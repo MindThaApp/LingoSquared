@@ -5,7 +5,7 @@ target_language: en
 unit_content_key: en.a2.unit29.maintenance
 review:
   status: unreviewed
-  fresh_context: false
+  fresh_context: "false"
   notes: >-
     Authored 2026-07-07, closing a real visible gap: units 25-28 (the
     four earlier A2 units in this same en-target realization) already had
@@ -100,16 +100,86 @@ review:
     automatically for nl-en) and compile_content.py practice-validate, 0
     errors/0 warnings -- see the commit message for the exact run output.
     Still needs the standard fresh-context review before import.
+
+    RE-AUTHORED 2026-07-24 (unit-scope DEAD-template pass): same root
+    problem this pack's own notes above almost caught ("real A2-scoped
+    candidate-count math done by hand") but didn't go far enough --
+    "A2-scoped" here still meant A2-COURSE-pooled, not unit29-scoped, and
+    generate_checkpoint() only ever sees the latter. scripts/
+    _practice_unit_scope_check.py (the real per-unit model) found 6 DEAD
+    templates: lesson02.possessive_order.002 and lesson03.possessive_order.002
+    (possessive's real A2 pool is 'my'@unit25/'your'@unit25 -- BOTH pinned to
+    unit25's own lesson_content_key, 0 in unit29), lesson03.
+    possessive_translate_bare.003 (same reason), lesson04.match.001
+    (bureaucracy_noun contributes 0 within-unit -- all 4 tokens pinned to
+    unit25 -- so the declared 7-slot matching_pairs only had 3 real
+    (maintenance_noun) candidates), and lesson04.bureaucracy_listen.002 /
+    bureaucracy_translate_bare.003 (bureaucracy_noun, 0 unit-scoped
+    candidates). Also fixed the bare `false` YAML boolean on
+    review.fresh_context (DO-NOT #14 -- PyYAML coerces it, the field must be
+    the quoted string "false").
+
+    Before this fix, EVERY structured-tier template in this pack was dead
+    (both possessive_order instances and the matching_pairs) -- structured
+    tier was 0/15 live.
+
+    FIXES applied, PACK-ONLY (no backfill/realization/overlay edits), all
+    re-anchored to unit29's own genuinely live tags -- maintenance_noun (3:
+    sink/plumber/repair, unit29's own per _en_target_lexeme_common.py's
+    "Unit 29" block) and room_noun (2: kitchen/bathroom -- unit29's own
+    lesson01 "reused_home_words" recap card is what actually pins these to
+    unit29 in the A2 course dict, NOT unit24 which is a separate A1 course
+    row and therefore a fresh, unrelated dict). Also newly drew on
+    'day_part_in' (morning/afternoon/evening, minus night): unit29's own
+    lesson02 genuinely reintroduces "morning" ("...come by tomorrow
+    morning"), and it is the only A2-course-wide day_part_in token besides
+    unit32's "evening" -- both checked grammatical in the new frame below.
+    (1) lesson02.possessive_order.002 -> RENAMED daypart_order.002,
+    RE-ANCHORED to 'day_part_in', new frame "Can someone come fix it in the
+    {item}" -- grammatical for both real A2 course-wide members ("in the
+    morning"/"in the evening" both hold), no self-reference (no frame word
+    matches morning/evening).
+    (2) lesson03.possessive_order.002 -> RENAMED room_order.002,
+    RE-ANCHORED to 'room_noun', new frame "The plumber checked the {item}
+    today" -- grammatical for both real A2 course-wide members ("checked
+    the kitchen"/"checked the bathroom" both hold; room_noun's A1 members
+    bedroom/garden do NOT exist in the A2 course dict at all, confirmed via
+    the harness, so they can never leak into this frame).
+    (3) lesson03.possessive_translate_bare.003 -> RENAMED
+    maintenance_translate_bare.003, RE-ANCHORED to 'maintenance_noun'
+    (bare-word translation, no floor requirement, adds a 3rd maintenance_noun
+    production-tier instance).
+    (4) lesson04.match.001 -> RE-ANCHORED from 'maintenance_bureaucracy_
+    combined' to a new 'unit_recap_combined' preset (maintenance_noun UNION
+    room_noun UNION day_part_in = sink/plumber/repair/kitchen/bathroom/
+    morning, all noun POS, all genuinely unit29's own), slot count reduced
+    from 7 to 6 to match the real pool exactly (was declaring 1 more slot
+    than any real vocabulary supports).
+    (5) lesson04.bureaucracy_listen.002 -> RENAMED maintenance_listen.002,
+    RE-ANCHORED to 'maintenance_noun'. lesson04.bureaucracy_translate_bare.003
+    -> RENAMED room_translate_bare2.003, RE-ANCHORED to 'room_noun'.
+
+    Net result: 15 templates before -> 15 templates after (all renamed/
+    re-anchored in place, none dropped, none added). Tier counts after the
+    fix: recognition 7 (maintenance_noun MC/listen across lessons 01-04),
+    structured 3 (daypart_order, room_order, the fixed 6-pair
+    unit_recap_combined matching_pairs -- was 0 before), production 5
+    (maintenance_noun x3, room_noun x2). All three tiers now clear the
+    >=3-templates bar. Verified 0 DEAD/0 FLOOR for this pack with scripts/
+    _practice_unit_scope_check.py and 0 errors with compile_content.py
+    practice-validate. tag_schema/slot_presets updated: dropped the now-unused
+    'bureaucracy_noun'/'possessive' tags and presets, added 'day_part_in' and
+    the 'unit_recap_combined' union preset. Still needs the standard
+    fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [maintenance_noun, bureaucracy_noun, possessive, room_noun]
+    semantic: [maintenance_noun, room_noun, day_part_in]
 slot_presets:
   maintenance_noun: &maintenance_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: maintenance_noun}}
-  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
   room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
-  maintenance_bureaucracy_combined: &maintenance_bureaucracy_combined {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, bureaucracy_noun]}}
+  day_part_in: &day_part_in {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
+  unit_recap_combined: &unit_recap_combined {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, room_noun, day_part_in]}}
 templates:
   - content_key: practice.nl-en.en.a2.unit29.lesson01.choose.001
     lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
@@ -146,13 +216,13 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit29.lesson02.possessive_order.002
+  - content_key: practice.nl-en.en.a2.unit29.lesson02.daypart_order.002
     lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
     type: word_order
-    frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
+    frame: {text: "Can someone come fix it in the {item}", language_code: en, direction: ltr}
+    slots: {item: *day_part_in}
+    answer_derivation: {kind: render_frame, frame: {text: "Can someone come fix it in the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het dagdeel in deze zin.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit29.lesson02.listen.003
     lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
     type: listen_select
@@ -167,18 +237,18 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit29.lesson03.possessive_order.002
+  - content_key: practice.nl-en.en.a2.unit29.lesson03.room_order.002
     lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
     type: word_order
-    frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit29.lesson03.possessive_translate_bare.003
+    frame: {text: "The plumber checked the {item} today", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "The plumber checked the {item} today", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de kamer in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit29.lesson03.maintenance_translate_bare.003
     lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
+    slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit29.lesson03.listen.004
@@ -191,23 +261,23 @@ templates:
   - content_key: practice.nl-en.en.a2.unit29.lesson04.match.001
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *maintenance_bureaucracy_combined, second: *maintenance_bureaucracy_combined, third: *maintenance_bureaucracy_combined, fourth: *maintenance_bureaucracy_combined, fifth: *maintenance_bureaucracy_combined, sixth: *maintenance_bureaucracy_combined, seventh: *maintenance_bureaucracy_combined}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit_recap_combined, second: *unit_recap_combined, third: *unit_recap_combined, fourth: *unit_recap_combined, fifth: *unit_recap_combined, sixth: *unit_recap_combined}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit29.lesson04.bureaucracy_listen.002
+  - content_key: practice.nl-en.en.a2.unit29.lesson04.maintenance_listen.002
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je in dit gesprek hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit29.lesson04.bureaucracy_translate_bare.003
+  - content_key: practice.nl-en.en.a2.unit29.lesson04.room_translate_bare2.003
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *room_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit29.lesson04.maintenance_translate.004

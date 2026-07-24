@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit33.transportation
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
     a1_unit30.yaml's notes for the sprint context). 4-member
     'vehicle_noun' tag (bus/train/car/bike, all nouns) -- deliberately
@@ -30,36 +30,73 @@ review:
     reasoning): lesson_content_keys (lesson01.transport_vocabulary, lesson03.dialogue_commute_talk, lesson04.two_commuters) resolve to real lessons in en/a1_unit33_transportation.yaml. vehicle_noun (bus/train/car/bike = bus/trein/auto/fiets) is recognition-only -- correct, since each vehicle takes its own verb and no single shared frame is grammatical. All glosses accurate and mutually distinct. No bare YAML booleans, no snake_case learner-facing
     leaks. Validation: compiler practice-validate 0/0 across the full
     42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    DEAD-template remediation 2026-07-24 (PACK-ONLY,
+    scripts/_practice_unit_scope_check.py): 'vehicle_noun' is a 4-member
+    course-wide tag (bus/train/car/bike) but unit33 itself only introduces
+    2 of those (bus, bike -- train/car were introduced in unit21/unit20),
+    below the MC/listen 3-floor and below the matching_pairs' declared
+    4 slots -> DEAD/FLOOR on choose.001, listen.002, match.003,
+    lesson03.choose.002. Recipe fix SS3.1(c): re-anchored these four
+    recognition/structured templates to plain part_of_speech: verb
+    (unit33_verb preset, no semantic tag) over unit33's OWN full verb
+    pool: drive, ride, takes, drives, worry -- 5 distinct unit-scoped
+    verbs (glosses rijden/rijden/neemt/rijdt/zorgen maken; note drive and
+    ride share the literal gloss 'rijden' -- recipe SS6.3 explicitly
+    permits duplicate right-hand matching_pairs values as valid pedagogy,
+    and for multiple_choice the pool still clears the 3-floor with 4
+    distinct display strings after dedup). Bumped match.003 from 4 to 5
+    declared slots to use the full clean pool (still below the 6-pair
+    ideal -- documented as genuine thinness below). Left translate.004/
+    translate.003 (both translation, no floor) on vehicle_noun unchanged
+    -- unit33's own 2-member pool (bus/bike) already satisfies them.
+
+    IMPORTANT DATA-QUALITY FINDING for the coordinator (LOG-not-fix, out
+    of PACK-ONLY scope): unit33's own lexeme pool has SIX tokens with
+    stray sentence-final punctuation baked into the token string itself
+    -- 'work?' (lesson02), 'daniel?', 'it?', 'okay,', 'difficult.'
+    (lesson03), 'office.' (lesson04) -- a backfill extraction defect
+    (adjacent punctuation not stripped). These would display broken text
+    ('work?', 'okay,') if used as MC/listen/matching answer values, so
+    they were deliberately excluded from every pool above by restricting
+    to part_of_speech: verb (none of the six contaminated tokens are
+    classified verb). This also explains why unit33's own noun pool looks
+    thin in isolation: 'work?'/'office.' are unusable nouns and 'parking'
+    is the only clean noun lesson03/04 contribute. Routing to the
+    backfill lane: scripts/backfill_lexemes_nl_en.py should re-strip
+    trailing punctuation from these six tokens (and re-check the rest of
+    the corpus for the same class of defect)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
     semantic: [vehicle_noun]
 slot_presets:
   vehicle_noun: &vehicle_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: vehicle_noun}}
+  unit33_verb: &unit33_verb {language_code: en, part_of_speech: verb}
 templates:
   - content_key: practice.nl-en.en.a1.unit33.lesson01.choose.001
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *vehicle_noun}
+    slots: {item: *unit33_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een vervoermiddel uit deze les.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit33.lesson01.listen.002
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *vehicle_noun}
+    slots: {item: *unit33_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit33.lesson01.match.003
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *vehicle_noun, second: *vehicle_noun, third: *vehicle_noun, fourth: *vehicle_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Verbind elk vervoermiddel met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: en, direction: ltr}
+    slots: {first: *unit33_verb, second: *unit33_verb, third: *unit33_verb, fourth: *unit33_verb, fifth: *unit33_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit33.lesson01.translate.004
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: translation
@@ -71,7 +108,7 @@ templates:
     lesson_content_key: en.a1.unit33.lesson03.dialogue_commute_talk
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *vehicle_noun}
+    slots: {item: *unit33_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit33.lesson04.translate.003

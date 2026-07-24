@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). Two tags:
     ''device_noun'' (all 6 lesson01 vocabulary items -- phone/laptop/ tablet/computer/app/camera, all nouns) for bare-word
     recognition/ matching, and a narrower 5-member ''device_noun_a'' (excludes ''app'') for the generative frame ''I have
@@ -19,7 +19,31 @@ review:
     ''app'') have distinct glosses. Frame ''I have a {item}'' is grammatical for every device_noun_a member -- the a/an article
     discipline (dropping ''app'') is correct. No bare YAML booleans, no snake_case learner-facing leaks. Validation: compiler
     practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py
-    --dry-run clean. Upgrading to reviewed.'
+    --dry-run clean. Upgrading to reviewed.
+
+    DEAD-template re-authoring pass (2026-07-24, unit-scope satisfiability fix):
+    scripts/_practice_unit_scope_check.py found 2 DEAD templates -- both were
+    fine in Endless Practice (course-scoped) but had 0 candidates at
+    generate_checkpoint()''s unit-scoped pool. (1) lesson01.match.003
+    (matching_pairs) needed 6 distinct fills but device_noun''s unit-scoped
+    pool is only 5 (laptop/tablet/computer/app/camera) -- widened the slot to
+    drop the semantic tag and constrain by part_of_speech: noun only (recipe
+    SS3.1c), pulling from unit35''s own 20-noun pool; updated the feedback text
+    from "elk apparaat" (each device) to the generic "elk woord" since the
+    pool is no longer device-only. (2) lesson02''s
+    translate.001.volume_fill.004 (fill_in_blank) was anchored to
+    volume_nl_en_a1_unit35_item_04_single, a single-member tag whose ONLY
+    course-wide member is "phone" -- but "phone" is introduced by unit03 (and
+    reused in unit32/b1unit01), never reintroduced as a new token in unit35
+    itself, so the unit-scoped pool was 0 -- textbook DO-NOT #2. No other
+    existing tag anchors a unit35-native single-candidate token (device_noun_a
+    has 5 members, too many for fill_in_blank without interchangeable:true,
+    and these devices are not synonyms), so pack-only re-anchoring is not
+    possible; DROPPED the template (lesson02 keeps its structured-tier
+    coverage via the existing volume_order.002 word_order template, so no
+    tier is lost). Re-verified 0 DEAD, 0 below-floor with
+    scripts/_practice_unit_scope_check.py and 0 errors with
+    compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -36,7 +60,6 @@ tag_schema:
     semantic:
     - device_noun
     - device_noun_a
-    - volume_nl_en_a1_unit35_item_04_single
 slot_presets:
   device_noun: &id001
     language_code: en
@@ -89,12 +112,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
+    first: &id003 {language_code: en, part_of_speech: noun}
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
   slot_relations:
   - kind: distinct
     slots:
@@ -114,7 +137,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Verbind elk apparaat met de Nederlandse betekenis.
+    text: Verbind elk woord met de Nederlandse betekenis.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit35.lesson01.translate.004
@@ -174,26 +197,6 @@ templates:
   feedback_frame:
     text: I have a {item}. betekent Ik heb een {item}.
     language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit35.lesson02.translate.001.volume_fill.004
-  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
-  type: fill_in_blank
-  frame:
-    text: I have a {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: volume_nl_en_a1_unit35_item_04_single
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: '{item}'
-    language_code: en
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit35.lesson02.translate.001.volume_order.002
   lesson_content_key: en.a1.unit35.lesson02.using_your_phone

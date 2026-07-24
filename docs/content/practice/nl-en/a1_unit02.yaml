@@ -17,7 +17,26 @@ review:
     deterministic slots) meet >=1. Read every frame against its full candidate list by hand: ''I {am} a student.''/''{are}
     you a teacher?''/''Are you a {new} member''/''I {work} at the library.'' are all grammatically sound for their one fixed
     slot value; the bare-word identity/person_name recognition and translation templates carry no sentence-context risk. No
-    self-reference, agreement, or homograph issues found. Compiler practice-validate re-confirmed 0/0. Upgrading to reviewed.'
+    self-reference, agreement, or homograph issues found. Compiler practice-validate re-confirmed 0/0. Upgrading to reviewed.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX (2026-07-24, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    flagged lesson02.are_fill.002 as DEAD -- its slot (second_identity_verb: identity + person=second) had 0 unit02-scoped
+    candidates. Root cause verified via iter_specs(): the token ''are'' is only ever classified under
+    en.a1.unit01.lesson03.wellbeing (taught first in unit01''s ''How are you?''); unit02''s own lesson02 realization reuses
+    ''are'' in a new sentence (''Are you a teacher?'') but backfill_lexemes_nl_en.py dedups lexemes by bare token, so no
+    unit02-scoped ''are'' spec exists and generate_checkpoint() (which loads only the pack''s own unit) could never fill this
+    slot -- 100% dead at checkpoint time despite working fine in Endless Practice. Could not re-anchor in place: no other
+    unit02 token is grammatical in ''{item} you a teacher?'' (am/is both ungrammatical there), so widening the slot would only
+    trade a DEAD template for an ungrammatical one. Per the recipe''s option 2, dropped are_fill.002 and replaced it with
+    lesson02.dialogue_choose.002 (multiple_choice) on the ''dialogue_word'' tag (POS noun) -- already declared in this pack''s
+    tag_schema but never used by any template. Verified via iter_specs(): 6 distinct unit02-scoped candidates
+    (student/student, teacher/leraar, member/lid, engineer/ingenieur, library/bibliotheek, assistant/medewerker, all
+    distinct glosses) -- comfortably clears the >=3 MC floor and, as a bonus, gives lesson02 its first recognition-tier
+    template (previously 0: am_fill/are_fill were both
+    fill_in_blank/structured, member_order word_order/structured, new_translate production). LOGGED for the coordinator:
+    ''are'' needs a backfill_lexemes_nl_en.py change to emit a unit02-scoped spec (or a shared cross-unit reuse mechanism)
+    if a checkpoint-visible ''Are you a teacher?'' exercise is ever wanted for this unit; not fixable from the pack alone.
+    Re-verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -145,20 +164,24 @@ templates:
     text: De volledige zin is I {am} a student.
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit02.lesson02.are_fill.002
+- content_key: practice.nl-en.en.a1.unit02.lesson02.dialogue_choose.002
   lesson_content_key: en.a1.unit02.lesson02.exchange_roles
-  type: fill_in_blank
+  type: multiple_choice
   frame:
-    text: '{are} you a teacher?'
+    text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    are: *id004
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: dialogue_word
   answer_derivation:
-    kind: slot_text
-    slot: are
+    kind: slot_gloss
+    slot: item
   feedback_frame:
-    text: 'In de vraag staat {are} vóór you: Are you a teacher?'
+    text: '{item} is een beroep of rol uit deze les.'
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit02.lesson02.member_order.003

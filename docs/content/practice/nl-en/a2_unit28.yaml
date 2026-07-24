@@ -114,18 +114,83 @@ review:
     unit28 to scripts/practice_manifest.txt's nl-en line) and
     compile_content.py practice-validate, 0 errors/0 warnings. Still
     needs the standard fresh-context review before import.
+
+    RE-AUTHORED 2026-07-24 (unit-scope DEAD-template pass): the "possessive"/
+    "identity" candidate counts above were never actually unit28-scoped --
+    they were A2-course-pooled (the same mis-measurement flagged in
+    a2_unit27.yaml's own re-authoring note). scripts/
+    _practice_unit_scope_check.py (the real per-unit model, run against
+    backfill_lexemes_nl_en.py's actual en_specs dict, which keys by bare
+    token and pins provenance to whichever course-level unit FIRST
+    introduces it -- see that script's :2873-2878 comment) found this pack
+    was far worse than a2_unit27.yaml's: 6 fully DEAD templates (0
+    unit-scoped candidates each) plus the entire structured tier collapsed
+    to zero live templates:
+      - lesson01.match.005: 'bureaucracy_noun' contributes 0 (all 4 tokens
+        pinned to unit25), so the declared 7-slot matching_pairs only had 3
+        real (health_followup_noun) candidates -- DEAD.
+      - lesson02.choose.001, lesson02.translate.003, lesson03.choose.002,
+        lesson03.listen.003: all four constrained solely to 'bureaucracy_noun'
+        -- 0 unit-scoped candidates each -- DEAD.
+      - lesson03.possessive_order.001: 'possessive' has 0 unit28-scoped
+        candidates (both members pinned to unit25) -- DEAD. This was
+        unit28's ONLY other structured-tier template besides the (also
+        dead) matching_pairs, so structured tier was 0/16 live before this
+        fix.
+      - lesson04.identity_choose.001/identity_listen.002: 'identity' has
+        exactly 1 unit28-scoped candidate ("what's", the only identity
+        token this unit itself introduces) -- below the >=3 multiple_
+        choice/listen_select floor, so both silently never generate.
+
+    FIXES applied, PACK-ONLY (no backfill/realization/overlay edits), all
+    re-anchored to unit28's own 3 genuinely live tags (health_followup_noun
+    3, symptom_noun 2, condition_adjective 1 -- all pinned to this unit's
+    own lessons, verified against the real per-unit dump):
+    (1) Added 'unit_recap_combined' slot preset = health_followup_noun UNION
+    symptom_noun UNION condition_adjective (part_of_speech [noun,adjective]),
+    exactly 6 distinct tokens (medicine/prescription/insurance/headache/
+    fever/worse), all unit28-native, no other-unit padding. Re-anchored
+    lesson01.match.005 to this preset at exactly 6 slots (was 7, above the
+    real pool). Re-anchored the 4 dead bureaucracy_noun MC/listen/translate
+    slots (lesson02.choose/translate, lesson03.choose/listen) to the same
+    preset -- all now have 6 distinct unit-scoped candidates, comfortably
+    above the >=3 floor. Re-anchored lesson04.identity_choose/identity_listen
+    (renamed recap_choose.001/recap_listen.002) to the same preset for the
+    same reason (identity's 1 candidate was below floor).
+    (2) lesson03.possessive_order.001 -> RENAMED condition_order2.001,
+    RE-ANCHORED from 'possessive' to 'condition_adjective' with a NEW frame
+    ("Your symptoms sound {item} than last week") anchored to lesson03 (the
+    slot draws from lesson01's 'worse', which is fine -- the checkpoint pools
+    the whole unit's lexemes, only the anchor lesson bucket differs, per the
+    recipe's SS8.1 point 1). Verified grammatical at COURSE scope for BOTH
+    condition_adjective members (worse: unit28's own; better: unit26's) --
+    "Your symptoms sound worse/better than last week" both hold. This
+    restores a second structured template alongside the fixed matching_pairs
+    (structured tier was otherwise still just 1 template).
+
+    Net result: 16 templates before -> 16 templates after (all renamed/
+    re-anchored in place, none dropped, none added -- this pack had exactly
+    enough live tags to fix every dead/below-floor template without needing
+    a net new template). Tier counts after the fix: recognition 8 (2
+    health_followup_noun-only + 6 unit_recap_combined-anchored MC/listen),
+    structured 3 (the fixed 6-pair matching_pairs, condition_order2, and the
+    pre-existing condition_order.003), production 5 (health_followup_noun
+    x3, symptom_noun, condition_adjective) -- all three tiers now clear the
+    >=3-templates bar (structured was previously 0 live). Verified 0 DEAD/
+    0 FLOOR for this pack with scripts/_practice_unit_scope_check.py and 0
+    errors with compile_content.py practice-validate. tag_schema/
+    slot_presets updated: dropped the now-unused 'bureaucracy_noun'/
+    'possessive'/'identity' tags and presets, added 'unit_recap_combined'.
+    Still needs the standard fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [health_followup_noun, bureaucracy_noun, symptom_noun, possessive, identity, condition_adjective]
+    semantic: [health_followup_noun, symptom_noun, condition_adjective]
 slot_presets:
   health_followup_noun: &health_followup_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: health_followup_noun}}
-  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
-  clinic_noun_combined: &clinic_noun_combined {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [health_followup_noun, bureaucracy_noun]}}
   symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
   condition_adjective: &condition_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: condition_adjective}}
+  unit_recap_combined: &unit_recap_combined {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [health_followup_noun, symptom_noun, condition_adjective]}}
 templates:
   - content_key: practice.nl-en.en.a2.unit28.lesson01.choose.001
     lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
@@ -158,16 +223,16 @@ templates:
   - content_key: practice.nl-en.en.a2.unit28.lesson01.match.005
     lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *clinic_noun_combined, second: *clinic_noun_combined, third: *clinic_noun_combined, fourth: *clinic_noun_combined, fifth: *clinic_noun_combined, sixth: *clinic_noun_combined, seventh: *clinic_noun_combined}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit_recap_combined, second: *unit_recap_combined, third: *unit_recap_combined, fourth: *unit_recap_combined, fifth: *unit_recap_combined, sixth: *unit_recap_combined}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson02.choose.001
     lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson02.listen.002
@@ -181,28 +246,28 @@ templates:
     lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit28.lesson03.possessive_order.001
+  - content_key: practice.nl-en.en.a2.unit28.lesson03.condition_order2.001
     lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
     type: word_order
-    frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
+    frame: {text: "Your symptoms sound {item} than last week", language_code: en, direction: ltr}
+    slots: {item: *condition_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "Your symptoms sound {item} than last week", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} beschrijft hoe de klacht verandert.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson03.choose.002
     lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson03.listen.003
     lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson03.translate.004
@@ -212,18 +277,18 @@ templates:
     slots: {item: *health_followup_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit28.lesson04.identity_choose.001
+  - content_key: practice.nl-en.en.a2.unit28.lesson04.recap_choose.001
     lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit28.lesson04.identity_listen.002
+  - content_key: practice.nl-en.en.a2.unit28.lesson04.recap_listen.002
     lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *unit_recap_combined}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je in dit gesprek hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit28.lesson04.condition_order.003

@@ -4,46 +4,67 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit17.plans
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-05 by the Claude session syncing Endless Practice template pools to lesson content growth (nl-en
-    direction, continuing past the coordinator''s requested 11-16 range into 17+ as content kept growing). Keyed to English
-    target lexemes extended into the shared scripts/_en_target_lexeme_common.py plus this pair''s own Dutch glosses added
-    to scripts/backfill_lexemes_nl_en.py. Same deliberate scope decision as unit14 lesson02/unit16 lesson01: lesson01 (proposing
-    an activity: ''Do you want to see a movie...?''/''Would you like to go for a walk?'') gets ZERO generated templates --
-    neither invitation phrase mentions a specific day/time/place that could vary, and none of this lesson''s other vocabulary
-    (want/movie/weekend/would/walk) has a same-lesson synonym group. The other three lessons all reuse the already-established
-    7-member ''weekday'' tag (unit04) -- genuinely apt here since this whole unit is about scheduling: ''I''m busy on {item}.''
-    (lesson02), ''Do you want to have lunch on {item}?'' (lesson03), ''{item} works for me.'' (lesson04) are all grammatical
-    with any weekday. Every slot''s real candidate count was verified with the same standalone lexeme_matches()-replicating
-    harness used for every other pack this pass. The underlying en realization unit17 is itself UNREVIEWED (Codex was usage-limited
-    at authoring time), same as the nl-en overlay. Needs the standard fresh-context review before import (both realization
-    and this practice pack). Same blocking DB-level gap as every other pack from this pass: no backfill_lexemes_nl_en.py run
-    has actually happened against a real database yet. FRESH-CONTEXT REVIEW ADDENDUM (2026-07-06, zero access to any authoring
-    reasoning): confirmed every lesson_content_key matches the correct lesson in en/a1_unit17_plans.yaml; re-ran the standalone
-    lexeme_matches()-replicating harness against the real iter_specs() output (0 count failures, weekday=7 for all templates)
-    and compiler practice-validate (0/0). Read every frame against its full candidate list -- all grammatical for every weekday.
-    The lesson01 zero-templates decision is sound. No self-reference, agreement, or homograph issues found; does not reuse
-    the broad ''number''/''count_plural'' tags flagged as an open defect elsewhere. Upgrading this pack to reviewed (the underlying
-    realization being unreviewed is a separate, unresolved dependency noted above, not something this review can resolve).
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    REBUILT 2026-07-24 (DEAD-template remediation pass, PACK-ONLY). Every one
+    of the previous 12 templates was constrained to the 'weekday' semantic
+    tag (established in unit04), and unit17 itself introduces ZERO
+    weekday-tagged lexemes -- scripts/_practice_unit_scope_check.py confirmed
+    all 12 templates (18 slot-level DEAD lines, counting matching_pairs'
+    7 slots individually) had 0 unit-scoped candidates, so the checkpoint
+    could never generate a single item from this pack. This is recipe
+    DO-NOT #2 (slot constrained to vocabulary taught in an EARLIER unit).
 
-    Deepened 2026-07-07 (templates-per-unit audit found this unit tied-shallowest in nl-en at 8, alongside sibling fa-en/prs-en''s
-    identical unit17 tied at the same count and deepened the same night -- mirrored their additions here with fresh Dutch,
-    not copied Farsi/Dari). weekday (7 members) is the only genuinely generative tag this unit supports (confirmed above:
-    none of this unit''s other single-token vocabulary -- want/movie/weekend/would/walk/love/busy/maybe/another/ lunch/1pm/works
-    -- has its own semantic group). Added 3 new templates, all reusing weekday with exercise TYPES this unit hadn''t used
-    yet (word_order/translation/listen_select already existed at 2-3 lessons each; multiple_choice/matching_pairs did not):
-    a lesson03 listen_select (parity fix -- lesson02/04 already had one, lesson03 didn''t), a lesson04 multiple_choice (bare-word
-    Dutch-gloss recognition), and a lesson04 matching_pairs using all 7 weekday members (AUTHORING_GUIDE.md #16 -- exactly
-    the ''6-12 real pairs'' range, not padded). No new EN_POS/semantic-tag or Dutch-gloss additions needed -- weekday was
-    already fully classified/glossed since unit04 (confirmed by re-reading scripts/_en_target_lexeme_common.py and scripts/backfill_lexemes_nl_en.py
-    fresh before this edit). Considered fill_in_blank for weekday (e.g. blanking ''I''m busy on {item}'') but rejected it:
-    all 7 weekdays are genuinely grammatical in every one of this unit''s real frames with nothing else to disambiguate --
-    scripts/_fill_in_blank_ambiguity_check.py (and compile_content.py''s hard-fail per AUTHORING_GUIDE.md #17) would correctly
-    flag it, so zero new fill_in_blank templates, matching this direction''s own established ''zero is fine when real vocabulary
-    can''t safely support one'' precedent. Re-verified scripts/_practice_slot_check.py (weekday still safely >=3 for the new
-    multiple_choice, >=2 for matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS flags) before
-    import. New count: 11 templates (8 -> 11) -- an honest ceiling given weekday is the unit''s only real generative tag.'
+    Verified unit17's own lexeme pool via iter_specs filtered on
+    '.a1.unit17.': 12 lexemes across 4 lessons (lesson01
+    proposing_an_activity: want/movie/weekend/would/walk; lesson02
+    accepting_and_declining: love/busy/maybe/another; lesson03
+    reading_an_invitation: lunch/1pm; lesson04
+    negotiating_a_plan_dialogue: works). None of these share a
+    pre-existing semantic tag with each other (this unit is a grab-bag of
+    scheduling/invitation phrases, not a vocabulary-cluster unit), so no
+    RE-ANCHOR to an existing narrow tag was possible without a backfill
+    change. Per recipe SS3.1(c)/SS8.1, dropped the semantic constraint
+    entirely for all bare-word (no-literal-frame-text) templates and used
+    part_of_speech: [noun, verb, adjective, adverb] over the unit's own
+    12-lexeme pool instead -- safe because multiple_choice/listen_select/
+    bare-word translation/matching_pairs carry no course-scope
+    grammaticality requirement (the prompt is either a single word or
+    varies with the answer). Read every gloss in this pool (SS0.1): want
+    -> willen, movie -> film, weekend -> weekend, would -> zou, walk ->
+    wandeling, love -> graag willen, busy -> druk, maybe -> misschien,
+    another -> een andere, lunch -> lunch, 1pm -> "1 uur 's middags",
+    works -> komt uit. All 12 distinct, none mis-glossed against
+    en/a1_unit17_plans.yaml's actual taught content (confirmed against the
+    realization file directly).
+
+    For the structured tier, reused the pre-existing course-wide
+    'preference_verb_full' tag (like/love/prefer/hate, verified via
+    iter_specs at course scope '.a1.') for two new word_order templates in
+    lesson02 -- legal because 'love' is unit17's OWN lesson02 lexeme, so
+    the unit-scoped pool is non-empty (word_order has no candidate floor).
+    Checked COURSE-SCOPE grammaticality by hand for all 4 members in both
+    new frames: "I'd {item} to see a movie." -> I'd like/love/prefer/hate
+    to see a movie (all grammatical); "I'd {item} to go for a walk." ->
+    same check, all grammatical. Both frames also directly extend the
+    unit's own taught phrase ("Sure, I'd love to!"), so they stay
+    pedagogically anchored to lesson02 even though the pool's other 3
+    members are introduced elsewhere.
+
+    New template count: 12 (was 12, all dead; now 12, all live) -- 5
+    recognition (multiple_choice x3, listen_select x2), 3 structured
+    (matching_pairs x1, word_order x2), 4 production (bare-word
+    translation x4). All 4 lessons represented in at least one template.
+    Verified with scripts/_practice_unit_scope_check.py: 0 DEAD, 0
+    below-floor for this pack (multiple_choice/listen_select pool = 12
+    distinct unit-scoped tokens, well above the 3-floor; matching_pairs
+    pool = 12 distinct tokens for 6 declared slots). Verified compiler
+    practice-validate 0 errors. Honestly thin unit (12 lexemes, no shared
+    semantic cluster) -- did not pad with untaught or other-unit
+    vocabulary; the two word_order templates are the only place this pack
+    reaches outside its own 12 lexemes, and only for the semantic TAG
+    (not the actual candidate, which stays unit-scoped to 'love').
 tag_schema:
   part_of_speech:
   - symbol
@@ -58,167 +79,164 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
-    - weekday
+    - preference_verb_full
 slot_presets:
-  weekday: &id001
+  unit_word: &unit_word
     language_code: en
-    part_of_speech: noun
+    part_of_speech: [noun, verb, adjective, adverb]
+  preference_verb_full: &preference_verb_full
+    language_code: en
+    part_of_speech: verb
     agreement_tags:
-      semantic: weekday
+      semantic: preference_verb_full
 templates:
-- content_key: practice.nl-en.en.a1.unit17.lesson02.busy_order.001
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: word_order
+- content_key: practice.nl-en.en.a1.unit17.lesson01.choose.001
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: multiple_choice
   frame:
-    text: I'm busy on {item}
+    text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_gloss
+    slot: item
   feedback_frame:
-    text: '{item} is de dag waarop het druk is.'
+    text: '{item} is een woord uit deze les.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson02.busy_translate.003
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: translation
-  frame:
-    text: Ik heb het druk op {item}.
-    language_code: nl
-    direction: ltr
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: I'm busy on {item} betekent Ik heb het druk op {item}.
-    language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson02.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+- content_key: practice.nl-en.en.a1.unit17.lesson01.listen.002
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: listen_select
   frame:
     text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is de dag die je hoorde.'
+    text: '{item} is het woord dat je hoorde.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson03.lunch_order.001
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: word_order
+- content_key: practice.nl-en.en.a1.unit17.lesson01.match.003
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: matching_pairs
   frame:
-    text: Do you want to have lunch on {item}
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    first: *unit_word
+    second: *unit_word
+    third: *unit_word
+    fourth: *unit_word
+    fifth: *unit_word
+    sixth: *unit_word
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: '{item} is de voorgestelde dag voor de lunch.'
+    text: Verbind elk woord met de Nederlandse betekenis.
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson03.lunch_translate.003
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
+- content_key: practice.nl-en.en.a1.unit17.lesson01.translate.004
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: translation
   frame:
-    text: Heb je zin om op {item} te lunchen?
+    text: '{item}'
     language_code: nl
     direction: ltr
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: Do you want to have lunch on {item}? betekent Heb je zin om op {item} te lunchen?
+    text: De Engelse vertaling is {item}.
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson04.works_order.001
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: word_order
-  frame:
-    text: '{item} works for me'
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} is de dag die goed uitkomt.'
-    language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson04.works_translate.003
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: translation
-  frame:
-    text: '{item} komt mij goed uit.'
-    language_code: nl
-    direction: ltr
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} works for me betekent {item} komt mij goed uit.'
-    language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson04.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: listen_select
+- content_key: practice.nl-en.en.a1.unit17.lesson02.choose.001
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: multiple_choice
   frame:
     text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is de dag die je hoorde.'
+    text: '{item} is een woord uit deze les.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson03.weekday_listen.004
+- content_key: practice.nl-en.en.a1.unit17.lesson02.order.002
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: word_order
+  frame:
+    text: I'd {item} to see a movie
+    language_code: en
+    direction: ltr
+  slots:
+    item: *preference_verb_full
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I'd {item} to see a movie
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is de voorkeur die wordt uitgedrukt.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit17.lesson02.order.003
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: word_order
+  frame:
+    text: I'd {item} to go for a walk
+    language_code: en
+    direction: ltr
+  slots:
+    item: *preference_verb_full
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I'd {item} to go for a walk
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is de voorkeur die wordt uitgedrukt.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit17.lesson02.translate.004
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *unit_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit17.lesson03.listen.001
   lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
   type: listen_select
   frame:
@@ -226,15 +244,33 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is de dag die je hoorde.'
+    text: '{item} is het woord dat je hoorde.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson04.weekday_choose.005
+- content_key: practice.nl-en.en.a1.unit17.lesson03.translate.002
+  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *unit_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit17.lesson04.choose.001
   lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
   type: multiple_choice
   frame:
@@ -242,73 +278,29 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: Kies de Nederlandse betekenis van {item}.
+    text: '{item} is een woord uit deze les.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson04.weekday_match.006
+- content_key: practice.nl-en.en.a1.unit17.lesson04.translate.002
   lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: matching_pairs
+  type: translation
   frame:
-    text: '{first} — {second}'
-    language_code: en
-    direction: ltr
-  slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
-    seventh: *id001
-  slot_relations:
-  - kind: distinct
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-    - seventh
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-    - seventh
-  feedback_frame:
-    text: Verbind elke dag van de week met de juiste Nederlandse betekenis.
+    text: '{item}'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit17.lesson02.busy_translate.003.volume_order.010
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: word_order
-  frame:
-    text: I'm busy on {item}
-    language_code: en
-    direction: ltr
+    slot_rendering:
+      item: english_gloss
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
+    item: *unit_word
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: I'm busy on {item}
-    language_code: en
+    text: De Engelse vertaling is {item}.
+    language_code: nl
     direction: ltr

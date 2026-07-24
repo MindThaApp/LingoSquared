@@ -58,7 +58,48 @@ review:
     on ''later'' alone) were left untouched since they''re already narrowly and correctly scoped. Verified with scripts/_practice_slot_check.py
     (all touched slots at or above the relevant floor), scripts/_fill_in_blank_ambiguity_check.py (0 new AMBIGUOUS flags),
     and compile_content.py practice-validate, 0 errors/0 warnings. Still carries this pack''s own prior fresh-context review
-    status -- a fresh re-review of specifically these 8 new templates has not happened yet.'
+    status -- a fresh re-review of specifically these 8 new templates has not happened yet.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX (2026-07-24, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    flagged 13 DEAD template-slots + 4 below-floor. Verified against a standalone iter_specs() dump of this unit''s real
+    lexemes (27 tokens) that ''dialogue_word'' and ''extended_family'' -- both declared in this pack''s own tag_schema and
+    used by lesson01.variety_dialogue_pair.903 / variety_family_pair.904 -- have ZERO unit01-scoped members (dialogue_word is
+    only ever classified starting at unit02; extended_family only at unit06), so both templates had 0 candidates on every
+    slot and could never generate at checkpoint time. Not pack-fixable (would need a new backfill classification for unit01
+    itself, which this pack cannot author) -- DROPPED both and removed their now-dead presets (dialogue_noun/extended_family)
+    from slot_presets and their tags from tag_schema. LOGGED for the coordinator: if a checkpoint-visible dialogue-vocabulary
+    or family-vocabulary exercise is ever wanted for unit01 specifically, backfill_lexemes_nl_en.py needs new unit01-native
+    lexeme tagging.
+
+    Also DEAD: lesson05.farewell_pair.005 (farewell_word preset excluded verb POS, so its unit-scoped pool was only 3 --
+    goodbye/bye/later -- against 4 declared slots) and lesson03.variety_politeness_pair.902 (politeness preset had only 2
+    unit-scoped members -- thanks/nice -- against 6 declared slots). Fix for both, per the recipe''s union technique (SS3.1a):
+    lesson03''s politeness/wellbeing_answer/identity tags are ALL taught in the same lesson03 (wellbeing) and none of their
+    real English glosses overlap (bedankt/leuk/goed/slecht/oke/bent/ik ben -- 7 distinct), so I widened the shared
+    ''politeness'' preset (id005) to the union of those three tags (also adding pronoun to part_of_speech for i''m) --
+    this single change brought lesson03.politeness_gloss.004 and politeness_listen.005 up from 2 to 7 distinct candidates
+    (fixing their below-floor MC/listen_select flags) and variety_politeness_pair.902 up from 2 to 7 (fixing its DEAD
+    matching_pairs, now 6 declared slots against a 7-member pool) in one edit. Softened variety_politeness_pair.902''s frame
+    text from ''beleefde Engelse woorden'' (polite English words) to ''de Engelse woorden uit deze les'' (the English words
+    from this lesson) since the widened pool includes fine/bad/okay/are/i''m alongside the two genuinely polite words --
+    the narrower claim would have been misleading now that the pool is broader. Also repointed lesson03.identity_choose.006
+    (was 2 unit-scoped candidates -- are/i''m -- below the MC floor) onto the same widened id005 preset rather than
+    maintaining a separate narrow ''identity'' preset (id006, now unused but left defined in case a future author wants
+    the narrower pool back).
+
+    For lesson01/lesson05''s greeting+farewell matching_pairs: rather than independently widening BOTH greeting_pair.004
+    and the now-DEAD farewell_pair.005 to the same union (which would have made them literal duplicates -- unit01''s entire
+    greeting/farewell vocabulary is only 6 words total: hello/hi/goodbye/bye/see/later, all distinct glosses hallo/hoi/tot
+    ziens/doei/zien/later), I widened ONLY greeting_pair.004 to a new union preset (greeting_farewell, id015: semantic
+    [greeting, farewell], POS [noun, verb, adverb]) at the full 6 pairs (was 4, below the recipe''s 6-pair standard) and
+    DROPPED farewell_pair.005 outright rather than ship a second matching_pairs template presenting the identical 6-word
+    pool under a different label. lesson05 stays fully viable in the structured tier via farewell_order.001 (word_order)
+    and its volume_fill.002 (fill_in_blank), both untouched and already live.
+
+    Net template count: 26 -> 23 (dropped variety_dialogue_pair.903, variety_family_pair.904, farewell_pair.005; no
+    replacements needed since the pack was comfortably above every tier floor even before the DEAD fixes -- recognition 9,
+    structured 9, production 5 after all changes). Re-verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors
+    via compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -81,8 +122,6 @@ tag_schema:
     - politeness
     - identity
     - person_name
-    - dialogue_word
-    - extended_family
     - volume_nl_en_a1_unit01_see_02_single
     - volume_nl_en_a1_unit01_item_03_single
     - volume_nl_en_a1_unit01_item_05_single
@@ -131,8 +170,12 @@ slot_presets:
     - verb
     - adjective
     - particle
+    - pronoun
     agreement_tags:
-      semantic: politeness
+      semantic:
+      - politeness
+      - wellbeing_answer
+      - identity
   identity: &id006
     language_code: en
     part_of_speech:
@@ -160,16 +203,16 @@ slot_presets:
     - adverb
     agreement_tags:
       semantic: farewell
-  dialogue_noun: &id012
+  greeting_farewell: &id015
     language_code: en
-    part_of_speech: noun
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
     agreement_tags:
-      semantic: dialogue_word
-  extended_family: &id013
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: extended_family
+      semantic:
+      - greeting
+      - farewell
   practice_word: &id014
     language_code: en
     part_of_speech:
@@ -243,10 +286,12 @@ templates:
     language_code: nl
     direction: ltr
   slots:
-    first_greeting: *id001
-    second_greeting: *id001
-    third_greeting: *id001
-    fourth_greeting: *id001
+    first_greeting: *id015
+    second_greeting: *id015
+    third_greeting: *id015
+    fourth_greeting: *id015
+    fifth_greeting: *id015
+    sixth_greeting: *id015
   slot_relations:
   - kind: distinct
     slots:
@@ -254,6 +299,8 @@ templates:
     - second_greeting
     - third_greeting
     - fourth_greeting
+    - fifth_greeting
+    - sixth_greeting
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -261,8 +308,10 @@ templates:
     - second_greeting
     - third_greeting
     - fourth_greeting
+    - fifth_greeting
+    - sixth_greeting
   feedback_frame:
-    text: Je hebt twee begroetingen of afscheidswoorden gekoppeld aan hun Nederlandse betekenis.
+    text: Je hebt begroetingen en afscheidswoorden gekoppeld aan hun Nederlandse betekenis.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit01.lesson01.time_period_gloss.005
@@ -373,7 +422,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    identity: *id006
+    identity: *id005
   answer_derivation:
     kind: slot_gloss
     slot: identity
@@ -454,36 +503,6 @@ templates:
     text: '{farewell} is een woord om afscheid te nemen.'
     language_code: nl
     direction: ltr
-- content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_pair.005
-  lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
-  type: matching_pairs
-  frame:
-    text: Koppel de Engelse afscheidswoorden aan de Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
-  slots:
-    first_farewell: *id011
-    second_farewell: *id011
-    third_farewell: *id011
-    fourth_farewell: *id011
-  slot_relations:
-  - kind: distinct
-    slots:
-    - first_farewell
-    - second_farewell
-    - third_farewell
-    - fourth_farewell
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - first_farewell
-    - second_farewell
-    - third_farewell
-    - fourth_farewell
-  feedback_frame:
-    text: Je hebt vier afscheidswoorden gekoppeld aan hun Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
 - content_key: practice.nl-en.en.a1.unit01.lesson05.farewell_listen.006
   lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
   type: listen_select
@@ -542,7 +561,7 @@ templates:
   lesson_content_key: en.a1.unit01.lesson03.wellbeing
   type: matching_pairs
   frame:
-    text: Koppel beleefde Engelse woorden aan hun Nederlandse betekenis.
+    text: Koppel de Engelse woorden uit deze les aan hun Nederlandse betekenis.
     language_code: nl
     direction: ltr
   slots:
@@ -571,76 +590,7 @@ templates:
     - word_five
     - word_six
   feedback_frame:
-    text: Je hebt de beleefde woorden gekoppeld aan hun Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_dialogue_pair.903
-  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-  type: matching_pairs
-  frame:
-    text: Koppel elk Engels woord uit de dialoog aan zijn Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
-  slots:
-    word_one: *id012
-    word_two: *id012
-    word_three: *id012
-    word_four: *id012
-    word_five: *id012
-    word_six: *id012
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  feedback_frame:
-    text: Je hebt de dialoogwoorden gekoppeld aan hun Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit01.lesson01.variety_family_pair.904
-  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-  type: matching_pairs
-  frame:
-    text: Koppel familieleden aan hun Nederlandse betekenis.
-    language_code: nl
-    direction: ltr
-  slots:
-    word_one: *id013
-    word_two: *id013
-    word_three: *id013
-    word_four: *id013
-    word_five: *id013
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-  feedback_frame:
-    text: Je hebt de familiewoorden gekoppeld aan hun Nederlandse betekenis.
+    text: Je hebt de Engelse woorden uit deze les gekoppeld aan hun Nederlandse betekenis.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit01.lesson01.practice_translate.905

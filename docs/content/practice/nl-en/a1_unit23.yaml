@@ -45,7 +45,29 @@ review:
     where occupation_a/occupation_noun's real tokens anchor). Applied the
     identical fix here: repointed both order.001 and listen.003 to
     en.a1.unit23.lesson01.occupation_words, a safe, no-forward-reference
-    anchor already used successfully above."
+    anchor already used successfully above.
+
+    DEAD-template remediation 2026-07-24 (PACK-ONLY,
+    scripts/_practice_unit_scope_check.py): lesson01.match.003 declared 5
+    matching_pairs slots against 'occupation_noun', but that tag's
+    course-wide 5 members include teacher/engineer (introduced in
+    unit01/unit02) -- unit23 itself only carries 3 (nurse/cook/driver),
+    below the declared 5 -> DEAD. Recipe fix SS3.1(c): dropped the
+    semantic constraint to plain part_of_speech: noun (unit23_noun
+    preset) over unit23's OWN full noun pool -- nurse, cook, driver
+    (lesson01), patients, reports (lesson03), company, downtown, emails,
+    clients, job (lesson04) -- 10 distinct unit-scoped nouns, all
+    distinct glosses (verpleegkundige/kok/chauffeur/patienten/
+    rapporten/bedrijf/in het centrum/e-mails/klanten/baan, checked by
+    hand for confusability, none found). Bumped the template from 5 to 8
+    declared slots (comfortably under the 10-token pool, above the
+    AUTHORING_GUIDE #16 6-pair floor). Left every other template
+    (choose/listen/translate on occupation_noun, word_order on
+    occupation_a) untouched -- none of those were flagged; their 3-member
+    unit-scoped pools already clear the MC/listen 3-floor and word_order
+    has no floor. Verified 0 DEAD / 0 below-floor via
+    scripts/_practice_unit_scope_check.py and compiler practice-validate
+    0 errors after the fix."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -53,6 +75,7 @@ tag_schema:
 slot_presets:
   occupation_noun: &occupation_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_noun}}
   occupation_a: &occupation_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_a}}
+  unit23_noun: &unit23_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.nl-en.en.a1.unit23.lesson01.choose.001
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
@@ -71,11 +94,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit23.lesson01.match.003
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *occupation_noun, second: *occupation_noun, third: *occupation_noun, fourth: *occupation_noun, fifth: *occupation_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Verbind elk beroep met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: en, direction: ltr}
+    slots: {first: *unit23_noun, second: *unit23_noun, third: *unit23_noun, fourth: *unit23_noun, fifth: *unit23_noun, sixth: *unit23_noun, seventh: *unit23_noun, eighth: *unit23_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit23.lesson01.translate.004
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: translation

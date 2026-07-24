@@ -42,106 +42,147 @@ review:
     scripts/_en_target_lexeme_common.py and re-pointing every clock-hour
     template (all of lesson01/lesson02/lesson04's number-slotted templates)
     to it. Re-verified with compile_content.py practice-validate (0/0) and a
-    standalone harness confirming every fixed slot now draws only 1-12. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the day_part (noun) matching_pairs template from 2 to 4 pairs."
+    standalone harness confirming every fixed slot now draws only 1-12. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the day_part (noun) matching_pairs template from 2 to 4 pairs.
+
+    UNIT-SCOPE REBUILD (2026-07-24, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    flagged 10 of this pack's 13 templates DEAD and the remaining 3 below-floor -- effectively the entire pack. Root cause,
+    confirmed via a standalone iter_specs() dump of unit05's real lexemes (only 11 tokens total): 'hour_number' (like plain
+    'number') is classified starting at a1.unit03 and never reintroduced with a unit05-scoped lesson_content_key, so every
+    template built around filling a clock-hour NUMBER into a fixed sentence (oclock_order/listen/translate,
+    quarter_past_order, ten_past_order, quarter_to_translate, open_hour_order/translate -- 8 templates) had 0 unit05-scoped
+    candidates. Separately, 'day_part_in' (deliberately excluding 'night', per the 2026-07-05 note above) is classified
+    starting at a1.unit01/b1.unit05/etc. but a1.unit05 was never added to its list either (opens_order.003, 1 more DEAD).
+    And 'day_part' itself has only ONE unit05-native member ('night' -- morning/afternoon/evening were all taught back in
+    unit01), so day_part_pair.002 (needs 4) was DEAD and day_part_meaning.001/day_part_listen.001 (need >=3) were both
+    below-floor at 1. In short: unit05 itself introduces only 11 tokens (time, o'clock, half, past, quarter, night, store,
+    in, closes, does, close), of which only 'night' (day_part/time_period) and 'store' (neighborhood_noun) carry ANY
+    pre-existing semantic tag at all -- every clock-number word this unit's own realization teaches is completely
+    unclassified by the shared lexeme classifier.
+
+    None of the 10 DEAD templates could be pack-fixed by re-anchoring to a real unit05 number: no unit05-native number
+    lexeme exists at all (this is systemic -- the same gap is independently logged against nl-en a1_unit07/a1_unit08's
+    price templates). LOGGED for the coordinator: en-target number words need a backfill_lexemes_nl_en.py /
+    _en_target_lexeme_common.py change to emit unit-scoped specs wherever a LATER unit's own realization actually uses a
+    number in its dialogue (not just at first introduction), or checkpoint-visible hour-telling exercises can never exist
+    for this unit. Rebuilt the pack from scratch around what this unit ACTUALLY introduces, per the recipe's SS3.1c
+    (untagged POS-only slots) and SS8.1 (grammar unit: put the structure in the frame, not the pool):
+      - Recognition + production: a 'unit05_noun' slot (no semantic tag, just language_code+part_of_speech=noun,
+        unit05-scoped) pools time/o'clock/half/quarter/night/store -- 6 distinct glosses (tijd/uur/half/kwart/nacht/winkel,
+        no duplicates) -- used for lesson01/lesson02's MC, listen_select, and bare-word translation templates. A parallel
+        'unit05_verb' slot (closes/does/close -- gaat dicht/doet/dicht, all distinct) covers the same 3 types for
+        lesson04. Bare-word MC/listen/translation frames ('{item}' alone, no other literal text) carry no
+        grammaticality-in-frame risk regardless of how broad the underlying POS pool is (SS6.1/SS6.6a), so dropping the
+        semantic constraint here is safe at BOTH unit and course scope.
+      - Structured tier: replaced the unfixable hour-telling word_order frames with two frames anchored on the two
+        single-unit05-member tags that DO already exist in the shared classifier -- 'Good {item}.' on day_part (night at
+        unit scope; morning/afternoon/evening/night at a1 course scope, ALL four grammatical in 'Good ___', matching the
+        precedent already shipped in nl-en a1_unit01's variety_time_order.900) and 'The {item} is nearby.' on
+        neighborhood_noun (store at unit scope; neighbor/park/store/street at a1 course scope, verified ALL four
+        grammatical in this exact frame -- deliberately NOT reusing the original 'The store opens at nine in the
+        {item}.' shape, since that frame is only safe for morning/afternoon/evening and 'in the night' is idiomatically
+        wrong, which is exactly why day_part_in existed and exactly why it can't be pack-fixed here). Both verified for
+        self-reference (SS1.1/1.14): neither frame's literal words appear in its own slot's course-wide pool. Widened
+        day_part_pair.002 into a 'unit05_noun' matching_pairs (6 pairs on the same safe noun pool, replacing the
+        unreachable 4-pair day_part-only version).
+      - Kept the one template that was already fully valid, day_part_translate (bare-word 'night' translation, single
+        candidate, no floor to fail).
+    Net result: 13 -> 12 templates (all now live), spread 4/4/2/3 across lesson01-04, tiers recognition=4 (noun_choose,
+    noun_listen, verb_choose, verb_listen), structured=3 (day_part_order, store_order, noun_pair), production=5
+    (noun_translate x2, prep_translate, day_part_translate, verb_translate) -- all comfortably clear the >=3/tier bar.
+    Re-verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, hour_number, day_part, day_part_in, time_period]
+    semantic: [day_part, neighborhood_noun]
 slot_presets:
-  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
-  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
   day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
-  day_part_in: &day_part_in {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
+  neighborhood_noun: &neighborhood_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: neighborhood_noun}}
+  unit05_noun: &unit05_noun {language_code: en, part_of_speech: noun}
+  unit05_verb: &unit05_verb {language_code: en, part_of_speech: verb}
+  unit05_prep: &unit05_prep {language_code: en, part_of_speech: preposition}
 templates:
-  - content_key: practice.nl-en.en.a1.unit05.lesson01.oclock_order.001
+  - content_key: practice.nl-en.en.a1.unit05.lesson01.noun_choose.001
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
-    type: word_order
-    frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur in deze tijdsaanduiding.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson01.oclock_listen.003
-    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
-    type: listen_select
-    frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson01.oclock_translate.004
-    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
-    type: translation
-    frame: {text: "Het is {item} uur.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It's {item} o'clock betekent Het is {item} uur.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson02.quarter_past_order.001
-    lesson_content_key: en.a1.unit05.lesson02.quarter_times
-    type: word_order
-    frame: {text: "It's a quarter past {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's a quarter past {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur waar kwart over naar verwijst.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson02.ten_past_order.003
-    lesson_content_key: en.a1.unit05.lesson02.quarter_times
-    type: word_order
-    frame: {text: "It's ten past {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's ten past {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur waar tien over naar verwijst.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson02.quarter_to_translate.004
-    lesson_content_key: en.a1.unit05.lesson02.quarter_times
-    type: translation
-    frame: {text: "Het is kwart voor {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's a quarter to {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It's a quarter to {item} betekent Het is kwart voor {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_meaning.001
-    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *day_part}
+    slots: {item: *unit05_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het Engelse dagdeel.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_pair.002
-    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    feedback_frame: {text: "{item} is een woord uit deze les over tijd en openingstijden.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson01.noun_listen.002
+    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit05_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson01.noun_translate.003
+    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit05_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson01.prep_translate.004
+    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit05_prep}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson02.noun_pair.001
+    lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: matching_pairs
-    frame: {text: "Koppel de dagdelen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_part: *day_part, second_part: *day_part, third_part: *day_part, fourth_part: *day_part}
-    slot_relations: [{kind: distinct, slots: [first_part, second_part, third_part, fourth_part]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_part, second_part, third_part, fourth_part]}
-    feedback_frame: {text: "Je hebt twee dagdelen gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson03.opens_order.003
+    frame: {text: "Koppel de Engelse woorden uit deze les aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_item: *unit05_noun, second_item: *unit05_noun, third_item: *unit05_noun, fourth_item: *unit05_noun, fifth_item: *unit05_noun, sixth_item: *unit05_noun}
+    slot_relations: [{kind: distinct, slots: [first_item, second_item, third_item, fourth_item, fifth_item, sixth_item]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_item, second_item, third_item, fourth_item, fifth_item, sixth_item]}
+    feedback_frame: {text: "Je hebt de Engelse woorden uit deze les gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson02.noun_translate.002
+    lesson_content_key: en.a1.unit05.lesson02.quarter_times
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit05_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_order.001
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: word_order
-    frame: {text: "The store opens at nine in the {item}", language_code: en, direction: ltr}
-    slots: {item: *day_part_in}
-    answer_derivation: {kind: render_frame, frame: {text: "The store opens at nine in the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het dagdeel waarin de winkel opengaat.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_translate.004
+    frame: {text: "Good {item}", language_code: en, direction: ltr}
+    slots: {item: *day_part}
+    answer_derivation: {kind: render_frame, frame: {text: "Good {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is Good {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson03.store_order.002
+    lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
+    type: word_order
+    frame: {text: "The {item} is nearby", language_code: en, direction: ltr}
+    slots: {item: *neighborhood_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "The {item} is nearby", language_code: en, direction: ltr}}
+    feedback_frame: {text: "De juiste volgorde is The {item} is nearby.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson03.day_part_translate.003
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *day_part}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson04.day_part_listen.001
+  - content_key: practice.nl-en.en.a1.unit05.lesson04.verb_choose.001
+    lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit05_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een werkwoord uit deze les over openingstijden.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson04.verb_listen.002
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *day_part}
+    slots: {item: *unit05_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het dagdeel dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson04.open_hour_order.002
-    lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
-    type: word_order
-    frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur waarop de bibliotheek opengaat.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit05.lesson04.open_hour_translate.004
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit05.lesson04.verb_translate.003
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: translation
-    frame: {text: "Het gaat om {item} uur open.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It opens at {item} in the morning", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It opens at {item} in the morning betekent Het gaat om {item} uur 's ochtends open.", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit05_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
