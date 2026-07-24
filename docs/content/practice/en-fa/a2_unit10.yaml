@@ -66,15 +66,78 @@ review:
     compile_content.py practice-validate (0 errors/0 warnings, full en-fa
     pack). review.status left unreviewed -- this pass does not
     self-certify review.
+
+    DEAD-TEMPLATE FIX PASS, 2026-07-24 (reauth lane, unit-scope check).
+    scripts/_practice_unit_scope_check.py flagged three defects, all
+    caused by the "person_name" tag being COURSE-wide (established in
+    units 01/02/07) while this unit's own lessons introduce only 2 of its
+    7 members (نگار/آرش): (1) lesson04 person_name_match.002 was DEAD --
+    matching_pairs declared 7 slots against a 2-member unit-scoped pool;
+    (2) lesson04 person_name_choice.001 was below the multiple_choice
+    3-distinct floor (2 unit-scoped candidates); (3) lesson03
+    family_message_match.005 was below the matching_pairs 6-pair floor
+    (family_message_word is only 2 members, پیام/خانواده, unit-wide).
+    Fix per docs/content/PRACTICE_PACK_RECIPE.md option 1 (re-anchor to
+    the unit's own vocab) for both: renamed the two lesson04 templates to
+    dialogue_word_choice.001/dialogue_word_match.002 and re-anchored their
+    slot to a NEW "dialogue_word" tag/preset -- this unit's own
+    lesson04.office_debate_dialogue already carries this tag on 16
+    distinct word-level lexemes (موافق/نیستم/نگار/آرش/چرا/خونه/ندارم/
+    دوست/دارم/همکارامو/ببینم/باشه/ولی/می‌گیره/درسته/عادت, part_of_speech
+    adjective/verb/proper_noun/adverb/noun/particle, phrase-type excluded
+    so the 4 reviewed_phrase/opinion_phrase sentences stay out of this
+    pool), all glosses read and confirmed distinct/non-duplicate against
+    the realization. The now-unused course-wide "person_name" tag/preset
+    was removed from this pack (tag_schema + slot_presets) since nothing
+    in this file references it anymore -- it is untouched everywhere else
+    (backfill_lexemes.py, other units' packs). lesson03's
+    family_message_match.005 widened from 2 to 6 slots using a NEW
+    "family_or_opinion_word" preset (semantic union
+    [family_message_word, opinion_word], all-noun, 8 unit-scoped members:
+    پیام/خانواده + نظر/دلیل/دورکاری/ترافیک/تمرکز/دفتر), matching the
+    §8.1(4)/§3.1(a) "matching_pairs pools the unit-wide union" pattern
+    already used elsewhere in this same corpus; glosses checked, no
+    confusable/duplicate pairs. family_message_translate.006 left
+    untouched (translation has no candidate floor). Verified after fix:
+    scripts/_practice_unit_scope_check.py shows 0 DEAD / 0 below-floor for
+    this pack (was 1 DEAD / 2 below-floor); compile_content.py
+    practice-validate 0 errors for the full en-fa pack. Course-scope
+    re-read: neither touched template type (multiple_choice,
+    matching_pairs) has a literal-text frame that embeds a slot value
+    (choice.001's frame is a bare "{dialogue_word}" placeholder;
+    match.002/005's frames are fixed English instructions with no
+    placeholder at all), so the COURSE-scope grammaticality rule
+    (word_order/fixed-sentence translation only, §1.1) does not apply to
+    either fix, and self-reference (defect 1.14) cannot occur either.
+    CORRECTION to an earlier draft of this note: "dialogue_word" is
+    course-wide (every fa a1 unit's dialogue lesson plus a2_unit09 also
+    carry it) and "family_message_word"/"opinion_word" each appear in one
+    other unit (a1_unit22/b1_unit12, and b1_unit04/b1_unit08,
+    respectively) -- checked with iter_specs(), none of that crosses the
+    A1/A2/B1 course boundary in a way that matters for THIS a2 pack
+    (DO-NOT #12 is about a boundary-crossing tag making a pool look
+    bigger than it really is for one Course; a2_unit09 sharing
+    dialogue_word with a2_unit10 is same-Course reuse, which is normal
+    and, for these floor-free-of-grammaticality bare/instructional
+    frames, harmless -- it only enlarges the Endless-Practice pool, same
+    as opinion_word already does by design). Reported so the coordinator
+    can double check if that reasoning is disputed.
+    Noted for the coordinator, not fixed here (PACK-ONLY): lesson02
+    (giving_an_opinion) has real lexemes (better/lot/wasted/تهران/به/من/
+    بهتره/زیادی/تلف + its own opinion_phrase sentence) but zero templates
+    anchored to it -- a template-count/lesson-spread gap (§8), not a
+    DEAD/floor defect, so out of this pass's scope; flagging as a
+    possible follow-up "add a lesson02-anchored template" task.
 tag_schema:
-  part_of_speech: [noun, proper_noun, phrase]
+  part_of_speech: [noun, proper_noun, phrase, adjective, verb, adverb, particle]
   agreement_tags:
-    semantic: [opinion_word, person_name, family_message_word, opinion_phrase]
+    semantic: [opinion_word, family_message_word, opinion_phrase, dialogue_word]
 slot_presets:
   opinion_word: &opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   family_message_word: &family_message_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: family_message_word}}
+  family_or_opinion_word: &family_or_opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [family_message_word, opinion_word]}}
   opinion_phrase: &opinion_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: opinion_phrase}}
+  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [adjective, verb, proper_noun, adverb, noun, particle], agreement_tags: {semantic: dialogue_word}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_choice.001
     lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
@@ -98,21 +161,21 @@ templates:
     slots: {opinion_word: *opinion_word}
     answer_derivation: {kind: slot_text, slot: opinion_word}
     feedback_frame: {text: "The Farsi word is {opinion_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a2.unit10.lesson04.person_name_choice.001
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.dialogue_word_choice.001
     lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
     type: multiple_choice
-    frame: {text: "{person_name}", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name that has appeared in this course.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a2.unit10.lesson04.person_name_match.002
+    frame: {text: "{dialogue_word}", language_code: fa, direction: rtl}
+    slots: {dialogue_word: *dialogue_word}
+    answer_derivation: {kind: slot_gloss, slot: dialogue_word}
+    feedback_frame: {text: "{dialogue_word} is a word from this unit's office-debate dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit10.lesson04.dialogue_word_match.002
     lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
     type: matching_pairs
-    frame: {text: "Match each name with how it's written in Farsi.", language_code: en, direction: ltr}
-    slots: {first: *person_name, second: *person_name, third: *person_name, fourth: *person_name, fifth: *person_name, sixth: *person_name, seventh: *person_name}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *dialogue_word, second: *dialogue_word, third: *dialogue_word, fourth: *dialogue_word, fifth: *dialogue_word, sixth: *dialogue_word, seventh: *dialogue_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
-    feedback_frame: {text: "Match each name to how it's written in Farsi.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_word_order.004
     lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
     type: word_order
@@ -125,9 +188,9 @@ templates:
     lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *family_message_word, second: *family_message_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    slots: {first: *family_or_opinion_word, second: *family_or_opinion_word, third: *family_or_opinion_word, fourth: *family_or_opinion_word, fifth: *family_or_opinion_word, sixth: *family_or_opinion_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit10.lesson03.family_message_translate.006
     lesson_content_key: fa.a2.unit10.lesson03.reading_an_opinion_message

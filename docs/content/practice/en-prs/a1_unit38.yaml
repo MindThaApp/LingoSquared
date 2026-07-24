@@ -4,9 +4,31 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit38.colors
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24: scripts/_practice_unit_scope_check.py flagged
+    lesson03.color_liked_order.001.volume_fill.005 (fill_in_blank) DEAD -- 0 unit-scoped candidates.
+    Root cause: its slot used the singleton tag "volume_en_prs_a1_unit38_color_word_05_single",
+    which scripts/backfill_lexemes_en_prs.py assigns to آبی ("blue") -- but آبی''s own lesson_content_key
+    is prs.a1.unit27.lesson03.hair_eye_color (an EARLIER unit), so generate_checkpoint()''s unit-scoped
+    lesson-id filter excludes it entirely; the tag name embedding "unit38" is misleading, the anchor
+    lexeme is not actually this unit''s own vocabulary. No token native to unit38''s own lessons carries
+    a single-member semantic tag (checked via iter_specs()), so a compliant fill_in_blank replacement
+    (needs an exactly-one-course-wide-candidate anchor) would require a NEW backfill_lexemes_en_prs.py
+    singleton tag on one of this unit''s own colors -- out of scope for a pack-only fix; LOGGED for the
+    coordinator to route to the backfill lane. PACK-ONLY fix applied instead: dropped the dead
+    fill_in_blank and, since dropping alone left the recognition tier at only 1 live template
+    (lesson01''s color_gloss.001) with lesson02 having zero recognition-tier coverage, added a second
+    multiple_choice template anchored to lesson02 (prs.a1.unit38.lesson02.more_colors) reusing the
+    existing color_word preset (6 unit-scoped candidates, already used safely by color_pair.002/
+    volume_match.003) -- net effect is MORE live templates than before (7 -> 7, one dead swapped for
+    one live, recognition tier 1 -> 2) and lesson02 now has both recognition and structured coverage.
+    Removed the now-unused "volume_en_prs_a1_unit38_color_word_05_single" tag from tag_schema (no slot
+    references it anymore). Re-verified: scripts/_practice_unit_scope_check.py 0 DEAD / 0 below-floor
+    for this file; scripts/compile_content.py practice-validate 0 errors; scripts/check_dari_register.py
+    0 findings for this file. Prior authoring history retained below.
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     One group: "color_word" extends the existing color_word tag (unit21: سیاه/سفید/سرخ) with this unit''s new colors (زرد/سبز/نارنجی/خاکستری/بنفش/قهوه‌یی,
@@ -37,7 +59,6 @@ tag_schema:
   agreement_tags:
     semantic:
     - color_word
-    - volume_en_prs_a1_unit38_color_word_05_single
 slot_presets:
   color_word: &id001
     language_code: prs
@@ -134,26 +155,22 @@ templates:
     text: '{color_word} is the Dari word for this.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit38.lesson03.color_liked_order.001.volume_fill.005
-  lesson_content_key: prs.a1.unit38.lesson03.asking_about_colors
-  type: fill_in_blank
+- content_key: practice.en-prs.prs.a1.unit38.lesson02.color_gloss.004
+  lesson_content_key: prs.a1.unit38.lesson02.more_colors
+  type: multiple_choice
   frame:
-    text: رنگ {color_word} را دوست دارم
-    language_code: prs
-    direction: rtl
-  slots:
-    color_word:
-      language_code: prs
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: volume_en_prs_a1_unit38_color_word_05_single
-  answer_derivation:
-    kind: slot_text
-    slot: color_word
-  feedback_frame:
     text: '{color_word}'
     language_code: prs
     direction: rtl
+  slots:
+    color_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: color_word
+  feedback_frame:
+    text: '{color_word} is a color word.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit38.lesson02.color_pair.002.volume_match.003
   lesson_content_key: prs.a1.unit38.lesson02.more_colors
   type: matching_pairs

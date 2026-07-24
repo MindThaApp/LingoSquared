@@ -25,6 +25,17 @@ review:
     have no shared grammatical carrier frame, and laundry_question_phrase is
     two full fixed questions, unsuitable for a slot inside another frame. No
     mis-glossed lexemes found. No listen_select (Azure TTS key unset for fa).
+    REAUTH FIX 2026-07-24: the "EXACTLY 6 distinct tokens" claim above was
+    wrong -- the matching_pairs pool's part_of_speech: [noun, adjective,
+    phrase] silently excluded کاظمی (person_name, proper_noun), leaving only
+    5 unit-scoped distinct fills for a 6-slot template -- DEAD at checkpoint
+    scope in all 3 matching_pairs instances (lesson01/02/04, shared via the
+    &laundry_pool anchor) per _practice_unit_scope_check.py. Added
+    proper_noun to the shared anchor's part_of_speech (کاظمی's gloss "Kazemi
+    (surname)" is a transliteration, not a same-script self-gloss, so it is
+    safe in a matching_pairs pool even though proper_noun stays excluded
+    from this pack's MC/translation slots). Pool is now exactly 6, still at
+    zero slack.
 tag_schema:
   part_of_speech:
   - symbol
@@ -92,7 +103,7 @@ templates:
   slots:
     first: &laundry_pool
       language_code: fa
-      part_of_speech: [noun, adjective, phrase]
+      part_of_speech: [noun, adjective, phrase, proper_noun]
       agreement_tags:
         semantic: [laundry_word, laundry_question_phrase, person_name, reviewed_phrase]
     second: *laundry_pool

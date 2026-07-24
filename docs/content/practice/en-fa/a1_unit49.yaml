@@ -30,6 +30,18 @@ review:
     pack, given only 6 total hostable lexemes across 2 of 4 lessons -- a
     backfill_lexemes_en_fa extension for lessons01/02 would fix this at the
     source.
+    REAUTH FIX 2026-07-24: the "EXACTLY 6 distinct tokens" claim above was
+    wrong -- the matching_pairs pool's part_of_speech: [noun, verb,
+    adjective, phrase] silently excluded جعفری (person_name, proper_noun),
+    leaving only 5 unit-scoped distinct fills for a 6-slot template -- DEAD
+    at checkpoint scope in all 3 matching_pairs instances
+    (lesson03.match.003/.004, lesson04.match.003, shared via the &pool_pool
+    anchor) per _practice_unit_scope_check.py. Added proper_noun to the
+    shared anchor's part_of_speech (جعفری's gloss "Jafari (surname)" is a
+    transliteration, not a same-script self-gloss, so it is safe in a
+    matching_pairs pool even though proper_noun stays excluded from this
+    pack's MC/translation slots). Pool is now exactly 6, still at zero
+    slack.
 tag_schema:
   part_of_speech:
   - symbol
@@ -96,7 +108,7 @@ templates:
   slots:
     first: &pool_pool
       language_code: fa
-      part_of_speech: [noun, verb, adjective, phrase]
+      part_of_speech: [noun, verb, adjective, phrase, proper_noun]
       agreement_tags:
         semantic: [pool_facility_word, person_name, reviewed_phrase]
     second: *pool_pool

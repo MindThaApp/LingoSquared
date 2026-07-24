@@ -27,6 +27,12 @@ review:
     telegraphic notice-style label ("lost bag" / "found bag") matching the
     unit's own lost-and-found-notice register. 15 templates across all 5
     hostable lessons; tiers: 5 recognition / 5 structured / 5 production.
+    REAUTH FIX 2026-07-24: lesson01.match.003 declared 8 matching_pairs
+    slots but its part_of_speech: [noun, adjective] constraint excludes
+    دیدید (the set's only verb), leaving just 7 unit-scoped distinct
+    fills -- DEAD at checkpoint scope per _practice_unit_scope_check.py.
+    Trimmed to 7 slots (still above the 6-pair floor) rather than widening
+    part_of_speech, to keep the exercise's noun/adjective register intact.
 tag_schema:
   part_of_speech:
   - symbol
@@ -87,7 +93,7 @@ templates:
   lesson_content_key: fa.a1.unit40.lesson01.new_lost_items_one
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}'
     language_code: fa
     direction: rtl
   slots:
@@ -101,13 +107,12 @@ templates:
     fifth: *unit40_l1_match
     sixth: *unit40_l1_match
     seventh: *unit40_l1_match
-    eighth: *unit40_l1_match
   slot_relations:
   - kind: distinct
-    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+    slots: [first, second, third, fourth, fifth, sixth, seventh]
   answer_derivation:
     kind: matching_pairs
-    slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]
+    slots: [first, second, third, fourth, fifth, sixth, seventh]
   feedback_frame:
     text: 'Lost items, lost/found verbs, and notice-status words from this unit.'
     language_code: en

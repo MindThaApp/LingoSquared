@@ -23,6 +23,16 @@ review:
     production(translation)=4, total=9. No listen_select authored (fa has no TTS configured --
     AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed lexemes found in this
     pool (every gloss checked against what the unit realization teaches).
+    REAUTH FIX 2026-07-24: the "well above the 6-pair floor" claim above was wrong at UNIT scope --
+    excluding proper_noun left only 4 unit-scoped distinct fills (کنسرت, خواننده, خانم حسینی,
+    کنسرت چطور بود؟ باحال بود!) for the 6-slot lesson04.match.004 -- DEAD at checkpoint scope per
+    _practice_unit_scope_check.py (it was only course-wide-safe in Endless Practice, per recipe §1.1).
+    Re-added proper_noun to the matching_pairs slots' part_of_speech (&id001), bringing in حسینی
+    ("Hosseini (surname)") and شاهین ("Shahin (singer's name)") for exactly 6. Their glosses are
+    transliterations in a different script from the fa token, not same-script self-glosses like the
+    "Nina -> Nina" case the recipe warns about for multiple_choice, so they are safe here even though
+    proper_noun stays excluded from this pack's MC/translation slots (which do retain that self-gloss
+    guard).
 tag_schema:
   part_of_speech:
   - symbol
@@ -262,6 +272,7 @@ templates:
       - preposition
       - particle
       - phrase
+      - proper_noun
     second:
       language_code: fa
       part_of_speech: *id001
