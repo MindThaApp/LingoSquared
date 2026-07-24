@@ -175,6 +175,7 @@ def main() -> int:
     import importlib
     total_dead = 0
     total_floor = 0
+    total_tier = 0
     dead_packs: dict[str, int] = {}
     for label, subdir, module_name in DIRECTIONS:
         try:
@@ -189,24 +190,29 @@ def main() -> int:
             problems = check_pack(pack_path, specs)
             dead = [m for sev, m in problems if sev == "DEAD"]
             floor = [m for sev, m in problems if sev == "FLOOR"]
+            tier = [m for sev, m in problems if sev == "TIER"]
             skip = [m for sev, m in problems if sev == "SKIP"]
             if dead:
                 dead_packs[label] = dead_packs.get(label, 0) + 1
             total_dead += len(dead)
             total_floor += len(floor)
+            total_tier += len(tier)
             if problems:
-                print(f"  {pack_path.name}: {len(dead)} DEAD, {len(floor)} below-floor"
-                      + (", SKIPPED" if skip else ""))
+                print(f"  {pack_path.name}: {len(dead)} DEAD, {len(floor)} below-floor, "
+                      f"{len(tier)} tier-short" + (", SKIPPED" if skip else ""))
                 for m in dead:
                     print(f"      DEAD  {m}")
+                for m in tier:
+                    print(f"      TIER  {m}")
                 for m in floor:
                     print(f"      FLOOR {m}")
                 for m in skip:
                     print(f"      SKIP  {m}")
     print()
-    print(f"TOTAL: {total_dead} DEAD template-slots, {total_floor} below-floor "
+    print(f"TOTAL: {total_dead} DEAD template-slots, {total_tier} tier-short, "
+          f"{total_floor} below-floor "
           f"({sum(dead_packs.values())} packs with >=1 dead template: "
-          f"{', '.join(f'{k}={v}' for k, v in sorted(dead_packs.items()))})")
+          f"{', '.join(f'{k}={v}' for k, v in sorted(dead_packs.items())) or 'none'})")
     return 1 if total_dead else 0
 
 
