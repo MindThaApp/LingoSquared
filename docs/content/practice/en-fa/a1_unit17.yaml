@@ -8,81 +8,138 @@ review:
   required_next_reviewer: codex
   notes: >-
     Authored 2026-07-07, same pass as a1_unit16.yaml -- see that file's
-    notes for the shared backfill_lexemes.py UNIT_FILES extension. Reuses
-    the existing course-wide "person_name" tag (علی/نرگس/سارا/مینا/رضا/
-    نگار/آرش/مریم/نیما, 9 members, established across units 01/02/07/09-11)
-    and existing course-wide "possession_verb"-tagged دارم/داره (both
-    already classified from unit01/unit04) rather than inventing new tags
-    for already-classified tokens.
+    notes for the shared backfill_lexemes.py UNIT_FILES extension.
 
-    Five semantic groups, all verified via scripts/_practice_slot_check.py:
-    "symptom_word" pools every genuine symptom noun/phrase this unit's
-    first two lessons teach (سردرد/تب plus the three auto-derived/single-
-    token symptom phrases حالم خوب نیست/دلم درد می‌کنه/خسته‌ام, 5 members,
-    mixed noun/phrase/verb, anchored lesson02 where خسته‌ام completes the
-    pool) -- mirrors the realization's own combined match_more_symptoms
-    exercise, which pairs this same mixed word/phrase set. "symptom_noun_
-    word" is a narrower additive subset of just the 2 single-word physical
-    symptoms (سردرد/تب) used by this unit's own generative "{symptom}
-    دارم"/"{name} {symptom} داره" word_order templates below, since the 3
-    phrase-level members can't grammatically follow دارم/داره the same way.
-    "help_word" (کمک/می‌تونی plus the auto-derived "می‌تونی کمکم کنی؟"
-    phrase, 3 members, mixed noun/verb/phrase, anchored lesson03) and
-    "advice_word" (دکتر/دارو, 2 members noun, anchored lesson04, matching/
-    translation-only -- below the multiple_choice threshold) are
-    recognition groups. "advice_phrase" (استراحت کن/آب بخور, the 2
-    auto-derived imperative-advice phrases, anchored lesson04) is also
-    generative.
+    2026-07-24 RE-AUTHORED (unit-scope DEAD-template fix pass, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md). scripts/_practice_unit_scope_check.py
+    flagged 1 DEAD template-slot + 5 below-floor matching_pairs:
 
-    Three generative templates: (1) word_order "{advice_phrase_one} و
-    {advice_phrase_two}" directly mirrors lesson04's own taught "استراحت
-    کن و آب بخور" sentence (both orders read equally naturally as advice);
-    (2) word_order "{symptom_noun_word} دارم" mirrors lesson01's own
-    "سردرد دارم"/"تب دارم" (both combinations natural, anchored lesson01
-    where دارم is first taught); (3) word_order "{person_name}
-    {symptom_noun_word} داره" mirrors lesson06's own "نیما سردرد داره"
-    (generalized across the full course-wide person_name pool x the 2
-    symptom_noun_word members = 18 combinations, all grammatical, anchored
-    lesson06 where داره -- the colloquial 3rd-person form -- is taught).
+    (a) person_symptom_have_order.001 (lesson06, word_order) constrained
+    person_name to the course-wide "person_name" tag (علی/نرگس/سارا/مینا/رضا/
+    نگار/آرش/مریم/نیما, established across units 01/02/07/09-11) -- this
+    unit's own lessons introduce ZERO proper nouns (confirmed directly against
+    backfill_lexemes.py's iter_specs(), the same recipe DO-NOT #2 pattern as
+    every other pack in this batch: fine in Endless Practice, invisible to
+    generate_checkpoint()). Not fixable PACK-ONLY -- DROPPED, logged for the
+    coordinator's backfill lane. Lesson06 keeps its checkpoint representation
+    through the widened unit_review_match.002 below.
 
-    Deliberately left out: می‌تونی کمکم کنی؟ as a standalone word_order
-    target (already covered as a recognition item within help_word) and
-    the full lesson05/06 reading/dialogue text.
+    (b) Five matching_pairs were below the recipe's 6-pair floor
+    (DO-NOT #5) because every one of this unit's four semantic groups is
+    individually thin: symptom_word=5, help_word=3, advice_word=2,
+    advice_phrase=2 -- all real, all genuinely this unit's own vocabulary
+    (re-verified against iter_specs()), just none alone reaches 6. Rather
+    than ship four separate sub-floor matching_pairs (symptom_match.002,
+    help_match.002, advice_word_match.001, advice_phrase_match.001 -- all
+    DROPPED), consolidated them into ONE 12-pair union matching_pairs at
+    unit_review_match.002 (symptom_word UNION help_word UNION advice_word
+    UNION advice_phrase = 5+3+2+2 = 12, right at the recipe's 6-12 range's
+    ceiling) -- checked all 12 English glosses for collisions/confusable
+    pairs first (none: "I don't feel well" / "headache" / "fever" / "my
+    stomach hurts" / "I'm tired" / "help" / "you can (informal)" / "Can you
+    help me?" / "doctor" / "medicine" / "rest" / "drink water" are all
+    distinct). Declared as four separate `distinct` relations (one per
+    source tag), not one 12-way relation -- tried the single-relation form
+    first and scripts/_practice_unit_scope_check.py (and this task's own
+    unit-scope checker) evaluate a `distinct` relation's pool from its FIRST
+    listed slot's constraints only, so a merged relation misreports as
+    "needs 12 but pool has 5"; the four-group form (matching a1_unit16's
+    already-fixed unit_review_match.001) reports honestly and fills
+    identically at runtime since the four tags are disjoint token sets.
 
-    Lesson-anchor check: lesson01, lesson02, lesson03, lesson04, and
-    lesson06 each genuinely introduce new vocabulary or grammar
-    (confirmed by reading the realization file directly) -- safe anchors.
-    lesson06 additionally hosts a combined review matching_pairs template
-    pooling symptom_word (5) and advice_word (2) into one 7-pair exercise,
-    the same "final unit review" pattern a1_unit09's/a1_unit16's own packs
-    already established.
+    Dropping the four narrow matching_pairs removed lesson02/03/04's only
+    structured-tier template each, so each got a REPLACEMENT: lesson02 and
+    lesson01 now both anchor a copy of the existing "{symptom_noun_word}
+    دارم" word_order (identical design to the original lesson01 template,
+    just re-anchored -- SS8.1 step 2's "anchor per lesson, pool across the
+    unit" pattern); lesson03 gets a NEW single-member word_order isolating
+    just this unit's own "می‌تونی کمکم کنی؟" (help_word narrowed to
+    part_of_speech: phrase, its only phrase-type member -- SS3.1(b)/(d)'s
+    part-of-speech exclusion-to-a-single-member technique, deliberately NOT
+    the project-wide "reviewed_phrase" tag, which has 401 course-wide members
+    and would have been a much blunter, needlessly broad instrument for one
+    sentence this unit already owns outright); lesson04 gets a NEW
+    multiple_choice over advice_word UNION advice_phrase (4 distinct glosses,
+    clears the 3-answer floor) since neither of lesson04's own tags alone
+    reaches 3. Also added a bare-word translation + multiple_choice pass for
+    lesson01 (previously only had the one word_order template and no
+    recognition/production template of its own) using symptom_noun_word
+    (translation) and the lesson02-anchored symptom_word tag (multiple_choice,
+    5 distinct, reused across both lessons per the same anchor-per-lesson
+    pattern).
 
-    Verified with scripts/_practice_slot_check.py against
-    backfill_lexemes.py's actual iter_specs() output -- clean, no
-    zero-candidate slots, no under-3 multiple_choice/matching_pairs slots
-    (advice_word/advice_phrase correctly have only 2 candidates each and
-    are never used for multiple_choice here).
-    scripts/_fill_in_blank_ambiguity_check.py reports zero flags (no
-    fill_in_blank templates in this pack at all -- every group here has
-    >=2 genuinely distinct, non-synonymous candidates with no natural
-    single-slot frame that could disambiguate them, so per the standing
-    en-fa precedent this unit follows the same zero-fill_in_blank
-    approach as units 03-16 rather than authoring one the compiler's own
-    ambiguity hard-fail would reject anyway). compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard
-    fresh-context review before import.
+    Net: 13 templates -> 14 (4 dropped as sub-floor/dead, 5 added). Final:
+    recognition 4, structured 5, production 5. Lessons 01-04 and 06 each
+    represented; lesson05 introduces zero lexemes of its own (confirmed
+    against iter_specs()) and stays uncovered, same as this unit's own
+    original authoring -- genuinely un-coverable PACK-ONLY, not a gap this
+    pass could close.
+
+    Five semantic groups (unchanged from the original authoring):
+    "symptom_word" pools every genuine symptom noun/phrase this unit's first
+    two lessons teach (سردرد/تب plus the three auto-derived/single-token
+    symptom phrases حالم خوب نیست/دلم درد می‌کنه/خسته‌ام, 5 members, mixed
+    noun/phrase/verb) -- mirrors the realization's own combined
+    match_more_symptoms exercise, which pairs this same mixed word/phrase set.
+    "symptom_noun_word" is a narrower additive subset of just the 2
+    single-word physical symptoms (سردرد/تب) used by this unit's own
+    generative "{symptom} دارم" word_order templates, since the 3 phrase-level
+    members can't grammatically follow دارم the same way. "help_word"
+    (کمک/می‌تونی plus the auto-derived "می‌تونی کمکم کنی؟" phrase, 3 members,
+    mixed noun/verb/phrase) and "advice_word" (دکتر/دارو, 2 members noun) are
+    recognition/production groups. "advice_phrase" (استراحت کن/آب بخور, the 2
+    auto-derived imperative-advice phrases) is also generative: word_order
+    "{advice_phrase_one} و {advice_phrase_two}" directly mirrors lesson04's
+    own taught "استراحت کن و آب بخور" sentence (both orders read equally
+    naturally as advice, re-checked at course scope: advice_phrase has no
+    members outside this unit).
+
+    Deliberately left out: می‌تونی کمکم کنی؟ as a full-sentence word_order
+    target using the project-wide reviewed_phrase tag (see (b) above -- used
+    the narrower unit-native help_word+phrase-POS route instead) and the full
+    lesson05/06 reading/dialogue text.
+
+    scripts/_practice_unit_scope_check.py: 0 DEAD (was 1), 0 below-floor
+    (was 5). compile_content.py practice-validate: 0 errors. No fill_in_blank
+    in this pack. No mis-glossed lexeme found in this unit's own pool (every
+    gloss re-read against this unit's realization file).
 tag_schema:
   part_of_speech: [noun, verb, phrase, proper_noun]
   agreement_tags:
-    semantic: [symptom_word, symptom_noun_word, help_word, advice_word, advice_phrase, person_name]
+    semantic: [symptom_word, symptom_noun_word, help_word, advice_word, advice_phrase]
 slot_presets:
   symptom_word: &symptom_word {language_code: fa, part_of_speech: [noun, phrase, verb], agreement_tags: {semantic: symptom_word}}
   symptom_noun_word: &symptom_noun_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: symptom_noun_word}}
   help_word: &help_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: help_word}}
+  help_phrase: &help_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: help_word}}
   advice_word: &advice_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: advice_word}}
   advice_phrase: &advice_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: advice_phrase}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  advice_or_advice_phrase: &advice_or_advice_phrase {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [advice_word, advice_phrase]}}
 templates:
+  # lesson01 -- basic_symptoms (حالم خوب نیست, سردرد, تب)
+  - content_key: practice.en-fa.fa.a1.unit17.lesson01.symptom_choice.001
+    lesson_content_key: fa.a1.unit17.lesson01.basic_symptoms
+    type: multiple_choice
+    frame: {text: "{symptom_word}", language_code: fa, direction: rtl}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_gloss, slot: symptom_word}
+    feedback_frame: {text: "{symptom_word} describes how someone feels.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson01.symptom_have_order.002
+    lesson_content_key: fa.a1.unit17.lesson01.basic_symptoms
+    type: word_order
+    frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}
+    slots: {symptom_noun_word: *symptom_noun_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "دارم means I have, as in سردرد دارم (I have a headache).", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit17.lesson01.symptom_noun_translate.003
+    lesson_content_key: fa.a1.unit17.lesson01.basic_symptoms
+    type: translation
+    frame: {text: "{symptom_noun_word}", language_code: en, direction: ltr, slot_rendering: {symptom_noun_word: english_gloss}}
+    slots: {symptom_noun_word: *symptom_noun_word}
+    answer_derivation: {kind: slot_text, slot: symptom_noun_word}
+    feedback_frame: {text: "The Farsi word is {symptom_noun_word}.", language_code: en, direction: ltr}
+
+  # lesson02 -- more_symptoms (دلم درد می‌کنه, خسته‌ام)
   - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_choice.001
     lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
     type: multiple_choice
@@ -90,14 +147,13 @@ templates:
     slots: {symptom_word: *symptom_word}
     answer_derivation: {kind: slot_gloss, slot: symptom_word}
     feedback_frame: {text: "{symptom_word} describes how someone feels.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_match.002
+  - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_have_order.002
     lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *symptom_word, second: *symptom_word, third: *symptom_word, fourth: *symptom_word, fifth: *symptom_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
+    type: word_order
+    frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}
+    slots: {symptom_noun_word: *symptom_noun_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "دارم means I have, as in تب دارم (I have a fever).", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit17.lesson02.symptom_translate.003
     lesson_content_key: fa.a1.unit17.lesson02.more_symptoms
     type: translation
@@ -105,13 +161,8 @@ templates:
     slots: {symptom_word: *symptom_word}
     answer_derivation: {kind: slot_text, slot: symptom_word}
     feedback_frame: {text: "The Farsi word or phrase is {symptom_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson01.symptom_have_order.004
-    lesson_content_key: fa.a1.unit17.lesson01.basic_symptoms
-    type: word_order
-    frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}
-    slots: {symptom_noun_word: *symptom_noun_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{symptom_noun_word} دارم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "دارم means I have, as in سردرد دارم (I have a headache).", language_code: en, direction: ltr}
+
+  # lesson03 -- asking_for_help (کمک, می‌تونی, می‌تونی کمکم کنی؟)
   - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_choice.001
     lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
     type: multiple_choice
@@ -119,14 +170,13 @@ templates:
     slots: {help_word: *help_word}
     answer_derivation: {kind: slot_gloss, slot: help_word}
     feedback_frame: {text: "{help_word} is used when asking someone for help.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_match.002
+  - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_phrase_order.002
     lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *help_word, second: *help_word, third: *help_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
+    type: word_order
+    frame: {text: "{help_phrase}", language_code: fa, direction: rtl}
+    slots: {help_phrase: *help_phrase}
+    answer_derivation: {kind: render_frame, frame: {text: "{help_phrase}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "می‌تونی کمکم کنی؟ means 'Can you help me?'.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit17.lesson03.help_translate.003
     lesson_content_key: fa.a1.unit17.lesson03.asking_for_help
     type: translation
@@ -134,14 +184,15 @@ templates:
     slots: {help_word: *help_word}
     answer_derivation: {kind: slot_text, slot: help_word}
     feedback_frame: {text: "The Farsi word or phrase is {help_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_word_match.001
+
+  # lesson04 -- simple_advice (دکتر, دارو, استراحت کن, آب بخور)
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_choice.001
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *advice_word, second: *advice_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    type: multiple_choice
+    frame: {text: "{advice_or_advice_phrase}", language_code: fa, direction: rtl}
+    slots: {advice_or_advice_phrase: *advice_or_advice_phrase}
+    answer_derivation: {kind: slot_gloss, slot: advice_or_advice_phrase}
+    feedback_frame: {text: "{advice_or_advice_phrase} is advice you might get from a doctor.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_word_translate.002
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
     type: translation
@@ -149,22 +200,14 @@ templates:
     slots: {advice_word: *advice_word}
     answer_derivation: {kind: slot_text, slot: advice_word}
     feedback_frame: {text: "The Farsi word is {advice_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_match.001
-    lesson_content_key: fa.a1.unit17.lesson04.simple_advice
-    type: matching_pairs
-    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *advice_phrase, second: *advice_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_translate.002
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_translate.003
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
     type: translation
     frame: {text: "{advice_phrase}", language_code: en, direction: ltr, slot_rendering: {advice_phrase: english_gloss}}
     slots: {advice_phrase: *advice_phrase}
     answer_derivation: {kind: slot_text, slot: advice_phrase}
     feedback_frame: {text: "The Farsi phrase is {advice_phrase}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_order.003
+  - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_order.004
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
     type: word_order
     frame: {text: "{advice_phrase_one} و {advice_phrase_two}", language_code: fa, direction: rtl}
@@ -172,14 +215,10 @@ templates:
     slot_relations: [{kind: distinct, slots: [advice_phrase_one, advice_phrase_two]}]
     answer_derivation: {kind: render_frame, frame: {text: "{advice_phrase_one} و {advice_phrase_two}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "و joins two pieces of advice, like استراحت کن و آب بخور (rest and drink water).", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson06.person_symptom_have_order.001
-    lesson_content_key: fa.a1.unit17.lesson06.advice_dialogue
-    type: word_order
-    frame: {text: "{person_name} {symptom_noun_word} داره", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name, symptom_noun_word: *symptom_noun_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {symptom_noun_word} داره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "داره means he/she has, like نیما سردرد داره (Nima has a headache).", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit17.lesson06.unit_review_match.002
+
+  # lesson06 -- advice_dialogue (no new vocabulary of its own; hosts this
+  # unit's full review, pooling all four semantic groups above)
+  - content_key: practice.en-fa.fa.a1.unit17.lesson06.unit_review_match.001
     lesson_content_key: fa.a1.unit17.lesson06.advice_dialogue
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's health vocabulary.", language_code: en, direction: ltr}
@@ -189,10 +228,17 @@ templates:
       sw3: *symptom_word
       sw4: *symptom_word
       sw5: *symptom_word
+      hw1: *help_word
+      hw2: *help_word
+      hw3: *help_word
       aw1: *advice_word
       aw2: *advice_word
+      ap1: *advice_phrase
+      ap2: *advice_phrase
     slot_relations:
       - {kind: distinct, slots: [sw1, sw2, sw3, sw4, sw5]}
+      - {kind: distinct, slots: [hw1, hw2, hw3]}
       - {kind: distinct, slots: [aw1, aw2]}
-    answer_derivation: {kind: matching_pairs, slots: [sw1, sw2, sw3, sw4, sw5, aw1, aw2]}
-    feedback_frame: {text: "This reviews both the symptom words/phrases and the advice vocabulary taught in this unit.", language_code: en, direction: ltr}
+      - {kind: distinct, slots: [ap1, ap2]}
+    answer_derivation: {kind: matching_pairs, slots: [sw1, sw2, sw3, sw4, sw5, hw1, hw2, hw3, aw1, aw2, ap1, ap2]}
+    feedback_frame: {text: "This reviews the symptom, help, and advice vocabulary taught in this unit.", language_code: en, direction: ltr}

@@ -57,15 +57,78 @@ review:
     practice-validate clean (0 errors/0 warnings) for the full en-fa pack
     including this new file. Needs the standard fresh-context review
     before import.
+
+    REAUTH 2026-07-24 (unit-scope DEAD fix, pack-only): scripts/
+    _practice_unit_scope_check.py found this pack's "day_part_word" tag
+    carries only 1 real unit-scoped lexeme (ظهر), not the 4 (صبح/ظهر/عصر/
+    شب) this file's own authoring notes above claimed -- صبح/عصر never
+    got their own day_part_word-tagged lexeme entries in
+    backfill_lexemes.py (they only appear inside lesson06's
+    dialogue_word-tagged sentence phrases), and شب does not appear in
+    this unit's real iter_specs() output at all. That made
+    lesson04.day_part_match.006 DEAD (needed 4 distinct fills, pool had
+    1) and lesson04.day_part_choice.005 below the 3-option floor (1
+    distinct), and silently made lesson04.day_part_word_order.008
+    unfillable too (its two slots require distinct=true over the same
+    1-member pool -- fill_slots()'s backtracking can never satisfy that,
+    though the scope-check tool does not itself flag word_order this
+    way). PACK-ONLY fix per the recipe SS3.1a/SS8.1 pattern: added a
+    `unit_noun_review` union preset (time_unit_word + day_part_word +
+    appointment_word = 6 real distinct unit-scoped nouns: ساعت/دقیقه/
+    نیم/ربع/ظهر/قرار) and re-anchored the three lesson04 templates to it
+    (lesson_content_key unchanged, only the slot widened), bumping
+    day_part_match.006 from 4 to 6 declared pairs to match the floor.
+    Also widened the two other below-floor matching_pairs: lesson01.
+    time_unit_match.002 (was time_unit_word alone, 4 pairs) now uses the
+    same unit_noun_review preset at 6 pairs; lesson06.time_phrase_match.
+    011 (was time_phrase alone, 4 pairs) now unions time_phrase with this
+    unit's own dialogue_word-tagged nouns (سر/کار/مشکلی, all from
+    lesson06's own dialogue) via a new `lesson06_review_word` preset (10
+    distinct), at 6 pairs. lesson06.unit_review_match.013 was rebuilt
+    from its old two broken 4-slot distinct sub-groups (tu1-4 fine, but
+    dp1-4 was 0-candidate-safe yet still infeasible for the same
+    distinct-vs-1-member reason as 008) into one clean 6-slot distinct
+    group over a new full-unit `unit_review_word` preset (13 distinct:
+    all 5 of this unit's semantic tags unioned). Checked every new pool
+    by hand for confusable/duplicate english_gloss values -- none found
+    (13 distinct tokens, 13 distinct glosses). word_order frames ("{a} و
+    {b}") stay syntactically safe under the widened pool: و is a plain
+    noun-conjunction, and all 5 semantic tags used here are unit09-
+    exclusive (grepped scripts/backfill_lexemes.py -- none reused by any
+    other unit), so course scope == unit scope for this pack and no
+    Endless-Practice-only grammaticality risk was introduced.
+    BACKFILL GAP TO LOG (not fixed here, pack-only): day_part_word should
+    really carry صبح ("morning") and عصر ("afternoon/evening") as their
+    own standalone lexemes (they are taught and used in lesson06's
+    dialogue) -- coordinator should route a backfill_lexemes.py extension
+    for those two tokens; شب ("night") is not taught anywhere in this
+    unit's realization at all, so it should not be added as day_part_word
+    without a teaching card to back it.
+    After fix: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0
+    below-floor for this pack. All three tiers still clear >=3 templates
+    (recognition 3, structured 6, production 4), 13 templates total,
+    unchanged from before the fix.
 tag_schema:
   part_of_speech: [noun, phrase]
   agreement_tags:
-    semantic: [time_unit_word, day_part_word, appointment_word, time_phrase]
+    semantic: [time_unit_word, day_part_word, appointment_word, time_phrase, dialogue_word]
 slot_presets:
   time_unit_word: &time_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: time_unit_word}}
   day_part_word: &day_part_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: day_part_word}}
   appointment_word: &appointment_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: appointment_word}}
   time_phrase: &time_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: time_phrase}}
+  # REAUTH 2026-07-24: day_part_word only has 1 real unit-scoped lexeme (ظهر) --
+  # صبح/عصر/شب never got their own day_part_word-tagged lexeme entries (backfill
+  # gap, logged below). Union with the unit's other two narrow noun tags gives a
+  # real 6-member unit-scoped pool per SS3.1a/SS8.1 -- used to re-anchor the
+  # previously-DEAD/below-floor day-part templates while keeping their
+  # lesson_content_key anchors unchanged.
+  unit_noun_review: &unit_noun_review {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [time_unit_word, day_part_word, appointment_word]}}
+  # time_phrase alone is only 4 -- union with this unit's own dialogue_word nouns
+  # (all from lesson06's dialogue) reaches 10, clearing the 6-pair floor.
+  lesson06_review_word: &lesson06_review_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [time_phrase, dialogue_word]}}
+  # Full-unit union (13 distinct) for the unit-wide review card.
+  unit_review_word: &unit_review_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [time_unit_word, day_part_word, appointment_word, dialogue_word, time_phrase]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_choice.001
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
@@ -78,9 +141,9 @@ templates:
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
     type: matching_pairs
     frame: {text: "Match each time word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *time_unit_word, second: *time_unit_word, third: *time_unit_word, fourth: *time_unit_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    slots: {first: *unit_noun_review, second: *unit_noun_review, third: *unit_noun_review, fourth: *unit_noun_review, fifth: *unit_noun_review, sixth: *unit_noun_review}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each time word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_translate.003
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
@@ -101,17 +164,17 @@ templates:
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: multiple_choice
     frame: {text: "{day_part_word}", language_code: fa, direction: rtl}
-    slots: {day_part_word: *day_part_word}
+    slots: {day_part_word: *unit_noun_review}
     answer_derivation: {kind: slot_gloss, slot: day_part_word}
-    feedback_frame: {text: "{day_part_word} names a part of the day.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{day_part_word} is a time-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_match.006
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: matching_pairs
-    frame: {text: "Match each part of the day with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *day_part_word, second: *day_part_word, third: *day_part_word, fourth: *day_part_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each part of the day to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit_noun_review, second: *unit_noun_review, third: *unit_noun_review, fourth: *unit_noun_review, fifth: *unit_noun_review, sixth: *unit_noun_review}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_translate.007
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: translation
@@ -123,10 +186,10 @@ templates:
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: word_order
     frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}
-    slots: {day_part_word_one: *day_part_word, day_part_word_two: *day_part_word}
+    slots: {day_part_word_one: *unit_noun_review, day_part_word_two: *unit_noun_review}
     slot_relations: [{kind: distinct, slots: [day_part_word_one, day_part_word_two]}]
     answer_derivation: {kind: render_frame, frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "و joins two parts of the day, like صبح و عصر.", language_code: en, direction: ltr}
+    feedback_frame: {text: "و means 'and' -- it joins two words together, like ربع و ظهر.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson05.appointment_translate.009
     lesson_content_key: fa.a1.unit09.lesson05.asking_about_an_appointment
     type: translation
@@ -144,11 +207,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson06.time_phrase_match.011
     lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
     type: matching_pairs
-    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *time_phrase, second: *time_phrase, third: *time_phrase, fourth: *time_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *lesson06_review_word, second: *lesson06_review_word, third: *lesson06_review_word, fourth: *lesson06_review_word, fifth: *lesson06_review_word, sixth: *lesson06_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson06.time_phrase_translate.012
     lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
     type: translation
@@ -159,18 +222,15 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson06.unit_review_match.013
     lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
     type: matching_pairs
-    frame: {text: "Match each word with its meaning -- a review of this whole unit's time vocabulary.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's time vocabulary.", language_code: en, direction: ltr}
     slots:
-      tu1: *time_unit_word
-      tu2: *time_unit_word
-      tu3: *time_unit_word
-      tu4: *time_unit_word
-      dp1: *day_part_word
-      dp2: *day_part_word
-      dp3: *day_part_word
-      dp4: *day_part_word
+      first: *unit_review_word
+      second: *unit_review_word
+      third: *unit_review_word
+      fourth: *unit_review_word
+      fifth: *unit_review_word
+      sixth: *unit_review_word
     slot_relations:
-      - {kind: distinct, slots: [tu1, tu2, tu3, tu4]}
-      - {kind: distinct, slots: [dp1, dp2, dp3, dp4]}
-    answer_derivation: {kind: matching_pairs, slots: [tu1, tu2, tu3, tu4, dp1, dp2, dp3, dp4]}
-    feedback_frame: {text: "This reviews both the basic time words and the parts of the day taught in this unit.", language_code: en, direction: ltr}
+      - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "This reviews the time words and phrases taught across this unit.", language_code: en, direction: ltr}

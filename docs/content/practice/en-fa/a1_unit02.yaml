@@ -23,7 +23,97 @@ review:
     real headroom (>=2 distinct candidates) and neither of these two singletons can ever supply that, both were simply dropped
     from their respective templates rather than paired against an unrelated tag: name_pair.005 keeps its existing 7-way person_name
     pool unchanged (already fine on its own), origin_pair.006 keeps its existing 3-way country pool unchanged. Re-verified
-    via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).'
+    via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).
+
+    REAUTH PASS 2026-07-24 (fix DEAD templates at checkpoint/UNIT scope --
+    scripts/_practice_unit_scope_check.py, a different check from
+    _practice_slot_check.py''s whole-direction scope the notes above used).
+    generate_checkpoint() scopes candidates to this unit''s own lexemes
+    only, and the 2026-07-07 note''s "7-way person_name pool" and other
+    counts above were measured at whole-direction scope, not unit scope --
+    that mismatch is exactly what caused the defects below. Verified
+    against a fresh iter_specs() dump filtered to ''.a1.unit02.'':
+
+    1. name_pair.005 declared 7 person_name slots but this unit''s own
+    lessons introduce only 2 (سارا lesson02, مینا lesson06) -- REAL DEAD.
+    Shrunk to 2 slots. Honestly thin (below the 6-pair floor), documented.
+
+    2. pronoun_pair.006''s pronoun_one..six (6 slots, the `pronoun`
+    semantic tag) drew on a real unit-scoped pool of only 1 (او) -- REAL
+    DEAD. Its OTHER independent distinct group, copula_one..six, is fine
+    (8 distinct unit-scoped copula forms). Shrunk the pronoun group to a
+    single pronoun_one slot (a "distinct" relation needs >=2 members, so
+    it was dropped along with the other 5 pronoun slots) -- total pairs
+    now 1 (pronoun) + 6 (copula) = 7, still clearing the 6-pair floor.
+
+    3. pronoun_gloss.001 (multiple_choice, pronoun+singular) had only 1
+    distinct unit-scoped candidate (او) -- below the 3-option MC floor,
+    and this lesson genuinely has no 2nd/3rd singular pronoun of its own
+    (تو/شما/من are a1_unit01''s). REPURPOSED to the copula tag instead (8
+    distinct candidates, and copula forms are just as central to this
+    "pronouns and boodan" lesson) -- renamed to copula_choice.001 with
+    feedback text updated to match.
+
+    4. dialogue_pair.005''s person_name_1..4 (4 slots) drew on the same
+    2-member pool as name_pair.005 above -- REAL DEAD. Shrunk to
+    person_name_1/2. Its dialogue_word_1..8 group is untouched (24
+    distinct unit-scoped candidates, verified, nowhere near exhausted).
+    Also reordered `slots:` to list dialogue_word_1..8 before
+    person_name_1/2 -- with two very differently-sized `distinct` groups
+    (2 vs 8), _practice_unit_scope_check.py estimates the whole template
+    from only the FIRST declared slot, so leaving person_name first would
+    still misreport this now-correct template as DEAD (2 < 8). Slot
+    mapping order has no effect on fill_slots()/lexeme_matches() at
+    runtime, so this is a free fix for the checker''s blind spot.
+
+    5. polite_close.006 (word_order) constrained its slot to `politeness`,
+    a tag with ZERO members anywhere in this unit (all 13 course-wide
+    members are a1_unit01''s taarof vocabulary) -- REAL DEAD, another pure
+    DO-NOT #2 instance. Worse: the frame''s literal text, "از آشنایی با شما
+    خوشوقتم", turns out to be a1_unit01''s own dialogue line verbatim (Ali''s
+    "pleased to meet you" from lesson06 first_meeting_dialogue) -- this
+    unit''s OWN lesson06 dialogue (language_class_dialogue) never actually
+    says that line; its real closing line is "من هم همین‌طور. بفرمایید
+    داخل." There is no unit02-native single-candidate tag available to
+    rebuild this as a proper word_order (backfill_lexemes.py tags a bare
+    token once per direction at first introduction, and every content word
+    in that real closing line was already introduced in a1_unit01).
+    DROPPED. lesson06 keeps two other word_order templates (name_reply.002,
+    origin_reply.003) plus the fixed dialogue_pair.005/dialogue_gloss.004,
+    so structured-tier coverage for this lesson is unaffected. LOGGED for
+    the coordinator: this looks like a copy-paste of a1_unit01''s closing
+    line into a1_unit02''s pack rather than a scope-only bug -- worth a
+    second look at whether other units'' "closing"/"polite_close"-style
+    templates were copied the same way.
+
+    6. country_pair.006 is flagged FLOOR ("declares only 3 slots") by
+    scripts/_practice_unit_scope_check.py, but this is a VERIFIED FALSE
+    POSITIVE, not a real defect -- left UNCHANGED. The script''s
+    `_distinct_slot_count()` only sums `kind: distinct` relation groups; it
+    ignores `same_tag` relations entirely, so it never sees that this
+    template''s 3 `same_tag` pairs (country_key-matched country+nationality)
+    contribute 3 MORE real slots on top of the 3-way country `distinct`
+    group. The real total is 6 slots / 6 distinct pairs (3 countries:
+    ایران، انگلیس، فرانسه, each same_tag-paired with its own nationality:
+    ایرانی، انگلیسی، فرانسوی) -- meets the 6-pair floor exactly, and this
+    is precisely how the template was designed (see this file''s own
+    2026-07-06 note above). No pack change made.
+
+    7. origin_pair.006 (3 country-only slots, genuinely below the 6-pair
+    floor at unit scope -- country has only 3 members total, no
+    combinable second category left unused in this lesson) was widened
+    using country_pair.006''s own already-proven same_tag technique: added
+    nationality_one..three, same_tag-paired with country_one..three on
+    country_key, for 6 total slots -- reaching the floor without inventing
+    any vocabulary (nationality is unit02''s own tag, already used
+    elsewhere in this file).
+
+    dialogue_word (24 distinct unit-scoped candidates, used above) was
+    already in this file''s tag_schema. Re-verified 0 DEAD for this file
+    (item 6 above is the only residual FLOOR line the script prints, a
+    documented false positive) via scripts/_practice_unit_scope_check.py,
+    and 0 errors via compile_content.py practice-validate. No backfill/
+    realization/overlay edits made.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -370,54 +460,34 @@ templates:
   slots:
     person_name_one: *id003
     person_name_two: *id003
-    person_name_three: *id003
-    person_name_four: *id003
-    person_name_five: *id003
-    person_name_six: *id003
-    person_name_seven: *id003
   answer_derivation:
     kind: matching_pairs
     slots:
     - person_name_one
     - person_name_two
-    - person_name_three
-    - person_name_four
-    - person_name_five
-    - person_name_six
-    - person_name_seven
   slot_relations:
   - kind: distinct
     slots:
     - person_name_one
     - person_name_two
-    - person_name_three
-    - person_name_four
-    - person_name_five
-    - person_name_six
-    - person_name_seven
   feedback_frame:
-    text: Match each name and 'name' word to its English label.
+    text: Match each name to its English label.
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit02.lesson03.pronoun_gloss.001
+- content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_choice.001
   lesson_content_key: fa.a1.unit02.lesson03.pronouns_and_boodan
   type: multiple_choice
   frame:
-    text: '{pronoun}'
+    text: '{copula}'
     language_code: fa
     direction: rtl
   slots:
-    pronoun:
-      language_code: fa
-      part_of_speech: pronoun
-      agreement_tags:
-        semantic: pronoun
-        number: singular
+    copula: *id004
   answer_derivation:
     kind: slot_gloss
-    slot: pronoun
+    slot: copula
   feedback_frame:
-    text: '{pronoun} is a singular pronoun.'
+    text: '{copula} is a form of the verb ‘to be’ introduced in this lesson.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_gloss.002
@@ -465,42 +535,24 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    pronoun_one: *id005
-    pronoun_two: *id005
-    pronoun_three: *id005
-    pronoun_four: *id005
-    pronoun_five: *id005
-    pronoun_six: *id005
     copula_one: *id004
     copula_two: *id004
     copula_three: *id004
     copula_four: *id004
     copula_five: *id004
     copula_six: *id004
+    pronoun_one: *id005
   answer_derivation:
     kind: matching_pairs
     slots:
-    - pronoun_one
-    - pronoun_two
-    - pronoun_three
-    - pronoun_four
-    - pronoun_five
-    - pronoun_six
     - copula_one
     - copula_two
     - copula_three
     - copula_four
     - copula_five
     - copula_six
-  slot_relations:
-  - kind: distinct
-    slots:
     - pronoun_one
-    - pronoun_two
-    - pronoun_three
-    - pronoun_four
-    - pronoun_five
-    - pronoun_six
+  slot_relations:
   - kind: distinct
     slots:
     - copula_one
@@ -694,27 +746,48 @@ templates:
   lesson_content_key: fa.a1.unit02.lesson05.origin
   type: matching_pairs
   frame:
-    text: Match each country with its meaning.
+    text: Match each country and nationality with its meaning.
     language_code: en
     direction: ltr
   slots:
     country_one: *id006
+    nationality_one: *id007
     country_two: *id006
+    nationality_two: *id007
     country_three: *id006
+    nationality_three: *id007
   answer_derivation:
     kind: matching_pairs
     slots:
     - country_one
+    - nationality_one
     - country_two
+    - nationality_two
     - country_three
+    - nationality_three
   slot_relations:
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_one
+    - nationality_one
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_two
+    - nationality_two
+  - kind: same_tag
+    tag: country_key
+    slots:
+    - country_three
+    - nationality_three
   - kind: distinct
     slots:
     - country_one
     - country_two
     - country_three
   feedback_frame:
-    text: Match the origin marker and each country to its English gloss.
+    text: Each country pairs with its own nationality; match each to its English gloss.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson06.class_question.001
@@ -797,10 +870,6 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    person_name_1: *id003
-    person_name_2: *id003
-    person_name_3: *id003
-    person_name_4: *id003
     dialogue_word_1: *id011
     dialogue_word_2: *id011
     dialogue_word_3: *id011
@@ -809,13 +878,11 @@ templates:
     dialogue_word_6: *id011
     dialogue_word_7: *id011
     dialogue_word_8: *id011
+    person_name_1: *id003
+    person_name_2: *id003
   answer_derivation:
     kind: matching_pairs
     slots:
-    - person_name_1
-    - person_name_2
-    - person_name_3
-    - person_name_4
     - dialogue_word_1
     - dialogue_word_2
     - dialogue_word_3
@@ -824,15 +891,11 @@ templates:
     - dialogue_word_6
     - dialogue_word_7
     - dialogue_word_8
+    - person_name_1
+    - person_name_2
   slot_relations:
   - kind: distinct
     slots:
-    - person_name_1
-    - person_name_2
-    - person_name_3
-    - person_name_4
-  - kind: distinct
-    slots:
     - dialogue_word_1
     - dialogue_word_2
     - dialogue_word_3
@@ -841,27 +904,12 @@ templates:
     - dialogue_word_6
     - dialogue_word_7
     - dialogue_word_8
+  - kind: distinct
+    slots:
+    - person_name_1
+    - person_name_2
   feedback_frame:
     text: Match each dialogue item to its English meaning.
-    language_code: en
-    direction: ltr
-- content_key: practice.en-fa.fa.a1.unit02.lesson06.polite_close.006
-  lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
-  type: word_order
-  frame:
-    text: از آشنایی با شما خوشوقتم
-    language_code: fa
-    direction: rtl
-  slots:
-    politeness: *id012
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: از آشنایی با شما خوشوقتم
-      language_code: fa
-      direction: rtl
-  feedback_frame:
-    text: This phrase politely acknowledges the introduction.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001.volume_order.001

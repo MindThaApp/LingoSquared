@@ -62,31 +62,143 @@ review:
     (no fill_in_blank templates in this pack). compile_content.py
     practice-validate clean (0 errors/0 warnings). Needs the standard
     fresh-context review before import.
+
+    REAUTH 2026-07-24 (unit-scope DEAD fix, pack-only): this file's own
+    notes above are WRONG about this unit's real capacity, and not from
+    later drift -- from a structural cross-unit token collision that was
+    true from day one. قهوه, چای, کدوم, یا, داره, and نداره are all
+    genuinely re-taught in THIS unit's own realization (fa/
+    a1_unit14_preferences.yaml -- confirmed by reading the teaching cards
+    directly: lesson01.teach.ghahve_word/chay_word, lesson02.teach.
+    kodum_word, lesson03.teach.ya_word, lesson05.teach.dareh_grammar/
+    nadareh_grammar all declare introduced_tokens for these exact
+    tokens), but backfill_lexemes.py/iter_specs() attributes each bare
+    token's canonical lexeme spec to whichever unit FIRST taught that
+    same literal string course-wide: قهوه -> a1_unit06, چای -> a1_unit01,
+    کدوم -> a1_unit10, یا -> a1_unit06, داره/نداره -> a1_unit04 (all
+    confirmed directly against iter_specs() output). generate_checkpoint()
+    only loads lexemes whose provenance is THIS unit's own lesson ids, so
+    none of these 6 tokens can ever be unit14-scoped candidates no matter
+    how this pack's tags are written -- this is the same end effect as
+    DO-NOT #2 (relying on another unit's vocabulary) even though the
+    mechanism here is a same-string re-teaching collision, not a
+    deliberate tag reuse.
+    Net effect: this unit's REAL unit-scoped vocabulary is only 6 tokens,
+    total, across all 6 lessons: "دوست دارم" (reviewed_phrase, lesson01),
+    موسیقی (preference_word, lesson02), "کدوم رو دوست داری؟"
+    (reviewed_phrase, lesson02), بیشتر (asking_word, lesson03),
+    خوشمزه‌ست and جالبه (preference_reason, lesson04). Lessons 05 and 06
+    have ZERO real unit-scoped lexemes at all -- every token they teach
+    (سارا, نیما, عالیه, گرمه, "تو چی؟", داره, نداره) is canonically
+    attributed to an earlier unit (a1_unit02/07/11 confirmed). No pack-
+    only fix can put content into lesson05/06's checkpoint bucket; this
+    is a hard backfill-classification limitation, not a slot-design
+    problem.
+    This made preference_word_match.002 DEAD (needed 3, pool 1),
+    preference_verb_match.001 and preference_verb_translate.002 DEAD
+    (pool 0 -- preference_verb has ZERO real members in this unit),
+    asking_word_match.002 DEAD (needed 3, pool 1); preference_word_
+    choice.001 and asking_word_choice.001 were below the 3-option MC
+    floor (1 distinct each); preference_reason_match.001 was below the
+    6-pair floor (2, exact fit). Also found by hand (not itself flagged,
+    since the checker doesn't test word_order's implicit distinct-
+    relation feasibility): preference_choice_question_order.004 required
+    2 DISTINCT preference_word fills but the real pool is only 1
+    (موسیقی) -- silently unfillable, same mechanism as a1_unit09's
+    day_part_word_order/a1_unit12's accept_word_order.
+
+    PACK-ONLY fix: DROPPED preference_verb_match.001 and preference_verb_
+    translate.002 outright -- preference_verb has zero real unit-scoped
+    members and there is no compatible substitute anywhere in this unit
+    (its whole concept is the 3rd-person داره/نداره forms, which simply
+    are not this unit's own lexemes); lesson05 (their anchor) has no
+    other real content to redirect to either. Added `unit14_review_word`,
+    the union of every one of this unit's 3 surviving real tags plus its
+    own reviewed_phrase items -- literally all 6 real tokens in the whole
+    unit, per SS3.1a/SS8.1, at its ceiling (0 headroom for variety; every
+    generated matching_pairs instance necessarily uses all 6 every time
+    -- an honest ceiling, not a design shortfall). Re-anchored
+    preference_word_choice.001/asking_word_choice.001 to it (fixes the MC
+    floor) and bumped preference_word_match.002/preference_reason_
+    match.001/asking_word_match.002 to it at 6 declared pairs each (fixes
+    DEAD + the 6-pair floor). ADDED a new lesson04-anchored multiple_
+    choice (preference_reason_choice.003, same union) -- dropping the 2
+    dead preference_verb templates left only 2 recognition-tier
+    templates, below the SS8 tier floor of 3; this restores it to 3
+    without inventing content (same real 6-item pool already used
+    elsewhere in this pack).
+    preference_choice_question_order.004 was redesigned as a single-slot
+    frame (SS3.1d anchor) instead of widened: its original "X یا Y؟"
+    shape needs a second real candidate that simply does not exist here,
+    and widening to the 6-item union would be ungrammatical for 5 of the
+    6 members (e.g. "خوشمزه‌ست یا موسیقی؟" does not parse as a coordinate
+    choice). First tried a fixed literal "{preference_word} یا چای؟"
+    companion, then caught it myself: چای is one of the exact 3 tokens
+    `if token in {"قهوه","چای","موسیقی"}` that backfill_lexemes.py
+    classifies preference_word course-wide (from its OWN a1_unit01
+    introduction), so it would be a real course-scope candidate for this
+    same slot -- a genuine SS1.1/defect-1.14 self-reference bug. Replaced
+    it with "{preference_word} رو بیشتر دوست داری؟" (do you like ... more?)
+    instead, mirroring lesson06's own dialogue question shape; بیشتر/رو/
+    دوست/داری are never in the exact 3-token preference_word set so this
+    is course-scope-safe.
+    preference_word_translate.003/preference_reason_translate.002/
+    asking_word_translate.003/preference_more_order.005/preference_
+    reason_order.006 were left on their original narrow presets --
+    unwidened, since translation/word_order have no candidate floor and
+    each already had >=1 real candidate.
+
+    BACKFILL GAP TO LOG (not fixed here, pack-only): if the coordinator
+    wants this unit's own re-teaching of قهوه/چای/کدوم/یا/داره/نداره to
+    actually count toward its own checkpoint, backfill_lexemes.py's
+    token-registration would need to stop deduplicating identical bare
+    tokens taught in multiple units and instead register a fresh spec
+    per (token, unit) pair, or explicitly special-case these 6 tokens for
+    a1_unit14 too -- a design change well beyond this pack-only task, and
+    likely to affect every other unit that deliberately re-teaches
+    earlier vocabulary (a common, apparently intentional pattern in this
+    course, not unique to unit14).
+
+    After fix: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0
+    below-floor for this pack. Tiers: recognition 3, structured 6,
+    production 3, 12 templates total (was 13; net -1 after dropping 2
+    dead and adding 1 replacement). Lessons 05/06 are honestly
+    unrepresented in the checkpoint -- see the backfill-blocked
+    explanation above; this is the genuine ceiling of a pack-only fix.
 tag_schema:
-  part_of_speech: [noun, verb, pronoun, adverb, particle]
+  part_of_speech: [noun, verb, pronoun, adverb, particle, phrase]
   agreement_tags:
-    semantic: [preference_word, preference_verb, preference_reason, asking_word]
+    semantic: [preference_word, preference_reason, asking_word, reviewed_phrase]
 slot_presets:
   preference_word: &preference_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: preference_word}}
-  preference_verb: &preference_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
   preference_reason: &preference_reason {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: preference_reason}}
   asking_word: &asking_word {language_code: fa, part_of_speech: [pronoun, adverb, particle], agreement_tags: {semantic: asking_word}}
+  # REAUTH 2026-07-24: this whole unit has only 6 real unit-scoped lexemes
+  # total (see review notes below -- قهوه/چای/کدوم/یا/داره/نداره are all
+  # taught again in this unit's own realization but their canonical
+  # lexeme spec is attributed to an EARLIER unit that taught the same bare
+  # token first, so generate_checkpoint() can never see them for THIS
+  # unit). This union of every one of this unit's 3 real narrow tags plus
+  # its own reviewed_phrase items is literally the unit's entire real
+  # vocabulary (6 distinct) -- used, at its ceiling, to re-anchor the
+  # below-floor/DEAD MC and matching_pairs templates.
+  unit14_review_word: &unit14_review_word {language_code: fa, part_of_speech: [noun, verb, adverb, phrase], agreement_tags: {semantic: [preference_word, preference_reason, asking_word, reviewed_phrase]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_choice.001
     lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
     type: multiple_choice
     frame: {text: "{preference_word}", language_code: fa, direction: rtl}
-    slots: {preference_word: *preference_word}
+    slots: {preference_word: *unit14_review_word}
     answer_derivation: {kind: slot_gloss, slot: preference_word}
-    feedback_frame: {text: "{preference_word} is something you might like or dislike.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{preference_word} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_match.002
     lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
     type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *preference_word, second: *preference_word, third: *preference_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit14_review_word, second: *unit14_review_word, third: *unit14_review_word, fourth: *unit14_review_word, fifth: *unit14_review_word, sixth: *unit14_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_translate.003
     lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
     type: translation
@@ -94,29 +206,21 @@ templates:
     slots: {preference_word: *preference_word}
     answer_derivation: {kind: slot_text, slot: preference_word}
     feedback_frame: {text: "The Farsi word is {preference_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit14.lesson05.preference_verb_match.001
-    lesson_content_key: fa.a1.unit14.lesson05.reading_about_preferences
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *preference_verb, second: *preference_verb}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit14.lesson05.preference_verb_translate.002
-    lesson_content_key: fa.a1.unit14.lesson05.reading_about_preferences
-    type: translation
-    frame: {text: "{preference_verb}", language_code: en, direction: ltr, slot_rendering: {preference_verb: english_gloss}}
-    slots: {preference_verb: *preference_verb}
-    answer_derivation: {kind: slot_text, slot: preference_verb}
-    feedback_frame: {text: "The Farsi word is {preference_verb}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_choice.003
+    lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
+    type: multiple_choice
+    frame: {text: "{preference_reason}", language_code: fa, direction: rtl}
+    slots: {preference_reason: *unit14_review_word}
+    answer_derivation: {kind: slot_gloss, slot: preference_reason}
+    feedback_frame: {text: "{preference_reason} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_match.001
     lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
     type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *preference_reason, second: *preference_reason}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit14_review_word, second: *unit14_review_word, third: *unit14_review_word, fourth: *unit14_review_word, fifth: *unit14_review_word, sixth: *unit14_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_translate.002
     lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
     type: translation
@@ -128,17 +232,17 @@ templates:
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: multiple_choice
     frame: {text: "{asking_word}", language_code: fa, direction: rtl}
-    slots: {asking_word: *asking_word}
+    slots: {asking_word: *unit14_review_word}
     answer_derivation: {kind: slot_gloss, slot: asking_word}
-    feedback_frame: {text: "{asking_word} is used when asking about or choosing between preferences.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{asking_word} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_match.002
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *asking_word, second: *asking_word, third: *asking_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit14_review_word, second: *unit14_review_word, third: *unit14_review_word, fourth: *unit14_review_word, fifth: *unit14_review_word, sixth: *unit14_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_translate.003
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: translation
@@ -149,11 +253,10 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit14.lesson03.preference_choice_question_order.004
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: word_order
-    frame: {text: "{preference_word_one} یا {preference_word_two}؟", language_code: fa, direction: rtl}
-    slots: {preference_word_one: *preference_word, preference_word_two: *preference_word}
-    slot_relations: [{kind: distinct, slots: [preference_word_one, preference_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{preference_word_one} یا {preference_word_two}؟", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "یا offers a choice, like قهوه یا چای؟", language_code: en, direction: ltr}
+    frame: {text: "{preference_word} رو بیشتر دوست داری؟", language_code: fa, direction: rtl}
+    slots: {preference_word: *preference_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_word} رو بیشتر دوست داری؟", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "رو بیشتر دوست داری؟ asks 'do you like ... more?', as in موسیقی رو بیشتر دوست داری؟", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson03.preference_more_order.005
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: word_order

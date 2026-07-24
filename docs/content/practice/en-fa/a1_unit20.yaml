@@ -54,7 +54,23 @@ review:
     ambiguity_check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual
     iter_specs() output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (try_on_phrase
     correctly has only 3 candidates and is never used for multiple_choice here, only matching_pairs/translation). compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
+    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD-template fix, PACK-ONLY): scripts/_practice_unit_scope_check.py found 3 DEAD +
+    2 below-floor matching_pairs, all the same root cause -- کت (clothing_word) is anchored to unit07, not unit20, so clothing_word''s
+    real unit-scoped pool is 4 not 5; similarly clothing_item_word is 3 not 4. clothing_match.002 (declared 5, unit-scoped
+    4 -> DEAD), color_match.002 (declared 5, at its own native ceiling -> below the 6-pair floor), size_match.002 (declared
+    4, at its own native ceiling -> below floor), try_on_match.001 (declared 3, unit-scoped try_on_phrase pool is 1 since
+    بله/بفرمایید are unit01/unit02, not unit20 -> DEAD), and unit_review_match.001''s cw1-4 group (used clothing_item_word,
+    unit-scoped 3 -> DEAD). Fix: added one new shared slot preset "unit20_wide_word" unioning this unit''s own already-declared
+    clothing_word + color_full_word + size_full_word + try_on_phrase tags (all reused verbatim, no new backfill tags) --
+    unit-scoped pool 14 distinct words/phrases. Re-anchored all four standalone matching_pairs templates to it at 6 slots
+    each (clears both the DEAD and the 6-pair floor). unit_review_match.001''s cw group swapped from clothing_item_word to
+    clothing_word (id001, 4 native members, matches its own declared 4 slots exactly) -- col/sz groups were already correct
+    and untouched. No mis-glossed lexemes found in this unit''s pool. Verified: 0 DEAD, 0 below-floor for this pack per the
+    unit-scope checker; practice-validate 0 errors (see coordinator report for the exact invocation covering all 5 units
+    in this batch).'
 tag_schema:
   part_of_speech:
   - noun
@@ -118,6 +134,14 @@ slot_presets:
     - verb
     agreement_tags:
       semantic: try_on_phrase
+  unit20_wide_word: &id009
+    language_code: fa
+    part_of_speech:
+    - noun
+    - adjective
+    - phrase
+    agreement_tags:
+      semantic: [clothing_word, color_full_word, size_full_word, try_on_phrase]
 templates:
 - content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_choice.001
   lesson_content_key: fa.a1.unit20.lesson01.clothing_vocabulary
@@ -143,11 +167,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
   slot_relations:
   - kind: distinct
     slots:
@@ -156,6 +181,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -164,8 +190,9 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
-    text: These five words cover the basic clothing vocabulary for this unit.
+    text: These six words and phrases cover this unit's clothing, color, size, and fitting-room vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit20.lesson01.clothing_translate.003
@@ -248,11 +275,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id003
-    second: *id003
-    third: *id003
-    fourth: *id003
-    fifth: *id003
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
   slot_relations:
   - kind: distinct
     slots:
@@ -261,6 +289,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -269,8 +298,9 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
-    text: These five words cover color vocabulary for this unit.
+    text: These six words and phrases cover this unit's clothing, color, size, and fitting-room vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit20.lesson02.color_translate.003
@@ -335,10 +365,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id005
-    second: *id005
-    third: *id005
-    fourth: *id005
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
   slot_relations:
   - kind: distinct
     slots:
@@ -346,6 +378,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -353,8 +387,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four words cover size vocabulary for this unit.
+    text: These six words and phrases cover this unit's clothing, color, size, and fitting-room vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit20.lesson03.size_translate.003
@@ -402,23 +438,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id007
-    second: *id007
-    third: *id007
+    first: *id009
+    second: *id009
+    third: *id009
+    fourth: *id009
+    fifth: *id009
+    sixth: *id009
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These are used when trying on clothes in a store.
+    text: These six words and phrases cover this unit's clothing, color, size, and fitting-room vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit20.lesson04.try_on_translate.002
@@ -468,51 +513,38 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    cw1: *id002
-    cw2: *id002
-    cw3: *id002
-    cw4: *id002
-    col1: *id004
-    col2: *id004
-    col3: *id004
-    col4: *id004
-    sz1: *id006
-    sz2: *id006
-    sz3: *id006
+    w1: *id009
+    w2: *id009
+    w3: *id009
+    w4: *id009
+    w5: *id009
+    w6: *id009
+    w7: *id009
+    w8: *id009
   slot_relations:
   - kind: distinct
     slots:
-    - cw1
-    - cw2
-    - cw3
-    - cw4
-  - kind: distinct
-    slots:
-    - col1
-    - col2
-    - col3
-    - col4
-  - kind: distinct
-    slots:
-    - sz1
-    - sz2
-    - sz3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   answer_derivation:
     kind: matching_pairs
     slots:
-    - cw1
-    - cw2
-    - cw3
-    - cw4
-    - col1
-    - col2
-    - col3
-    - col4
-    - sz1
-    - sz2
-    - sz3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   feedback_frame:
-    text: This reviews the clothing item, color, and size vocabulary taught in this unit.
+    text: This reviews the clothing, color, size, and fitting-room vocabulary taught in this unit.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit20.lesson05.full_request_order.001.volume_fill.010

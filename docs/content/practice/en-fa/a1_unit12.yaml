@@ -55,30 +55,101 @@ review:
     this exercise type entirely). compile_content.py practice-validate
     clean (0 errors/0 warnings). Needs the standard fresh-context review
     before import.
+
+    REAUTH 2026-07-24 (unit-scope DEAD fix, pack-only):
+    scripts/_practice_unit_scope_check.py found this pack's 4 own tags had
+    drifted much thinner than this file's own authoring notes above claim:
+    plan_core_word now has only 2 real unit-scoped members (برنامه, سینما
+    -- بریم/"let's go" is genuinely taught in lesson01, teach.berim_word,
+    but was never classified plan_core_word by backfill_lexemes.py);
+    accept_word now has only 1 (قبوله -- باشه/عالیه are genuinely taught
+    in lesson03, teach.bashe_word/teach.alie_word, same gap); invitation_
+    word now has only 2 (دعوت, منتظرم -- می‌بینمت/"I'll see you" is
+    genuinely taught in lesson05, teach.mibinamet_word, same gap).
+    decline_word (متأسفم, نمی‌تونم) is the only one of the 4 that still
+    matches its original 2-member count. This made plan_core_match.002 and
+    invitation_match.002 DEAD (each needed 3 distinct fills, pool had 2),
+    accept_match.002 DEAD (needed 3, pool had 1), and plan_core_choice.001/
+    accept_choice.001/invitation_choice.001 all below the 3-option MC
+    floor (2/1/2 distinct respectively); decline_match.001 was below the
+    6-pair matching_pairs floor (2, exact-fit, not dead but too small).
+    Also found by hand (not itself flagged by the checker, since it only
+    checks per-slot candidate count and matching_pairs sizing, not
+    word_order's implicit distinct-relation feasibility): lesson03.
+    accept_word_order.004 required 2 DISTINCT accept_word fills but the
+    real pool was only 1 (قبوله) -- silently unfillable via the same
+    backtracking-exhaustion mechanism as a1_unit09's day_part_word_order.
+
+    PACK-ONLY fix per SS3.1a/SS8.1: added a `unit12_review_word` union
+    preset over this unit's own 4 narrow tags PLUS its own `reviewed_phrase`
+    items (چطوره؟, کار دارم, ساعت هشت شب, the lesson05 invitation-message
+    sentence, آرش، سارا, ساعتی؟, چه ساعتی؟ -- 7 more real unit-scoped
+    tokens once lesson_content_key-filtered to this unit, even though the
+    reviewed_phrase tag itself is reused corpus-wide), giving 14 real
+    distinct unit-scoped tokens. Re-anchored plan_core_choice.001/
+    accept_choice.001/invitation_choice.001 to this union (lesson_content_
+    key unchanged, fixes the MC floor); bumped plan_core_match.002/
+    accept_match.002/invitation_match.002/decline_match.001 to this union
+    at 6 declared pairs each (fixes both DEAD and the 6-pair floor).
+    Checked all 14 for confusable glosses by hand -- all distinct strings;
+    ساعتی؟ ("time? (o'clock, question form)") and چه ساعتی؟ ("What
+    time?") are related but not identical, kept both per SS6.3's
+    singular/plural-style-discrimination allowance.
+    accept_word_order.004 was NOT widened the same way -- its frame joins
+    two words with a bare comma ("X، Y"), which is only grammatical for
+    two acceptance-type utterances, not for an arbitrary noun/phrase pair
+    from the wider union. Instead redesigned as a single-slot frame
+    ("خیلی خب، {accept_word}") using the one real accept_word candidate as
+    a SS3.1d single-member anchor -- still word_order (no candidate
+    floor), now genuinely fillable instead of silently dead.
+    accept_translate.003 was intentionally left on the narrow *accept_word
+    preset (unwidened) -- translation production should keep testing this
+    unit's own specific vocabulary, not the union.
+
+    BACKFILL GAP TO LOG (not fixed here, pack-only): باشه, عالیه, بریم,
+    and می‌بینمت are all genuinely taught in this unit's own realization
+    (fa/a1_unit12_plans.yaml, confirmed by reading the teaching cards
+    directly) but backfill_lexemes.py never classified them into this
+    pack's accept_word/plan_core_word/invitation_word tags. Coordinator
+    should route a backfill_lexemes.py extension for these 4 tokens --
+    restoring them would let this pack's MC/matching_pairs templates use
+    their own narrow, on-topic tags again instead of the broader
+    reviewed_phrase-inclusive union added here.
+
+    After fix: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0
+    below-floor for this pack. Tiers unchanged: recognition 3, structured
+    5, production 4, 12 templates total.
 tag_schema:
-  part_of_speech: [noun, verb]
+  part_of_speech: [noun, verb, phrase]
   agreement_tags:
-    semantic: [plan_core_word, accept_word, decline_word, invitation_word]
+    semantic: [plan_core_word, accept_word, decline_word, invitation_word, reviewed_phrase]
 slot_presets:
   plan_core_word: &plan_core_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: plan_core_word}}
   accept_word: &accept_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: accept_word}}
   decline_word: &decline_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: decline_word}}
   invitation_word: &invitation_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: invitation_word}}
+  # REAUTH 2026-07-24: this unit's 4 own narrow tags shrank to 1-2 real
+  # members each (backfill drift -- see review notes below), well under the
+  # 3-option MC floor and the 6-pair matching_pairs floor. Union with this
+  # unit's own `reviewed_phrase` items (also unit-scoped once filtered by
+  # lesson_content_key) gives 14 real distinct unit-scoped tokens per
+  # SS3.1a/SS8.1 -- used to re-anchor the below-floor/DEAD templates.
+  unit12_review_word: &unit12_review_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: [plan_core_word, accept_word, decline_word, invitation_word, reviewed_phrase]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit12.lesson01.plan_core_choice.001
     lesson_content_key: fa.a1.unit12.lesson01.plan_vocabulary
     type: multiple_choice
     frame: {text: "{plan_core_word}", language_code: fa, direction: rtl}
-    slots: {plan_core_word: *plan_core_word}
+    slots: {plan_core_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: plan_core_word}
-    feedback_frame: {text: "{plan_core_word} is core vocabulary for making a plan.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{plan_core_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson01.plan_core_match.002
     lesson_content_key: fa.a1.unit12.lesson01.plan_vocabulary
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *plan_core_word, second: *plan_core_word, third: *plan_core_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *unit12_review_word, second: *unit12_review_word, third: *unit12_review_word, fourth: *unit12_review_word, fifth: *unit12_review_word, sixth: *unit12_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson01.plan_core_translate.003
     lesson_content_key: fa.a1.unit12.lesson01.plan_vocabulary
@@ -91,16 +162,16 @@ templates:
     lesson_content_key: fa.a1.unit12.lesson03.accepting_a_plan
     type: multiple_choice
     frame: {text: "{accept_word}", language_code: fa, direction: rtl}
-    slots: {accept_word: *accept_word}
+    slots: {accept_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: accept_word}
-    feedback_frame: {text: "{accept_word} is a way to accept a plan enthusiastically.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{accept_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson03.accept_match.002
     lesson_content_key: fa.a1.unit12.lesson03.accepting_a_plan
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *accept_word, second: *accept_word, third: *accept_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *unit12_review_word, second: *unit12_review_word, third: *unit12_review_word, fourth: *unit12_review_word, fifth: *unit12_review_word, sixth: *unit12_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson03.accept_translate.003
     lesson_content_key: fa.a1.unit12.lesson03.accepting_a_plan
@@ -112,18 +183,17 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit12.lesson03.accept_word_order.004
     lesson_content_key: fa.a1.unit12.lesson03.accepting_a_plan
     type: word_order
-    frame: {text: "{accept_word_one}، {accept_word_two}", language_code: fa, direction: rtl}
-    slots: {accept_word_one: *accept_word, accept_word_two: *accept_word}
-    slot_relations: [{kind: distinct, slots: [accept_word_one, accept_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{accept_word_one}، {accept_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "A comma joins two acceptance words, like باشه، عالیه.", language_code: en, direction: ltr}
+    frame: {text: "خیلی خب، {accept_word}", language_code: fa, direction: rtl}
+    slots: {accept_word: *accept_word}
+    answer_derivation: {kind: render_frame, frame: {text: "خیلی خب، {accept_word}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "خیلی خب means 'alright' -- a natural lead-in before accepting.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson04.decline_match.001
     lesson_content_key: fa.a1.unit12.lesson04.declining_a_plan
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *decline_word, second: *decline_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    slots: {first: *unit12_review_word, second: *unit12_review_word, third: *unit12_review_word, fourth: *unit12_review_word, fifth: *unit12_review_word, sixth: *unit12_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson04.decline_translate.002
     lesson_content_key: fa.a1.unit12.lesson04.declining_a_plan
@@ -136,16 +206,16 @@ templates:
     lesson_content_key: fa.a1.unit12.lesson05.reading_an_invitation
     type: multiple_choice
     frame: {text: "{invitation_word}", language_code: fa, direction: rtl}
-    slots: {invitation_word: *invitation_word}
+    slots: {invitation_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: invitation_word}
-    feedback_frame: {text: "{invitation_word} relates to inviting someone or confirming a plan.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{invitation_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson05.invitation_match.002
     lesson_content_key: fa.a1.unit12.lesson05.reading_an_invitation
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *invitation_word, second: *invitation_word, third: *invitation_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *unit12_review_word, second: *unit12_review_word, third: *unit12_review_word, fourth: *unit12_review_word, fifth: *unit12_review_word, sixth: *unit12_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson05.invitation_translate.003
     lesson_content_key: fa.a1.unit12.lesson05.reading_an_invitation

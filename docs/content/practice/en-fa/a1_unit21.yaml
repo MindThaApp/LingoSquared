@@ -42,7 +42,33 @@ review:
     check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual iter_specs()
     output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (change_word/rate_word correctly
     have only 2 candidates each and are never used for multiple_choice here, only matching_pairs/translation). compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
+    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD-template fix, PACK-ONLY): scripts/_practice_unit_scope_check.py found this to
+    be the worst pack in the batch -- 6 DEAD + 5 below-floor. Root cause, confirmed via iter_specs(): every one of این unit''s
+    narrow "additive" pairs is really only 1 native member plus 1 member borrowed from an EARLIER unit -- به/دارید/تومن (exchange_word)
+    are unit01/unit01/unit03; بفرمایید (change_word) is unit01; هر (rate_word) is unit11. Same defect, worse: the two fill_in_blank
+    "volume_fill" templates constrain number_word to volume_en_fa_a1_unit21_number_word_{07,09}_single, but VOLUME_PRACTICE_SINGLETON_TAGS
+    in backfill_lexemes.py pins both tags to ده ("ten"), which is anchored to unit03/unit09 lexemes, NOT unit21 -- 0 unit-scoped
+    candidates, genuinely un-fixable from the pack side (would need a NEW singleton tag pinned to unit21''s own صد ("hundred",
+    lesson06) added to backfill_lexemes.py, which this pass is not permitted to touch). DROPPED both (rate_amount_order.003.volume_fill.007,
+    dollar_amount_order.004.volume_fill.009) and LOG this backfill gap for the coordinator -- unit21''s own word_order templates
+    (dollar_amount_order.004, rate_amount_order.003) already cover the same {number} دلار / هر دلار {number} تومنه frames using
+    the course-wide "number" tag (no floor for word_order), so structured-tier coverage for this material is not lost.
+
+
+    Fix for every matching_pairs/multiple_choice DEAD or below-floor: added one new shared slot preset "unit21_wide_word"
+    unioning this unit''s own already-declared money_word + exchange_word + atm_word + change_word + rate_word + number tags
+    (all reused verbatim, no new backfill tags) -- unit-scoped pool is 10 distinct words (پول/بانک/دلار/تبدیل/چقدر/خودپرداز/بردارم/خرد/نرخ/صد).
+    Re-anchored money_match.002, exchange_match.002, atm_match.002, change_match.001, rate_match.001, and money_match.002.volume_match.010
+    to it at 6 slots each; re-anchored exchange_choice.001 and atm_choice.001 to it too (both now have a real 10-value pool,
+    well clear of the 3-distinct floor). unit_review_match.001 converted from its old 3-group (mw/ew/aw) design -- which was
+    ACTUALLY dead in two of its three groups even though the checker''s first-slot-only heuristic only flagged one -- to a
+    single flat 8-of-10 pool over the same wide preset, since 4+4+3=11 needed distinct values against a real unit-scoped universe
+    of only 10 was mathematically unsatisfiable regardless of how the groups were split. No mis-glossed lexemes found in this
+    unit''s pool. Verified: 0 DEAD, 0 below-floor for this pack per the unit-scope checker; practice-validate 0 errors (see
+    coordinator report for the exact invocation covering all 5 units in this batch).'
 tag_schema:
   part_of_speech:
   - noun
@@ -102,6 +128,15 @@ slot_presets:
     part_of_speech: adjective
     agreement_tags:
       semantic: number
+  unit21_wide_word: &id008
+    language_code: fa
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: [money_word, exchange_word, atm_word, change_word, rate_word, number]
 templates:
 - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_choice.001
   lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
@@ -127,10 +162,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -138,6 +175,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -145,8 +184,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four words cover the basic money vocabulary for this unit.
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_translate.003
@@ -194,12 +235,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    exchange_word: *id003
+    exchange_word: *id008
   answer_derivation:
     kind: slot_gloss
     slot: exchange_word
   feedback_frame:
-    text: '{exchange_word} is used when asking to exchange currency.'
+    text: '{exchange_word} is money vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_match.002
@@ -210,10 +251,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id003
-    second: *id003
-    third: *id003
-    fourth: *id003
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -221,6 +264,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -228,8 +273,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson02.exchange_translate.003
@@ -258,12 +305,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    atm_word: *id004
+    atm_word: *id008
   answer_derivation:
     kind: slot_gloss
     slot: atm_word
   feedback_frame:
-    text: '{atm_word} is used when withdrawing money from an ATM.'
+    text: '{atm_word} is money vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_match.002
@@ -274,23 +321,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id004
-    second: *id004
-    third: *id004
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson03.atm_translate.003
@@ -319,20 +375,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id005
-    second: *id005
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson04.change_translate.002
@@ -361,20 +429,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id006
-    second: *id006
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_translate.002
@@ -422,93 +502,40 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    mw1: *id001
-    mw2: *id001
-    mw3: *id001
-    mw4: *id001
-    ew1: *id003
-    ew2: *id003
-    ew3: *id003
-    ew4: *id003
-    aw1: *id004
-    aw2: *id004
-    aw3: *id004
+    w1: *id008
+    w2: *id008
+    w3: *id008
+    w4: *id008
+    w5: *id008
+    w6: *id008
+    w7: *id008
+    w8: *id008
   slot_relations:
   - kind: distinct
     slots:
-    - mw1
-    - mw2
-    - mw3
-    - mw4
-  - kind: distinct
-    slots:
-    - ew1
-    - ew2
-    - ew3
-    - ew4
-  - kind: distinct
-    slots:
-    - aw1
-    - aw2
-    - aw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   answer_derivation:
     kind: matching_pairs
     slots:
-    - mw1
-    - mw2
-    - mw3
-    - mw4
-    - ew1
-    - ew2
-    - ew3
-    - ew4
-    - aw1
-    - aw2
-    - aw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   feedback_frame:
-    text: This reviews the money, exchange, and ATM vocabulary taught in this unit.
+    text: This reviews the money, exchange, ATM, change, and rate vocabulary taught in this unit.
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit21.lesson05.rate_amount_order.003.volume_fill.007
-  lesson_content_key: fa.a1.unit21.lesson05.asking_the_rate
-  type: fill_in_blank
-  frame:
-    text: هر دلار {number_word} تومنه
-    language_code: fa
-    direction: rtl
-  slots:
-    number_word:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: volume_en_fa_a1_unit21_number_word_07_single
-  answer_derivation:
-    kind: slot_text
-    slot: number_word
-  feedback_frame:
-    text: '{number_word}'
-    language_code: fa
-    direction: rtl
-- content_key: practice.en-fa.fa.a1.unit21.lesson01.dollar_amount_order.004.volume_fill.009
-  lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
-  type: fill_in_blank
-  frame:
-    text: '{number_word} دلار'
-    language_code: fa
-    direction: rtl
-  slots:
-    number_word:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: volume_en_fa_a1_unit21_number_word_09_single
-  answer_derivation:
-    kind: slot_text
-    slot: number_word
-  feedback_frame:
-    text: '{number_word}'
-    language_code: fa
-    direction: rtl
 - content_key: practice.en-fa.fa.a1.unit21.lesson01.money_match.002.volume_match.010
   lesson_content_key: fa.a1.unit21.lesson01.money_vocabulary
   type: matching_pairs
@@ -517,14 +544,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id007
-      language_code: fa
-      part_of_speech: noun
-      agreement_tags:
-        semantic: money_word
-    second: *id007
-    third: *id007
-    fourth: *id007
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -532,6 +557,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -539,6 +566,12 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: These six words cover this unit's money, exchange, ATM, and rate vocabulary.
+    language_code: en
+    direction: ltr
   feedback_frame:
     text: These four words cover the basic money vocabulary for this unit.
     language_code: en

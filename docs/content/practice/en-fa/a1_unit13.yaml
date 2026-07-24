@@ -52,16 +52,70 @@ review:
     (no fill_in_blank templates in this pack). compile_content.py
     practice-validate clean (0 errors/0 warnings). Needs the standard
     fresh-context review before import.
+
+    REAUTH 2026-07-24 (unit-scope DEAD fix, pack-only):
+    scripts/_practice_unit_scope_check.py found this pack's own
+    recent_event_question_word pool is only 2 unit-scoped members
+    (دیروز, کردی), not the 3 this file's own notes above claim -- چیکار
+    does carry this same semantic tag in backfill_lexemes.py, but its
+    lesson_content_key belongs to a1_unit11 (lesson06), not this unit;
+    recent_event_question_word is legitimately reused across unit11/
+    unit13 (both a1), it just means THIS unit's own real pool was always
+    2, not 3 -- the file's authoring notes were wrong about which unit
+    چیکار belongs to, not a case of the DO-NOT #2 cross-unit-reliance
+    defect (generate_checkpoint() already correctly scopes to this
+    unit's own lesson ids regardless). This made recent_event_question_
+    match.002 DEAD (needed 3 distinct fills, pool had 2) and recent_
+    event_question_choice.001 below the 3-option MC floor (2 distinct).
+    Separately, past_verb_first_person(4)/past_verb_third_person(5)/
+    recent_event_word(3)/weekend_misc_word(2) all still match their
+    originally-authored member counts exactly, but every matching_pairs
+    over them declared its own tag's exact pool size (2-5), all below
+    the 6-pair floor.
+
+    PACK-ONLY fix per SS3.1a/SS8.1: added a `unit13_review_word` union
+    over all 7 of this unit's own real semantic tags (the 5 narrow tags
+    above plus this unit's own reviewed_phrase and dialogue_word items,
+    lesson_content_key-filtered to unit13 only even though both tags are
+    reused corpus-wide) -- 21 real distinct unit-scoped tokens. Re-
+    anchored recent_event_question_choice.001 to it (fixes the MC floor)
+    and bumped all 5 below-floor/DEAD matching_pairs (past_verb_first_
+    match.002, past_verb_third_match.002, recent_event_match.002,
+    recent_event_question_match.002, weekend_misc_match.001) to 6
+    declared pairs over the same union (fixes DEAD + the 6-pair floor).
+    Checked the 21-item pool by hand for confusable glosses -- all
+    distinct; "موندم"/"I stayed" and "خونه موندم"/"I stayed home" are
+    related but not interchangeable (kept both).
+    Deliberately did NOT widen past_verb_first_word_order.004 / past_
+    verb_third_word_order.004 -- their frames ("X و Y") specifically pair
+    two SAME-PERSON past-tense VERBS to read as "I did X and did Y"; the
+    wider union includes nouns/phrases ("فیلم" movie, "خونه" house) that
+    would make "X و Y" ungrammatical if drawn into a verb-coordination
+    slot (e.g. "رفتم و فیلم" does not parse). Their own narrow pools (4
+    and 5) already clear word_order's no-floor requirement, so they were
+    left untouched.
+
+    After fix: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0
+    below-floor for this pack. Tiers unchanged: recognition 4, structured
+    7, production 5, 16 templates total.
 tag_schema:
-  part_of_speech: [verb, noun, adjective, adverb, pronoun]
+  part_of_speech: [verb, noun, adjective, adverb, pronoun, phrase]
   agreement_tags:
-    semantic: [past_verb_first_person, past_verb_third_person, recent_event_word, recent_event_question_word, weekend_misc_word]
+    semantic: [past_verb_first_person, past_verb_third_person, recent_event_word, recent_event_question_word, weekend_misc_word, reviewed_phrase, dialogue_word]
 slot_presets:
   past_verb_first_person: &past_verb_first_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: past_verb_first_person}}
   past_verb_third_person: &past_verb_third_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: past_verb_third_person}}
   recent_event_word: &recent_event_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: recent_event_word}}
   recent_event_question_word: &recent_event_question_word {language_code: fa, part_of_speech: [adverb, pronoun, verb], agreement_tags: {semantic: recent_event_question_word}}
   weekend_misc_word: &weekend_misc_word {language_code: fa, part_of_speech: [verb, pronoun], agreement_tags: {semantic: weekend_misc_word}}
+  # REAUTH 2026-07-24: this unit's own real recent_event_question_word pool is
+  # only 2 (چیکار belongs to a1_unit11's own lesson, not this unit's -- see
+  # notes below), and every matching_pairs here declared only its own narrow
+  # tag's exact pool size (3-5), under the 6-pair floor. Union of all 7 of
+  # this unit's own real semantic tags (verbs + recent-event/weekend nouns +
+  # this unit's own reviewed_phrase/dialogue_word items) gives 21 real
+  # distinct unit-scoped tokens per SS3.1a/SS8.1.
+  unit13_review_word: &unit13_review_word {language_code: fa, part_of_speech: [verb, noun, adjective, adverb, pronoun, phrase], agreement_tags: {semantic: [past_verb_first_person, past_verb_third_person, recent_event_word, recent_event_question_word, weekend_misc_word, reviewed_phrase, dialogue_word]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_choice.001
     lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
@@ -73,11 +127,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_match.002
     lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
     type: matching_pairs
-    frame: {text: "Match each verb with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *past_verb_first_person, second: *past_verb_first_person, third: *past_verb_first_person, fourth: *past_verb_first_person}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each verb to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit13_review_word, second: *unit13_review_word, third: *unit13_review_word, fourth: *unit13_review_word, fifth: *unit13_review_word, sixth: *unit13_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson05.past_verb_first_translate.003
     lesson_content_key: fa.a1.unit13.lesson05.writing_about_a_recent_event
     type: translation
@@ -103,11 +157,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_match.002
     lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
     type: matching_pairs
-    frame: {text: "Match each verb with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *past_verb_third_person, second: *past_verb_third_person, third: *past_verb_third_person, fourth: *past_verb_third_person, fifth: *past_verb_third_person}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each verb to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit13_review_word, second: *unit13_review_word, third: *unit13_review_word, fourth: *unit13_review_word, fifth: *unit13_review_word, sixth: *unit13_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson06.past_verb_third_translate.003
     lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
     type: translation
@@ -134,9 +188,9 @@ templates:
     lesson_content_key: fa.a1.unit13.lesson04.reading_a_recent_event_text
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *recent_event_word, second: *recent_event_word, third: *recent_event_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *unit13_review_word, second: *unit13_review_word, third: *unit13_review_word, fourth: *unit13_review_word, fifth: *unit13_review_word, sixth: *unit13_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson04.recent_event_translate.003
     lesson_content_key: fa.a1.unit13.lesson04.reading_a_recent_event_text
@@ -149,16 +203,16 @@ templates:
     lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
     type: multiple_choice
     frame: {text: "{recent_event_question_word}", language_code: fa, direction: rtl}
-    slots: {recent_event_question_word: *recent_event_question_word}
+    slots: {recent_event_question_word: *unit13_review_word}
     answer_derivation: {kind: slot_gloss, slot: recent_event_question_word}
-    feedback_frame: {text: "{recent_event_question_word} is used to ask or answer about a recent event.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{recent_event_question_word} is vocabulary from this unit's recent-past lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson03.recent_event_question_match.002
     lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *recent_event_question_word, second: *recent_event_question_word, third: *recent_event_question_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *unit13_review_word, second: *unit13_review_word, third: *unit13_review_word, fourth: *unit13_review_word, fifth: *unit13_review_word, sixth: *unit13_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson03.recent_event_question_translate.003
     lesson_content_key: fa.a1.unit13.lesson03.asking_about_a_recent_event
@@ -171,9 +225,9 @@ templates:
     lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *weekend_misc_word, second: *weekend_misc_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    slots: {first: *unit13_review_word, second: *unit13_review_word, third: *unit13_review_word, fourth: *unit13_review_word, fifth: *unit13_review_word, sixth: *unit13_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit13.lesson06.weekend_misc_translate.002
     lesson_content_key: fa.a1.unit13.lesson06.weekend_recap_dialogue

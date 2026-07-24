@@ -60,7 +60,27 @@ review:
     check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual iter_specs()
     output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (frequency_word/closing_word
     correctly have only 2 candidates each and are never used for multiple_choice here, only matching_pairs/translation). compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
+    practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD-template fix, PACK-ONLY): scripts/_practice_unit_scope_check.py found 3 DEAD +
+    7 below-floor. Same root cause as the rest of this batch -- موسیقی (music_movie_word) is anchored to unit14, فیلم to unit13,
+    هم (reading_hobby_word) to unit01, and می‌کنه (reading_hobby_word) to unit10, none of which this unit''s own lessons actually
+    introduce. Fix: added a shared slot preset "unit24_wide_word" unioning this unit''s own already-declared hobby_word + music_movie_word
+    + sport_word + frequency_word + reading_hobby_word + closing_word tags (all reused verbatim, no new backfill tags) --
+    unit-scoped pool is 13 distinct words/phrases. Re-anchored hobby_match.002 (+ its volume_match.007 duplicate), music_movie_match.002,
+    sport_match.002, frequency_match.001, reading_hobby_match.002, and closing_match.001 to it at 6 slots each; re-anchored
+    music_movie_choice.001 and reading_hobby_choice.001 to it too (both now well clear of the 3-distinct floor).
+
+    unit_review_match.002''s mw (music_movie_word) group needed 4 but its unit-scoped native pool is only 2 (موسیقی/فیلم borrowed
+    from unit13/14) -- this template was flagged DEAD by the checker, though (as elsewhere in this batch) only because its
+    first-slot check happened to land on the also-broken hw/need computation, not because it understood the mw group specifically.
+    Converted the whole template from its 3-group (hw/mw/sw) design to a single flat 8-of-13 pool over the same "unit24_wide_word"
+    preset used everywhere else in this pack, the same fix applied to the other 4 packs in this batch -- simpler than trying
+    to keep 3 disjoint sub-pools each individually over the 6-pair floor, and it also clears the checker''s per-relation-group
+    6-pair floor check outright instead of leaving a residual (harmless but noisy) FLOOR line. No mis-glossed lexemes found
+    in this unit''s pool. Verified: 0 DEAD, 0 below-floor for this pack per the unit-scope checker; practice-validate 0 errors
+    (see coordinator report for the exact invocation covering all 5 units in this batch).'
 tag_schema:
   part_of_speech:
   - noun
@@ -118,6 +138,17 @@ slot_presets:
     - phrase
     agreement_tags:
       semantic: closing_word
+  unit24_wide_word: &id008
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    - verb
+    - adverb
+    - particle
+    agreement_tags:
+      semantic: [hobby_word, music_movie_word, sport_word, frequency_word, reading_hobby_word,
+        closing_word]
 templates:
 - content_key: practice.en-fa.fa.a1.unit24.lesson01.hobby_choice.001
   lesson_content_key: fa.a1.unit24.lesson01.basic_hobbies
@@ -143,23 +174,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the basic hobby vocabulary for this lesson.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson01.hobby_translate.003
@@ -188,12 +228,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    music_movie_word: *id002
+    music_movie_word: *id008
   answer_derivation:
     kind: slot_gloss
     slot: music_movie_word
   feedback_frame:
-    text: '{music_movie_word} is vocabulary about music or movies.'
+    text: '{music_movie_word} is hobby vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson02.music_movie_match.002
@@ -204,10 +244,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id002
-    second: *id002
-    third: *id002
-    fourth: *id002
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -215,6 +257,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -222,8 +266,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four cover the music and movies vocabulary for this lesson.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson02.music_movie_translate.003
@@ -268,23 +314,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id003
-    second: *id003
-    third: *id003
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the sport vocabulary for this lesson.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson03.sport_translate.003
@@ -313,20 +368,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id004
-    second: *id004
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson04.frequency_translate.002
@@ -355,12 +422,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    reading_hobby_word: *id005
+    reading_hobby_word: *id008
   answer_derivation:
     kind: slot_gloss
     slot: reading_hobby_word
   feedback_frame:
-    text: '{reading_hobby_word} appears in this lesson''s reading passage.'
+    text: '{reading_hobby_word} is hobby vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson05.reading_hobby_match.002
@@ -371,23 +438,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id005
-    second: *id005
-    third: *id005
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the reading-passage vocabulary for this lesson.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson05.reading_hobby_translate.003
@@ -416,20 +492,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id006
-    second: *id006
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word or phrase to its English meaning.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson06.unit_review_match.002
@@ -440,48 +528,38 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    hw1: *id001
-    hw2: *id001
-    hw3: *id001
-    mw1: *id002
-    mw2: *id002
-    mw3: *id002
-    mw4: *id002
-    sw1: *id003
-    sw2: *id003
-    sw3: *id003
+    w1: *id008
+    w2: *id008
+    w3: *id008
+    w4: *id008
+    w5: *id008
+    w6: *id008
+    w7: *id008
+    w8: *id008
   slot_relations:
   - kind: distinct
     slots:
-    - hw1
-    - hw2
-    - hw3
-  - kind: distinct
-    slots:
-    - mw1
-    - mw2
-    - mw3
-    - mw4
-  - kind: distinct
-    slots:
-    - sw1
-    - sw2
-    - sw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   answer_derivation:
     kind: matching_pairs
     slots:
-    - hw1
-    - hw2
-    - hw3
-    - mw1
-    - mw2
-    - mw3
-    - mw4
-    - sw1
-    - sw2
-    - sw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   feedback_frame:
-    text: This reviews the hobby, music/movie, and sport vocabulary taught in this unit.
+    text: This reviews the hobby, music/movie, sport, reading, and closing vocabulary taught in this unit.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson01.hobby_match.002.volume_match.007
@@ -492,29 +570,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id007
-      language_code: fa
-      part_of_speech:
-      - noun
-      - phrase
-      agreement_tags:
-        semantic: hobby_word
-    second: *id007
-    third: *id007
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the basic hobby vocabulary for this lesson.
+    text: These six cover this unit's hobby, music/movie, sport, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit24.lesson01.hobby_translate.003.volume_translate.007

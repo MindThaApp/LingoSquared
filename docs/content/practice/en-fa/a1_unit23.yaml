@@ -44,7 +44,35 @@ review:
     check.py reports zero flags. Verified with scripts/ _practice_slot_check.py against backfill_lexemes.py''s actual iter_specs()
     output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (hunger_word/asking_state_word/
     reaction_word correctly have only 2 candidates each and are never used for multiple_choice here, only matching_pairs/translation).
-    compile_content.py practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.'
+    compile_content.py practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD-template fix, PACK-ONLY): scripts/_practice_unit_scope_check.py found 6 DEAD +
+    3 below-floor. Same root cause as the rest of this batch, but this pack has the highest density of it -- every one of
+    hunger_word/feeling_1st_person_word/asking_state_word/reason_word/reading_word/reaction_word is exactly one native member
+    short of its declared floor, because each pools 1-4 unit23-native tokens plus exactly ONE token that turns out to be anchored
+    to an EARLIER unit (یکم->unit09, خسته‌ام->unit17, چرا->unit09, امروز->unit06, نیست->unit09, چه->unit12). feeling_word itself
+    (the growing 6-member superset) has NO such contamination -- all 6 of its members are genuinely unit23-native, which is
+    why feeling_match.002 and feeling_pair_order.004 needed no fix.
+
+    Fix for every DEAD/below-floor matching_pairs and the one below-floor multiple_choice: added a shared slot preset "unit23_wide_word"
+    unioning this unit''s own already-declared feeling_word + feeling_1st_person_word + asking_state_word + reason_word +
+    reading_word + reaction_word tags (all reused verbatim, no new backfill tags) -- unit-scoped pool is 17 distinct words.
+    Re-anchored basic_feeling_match.002 (+ its volume_match.008 duplicate), hunger_match.001, asking_state_match.007, reason_match.002,
+    reading_match.002, and reaction_match.001 to it at 6 slots each; re-anchored reason_choice.001 to it too. feeling_1st_person_match.005
+    (needed 5, unit-scoped feeling_1st_person_word pool is 4) was DROPPED rather than widened: the tag is a semantically narrow
+    "colloquial I-am-X contraction" set, its own feedback_frame says exactly that, and every other unit23-native token is either
+    a plain adjective (feeling_word) or a 2nd/3rd-person contraction (نگرانی, خوشحاله) -- widening it would have shown false
+    "I am ..." pairs. feeling_1st_person_translate.006 (bare-word translation, no floor) stays, so this micro-category still
+    gets production-tier coverage; genuine thinness, logged rather than papered over.
+
+    unit_review_match.002 converted its rw (reading_word, needed4/native3) and ra (reaction_word, needed2/native1) groups to
+    two new disjoint-from-each-other-and-from-fw slot presets -- "reading_reason_word" ([reading_word, reason_word], 5 native)
+    and "reaction_asking_state_word" ([reaction_word, asking_state_word], 2 native) -- both were ACTUALLY dead even though
+    the checker did not flag this template at all (its first-slot-only heuristic checked fw''s pool of 6 against a need of
+    6 and stopped there). fw (feeling_word, 6 native, exact) is untouched. No mis-glossed lexemes found in this unit''s pool.
+    Verified: 0 DEAD, 0 below-floor for this pack per the unit-scope checker; practice-validate 0 errors (see coordinator
+    report for the exact invocation covering all 5 units in this batch).'
 tag_schema:
   part_of_speech:
   - adjective
@@ -114,6 +142,31 @@ slot_presets:
     - verb
     agreement_tags:
       semantic: reaction_word
+  unit23_wide_word: &id011
+    language_code: fa
+    part_of_speech:
+    - adjective
+    - verb
+    - adverb
+    - pronoun
+    agreement_tags:
+      semantic: [feeling_word, feeling_1st_person_word, asking_state_word, reason_word,
+        reading_word, reaction_word]
+  reading_reason_word: &id012
+    language_code: fa
+    part_of_speech:
+    - verb
+    - adverb
+    agreement_tags:
+      semantic: [reading_word, reason_word]
+  reaction_asking_state_word: &id013
+    language_code: fa
+    part_of_speech:
+    - pronoun
+    - verb
+    - adverb
+    agreement_tags:
+      semantic: [reaction_word, asking_state_word]
 templates:
 - content_key: practice.en-fa.fa.a1.unit23.lesson01.basic_feeling_choice.001
   lesson_content_key: fa.a1.unit23.lesson01.basic_feelings
@@ -139,23 +192,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the basic feeling vocabulary for this lesson.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson01.basic_feeling_translate.003
@@ -184,20 +246,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id002
-    second: *id002
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson02.hunger_translate.002
@@ -313,39 +387,6 @@ templates:
     text: و joins two words, like خوشحال و ناراحت (happy and sad).
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit23.lesson03.feeling_1st_person_match.005
-  lesson_content_key: fa.a1.unit23.lesson03.more_feelings
-  type: matching_pairs
-  frame:
-    text: Match each phrase with its meaning.
-    language_code: en
-    direction: ltr
-  slots:
-    first: *id004
-    second: *id004
-    third: *id004
-    fourth: *id004
-    fifth: *id004
-  slot_relations:
-  - kind: distinct
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-  feedback_frame:
-    text: These are the colloquial "I am ..." forms of the feeling words.
-    language_code: en
-    direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson03.feeling_1st_person_translate.006
   lesson_content_key: fa.a1.unit23.lesson03.more_feelings
   type: translation
@@ -372,20 +413,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id005
-    second: *id005
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_choice.001
@@ -396,12 +449,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    reason_word: *id006
+    reason_word: *id011
   answer_derivation:
     kind: slot_gloss
     slot: reason_word
   feedback_frame:
-    text: '{reason_word} is used when giving a reason for a feeling.'
+    text: '{reason_word} is feeling vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_match.002
@@ -412,23 +465,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id006
-    second: *id006
-    third: *id006
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_translate.003
@@ -473,10 +535,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id007
-    second: *id007
-    third: *id007
-    fourth: *id007
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
@@ -484,6 +548,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -491,8 +557,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four cover the reading-passage vocabulary for this lesson.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson05.reading_translate.003
@@ -521,20 +589,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id008
-    second: *id008
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson06.unit_review_match.002
@@ -551,12 +631,12 @@ templates:
     fw4: *id003
     fw5: *id003
     fw6: *id003
-    rw1: *id007
-    rw2: *id007
-    rw3: *id007
-    rw4: *id007
-    ra1: *id008
-    ra2: *id008
+    rw1: *id012
+    rw2: *id012
+    rw3: *id012
+    rw4: *id012
+    ra1: *id013
+    ra2: *id013
   slot_relations:
   - kind: distinct
     slots:
@@ -660,27 +740,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id010
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: basic_feeling_word
-    second: *id010
-    third: *id010
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These three cover the basic feeling vocabulary for this lesson.
+    text: These six cover this unit's feeling, reason, and reading vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson01.basic_feeling_translate.003.volume_translate.008

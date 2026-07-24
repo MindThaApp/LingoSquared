@@ -50,7 +50,23 @@ review:
     output -- clean, no zero-candidate slots, no under-3 multiple_choice/matching_pairs slots (phone_answer_word/repeat_ phrase/message_phrase/ending_phrase
     correctly have only 2 candidates each and are never used for multiple_choice here, only matching_ pairs/translation).
     compile_content.py practice-validate clean (0 errors/0 warnings). Needs the standard fresh-context review before import
-    -- including a specific check of the 2 overlay-entry fixes noted above.'
+    -- including a specific check of the 2 overlay-entry fixes noted above.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD-template fix, PACK-ONLY): scripts/_practice_unit_scope_check.py found 5 DEAD
+    + 6 below-floor. Same root cause as the rest of this batch -- تلفن (phone_word) is anchored to unit03, الان (call_ending_word)
+    to unit06, and برات (message_word) to unit08, each ONE token short of what this unit''s own lessons actually carry at
+    unit scope. Fix: added one new shared slot preset "unit22_wide_word" unioning this unit''s own already-declared phone_word
+    + phone_answer_word + repeat_word + repeat_phrase + message_word + message_phrase + call_ending_word + ending_phrase tags
+    (all reused verbatim, no new backfill tags) -- unit-scoped pool is 19 distinct words/phrases. Re-anchored every below-floor
+    matching_pairs (phone_match.002 and its volume_match.009 duplicate, answer_match.001, repeat_match.002, repeat_phrase_match.004,
+    message_match.002, message_phrase_match.004, ending_match.002, ending_phrase_match.004) to it at 6 slots each, and re-anchored
+    message_choice.001 to it too (well clear of the 3-distinct floor). unit_review_match.001 converted from its 3-group (pw/rw/mw)
+    design -- pw''s own native pool (phone_word=3) and mw''s own native pool (message_word=2) were each individually below
+    their declared group size, a defect the checker''s first-slot-only heuristic caught only by accident -- to a single flat
+    8-of-19 pool over the same wide preset. No mis-glossed lexemes found in this unit''s pool. Verified: 0 DEAD, 0 below-floor
+    for this pack per the unit-scope checker; practice-validate 0 errors (see coordinator report for the exact invocation
+    covering all 5 units in this batch).'
 tag_schema:
   part_of_speech:
   - noun
@@ -125,6 +141,19 @@ slot_presets:
     part_of_speech: phrase
     agreement_tags:
       semantic: ending_phrase
+  unit22_wide_word: &id011
+    language_code: fa
+    part_of_speech:
+    - noun
+    - phrase
+    - particle
+    - verb
+    - adverb
+    - preposition
+    - adjective
+    agreement_tags:
+      semantic: [phone_word, phone_answer_word, repeat_word, repeat_phrase, message_word,
+        message_phrase, call_ending_word, ending_phrase]
 templates:
 - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_choice.001
   lesson_content_key: fa.a1.unit22.lesson01.phone_vocabulary
@@ -150,10 +179,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
@@ -161,6 +192,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -168,8 +201,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four cover the basic phone vocabulary for this unit.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_translate.003
@@ -223,20 +258,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id002
-    second: *id002
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson02.answer_translate.002
@@ -281,23 +328,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id003
-    second: *id003
-    third: *id003
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson03.repeat_translate.003
@@ -322,24 +378,36 @@ templates:
   lesson_content_key: fa.a1.unit22.lesson03.asking_to_repeat
   type: matching_pairs
   frame:
-    text: Match each phrase with its meaning.
+    text: Match each word or phrase with its meaning.
     language_code: en
     direction: ltr
   slots:
-    first: *id004
-    second: *id004
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These are used when asking someone to repeat or slow down.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_choice.001
@@ -350,12 +418,12 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    message_word: *id005
+    message_word: *id011
   answer_derivation:
     kind: slot_gloss
     slot: message_word
   feedback_frame:
-    text: '{message_word} is vocabulary from this lesson''s text message.'
+    text: '{message_word} is phone vocabulary from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_match.002
@@ -366,23 +434,32 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id005
-    second: *id005
-    third: *id005
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson04.message_translate.003
@@ -407,24 +484,36 @@ templates:
   lesson_content_key: fa.a1.unit22.lesson04.reading_a_text_message
   type: matching_pairs
   frame:
-    text: Match each phrase with its meaning.
+    text: Match each word or phrase with its meaning.
     language_code: en
     direction: ltr
   slots:
-    first: *id006
-    second: *id006
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These are the two lines of the text message.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_choice.001
@@ -451,10 +540,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id007
-    second: *id007
-    third: *id007
-    fourth: *id007
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
@@ -462,6 +553,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -469,8 +562,10 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four cover the call-ending vocabulary for this unit.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson05.ending_translate.003
@@ -495,24 +590,36 @@ templates:
   lesson_content_key: fa.a1.unit22.lesson05.ending_a_call
   type: matching_pairs
   frame:
-    text: Match each phrase with its meaning.
+    text: Match each word or phrase with its meaning.
     language_code: en
     direction: ltr
   slots:
-    first: *id008
-    second: *id008
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These are used to check on or end a phone call.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson06.unit_review_match.001
@@ -523,48 +630,38 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    pw1: *id001
-    pw2: *id001
-    pw3: *id001
-    pw4: *id001
-    rw1: *id003
-    rw2: *id003
-    rw3: *id003
-    mw1: *id005
-    mw2: *id005
-    mw3: *id005
+    w1: *id011
+    w2: *id011
+    w3: *id011
+    w4: *id011
+    w5: *id011
+    w6: *id011
+    w7: *id011
+    w8: *id011
   slot_relations:
   - kind: distinct
     slots:
-    - pw1
-    - pw2
-    - pw3
-    - pw4
-  - kind: distinct
-    slots:
-    - rw1
-    - rw2
-    - rw3
-  - kind: distinct
-    slots:
-    - mw1
-    - mw2
-    - mw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   answer_derivation:
     kind: matching_pairs
     slots:
-    - pw1
-    - pw2
-    - pw3
-    - pw4
-    - rw1
-    - rw2
-    - rw3
-    - mw1
-    - mw2
-    - mw3
+    - w1
+    - w2
+    - w3
+    - w4
+    - w5
+    - w6
+    - w7
+    - w8
   feedback_frame:
-    text: This reviews the phone, repeat/slow-down, and message vocabulary taught in this unit.
+    text: This reviews the phone, repeat/slow-down, message, and call-ending vocabulary taught in this unit.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit22.lesson01.phone_word_pair_order.004.volume_fill.005
@@ -636,16 +733,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id010
-      language_code: fa
-      part_of_speech:
-      - noun
-      - phrase
-      agreement_tags:
-        semantic: phone_word
-    second: *id010
-    third: *id010
-    fourth: *id010
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
   slot_relations:
   - kind: distinct
     slots:
@@ -653,6 +746,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -660,7 +755,9 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
-    text: These four cover the basic phone vocabulary for this unit.
+    text: These six cover this unit's phone, repeat, message, and call-ending vocabulary.
     language_code: en
     direction: ltr

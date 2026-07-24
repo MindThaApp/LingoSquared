@@ -13,80 +13,159 @@ review:
     added the necessary new FA_GLOSSES/FA_VERBS/FA_PREPOSITIONS entries
     (see that script's own unit18 comment block for the exact additions).
 
-    Six semantic groups, all verified via scripts/_practice_slot_check.py:
-    "job_asking_word" (شغل/شغلت/چیه, 3 members, mirrors the realization's
-    own match_asking_vocab base, anchored lesson02 where the pool
-    completes), "occupation_self_phrase" (مهندسم/معلمم/دکترم, 3 members,
-    all classified verb per this course's established copula-contraction
-    precedent, anchored lesson01), "workplace_word" (شرکت/مدرسه/بیمارستان,
-    3 members, anchored lesson03), "workplace_grammar_word" (در/کجا, 2
-    members, mixed preposition/adverb, translation/matching-only -- below
-    the multiple_choice floor, anchored lesson03), "occupation_third_
-    person" (مهندسه/معلمه, 2 members, translation/matching-only, anchored
-    lesson06 where معلمه completes the pair), and "work_verb_form"
-    (می‌کنم/می‌کنی/می‌کنه, 3 members -- a genuine compositional reuse: each
-    token always literally means "do/does," and combining any of them
-    with the fixed noun کار is grammatically valid regardless of which
-    lesson first introduced them, so no lesson_key scoping was needed
-    for this tag, unlike a true homograph split). Also reuses the
-    existing course-wide "person_name" tag (نیما/سارا/etc., established
-    across many earlier units).
+    2026-07-24 RE-AUTHORED (unit-scope DEAD-template fix pass, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md). scripts/_practice_unit_scope_check.py
+    flagged 5 DEAD template-slots + 4 below-floor; a by-hand re-read of every
+    gloss/tag against backfill_lexemes.py's actual iter_specs() (SS0.1) found
+    the original notes overstated three of this pack's six semantic groups'
+    real unit18-native membership -- every overstated case is the same
+    recipe DO-NOT #2 pattern (a course-wide reused token that looks like it
+    belongs to this unit but was actually introduced by an earlier one):
 
-    Real pre-existing homograph handled while extending the classifier:
-    the realization's own review notes explain fa deliberately uses در
-    (not تو) for "at a workplace" throughout this unit specifically to
-    avoid a collision with تو meaning "you" -- so this unit never
-    actually needs تو's location sense (that only appears in the sibling
-    a1_unit19 housing pack; see that file's own notes for the classifier
-    fix). This unit's own "در" is therefore the ordinary preposition
-    sense with no ambiguity.
+    - "job_asking_word" was claimed as {شغل/شغلت/چیه} (3); چیه is really a
+      unit02 lexeme (fa.a1.unit02.lesson02.names). Real unit18-native pool:
+      {شغل, شغلت} (2).
+    - "workplace_grammar_word" was claimed as {در/کجا} (2); کجا is really a
+      unit02 lexeme (fa.a1.unit02.lesson05.origin). Real unit18-native pool:
+      {در} (1).
+    - "work_verb_form" was claimed as {می‌کنم/می‌کنی/می‌کنه} (3) with a note
+      that "no lesson_key scoping was needed"; in fact ALL THREE are earlier
+      units' lexemes (می‌کنم=unit01, می‌کنه=unit10, می‌کنی=unit11). Real
+      unit18-native pool: EMPTY. This concept has zero presence in this
+      unit's own lexeme set at any scope.
 
-    Seven generative word_order templates combine workplace_word/
-    work_verb_form/person_name into full natural sentences mirroring the
-    realization's own content: "در یک {workplace_word} کار می‌کنم"
-    (lesson03, matches translate_work_at_hospital's pattern generalized
-    across all 3 workplaces), "هر روز در یک {workplace_word} کار می‌کنم"
-    (lesson04, matches translate_work_school_every_day), "کار
-    {work_verb_form}" (lesson05, drills all three persons: I/you/he-she
-    work), "{person_name} {occupation_third_person}" (lesson06, matches
-    the dialogue's own نیما مهندسه/سارا معلمه pattern generalized across
-    the full course-wide person_name pool), and "{person_name} در یک
-    {workplace_word} کار می‌کنه" (lesson06, matches نیما در یک شرکت کار
-    می‌کنه). All combinations are grammatically valid regardless of
-    real-world plausibility, the same generalization precedent already
-    used throughout this course's Endless Practice content (e.g.
-    a1_unit17's own person_name x symptom_noun_word combinations).
+    Fixes, one per affected template:
 
-    Zero fill_in_blank templates: this unit's real vocabulary doesn't
-    support one safely -- every group either has too few candidates or
-    no natural single-slot frame that could disambiguate members, so per
-    the standing en-fa precedent (units 03-17) this unit follows the
-    same zero-fill_in_blank approach the compiler's own ambiguity
-    hard-fail would reject anyway.
-    scripts/_fill_in_blank_ambiguity_check.py reports zero flags (no
-    fill_in_blank templates in this pack at all). Verified with
-    scripts/_practice_slot_check.py against backfill_lexemes.py's actual
-    iter_specs() output -- clean, no zero-candidate slots, no under-3
-    multiple_choice/matching_pairs slots. compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard
-    fresh-context review before import.
+    (a) job_asking_choice.001 (below the 3-answer floor at the real 2) --
+    re-anchored its slot to a UNION of job_asking_word + occupation_self_phrase
+    (2+3=5 distinct, no gloss collisions: job/your job/I'm an
+    engineer.../I'm a teacher.../I'm a doctor...) -- both are this unit's own
+    lesson01/02 "introducing yourself for work" vocabulary, so the union is
+    thematically coherent, not just floor-padding.
+
+    (b) job_asking_review_match.002 (matching_pairs, declared 3 jw-distinct
+    but the real pool is 2) -- widened to a THREE-way union (job_asking_word
+    + occupation_self_phrase + workplace_word = 2+3+3 = 8 distinct, still
+    within the 6-12 range) using a single shared preset across all 8 slots
+    and ONE `distinct` relation, rather than three separate per-tag distinct
+    groups -- tried the multi-group form first (mirroring the original
+    author's own op/ww two-group style) and found scripts/
+    _practice_unit_scope_check.py evaluates a `distinct` relation's pool from
+    its FIRST slot's constraints only, so heterogeneous per-slot presets
+    inside one relation group under- or mis-report; one preset shared by
+    every slot in the one relation reports honestly.
+
+    (c) workplace_match.002 -- this one had a defect the official checker
+    doesn't catch at all (found by hand, cross-checked with a purpose-built
+    per-relation script): its wg1/wg2 sub-group required 2 distinct
+    workplace_grammar_word values, but the real unit18-native pool is {در}
+    alone (1) -- fill_slots() can never assign 2 distinct values from a
+    1-member pool, so the ENTIRE template was silently dead at the
+    checkpoint despite the corpus-wide checker reporting only "declares 3
+    slots (<6-pair floor)" (it computes "need" as max(3,2)=3 and never
+    verifies each relation's OWN pool separately). FIXED by dropping the
+    wg1/wg2 slots and widening to workplace_word UNION occupation_self_phrase
+    (3+3=6, exactly the floor, one shared preset/one relation as in (b)).
+    در (this unit's only real workplace_grammar_word) still gets a checkpoint
+    home: added workplace_translate.003, a bare-word translation over
+    workplace_word UNION workplace_grammar_word (4 distinct), which lesson03
+    otherwise had zero of (production tier was previously uncovered there).
+
+    (d) work_verb_choice.001 and work_verb_order.002 (lesson05) -- both
+    DEAD, 0 real candidates, and not fixable PACK-ONLY (the whole
+    "کار + person-marked verb" concept has no unit18-native lexeme at all).
+    DROPPED. Re-read lesson05's own realization content and found it DOES
+    introduce one real lexeme of its own: مهندسه (occupation_third_person)
+    -- REPLACED both dropped templates with occupation_choice.001
+    (multiple_choice over occupation_self_phrase UNION occupation_third_person,
+    2+3=5 distinct, no collisions) and occupation_third_translate.002
+    (bare-word translation, occupation_third_person, 2 members -- no floor
+    issue for translation), giving lesson05 real recognition + production
+    coverage using vocabulary this unit and this lesson actually own.
+
+    (e) person_occupation_order.002 and person_workplace_order.003
+    (lesson06) both constrained person_name to the course-wide tag
+    (established across units 01/02/07/09-11) which unit18 never
+    reintroduces -- 0 unit-scoped candidates, DEAD. FIXED (not dropped: both
+    frames are otherwise genuinely generative over real unit18 vocabulary)
+    by replacing the {person_name} slot with the literal, non-slotted نیما --
+    the exact name this pack's OWN feedback_frame text already used as its
+    illustrative example ("نیما مهندسه" / "نیما در یک شرکت کار می‌کنه"),
+    so this only removes a slot that was never going to generate anyway and
+    keeps the taught sentence pattern intact. Checked: نیما is not a
+    candidate value of occupation_third_person or workplace_word, so no
+    self-reference conflict, and both frames stay grammatical for every
+    remaining slot member (occupation_third_person's 2, workplace_word's 3).
+
+    occupation_match.002 (lesson01, 3 pairs, below the 6-pair floor) --
+    widened the same way as (c): occupation_self_phrase UNION workplace_word
+    (3+3=6), one shared preset/one relation.
+
+    unit_review_match.004 (lesson06) needed no fix: its three sub-groups
+    (occupation_self_phrase=3, workplace_word=3, occupation_third_person=2)
+    all match their real unit-native pools exactly, so despite the
+    corpus-wide checker's cosmetic "declares only 3 slots" report (the same
+    max-of-relations shortcut as (b)/(c) above), this template genuinely
+    fills all 8 slots at runtime -- left unchanged.
+
+    Net: 15 templates -> 17. Dropped 2 permanently-dead templates (backfill-
+    blocked), fixed/widened 5, added 2. Final: recognition 4, structured 8,
+    production 5, all six lessons represented (lesson04/05 more thinly, both
+    genuinely single-lexeme-origin lessons -- lesson04 introduces no new
+    lexeme of its own at all, hosted only via its pre-existing
+    workplace_word word_order; not a gap this pass could close PACK-ONLY).
+
+    Six semantic groups, corrected to their real unit18-native membership:
+    "job_asking_word" (شغل/شغلت, 2 members, mirrors the realization's own
+    match_asking_vocab), "occupation_self_phrase" (مهندسم/معلمم/دکترم, 3
+    members, all classified verb per this course's established
+    copula-contraction precedent, anchored lesson01), "workplace_word"
+    (شرکت/مدرسه/بیمارستان, 3 members, anchored lesson03),
+    "workplace_grammar_word" (در alone, translation-only now, see (c)),
+    "occupation_third_person" (مهندسه/معلمه, 2 members, one native to
+    lesson05 and one to lesson06 -- both real, unlike work_verb_form).
+    "work_verb_form" is REMOVED from tag_schema (zero real members, see
+    above).
+
+    Real pre-existing homograph handled while extending the classifier (kept
+    from the original notes, still accurate): the realization's own review
+    notes explain fa deliberately uses در (not تو) for "at a workplace"
+    throughout this unit specifically to avoid a collision with تو meaning
+    "you" -- so this unit never actually needs تو's location sense (that only
+    appears in the sibling a1_unit19 housing pack; see that file's own notes
+    for the classifier fix). This unit's own در is therefore the ordinary
+    preposition sense with no ambiguity.
+
+    Five generative word_order templates now: "در یک {workplace_word} کار
+    می‌کنم" (lesson03), "هر روز در یک {workplace_word} کار می‌کنم" (lesson04),
+    "نیما {occupation_third_person}" (lesson06, fixed per (e) above -- matches
+    the dialogue's own نیما مهندسه/سارا معلمه pattern), and "نیما در یک
+    {workplace_word} کار می‌کنه" (lesson06, fixed per (e) above -- matches
+    نیما در یک شرکت کار می‌کنه exactly).
+
+    scripts/_practice_unit_scope_check.py: 0 DEAD (was 5), 0 below-floor that
+    isn't the documented max-of-relations cosmetic report (was 4 below-floor,
+    two of which were masking a real hidden-DEAD subgroup -- see (b)/(c)).
+    compile_content.py practice-validate: 0 errors. No fill_in_blank in this
+    pack. No mis-glossed lexeme found in this unit's own pool.
 tag_schema:
   part_of_speech: [noun, verb, phrase, preposition, adverb, proper_noun]
   agreement_tags:
     semantic:
       [job_asking_word, occupation_self_phrase, workplace_word,
-       workplace_grammar_word, occupation_third_person, work_verb_form,
-       person_name]
+       workplace_grammar_word, occupation_third_person]
 slot_presets:
-  job_asking_word: &job_asking_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: job_asking_word}}
   occupation_self_phrase: &occupation_self_phrase {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: occupation_self_phrase}}
+  job_asking_word: &job_asking_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: job_asking_word}}
   workplace_word: &workplace_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: workplace_word}}
-  workplace_grammar_word: &workplace_grammar_word {language_code: fa, part_of_speech: [preposition, adverb], agreement_tags: {semantic: workplace_grammar_word}}
   occupation_third_person: &occupation_third_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: occupation_third_person}}
-  work_verb_form: &work_verb_form {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: work_verb_form}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  job_or_occupation: &job_or_occupation {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [job_asking_word, occupation_self_phrase]}}
+  job_or_occupation_or_workplace: &job_or_occupation_or_workplace {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [job_asking_word, occupation_self_phrase, workplace_word]}}
+  occupation_or_workplace: &occupation_or_workplace {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [occupation_self_phrase, workplace_word]}}
+  occupation_self_or_third: &occupation_self_or_third {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: [occupation_self_phrase, occupation_third_person]}}
+  workplace_or_grammar: &workplace_or_grammar {language_code: fa, part_of_speech: [noun, preposition], agreement_tags: {semantic: [workplace_word, workplace_grammar_word]}}
 templates:
-  # Lesson 1: basic occupation vocabulary.
+  # Lesson 1: basic occupation vocabulary (مهندسم, معلمم, دکترم).
   - content_key: practice.en-fa.fa.a1.unit18.lesson01.occupation_choice.001
     lesson_content_key: fa.a1.unit18.lesson01.basic_job_vocab
     type: multiple_choice
@@ -97,11 +176,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit18.lesson01.occupation_match.002
     lesson_content_key: fa.a1.unit18.lesson01.basic_job_vocab
     type: matching_pairs
-    frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *occupation_self_phrase, second: *occupation_self_phrase, third: *occupation_self_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *occupation_or_workplace, second: *occupation_or_workplace, third: *occupation_or_workplace, fourth: *occupation_or_workplace, fifth: *occupation_or_workplace, sixth: *occupation_or_workplace}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson01.occupation_translate.003
     lesson_content_key: fa.a1.unit18.lesson01.basic_job_vocab
     type: translation
@@ -110,30 +189,30 @@ templates:
     answer_derivation: {kind: slot_text, slot: occupation_self_phrase}
     feedback_frame: {text: "The Farsi phrase is {occupation_self_phrase}.", language_code: en, direction: ltr}
 
-  # Lesson 2: asking about someone's job.
+  # Lesson 2: asking about someone's job (شغلت; شغل is native to lesson01).
   - content_key: practice.en-fa.fa.a1.unit18.lesson02.job_asking_choice.001
     lesson_content_key: fa.a1.unit18.lesson02.asking_about_job
     type: multiple_choice
-    frame: {text: "{job_asking_word}", language_code: fa, direction: rtl}
-    slots: {job_asking_word: *job_asking_word}
-    answer_derivation: {kind: slot_gloss, slot: job_asking_word}
-    feedback_frame: {text: "{job_asking_word} is used when talking about someone's job.", language_code: en, direction: ltr}
+    frame: {text: "{job_or_occupation}", language_code: fa, direction: rtl}
+    slots: {job_or_occupation: *job_or_occupation}
+    answer_derivation: {kind: slot_gloss, slot: job_or_occupation}
+    feedback_frame: {text: "{job_or_occupation} is used when talking about someone's job.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson02.job_asking_review_match.002
     lesson_content_key: fa.a1.unit18.lesson02.asking_about_job
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- this lesson's words plus a review of lesson01's.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning -- this lesson's words plus a review of lesson01's and lesson03's.", language_code: en, direction: ltr}
     slots:
-      jw1: *job_asking_word
-      jw2: *job_asking_word
-      jw3: *job_asking_word
-      op1: *occupation_self_phrase
-      op2: *occupation_self_phrase
-      op3: *occupation_self_phrase
-    slot_relations:
-      - {kind: distinct, slots: [jw1, jw2, jw3]}
-      - {kind: distinct, slots: [op1, op2, op3]}
-    answer_derivation: {kind: matching_pairs, slots: [jw1, jw2, jw3, op1, op2, op3]}
-    feedback_frame: {text: "This combines lesson02's new words with lesson01's review vocabulary.", language_code: en, direction: ltr}
+      r1: *job_or_occupation_or_workplace
+      r2: *job_or_occupation_or_workplace
+      r3: *job_or_occupation_or_workplace
+      r4: *job_or_occupation_or_workplace
+      r5: *job_or_occupation_or_workplace
+      r6: *job_or_occupation_or_workplace
+      r7: *job_or_occupation_or_workplace
+      r8: *job_or_occupation_or_workplace
+    slot_relations: [{kind: distinct, slots: [r1, r2, r3, r4, r5, r6, r7, r8]}]
+    answer_derivation: {kind: matching_pairs, slots: [r1, r2, r3, r4, r5, r6, r7, r8]}
+    feedback_frame: {text: "This combines lesson02's new words with lesson01's and lesson03's review vocabulary.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson02.job_asking_translate.003
     lesson_content_key: fa.a1.unit18.lesson02.asking_about_job
     type: translation
@@ -142,7 +221,7 @@ templates:
     answer_derivation: {kind: slot_text, slot: job_asking_word}
     feedback_frame: {text: "The Farsi word or phrase is {job_asking_word}.", language_code: en, direction: ltr}
 
-  # Lesson 3: workplace vocabulary.
+  # Lesson 3: workplace vocabulary (شرکت, مدرسه, بیمارستان, در).
   - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_choice.001
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: multiple_choice
@@ -154,18 +233,18 @@ templates:
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      ww1: *workplace_word
-      ww2: *workplace_word
-      ww3: *workplace_word
-      wg1: *workplace_grammar_word
-      wg2: *workplace_grammar_word
-    slot_relations:
-      - {kind: distinct, slots: [ww1, ww2, ww3]}
-      - {kind: distinct, slots: [wg1, wg2]}
-    answer_derivation: {kind: matching_pairs, slots: [ww1, ww2, ww3, wg1, wg2]}
-    feedback_frame: {text: "These combine lesson03's new words together.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_have_order.003
+    slots: {first: *occupation_or_workplace, second: *occupation_or_workplace, third: *occupation_or_workplace, fourth: *occupation_or_workplace, fifth: *occupation_or_workplace, sixth: *occupation_or_workplace}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These combine lesson03's new words with a review of lesson01's.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_translate.003
+    lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
+    type: translation
+    frame: {text: "{workplace_or_grammar}", language_code: en, direction: ltr, slot_rendering: {workplace_or_grammar: english_gloss}}
+    slots: {workplace_or_grammar: *workplace_or_grammar}
+    answer_derivation: {kind: slot_text, slot: workplace_or_grammar}
+    feedback_frame: {text: "The Farsi word is {workplace_or_grammar}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_have_order.004
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: word_order
     frame: {text: "در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}
@@ -182,23 +261,23 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "هر روز در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}}
     feedback_frame: {text: "هر روز در یک {workplace_word} کار می‌کنم means I work at a {workplace_word} every day.", language_code: en, direction: ltr}
 
-  # Lesson 5: reading a work profile.
-  - content_key: practice.en-fa.fa.a1.unit18.lesson05.work_verb_choice.001
+  # Lesson 5: reading a work profile (مهندسه is native here).
+  - content_key: practice.en-fa.fa.a1.unit18.lesson05.occupation_choice.001
     lesson_content_key: fa.a1.unit18.lesson05.reading_a_work_profile
     type: multiple_choice
-    frame: {text: "{work_verb_form}", language_code: fa, direction: rtl}
-    slots: {work_verb_form: *work_verb_form}
-    answer_derivation: {kind: slot_gloss, slot: work_verb_form}
-    feedback_frame: {text: "{work_verb_form} combines with کار (کار {work_verb_form}) to mean 'work.'", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit18.lesson05.work_verb_order.002
+    frame: {text: "{occupation_self_or_third}", language_code: fa, direction: rtl}
+    slots: {occupation_self_or_third: *occupation_self_or_third}
+    answer_derivation: {kind: slot_gloss, slot: occupation_self_or_third}
+    feedback_frame: {text: "{occupation_self_or_third} states or describes an occupation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit18.lesson05.occupation_third_translate.002
     lesson_content_key: fa.a1.unit18.lesson05.reading_a_work_profile
-    type: word_order
-    frame: {text: "کار {work_verb_form}", language_code: fa, direction: rtl}
-    slots: {work_verb_form: *work_verb_form}
-    answer_derivation: {kind: render_frame, frame: {text: "کار {work_verb_form}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "کار {work_verb_form} means I/you/he/she work[s], depending on the verb form.", language_code: en, direction: ltr}
+    type: translation
+    frame: {text: "{occupation_third_person}", language_code: en, direction: ltr, slot_rendering: {occupation_third_person: english_gloss}}
+    slots: {occupation_third_person: *occupation_third_person}
+    answer_derivation: {kind: slot_text, slot: occupation_third_person}
+    feedback_frame: {text: "The Farsi word is {occupation_third_person}.", language_code: en, direction: ltr}
 
-  # Lesson 6: a dialogue about jobs.
+  # Lesson 6: a dialogue about jobs (معلمه is native here).
   - content_key: practice.en-fa.fa.a1.unit18.lesson06.occupation_third_person_translate.001
     lesson_content_key: fa.a1.unit18.lesson06.jobs_dialogue
     type: translation
@@ -209,16 +288,16 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit18.lesson06.person_occupation_order.002
     lesson_content_key: fa.a1.unit18.lesson06.jobs_dialogue
     type: word_order
-    frame: {text: "{person_name} {occupation_third_person}", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name, occupation_third_person: *occupation_third_person}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {occupation_third_person}", language_code: fa, direction: rtl}}
+    frame: {text: "نیما {occupation_third_person}", language_code: fa, direction: rtl}
+    slots: {occupation_third_person: *occupation_third_person}
+    answer_derivation: {kind: render_frame, frame: {text: "نیما {occupation_third_person}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "{occupation_third_person} means he's/she's a ..., as in نیما مهندسه (Nima is an engineer).", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson06.person_workplace_order.003
     lesson_content_key: fa.a1.unit18.lesson06.jobs_dialogue
     type: word_order
-    frame: {text: "{person_name} در یک {workplace_word} کار می‌کنه", language_code: fa, direction: rtl}
-    slots: {person_name: *person_name, workplace_word: *workplace_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} در یک {workplace_word} کار می‌کنه", language_code: fa, direction: rtl}}
+    frame: {text: "نیما در یک {workplace_word} کار می‌کنه", language_code: fa, direction: rtl}
+    slots: {workplace_word: *workplace_word}
+    answer_derivation: {kind: render_frame, frame: {text: "نیما در یک {workplace_word} کار می‌کنه", language_code: fa, direction: rtl}}
     feedback_frame: {text: "کار می‌کنه means he/she works, as in نیما در یک شرکت کار می‌کنه (Nima works at a company).", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson06.unit_review_match.004
     lesson_content_key: fa.a1.unit18.lesson06.jobs_dialogue

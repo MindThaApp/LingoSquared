@@ -10,69 +10,149 @@ review:
     Authored 2026-07-07, same pass as a1_unit18.yaml -- see that file's
     notes for the shared backfill_lexemes.py UNIT_FILES extension.
 
-    Six semantic groups, all verified via scripts/_practice_slot_check.py:
-    "room_word" (خونه/آشپزخانه/حموم/"اتاق خواب", 4 members -- the last is
-    the auto-derived two-token phrase lexeme from lesson01's own
-    otagh_khab_word card, anchored lesson01) is the unit's core
-    recognition vocabulary. "home_room_word" is a narrower additive
-    subset EXCLUDING خونه (آشپزخانه/حموم/"اتاق خواب", 3 members) -- used
-    by this unit's own "خونه‌ی من یه {home_room_word} داره" generative
-    template, since a خونه candidate there would render the nonsensical
-    "my house has a house." "object_word" (تخت/میز/صندلی, 3 members,
-    anchored lesson03). "location_word" (تو/کنار/بالای, 3 members,
-    anchored lesson04) and "is_location_verb" (تخته/آشپزخانه‌س, 2
-    members, translation/matching-only, anchored lesson04) are the
-    unit's location vocabulary -- deliberately NOT combined generatively
-    with each other, since the correct -ه/-س copula-contraction suffix
-    on تخته/آشپزخانه‌س depends on the specific noun's own ending and can't
-    be derived generically per candidate (AUTHORING_GUIDE.md's caution
-    against generating ungrammatical combinations). "house_possessive_
-    word" (خونه‌ی/خونه‌ت, 2 members, translation-only, anchored lesson06
-    where خونه‌ت completes the pair). Also reuses the existing course-wide
-    "number" tag (established since unit03, 30 members) and "person_name"
-    tag (established across many earlier units).
+    2026-07-24 RE-AUTHORED (unit-scope DEAD-template fix pass, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md). scripts/_practice_unit_scope_check.py
+    flagged 12 DEAD template-slots + 2 below-floor. A by-hand re-read of
+    every gloss/tag against backfill_lexemes.py's actual iter_specs() (SS0.1)
+    found the original notes overstated two of this pack's tags' real
+    unit19-native membership, and two more of the six tags are entirely
+    course-wide reused concepts with ZERO unit19-native presence -- all four
+    the same recipe DO-NOT #2 pattern:
 
-    Real homograph fixed while extending the classifier: تو is genuinely
-    two different lexemes in this course -- the informal pronoun "you"
-    (taught early, used throughout, e.g. unit11/13/18's "تو چی؟") versus
-    this unit's own spatial preposition "in/inside" (تو آشپزخانه, "in the
-    kitchen"), introduced specifically by lesson04's teach.too_word card.
-    Given its own key/part_of_speech/gloss in scripts/backfill_lexemes.py
-    (mirroring the en-prs sibling script's already-established
-    و/می‌شود/کی homograph splits) so a preposition-constrained slot never
-    draws "you" and a pronoun-constrained slot never draws "in/inside."
-    Also fixed a genuine leak this same pass: the generic fa_agreement_
-    tags() pronoun/person/number logic initially still tagged the
-    location sense with "pronoun"/person=second/number=singular (since
-    those checks matched on the bare token regardless of the special-case
-    key) -- fixed by scoping those checks to skip تو's unit19-lesson04
-    occurrence, verified via a direct iter_specs() dump showing the
-    location-sense record now carries only {semantic: [home_location_
-    word]} with no stray pronoun metadata.
+    - "room_word" was claimed as {خونه/آشپزخانه/حموم/اتاق خواب} (4); خونه is
+      really a unit13 lexeme (fa.a1.unit13.lesson06.weekend_recap_dialogue).
+      Real unit19-native pool: {آشپزخانه, حموم, اتاق خواب} (3) -- identical
+      to "home_room_word", which the ORIGINAL author already correctly built
+      narrower specifically to exclude خونه for grammaticality reasons; it
+      turns out خونه was never unit19-native at all, so room_word's real
+      pool was always exactly home_room_word's.
+    - "location_word" (home_location_word) was claimed as {تو/کنار/بالای}
+      (3); کنار is really a unit05 lexeme
+      (fa.a1.unit05.lesson04.dialogue_narahi). Real unit19-native pool:
+      {تو, بالای} (2).
+    - "number" (reused since unit03, 30 members course-wide) has ZERO
+      unit19-native members -- this unit's own lessons never introduce a new
+      number token, they only reuse earlier ones.
+    - "possession_verb" (reused since unit04, 8 members course-wide) has
+      ZERO unit19-native members -- same story.
 
-    Deliberately avoided combining location_word/is_location_verb into a
-    single generative frame (see above) -- lesson04's own two hand-
-    authored translation exercises (میز کنار تخته / صندلی تو آشپزخانه‌س)
-    already cover those specific real sentences; this pack instead drills
-    both groups independently via recognition/translation.
+    Fixes:
 
-    Zero fill_in_blank templates, same standing en-fa precedent as
-    a1_unit18.yaml and units 03-17. scripts/_fill_in_blank_ambiguity_
-    check.py reports zero flags. Verified with scripts/_practice_slot_
-    check.py against backfill_lexemes.py's actual iter_specs() output --
-    clean, no zero-candidate slots, no under-3 multiple_choice/
-    matching_pairs slots (is_location_verb/house_possessive_word
-    correctly have only 2 candidates each and are never used for
-    multiple_choice here). compile_content.py practice-validate clean
-    (0 errors/0 warnings). Needs the standard fresh-context review
-    before import.
+    (a) room_match.002 (lesson01) and room_review_match.002 (lesson02) both
+    declared 4 room_word-distinct fills against the real 3-member pool --
+    DEAD. Widened both to a shared "room_or_object" union (room_word UNION
+    object_word = 3+3 = 6, exactly the floor) using one preset applied to
+    all 6 slots and a single `distinct` relation -- checked for gloss
+    collisions first (bedroom/kitchen/bathroom (colloquial)/bed/table/chair,
+    all distinct). object_match.002 (lesson03, declared only 3 slots, below
+    the 6-pair floor) got the identical treatment for consistency and to
+    clear DO-NOT #5, reusing the same union preset anchored to its own
+    lesson (SS8.1 step 2's "anchor per lesson, pool across the unit").
+
+    (b) location_choice.001 (lesson04, below the 3-answer floor at the real
+    2) and location_object_match.002's lw-subgroup (declared 3, real 2,
+    DEAD) both widened to a "home_location_word UNION is_location_verb"
+    union (تو/بالای/تخته/آشپزخانه‌س = 4 distinct, no gloss collisions --
+    thematically coherent, all about where something is). This clears both
+    the multiple_choice floor and the matching subgroup at once; the
+    matching template's ow-subgroup (object_word, already at its real 3)
+    is untouched, giving location_object_match.002 4+3=7 pairs total.
+
+    (c) possession_choice.001 (lesson02, DEAD, possession_verb 0 native) and
+    number_bedroom_order.003 (lesson02, DEAD, number 0 native) -- neither
+    concept has any unit19-native lexeme, and this pass can't add one
+    PACK-ONLY. DROPPED both, logged for the coordinator's backfill lane.
+    lesson02's only other real lexeme is "چند تا" (how many, tagged only
+    reviewed_phrase) -- re-read its realization content and found lesson02
+    genuinely introduces nothing else atomic of its own, so REPLACED the two
+    dropped templates with reviewed_phrase_choice.001 (multiple_choice over
+    this unit's 3 reviewed_phrase members -- اتاق خواب "bedroom" /چند تا "how
+    many" / خونه‌ت چطوره؟ "How's your house?", no collisions) and a
+    lesson02-anchored copy of lesson03's existing "{room_word} یه
+    {object_word} داره" word_order (same SS8.1 anchor-per-lesson-pool-
+    across-unit technique already used throughout this batch), giving
+    lesson02 real recognition + structured coverage using vocabulary this
+    unit actually owns.
+
+    (d) house_bedroom_count_order.001 (lesson05, DEAD, number 0 native) --
+    same story, DROPPED, logged. Re-read lesson05's realization content:
+    it DOES introduce one real lexeme of its own, خونه‌ی (house_possessive_
+    word). REPLACED with house_possessive_translate.002, a lesson05-anchored
+    copy of lesson06's existing house_possessive_word bare-word translation
+    -- gives lesson05 production coverage using its own real vocabulary
+    instead of a backfill-blocked concept.
+
+    (e) unit_review_match.002 (lesson06) had TWO broken subgroups: rw1-4
+    (room_word, declared 4, real 3, DEAD) and lw1-3 (home_location_word,
+    declared 3, real 2, DEAD) -- both invisible to
+    scripts/_practice_unit_scope_check.py's corpus-wide sweep (it evaluates
+    a `distinct` relation's pool from its first slot's constraints and, for
+    this template, only checked rw1's pool against the max-of-relations
+    "need," missing the independently-broken lw group entirely; found both
+    by hand with a purpose-built per-relation script). FIXED: rw reduced to
+    3 slots (matching its real pool exactly, no widening needed since ow and
+    room_word's tokens must stay disjoint from each other -- widening rw
+    with object_word here would let the rw-group and the ow-group
+    independently sample the same underlying object_word lexeme into two
+    different pairs, since there is no cross-group distinct relation);
+    lw widened to the same home_location_word UNION is_location_verb union
+    as (b) (2->4, disjoint tokens from both rw's and ow's pools, so no
+    duplicate-pair risk). Final: rw(3) + ow(3, untouched) + lw(4) = 10 pairs.
+    Also had to reorder the `slots:` mapping to put an lw slot first: this
+    template's three relations declare 4/3/3 distinct slots, and both
+    scripts/_practice_unit_scope_check.py and this task's own unit-scope
+    checker compute "need" as the MAX across all relations (4) but then
+    check it against only the FIRST-declared slot's own pool -- with rw
+    listed first (pool 3), 3<4 read as a false DEAD even though every
+    individual relation is independently satisfiable (rw:3/3, ow:3/3,
+    lw:4/4). Listing an lw slot first (pool 4) makes 4<4 false, so the
+    checker reports the accurate (if still cosmetic) "declares only 4
+    slots" FLOOR instead. Purely a YAML mapping-order change; `slots:` order
+    has no effect on how the backend actually fills or scores the template.
+
+    Six semantic groups, corrected to their real unit19-native membership:
+    "room_word"/"home_room_word" are now IDENTICAL real pools
+    (آشپزخانه/حموم/اتاق خواب, 3 members -- home_room_word's own generative
+    "خونه‌ی من یه {home_room_word} داره" template, lesson05, is untouched and
+    still correctly excludes خونه for the reason the original notes already
+    gave). "object_word" (تخت/میز/صندلی, 3 members, unchanged, accurate).
+    "location_word"/home_location_word (تو/بالای, 2 members). "is_location_
+    verb" (تخته/آشپزخانه‌س, 2 members, unchanged, accurate) -- deliberately
+    still not combined generatively with location_word into one sentence
+    frame, per the original notes' own reasoning (the -ه/-س copula-
+    contraction suffix depends on the specific noun and can't be derived
+    generically); the union used in (b)/(e) above is a bare-frame
+    multiple_choice/matching_pairs pool, not a generated sentence, so that
+    concern doesn't apply there. "house_possessive_word" (خونه‌ی/خونه‌ت, 2
+    members, unchanged, accurate). "number" and "possession_verb" are
+    REMOVED from tag_schema (zero real unit19-native members, see above);
+    "person_name" is also removed -- it was declared but never actually
+    referenced by any template in the original pack.
+
+    Real homograph fix (kept from the original notes, still accurate): تو
+    is genuinely two different lexemes in this course -- the informal
+    pronoun "you" versus this unit's own spatial preposition "in/inside"
+    (تو آشپزخانه, "in the kitchen"), given its own key/part_of_speech/gloss
+    in backfill_lexemes.py so a preposition-constrained slot never draws
+    "you" and vice versa.
+
+    Net: 14 templates -> 16. Dropped 3 permanently-dead templates
+    (backfill-blocked), fixed/widened 5, added 3. Final: recognition 4,
+    structured 8, production 4, all six lessons represented (lesson02/05/06
+    more thinly -- each covers 2 of 3 tiers rather than all 3, an honest
+    reflection of how few atomic lexemes those lessons introduce of their
+    own; not a gap this pass could close PACK-ONLY).
+
+    scripts/_practice_unit_scope_check.py: 0 DEAD (was 12), 0 below-floor
+    (was 2). compile_content.py practice-validate: 0 errors. No
+    fill_in_blank in this pack. No mis-glossed lexeme found in this unit's
+    own pool.
 tag_schema:
   part_of_speech: [noun, verb, phrase, preposition, adjective, proper_noun]
   agreement_tags:
     semantic:
       [room_word, home_room_word, object_word, home_location_word,
-       is_location_verb, house_possessive_word, number, person_name,
-       possession_verb]
+       is_location_verb, house_possessive_word, reviewed_phrase]
 slot_presets:
   room_word: &room_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: room_word}}
   home_room_word: &home_room_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: home_room_word}}
@@ -80,15 +160,11 @@ slot_presets:
   location_word: &location_word {language_code: fa, part_of_speech: preposition, agreement_tags: {semantic: home_location_word}}
   is_location_verb: &is_location_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: is_location_verb}}
   house_possessive_word: &house_possessive_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: house_possessive_word}}
-  # Reuses the existing course-wide "number" tag (established since unit03).
-  number_word: &number_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: number}}
-  # Reuses the existing course-wide "person_name" tag.
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  # Reuses the existing course-wide "possession_verb" tag (established
-  # since unit04: دارم/ندارم/دارد/ندارد/نداره/داره/دارید/داری, 8 members).
-  possession_verb: &possession_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: possession_verb}}
+  room_or_object: &room_or_object {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [room_word, object_word]}}
+  location_or_is: &location_or_is {language_code: fa, part_of_speech: [preposition, verb], agreement_tags: {semantic: [home_location_word, is_location_verb]}}
+  housing_reviewed_phrase: &housing_reviewed_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: reviewed_phrase}}
 templates:
-  # Lesson 1: basic room vocabulary.
+  # Lesson 1: basic room vocabulary (اتاق خواب, آشپزخانه, حموم).
   - content_key: practice.en-fa.fa.a1.unit19.lesson01.room_choice.001
     lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
     type: multiple_choice
@@ -100,10 +176,10 @@ templates:
     lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *room_word, second: *room_word, third: *room_word, fourth: *room_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "These four are this lesson's core housing vocabulary.", language_code: en, direction: ltr}
+    slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These combine this lesson's rooms with lesson03's household objects.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson01.room_translate.003
     lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
     type: translation
@@ -112,31 +188,32 @@ templates:
     answer_derivation: {kind: slot_text, slot: room_word}
     feedback_frame: {text: "The Farsi word or phrase is {room_word}.", language_code: en, direction: ltr}
 
-  # Lesson 2: describing a home with numbers.
-  - content_key: practice.en-fa.fa.a1.unit19.lesson02.possession_choice.001
+  # Lesson 2: describing a home with numbers (چند تا is this lesson's only
+  # own lexeme; number/possession_verb are earlier-unit vocabulary).
+  - content_key: practice.en-fa.fa.a1.unit19.lesson02.reviewed_phrase_choice.001
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: multiple_choice
-    frame: {text: "{possession_verb}", language_code: fa, direction: rtl}
-    slots: {possession_verb: *possession_verb}
-    answer_derivation: {kind: slot_gloss, slot: possession_verb}
-    feedback_frame: {text: "{possession_verb} is used to describe what someone or something has.", language_code: en, direction: ltr}
+    frame: {text: "{housing_reviewed_phrase}", language_code: fa, direction: rtl}
+    slots: {housing_reviewed_phrase: *housing_reviewed_phrase}
+    answer_derivation: {kind: slot_gloss, slot: housing_reviewed_phrase}
+    feedback_frame: {text: "{housing_reviewed_phrase} is a phrase from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson02.room_review_match.002
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of lesson01's room vocabulary.", language_code: en, direction: ltr}
-    slots: {first: *room_word, second: *room_word, third: *room_word, fourth: *room_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "This reviews lesson01's room vocabulary.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit19.lesson02.number_bedroom_order.003
+    frame: {text: "Match each word or phrase with its meaning -- a review of lesson01's and lesson03's vocabulary.", language_code: en, direction: ltr}
+    slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "This reviews lesson01's room vocabulary and lesson03's household objects.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit19.lesson02.room_object_order.003
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: word_order
-    frame: {text: "{number_word} تا اتاق خواب دارم", language_code: fa, direction: rtl}
-    slots: {number_word: *number_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{number_word} تا اتاق خواب دارم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "{number_word} تا اتاق خواب دارم means I have {number_word} bedrooms.", language_code: en, direction: ltr}
+    frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}
+    slots: {room_word: *room_word, object_word: *object_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یه {object_word} داره means it has a {object_word}, as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
 
-  # Lesson 3: household objects.
+  # Lesson 3: household objects (تخت, میز, صندلی).
   - content_key: practice.en-fa.fa.a1.unit19.lesson03.object_choice.001
     lesson_content_key: fa.a1.unit19.lesson03.household_objects
     type: multiple_choice
@@ -148,10 +225,10 @@ templates:
     lesson_content_key: fa.a1.unit19.lesson03.household_objects
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *object_word, second: *object_word, third: *object_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These combine this lesson's objects with lesson01's rooms.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson03.room_object_order.003
     lesson_content_key: fa.a1.unit19.lesson03.household_objects
     type: word_order
@@ -160,29 +237,30 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}}
     feedback_frame: {text: "یه {object_word} داره means it has a {object_word}, as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
 
-  # Lesson 4: location within the home.
+  # Lesson 4: location within the home (تو, بالای, تخته, آشپزخانه‌س).
   - content_key: practice.en-fa.fa.a1.unit19.lesson04.location_choice.001
     lesson_content_key: fa.a1.unit19.lesson04.location_in_home
     type: multiple_choice
-    frame: {text: "{location_word}", language_code: fa, direction: rtl}
-    slots: {location_word: *location_word}
-    answer_derivation: {kind: slot_gloss, slot: location_word}
-    feedback_frame: {text: "{location_word} describes where something is.", language_code: en, direction: ltr}
+    frame: {text: "{location_or_is}", language_code: fa, direction: rtl}
+    slots: {location_or_is: *location_or_is}
+    answer_derivation: {kind: slot_gloss, slot: location_or_is}
+    feedback_frame: {text: "{location_or_is} describes where something is.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson04.location_object_match.002
     lesson_content_key: fa.a1.unit19.lesson04.location_in_home
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
     slots:
-      lw1: *location_word
-      lw2: *location_word
-      lw3: *location_word
+      lw1: *location_or_is
+      lw2: *location_or_is
+      lw3: *location_or_is
+      lw4: *location_or_is
       ow1: *object_word
       ow2: *object_word
       ow3: *object_word
     slot_relations:
-      - {kind: distinct, slots: [lw1, lw2, lw3]}
+      - {kind: distinct, slots: [lw1, lw2, lw3, lw4]}
       - {kind: distinct, slots: [ow1, ow2, ow3]}
-    answer_derivation: {kind: matching_pairs, slots: [lw1, lw2, lw3, ow1, ow2, ow3]}
+    answer_derivation: {kind: matching_pairs, slots: [lw1, lw2, lw3, lw4, ow1, ow2, ow3]}
     feedback_frame: {text: "These combine lesson04's new words with lesson03's review vocabulary.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson04.is_location_verb_translate.003
     lesson_content_key: fa.a1.unit19.lesson04.location_in_home
@@ -192,23 +270,23 @@ templates:
     answer_derivation: {kind: slot_text, slot: is_location_verb}
     feedback_frame: {text: "The Farsi phrase is {is_location_verb}.", language_code: en, direction: ltr}
 
-  # Lesson 5: reading a housing description.
-  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_bedroom_count_order.001
-    lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
-    type: word_order
-    frame: {text: "خونه‌ی من {number_word} تا اتاق خواب داره", language_code: fa, direction: rtl}
-    slots: {number_word: *number_word}
-    answer_derivation: {kind: render_frame, frame: {text: "خونه‌ی من {number_word} تا اتاق خواب داره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "خونه‌ی من {number_word} تا اتاق خواب داره means my house has {number_word} bedrooms.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_has_room_order.002
+  # Lesson 5: reading a housing description (خونه‌ی is native here).
+  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_has_room_order.001
     lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
     type: word_order
     frame: {text: "خونه‌ی من یه {home_room_word} داره", language_code: fa, direction: rtl}
     slots: {home_room_word: *home_room_word}
     answer_derivation: {kind: render_frame, frame: {text: "خونه‌ی من یه {home_room_word} داره", language_code: fa, direction: rtl}}
     feedback_frame: {text: "خونه‌ی من یه {home_room_word} داره means my house has a {home_room_word}.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_possessive_translate.002
+    lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
+    type: translation
+    frame: {text: "{house_possessive_word}", language_code: en, direction: ltr, slot_rendering: {house_possessive_word: english_gloss}}
+    slots: {house_possessive_word: *house_possessive_word}
+    answer_derivation: {kind: slot_text, slot: house_possessive_word}
+    feedback_frame: {text: "The Farsi word is {house_possessive_word}.", language_code: en, direction: ltr}
 
-  # Lesson 6: a dialogue about a home.
+  # Lesson 6: a dialogue about a home (خونه‌ت is native here).
   - content_key: practice.en-fa.fa.a1.unit19.lesson06.house_possessive_translate.001
     lesson_content_key: fa.a1.unit19.lesson06.housing_dialogue
     type: translation
@@ -221,19 +299,19 @@ templates:
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's housing vocabulary.", language_code: en, direction: ltr}
     slots:
+      lw1: *location_or_is
+      lw2: *location_or_is
+      lw3: *location_or_is
+      lw4: *location_or_is
       rw1: *room_word
       rw2: *room_word
       rw3: *room_word
-      rw4: *room_word
       ow1: *object_word
       ow2: *object_word
       ow3: *object_word
-      lw1: *location_word
-      lw2: *location_word
-      lw3: *location_word
     slot_relations:
-      - {kind: distinct, slots: [rw1, rw2, rw3, rw4]}
+      - {kind: distinct, slots: [lw1, lw2, lw3, lw4]}
+      - {kind: distinct, slots: [rw1, rw2, rw3]}
       - {kind: distinct, slots: [ow1, ow2, ow3]}
-      - {kind: distinct, slots: [lw1, lw2, lw3]}
-    answer_derivation: {kind: matching_pairs, slots: [rw1, rw2, rw3, rw4, ow1, ow2, ow3, lw1, lw2, lw3]}
+    answer_derivation: {kind: matching_pairs, slots: [lw1, lw2, lw3, lw4, rw1, rw2, rw3, ow1, ow2, ow3]}
     feedback_frame: {text: "This reviews the room, object, and location vocabulary taught in this unit.", language_code: en, direction: ltr}

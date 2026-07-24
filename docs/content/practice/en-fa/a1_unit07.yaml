@@ -64,15 +64,55 @@ review:
     time_word=2 real candidates, others unchanged) and compile_content.py
     practice-validate (0 errors/0 warnings, full en-fa pack). review.status
     left unreviewed -- this pass does not self-certify review.
+
+    REAUTH PASS 2026-07-24 (fix DEAD templates at checkpoint/unit scope --
+    scripts/_practice_unit_scope_check.py). This is the textbook DO-NOT #2
+    defect: weather_time_word's real course-wide members are امروز
+    (a1_unit06.lesson03) and فردا (a1_unit03.lesson06) -- BOTH from EARLIER
+    units, not this one. Confirmed by direct iter_specs() query: 0 (zero)
+    lexemes in this unit carry weather_time_word. The DEPTH PASS notes above
+    were wrong to call it "2 members ... anchored at lesson03" -- that
+    count was taken at whole-direction scope, not unit scope, and
+    generate_checkpoint() only sees this unit's own lessons.
+    weather_time_match.004/weather_time_translate.005/weather_forecast_
+    order.007 were all DEAD as a result. Fix, per lesson:
+    - lesson03 (asking_about_weather) has exactly ONE native lexeme, هوا
+      (weather, noun, tagged dialogue_word). RE-ANCHORED
+      weather_time_match.004 and weather_time_translate.005 away from
+      weather_time_word onto a new dialogue_noun preset
+      (part_of_speech: noun, semantic: dialogue_word, native to this unit)
+      -- 5 distinct unit-scoped nouns (هوا/چتر/کت/فکر/پارک, from
+      lessons03/05/06). Renamed both content_keys to dialogue_word_match/
+      dialogue_word_translate.005 since they're no longer weather-time-
+      specific; below the 6-pair matching floor (5, honestly the ceiling --
+      no 6th native noun exists in this unit) but no longer DEAD.
+    - weather_forecast_order.007 (word_order) dropped the missing
+      weather_time_word slot entirely and now pairs unit07's own lesson03
+      noun هوا (hardcoded literal frame text, not a slot) with the fully
+      native weather_state_verb slot (lesson04, 4 members, unchanged) --
+      "هوا {weather_state_verb}" renders as "هوا آفتابیه" / "هوا سرده" /
+      "هوا بارونیه" / "هوا گرمه", all four grammatical at both unit and
+      full a1-course scope (weather_state_verb has no members outside this
+      unit, so unit scope == course scope for this tag).
+    Re-verified 0 DEAD for this file via scripts/_practice_unit_scope_check.py
+    and 0 errors via compile_content.py practice-validate. No backfill/
+    realization/overlay edits made. weather_match.002 (4<6), temperature_
+    match.002 (3<6), weather_state_match.002 (4<6) are left as honestly-thin
+    -- each tag's real course-wide ceiling in this unit IS its unit-scoped
+    count (weather_condition/temperature_word/weather_state_verb none have
+    members outside a1_unit07), so reaching 6 would require merging two of
+    these three otherwise-distinct categories into one matching exercise,
+    which would just produce a redundant near-duplicate at the same lesson
+    anchor rather than new coverage.
 tag_schema:
-  part_of_speech: [adjective, verb, adverb]
+  part_of_speech: [adjective, verb, adverb, noun]
   agreement_tags:
-    semantic: [weather_condition, temperature_word, weather_state_verb, weather_time_word]
+    semantic: [weather_condition, temperature_word, weather_state_verb, dialogue_word]
 slot_presets:
   weather_condition: &weather_condition {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
   temperature_word: &temperature_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: temperature_word}}
   weather_state_verb: &weather_state_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: weather_state_verb}}
-  weather_time_word: &weather_time_word {language_code: fa, part_of_speech: adverb, agreement_tags: {semantic: weather_time_word}}
+  dialogue_noun: &dialogue_noun {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: dialogue_word}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_choice.001
     lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
@@ -140,28 +180,28 @@ templates:
     slots: {weather_state_verb: *weather_state_verb}
     answer_derivation: {kind: slot_text, slot: weather_state_verb}
     feedback_frame: {text: "The Farsi phrase is {weather_state_verb}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit07.lesson03.weather_time_match.004
+  - content_key: practice.en-fa.fa.a1.unit07.lesson03.dialogue_word_match.004
     lesson_content_key: fa.a1.unit07.lesson03.asking_about_weather
     type: matching_pairs
-    frame: {text: "Match each time word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *weather_time_word, second: *weather_time_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each time word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit07.lesson03.weather_time_translate.005
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *dialogue_noun, second: *dialogue_noun, third: *dialogue_noun, fourth: *dialogue_noun, fifth: *dialogue_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit07.lesson03.dialogue_word_translate.005
     lesson_content_key: fa.a1.unit07.lesson03.asking_about_weather
     type: translation
-    frame: {text: "{weather_time_word}", language_code: en, direction: ltr, slot_rendering: {weather_time_word: english_gloss}}
-    slots: {weather_time_word: *weather_time_word}
-    answer_derivation: {kind: slot_text, slot: weather_time_word}
-    feedback_frame: {text: "The Farsi word is {weather_time_word}.", language_code: en, direction: ltr}
+    frame: {text: "{dialogue_noun}", language_code: en, direction: ltr, slot_rendering: {dialogue_noun: english_gloss}}
+    slots: {dialogue_noun: *dialogue_noun}
+    answer_derivation: {kind: slot_text, slot: dialogue_noun}
+    feedback_frame: {text: "The Farsi word is {dialogue_noun}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit07.lesson04.weather_forecast_order.007
     lesson_content_key: fa.a1.unit07.lesson04.describing_todays_weather
     type: word_order
-    frame: {text: "{weather_time_word} {weather_state_verb}", language_code: fa, direction: rtl}
-    slots: {weather_time_word: *weather_time_word, weather_state_verb: *weather_state_verb}
-    answer_derivation: {kind: render_frame, frame: {text: "{weather_time_word} {weather_state_verb}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "Word order: time word, then the weather-state verb.", language_code: en, direction: ltr}
+    frame: {text: "هوا {weather_state_verb}", language_code: fa, direction: rtl}
+    slots: {weather_state_verb: *weather_state_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "هوا {weather_state_verb}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "هوا (the weather) is the subject; the weather-state verb comes after it.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit07.lesson01.weather_condition_order.008
     lesson_content_key: fa.a1.unit07.lesson01.weather_conditions
     type: word_order

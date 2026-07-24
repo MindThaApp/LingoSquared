@@ -77,15 +77,65 @@ review:
     unchanged at 4/3) and compile_content.py practice-validate (0 errors/0
     warnings, full en-fa pack). review.status left unreviewed -- this pass
     does not self-certify review.
+
+    REAUTH PASS 2026-07-24 (fix DEAD templates at checkpoint/unit scope --
+    scripts/_practice_unit_scope_check.py, not the whole-direction check the
+    notes above describe). generate_checkpoint() scopes candidates to THIS
+    unit's own lexemes only; several slots above were satisfiable at
+    whole-direction scope but NOT at unit scope, per docs/content/
+    PRACTICE_PACK_RECIPE.md DO-NOT #2. Found (each verified against a fresh
+    iter_specs() dump filtered to '.a1.unit06.'):
+    - drink_item is genuinely only 2 at unit scope (آب, قهوه -- چای is
+      drink_item too but was introduced back in a1_unit01, so it doesn't
+      count here). drink_choice.001/drink_match.002 were DEAD/below-floor.
+      RE-ANCHORED both to a new food_or_drink preset (semantic union
+      [food_item, drink_item], both native to THIS unit's own lesson01) --
+      6 distinct (نان/برنج/مرغ/میوه/آب/قهوه). drink_match.002 renamed to
+      food_drink_match.002 (6 slots, was 3) since it's no longer drink-only;
+      drink_choice.001 kept its content_key (still anchors lesson01, wider
+      pool now). food_choice/food_match/food_translate untouched (4
+      distinct food_item is fine on its own; not duplicating the union
+      there to avoid two near-identical 6-pair matches on the same lesson).
+    - quantity_unit_word is genuinely only 2 at unit scope (لیوان, بشقاب --
+      کیلو/نصف are a1_unit08's own). quantity_choice.001/quantity_match.002
+      were DEAD/below-floor. RE-ANCHORED both to a new quantity_or_dialogue
+      preset (union [quantity_unit_word, dialogue_word] restricted to
+      part_of_speech: noun, all native to this unit) -- 11 distinct nouns
+      (لیوان/بشقاب plus 9 dialogue_word nouns from lessons02/03/05/06:
+      گارسون/منو/توصیه/میل/جوجه‌کباب/صورت‌حساب/مشتری/البته/برنج).
+      quantity_translate.003 untouched (translation has no floor; still
+      fine at 2).
+    - ordering_register is genuinely only 1 at unit scope (می‌خواستم --
+      می‌خوام, the register contrast partner the original notes assumed
+      would also be native here, actually first appears in a1_unit03).
+      register_match.004 was DEAD (needed 2, had 1). RE-ANCHORED by dropping
+      the semantic tag entirely and constraining part_of_speech: verb only
+      (safe here -- the frame is the generic "Match each ... with its
+      meaning", no literal Persian text, so a broader unit-scoped verb pool
+      carries no course-scope grammaticality risk per recipe SS3.1c) -- 6
+      distinct unit-scoped verbs (می‌خواستم/می‌کنید/خوبه/بود/میارم/اومدید).
+      register_translate.005 untouched (translation, no floor, still fine
+      at 1 -- a legitimate single-member anchor).
+    dialogue_word added to tag_schema for the above. Re-verified 0 DEAD for
+    this file via scripts/_practice_unit_scope_check.py and 0 errors via
+    compile_content.py practice-validate. No backfill/realization/overlay
+    edits made; food_match's own 4<6 matching_pairs floor gap is left as
+    honestly-thin (food_item's real native ceiling in this unit is 4; a
+    union with drink_item would just duplicate the widened food_drink_match
+    above at the same lesson01 anchor, so it's left alone rather than
+    padded into a redundant near-clone).
 tag_schema:
   part_of_speech: [noun, verb]
   agreement_tags:
-    semantic: [food_item, drink_item, quantity_unit_word, ordering_register]
+    semantic: [food_item, drink_item, quantity_unit_word, ordering_register, dialogue_word]
 slot_presets:
   food_item: &food_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: food_item}}
   drink_item: &drink_item {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: drink_item}}
+  food_or_drink: &food_or_drink {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [food_item, drink_item]}}
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
+  quantity_or_dialogue: &quantity_or_dialogue {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit_word, dialogue_word]}}
   ordering_register: &ordering_register {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: ordering_register}}
+  any_verb: &any_verb {language_code: fa, part_of_speech: verb}
 templates:
   - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_choice.001
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
@@ -113,17 +163,17 @@ templates:
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
     type: multiple_choice
     frame: {text: "{drink_item}", language_code: fa, direction: rtl}
-    slots: {drink_item: *drink_item}
+    slots: {drink_item: *food_or_drink}
     answer_derivation: {kind: slot_gloss, slot: drink_item}
-    feedback_frame: {text: "{drink_item} is a drink word from this lesson.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_match.002
+    feedback_frame: {text: "{drink_item} is a food or drink word from this lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_drink_match.002
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
     type: matching_pairs
-    frame: {text: "Match each Farsi drink word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *drink_item, second: *drink_item, third: *drink_item}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each Farsi drink word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each Farsi food or drink word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *food_or_drink, second: *food_or_drink, third: *food_or_drink, fourth: *food_or_drink, fifth: *food_or_drink, sixth: *food_or_drink}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each Farsi food or drink word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit06.lesson01.drink_translate.003
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
     type: translation
@@ -135,17 +185,17 @@ templates:
     lesson_content_key: fa.a1.unit06.lesson04.quantities
     type: multiple_choice
     frame: {text: "{quantity_unit_word}", language_code: fa, direction: rtl}
-    slots: {quantity_unit_word: *quantity_unit_word}
+    slots: {quantity_unit_word: *quantity_or_dialogue}
     answer_derivation: {kind: slot_gloss, slot: quantity_unit_word}
-    feedback_frame: {text: "{quantity_unit_word} is a quantity/counting word used when ordering or shopping.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{quantity_unit_word} is a shopping/restaurant word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit06.lesson04.quantity_match.002
     lesson_content_key: fa.a1.unit06.lesson04.quantities
     type: matching_pairs
-    frame: {text: "Match each quantity word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *quantity_unit_word, second: *quantity_unit_word, third: *quantity_unit_word, fourth: *quantity_unit_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each quantity word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *quantity_or_dialogue, second: *quantity_or_dialogue, third: *quantity_or_dialogue, fourth: *quantity_or_dialogue, fifth: *quantity_or_dialogue, sixth: *quantity_or_dialogue}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit06.lesson04.quantity_translate.003
     lesson_content_key: fa.a1.unit06.lesson04.quantities
     type: translation
@@ -156,11 +206,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit06.lesson02.register_match.004
     lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
     type: matching_pairs
-    frame: {text: "Match each ordering phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *ordering_register, second: *ordering_register}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "می‌خواستم is polite (a waiter or stranger); می‌خوام is informal (a close friend).", language_code: en, direction: ltr}
+    frame: {text: "Match each Farsi verb with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *any_verb, second: *any_verb, third: *any_verb, fourth: *any_verb, fifth: *any_verb, sixth: *any_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Each of these verbs appears somewhere in this unit's dialogues.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit06.lesson02.register_translate.005
     lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
     type: translation
