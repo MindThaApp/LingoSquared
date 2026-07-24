@@ -14,9 +14,14 @@ review:
     from its English gloss is legitimate). Structured: 2x word_order -- workplace_word (single candidate
     شروع within the A1 course; NOT direction-wide single, so this could not legally be fill_in_blank --
     4 more workplace_word tokens exist at A2/B1/B2) and concert_word (course-wide 2 members: کنسرت and
-    خواننده, both fit ''in X ast''). Only 2 structured templates -- BELOW the 3-structured floor; no 3rd
-    safe structured type exists at this capacity. 1 extra fixed-sentence translation added for production
-    depth. 7 templates total -- BELOW the 12-template floor and the >=40-distinct-item floor. Backfill-thin:
+    خواننده, both fit ''in X ast''). 2026-07-24 polish wave 2: added a 3rd recognition MC (choose.006,
+    REVERSED direction -- English gloss shown via slot_rendering, options are the Dari tokens via slot_text;
+    backend build_prompt/_distractor_values and the unit-scope checker both support MC+slot_text, and
+    this is the only way to get a genuinely non-clone 3rd MC when the unit''s only >=3-gloss pool is
+    already used by both siblings) and a 3rd structured word_order (order.007, ''{item} خواننده است.''
+    over person_name/proper_noun -- unit candidate سیما, matching lesson02''s own poster content; every
+    course-scope person_name member is a name, so ''X is a singer'' stays grammatical). Both tiers now
+    3 live. 1 extra fixed-sentence translation added for production depth. 9 templates total -- BELOW the 12-template floor and the >=40-distinct-item floor. Backfill-thin:
     lessons 03-06 contribute 0 lexemes each; routing to the backfill lane is the real fix. No mis-glossed
     lexemes found.'
 tag_schema:
@@ -178,6 +183,56 @@ templates:
       direction: rtl
   feedback_frame:
     text: This is [the concert / the singer].
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit54.lesson02.concert_poster.choose.006
+  lesson_content_key: prs.a1.unit54.lesson02.concert_poster
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - concert_word
+        - service_person_word
+        - workplace_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dari word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit54.lesson02.concert_poster.order.007
+  lesson_content_key: prs.a1.unit54.lesson02.concert_poster
+  type: word_order
+  frame:
+    text: '{item} خواننده است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic:
+        - person_name
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} خواننده است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '[Sima] is a singer.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit54.lesson02.concert_poster.translate.005

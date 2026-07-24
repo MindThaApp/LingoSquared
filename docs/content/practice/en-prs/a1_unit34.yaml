@@ -6,7 +6,21 @@ unit_content_key: prs.a1.unit34.neighborhood
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass), three defects, all traced to the same
+  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template, production 2. Added two
+    multiple_choice templates on the pack''s only viable pool (neighborhood_word, 3 unit glosses -- exactly at the MC
+    floor): lesson01.neighborhood_where_gloss.001 ("{neighborhood_word} کجاست" -- کجاست is course-taught (بانک کجاست/
+    بازار کجاست) and reads naturally for all 5 course-scope candidates including the extras مکتب/دوکان) and
+    lesson03.neighborhood_this_gloss.001 ("این {neighborhood_word} است" -- same 5-candidate course-scope check; این/است/
+    کجاست are not slot candidates, no self-reference). Recognition now 3 live. PRODUCTION LEFT HONESTLY THIN AT 2:
+    the unit''s entire usable pool is the same 3-noun tag already carried by both existing bare-word translations; a third
+    bare translation on the same pool+frame would be a functional clone (runtime never renders text_blocks for practice),
+    a slotted English sentence frame renders سرک''s gloss "street; road" mid-sentence ("My street; road is good."), and
+    there is no single-candidate tag for a SS6.6(b) fixed-sentence translation. Needs a backfill change (already logged
+    below by the earlier fix) before production can honestly reach 3. Verified: practice-validate 0 errors;
+    _practice_unit_scope_check.py 0 DEAD for this file, recognition tier-short line gone, production tier-short line
+    remains by this honest-thin note; _practice_self_reference_check.py 0 hits; check_dari_register.py 0 new findings.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass), three defects, all traced to the same
     root cause: this unit is a genuinely thin "recombine known vocabulary in a new topic" unit. Its lessons teach and
     exercise plenty of Dari (نزدیک/دور/دوکان/مکتب/بسیار/خوشحال and more), but backfill_lexemes_en_prs.py keys each token
     once for the whole direction at its FIRST-taught unit, and every one of those words was already introduced earlier
@@ -170,6 +184,38 @@ templates:
       direction: rtl
   feedback_frame:
     text: 'Word order: [place] دور نیست ([place] is not far).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_where_gloss.001
+  lesson_content_key: prs.a1.unit34.lesson01.neighborhood_words
+  type: multiple_choice
+  frame:
+    text: '{neighborhood_word} کجاست'
+    language_code: prs
+    direction: rtl
+  slots:
+    neighborhood_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: neighborhood_word
+  feedback_frame:
+    text: '... کجاست asks "Where is ...?". Pick the English meaning of the place word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit34.lesson03.neighborhood_this_gloss.001
+  lesson_content_key: prs.a1.unit34.lesson03.which_neighborhood
+  type: multiple_choice
+  frame:
+    text: این {neighborhood_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    neighborhood_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: neighborhood_word
+  feedback_frame:
+    text: 'این ... است means "This is ...". Pick the English meaning of the place word.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit34.lesson06.neighborhood_translate.001.volume_translate.007

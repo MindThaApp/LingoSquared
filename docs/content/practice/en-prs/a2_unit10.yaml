@@ -7,6 +7,16 @@ review:
   status: unreviewed
   fresh_context: 'false'
   notes: >-
+    POLISH WAVE 2 2026-07-24 (tier-thinness): recognition tier was 2 live
+    templates (opinion_gloss.001, opinion_phrase_choice.006; listen_select is
+    banned for prs -- no TTS). Added lesson03.message_noun_gloss.009, a
+    multiple_choice anchored to lesson03 (which previously had no
+    recognition-tier template at all) pooling the semantic union
+    [opinion_word, family_message_word] (nouns only): 7 unit-scoped tokens /
+    7 distinct glosses, comfortably over the >=3 MC floor. Differs from
+    opinion_gloss.001 in pool (adds lesson03's پیام/فامیل). Recognition tier
+    is now 3 live templates. No other change.
+
     UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24: scripts/_practice_unit_scope_check.py
     flagged this pack (1 DEAD, 3 below-floor), all four stemming from the same
     root cause the prior authoring notes below actually documented as a
@@ -143,6 +153,9 @@ slot_presets:
   # lessons introduce (7 real distinct candidates, level a2 -- verified
   # via iter_specs()).
   opinion_phrase: &opinion_phrase {language_code: prs, part_of_speech: phrase, agreement_tags: {semantic: opinion_phrase}}
+  # Added 2026-07-24 (polish wave 2, tier-thinness): union of the unit's two
+  # noun tags (recipe SS3.1a) -- 7 unit-scoped tokens / 7 distinct glosses.
+  unit_noun: &unit_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [opinion_word, family_message_word]}}
 templates:
   # Lesson 1: opinions vocabulary.
   - content_key: practice.en-prs.prs.a2.unit10.lesson01.opinion_gloss.001
@@ -245,6 +258,17 @@ templates:
   # word_order hero-sentence frame authored around پیام/فامیل specifically
   # (out of scope for this pack-only pass since it would need its own
   # single-member anchor tags).
+  - content_key: practice.en-prs.prs.a2.unit10.lesson03.message_noun_gloss.009
+    lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
+    # Added 2026-07-24 (polish wave 2, tier-thinness): third live
+    # recognition-tier template; lesson03 previously had no recognition
+    # coverage. Pools the [opinion_word, family_message_word] union -- 7
+    # unit-scoped tokens / 7 distinct glosses (>=3 MC floor).
+    type: multiple_choice
+    frame: {text: "{unit_noun}", language_code: prs, direction: rtl}
+    slots: {unit_noun: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: unit_noun}
+    feedback_frame: {text: "{unit_noun} is a noun from this unit's opinion lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a2.unit10.lesson03.family_message_translate.002
     lesson_content_key: prs.a2.unit10.lesson03.reading_an_opinion_message
     type: translation

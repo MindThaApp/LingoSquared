@@ -4,9 +4,27 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit29.sports
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
+    TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition and production
+    tiers each had only 1 live template. Added 2 multiple_choice + 2
+    translation templates, all bare-word corpus-standard shapes, on
+    distinct unit-native pools: lesson02 gets ball_sport_gloss.002 +
+    ball_sport_translate.003 on the existing ball_sport_word preset
+    (3 distinct unit tokens/glosses football/volleyball/cricket, exactly
+    at the MC floor); lesson03 gets sport_game_gloss.002 on a new
+    sport_game_word preset (union of the unit's own sport_topic_word +
+    online_habit_word tags -- online_habit_word reaches the unit's own
+    lesson01 بازی "game" -- 7 distinct unit tokens/glosses) and
+    place_translate.003 on sport_place_word (honest-thin: only 1
+    unit-scoped candidate باشگاه since پارک is reused from unit13, but
+    live and unit-taught; course pool gym/park is bare-word-safe).
+    online_habit_word added to tag_schema. No new Dari strings (all new
+    frames are bare slot placeholders); no literal-text frames. Tiers now
+    3/3/3 live. Status flipped back to unreviewed pending fresh-context
+    review of the additions.
+
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
     that file's notes for the shared pass context). Realization is
@@ -54,11 +72,14 @@ review:
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
-    semantic: [sport_topic_word, ball_sport_word, sport_place_word]
+    semantic: [sport_topic_word, ball_sport_word, sport_place_word, online_habit_word]
 slot_presets:
   sport_topic_word: &sport_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: sport_topic_word}}
   ball_sport_word: &ball_sport_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ball_sport_word}}
   sport_place_word: &sport_place_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: sport_place_word}}
+  # Union of the unit's own tags: online_habit_word reaches the unit's own
+  # lesson01 lexeme بازی ("game"), giving 7 distinct unit-scoped tokens.
+  sport_game_word: &sport_game_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [sport_topic_word, online_habit_word]}}
 templates:
   # Lesson 1: sport vocabulary.
   - content_key: practice.en-prs.prs.a1.unit29.lesson01.sport_gloss.001
@@ -85,6 +106,20 @@ templates:
     slots: {ball_sport_word: *ball_sport_word}
     answer_derivation: {kind: render_frame, frame: {text: "من دو بار در هفته {ball_sport_word} بازی می‌کنم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: من دو بار در هفته [sport] بازی می‌کنم (I play [sport] twice a week).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit29.lesson02.ball_sport_gloss.002
+    lesson_content_key: prs.a1.unit29.lesson02.frequency_question
+    type: multiple_choice
+    frame: {text: "{ball_sport_word}", language_code: prs, direction: rtl}
+    slots: {ball_sport_word: *ball_sport_word}
+    answer_derivation: {kind: slot_gloss, slot: ball_sport_word}
+    feedback_frame: {text: "{ball_sport_word} is a sport you play (بازی می‌کنم).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit29.lesson02.ball_sport_translate.003
+    lesson_content_key: prs.a1.unit29.lesson02.frequency_question
+    type: translation
+    frame: {text: "{ball_sport_word}", language_code: en, direction: ltr, slot_rendering: {ball_sport_word: english_gloss}}
+    slots: {ball_sport_word: *ball_sport_word}
+    answer_derivation: {kind: slot_text, slot: ball_sport_word}
+    feedback_frame: {text: "{ball_sport_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 3: where you play.
   - content_key: practice.en-prs.prs.a1.unit29.lesson03.play_location_order.001
@@ -94,6 +129,20 @@ templates:
     slots: {sport_place_word: *sport_place_word}
     answer_derivation: {kind: render_frame, frame: {text: "در {sport_place_word} بازی می‌کنم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: در [place] بازی می‌کنم (I play at the [place]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit29.lesson03.sport_game_gloss.002
+    lesson_content_key: prs.a1.unit29.lesson03.location
+    type: multiple_choice
+    frame: {text: "{sport_game_word}", language_code: prs, direction: rtl}
+    slots: {sport_game_word: *sport_game_word}
+    answer_derivation: {kind: slot_gloss, slot: sport_game_word}
+    feedback_frame: {text: "{sport_game_word} belongs to this unit's sports vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit29.lesson03.place_translate.003
+    lesson_content_key: prs.a1.unit29.lesson03.location
+    type: translation
+    frame: {text: "{sport_place_word}", language_code: en, direction: ltr, slot_rendering: {sport_place_word: english_gloss}}
+    slots: {sport_place_word: *sport_place_word}
+    answer_derivation: {kind: slot_text, slot: sport_place_word}
+    feedback_frame: {text: "{sport_place_word} is the Dari word for this place.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit29.lesson06.sport_translate.001

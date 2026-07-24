@@ -4,9 +4,22 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit37.personality
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
+    (1) lesson02.personality_he_gloss.001 (multiple_choice, "او {personality_word} است" -- the pack''s own already-vetted
+    predicate frame, grammatical for every course-scope candidate (the 7 unit adjectives; course adds only b1''s duplicate
+    مهربان, same token)); (2) lesson04.personality_i_gloss.001 (multiple_choice, "من {personality_word} استم" -- Afghan
+    first-person copula استم (NOT هستم), the pattern taught since unit01 (خوب استم/مریض استم); all 7 candidates read
+    naturally as "I am kind/hardworking/smart/lazy/funny/quiet/honest"); (3) lesson02.funny_translate.001 (translation,
+    fixed-sentence SS6.6(b): "He is funny." -> "او {personality_word} است" on the singleton tag
+    volume_en_prs_a1_unit37_personality_word_07_single (exactly one course-wide member, شوخ), so the fixed English prompt
+    is deterministic; same singleton the structured-tier volume_fill.007 already uses safely). Recognition now 3 live,
+    production 3 live. No new self-reference (او/من/است/استم are not slot candidates). Verified: practice-validate 0
+    errors; _practice_unit_scope_check.py 0 DEAD / tier-short lines gone for this file; _practice_self_reference_check.py
+    0 hits; check_dari_register.py 0 new findings. Prior history below.
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     One group: "personality_word" (مهربان/زحمتکش/باهوش/تنبل/شوخ/ کم‌حرف/راستگو, 7 members, completes lesson01+lesson02). All
@@ -156,6 +169,61 @@ templates:
     text: '{personality_word}'
     language_code: prs
     direction: rtl
+- content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_he_gloss.001
+  lesson_content_key: prs.a1.unit37.lesson02.more_traits
+  type: multiple_choice
+  frame:
+    text: او {personality_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    personality_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: personality_word
+  feedback_frame:
+    text: 'او ... است means "He/she is ...". Pick the English meaning of the trait word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson04.personality_i_gloss.001
+  lesson_content_key: prs.a1.unit37.lesson04.personality_dialogue
+  type: multiple_choice
+  frame:
+    text: من {personality_word} استم
+    language_code: prs
+    direction: rtl
+  slots:
+    personality_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: personality_word
+  feedback_frame:
+    text: 'من ... استم means "I am ..." (Afghan Dari uses استم). Pick the English meaning of the trait word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit37.lesson02.funny_translate.001
+  lesson_content_key: prs.a1.unit37.lesson02.more_traits
+  type: translation
+  frame:
+    text: He is funny.
+    language_code: en
+    direction: ltr
+  slots:
+    personality_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit37_personality_word_07_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: او {personality_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'شوخ (funny; playful) fills the taught او ... است pattern: او شوخ است (He is funny).'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_pair.002.volume_match.004
   lesson_content_key: prs.a1.unit37.lesson02.more_traits
   type: matching_pairs

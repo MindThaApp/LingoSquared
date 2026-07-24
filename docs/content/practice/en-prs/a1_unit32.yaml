@@ -4,9 +4,22 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit32.celebrations
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition and production tiers each had only 1 live template. Added
+    lesson01.celebration_liked_gloss.003 + lesson01.celebration_liked_translate.004 on the existing celebration_liked_word
+    preset (4 distinct unit tokens/glosses birthday/party/cake/gift, over the MC floor, pool distinct from
+    celebration_word by excluding تبریک) and lesson04.celebration_dialogue_gloss.001 +
+    lesson04.celebration_dialogue_translate.002 on a new celebration_dialogue_word preset (union of the unit''s own
+    celebration_word + come_verb_present tags, pos [noun, verb] -- come_verb_present reaches the unit''s own lesson04
+    می‌آیی "you come", the invitation-dialogue verb -- 6 distinct unit tokens/glosses). come_verb_present and verb added
+    to tag_schema. All corpus-standard bare-slot MC/translation shapes -- no new Dari strings, no literal-text frames.
+    Tiers now 3/3/3 live. The two pre-existing 5-pair matching_pairs FLOOR flags are not in this dispatch and are left
+    as-is (celebration_word genuinely has only 5 unit members; the fix would be the same union used here). Status flipped
+    back to unreviewed pending fresh-context review of the additions.
+
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     Two groups: "celebration_word" (تولد/جشن/کیک/هدیه/تبریک, 5 members, completes lesson01) is the recognition pool. "celebration_liked_word"
@@ -35,10 +48,12 @@ review:
 tag_schema:
   part_of_speech:
   - noun
+  - verb
   agreement_tags:
     semantic:
     - celebration_word
     - celebration_liked_word
+    - come_verb_present
 slot_presets:
   celebration_word: &id001
     language_code: prs
@@ -50,6 +65,18 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: celebration_liked_word
+  # Union of the unit's own tags: come_verb_present reaches the unit's own
+  # lesson04 lexeme می‌آیی ("you come"), the invitation-dialogue verb,
+  # giving 6 distinct unit-scoped tokens/glosses.
+  celebration_dialogue_word: &celebration_dialogue_word
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - celebration_word
+      - come_verb_present
 templates:
 - content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_gloss.001
   lesson_content_key: prs.a1.unit32.lesson01.celebration_vocabulary
@@ -135,6 +162,74 @@ templates:
     slot: celebration_word
   feedback_frame:
     text: '{celebration_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_liked_gloss.003
+  lesson_content_key: prs.a1.unit32.lesson01.celebration_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{celebration_liked_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    celebration_liked_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: celebration_liked_word
+  feedback_frame:
+    text: '{celebration_liked_word} is a celebration word you can say you like.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_liked_translate.004
+  lesson_content_key: prs.a1.unit32.lesson01.celebration_vocabulary
+  type: translation
+  frame:
+    text: '{celebration_liked_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      celebration_liked_word: english_gloss
+  slots:
+    celebration_liked_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: celebration_liked_word
+  feedback_frame:
+    text: '{celebration_liked_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit32.lesson04.celebration_dialogue_gloss.001
+  lesson_content_key: prs.a1.unit32.lesson04.celebration_dialogue
+  type: multiple_choice
+  frame:
+    text: '{celebration_dialogue_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    celebration_dialogue_word: *celebration_dialogue_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: celebration_dialogue_word
+  feedback_frame:
+    text: '{celebration_dialogue_word} appears in this unit''s celebration and invitation language.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit32.lesson04.celebration_dialogue_translate.002
+  lesson_content_key: prs.a1.unit32.lesson04.celebration_dialogue
+  type: translation
+  frame:
+    text: '{celebration_dialogue_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      celebration_dialogue_word: english_gloss
+  slots:
+    celebration_dialogue_word: *celebration_dialogue_word
+  answer_derivation:
+    kind: slot_text
+    slot: celebration_dialogue_word
+  feedback_frame:
+    text: '{celebration_dialogue_word} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit32.lesson01.celebration_pair.002.volume_match.009

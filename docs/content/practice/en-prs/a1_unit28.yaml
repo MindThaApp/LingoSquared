@@ -7,6 +7,26 @@ review:
   status: unreviewed
   fresh_context: 'false'
   notes: >-
+    TIER-THINNESS + POS-ONLY-MATCHING POLISH 2026-07-24 (wave 2), two
+    fixes: (1) animal_pair.002's pet_vocab_word preset was a bare
+    part_of_speech-only constraint -- safe at checkpoint scope but at
+    Endless-Practice COURSE scope it pooled every a1 noun/adjective
+    (off-theme pairs). Replaced with a semantic union of the unit's own
+    tags [animal_topic_word, food_item] (pos noun): animal_topic_word is
+    unit28-only (5 animals) and food_item reaches the unit's own lesson04
+    غذا, giving exactly 6 distinct unit-scoped tokens/glosses
+    (animal/dog/cat/bird/fish/food) -- at the 6-pair floor -- while course
+    scope now pulls only animal + food nouns instead of everything.
+    food_item added to tag_schema. (2) recognition and production tiers
+    each had only 1 live template; added lesson01 pet_gloss.003 +
+    pet_translate.004 on the existing pet_animal preset (4 distinct unit
+    tokens/glosses, over the MC floor; deliberately did NOT widen the
+    re-pinned pet_animal anchor) and lesson04 pet_food_gloss.001 +
+    pet_food_translate.002 on the fixed pet_vocab_word union (6). All new
+    frames are bare slot placeholders (corpus-standard MC/translation
+    shapes) -- no new Dari strings, no literal-text frames. Tiers now
+    3/3/3 live. Status stays unreviewed pending fresh-context review.
+
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
     that file's notes for the shared pass context). Realization is
@@ -95,7 +115,7 @@ review:
 tag_schema:
   part_of_speech: [noun, adjective]
   agreement_tags:
-    semantic: [animal_topic_word, animal_word, pet_animal]
+    semantic: [animal_topic_word, animal_word, pet_animal, food_item]
 slot_presets:
   animal_topic_word: &animal_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_topic_word}}
   # pet_animal = unit28's own 4 pets only (backfill_lexemes_en_prs.py):
@@ -103,11 +123,12 @@ slot_presets:
   # Endless-Practice course scope rendered "the lion is my pet" through
   # the ownership claim frames below.
   animal_word: &animal_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: pet_animal}}
-  # No semantic tag: matching_pairs' frame is pure placeholders (no literal
-  # grammatical requirement), so this is the recipe's sanctioned untagged
-  # part_of_speech-only pool. At unit (checkpoint) scope it resolves to
-  # exactly this unit's own 7 nominal tokens (see review.notes).
-  pet_vocab_word: &pet_vocab_word {language_code: prs, part_of_speech: [noun, adjective]}
+  # Semantic union of the unit's own tags (POS-only was safe at checkpoint
+  # scope but pulled the whole level's vocab at Endless-Practice COURSE
+  # scope). animal_topic_word is unit28-only; food_item reaches the unit's
+  # own lesson04 lexeme غذا (pet food). 6 distinct unit-scoped tokens/
+  # glosses: حیوان سگ پشک پرنده ماهی غذا -- at the 6-pair floor.
+  pet_vocab_word: &pet_vocab_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [animal_topic_word, food_item]}}
 templates:
   # Lesson 1: animal vocabulary.
   - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_gloss.001
@@ -125,6 +146,20 @@ templates:
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit28.lesson01.pet_gloss.003
+    lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+    type: multiple_choice
+    frame: {text: "{animal_word}", language_code: prs, direction: rtl}
+    slots: {animal_word: *animal_word}
+    answer_derivation: {kind: slot_gloss, slot: animal_word}
+    feedback_frame: {text: "{animal_word} is an animal you can keep as a pet.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit28.lesson01.pet_translate.004
+    lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
+    type: translation
+    frame: {text: "{animal_word}", language_code: en, direction: ltr, slot_rendering: {animal_word: english_gloss}}
+    slots: {animal_word: *animal_word}
+    answer_derivation: {kind: slot_text, slot: animal_word}
+    feedback_frame: {text: "{animal_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 2: do you have a pet?
   - content_key: practice.en-prs.prs.a1.unit28.lesson02.have_animal_order.001
@@ -143,6 +178,22 @@ templates:
     slots: {animal_word: *animal_word}
     answer_derivation: {kind: render_frame, frame: {text: "{animal_word} حیوان خانگی من است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: [animal] حیوان خانگی من است ([animal] is my pet).", language_code: en, direction: ltr}
+
+  # Lesson 4: pet dialogue (feeding your pet).
+  - content_key: practice.en-prs.prs.a1.unit28.lesson04.pet_food_gloss.001
+    lesson_content_key: prs.a1.unit28.lesson04.pet_dialogue
+    type: multiple_choice
+    frame: {text: "{pet_vocab_word}", language_code: prs, direction: rtl}
+    slots: {pet_vocab_word: *pet_vocab_word}
+    answer_derivation: {kind: slot_gloss, slot: pet_vocab_word}
+    feedback_frame: {text: "{pet_vocab_word} belongs to this unit's pet vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit28.lesson04.pet_food_translate.002
+    lesson_content_key: prs.a1.unit28.lesson04.pet_dialogue
+    type: translation
+    frame: {text: "{pet_vocab_word}", language_code: en, direction: ltr, slot_rendering: {pet_vocab_word: english_gloss}}
+    slots: {pet_vocab_word: *pet_vocab_word}
+    answer_derivation: {kind: slot_text, slot: pet_vocab_word}
+    feedback_frame: {text: "{pet_vocab_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit28.lesson06.animal_translate.001

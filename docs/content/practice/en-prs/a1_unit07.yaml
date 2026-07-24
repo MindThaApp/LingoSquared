@@ -81,7 +81,7 @@ tag_schema:
   - particle
   - phrase
   agreement_tags:
-    semantic: [person_name, phone_opening, message_word, dialogue_word]
+    semantic: [person_name, phone_opening, message_word, dialogue_word, tomorrow_word, appointment_word, time_unit, want_verb, phone_action_verb, work_verb_form]
 slot_presets:
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   phone_opening: &phone_opening {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: phone_opening}}
@@ -94,6 +94,20 @@ slot_presets:
   # spanning lessons 02-06) = 10 distinct unit-scoped tokens, comfortably
   # over the 6-pair matching_pairs floor and the 3-option MC floor.
   unit_vocab: &unit_vocab {language_code: prs, part_of_speech: [noun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: [phone_opening, message_word, dialogue_word]}}
+  # POLISH 2026-07-24 (tier-thinness, recipe SS8): the recognition tier had
+  # only 1 live template (name_gloss.001). Two narrower unions of this
+  # unit's OWN tags (SS3.1a) feed the two added multiple_choice templates
+  # below -- both pools differ from unit_vocab and from each other.
+  # message_time: پیام/کوتاه (message_word) + فردا (tomorrow_word) +
+  # جلسه (appointment_word) + ساعت (time_unit) = 5 distinct unit-scoped
+  # tokens / 5 distinct glosses.
+  message_time: &message_time {language_code: prs, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [message_word, tomorrow_word, appointment_word, time_unit]}}
+  # phone_verbs: می‌خواهم (want_verb) + می‌زنم (phone_action_verb) +
+  # می‌کند (work_verb_form) = 3 distinct unit-scoped tokens / 3 distinct
+  # glosses -- exactly clears the 3-option MC floor. کنین deliberately
+  # left out (its "do (polite imperative)" gloss is confusable with
+  # می‌کند's "does / is doing" as an option pair).
+  phone_verbs: &phone_verbs {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: [want_verb, phone_action_verb, work_verb_form]}}
 templates:
   # Lesson 1: answering the phone.
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_translate.002
@@ -135,6 +149,26 @@ templates:
     slot_relations: [{kind: distinct, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  # POLISH 2026-07-24: recognition-tier addition (see slot_presets note).
+  - content_key: practice.en-prs.prs.a1.unit07.lesson04.phone_verb_gloss.004
+    lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *phone_verbs}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a first-person or third-person verb from this unit's phone conversations.", language_code: en, direction: ltr}
+
+  # Lesson 5: text messages.
+  # POLISH 2026-07-24: recognition-tier addition (see slot_presets note).
+  # Lesson05 introduces کوتاه/فردا/جلسه/ساعت itself but previously had no
+  # template at all.
+  - content_key: practice.en-prs.prs.a1.unit07.lesson05.message_time_gloss.001
+    lesson_content_key: prs.a1.unit07.lesson05.text_messages
+    type: multiple_choice
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *message_time}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is message or time vocabulary from this unit.", language_code: en, direction: ltr}
 
   # Lesson 6: the full phone call dialogue (Farid, Homayoun, Lima).
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_gloss.001

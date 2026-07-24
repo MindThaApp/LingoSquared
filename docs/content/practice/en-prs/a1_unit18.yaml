@@ -138,6 +138,17 @@ review:
     this file after the fix), scripts/compile_content.py
     practice-validate (0 errors), and scripts/check_dari_register.py (0
     new findings) -- see the coordinator report for exact output.
+
+    POLISH 2026-07-24 (tier-thinness wave 2, PACK-ONLY): the production
+    tier was honestly-thin at 2 (flagged above). Added
+    lesson05.laila_teaches_translate.002, a fixed-sentence translation
+    per recipe SS6.6(b): legal because teach_word_verb has exactly one
+    candidate at COURSE scope too (می‌دهد -- pool_check shows no
+    course-scope extras), so the fixed English prompt "Laila teaches a
+    lesson." is deterministic; it renders لیلا درس می‌دهد, the exact
+    sentence lesson05's reading passage teaches. Production tier now 3
+    live. Recognition (4 MC, all necessarily on the same 3-token
+    unit_vocab_pool) and structured (5 word_order) were already >= 3.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
   agreement_tags:
@@ -289,6 +300,21 @@ templates:
     slots: {teach_word: *teach_word}
     answer_derivation: {kind: slot_text, slot: teach_word}
     feedback_frame: {text: "{teach_word} is the Dari word for this.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit18.lesson05.laila_teaches_translate.002
+    lesson_content_key: prs.a1.unit18.lesson05.reading_a_longer_profile
+    type: translation
+    # ADDED (POLISH 2026-07-24, tier-thinness): 3rd production-tier
+    # template. Fixed-sentence translation per recipe SS6.6(b) -- legal
+    # only because teach_word_verb has exactly ONE candidate even at
+    # COURSE scope (می‌دهد, verified via pool_check: no course-scope
+    # extras), so the fixed English prompt stays deterministic. Renders
+    # the exact sentence lesson05's own reading passage teaches. The
+    # frame literal درس is NOT a candidate of the gives_word slot
+    # (teach_word narrowed to verb) -- no self-reference.
+    frame: {text: "Laila teaches a lesson.", language_code: en, direction: ltr}
+    slots: {gives_word: *teach_word_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "لیلا درس {gives_word}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Dari uses درس + دادن for 'to teach': لیلا درس می‌دهد (Laila gives a lesson = teaches).", language_code: en, direction: ltr}
     # (teach_word_pair.002, a 2-slot matching_pairs, was already
     # below the 6-pair floor and this unit's teach_word tag has only 2
     # unit-scoped members total -- cannot reach 6. DROPPED per the

@@ -120,6 +120,13 @@ slot_presets:
   # vocabulary reused course-wide -- see review.notes). 7 distinct
   # unit-scoped tokens: دقیقه, نیم, ربع, ظهر, قرار, می‌آیم, منتظر.
   unit_vocab: &unit_vocab {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [time_unit, time_of_day, appointment_word, meeting_verb, state_adjective]}}
+  # POLISH 2026-07-24 (tier-thinness, recipe SS8): the recognition tier had
+  # only 2 live templates. This union of the unit's own scheduling tags
+  # (SS3.1a) -- قرار (appointment_word) + می‌آیم (meeting_verb) + منتظر
+  # (state_adjective) = 3 distinct unit-scoped tokens / 3 distinct glosses
+  # -- exactly clears the 3-option MC floor and differs from both existing
+  # MC pools (time_unit alone, unit_vocab).
+  scheduling_vocab: &scheduling_vocab {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [appointment_word, meeting_verb, state_adjective]}}
 templates:
   # Lesson 1: basic time vocabulary.
   - content_key: practice.en-prs.prs.a1.unit11.lesson01.time_unit_gloss.001
@@ -220,6 +227,14 @@ templates:
     feedback_frame: {text: "Word order: [word] ساعت چند است (what time is the [word]?).", language_code: en, direction: ltr}
 
   # Lesson 6: the meeting-time dialogue (Zarmina and Homayoun).
+  # POLISH 2026-07-24: recognition-tier addition (see slot_presets note).
+  - content_key: practice.en-prs.prs.a1.unit11.lesson06.scheduling_gloss.004
+    lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *scheduling_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is scheduling vocabulary from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit11.lesson06.meeting_verb_translate.001
     lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
     type: translation

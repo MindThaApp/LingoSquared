@@ -4,9 +4,24 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit33.household
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
+    (1) lesson03.chore_noun_gloss.001 (multiple_choice, chore_word narrowed to part_of_speech noun -- جاروب/ظرف/کمک, 3
+    distinct unit glosses at the floor; distinct POOL from chore_gloss.001, which keeps the noun+adjective pool with پاک);
+    (2) lesson01.chore_this_gloss.001 (multiple_choice, frame "این {chore_word} است" over the same noun pool -- این/است
+    are course-taught since the early units and the frame reads grammatically for every course-scope candidate: this-is-a
+    broom/dishes/help; کجاست and را-دوست-دارم frames were rejected because "کمک کجاست"/"پاک را دوست دارم" fail per-candidate);
+    (3) lesson01.clean_room_translate.001 (translation, fixed-sentence SS6.6(b): "The room is clean." -> "اتاق {clean_word}
+    است", the unit''s own taught sentence "اتاق پاک است."; clean_word has exactly ONE distinct course-wide token (پاک,
+    twice -- a1_unit33 + b1_unit02, same token/gloss) so the fixed English prompt is deterministic). clean_word added to
+    tag_schema. Recognition now 3 live, production 3 live. Sentence-frame candidates checked at COURSE scope: chore_word
+    nouns have no course-scope extras beyond duplicate کمک entries (same token). No new self-reference (این/است/اتاق are
+    not slot candidates). Verified: practice-validate 0 errors; _practice_unit_scope_check.py 0 DEAD / tier-short lines
+    gone for this file (the two pre-existing 4-pair matching FLOOR lines are out of this dispatch''s scope and untouched);
+    _practice_self_reference_check.py 0 hits; check_dari_register.py 0 new findings. Prior history below.
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     Two groups: "chore_word" (جاروب/ظرف/پاک/کمک, 4 members, completes lesson01 -- "کار خانه" deliberately excluded: its own
@@ -42,7 +57,13 @@ tag_schema:
     semantic:
     - chore_word
     - sweep_clean_word
+    - clean_word
 slot_presets:
+  chore_noun_word: &chore_noun
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: chore_word
   chore_word: &id001
     language_code: prs
     part_of_speech:
@@ -139,6 +160,61 @@ templates:
     slot: chore_word
   feedback_frame:
     text: '{chore_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit33.lesson03.chore_noun_gloss.001
+  lesson_content_key: prs.a1.unit33.lesson03.asking_for_help
+  type: multiple_choice
+  frame:
+    text: '{chore_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    chore_word: *chore_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: chore_word
+  feedback_frame:
+    text: '{chore_word} is one of this unit''s household nouns.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit33.lesson01.chore_this_gloss.001
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: multiple_choice
+  frame:
+    text: این {chore_word} است
+    language_code: prs
+    direction: rtl
+  slots:
+    chore_word: *chore_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: chore_word
+  feedback_frame:
+    text: 'این ... است means "This is ...". Pick the English meaning of the household word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit33.lesson01.clean_room_translate.001
+  lesson_content_key: prs.a1.unit33.lesson01.chore_vocabulary
+  type: translation
+  frame:
+    text: The room is clean.
+    language_code: en
+    direction: ltr
+  slots:
+    clean_word:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: clean_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اتاق {clean_word} است
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'The taught pattern is [noun] [adjective] است: اتاق پاک است (The room is clean).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit33.lesson01.chore_pair.002.volume_match.008

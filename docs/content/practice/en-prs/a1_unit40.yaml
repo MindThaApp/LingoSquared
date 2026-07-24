@@ -34,7 +34,13 @@ review:
     has zero TTS); no bare YAML booleans; no snake_case jargon in learner-facing text. The three unit31/33 homograph splits
     (حقوق law vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are correctly scoped by content_key in _classify()
     and by lesson_key in prs_agreement_tags(), leaving each other sense untouched. practice-validate 0/0 and _practice_slot_check.py
-    clean for the full en-prs set.'
+    clean for the full en-prs set.
+
+
+    Polish wave 2 (2026-07-24): tier-thinness fix — added 2 recognition templates (bare MC over the 3-member emergency_service_word
+    pool; sentence MC over the taught "…می‌خواهم" frame, grammatical for every course-scope member of the service pool) and 1
+    production template (deterministic fixed-sentence translation "I need the police." over the single-member
+    volume_…_emergency_service_word_01_single anchor). No existing template touched.'
 tag_schema:
   part_of_speech:
   - noun
@@ -245,5 +251,60 @@ templates:
     slot: emergency_topic_word
   feedback_frame:
     text: '{emergency_topic_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit40.lesson03.emergency_service_gloss.001
+  lesson_content_key: prs.a1.unit40.lesson03.describing_the_emergency
+  type: multiple_choice
+  frame:
+    text: '{emergency_service_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    emergency_service_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: emergency_service_word
+  feedback_frame:
+    text: '{emergency_service_word} is one of this unit''s callable emergency services.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit40.lesson04.emergency_need_gloss.001
+  lesson_content_key: prs.a1.unit40.lesson04.emergency_dialogue
+  type: multiple_choice
+  frame:
+    text: '{emergency_service_word} می‌خواهم'
+    language_code: prs
+    direction: rtl
+  slots:
+    emergency_service_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: emergency_service_word
+  feedback_frame:
+    text: This sentence says which service the speaker needs — {emergency_service_word}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit40.lesson04.emergency_need_translate.001
+  lesson_content_key: prs.a1.unit40.lesson04.emergency_dialogue
+  type: translation
+  frame:
+    text: I need the police.
+    language_code: en
+    direction: ltr
+  slots:
+    emergency_service_word:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit40_emergency_service_word_01_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{emergency_service_word} می‌خواهم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '"I need the police." is پولیس می‌خواهم in Dari.'
     language_code: en
     direction: ltr

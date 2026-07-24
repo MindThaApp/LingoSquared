@@ -28,6 +28,29 @@ review:
     scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 below-floor for
     this pack.
 
+    POLISH 2026-07-24 (tier-thinness + POS-only matching wave 2,
+    PACK-ONLY): recognition and production tiers each had only 1 live
+    template. Added 4 templates from the unit's own vocabulary:
+    lesson03.feeling_state_gloss.002 (MC, semantic union emotion_word +
+    complaint_word, 4 unit-scoped glosses), lesson04.adverb_gloss.001
+    (MC over the unit's own untagged adverbs چرا/کمی/گاهی, 3 glosses --
+    POS-only by necessity, see below), lesson02.adverb_translate.002
+    (bare-word translation, same adverb pool) and
+    lesson03.complaint_translate.003 (bare-word translation, خراب).
+    Both tiers now 3 live. complaint_word added to tag_schema.
+    HONEST LIMIT -- emotion_pair.002 stays POS-only: the dispatch
+    flagged its bare [adjective, adverb] constraint (204 off-theme
+    course-scope extras), but the unit's tagged vocabulary maxes out at
+    emotion_word(3) + complaint_word(1) = 4 distinct tokens, below the
+    6-pair floor, and چرا/کمی/گاهی carry no semantic tag (backfill
+    scripts are off-limits in this lane). No semantic union can reach
+    6, so the POS-only constraint is left in place rather than replaced
+    with a wrong union; the same applies to the two new POS-only
+    adverb templates (bare frames only, where SS3.1(c) declares POS-only
+    safe). LOGGED for the coordinator: a backfill_lexemes_en_prs.py
+    extension tagging چرا/کمی/گاهی (e.g. feelings_adverb) would let
+    emotion_pair.002 move to a semantic union.
+
     --- prior authoring notes (2026-07-11), kept for context ---
 
     Authored 2026-07-11, practice-pool depth-extension pass for A1 units
@@ -73,9 +96,27 @@ review:
 tag_schema:
   part_of_speech: [adjective, adverb]
   agreement_tags:
-    semantic: [emotion_word]
+    semantic: [emotion_word, complaint_word]
 slot_presets:
   emotion_word: &emotion_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: emotion_word}}
+  # POLISH 2026-07-24 (tier-thinness wave 2): this unit's only tagged
+  # lexemes are emotion_word (3 unit-scoped) + complaint_word (1: خراب,
+  # lesson03) -- the three lesson02/04 adverbs (چرا/کمی/گاهی) carry NO
+  # semantic tag at all. complaint_word + the union below let the
+  # recognition and production tiers reach 3 live templates from the
+  # unit's own vocabulary; adverb_word_pool is POS-only by necessity
+  # (untagged lexemes), used only in bare-frame templates where the
+  # course-scope pool needs no frame grammaticality.
+  complaint_word: &complaint_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: complaint_word}}
+  # feeling_state_pool: emotion_word (3) + complaint_word (1) -- 4
+  # unit-scoped distinct glosses (sad/angry/worried/broken), over the MC
+  # floor.
+  feeling_state_pool: &feeling_state_pool {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: [emotion_word, complaint_word]}}
+  # adverb_word_pool: this unit's own adverbs (چرا/کمی/گاهی, 3 distinct
+  # glosses). POS-only per recipe SS3.1(c) -- these lexemes are untagged,
+  # so no semantic constraint can reach them (backfill scripts are
+  # off-limits in this PACK-ONLY lane).
+  adverb_word_pool: &adverb_word_pool {language_code: prs, part_of_speech: adverb}
   # Re-anchor fix (2026-07-24): emotion_word alone is only 3 unit-scoped
   # tokens (خوشحال/خسته are REUSED from earlier units, out of this unit's
   # checkpoint scope) -- 5 slots over 3 real tokens was DEAD. This unit is
@@ -116,6 +157,19 @@ templates:
     slots: {emotion_word: *emotion_word}
     answer_derivation: {kind: render_frame, frame: {text: "چرا {emotion_word} استین", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: چرا [feeling] استین (why are you [feeling]?).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit25.lesson02.adverb_translate.002
+    lesson_content_key: prs.a1.unit25.lesson02.why_and_because
+    type: translation
+    # ADDED (POLISH 2026-07-24, tier-thinness): production tier had only
+    # 1 live template. Bare-word translation over this unit's own
+    # adverbs (چرا is this lesson's own vocabulary; کمی/گاهی lesson04's)
+    # -- POS-only slot per recipe SS3.1(c), safe for bare-word
+    # translation because the English-gloss prompt varies with the
+    # answer.
+    frame: {text: "{adverb_word}", language_code: en, direction: ltr, slot_rendering: {adverb_word: english_gloss}}
+    slots: {adverb_word: *adverb_word_pool}
+    answer_derivation: {kind: slot_text, slot: adverb_word}
+    feedback_frame: {text: "{adverb_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 3: more feelings and reasons.
   - content_key: practice.en-prs.prs.a1.unit25.lesson03.i_am_feeling_order.001
@@ -125,6 +179,44 @@ templates:
     slots: {emotion_word: *emotion_word}
     answer_derivation: {kind: render_frame, frame: {text: "{emotion_word} استم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: [feeling] استم (I am [feeling]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit25.lesson03.feeling_state_gloss.002
+    lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+    type: multiple_choice
+    # ADDED (POLISH 2026-07-24, tier-thinness): recognition tier had only
+    # 1 live template. Semantic union of the unit's own tags (recipe
+    # SS3.1a): emotion_word (3) + complaint_word (1: خراب, this lesson's
+    # own vocabulary) -- 4 unit-scoped distinct glosses
+    # (sad/angry/worried/broken).
+    frame: {text: "{feeling_state_word}", language_code: prs, direction: rtl}
+    slots: {feeling_state_word: *feeling_state_pool}
+    answer_derivation: {kind: slot_gloss, slot: feeling_state_word}
+    feedback_frame: {text: "{feeling_state_word} describes a feeling or a state.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit25.lesson03.complaint_translate.003
+    lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
+    type: translation
+    # ADDED (POLISH 2026-07-24, tier-thinness): production tier had only
+    # 1 live template. Bare-word translation over this lesson's own
+    # complaint_word (1 unit-scoped: خراب).
+    frame: {text: "{complaint_word}", language_code: en, direction: ltr, slot_rendering: {complaint_word: english_gloss}}
+    slots: {complaint_word: *complaint_word}
+    answer_derivation: {kind: slot_text, slot: complaint_word}
+    feedback_frame: {text: "{complaint_word} is the Dari word for this.", language_code: en, direction: ltr}
+
+  # Lesson 4: feelings dialogue.
+  - content_key: practice.en-prs.prs.a1.unit25.lesson04.adverb_gloss.001
+    lesson_content_key: prs.a1.unit25.lesson04.feelings_dialogue
+    type: multiple_choice
+    # ADDED (POLISH 2026-07-24, tier-thinness): recognition tier had only
+    # 1 live template, and lesson04 (own vocab کمی/گاهی) had no template
+    # at all. POS-only slot per recipe SS3.1(c) -- this unit's adverbs
+    # carry no semantic tag, so no semantic constraint can reach them;
+    # bare '{slot}' frame, so the wide course-scope pool poses no frame
+    # grammaticality risk. 3 unit-scoped distinct glosses (why / a
+    # little; a bit / sometimes) -- exactly the MC floor.
+    frame: {text: "{adverb_word}", language_code: prs, direction: rtl}
+    slots: {adverb_word: *adverb_word_pool}
+    answer_derivation: {kind: slot_gloss, slot: adverb_word}
+    feedback_frame: {text: "{adverb_word} is one of this unit's own small words.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit25.lesson06.emotion_translate.001

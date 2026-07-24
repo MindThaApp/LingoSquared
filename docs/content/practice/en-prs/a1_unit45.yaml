@@ -15,9 +15,15 @@ review:
     hotel_word + stay_verb = 7 distinct tokens (6-pair floor met). word_order uses
     the taught frame "دو شب {verb}" over stay_verb -- all three person-forms
     grammatical ("I/you/he stay two nights"). MC over dialogue_word gives 3 glosses.
-    NO listen_select (no TTS). NO fill_in_blank (no reliable single-member
-    course-wide anchor). Afghan Dari register (هوتل not هتل; می‌مانین 2pl, not
-    می‌مانید). No mis-glossed lexemes found.
+    NO listen_select (no TTS). Afghan Dari register (هوتل not هتل; می‌مانین 2pl,
+    not می‌مانید). No mis-glossed lexemes found.
+
+    Polish wave 2 (2026-07-24): recognition 2 -> 3 (bare MC over the existing
+    hotel_word+stay_verb union preset, 7 unit glosses, anchored to lesson02)
+    and structured 2 -> 3 (fill_in_blank on the dialogue-verbatim چای صبح شامل
+    است — inclusion_word ∩ adjective = {شامل} is single-member course-wide, so
+    the original "no reliable single-member anchor" note was wrong for this one
+    tag; inclusion_word added to tag_schema).
 tag_schema:
   part_of_speech:
   - symbol
@@ -35,6 +41,7 @@ tag_schema:
     - hotel_word
     - stay_verb
     - dialogue_word
+    - inclusion_word
 slot_presets:
   hotel_word: &hw
     language_code: prs
@@ -80,7 +87,33 @@ templates:
     text: '{item} is a word from this unit''s check-in dialogue.'
     language_code: en
     direction: ltr
+- content_key: practice.en-prs.prs.a1.unit45.lesson02.choose.001
+  lesson_content_key: prs.a1.unit45.lesson02.bathroom_and_reservation
+  type: multiple_choice
+  frame: {text: '{item}', language_code: prs, direction: rtl}
+  slots:
+    item: *hs
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} belongs to this unit''s hotel-stay vocabulary.'
+    language_code: en
+    direction: ltr
 # ---- structured ----
+- content_key: practice.en-prs.prs.a1.unit45.lesson04.fill.001
+  lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
+  type: fill_in_blank
+  frame: {text: 'چای صبح {item} است', language_code: prs, direction: rtl}
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: inclusion_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: 'The missing word is شامل (included) — چای صبح شامل است means "morning tea is included".'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit45.lesson03.order.001
   lesson_content_key: prs.a1.unit45.lesson03.room_number_and_nights
   type: word_order
