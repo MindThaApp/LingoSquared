@@ -143,19 +143,22 @@ templates:
   lesson_content_key: en.b1.unit08.lesson01.sequencing_vocabulary
   type: word_order
   frame:
-    text: Please lock the door {item} soon as you leave.
+    text: Please lock the door as {item} as you leave.
     language_code: en
     direction: ltr
   slots:
+    # The slot sits on `soon` (adverb), not on either `as`: with the slot
+    # on `as` the frame's other literal "as" duplicated a slot candidate
+    # in the word bank (self-reference, recipe defect 1.14).
     item:
       language_code: en
-      part_of_speech: preposition
+      part_of_speech: adverb
       agreement_tags:
         semantic: b1_unit08_sequencing_lesson01
   answer_derivation:
     kind: render_frame
     frame:
-      text: Please lock the door {item} soon as you leave.
+      text: Please lock the door as {item} as you leave.
       language_code: en
       direction: ltr
   feedback_frame:
