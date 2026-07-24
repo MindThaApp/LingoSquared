@@ -39,70 +39,98 @@ review:
     hard-fail per AUTHORING_GUIDE.md #17) would flag any single-slot attempt at any of the three, so zero new fill_in_blank
     templates, matching this direction''s own established "zero is fine" precedent. Re-verified scripts/_practice_slot_check.py
     (all three tags still safely above the >=3/>=2 floors for their new exercise types) and scripts/_fill_in_blank_ambiguity_check.py
-    (zero new AMBIGUOUS flags) before import. New count: 13 templates (8 -> 13).'
+    (zero new AMBIGUOUS flags) before import. New count: 13 templates (8 -> 13).
+
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found 13 of the 15 templates
+    DEAD at checkpoint scope (20 DEAD lines, since the 8-slot hour_match counted once per slot): every template built on
+    `hour_number` or `number` was dead, because BOTH tags are established entirely by earlier units -- unit16 itself introduces
+    zero hour_number- or number-tagged lexemes (confirmed via the iter_specs unit filter: unit16''s own tokens are wake/up/dressed/dinner/bed/every/usually/breakfast/after,
+    and only dinner/breakfast carry any semantic tag at all, both `meal`). generate_checkpoint() only loads unit16''s own
+    lexemes, so these 13 had 0 unit-scoped candidates -- recipe DO-NOT #2 again, and the reason `meal`''s 2 templates (meal_translate.003,
+    meal_order.005) were never flagged: meal is 100% unit-native AND course-wide-identical (no other unit reuses it), so
+    it was always safe and is unchanged here.
+
+    PACK-ONLY fix: every dead template was rebuilt on unit16''s own vocabulary. Where the frame has literal sentence text
+    (word_order, fixed-sentence translation) the slot is now `meal` (the only tag that is both unit-native and course-safe
+    per SS1.1 -- "Every day, I have {item}." / "Every day, I eat {item}." / "I usually have {item}." / "I always have {item}."
+    / "I have {item} at home." are all grammatical for both breakfast and dinner, at COURSE scope too since meal has no other
+    course-wide members). Where the frame is bare (`{item}` only -- multiple_choice/listen_select/matching_pairs/bare-word
+    translation) course-scope breadth is a non-issue, so those now use two new untagged POS-only pools: noun_pool = bed/dinner/breakfast
+    (3, POS=noun with no semantic filter, so it legitimately also catches the two meal-tagged nouns) and content_pool = wake/dressed/every/usually
+    (4, verb+adjective+adverb). A third pool, full_pool = the union of both (7 distinct: bed/dinner/breakfast/wake/dressed/every/usually),
+    anchors the one matching_pairs. Excluded "up" (particle) and "after" (preposition) from every pool per recipe SS8.1#5
+    (function-word noise). Read every gloss in all three pools (SS0.1); all distinct, no collisions.
+
+    13 replacement templates (like-for-like on type/tier/lesson-anchor): lesson02 keeps 5 templates (word_order on meal,
+    fixed-sentence translation on meal, listen_select on noun_pool, multiple_choice on noun_pool, multiple_choice on content_pool),
+    lesson03 keeps 2 (word_order on meal, listen_select on full_pool -- meal_translate.003 unchanged), lesson04 keeps 6 (word_order
+    on meal x2 variants, fixed-sentence translation on meal, listen_select on content_pool, matching_pairs on full_pool x7
+    -- meal_order.005 unchanged). Tiers: recognition 5 (2 MC + 3 listen_select), structured 7 (5 word_order + 1 matching_pairs
+    + the pre-existing meal_order.005), production 3 (2 new fixed-sentence translations + the pre-existing meal_translate.003).
+    Verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - noun
+  - verb
+  - adjective
+  - adverb
   agreement_tags:
     semantic:
-    - number
-    - hour_number
     - meal
 slot_presets:
-  number: &id002
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: number
-  hour_number: &id001
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: hour_number
-  meal: &id003
+  meal: &meal
     language_code: en
     part_of_speech: noun
     agreement_tags:
       semantic: meal
+  noun_pool: &noun_pool
+    language_code: en
+    part_of_speech: noun
+  content_pool: &content_pool
+    language_code: en
+    part_of_speech: [verb, adjective, adverb]
+  full_pool: &full_pool
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
 templates:
 - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_order.001
   lesson_content_key: en.a1.unit16.lesson02.routine_with_times
   type: word_order
   frame:
-    text: I wake up at {item} every day
+    text: Every day, I have {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I wake up at {item} every day
+      text: Every day, I have {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} ساعتی است که بیدار می‌شین.'
+    text: '{item} وعدهٔ غذایی است که هر روز می‌خورین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_translate.003
   lesson_content_key: en.a1.unit16.lesson02.routine_with_times
   type: translation
   frame:
-    text: هر روز ساعت {item} بیدار می‌شم.
+    text: هر روز {item} می‌خورم.
     language_code: prs
     direction: rtl
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id001
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I wake up at {item} every day
+      text: I eat {item} every day
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I wake up at {item} every day یعنی هر روز ساعت {item} بیدار می‌شم.
+    text: I eat {item} every day یعنی هر روز {item} می‌خورم.
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson02.number_listen.004
@@ -113,31 +141,31 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id002
+    item: *noun_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} عددی است که شنیدین.'
+    text: '{item} واژه‌ای است که شنیدین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson03.every_day_order.001
   lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
   type: word_order
   frame:
-    text: Every day, I wake up at {item}
+    text: Every day, I eat {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: Every day, I wake up at {item}
+      text: Every day, I eat {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} ساعتِ همی توصیف روزمره است.'
+    text: '{item} وعدهٔ غذایی است که هر روز می‌خورین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson03.meal_translate.003
@@ -150,7 +178,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id003
+    item: *meal
   answer_derivation:
     kind: slot_text
     slot: item
@@ -166,52 +194,52 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id002
+    item: *content_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} عددی است که شنیدین.'
+    text: '{item} واژه‌ای است که شنیدین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson04.wake_order.002
   lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
   type: word_order
   frame:
-    text: I wake up at {item} every day
+    text: I usually have {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I wake up at {item} every day
+      text: I usually have {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} ساعتی است که دنیل بیدار می‌شه.'
+    text: '{item} وعدهٔ غذایی است که معمولاً می‌خورین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson04.bed_translate.004
   lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
   type: translation
   frame:
-    text: معمولاً ساعت {item} می‌خوابم.
+    text: '{item} را در خانه می‌خورم.'
     language_code: prs
     direction: rtl
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id001
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I usually go to bed at {item}
+      text: I eat {item} at home
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I usually go to bed at {item} یعنی معمولاً ساعت {item} می‌خوابم.
+    text: I eat {item} at home یعنی {item} را در خانه می‌خورم.
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson02.hour_choose.005
@@ -222,7 +250,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *noun_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -238,7 +266,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id002
+    item: *content_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -254,12 +282,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *full_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} ساعتی است که شنیدین.'
+    text: '{item} واژه‌ای است که شنیدین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson04.meal_order.005
@@ -270,7 +298,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id003
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
@@ -289,14 +317,13 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
-    seventh: *id001
-    eighth: *id001
+    first: *full_pool
+    second: *full_pool
+    third: *full_pool
+    fourth: *full_pool
+    fifth: *full_pool
+    sixth: *full_pool
+    seventh: *full_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -307,7 +334,6 @@ templates:
     - fifth
     - sixth
     - seventh
-    - eighth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -318,54 +344,45 @@ templates:
     - fifth
     - sixth
     - seventh
-    - eighth
   feedback_frame:
-    text: هر عدد را به معنی دری خودش وصل کنین.
+    text: هر واژه را به معنی دری خودش وصل کنین.
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_translate.003.volume_order.007
   lesson_content_key: en.a1.unit16.lesson02.routine_with_times
   type: word_order
   frame:
-    text: I wake up at {item} every day
+    text: I always have {item}
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: hour_number
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I wake up at {item} every day
+      text: I always have {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I wake up at {item} every day
+    text: I always have {item}
     language_code: en
     direction: ltr
 - content_key: practice.prs-en.en.a1.unit16.lesson04.bed_translate.004.volume_order.008
   lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
   type: word_order
   frame:
-    text: I usually go to bed at {item}
+    text: I have {item} at home
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: hour_number
+    item: *meal
   answer_derivation:
     kind: render_frame
     frame:
-      text: I usually go to bed at {item}
+      text: I have {item} at home
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I usually go to bed at {item}
+    text: I have {item} at home
     language_code: en
     direction: ltr

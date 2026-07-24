@@ -41,14 +41,34 @@ review:
     weather_pair widened from 2 to 6 slots (the full course-wide
     weather_condition adjective pool), per the pre-computed retrofit
     table.
+
+    Unit-scope reauth pass (2026-07-24): scripts/_practice_unit_scope_check.py found weekday_listen (lesson03),
+    suggest_order (lesson04), and place_translate (lesson04) all DEAD -- exactly the two cross-unit reuses this note
+    already admits above ('weekday' is unit04's own tag, 'place' is unit09's own tag; unit11 introduces zero tokens
+    under either), the defect class this reauth pass exists to catch. The '_practice_slot_check.py' verification cited
+    above (weather_condition=6, weekday=7, place=5) was course-wide; generate_checkpoint() only ever sees unit11's own
+    lexemes, which is 6/0/0 for those three tags respectively. Fixes, all pack-only, no backfill/realization edits, all
+    re-anchored to weather_condition -- the ONLY semantic tag unit11 itself introduces. (1) weekday_listen renamed
+    weather_listen (lesson03 still, bare {item} listen_select, no frame-grammaticality concern). (2) place_translate
+    renamed weather_translate (lesson04, bare {item} translation, same). (3) suggest_order, which used the literal
+    sentence frame "Let's go to the {item}" -- ungrammatical with weather adjectives -- was repurposed rather than
+    just re-slotted: renamed weather_look_order, frame changed to "It looks {item} today" and hand-checked grammatical
+    for all 6 course-wide weather_condition members (sunny/rainy/cloudy/cold/hot/windy -- "it looks cold/hot/windy
+    today" are all standard English, describing visible weather cues). All three templates' feedback_frame text updated
+    to match (no longer claiming the item is "a place" or "a day"). weekday and place removed from tag_schema and their
+    slot_presets removed (no longer referenced anywhere in this file). weather_meaning/weather_listen/weather_pair/
+    weather_translate (lesson01), today_order/today_translate (lesson02), and tomorrow_order/tomorrow_translate
+    (lesson03) were already unit-scope-valid on weather_condition and are untouched. Verified: scripts/
+    _practice_unit_scope_check.py now reports 0 DEAD and 0 below-floor for this pack; compile_content.py
+    practice-validate 0 errors; scripts/check_dari_register.py no new findings (only feedback_frame text changed,
+    reusing this file's own existing phrasing). Still left unreviewed pending a separate fresh-context review pass,
+    per standing project policy -- unchanged from before this pass.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [weather_condition, weekday, place]
+    semantic: [weather_condition]
 slot_presets:
   weather_condition: &weather_condition {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
-  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
 templates:
   - content_key: practice.prs-en.en.a1.unit11.lesson01.weather_meaning.001
     lesson_content_key: en.a1.unit11.lesson01.weather_words
@@ -107,27 +127,27 @@ templates:
     slots: {item: *weather_condition}
     answer_derivation: {kind: render_frame, frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}}
     feedback_frame: {text: "It will be {item} tomorrow یعنی فردا هوا {item} می‌شه.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit11.lesson03.weekday_listen.004
+  - content_key: practice.prs-en.en.a1.unit11.lesson03.weather_listen.004
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *weekday}
+    slots: {item: *weather_condition}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "روزی که شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit11.lesson04.suggest_order.001
+    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit11.lesson04.weather_look_order.001
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: word_order
-    frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکانی است که پیشنهاد می‌شه.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit11.lesson04.place_translate.003
+    frame: {text: "It looks {item} today", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It looks {item} today", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} چگونگی هوای امروز در همی جمله است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit11.lesson04.weather_translate.003
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *weather_condition}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی مکان {item} است.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "معادل انگلیسی همی حالت هوا {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit11.lesson04.weather_meaning.004
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: multiple_choice
