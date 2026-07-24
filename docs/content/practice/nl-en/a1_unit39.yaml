@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit39.neighborhood
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
     a1_unit30.yaml's notes for the sprint context). 3-member
     'neighborhood_adj' tag (quiet/noisy/friendly, all adjectives) for
@@ -32,13 +32,33 @@ review:
     reasoning): lesson_content_keys (lesson01.neighborhood_vocabulary, lesson02.describing_your_area) resolve to real lessons in en/a1_unit39_neighborhood.yaml. neighborhood_adj (quiet/noisy/friendly = rustig/lawaaierig/vriendelijk) sits at the >=3 floor and is recognition-only; correctly excludes the nouns neighborhood/neighbor and the adverb 'nearby'. No bare YAML booleans, no snake_case learner-facing
     leaks. Validation: compiler practice-validate 0/0 across the full
     42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    DEAD-template re-authoring pass (2026-07-24, unit-scope satisfiability
+    fix): scripts/_practice_unit_scope_check.py found neighborhood_adj's real
+    unit-scoped pool is only 2 (quiet/noisy) -- the original notes' assumed
+    3rd member 'friendly' is actually introduced by unit32 (pets), not
+    unit39, so it never counts at generate_checkpoint()'s unit-scoped pool
+    (textbook DO-NOT #2). This broke 1 template outright (lesson01.match.003,
+    which needs 3 distinct fills but had only 2) and put 3 more below the
+    MC/listen_select 3-option floor (lesson01.choose.001, lesson01.listen.002,
+    lesson02.choose.002 -- all had only 2 distinct answer values). Fixed by
+    widening the SHARED neighborhood_adj preset (used by every template in
+    this pack) to drop the semantic tag and constrain by part_of_speech:
+    [noun, adjective] only (recipe SS3.1c) -- pulls from unit39's own 15-token
+    native pool (10 nouns: neighborhood/neighbors/grocery/building/mr/plants/
+    neighborhoods/restaurants/shops/hallway, plus the original 5 adjectives:
+    quiet/noisy/helpful/five-minute/several), all distinct non-confusable
+    Dutch glosses. Also widened lesson01.match.003 from 3 to the recipe's
+    6-pair floor (SS16) now that the pool supports it. Updated
+    feedback_frame text was already generic ('elk woord', not 'elk bijvoeglijk
+    naamwoord') so no wording change was needed there. Re-verified 0 DEAD,
+    0 below-floor with scripts/_practice_unit_scope_check.py and 0 errors
+    with compile_content.py practice-validate."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
-  agreement_tags:
-    semantic: [neighborhood_adj]
 slot_presets:
-  neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
+  neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: [noun, adjective]}
 templates:
   - content_key: practice.nl-en.en.a1.unit39.lesson01.choose.001
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -58,9 +78,9 @@ templates:
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
     type: matching_pairs
     frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *neighborhood_adj, second: *neighborhood_adj, third: *neighborhood_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
+    slots: {first: *neighborhood_adj, second: *neighborhood_adj, third: *neighborhood_adj, fourth: *neighborhood_adj, fifth: *neighborhood_adj, sixth: *neighborhood_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit39.lesson01.translate.004
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary

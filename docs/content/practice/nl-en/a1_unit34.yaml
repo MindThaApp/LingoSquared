@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit34.sports
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). Two tags:
     ''sport_noun'' (all 6 lesson01 vocabulary items -- soccer/tennis/basketball/ swimming/yoga/exercise, all classified noun)
     for bare-word recognition/matching, and a narrower 3-member ''play_sport'' (soccer/tennis/basketball only) for a real
@@ -20,7 +20,19 @@ review:
     both have distinct Dutch glosses. Frame ''We play {item}'' is grammatical only for the 3 play_sport members and matches
     ''We play soccer.''; swimming/yoga are correctly kept out of the ''play'' frame (they need go/do). No bare YAML booleans,
     no snake_case learner-facing leaks. Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py
-    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.'
+    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+
+    DEAD-template remediation 2026-07-24 (PACK-ONLY, scripts/_practice_unit_scope_check.py): lesson01.match.003 declared 6 matching_pairs
+    slots against sport_noun constrained to part_of_speech: noun, but ''exercise'' -- the 6th sport_noun member -- is itself
+    classified part_of_speech: verb, so the noun-only constraint silently excluded it, leaving only 5 unit-scoped candidates
+    (soccer/tennis/basketball/swimming/yoga) against a declared need of 6 -> DEAD. Minimal fix (recipe SS3.1(a), widen POS
+    rather than change the semantic tag): added a sport_word preset identical to sport_noun but with part_of_speech: [noun,
+    verb], used ONLY on match.003''s six slots -- this pulls ''exercise'' (gloss ''sporten / bewegen'') back in, reaching exactly
+    6 distinct unit-scoped tokens, matching the declared 6 slots. Left choose.001/listen.002/translate.004 on the original
+    noun-only sport_noun preset (id001) untouched -- their 5-distinct pool already clears the 3-floor and was never flagged.
+    Verified 0 DEAD / 0 below-floor via scripts/_practice_unit_scope_check.py and compiler practice-validate 0 errors after
+    the fix.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -49,6 +61,11 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: play_sport
+  sport_word: &id003
+    language_code: en
+    part_of_speech: [noun, verb]
+    agreement_tags:
+      semantic: sport_noun
 templates:
 - content_key: practice.nl-en.en.a1.unit34.lesson01.choose.001
   lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
@@ -90,12 +107,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
+    first: *id003
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
   slot_relations:
   - kind: distinct
     slots:

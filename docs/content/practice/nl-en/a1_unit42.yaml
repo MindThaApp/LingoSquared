@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit42.personality
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). 6-member
     ''personality_adj'' tag (all 6 lesson01 vocabulary items -- friendly/funny/hardworking/shy/calm/talkative, all adjectives)
     used both for bare-word recognition/matching AND a real generative frame, ''She is {item}.'' -- verified grammatical for
@@ -21,7 +21,35 @@ review:
     all distinct) drives frame ''She is {item}'', grammatical for every predicate adjective and matching the unit''s own examples;
     the cross-unit ''friendly'' homograph is reused unchanged (same adjective POS across units 32/39/42). No bare YAML booleans,
     no snake_case learner-facing leaks. Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py
-    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.'
+    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    DEAD-template re-authoring pass (2026-07-24, unit-scope satisfiability
+    fix): scripts/_practice_unit_scope_check.py found BOTH matching_pairs
+    templates DEAD -- personality_adj''s course-wide member list is 6
+    (friendly/funny/hardworking/shy/calm/talkative), matching the original
+    authoring note''s count, but "friendly" is introduced by unit32, not
+    unit42, so it does not count at generate_checkpoint()''s unit-scoped
+    pool -- leaving only 5 native members, one short of the 6-pair floor
+    (same DO-NOT #2 pattern as the cross-unit reuse this file''s own notes
+    describe). Fixed lesson01.match.003 by widening its slots to drop the
+    semantic tag and constrain by part_of_speech: adjective only (recipe
+    SS3.1c) -- unit42 natively introduces 12 distinct adjectives (the 5
+    personality_adj members plus comfortable/relaxed from lesson03 and
+    creative/upset/outgoing/organized/patient from lesson04), all clean
+    non-confusable Dutch glosses, comfortably above the 6-pair floor.
+    lesson01.match.003.volume_match.007 declared the IDENTICAL constraint
+    (personality_adj, same 6 slots, same lesson anchor) -- widening it too
+    would have produced a second matching_pairs sampling the exact same
+    now-enlarged pool as match.003, which is the near-duplicate-content
+    anti-pattern the recipe and a2_unit26''s own notes explicitly avoid, so
+    it was DROPPED rather than duplicated (match.003 alone now covers
+    lesson01''s structured-tier matching_pairs; no tier or lesson coverage is
+    lost, since both templates anchored to the same lesson). Net effect: 2
+    DEAD templates -> 1 fixed, 1 dropped as a genuine duplicate, viable
+    checkpoint content increases (0 live matching_pairs -> 1 live
+    matching_pairs). Re-verified 0 DEAD, 0 below-floor with
+    scripts/_practice_unit_scope_check.py and 0 errors with
+    compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -85,12 +113,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
+    first: &id003 {language_code: en, part_of_speech: adjective}
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
   slot_relations:
   - kind: distinct
     slots:
@@ -213,44 +241,4 @@ templates:
   feedback_frame:
     text: She is {item}
     language_code: en
-    direction: ltr
-- content_key: practice.nl-en.en.a1.unit42.lesson01.match.003.volume_match.007
-  lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
-  type: matching_pairs
-  frame:
-    text: '{first} · {second}'
-    language_code: en
-    direction: ltr
-  slots:
-    first: &id002
-      language_code: en
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: personality_adj
-    second: *id002
-    third: *id002
-    fourth: *id002
-    fifth: *id002
-    sixth: *id002
-  slot_relations:
-  - kind: distinct
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-  feedback_frame:
-    text: Verbind elk woord met de Nederlandse betekenis.
-    language_code: nl
     direction: ltr

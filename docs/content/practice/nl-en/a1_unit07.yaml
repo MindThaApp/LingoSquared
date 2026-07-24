@@ -39,7 +39,25 @@ review:
     tag (21 members) added to scripts/_en_target_lexeme_common.py. Both
     verified via compile_content.py practice-validate (0/0) and a standalone
     harness confirming neither 'sandwich' nor 'hundred' is reachable in
-    either fixed slot. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the food_item (noun) matching_pairs template from 2 to 7 pairs."
+    either fixed slot. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the food_item (noun) matching_pairs template from 2 to 7 pairs.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX (2026-07-24, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    flagged lesson04.price_translate.004 as DEAD -- 'number_no_hundred' (like plain 'number') is classified starting at
+    unit03 and is never reintroduced with a unit07-scoped lesson_content_key, so at checkpoint scope (unit07's own
+    lexemes only) the slot had 0 candidates. This is the same systemic gap noted in nl-en a1_unit05/a1_unit08's price/count
+    templates: numbers are only ever lexeme-classified once, at first introduction, and generate_checkpoint() cannot see
+    them again from a later unit. Could not re-anchor to a genuinely unit07-native number word (none exists in this
+    unit's own lesson_content_key at all). Fixed instead by re-anchoring the SLOT to unit07's own price-tag symbols
+    (2/3/5/6, taught in lesson03.reading_a_menu as menu prices) and converting the exercise from a fixed-sentence
+    render_frame translation to a bare-word translation (frame '{item}' with no other literal text) -- this keeps the
+    same template type/tier (translation/production) while removing both the DEAD unit-scope issue and the course-scope
+    grammaticality risk a fixed 'That's {item} dollars' sentence would have carried: a1-course-wide 'symbol' POS also
+    includes ordinals/dates/dollar-amounts (12th, 3:00, $10, 911, ...) that would NOT be sensible substituted into a
+    fixed 'dollars' sentence at Endless-Practice course scope, but a bare-word translate has no such risk (SS6.6a).
+    LOGGED for the coordinator: en-target number words need a backfill_lexemes_nl_en.py change (shared with
+    _en_target_lexeme_common.py) to emit unit-scoped specs wherever a later unit's own realization actually uses a
+    number, if checkpoint-visible price/quantity sentences are wanted for unit07 and similar units. Re-verified 0 DEAD
+    via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -132,7 +150,7 @@ templates:
   - content_key: practice.nl-en.en.a1.unit07.lesson04.price_translate.004
     lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
     type: translation
-    frame: {text: "Dat is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "That's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "That's {item} dollars betekent Dat is {item} dollar.", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: {language_code: en, part_of_speech: symbol}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

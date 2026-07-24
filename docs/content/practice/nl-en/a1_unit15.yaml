@@ -38,16 +38,47 @@ review:
     affected templates (lesson03.total_order/total_fill/total_translate,
     lesson04.its_order/its_fill/its_translate) to it. Re-verified with
     compile_content.py practice-validate (0/0) and a standalone harness
-    confirming 'hundred' is no longer reachable in any of the fixed slots. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the payment_method (noun) matching_pairs template from 2 to 4 pairs."
+    confirming 'hundred' is no longer reachable in any of the fixed slots. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the payment_method (noun) matching_pairs template from 2 to 4 pairs.
+
+    REAUTH FIX 2026-07-24 (unit-scope DEAD-template pass): scripts/_practice_unit_scope_check.py
+    flagged 4 DEAD templates (lesson03.total_order.002/total_translate.004,
+    lesson04.its_order.002/its_translate.004) plus 1 below-floor matching_pairs
+    (lesson01.payment_pair.003, 4 slots < the SS16 6-pair floor). All 4 DEAD
+    templates used 'number_no_hundred' -- despite the distinct tag name, its
+    members are still the SAME lexemes tagged to unit03's own lesson_content_key
+    (this pack's earlier note candidly says 'reused the already-established
+    22-member number tag from unit03'), so generate_checkpoint()'s unit-scoped
+    pool has 0 unit15 candidates for it (recipe DO-NOT #2). unit15's own numeric
+    vocabulary is only the 2 bare digit symbols '1'/'10' from lesson03 (too
+    thin, and '1'/'10' being symbols not words would make 'The total is {item}
+    dollars' produce a singular/plural agreement error for '1' anyway), so
+    RE-ANCHORED all 4 to this unit's OWN already-verified 4-member
+    'payment_method' tag (cash/card/credit/debit) instead, with new frames
+    checked grammatical for all 4 members by hand: 'This receipt shows a {item}
+    payment' (lesson03) and 'Can I pay with {item}' (lesson04). payment_method
+    is confirmed course-wide (a1 level) to have exactly these same 4 members --
+    no other a1 unit reuses this tag -- so the frames hold at both scopes.
+    Widened payment_pair.003 from 4 to 7 slots using a new untagged 'noun_word'
+    preset (language_code: en, part_of_speech: noun, no semantic tag) pooling
+    ALL of unit15's own nouns (cash/card/credit/debit/total/cards/tax, 7
+    distinct) -- safe per SS3.1(c) since matching_pairs uses a static
+    instruction frame, never a literal sentence. Generalized that template's
+    Dutch instruction/feedback text from 'betaalwoorden' (payment words) to
+    'woorden' (words) since the pool is no longer payment-only. Removed the
+    now-unused 'number'/'number_no_hundred' tags from tag_schema. Re-verified:
+    scripts/_practice_unit_scope_check.py shows 0 DEAD/0 FLOOR for this file;
+    compile_content.py practice-validate 0 errors."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [payment_method, card_type, number, number_no_hundred]
+    semantic: [payment_method, card_type]
 slot_presets:
   payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
   card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
-  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
-  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
+  # noun_word: untagged noun pool built from unit15's OWN vocabulary only
+  # (cash/card/credit/debit/total/cards/tax) -- used ONLY for the matching_pairs
+  # below, whose frame is a static instruction, never a literal sentence (SS3.1c).
+  noun_word: &noun_word {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_meaning.001
     lesson_content_key: en.a1.unit15.lesson01.payment_words
@@ -66,11 +97,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_pair.003
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: matching_pairs
-    frame: {text: "Koppel de Engelse betaalwoorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_word: *payment_method, second_word: *payment_method, third_word: *payment_method, fourth_word: *payment_method}
-    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word]}
-    feedback_frame: {text: "Je hebt twee betaalwoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *noun_word, second_word: *noun_word, third_word: *noun_word, fourth_word: *noun_word, fifth_word: *noun_word, sixth_word: *noun_word, seventh_word: *noun_word}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word, seventh_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word, seventh_word]}
+    feedback_frame: {text: "Je hebt zeven woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_translate.004
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: translation
@@ -109,17 +140,17 @@ templates:
   - content_key: practice.nl-en.en.a1.unit15.lesson03.total_order.002
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: word_order
-    frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het totaalbedrag op de kassabon.", language_code: nl, direction: ltr}
+    frame: {text: "This receipt shows a {item} payment", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: render_frame, frame: {text: "This receipt shows a {item} payment", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de betaalmethode op deze kassabon.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit15.lesson03.total_translate.004
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: translation
-    frame: {text: "Het totaal is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "The total is {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "The total is {item} dollars betekent Het totaal is {item} dollar.", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit15.lesson04.payment_listen.001
     lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
     type: listen_select
@@ -130,14 +161,14 @@ templates:
   - content_key: practice.nl-en.en.a1.unit15.lesson04.its_order.002
     lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
     type: word_order
-    frame: {text: "It's {item} dollars", language_code: en, direction: ltr}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bedrag in dit antwoord.", language_code: nl, direction: ltr}
+    frame: {text: "Can I pay with {item}", language_code: en, direction: ltr}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I pay with {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is de betaalmethode in deze vraag.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit15.lesson04.its_translate.004
     lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
     type: translation
-    frame: {text: "Het is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It's {item} dollars betekent Het is {item} dollar.", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *payment_method}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
