@@ -127,16 +127,50 @@ review:
     answer_derivation slot_text instead of slot_gloss (translation has no
     minimum-candidate floor). No candidates invented, no A1 vocabulary
     pooled in as if A2-scoped.
+
+
+    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found 10 more DEAD template-slots the A2-scoping fix above missed: it measured "reused across A2 units" (COURSE
+    scope), not the stricter UNIT scope generate_checkpoint() actually uses (recipe SS1.1). `bureaucracy_noun`
+    (appointment/document/form/confirmation) turned out to have ZERO a2.unit28-introduced members via iter_specs() --
+    every one of its A2 members belongs to unit25 alone, so every template built on it was DEAD from day one:
+    lesson02.choose.001, lesson02.listen.002, lesson03.choose.003, lesson04.bureaucracy_listen.003, and the 4 slots
+    of lesson04.match.001 that used it. Re-anchored (recipe SS3.1's preferred fix, no backfill change) rather than
+    dropped, since this unit's own `health_followup_noun` (medicine/prescription/insurance, all native to unit28
+    lesson01) is a real substitute for bare recognition: lesson02.choose.001/listen.002 and lesson04.bureaucracy_listen.003
+    (renamed lesson04.health_listen.003) now use `health_followup_noun` directly; lesson03.choose.003 uses a new
+    `health_symptom_union` (health_followup_noun UNION symptom_noun, avoiding an exact duplicate of the pack's own
+    lesson03.health_choose.004). lesson04.match.001 (needed 4 bureaucracy_noun-tagged fills, had 0) was re-anchored to
+    a new 3-way union preset `match_pool` (health_followup_noun UNION symptom_noun UNION condition_adjective) and
+    reduced from 7 declared pairs to 6 to match the real unit-scoped pool exactly (medicine/prescription/insurance/
+    headache/fever/worse -- 6 distinct, no confusable glosses by hand-check). Separately, `possessive` (my/your/his/her)
+    had zero a2.unit28 members (same as bureaucracy_noun's story), so lesson03.possessive_order.001 and
+    lesson03.possessive_translate_bare.002 were DROPPED -- no unit-native possessive-pronoun substitute exists for
+    that frame shape. Dropping alone would have taken the structured tier to 1 (lesson02.condition_order.003 only,
+    since match.001 was also dead before its own fix and possessive_order.001 was the pack's other word_order), below
+    the recipe's >=3-per-tier bar even after match.001's fix (only 2: match.001 + condition_order.003), so ONE
+    replacement structured template was added: lesson04.condition_order.005 (word_order, "The doctor said it's getting
+    {item}") over the SAME `condition_adjective` tag already used by condition_order.003 but a different frame/lesson
+    anchor -- checked against the A2-course-wide pool (better [a2.unit26] + worse [a2.unit28], 2 members): "The doctor
+    said it's getting better/worse" both hold. Structured tier is now 3 (condition_order.003, condition_order.005,
+    match.001). Production tier was unaffected by the possessive drop (translate.003, symptom_translate_bare.004,
+    symptom_translate_bare.002, condition_translate.004 -- still 4, well above the floor). tag_schema's semantic list
+    updated: `bureaucracy_noun`/`possessive` removed (no longer referenced anywhere in this pack). Net: 15 -> 14
+    templates (this pack's real count, correcting the "16" claimed in the depth-pass note above -- 2 dropped
+    [possessive pair], 1 added [condition_order.005], 5 re-anchored in place with no net count change). Before:
+    10 DEAD. After: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR.
+    Re-validated with compile_content.py practice-validate (0 errors). review.status left as unreviewed pending a
+    fresh-context pass over this reauth.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [health_followup_noun, symptom_noun, bureaucracy_noun, possessive, condition_adjective]
+    semantic: [health_followup_noun, symptom_noun, condition_adjective]
 slot_presets:
   health_followup_noun: &health_followup_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: health_followup_noun}}
   symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
-  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  health_symptom_union: &health_symptom_union {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [health_followup_noun, symptom_noun]}}
   condition_adjective: &condition_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: condition_adjective}}
+  match_pool: &match_pool {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [health_followup_noun, symptom_noun, condition_adjective]}}
 templates:
   - content_key: practice.fa-en.en.a2.unit28.lesson01.choose.001
     lesson_content_key: en.a2.unit28.lesson01.health_followup_vocabulary
@@ -170,14 +204,14 @@ templates:
     lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *health_followup_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson02.listen.002
     lesson_content_key: en.a2.unit28.lesson02.calling_to_make_an_appointment
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *health_followup_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson02.condition_order.003
@@ -187,25 +221,18 @@ templates:
     slots: {item: *condition_adjective}
     answer_derivation: {kind: render_frame, frame: {text: "it's getting {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} صفت تغییر وضعیت در این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit28.lesson03.possessive_order.001
-    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.condition_order.005
+    lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
     type: word_order
-    frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} appointment is confirmed for 3pm today", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit28.lesson03.possessive_translate_bare.002
-    lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+    frame: {text: "The doctor said it's getting {item}", language_code: en, direction: ltr}
+    slots: {item: *condition_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "The doctor said it's getting {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} صفت تغییر وضعیت در این جمله است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson03.choose.003
     lesson_content_key: en.a2.unit28.lesson03.reading_an_appointment_confirmation
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *health_symptom_union}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson03.health_choose.004
@@ -218,10 +245,10 @@ templates:
   - content_key: practice.fa-en.en.a2.unit28.lesson04.match.001
     lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
     type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *health_followup_noun, second: *health_followup_noun, third: *health_followup_noun, fourth: *bureaucracy_noun, fifth: *bureaucracy_noun, sixth: *bureaucracy_noun, seventh: *bureaucracy_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *match_pool, second: *match_pool, third: *match_pool, fourth: *match_pool, fifth: *match_pool, sixth: *match_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson04.symptom_translate_bare.002
     lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
@@ -230,11 +257,11 @@ templates:
     slots: {item: *symptom_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit28.lesson04.bureaucracy_listen.003
+  - content_key: practice.fa-en.en.a2.unit28.lesson04.health_listen.003
     lesson_content_key: en.a2.unit28.lesson04.doctor_appointment_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *health_followup_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit28.lesson04.condition_translate.004

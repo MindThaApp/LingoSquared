@@ -78,101 +78,149 @@ review:
     unreviewed/not-fresh-context, matching this pack's own pre-existing
     status -- a fresh-context review of the whole pack (including these 9
     new templates) has not happened yet.
+
+    Unit-scope DEAD/FLOOR fix pass (2026-07-24, PACK-ONLY re-authoring
+    lane): scripts/_practice_unit_scope_check.py found 21 DEAD template-
+    slots + 3 below-floor -- the depth pass above reused hour_number
+    (12 members) believing it was already-established course-wide vocab,
+    but iter_specs() shows hour_number is introduced entirely by unit03
+    (numbers), never by unit05 -- 0 unit-scoped candidates, a textbook
+    DO-NOT #2 (a tag whose real lexemes were first introduced by an
+    earlier unit). Same defect for day_part_in (0 in-unit05: its 3
+    members morning/afternoon/evening all belong to unit01; only
+    'night' is unit05's own, and night was never day_part_in-tagged in
+    the first place, by original design, since "in the night" is not
+    natural English). unit05's OWN vocabulary (measured via iter_specs
+    filtered to '.a1.unit05.') is just 11 lexemes, mostly untagged
+    function words: time/o'clock/half/past (lesson01), quarter
+    (lesson02), night/store/in/closes (lesson03), does/close (lesson04)
+    -- only 'night' (day_part) and 'store' carry any semantic tag at
+    all. Fixed by dropping the semantic constraint on every bare-frame
+    recognition/production slot ('{item}' with no other literal text,
+    §3.1(c) -- safe regardless of pool) and constraining by
+    part_of_speech only: hour_gloss/hour_listen/hour_translate (lesson01)
+    and daypart_gloss/daypart_listen (lesson03) and daypart_listen
+    (lesson04) now draw on the unit's own 6 real nouns (time/o'clock/
+    half/quarter/night/store, all distinct glosses, well above the
+    3-distinct floor). hour_pair.005 (matching_pairs) reduced from a
+    dead 12-slot hour_number pool to 6 slots over that same 6-noun pool
+    (exact 6-pair floor, no padding). daypart_pair.003 widened from a
+    dead 4-slot day_part pool (1 in-unit member) to 6 slots over
+    part_of_speech:[noun,verb] with no semantic tag (adds
+    closes/does/close -- 9 distinct in-unit, still zero risk since
+    matching_pairs has no frame-grammaticality exposure). hour_order.004,
+    ten_past_order.001, and quarter_to_order.002 (word_order frames
+    literally requiring a taught NUMBER -- "It's {item} o'clock" / "It's
+    ten past {item}" / "It's a quarter to {item}") were DROPPED: unit05
+    teaches no numbers of its own (that is unit03's job) and forcing any
+    of the unit's real nouns into those frames is ungrammatical ("It's
+    store o'clock"), so re-anchoring was not possible without a new
+    backfill tag, which is out of PACK-ONLY scope -- logging this as a
+    genuine follow-up for whoever owns unit05's backfill (a dedicated
+    single-member "o'clock" anchor, if ever wanted, would need a new
+    semantic tag). Dropping those 2 lesson02 templates would have left
+    lesson02 with ZERO live templates, so added a replacement bare-word
+    translation (vocab_translate.003) anchored to lesson02.quarter_times
+    over the same unit-noun pool, keeping every lesson represented per
+    recipe §8. store_open_order.004 and library_close_order.004
+    (word_order, day_part_in, both DEAD at 0 in-unit candidates) were
+    NOT dropped -- re-anchored instead to day_part (course-wide:
+    morning/afternoon/evening/night, all 4 members hand-checked
+    grammatical) with brand-new frames that avoid the "in the {item}"
+    preposition trap day_part_in existed to route around: "It's {item}
+    now." (lesson03) and "I love the {item}." (lesson04), both correct
+    English for every one of the 4 course-scope day_part members.
+    tag_schema/slot_presets cleaned up to match: hour_number and
+    day_part_in removed (no longer referenced by any template); two new
+    untagged presets (unit_noun, unit_noun_verb) added for the
+    part_of_speech-only slots. Net template count: 12 (was 14; -3 for the
+    genuinely-unsupportable number frames, +1 replacement), tier balance
+    recognition=5 / structured=4 / production=3, every lesson still
+    carries at least one live template. Verified: scripts/
+    _practice_unit_scope_check.py now reports 0 DEAD, 0 FLOOR for
+    a1_unit05.yaml; compile_content.py practice-validate 0 errors (see
+    coordinator report for the exact fa-en batch invocation).
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [day_part, day_part_in, hour_number]
+    semantic: [day_part]
 slot_presets:
   day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
-  day_part_in: &day_part_in {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
-  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
+  unit_noun_verb: &unit_noun_verb {language_code: en, part_of_speech: [noun, verb]}
 templates:
   - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_gloss.001
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_listen.002
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "عددی که شنیدید {item} بود.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_translate.003
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} معادل انگلیسی این عدد است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_order.004
-    lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
-    type: word_order
-    frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's {item} o'clock", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} عدد ساعت در این جمله است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_pair.005
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: matching_pairs
-    frame: {text: "{hour_one} — {hour_two}", language_code: en, direction: ltr}
-    slots: {hour_one: *hour_number, hour_two: *hour_number, hour_three: *hour_number, hour_four: *hour_number, hour_five: *hour_number, hour_six: *hour_number, hour_seven: *hour_number, hour_eight: *hour_number, hour_nine: *hour_number, hour_ten: *hour_number, hour_eleven: *hour_number, hour_twelve: *hour_number}
-    slot_relations: [{kind: distinct, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six, hour_seven, hour_eight, hour_nine, hour_ten, hour_eleven, hour_twelve]}]
-    answer_derivation: {kind: matching_pairs, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six, hour_seven, hour_eight, hour_nine, hour_ten, hour_eleven, hour_twelve]}
-    feedback_frame: {text: "هر عدد را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit05.lesson02.ten_past_order.001
+    frame: {text: "{hour_one} — {hour_two} — {hour_three} — {hour_four} — {hour_five} — {hour_six}", language_code: en, direction: ltr}
+    slots: {hour_one: *unit_noun, hour_two: *unit_noun, hour_three: *unit_noun, hour_four: *unit_noun, hour_five: *unit_noun, hour_six: *unit_noun}
+    slot_relations: [{kind: distinct, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit05.lesson02.vocab_translate.003
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
-    type: word_order
-    frame: {text: "It's ten past {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's ten past {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} عدد ساعت در این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit05.lesson02.quarter_to_order.002
-    lesson_content_key: en.a1.unit05.lesson02.quarter_times
-    type: word_order
-    frame: {text: "It's a quarter to {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "It's a quarter to {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} عدد ساعت در این جمله است.", language_code: fa, direction: rtl}
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_gloss.001
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: multiple_choice
-    frame: {text: "{day_part}", language_code: en, direction: ltr}
-    slots: {day_part: *day_part}
-    answer_derivation: {kind: slot_gloss, slot: day_part}
-    feedback_frame: {text: "معنی فارسی {day_part} را انتخاب کنید.", language_code: fa, direction: rtl}
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_listen.002
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: listen_select
-    frame: {text: "{day_part}", language_code: en, direction: ltr}
-    slots: {day_part: *day_part}
-    answer_derivation: {kind: slot_gloss, slot: day_part}
-    feedback_frame: {text: "بخشی از روز که شنیدید {day_part} بود.", language_code: fa, direction: rtl}
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson03.daypart_pair.003
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: matching_pairs
-    frame: {text: "{day_part_one} — {day_part_two}", language_code: en, direction: ltr}
-    slots: {day_part_one: *day_part, day_part_two: *day_part, day_part_three: *day_part, day_part_four: *day_part}
-    slot_relations: [{kind: distinct, slots: [day_part_one, day_part_two, day_part_three, day_part_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [day_part_one, day_part_two, day_part_three, day_part_four]}
-    feedback_frame: {text: "هر بخش از روز را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    frame: {text: "{day_part_one} — {day_part_two} — {day_part_three} — {day_part_four} — {day_part_five} — {day_part_six}", language_code: en, direction: ltr}
+    slots: {day_part_one: *unit_noun_verb, day_part_two: *unit_noun_verb, day_part_three: *unit_noun_verb, day_part_four: *unit_noun_verb, day_part_five: *unit_noun_verb, day_part_six: *unit_noun_verb}
+    slot_relations: [{kind: distinct, slots: [day_part_one, day_part_two, day_part_three, day_part_four, day_part_five, day_part_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [day_part_one, day_part_two, day_part_three, day_part_four, day_part_five, day_part_six]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson03.store_open_order.004
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: word_order
-    frame: {text: "The store opens at nine in the {item}.", language_code: en, direction: ltr}
-    slots: {item: *day_part_in}
-    answer_derivation: {kind: render_frame, frame: {text: "The store opens at nine in the {item}.", language_code: en, direction: ltr}}
+    frame: {text: "It's {item} now.", language_code: en, direction: ltr}
+    slots: {item: *day_part}
+    answer_derivation: {kind: render_frame, frame: {text: "It's {item} now.", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} بخشی از روز در این جمله است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson04.daypart_listen.001
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: listen_select
-    frame: {text: "{day_part}", language_code: en, direction: ltr}
-    slots: {day_part: *day_part}
-    answer_derivation: {kind: slot_gloss, slot: day_part}
-    feedback_frame: {text: "بخشی از روز که در این گفتگو شنیدید {day_part} بود.", language_code: fa, direction: rtl}
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که در این گفتگو شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit05.lesson04.daypart_translate.003
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: translation
@@ -183,7 +231,7 @@ templates:
   - content_key: practice.fa-en.en.a1.unit05.lesson04.library_close_order.004
     lesson_content_key: en.a1.unit05.lesson04.schedule_dialogue
     type: word_order
-    frame: {text: "It closes at six in the {item}.", language_code: en, direction: ltr}
-    slots: {item: *day_part_in}
-    answer_derivation: {kind: render_frame, frame: {text: "It closes at six in the {item}.", language_code: en, direction: ltr}}
+    frame: {text: "I love the {item}.", language_code: en, direction: ltr}
+    slots: {item: *day_part}
+    answer_derivation: {kind: render_frame, frame: {text: "I love the {item}.", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} بخشی از روز در این جمله است.", language_code: fa, direction: rtl}

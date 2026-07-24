@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit36.education
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 7 of the 30-42 batch, see unit30''s pack notes for the full batch
     rationale).
 
@@ -24,7 +24,41 @@ review:
     Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
     listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
     practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
-    upgraded to reviewed.'
+    upgraded to reviewed.
+
+
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md
+    §1.1/DO-NOT #2): BOTH prior passes'' "class/course/test" claim for class_noun was wrong at CHECKPOINT
+    (unit) scope. scripts/_practice_unit_scope_check.py confirmed: "class" and "test" (2 of class_noun''s 3
+    course-wide members) were already classified in an EARLIER unit (unit13), so this unit''s own lesson01
+    only introduces "course" as a real new lexeme. That left choose.001/listen.002 at 1 (!) distinct
+    unit-scoped answer -- nowhere near the 3-option floor, silently 0 items forever -- and
+    translate_sentence.005.volume_fill.008''s fill_in_blank (volume_fa_en_a1_unit36_item_08_single, keyed on
+    "test" in scripts/_en_target_lexeme_common.py''s VOLUME_PRACTICE_SINGLETON_TAGS table) at 0 unit-scoped
+    candidates -- DEAD, since "test" also belongs to unit13.
+
+    order.004, translate_sentence.005, and volume_order.002 were UNCHANGED -- they correctly rely on
+    class_noun''s single unit-native member ("course") for a deterministic frame/fixed-sentence-translation
+    (recipe §3.1(d)/§6.6(b)) and were not flagged by the validator.
+
+    Re-anchored choose.001 and listen.002 (only) from class_noun to a plain `part_of_speech: noun` constraint
+    (no semantic tag, recipe §3.1(c) -- bare-word MC/listen has no frame-literal-text grammaticality concern).
+    Also widened translate.003 the same way for consistency/variety (translation has no floor either way).
+    Verified via iter_specs() filtered to `.a1.unit36.`: this unit natively introduces 8 distinct nouns across
+    its 4 lessons -- course/community/college/math (lesson01), photography (lesson03), nights/skills/classes
+    (lesson04) -- all distinct Farsi glosses, no confusable pairs. This also let me ADD match.006
+    (matching_pairs, 6 slots over the same noun pool) -- the original 2026-07-11 notes explicitly said
+    "matching_pairs skipped as too thin" over the narrow class_noun tag alone, but the same part_of_speech-only
+    widening that fixes choose/listen makes a full 6-pair matching_pairs viable, strengthening what was
+    previously a 1-template structured tier (order.004/volume_order.002 are both the same "I have a course."
+    frame) to include a real vocabulary-matching exercise.
+
+    Dropped translate_sentence.005.volume_fill.008 (fill_in_blank): no unit-native single-course-wide-candidate
+    tag exists to re-anchor it onto (fill_in_blank needs <=1 course-wide candidate per slot, recipe §6.5), and
+    the pack is clearly viable without it (order.004/volume_order.002/translate_sentence.005 keep the
+    structured/production tiers alive). LOG for the coordinator: a genuinely unit36-native single-member tag
+    (e.g. on "math" or "college") would let a future pass re-add a working fill_in_blank here -- needs a
+    backfill change, out of this pass''s pack-only scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -40,7 +74,6 @@ tag_schema:
   agreement_tags:
     semantic:
     - class_noun
-    - volume_fa_en_a1_unit36_item_08_single
 slot_presets:
   class_noun: &id001
     language_code: en
@@ -56,7 +89,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: &unit36_noun {language_code: en, part_of_speech: noun}
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -72,12 +105,48 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *unit36_noun
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
     text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson01.match.006
+  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *unit36_noun
+    second: *unit36_noun
+    third: *unit36_noun
+    fourth: *unit36_noun
+    fifth: *unit36_noun
+    sixth: *unit36_noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit36.lesson01.translate.003
@@ -90,7 +159,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id001
+    item: *unit36_noun
   answer_derivation:
     kind: slot_text
     slot: item
@@ -138,26 +207,6 @@ templates:
     text: I have a {item}. یعنی من یه {item} دارم.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005.volume_fill.008
-  lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
-  type: fill_in_blank
-  frame:
-    text: I have a {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: volume_fa_en_a1_unit36_item_08_single
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
 - content_key: practice.fa-en.en.a1.unit36.lesson01.translate_sentence.005.volume_order.002
   lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
   type: word_order

@@ -144,15 +144,50 @@ review:
     politeness_translate_bare.004) and politeness_listen.005 was removed
     outright rather than kept as dead duplicate content. No candidates
     invented, no A1 vocabulary pooled in as if A2-scoped.
+
+
+    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found the A2-scoping fix above still left 5 DEAD templates + 1 below-floor matching_pairs, because "REAL A2-scoped"
+    in the note above still meant "reused across A2 units", which is COURSE scope (Endless Practice), not the stricter
+    UNIT scope generate_checkpoint() actually uses (recipe SS1.1 -- this pack's own prior fixes hadn't drawn that
+    distinction yet). Re-checked every tag against `.a2.unit26.` specifically via iter_specs(): `possessive` (my/your/
+    his/her) has zero a2.unit26-introduced members (all its A2 members belong to unit25 alone); `identity` likewise has
+    zero a2.unit26 members; `politeness` likewise zero (the prior note's "yes from this unit" was itself wrong -- "yes"
+    is an a2.unit25 introduction, never reintroduced in unit26). So lesson01.possessive_order.004,
+    lesson01.possessive_translate_bare.006, lesson01.identity_choose.007, lesson01.identity_listen.008, and
+    lesson04.politeness_translate_bare.004 were DEAD at checkpoint scope from the day this pack was written. None of
+    the three tags has any unit-native alternative token that fits their frames (the "In {item} opinion" /
+    possessive-pronoun shape has no substitute in this unit's own vocabulary), so per the recipe's fix ranking these
+    were DROPPED rather than re-anchored -- but dropping alone would have taken the structured tier from 1 (matching_pairs
+    only) to 0, well under the recipe's >=3-templates-per-tier bar, so two REPLACEMENT structured templates were
+    added, both anchored to lessons with genuine native vocabulary and both verified grammatical for their FULL
+    A2-course-wide pool (not just unit26's own), per SS1.1/SS6.4: (1) lesson02.dogpark_order.004 (word_order,
+    "I really like the {item}") over `dogpark_noun` -- unit26 IS the only A2 unit using this tag, so unit-scope and
+    A2-course-scope are identical here (dog/park/playground/space, 4 members); "I really like the dog/park/playground/
+    space" all hold. (2) lesson04.condition_order.004 (word_order, "I think that's a {item} idea") over
+    `condition_adjective` -- native member is only "better" at unit26, but the A2-course-wide pool also includes
+    "worse" (a2.unit28) since Endless Practice draws course-wide; "I think that's a better/worse idea" both hold, so
+    the frame is safe at both scopes. `condition_adjective` was added to this pack's own tag_schema (it already existed
+    in the shared backfill; only referencing it here is new). Also fixed the pre-existing FLOOR issue
+    (lesson03.match.001 had only 4 dogpark_noun pairs, under the 6-pair floor): re-anchored from the `dogpark_noun` tag
+    to a bare `part_of_speech: noun` slot (no semantic constraint, recipe SS3.1(c)) -- unit26's own lessons introduce 9
+    distinct untagged/tagged nouns total (opinion, hand, dog, park, idea, dogs, space, playground, point), comfortably
+    clearing 6; safe because matching_pairs' frame (`{first} -- {second} -- ...`) has no literal text, so the
+    course-scope-grammaticality risk that bare POS slots carry for sentence frames (SS3.1(c)) does not apply here --
+    the only residual risk is confusable-gloss collisions, checked by hand for these 9 and none found. Net effect:
+    18 -> 15 templates (5 dropped, 2 added), recognition 8 / structured 3 (matching_pairs widened to 6 pairs +
+    2 new word_order) / production 4 -- all three tiers clear the recipe's >=3-template bar. Before:
+    5 DEAD + 1 FLOOR. After: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR. Re-validated with
+    compile_content.py practice-validate (0 errors). review.status left as unreviewed pending a fresh-context pass over
+    this reauth.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [dogpark_noun, possessive, identity, politeness]
+    semantic: [dogpark_noun, condition_adjective]
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
+  unit26_noun: &unit26_noun {language_code: en, part_of_speech: noun}
+  condition_adjective: &condition_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: condition_adjective}}
 templates:
   - content_key: practice.fa-en.en.a2.unit26.lesson01.choose.001
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
@@ -199,10 +234,10 @@ templates:
   - content_key: practice.fa-en.en.a2.unit26.lesson03.match.001
     lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
     type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *dogpark_noun, second: *dogpark_noun, third: *dogpark_noun, fourth: *dogpark_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit26_noun, second: *unit26_noun, third: *unit26_noun, fourth: *unit26_noun, fifth: *unit26_noun, sixth: *unit26_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a2.unit26.lesson03.translate.002
     lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
@@ -246,38 +281,17 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit26.lesson01.possessive_order.004
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
+  - content_key: practice.fa-en.en.a2.unit26.lesson02.dogpark_order.004
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
     type: word_order
-    frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit26.lesson01.possessive_translate_bare.006
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit26.lesson01.identity_choose.007
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit26.lesson01.identity_listen.008
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a2.unit26.lesson04.politeness_translate_bare.004
+    frame: {text: "I really like the {item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I really like the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژه‌ای است که در این جمله به کار رفته است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a2.unit26.lesson04.condition_order.004
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
-    type: translation
-    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *politeness}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+    type: word_order
+    frame: {text: "I think that's a {item} idea", language_code: en, direction: ltr}
+    slots: {item: *condition_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "I think that's a {item} idea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} صفت تغییر وضعیت در این جمله است.", language_code: fa, direction: rtl}

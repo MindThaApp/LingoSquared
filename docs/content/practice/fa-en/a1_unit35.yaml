@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 6 of the 30-42 batch, see unit30''s pack notes for the full batch
     rationale).
 
@@ -24,7 +24,34 @@ review:
     shared _en_target_lexeme_common.py pool includes ''app'', so the frame could render the ungrammatical "I have a app."
     Repointed both generative templates at the narrower ''device_noun_a'' tag (excludes ''app''), mirroring the nl-en unit35
     pack''s identical split; recognition/matching templates keep the full ''device_noun''. All else verified sound. compile_content.py
-    practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.'
+    practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
+
+
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md
+    §1.1/DO-NOT #2): scripts/_practice_unit_scope_check.py flagged translate_sentence.006.volume_fill.011
+    (fill_in_blank) DEAD -- its volume_fa_en_a1_unit35_item_11_single tag is defined (in
+    scripts/_en_target_lexeme_common.py''s VOLUME_PRACTICE_SINGLETON_TAGS table) on the token "phone", but
+    "phone" was already classified in an EARLIER unit (unit03''s phone_phrase), so it has 0 candidates in
+    this unit''s own checkpoint-scoped pool. No unit-native single-course-wide-candidate tag exists to
+    re-anchor a fill_in_blank onto (fill_in_blank needs <=1 course-wide candidate per slot, recipe §6.5), so
+    per the recipe''s option 3 I DROPPED this template (device_noun/device_noun_a still give this pack a live
+    fill-tier-adjacent structured slate via order.005/translate_sentence.006/volume_order.003 -- see below --
+    so the pack stays viable). LOG for the coordinator: a genuinely unit35-native single-member tag (e.g. on
+    "mom" or "home") would let a future pass re-add a working fill_in_blank here -- needs a backfill change,
+    out of this pass''s pack-only scope.
+
+    Also widened match.003 (flagged below-floor: only 5 of the recipe''s 6-pair standard, since device_noun''s
+    unit-scoped pool tops out at 5 -- "phone" is the 6th course-wide member and, per the same DEAD finding
+    above, belongs to unit03, not this unit). Re-anchored match.003 (only -- choose.001/listen.002/
+    translate.004 keep the original narrow device_noun tag unchanged, since they already meet their floor and
+    the recipe favors precision over unnecessary widening) to a plain `part_of_speech: noun` constraint (no
+    semantic tag, recipe §3.1(c) -- matching_pairs has no frame-literal-text grammaticality concern) and
+    widened to 6 slots. Verified via iter_specs() filtered to `.a1.unit35.`: this unit natively introduces 19
+    distinct nouns across its 4 lessons (device_noun''s 5 plus mom/books/home/photos, friend/wifi/battery,
+    apps/map/names, phones/people/maps/recipes/laptops), all distinct Farsi glosses, singular/plural pairs
+    (app/apps, map/maps, laptop/laptops) kept per recipe''s allowance, no confusable duplicates. order.005 and
+    translate_sentence.006 (both frame-literal generative templates, correctly restricted to the
+    single-vowel-safe device_noun_a tag) are UNCHANGED and were not flagged.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -41,7 +68,6 @@ tag_schema:
     semantic:
     - device_noun
     - device_noun_a
-    - volume_fa_en_a1_unit35_item_11_single
 slot_presets:
   device_noun: &id001
     language_code: en
@@ -94,11 +120,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
+    first: &unit35_noun {language_code: en, part_of_speech: noun}
+    second: *unit35_noun
+    third: *unit35_noun
+    fourth: *unit35_noun
+    fifth: *unit35_noun
+    sixth: *unit35_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -107,6 +134,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -115,8 +143,9 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
-    text: هر دستگاه را به معنی فارسی خودش وصل کنید.
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit35.lesson01.translate.004
@@ -177,26 +206,6 @@ templates:
     text: I have a {item}. یعنی من یه {item} دارم.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit35.lesson01.translate_sentence.006.volume_fill.011
-  lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
-  type: fill_in_blank
-  frame:
-    text: I have a {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: volume_fa_en_a1_unit35_item_11_single
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
 - content_key: practice.fa-en.en.a1.unit35.lesson01.translate_sentence.006.volume_order.003
   lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
   type: word_order

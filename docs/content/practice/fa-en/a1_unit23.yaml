@@ -44,6 +44,29 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.003 from
     2 to 5 pairs (occupation_noun/noun, real course-wide pool=5 -- cook/
     driver/engineer/nurse/teacher), no padding with untaught words.
+
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass,
+    docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT #2):
+    scripts/_practice_unit_scope_check.py flagged match.003 DEAD --
+    "teacher"/"engineer" (2 of occupation_noun's 5 course-wide members)
+    were already classified in an EARLIER unit (unit01), so
+    generate_checkpoint()'s unit-scoped pool for occupation_noun is only
+    3 (nurse/cook/driver), below the 5 declared slots. Re-anchored
+    match.003 from the occupation_noun tag to a plain `part_of_speech:
+    noun` constraint (no semantic tag, recipe §3.1(c) -- matching_pairs
+    has no frame-literal-text grammaticality concern, unlike
+    word_order/fixed-sentence translation, so this is safe here) and
+    widened to the recipe's standard 6 slots. Verified via iter_specs()
+    filtered to `.a1.unit23.`: the unit's own nouns are nurse/cook/driver
+    (lesson01) plus patients/reports (lesson03) and
+    company/downtown/emails/clients/job (lesson04) -- 10 distinct nouns,
+    all distinct Farsi glosses, no confusable/case-duplicate pairs.
+    choose.001/listen.002/translate.004/order.005/lesson03.choose.001/
+    lesson04.listen.001/order.002/translate.003 were all already live
+    (each has exactly the 3 unit-native occupation_noun/occupation_a
+    candidates, meeting the >=3 MC/listen floor) and are UNCHANGED.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
+    below-floor for this pack) and compile_content.py practice-validate.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -70,10 +93,16 @@ templates:
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *occupation_noun, second: *occupation_noun, third: *occupation_noun, fourth: *occupation_noun, fifth: *occupation_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر شغل را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    slots:
+      first: &unit23_noun {language_code: en, part_of_speech: noun}
+      second: *unit23_noun
+      third: *unit23_noun
+      fourth: *unit23_noun
+      fifth: *unit23_noun
+      sixth: *unit23_noun
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit23.lesson01.translate.004
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: translation
