@@ -107,16 +107,66 @@ review:
     automatically for prs-en) and compile_content.py practice-validate, 0
     errors/0 warnings -- see the commit message for the exact run output.
     Still needs the standard fresh-context review before import.
+
+    UNIT-SCOPE DEAD-TEMPLATE REPAIR (2026-07-24): scripts/_practice_unit_scope_check.py
+    (which scopes candidates to THIS unit's own lesson_ids, matching
+    generate_checkpoint() exactly) found the "real A2-scoped candidate-count
+    math" above still wasn't the load-bearing scope: 'bureaucracy_noun'
+    (defined unit25) and 'possessive' (defined unit06/reintroduced unit25)
+    are course-wide reuse tags whose REAL members were introduced by
+    EARLIER units -- unit29 itself introduces ZERO lexemes carrying either
+    tag, so every slot built on them has 0 unit-scoped candidates and
+    silently never generates at the checkpoint (recipe DO-NOT #2), even
+    though they are perfectly valid for Endless Practice. Fixed by
+    RE-ANCHORING to tags unit29 genuinely introduces itself
+    (maintenance_noun, room_noun) plus one clean single-member addition,
+    never by inventing a backfill tag:
+    (1) lesson02.possessive_order.002 (word_order testing "my") ->
+    REPLACED, renamed lesson02.room_order.002, re-anchored to room_noun
+    (kitchen/bathroom, unit29-native via lesson01's own recap), frame
+    "There's a leak in the {item}" (grammatical for both candidates;
+    verified no self-reference; room_noun's A2-course-wide pool is the
+    same 2 members, so no course-scope widening risk). (2)
+    lesson03.possessive_order.002 (word_order testing "your") -> REPLACED,
+    renamed lesson03.room_order.002, same room_noun re-anchor with a
+    DIFFERENT frame ("Please check the {item} today") so it isn't a
+    literal duplicate of lesson02's new template. (3)
+    lesson03.possessive_translate_bare.003 -> REPLACED, renamed
+    lesson03.maintenance_translate_bare.003, bare-word translation over
+    maintenance_noun (sink/plumber/repair -- thematically apt, lesson03 is
+    "reading_a_repair_notice"). (4) lesson04.match.001 (7-pair
+    matching_pairs, unit-scoped pool only 3 since bureaucracy_noun
+    contributed 0) -> reduced to the standard 6 pairs, all from unit29's
+    own tags with zero padding: maintenance_noun x3 (sink/plumber/repair) +
+    room_noun x2 (kitchen/bathroom) + a new single-member 'day_part_in'
+    slot x1 ("morning", introduced by lesson02's own reading text, already
+    carries this tag in the shared EN classification -- no backfill change
+    needed) = exactly 6 distinct unit-scoped tokens, a deterministic
+    bijection. (5) lesson04.bureaucracy_listen.002 -> REPLACED, renamed
+    lesson04.maintenance_listen.002, re-anchored to a new
+    'maintenance_room_union' preset (union of maintenance_noun + room_noun,
+    5 distinct unit-scoped candidates, well above the >=3 floor). (6)
+    lesson04.bureaucracy_translate_bare.003 -> REPLACED, renamed
+    lesson04.maintenance_translate_bare.003, same maintenance_room_union
+    re-anchor (translation has no floor, but the union gives good variety).
+    'bureaucracy_noun', 'possessive' and 'maintenance_bureaucracy_combined'
+    are no longer referenced anywhere in this pack and were dropped from
+    tag_schema/slot_presets.
+    Before: 6 DEAD template-slots (6 templates) per _practice_unit_scope_check.py.
+    After: 0 DEAD, 0 below-floor for this file. practice-validate: 0 errors.
+    check_dari_register.py: 0 new findings (new/changed Dari feedback text
+    reuses already-vetted words/phrases verbatim from elsewhere in this
+    file -- همی جمله, واژه, است -- no Iranian-register or Tehrani-contraction
+    markers introduced). No backfill/realization/overlay file touched.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [maintenance_noun, bureaucracy_noun, possessive, room_noun]
+    semantic: [maintenance_noun, room_noun, day_part_in]
 slot_presets:
   maintenance_noun: &maintenance_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: maintenance_noun}}
-  bureaucracy_noun: &bureaucracy_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
   room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
-  maintenance_bureaucracy_combined: &maintenance_bureaucracy_combined {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, bureaucracy_noun]}}
+  maintenance_room_union: &maintenance_room_union {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, room_noun]}}
+  day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part_in}}
 templates:
   - content_key: practice.prs-en.en.a2.unit29.lesson01.choose.001
     lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
@@ -153,13 +203,13 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit29.lesson02.possessive_order.002
+  - content_key: practice.prs-en.en.a2.unit29.lesson02.room_order.002
     lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
     type: word_order
-    frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "I'd like to report a problem with {item} kitchen sink", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی همی جمله است.", language_code: prs, direction: rtl}
+    frame: {text: "There's a leak in the {item}", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "There's a leak in the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} اسم کلیدی همی جمله است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit29.lesson02.listen.003
     lesson_content_key: en.a2.unit29.lesson02.calling_to_report_a_problem
     type: listen_select
@@ -174,18 +224,18 @@ templates:
     slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit29.lesson03.possessive_order.002
+  - content_key: practice.prs-en.en.a2.unit29.lesson03.room_order.002
     lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
     type: word_order
-    frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} report of a leaking kitchen sink has been received", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit29.lesson03.possessive_translate_bare.003
+    frame: {text: "Please check the {item} today", language_code: en, direction: ltr}
+    slots: {item: *room_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Please check the {item} today", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} اسم کلیدی همی جمله است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit29.lesson03.maintenance_translate_bare.003
     lesson_content_key: en.a2.unit29.lesson03.reading_a_repair_notice
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
+    slots: {item: *maintenance_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit29.lesson03.listen.004
@@ -199,22 +249,22 @@ templates:
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *maintenance_bureaucracy_combined, second: *maintenance_bureaucracy_combined, third: *maintenance_bureaucracy_combined, fourth: *maintenance_bureaucracy_combined, fifth: *maintenance_bureaucracy_combined, sixth: *maintenance_bureaucracy_combined, seventh: *maintenance_bureaucracy_combined}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    slots: {first: *maintenance_noun, second: *maintenance_noun, third: *maintenance_noun, fourth: *room_noun, fifth: *room_noun, sixth: *day_part}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit29.lesson04.bureaucracy_listen.002
+  - content_key: practice.prs-en.en.a2.unit29.lesson04.maintenance_listen.002
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *maintenance_room_union}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که در همی گفتگو شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit29.lesson04.bureaucracy_translate_bare.003
+  - content_key: practice.prs-en.en.a2.unit29.lesson04.room_translate_bare.003
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *bureaucracy_noun}
+    slots: {item: *room_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit29.lesson04.maintenance_translate.004

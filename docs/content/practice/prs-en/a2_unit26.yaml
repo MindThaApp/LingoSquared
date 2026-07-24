@@ -159,42 +159,89 @@ review:
     verified with scripts/_practice_slot_check.py (prs-en: OK) and
     compile_content.py practice-validate, 0 errors/0 warnings. Still
     needs the standard fresh-context review before import.
+
+    UNIT-SCOPE DEAD/FLOOR FIX (2026-07-24, reauth batch, reverting to
+    unreviewed): scripts/_practice_unit_scope_check.py flagged this pack
+    with 5 DEAD + 1 below-floor. Root cause, confirmed via iter_specs()
+    filtered to '.a2.unit26.': `possessive` (my/your/his/her, defined for
+    unit06) and `identity`/`politeness` (defined for unit01) are reused
+    course-wide tags -- NONE of their members are actually introduced by
+    ANY lesson of unit26 itself. This is defect DO-NOT #2 exactly:
+    "bare-word recognition variety" reuse works fine in Endless Practice
+    (course-scoped) but generate_checkpoint() only ever loads unit26's
+    own lexemes, so lesson01.possessive_order.001,
+    lesson01.possessive_translate_bare.003, lesson01.identity_choose.004,
+    lesson01.identity_listen.005, and lesson04.politeness_translate_bare.003
+    all had ZERO unit-scoped candidates and could never generate at
+    checkpoint time.
+    Fix, per template:
+    - possessive_order.001 (word_order, "In {item} opinion, the dog park
+      is a good idea") and possessive_translate_bare.003: DROPPED, not
+      re-anchored. This frame's whole point is a possessive-pronoun slot,
+      and unit26 introduces no possessive pronoun at all -- there is no
+      unit-native substitute that keeps the frame grammatical, and
+      inventing one would require a new backfill semantic tag (out of
+      PACK-ONLY scope). LOGGED for the coordinator.
+    - identity_choose.004 / identity_listen.005 (both MC/listen_select,
+      bare `{item}` frame -- no course-scope grammaticality risk):
+      RE-ANCHORED (renamed vocab_choose.004 / vocab_listen.005) to a bare
+      `part_of_speech: noun` pool (no semantic tag, SS3.1(c)/SS8.1).
+      Verified via iter_specs(): unit26's own nouns, unit-wide, are 9
+      distinct with 9 distinct glosses (opinion/hand/dog/park/idea/dogs/
+      space/playground/point) -- well above the 3-answer floor, and a
+      real superset of dogpark_noun's 4, so this also newly hosts
+      opinion/hand/idea/dogs/point for recognition, not previously
+      hostable by ANY template in this pack. Not a duplicate of the
+      existing dogpark_choose.006/dogpark_listen.007 (those stay narrower
+      on dogpark_noun; these are the wider unit-vocabulary variant).
+    - politeness_translate_bare.003 (translation, bare-word, safe with a
+      broad pool per SS6.6(a)): RE-ANCHORED (renamed
+      vocab_translate_bare.003) to the same bare-noun pool -- adds
+      production-tier coverage for opinion/hand/idea/dogs/point, distinct
+      from the existing lesson04 translate.002 (which stays narrowly on
+      dogpark_noun).
+    - lesson03.match.001 (matching_pairs, FLOOR: only 4 slots declared on
+      dogpark_noun's real 4-member unit-scoped pool, below the 6-pair
+      floor): WIDENED to the same bare-noun pool, 6 of the 9 available
+      distinct nouns -- matching_pairs carries no frame-grammaticality
+      requirement (SS6.3), so this widening is safe.
+    - ADDED one new template, lesson02.dogpark_order.004 (word_order,
+      "Everyone loves the {item}.", still on the real dogpark_noun tag,
+      NOT the wide bare-noun pool -- word_order needs course-scope
+      grammaticality, SS1.1/SS6.4) to replace the structured-tier slot
+      lost when possessive_order.001 was dropped. Verified dogpark_noun
+      is NOT reused anywhere else in the A2 course (4 course-wide ==
+      4 unit-wide, unique to unit26), so "Everyone loves the {item}."
+      only ever needs to hold for dog/park/playground/space -- checked,
+      all four are grammatical and sensible. No self-reference (literal
+      words "Everyone"/"loves"/"the" are not pool candidates).
+    tag_schema trimmed to [dogpark_noun] (possessive/identity/politeness
+    are no longer referenced by any slot in this file) and the now-unused
+    possessive/identity/politeness slot_presets removed.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
+    below-floor for this pack) and compile_content.py practice-validate.
+    Reverted status to unreviewed/fresh_context: false -- needs a fresh
+    review pass given the substantive change.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [dogpark_noun, possessive, identity, politeness]
+    semantic: [dogpark_noun]
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
 templates:
-  - content_key: practice.prs-en.en.a2.unit26.lesson01.possessive_order.001
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: word_order
-    frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی این جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit26.lesson01.possessive_translate_bare.003
-    lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit26.lesson01.identity_choose.004
+  - content_key: practice.prs-en.en.a2.unit26.lesson01.vocab_choose.004
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit26.lesson01.identity_listen.005
+  - content_key: practice.prs-en.en.a2.unit26.lesson01.vocab_listen.005
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson02.choose.001
@@ -211,13 +258,20 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit26.lesson02.dogpark_order.004
+    lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
+    type: word_order
+    frame: {text: "Everyone loves the {item}", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Everyone loves the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژه‌ای است که در همی درس آمده.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson03.match.001
     lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *dogpark_noun, second: *dogpark_noun, third: *dogpark_noun, fourth: *dogpark_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    slots: {first: *unit_noun, second: *unit_noun, third: *unit_noun, fourth: *unit_noun, fifth: *unit_noun, sixth: *unit_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson03.translate.002
     lesson_content_key: en.a2.unit26.lesson03.reading_a_written_opinion
@@ -240,11 +294,11 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit26.lesson04.politeness_translate_bare.003
+  - content_key: practice.prs-en.en.a2.unit26.lesson04.vocab_translate_bare.003
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *politeness}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson01.dogpark_choose.006

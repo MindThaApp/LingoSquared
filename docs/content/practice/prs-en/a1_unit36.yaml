@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit36.education
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: >-
     Authored 2026-07-11 by the prs-en depth-extension worker, same pass
     as unit30-35. Two tags: 6-member 'education_noun' (class/course/
@@ -43,6 +43,39 @@ review:
     sibling block) is harmless, since 'cake' is genuinely taught in en
     unit37 and has a Dari gloss, so it is only ever a valid recognition
     candidate. Upgraded to reviewed: genuinely clean.
+
+    UNIT-SCOPE DEAD FIX (2026-07-24, reauth batch, reverting to
+    unreviewed): scripts/_practice_unit_scope_check.py flagged lesson01.
+    match.003 as DEAD -- education_noun's course-wide 6-member pool
+    (class/course/student/homework/subject/test) collapses to just 3
+    UNIT-scoped members (course/homework/subject: class/student/test are
+    reused additively from earlier units, exactly as this file's own
+    authoring note already documents), below the declared 4 slots.
+    generate_checkpoint() only ever sees unit36's own lexemes, so this
+    template could never actually generate at checkpoint time despite
+    validating green and passing the earlier (course-wide) review.
+    Fix: dropped the education_noun semantic constraint and widened to a
+    bare `part_of_speech: noun` pool (no semantic tag, SS3.1(c)/SS8.1),
+    safe for matching_pairs since it carries no frame-grammaticality
+    requirement (SS6.3). Verified via iter_specs() filtered to
+    '.a1.unit36.': 10 distinct, all-clean unit-native nouns (course/
+    community/college/homework/subject/math/photography/nights/skills/
+    classes), 10 distinct glosses, no proper_noun/case-duplicate risk.
+    Widened from 4 to the recipe's 6-pair standard (SS16). MC
+    (choose.001) and listen_select (listen.002) were NOT touched -- both
+    already sit exactly at the 3-distinct floor on education_noun's real
+    3 unit-native members, unaffected by this defect.
+    Also ADDED one new template, translate.006, anchored to lesson04
+    (en.a1.unit36.lesson04.learning_something_new, which previously had
+    zero templates despite introducing 12 real lexemes) using the same
+    widened noun pool, per the recipe's "thin lesson01-only pack"
+    guidance (SS0 fix option 2) -- gives real production-tier target
+    coverage to nights/skills/classes, not a duplicate of any existing
+    template.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
+    below-floor for this pack) and compile_content.py practice-validate.
+    Reverted status to unreviewed/fresh_context: false -- needs a fresh
+    review pass given the substantive change.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -50,6 +83,7 @@ tag_schema:
 slot_presets:
   education_noun: &education_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: education_noun}}
   recurring_class_noun: &recurring_class_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: recurring_class_noun}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.prs-en.en.a1.unit36.lesson01.choose.001
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
@@ -69,10 +103,10 @@ templates:
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *education_noun, second: *education_noun, third: *education_noun, fourth: *education_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "هر واژهٔ تحصیلی را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+    slots: {first: *unit_noun, second: *unit_noun, third: *unit_noun, fourth: *unit_noun, fifth: *unit_noun, sixth: *unit_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit36.lesson01.translate.004
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
     type: translation
@@ -87,3 +121,10 @@ templates:
     slots: {item: *recurring_class_noun}
     answer_derivation: {kind: render_frame, frame: {text: "I have a {item} every Friday", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} چیزی است که هر جمعه دارین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit36.lesson04.translate.006
+    lesson_content_key: en.a1.unit36.lesson04.learning_something_new
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}

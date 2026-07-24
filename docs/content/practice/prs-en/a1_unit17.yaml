@@ -35,197 +35,73 @@ review:
     matching this direction''s own established "zero is fine when real vocabulary can''t safely support one" precedent. Re-verified
     scripts/_practice_slot_check.py (weekday still safely >=3 for the new multiple_choice, >=2 for matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py
     (zero new AMBIGUOUS flags) before import. New count: 11 templates (8 -> 11) -- an honest ceiling given weekday is the
-    unit''s only real generative tag.'
+    unit''s only real generative tag.
+
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found ALL 11 templates DEAD
+    at checkpoint scope: `weekday`''s entire 7-member course-wide pool (friday/monday/saturday/sunday/thursday/tuesday/wednesday)
+    is established by unit04 -- unit17 itself introduces zero weekday-tagged lexemes (confirmed via the iter_specs unit filter:
+    unit17''s own 12 tokens are want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/works, and only "love" carries
+    any semantic tag at all -- preference_verb/preference_verb_full, shared with unit19). generate_checkpoint() only loads
+    unit17''s own lexemes, so every weekday-anchored slot had 0 unit-scoped candidates -- recipe DO-NOT #2, and this is one
+    of the two prs-en packs (with a1_unit14) the recipe flags as GUARANTEED to 409 today.
+
+    PACK-ONLY fix: weekday dropped entirely, rebuilt on unit17''s own vocabulary. Three untagged POS-only pools cover recognition/production
+    (bare frames, course-scope-breadth-safe per SS1.1): noun_pool = movie/weekend/walk/lunch/1pm (5); verb_pool = want/would/love/works
+    (4); desc_pool = busy/another/maybe (3, exactly the MC/listen floor). A fourth, content_pool, unions all three (12 distinct)
+    for the one matching_pairs. For the structured tier''s literal-sentence slot, weekday could not simply be swapped for
+    a broad POS pool (course-wide noun=512, verb=317 -- neither is remotely safe for a literal frame per SS1.1). But "love"''s
+    OWN tag, preference_verb_full, IS course-scope-safe: its full course-wide pool is hate/like/love/prefer (4, all from
+    the shared preference-verbs vocabulary also taught in unit19), and "I''d {item} to see a movie." is grammatical for every
+    one of the four ("I''d hate/like/love/prefer to see a movie.") -- so this is a genuine, verified-safe structured template,
+    not a broad-POS gamble. Read every gloss in every new pool (SS0.1); all distinct.
+
+    11 replacement templates (like-for-like on lesson anchor): lesson01 x3 (multiple_choice + bare translation on noun_pool,
+    a content_pool matching_pairs x12), lesson02 x6 (multiple_choice + listen_select on verb_pool, multiple_choice + listen_select
+    on desc_pool, the preference_verb_full word_order, bare translation on desc_pool), lesson03 x1 (listen_select on noun_pool),
+    lesson04 x1 (bare translation on verb_pool). Tiers: recognition 6 (3 MC + 3 listen_select), structured 2 (matching_pairs
+    + the one course-verified word_order -- an honest ceiling: no other native tag survives that is also course-scope-safe
+    for a second literal-sentence template, and fill_in_blank needs an exact single course-wide candidate that none of this
+    unit''s tags provide), production 3 (3 bare-word translations). LOG for the coordinator: a second structured template
+    would need either a genuinely single-member native semantic tag (fill_in_blank) or another course-safe multi-member one
+    (word_order) added in scripts/backfill_lexemes_prs_en.py -- out of scope here (PACK-ONLY). Verified 0 DEAD via scripts/_practice_unit_scope_check.py
+    and 0 errors via compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - noun
+  - verb
+  - adjective
+  - adverb
   agreement_tags:
     semantic:
-    - weekday
+    - preference_verb_full
 slot_presets:
-  weekday: &id001
+  noun_pool: &noun_pool
     language_code: en
     part_of_speech: noun
+  verb_pool: &verb_pool
+    language_code: en
+    part_of_speech: verb
+  desc_pool: &desc_pool
+    language_code: en
+    part_of_speech: [adjective, adverb]
+  content_pool: &content_pool
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
+  preference_verb_full: &preference_verb_full
+    language_code: en
+    part_of_speech: verb
     agreement_tags:
-      semantic: weekday
+      semantic: preference_verb_full
 templates:
-- content_key: practice.prs-en.en.a1.unit17.lesson02.busy_order.001
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: word_order
-  frame:
-    text: I'm busy on {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} روزی است که مصروف استین.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson02.busy_translate.003
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: translation
-  frame:
-    text: روز {item} مصروف استم.
-    language_code: prs
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: I'm busy on {item} یعنی روز {item} مصروف استم.
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson02.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: listen_select
-  frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: slot_gloss
-    slot: item
-  feedback_frame:
-    text: '{item} روزی است که شنیدین.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson03.lunch_order.001
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: word_order
-  frame:
-    text: Do you want to have lunch on {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} روز پیشنهادی برای چاشت است.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson03.lunch_translate.003
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: translation
-  frame:
-    text: می‌خواین {item} چاشت بخوریم؟
-    language_code: prs
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: Do you want to have lunch on {item}؟ یعنی می‌خواین {item} چاشت بخوریم؟
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson04.works_order.001
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: word_order
-  frame:
-    text: '{item} works for me'
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} روزی است که مناسب است.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson04.works_translate.003
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: translation
-  frame:
-    text: '{item} برایم خوب استه.'
-    language_code: prs
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} works for me یعنی {item} برایم خوب استه.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson04.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: listen_select
-  frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: slot_gloss
-    slot: item
-  feedback_frame:
-    text: '{item} روزی است که شنیدین.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson03.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: listen_select
-  frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: slot_gloss
-    slot: item
-  feedback_frame:
-    text: '{item} روزی است که شنیدین.'
-    language_code: prs
-    direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson04.weekday_choose.005
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
+- content_key: practice.prs-en.en.a1.unit17.lesson01.noun_choose.001
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: multiple_choice
   frame:
     text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item: *noun_pool
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -233,21 +109,44 @@ templates:
     text: معنی دری {item} را انتخاب کنین.
     language_code: prs
     direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson04.weekday_match.006
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
+- content_key: practice.prs-en.en.a1.unit17.lesson01.noun_translate.002
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *noun_pool
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson01.content_match.003
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: matching_pairs
   frame:
     text: '{first} — {second}'
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
-    seventh: *id001
+    first: *content_pool
+    second: *content_pool
+    third: *content_pool
+    fourth: *content_pool
+    fifth: *content_pool
+    sixth: *content_pool
+    seventh: *content_pool
+    eighth: *content_pool
+    ninth: *content_pool
+    tenth: *content_pool
+    eleventh: *content_pool
+    twelfth: *content_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -258,6 +157,11 @@ templates:
     - fifth
     - sixth
     - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -268,76 +172,147 @@ templates:
     - fifth
     - sixth
     - seventh
+    - eighth
+    - ninth
+    - tenth
+    - eleventh
+    - twelfth
   feedback_frame:
-    text: هر روز هفته را به معنی دری خودش وصل کنین.
+    text: هر واژه را به معنی دری خودش وصل کنین.
     language_code: prs
     direction: rtl
-- content_key: practice.prs-en.en.a1.unit17.lesson02.busy_translate.003.volume_order.004
+- content_key: practice.prs-en.en.a1.unit17.lesson02.verb_choose.001
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *verb_pool
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson02.verb_listen.002
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *verb_pool
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که شنیدین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson02.desc_choose.003
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *desc_pool
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson02.desc_listen.004
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *desc_pool
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} واژه‌ای است که شنیدین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson02.love_order.005
   lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
   type: word_order
   frame:
-    text: I'm busy on {item}
+    text: I'd {item} to see a movie
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
+    item: *preference_verb_full
   answer_derivation:
     kind: render_frame
     frame:
-      text: I'm busy on {item}
+      text: I'd {item} to see a movie
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I'm busy on {item}
-    language_code: en
-    direction: ltr
-- content_key: practice.prs-en.en.a1.unit17.lesson03.lunch_translate.003.volume_order.005
+    text: '{item} یعنی چقدر علاقه دارین یک فلم ببینین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson02.desc_translate.006
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *desc_pool
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson03.noun_listen.001
   lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: word_order
+  type: listen_select
   frame:
-    text: Do you want to have lunch on {item}
+    text: '{item}'
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
+    item: *noun_pool
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_gloss
+    slot: item
   feedback_frame:
-    text: Do you want to have lunch on {item}
-    language_code: en
-    direction: ltr
-- content_key: practice.prs-en.en.a1.unit17.lesson04.works_translate.003.volume_order.006
+    text: '{item} واژه‌ای است که شنیدین.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson04.verb_translate.001
   lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: word_order
+  type: translation
   frame:
-    text: '{item} works for me'
-    language_code: en
-    direction: ltr
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
+    item: *verb_pool
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: '{item} works for me'
-    language_code: en
-    direction: ltr
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
+    language_code: prs
+    direction: rtl
