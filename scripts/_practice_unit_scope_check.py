@@ -123,15 +123,27 @@ def check_pack(pack_path: Path, all_specs: list[dict]) -> list[tuple[str, str]]:
                 if distinct < MIN_MULTI_OPTION_CANDIDATES:
                     problems.append(("FLOOR", f"{key}: {ttype} has only {distinct} distinct unit-scoped answer value(s) (<{MIN_MULTI_OPTION_CANDIDATES})"))
         if ttype == "matching_pairs":
-            need = _distinct_slot_count(template)
-            # tokens across all matching slots (all share the same pool here)
-            first_slot = next(iter(slots.values()), {})
-            cands = [lx for lx in unit_lexemes if lexeme_matches(lx, first_slot)]
-            distinct_tokens = len({lx["token"] for lx in cands})
-            if distinct_tokens < need:
-                problems.append(("DEAD", f"{key}: matching_pairs needs {need} distinct fills but unit-scoped pool has {distinct_tokens} -> never generates"))
-            elif need < MATCHING_PAIRS_FLOOR:
-                problems.append(("FLOOR", f"{key}: matching_pairs declares only {need} slots (<{MATCHING_PAIRS_FLOOR}-pair floor)"))
+            # Check each `distinct`-relation GROUP independently against ITS OWN
+            # slots' pools. Heterogeneous two-category matches (e.g. hair-color
+            # slots + eye-color slots) declare separate distinct relations;
+            # estimating the whole template from one slot's pool false-positives.
+            relations = [r for r in (template.get("slot_relations") or [])
+                         if r.get("kind") == "distinct"]
+            groups = [r.get("slots", []) for r in relations] or [list(slots.keys())]
+            group_dead = False
+            for grp in groups:
+                need = len(grp)
+                if need == 0:
+                    continue
+                pool = {lx["token"] for sn in grp for lx in unit_lexemes
+                        if lexeme_matches(lx, slots.get(sn, {}))}
+                if len(pool) < need:
+                    problems.append(("DEAD", f"{key}: matching_pairs group {grp} needs {need} distinct fills but unit-scoped pool has {len(pool)} -> never generates"))
+                    group_dead = True
+            # The >=6-pair floor is on TOTAL pairs (all groups), not per group.
+            total_pairs = len(slots)
+            if not group_dead and total_pairs < MATCHING_PAIRS_FLOOR:
+                problems.append(("FLOOR", f"{key}: matching_pairs has only {total_pairs} pairs (<{MATCHING_PAIRS_FLOOR}-pair floor)"))
     return problems
 
 
