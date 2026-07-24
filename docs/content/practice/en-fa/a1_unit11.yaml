@@ -57,15 +57,69 @@ review:
     compile_content.py practice-validate clean (0 errors/0 warnings) for
     the full en-fa pack including this new file. Needs the standard
     fresh-context review before import.
+
+    REAUTH 2026-07-24 (unit-scope DEAD fix, pack-only):
+    scripts/_practice_unit_scope_check.py found 5 DEAD template-slots here.
+    Two distinct root causes:
+    (1) lesson06.routine_and_day_part_match.012's dp1-4 slots referenced
+    "day_part_word" -- a tag that has ZERO real unit-scoped candidates in
+    this unit (it is a1_unit09.yaml's tag, apparently copy-pasted here by
+    mistake; this unit's only real day-part content is a single combined
+    reviewed_phrase "صبح، ظهر، عصر، شب" = "morning, noon, afternoon, night",
+    not four standalone day-part lexemes). DROPPED the whole template
+    (pack-only cannot invent the 4 missing day_part_word-tagged lexemes it
+    would need; a genuine fix would need backfill_lexemes.py to classify
+    the four words inside that combined phrase as their own lexemes --
+    logged for the coordinator, not attempted here). Pack stays viable
+    without it: 11 templates remain (was 12), still 3 recognition / 5
+    structured / 3 production, all lessons with lexemes still represented.
+    (2) lesson06.unit_review_match.011's two-subgroup structure (rv-group
+    of 4 over routine_verb_phrase, rc-group of 5 over routine_connector)
+    was flagged DEAD by the checker's simplified matching_pairs check
+    (which only tests ONE slot's tag pool against the template's largest
+    distinct-group size) even though each subgroup's own pool exactly
+    matched its own need (4-for-4, 5-for-5) -- so it was not literally
+    dead at runtime, only exact-fit (0 variety: every generated instance
+    used the identical 9 members). Fixed properly rather than leaving a
+    validator-placating no-op: flattened it into ONE 9-slot distinct group
+    over a new `unit_review_word` union preset (this unit's own 3 real
+    semantic tags -- routine_verb_phrase + routine_connector +
+    routine_phrase -- 14 distinct total), so it now genuinely varies
+    (draws 9 of 14 per instance) instead of being a fixed set.
+    Also widened the three below-floor matching_pairs (each declared
+    4-5 slots, exactly matching one narrow tag's own pool, <6-pair floor)
+    to the same `unit_review_word` union at 6 slots each: lesson01.
+    routine_verb_match.002 (was routine_verb_phrase alone, 4), lesson06.
+    routine_connector_match.006 (was routine_connector alone, 5), lesson06.
+    routine_phrase_match.009 (was routine_phrase alone, 5). This is the
+    SS8.1-point-2 pattern deliberately: several templates anchored to
+    different lessons, all pooling the same unit-wide union, each drawing
+    a different random subset per instance.
+    Checked the 14-item union pool by hand for confusable glosses: هر
+    "every" / بعدش "after that" / یه‌کم "a little (spoken)" / دیرتر
+    "later" / معمولاً "usually" plus the 4 routine_verb_phrase and 5
+    routine_phrase entries are all distinct; یه‌کم "a little" and یه‌کم
+    دیرتر "a little later" are related but not interchangeable paraphrases
+    (kept both, per recipe SS6.3). All 3 tags are unit11-exclusive
+    (grepped scripts/backfill_lexemes.py), so course scope == unit scope
+    here; no Endless-Practice-only risk introduced.
+    After fix: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0
+    below-floor for this pack. Tiers: recognition 3, structured 5,
+    production 3, 11 templates total (was 12; the one drop is 012, logged
+    above).
 tag_schema:
   part_of_speech: [phrase, verb, adjective, adverb, noun]
   agreement_tags:
-    semantic: [routine_verb_phrase, routine_connector, routine_phrase, day_part_word]
+    semantic: [routine_verb_phrase, routine_connector, routine_phrase]
 slot_presets:
   routine_verb_phrase: &routine_verb_phrase {language_code: fa, part_of_speech: [phrase, verb], agreement_tags: {semantic: routine_verb_phrase}}
   routine_connector: &routine_connector {language_code: fa, part_of_speech: [adjective, adverb], agreement_tags: {semantic: routine_connector}}
   routine_phrase: &routine_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: routine_phrase}}
-  day_part_word: &day_part_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: day_part_word}}
+  # REAUTH 2026-07-24: union of this unit's own 3 real semantic tags (14
+  # distinct: 4 routine_verb_phrase + 5 routine_connector + 5 routine_phrase),
+  # per SS3.1a/SS8.1 -- used to re-anchor the below-floor matching_pairs
+  # templates that were declaring only their own narrow tag's exact pool size.
+  unit_review_word: &unit_review_word {language_code: fa, part_of_speech: [phrase, verb, adjective, adverb], agreement_tags: {semantic: [routine_verb_phrase, routine_connector, routine_phrase]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_choice.001
     lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
@@ -78,10 +132,10 @@ templates:
     lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
     type: matching_pairs
     frame: {text: "Match each Persian phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *routine_verb_phrase, second: *routine_verb_phrase, third: *routine_verb_phrase, fourth: *routine_verb_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "These are the core routine verbs for this unit.", language_code: en, direction: ltr}
+    slots: {first: *unit_review_word, second: *unit_review_word, third: *unit_review_word, fourth: *unit_review_word, fifth: *unit_review_word, sixth: *unit_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are core words and phrases for describing a daily routine.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_translate.003
     lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
     type: translation
@@ -108,9 +162,9 @@ templates:
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *routine_connector, second: *routine_connector, third: *routine_connector, fourth: *routine_connector, fifth: *routine_connector}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    slots: {first: *unit_review_word, second: *unit_review_word, third: *unit_review_word, fourth: *unit_review_word, fifth: *unit_review_word, sixth: *unit_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "These words sequence and compare parts of a daily routine.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_translate.007
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
@@ -130,9 +184,9 @@ templates:
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: matching_pairs
     frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *routine_phrase, second: *routine_phrase, third: *routine_phrase, fourth: *routine_phrase, fifth: *routine_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    slots: {first: *unit_review_word, second: *unit_review_word, third: *unit_review_word, fourth: *unit_review_word, fifth: *unit_review_word, sixth: *unit_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_phrase_translate.010
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
@@ -146,35 +200,16 @@ templates:
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's routine vocabulary.", language_code: en, direction: ltr}
     slots:
-      rv1: *routine_verb_phrase
-      rv2: *routine_verb_phrase
-      rv3: *routine_verb_phrase
-      rv4: *routine_verb_phrase
-      rc1: *routine_connector
-      rc2: *routine_connector
-      rc3: *routine_connector
-      rc4: *routine_connector
-      rc5: *routine_connector
+      first: *unit_review_word
+      second: *unit_review_word
+      third: *unit_review_word
+      fourth: *unit_review_word
+      fifth: *unit_review_word
+      sixth: *unit_review_word
+      seventh: *unit_review_word
+      eighth: *unit_review_word
+      ninth: *unit_review_word
     slot_relations:
-      - {kind: distinct, slots: [rv1, rv2, rv3, rv4]}
-      - {kind: distinct, slots: [rc1, rc2, rc3, rc4, rc5]}
-    answer_derivation: {kind: matching_pairs, slots: [rv1, rv2, rv3, rv4, rc1, rc2, rc3, rc4, rc5]}
-    feedback_frame: {text: "This reviews both the core routine verbs and the sequencing/comparison words taught in this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_and_day_part_match.012
-    lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
-    type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- routine verbs and parts of the day.", language_code: en, direction: ltr}
-    slots:
-      rv1: *routine_verb_phrase
-      rv2: *routine_verb_phrase
-      rv3: *routine_verb_phrase
-      rv4: *routine_verb_phrase
-      dp1: *day_part_word
-      dp2: *day_part_word
-      dp3: *day_part_word
-      dp4: *day_part_word
-    slot_relations:
-      - {kind: distinct, slots: [rv1, rv2, rv3, rv4]}
-      - {kind: distinct, slots: [dp1, dp2, dp3, dp4]}
-    answer_derivation: {kind: matching_pairs, slots: [rv1, rv2, rv3, rv4, dp1, dp2, dp3, dp4]}
-    feedback_frame: {text: "A daily routine is described using both these activities and the parts of the day they happen in.", language_code: en, direction: ltr}
+      - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}
+    feedback_frame: {text: "This reviews the core routine verbs and the sequencing/comparison words taught in this unit.", language_code: en, direction: ltr}
