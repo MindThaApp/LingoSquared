@@ -2494,8 +2494,14 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # -- a red pet is not a sentence this unit teaches).
     if token in {"حیوان", "سگ", "پشک", "پرنده", "ماهی"}:
         semantics.append("animal_topic_word")
+    # "pet_animal" (same 4 members, added 2026-07-24): unit58's zoo section
+    # below reuses "animal_word" for شیر/فیل/میمون, so at Endless-Practice
+    # COURSE scope unit28's ownership frames could render "شیر حیوان خانگی
+    # من است" ("the lion is my pet"). The pack's claim frames pin to this
+    # pet-only subset instead; "animal_word" stays for recognition reuse.
     if token in {"سگ", "پشک", "پرنده", "ماهی"}:
         semantics.append("animal_word")
+        semantics.append("pet_animal")
     if token in {"سیاه", "سفید"}:
         semantics.append("pet_color_word")
 
