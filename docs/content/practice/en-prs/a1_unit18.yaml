@@ -59,103 +59,219 @@ review:
     -- 0 errors/0 warnings. Needs the standard fresh-context review
     before import; no backfill_lexemes_en_prs.py run has happened against
     a real database yet in this pass.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found this pack had 25 DEAD templates + 2 below-floor -- the worst in
+    the assigned batch. Root cause: this unit's own "four semantic
+    groups" claim above was accurate about backfill_lexemes_en_prs.py's
+    classifier tags existing, but three of them (occupation,
+    occupation_workplace, person_name) turned out to have ZERO
+    unit18-scoped candidates -- every single member (معلم/مهندس/داکتر/
+    دوکاندار, دفتر/دوکان/شفاخانه/مکتب, لیلا/نگار/etc.) was introduced by
+    an EARLIER unit (unit02/unit05/unit10/unit04). generate_checkpoint()
+    scopes candidates to THIS unit's own lexemes only, so every slot
+    built on those three tags could never generate at checkpoint scope,
+    even though the same slots work fine in Endless Practice (course
+    scope) -- exactly the defect this reauth pass targets.
+
+    Measured via the iter_specs() unit18 filter: this unit's ENTIRE
+    native vocabulary is 3 distinct tokens -- می‌کنین (work_verb_form,
+    lesson03) and درس + می‌دهد (teach_word, lesson05). Lessons 01, 02, 04,
+    and 06 introduce ZERO new lexemes of their own (all of their
+    introduced_tokens were already established in earlier units). No
+    backfill_lexemes_en_prs.py or realization change was made (PACK-ONLY
+    lane) -- every fix re-anchors a slot to this unit's own 3-token pool
+    (or a deterministic single-member narrowing of it, §3.1d) rather
+    than adding vocabulary the unit doesn't teach:
+    - occupation_gloss.001, workplace_gloss.001, work_verb_gloss.001
+      (widened from 1 candidate), person_name_gloss.001 (4 separate MC
+      templates, all previously DEAD or FLOOR) -> all re-anchored to
+      unit_vocab_pool (work_verb_form + teach_word, 3 distinct: exactly
+      this unit's entire native vocabulary, and exactly the MC floor).
+      There is no larger unit-native pool to split these across, so all
+      four necessarily draw from the identical 3-token set -- flagged
+      here rather than padded with untaught vocabulary.
+    - occupation_am_order.003, occupation_workplace_combo_order.001,
+      person_occupation_order.002 (previously DEAD, 0 candidates) ->
+      re-anchored to single-member deterministic anchors: work_verb_form
+      (می‌کنین) for the first two (with distinct literal wrapping --
+      "امروز کار ..." / "هر روز کار ..." -- to avoid identical generated
+      sentences), teach_word narrowed to its verb member (می‌دهد) for the
+      third.
+    - workplace_work_order.003 (previously DEAD) -> re-anchored to
+      teach_word narrowed to its noun member (درس), rendering لیلا درس
+      می‌دهد (Laila teaches), the exact phrase lesson05's own reading
+      passage already teaches.
+    - occupation_pair.002 (lesson01), workplace_pair.002 (lesson02),
+      review_pair.002 (lesson03) -- 3 matching_pairs templates on the
+      dead occupation/occupation_workplace tags, needing 4/4/8 distinct
+      fills with 0 unit-scoped candidates -- DROPPED. teach_word_pair.002
+      (lesson05) -- already below the 6-pair floor at 2 slots, and this
+      unit's teach_word tag has only 2 unit-scoped members total, so it
+      can never reach 6 either -- also DROPPED. All four matching_pairs
+      templates in this pack are gone; per the recipe's explicit
+      below-floor-matching_pairs guidance ("drop if the unit truly can't
+      reach 6... but then keep a non-matching structured template so the
+      tier survives"), the structured tier stays alive via 5 surviving/
+      re-anchored word_order templates (one per lesson except lesson05).
+    - ADDED work_verb_translate.002 (lesson03): a bare-word translation
+      of work_verb_form (می‌کنین). This unit's production tier was down
+      to a single template (teach_word_translate.001) even before this
+      pass -- adding this brings it to 2, still short of the recipe's
+      §8 "≥3 per tier" soft bar. Flagging honestly: with only 3 native
+      tokens in the whole unit, a genuine 3rd production template isn't
+      reachable without a backfill change, which is out of scope for
+      this PACK-ONLY pass. LOGGED for the coordinator: this unit's
+      production tier (and its MC tier's total reliance on one 3-token
+      pool) would benefit from a backfill_lexemes_en_prs.py extension
+      that classifies more of unit18's already-taught, currently-reused
+      vocabulary (e.g. لیلا/نگار as person_name, or کار itself) as
+      genuinely unit18-scoped -- not attempted here, PACK-ONLY.
+
+    Net effect: 16 templates -> 13 (4 matching_pairs dropped, 1
+    translation added), still clears the 12-item checkpoint floor.
+    Removed the now-fully-unused occupation/occupation_workplace/
+    person_name slot_presets and tag_schema entries (nothing in this
+    pack references them anymore). Verified with
+    scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
+    this file after the fix), scripts/compile_content.py
+    practice-validate (0 errors), and scripts/check_dari_register.py (0
+    new findings) -- see the coordinator report for exact output.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
   agreement_tags:
-    semantic: [occupation, occupation_workplace, work_verb_form, teach_word, person_name]
+    semantic: [work_verb_form, teach_word]
 slot_presets:
-  # Reuses the existing course-wide "occupation" tag (established unit02/
-  # unit10: معلم/مهندس/داکتر/دوکاندار).
-  occupation: &occupation {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: occupation}}
-  occupation_workplace: &occupation_workplace {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: occupation_workplace}}
+  # REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY): the
+  # course-wide "occupation" (معلم/مهندس/داکتر/دوکاندار, established
+  # unit02/unit10), "occupation_workplace" (دفتر/دوکان/شفاخانه/مکتب,
+  # established unit05/unit10), and "person_name" (established unit02/
+  # unit04 etc.) tags all had ZERO unit18-scoped candidates -- every
+  # member was introduced in an EARLIER unit; unit18 only reuses them.
+  # generate_checkpoint() scopes candidates to this unit's OWN lexemes,
+  # so every slot built on those three tags was DEAD at checkpoint
+  # scope. This unit's ENTIRE native vocabulary is 3 tokens
+  # (می‌کنین/درس/می‌دهد, introduced at lesson03/lesson05 respectively) --
+  # removed the three dead presets/tags and re-anchored every affected
+  # template to these below. See review.notes for the full per-template
+  # accounting; this is a genuinely thin unit, not an authoring
+  # shortcut.
   work_verb_form: &work_verb_form {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: work_verb_form}}
   teach_word: &teach_word {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: teach_word}}
-  # Reuses the existing course-wide "person_name" tag.
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # teach_word narrowed by part_of_speech to its single noun member
+  # (درس) / single verb member (می‌دهد) -- two deterministic
+  # single-candidate anchors (§3.1d) for word_order frames that need
+  # exactly one of the two, not their OR-union.
+  teach_word_noun: &teach_word_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: teach_word}}
+  teach_word_verb: &teach_word_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: teach_word}}
+  # unit_vocab_pool: work_verb_form (1: می‌کنین) + teach_word (2:
+  # درس/می‌دهد) -- 3 distinct, this unit's ENTIRE native vocabulary,
+  # exactly the multiple_choice 3-option floor. Every MC template below
+  # necessarily draws from this same pool -- there is no larger
+  # unit-native pool to split it across.
+  unit_vocab_pool: &unit_vocab_pool {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: [work_verb_form, teach_word]}}
 templates:
-  # Lesson 1: occupation vocabulary.
+  # Lesson 1: occupation vocabulary. This lesson's own introduced_tokens
+  # (معلم/مهندس/داکتر/دوکاندار/کار/استم) are ALL course-wide reused
+  # tokens (established unit02/unit10, کار/استم even earlier) -- unit18
+  # itself introduces ZERO new lexemes in this lesson. Both templates
+  # re-anchored to this unit's own 3-token native pool (see review.notes).
   - content_key: practice.en-prs.prs.a1.unit18.lesson01.occupation_gloss.001
     lesson_content_key: prs.a1.unit18.lesson01.occupation_words
     type: multiple_choice
-    frame: {text: "{occupation}", language_code: prs, direction: rtl}
-    slots: {occupation: *occupation}
-    answer_derivation: {kind: slot_gloss, slot: occupation}
-    feedback_frame: {text: "{occupation} names an occupation.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit18.lesson01.occupation_pair.002
-    lesson_content_key: prs.a1.unit18.lesson01.occupation_words
-    type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *occupation, word_two: *occupation, word_three: *occupation, word_four: *occupation}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `occupation` tag (0 unit-scoped
+    # candidates) to unit_vocab_pool (work_verb_form + teach_word, 3
+    # distinct: می‌کنین/درس/می‌دهد) -- this unit's entire native
+    # vocabulary, exactly the 3-option MC floor.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit18.lesson01.occupation_am_order.003
     lesson_content_key: prs.a1.unit18.lesson01.occupation_words
     type: word_order
-    frame: {text: "{occupation} استم", language_code: prs, direction: rtl}
-    slots: {occupation: *occupation}
-    answer_derivation: {kind: render_frame, frame: {text: "{occupation} استم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [occupation] استم (I am [occupation]).", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `occupation` tag (0 unit-scoped
+    # candidates) to work_verb_form (1: می‌کنین), a deterministic
+    # single-candidate anchor (§3.1d). Grammatical for every course-wide
+    # member (می‌کنم/می‌کنین/می‌کند all combine with کار regardless of
+    # person, per the backfill classifier's own note).
+    frame: {text: "امروز کار {work_verb_form}", language_code: prs, direction: rtl}
+    slots: {work_verb_form: *work_verb_form}
+    answer_derivation: {kind: render_frame, frame: {text: "امروز کار {work_verb_form}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: امروز کار می‌کنین (You work today).", language_code: en, direction: ltr}
+    # (occupation_pair.002, a 4-slot matching_pairs on the same dead
+    # `occupation` tag, DROPPED -- 0 unit-scoped candidates and no
+    # unit-native pool anywhere near reaches the 6-pair floor. The
+    # structured tier stays alive via this lesson's own word_order
+    # template plus 4 more across the pack -- see review.notes.)
 
-  # Lesson 2: workplace vocabulary.
+  # Lesson 2: workplace vocabulary. Same situation as lesson01 -- every
+  # introduced_tokens here (دفتر/دوکان/شفاخانه/مکتب/در/می‌کنم) is
+  # course-wide reused; unit18 introduces zero new lexemes in this
+  # lesson either.
   - content_key: practice.en-prs.prs.a1.unit18.lesson02.workplace_gloss.001
     lesson_content_key: prs.a1.unit18.lesson02.workplace_words
     type: multiple_choice
-    frame: {text: "{occupation_workplace}", language_code: prs, direction: rtl}
-    slots: {occupation_workplace: *occupation_workplace}
-    answer_derivation: {kind: slot_gloss, slot: occupation_workplace}
-    feedback_frame: {text: "{occupation_workplace} names a workplace.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit18.lesson02.workplace_pair.002
-    lesson_content_key: prs.a1.unit18.lesson02.workplace_words
-    type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *occupation_workplace, word_two: *occupation_workplace, word_three: *occupation_workplace, word_four: *occupation_workplace}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `occupation_workplace` tag (0
+    # unit-scoped candidates) to unit_vocab_pool (3: می‌کنین/درس/می‌دهد).
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit18.lesson02.workplace_work_order.003
     lesson_content_key: prs.a1.unit18.lesson02.workplace_words
     type: word_order
-    frame: {text: "در {occupation_workplace} کار می‌کنم", language_code: prs, direction: rtl}
-    slots: {occupation_workplace: *occupation_workplace}
-    answer_derivation: {kind: render_frame, frame: {text: "در {occupation_workplace} کار می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: در [workplace] کار می‌کنم (I work in [workplace]).", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `occupation_workplace` tag (0
+    # unit-scoped candidates) to teach_word narrowed to its single noun
+    # member (درس), a deterministic single-candidate anchor -- renders
+    # the exact phrase lesson05's own reading passage teaches.
+    frame: {text: "لیلا {lesson_word} می‌دهد", language_code: prs, direction: rtl}
+    slots: {lesson_word: *teach_word_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "لیلا {lesson_word} می‌دهد", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: لیلا درس می‌دهد (Laila teaches / gives a lesson).", language_code: en, direction: ltr}
+    # (workplace_pair.002, a 4-slot matching_pairs on the same dead
+    # `occupation_workplace` tag, DROPPED -- same reasoning as
+    # occupation_pair.002 above.)
 
-  # Lesson 3: combining a job and a workplace.
+  # Lesson 3: combining a job and a workplace. This unit's own
+  # می‌کنین (work_verb_form) is genuinely introduced here.
   - content_key: practice.en-prs.prs.a1.unit18.lesson03.occupation_workplace_combo_order.001
     lesson_content_key: prs.a1.unit18.lesson03.combining_job_and_place
     type: word_order
-    frame: {text: "{occupation} استم و در {occupation_workplace} کار می‌کنم", language_code: prs, direction: rtl}
-    slots: {occupation: *occupation, occupation_workplace: *occupation_workplace}
-    answer_derivation: {kind: render_frame, frame: {text: "{occupation} استم و در {occupation_workplace} کار می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [occupation] استم و در [workplace] کار می‌کنم (I am [occupation] and I work in [workplace]).", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit18.lesson03.review_pair.002
+    # Re-anchored from a 2-slot occupation+occupation_workplace combo
+    # (both 0 unit-scoped candidates) to a single work_verb_form anchor
+    # (1: می‌کنین).
+    frame: {text: "هر روز کار {work_verb_form}", language_code: prs, direction: rtl}
+    slots: {work_verb_form: *work_verb_form}
+    answer_derivation: {kind: render_frame, frame: {text: "هر روز کار {work_verb_form}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: هر روز کار می‌کنین (You work every day).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit18.lesson03.work_verb_translate.002
     lesson_content_key: prs.a1.unit18.lesson03.combining_job_and_place
-    type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
-    slots:
-      word_one: *occupation
-      word_two: *occupation
-      word_three: *occupation
-      word_four: *occupation
-      word_five: *occupation_workplace
-      word_six: *occupation_workplace
-      word_seven: *occupation_workplace
-      word_eight: *occupation_workplace
-    slot_relations:
-      - {kind: distinct, slots: [word_one, word_two, word_three, word_four]}
-      - {kind: distinct, slots: [word_five, word_six, word_seven, word_eight]}
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
-    feedback_frame: {text: "Match each word to its English meaning -- occupations and workplaces together.", language_code: en, direction: ltr}
+    type: translation
+    # ADDED (this unit had only 1 production-tier template before this
+    # pass, teach_word_translate.001 at lesson05): a bare-word
+    # translation of this unit's own work_verb_form (1: می‌کنین).
+    frame: {text: "{work_verb_form}", language_code: en, direction: ltr, slot_rendering: {work_verb_form: english_gloss}}
+    slots: {work_verb_form: *work_verb_form}
+    answer_derivation: {kind: slot_text, slot: work_verb_form}
+    feedback_frame: {text: "{work_verb_form} is the Dari word for this.", language_code: en, direction: ltr}
+    # (review_pair.002, an 8-slot matching_pairs on the dead
+    # occupation+occupation_workplace tags, DROPPED -- same reasoning
+    # as lesson01/02's dropped matching_pairs above, and even further
+    # from the 6-pair floor.)
 
   # Lesson 4: reading a work profile.
   - content_key: practice.en-prs.prs.a1.unit18.lesson04.work_verb_gloss.001
     lesson_content_key: prs.a1.unit18.lesson04.reading_a_work_profile
     type: multiple_choice
-    frame: {text: "{work_verb_form}", language_code: prs, direction: rtl}
-    slots: {work_verb_form: *work_verb_form}
-    answer_derivation: {kind: slot_gloss, slot: work_verb_form}
-    feedback_frame: {text: "{work_verb_form} combines with کار (کار {work_verb_form}) to mean 'work.'", language_code: en, direction: ltr}
+    # Widened from the bare work_verb_form tag (1 unit-scoped candidate
+    # -- below the 3-option MC floor) to unit_vocab_pool (3:
+    # می‌کنین/درس/می‌دهد).
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit18.lesson04.work_verb_order.002
     lesson_content_key: prs.a1.unit18.lesson04.reading_a_work_profile
     type: word_order
@@ -164,7 +280,8 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "کار {work_verb_form}", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: کار [verb form] (I/you/he-she work[s], depending on the verb form).", language_code: en, direction: ltr}
 
-  # Lesson 5: reading a longer work profile.
+  # Lesson 5: reading a longer work profile. This unit's own teach_word
+  # (درس/می‌دهد) is genuinely introduced here.
   - content_key: practice.en-prs.prs.a1.unit18.lesson05.teach_word_translate.001
     lesson_content_key: prs.a1.unit18.lesson05.reading_a_longer_profile
     type: translation
@@ -172,27 +289,31 @@ templates:
     slots: {teach_word: *teach_word}
     answer_derivation: {kind: slot_text, slot: teach_word}
     feedback_frame: {text: "{teach_word} is the Dari word for this.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit18.lesson05.teach_word_pair.002
-    lesson_content_key: prs.a1.unit18.lesson05.reading_a_longer_profile
-    type: matching_pairs
-    frame: {text: "{word_one} — {word_two}", language_code: prs, direction: rtl}
-    slots: {word_one: *teach_word, word_two: *teach_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+    # (teach_word_pair.002, a 2-slot matching_pairs, was already
+    # below the 6-pair floor and this unit's teach_word tag has only 2
+    # unit-scoped members total -- cannot reach 6. DROPPED per the
+    # recipe's explicit below-floor-matching_pairs guidance; the
+    # structured tier stays alive via this pack's 5 word_order
+    # templates.)
 
   # Lesson 6: a dialogue about someone's job.
   - content_key: practice.en-prs.prs.a1.unit18.lesson06.person_name_gloss.001
     lesson_content_key: prs.a1.unit18.lesson06.job_dialogue
     type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `person_name` tag (0 unit-scoped
+    # candidates -- بشیر/نگار are both reused from earlier units) to
+    # unit_vocab_pool (3: می‌کنین/درس/می‌دهد).
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit18.lesson06.person_occupation_order.002
     lesson_content_key: prs.a1.unit18.lesson06.job_dialogue
     type: word_order
-    frame: {text: "{person_name} {occupation} است", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name, occupation: *occupation}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {occupation} است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "است means is, as in لیلا معلم است (Laila is a teacher).", language_code: en, direction: ltr}
+    # Re-anchored from a 2-slot person_name+occupation combo (both 0
+    # unit-scoped candidates) to teach_word narrowed to its single verb
+    # member (می‌دهد), a deterministic single-candidate anchor.
+    frame: {text: "لیلا درس {gives_word}", language_code: prs, direction: rtl}
+    slots: {gives_word: *teach_word_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "لیلا درس {gives_word}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: لیلا درس می‌دهد (Laila teaches / gives a lesson).", language_code: en, direction: ltr}

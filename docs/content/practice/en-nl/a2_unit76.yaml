@@ -33,7 +33,48 @@ review:
     slot (slotte_single) has exactly 1 course-wide candidate by construction -- re-verified by re-running scripts/_fill_in_blank_ambiguity_check.py
     after adding this file''s PACKS entry, 0 flagged. Needs the standard fresh-context review before import. Same blocking
     dependency as every other en-nl pack: backfill_lexemes_en_nl.py has not actually been run against a real database yet
-    (only --dry-run, which succeeds).'
+    (only --dry-run, which succeeds).
+
+
+    REAUTH 2026-07-24: the ''weekday''/''weekday_pure'' re-use above was
+    measured at A2 COURSE scope (5 members: dinsdag/donderdag/maandag/
+    vrijdag/woensdag), but generate_checkpoint() scopes candidates to
+    unit76''s OWN lessons only, and within unit76 itself only ONE lexeme
+    (donderdag, lesson05) carries either tag -- confirmed DEAD (matching_pairs
+    needs 6, unit-scoped pool has 1) and separately lesson01.listen.002''s
+    ''weekday'' slot had only 1 unit-scoped value (<3 floor) for the same
+    reason: maandag/woensdag are lesson01''s own dialogue words but were
+    FIRST introduced as lexemes in an earlier A1 unit, so unit76 never
+    re-registers them. Fixed both by re-anchoring to tags unit76 genuinely
+    owns: lesson01.listen.002 now uses weekly_schedule_vocab (*id001, same
+    5-member pool already proven live for lesson01.choose.001, well over the
+    3-option floor). lesson05.match.001 now uses a new weekly_schedule_reading
+    preset (*id008, repurposed from the old weekday_pure anchor) built from
+    lesson05''s own 10-member reading vocabulary (druk/woensdagavond/
+    taalcursus/donderdag/sport/kookt/familie/leest/boek, excluding the bare
+    preposition ''In''), widened from 5 to 6 pairs to also clear the 6-pair
+    matching_pairs floor.
+
+    Also fixed two below-floor lesson02 matching_pairs (match.002 and its
+    volume_match.002 duplicate), which declared only 5 slots against a
+    5-member weekly_schedule_vocab-only pool. Rather than reuse
+    sequence_connector (its unit-scoped pool has real case-duplicates within
+    this very unit -- ''Eerst''/''eerst'' and ''daarna''/''Daarna'' both carry it,
+    lesson02 vs lesson06 -- which this file''s own notes above already flagged
+    as a reason to avoid it in generative frames), widened via a new
+    weekly_schedule_wide preset unioning weekly_schedule_vocab with
+    lesson02''s own sequencing_activities tag, part_of_speech [noun, verb]
+    only (excludes Eerst/daarna/Ten/slotte/iets, which are particles/adverbs/
+    pronouns and were the source of the case-duplicate and unanswerable-pair
+    risk). That pool is 9 distinct unit-scoped tokens (rooster/cursus/
+    volgorde/verschil/agenda/ga/sporten/kook/avondeten) with 9 distinct,
+    non-confusable glosses -- comfortably clears 6. Both lesson02
+    matching_pairs templates widened from 5 to 6 pairs using this preset.
+
+    tag_schema updated: removed the no-longer-used weekday/weekday_pure
+    entries, added sequencing_activities and weekly_schedule_reading.
+    Verified 0 DEAD, 0 below-floor via scripts/_practice_unit_scope_check.py
+    after the fix.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -50,8 +91,8 @@ tag_schema:
     semantic:
     - weekly_schedule_vocab
     - sequence_connector
-    - weekday
-    - weekday_pure
+    - sequencing_activities
+    - weekly_schedule_reading
     - drukkeweek_rooster_single
     - drukkeweek_daarna_single
     - drukkeweek_slotte_single
@@ -74,20 +115,23 @@ slot_presets:
     - phrase
     agreement_tags:
       semantic: sequence_connector
-  weekday: &id002
+  weekly_schedule_wide: &id012
     language_code: nl
     part_of_speech:
     - noun
-    - proper_noun
+    - verb
     agreement_tags:
-      semantic: weekday
-  weekday_pure: &id008
+      semantic:
+      - weekly_schedule_vocab
+      - sequencing_activities
+  weekly_schedule_reading: &id008
     language_code: nl
     part_of_speech:
     - noun
-    - proper_noun
+    - verb
+    - adjective
     agreement_tags:
-      semantic: weekday_pure
+      semantic: weekly_schedule_reading
   rooster_single: &id003
     language_code: nl
     part_of_speech: noun
@@ -153,12 +197,12 @@ templates:
     language_code: nl
     direction: ltr
   slots:
-    item: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is the day you heard.'
+    text: '{item} is the word you heard.'
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a2.unit76.lesson01.order.003
@@ -204,15 +248,16 @@ templates:
   lesson_content_key: nl.a2.unit76.lesson02.eerst_werken_dan_sporten
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
   slot_relations:
   - kind: distinct
     slots:
@@ -221,6 +266,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -229,6 +275,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -330,7 +377,7 @@ templates:
   lesson_content_key: nl.a2.unit76.lesson05.ninas_week_lezen
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: nl
     direction: ltr
   slots:
@@ -339,6 +386,7 @@ templates:
     third: *id008
     fourth: *id008
     fifth: *id008
+    sixth: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -347,6 +395,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -355,8 +404,9 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
-    text: Match each day with its English meaning.
+    text: Match each word from this reading with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a2.unit76.lesson05.fill.002
@@ -530,19 +580,16 @@ templates:
   lesson_content_key: nl.a2.unit76.lesson02.eerst_werken_dan_sporten
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first: &id011
-      language_code: nl
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekly_schedule_vocab
-    second: *id011
-    third: *id011
-    fourth: *id011
-    fifth: *id011
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
   slot_relations:
   - kind: distinct
     slots:
@@ -551,6 +598,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -559,6 +607,7 @@ templates:
     - third
     - fourth
     - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en

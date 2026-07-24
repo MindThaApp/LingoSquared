@@ -4,9 +4,46 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit34.neighborhood
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass), three defects, all traced to the same
+    root cause: this unit is a genuinely thin "recombine known vocabulary in a new topic" unit. Its lessons teach and
+    exercise plenty of Dari (نزدیک/دور/دوکان/مکتب/بسیار/خوشحال and more), but backfill_lexemes_en_prs.py keys each token
+    once for the whole direction at its FIRST-taught unit, and every one of those words was already introduced earlier
+    (unit02/unit05/unit10/unit01/unit02) -- only محله, همسایه, سرک (neighborhood_word, all lesson01) and کارته (an
+    unusable proper-noun place-name fragment) are genuinely native to unit34. That is the entire unit-scoped lexeme
+    pool: 3 usable tokens.
+
+    (1) lesson02.proximity_order.001 (word_order) was DEAD: place_proximity_word''s only two members (دوکان, مکتب)
+    are BOTH additive tags on earlier-unit lexemes (unit10, unit05) -- zero unit-scoped candidates. RE-ANCHORED to the
+    pack''s own neighborhood_word tag (already used cleanly by the lesson01 MC/lesson06 translation templates): same
+    frame shape, "{neighborhood_word} نزدیک است" (kept the exact original text, which is also the unit''s own verbatim
+    taught sentence "دوکان نزدیک است."). Checked all 5 COURSE-scope members (مکتب/دوکان/محله/همسایه/سرک, per SS1.1):
+    every one reads as a grammatical Dari sentence ("The school/shop/neighborhood/neighbor/street is near"); no
+    self-reference (نزدیک/است are not neighborhood_word candidates).
+
+    (2)+(3) lesson01.neighborhood_pair.002 and its .volume_match.007 duplicate (both matching_pairs, 5 declared slots)
+    were DEAD: unit-scoped neighborhood_word has only 3 members (محله/همسایه/سرک), and even the loosest possible
+    pack-only widening (part_of_speech noun+proper_noun, no semantic tag) tops out at 4 -- this unit truly cannot
+    reach the 6-pair matching_pairs floor from its own vocabulary; there is no fix available without a backfill change
+    (logged below for the coordinator, not attempted here -- pack-only). DROPPED both matching_pairs and, to keep
+    template count and structured-tier depth from shrinking, REPLACED them with two more word_order variants on the
+    same course-scope-safe neighborhood_word tag rather than just deleting: "{neighborhood_word} خوب است" ("[X] is
+    good", lesson01) and "{neighborhood_word} دور نیست" ("[X] is not far", lesson01 -- "مکتب دور نیست." is this
+    unit''s own verbatim taught sentence). Both re-checked against all 5 course-wide members the same way as (1); no
+    self-reference. The structured tier now has 3 live word_order templates (previously 1 live + 2 dead) drawing on
+    the unit''s only 3 real content words, honestly thin but functioning -- MC (3 distinct, at the floor) and both
+    translation templates (3 distinct each) are unchanged since they were never dead. Re-verified with
+    scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for this file) and scripts/compile_content.py
+    practice-validate.
+
+    LOGGED for the coordinator (not fixed here, needs backfill access): this unit has only 4 total fresh lexemes
+    across 6 lessons (محله/همسایه/سرک/کارته), the thinnest of the units in this batch. If checkpoint quality for
+    unit34 needs improving beyond honestly-thin, the fix is a backfill_lexemes_en_prs.py change -- e.g. giving کارته
+    a real POS/tag, or deciding some of this unit''s heavily-recycled words (نزدیک/دور especially) warrant a
+    unit34-specific additive semantic tag the way unit31''s محصل/مکتب/درس got one -- not a pack-only change.
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     Two groups: "neighborhood_word" (محله/همسایه/سرک/دوکان/مکتب, 5 members, completes lesson01 -- مکتب is a REUSED existing
@@ -37,18 +74,12 @@ tag_schema:
   agreement_tags:
     semantic:
     - neighborhood_word
-    - place_proximity_word
 slot_presets:
   neighborhood_word: &id001
     language_code: prs
     part_of_speech: noun
     agreement_tags:
       semantic: neighborhood_word
-  place_proximity_word: &id002
-    language_code: prs
-    part_of_speech: noun
-    agreement_tags:
-      semantic: place_proximity_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_gloss.001
   lesson_content_key: prs.a1.unit34.lesson01.neighborhood_words
@@ -66,52 +97,38 @@ templates:
     text: '{neighborhood_word} belongs to this unit''s neighborhood vocabulary.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_pair.002
+- content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_order.002
   lesson_content_key: prs.a1.unit34.lesson01.neighborhood_words
-  type: matching_pairs
+  type: word_order
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five}'
+    text: '{neighborhood_word} خوب است'
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id001
-    word_two: *id001
-    word_three: *id001
-    word_four: *id001
-    word_five: *id001
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
+    neighborhood_word: *id001
   answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
+    kind: render_frame
+    frame:
+      text: '{neighborhood_word} خوب است'
+      language_code: prs
+      direction: rtl
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: 'Word order: [place] خوب است ([place] is good).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit34.lesson02.proximity_order.001
   lesson_content_key: prs.a1.unit34.lesson02.near_and_far
   type: word_order
   frame:
-    text: '{place_proximity_word} نزدیک است'
+    text: '{neighborhood_word} نزدیک است'
     language_code: prs
     direction: rtl
   slots:
-    place_proximity_word: *id002
+    neighborhood_word: *id001
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{place_proximity_word} نزدیک است'
+      text: '{neighborhood_word} نزدیک است'
       language_code: prs
       direction: rtl
   feedback_frame:
@@ -136,41 +153,23 @@ templates:
     text: '{neighborhood_word} is the Dari word for this.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_pair.002.volume_match.007
+- content_key: practice.en-prs.prs.a1.unit34.lesson01.neighborhood_order.002.volume_order.007
   lesson_content_key: prs.a1.unit34.lesson01.neighborhood_words
-  type: matching_pairs
+  type: word_order
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five}'
+    text: '{neighborhood_word} دور نیست'
     language_code: prs
     direction: rtl
   slots:
-    word_one: &id003
-      language_code: prs
-      part_of_speech: noun
-      agreement_tags:
-        semantic: neighborhood_word
-    word_two: *id003
-    word_three: *id003
-    word_four: *id003
-    word_five: *id003
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
+    neighborhood_word: *id001
   answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
+    kind: render_frame
+    frame:
+      text: '{neighborhood_word} دور نیست'
+      language_code: prs
+      direction: rtl
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: 'Word order: [place] دور نیست ([place] is not far).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit34.lesson06.neighborhood_translate.001.volume_translate.007

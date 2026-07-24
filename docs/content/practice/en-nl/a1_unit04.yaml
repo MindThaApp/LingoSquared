@@ -4,7 +4,7 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit04.time
 review:
-  status: reviewed
+  status: unreviewed
   required_next_reviewer: null
   fresh_context: "true"
   notes: >-
@@ -28,6 +28,37 @@ review:
     weekdays. No self-reference, no capitalization leaks, no jargon leaks, no
     stray YAML booleans. Compiler validation re-run together with units
     01-03, 05-09: 0 errors/0 warnings.
+
+    **Re-authoring fix, 2026-07-24 (unit-scope DEAD-template pass)**: the
+    "weekday tag produces correct Dutch compounds" claim above was never
+    actually reachable at checkpoint scope -- `weekday` is entirely
+    unit03's own vocabulary (maandag..zondag are all introduced by
+    nl.a1.unit03's lessons); unit04 lesson06
+    (`afspreken_bij_het_taalcafe`) introduces zero bare weekday tokens of
+    its own, so `generate_checkpoint()` (unit-scoped) always saw 0
+    candidates for both `lesson06.order.001` and `lesson06.translate.003`.
+    This is exactly the "slot anchored to an earlier unit's vocabulary"
+    defect -- confirmed via iter_specs(): lesson06's own real vocabulary is
+    only `dus`/`hoe`/`Dan`/`vrijdagmiddag`, the last already the fused
+    Friday+afternoon compound the lesson actually teaches (not a
+    generic weekday+middag pattern). Re-anchoring the SAME frame/type was
+    not viable: any semantic tag broad enough to have a unit-scoped
+    candidate (`cafe_meetup_time`/`time_of_day`) pools course-wide members
+    (taalcafé, twee, uur, kwart, workshop, ...) that are not grammatical in
+    "Prima, tot {item}middag!" or a bare "Prima, tot {item}!" (checked at
+    course scope, not just unit scope). REPLACED both with new templates
+    anchored to lesson06's own vocabulary instead: `lesson06.choose.001`
+    (multiple_choice, recognition) unions `cafe_meetup_time` across all of
+    unit04's own lessons (uur/kwart/workshop/dus/hoe/Dan/vrijdagmiddag = 7
+    distinct glosses, well past the 3-option floor; safe because a bare
+    `{item}` MC frame has no grammaticality-in-frame requirement) and a
+    rebuilt `lesson06.translate.003` (translation, production, bare-word
+    shape) restricted to `cafe_meetup_time` nouns only
+    (uur/kwart/workshop/vrijdagmiddag = 4 distinct) to avoid asking the
+    learner to "translate" bare particles/adverbs. This incidentally moves
+    the pack's recognition tier from 1 live template (lesson04's
+    listen_select alone) to 2 -- still thin, but a pre-existing gap outside
+    this fix's scope, noted here for whichever pass next touches this pack.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -144,23 +175,30 @@ templates:
     slots: {item: *number}
     answer_derivation: {kind: render_frame, frame: {text: "De workshop begint om kwart voor {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "Use om kwart voor {item} for this workshop time.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit04.lesson06.order.001
+  - content_key: practice.en-nl.nl.a1.unit04.lesson06.choose.001
     lesson_content_key: nl.a1.unit04.lesson06.afspreken_bij_het_taalcafe
-    type: word_order
-    frame: {text: "Prima, tot {item}middag!", language_code: nl, direction: ltr}
-    slots: {item: *weekday}
-    answer_derivation: {kind: render_frame, frame: {text: "Prima, tot {item}middag!", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item}middag names the afternoon of that weekday.", language_code: en, direction: ltr}
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots:
+      item: {language_code: nl, part_of_speech: [noun, particle, adverb], agreement_tags: {semantic: cafe_meetup_time}}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is used when arranging to meet at the language café.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson06.translate.003
     lesson_content_key: nl.a1.unit04.lesson06.afspreken_bij_het_taalcafe
     type: translation
     frame:
-      text: "Great, see you on {item} afternoon!"
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *weekday}
-    answer_derivation: {kind: render_frame, frame: {text: "Prima, tot {item}middag!", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Dutch joins {item} and middag into one word.", language_code: en, direction: ltr}
+    slots:
+      item: {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: cafe_meetup_time}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is meetup vocabulary from this unit.", language_code: en, direction: ltr}

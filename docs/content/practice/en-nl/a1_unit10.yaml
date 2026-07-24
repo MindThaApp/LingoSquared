@@ -4,7 +4,7 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit10.routines
 review:
-  status: reviewed
+  status: unreviewed
   required_next_reviewer: null
   fresh_context: "false"
   notes: >-
@@ -49,6 +49,26 @@ review:
     closest earlier lesson already proven to resolve for the same tag (used
     by that lesson's own template above) -- a safe, no-forward-reference
     anchor.
+
+    **Re-authoring fix, 2026-07-24 (unit-scope DEAD-template pass)**: the
+    "routine_verb_infinitive=7 (all lowercase bare infinitives, no ...
+    homograph contamination)" candidate count above was measured without
+    isolating provenance by unit -- `eten` (the 7th verb in the claimed
+    opstaan/aankleden/ontbijten/werken/eten/afwassen/slapen set) is a real
+    homograph collision (defect 1.29/§0.1 class, not sense-related here but
+    provenance-related): `eten`'s canonical `iter_specs()` lexeme record is
+    classified under `nl.a1.unit06.lesson04.wat_wilt_u` (already introduced
+    there for food-ordering), so `routine_verb_infinitive` has only 6
+    unit10-scoped members (opstaan/aankleden/ontbijten/werken/afwassen/
+    slapen), not 7. `lesson01.match.003` declared 7 slots against a
+    6-member unit-scoped pool and could never generate at checkpoint scope.
+    Fixed by reducing the template to 6 slots (first..sixth), matching the
+    real unit-scoped pool exactly at the 6-pair floor. `eten` remains a
+    valid member of the tag for Endless Practice (course scope still
+    includes it) and for this pack's other `routine_verb_infinitive`
+    templates (choose/listen/translate), none of which were flagged --
+    they all only need >=1 (translation) or >=3 (MC/listen) candidates,
+    comfortably met by the 6 that remain even before counting `eten`.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -79,10 +99,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit10.lesson01.match.003
     lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}", language_code: nl, direction: ltr}
-    slots: {first: *routine_verb_infinitive, second: *routine_verb_infinitive, third: *routine_verb_infinitive, fourth: *routine_verb_infinitive, fifth: *routine_verb_infinitive, sixth: *routine_verb_infinitive, seventh: *routine_verb_infinitive}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *routine_verb_infinitive, second: *routine_verb_infinitive, third: *routine_verb_infinitive, fourth: *routine_verb_infinitive, fifth: *routine_verb_infinitive, sixth: *routine_verb_infinitive}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each routine verb with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit10.lesson01.translate.004
     lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten

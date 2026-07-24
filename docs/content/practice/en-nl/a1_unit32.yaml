@@ -45,16 +45,62 @@ review:
     (single-candidate), word_order x3, translation x5. Needs the standard
     fresh-context review before import. Blocking dependency, same as every
     other en-nl pack: backfill_lexemes_en_nl.py has not actually been run
-    against a real database yet."
+    against a real database yet.
+
+    REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, pack-only, no
+    backfill/realization edits): this file's own notes already admit
+    freq_adverb is entirely a REUSE of a1_unit29's altijd/vaak/soms/nooit --
+    what that framing missed is generate_checkpoint() only loads THIS
+    unit's own lexemes, and unit32 introduces ZERO freq_adverb-tagged
+    tokens of its own. scripts/_practice_unit_scope_check.py confirmed all
+    5 uses were DEAD: lesson02.translate.001/order.002/choose.003 (freq_adverb
+    alone, 0 unit-scoped candidates), lesson06.order.002 (same), and
+    lesson05.match.001's sport_or_freq union (0 contribution from
+    freq_adverb -> only sport_noun's 4 tokens against an 8-slot need).
+    Genuinely thin lesson: lesson02 ('hoe_vaak_sport_je') introduces no
+    vocabulary of its own beyond the adjective 'specifieke' (a grammar-note
+    word, not usable as a floor-clearing pool), and lesson06
+    ('taalcafe_samen_sporten') only 'proberen'. Rather than drop these 4
+    templates outright (recipe: only drop if the pack stays viable across
+    ALL THREE tiers -- pre-fix the structured tier already had only 2 live
+    templates against the recipe's >=3 floor, so a bare drop would have
+    made it worse, not better), re-anchored all 4 to this unit's own
+    sport_noun (4-member, already used elsewhere in this pack) while
+    keeping each lesson's original 'frequency' framing alive as FIXED,
+    non-tested literal text in the frame -- 'Ik doe vaak aan {item}.'
+    (lesson02) / 'Ik doe altijd aan {item}.' (lesson06) -- vaak/altijd are
+    review vocabulary from earlier A1 units, exactly like every other
+    surrounding function word in this pack's frames (heb/een/heeft/etc.),
+    never part of the tested slot's own candidate pool, so this is NOT the
+    forbidden untaught-vocabulary-in-the-pool padding -- only the SLOT
+    (sport_noun) is unit-native and generative. Checked self-reference:
+    neither 'vaak' nor 'altijd' is a sport_noun candidate. lesson05.match.001
+    also re-pooled: dropped the freq_adverb half of its union entirely and
+    replaced sport_or_freq with a new `unit_content_word` preset
+    (part_of_speech: [noun, adjective, adverb], no semantic tag -- SS3.1c,
+    safe here since matching_pairs has no literal frame text to be
+    ungrammatical against at any scope), which pools this unit's own 11
+    distinct content words across all 6 lessons (voetbal/yoga/hardlopen/
+    zwemmen/huis/specifieke/Beide/dicht/rustig/hard/bijna, all distinct
+    english_gloss text, no collisions) against the template's 8 slots.
+    Removed the now-unused freq_adverb and sport_or_freq tag_schema
+    entries/presets. sport_dicht_single and sport_noun's other standalone
+    uses (lesson01, lesson03, lesson04, lesson06.translate.001) are
+    untouched and were already unit-scope-satisfiable. Template count
+    unchanged at 14 (this file's own 2026-07-09 notes above say '15
+    templates' but the actual templates: list has always had 14 -- a
+    pre-existing off-by-one in the prose, not something this pass
+    introduced); tier balance after fix: recognition 5 live (was 4),
+    structured 5 live (was 2), production 4 live (was 3). Post-fix: 0 DEAD,
+    0 FLOOR for this pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [sport_noun, freq_adverb, sport_dicht_single]
+    semantic: [sport_noun, sport_dicht_single]
 slot_presets:
   sport_noun: &sport_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: sport_noun}}
-  freq_adverb: &freq_adverb {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: freq_adverb}}
   sport_dicht_single: &sport_dicht_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: sport_dicht_single}}
-  sport_or_freq: &sport_or_freq {language_code: nl, part_of_speech: [noun, adverb], agreement_tags: {semantic: [sport_noun, freq_adverb]}}
+  unit_content_word: &unit_content_word {language_code: nl, part_of_speech: [noun, adjective, adverb]}
 templates:
   - content_key: practice.en-nl.nl.a1.unit32.lesson01.choose.001
     lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
@@ -99,22 +145,22 @@ templates:
     lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
     type: translation
     frame:
-      text: "I {item} do football."
+      text: "I often do {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *freq_adverb}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik doe {item} aan voetbal.", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe vaak aan {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe vaak aan {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit32.lesson02.order.002
     lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
     type: word_order
-    frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}
-    slots: {item: *freq_adverb}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik doe {item} aan voetbal. -- I {item} do football.", language_code: en, direction: ltr}
+    frame: {text: "Ik doe vaak aan {item}.", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe vaak aan {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe vaak aan {item}. -- I often do {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit32.lesson02.choose.003
     lesson_content_key: nl.a1.unit32.lesson02.hoe_vaak_sport_je
     type: multiple_choice
@@ -124,9 +170,9 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *freq_adverb}
+    slots: {item: *sport_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a frequency word.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a sport from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit32.lesson03.listen.001
     lesson_content_key: nl.a1.unit32.lesson03.ik_sport_graag
     type: listen_select
@@ -165,7 +211,7 @@ templates:
     lesson_content_key: nl.a1.unit32.lesson05.lotte_fenna_sport
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
-    slots: {first: *sport_or_freq, second: *sport_or_freq, third: *sport_or_freq, fourth: *sport_or_freq, fifth: *sport_or_freq, sixth: *sport_or_freq, seventh: *sport_or_freq, eighth: *sport_or_freq}
+    slots: {first: *unit_content_word, second: *unit_content_word, third: *unit_content_word, fourth: *unit_content_word, fifth: *unit_content_word, sixth: *unit_content_word, seventh: *unit_content_word, eighth: *unit_content_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}
@@ -185,7 +231,7 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit32.lesson06.order.002
     lesson_content_key: nl.a1.unit32.lesson06.taalcafe_samen_sporten
     type: word_order
-    frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}
-    slots: {item: *freq_adverb}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik doe {item} aan voetbal.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik doe {item} aan voetbal. -- I {item} do football.", language_code: en, direction: ltr}
+    frame: {text: "Ik doe altijd aan {item}.", language_code: nl, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik doe altijd aan {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik doe altijd aan {item}. -- I always do {item}.", language_code: en, direction: ltr}
