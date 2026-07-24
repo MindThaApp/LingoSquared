@@ -91,14 +91,42 @@ review:
     nothing new to flag in this pack. Still carries this pack's own
     fresh-context review status from before this pass -- a fresh
     re-review of specifically these 8 new templates has not happened yet.
+
+    Unit-scope reauth pass (2026-07-24): scripts/_practice_unit_scope_check.py caught that the "20 distinct A1 candidates"
+    for count_plural_no_hundred above was measured course-wide (across the whole A1 level via _practice_slot_check.py), not
+    at checkpoint scope. generate_checkpoint() only loads a unit's own lexemes, and count_plural_no_hundred is entirely
+    unit03's own tag (zero_to_ten/eleven_to_hundred) -- unit08 introduces no numbers of its own, so count_order/count_gloss/
+    count_translate were all DEAD (0 unit-scoped candidates), the exact cross-unit-leak defect this reauth pass exists to
+    catch. Fixes, all pack-only, no backfill/realization edits. (1) count_gloss and count_translate DROPPED -- unit08 has
+    no numeral vocabulary of its own to re-anchor them to, and quantity_unit/food_plural MC and translation coverage already
+    exist elsewhere in this pack, so dropping does not reduce checkpoint viability. (2) count_order re-anchored (renamed
+    quantity_order) from count_plural_no_hundred to quantity_unit -- itself entirely unit08-native (pound/dozen/bottle/bag/
+    kilo, no cross-unit growth), frame changed from "Can I have {item} pounds, please?" to "Can I have a {item}, please?"
+    (hand-checked grammatical for all 5: pound/dozen/bottle/bag/kilo). (3) A new food_shop preset was added, unioning
+    quantity_unit with food_plural, part_of_speech noun -- both tags are 100% unit08-native so this is a same-unit union,
+    not a cross-unit leak (per AUTHORING_GUIDE #3.1a); at unit scope it yields pound/dozen/bottle/bag/kilo/eggs/tomatoes,
+    7 distinct with no confusable glosses. food_gloss, food_plural_listen (lesson02), food_plural_pair (lesson03, widened
+    from 3 declared/2 available -- DEAD -- to 6 declared/7 available), food_plural_gloss (lesson04), and quantity_pair
+    (lesson01, widened from 5 to 6 declared/7 available, clearing the 6-pair floor for the first time) were all re-anchored
+    from the food_plural-only preset (2 unit-scoped candidates: eggs/tomatoes, since "apples" is unit03's own token) to
+    food_shop. All four are bare-word frames ({food_plural}/{quantity_one}-style, no literal sentence text), so the wider
+    course-wide pool (8 distinct once "apples" is added back in at course scope) carries no grammaticality risk -- only
+    bare-word MC/listen/translate/matching_pairs are widened this way; the one literal-text frame (quantity_order's "Can
+    I have a {item}, please?") deliberately stays on the narrower, non-cross-unit-leaking quantity_unit alone. (4) A new
+    food_shop_translate template was added at lesson02 (translation, bare-word, food_shop pool) so lesson02 keeps a
+    production-tier template after count_translate was dropped. count_plural_no_hundred removed from tag_schema (no
+    longer referenced anywhere in this file). Verified: scripts/_practice_unit_scope_check.py now reports 0 DEAD and 0
+    below-floor for this pack; compile_content.py practice-validate 0 errors; scripts/check_dari_register.py no new
+    findings (new Dari strings reuse this file's own existing phrasing, changed only in the topic noun). The REAL FINDING
+    above (overlay پونډ -> پوند) remains open and unfixed -- still out of this pack-only task's scope.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [quantity_unit, food_plural, count_plural_no_hundred]
+    semantic: [quantity_unit, food_plural]
 slot_presets:
   quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
   food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
-  count_plural_no_hundred: &count_plural_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural_no_hundred}}
+  food_shop: &food_shop {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit, food_plural]}}
 templates:
   - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_gloss.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
@@ -118,10 +146,10 @@ templates:
     lesson_content_key: en.a1.unit08.lesson01.quantities
     type: matching_pairs
     frame: {text: "{quantity_one} — {quantity_two}", language_code: en, direction: ltr}
-    slots: {quantity_one: *quantity_unit, quantity_two: *quantity_unit, quantity_three: *quantity_unit, quantity_four: *quantity_unit, quantity_five: *quantity_unit}
-    slot_relations: [{kind: distinct, slots: [quantity_one, quantity_two, quantity_three, quantity_four, quantity_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [quantity_one, quantity_two, quantity_three, quantity_four, quantity_five]}
-    feedback_frame: {text: "هر واحد اندازه‌گیری را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+    slots: {quantity_one: *food_shop, quantity_two: *food_shop, quantity_three: *food_shop, quantity_four: *food_shop, quantity_five: *food_shop, quantity_six: *food_shop}
+    slot_relations: [{kind: distinct, slots: [quantity_one, quantity_two, quantity_three, quantity_four, quantity_five, quantity_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [quantity_one, quantity_two, quantity_three, quantity_four, quantity_five, quantity_six]}
+    feedback_frame: {text: "هر واژهٔ خرید را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit08.lesson01.quantity_translate.004
     lesson_content_key: en.a1.unit08.lesson01.quantities
     type: translation
@@ -133,35 +161,28 @@ templates:
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: multiple_choice
     frame: {text: "{food_plural}", language_code: en, direction: ltr}
-    slots: {food_plural: *food_plural}
+    slots: {food_plural: *food_shop}
     answer_derivation: {kind: slot_gloss, slot: food_plural}
     feedback_frame: {text: "معنای دری {food_plural} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit08.lesson02.count_order.003
+  - content_key: practice.prs-en.en.a1.unit08.lesson02.quantity_order.003
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: word_order
-    frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}
-    slots: {item: *count_plural_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} pounds, please?", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} عددِ مقدارِ درخواست‌شده در همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit08.lesson02.count_gloss.004
-    lesson_content_key: en.a1.unit08.lesson02.asking_prices
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *count_plural_no_hundred}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنای دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit08.lesson02.count_translate.005
+    frame: {text: "Can I have a {item}, please?", language_code: en, direction: ltr}
+    slots: {item: *quantity_unit}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have a {item}, please?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واحد اندازه‌گیری درخواست‌شده در همی جمله است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit08.lesson02.food_shop_translate.007
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *count_plural_no_hundred}
+    slots: {item: *food_shop}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} معادل انگلیسی این عدد است.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ خرید است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit08.lesson02.food_plural_listen.006
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: listen_select
     frame: {text: "{food_plural}", language_code: en, direction: ltr}
-    slots: {food_plural: *food_plural}
+    slots: {food_plural: *food_shop}
     answer_derivation: {kind: slot_gloss, slot: food_plural}
     feedback_frame: {text: "واژه‌ای که شنیدین {food_plural} بود.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit08.lesson03.quantity_gloss.001
@@ -182,10 +203,10 @@ templates:
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: matching_pairs
     frame: {text: "{food_plural_one} — {food_plural_two}", language_code: en, direction: ltr}
-    slots: {food_plural_one: *food_plural, food_plural_two: *food_plural, food_plural_three: *food_plural}
-    slot_relations: [{kind: distinct, slots: [food_plural_one, food_plural_two, food_plural_three]}]
-    answer_derivation: {kind: matching_pairs, slots: [food_plural_one, food_plural_two, food_plural_three]}
-    feedback_frame: {text: "هر خوراکه را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
+    slots: {food_plural_one: *food_shop, food_plural_two: *food_shop, food_plural_three: *food_shop, food_plural_four: *food_shop, food_plural_five: *food_shop, food_plural_six: *food_shop}
+    slot_relations: [{kind: distinct, slots: [food_plural_one, food_plural_two, food_plural_three, food_plural_four, food_plural_five, food_plural_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [food_plural_one, food_plural_two, food_plural_three, food_plural_four, food_plural_five, food_plural_six]}
+    feedback_frame: {text: "هر واژهٔ خرید را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit08.lesson03.quantity_listen.004
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: listen_select
@@ -211,6 +232,6 @@ templates:
     lesson_content_key: en.a1.unit08.lesson04.market_dialogue
     type: multiple_choice
     frame: {text: "{food_plural}", language_code: en, direction: ltr}
-    slots: {food_plural: *food_plural}
+    slots: {food_plural: *food_shop}
     answer_derivation: {kind: slot_gloss, slot: food_plural}
     feedback_frame: {text: "معنای دری {food_plural} را انتخاب کنین.", language_code: prs, direction: rtl}

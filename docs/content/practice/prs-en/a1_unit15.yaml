@@ -20,10 +20,38 @@ review:
     is UNREVIEWED (Codex was usage- limited at authoring time) -- needs the standard fresh-context review before import.
 
     matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 4
-    slots (the full course-wide payment_method noun pool: cash/card/credit/debit), per the pre-computed retrofit table.'
+    slots (the full course-wide payment_method noun pool: cash/card/credit/debit), per the pre-computed retrofit table.
+
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found 6 of the 15 templates
+    DEAD at checkpoint scope: total_order.002, total_translate.004, its_order.002, its_translate.004, and their two
+    volume_order duplicates all relied on `number_no_hundred`, a tag whose entire 21-member course-wide pool is established
+    by unit03 -- unit15 introduces zero number_no_hundred-tagged lexemes of its own (confirmed via the iter_specs unit
+    filter: unit15''s own tokens are cash/card/credit/debit/total/cards/pay/by/tax/1/10, and only 1/10 carry any numeric
+    role, tagged bare `symbol`, never `number_no_hundred`). generate_checkpoint() only loads unit15''s own lexemes, so these
+    6 had 0 unit-scoped candidates and could never generate -- textbook recipe DO-NOT #2. `payment_method` (cash/card/
+    credit/debit) and `card_type` (credit/debit) are, by contrast, both FULLY unit-native AND course-wide-identical (no
+    other unit anywhere in the a1 course reuses either tag), so the pack''s other 9 templates (all payment_method/card_type
+    -based) were never at risk and are unchanged.
+
+    PACK-ONLY fix, re-anchoring every dead template to unit15''s own vocabulary, same type/tier each time: the two
+    word_order templates (total_order.002, its_order.002) and their two volume_order duplicates now use `payment_method`
+    (course-safe: "I''ll pay by {item}" / "Can I pay by {item}" / "I paid by {item} today" are all grammatical for every
+    one of cash/card/credit/debit, so this holds at COURSE scope too, not just unit scope -- SS1.1). The two translation
+    templates (total_translate.004, its_translate.004) were fixed-sentence render_frame translations keyed to the same
+    dead tag; rather than re-anchor a fixed-sentence prompt to a 4-member slot (which would recreate the underdetermined-
+    production-prompt defect, DO-NOT #11), they were converted to BARE-WORD translations instead -- safe with any pool
+    width since the prompt varies with the answer (SS6.6a). total_translate.004 now bare-translates the unit''s own
+    untagged noun pool (POS=noun with no semantic filter legitimately also matches the payment_method nouns, giving 7
+    distinct candidates: cash/card/credit/debit/total/cards/tax); its_translate.004.volume_order.010 bare-translates the
+    unit''s only native verb, "pay" (1 candidate -- fine, bare translation has no floor). Read every gloss in both new
+    pools (SS0.1); none collide or duplicate. Structured tier is unchanged in template type (word_order using payment_method,
+    plus the existing card_type word_order and the existing payment_method matching_pairs); production tier gains genuine
+    coverage at lesson03/lesson04 instead of dead weight. Verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0
+    errors via compile_content.py practice-validate.'
 tag_schema:
   part_of_speech:
   - noun
+  - verb
   agreement_tags:
     semantic:
     - payment_method
@@ -199,40 +227,39 @@ templates:
   lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
   type: word_order
   frame:
-    text: The total is {item} dollars
+    text: I'll pay by {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id003
+    item: *id001
   answer_derivation:
     kind: render_frame
     frame:
-      text: The total is {item} dollars
+      text: I'll pay by {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} مبلغ جمع کل روی رسید است.'
+    text: '{item} روشی است که با آن پرداخت می‌کنین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson03.total_translate.004
   lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
   type: translation
   frame:
-    text: جمع کل {item} دالر است.
+    text: '{item}'
     language_code: prs
     direction: rtl
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id003
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: The total is {item} dollars
+    item:
       language_code: en
-      direction: ltr
+      part_of_speech: noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: The total is {item} dollars یعنی جمع کل {item} دالر است.
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson04.payment_listen.001
@@ -255,85 +282,75 @@ templates:
   lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
   type: word_order
   frame:
-    text: It's {item} dollars
+    text: Can I pay by {item}
     language_code: en
     direction: ltr
   slots:
-    item: *id003
+    item: *id001
   answer_derivation:
     kind: render_frame
     frame:
-      text: It's {item} dollars
+      text: Can I pay by {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} مبلغی است که در همی جواب آمده.'
+    text: '{item} روشی است که برای پرداخت پرسیده می‌شه.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson04.its_translate.004
   lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
   type: translation
   frame:
-    text: '{item} دالر است.'
+    text: '{item}'
     language_code: prs
     direction: rtl
     slot_rendering:
       item: english_gloss
   slots:
-    item: *id003
+    item: *id001
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: It's {item} dollars
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: It's {item} dollars یعنی {item} دالر است.
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson03.total_translate.004.volume_order.009
   lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
   type: word_order
   frame:
-    text: The total is {item} dollars
+    text: I paid by {item} today
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: number_no_hundred
+    item: *id001
   answer_derivation:
     kind: render_frame
     frame:
-      text: The total is {item} dollars
+      text: I paid by {item} today
       language_code: en
       direction: ltr
   feedback_frame:
-    text: The total is {item} dollars
+    text: I paid by {item} today
     language_code: en
     direction: ltr
 - content_key: practice.prs-en.en.a1.unit15.lesson04.its_translate.004.volume_order.010
   lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
-  type: word_order
+  type: translation
   frame:
-    text: It's {item} dollars
-    language_code: en
-    direction: ltr
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
   slots:
     item:
       language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: number_no_hundred
+      part_of_speech: verb
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: It's {item} dollars
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: It's {item} dollars
-    language_code: en
-    direction: ltr
+    text: '{item} معادل انگلیسی این واژهٔ دری است.'
+    language_code: prs
+    direction: rtl

@@ -40,41 +40,83 @@ review:
     the matching_pairs template widened from 2 to 5 slots (the full
     course-wide preference_verb pool: like/don't/prefer/love/hate), per
     the pre-computed retrofit table.
+
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/
+    _practice_unit_scope_check.py found verb_pair.003 DEAD and 5 more
+    templates (verb_meaning.001, verb_listen.002, verb_listen.004,
+    verb_meaning.004, verb_listen.001) below the >=3 MC/listen floor,
+    all because of `preference_verb`: its course-wide pool is 5 (like/
+    don't/prefer/love/hate) but unit19 itself only introduces 2 of them
+    natively -- prefer and hate (lesson01). "like" and "don't" are
+    established in an earlier unit (per this file's own note above,
+    "like" carries a unit07 sense too) and "love" turned out to be
+    native to unit17, not unit19 -- confirmed via the iter_specs unit
+    filter: unit19's own tokens are prefer/hate/calmer/very/strong/why/
+    think/prefers/thinks, and only prefer/hate carry the preference_verb/
+    preference_verb_full tags. generate_checkpoint() only loads unit19's
+    own lexemes, so the matching_pairs' 5 declared slots had only 2
+    real candidates (DEAD) and the 5 MC/listen templates had only 2
+    distinct answers (below the 3-option floor) -- recipe DO-NOT #2.
+    preference_verb_full's own 6 templates (tea_order/coffee_order/
+    verb_full_translate x3) were never at risk: they have no candidate
+    floor (word_order/translation) and preference_verb_full's course-wide
+    pool (hate/like/love/prefer) is already verified grammatical in
+    "I {item} tea/coffee" -- unchanged here.
+
+    PACK-ONLY fix: dropped `preference_verb` and re-anchored all 6
+    affected templates to a new untagged content_pool (verb + adjective +
+    adverb, no semantic filter) -- unit19's own calmer/very/strong/why/
+    think/prefers/thinks, unioned with the native prefer/hate, gives 9
+    distinct unit-scoped candidates (prefer/hate/calmer/very/strong/why/
+    think/prefers/thinks), comfortably clearing both the 3-option
+    MC/listen floor and the matching_pairs need (widened from 5 to 9
+    slots, within the AUTHORING_GUIDE.md #16 6-12 range instead of
+    below it). Bare `{item}` frames (multiple_choice/listen_select) and
+    matching_pairs impose no literal-frame grammaticality constraint, so
+    this widening is course-scope-safe by construction (SS1.1) -- no
+    sentence needs to stay grammatical for every pool member. Read every
+    gloss in the new pool (SS0.1): prefer/prefers and think/thinks are
+    base-form/3rd-person-singular conjugation pairs of the same verb
+    (an acceptable singular/plural-style discrimination per recipe SS6.3,
+    not a paraphrase collision), and all 9 glosses are otherwise
+    distinct. Verified 0 DEAD and 0 below-floor via scripts/
+    _practice_unit_scope_check.py and 0 errors via compile_content.py
+    practice-validate.
 tag_schema:
-  part_of_speech: [verb]
+  part_of_speech: [verb, adjective, adverb]
   agreement_tags:
-    semantic: [preference_verb, preference_verb_full]
+    semantic: [preference_verb_full]
 slot_presets:
-  preference_verb: &preference_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
+  content_pool: &content_pool {language_code: en, part_of_speech: [verb, adjective, adverb]}
   preference_verb_full: &preference_verb_full {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb_full}}
 templates:
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_meaning.001
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} فعل بیان ترجیح همی درس است.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "{item} واژه‌ای از همی درس است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_listen.002
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_pair.003
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: matching_pairs
     frame: {text: "{first_verb} — {second_verb}", language_code: en, direction: ltr}
-    slots: {first_verb: *preference_verb, second_verb: *preference_verb, third_verb: *preference_verb, fourth_verb: *preference_verb, fifth_verb: *preference_verb}
-    slot_relations: [{kind: distinct, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb]}
-    feedback_frame: {text: "دو واژهٔ ترجیح را به معنای دری آن‌ها وصل کنین.", language_code: prs, direction: rtl}
+    slots: {first_verb: *content_pool, second_verb: *content_pool, third_verb: *content_pool, fourth_verb: *content_pool, fifth_verb: *content_pool, sixth_verb: *content_pool, seventh_verb: *content_pool, eighth_verb: *content_pool, ninth_verb: *content_pool}
+    slot_relations: [{kind: distinct, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb, sixth_verb, seventh_verb, eighth_verb, ninth_verb]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb, sixth_verb, seventh_verb, eighth_verb, ninth_verb]}
+    feedback_frame: {text: "هر واژه را به معنای دری آن وصل کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_translate.004
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson02.tea_order.001
@@ -95,7 +137,7 @@ templates:
     lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson03.coffee_order.001
@@ -116,14 +158,14 @@ templates:
     lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} فعل بیان ترجیح است.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "{item} واژه‌ای از همی درس است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson04.verb_listen.001
     lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *preference_verb}
+    slots: {item: *content_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson04.tea_order.002

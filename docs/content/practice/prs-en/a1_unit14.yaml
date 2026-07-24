@@ -63,82 +63,152 @@ review:
     new multiple_choice, >=2 for matching_pairs) and
     scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS
     flags) before import. New count: 10 templates (7 -> 10).
+
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/
+    _practice_unit_scope_check.py found ALL 10 of the templates above
+    DEAD at checkpoint scope: `generate_checkpoint()` only loads a
+    unit's OWN lexemes, and unit14 introduces zero lexemes carrying
+    `person_name` or `place` -- both tags are 100% established in
+    earlier units (person_name in unit01/02, place in unit09), which is
+    exactly recipe DO-NOT #2. Confirmed via the iter_specs unit-filter:
+    every one of unit14's own 16 introduced tokens (free/tonight/sorry/
+    repeat/that/speak/more/slowly/hear/well/6pm/message/suggest/
+    meeting/place/about) carries an EMPTY agreement_tags dict -- note
+    the token literally spelled "place" (lesson03, "a good place to
+    meet") is a generic noun with no semantic tag of its own; it is NOT
+    a member of the `place` tag (bank/hospital/park/pharmacy/
+    restaurant), which is why the old pool was genuinely empty here.
+
+    PACK-ONLY fix: no native semantic tag survives to re-anchor to, so
+    every template was rebuilt on unit14's own vocabulary using bare
+    part_of_speech-only slots (recipe SS3.1c), dropping person_name/place
+    entirely. Course-wide POS class sizes on the whole a1 course rule
+    out any literal-text sentence frame built on an untagged POS slot
+    (noun=512, verb=317, adjective=149, adverb=61 course-wide) --
+    SS1.1's course-scope grammaticality rule would require EVERY
+    course-wide member of that class to fit the sentence, which is
+    neither testable nor plausible. So word_order and fixed-sentence
+    translation (both course-scope-sensitive) were dropped for this
+    unit; recognition (multiple_choice/listen_select), matching_pairs
+    and BARE-WORD translation are all safe with a broad POS-only pool
+    (no literal frame text besides the slot itself, so course-scope
+    breadth is a non-issue) and now carry the whole pack.
+
+    New unit-wide pools (SS1.1 UNIT scope: pooled across all 4 lessons,
+    each anchored template still points at one lesson_content_key):
+    noun_pool = tonight/6pm/message/meeting/place (5, lesson01+03);
+    verb_pool = repeat/speak/hear/suggest (4, lesson02+03); desc_pool =
+    free/sorry/more/slowly/well (5, adjective+adverb, lesson01+02);
+    content_pool = noun_pool union verb_pool (9, matching_pairs only);
+    misc_pool = that/about (pronoun+preposition, 2, translation-only --
+    both too thin for any floored type, but bare translation has no
+    floor). Every gloss in every pool was read (SS0.1) and is distinct
+    within its pool -- no homograph/collapse risk, no proper nouns.
+
+    11 new templates (was 10, all previously dead): lesson01 x3
+    (word_listen on noun_pool, desc_listen on desc_pool, noun_translate
+    bare), lesson02 x3 (verb_choose MC, desc_choose MC, verb_translate
+    bare), lesson03 x4 (word_choose MC on noun_pool, verb_listen, a
+    content_pool matching_pairs x8, desc_translate bare), lesson04 x1
+    (misc_translate bare on that/about -- lesson04's only native token
+    is "about", so a bare-word translation is the honest ceiling there;
+    no recognition/structured template could be anchored to it without
+    pulling in vocabulary from a different lesson). Tiers: recognition
+    6 (3 MC + 3 listen_select), structured 1 (matching_pairs -- the
+    genuine ceiling, since no native semantic tag survives to anchor a
+    second safe structured template and a broad-POS word_order/
+    fill_in_blank is unsafe or impossible per the course-scope reasoning
+    above), production 4 (bare translation x4). LOG for the coordinator:
+    this unit would support a second safe structured type (e.g.
+    fill_in_blank) if any of its content words were given even one
+    single-member semantic tag in scripts/backfill_lexemes_prs_en.py --
+    out of scope here (PACK-ONLY). Verified 0 DEAD via scripts/
+    _practice_unit_scope_check.py and 0 errors via compile_content.py
+    practice-validate.
 tag_schema:
-  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol, proper_noun]
-  agreement_tags:
-    semantic: [person_name, place]
+  part_of_speech: [noun, verb, adjective, adverb, pronoun, preposition]
 slot_presets:
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  noun_pool: &noun_pool {language_code: en, part_of_speech: noun}
+  verb_pool: &verb_pool {language_code: en, part_of_speech: verb}
+  desc_pool: &desc_pool {language_code: en, part_of_speech: [adjective, adverb]}
+  content_pool: &content_pool {language_code: en, part_of_speech: [noun, verb]}
+  misc_pool: &misc_pool {language_code: en, part_of_speech: [pronoun, preposition]}
 templates:
-  - content_key: practice.prs-en.en.a1.unit14.lesson01.hello_order.001
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.word_listen.001
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
-    type: word_order
-    frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} نامی است که خود را با آن معرفی می‌کنه.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson01.hello_translate.003
-    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
-    type: translation
-    frame: {text: "الو، {item} استم.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Hello, this is {item} یعنی الو، {item} استم.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson03.lets_meet_order.001
-    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: word_order
-    frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکان پیشنهادشده برای ملاقات است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson03.place_translate.003
-    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی مکان {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson04.how_about_order.001
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: word_order
-    frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکان پیشنهادشده است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_listen.003
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *noun_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_translate.004
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی مکان {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson03.place_listen.004
-    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.desc_listen.002
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *desc_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_choose.005
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson01.noun_translate.003
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *noun_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson02.verb_choose.001
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *verb_pool}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a1.unit14.lesson04.place_match.006
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+  - content_key: practice.prs-en.en.a1.unit14.lesson02.desc_choose.002
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *desc_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson02.verb_translate.003
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *verb_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.word_choose.001
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *noun_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} یکی از واژه‌های همی پیام است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.verb_listen.002
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *verb_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.content_match.003
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *place, second: *place, third: *place, fourth: *place, fifth: *place}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر مکان را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+    slots: {first: *content_pool, second: *content_pool, third: *content_pool, fourth: *content_pool, fifth: *content_pool, sixth: *content_pool, seventh: *content_pool, eighth: *content_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson03.desc_translate.004
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *desc_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit14.lesson04.misc_translate.001
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *misc_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}

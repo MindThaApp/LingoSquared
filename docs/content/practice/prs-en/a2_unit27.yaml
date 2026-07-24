@@ -98,15 +98,60 @@ review:
     exercise, not a duplicate of the existing possessive_order.001
     (full-sentence word_order). No candidates invented, no A1 vocabulary
     pooled in as if A2-scoped.
+
+    UNIT-SCOPE DEAD FIX (2026-07-24, reauth batch): the previous
+    "A2-scoping correctness fix" above checked A2-COURSE scope (all A2
+    units pooled), which is still broader than the actual checkpoint
+    scope. scripts/_practice_unit_scope_check.py -- which scopes
+    strictly to this UNIT's own lexemes, matching
+    generate_checkpoint() exactly -- flagged 4 DEAD: lesson03.
+    possessive_order.001, lesson03.possessive_translate_bare.002,
+    lesson04.identity_choose.002, lesson04.identity_listen.003. Confirmed
+    via iter_specs() filtered to '.a2.unit27.': neither `possessive`
+    (my/your/his/her, defined for unit06) nor `identity` (defined for
+    unit01/02) has ANY member actually introduced by unit27 itself --
+    both are pure course-wide reuse, same defect class as unit26's
+    sibling pack (DO-NOT #2).
+    Fix: possessive_order.001 ("{item} debit card will arrive in five to
+    seven business days") and possessive_translate_bare.002 were DROPPED,
+    not re-anchored -- this frame's whole point is a possessive-pronoun
+    slot and unit27 introduces no possessive pronoun, so there is no
+    unit-native substitute that keeps the frame grammatical (inventing
+    one needs a new backfill tag, out of PACK-ONLY scope). LOGGED for the
+    coordinator. This leaves the structured tier thin (only lesson04.
+    match.001, matching_pairs, survives) -- deliberately NOT patched with
+    a forced word_order over banking_noun/banking_adjective: this pack's
+    own original authoring note already established that this unit's
+    vocabulary is bare-recognition-only by design (no safe single-slot
+    fill_in_blank, no safe generative frame beyond the now-dropped
+    possessive one), and banking_noun's 8 members are semantically
+    heterogeneous (account/fee/balance/deposit/business/days/documents/
+    teller) with no single natural sentence frame that holds for all of
+    them -- forcing one risks the exact "afspraak voor een {any noun}"
+    ungrammaticality trap SS6.4 warns about. Honestly thin, not fixable
+    from this file alone.
+    identity_choose.002 / identity_listen.003 (both MC/listen_select,
+    bare `{item}` frame -- no course-scope grammaticality risk): these ARE
+    cleanly re-anchorable, since banking_noun is genuinely native to this
+    unit and ample (8 distinct course-wide == unit-wide members, confirmed
+    unique to unit27). RE-ANCHORED (renamed vocab_choose.002 /
+    vocab_listen.003) from `identity` to `banking_noun`, still anchored to
+    lesson04 -- adds a plain banking_noun MC/listen_select on lesson04
+    that didn't exist before (lesson04 previously only had matching_pairs
+    + adj_choose), not a duplicate of any existing template.
+    tag_schema trimmed to [banking_noun, banking_adjective] (possessive/
+    identity no longer referenced) and the now-unused possessive/identity
+    slot_presets removed.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for
+    this pack) and compile_content.py practice-validate. Status stays
+    unreviewed -- needs a fresh review pass given the substantive change.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [banking_noun, banking_adjective, possessive, identity]
+    semantic: [banking_noun, banking_adjective]
 slot_presets:
   banking_noun: &banking_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: banking_noun}}
   banking_adjective: &banking_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: banking_adjective}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
 templates:
   - content_key: practice.prs-en.en.a2.unit27.lesson01.choose.001
     lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
@@ -164,20 +209,6 @@ templates:
     slots: {item: *banking_adjective}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson03.possessive_order.001
-    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
-    type: word_order
-    frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ضمیر ملکی همی جمله است.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson03.possessive_translate_bare.002
-    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit27.lesson03.choose.003
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: multiple_choice
@@ -200,18 +231,18 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson04.identity_choose.002
+  - content_key: practice.prs-en.en.a2.unit27.lesson04.vocab_choose.002
     lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *banking_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson04.identity_listen.003
+  - content_key: practice.prs-en.en.a2.unit27.lesson04.vocab_listen.003
     lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *banking_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که در همی گفتگو شنیدین {item} بود.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit27.lesson04.adj_choose.004
