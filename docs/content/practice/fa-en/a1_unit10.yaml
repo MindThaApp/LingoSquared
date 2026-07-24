@@ -55,14 +55,40 @@ review:
     same unit. Re-verified: `compile_content.py practice-validate` still
     0/0, and the full 24-unit fa-en A1 practice import now succeeds
     end-to-end against a fresh isolated stack.
+
+    Unit-scope DEAD/FLOOR fix pass (2026-07-24, PACK-ONLY re-authoring
+    lane): scripts/_practice_unit_scope_check.py found 2 DEAD template-
+    slots. place_listen.004 (lesson02) and place_meaning.004 (lesson04)
+    both used semantic:place -- iter_specs() confirms `place` is
+    introduced entirely by unit09 (bank/hospital/pharmacy/park/
+    restaurant), never by unit10 itself, another DO-NOT #2 cross-unit
+    reuse (the pack's own note above already flagged that lesson02
+    "asks directions TO those same [unit09] places" but did not realize
+    that meant zero in-unit candidates at checkpoint scope). Fixed by
+    dropping the semantic constraint on both (bare '{item}' frames, no
+    other literal text, so zero grammaticality risk per recipe SS3.1c)
+    and constraining by part_of_speech:noun only, drawing on unit10's
+    own real nouns instead: left/right (turn_direction, POS noun),
+    corner, minutes, street (neighborhood_noun), directions -- 6
+    distinct glosses, comfortably above the 3-distinct floor. Also
+    corrected place_meaning.004's feedback_frame text, which referenced
+    "the place asked about in this dialogue" -- no longer accurate once
+    the slot can surface any of the 6 nouns. tag_schema's now-unused
+    `place` entry removed. Net effect: 0 templates dropped, both
+    fixes are pure re-anchors, pack stays at 10 templates, all now
+    live, tag_schema/turn_direction/street_ordinal templates unaffected.
+    Verified: scripts/_practice_unit_scope_check.py now reports 0 DEAD,
+    0 FLOOR for a1_unit10.yaml; compile_content.py practice-validate 0
+    errors (see coordinator report for the exact fa-en batch
+    invocation).
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [turn_direction, street_ordinal, place]
+    semantic: [turn_direction, street_ordinal]
 slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.fa-en.en.a1.unit10.lesson01.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
@@ -96,7 +122,7 @@ templates:
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit10.lesson03.street_order.001
@@ -131,6 +157,6 @@ templates:
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *unit_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} مکانی است که در این گفت‌وگو پرسیده می‌شود.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}

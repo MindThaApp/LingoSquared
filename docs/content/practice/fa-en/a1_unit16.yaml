@@ -77,43 +77,97 @@ review:
     exercise types) and scripts/_fill_in_blank_ambiguity_check.py (zero
     new AMBIGUOUS flags) before import. New count: 13 templates
     (8 -> 13).
+
+    Re-authored 2026-07-24 (unit-scope DEAD-template pass, docs/content/
+    PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py found
+    18 of the 13 slot-instances above DEAD -- every template built on
+    'hour_number' or 'number' has 0 unit-scoped candidates. Neither tag
+    is native to unit16 (checked via the iter_specs filter, recipe
+    section 0): unit16's own 9 lexemes are wake/up/dressed/dinner/bed
+    (lesson01), every/usually (lesson02), breakfast (lesson03), after
+    (lesson04) -- no hour or number vocabulary at all. Both tags are
+    established by an earlier unit (unit05, telling time) -- recipe
+    DO-NOT #2. Only 'meal' (dinner/breakfast, 2 members) is genuinely
+    native to unit16 -- both meal_translate.003 (lesson03) and
+    meal_order.005 (lesson04, "I have {item} every day") passed the
+    unit-scope check untouched and are kept unchanged (verified
+    course-scope too: 'meal' is a1-course-exclusive to this unit --
+    b1_unit08's reuse of "dinner" is a separate CEFR course and does not
+    leak in). Every hour_number/number template is replaced, not
+    re-anchored: with no native tag to fall back on (and fa-en's
+    a1_unit16 not in backfill_lexemes_fa_en.py's AUTO_TAG_UNIT_STEMS,
+    so no auto-tag exists -- PACK-ONLY, cannot add one), applied recipe
+    SS3.1(c): dropped the semantic tag and constrained by part_of_speech
+    only ([noun, verb, adjective, adverb], no tag) -- unit-wide this
+    pool is wake/dressed/dinner/bed/every/usually/breakfast, 7 distinct
+    tokens with 7 distinct glosses, safe at any scope for the
+    literal-text-free shapes (bare-word multiple_choice/listen_select/
+    translation, matching_pairs). None of the removed templates'
+    literal-text word_order frames ("I wake up at {item} every day.",
+    "Every day, I wake up at {item}.") are re-anchored to this pool --
+    that would need the whole a1-course noun/verb/adjective/adverb set
+    to be grammatical in an hour-of-day frame, which it plainly is not
+    (e.g. "dressed"/"usually" do not fit "I wake up at {item}."); they
+    are dropped in favour of matching_pairs (no literal-text
+    grammaticality concern). Replaced 11 dead templates with 10 new
+    ones on the untagged 7-token pool, spread across all 4 lessons.
+    Read every gloss above against unit16's own realization -- no
+    mis-glosses found. Net (including the 2 kept meal_ templates): 13
+    templates (11 DEAD) -> 12 templates (all live): 5 recognition, 3
+    structured, 4 production. Verified with
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for
+    this file.
 tag_schema:
-  part_of_speech: [noun]
+  part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
-    semantic: [number, hour_number, meal]
+    semantic: [meal]
 slot_presets:
-  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
-  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
   meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
+  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb]}
 templates:
-  - content_key: practice.fa-en.en.a1.unit16.lesson02.wake_order.001
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: word_order
-    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ساعتی است که بیدار می‌شوید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson02.wake_translate.003
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: translation
-    frame: {text: "ساعت {item} بیدار می‌شوم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I wake up at {item} every day یعنی ساعت {item} بیدار می‌شوم.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson02.number_listen.004
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  - content_key: practice.fa-en.en.a1.unit16.lesson01.routine_choose.001
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson01.routine_listen.002
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} عددی است که شنیدید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson03.every_day_order.001
-    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
-    type: word_order
-    frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ساعتِ این توصیف روزانه است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson01.routine_translate.003
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson01.routine_match.004
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.routine_choose.005
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson02.routine_translate.006
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit16.lesson03.meal_translate.003
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
     type: translation
@@ -121,48 +175,21 @@ templates:
     slots: {item: *meal}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson04.number_listen.001
-    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} عددی است که شنیدید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson04.wake_order.002
-    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: word_order
-    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} ساعتی است که دنیل بیدار می‌شود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson04.bed_translate.004
-    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: translation
-    frame: {text: "معمولاً ساعت {item} می‌خوابم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I usually go to bed at {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I usually go to bed at {item} یعنی معمولاً ساعت {item} می‌خوابم.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson02.hour_choose.005
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson02.number_choose.006
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson03.hour_listen.004
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.routine_listen.007
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} ساعتی است که شنیدید.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "{item} واژه‌ای است که شنیدید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson03.routine_match.008
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit16.lesson04.meal_order.005
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
     type: word_order
@@ -170,11 +197,17 @@ templates:
     slots: {item: *meal}
     answer_derivation: {kind: render_frame, frame: {text: "I have {item} every day", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} وعدهٔ غذایی است که هر روز می‌خورید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit16.lesson04.hour_match.006
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.routine_choose.009
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *hour_number, second: *hour_number, third: *hour_number, fourth: *hour_number, fifth: *hour_number, sixth: *hour_number, seventh: *hour_number, eighth: *hour_number}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
-    feedback_frame: {text: "هر عدد را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit16.lesson04.routine_translate.010
+    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}

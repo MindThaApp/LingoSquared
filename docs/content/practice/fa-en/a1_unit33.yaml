@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit33.transportation
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
     Authored 2026-07-11, fa-en depth-audit lane (unit 4 of the 30-42
     batch, see unit30's pack notes for the full batch rationale).
@@ -26,6 +26,37 @@ review:
     fresh-context review before import.
 
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md
+    §1.1/DO-NOT #2): BOTH the 2026-07-11 authoring note and the same-day fresh-context review's
+    "verified every slot member is taught in this unit's realization" claim were wrong at
+    CHECKPOINT (unit) scope -- they verified at COURSE scope. scripts/_practice_unit_scope_check.py
+    confirmed: "train" and "car" (2 of transport_noun's 4 course-wide members) were already
+    classified in EARLIER units (unit21/unit20 respectively); this unit's own lesson01 only
+    introduces "bus" and "bike" as real new lexemes. That left choose.001/listen.002 at 2 distinct
+    unit-scoped answers (below the 3-option floor -- build_prompt() silently rejects every
+    instance) and match.003 needing 4 distinct fills against a 2-token unit-scoped pool (DEAD,
+    never generates). translate.004 was unaffected (translation has no candidate floor) and is
+    UNCHANGED. Re-anchored choose.001/listen.002/match.003 from transport_noun to a plain
+    `part_of_speech: verb` constraint (no semantic tag): verified via iter_specs() filtered to
+    `.a1.unit33.` that this unit natively introduces 5 distinct, cleanly-tokenized verbs unit-wide
+    -- drive/ride (lesson01), takes (lesson02), drives/worry (lesson04) -- all distinct Farsi
+    glosses, no confusable pairs. match.003 now declares 5 slots (matches the real 5-verb pool);
+    this is still 1 below the recipe's 6-pair matching_pairs floor and I could not cleanly close
+    that last gap -- see the LOG note below.
+
+    LOG for the coordinator (backfill/realization data-quality defect, NOT fixed here --
+    pack-only): lessons 02-04's own realization file (docs/content/realizations/en/
+    a1_unit33_transportation.yaml) bakes trailing sentence punctuation directly into several
+    introduced_tokens entries -- "work?", "Daniel?", "it?", "okay,", "difficult.", "office." --
+    which backfill_lexemes_fa_en.py then carries through verbatim as the Lexeme.token/gloss
+    values. These are real, unit-native, otherwise-usable nouns/adjectives (e.g. "parking" is
+    clean, but "office." is not) that I deliberately excluded from every widened pool above because
+    a slot constrained only by `part_of_speech` has no lever to admit "parking" while excluding
+    "office."/"work?" (no semantic tag distinguishes them, and inventing one is a backfill change
+    out of this pass's scope). Stripping the stray punctuation from those six introduced_tokens
+    entries would let a future pass reach the full 6-pair matching_pairs floor and add real
+    lesson02-04 template coverage (currently 0/4 non-lesson01 lessons have a template).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -37,24 +68,24 @@ templates:
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *transport_noun}
+    slots: {item: &unit33_verb {language_code: en, part_of_speech: verb}}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit33.lesson01.listen.002
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *transport_noun}
+    slots: {item: *unit33_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit33.lesson01.match.003
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *transport_noun, second: *transport_noun, third: *transport_noun, fourth: *transport_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "هر وسیلهٔ نقلیه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    slots: {first: *unit33_verb, second: *unit33_verb, third: *unit33_verb, fourth: *unit33_verb, fifth: *unit33_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    feedback_frame: {text: "هر فعل را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit33.lesson01.translate.004
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: translation

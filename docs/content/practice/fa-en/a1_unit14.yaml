@@ -65,82 +65,145 @@ review:
     new multiple_choice, >=2 for matching_pairs) and
     scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS
     flags) before import. New count: 10 templates (7 -> 10).
+
+    Re-authored 2026-07-24 (unit-scope DEAD-template pass, docs/content/
+    PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py found
+    ALL 10 templates above DEAD at checkpoint scope. Both 'person_name'
+    (established unit01/02) and 'place' (established unit09) are
+    EARLIER-unit tags with ZERO unit14-scoped candidates -- recipe
+    DO-NOT #2; generate_checkpoint() only loads THIS unit's own lexemes,
+    so a slot anchored to an earlier unit's tag can never fill even
+    though it looked fine at course scope in Endless Practice. Checked
+    unit14's own 16 lexemes via the iter_specs filter
+    (docs/content/PRACTICE_PACK_RECIPE.md section 0): every one of them
+    -- free/tonight (lesson01), sorry/repeat/that/speak/more/slowly/hear/
+    well (lesson02), 6pm/message/suggest/meeting/place (lesson03), about
+    (lesson04) -- carries agreement_tags == {}. unit14 has NO native
+    semantic tag at all, and fa-en's a1_unit14 is not in
+    backfill_lexemes_fa_en.py's AUTO_TAG_UNIT_STEMS, so no per-lesson
+    auto-tag exists either (PACK-ONLY: cannot add one). Re-anchoring to a
+    native tag (recipe fix option 1a) is therefore unavailable; applied
+    recipe SS3.1(c) instead -- dropped the semantic tag on every slot and
+    constrained by part_of_speech only: [noun, verb, adjective, adverb]
+    unioned across the WHOLE unit (unit-scoped, not per-lesson) yields 14
+    distinct tokens with 14 distinct glosses (tonight/6pm/message/
+    meeting/place/free/sorry/repeat/speak/hear/suggest/more/slowly/well)
+    -- comfortably clears the multiple_choice/listen_select 3-option
+    floor and the matching_pairs 6-pair floor from every lesson anchor.
+    The 3 original word_order templates (hello_order, lets_meet_order,
+    how_about_order) are DROPPED, not re-anchored, rather than kept at
+    the same type: an untagged POS-only pool is course-scope-safe only
+    for literal-text-free frame shapes (bare '{item}' multiple_choice/
+    listen_select/translation, or matching_pairs) per recipe SS3.1(c)/
+    SS1.1 -- at COURSE scope (the whole en a1 direction) this pool would
+    match every noun/verb/adjective/adverb the course has taught so far,
+    and none of the three original literal-text sentence frames ("Hello,
+    this is {item}", "Let's meet at the {item}", "How about 6pm at the
+    {item}") is grammatical for that whole pool (e.g. "repeat"/"slowly"/
+    "free" plainly do not fit "Let's meet at the {item}"). Unlike
+    unit19's preference_verb_full (a native, narrow, already-vetted tag
+    genuinely safe in "I {item} tea"), unit14 has no native tag to make a
+    literal-text frame safe, so word_order is left out entirely rather
+    than risk a course-scope-ungrammatical sentence. Replaced with 12 new
+    templates spread across all 4 lessons so every lesson keeps a
+    checkpoint anchor: 5 recognition (3 multiple_choice + 2
+    listen_select), 3 structured (3 matching_pairs, each declaring 6 of
+    the pool's 14 distinct tokens), 4 production (4 bare-word
+    translations) -- all four safe, literal-text-free shapes. Read every
+    gloss above against the realization's own teaching (recipe SS0.1) --
+    no mis-glosses found. Net: 10 templates (all DEAD, 0 working) -> 12
+    templates (all live). Verified with
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for this
+    file.
 tag_schema:
-  part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol, proper_noun]
-  agreement_tags:
-    semantic: [person_name, place]
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
 slot_presets:
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb]}
 templates:
-  - content_key: practice.fa-en.en.a1.unit14.lesson01.hello_order.001
+  - content_key: practice.fa-en.en.a1.unit14.lesson01.phone_choose.001
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
-    type: word_order
-    frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} نامی است که خود را با آن معرفی می‌کند.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson01.hello_translate.003
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson01.phone_translate.002
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
     type: translation
-    frame: {text: "الو، {item} هستم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Hello, this is {item} یعنی الو، {item} هستم.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson03.lets_meet_order.001
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson02.phone_match.001
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson02.phone_listen.002
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson02.phone_translate.003
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson03.phone_choose.001
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: word_order
-    frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکان پیشنهادی برای ملاقات است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson03.place_translate.003
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *content_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson03.phone_translate.002
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson04.how_about_order.001
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: word_order
-    frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} مکان پیشنهادی است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson04.place_listen.003
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson03.phone_match.003
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson04.phone_listen.001
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson04.place_translate.004
+  - content_key: practice.fa-en.en.a1.unit14.lesson04.phone_translate.002
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی این مکان {item} است.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson03.place_listen.004
-    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson04.place_choose.005
+    feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit14.lesson04.phone_choose.003
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *content_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
-  - content_key: practice.fa-en.en.a1.unit14.lesson04.place_match.006
+  - content_key: practice.fa-en.en.a1.unit14.lesson04.phone_match.004
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *place, second: *place, third: *place, fourth: *place, fifth: *place}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر مکان را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

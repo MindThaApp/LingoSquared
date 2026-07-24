@@ -55,7 +55,53 @@ review:
     wellbeing_question) were added to this pack''s own tag_schema, both semantic tags already declared there. Verified with
     scripts/_practice_slot_check.py (all touched slots have real candidates at or above the relevant floor) and compile_content.py
     practice-validate, 0 errors/0 warnings. Still carries this pack''s own fresh-context review status from before this pass
-    -- a fresh re-review of specifically these 9 new templates has not happened yet.'
+    -- a fresh re-review of specifically these 9 new templates has not happened yet.
+
+    Unit-scope DEAD/FLOOR fix pass (2026-07-24, PACK-ONLY re-authoring lane):
+    scripts/_practice_unit_scope_check.py found 13 DEAD template-slots + 4
+    below-floor in this pack, all matching_pairs/MC/listen slots that were
+    satisfiable at whole-direction scope but not at generate_checkpoint()''s
+    unit-only scope. Fixed via re-anchoring to unit01''s own real vocab
+    (§3.1a unions), no backfill/gloss changes: farewell_word (id010) widened
+    to POS [noun,verb,adverb] + semantic [farewell, greeting] -- ''see'' (verb)
+    was excluded before, dropping the pool to 3/4 needed; now 4 distinct
+    (goodbye/bye/see/later), also reused to widen farewell_pair.004 from 4->6
+    slots. greeting_pair.004 widened 4->6 slots via a new inline union
+    [greeting, time_period] (hello/hi/goodbye/bye/morning/afternoon/evening/day,
+    8 distinct, POS noun only -- deliberately NOT touching the shared id001
+    preset since 3 other live templates (greeting_meaning/translate/listen)
+    already pass at 4 and didn''t need touching. politeness (id004) widened to
+    semantic [politeness, wellbeing_answer] -- fixes politeness_gloss.005 and
+    politeness_listen.006 (both were 2 distinct glosses, now 4 after the
+    fine/okay gloss collapse the pack''s own notes already flagged; safe
+    since only politeness_translate.003 and politeness_gloss/listen consume
+    this preset, all bare-word/bare-frame with zero grammaticality risk).
+    identity (id006) widened to semantic [identity, wellbeing_question,
+    wellbeing_answer] -- fixes identity_choose.007 (was 2 distinct: are/i''m;
+    now 5, all from this pack''s own lesson03). variety_politeness_pair.902
+    was DEAD (needed 6, politeness alone had only 2 in-unit: thanks/nice) --
+    re-anchored to a new 4-tag union [politeness, wellbeing_answer, identity,
+    wellbeing_question] (8 distinct tokens: thanks/nice/fine/bad/okay/are/i''m/
+    how), kept at 6 slots. variety_dialogue_pair.903 (semantic dialogue_word)
+    and variety_family_pair.904 (semantic extended_family) were BOTH
+    DO-NOT-#2 violations with 0 unit-scoped candidates -- verified via
+    iter_specs() that dialogue_word is introduced by unit02
+    (exchange_roles: student/teacher/new/member/engineer/...) and
+    extended_family by unit06 (extended_family_possessives:
+    grandmother/grandfather/aunt/uncle/cousin), neither taught anywhere in
+    unit01. DROPPED both rather than re-anchor: unit01''s own vocab, once
+    unioned as above, is entirely already consumed by greeting_pair (8),
+    farewell_pair (6), and variety_politeness_pair (8) -- there is no
+    remaining distinctly-flavored 6-token pool to build a 4th/5th
+    matching_pairs from without pure duplication, and this pack has 25
+    templates left after the drop (was 27), still far above the 12-item
+    floor and covering all 3 tiers in every lesson, so dropping (recipe
+    fix option 3) is the honest choice over padding. Removed the now-unused
+    dialogue_noun/extended_family slot_presets and their tag_schema entries
+    (dialogue_word, extended_family) since no template references them
+    anymore. Verified: scripts/_practice_unit_scope_check.py now reports 0
+    DEAD, 0 FLOOR for a1_unit01.yaml; compile_content.py practice-validate
+    0 errors (see coordinator report for the exact fa-en batch invocation).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -78,8 +124,6 @@ tag_schema:
     - politeness
     - identity
     - person_name
-    - dialogue_word
-    - extended_family
     - volume_fa_en_a1_unit01_farewell_verb_02_single
     - volume_fa_en_a1_unit01_item_03_single
     - volume_fa_en_a1_unit01_item_05_single
@@ -110,9 +154,10 @@ slot_presets:
     language_code: en
     part_of_speech:
     - noun
+    - verb
     - adverb
     agreement_tags:
-      semantic: farewell
+      semantic: [farewell, greeting]
   farewell_verb: &id009
     language_code: en
     part_of_speech: verb
@@ -140,24 +185,16 @@ slot_presets:
     - adjective
     - particle
     agreement_tags:
-      semantic: politeness
+      semantic: [politeness, wellbeing_answer]
   identity: &id006
     language_code: en
     part_of_speech:
     - pronoun
     - verb
+    - adverb
+    - adjective
     agreement_tags:
-      semantic: identity
-  dialogue_noun: &id011
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: dialogue_word
-  extended_family: &id012
-    language_code: en
-    part_of_speech: noun
-    agreement_tags:
-      semantic: extended_family
+      semantic: [identity, wellbeing_question, wellbeing_answer]
   practice_word: &id013
     language_code: en
     part_of_speech:
@@ -211,14 +248,20 @@ templates:
   lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
   type: matching_pairs
   frame:
-    text: '{greeting_one} — {greeting_two}'
+    text: '{greeting_one} — {greeting_two} — {greeting_three} — {greeting_four} — {greeting_five} — {greeting_six}'
     language_code: en
     direction: ltr
   slots:
-    greeting_one: *id001
-    greeting_two: *id001
-    greeting_three: *id001
-    greeting_four: *id001
+    greeting_one: &id001_time_union
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: [greeting, time_period]
+    greeting_two: *id001_time_union
+    greeting_three: *id001_time_union
+    greeting_four: *id001_time_union
+    greeting_five: *id001_time_union
+    greeting_six: *id001_time_union
   slot_relations:
   - kind: distinct
     slots:
@@ -226,6 +269,8 @@ templates:
     - greeting_two
     - greeting_three
     - greeting_four
+    - greeting_five
+    - greeting_six
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -233,6 +278,8 @@ templates:
     - greeting_two
     - greeting_three
     - greeting_four
+    - greeting_five
+    - greeting_six
   feedback_frame:
     text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
@@ -428,7 +475,7 @@ templates:
   lesson_content_key: en.a1.unit01.lesson05.noun_phrases_and_closings
   type: matching_pairs
   frame:
-    text: '{farewell_one} — {farewell_two}'
+    text: '{farewell_one} — {farewell_two} — {farewell_three} — {farewell_four} — {farewell_five} — {farewell_six}'
     language_code: en
     direction: ltr
   slots:
@@ -436,6 +483,8 @@ templates:
     farewell_two: *id010
     farewell_three: *id010
     farewell_four: *id010
+    farewell_five: *id010
+    farewell_six: *id010
   slot_relations:
   - kind: distinct
     slots:
@@ -443,6 +492,8 @@ templates:
     - farewell_two
     - farewell_three
     - farewell_four
+    - farewell_five
+    - farewell_six
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -450,6 +501,8 @@ templates:
     - farewell_two
     - farewell_three
     - farewell_four
+    - farewell_five
+    - farewell_six
   feedback_frame:
     text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
@@ -534,12 +587,22 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    word_one: *id004
-    word_two: *id004
-    word_three: *id004
-    word_four: *id004
-    word_five: *id004
-    word_six: *id004
+    word_one: &id004_wellbeing_union
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      - pronoun
+      - particle
+      agreement_tags:
+        semantic: [politeness, wellbeing_answer, identity, wellbeing_question]
+    word_two: *id004_wellbeing_union
+    word_three: *id004_wellbeing_union
+    word_four: *id004_wellbeing_union
+    word_five: *id004_wellbeing_union
+    word_six: *id004_wellbeing_union
   slot_relations:
   - kind: distinct
     slots:
@@ -560,75 +623,6 @@ templates:
     - word_six
   feedback_frame:
     text: هر واژهٔ مؤدبانه را به معنی فارسی خودش وصل کنید.
-    language_code: fa
-    direction: rtl
-- content_key: practice.fa-en.en.a1.unit01.lesson01.variety_dialogue_pair.903
-  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-  type: matching_pairs
-  frame:
-    text: واژه‌های انگلیسی گفت‌وگو را به معنی فارسی‌شان وصل کنید.
-    language_code: fa
-    direction: rtl
-  slots:
-    word_one: *id011
-    word_two: *id011
-    word_three: *id011
-    word_four: *id011
-    word_five: *id011
-    word_six: *id011
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  feedback_frame:
-    text: هر واژهٔ گفت‌وگو را به معنی فارسی خودش وصل کنید.
-    language_code: fa
-    direction: rtl
-- content_key: practice.fa-en.en.a1.unit01.lesson01.variety_family_pair.904
-  lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
-  type: matching_pairs
-  frame:
-    text: واژه‌های خانواده را به معنی فارسی‌شان وصل کنید.
-    language_code: fa
-    direction: rtl
-  slots:
-    word_one: *id012
-    word_two: *id012
-    word_three: *id012
-    word_four: *id012
-    word_five: *id012
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-  feedback_frame:
-    text: هر واژهٔ خانواده را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit01.lesson01.practice_translate.905

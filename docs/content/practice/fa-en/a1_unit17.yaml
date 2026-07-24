@@ -5,7 +5,7 @@ target_language: en
 unit_content_key: en.a1.unit17.plans
 review:
   status: unreviewed
-  fresh_context: false
+  fresh_context: 'false'
   notes: 'Authored 2026-07-06 by the practice-pool-sync lane extending fa-en coverage to units 15-20, mirroring nl-en''s already-reviewed
     a1_unit17.yaml. Same deliberate scope decision as nl-en''s unit17: lesson01 (proposing an activity: "Do you want to see
     a movie...?"/ "Would you like to go for a walk?") gets ZERO generated templates -- neither invitation phrase mentions
@@ -36,62 +36,70 @@ review:
     matching this direction''s own established "zero is fine when real vocabulary can''t safely support one" precedent. Re-verified
     scripts/_practice_slot_check.py (weekday still safely >=3 for the new multiple_choice, >=2 for matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py
     (zero new AMBIGUOUS flags) before import. New count: 11 templates (8 -> 11) -- an honest ceiling given weekday is the
-    unit''s only real generative tag.'
+    unit''s only real generative tag.
+
+
+    Re-authored 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found ALL 13 templates above DEAD (19 dead slot-instances) -- "weekday" is established by unit04, an EARLIER unit (recipe
+    DO-NOT #2); generate_checkpoint() only loads unit17''s own lexemes, so a slot built on an earlier unit''s tag has zero
+    candidates at checkpoint scope no matter how well it read in Endless Practice. Checked unit17''s own 12 lexemes via the
+    iter_specs filter (recipe section 0): want/movie/weekend/would/walk (lesson01), love/busy/maybe/another (lesson02), lunch/1pm
+    (lesson03), works (lesson04) -- no weekday token among them. One native semantic tag does exist: "love" (lesson02) carries
+    preference_verb/preference_verb_full, both first introduced right here (verified: unit19''s later reuse of these tags
+    does NOT re-carry them, per backfill_lexemes_fa_en.py''s "only on first introduction" rule) -- but that is a single-member
+    pool at this unit''s own scope, too narrow alone for multiple_choice/listen_select/matching_pairs. fa-en''s a1_unit17 is
+    not in AUTO_TAG_UNIT_STEMS either, so no per-lesson auto-tag exists (PACK-ONLY, cannot add one). Applied recipe SS3.1(c):
+    dropped the semantic tag and constrained by part_of_speech only ([noun, verb, adjective, adverb], no tag) for recognition/production/most
+    structured slots -- unit-wide this pool is want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/works, 12 distinct
+    tokens with 12 distinct glosses, safe at any scope for the literal-text-free shapes. Kept ONE literal-text word_order,
+    but re-anchored it to preference_verb_full instead of dropping it: courses-wide (a1) that tag is love (this unit) + like
+    (unit07) + prefer/hate (unit19) = 4 members, and "I {item} watching movies." is grammatical for all four ("I like/love/prefer/hate
+    watching movies.") -- verified by listing every course-scope member by hand (recipe SS1.1/SS9 step 5), the same technique
+    already proven safe by unit19''s own tea_order/coffee_order templates. All three original literal-text sentence frames
+    ("I''m busy on {item}", "Do you want to have lunch on {item}", "{item} works for me") are DROPPED rather than re-anchored
+    to the untagged pool: at course scope that pool would need to include every noun/verb/adjective/adverb the a1 course has
+    taught so far, and most of them (e.g. "walk", "another", "1pm") do not fit any of those three frames. Replaced with 12
+    new templates spread across all 4 lessons: 5 recognition (3 multiple_choice + 2 listen_select), 3 structured (2 matching_pairs
+    + the 1 preference_verb_full word_order), 4 production (4 bare-word translations). Read every gloss above against unit17''s
+    own realization -- no mis-glosses found. Net: 13 templates (all DEAD, 0 working) -> 12 templates (all live). Verified
+    with scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for this file.'
 tag_schema:
   part_of_speech:
   - noun
+  - verb
+  - adjective
+  - adverb
   agreement_tags:
     semantic:
-    - weekday
+    - preference_verb_full
 slot_presets:
-  weekday: &id001
+  content_word: &id001
     language_code: en
-    part_of_speech: noun
+    part_of_speech: [noun, verb, adjective, adverb]
+  preference_verb_full: &id002
+    language_code: en
+    part_of_speech: verb
     agreement_tags:
-      semantic: weekday
+      semantic: preference_verb_full
 templates:
-- content_key: practice.fa-en.en.a1.unit17.lesson02.busy_order.001
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: word_order
+- content_key: practice.fa-en.en.a1.unit17.lesson01.plans_choose.001
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: multiple_choice
   frame:
-    text: I'm busy on {item}
+    text: '{item}'
     language_code: en
     direction: ltr
   slots:
     item: *id001
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_gloss
+    slot: item
   feedback_frame:
-    text: '{item} روزی است که شلوغ است.'
+    text: معنی فارسی {item} را انتخاب کنید.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson02.busy_translate.003
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: translation
-  frame:
-    text: روز {item} سرم شلوغه.
-    language_code: fa
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: I'm busy on {item} یعنی روز {item} سرم شلوغه.
-    language_code: fa
-    direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson02.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+- content_key: practice.fa-en.en.a1.unit17.lesson01.plans_listen.002
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: listen_select
   frame:
     text: '{item}'
@@ -103,33 +111,14 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} روزی است که شنیدید.'
+    text: '{item} واژه‌ای است که شنیدید.'
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson03.lunch_order.001
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: word_order
-  frame:
-    text: Do you want to have lunch on {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} روز پیشنهادی برای ناهار است.'
-    language_code: fa
-    direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson03.lunch_translate.003
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
+- content_key: practice.fa-en.en.a1.unit17.lesson01.plans_translate.003
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
   type: translation
   frame:
-    text: می‌خوای {item} ناهار بخوریم؟
+    text: '{item}'
     language_code: fa
     direction: rtl
     slot_rendering:
@@ -137,58 +126,39 @@ templates:
   slots:
     item: *id001
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
+    kind: slot_text
+    slot: item
   feedback_frame:
-    text: Do you want to have lunch on {item}؟ یعنی می‌خوای {item} ناهار بخوریم؟
+    text: معادل انگلیسی {item} است.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson04.works_order.001
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: word_order
+- content_key: practice.fa-en.en.a1.unit17.lesson01.plans_match.004
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: matching_pairs
   frame:
-    text: '{item} works for me'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: '{item} روزی است که مناسب است.'
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson04.works_translate.003
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: translation
-  frame:
-    text: '{item} برای من خوبه.'
-    language_code: fa
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item: *id001
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{item} works for me'
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: '{item} works for me یعنی {item} برای من خوبه.'
-    language_code: fa
-    direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson04.weekday_listen.004
-  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
-  type: listen_select
+- content_key: practice.fa-en.en.a1.unit17.lesson02.plans_choose.005
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: multiple_choice
   frame:
     text: '{item}'
     language_code: en
@@ -199,10 +169,47 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} روزی است که شنیدید.'
+    text: معنی فارسی {item} را انتخاب کنید.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson03.weekday_listen.004
+- content_key: practice.fa-en.en.a1.unit17.lesson02.plans_translate.006
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit17.lesson02.love_order.007
+  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
+  type: word_order
+  frame:
+    text: I {item} watching movies
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} watching movies
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} احساسی است که دربارهٔ تماشای فیلم بیان می‌شود.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit17.lesson03.plans_listen.008
   lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
   type: listen_select
   frame:
@@ -215,10 +222,28 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} روزی است که شنیدید.'
+    text: '{item} واژه‌ای است که شنیدید.'
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson04.weekday_choose.005
+- content_key: practice.fa-en.en.a1.unit17.lesson03.plans_translate.009
+  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit17.lesson04.plans_choose.010
   lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
   type: multiple_choice
   frame:
@@ -234,11 +259,29 @@ templates:
     text: معنی فارسی {item} را انتخاب کنید.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson04.weekday_match.006
+- content_key: practice.fa-en.en.a1.unit17.lesson04.plans_translate.011
+  lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی {item} است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit17.lesson04.plans_match.012
   lesson_content_key: en.a1.unit17.lesson04.negotiating_a_plan_dialogue
   type: matching_pairs
   frame:
-    text: '{first} — {second}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
@@ -248,74 +291,13 @@ templates:
     fourth: *id001
     fifth: *id001
     sixth: *id001
-    seventh: *id001
   slot_relations:
   - kind: distinct
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-    - seventh
+    slots: [first, second, third, fourth, fifth, sixth]
   answer_derivation:
     kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
-    - seventh
+    slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: هر روز هفته را به معنی فارسی خودش وصل کنید.
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
-- content_key: practice.fa-en.en.a1.unit17.lesson02.busy_translate.003.volume_order.009
-  lesson_content_key: en.a1.unit17.lesson02.accepting_and_declining
-  type: word_order
-  frame:
-    text: I'm busy on {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: I'm busy on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: I'm busy on {item}
-    language_code: en
-    direction: ltr
-- content_key: practice.fa-en.en.a1.unit17.lesson03.lunch_translate.003.volume_order.010
-  lesson_content_key: en.a1.unit17.lesson03.reading_an_invitation
-  type: word_order
-  frame:
-    text: Do you want to have lunch on {item}
-    language_code: en
-    direction: ltr
-  slots:
-    item:
-      language_code: en
-      part_of_speech: noun
-      agreement_tags:
-        semantic: weekday
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: Do you want to have lunch on {item}
-      language_code: en
-      direction: ltr
-  feedback_frame:
-    text: Do you want to have lunch on {item}
-    language_code: en
-    direction: ltr
