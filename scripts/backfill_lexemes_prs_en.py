@@ -62,9 +62,12 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from _en_target_lexeme_common import (  # noqa: E402
+    EN_TOKEN_BOUNDARY_PUNCTUATION,
     EN_POS,
+    en_token_display,
     en_agreement_tags,
     iter_taught_phrase_lexemes,
+    normalize_en_token,
 )
 
 UNIT_FILES = (
@@ -1926,8 +1929,12 @@ def _classify(files, level, specs):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
                 content_key = item["content_key"]
-                for token in item.get("introduced_tokens", []):
-                    token = token.casefold().replace("’", "'")
+                for raw_token in item.get("introduced_tokens", []):
+                    raw_key = raw_token.casefold().replace("’", "'")
+                    token_key = normalize_en_token(raw_token)
+                    lookup_key = raw_key if (
+                        raw_key in EN_POS or raw_key in EN_POS_EXTRA
+                    ) else token_key
                     # Shared classification WINS; EN_POS_EXTRA is only the
                     # local fallback for tokens the shared module has not
                     # taken over yet (see its comment above). Never the other
@@ -1935,14 +1942,17 @@ def _classify(files, level, specs):
                     # ONE part_of_speech, or the (course, language_code,
                     # token, part_of_speech) lookup in main() misses and
                     # writes a duplicate Lexeme row.
-                    part_of_speech = EN_POS.get(token) or EN_POS_EXTRA.get(token)
+                    part_of_speech = (
+                        EN_POS.get(lookup_key) or EN_POS_EXTRA.get(lookup_key)
+                    )
                     if part_of_speech is None:
                         raise ValueError(
-                            f"missing English classification for {token!r} "
+                            f"missing English classification for {token_key!r} "
                             f"in _en_target_lexeme_common.py or EN_POS_EXTRA "
                             f"(lesson {lesson_key})"
                         )
-                    tags = en_agreement_tags(token)
+                    token = en_token_display(raw_token, part_of_speech)
+                    tags = en_agreement_tags(token_key)
                     # Keyed by (level, token) -- A1 and A2 are separate
                     # courses, so a bare token key would wrongly merge
                     # an A2 occurrence into an A1 spec already seen.
@@ -1955,12 +1965,12 @@ def _classify(files, level, specs):
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
                             "part_of_speech": PRS_UNIT_POS_OVERRIDES.get(
-                                (realization_path.stem, token), part_of_speech
+                                (realization_path.stem, lookup_key), part_of_speech
                             ),
                             "english_gloss": PRS_UNIT_GLOSS_OVERRIDES.get(
-                                (realization_path.stem, token),
-                                EN_TARGET_TO_PRS_GLOSS[token],
-                            ),
+                                (realization_path.stem, lookup_key),
+                                EN_TARGET_TO_PRS_GLOSS[lookup_key],
+                            ).strip(EN_TOKEN_BOUNDARY_PUNCTUATION),
                             "agreement_tags": tags,
                         }
                     else:

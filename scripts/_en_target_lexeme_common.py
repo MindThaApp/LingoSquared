@@ -51,6 +51,29 @@ EN_PHRASE_LEXEME_UNIT_STEMS = frozenset({
     "a1_unit68_borrowing_lending",
 })
 
+EN_TOKEN_BOUNDARY_PUNCTUATION = " \t\r\n.,?!;:\"'“”‘’"
+
+
+def normalize_en_token(value: object) -> str:
+    """Return a casefolded English lookup key without sentence punctuation."""
+    return str(value).replace("’", "'").strip(EN_TOKEN_BOUNDARY_PUNCTUATION).casefold()
+
+
+def en_token_display(value: object, part_of_speech: str) -> str:
+    """Return the bare stored token, capitalizing proper names."""
+    token = normalize_en_token(value)
+    if part_of_speech == "proper_noun":
+        source = strip_en_sentence_punctuation(value).replace("’", "'")
+        if source.isupper():
+            return source
+        return token[:1].upper() + token[1:]
+    return token
+
+
+def strip_en_sentence_punctuation(value: object) -> str:
+    """Strip sentence punctuation from a token or gloss without touching its core."""
+    return str(value).strip(EN_TOKEN_BOUNDARY_PUNCTUATION)
+
 
 def iter_taught_phrase_lexemes(
     realization_path_stem: str,
@@ -64,12 +87,12 @@ def iter_taught_phrase_lexemes(
         if item.get("kind") not in {"phrase", "dialogue", "reading"}:
             continue
         content_key = item["content_key"]
-        token = (
-            item.get("target", {}).get("text", "").casefold().replace("’", "'").strip()
-        )
+        token = normalize_en_token(item.get("target", {}).get("text", ""))
         if " " not in token or len(token) > 255:
             continue
-        gloss = str(teaching_overlays.get(content_key, {}).get("gloss", "")).strip()
+        gloss = strip_en_sentence_punctuation(
+            teaching_overlays.get(content_key, {}).get("gloss", "")
+        )
         if not gloss:
             raise ValueError(f"missing source-language phrase gloss for {content_key!r}")
         if len(gloss) <= 255:

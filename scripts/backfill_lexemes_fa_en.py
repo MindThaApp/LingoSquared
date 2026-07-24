@@ -61,8 +61,11 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 
 from _en_target_lexeme_common import (  # noqa: E402
     EN_POS,
+    en_token_display,
     en_agreement_tags,
     iter_taught_phrase_lexemes,
+    normalize_en_token,
+    strip_en_sentence_punctuation,
 )
 
 UNIT_FILES = (
@@ -2199,12 +2202,18 @@ def _classify(files, level, specs):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
                 content_key = item["content_key"]
-                for token in item.get("introduced_tokens", []):
-                    token = token.casefold().replace("’", "'")
+                for raw_token in item.get("introduced_tokens", []):
+                    raw_key = raw_token.casefold().replace("’", "'")
+                    token_key = normalize_en_token(raw_token)
+                    lookup_key = raw_key if (
+                        raw_key in EN_POS or raw_key in FA_EN_EXTRA_LEXEMES
+                    ) else token_key
                     part_of_speech, gloss = _lexeme_pos_and_gloss(
-                        level, stem, token
+                        level, stem, lookup_key
                     )
-                    tags = en_agreement_tags(token)
+                    token = en_token_display(raw_token, part_of_speech)
+                    gloss = strip_en_sentence_punctuation(gloss)
+                    tags = en_agreement_tags(token_key)
                     # Keyed by (level, token) -- A1/A2/B1/B2 are separate
                     # courses (separate Lexeme rows are fine/expected even
                     # for a token spelled the same in more than one), so a

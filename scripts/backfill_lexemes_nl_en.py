@@ -80,8 +80,11 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 
 from _en_target_lexeme_common import (  # noqa: E402
     EN_POS,
+    en_token_display,
     en_agreement_tags,
     iter_taught_phrase_lexemes,
+    normalize_en_token,
+    strip_en_sentence_punctuation,
 )
 
 # Dutch gloss for each shared English target token -- this is
@@ -2883,16 +2886,22 @@ def _classify_unit_files(unit_files, level):
                 content_key = item["content_key"]
                 gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
 
-                for token in item.get("introduced_tokens", []):
-                    token = token.casefold().replace("’", "'")
-                    if token not in EN_POS_ALL:
+                for raw_token in item.get("introduced_tokens", []):
+                    raw_key = raw_token.casefold().replace("’", "'")
+                    token_key = normalize_en_token(raw_token)
+                    lookup_key = raw_key if raw_key in EN_POS_ALL else token_key
+                    if lookup_key not in EN_POS_ALL:
                         raise ValueError(
-                            f"missing English classification for {token!r} "
+                            f"missing English classification for {token_key!r} "
                             f"in _en_target_lexeme_common.py or this script's "
                             f"EN_EXTRA (lesson {lesson_key})"
                         )
+                    part_of_speech = NL_UNIT_POS_OVERRIDES.get(
+                        (unit_stem, lookup_key), EN_POS_ALL[lookup_key]
+                    )
+                    token = en_token_display(raw_token, part_of_speech)
                     existing = en_specs.get(token)
-                    tags = en_agreement_tags(token)
+                    tags = en_agreement_tags(token_key)
                     if existing is None:
                         if auto_semantics:
                             semantics = tags.setdefault("semantic", [])
@@ -2902,11 +2911,12 @@ def _classify_unit_files(unit_files, level):
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": NL_UNIT_POS_OVERRIDES.get(
-                                (unit_stem, token), EN_POS_ALL[token]
-                            ),
-                            "english_gloss": NL_UNIT_GLOSS_OVERRIDES.get(
-                                (unit_stem, token), EN_TARGET_TO_NL_GLOSS[token]
+                            "part_of_speech": part_of_speech,
+                            "english_gloss": strip_en_sentence_punctuation(
+                                NL_UNIT_GLOSS_OVERRIDES.get(
+                                    (unit_stem, lookup_key),
+                                    EN_TARGET_TO_NL_GLOSS[lookup_key],
+                                )
                             ), "agreement_tags": tags,
                         }
                     else:
