@@ -6,7 +6,32 @@ unit_content_key: prs.a1.unit14.preferences
 review:
   status: unreviewed
   fresh_context: false
-  notes: 'Authored 2026-07-07 for the new A1 unit14 (preferences) realization, same pass as this bundle''s a1_unit12/13.yaml
+  notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
+    9 DEAD templates + 3 below-floor. LOG FOR COORDINATOR: `preference_verb`
+    (دارم/ندارم/دارد/ندارد/دارین) has ZERO unit14-scoped candidates -- despite this
+    file''s original notes claiming all 5 members were added for this unit, iter_specs()
+    shows every one anchored to a1 unit03 instead; a pack-only fix cannot move them.
+    This broke preference_verb_gloss.001, preference_verb_translate.002 (lesson02) and
+    preference_verb_pair.002 (lesson05, needed 5 distinct, had 0). Also LOG: person_name
+    (کریم) is only 1 distinct at unit14 scope (person_name_gloss.001 below the MC floor;
+    person_name_pair.002 needed 12, had 1). This unit''s real own vocabulary is exactly
+    7 content tokens (قهوه/موسیقی preference_topic, جالب/گرم description_adjective,
+    بیشتر/یا choice_word, چون connector_word -- a tag not previously declared in this
+    pack''s schema, added now) plus 1 name (کریم). Fixed all 9 DEAD + 3 below-floor by
+    re-anchoring to unions of these 7 real tokens: preference_topic_gloss.001 (was 2
+    distinct) and topic_description_pair.003 (was 4, needed 6) widened within
+    topic-adjacent tags (topic_and_description, then +choice_word for the pair, 6
+    distinct exact); choice_word_gloss.003 (was 2 distinct) widened with connector_word
+    (3 distinct); preference_verb_gloss.001/translate.002, preference_verb_pair.002 (slots
+    5->6), person_name_gloss.001, and person_name_pair.002 (slots 12->6) all re-anchored
+    to a new unit_wide_pool unioning all 7 tokens (topic+description+choice+connector).
+    No templates dropped -- unlike its a1_unit12/13 siblings, unit14''s real 7-token
+    vocabulary was just barely enough to widen every dead/floor slot without needing a
+    replacement. Post-fix: _practice_unit_scope_check.py reports 0 DEAD, 0 below-floor
+    (16 templates, unchanged count); practice-validate 0 errors (see coordinator report).
+    Pre-existing authoring notes below, retained for provenance.
+
+    Authored 2026-07-07 for the new A1 unit14 (preferences) realization, same pass as this bundle''s a1_unit12/13.yaml
     siblings (see a1_unit12.yaml''s notes for the full extension context: a parallel session authored units 09-11''s practice
     pool separately, this bundle only touches units 12-15).
 
@@ -44,6 +69,7 @@ tag_schema:
     - warm_word
     - choice_word
     - person_name
+    - connector_word
 slot_presets:
   preference_verb: &id003
     language_code: prs
@@ -87,16 +113,72 @@ slot_presets:
       semantic:
       - preference_topic
       - description_adjective
+  # UNIT-SCOPE REPAIR 2026-07-24: `preference_verb` has ZERO unit14-scoped
+  # candidates (its 5 members -- دارم/ندارم/دارد/ندارد/دارین -- are all
+  # registered to a1 unit03, despite this file's original notes claiming
+  # they were re-added here; verified via iter_specs()). This unit's ONLY
+  # real content vocabulary is 7 tokens across preference_topic (قهوه/
+  # موسیقی), description_adjective (جالب/گرم), choice_word (بیشتر/یا) and
+  # connector_word (چون) -- unioned here as the full-unit review pool (7
+  # distinct). Reused by every template that used to constrain on the
+  # 0-candidate preference_verb or the 1-distinct person_name alone:
+  # preference_verb_gloss.001, preference_verb_translate.002 (both
+  # lesson02), preference_verb_pair.002 (lesson05), person_name_gloss.001,
+  # person_name_pair.002 (both lesson06).
+  unit_wide_pool: &id008
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - pronoun
+    - particle
+    agreement_tags:
+      semantic:
+      - preference_topic
+      - description_adjective
+      - choice_word
+      - connector_word
+  # Narrower union for choice_word_gloss.003 (lesson02): choice_word alone
+  # is only 2 distinct (بیشتر/یا) at unit14 scope, below the MC floor.
+  # Adding connector_word (چون) reaches exactly 3.
+  choice_and_connector: &id009
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - choice_word
+      - connector_word
+  # Narrower union for topic_description_pair.003 (lesson01
+  # matching_pairs): preference_topic + description_adjective alone is
+  # only 4 distinct, below the needed 6. Adding choice_word reaches
+  # exactly 6 (قهوه/موسیقی/جالب/گرم/بیشتر/یا).
+  topic_description_choice: &id010
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - preference_topic
+      - description_adjective
+      - choice_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit14.lesson01.preference_topic_gloss.001
   lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+  # UNIT-SCOPE REPAIR 2026-07-24: preference_topic alone is only 2
+  # distinct at unit14 scope (قهوه/موسیقی), below the 3-option MC floor.
+  # Widened to topic_and_description (4 distinct: coffee/music/
+  # interesting/warm).
   type: multiple_choice
   frame:
     text: '{preference_topic}'
     language_code: prs
     direction: rtl
   slots:
-    preference_topic: *id001
+    preference_topic: *id002
   answer_derivation:
     kind: slot_gloss
     slot: preference_topic
@@ -124,18 +206,21 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson01.topic_description_pair.003
   lesson_content_key: prs.a1.unit14.lesson01.basic_likes
+  # UNIT-SCOPE REPAIR 2026-07-24: was topic_and_description alone (4
+  # distinct), needed 6 -> DEAD. Widened to topic_description_choice
+  # (adds choice_word: بیشتر/یا), reaching exactly 6 distinct.
   type: matching_pairs
   frame:
     text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id002
-    word_two: *id002
-    word_three: *id002
-    word_four: *id002
-    word_five: *id002
-    word_six: *id002
+    word_one: *id010
+    word_two: *id010
+    word_three: *id010
+    word_four: *id010
+    word_five: *id010
+    word_six: *id010
   slot_relations:
   - kind: distinct
     slots:
@@ -179,22 +264,28 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson02.preference_verb_gloss.001
   lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+  # UNIT-SCOPE REPAIR 2026-07-24: `preference_verb` has ZERO
+  # unit14-scoped candidates (its 5 members are registered to a1 unit03
+  # -- LOG FOR COORDINATOR, see review notes). Re-anchored to the
+  # unit_wide_pool (7 distinct: coffee/music/interesting/warm/more/or/because).
   type: multiple_choice
   frame:
     text: '{preference_verb}'
     language_code: prs
     direction: rtl
   slots:
-    preference_verb: *id003
+    preference_verb: *id008
   answer_derivation:
     kind: slot_gloss
     slot: preference_verb
   feedback_frame:
-    text: '{preference_verb} is a form of داشتن (to have), used with دوست for ''to like.'''
+    text: '{preference_verb} is one of this unit''s preference/reason words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson02.preference_verb_translate.002
   lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+  # UNIT-SCOPE REPAIR 2026-07-24: same 0-candidate `preference_verb`
+  # defect as the MC sibling above. Re-anchored to unit_wide_pool.
   type: translation
   frame:
     text: '{preference_verb}'
@@ -203,7 +294,7 @@ templates:
     slot_rendering:
       preference_verb: english_gloss
   slots:
-    preference_verb: *id003
+    preference_verb: *id008
   answer_derivation:
     kind: slot_text
     slot: preference_verb
@@ -213,13 +304,16 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson02.choice_word_gloss.003
   lesson_content_key: prs.a1.unit14.lesson02.asking_preferences
+  # UNIT-SCOPE REPAIR 2026-07-24: choice_word alone is only 2 distinct
+  # (بیشتر/یا) at unit14 scope, below the MC floor. Widened to
+  # choice_and_connector (adds چون "because"), reaching 3 distinct.
   type: multiple_choice
   frame:
     text: '{choice_word}'
     language_code: prs
     direction: rtl
   slots:
-    choice_word: *id004
+    choice_word: *id009
   answer_derivation:
     kind: slot_gloss
     slot: choice_word
@@ -325,17 +419,22 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson05.preference_verb_pair.002
   lesson_content_key: prs.a1.unit14.lesson05.reading_about_preferences
+  # UNIT-SCOPE REPAIR 2026-07-24: `preference_verb` is 0-candidate at
+  # unit14 scope (needed 5, had 0 -- LOG FOR COORDINATOR, same defect as
+  # preference_verb_gloss.001). Re-anchored to unit_wide_pool (7
+  # distinct), slots bumped 5->6 (AUTHORING_GUIDE SS16 standard).
   type: matching_pairs
   frame:
-    text: '{verb_one} — {verb_two} — {verb_three} — {verb_four} — {verb_five}'
+    text: '{verb_one} — {verb_two} — {verb_three} — {verb_four} — {verb_five} — {verb_six}'
     language_code: prs
     direction: rtl
   slots:
-    verb_one: *id003
-    verb_two: *id003
-    verb_three: *id003
-    verb_four: *id003
-    verb_five: *id003
+    verb_one: *id008
+    verb_two: *id008
+    verb_three: *id008
+    verb_four: *id008
+    verb_five: *id008
+    verb_six: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -344,6 +443,7 @@ templates:
     - verb_three
     - verb_four
     - verb_five
+    - verb_six
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -352,47 +452,47 @@ templates:
     - verb_three
     - verb_four
     - verb_five
+    - verb_six
   feedback_frame:
-    text: Match each form of داشتن (to have) to its English meaning.
+    text: Match each word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson06.person_name_gloss.001
   lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: person_name alone is only 1 distinct at
+  # unit14 scope (کریم), below the MC floor. Re-anchored to unit_wide_pool
+  # (7 distinct), fitting for lesson06's whole-unit dialogue review.
   type: multiple_choice
   frame:
     text: '{person_name}'
     language_code: prs
     direction: rtl
   slots:
-    person_name: *id007
+    person_name: *id008
   answer_derivation:
     kind: slot_gloss
     slot: person_name
   feedback_frame:
-    text: '{person_name} is a name used in this course.'
+    text: '{person_name} is a word from this unit''s preference vocabulary.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson06.person_name_pair.002
   lesson_content_key: prs.a1.unit14.lesson06.preferences_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: person_name alone is 1 distinct token,
+  # needed 12 -> DEAD. Re-anchored to unit_wide_pool (7 distinct, same as
+  # person_name_gloss.001 above), slots reduced 12->6.
   type: matching_pairs
   frame:
-    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}
-      — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}'
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}'
     language_code: prs
     direction: rtl
   slots:
-    person_name_one: *id007
-    person_name_two: *id007
-    person_name_three: *id007
-    person_name_four: *id007
-    person_name_five: *id007
-    person_name_six: *id007
-    person_name_seven: *id007
-    person_name_eight: *id007
-    person_name_nine: *id007
-    person_name_ten: *id007
-    person_name_eleven: *id007
-    person_name_twelve: *id007
+    person_name_one: *id008
+    person_name_two: *id008
+    person_name_three: *id008
+    person_name_four: *id008
+    person_name_five: *id008
+    person_name_six: *id008
   slot_relations:
   - kind: distinct
     slots:
@@ -402,12 +502,6 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -417,14 +511,8 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   feedback_frame:
-    text: Match each name to its English label.
+    text: Match each word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit14.lesson05.warm_word_fill.001.volume_order.006

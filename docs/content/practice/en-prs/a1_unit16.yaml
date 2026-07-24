@@ -6,7 +6,44 @@ unit_content_key: prs.a1.unit16.travel
 review:
   status: unreviewed
   fresh_context: false
-  notes: 'Authored 2026-07-07 for the new A1 unit16 (travel) realization, the same night prs''s real A1 realization grew 15->17
+  notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
+    10 DEAD templates + 1 below-floor -- the worst of this reauth batch. LOG FOR
+    COORDINATOR: contrary to this file''s original notes, want_verb (می‌خواهم), city_name
+    (هرات/کابل/مزار/شریف), confirmation_word (بسیار/خوب), tomorrow_word (فردا), and
+    travel_farewell_word (تشکر/زیاد/قابلی/نداره/سفر/خوش) all have ZERO unit16-scoped
+    Lexeme rows -- every one of those strings is already registered to an EARLIER unit
+    (verified via iter_specs()), so the classifier never emits a fresh unit16-anchored
+    row for them even though the realization''s own introduced_tokens genuinely lists
+    them at lesson02/04/05/06. This unit''s TRUE own vocabulary is only 9 tokens:
+    travel_noun (بلیط/قطار/بس/سکو, 4), platform_ezafe (سکوی, 1), depart_noun (حرکت, 1),
+    when_word (کی, 1), and travel_role_word (مسافر/فروشنده, 2 -- the only genuinely-new
+    tokens, now added to this pack''s tag_schema). Fixes: want_verb_translate.001,
+    city_name_gloss.002, travel_farewell_gloss.001, travel_farewell_translate.002,
+    travel_review_pair.003 (slots 10->6) all re-anchored to travel_review_pool, widened
+    in place to union all 5 real tags (9 distinct). ticket_request_order.003 (needed a
+    destination-city slot with no in-unit substitute) redesigned as a simple "این
+    {travel_noun} است" predicate frame -- travel_noun''s 4 members (ticket/train/bus/
+    platform) are all grammatical there and the tag is unit16-exclusive within the a1
+    course. schedule_number_order.002 (needed `ones_number`, a1 unit03/unit04''s tag)
+    DROPPED outright -- no in-unit noun fits "the [X] departs" grammatically/sensibly
+    (platform/ticket don''t "depart") and platform_ezafe_order.001 already covers
+    lesson04''s structured tier. confirmation_word_translate.001 re-anchored to
+    travel_role_word. tomorrow_word_fill.002 (fill_in_blank, needs a genuine
+    single-candidate slot) re-anchored to platform_ezafe (already direction-wide
+    single-candidate, previously only used by the word_order sibling) reusing that
+    exact frame. Its word_order twin (.005) re-anchored to travel_role_word instead
+    (avoiding an exact duplicate of platform_ezafe_order.001) with a fresh "این
+    {travel_role_word} است" frame -- both members grammatical, course-scope checked.
+    travel_noun_core_pair.003 (below the 6-pair floor at 3 slots) widened to
+    unit_core_pool (travel_noun+platform_ezafe+depart_noun, 6 distinct exact). Net:
+    19 templates -> 18 (1 drop, no replacement needed -- pack stays comfortably above
+    the 12-template floor with all three tiers populated). Post-fix:
+    _practice_unit_scope_check.py reports 0 DEAD, 0 below-floor; practice-validate 0
+    errors (see coordinator report). `ones_number` is now unused in this pack''s
+    tag_schema (harmless, left declared). Pre-existing authoring notes below, retained
+    for provenance.
+
+    Authored 2026-07-07 for the new A1 unit16 (travel) realization, the same night prs''s real A1 realization grew 15->17
     units (unit16 travel, unit17 health). This pack (and its unit17 sibling) extends scripts/backfill_lexemes_en_prs.py''s
     UNIT_FILES tuple, PRS_GLOSSES/ PRS_POS entries, and prs_agreement_tags() -- re-read fresh immediately before editing.
 
@@ -57,6 +94,7 @@ tag_schema:
     - tomorrow_word
     - travel_farewell_word
     - ones_number
+    - travel_role_word
 slot_presets:
   travel_noun_core: &id001
     language_code: prs
@@ -118,16 +156,52 @@ slot_presets:
     part_of_speech: adjective
     agreement_tags:
       semantic: ones_number
+  # UNIT-SCOPE REPAIR 2026-07-24: `travel_farewell_word` has ZERO
+  # unit16-scoped candidates (its 9 members -- خوش/تشکر/زیاد/قابلی/نداره/
+  # سفر -- are all registered to a1 unit01/unit05/unit06, despite this
+  # file's original notes claiming they were "this unit's closing polite
+  # phrases"; LOG FOR COORDINATOR). This unit's TRUE own vocabulary is
+  # only 9 tokens total: travel_noun (بلیط/قطار/بس/سکو, 4),
+  # platform_ezafe (سکوی, 1), depart_noun (حرکت, 1), when_word (کی, 1),
+  # and travel_role_word (مسافر/فروشنده, 2 -- newly declared below, the
+  # only genuinely-new-to-the-corpus tokens this unit introduces). Widened
+  # this preset (keeping its original anchor id so every template that
+  # referenced it keeps working) to union all five, 9 distinct total.
+  # Reused by want_verb_translate.001, city_name_gloss.002,
+  # travel_farewell_gloss.001, travel_farewell_translate.002 and
+  # travel_review_pair.003 (all previously constrained on a 0-candidate
+  # earlier-unit tag), slots reduced 10->6 where declared.
   travel_review_pool: &id012
     language_code: prs
     part_of_speech:
     - noun
-    - adjective
-    - verb
+    - adverb
     agreement_tags:
       semantic:
-      - travel_farewell_word
       - travel_noun
+      - platform_ezafe
+      - depart_noun
+      - when_word
+      - travel_role_word
+  # Narrower unit_core_pool for travel_noun_core_pair.003 (lesson01): just
+  # the "core travel nouns" cluster (travel_noun + platform_ezafe +
+  # depart_noun = 6 distinct), no when_word/travel_role_word.
+  unit_core_pool: &id014
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - travel_noun
+      - platform_ezafe
+      - depart_noun
+  # NEW real vocabulary this pack never used: مسافر "traveler" and
+  # فروشنده "seller" (lesson05's own dialogue-role nouns, genuinely new to
+  # the corpus -- not reused from an earlier unit).
+  travel_role_word: &id013
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: travel_role_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_gloss.001
   lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
@@ -165,33 +239,52 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_pair.003
   lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
+  # UNIT-SCOPE REPAIR 2026-07-24: travel_noun_core alone only has 3
+  # members, below the recipe's 6-pair floor. Widened to unit_core_pool
+  # (travel_noun + platform_ezafe + depart_noun = 6 distinct exact).
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id001
-    word_two: *id001
-    word_three: *id001
+    word_one: *id014
+    word_two: *id014
+    word_three: *id014
+    word_four: *id014
+    word_five: *id014
+    word_six: *id014
   slot_relations:
   - kind: distinct
     slots:
     - word_one
     - word_two
     - word_three
+    - word_four
+    - word_five
+    - word_six
   answer_derivation:
     kind: matching_pairs
     slots:
     - word_one
     - word_two
     - word_three
+    - word_four
+    - word_five
+    - word_six
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.want_verb_translate.001
   lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  # UNIT-SCOPE REPAIR 2026-07-24: `want_verb` (می‌خواهم) has ZERO
+  # unit16-scoped candidates -- it's registered to a1 unit07, despite
+  # this file's original notes claiming it as "a single Lexeme
+  # project-wide ... genuinely single-candidate" for this unit. LOG FOR
+  # COORDINATOR. Re-anchored to travel_review_pool (9 distinct: this
+  # unit's real travel_noun+platform_ezafe+depart_noun+when_word+
+  # travel_role_word union).
   type: translation
   frame:
     text: '{want_verb}'
@@ -200,7 +293,7 @@ templates:
     slot_rendering:
       want_verb: english_gloss
   slots:
-    want_verb: *id002
+    want_verb: *id012
   answer_derivation:
     kind: slot_text
     slot: want_verb
@@ -210,37 +303,51 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.city_name_gloss.002
   lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  # UNIT-SCOPE REPAIR 2026-07-24: `city_name` has ZERO unit16-scoped
+  # candidates (هرات/کابل/مزار/شریف are all registered to earlier units --
+  # LOG FOR COORDINATOR, same class as want_verb above). Re-anchored to
+  # travel_review_pool (9 distinct).
   type: multiple_choice
   frame:
     text: '{city_name}'
     language_code: prs
     direction: rtl
   slots:
-    city_name: *id003
+    city_name: *id012
   answer_derivation:
     kind: slot_gloss
     slot: city_name
   feedback_frame:
-    text: '{city_name} is a city name used in this course.'
+    text: '{city_name} is one of this unit''s travel words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.ticket_request_order.003
   lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  # UNIT-SCOPE REPAIR 2026-07-24: the original frame needed `city_name`
+  # (0 unit-scoped candidates, LOG FOR COORDINATOR above) and no in-unit
+  # tag can safely fill a destination-city slot without producing an
+  # ungrammatical/nonsensical sentence (this unit's other nouns --
+  # platform, departure -- aren't travel destinations). Redesigned as a
+  # simple predicate frame ("this is a/the [travel_noun]") over
+  # travel_noun (id006, unchanged, 4 distinct: ticket/train/bus/
+  # platform), all of which are grammatical in this shape. Course-scope
+  # checked: travel_noun is unit16-exclusive within the a1 course (see
+  # review notes), so no widening risk.
   type: word_order
   frame:
-    text: یک بلیط به {city_name} می‌خواهم
+    text: این {travel_noun} است
     language_code: prs
     direction: rtl
   slots:
-    city_name: *id003
+    travel_noun: *id006
   answer_derivation:
     kind: render_frame
     frame:
-      text: یک بلیط به {city_name} می‌خواهم
+      text: این {travel_noun} است
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: یک بلیط به [city] می‌خواهم (I want a ticket to [city]).'
+    text: 'Word order: این [thing] است (this is a/the [thing]).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson03.depart_noun_fill.001
@@ -310,27 +417,12 @@ templates:
     text: 'Word order: قطار از سکوی دو حرکت می‌کند (the train departs from platform two).'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit16.lesson04.schedule_number_order.002
-  lesson_content_key: prs.a1.unit16.lesson04.reading_a_schedule
-  type: word_order
-  frame:
-    text: قطار ساعت {ones_number} حرکت می‌کند
-    language_code: prs
-    direction: rtl
-  slots:
-    ones_number: *id008
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: قطار ساعت {ones_number} حرکت می‌کند
-      language_code: prs
-      direction: rtl
-  feedback_frame:
-    text: 'Word order: قطار ساعت [number] حرکت می‌کند (the train departs at [number] o''clock).'
-    language_code: en
-    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson05.confirmation_word_translate.001
   lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: `confirmation_word` (بسیار/خوب) has
+  # ZERO unit16-scoped candidates (registered to a1 unit01 -- LOG FOR
+  # COORDINATOR). Re-anchored to travel_role_word (2 distinct:
+  # traveler/seller), lesson05's own genuinely-new vocabulary.
   type: translation
   frame:
     text: '{confirmation_word}'
@@ -339,7 +431,7 @@ templates:
     slot_rendering:
       confirmation_word: english_gloss
   slots:
-    confirmation_word: *id009
+    confirmation_word: *id013
   answer_derivation:
     kind: slot_text
     slot: confirmation_word
@@ -349,38 +441,53 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson05.tomorrow_word_fill.002
   lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: `tomorrow_word` (فردا) has ZERO
+  # unit16-scoped candidates (registered to a1 unit07 -- LOG FOR
+  # COORDINATOR). fill_in_blank requires a genuinely single-candidate
+  # slot course-wide; travel_role_word has 2 members so it can't serve
+  # here, but platform_ezafe (سکوی) already is one (direction-wide, per
+  # the compiler's SS17 check) and was previously only exercised by a
+  # word_order (platform_ezafe_order.001) -- reusing its exact frame here
+  # gives it a fill_in_blank too, the same "same frame, two types"
+  # pattern already used by depart_noun_fill.001/when_word_fill.002 in
+  # this same file.
   type: fill_in_blank
   frame:
-    text: '{tomorrow_word} صبح'
+    text: قطار از {platform_ezafe} دو حرکت می‌کند
     language_code: prs
     direction: rtl
   slots:
-    tomorrow_word: *id010
+    platform_ezafe: *id007
   answer_derivation:
     kind: slot_text
-    slot: tomorrow_word
+    slot: platform_ezafe
   feedback_frame:
-    text: فردا صبح means tomorrow morning.
+    text: 'قطار از سکوی دو حرکت می‌کند means the train departs from platform two.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_gloss.001
   lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  # UNIT-SCOPE REPAIR 2026-07-24: `travel_farewell_word` has ZERO
+  # unit16-scoped candidates (LOG FOR COORDINATOR, see travel_review_pool's
+  # definition note). Re-anchored to travel_review_pool (9 distinct).
   type: multiple_choice
   frame:
     text: '{travel_farewell_word}'
     language_code: prs
     direction: rtl
   slots:
-    travel_farewell_word: *id011
+    travel_farewell_word: *id012
   answer_derivation:
     kind: slot_gloss
     slot: travel_farewell_word
   feedback_frame:
-    text: '{travel_farewell_word} is one of this unit''s polite travel phrases.'
+    text: '{travel_farewell_word} is one of this unit''s travel words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_translate.002
   lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  # UNIT-SCOPE REPAIR 2026-07-24: same 0-candidate travel_farewell_word
+  # defect as the MC sibling above. Re-anchored to travel_review_pool.
   type: translation
   frame:
     text: '{travel_farewell_word}'
@@ -389,7 +496,7 @@ templates:
     slot_rendering:
       travel_farewell_word: english_gloss
   slots:
-    travel_farewell_word: *id011
+    travel_farewell_word: *id012
   answer_derivation:
     kind: slot_text
     slot: travel_farewell_word
@@ -399,10 +506,13 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_review_pair.003
   lesson_content_key: prs.a1.unit16.lesson06.confirming_travel_plans
+  # UNIT-SCOPE REPAIR 2026-07-24: was travel_farewell_word (0 candidates,
+  # LOG FOR COORDINATOR) union'd with travel_noun (4) -- needed 10, had 4.
+  # travel_review_pool now unions this unit's real 9-token vocabulary;
+  # slots reduced 10->6 (9>=6, C(9,6)=84 combinations).
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} —
-      {word_nine} — {word_ten}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
@@ -412,10 +522,6 @@ templates:
     word_four: *id012
     word_five: *id012
     word_six: *id012
-    word_seven: *id012
-    word_eight: *id012
-    word_nine: *id012
-    word_ten: *id012
   slot_relations:
   - kind: distinct
     slots:
@@ -425,10 +531,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
-    - word_eight
-    - word_nine
-    - word_ten
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -438,10 +540,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
-    - word_eight
-    - word_nine
-    - word_ten
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
@@ -494,24 +592,33 @@ templates:
     direction: rtl
 - content_key: practice.en-prs.prs.a1.unit16.lesson05.tomorrow_word_fill.002.volume_order.005
   lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: `tomorrow_word` has ZERO unit16-scoped
+  # candidates (see tomorrow_word_fill.002's note above). A "platform"
+  # word_order twin already exists (platform_ezafe_order.001), so instead
+  # of duplicating that exact frame a second time, re-anchored to
+  # travel_role_word (2 distinct: traveler/seller -- lesson05's own new
+  # vocabulary) with a fresh predicate frame. Course-scope checked:
+  # travel_role_word is unit16-exclusive within the a1 course, and both
+  # "این مسافر است" (this is a traveler) / "این فروشنده است" (this is a
+  # seller) are grammatical.
   type: word_order
   frame:
-    text: '{tomorrow_word} صبح'
+    text: این {travel_role_word} است
     language_code: prs
     direction: rtl
   slots:
-    tomorrow_word:
+    travel_role_word:
       language_code: prs
-      part_of_speech: adverb
+      part_of_speech: noun
       agreement_tags:
-        semantic: tomorrow_word
+        semantic: travel_role_word
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{tomorrow_word} صبح'
+      text: این {travel_role_word} است
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: '{tomorrow_word} صبح'
-    language_code: prs
-    direction: rtl
+    text: 'Word order: این [person] است (this is a/the [person]).'
+    language_code: en
+    direction: ltr

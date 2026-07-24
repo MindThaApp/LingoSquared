@@ -6,7 +6,34 @@ unit_content_key: prs.a1.unit13.plans
 review:
   status: unreviewed
   fresh_context: false
-  notes: 'Authored 2026-07-07 for the new A1 unit13 (making plans) realization, same pass as this bundle''s a1_unit12.yaml
+  notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
+    7 DEAD templates + 1 below-floor, all from tags reused from EARLIER units (DO-NOT
+    #2), despite this file''s original notes claiming they were unit13''s own. weekday_order.003
+    (lesson02 word_order) and weekday_gloss.003 (lesson05 MC) relied on `weekday_name`
+    -- 0 unit13-scoped candidates (introduced a1 unit09, a2 unit09/unit12, b1 unit03,
+    never unit13). weekday_order.003 DROPPED (no in-unit day-word substitute and no
+    frame using plan_verb''s 4 differing-person members could work); weekday_gloss.003
+    re-anchored to plan_verb (4 distinct). waiting_word_fill.001 (fill_in_blank),
+    waiting_word_translate.002, and their word_order twin (.007) relied on `waiting_word`
+    (منتظر) -- 0 unit13-scoped candidates (registered to a1 unit11, not unit13). waiting_word_fill.001
+    and its word_order twin DROPPED (no other unit13 tag is single-candidate course-wide,
+    which fill_in_blank/its deterministic word_order twin require); REPLACED the word_order
+    slot with a new lesson05 bare-word translation over accept_decline_word (accept_decline_translate.010)
+    to keep template count/tier balance. waiting_word_translate.002 (no candidate-count
+    floor) re-anchored to plan_pool instead. plan_pool_pair.003 (lesson03 matching_pairs,
+    needed 11 distinct, had 10) and person_name_gloss.001/person_name_pair.002 (lesson06,
+    person_name alone is only 1 distinct (نگار) -- below the MC floor, and far short
+    of the pair''s declared 12) all fixed by widening `plan_pool` to also include person_name
+    (+ proper_noun POS), reaching exactly 11 distinct (پلان/پارک/برویم/می‌خواهین/عالی/قبول/متأسف/نمی‌توانم/دعوت/می‌بینم/نگار);
+    person_name_pair.002''s declared slots reduced 12->6. LOG FOR COORDINATOR: `waiting_word`
+    (منتظر) and `weekday_name` both need a unit13-anchored backfill Lexeme (or their
+    templates permanently rely on cross-unit reuse); a pack-only fix cannot add one.
+    Post-fix: _practice_unit_scope_check.py reports 0 DEAD, 0 below-floor for this pack
+    (13 templates, down from 15 -- 2 net drops, 1 replacement added); practice-validate
+    0 errors (see coordinator report). Pre-existing authoring notes below, retained for
+    provenance.
+
+    Authored 2026-07-07 for the new A1 unit13 (making plans) realization, same pass as this bundle''s a1_unit12.yaml
     sibling (see that file''s notes for the full extension context: a parallel session authored units 09-11''s practice pool
     separately, this bundle only touches units 12-15).
 
@@ -70,17 +97,26 @@ slot_presets:
     part_of_speech: proper_noun
     agreement_tags:
       semantic: person_name
+  # UNIT-SCOPE REPAIR 2026-07-24: widened with `person_name` (+
+  # `proper_noun` POS) so this preset reaches exactly the 11 distinct
+  # tokens plan_pool_pair.003 already declared (پلان/پارک/برویم/می‌خواهین/
+  # عالی/قبول/متأسف/نمی‌توانم/دعوت/می‌بینم = 10 without person_name, one
+  # short of the declared 11 -- see plan_pool_pair.003). Also now used by
+  # person_name_gloss.001 / person_name_pair.002 (both re-anchored off
+  # the 0-candidate `person_name`-alone constraint).
   plan_pool: &id005
     language_code: prs
     part_of_speech:
     - noun
     - verb
     - adjective
+    - proper_noun
     agreement_tags:
       semantic:
       - plan_noun
       - plan_verb
       - accept_decline_word
+      - person_name
 templates:
 - content_key: practice.en-prs.prs.a1.unit13.lesson01.plan_noun_gloss.001
   lesson_content_key: prs.a1.unit13.lesson01.plan_vocabulary
@@ -169,25 +205,6 @@ templates:
     text: '{plan_verb} is the Dari word for this.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit13.lesson02.weekday_order.003
-  lesson_content_key: prs.a1.unit13.lesson02.proposing_a_plan
-  type: word_order
-  frame:
-    text: می‌خواهین {weekday_name} برویم پارک؟
-    language_code: prs
-    direction: rtl
-  slots:
-    weekday_name: *id003
-  answer_derivation:
-    kind: render_frame
-    frame:
-      text: می‌خواهین {weekday_name} برویم پارک؟
-      language_code: prs
-      direction: rtl
-  feedback_frame:
-    text: 'Word order: می‌خواهین [day] برویم پارک؟ (do you want to go to the park [day]?).'
-    language_code: en
-    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson03.accept_decline_gloss.001
   lesson_content_key: prs.a1.unit13.lesson03.accepting_a_plan
   type: multiple_choice
@@ -274,24 +291,20 @@ templates:
     text: Match each word to its English meaning.
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit13.lesson05.waiting_word_fill.001
-  lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
-  type: fill_in_blank
-  frame:
-    text: '{waiting_word} استم.'
-    language_code: prs
-    direction: rtl
-  slots:
-    waiting_word: *id006
-  answer_derivation:
-    kind: slot_text
-    slot: waiting_word
-  feedback_frame:
-    text: '{waiting_word} استم means I''m waiting.'
-    language_code: en
-    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson05.waiting_word_translate.002
   lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
+  # UNIT-SCOPE REPAIR 2026-07-24: `waiting_word` (منتظر) has ZERO
+  # unit13-scoped candidates -- it's registered to a1 unit11 (meeting_
+  # time_dialogue), not this unit, despite this file's original notes
+  # calling it "a private single-candidate tag layered on top of
+  # accept_decline_word ... used only by this pack". Cannot fix pack-only
+  # (would need a new backfill Lexeme row anchored to unit13) -- LOGGED
+  # for the coordinator. The sibling fill_in_blank (waiting_word_fill.001)
+  # and its word_order twin (.007) both required a genuinely
+  # single-candidate slot and no other unit13 tag is single-candidate
+  # course-wide, so both were DROPPED rather than mis-re-anchored; see
+  # review notes. This translation (no candidate-count floor) is
+  # re-anchored to plan_pool (11 distinct) instead.
   type: translation
   frame:
     text: '{waiting_word}'
@@ -300,7 +313,7 @@ templates:
     slot_rendering:
       waiting_word: english_gloss
   slots:
-    waiting_word: *id006
+    waiting_word: *id005
   answer_derivation:
     kind: slot_text
     slot: waiting_word
@@ -310,57 +323,64 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson05.weekday_gloss.003
   lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
+  # UNIT-SCOPE REPAIR 2026-07-24: `weekday_name` has ZERO unit13-scoped
+  # candidates (it's introduced at a1 unit09, a2 unit09/unit12, b1 unit03
+  # -- never unit13; the DROPPED sibling weekday_order.003 had the same
+  # defect and could not be salvaged pack-only, see review notes). Slot
+  # re-anchored to plan_verb (4 distinct: "let's go"/"do you want
+  # (polite)"/"I can't"/"I'll see"), which this unit genuinely teaches.
   type: multiple_choice
   frame:
     text: '{weekday_name}'
     language_code: prs
     direction: rtl
   slots:
-    weekday_name: *id003
+    weekday_name: *id002
   answer_derivation:
     kind: slot_gloss
     slot: weekday_name
   feedback_frame:
-    text: '{weekday_name} names a day of the week.'
+    text: '{weekday_name} is a verb used when making a plan.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson06.person_name_gloss.001
   lesson_content_key: prs.a1.unit13.lesson06.making_a_plan_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: person_name alone is only 1 distinct
+  # gloss at unit13 scope (نگار), below the 3-option floor. Widened to
+  # plan_pool (now 11 distinct: پلان/پارک/برویم/می‌خواهین/عالی/قبول/متأسف/
+  # نمی‌توانم/دعوت/می‌بینم/نگار), fitting for lesson06's whole-unit
+  # dialogue review.
   type: multiple_choice
   frame:
     text: '{person_name}'
     language_code: prs
     direction: rtl
   slots:
-    person_name: *id007
+    person_name: *id005
   answer_derivation:
     kind: slot_gloss
     slot: person_name
   feedback_frame:
-    text: '{person_name} is a name used in this course.'
+    text: '{person_name} is a word from this unit''s plan-making vocabulary.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson06.person_name_pair.002
   lesson_content_key: prs.a1.unit13.lesson06.making_a_plan_dialogue
+  # UNIT-SCOPE REPAIR 2026-07-24: person_name alone is 1 distinct token,
+  # needed 12 -> DEAD. Widened to plan_pool (11 distinct, same as
+  # person_name_gloss.001 above), slots reduced 12->6.
   type: matching_pairs
   frame:
-    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}
-      — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten} — {person_name_eleven} — {person_name_twelve}'
+    text: '{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six}'
     language_code: prs
     direction: rtl
   slots:
-    person_name_one: *id007
-    person_name_two: *id007
-    person_name_three: *id007
-    person_name_four: *id007
-    person_name_five: *id007
-    person_name_six: *id007
-    person_name_seven: *id007
-    person_name_eight: *id007
-    person_name_nine: *id007
-    person_name_ten: *id007
-    person_name_eleven: *id007
-    person_name_twelve: *id007
+    person_name_one: *id005
+    person_name_two: *id005
+    person_name_three: *id005
+    person_name_four: *id005
+    person_name_five: *id005
+    person_name_six: *id005
   slot_relations:
   - kind: distinct
     slots:
@@ -370,12 +390,6 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -385,36 +399,34 @@ templates:
     - person_name_four
     - person_name_five
     - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
-    - person_name_eleven
-    - person_name_twelve
   feedback_frame:
-    text: Match each name to its English label.
+    text: Match each word to its English meaning.
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit13.lesson05.waiting_word_fill.001.volume_order.007
+- content_key: practice.en-prs.prs.a1.unit13.lesson05.accept_decline_translate.010
   lesson_content_key: prs.a1.unit13.lesson05.reading_an_invitation
-  type: word_order
+  # UNIT-SCOPE REPAIR 2026-07-24: REPLACES the DROPPED
+  # waiting_word_fill.001.volume_order.007 (word_order twin of the
+  # DROPPED waiting_word_fill.001 -- see waiting_word_translate.002's
+  # note: `waiting_word`/منتظر is 0-candidate at unit13 scope, registered
+  # to a1 unit11 instead, and no other unit13 tag is single-candidate
+  # course-wide so fill_in_blank/word_order pack-only fixes weren't
+  # available). Added as a bare-word translation over accept_decline_word
+  # (3 distinct: عالی/قبول/متأسف) anchored to lesson05, to keep this
+  # lesson represented and the pack's template count/tier balance intact.
+  type: translation
   frame:
-    text: '{waiting_word} استم.'
-    language_code: prs
-    direction: rtl
+    text: '{accept_decline_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      accept_decline_word: english_gloss
   slots:
-    waiting_word:
-      language_code: prs
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: waiting_word
+    accept_decline_word: *id004
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{waiting_word} استم.'
-      language_code: prs
-      direction: rtl
+    kind: slot_text
+    slot: accept_decline_word
   feedback_frame:
-    text: '{waiting_word} استم.'
-    language_code: prs
-    direction: rtl
+    text: '{accept_decline_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
