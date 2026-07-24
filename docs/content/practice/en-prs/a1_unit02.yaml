@@ -31,7 +31,37 @@ review:
     "title" specifically is never used in multiple_choice here (2 < 3), only fill_in_blank/ translation. Not yet compiler-validated
     or DB-verified as of this writing (left for the end-of-session scripts/verify.sh run); status left unreviewed pending
     a real fresh-context review -- this lane does not self-certify review status, and human native-speaker review is still
-    recommended before Dari content ships, per standing project policy.'
+    recommended before Dari content ships, per standing project policy.
+
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py):
+    generate_checkpoint() scopes candidates to THIS unit''s own lexemes only, and several slots
+    here had silently drifted to depend on lexemes actually introduced by an EARLIER unit (the
+    backfill classifier keys glosses by bare token, so a token re-taught in this unit but first
+    classified in an earlier one contributes 0 to unit02''s own pool). Fixed, all pack-only (no
+    backfill/realization/overlay edits):
+    (1) person_pair.004 was DEAD (10 slots declared, only 3 unit-scoped person_name candidates
+    existed -- ONLY 3 person names are actually introduced anywhere in this unit). Repurposed to
+    a "social words" matching_pairs over politeness UNION title (4+2=6 distinct, both genuinely
+    unit02-introduced, no overlap with the other two matching_pairs templates below).
+    (2) city_pair.004 was DEAD (5 slots declared, only 4 unit-scoped city_name+country candidates
+    existed). Widened to the full unit-scoped proper-noun pool (person_name UNION city_name UNION
+    country = 3+3+1 = 7 distinct), reusing the person names freed up by fix (1) instead of
+    duplicating them into two separate templates.
+    (3) occupation_pair.004 was below the 6-pair floor (4 occupation-only candidates). Widened to
+    occupation UNION relationship_word (4+2=6 distinct, both genuinely unit02-introduced,
+    disjoint from politeness/title used in fix (1)).
+    (4) name_gloss.001 was below the multiple_choice 3-option floor (name_word alone = 1
+    unit-scoped candidate, نامت). Widened to name_word UNION person_name (1+3=4 distinct);
+    name_translate.003 widened the same way for consistency/variety (translation has no floor,
+    this is purely a quality improvement).
+    (5) relationship_gloss.001 was below the multiple_choice 3-option floor (relationship_word
+    alone = 2 unit-scoped candidates). Widened to relationship_word UNION title (2+2=4 distinct);
+    relationship_translate.004 widened the same way for consistency.
+    All five fixes only recombine semantic tags this unit''s OWN lexemes already carry -- no new
+    vocabulary, no backfill/gloss changes. Re-verified 0 DEAD / 0 below-floor for this pack via
+    scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py
+    practice-validate (see coordinator report for the exact invocation/output).'
 tag_schema:
   part_of_speech:
   - noun
@@ -115,6 +145,67 @@ slot_presets:
     - adverb
     agreement_tags:
       semantic: dialogue_word
+  # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, see review.notes below):
+  # name_word alone has only 1 unit-scoped member (نامت); unioned with
+  # person_name (all 3 introduced somewhere in this unit) it clears the
+  # multiple_choice 3-option floor without touching any other unit's vocab.
+  name_or_person: &id011
+    language_code: prs
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - name_word
+      - person_name
+  # relationship_word alone has only 2 unit-scoped members; unioned with
+  # title (also 2) it clears the multiple_choice floor. Both are "words
+  # that describe or address a person" -- a coherent pairing.
+  relationship_or_title: &id012
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - relationship_word
+      - title
+  # person_name(3) + city_name(3) + country(1) = 7 distinct proper nouns,
+  # the complete unit-scoped proper-noun pool -- replaces the old
+  # city_or_country preset (city_name+country only = 4, DEAD at 5 slots).
+  proper_noun_pool: &id013
+    language_code: prs
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - person_name
+      - city_name
+      - country
+  # politeness(4) + title(2) = 6 distinct "polite social words" -- replaces
+  # the old person_name-only preset used by person_pair.004 (DEAD at 10
+  # slots; person_name itself only ever had 3 unit-scoped members). Kept
+  # disjoint from proper_noun_pool above and occupation_and_relationship
+  # below so the pack's three matching_pairs templates don't just recycle
+  # the same tokens at each other.
+  social_words_pool: &id014
+    language_code: prs
+    part_of_speech:
+    - noun
+    - verb
+    - adverb
+    - adjective
+    agreement_tags:
+      semantic:
+      - politeness
+      - title
+  # occupation(4) + relationship_word(2) = 6 distinct "people & jobs" words
+  # -- replaces the occupation-only preset (4 slots, below the 6-pair
+  # floor). relationship_word is NOT reused in social_words_pool above.
+  occupation_and_relationship: &id015
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - occupation
+      - relationship_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit02.lesson01.name_gloss.001
   lesson_content_key: prs.a1.unit02.lesson01.name_exchange
@@ -124,12 +215,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    name_word: *id001
+    name_word: *id011
   answer_derivation:
     kind: slot_gloss
     slot: name_word
   feedback_frame:
-    text: '{name_word} is used to ask or give a name.'
+    text: '{name_word} is a name or a name-related word.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson01.name_translate.003
@@ -142,7 +233,7 @@ templates:
     slot_rendering:
       name_word: english_gloss
   slots:
-    name_word: *id001
+    name_word: *id011
   answer_derivation:
     kind: slot_text
     slot: name_word
@@ -154,49 +245,36 @@ templates:
   lesson_content_key: prs.a1.unit02.lesson01.name_exchange
   type: matching_pairs
   frame:
-    text: '{person_name_one}، {person_name_two}، {person_name_three}، {person_name_four}، {person_name_five}، {person_name_six}،
-      {person_name_seven}، {person_name_eight}، {person_name_nine}، {person_name_ten}'
+    text: '{social_word_one} — {social_word_two} — {social_word_three} — {social_word_four} — {social_word_five} — {social_word_six}'
     language_code: prs
     direction: rtl
   slots:
-    person_name_one: *id002
-    person_name_two: *id002
-    person_name_three: *id002
-    person_name_four: *id002
-    person_name_five: *id002
-    person_name_six: *id002
-    person_name_seven: *id002
-    person_name_eight: *id002
-    person_name_nine: *id002
-    person_name_ten: *id002
+    social_word_one: *id014
+    social_word_two: *id014
+    social_word_three: *id014
+    social_word_four: *id014
+    social_word_five: *id014
+    social_word_six: *id014
   slot_relations:
   - kind: distinct
     slots:
-    - person_name_one
-    - person_name_two
-    - person_name_three
-    - person_name_four
-    - person_name_five
-    - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
+    - social_word_one
+    - social_word_two
+    - social_word_three
+    - social_word_four
+    - social_word_five
+    - social_word_six
   answer_derivation:
     kind: matching_pairs
     slots:
-    - person_name_one
-    - person_name_two
-    - person_name_three
-    - person_name_four
-    - person_name_five
-    - person_name_six
-    - person_name_seven
-    - person_name_eight
-    - person_name_nine
-    - person_name_ten
+    - social_word_one
+    - social_word_two
+    - social_word_three
+    - social_word_four
+    - social_word_five
+    - social_word_six
   feedback_frame:
-    text: Match each name to its English label.
+    text: Match each polite/social word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_gloss.001
@@ -238,33 +316,40 @@ templates:
   lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
   type: matching_pairs
   frame:
-    text: '{city_name_one} — {city_name_two} — {city_name_three} — {city_name_four} — {city_name_five}'
+    text: '{proper_noun_one} — {proper_noun_two} — {proper_noun_three} — {proper_noun_four} — {proper_noun_five} — {proper_noun_six}
+      — {proper_noun_seven}'
     language_code: prs
     direction: rtl
   slots:
-    city_name_one: *id004
-    city_name_two: *id004
-    city_name_three: *id004
-    city_name_four: *id004
-    city_name_five: *id004
+    proper_noun_one: *id013
+    proper_noun_two: *id013
+    proper_noun_three: *id013
+    proper_noun_four: *id013
+    proper_noun_five: *id013
+    proper_noun_six: *id013
+    proper_noun_seven: *id013
   slot_relations:
   - kind: distinct
     slots:
-    - city_name_one
-    - city_name_two
-    - city_name_three
-    - city_name_four
-    - city_name_five
+    - proper_noun_one
+    - proper_noun_two
+    - proper_noun_three
+    - proper_noun_four
+    - proper_noun_five
+    - proper_noun_six
+    - proper_noun_seven
   answer_derivation:
     kind: matching_pairs
     slots:
-    - city_name_one
-    - city_name_two
-    - city_name_three
-    - city_name_four
-    - city_name_five
+    - proper_noun_one
+    - proper_noun_two
+    - proper_noun_three
+    - proper_noun_four
+    - proper_noun_five
+    - proper_noun_six
+    - proper_noun_seven
   feedback_frame:
-    text: Match each place name to its English label.
+    text: Match each name or place to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson02.country_translate.005
@@ -323,14 +408,16 @@ templates:
   lesson_content_key: prs.a1.unit02.lesson03.occupation
   type: matching_pairs
   frame:
-    text: '{occupation_one} — {occupation_two} — {occupation_three} — {occupation_four}'
+    text: '{occupation_one} — {occupation_two} — {occupation_three} — {occupation_four} — {occupation_five} — {occupation_six}'
     language_code: prs
     direction: rtl
   slots:
-    occupation_one: *id006
-    occupation_two: *id006
-    occupation_three: *id006
-    occupation_four: *id006
+    occupation_one: *id015
+    occupation_two: *id015
+    occupation_three: *id015
+    occupation_four: *id015
+    occupation_five: *id015
+    occupation_six: *id015
   slot_relations:
   - kind: distinct
     slots:
@@ -338,6 +425,8 @@ templates:
     - occupation_two
     - occupation_three
     - occupation_four
+    - occupation_five
+    - occupation_six
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -345,8 +434,10 @@ templates:
     - occupation_two
     - occupation_three
     - occupation_four
+    - occupation_five
+    - occupation_six
   feedback_frame:
-    text: Match each job to its English label.
+    text: Match each job or people-word to its English label.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_gloss.001
@@ -357,12 +448,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    relationship_word: *id007
+    relationship_word: *id012
   answer_derivation:
     kind: slot_gloss
     slot: relationship_word
   feedback_frame:
-    text: '{relationship_word} names a person you know.'
+    text: '{relationship_word} names a person you know, or how you address them.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson04.this_is_person_order.003
@@ -394,7 +485,7 @@ templates:
     slot_rendering:
       relationship_word: english_gloss
   slots:
-    relationship_word: *id007
+    relationship_word: *id012
   answer_derivation:
     kind: slot_text
     slot: relationship_word

@@ -11,15 +11,43 @@ review:
     same pass as this bundle's a1_unit03.yaml sibling (see that file's
     notes for the full extension rationale and verification method).
 
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair,
+    docs/content/PRACTICE_PACK_RECIPE.md §1.1/§3.1/§8.1): the original
+    phone_and_message preset pooled this unit's phone_opening/
+    message_word with unit04's phone_word -- exactly recipe DO-NOT #2
+    (a slot constrained to vocabulary introduced in an EARLIER unit).
+    generate_checkpoint() scopes candidates to unit07's own lexemes
+    only, so phone_word contributed 0 there and the pool sat at 3, not
+    the 6 the templates declared -- phone_open_pair.003, message_pair.003
+    DEAD. Likewise name_pair.004 declared 10 slots against the
+    course-wide person_name population (10 names across the whole
+    direction) while unit07 itself introduces only 2 (فرید, لیمه) --
+    also DEAD; name_gloss.001 (MC over the same 2) sat below the
+    3-option floor.
+
+    FIX: re-anchored all four to the unit's own already-tagged
+    `dialogue_word` vocabulary (an established corpus-wide tag; see
+    a1_unit45's pilot pack), unioned with this unit's own
+    phone_opening/message_word (§3.1a). unit07 carries 10 distinct
+    unit-scoped tokens under {phone_opening, message_word,
+    dialogue_word}: الو, پیام, کوتاه, می‌کند, لطفاً, کنین, می‌خواهم,
+    فردا, ساعت, برای -- 10 distinct glosses, no collisions. Verified via
+    the iter_specs filter in REAUTH_TASK.md. phone_open_pair.003 (6
+    slots, lesson01), message_pair.003 (6 slots, lesson04) and
+    name_pair.004 (reduced from 10 to the standard 6 slots, lesson06)
+    now draw from this pool; name_gloss.001 (MC, lesson06) does too --
+    7 -> 10 distinct answer values, clears the 3-option floor.
+    person_name (فرید/لیمه) stays real, single-purpose vocabulary in
+    name_translate.003 (bare-word translation has no candidate floor)
+    -- unaffected, still hosts both names. phone_opening/message_word
+    keep their own narrow translation templates unchanged. dropped the
+    stale unit04 phone_word cross-reference entirely (PACK-ONLY: no
+    other unit's tag is referenced here anymore).
+
     This unit's own vocabulary is mostly full phrases (کی صحبت می‌کند؟,
     لطفاً آهسته صحبت کنین, etc.) rather than atomic nouns, so well-
     populated single-token semantic groups are thinner here than in
-    other units. Three groups: person_name (فرید/همایون/لیمه, 3
-    members, the one genuinely well-populated group -- anchored to
-    lesson06's phone-call dialogue, where all three are real speakers),
-    phone_opening (الو/تلفن, 2 members -- matching_pairs/translation
-    only) and message_word (پیام/کوتاه, 2 members -- matching_pairs/
-    translation only). Deliberately skipped the many multi-word phrase
+    other units. Deliberately skipped the many multi-word phrase
     tokens (بلی بفرمایین, کی صحبت می‌کند, لطفاً آهسته صحبت کنین, etc.)
     as slot fillers -- this project's backfill scripts only build
     single-token lexemes, so phrase-level vocabulary stays taught in
@@ -41,21 +69,31 @@ review:
     backfill_lexemes_en_prs.py run has actually happened against a real
     database yet in this pass.
 tag_schema:
-  part_of_speech: [noun, proper_noun, adjective, particle]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    # phone_word declared here too (not this pack's own tag) because
-    # phone_open_pair/message_pair pool it in from unit04 to reach 6
-    # candidates -- see the phone_and_message preset below.
-    semantic: [person_name, phone_opening, message_word, phone_word]
+    semantic: [person_name, phone_opening, message_word, dialogue_word]
 slot_presets:
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   phone_opening: &phone_opening {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: phone_opening}}
   message_word: &message_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: message_word}}
-  # phone_opening (2) and message_word (2) are each too thin alone;
-  # pooled with unit04's phone_word (نمبر/تلفن/تلفنم) for the
-  # matching_pairs templates below to reach 6 (AUTHORING_GUIDE.md #16) --
-  # coherent "phone & messaging" theme, real vocabulary only.
-  phone_and_message: &phone_and_message {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: [phone_word, phone_opening, message_word]}}
+  # REAUTH 2026-07-24: replaces the old phone_and_message preset, which
+  # pooled in unit04's phone_word (an EARLIER unit -- 0 unit-scoped
+  # candidates at checkpoint time, recipe DO-NOT #2). This unions only
+  # unit07's OWN tags: phone_opening (1) + message_word (2) +
+  # dialogue_word (7, this unit's own already-tagged dialogue vocabulary
+  # spanning lessons 02-06) = 10 distinct unit-scoped tokens, comfortably
+  # over the 6-pair matching_pairs floor and the 3-option MC floor.
+  unit_vocab: &unit_vocab {language_code: prs, part_of_speech: [noun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: [phone_opening, message_word, dialogue_word]}}
 templates:
   # Lesson 1: answering the phone.
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_translate.002
@@ -68,12 +106,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_pair.003
     lesson_content_key: prs.a1.unit07.lesson01.answering_the_phone
     type: matching_pairs
-    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
-    # pooling phone_opening with unit04's phone_word and this unit's own
-    # message_word (phone_and_message preset above) -- verified via
-    # scripts/_practice_slot_check.py.
+    # REAUTH 2026-07-24: re-anchored to unit_vocab (this unit's own
+    # phone_opening + message_word + dialogue_word union, 10 distinct
+    # unit-scoped tokens) -- the old phone_and_message preset pooled in
+    # unit04's phone_word (an earlier unit), 0 unit-scoped candidates,
+    # DEAD at checkpoint scope. See review.notes.
     frame: {text: "{phone_opening_one} — {phone_opening_two} — {phone_opening_three} — {phone_opening_four} — {phone_opening_five} — {phone_opening_six}", language_code: prs, direction: rtl}
-    slots: {phone_opening_one: *phone_and_message, phone_opening_two: *phone_and_message, phone_opening_three: *phone_and_message, phone_opening_four: *phone_and_message, phone_opening_five: *phone_and_message, phone_opening_six: *phone_and_message}
+    slots: {phone_opening_one: *unit_vocab, phone_opening_two: *unit_vocab, phone_opening_three: *unit_vocab, phone_opening_four: *unit_vocab, phone_opening_five: *unit_vocab, phone_opening_six: *unit_vocab}
     slot_relations: [{kind: distinct, slots: [phone_opening_one, phone_opening_two, phone_opening_three, phone_opening_four, phone_opening_five, phone_opening_six]}]
     answer_derivation: {kind: matching_pairs, slots: [phone_opening_one, phone_opening_two, phone_opening_three, phone_opening_four, phone_opening_five, phone_opening_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -89,12 +128,10 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson04.message_pair.003
     lesson_content_key: prs.a1.unit07.lesson04.leaving_a_message
     type: matching_pairs
-    # Expanded 2->6 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
-    # pooling message_word with unit04's phone_word and this unit's own
-    # phone_opening (phone_and_message preset above) -- verified via
-    # scripts/_practice_slot_check.py.
+    # REAUTH 2026-07-24: re-anchored to unit_vocab, same fix as
+    # phone_open_pair.003 above -- see review.notes.
     frame: {text: "{message_word_one} — {message_word_two} — {message_word_three} — {message_word_four} — {message_word_five} — {message_word_six}", language_code: prs, direction: rtl}
-    slots: {message_word_one: *phone_and_message, message_word_two: *phone_and_message, message_word_three: *phone_and_message, message_word_four: *phone_and_message, message_word_five: *phone_and_message, message_word_six: *phone_and_message}
+    slots: {message_word_one: *unit_vocab, message_word_two: *unit_vocab, message_word_three: *unit_vocab, message_word_four: *unit_vocab, message_word_five: *unit_vocab, message_word_six: *unit_vocab}
     slot_relations: [{kind: distinct, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [message_word_one, message_word_two, message_word_three, message_word_four, message_word_five, message_word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -103,10 +140,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_gloss.001
     lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
     type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a speaker in this phone call.", language_code: en, direction: ltr}
+    # REAUTH 2026-07-24: re-anchored from person_name (only 2
+    # unit-scoped candidates, below the 3-option floor) to unit_vocab
+    # (10 distinct) -- see review.notes. person_name stays real,
+    # single-purpose vocabulary in name_translate.003 below.
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *unit_vocab}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is from this unit's phone-call vocabulary.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_translate.003
     lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
     type: translation
@@ -117,11 +158,15 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_pair.004
     lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
     type: matching_pairs
-    # Expanded 2->10 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit) --
-    # verified via scripts/_practice_slot_check.py: 10 distinct
-    # person_name candidates backfilled course-wide.
-    frame: {text: "{person_name_one} — {person_name_two} — {person_name_three} — {person_name_four} — {person_name_five} — {person_name_six} — {person_name_seven} — {person_name_eight} — {person_name_nine} — {person_name_ten}", language_code: prs, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name, person_name_three: *person_name, person_name_four: *person_name, person_name_five: *person_name, person_name_six: *person_name, person_name_seven: *person_name, person_name_eight: *person_name, person_name_nine: *person_name, person_name_ten: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [person_name_one, person_name_two, person_name_three, person_name_four, person_name_five, person_name_six, person_name_seven, person_name_eight, person_name_nine, person_name_ten]}
-    feedback_frame: {text: "Match each name to its English label.", language_code: en, direction: ltr}
+    # REAUTH 2026-07-24: the old person_name pool (10 slots) was
+    # backfilled COURSE-WIDE (10 names across the whole direction);
+    # unit07 itself introduces only 2 (فرید, لیمه) -- 0 unit-scoped
+    # candidates below what 10 slots need, DEAD at checkpoint scope.
+    # Re-anchored to unit_vocab (10 distinct unit-scoped tokens) and
+    # reduced to the standard 6 slots -- see review.notes. person_name
+    # stays real, single-purpose vocabulary in name_translate.003 above.
+    frame: {text: "{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}", language_code: prs, direction: rtl}
+    slots: {item_one: *unit_vocab, item_two: *unit_vocab, item_three: *unit_vocab, item_four: *unit_vocab, item_five: *unit_vocab, item_six: *unit_vocab}
+    slot_relations: [{kind: distinct, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -51,10 +51,34 @@ review:
     standard fresh-context review before import; no backfill_lexemes_
     en_prs.py run has actually happened against a real database yet in
     this pass.
+
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix,
+    scripts/_practice_unit_scope_check.py): the whole-direction check
+    above only proves a slot has candidates SOMEWHERE in en-prs;
+    generate_checkpoint() scopes candidates to THIS unit's own lexemes
+    only, and khanem/خانم above turned out to be introduced in unit02, not
+    here -- marital_word's real unit03-scoped pool is 3 (متأهل/مجرد/شوهر),
+    not 4, which left marital_pair.004 DEAD (declared 4 slots, 0 could
+    ever fill from this unit alone) and have_pair.004 below the 6-pair
+    floor (3 slots, the honest have_verb-only ceiling). Fixed pack-only,
+    no backfill/realization/overlay edits, no new vocabulary:
+    (1) marital_pair.004 widened via a new marital_review preset
+    (marital_word UNION study_vocab_word UNION family_message_word UNION
+    time_reference = 3+1+1+1 = 6 distinct: متأهل/مجرد/شوهر/محصل/فامیل/هنوز,
+    all genuinely introduced by this unit's own lesson05/lesson06).
+    (2) have_pair.004 widened via a new have_and_preference preset
+    (have_verb UNION preference_verb = the full داشتن paradigm this unit
+    teaches: دارم/داریم/دارین/ندارم/دارد/ندارد, 6 distinct), kept disjoint
+    from marital_review so the two matching_pairs templates don't recycle
+    each other's tokens. Re-verified 0 DEAD / 0 below-floor for this pack
+    via scripts/_practice_unit_scope_check.py and 0 errors via
+    scripts/compile_content.py practice-validate (see coordinator report
+    for the exact invocation/output).
 tag_schema:
-  part_of_speech: [noun, adjective, verb]
+  part_of_speech: [noun, adjective, verb, adverb]
   agreement_tags:
-    semantic: [immediate_family, uncle_aunt, marital_word, have_verb]
+    semantic: [immediate_family, uncle_aunt, marital_word, have_verb,
+               study_vocab_word, family_message_word, time_reference, preference_verb]
 slot_presets:
   immediate_family: &immediate_family {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: immediate_family}}
   uncle_aunt: &uncle_aunt {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: uncle_aunt}}
@@ -65,6 +89,21 @@ slot_presets:
   # 8 (AUTHORING_GUIDE.md #16) -- both are lesson01/lesson02 of this same
   # unit, a coherent single "family members" theme, real vocabulary only.
   family_pool: &family_pool {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [immediate_family, uncle_aunt]}}
+  # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix, see review.notes below):
+  # marital_word alone has only 3 unit-scoped candidates (متأهل/مجرد/شوهر --
+  # خانم, the 4th token this pack's original notes assumed, was actually
+  # introduced in unit02, not here). Widened with the OTHER small
+  # lesson05/06 tags this unit genuinely introduces of its own
+  # (study_vocab_word: محصل; family_message_word: فامیل; time_reference:
+  # هنوز) to reach 6 distinct without touching have_verb/preference_verb
+  # (kept disjoint from the have_and_preference pool below).
+  marital_review: &marital_review {language_code: prs, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [marital_word, study_vocab_word, family_message_word, time_reference]}}
+  # have_verb alone has only 3 unit-scoped candidates (دارم/داریم/دارین).
+  # preference_verb is the same "to have" paradigm's negative/3rd-person
+  # forms taught later in this unit (ندارم/دارد/ندارد, plus دارم/دارین
+  # again) -- unioning reaches 6 distinct (دارم/داریم/دارین/ندارم/دارد/ندارد),
+  # a single coherent "have/don't have" verb-form review.
+  have_and_preference: &have_and_preference {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: [have_verb, preference_verb]}}
 templates:
   # Lesson 1: immediate family members.
   - content_key: practice.en-prs.prs.a1.unit03.lesson01.family_gloss.001
@@ -138,17 +177,16 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_pair.004
     lesson_content_key: prs.a1.unit03.lesson03.family_size
     type: matching_pairs
-    # Expanded 2->3 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
-    # Real vocabulary ceiling: داشتن (to have) only has 3 taught
-    # conjugated forms in this course (دارم/داریم/دارین) -- a closed
-    # paradigm, not a vocab set to pool further without mixing in a
-    # different verb's conjugations (would break the "match the subject"
-    # coherence of this specific drill).
-    frame: {text: "{have_verb_one} — {have_verb_two} — {have_verb_three}", language_code: prs, direction: rtl}
-    slots: {have_verb_one: *have_verb, have_verb_two: *have_verb, have_verb_three: *have_verb}
-    slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two, have_verb_three]}]
-    answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two, have_verb_three]}
-    feedback_frame: {text: "Match each form of داشتن to its subject.", language_code: en, direction: ltr}
+    # REAUTH 2026-07-24: was below the 6-pair floor at 3 slots (real
+    # unit-scoped ceiling for have_verb alone). Widened via
+    # have_and_preference (have_verb UNION preference_verb, see preset
+    # above) to the full 6-member داشتن paradigm this unit actually
+    # teaches (دارم/داریم/دارین/ندارم/دارد/ندارد), still one coherent verb.
+    frame: {text: "{have_verb_one} — {have_verb_two} — {have_verb_three} — {have_verb_four} — {have_verb_five} — {have_verb_six}", language_code: prs, direction: rtl}
+    slots: {have_verb_one: *have_and_preference, have_verb_two: *have_and_preference, have_verb_three: *have_and_preference, have_verb_four: *have_and_preference, have_verb_five: *have_and_preference, have_verb_six: *have_and_preference}
+    slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two, have_verb_three, have_verb_four, have_verb_five, have_verb_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two, have_verb_three, have_verb_four, have_verb_five, have_verb_six]}
+    feedback_frame: {text: "Match each form of داشتن (to have) to its subject.", language_code: en, direction: ltr}
 
   # Lesson 5: marriage and marital status.
   - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_gloss.001
@@ -168,11 +206,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_pair.004
     lesson_content_key: prs.a1.unit03.lesson05.marital_status
     type: matching_pairs
-    # Expanded 2->4 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit).
-    # Real vocabulary ceiling: 4 distinct marital_word candidates taught
-    # course-wide (verified via scripts/_practice_slot_check.py).
-    frame: {text: "{marital_word_one} — {marital_word_two} — {marital_word_three} — {marital_word_four}", language_code: prs, direction: rtl}
-    slots: {marital_word_one: *marital_word, marital_word_two: *marital_word, marital_word_three: *marital_word, marital_word_four: *marital_word}
-    slot_relations: [{kind: distinct, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four]}
+    # REAUTH 2026-07-24: was DEAD (declared 4 slots but only 3 unit-scoped
+    # marital_word candidates exist -- خانم, the notes' assumed 4th member,
+    # was actually introduced in unit02). Widened via marital_review
+    # (marital_word UNION study_vocab_word UNION family_message_word UNION
+    # time_reference, see preset above) to 6 distinct, all genuinely
+    # introduced by this unit's own lesson05/lesson06 lexemes.
+    frame: {text: "{marital_word_one} — {marital_word_two} — {marital_word_three} — {marital_word_four} — {marital_word_five} — {marital_word_six}", language_code: prs, direction: rtl}
+    slots: {marital_word_one: *marital_review, marital_word_two: *marital_review, marital_word_three: *marital_review, marital_word_four: *marital_review, marital_word_five: *marital_review, marital_word_six: *marital_review}
+    slot_relations: [{kind: distinct, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four, marital_word_five, marital_word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [marital_word_one, marital_word_two, marital_word_three, marital_word_four, marital_word_five, marital_word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

@@ -33,19 +33,35 @@ review:
     scripts/backfill_lexemes_en_prs.py''s real iter_specs() output (after extending that script''s classifier for units 09-11)
     -- 0 problems. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0 warnings. scripts/_fill_in_blank_ambiguity_check.py
     -- 0 AMBIGUOUS flags (no fill_in_blank templates exist in this file to flag). Needs the standard fresh-context review
-    before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.'
+    before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
+
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, docs/content/PRACTICE_PACK_RECIPE.md SS1.1/SS3.1): the ''extended
+    the course-wide person_name pool with بشیر'' claim above never actually landed in backfill_lexemes_en_prs.py -- بشیر
+    is unit04''s lesson06 and a2 unit12''s lesson04 only, both NOT this unit. unit09 itself introduces zero person_name
+    lexemes, so person_name_gloss.001 (MC) and person_name_translate.002 (translation) were both DEAD at checkpoint scope
+    (recipe DO-NOT #2: constrained to an earlier unit''s vocabulary). PACK-ONLY, so بشیر cannot be added here -- re-anchored
+    both templates instead to lesson06''s OWN real vocabulary via a new lesson06_word preset unioning this lesson''s own
+    office_word/state_adjective/meeting_verb/ordinal_date tags: وقت "appointment / time", مصروف "busy", می‌بینمت "I''ll see
+    you", نوزدهم "19th" -- 4 distinct unit-scoped tokens, no collisions, clears the 3-option MC floor. Slot renamed
+    person_name -> item; frame/feedback text genericized accordingly. Also widened calendar_pair.005 (4 slots, below the
+    6-pair floor) by unioning calendar_word with this unit''s own month_name (no overlap): تاریخ, تقویم, هجری, شمسی, حمل,
+    ثور, جوزا -- 7 distinct, 6 slots used. person_name removed from tag_schema (no longer referenced by any slot).'
 tag_schema:
   part_of_speech:
   - noun
   - adjective
   - proper_noun
+  - verb
   agreement_tags:
     semantic:
     - weekday_name
     - month_name
     - ordinal_date
     - calendar_word
-    - person_name
+    - office_word
+    - state_adjective
+    - meeting_verb
     - volume_en_prs_a1_unit09_weekday_name_10_single
 slot_presets:
   weekday_name: &id001
@@ -70,11 +86,23 @@ slot_presets:
     - adjective
     agreement_tags:
       semantic: calendar_word
-  person_name: &id006
+  # REAUTH 2026-07-24: replaces person_name (0 unit-scoped candidates --
+  # see review.notes). Unions lesson06's own office_word/state_adjective/
+  # meeting_verb tags with ordinal_date (also lesson06's نوزدهم) to reach
+  # 4 distinct unit-scoped tokens for lesson06's recognition/production
+  # templates.
+  lesson06_word: &id006
     language_code: prs
-    part_of_speech: proper_noun
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
     agreement_tags:
-      semantic: person_name
+      semantic:
+      - office_word
+      - state_adjective
+      - meeting_verb
+      - ordinal_date
   date_word: &id005
     language_code: prs
     part_of_speech:
@@ -85,6 +113,18 @@ slot_presets:
       - weekday_name
       - month_name
       - ordinal_date
+  # REAUTH 2026-07-24: widens calendar_word (4 distinct, below the
+  # 6-pair matching_pairs floor -- see review.notes) with this unit's
+  # own month_name (no token overlap) to reach 7 distinct.
+  calendar_and_month: &id007
+    language_code: prs
+    part_of_speech:
+    - noun
+    - adjective
+    agreement_tags:
+      semantic:
+      - calendar_word
+      - month_name
 templates:
 - content_key: practice.en-prs.prs.a1.unit09.lesson01.weekday_gloss.001
   lesson_content_key: prs.a1.unit09.lesson01.days_of_the_week
@@ -250,29 +290,38 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit09.lesson02.calendar_pair.005
   lesson_content_key: prs.a1.unit09.lesson02.months
   type: matching_pairs
+  # REAUTH 2026-07-24: widened from 4 slots (below the 6-pair floor) to
+  # calendar_and_month (7 distinct: تاریخ/تقویم/هجری/شمسی + حمل/ثور/جوزا)
+  # -- see review.notes. 6 slots used.
   frame:
-    text: '{calendar_word_one} — {calendar_word_two} — {calendar_word_three} — {calendar_word_four}'
+    text: '{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}'
     language_code: prs
     direction: rtl
   slots:
-    calendar_word_one: *id003
-    calendar_word_two: *id003
-    calendar_word_three: *id003
-    calendar_word_four: *id003
+    item_one: *id007
+    item_two: *id007
+    item_three: *id007
+    item_four: *id007
+    item_five: *id007
+    item_six: *id007
   slot_relations:
   - kind: distinct
     slots:
-    - calendar_word_one
-    - calendar_word_two
-    - calendar_word_three
-    - calendar_word_four
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
   answer_derivation:
     kind: matching_pairs
     slots:
-    - calendar_word_one
-    - calendar_word_two
-    - calendar_word_three
-    - calendar_word_four
+    - item_one
+    - item_two
+    - item_three
+    - item_four
+    - item_five
+    - item_six
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
@@ -353,35 +402,39 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit09.lesson06.person_name_gloss.001
   lesson_content_key: prs.a1.unit09.lesson06.meeting_date_dialogue
   type: multiple_choice
+  # REAUTH 2026-07-24: re-anchored from person_name (0 unit-scoped
+  # candidates -- بشیر is unit04/a2-unit12's, not unit09's) to
+  # lesson06_word (4 distinct unit-scoped tokens) -- see review.notes.
   frame:
-    text: '{person_name}'
+    text: '{item}'
     language_code: prs
     direction: rtl
   slots:
-    person_name: *id006
+    item: *id006
   answer_derivation:
     kind: slot_gloss
-    slot: person_name
+    slot: item
   feedback_frame:
-    text: '{person_name} is a name used in this course.'
+    text: '{item} is vocabulary from this dialogue.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit09.lesson06.person_name_translate.002
   lesson_content_key: prs.a1.unit09.lesson06.meeting_date_dialogue
   type: translation
+  # REAUTH 2026-07-24: same re-anchor as person_name_gloss.001 above.
   frame:
-    text: '{person_name}'
+    text: '{item}'
     language_code: en
     direction: ltr
     slot_rendering:
-      person_name: english_gloss
+      item: english_gloss
   slots:
-    person_name: *id006
+    item: *id006
   answer_derivation:
     kind: slot_text
-    slot: person_name
+    slot: item
   feedback_frame:
-    text: '{person_name} is this name in Dari.'
+    text: '{item} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit09.lesson01.weekday_order.004.volume_fill.010
