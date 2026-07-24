@@ -251,7 +251,7 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "such": "zoals", "lived": "woonde", "since": "sinds", "lease": "huurcontract",
     "when": "wanneer", "10am": "10:00 uur", "4471": "4471",
     # Unit 26 (A2: giving opinions with reasons), added 2026-07-06.
-    "opinion": "mening", "other": "andere", "hand": "kant (aan de andere kant)",
+    "opinion": "mening", "other": "andere", "hand": "de hand",
     "agree": "het eens zijn", "dog": "hond", "dogs": "honden", "space": "ruimte",
     "run": "rennen", "playground": "speeltuin", "fair": "redelijk", "point": "punt",
     "they": "zij", "move": "verplaatsen", "farther": "verder", "away": "weg",
@@ -2837,6 +2837,7 @@ def nl_agreement_tags(token: str) -> dict[str, object]:
 
 
 NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("a2_unit26_opinions", "hand"): "kant (aan de andere kant)",
     ("b1_unit01_necessity", "don't"): "hoeven niet",
     ("b1_unit01_necessity", "right"): "gelijk (hebben)",
     ("b1_unit09_reported_speech", "direct"): "direct",
