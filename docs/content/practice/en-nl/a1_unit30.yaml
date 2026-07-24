@@ -47,18 +47,67 @@ review:
     single-candidate), word_order x3, translation x5. Needs the standard
     fresh-context review before import. Blocking dependency, same as every
     other en-nl pack: backfill_lexemes_en_nl.py has not actually been run
-    against a real database yet."
+    against a real database yet.
+
+    REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, pack-only, no
+    backfill/realization edits): every course-wide candidate count this
+    file's original notes cite (hair_color_adj 4-member incl. unit20's
+    zwart; eye_color_adj 3-member incl. unit13's blauwe; appearance_eruit_
+    single via unit10's eruit) is course-scoped, not unit-scoped, and
+    generate_checkpoint() only loads THIS unit's own lexemes -- so all
+    three were silently invisible at checkpoint time. scripts/
+    _practice_unit_scope_check.py confirmed: (1) lesson03.fill.005's
+    appearance_eruit_single had 0 unit-scoped candidates (eruit is
+    unit10/unit76 vocabulary only) -- re-anchored to appearance_ogen_single
+    (ogen IS this unit's own lesson03 token) with a new sentence, 'Nina
+    heeft bruine {item}.', distinct from fill.004's existing 'Lotte heeft
+    blauwe {item}.' on the same anchor. (2) lesson05.match.001's declared
+    4-slot hair_color_adj group had only 3 unit-scoped tokens
+    (blond/bruin/grijs -- zwart is unit20) -- the checker's single-slot
+    scan doesn't separately re-verify the template's second group, but by
+    hand the 3-slot eye_color_adj group was ALSO short (bruine/groene only,
+    2 unit-scoped tokens -- blauwe is unit13), so the whole 7-pair
+    two-group design could never fill either relation from this unit's own
+    vocabulary. Replaced it with a single uniform 6-pair matching_pairs
+    over a new `appearance_adj` preset (part_of_speech: adjective, no
+    semantic tag -- SS3.1c: safe here since the frame is a bare
+    dot-separated placeholder list with no literal text to be
+    ungrammatical against), which pools all 11 of this unit's own
+    adjectives (lang/jong/Oud/blond/bruin/grijs/groen/bruine/groene/
+    anders/langer) course-wide moot since matching_pairs has no
+    course-scope grammaticality requirement; checked for gloss collapse --
+    all 11 have distinct english_gloss text, including the
+    inflected/bare pairs (bruin \"brown\"/bruine \"brown (inflected)\",
+    groen \"green\"/groene \"green (inflected)\"), which is the same
+    accepted singular/plural-style discrimination the original author
+    already relied on for bruin+bruine coexisting in one pool. (3) three
+    multiple_choice/listen_select templates constrained to eye_color_adj
+    alone (lesson03.choose.001, lesson03.listen.002, lesson04.choose.002)
+    were below the 3-distinct floor at unit scope (bruine/groene only, 2
+    distinct glosses) -- widened all three to a new `hair_or_eye_color_adj`
+    preset unioning the two ALREADY-LISTED semantic tags (SS3.1a), which
+    pools blond/bruin/grijs/bruine/groene = 5 unit-scoped distinct glosses,
+    and updated their feedback_frame text from 'is an eye-color word' to
+    'is a hair- or eye-color word' since the pool is no longer eye-only.
+    Removed the now-unused appearance_eruit_single preset and its
+    tag_schema entry (no template references it anymore); left
+    hair_color_adj/eye_color_adj/height_adj/age_adj/appearance_ogen_single
+    untouched, including their narrow standalone uses in lesson01/lesson02
+    translation/word_order templates, which have no candidate floor and
+    were already unit-scope-satisfiable (lang x1, jong x1). Post-fix: 0
+    DEAD, 0 FLOOR for this pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [hair_color_adj, eye_color_adj, height_adj, age_adj, appearance_ogen_single, appearance_eruit_single]
+    semantic: [hair_color_adj, eye_color_adj, height_adj, age_adj, appearance_ogen_single]
 slot_presets:
   hair_color_adj: &hair_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: hair_color_adj}}
   eye_color_adj: &eye_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: eye_color_adj}}
   height_adj: &height_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: height_adj}}
   age_adj: &age_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: age_adj}}
   appearance_ogen_single: &appearance_ogen_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: appearance_ogen_single}}
-  appearance_eruit_single: &appearance_eruit_single {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: appearance_eruit_single}}
+  appearance_adj: &appearance_adj {language_code: nl, part_of_speech: adjective}
+  hair_or_eye_color_adj: &hair_or_eye_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: [hair_color_adj, eye_color_adj]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit30.lesson01.translate.001
     lesson_content_key: nl.a1.unit30.lesson01.lang_klein_oud_jong
@@ -148,14 +197,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *eye_color_adj}
+    slots: {item: *hair_or_eye_color_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is an eye-color word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a hair- or eye-color word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit30.lesson03.listen.002
     lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *eye_color_adj}
+    slots: {item: *hair_or_eye_color_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit30.lesson03.translate.003
@@ -181,10 +230,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit30.lesson03.fill.005
     lesson_content_key: nl.a1.unit30.lesson03.ogen_en_eruitzien
     type: fill_in_blank
-    frame: {text: "Hoe ziet Lotte {item}?", language_code: nl, direction: ltr}
-    slots: {item: *appearance_eruit_single}
+    frame: {text: "Nina heeft bruine {item}.", language_code: nl, direction: ltr}
+    slots: {item: *appearance_ogen_single}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Hoe ziet Lotte eruit? -- What does Lotte look like?", language_code: en, direction: ltr}
+    feedback_frame: {text: "Nina heeft bruine ogen. -- Nina has brown eyes.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit30.lesson04.listen.001
     lesson_content_key: nl.a1.unit30.lesson04.taalcafe_nina
     type: listen_select
@@ -201,17 +250,17 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *eye_color_adj}
+    slots: {item: *hair_or_eye_color_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is an eye-color word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a hair- or eye-color word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit30.lesson05.match.001
     lesson_content_key: nl.a1.unit30.lesson05.sander_fenna_vergelijken
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh}", language_code: nl, direction: ltr}
-    slots: {first: *hair_color_adj, second: *hair_color_adj, third: *hair_color_adj, fourth: *hair_color_adj, fifth: *eye_color_adj, sixth: *eye_color_adj, seventh: *eye_color_adj}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}, {kind: distinct, slots: [fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
-    feedback_frame: {text: "Match each hair- or eye-color word with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *appearance_adj, second: *appearance_adj, third: *appearance_adj, fourth: *appearance_adj, fifth: *appearance_adj, sixth: *appearance_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each appearance word from this unit with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit30.lesson06.order.001
     lesson_content_key: nl.a1.unit30.lesson06.taalcafe_herkenning
     type: word_order

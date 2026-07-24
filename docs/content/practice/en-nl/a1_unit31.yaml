@@ -43,17 +43,58 @@ review:
     (both single-candidate), word_order x2, translation x4. Needs the
     standard fresh-context review before import. Blocking dependency, same
     as every other en-nl pack: backfill_lexemes_en_nl.py has not actually
-    been run against a real database yet."
+    been run against a real database yet.
+
+    REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, pack-only, no
+    backfill/realization edits): this file's own notes above already flag
+    that animal_elke_single/animal_van_single 'reus[e] already-classified
+    tokens (elke from unit29, van from unit8)' -- confirmed by scripts/
+    _practice_unit_scope_check.py that both are 0-candidate at unit scope
+    (elke's only course-wide token is introduced unit05, not unit29 as
+    claimed; van is unit08) -- classic DO-NOT #2, invisible to
+    generate_checkpoint(). Searched every semantic tag this unit's own
+    lexemes carry for one that is ALSO course-wide single-token (the only
+    way to build a fill_in_blank anchor without a new backfill tag); none
+    exists natively for lesson02 or lesson03. Per the recipe's HARD RULES
+    (a fix requiring a new backfill tag can't be done pack-only), replaced
+    both DEAD fill_in_blank templates with a same-tier (structured), no-new-
+    tag alternative instead of dropping them: lesson02.fill.004 ->
+    lesson02.match.004, a 6-pair matching_pairs over a new
+    `pet_care_or_noun` preset unioning this unit's OWN pet_noun (4) +
+    pet_care_verb (3) tags (7 unit-scoped distinct tokens, no shared
+    generative sentence exists for pet_care_verb per this file's own notes,
+    so matching_pairs -- pure token/gloss pairs, no frame sentence -- sidesteps
+    that entirely); lesson03.fill.004 -> lesson03.order.004, a word_order
+    reusing this file's own already-verified-grammatical 'Ik houd van
+    {item}.' frame over pet_noun_plural (word_order has no candidate floor).
+    Note this frame text is identical to lesson04.order.002's (same verified
+    sentence, different lesson anchor/content_key) -- accepted as a known
+    minor duplication rather than risk an unverified new sentence against
+    all 4 plurals. Also fixed lesson05.match.001: its two SEPARATE 4-slot
+    `distinct` relations (pet_noun x4, pet_noun_plural x4) made
+    _practice_unit_scope_check.py report 'declares only 4 slots (<6-pair
+    floor)' since it takes the max relation size, not the total 8 pairs
+    actually shown -- collapsed into ONE 8-slot `distinct` relation over a
+    new `pet_noun_all` preset (union of the same two already-listed tags),
+    which is both what the checker's single-pool model expects and exactly
+    what recipe SS6.3's standard shape looks like (uniform preset, one
+    relation); the two pools' 8 tokens are all distinct strings (singular
+    vs plural), so nothing else about the exercise changed. Removed the now
+    -unused animal_elke_single/animal_van_single presets and tag_schema
+    entries. Template count unchanged at 17 (2 fill_in_blank -> 1
+    matching_pairs + 1 word_order; net type mix: multiple_choice x4,
+    listen_select x4, matching_pairs x2, word_order x3, translation x4).
+    Post-fix: 0 DEAD, 0 FLOOR for this pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [pet_noun, pet_noun_plural, pet_care_verb, animal_elke_single, animal_van_single]
+    semantic: [pet_noun, pet_noun_plural, pet_care_verb]
 slot_presets:
   pet_noun: &pet_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pet_noun}}
   pet_noun_plural: &pet_noun_plural {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pet_noun_plural}}
   pet_care_verb: &pet_care_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: pet_care_verb}}
-  animal_elke_single: &animal_elke_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: animal_elke_single}}
-  animal_van_single: &animal_van_single {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: animal_van_single}}
+  pet_noun_all: &pet_noun_all {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: [pet_noun, pet_noun_plural]}}
+  pet_care_or_noun: &pet_care_or_noun {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: [pet_noun, pet_care_verb]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit31.lesson01.choose.001
     lesson_content_key: nl.a1.unit31.lesson01.huisdieren_woorden
@@ -126,13 +167,14 @@ templates:
     slots: {item: *pet_care_verb}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit31.lesson02.fill.004
+  - content_key: practice.en-nl.nl.a1.unit31.lesson02.match.004
     lesson_content_key: nl.a1.unit31.lesson02.zorg_voor_huisdieren
-    type: fill_in_blank
-    frame: {text: "Ik laat de hond {item} dag uit.", language_code: nl, direction: ltr}
-    slots: {item: *animal_elke_single}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Ik laat de hond elke dag uit. -- I walk the dog every day.", language_code: en, direction: ltr}
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *pet_care_or_noun, second: *pet_care_or_noun, third: *pet_care_or_noun, fourth: *pet_care_or_noun, fifth: *pet_care_or_noun, sixth: *pet_care_or_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each animal or pet-care word from this unit with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit31.lesson03.choose.001
     lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
     type: multiple_choice
@@ -165,13 +207,13 @@ templates:
     slots: {item: *pet_noun_plural}
     answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "Ik houd van {item}.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit31.lesson03.fill.004
+  - content_key: practice.en-nl.nl.a1.unit31.lesson03.order.004
     lesson_content_key: nl.a1.unit31.lesson03.van_dieren_houden
-    type: fill_in_blank
-    frame: {text: "Ik houd {item} dieren.", language_code: nl, direction: ltr}
-    slots: {item: *animal_van_single}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Ik houd van dieren. -- I love animals.", language_code: en, direction: ltr}
+    type: word_order
+    frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}
+    slots: {item: *pet_noun_plural}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik houd van {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik houd van {item}. -- I love {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit31.lesson04.listen.001
     lesson_content_key: nl.a1.unit31.lesson04.taalcafe_lottes_hond
     type: listen_select
@@ -190,8 +232,8 @@ templates:
     lesson_content_key: nl.a1.unit31.lesson05.omar_fenna_sander_dieren
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
-    slots: {first: *pet_noun, second: *pet_noun, third: *pet_noun, fourth: *pet_noun, fifth: *pet_noun_plural, sixth: *pet_noun_plural, seventh: *pet_noun_plural, eighth: *pet_noun_plural}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}, {kind: distinct, slots: [fifth, sixth, seventh, eighth]}]
+    slots: {first: *pet_noun_all, second: *pet_noun_all, third: *pet_noun_all, fourth: *pet_noun_all, fifth: *pet_noun_all, sixth: *pet_noun_all, seventh: *pet_noun_all, eighth: *pet_noun_all}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Match each animal word from this unit with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit31.lesson06.translate.001

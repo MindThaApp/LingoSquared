@@ -4,13 +4,33 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit27.appearance
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
     that file's notes for the shared pass context). Realization is
     status reviewed.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring
+    pass): lesson01.appearance_pair.002 (matching_pairs, 6 slots) was
+    DEAD at checkpoint scope. The original notes above counted قد as a
+    6th appearance_word member, but قد's lexeme row is registered
+    against prs.a1.unit15.lesson03.comparing_people (an EARLIER unit) --
+    generate_checkpoint() scopes candidates to THIS unit's own lexemes
+    only, so at checkpoint scope the appearance_word pool is really just
+    5 (مو/چشم/ریش/عینک/قیافه), one short of the 6-pair floor. RE-ANCHORED
+    (did not drop): added a matching_pairs-only preset
+    appearance_match_word that unions appearance_word with the unit's
+    own eye_hair_color_word tag (part_of_speech widened to [noun,
+    adjective]) -- both tags were already declared in tag_schema. That
+    yields 7 distinct unit-scoped tokens/glosses (hair, eye, beard,
+    glasses, appearance/looks, blue, brown), comfortably over the floor
+    and thematically coherent (still appearance vocabulary). The MC and
+    translation templates keep the original narrower *appearance_word
+    preset (5 nouns, already >=3) untouched since they weren't broken.
+    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for
+    this file) and scripts/compile_content.py practice-validate.
 
     Three groups: "appearance_word" (قد/مو/چشم/ریش/عینک/قیافه, 6
     members, completes lesson01 -- قد is a REUSED existing lexeme;
@@ -69,6 +89,7 @@ slot_presets:
   appearance_word: &appearance_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: appearance_word}}
   have_feature_word: &have_feature_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: have_feature_word}}
   eye_hair_color_word: &eye_hair_color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: eye_hair_color_word}}
+  appearance_match_word: &appearance_match_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [appearance_word, eye_hair_color_word]}}
 templates:
   # Lesson 1: appearance vocabulary.
   - content_key: practice.en-prs.prs.a1.unit27.lesson01.appearance_gloss.001
@@ -82,7 +103,7 @@ templates:
     lesson_content_key: prs.a1.unit27.lesson01.appearance_vocabulary
     type: matching_pairs
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *appearance_word, word_two: *appearance_word, word_three: *appearance_word, word_four: *appearance_word, word_five: *appearance_word, word_six: *appearance_word}
+    slots: {word_one: *appearance_match_word, word_two: *appearance_match_word, word_three: *appearance_match_word, word_four: *appearance_match_word, word_five: *appearance_match_word, word_six: *appearance_match_word}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

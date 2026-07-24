@@ -39,7 +39,28 @@ review:
     Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
     slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
     warnings. scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags. Needs the standard fresh-context review before
-    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.'
+    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.
+
+
+    RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD/FLOOR
+    fixes, PACK-ONLY): the whole-direction slot check above never proved
+    candidates exist WITHIN this unit''s own lessons, which is what
+    generate_checkpoint() actually loads. (1) lesson06.can_exchange_order.002
+    slotted "can_verb" (می‌تانم), REUSED as-is from a1_unit21 -- unit23 itself
+    introduces zero can_verb lexemes, so this was 0 unit-scoped candidates,
+    DEAD at checkpoint scope. Since PACK-ONLY forbids a backfill re-tag,
+    replaced it (now lesson06.money_review_translate.002) with a bare-word
+    translation over money_review_pool (money_word ∪ exchange_word, 6
+    unit-scoped tokens, the same pool already verified safe for this
+    lesson''s matching_pairs) -- this also fills a production-tier gap
+    lesson06 otherwise had. (2) lesson01.money_word_pair.002 declared only 4
+    matching_pairs slots (below the 6-pair floor). Widened to a new
+    money_payment_review_word preset (money_word ∪ payment_verb, both native
+    to this unit) -- 7 unit-scoped distinct tokens, now 6 slots. Removed the
+    now-unused can_verb tag/preset. Both fixes keep every other template
+    unchanged; no backfill/realization/overlay edits. Post-fix:
+    scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 below-floor for
+    this pack.'
 tag_schema:
   part_of_speech:
   - noun
@@ -58,7 +79,6 @@ tag_schema:
     - exchange_imperative
     - receipt_word
     - receive_verb
-    - can_verb
 slot_presets:
   money_word: &id001
     language_code: prs
@@ -112,11 +132,19 @@ slot_presets:
       semantic:
       - money_word
       - exchange_word
-  can_verb: &id011
+  # Re-anchor fix (2026-07-24): unions money_word (lesson01, 4) + payment_verb
+  # (lesson02, 3) = 7 unit-scoped distinct tokens, so lesson01's review
+  # matching_pairs clears the 6-pair floor from this unit's OWN vocabulary
+  # (previously only 4 slots -- below floor).
+  money_payment_review_word: &id012
     language_code: prs
-    part_of_speech: verb
+    part_of_speech:
+    - noun
+    - verb
     agreement_tags:
-      semantic: can_verb
+      semantic:
+      - money_word
+      - payment_verb
 templates:
 - content_key: practice.en-prs.prs.a1.unit23.lesson01.money_word_gloss.001
   lesson_content_key: prs.a1.unit23.lesson01.money_vocabulary
@@ -136,16 +164,22 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit23.lesson01.money_word_pair.002
   lesson_content_key: prs.a1.unit23.lesson01.money_vocabulary
+  # Re-anchor fix (2026-07-24): was money_word alone (4 slots, below the
+  # 6-pair floor). Widened to money_payment_review_word (money_word ∪
+  # payment_verb, both native to this unit) -- 7 unit-scoped distinct
+  # tokens, comfortably clears the floor.
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id001
-    word_two: *id001
-    word_three: *id001
-    word_four: *id001
+    word_one: *id012
+    word_two: *id012
+    word_three: *id012
+    word_four: *id012
+    word_five: *id012
+    word_six: *id012
   slot_relations:
   - kind: distinct
     slots:
@@ -153,6 +187,8 @@ templates:
     - word_two
     - word_three
     - word_four
+    - word_five
+    - word_six
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -160,8 +196,10 @@ templates:
     - word_two
     - word_three
     - word_four
+    - word_five
+    - word_six
   feedback_frame:
-    text: Match each word to its English meaning.
+    text: Match each word to its English meaning -- money and payment vocabulary.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit23.lesson01.money_have_order.003
@@ -396,24 +434,30 @@ templates:
     text: Match each word to its English meaning -- money and exchange together.
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit23.lesson06.can_exchange_order.002
+- content_key: practice.en-prs.prs.a1.unit23.lesson06.money_review_translate.002
   lesson_content_key: prs.a1.unit23.lesson06.wrap_up
-  type: word_order
+  # Replaced (2026-07-24): the original word_order slotted "can_verb"
+  # (می‌تانم), which this unit never introduces itself -- می‌تانم is REUSED
+  # as-is from a1_unit21 (0 unit-scoped candidates, DEAD at checkpoint
+  # scope, and PACK-ONLY means no backfill re-tagging to fix that here).
+  # Replaced with a bare-word production template over money_review_pool
+  # (money_word ∪ exchange_word, 6 unit-scoped tokens already verified safe
+  # for lesson06's matching_pairs above) -- also fills in a production-tier
+  # gap lesson06 otherwise had (both its prior templates were structured).
+  type: translation
   frame:
-    text: '{can_verb} {currency_word} را به افغانی تبدیل کنم'
-    language_code: prs
-    direction: rtl
+    text: '{money_review_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      money_review_word: english_gloss
   slots:
-    can_verb: *id011
-    currency_word: *id005
+    money_review_word: *id010
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: '{can_verb} {currency_word} را به افغانی تبدیل کنم'
-      language_code: prs
-      direction: rtl
+    kind: slot_text
+    slot: money_review_word
   feedback_frame:
-    text: 'Word order: می‌تانم دالر را به افغانی تبدیل کنم (I can exchange dollars for afghanis).'
+    text: '{money_review_word} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit23.lesson05.receipt_word_fill.001.volume_order.001

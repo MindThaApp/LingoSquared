@@ -6,8 +6,32 @@ unit_content_key: nl.a1.unit46.afspraak
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 46. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 46. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    REAUTH 2026-07-24: lesson01.translate.003's slot was tagged
+    `appointment_scheduling`. That tag's real course-wide members (wil,
+    graag, afspraak, maken) were all FIRST introduced in earlier units
+    (a1.unit02/unit06/unit09/unit11/unit13/unit19) -- unit46's lesson01
+    ("afspraak_maken") reintroduces the same tokens in a new lesson but the
+    backfill classifier only registers a token's first-ever introduction, so
+    unit46 itself has ZERO lexemes carrying that tag (0 unit-scoped
+    candidates, confirmed dead). unit46's OWN native lexeme pool is only 8
+    tokens (beschikbaar/Woensdag/computerhulp/Voor/Waarvoor/bevestigd/
+    Bevestiging/herinneren, spread across lesson02/03/05/06 -- lesson01 has
+    no own backfilled lexemes at all). Fixed by dropping the semantic
+    constraint entirely on translate.003 (matches the pattern already used
+    by this pack's own choose.001 and match.002, which are untagged and pull
+    from the unit's full 8-lexeme pool -- safe for bare-word translation
+    per PRACTICE_PACK_RECIPE.md §3.1(c)/§6.6(a): prompt varies with the
+    answer, no literal frame text). Also widened lesson01.match.002 and its
+    volume_match.007 duplicate from 4 to 6 pairs (AUTHORING_GUIDE §16 floor)
+    using the same untagged 8-lexeme pool -- verified 8 distinct glosses
+    (available/Wednesday/computer help/for/for what;what for/confirmed/
+    Confirmation/to remind), comfortably clears 6. Removed the now-unused
+    `appointment_scheduling` tag from tag_schema. Verified 0 DEAD, 0
+    below-floor via scripts/_practice_unit_scope_check.py after the fix.
 tag_schema:
   part_of_speech:
   - symbol
@@ -20,9 +44,6 @@ tag_schema:
   - preposition
   - particle
   - phrase
-  agreement_tags:
-    semantic:
-    - appointment_scheduling
 slot_presets:
   unit_word:
     language_code: nl
@@ -69,11 +90,11 @@ templates:
   lesson_content_key: nl.a1.unit46.lesson01.afspraak_maken
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
+    first: &unit46_match_word
       language_code: nl
       part_of_speech:
       - symbol
@@ -85,42 +106,11 @@ templates:
       - preposition
       - particle
       - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    second: *unit46_match_word
+    third: *unit46_match_word
+    fourth: *unit46_match_word
+    fifth: *unit46_match_word
+    sixth: *unit46_match_word
   slot_relations:
   - kind: distinct
     slots:
@@ -128,6 +118,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -135,6 +127,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -161,7 +155,6 @@ templates:
       - preposition
       - particle
       - phrase
-      agreement_tags: {semantic: appointment_scheduling}
   answer_derivation:
     kind: slot_text
     slot: item
@@ -173,11 +166,11 @@ templates:
   lesson_content_key: nl.a1.unit46.lesson01.afspraak_maken
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
+    first: &unit46_match_word_007
       language_code: nl
       part_of_speech:
       - symbol
@@ -189,42 +182,11 @@ templates:
       - preposition
       - particle
       - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    second: *unit46_match_word_007
+    third: *unit46_match_word_007
+    fourth: *unit46_match_word_007
+    fifth: *unit46_match_word_007
+    sixth: *unit46_match_word_007
   slot_relations:
   - kind: distinct
     slots:
@@ -232,6 +194,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -239,6 +203,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en

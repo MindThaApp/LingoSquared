@@ -41,7 +41,33 @@ review:
     Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
     slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
     warnings. scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags. Needs the standard fresh-context review before
-    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.'
+    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.
+
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md):
+    scripts/_practice_unit_scope_check.py found 4 DEAD templates + 1 below-floor in this pack. Root cause: the course-wide
+    work_noun_word (کار, established far earlier), routine_word (صبحانه, established unit12), and person_name tags all had ZERO
+    unit20-scoped candidates -- this unit reuses them but introduces no new members of its own -- while the bare time_reference
+    tag had only 1 unit-scoped member (دیروز), below the multiple_choice 3-option floor, and past_verb_pool_pair.003 declared 9
+    slots against a real 8-distinct unit-scoped pool. generate_checkpoint() scopes candidates to this unit''s own lexemes only,
+    so every affected slot could never generate at checkpoint scope. No backfill_lexemes_en_prs.py or realization change was
+    made (PACK-ONLY lane):
+    - time_reference_gloss.001 (lesson01, was FLOOR: 1 candidate) -> widened to time_reference_review_pool (time_reference +
+    past_verb_first, 4 distinct: دیروز/رفتم/خوردم/کردم).
+    - routine_word_translate.001 (lesson02, was DEAD: 0 candidates) -> re-anchored to eat_verb (1: خوردم), this lesson''s own
+    genuinely new token.
+    - work_noun_translate.001 (lesson03, was DEAD: 0 candidates) -> re-anchored to work_past_verb (1: کردم), this lesson''s own
+    genuinely new token.
+    - person_past_order.002 (lesson06, was DEAD: person_name 0 candidates) -> re-anchored from a 2-slot person_name+
+    past_verb_third combo to a single past_verb_third slot (3: رفت/کرد/شد), all grammatical in "دیروز [verb]" regardless of
+    which fills it.
+    - past_verb_pool_pair.003 (lesson06, was DEAD: needed 9, had 8) -> declared slot count reduced 9 -> 8 to match the real
+    past_verb_pool union size exactly.
+    No new backfill tag, gloss, or lexeme was introduced. Removed the now-fully-unused work_noun_word/routine_word/person_name
+    slot_presets and tag_schema entries (nothing in this pack references them anymore). Template count unchanged (16 -- nothing
+    dropped, only re-anchored/widened/reduced). Verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
+    this file after the fix), scripts/compile_content.py practice-validate (0 errors), and scripts/check_dari_register.py (0
+    new findings) -- see the coordinator report for exact output.'
 tag_schema:
   part_of_speech:
   - noun
@@ -55,13 +81,14 @@ tag_schema:
     - go_verb
     - eat_verb
     - work_past_verb
-    - work_noun_word
     - tired_word
     - past_verb_second
     - past_verb_third
     - time_reference
-    - routine_word
-    - person_name
+    # REAUTH 2026-07-24: work_noun_word, routine_word, and person_name
+    # removed -- all had ZERO unit20-scoped candidates (established in
+    # earlier units) and every template that used them has been
+    # re-anchored to this unit's own tags above. See review.notes.
 slot_presets:
   past_verb_first: &id008
     language_code: prs
@@ -83,11 +110,6 @@ slot_presets:
     part_of_speech: verb
     agreement_tags:
       semantic: work_past_verb
-  work_noun_word: &id005
-    language_code: prs
-    part_of_speech: noun
-    agreement_tags:
-      semantic: work_noun_word
   tired_word: &id007
     language_code: prs
     part_of_speech: adjective
@@ -111,36 +133,42 @@ slot_presets:
       - past_verb_first
       - past_verb_second
       - past_verb_third
+  # REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY): the
+  # bare time_reference tag has only 1 unit-scoped candidate (دیروز --
+  # امروز/فردا are both reused from earlier units), below the
+  # multiple_choice 3-option floor. Widened by unioning with
+  # past_verb_first (3: رفتم/خوردم/کردم) -- 4 distinct total, all
+  # genuinely this unit's own lesson01/02/03 vocabulary.
+  time_reference_review_pool: &time_reference_review_pool
+    language_code: prs
+    part_of_speech: [adverb, verb]
+    agreement_tags:
+      semantic:
+      - time_reference
+      - past_verb_first
   time_reference: &id001
     language_code: prs
     part_of_speech: adverb
     agreement_tags:
       semantic: time_reference
-  routine_word: &id003
-    language_code: prs
-    part_of_speech: noun
-    agreement_tags:
-      semantic: routine_word
-  person_name: &id010
-    language_code: prs
-    part_of_speech: proper_noun
-    agreement_tags:
-      semantic: person_name
 templates:
 - content_key: practice.en-prs.prs.a1.unit20.lesson01.time_reference_gloss.001
   lesson_content_key: prs.a1.unit20.lesson01.yesterday_went
   type: multiple_choice
+  # Widened from the bare time_reference tag (1 unit-scoped candidate --
+  # below the 3-option MC floor) to time_reference_review_pool (4):
+  # time_reference + past_verb_first.
   frame:
-    text: '{time_reference}'
+    text: '{unit_word}'
     language_code: prs
     direction: rtl
   slots:
-    time_reference: *id001
+    unit_word: *time_reference_review_pool
   answer_derivation:
     kind: slot_gloss
-    slot: time_reference
+    slot: unit_word
   feedback_frame:
-    text: '{time_reference} refers to a day relative to today.'
+    text: '{unit_word} is one of this unit''s own words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson01.yesterday_went_order.002
@@ -165,19 +193,22 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit20.lesson02.routine_word_translate.001
   lesson_content_key: prs.a1.unit20.lesson02.i_ate
   type: translation
+  # Re-anchored from the course-wide `routine_word` tag (0 unit-scoped
+  # candidates -- صبحانه is reused from unit12) to eat_verb (1: خوردم),
+  # this lesson's own genuinely new token.
   frame:
-    text: '{routine_word}'
+    text: '{eat_verb}'
     language_code: en
     direction: ltr
     slot_rendering:
-      routine_word: english_gloss
+      eat_verb: english_gloss
   slots:
-    routine_word: *id003
+    eat_verb: *id004
   answer_derivation:
     kind: slot_text
-    slot: routine_word
+    slot: eat_verb
   feedback_frame:
-    text: '{routine_word} is the Dari word for this.'
+    text: '{eat_verb} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson02.ate_breakfast_order.002
@@ -202,19 +233,22 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit20.lesson03.work_noun_translate.001
   lesson_content_key: prs.a1.unit20.lesson03.i_worked
   type: translation
+  # Re-anchored from the course-wide `work_noun_word` tag (0
+  # unit-scoped candidates -- کار is established far earlier) to
+  # work_past_verb (1: کردم), this lesson's own genuinely new token.
   frame:
-    text: '{work_noun_word}'
+    text: '{work_past_verb}'
     language_code: en
     direction: ltr
     slot_rendering:
-      work_noun_word: english_gloss
+      work_past_verb: english_gloss
   slots:
-    work_noun_word: *id005
+    work_past_verb: *id006
   answer_derivation:
     kind: slot_text
-    slot: work_noun_word
+    slot: work_past_verb
   feedback_frame:
-    text: '{work_noun_word} is the Dari word for this.'
+    text: '{work_past_verb} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson03.worked_order.002
@@ -343,29 +377,37 @@ templates:
 - content_key: practice.en-prs.prs.a1.unit20.lesson06.person_past_order.002
   lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
   type: word_order
+  # Re-anchored from a 2-slot person_name+past_verb_third combo
+  # (person_name: 0 unit-scoped candidates -- reused from earlier
+  # units) to a single past_verb_third slot (3: رفت/کرد/شد), all
+  # grammatical in this frame regardless of which of the three fills it
+  # (دیروز رفت / دیروز کرد / دیروز شد, all valid "yesterday [he/she]
+  # ...").
   frame:
-    text: '{person_name} دیروز {past_verb_third}'
+    text: دیروز {past_verb_third}
     language_code: prs
     direction: rtl
   slots:
-    person_name: *id010
     past_verb_third: *id009
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{person_name} دیروز {past_verb_third}'
+      text: دیروز {past_verb_third}
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: [name] دیروز [verb] ([name] VERBED yesterday).'
+    text: 'Word order: دیروز رفت (he/she went yesterday).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson06.past_verb_pool_pair.003
   lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
   type: matching_pairs
+  # Declared slot count reduced 9 -> 8: past_verb_pool (past_verb_first
+  # + past_verb_second + past_verb_third) has exactly 8 distinct
+  # unit-scoped tokens (رفتم/خوردم/کردم/رفتی/کردی/رفت/کرد/شد), not 9 --
+  # this template never generated at the old count.
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} —
-      {word_nine}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}'
     language_code: prs
     direction: rtl
   slots:
@@ -377,7 +419,6 @@ templates:
     word_six: *id011
     word_seven: *id011
     word_eight: *id011
-    word_nine: *id011
   slot_relations:
   - kind: distinct
     slots:
@@ -389,7 +430,6 @@ templates:
     - word_six
     - word_seven
     - word_eight
-    - word_nine
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -401,7 +441,6 @@ templates:
     - word_six
     - word_seven
     - word_eight
-    - word_nine
   feedback_frame:
     text: Match each word to its meaning -- all the past-tense verb forms in this unit.
     language_code: en

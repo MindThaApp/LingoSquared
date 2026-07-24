@@ -63,13 +63,36 @@ review:
     Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has happened against a real database
     yet in this pass.
+
+    RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD-
+    template fixes, PACK-ONLY): the whole-direction slot check above
+    only proved candidates exist somewhere in en-prs; it never proved
+    they exist WITHIN this unit's own lessons, which is what
+    generate_checkpoint() actually loads. Two templates were DEAD at
+    checkpoint scope: (1) lesson04.time_reference_gloss.001 slotted the
+    course-wide "time_reference" tag (دیروز/امروز/فردا), which unit22
+    introduces zero lexemes for -- re-anchored (now weather_verb_gloss.001)
+    to a union of this unit's own verb tags (future_become_verb,
+    fall_verb, cant_verb, watch_verb, stay_verb -- 7 unit-scoped tokens,
+    7 distinct glosses). (2) lesson06.weather_review_pair.002's 4-way
+    weather_descriptor distinct-group needed 4 tokens but this unit's OWN
+    weather_descriptor pool is only 3 (آفتابی/ابری/سرد) -- گرم is
+    additively tagged here but its lexeme spec is still keyed to unit14's
+    lesson_content_key (first-introduced there), so it is out of unit
+    scope for THIS unit's checkpoint no matter how many tags it also
+    carries. Re-anchored to a single 6-way distinct group unioning
+    weather_descriptor (3) + weather_precip_noun (2) + weather_noun (1) =
+    exactly 6 unit-scoped distinct tokens. Both fixes keep the same
+    template type/tier and the same lesson anchor; no backfill/realization/
+    overlay change needed. Post-fix: scripts/_practice_unit_scope_check.py
+    reports 0 DEAD, 0 below-floor for this pack.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
     semantic:
       [weather_descriptor, weather_noun, weather_precip_noun, fall_verb,
        stay_verb, stay_verb_subjunctive, watch_verb, cant_verb,
-       film_word, future_become_verb, time_reference]
+       film_word, future_become_verb]
 slot_presets:
   weather_descriptor: &weather_descriptor {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: weather_descriptor}}
   weather_noun: &weather_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: weather_noun}}
@@ -79,8 +102,20 @@ slot_presets:
   cant_verb: &cant_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: cant_verb}}
   film_word: &film_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: film_word}}
   future_become_verb: &future_become_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: future_become_verb}}
-  # Reuses the existing course-wide "time_reference" group (دیروز/امروز/فردا).
-  time_reference: &time_reference {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: time_reference}}
+  # Re-anchor fix (2026-07-24): unions this unit's OWN verb tags (all five are
+  # native to unit22 -- future_become_verb/fall_verb from lessons02+04,
+  # cant_verb/watch_verb/stay_verb from lesson05) so lesson04's recognition
+  # template no longer depends on the course-wide "time_reference" tag, which
+  # unit22 introduces zero lexemes for (it was an earlier unit's tag -- DEAD
+  # at checkpoint scope). 7 unit-scoped tokens, 7 distinct glosses.
+  weather_verb: &weather_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: [future_become_verb, fall_verb, cant_verb, watch_verb, stay_verb]}}
+  # Re-anchor fix (2026-07-24): unions weather_descriptor + weather_precip_noun
+  # + weather_noun so the lesson06 review matching_pairs has 6 unit-scoped
+  # distinct tokens (سرد/آفتابی/ابری/باران/برف/هوا). گرم stays excluded --
+  # its spec is still keyed to unit14's own lesson_content_key (only
+  # additively re-tagged here), so it is out of scope for THIS unit's
+  # checkpoint even though it shares the weather_descriptor tag.
+  weather_review_word: &weather_review_word {language_code: prs, part_of_speech: [adjective, noun], agreement_tags: {semantic: [weather_descriptor, weather_precip_noun, weather_noun]}}
 templates:
   # Lesson 1: weather vocabulary.
   - content_key: practice.en-prs.prs.a1.unit22.lesson01.weather_noun_translate.001
@@ -131,13 +166,17 @@ templates:
     feedback_frame: {text: "Word order: هوا [descriptor] است (the weather is [descriptor]).", language_code: en, direction: ltr}
 
   # Lesson 4: tomorrow's forecast.
-  - content_key: practice.en-prs.prs.a1.unit22.lesson04.time_reference_gloss.001
+  - content_key: practice.en-prs.prs.a1.unit22.lesson04.weather_verb_gloss.001
     lesson_content_key: prs.a1.unit22.lesson04.tomorrow_forecast
+    # Re-anchored (2026-07-24): was slotted to the course-wide "time_reference"
+    # tag (دیروز/امروز/فردا), which THIS unit introduces zero lexemes for --
+    # 0 unit-scoped candidates, DEAD at checkpoint scope. Re-anchored to a
+    # union of this unit's own verb tags (see weather_verb preset above).
     type: multiple_choice
-    frame: {text: "{time_reference}", language_code: prs, direction: rtl}
-    slots: {time_reference: *time_reference}
-    answer_derivation: {kind: slot_gloss, slot: time_reference}
-    feedback_frame: {text: "{time_reference} refers to a day relative to today.", language_code: en, direction: ltr}
+    frame: {text: "{weather_verb}", language_code: prs, direction: rtl}
+    slots: {weather_verb: *weather_verb}
+    answer_derivation: {kind: slot_gloss, slot: weather_verb}
+    feedback_frame: {text: "{weather_verb} is one of this unit's Dari verbs.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit22.lesson04.forecast_order.002
     lesson_content_key: prs.a1.unit22.lesson04.tomorrow_forecast
     type: word_order
@@ -179,20 +218,24 @@ templates:
     feedback_frame: {text: "{stay_verb} means to stay/remain.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit22.lesson06.weather_review_pair.002
     lesson_content_key: prs.a1.unit22.lesson06.wrap_up_reading
-    # Pools weather_descriptor (4) + weather_precip_noun (2) -- 6
-    # distinct real tokens.
+    # Re-anchored (2026-07-24): was weather_descriptor (4 slots) + weather_
+    # precip_noun (2 slots) as two separate distinct-groups, but this unit's
+    # OWN weather_descriptor pool is only 3 tokens (آفتابی/ابری/سرد -- گرم
+    # stays keyed to unit14, out of unit scope), so the 4-slot group was DEAD.
+    # Now a single 6-way distinct group over weather_descriptor (3) +
+    # weather_precip_noun (2) + weather_noun (1) = 6 distinct unit-scoped
+    # tokens -- exactly meets the matching_pairs floor.
     type: matching_pairs
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
     slots:
-      word_one: *weather_descriptor
-      word_two: *weather_descriptor
-      word_three: *weather_descriptor
-      word_four: *weather_descriptor
-      word_five: *weather_precip_noun
-      word_six: *weather_precip_noun
+      word_one: *weather_review_word
+      word_two: *weather_review_word
+      word_three: *weather_review_word
+      word_four: *weather_review_word
+      word_five: *weather_review_word
+      word_six: *weather_review_word
     slot_relations:
-      - {kind: distinct, slots: [word_one, word_two, word_three, word_four]}
-      - {kind: distinct, slots: [word_five, word_six]}
+      - {kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning -- weather conditions.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit22.lesson06.today_tomorrow_order.003

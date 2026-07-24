@@ -83,26 +83,118 @@ review:
     practice-validate for en-prs -- 0 errors/0 warnings (was 1 error);
     full scripts/verify.sh --content-only re-run confirms no new
     failures introduced elsewhere in the corpus.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found 5 DEAD templates + 2 below-floor in this pack. Root cause: the
+    person_name/greeting/wellbeing_question slots (and the bare
+    health_feeling_word/health_advice_word slots) were all built from
+    tags whose real candidates were introduced in EARLIER units (بشیر
+    unit04; سلام/علیکم/وعلیکم/خوش and چطور/استین/استی all pre-unit17).
+    generate_checkpoint() scopes candidates to this unit's OWN lexemes
+    only, so those slots had 0 (or below-floor) unit-scoped candidates
+    and could never generate at checkpoint time, even though they work
+    fine in Endless Practice (course scope). This unit is genuinely
+    thin: only 9 distinct content tokens are natively introduced across
+    the whole unit (سردرد/تب/دل‌درد/مریض/حالم/دوا/استراحت/بنوشین/صاحب),
+    and lesson05 introduces zero new tokens of its own (its two
+    teaching cards re-teach سلام and و, both already known). No
+    backfill_lexemes_en_prs.py or realization change was made (PACK-ONLY
+    lane) -- every fix below re-anchors a slot to a union of this unit's
+    OWN tags (§3.1a) rather than adding vocabulary the unit doesn't
+    teach:
+    - health_feeling_gloss.001 (lesson02, was FLOOR: 1 candidate) ->
+      feeling_review_pool (health_feeling_word+condition_word+
+      symptom_word, 5 distinct).
+    - health_advice_gloss.001 (lesson04, was FLOOR: 2 candidates) and
+      health_advice_pair.003 (lesson04, was DEAD: needed 5 had 2) ->
+      advice_review_pool (health_advice_word+seek_help_noun+
+      symptom_word, 6 distinct; health_advice_pair.003's declared slot
+      count dropped 5->6 to match).
+    - greeting_gloss.001 (lesson05, was DEAD: 0 candidates) ->
+      re-anchored straight to the existing symptom_word tag (3), the
+      same pool lesson01's own symptom_word_gloss.001 uses (identical
+      slot -- an honest consequence of lesson05's own thinness, not an
+      oversight).
+    - person_name_gloss.001 (lesson06, was DEAD: 0 candidates) ->
+      doctor_visit_pool (health_advice_word+seek_help_noun+
+      condition_word, 4 distinct), the vocabulary of the doctor's own
+      dialogue lines.
+    - wellbeing_question_translate.002 (lesson06, was DEAD: 0
+      candidates) -> re-anchored to the (newly named) `title` tag
+      (صاحب alone, 1 candidate), this lesson's own genuinely new token;
+      translation (bare-word) has no candidate-count floor.
+    - health_review_pair.003 (lesson06, was DEAD: needed 10 had 6) ->
+      widened health_review_pool from a 3-tag union (6 distinct) to the
+      full 6-tag union (9 distinct, adding condition_word+
+      health_feeling_word+title); declared slot count dropped 10->9 to
+      match this unit's true total native-token count.
+    No new backfill tag, gloss, or lexeme was introduced; every pool
+    used above already existed in backfill_lexemes_en_prs.py's
+    classifier, just re-composed at the pack level. Removed the now-fully
+    -unused person_name/greeting/wellbeing_question slot_presets and
+    tag_schema entries (nothing in this pack references them anymore).
+    Consequence of the genuine thinness: health_feeling_gloss.001,
+    health_advice_gloss.001, person_name_gloss.001, and
+    health_advice_pair.003/health_review_pair.003 draw from overlapping
+    9-token-or-fewer pools -- flagged here rather than padded with
+    untaught vocabulary, per the recipe's explicit instruction. Verified
+    with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor
+    for this file after the fix), scripts/compile_content.py
+    practice-validate (0 errors), and scripts/check_dari_register.py
+    (0 new findings) -- see the coordinator report for exact output.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
   agreement_tags:
-    semantic: [symptom_word, health_feeling_word, seek_help_noun, health_advice_word, condition_word, person_name, greeting, wellbeing_question]
+    semantic: [symptom_word, health_feeling_word, seek_help_noun, health_advice_word, condition_word, title]
 slot_presets:
   symptom_word: &symptom_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: symptom_word}}
   health_feeling_word: &health_feeling_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: health_feeling_word}}
   seek_help_noun: &seek_help_noun {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: seek_help_noun}}
   health_advice_word: &health_advice_word {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: health_advice_word}}
   condition_word: &condition_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: condition_word}}
-  # Reuses the existing course-wide person_name group (now includes بشیر).
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  # Reuses the existing course-wide greeting group (سلام/علیکم/وعلیکم/خوش).
-  greeting: &greeting {language_code: prs, part_of_speech: [noun, particle, adjective], agreement_tags: {semantic: greeting}}
-  # Reuses the existing course-wide wellbeing_question group (چطور/استین/استی).
-  wellbeing_question: &wellbeing_question {language_code: prs, part_of_speech: [adverb, verb], agreement_tags: {semantic: wellbeing_question}}
-  # Pools symptom_word (3) + seek_help_noun (2) + health_advice_word (5)
-  # for the final review matching_pairs -- 10 distinct real tokens,
-  # AUTHORING_GUIDE.md #16.
-  health_review_pool: &health_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [symptom_word, seek_help_noun, health_advice_word]}}
+  # صاحب only (this unit's own genuinely-introduced member of the
+  # course-wide title group; جناب/خانم are reused from earlier units and
+  # are NOT unit-scoped here).
+  title: &title {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: title}}
+  # REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY):
+  # `person_name`, `greeting`, `wellbeing_question` were all
+  # course-wide tags reused from earlier units with ZERO unit17-scoped
+  # candidates (بشیر/سلام-علیکم-وعلیکم-خوش/چطور-استین-استی are all
+  # introduced by earlier units; unit17 only additively re-tags them).
+  # generate_checkpoint() scopes lexeme candidates to THIS unit's own
+  # lexemes only, so every slot built on those three tags was DEAD at
+  # checkpoint scope (0 candidates). Removed the three dead presets and
+  # replaced their four templates below (greeting_gloss.001,
+  # person_name_gloss.001, wellbeing_question_translate.002, plus
+  # widening health_feeling_gloss.001/health_advice_gloss.001/
+  # health_advice_pair.003/health_review_pair.003) with unions of this
+  # unit's own genuinely-introduced tags (§3.1a). This unit is real thin
+  # (9 distinct native content tokens total, across only 5 of 6
+  # lessons -- lesson05 introduces zero new tokens of its own), so
+  # several of the new pools below unavoidably overlap; documented
+  # per-template below and in review.notes.
+  #
+  # feeling_review_pool: health_feeling_word (1: مریض) + condition_word
+  # (1: حالم) + symptom_word (3: سردرد/تب/دل‌درد) -- 5 distinct, all
+  # "how the patient is/feels" vocabulary. Used by health_feeling_gloss.001.
+  feeling_review_pool: &feeling_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [health_feeling_word, condition_word, symptom_word]}}
+  # advice_review_pool: health_advice_word (2: استراحت/بنوشین) +
+  # seek_help_noun (1: دوا) + symptom_word (3: سردرد/تب/دل‌درد) -- 6
+  # distinct, exactly the matching_pairs floor. Used by
+  # health_advice_gloss.001 and health_advice_pair.003.
+  advice_review_pool: &advice_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [health_advice_word, seek_help_noun, symptom_word]}}
+  # doctor_visit_pool: health_advice_word (2) + seek_help_noun (1) +
+  # condition_word (1) -- 4 distinct, the vocabulary of the doctor's own
+  # dialogue lines. Used by person_name_gloss.001 (re-anchored away from
+  # the dead person_name tag).
+  doctor_visit_pool: &doctor_visit_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [health_advice_word, seek_help_noun, condition_word]}}
+  # Pools symptom_word (3) + seek_help_noun (1) + health_advice_word (2)
+  # + condition_word (1) + health_feeling_word (1) + title (1) -- 9
+  # distinct real unit-scoped tokens (widened from the original 3-tag,
+  # 6-distinct union, which was 4 short of the 10 pairs this template
+  # declared -- see the matching_pairs slot count below, now 9).
+  health_review_pool: &health_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [symptom_word, seek_help_noun, health_advice_word, condition_word, health_feeling_word, title]}}
 templates:
   # Lesson 1: symptom vocabulary.
   - content_key: practice.en-prs.prs.a1.unit17.lesson01.symptom_word_gloss.001
@@ -131,10 +223,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit17.lesson02.health_feeling_gloss.001
     lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
     type: multiple_choice
-    frame: {text: "{health_feeling_word}", language_code: prs, direction: rtl}
-    slots: {health_feeling_word: *health_feeling_word}
-    answer_derivation: {kind: slot_gloss, slot: health_feeling_word}
-    feedback_frame: {text: "{health_feeling_word} describes how someone feels.", language_code: en, direction: ltr}
+    # Widened from the bare health_feeling_word tag (1 unit-scoped
+    # candidate, مریض alone -- below the 3-option MC floor) to
+    # feeling_review_pool (5): health_feeling_word + condition_word +
+    # symptom_word.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *feeling_review_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's health words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson02.condition_state_order.002
     lesson_content_key: prs.a1.unit17.lesson02.feeling_unwell
     type: word_order
@@ -170,10 +266,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_gloss.001
     lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
     type: multiple_choice
-    frame: {text: "{health_advice_word}", language_code: prs, direction: rtl}
-    slots: {health_advice_word: *health_advice_word}
-    answer_derivation: {kind: slot_gloss, slot: health_advice_word}
-    feedback_frame: {text: "{health_advice_word} is one of this unit's health-advice words.", language_code: en, direction: ltr}
+    # Widened from the bare health_advice_word tag (2 unit-scoped
+    # candidates -- below the 3-option MC floor) to advice_review_pool
+    # (6): health_advice_word + seek_help_noun + symptom_word.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *advice_review_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's health words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_translate.002
     lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
     type: translation
@@ -184,20 +283,32 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit17.lesson04.health_advice_pair.003
     lesson_content_key: prs.a1.unit17.lesson04.reading_health_advice
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
-    slots: {word_one: *health_advice_word, word_two: *health_advice_word, word_three: *health_advice_word, word_four: *health_advice_word, word_five: *health_advice_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+    # Widened from the bare health_advice_word tag (2 unit-scoped
+    # candidates -- needed 5, had 2, never generated) to
+    # advice_review_pool (6): health_advice_word + seek_help_noun +
+    # symptom_word -- exactly the 6-pair floor. Declared slot count
+    # dropped 5 -> 6 to match the real pool size.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *advice_review_pool, word_two: *advice_review_pool, word_three: *advice_review_pool, word_four: *advice_review_pool, word_five: *advice_review_pool, word_six: *advice_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 5: reading a health message.
   - content_key: practice.en-prs.prs.a1.unit17.lesson05.greeting_gloss.001
     lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
     type: multiple_choice
-    frame: {text: "{greeting}", language_code: prs, direction: rtl}
-    slots: {greeting: *greeting}
-    answer_derivation: {kind: slot_gloss, slot: greeting}
-    feedback_frame: {text: "{greeting} is used when greeting someone.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `greeting` tag (0 unit-scoped
+    # candidates -- سلام/علیکم/وعلیکم/خوش are all reused from earlier
+    # units; this unit's own lesson05 introduces zero new tokens of its
+    # own) to symptom_word (3), which is exactly the vocabulary the
+    # lesson05 reading passage itself tests (سردرد و تب). Identical
+    # slot/pool to lesson01.symptom_word_gloss.001 -- an honest
+    # consequence of this lesson's genuine thinness (see review.notes).
+    frame: {text: "{symptom_word}", language_code: prs, direction: rtl}
+    slots: {symptom_word: *symptom_word}
+    answer_derivation: {kind: slot_gloss, slot: symptom_word}
+    feedback_frame: {text: "{symptom_word} names a symptom.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson05.symptom_and_word_order.002
     lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
     type: word_order
@@ -211,24 +322,38 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit17.lesson06.person_name_gloss.001
     lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
     type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `person_name` tag (0 unit-scoped
+    # candidates -- بشیر was already introduced in unit04; this unit
+    # only additively extends his existing tag set, it introduces no
+    # new name) to doctor_visit_pool (4): health_advice_word +
+    # seek_help_noun + condition_word -- the vocabulary the doctor's
+    # own dialogue lines actually use.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *doctor_visit_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's health words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson06.wellbeing_question_translate.002
     lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
     type: translation
-    frame: {text: "{wellbeing_question}", language_code: en, direction: ltr, slot_rendering: {wellbeing_question: english_gloss}}
-    slots: {wellbeing_question: *wellbeing_question}
-    answer_derivation: {kind: slot_text, slot: wellbeing_question}
-    feedback_frame: {text: "{wellbeing_question} is the Dari word for this.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `wellbeing_question` tag (0
+    # unit-scoped candidates -- چطور/استین/استی are all reused from
+    # earlier units) to `title` (صاحب), this lesson's own genuinely new
+    # token.
+    frame: {text: "{title}", language_code: en, direction: ltr, slot_rendering: {title: english_gloss}}
+    slots: {title: *title}
+    answer_derivation: {kind: slot_text, slot: title}
+    feedback_frame: {text: "{title} is the Dari word for this.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit17.lesson06.health_review_pair.003
     lesson_content_key: prs.a1.unit17.lesson06.doctor_dialogue
     type: matching_pairs
-    # Pools symptom_word (3) + seek_help_noun (2) + health_advice_word
-    # (5) -- 10 distinct real tokens, AUTHORING_GUIDE.md #16.
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
-    slots: {word_one: *health_review_pool, word_two: *health_review_pool, word_three: *health_review_pool, word_four: *health_review_pool, word_five: *health_review_pool, word_six: *health_review_pool, word_seven: *health_review_pool, word_eight: *health_review_pool, word_nine: *health_review_pool, word_ten: *health_review_pool}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
+    # Widened from the 3-tag union (symptom_word + seek_help_noun +
+    # health_advice_word, 6 unit-scoped distinct tokens -- needed 10,
+    # never generated) to the full 6-tag health_review_pool (9): adds
+    # condition_word + health_feeling_word + title. Declared slot count
+    # dropped 10 -> 9 to match the real pool size (this unit's total
+    # native content-word count).
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine}", language_code: prs, direction: rtl}
+    slots: {word_one: *health_review_pool, word_two: *health_review_pool, word_three: *health_review_pool, word_four: *health_review_pool, word_five: *health_review_pool, word_six: *health_review_pool, word_seven: *health_review_pool, word_eight: *health_review_pool, word_nine: *health_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}

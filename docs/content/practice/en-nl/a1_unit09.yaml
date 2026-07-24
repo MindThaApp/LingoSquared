@@ -4,7 +4,7 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit09.directions
 review:
-  status: reviewed
+  status: unreviewed
   required_next_reviewer: null
   fresh_context: "false"
   notes: >-
@@ -50,10 +50,60 @@ review:
     by that lesson's own templates above); `order.002` (turn_direction) ->
     `lesson02.bevelsvormen` (same tag already used there too). Both are
     safe, no-forward-reference anchors within the same unit.
+
+    **Re-authoring fix, 2026-07-24 (unit-scope DEAD-template pass)**: the
+    2026-07-06 authoring note's own words -- "Reused unit08's
+    place_non_station tag ... legitimate cross-unit vocabulary reuse" --
+    turned out to be exactly the anti-pattern
+    docs/content/PRACTICE_PACK_RECIPE.md's DO-NOT #2 warns about:
+    `place_non_station` is entirely unit08's own vocabulary (supermarkt,
+    apotheek, etc.); unit09's own lessons (verified via iter_specs())
+    introduce ZERO tokens carrying that tag. `generate_checkpoint()` is
+    unit-scoped, so all 5 templates built on it --
+    `lesson03.choose.001`/`lesson03.listen.002`/`lesson04.choose.001`/
+    `lesson05.choose.001`/`lesson06.listen.001` -- had 0 candidates and
+    could never generate at checkpoint scope, even though they looked fine
+    in Endless Practice (course-scoped). This unit teaches directions and
+    routes, not places, so re-anchored all 5 to unit09's own `route_map`
+    tag instead (renamed the `place_non_station` preset alias to
+    `route_word` and repointed its `semantic` value to `route_map`; no
+    other template referenced the old alias). `route_map` pools unit09's
+    own route/route_op_de_kaart. Unit-scoped candidates: route ("the
+    route"), Route ("Route"), START ("START"), DOEL ("DESTINATION") -- 4
+    distinct glosses, clearing the >=3 MC/listen floor for all 5 templates
+    (bare `{item}` MC/listen frames have no grammaticality-in-frame
+    requirement, so course-scope pool diversity is not a risk here). Note
+    for the coordinator: `route`/`Route` is a genuine case-duplicate in the
+    underlying backfill data (same word, two case variants, both tagged
+    identically with no way to exclude one via the pack alone) -- a minor,
+    pre-existing content-quality wrinkle, not introduced by this fix, and
+    out of PACK-ONLY scope to resolve (would need a `route_map_pure` tag
+    analogous to this file's own `direction_word_pure`). Updated the
+    "place word" feedback_frame text on all 5 templates to describe route
+    vocabulary accurately.
+
+    Also fixed the below-floor `lesson01.match.003` (matching_pairs
+    declared 5 slots against `direction_word_pure`, which has exactly 5
+    members course-wide -- links/rechts/linksaf/rechtsaf/rechtdoor -- a
+    closed, complete A1 direction-word set with no 6th member reachable
+    inside this unit). Widening to `direction_word` (the non-pure sibling)
+    does not help -- identical 5 members, no capitalized duplicate exists
+    for this specific set. The only other unit-scoped pool large enough
+    (`imperative_direction`, the lesson02 command verbs ga/sla/loop) is a
+    genuine case-duplicate trap: each verb's bare and sentence-initial
+    capitalized forms (ga/Ga, sla/Sla, loop/Loop) share the identical
+    `imperative_direction` tag with no way to exclude one case variant
+    (no `_pure` sibling exists for it), so unioning it in would recreate
+    the exact §6.3 case-duplicate defect this recipe warns against for
+    matching_pairs. DROPPED `lesson01.match.003` per the recipe's explicit
+    guidance for a genuinely-capped-below-6 unit; the structured tier
+    still has 3 live `word_order` templates
+    (`lesson02.order.001`/`lesson04.order.002`/`lesson06.order.002`), so
+    the tier survives.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [direction_word, direction_word_pure, turn_direction, place_non_station]
+    semantic: [direction_word, direction_word_pure, turn_direction, route_map]
 slot_presets:
   direction_word: &direction_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word}}
   # direction_word_pure: exact-case (no capitalized "Rechtdoor" duplicate),
@@ -62,7 +112,11 @@ slot_presets:
   # using the plain "direction_word" tag unchanged.
   direction_word_pure: &direction_word_pure {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word_pure}}
   turn_direction: &turn_direction {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: turn_direction}}
-  place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
+  # route_word: unit09's own route/map vocabulary (route, Route, START,
+  # DOEL from lesson05's route_op_de_kaart) -- re-anchored 2026-07-24 from
+  # a dead cross-unit "place_non_station" (unit08-only vocabulary, 0
+  # unit09-scoped candidates). See review notes above.
+  route_word: &route_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: route_map}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit09.lesson01.choose.001
     lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
@@ -83,14 +137,6 @@ templates:
     slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the direction word you heard.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit09.lesson01.match.003
-    lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
-    type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
-    slots: {first: *direction_word_pure, second: *direction_word_pure, third: *direction_word_pure, fourth: *direction_word_pure, fifth: *direction_word_pure}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each direction word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson01.translate.004
     lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
     type: translation
@@ -127,16 +173,16 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *route_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a map or route word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson03.listen.002
     lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *route_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the map or route word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson04.choose.001
     lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
     type: multiple_choice
@@ -146,9 +192,9 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *route_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a map or route word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson04.order.002
     lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
     type: word_order
@@ -165,9 +211,9 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *route_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a place word from the map.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the route map.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson05.listen.002
     lesson_content_key: nl.a1.unit09.lesson05.route_op_de_kaart
     type: listen_select
@@ -179,9 +225,9 @@ templates:
     lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *route_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the place word you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a route-map word you heard in this dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson06.order.002
     lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
     type: word_order

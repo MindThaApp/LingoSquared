@@ -34,16 +34,51 @@ review:
     writing these templates. Needs the standard fresh-context review
     before import. Same blocking dependency as every earlier en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
-    database yet."
+    database yet.
+
+    2026-07-24 unit-scope re-authoring pass (checkpoint-viability fix,
+    PACK-ONLY, see docs/content/PRACTICE_PACK_RECIPE.md): three DEAD
+    templates found by scripts/_practice_unit_scope_check.py.
+    (1) lesson01.match.003 declared 6 slots over 'clothing_noun' alone,
+    but that tag has only 5 unit-native distinct tokens (jas, broek,
+    schoenen, maat, kleur) -- never generates (recipe DO-NOT #5).
+    Widened to the union 'clothing_noun'+'receipt_reading', which adds
+    'Winterjas' (unit20-native, lesson05) for 6 distinct tokens; no
+    case-duplicate risk (Winterjas/kleur have no capitalized siblings in
+    this pool). (2) lesson04.order.001 ('Het is te {item}.') and
+    (3) lesson04.translate.002 both constrained `item` to 'size_too_adj'
+    (klein/groot) -- but those adjectives are unit14-native, not unit20-
+    native (this unit's own lesson04 only ever reintroduces them, it
+    doesn't introduce them), so both had 0 unit-scoped candidates
+    (recipe DO-NOT #2). lesson04's OWN real vocabulary is 'Past'/'past'
+    ('Fits'/'fits', clothing_fit tag) from its actually-taught phrase
+    'Het past goed.' -- order.001 re-anchored to frame 'Het {item}
+    goed.' (renders the exact taught sentence for 'past'); course-scope
+    re-read (dropping the unit filter, keeping '.a1.') widens
+    clothing_fit+verb to {is, Past, past} -- 'Het is goed.'/'Het past
+    goed.'/'Het Past goed.' are all grammatical (the last is just a
+    mid-sentence capital, a display-quality note only, not a grading
+    hazard per the recipe's §6.6 correction). translate.002 converted
+    from the old fixed-English-sentence shape (unsafe over a >1-member
+    slot -- the underdetermined-production-prompt defect) to a bare-word
+    translation over the same clothing_fit tag, which is safe with any
+    pool size. Verified via scripts/_practice_unit_scope_check.py: 0
+    DEAD, 0 below-floor after this pass (was 3 DEAD, 0 below-floor)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [clothing_noun, clothing_item_singular, color, size_too_adj]
+    semantic: [clothing_noun, clothing_item_singular, color, clothing_fit, receipt_reading]
 slot_presets:
   clothing_noun: &clothing_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_noun}}
   clothing_item_singular: &clothing_item_singular {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_item_singular}}
   color: &color {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: color}}
-  size_too_adj: &size_too_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: size_too_adj}}
+  # clothing_noun ∪ receipt_reading: widens lesson01.match.003's pool from 5
+  # to 6 distinct unit-native tokens (adds 'Winterjas'/'kleur' from lesson05
+  # -- see review.notes' 2026-07-24 entry). size_too_adj (klein/groot) is
+  # dropped: those adjectives are unit14-native, not unit20-native, so the
+  # tag had 0 unit-scoped candidates here; clothing_fit is its replacement.
+  clothing_noun_or_receipt: &clothing_noun_or_receipt {language_code: nl, part_of_speech: [noun], agreement_tags: {semantic: [clothing_noun, receipt_reading]}}
+  clothing_fit: &clothing_fit {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: clothing_fit}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit20.lesson01.choose.001
     lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
@@ -68,7 +103,7 @@ templates:
     lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
-    slots: {first: *clothing_noun, second: *clothing_noun, third: *clothing_noun, fourth: *clothing_noun, fifth: *clothing_noun, sixth: *clothing_noun}
+    slots: {first: *clothing_noun_or_receipt, second: *clothing_noun_or_receipt, third: *clothing_noun_or_receipt, fourth: *clothing_noun_or_receipt, fifth: *clothing_noun_or_receipt, sixth: *clothing_noun_or_receipt}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each clothing word with its English meaning.", language_code: en, direction: ltr}
@@ -141,23 +176,23 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit20.lesson04.order.001
     lesson_content_key: nl.a1.unit20.lesson04.past_het
     type: word_order
-    frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}
-    slots: {item: *size_too_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}}
+    frame: {text: "Het {item} goed.", language_code: nl, direction: ltr}
+    slots: {item: *clothing_fit}
+    answer_derivation: {kind: render_frame, frame: {text: "Het {item} goed.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} describes how it fits.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit20.lesson04.translate.002
     lesson_content_key: nl.a1.unit20.lesson04.past_het
     type: translation
     frame:
-      text: "It is too {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *size_too_adj}
-    answer_derivation: {kind: render_frame, frame: {text: "Het is te {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Het is te {item}.", language_code: en, direction: ltr}
+    slots: {item: *clothing_fit}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit20.lesson05.choose.001
     lesson_content_key: nl.a1.unit20.lesson05.bonnetje_lezen
     type: multiple_choice

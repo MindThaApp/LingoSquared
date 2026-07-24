@@ -66,13 +66,44 @@ review:
     Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has happened against a real database
     yet in this pass.
+
+    RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD/
+    FLOOR fixes, PACK-ONLY): the whole-direction slot check above never
+    proved candidates exist WITHIN this unit's own lessons -- 4 templates
+    were DEAD and 2 below-floor at checkpoint scope, all from the same
+    root cause: this unit's own "transport_mode_word" is only 3
+    unit-scoped tokens (بس is REUSED from unit16, its lexeme spec is still
+    keyed there, out of unit24's checkpoint scope no matter how the notes
+    above describe it), and "buy_verb"/"person_name" are 0 unit-scoped
+    tokens (REUSED from unit21 / an earlier-unit course-wide tag
+    respectively). Fixes: (1) lesson01.transport_word_pair.002 and (2)
+    lesson04.speed_pair.003 (2 slots, far below the 6-pair floor) widened
+    to new transport_ticket_pool / commute_review_pool presets (6
+    unit-scoped distinct tokens each). (3) lesson05.go_verb_gloss.001 (only
+    2 unit-scoped glosses, below the multiple_choice floor) and (4)
+    lesson06.transport_review_pair.001 (need 5, had 4) both re-anchored to
+    a new unit_vocab_pool unioning all 5 of this unit's own content tags
+    (10 unit-scoped distinct tokens) -- renamed
+    lesson05.unit_vocab_gloss.001 and widened lesson06's matching_pairs to
+    10 pairs. (5) lesson05.person_transport_order.002 required "person_name"
+    (0 unit-scoped candidates) -- re-anchored (now commute_go_order.002) by
+    dropping the subject slot entirely: Dari is pro-drop and this unit's OWN
+    realization already tests this same sentence subject-less ("هر روز با
+    تکسی می‌رود"). (6) lesson06.buy_ticket_translate.003 required "buy_verb"
+    (0 unit-scoped candidates) -- replaced (now ticket_word_translate.003)
+    with a bare-word translation over the unit's own ticket_word tag.
+    Removed the now-unused buy_verb/person_name tags and presets, and
+    proper_noun from tag_schema.part_of_speech. Every fix keeps the
+    template's type/tier and lesson anchor. No backfill/realization/overlay
+    edits. Post-fix: scripts/_practice_unit_scope_check.py reports 0 DEAD,
+    0 below-floor for this pack.
 tag_schema:
-  part_of_speech: [noun, verb, adjective, adverb, proper_noun]
+  part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
     semantic:
       [transport_mode_word, on_foot_word, go_verb_present, you_go_verb,
        go_verb_third, speed_adjective, speed_comparative_only,
-       ticket_word, ticket_only, buy_verb, person_name]
+       ticket_word, ticket_only]
 slot_presets:
   transport_mode_word: &transport_mode_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: transport_mode_word}}
   on_foot_word: &on_foot_word {language_code: prs, part_of_speech: adverb, agreement_tags: {semantic: on_foot_word}}
@@ -83,19 +114,25 @@ slot_presets:
   speed_comparative_only: &speed_comparative_only {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: speed_comparative_only}}
   ticket_word: &ticket_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ticket_word}}
   ticket_only: &ticket_only {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ticket_only}}
-  # Reuses "buy_verb" (می‌خرم), established in this pass's own
-  # a1_unit21.yaml (genuinely the same word, not a new entry).
-  buy_verb: &buy_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: buy_verb}}
-  # Union of transport_mode_word (4) + on_foot_word (1) for the final
-  # review matching_pairs -- 5 distinct real tokens. Unlike a per-slot
-  # split (which would give the single on_foot_word slot only 1
-  # candidate, below the >=2 floor _practice_slot_check.py enforces for
-  # every matching_pairs slot), every word_N slot below draws from this
-  # SAME shared 5-member pool, matching the health_review_pool/money_
-  # review_pool pattern.
-  transport_review_pool: &transport_review_pool {language_code: prs, part_of_speech: [noun, adverb], agreement_tags: {semantic: [transport_mode_word, on_foot_word]}}
-  # Reuses the existing course-wide "person_name" group.
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # Re-anchor fix (2026-07-24): transport_mode_word is only 3 unit-scoped
+  # tokens (بس is REUSED from unit16 -- its spec is still keyed to unit16,
+  # out of THIS unit's checkpoint scope even though the notes above call it
+  # a "4th member"). Union with on_foot_word (1) + ticket_word (2) reaches
+  # 6 unit-scoped distinct tokens for lesson01's review matching_pairs.
+  transport_ticket_pool: &transport_ticket_pool {language_code: prs, part_of_speech: [noun, adverb], agreement_tags: {semantic: [transport_mode_word, on_foot_word, ticket_word]}}
+  # Re-anchor fix (2026-07-24): speed_adjective alone is only 2 unit-scoped
+  # tokens (was declared as a 2-slot matching_pairs, below the 6-pair
+  # floor). Union with go_verb_present (2) + ticket_word (2) reaches 6.
+  commute_review_pool: &commute_review_pool {language_code: prs, part_of_speech: [adjective, verb, noun], agreement_tags: {semantic: [speed_adjective, go_verb_present, ticket_word]}}
+  # Re-anchor fix (2026-07-24): unions ALL FIVE of this unit's own content
+  # tags (transport_mode_word 3 + on_foot_word 1 + ticket_word 2 +
+  # speed_adjective 2 + go_verb_present 2 = 10 unit-scoped distinct
+  # tokens) -- replaces the old transport_mode_word(4)+on_foot_word(1)
+  # assumption (only 4 unit-scoped, not 5: بس is out of scope, see above),
+  # and doubles as lesson05's recognition-tier pool since go_verb_present
+  # alone (2 unit-scoped glosses) can't clear the multiple_choice 3-option
+  # floor on its own.
+  unit_vocab_pool: &unit_vocab_pool {language_code: prs, part_of_speech: [noun, adverb, adjective, verb], agreement_tags: {semantic: [transport_mode_word, on_foot_word, ticket_word, speed_adjective, go_verb_present]}}
 templates:
   # Lesson 1: transport vocabulary.
   - content_key: practice.en-prs.prs.a1.unit24.lesson01.transport_word_gloss.001
@@ -107,11 +144,15 @@ templates:
     feedback_frame: {text: "{transport_mode_word} names a way to get around town.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson01.transport_word_pair.002
     lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
+    # Re-anchored (2026-07-24) to transport_ticket_pool: transport_mode_word
+    # alone is only 3 unit-scoped tokens (بس is out of scope, see preset
+    # comment above) -- 4 slots over it was DEAD. Now 6 slots over 6
+    # unit-scoped distinct tokens.
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *transport_mode_word, word_two: *transport_mode_word, word_three: *transport_mode_word, word_four: *transport_mode_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *transport_ticket_pool, word_two: *transport_ticket_pool, word_three: *transport_ticket_pool, word_four: *transport_ticket_pool, word_five: *transport_ticket_pool, word_six: *transport_ticket_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson01.go_by_order.003
     lesson_content_key: prs.a1.unit24.lesson01.transport_vocabulary
@@ -170,28 +211,44 @@ templates:
     feedback_frame: {text: "Word order: تکسی تیزتر است (the taxi is faster).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson04.speed_pair.003
     lesson_content_key: prs.a1.unit24.lesson04.commute_dialogue
+    # Re-anchored (2026-07-24) to commute_review_pool: speed_adjective alone
+    # is only 2 unit-scoped tokens (2 slots is far below the 6-pair floor).
+    # Widened to 6 unit-scoped distinct tokens.
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two}", language_code: prs, direction: rtl}
-    slots: {word_one: *speed_adjective, word_two: *speed_adjective}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two]}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *commute_review_pool, word_two: *commute_review_pool, word_three: *commute_review_pool, word_four: *commute_review_pool, word_five: *commute_review_pool, word_six: *commute_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 5: reading about commuting.
-  - content_key: practice.en-prs.prs.a1.unit24.lesson05.go_verb_gloss.001
+  - content_key: practice.en-prs.prs.a1.unit24.lesson05.unit_vocab_gloss.001
     lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+    # Re-anchored (2026-07-24): go_verb_present alone is only 2 unit-scoped
+    # distinct glosses (below the multiple_choice 3-option floor) and this
+    # unit introduces no third go-verb form. Widened to unit_vocab_pool
+    # (all 5 of this unit's own content tags, 10 unit-scoped distinct
+    # glosses) instead of padding with an earlier unit's vocabulary.
     type: multiple_choice
-    frame: {text: "{go_verb_present}", language_code: prs, direction: rtl}
-    slots: {go_verb_present: *go_verb_present}
-    answer_derivation: {kind: slot_gloss, slot: go_verb_present}
-    feedback_frame: {text: "{go_verb_present} is a form of the verb 'to go.'", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit24.lesson05.person_transport_order.002
+    frame: {text: "{unit_vocab_word}", language_code: prs, direction: rtl}
+    slots: {unit_vocab_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_vocab_word}
+    feedback_frame: {text: "{unit_vocab_word} is from this unit's transportation vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson05.commute_go_order.002
     lesson_content_key: prs.a1.unit24.lesson05.reading_commute
+    # Re-anchored (2026-07-24): the original frame required "person_name",
+    # a course-wide tag this unit introduces zero lexemes for (0
+    # unit-scoped candidates, DEAD at checkpoint scope). Dari is pro-drop --
+    # این می‌رود already reads as a complete "(he/she) goes" without a named
+    # subject, and this unit's OWN realization teaches exactly this pattern
+    # subject-less (lesson05's real word_order exercise tests "هر روز با
+    # تکسی می‌رود" with no name). Dropped the person_name slot instead of
+    # inventing a subject.
     type: word_order
-    frame: {text: "{person_name} با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name, transport_mode_word: *transport_mode_word, go_verb_third: *go_verb_third}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [name] با [vehicle] می‌رود ([name] goes by [vehicle]).", language_code: en, direction: ltr}
+    frame: {text: "با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}
+    slots: {transport_mode_word: *transport_mode_word, go_verb_third: *go_verb_third}
+    answer_derivation: {kind: render_frame, frame: {text: "با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: با [vehicle] می‌رود ((he/she) goes by [vehicle]).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson05.transport_word_translate.003
     lesson_content_key: prs.a1.unit24.lesson05.reading_commute
     type: translation
@@ -203,20 +260,28 @@ templates:
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit24.lesson06.transport_review_pair.001
     lesson_content_key: prs.a1.unit24.lesson06.wrap_up
-    # Pools transport_mode_word (4) + on_foot_word (1) -- 5 distinct
-    # real tokens, all drawn from the shared union preset so every slot
-    # independently has >=2 candidates (AUTHORING_GUIDE.md #16).
+    # Re-anchored (2026-07-24): the old transport_mode_word(4)+on_foot_word(1)
+    # union assumed transport_mode_word had 4 unit-scoped members: it has
+    # only 3 (بس is REUSED from unit16, out of this unit's checkpoint scope)
+    # -- 5 slots over 4 real tokens was DEAD. Widened to unit_vocab_pool,
+    # the full 10-token union of every content tag this unit introduces --
+    # a genuine final wrap-up review of the whole unit.
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five}", language_code: prs, direction: rtl}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine} — {word_ten}", language_code: prs, direction: rtl}
     slots:
-      word_one: *transport_review_pool
-      word_two: *transport_review_pool
-      word_three: *transport_review_pool
-      word_four: *transport_review_pool
-      word_five: *transport_review_pool
+      word_one: *unit_vocab_pool
+      word_two: *unit_vocab_pool
+      word_three: *unit_vocab_pool
+      word_four: *unit_vocab_pool
+      word_five: *unit_vocab_pool
+      word_six: *unit_vocab_pool
+      word_seven: *unit_vocab_pool
+      word_eight: *unit_vocab_pool
+      word_nine: *unit_vocab_pool
+      word_ten: *unit_vocab_pool
     slot_relations:
-      - {kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five]}
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five]}
+      - {kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
     feedback_frame: {text: "Match each word to its English meaning -- transportation.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson06.daily_commute_order.002
     lesson_content_key: prs.a1.unit24.lesson06.wrap_up
@@ -225,10 +290,16 @@ templates:
     slots: {on_foot_word: *on_foot_word, transport_mode_word: *transport_mode_word}
     answer_derivation: {kind: render_frame, frame: {text: "من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: من هر روز پیاده یا با [vehicle] می‌روم (I go on foot or by [vehicle] every day).", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit24.lesson06.buy_ticket_translate.003
+  - content_key: practice.en-prs.prs.a1.unit24.lesson06.ticket_word_translate.003
     lesson_content_key: prs.a1.unit24.lesson06.wrap_up
+    # Replaced (2026-07-24): the original slotted "buy_verb" (می‌خرم),
+    # REUSED as-is from a1_unit21 -- this unit introduces zero buy_verb
+    # lexemes (0 unit-scoped candidates, DEAD at checkpoint scope). PACK-
+    # ONLY means no backfill re-tagging, so replaced with a bare-word
+    # production template over ticket_word (native to lesson03, valid
+    # unit-wide per the standard pooling technique).
     type: translation
-    frame: {text: "{buy_verb}", language_code: en, direction: ltr, slot_rendering: {buy_verb: english_gloss}}
-    slots: {buy_verb: *buy_verb}
-    answer_derivation: {kind: slot_text, slot: buy_verb}
-    feedback_frame: {text: "{buy_verb} is the Dari word for this.", language_code: en, direction: ltr}
+    frame: {text: "{ticket_word}", language_code: en, direction: ltr, slot_rendering: {ticket_word: english_gloss}}
+    slots: {ticket_word: *ticket_word}
+    answer_derivation: {kind: slot_text, slot: ticket_word}
+    feedback_frame: {text: "{ticket_word} is the Dari word for this.", language_code: en, direction: ltr}

@@ -42,7 +42,24 @@ review:
     >=2 distinct tokens. Needs the standard fresh-context review before
     import. Same blocking dependency as every earlier en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
-    database yet."
+    database yet.
+
+    2026-07-24 unit-scope re-authoring pass (checkpoint-viability fix,
+    PACK-ONLY, see docs/content/PRACTICE_PACK_RECIPE.md): lesson04's
+    match.003 constrained all 6 slots to 'weekday_pure', a tag reused
+    from unit04 -- but generate_checkpoint() only loads THIS unit's own
+    lexemes, and unit19 introduces zero 'weekday_pure' members itself
+    (it only ever reuses the plain 'weekday' tag on 'Zaterdag'/'Zondag',
+    2 tokens, still short of the 6-pair floor). All 6 slots had 0
+    unit-scoped candidates -- the whole template was dead at checkpoint
+    scope (recipe DO-NOT #2). Re-anchored to 'weather_vocab_pure', the
+    file's own broader union tag: unit19 natively carries 8 distinct
+    members under it (weer, zonnig, regent, bewolkt, koud, warm,
+    weerbericht, wandeling -- verified with the iter_specs unit filter),
+    comfortably clearing the 6-pair floor with real unit-taught
+    vocabulary, not padding. Verified via
+    scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
+    this pass (was 6 DEAD-slot lines / 1 template, 0 below-floor)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -160,10 +177,10 @@ templates:
     lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
-    slots: {first: *weekday_pure, second: *weekday_pure, third: *weekday_pure, fourth: *weekday_pure, fifth: *weekday_pure, sixth: *weekday_pure}
+    slots: {first: *weather_vocab_pure, second: *weather_vocab_pure, third: *weather_vocab_pure, fourth: *weather_vocab_pure, fifth: *weather_vocab_pure, sixth: *weather_vocab_pure}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "Match each weekday with its English meaning.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each weather word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson05.choose.001
     lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
     type: multiple_choice

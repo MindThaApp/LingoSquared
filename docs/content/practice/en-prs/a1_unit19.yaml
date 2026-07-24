@@ -60,25 +60,88 @@ review:
     Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has happened against a real database
     yet in this pass.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found 9 DEAD templates (0 below-floor) in this pack. Root cause: the
+    course-wide ones_number (established unit04), preference_verb
+    (established unit14), and person_name tags all had ZERO unit19-scoped
+    candidates -- this unit reuses them but introduces no new members of
+    its own -- while room_word/object_word each had only 3 unit-scoped
+    members (below the matching_pairs floors the pack had declared).
+    generate_checkpoint() scopes candidates to this unit's own lexemes
+    only, so every affected slot could never generate at checkpoint
+    scope. No backfill_lexemes_en_prs.py or realization change was made
+    (PACK-ONLY lane) -- every fix re-anchors a slot to a union or
+    single-member narrowing of this unit's own room_word/object_word/
+    home_description_word tags (§3.1a/§3.1d):
+    - room_word_pair.002 (lesson01) and object_word_pair.002 (lesson02),
+      each previously DEAD (needed 4, had 3 native) -> both widened to
+      room_object_pool (room_word + object_word, 6 distinct), declared
+      slot count raised 4 -> 6 to match.
+    - review_pair.003 (lesson03), previously DEAD (an 8-slot
+      room_word(4)+object_word(4) split against a real combined
+      unit-scoped pool of only 6) -> reduced to 6 slots on the same
+      room_object_pool.
+    - number_room_order.001 (lesson03) and house_bedroom_count_order.001
+      (lesson04), both previously DEAD (`ones_number`, 0 candidates) ->
+      re-anchored to home_description_word narrowed to its single
+      adjective member (بزرگ, excludes مقابل and course-wide noun
+      زندگی), either alone as a fixed-anchor sentence (lesson04: "این
+      خانه {home_description_word} است") or combined with a room_word
+      slot for variety (lesson03: "{room_word} {home_description_word}
+      است" -- checked grammatical for every room_word member including
+      خانه at course scope).
+    - preference_verb_gloss.002 (lesson04) and person_name_gloss.001
+      (lesson06), both previously DEAD (`preference_verb`/`person_name`,
+      0 candidates) -> both re-anchored to unit_vocab_pool (room_word +
+      object_word + home_description_word, 7 distinct), this unit's
+      entire native content vocabulary.
+    - person_bedroom_count_order.002 (lesson06), previously DEAD on
+      BOTH its person_name and ones_number slots -> re-anchored to
+      home_description_word narrowed to its adjective member again,
+      with a different fixed room noun (این آشپزخانه) than lesson04's
+      fix so the two don't render an identical sentence.
+    No new backfill tag, gloss, or lexeme was introduced. Removed the
+    now-fully-unused ones_number/preference_verb/person_name
+    slot_presets and tag_schema entries (nothing in this pack references
+    them anymore). Template count unchanged (14 -- nothing dropped, only
+    re-anchored/widened). Verified with
+    scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
+    this file after the fix), scripts/compile_content.py
+    practice-validate (0 errors), and scripts/check_dari_register.py (0
+    new findings) -- see the coordinator report for exact output.
 tag_schema:
   part_of_speech: [noun, verb, adjective, preposition, proper_noun]
   agreement_tags:
     semantic:
-      [room_word, home_room_word, object_word, home_description_word,
-       ones_number, preference_verb, person_name]
+      [room_word, home_room_word, object_word, home_description_word]
 slot_presets:
   room_word: &room_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: room_word}}
   home_room_word: &home_room_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: home_room_word}}
   object_word: &object_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: object_word}}
   home_description_word: &home_description_word {language_code: prs, part_of_speech: [adjective, preposition], agreement_tags: {semantic: home_description_word}}
-  # Reuses the existing course-wide "ones_number" tag (established
-  # unit04: یک-ده, 10 members).
-  ones_number: &ones_number {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: ones_number}}
-  # Reuses the existing course-wide "preference_verb" tag (established
-  # unit14: دارم/دارین/دارد/ندارم/ندارد, 5 members).
-  preference_verb: &preference_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
-  # Reuses the existing course-wide "person_name" tag.
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # home_description_word narrowed to its single adjective member
+  # (بزرگ) -- a deterministic single-candidate anchor (§3.1d), safe at
+  # course scope too (excludes مقابل, a preposition, and the later
+  # course-wide noun زندگی added to the same tag by a different unit).
+  home_description_adjective: &home_description_adjective {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: home_description_word}}
+  # REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY): the
+  # course-wide "ones_number" (established unit04), "preference_verb"
+  # (established unit14), and "person_name" tags all had ZERO
+  # unit19-scoped candidates -- removed those three dead presets/tags
+  # and re-anchored their 5 affected templates below to unions/
+  # narrowings of this unit's own room_word/object_word/
+  # home_description_word tags. See review.notes for the full
+  # accounting.
+  # room_object_pool: room_word (3: اتاق/آشپزخانه/تشناب) + object_word
+  # (3: چوکی/تخت/کلکین) -- 6 distinct unit-scoped tokens, exactly the
+  # matching_pairs floor.
+  room_object_pool: &room_object_pool {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [room_word, object_word]}}
+  # unit_vocab_pool: room_word + object_word + home_description_word --
+  # 7 distinct unit-scoped tokens, this unit's entire native content
+  # vocabulary.
+  unit_vocab_pool: &unit_vocab_pool {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [room_word, object_word, home_description_word]}}
 templates:
   # Lesson 1: room words.
   - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_gloss.001
@@ -91,10 +154,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_pair.002
     lesson_content_key: prs.a1.unit19.lesson01.room_words
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *room_word, word_two: *room_word, word_three: *room_word, word_four: *room_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    # Widened from the bare room_word tag (3 unit-scoped candidates --
+    # needed 4, never generated) to room_object_pool (6): room_word +
+    # object_word. Declared slot count raised 4 -> 6 to match the real
+    # pool size.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_have_order.003
     lesson_content_key: prs.a1.unit19.lesson01.room_words
@@ -115,10 +182,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_pair.002
     lesson_content_key: prs.a1.unit19.lesson02.object_words
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *object_word, word_two: *object_word, word_three: *object_word, word_four: *object_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    # Widened from the bare object_word tag (3 unit-scoped candidates --
+    # needed 4, never generated) to room_object_pool (6): room_word +
+    # object_word. Declared slot count raised 4 -> 6 to match the real
+    # pool size.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_have_order.003
     lesson_content_key: prs.a1.unit19.lesson02.object_words
@@ -132,10 +203,16 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.number_room_order.001
     lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
     type: word_order
-    frame: {text: "{ones_number} اتاق دارم", language_code: prs, direction: rtl}
-    slots: {ones_number: *ones_number}
-    answer_derivation: {kind: render_frame, frame: {text: "{ones_number} اتاق دارم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [number] اتاق دارم (I have [number] rooms).", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `ones_number` tag (0 unit-scoped
+    # candidates -- established unit04, unit19 introduces no new
+    # numbers) to a 2-slot room_word + home_description_adjective combo
+    # (3 x 1 candidates). Grammatical for every room_word member,
+    # including خانه at course scope ("خانه بزرگ است", the house is
+    # big).
+    frame: {text: "{room_word} {home_description_word} است", language_code: prs, direction: rtl}
+    slots: {room_word: *room_word, home_description_word: *home_description_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "{room_word} {home_description_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [room] بزرگ است (the [room] is big).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.object_near_order.002
     lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
     type: word_order
@@ -147,37 +224,39 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.review_pair.003
     lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}", language_code: prs, direction: rtl}
-    slots:
-      word_one: *room_word
-      word_two: *room_word
-      word_three: *room_word
-      word_four: *room_word
-      word_five: *object_word
-      word_six: *object_word
-      word_seven: *object_word
-      word_eight: *object_word
-    slot_relations:
-      - {kind: distinct, slots: [word_one, word_two, word_three, word_four]}
-      - {kind: distinct, slots: [word_five, word_six, word_seven, word_eight]}
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight]}
+    # Widened from an 8-slot room_word(4)+object_word(4) split (needed
+    # 8, unit-scoped pool has only 6: 3 room_word + 3 object_word) to a
+    # single 6-slot room_object_pool union, matching this unit's real
+    # combined native pool size exactly.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning -- rooms and objects together.", language_code: en, direction: ltr}
 
   # Lesson 4: reading a home description.
   - content_key: practice.en-prs.prs.a1.unit19.lesson04.house_bedroom_count_order.001
     lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
     type: word_order
-    frame: {text: "این خانه {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}
-    slots: {ones_number: *ones_number}
-    answer_derivation: {kind: render_frame, frame: {text: "این خانه {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: این خانه [number] اتاق خواب دارد (this house has [number] bedrooms).", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `ones_number` tag (0 unit-scoped
+    # candidates) to home_description_adjective (1: بزرگ), a
+    # deterministic single-candidate anchor (§3.1d).
+    frame: {text: "این خانه {home_description_word} است", language_code: prs, direction: rtl}
+    slots: {home_description_word: *home_description_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "این خانه {home_description_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این خانه بزرگ است (this house is big).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson04.preference_verb_gloss.002
     lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
     type: multiple_choice
-    frame: {text: "{preference_verb}", language_code: prs, direction: rtl}
-    slots: {preference_verb: *preference_verb}
-    answer_derivation: {kind: slot_gloss, slot: preference_verb}
-    feedback_frame: {text: "{preference_verb} is used to describe what someone or something has.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `preference_verb` tag (0
+    # unit-scoped candidates -- established unit14, unit19 introduces no
+    # new preference verbs) to unit_vocab_pool (7): room_word +
+    # object_word + home_description_word, this unit's entire native
+    # content vocabulary.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
 
   # Lesson 5: reading a longer home description.
   - content_key: practice.en-prs.prs.a1.unit19.lesson05.home_description_word_translate.001
@@ -200,14 +279,22 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit19.lesson06.person_name_gloss.001
     lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
     type: multiple_choice
-    frame: {text: "{person_name}", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name}
-    answer_derivation: {kind: slot_gloss, slot: person_name}
-    feedback_frame: {text: "{person_name} is a name used in this course.", language_code: en, direction: ltr}
+    # Re-anchored from the course-wide `person_name` tag (0 unit-scoped
+    # candidates -- لیلا/فریدون are both reused from earlier units) to
+    # unit_vocab_pool (7): room_word + object_word +
+    # home_description_word.
+    frame: {text: "{unit_word}", language_code: prs, direction: rtl}
+    slots: {unit_word: *unit_vocab_pool}
+    answer_derivation: {kind: slot_gloss, slot: unit_word}
+    feedback_frame: {text: "{unit_word} is one of this unit's own words.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson06.person_bedroom_count_order.002
     lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
     type: word_order
-    frame: {text: "{person_name} {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name, ones_number: *ones_number}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} {ones_number} اتاق خواب دارد", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [name] [number] اتاق خواب دارد ([name] has [number] bedrooms).", language_code: en, direction: ltr}
+    # Re-anchored from a 2-slot person_name+ones_number combo (both 0
+    # unit-scoped candidates) to home_description_adjective (1: بزرگ), a
+    # deterministic single-candidate anchor, with a different fixed room
+    # noun than lesson04's fix to avoid an identical rendered sentence.
+    frame: {text: "این آشپزخانه {home_description_word} است", language_code: prs, direction: rtl}
+    slots: {home_description_word: *home_description_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "این آشپزخانه {home_description_word} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: این آشپزخانه بزرگ است (this kitchen is big).", language_code: en, direction: ltr}

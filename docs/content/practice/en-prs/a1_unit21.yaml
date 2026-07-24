@@ -64,12 +64,46 @@ review:
     Needs the standard fresh-context review before import; no
     backfill_lexemes_en_prs.py run has happened against a real database
     yet in this pass.
+
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY, per
+    docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    found 2 DEAD templates + 1 below-floor in this pack. No
+    backfill_lexemes_en_prs.py or realization change was made (PACK-ONLY
+    lane):
+    - clothing_word_pair.002 (lesson01, was FLOOR: 4 slots) -> widened
+      to clothing_review_pool (already defined in this file for
+      lesson06's clothing_review_pair.001: clothing_word + color_word,
+      7 distinct), sized to 6 pairs here.
+    - size_adjective_pair.002 (lesson03, was DEAD: needed 2, had 1 --
+      clothing_size_adjective's only unit-scoped member is کوچک; بزرگ is
+      reused from the comparisons unit, and even course-wide this tag
+      never reaches the 6-pair floor on its own) -> widened to a NEW
+      size_clothing_pool (clothing_size_adjective + size_word +
+      clothing_word, 6 distinct: کوچک/اندازه/لباس/پیراهن/پطلون/کفش).
+      Declared slot count raised 2 -> 6.
+    - person_bought_order.002 (lesson06, was DEAD: person_name 0
+      unit-scoped candidates -- reused from earlier units) -> re-anchored
+      from a 2-slot person_name+clothing_word combo to a single
+      clothing_word slot (4), dropping the explicit subject (Dari is
+      pro-drop; "یک [item] خرید" reads as "[he/she] bought a [item]",
+      grammatical without a name).
+    No new backfill tag, gloss, or lexeme was introduced. Removed the
+    now-fully-unused person_name slot_preset and tag_schema entry
+    (nothing in this pack references it anymore). Template count
+    unchanged (13 -- nothing dropped, only widened/re-anchored).
+    Verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
+    below-floor for this file after the fix), scripts/compile_content.py
+    practice-validate (0 errors), and scripts/check_dari_register.py (0
+    new findings) -- see the coordinator report for exact output.
 tag_schema:
   part_of_speech: [noun, verb, adjective, proper_noun]
   agreement_tags:
     semantic:
       [clothing_word, color_word, color_noun, size_word,
-       clothing_size_adjective, can_verb, buy_verb, person_name]
+       clothing_size_adjective, can_verb, buy_verb]
+    # REAUTH 2026-07-24: person_name removed -- 0 unit-scoped candidates
+    # (reused from earlier units); person_bought_order.002 below no
+    # longer uses it. See review.notes.
 slot_presets:
   clothing_word: &clothing_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: clothing_word}}
   color_word: &color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: color_word}}
@@ -80,8 +114,13 @@ slot_presets:
   # Pools clothing_word (4) + color_word (3) for the final review
   # matching_pairs -- 7 distinct real tokens, AUTHORING_GUIDE.md #16.
   clothing_review_pool: &clothing_review_pool {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [clothing_word, color_word]}}
-  # Reuses the existing course-wide "person_name" group.
-  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
+  # REAUTH 2026-07-24 (unit-scope DEAD-template repair, PACK-ONLY): the
+  # bare clothing_size_adjective tag has only 1 unit-scoped candidate
+  # (کوچک -- بزرگ is reused from the comparisons unit), below even a
+  # 2-pair matching_pairs, let alone the 6-pair floor. Widened by
+  # unioning with size_word (1: اندازه) + clothing_word (4) -- 6
+  # distinct total, exactly the floor.
+  size_clothing_pool: &size_clothing_pool {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [clothing_size_adjective, size_word, clothing_word]}}
 templates:
   # Lesson 1: clothing vocabulary.
   - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_word_gloss.001
@@ -94,10 +133,14 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_word_pair.002
     lesson_content_key: prs.a1.unit21.lesson01.clothing_vocabulary
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four}", language_code: prs, direction: rtl}
-    slots: {word_one: *clothing_word, word_two: *clothing_word, word_three: *clothing_word, word_four: *clothing_word}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four]}
+    # Widened from the bare clothing_word tag (4 slots, below the
+    # 6-pair floor) to clothing_review_pool (clothing_word + color_word,
+    # 7 distinct), sized to 6 pairs here (lesson06's own
+    # clothing_review_pair.001 uses the full 7 from the same pool).
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *clothing_review_pool, word_two: *clothing_review_pool, word_three: *clothing_review_pool, word_four: *clothing_review_pool, word_five: *clothing_review_pool, word_six: *clothing_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit21.lesson01.clothing_expensive_order.003
     lesson_content_key: prs.a1.unit21.lesson01.clothing_vocabulary
@@ -141,10 +184,15 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit21.lesson03.size_adjective_pair.002
     lesson_content_key: prs.a1.unit21.lesson03.sizes
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two}", language_code: prs, direction: rtl}
-    slots: {word_one: *clothing_size_adjective, word_two: *clothing_size_adjective}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two]}
+    # Widened from the bare clothing_size_adjective tag (1 unit-scoped
+    # candidate -- needed 2, never generated, and even course-wide this
+    # tag never reaches the 6-pair floor) to size_clothing_pool
+    # (clothing_size_adjective + size_word + clothing_word, 6 distinct).
+    # Declared slot count raised 2 -> 6 to match.
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *size_clothing_pool, word_two: *size_clothing_pool, word_three: *size_clothing_pool, word_four: *size_clothing_pool, word_five: *size_clothing_pool, word_six: *size_clothing_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: trying on and reading a label.
@@ -186,7 +234,12 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit21.lesson06.person_bought_order.002
     lesson_content_key: prs.a1.unit21.lesson06.wrap_up_reading
     type: word_order
-    frame: {text: "{person_name} یک {clothing_word} خرید", language_code: prs, direction: rtl}
-    slots: {person_name: *person_name, clothing_word: *clothing_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name} یک {clothing_word} خرید", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [name] یک [item] خرید ([name] bought a [item]).", language_code: en, direction: ltr}
+    # Re-anchored from a 2-slot person_name+clothing_word combo
+    # (person_name: 0 unit-scoped candidates -- reused from earlier
+    # units) to a single clothing_word slot (4), dropping the subject
+    # (Dari is pro-drop; "یک [item] خرید" = "[he/she] bought a [item]",
+    # grammatical without an explicit name).
+    frame: {text: "یک {clothing_word} خرید", language_code: prs, direction: rtl}
+    slots: {clothing_word: *clothing_word}
+    answer_derivation: {kind: render_frame, frame: {text: "یک {clothing_word} خرید", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: یک [item] خرید ([he/she] bought a [item]).", language_code: en, direction: ltr}

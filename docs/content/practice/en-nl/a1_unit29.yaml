@@ -40,7 +40,32 @@ review:
     single-candidate), word_order x2, translation x3. Needs the standard
     fresh-context review before import. Blocking dependency, same as every
     other en-nl pack: backfill_lexemes_en_nl.py has not actually been run
-    against a real database yet."
+    against a real database yet.
+
+    REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, pack-only, no
+    backfill/realization edits): scripts/_practice_unit_scope_check.py found
+    lesson01.fill.004's hobby_boek_single slot DEAD -- the tag's only
+    course-wide token, boek, is introduced in unit03, not this unit, so
+    unit-scoped generate_checkpoint() had 0 candidates. Re-anchored that slot
+    to hobby_vrienden_single (vrienden IS native to this unit's own lesson01)
+    with a new frame, 'Ik sport graag met {item}.' (distinct from lesson02's
+    existing 'Ik game graag met vrienden.' fill_in_blank on the same
+    single-member token; course-wide the tag still resolves to exactly one
+    token, vrienden, so the compiler's fill_in_blank ambiguity rule still
+    holds). Also: lesson03's choose.001/listen.002 were below the 3-distinct
+    floor at unit scope -- freq_adverb's only unit-native members are
+    soms/nooit (altijd/vaak are unit05/unit18 vocabulary and don't count at
+    checkpoint scope). Widened those two recognition slots to
+    `part_of_speech: adverb` with no semantic tag (safe here per recipe
+    SS3.1c: the frame is bare `{item}`, so there is no literal text for a
+    widened pool to be ungrammatical against), which pools all 5 of this
+    unit's own adverbs (soms/nooit/thuis/buiten/allebei) course-wide is moot
+    since this is a bare-frame MC/listen pair. Updated their feedback_frame
+    text from '{item} is a frequency word from this unit.' to '{item} is a
+    word from this unit.' since the pool is no longer frequency-only.
+    freq_adverb itself is untouched and still used narrowly (2-member,
+    unit-scoped-only) by lesson03.translate.003 and lesson04.word_order.001,
+    which have no candidate floor. Post-fix: 0 DEAD, 0 FLOOR for this pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -82,10 +107,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit29.lesson01.fill.004
     lesson_content_key: nl.a1.unit29.lesson01.lezen_sporten_koken
     type: fill_in_blank
-    frame: {text: "Ik lees graag een {item}.", language_code: nl, direction: ltr}
-    slots: {item: *hobby_boek_single}
+    frame: {text: "Ik sport graag met {item}.", language_code: nl, direction: ltr}
+    slots: {item: *hobby_vrienden_single}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Ik lees graag een boek. -- I like reading a book.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik sport graag met vrienden. -- I like exercising with friends.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson02.translate.001
     lesson_content_key: nl.a1.unit29.lesson02.muziek_tekenen_gamen
     type: translation
@@ -122,14 +147,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *freq_adverb}
+    slots: {item: {language_code: nl, part_of_speech: adverb}}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a frequency word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson03.listen.002
     lesson_content_key: nl.a1.unit29.lesson03.vrije_tijd_vraag
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *freq_adverb}
+    slots: {item: {language_code: nl, part_of_speech: adverb}}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson03.translate.003

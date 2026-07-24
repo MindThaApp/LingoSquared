@@ -39,18 +39,49 @@ review:
     order x1, translation x3. Needs the standard fresh-context review
     before import. Blocking dependency, same as every other en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
-    database yet."
+    database yet.
+
+
+    REAUTH 2026-07-24: lesson05.fill.001 (bank_nodig_single, testing
+    'Ik heb ... mijn BSN-nummer {item}.' with nodig) had 0 unit-scoped
+    candidates -- nodig was FIRST introduced in a1.unit14, and reused
+    (still keyed to that same first introduction) in a2.unit24 and
+    b1.unit09; it is not a unit26-native lexeme, so generate_checkpoint()
+    (which scopes to unit26's own lessons only) can never fill this slot,
+    despite the course-wide verification this file's own notes above
+    describe -- that verification was course-scoped, not unit-scoped, and
+    the checkpoint gate is unit-scoped. No unit26-native
+    single-course-wide-candidate tag exists to re-anchor this exact 'need'
+    frame to (the only other _single tag unit26 owns, bank_openen_single,
+    is already used by lesson01.fill.004 and doesn't fit this sentence).
+    DROPPED the template rather than force a mismatched frame -- the pack
+    still has 12 live templates spanning all 6 lessons and all three tiers
+    (recognition: 2 MC + 2 listen; structured: fill.004, match.003 lesson01
+    (8-pair), order.001, match.003 lesson03 (now 6-pair, see below);
+    production: 3 translations), comfortably clearing the 12-item/3-tier
+    checkpoint floor. LOG for the backfill lane: either give nodig a
+    unit26-native sibling token/gloss, or accept this unit can't host a
+    fill_in_blank on that grammar point.
+
+
+    Also widened lesson03.match.003 from 5 to 6 pairs (AUTHORING_GUIDE §16
+    floor) by switching its pool from bank_verb-only (5 unit-scoped
+    members) to the existing bank_noun_or_verb union (bank_vocab_noun +
+    bank_verb, already proven safe at 13 members for lesson06.match.001 in
+    this same pack) and updated its feedback text from verb to word
+    accordingly. Removed the now-unused bank_nodig_single tag/preset from
+    tag_schema. Verified 0 DEAD, 0 below-floor via
+    scripts/_practice_unit_scope_check.py after the fix."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [bank_vocab_noun, bank_account_noun, bank_verb, bank_openen_single, bank_nodig_single]
+    semantic: [bank_vocab_noun, bank_account_noun, bank_verb, bank_openen_single]
 slot_presets:
   bank_vocab_noun: &bank_vocab_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: bank_vocab_noun}}
   bank_account_noun: &bank_account_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: bank_account_noun}}
   bank_verb: &bank_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bank_verb}}
   bank_noun_or_verb: &bank_noun_or_verb {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: [bank_vocab_noun, bank_verb]}}
   bank_openen_single: &bank_openen_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bank_openen_single}}
-  bank_nodig_single: &bank_nodig_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: bank_nodig_single}}
 templates:
   - content_key: practice.en-nl.nl.a2.unit26.lesson01.choose.001
     lesson_content_key: nl.a2.unit26.lesson01.rekening_openen
@@ -128,11 +159,11 @@ templates:
   - content_key: practice.en-nl.nl.a2.unit26.lesson03.match.003
     lesson_content_key: nl.a2.unit26.lesson03.bij_de_bank
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: nl, direction: ltr}
-    slots: {first: *bank_verb, second: *bank_verb, third: *bank_verb, fourth: *bank_verb, fifth: *bank_verb}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Match each verb with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *bank_noun_or_verb, second: *bank_noun_or_verb, third: *bank_noun_or_verb, fourth: *bank_noun_or_verb, fifth: *bank_noun_or_verb, sixth: *bank_noun_or_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit26.lesson04.translate.001
     lesson_content_key: nl.a2.unit26.lesson04.mijn_bankpas
     type: translation
@@ -146,13 +177,6 @@ templates:
     slots: {item: *bank_vocab_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a2.unit26.lesson05.fill.001
-    lesson_content_key: nl.a2.unit26.lesson05.folder_lezen
-    type: fill_in_blank
-    frame: {text: "Ik heb een geldig identiteitsbewijs en mijn BSN-nummer {item}.", language_code: nl, direction: ltr}
-    slots: {item: *bank_nodig_single}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "I need a valid identity document and my BSN number.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit26.lesson05.translate.002
     lesson_content_key: nl.a2.unit26.lesson05.folder_lezen
     type: translation
