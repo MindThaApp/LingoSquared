@@ -24,6 +24,18 @@ slot_presets:
   identity: &identity {language_code: prs, part_of_speech: [pronoun, verb, noun], agreement_tags: {semantic: identity}}
   dialogue_word: &dialogue_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: dialogue_word}}
   practice_word: &practice_word {language_code: prs, part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {}}
+  # POLISH 2026-07-24 (tier-thinness, recipe SS8): the structured tier had
+  # only 1 live template (letter_pair.003). Two new presets below feed the
+  # two added structured templates. greeting_time_farewell unions three of
+  # this unit's own noun groups (recipe SS3.1a): سلام + صبح/روز/عصر/شب +
+  # خدا/حافظ/امید/دیدار = 9 distinct unit-scoped tokens, 9 distinct
+  # glosses, no confusables (pos noun deliberately excludes the particle
+  # greetings علیکم/وعلیکم, whose "upon you" glosses would be confusable
+  # rights). person_name pins the word_order slot to real names only --
+  # every course-scope member is a personal name, so the frame stays
+  # grammatical when Endless Practice widens the pool.
+  greeting_time_farewell: &greeting_time_farewell {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [greeting, time_period, farewell]}}
+  person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
 templates:
   # Lesson 1: script recognition. No listen_select anywhere in this pack --
   # Dari has zero TTS voice coverage project-wide, a hard exclusion, not a
@@ -71,6 +83,16 @@ templates:
     slots: {time_period: *time_period}
     answer_derivation: {kind: slot_gloss, slot: time_period}
     feedback_frame: {text: "{time_period} names a time of day.", language_code: en, direction: ltr}
+  # POLISH 2026-07-24: structured-tier addition (see slot_presets note).
+  # Anchored to lesson03, the richest of the three contributing lessons.
+  - content_key: practice.en-prs.prs.a1.unit01.lesson03.greeting_time_pair.003
+    lesson_content_key: prs.a1.unit01.lesson03.time_and_farewells
+    type: matching_pairs
+    frame: {text: "{item_one} — {item_two} — {item_three} — {item_four} — {item_five} — {item_six}", language_code: prs, direction: rtl}
+    slots: {item_one: *greeting_time_farewell, item_two: *greeting_time_farewell, item_three: *greeting_time_farewell, item_four: *greeting_time_farewell, item_five: *greeting_time_farewell, item_six: *greeting_time_farewell}
+    slot_relations: [{kind: distinct, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}
+    feedback_frame: {text: "Match each greeting, time, or farewell word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: formal/informal wellbeing exchange.
   - content_key: practice.en-prs.prs.a1.unit01.lesson04.wellbeing_meaning.001
@@ -112,6 +134,17 @@ templates:
     slots: {dialogue_word: *dialogue_word}
     answer_derivation: {kind: slot_text, slot: dialogue_word}
     feedback_frame: {text: "{dialogue_word} appears in the taught workplace dialogue.", language_code: en, direction: ltr}
+  # POLISH 2026-07-24: structured-tier addition (see slot_presets note).
+  # Frame taught verbatim in this lesson's dialogue ("نام من حامد است").
+  # Self-reference checked at course scope: the frame literals نام/من/است
+  # are never person_name candidates.
+  - content_key: practice.en-prs.prs.a1.unit01.lesson06.name_order.003
+    lesson_content_key: prs.a1.unit01.lesson06.first_meeting_dialogue
+    type: word_order
+    frame: {text: "نام من {person_name} است", language_code: prs, direction: rtl}
+    slots: {person_name: *person_name}
+    answer_derivation: {kind: render_frame, frame: {text: "نام من {person_name} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: نام من [name] است (my name is [name]).", language_code: en, direction: ltr}
 
   # Cross-lesson fallback: keeps low-mastery practice from collapsing into
   # bare single-word recognition when a later lexeme lacks a narrower frame.

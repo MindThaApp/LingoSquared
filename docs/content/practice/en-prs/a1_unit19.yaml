@@ -111,6 +111,13 @@ review:
     this file after the fix), scripts/compile_content.py
     practice-validate (0 errors), and scripts/check_dari_register.py (0
     new findings) -- see the coordinator report for exact output.
+
+    POLISH 2026-07-24 (tier-thinness wave 2, PACK-ONLY): production tier
+    had only 1 live template (home_description_word_translate.001).
+    Added two bare-word translations over the unit's own lesson pools,
+    per recipe SS6.6(a): lesson01.room_word_translate.004 (room_word, 3
+    unit-scoped) and lesson02.object_word_translate.004 (object_word, 3
+    unit-scoped). Production tier now 3 live; no other change.
 tag_schema:
   part_of_speech: [noun, verb, adjective, preposition, proper_noun]
   agreement_tags:
@@ -170,6 +177,18 @@ templates:
     slots: {room_word: *room_word}
     answer_derivation: {kind: render_frame, frame: {text: "{room_word} دارم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: [room] دارم (I have a [room]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_translate.004
+    lesson_content_key: prs.a1.unit19.lesson01.room_words
+    type: translation
+    # ADDED (POLISH 2026-07-24, tier-thinness): production tier was 1
+    # live template. Bare-word translation over this lesson's own
+    # room_word pool (3 unit-scoped: اتاق/آشپزخانه/تشناب) -- safe with a
+    # multi-member pool because the English-gloss prompt varies with the
+    # answer (recipe SS6.6(a)).
+    frame: {text: "{room_word}", language_code: en, direction: ltr, slot_rendering: {room_word: english_gloss}}
+    slots: {room_word: *room_word}
+    answer_derivation: {kind: slot_text, slot: room_word}
+    feedback_frame: {text: "{room_word} is the Dari word for this part of a home.", language_code: en, direction: ltr}
 
   # Lesson 2: household object words.
   - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_gloss.001
@@ -198,6 +217,18 @@ templates:
     slots: {object_word: *object_word}
     answer_derivation: {kind: render_frame, frame: {text: "{object_word} دارم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: [object] دارم (I have a [object]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_translate.004
+    lesson_content_key: prs.a1.unit19.lesson02.object_words
+    type: translation
+    # ADDED (POLISH 2026-07-24, tier-thinness): production tier was 1
+    # live template. Bare-word translation over this lesson's own
+    # object_word pool (3 unit-scoped: چوکی/تخت/کلکین) -- safe with a
+    # multi-member pool because the English-gloss prompt varies with the
+    # answer (recipe SS6.6(a)).
+    frame: {text: "{object_word}", language_code: en, direction: ltr, slot_rendering: {object_word: english_gloss}}
+    slots: {object_word: *object_word}
+    answer_derivation: {kind: slot_text, slot: object_word}
+    feedback_frame: {text: "{object_word} is the Dari word for this household object.", language_code: en, direction: ltr}
 
   # Lesson 3: quantity and location.
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.number_room_order.001

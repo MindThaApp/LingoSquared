@@ -6,7 +6,19 @@ unit_content_key: prs.a1.unit38.colors
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24: scripts/_practice_unit_scope_check.py flagged
+  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 2 live templates and production tier 2. Added
+    (1) lesson03.color_liked_gloss.001 (multiple_choice, "رنگ {color_word} را دوست دارم" -- the pack''s own word_order
+    frame verbatim-taught in lesson03, grammatical for all 10 course-scope color_word candidates (the 6 unit colors +
+    آبی/سرخ/سفید/سیاه), same shape as unit39''s season_liked_gloss; رنگ/را/دوست/دارم are not slot candidates); (2)
+    lesson03.liked_phrase_translate.001 (translation, bare-word SS6.6(a) over a NEW pool: part_of_speech phrase +
+    semantic dialogue_word resolves at unit scope to exactly this lesson''s own key phrase دوست دارم "I like" (the unit''s
+    other دوست... phrase forms carry no semantic tag), and at course scope to 6 phrases with 6 distinct glosses -- no
+    underdetermined prompt; broad course pools are the sanctioned shape for bare-word translation). dialogue_word and
+    phrase added to tag_schema. Recognition now 3 live, production 3 live. Verified: practice-validate 0 errors;
+    _practice_unit_scope_check.py 0 DEAD / tier-short lines gone for this file; _practice_self_reference_check.py 0 hits;
+    check_dari_register.py 0 new findings. Prior history below.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24: scripts/_practice_unit_scope_check.py flagged
     lesson03.color_liked_order.001.volume_fill.005 (fill_in_blank) DEAD -- 0 unit-scoped candidates.
     Root cause: its slot used the singleton tag "volume_en_prs_a1_unit38_color_word_05_single",
     which scripts/backfill_lexemes_en_prs.py assigns to آبی ("blue") -- but آبی''s own lesson_content_key
@@ -56,9 +68,11 @@ review:
 tag_schema:
   part_of_speech:
   - adjective
+  - phrase
   agreement_tags:
     semantic:
     - color_word
+    - dialogue_word
 slot_presets:
   color_word: &id001
     language_code: prs
@@ -169,6 +183,44 @@ templates:
     slot: color_word
   feedback_frame:
     text: '{color_word} is a color word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit38.lesson03.color_liked_gloss.001
+  lesson_content_key: prs.a1.unit38.lesson03.asking_about_colors
+  type: multiple_choice
+  frame:
+    text: رنگ {color_word} را دوست دارم
+    language_code: prs
+    direction: rtl
+  slots:
+    color_word: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: color_word
+  feedback_frame:
+    text: 'رنگ ... را دوست دارم means "I like the color ...". Pick the English meaning of the color word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit38.lesson03.liked_phrase_translate.001
+  lesson_content_key: prs.a1.unit38.lesson03.asking_about_colors
+  type: translation
+  frame:
+    text: '{liked_phrase}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      liked_phrase: english_gloss
+  slots:
+    liked_phrase:
+      language_code: prs
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: dialogue_word
+  answer_derivation:
+    kind: slot_text
+    slot: liked_phrase
+  feedback_frame:
+    text: '{liked_phrase} is the Dari phrase for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit38.lesson02.color_pair.002.volume_match.003

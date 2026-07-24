@@ -97,6 +97,14 @@ review:
     template's type/tier and lesson anchor. No backfill/realization/overlay
     edits. Post-fix: scripts/_practice_unit_scope_check.py reports 0 DEAD,
     0 below-floor for this pack.
+
+    POLISH 2026-07-24 (tier-thinness wave 2, PACK-ONLY): recognition tier
+    had only 2 live templates (transport_word_gloss.001,
+    unit_vocab_gloss.001). Added lesson03.travel_vocab_gloss.003, a
+    multiple_choice over the pre-existing transport_ticket_pool (6
+    unit-scoped distinct glosses) anchored to lesson03 (own vocab
+    تکت/ایستگاه, 2 glosses, below the 3-option floor alone). Recognition
+    tier now 3 live; no other change.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
@@ -193,6 +201,19 @@ templates:
     slots: {ticket_only: *ticket_only}
     answer_derivation: {kind: render_frame, frame: {text: "{ticket_only} چند است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: تکت چند است (how much is the ticket?).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit24.lesson03.travel_vocab_gloss.003
+    lesson_content_key: prs.a1.unit24.lesson03.buying_a_ticket
+    type: multiple_choice
+    # ADDED (POLISH 2026-07-24, tier-thinness): recognition tier had only
+    # 2 live templates. Reuses the existing transport_ticket_pool
+    # (transport_mode_word + on_foot_word + ticket_word, 6 unit-scoped
+    # distinct glosses: taxi/car/bicycle/on foot/ticket/station),
+    # anchored to lesson03, whose own ticket_word vocabulary (تکت/
+    # ایستگاه, 2 glosses) is below the 3-option MC floor on its own.
+    frame: {text: "{travel_word}", language_code: prs, direction: rtl}
+    slots: {travel_word: *transport_ticket_pool}
+    answer_derivation: {kind: slot_gloss, slot: travel_word}
+    feedback_frame: {text: "{travel_word} is from this unit's getting-around vocabulary.", language_code: en, direction: ltr}
 
   # Lesson 4: commute dialogue.
   - content_key: practice.en-prs.prs.a1.unit24.lesson04.speed_adjective_translate.001

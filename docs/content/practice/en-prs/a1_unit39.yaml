@@ -30,7 +30,13 @@ review:
     has zero TTS); no bare YAML booleans; no snake_case jargon in learner-facing text. The three unit31/33 homograph splits
     (حقوق law vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are correctly scoped by content_key in _classify()
     and by lesson_key in prs_agreement_tags(), leaving each other sense untouched. practice-validate 0/0 and _practice_slot_check.py
-    clean for the full en-prs set.'
+    clean for the full en-prs set.
+
+
+    Polish wave 2 (2026-07-24): tier-thinness fix — added 2 recognition templates (sentence MC over the taught "…را دوست دارم"
+    frame with the specific_season pool; English-gloss-to-Dari-token MC over season_word via slot_text, same mechanism the
+    prs-en listen.002 corpus already uses) and 1 production template (deterministic fixed-sentence translation "I like spring."
+    over the single-member volume_…_specific_season_word_03_single anchor). No existing template touched.'
 tag_schema:
   part_of_speech:
   - noun
@@ -222,5 +228,62 @@ templates:
     slot: season_word
   feedback_frame:
     text: '{season_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit39.lesson03.season_liked_gloss.001
+  lesson_content_key: prs.a1.unit39.lesson03.asking_about_seasons
+  type: multiple_choice
+  frame:
+    text: '{specific_season_word} را دوست دارم'
+    language_code: prs
+    direction: rtl
+  slots:
+    specific_season_word: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: specific_season_word
+  feedback_frame:
+    text: This sentence says the speaker likes {specific_season_word} — pick that season's English name.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit39.lesson01.season_token_choice.001
+  lesson_content_key: prs.a1.unit39.lesson01.primary_seasons
+  type: multiple_choice
+  frame:
+    text: '{season_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      season_word: english_gloss
+  slots:
+    season_word: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: season_word
+  feedback_frame:
+    text: '{season_word} is the Dari word for this season term.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit39.lesson03.season_liked_translate.001
+  lesson_content_key: prs.a1.unit39.lesson03.asking_about_seasons
+  type: translation
+  frame:
+    text: I like spring.
+    language_code: en
+    direction: ltr
+  slots:
+    specific_season_word:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: volume_en_prs_a1_unit39_specific_season_word_03_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{specific_season_word} را دوست دارم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '"I like spring." is بهار را دوست دارم in Dari.'
     language_code: en
     direction: ltr

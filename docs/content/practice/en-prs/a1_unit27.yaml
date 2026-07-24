@@ -7,6 +7,21 @@ review:
   status: unreviewed
   fresh_context: 'false'
   notes: >-
+    TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition and production
+    tiers each had only 1 live template. Added 2 multiple_choice + 2
+    translation templates, all bare-word corpus-standard shapes, on
+    distinct unit-native pools: lesson02 gets feature_color_gloss.002 +
+    feature_translate.003 (new feature_color_word preset = union of the
+    pack's own have_feature_word + eye_hair_color_word tags, 4 distinct
+    unit tokens/glosses beard/glasses/blue/brown, comfortably over the
+    3-option MC floor; the translate uses the narrower have_feature_word,
+    2 members); lesson03 gets appearance_mix_gloss.002 +
+    appearance_mix_translate.003 on the existing appearance_match_word
+    union (7 unit tokens/glosses). No new Dari strings authored (all new
+    frames are bare slot placeholders); no literal-text frames, so no
+    self-reference or course-scope grammaticality exposure. Tiers now
+    3/3/3 live. Status stays unreviewed pending fresh-context review.
+
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
     that file's notes for the shared pass context). Realization is
@@ -90,6 +105,7 @@ slot_presets:
   have_feature_word: &have_feature_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: have_feature_word}}
   eye_hair_color_word: &eye_hair_color_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: eye_hair_color_word}}
   appearance_match_word: &appearance_match_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [appearance_word, eye_hair_color_word]}}
+  feature_color_word: &feature_color_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: [have_feature_word, eye_hair_color_word]}}
 templates:
   # Lesson 1: appearance vocabulary.
   - content_key: practice.en-prs.prs.a1.unit27.lesson01.appearance_gloss.001
@@ -116,6 +132,20 @@ templates:
     slots: {have_feature_word: *have_feature_word}
     answer_derivation: {kind: render_frame, frame: {text: "او {have_feature_word} دارد", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: او [feature] دارد (he/she has [feature]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit27.lesson02.feature_color_gloss.002
+    lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+    type: multiple_choice
+    frame: {text: "{feature_color_word}", language_code: prs, direction: rtl}
+    slots: {feature_color_word: *feature_color_word}
+    answer_derivation: {kind: slot_gloss, slot: feature_color_word}
+    feedback_frame: {text: "{feature_color_word} is used when describing what someone looks like.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit27.lesson02.feature_translate.003
+    lesson_content_key: prs.a1.unit27.lesson02.appearance_question
+    type: translation
+    frame: {text: "{have_feature_word}", language_code: en, direction: ltr, slot_rendering: {have_feature_word: english_gloss}}
+    slots: {have_feature_word: *have_feature_word}
+    answer_derivation: {kind: slot_text, slot: have_feature_word}
+    feedback_frame: {text: "{have_feature_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 3: hair and eye color.
   - content_key: practice.en-prs.prs.a1.unit27.lesson03.eye_color_order.001
@@ -125,6 +155,20 @@ templates:
     slots: {eye_hair_color_word: *eye_hair_color_word}
     answer_derivation: {kind: render_frame, frame: {text: "چشم او {eye_hair_color_word} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: چشم او [color] است (his/her eyes are [color]).", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit27.lesson03.appearance_mix_gloss.002
+    lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+    type: multiple_choice
+    frame: {text: "{appearance_match_word}", language_code: prs, direction: rtl}
+    slots: {appearance_match_word: *appearance_match_word}
+    answer_derivation: {kind: slot_gloss, slot: appearance_match_word}
+    feedback_frame: {text: "{appearance_match_word} belongs to this unit's appearance vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit27.lesson03.appearance_mix_translate.003
+    lesson_content_key: prs.a1.unit27.lesson03.hair_eye_color
+    type: translation
+    frame: {text: "{appearance_match_word}", language_code: en, direction: ltr, slot_rendering: {appearance_match_word: english_gloss}}
+    slots: {appearance_match_word: *appearance_match_word}
+    answer_derivation: {kind: slot_text, slot: appearance_match_word}
+    feedback_frame: {text: "{appearance_match_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit27.lesson06.appearance_translate.001

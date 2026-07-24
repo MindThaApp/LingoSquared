@@ -123,6 +123,18 @@ templates:
     slot_relations: [{kind: distinct, slots: [counting_word_one, counting_word_two, counting_word_three, counting_word_four, counting_word_five, counting_word_six, counting_word_seven]}]
     answer_derivation: {kind: matching_pairs, slots: [counting_word_one, counting_word_two, counting_word_three, counting_word_four, counting_word_five, counting_word_six, counting_word_seven]}
     feedback_frame: {text: "Match each counting word to its English meaning.", language_code: en, direction: ltr}
+  # POLISH 2026-07-24 (tier-thinness, recipe SS8): the recognition tier had
+  # only 1 live template (food_gloss.001, food_item alone). This MC reuses
+  # the existing food_and_counting union (7 distinct unit-scoped tokens /
+  # 7 distinct glosses) so lesson04's بشقاب/تا get recognition coverage --
+  # pool differs from food_gloss.001's.
+  - content_key: practice.en-prs.prs.a1.unit08.lesson04.counting_gloss.004
+    lesson_content_key: prs.a1.unit08.lesson04.quantities
+    type: multiple_choice
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *food_and_counting}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is food or quantity vocabulary from this unit.", language_code: en, direction: ltr}
 
   # Lesson 6: the full teahouse dialogue.
   - content_key: practice.en-prs.prs.a1.unit08.lesson06.role_translate.002
@@ -145,3 +157,15 @@ templates:
     slot_relations: [{kind: distinct, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}]
     answer_derivation: {kind: matching_pairs, slots: [item_one, item_two, item_three, item_four, item_five, item_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  # POLISH 2026-07-24: second recognition-tier addition (recipe SS8; see
+  # counting_gloss.004 note). Reuses the existing role_and_dialogue union
+  # (8 distinct unit-scoped tokens / 8 distinct glosses: مشتری, چای, بل,
+  # افغانی, نان, پلو, قورمه, آب) so lesson06's مشتری/بل/افغانی get
+  # recognition coverage -- pool differs from both other MC templates.
+  - content_key: practice.en-prs.prs.a1.unit08.lesson06.dialogue_gloss.004
+    lesson_content_key: prs.a1.unit08.lesson06.restaurant_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: prs, direction: rtl}
+    slots: {item: *role_and_dialogue}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} appears in this unit's teahouse dialogue vocabulary.", language_code: en, direction: ltr}

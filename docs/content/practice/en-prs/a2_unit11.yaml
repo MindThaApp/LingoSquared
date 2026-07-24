@@ -7,6 +7,11 @@ review:
   status: unreviewed
   fresh_context: 'false'
   notes: >-
+    POLISH WAVE 2 2026-07-24 (POS-only matching_pairs): lesson04.match.002's
+    bare-POS pool replaced with the unit-native banking_phrase semantic tag
+    (10 unit-scoped candidates, 0 course-scope extras) -- see the template's
+    inline comment. No other template changed.
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint. en-prs A2 unit11 had a full realization + overlay and 46
     backfilled lexemes across all 4 lessons but no practice pack at all, so
@@ -61,6 +66,7 @@ tag_schema:
     semantic:
     - bank_notice_word
     - bank_word
+    - banking_phrase
     - volume_en_prs_a1_unit05_city_place_06_single
 templates:
 - content_key: practice.en-prs.prs.a2.unit11.lesson01.choose.001
@@ -271,21 +277,28 @@ templates:
 
 - content_key: practice.en-prs.prs.a2.unit11.lesson04.match.002
   lesson_content_key: prs.a2.unit11.lesson04.bank_counter_dialogue
+  # POLISH WAVE 2 2026-07-24: was a bare-POS pool (verb/adjective/adverb/
+  # pronoun/particle/preposition, no semantic constraint) -- fine at unit
+  # scope but pulls the whole level's vocabulary at Endless-Practice COURSE
+  # scope (recipe SS1.1/SS6.3). The unit's word-form tags cover only 5
+  # distinct tokens (<6), so the pool is now the unit-native banking_phrase
+  # tag instead: 10 unit-scoped sentences/phrases spanning all four lessons,
+  # zero course-scope extras. Frame switched to the English instruction
+  # style this direction's other phrase matching_pairs already use
+  # (a2_unit09 bureaucracy_phrase_pair.002, a2_unit10 opinion_phrase_pair.007).
   type: matching_pairs
   frame:
-    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
-    language_code: prs
-    direction: rtl
+    text: Match each sentence or phrase with its meaning.
+    language_code: en
+    direction: ltr
   slots:
     first: &pool_forms
       language_code: prs
       part_of_speech:
-      - verb
-      - adjective
-      - adverb
-      - pronoun
-      - particle
-      - preposition
+      - phrase
+      agreement_tags:
+        semantic:
+        - banking_phrase
     second: *pool_forms
     third: *pool_forms
     fourth: *pool_forms
@@ -310,7 +323,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: "Match each Dari word form with its English meaning."
+    text: "Match each Dari sentence or phrase from this unit's banking scenario with its English meaning."
     language_code: en
     direction: ltr
 

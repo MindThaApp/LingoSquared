@@ -95,6 +95,14 @@ review:
     below-floor for this file after the fix), scripts/compile_content.py
     practice-validate (0 errors), and scripts/check_dari_register.py (0
     new findings) -- see the coordinator report for exact output.
+
+    POLISH 2026-07-24 (tier-thinness wave 2, PACK-ONLY): recognition
+    tier had only 2 live templates (clothing_word_gloss.001,
+    color_word_gloss.001). Added lesson03.size_vocab_gloss.003, a
+    multiple_choice over the pre-existing size_clothing_pool (6
+    unit-scoped distinct glosses) anchored to lesson03 (own vocab
+    اندازه/کوچک, individually below the 3-option floor). Recognition
+    tier now 3 live; no other change.
 tag_schema:
   part_of_speech: [noun, verb, adjective, proper_noun]
   agreement_tags:
@@ -194,6 +202,19 @@ templates:
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit21.lesson03.size_vocab_gloss.003
+    lesson_content_key: prs.a1.unit21.lesson03.sizes
+    type: multiple_choice
+    # ADDED (POLISH 2026-07-24, tier-thinness): recognition tier had only
+    # 2 live templates. Reuses the existing size_clothing_pool
+    # (clothing_size_adjective + size_word + clothing_word, 6 unit-scoped
+    # distinct glosses: small/size/clothes/shirt/trousers/shoes),
+    # anchored to lesson03, whose own vocabulary (اندازه/کوچک) the bare
+    # size tags alone could not carry past the 3-option MC floor.
+    frame: {text: "{size_clothing_word}", language_code: prs, direction: rtl}
+    slots: {size_clothing_word: *size_clothing_pool}
+    answer_derivation: {kind: slot_gloss, slot: size_clothing_word}
+    feedback_frame: {text: "{size_clothing_word} is from this unit's clothing-and-sizes vocabulary.", language_code: en, direction: ltr}
 
   # Lesson 4: trying on and reading a label.
   - content_key: practice.en-prs.prs.a1.unit21.lesson04.label_order.001
