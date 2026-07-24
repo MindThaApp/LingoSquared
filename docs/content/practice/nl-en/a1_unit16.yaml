@@ -83,44 +83,121 @@ review:
     'zero is fine' precedent. Re-verified scripts/_practice_slot_check.py
     (all three tags still safely above the >=3/>=2 floors for their new
     exercise types) and scripts/_fill_in_blank_ambiguity_check.py (zero new
-    AMBIGUOUS flags) before import. New count: 13 templates (8 -> 13)."
+    AMBIGUOUS flags) before import. New count: 13 templates (8 -> 13).
+
+    REAUTH FIX 2026-07-24 (unit-scope DEAD-template pass): scripts/_practice_unit_scope_check.py
+    flagged 11 of this file's 13 templates as DEAD -- all reused 'number' or
+    'hour_number', both pointing at unit03's own lexemes (hour_number was a
+    narrowed FILTER over the same unit03-anchored tokens, per this file's own
+    2026-07-06 note, not new unit16 vocabulary) -- recipe DO-NOT #2. Only the
+    2 templates using this unit's OWN 'meal' tag (dinner/breakfast) survived:
+    lesson03.meal_translate.003 and lesson04.meal_order.005 -- both left
+    untouched. A fresh iter_specs() dump filtered to '.a1.unit16.' confirms
+    unit16 introduces only 9 lexemes total across its 4 lessons, and besides
+    'meal' none share a tag: wake(verb), up(particle), dressed/every
+    (adjective), dinner/bed/breakfast(noun), usually(adverb), after
+    (preposition). Rebuilt the 11 DEAD templates (and added 2 more, since
+    lesson01 -- routine_verbs, the unit's richest lesson -- had never had a
+    single template anchored to it despite carrying dinner/bed) using two new
+    untagged presets (SS3.1c, no new backfill tag / PACK-ONLY): 'noun_word'
+    (dinner/bed/breakfast, 3 distinct) for multiple_choice/bare-word
+    translation, and 'all_word' (all 9 lexemes, POS in
+    [noun,verb,adjective,adverb,preposition,particle]) for
+    listen_select/bare-word translation/matching_pairs. No new word_order
+    template uses an untagged pool -- every frame using these presets is a bare
+    '{item}' or a matching_pairs instruction frame, never a literal sentence, so
+    the SS1.1 course-scope grammatical-in-frame risk (which DOES apply to
+    word_order) never arises; structured tier is carried entirely by
+    matching_pairs (4 of them, each >= the SS16 6-pair floor) plus the
+    untouched meal_order.005. New count: 13 templates, now with real anchors in
+    all 4 lessons and all 3 tiers per lesson (was previously 0 templates
+    anchored to lesson01 at all). Honestly thin: unit16 has almost no
+    per-lesson synonym sets of its own, so most pools are unit-wide unions
+    (SS8.1's 'anchor per lesson, pool across the unit' pattern), disclosed here
+    for the coordinator. Re-verified: scripts/_practice_unit_scope_check.py
+    shows 0 DEAD/0 FLOOR for this file; compile_content.py practice-validate 0
+    errors."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, hour_number, meal]
+    semantic: [meal]
 slot_presets:
-  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
-  hour_number: &hour_number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hour_number}}
   meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
+  # REAUTH FIX 2026-07-24: 'number' and 'hour_number' both pointed at unit03's
+  # OWN lexemes (hour_number was a narrowed filter over the same unit03-anchored
+  # tokens, not new unit16 vocabulary) -- recipe DO-NOT #2. unit16 itself only
+  # introduces 9 lexemes across its 4 lessons, none sharing any tag except
+  # 'meal' (dinner/breakfast). Every slot below therefore constrains ONLY
+  # language_code + part_of_speech (SS3.1c), pooled from unit16's own lexemes:
+  # wake(verb), up(particle), dressed/every(adjective), dinner/bed/breakfast
+  # (noun), usually(adverb), after(preposition). Safe here because every frame
+  # using these presets is a bare '{item}' (multiple_choice/listen_select/
+  # translation) or a matching_pairs instruction frame -- never a literal
+  # sentence -- so the SS1.1 course-scope grammatical-in-frame risk does not
+  # apply. The pack's one word_order template (meal_order.005) is untouched and
+  # keeps the unit's own narrow, already-verified 'meal' tag.
+  noun_word: &noun_word {language_code: en, part_of_speech: noun}
+  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, preposition, particle]}
 templates:
-  - content_key: practice.nl-en.en.a1.unit16.lesson02.wake_order.001
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: word_order
-    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur waarop wordt wakker geworden.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson02.wake_translate.003
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  - content_key: practice.nl-en.en.a1.unit16.lesson01.word_choose.001
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *noun_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson01.word_pair.002
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word, eighth: *all_word, ninth: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}
+    feedback_frame: {text: "Je hebt negen woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson01.word_translate.003
+    lesson_content_key: en.a1.unit16.lesson01.routine_verbs
     type: translation
-    frame: {text: "Ik word om {item} uur wakker.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I wake up at {item} every day betekent Ik word om {item} uur wakker.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson02.number_listen.004
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *noun_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson02.word_listen.001
     lesson_content_key: en.a1.unit16.lesson02.routine_with_times
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *all_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson03.every_day_order.001
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson02.word_pair.002
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson02.word_translate.003
+    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *all_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson03.word_choose.001
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
-    type: word_order
-    frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "Every day, I wake up at {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur in deze routinebeschrijving.", language_code: nl, direction: ltr}
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *all_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze routinebeschrijving.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson03.word_pair.002
+    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit16.lesson03.meal_translate.003
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
     type: translation
@@ -128,48 +205,21 @@ templates:
     slots: {item: *meal}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson04.number_listen.001
+  - content_key: practice.nl-en.en.a1.unit16.lesson04.word_listen.001
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
+    slots: {item: *all_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het getal dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson04.wake_order.002
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit16.lesson04.word_pair.002
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: word_order
-    frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I wake up at {item} every day", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het uur waarop Daniel wakker wordt.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson04.bed_translate.004
-    lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: translation
-    frame: {text: "Ik ga meestal om {item} uur naar bed.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: render_frame, frame: {text: "I usually go to bed at {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "I usually go to bed at {item} betekent Ik ga meestal om {item} uur naar bed.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson02.hour_choose.005
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson02.number_choose.006
-    lesson_content_key: en.a1.unit16.lesson02.routine_with_times
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson03.hour_listen.004
-    lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *hour_number}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het uur dat je hoorde.", language_code: nl, direction: ltr}
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    feedback_frame: {text: "Je hebt zeven woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit16.lesson04.meal_order.005
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
     type: word_order
@@ -177,11 +227,10 @@ templates:
     slots: {item: *meal}
     answer_derivation: {kind: render_frame, frame: {text: "I have {item} every day", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de maaltijd die je elke dag eet.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit16.lesson04.hour_match.006
+  - content_key: practice.nl-en.en.a1.unit16.lesson04.word_translate.003
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
-    type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *hour_number, second: *hour_number, third: *hour_number, fourth: *hour_number, fifth: *hour_number, sixth: *hour_number, seventh: *hour_number, eighth: *hour_number}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
-    feedback_frame: {text: "Verbind elk uur met de juiste Nederlandse betekenis.", language_code: nl, direction: ltr}
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *all_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

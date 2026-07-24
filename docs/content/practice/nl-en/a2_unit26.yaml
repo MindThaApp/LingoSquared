@@ -111,16 +111,79 @@ review:
     translation (renamed politeness_translate_bare.004) and
     politeness_listen.005 was removed outright rather than kept as dead
     duplicate content. No candidates invented, no A1 vocabulary pooled in
-    as if A2-scoped."
+    as if A2-scoped.
+
+    DEAD-template re-authoring pass (2026-07-24, unit-scope satisfiability
+    fix): the 2026-07-07 A2-scoping fix above only checked the COURSE-wide
+    (A2-only) pool, not the true UNIT-scoped pool generate_checkpoint() uses.
+    scripts/_practice_unit_scope_check.py (which replicates the checkpoint's
+    actual per-unit lexeme scoping) found all 5 remaining
+    possessive/identity/politeness templates DEAD at 0 unit-scoped
+    candidates: 'possessive' (my/your/his/her) is native to unit06, 'identity'
+    (i/i'm/am/is/are/what/what's/name) to unit01/02, and 'politeness'
+    (thanks/thank/nice/welcome/yes/no) to unit01 -- unit26 introduces NONE of
+    these tokens itself, so the checkpoint's unit-scoped pool for every one
+    of these slots is 0, however large the course-wide pool looks. This is
+    the exact DO-NOT #2 pattern the file's own 'backport of prs-en's better
+    technique' paragraph above (2026-07-06) walked into: generalizing to an
+    already-established COURSE-WIDE tag makes a template work in Endless
+    Practice but invisible to the checkpoint.
+
+    Re-anchored all 5 to tags/POS unit26 genuinely introduces natively:
+    (1) lesson01.possessive_order.004 -> dogpark_order.004 (word_order):
+    re-anchored from 'possessive' to 'dogpark_noun' (dog/park/space/
+    playground, the pack's own proven-safe 4-member tag, course-wide ==
+    unit-scoped since dogpark_noun is unique to this unit) with a NEW frame,
+    'I think the {item} is a good idea' (echoes lesson03's real reading text,
+    'In my opinion, the new dog park is a good idea.'), grammatical for all
+    4 members and containing none of them as literal frame text (no defect
+    1.14 self-reference). (2) lesson01.possessive_translate_bare.006 ->
+    adj_translate_bare.006 and (3)/(4) lesson01.identity_choose.007 /
+    identity_listen.008 -> adj_choose.007 / adj_listen.008: all three
+    re-anchored to a new bare part_of_speech: adjective pool (no semantic
+    tag, recipe SS3.1c) -- unit26 natively introduces 5 adjectives
+    (other/good/fair/little/better), clean non-confusable Dutch glosses,
+    clearing the >=3 MC/listen_select floor and giving translation real
+    variety instead of duplicating the existing dogpark_noun-based
+    translate.003. (5) lesson04.politeness_translate_bare.004 ->
+    content_translate_bare.004: re-anchored to bare part_of_speech:
+    [noun, adjective, adverb] (no semantic tag) -- lesson04 natively
+    introduces point/fair/maybe/little/farther/away/better, all clean
+    single-word or short Dutch glosses (verbs excluded to sidestep 'should'
+    -> 'kunt beter', a multi-word modal paraphrase that is not wrong but
+    reads oddly as a bare-word production prompt; noted here rather than
+    silently dropped since it is a real, if awkward, gloss, not a
+    backfill-lane mis-gloss).
+
+    All 4 now-unused slot_presets/tags (possessive, identity, politeness, and
+    the never-reused personality_adj-style duplication) were removed from
+    tag_schema.agreement_tags.semantic and slot_presets; only dogpark_noun
+    remains as a semantic tag, plus a new bare-POS opinion_adj preset.
+
+    NOT touched: lesson03.match.001 (matching_pairs, 4 slots, FLOOR not DEAD)
+    stays at 4 pairs. Widening it to the recipe's 6-pair floor would require
+    either the dogpark_noun tag (capped at 4, confirmed course-wide == this
+    unit's own pool) or a bare part_of_speech: noun pool -- but unit26's other
+    untagged nouns include 'hand', whose real gloss is 'kant (aan de andere
+    kant)' (the idiom fragment from 'on the other hand', not the body part) --
+    a genuine SS0.1 mis-gloss trap with no tag lever available to exclude it
+    while keeping the other untagged nouns (opinion/idea/dogs/point, which
+    are clean). Rather than risk shipping 'hand -> kant (aan de andere kant)'
+    as a matching_pairs pair a learner could read as the literal word 'hand',
+    left this matching_pairs at 4 (still generates fine, just below the
+    stylistic 6-12 floor) and logging 'hand''s mis-gloss here for the
+    coordinator to route to the backfill lane.
+
+    Re-verified with scripts/_practice_unit_scope_check.py: 0 DEAD (only the
+    pre-existing, deliberately-untouched lesson03.match.001 FLOOR line
+    remains) and compile_content.py practice-validate: 0 errors."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [dogpark_noun, possessive, identity, politeness]
+    semantic: [dogpark_noun]
 slot_presets:
   dogpark_noun: &dogpark_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: dogpark_noun}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
-  politeness: &politeness {language_code: en, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: politeness}}
+  opinion_adj: &opinion_adj {language_code: en, part_of_speech: adjective}
 templates:
   - content_key: practice.nl-en.en.a2.unit26.lesson02.choose.001
     lesson_content_key: en.a2.unit26.lesson02.giving_an_opinion_with_a_reason
@@ -214,38 +277,38 @@ templates:
     slots: {item: *dogpark_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_order.004
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.dogpark_order.004
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: word_order
-    frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "In {item} opinion, the dog park is a good idea", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson01.possessive_translate_bare.006
+    frame: {text: "I think the {item} is a good idea", language_code: en, direction: ltr}
+    slots: {item: *dogpark_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I think the {item} is a good idea", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het woord in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.adj_translate_bare.006
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *possessive}
+    slots: {item: *opinion_adj}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson01.identity_choose.007
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.adj_choose.007
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *opinion_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson01.identity_listen.008
+  - content_key: practice.nl-en.en.a2.unit26.lesson01.adj_listen.008
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
+    slots: {item: *opinion_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit26.lesson04.politeness_translate_bare.004
+  - content_key: practice.nl-en.en.a2.unit26.lesson04.content_translate_bare.004
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *politeness}
+    slots: {item: {language_code: en, part_of_speech: [noun, adjective, adverb]}}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

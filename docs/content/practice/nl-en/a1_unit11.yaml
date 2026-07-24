@@ -46,15 +46,34 @@ review:
     en/a1_unit11_weather.yaml itself is still unreviewed -- worth a repeat
     check of this practice pack if that realization is later revised. Does
     not reuse the broad 'number'/'count_plural' tags flagged as an open
-    defect elsewhere. Upgrading this pack to reviewed. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the weather_condition (adjective) matching_pairs template from 2 to 6 pairs."
+    defect elsewhere. Upgrading this pack to reviewed. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the weather_condition (adjective) matching_pairs template from 2 to 6 pairs.
+
+    REAUTH FIX 2026-07-24 (unit-scope DEAD-template pass): scripts/_practice_unit_scope_check.py
+    flagged 3 DEAD templates -- all 3 reused an EARLIER unit's own tag
+    (lesson03.weekday_listen.004 used unit04's 'weekday'; lesson04.suggest_order.001
+    and lesson04.place_translate.003 used unit09's 'place') -- recipe DO-NOT #2:
+    generate_checkpoint() only loads unit11's own lexemes, and unit11 never itself
+    introduces weekday or place vocabulary. Fixed by RE-ANCHORING all 3 to this
+    unit's OWN already-verified 6-member 'weather_condition' tag (sunny/rainy/
+    cloudy/cold/hot/windy) instead of inventing a new tag -- reusing a tag WITHIN
+    the same unit across lessons is fully legal (only cross-UNIT reuse is the
+    defect). weekday_listen.004 kept its bare '{item}' listen_select shape (just
+    retagged). suggest_order.001's frame changed from 'Let's go to the {item}'
+    (ungrammatical with weather adjectives) to 'It could be {item} later', checked
+    grammatical for all 6 members by hand (sunny/rainy/cloudy/cold/hot/windy).
+    place_translate.003 kept its bare-word translation shape (just retagged).
+    Course-scope re-check: iter_specs() confirms weather_condition has exactly 6
+    members course-wide (a1 level) -- identical to the unit-scope pool, since no
+    other a1 unit reuses this tag -- so the frame's grammaticality holds at both
+    scopes. Removed the now-unused 'weekday'/'place' tags from tag_schema.
+    Re-verified: scripts/_practice_unit_scope_check.py shows 0 DEAD/0 FLOOR for
+    this file; compile_content.py practice-validate 0 errors."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [weather_condition, weekday, place]
+    semantic: [weather_condition]
 slot_presets:
   weather_condition: &weather_condition {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: weather_condition}}
-  weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
 templates:
   - content_key: practice.nl-en.en.a1.unit11.lesson01.weather_meaning.001
     lesson_content_key: en.a1.unit11.lesson01.weather_words
@@ -117,21 +136,21 @@ templates:
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *weekday}
+    slots: {item: *weather_condition}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de dag die je hoorde.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit11.lesson04.suggest_order.001
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: word_order
-    frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's go to the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de plaats die wordt voorgesteld.", language_code: nl, direction: ltr}
+    frame: {text: "It could be {item} later", language_code: en, direction: ltr}
+    slots: {item: *weather_condition}
+    answer_derivation: {kind: render_frame, frame: {text: "It could be {item} later", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het mogelijke weer later vandaag.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit11.lesson04.place_translate.003
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *weather_condition}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit11.lesson04.weather_meaning.004

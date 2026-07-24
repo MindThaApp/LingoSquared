@@ -76,83 +76,162 @@ review:
     Re-verified scripts/_practice_slot_check.py (place still safely >=3 for
     the new multiple_choice, >=2 for matching_pairs) and
     scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS flags)
-    before import. New count: 10 templates (7 -> 10)."
+    before import. New count: 10 templates (7 -> 10).
+
+    REAUTH FIX 2026-07-24 (unit-scope DEAD-template pass): scripts/_practice_unit_scope_check.py
+    flagged ALL 10 of this file's templates as DEAD -- every one used either
+    person_name (unit01/02's own tag) or place (unit09's own tag), both EARLIER
+    units' vocabulary reused here (recipe DO-NOT #2). generate_checkpoint() only
+    loads unit14's own lexemes, and a fresh iter_specs() dump filtered to
+    '.a1.unit14.' confirms unit14 does not itself carry person_name or place
+    (or ANY multi-member semantic tag) -- its own vocabulary is 16 single-instance
+    content words spread across 4 lessons (free/tonight; sorry/repeat/that/
+    speak/more/slowly/hear/well; 6pm/message/suggest/meeting/place-the-word;
+    about), none sharing an existing tag. This was a whole-pack rewrite, not a
+    per-slot patch: kept the SAME 4 tiers-x-lessons shape and grew from 10 to 13
+    templates, but every slot now constrains ONLY language_code + part_of_speech
+    (no semantic tag, per SS3.1(c)) pooled from unit14's OWN lexemes -- noun
+    (tonight/6pm/message/meeting/place, 5 distinct), verb (repeat/speak/hear/
+    suggest, 4), adverb (more/slowly/well, 3), adjective (free/sorry, 2),
+    preposition (about, 1), and unions of these for matching_pairs (6-8 distinct
+    each, all >= the SS16 floor). No new backfill tag needed (PACK-ONLY): every
+    template renders a bare '{item}' frame (multiple_choice/listen_select/
+    translation) or a matching_pairs instruction frame -- the slot is never
+    embedded in literal sentence text, so the SS1.1 course-scope
+    grammatical-in-frame risk that applies to word_order/fixed-sentence
+    translation does not apply, and no word_order template was authored here for
+    that reason (matching_pairs alone clears the >=3-structured-templates bar).
+    Recognition floor (>=3 distinct) is met by every MC/listen_select slot (3,
+    4, or 5 distinct); the 2-member adjective and 1-member preposition pools are
+    used ONLY for bare-word translation, which has no candidate floor. Honestly
+    thin: unit14 has no real per-lesson synonym sets, so several templates share
+    a pool wider than their own anchor lesson's own words (deliberate, per
+    SS8.1's 'anchor per lesson, pool across the unit' pattern) -- this is
+    disclosed here for the coordinator, not hidden. Re-verified:
+    scripts/_practice_unit_scope_check.py shows 0 DEAD/0 FLOOR for this file;
+    compile_content.py practice-validate 0 errors. Still carries the file's own
+    prior 'reviewed' status from before this fix -- needs a fresh review pass
+    given how much of the pack changed."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
-  agreement_tags:
-    semantic: [person_name, place]
 slot_presets:
-  person_name: &person_name {language_code: en, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  # REAUTH FIX 2026-07-24: person_name (unit01/02's own tag) and place (unit09's
+  # own tag) are removed -- both were EARLIER-unit vocabulary reused here
+  # (recipe DO-NOT #2), so every template that used them had 0 unit-scoped
+  # candidates at checkpoint time. unit14 does not itself carry ANY multi-member
+  # semantic tag (its own vocabulary -- free/tonight/sorry/repeat/that/speak/
+  # more/slowly/hear/well/6pm/message/suggest/meeting/place(the word)/about -- is
+  # 16 single-instance content words spread thin across 4 lessons, no shared
+  # synonym group). Per SS3.1(c) every slot below constrains ONLY language_code +
+  # part_of_speech (no semantic tag), pooled from unit14's own lexemes only
+  # (verified against a fresh iter_specs() dump filtered to '.a1.unit14.'). This
+  # is safe here specifically because every frame that uses these presets is a
+  # bare '{item}' (multiple_choice/listen_select/translation) or a
+  # matching_pairs instruction frame -- the slot is never embedded in literal
+  # sentence text, so the SS1.1 course-scope grammatical-in-frame risk that
+  # applies to word_order/fixed-sentence translation does not apply. No
+  # word_order template uses an untagged pool in this file for that reason.
+  noun_word: &noun_word {language_code: en, part_of_speech: noun}
+  verb_word: &verb_word {language_code: en, part_of_speech: verb}
+  adverb_word: &adverb_word {language_code: en, part_of_speech: adverb}
+  adj_word: &adj_word {language_code: en, part_of_speech: adjective}
+  prep_word: &prep_word {language_code: en, part_of_speech: preposition}
+  verb_adverb_word: &verb_adverb_word {language_code: en, part_of_speech: [verb, adverb]}
+  noun_adj_word: &noun_adj_word {language_code: en, part_of_speech: [noun, adjective]}
+  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, pronoun, preposition]}
 templates:
-  - content_key: practice.nl-en.en.a1.unit14.lesson01.hello_order.001
+  - content_key: practice.nl-en.en.a1.unit14.lesson01.word_choose.001
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
-    type: word_order
-    frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de naam die zich voorstelt.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson01.hello_translate.003
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *noun_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson01.word_pair.002
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word, eighth: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
+    feedback_frame: {text: "Je hebt acht woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson01.adj_translate.003
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
     type: translation
-    frame: {text: "Hallo, met {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *person_name}
-    answer_derivation: {kind: render_frame, frame: {text: "Hello, this is {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Hello, this is {item} betekent Hallo, met {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson03.lets_meet_order.001
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *adj_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson02.verb_listen.001
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: listen_select
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *verb_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson02.adverb_choose.002
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *adverb_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson02.word_pair.003
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *verb_adverb_word, second: *verb_adverb_word, third: *verb_adverb_word, fourth: *verb_adverb_word, fifth: *verb_adverb_word, sixth: *verb_adverb_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson02.verb_translate.004
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *verb_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson03.word_choose.001
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: word_order
-    frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "Let's meet at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de voorgestelde ontmoetingsplek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson03.place_translate.003
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *noun_word}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is een woord uit dit bericht.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson03.word_pair.002
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: matching_pairs
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *noun_adj_word, second: *noun_adj_word, third: *noun_adj_word, fourth: *noun_adj_word, fifth: *noun_adj_word, sixth: *noun_adj_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson03.word_translate.003
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *noun_word}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson04.how_about_order.001
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: word_order
-    frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: render_frame, frame: {text: "How about 6pm at the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is de voorgestelde plek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_listen.003
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_translate.004
-    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
-    type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson03.place_listen.004
-    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_choose.005
+  - content_key: practice.nl-en.en.a1.unit14.lesson04.word_choose.001
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *all_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Kies de Nederlandse betekenis van {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit14.lesson04.place_match.006
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson04.word_pair.002
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: matching_pairs
-    frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *place, second: *place, third: *place, fourth: *place, fifth: *place}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "Verbind elke plaats met de juiste Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit14.lesson04.prep_translate.003
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *prep_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

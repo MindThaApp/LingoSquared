@@ -70,15 +70,50 @@ review:
     relevant floor) and compile_content.py practice-validate, 0 errors/0
     warnings. Still carries this pack's own prior fresh-context review
     status -- a fresh re-review of specifically these 5 new templates has
-    not happened yet."
+    not happened yet.
+
+    REAUTH FIX 2026-07-24 (unit-scope DEAD-template pass): scripts/_practice_unit_scope_check.py
+    flagged 11 DEAD template-slots, all 7 templates that reused unit09's 'place'
+    semantic tag (bank/hospital/pharmacy/park/restaurant) -- vocabulary unit10 never
+    itself introduces, so generate_checkpoint()'s unit-scoped lexeme pool had 0
+    candidates for every one of them (recipe DO-NOT #2): lesson02.place_listen.004,
+    place_meaning.005, place_pair.006 (all 5 slots), lesson03.place_listen.004,
+    lesson04.place_meaning.004, place_translate.005, place_listen.006. Fixed by
+    RE-ANCHORING every one to a new untagged 'direction_word' preset
+    (language_code: en, part_of_speech: noun, no semantic tag) built purely from
+    unit10's OWN lesson01-03 vocabulary: corner/minutes/street/directions plus the
+    turn_direction nouns left/right -- 6 distinct tokens, 6 distinct glosses,
+    verified against a fresh iter_specs() dump filtered to '.a1.unit10.'. No new
+    backfill tag needed (PACK-ONLY): every template using this preset renders a
+    bare '{item}' frame (multiple_choice/listen_select/translation) or a
+    matching_pairs instruction frame, so the SS1.1 course-scope
+    grammatical-in-frame risk that applies to word_order/fixed-sentence
+    translation does not apply here -- the slot is never embedded in literal
+    sentence text. Also widened place_pair.006 from 5 to 6 slots (was already
+    below the SS16 6-pair floor even before being DEAD) using all 6 direction_word
+    members. turn_direction/street_ordinal-based templates (word_order/translation)
+    were untouched -- they were never dead. Removed the now-unused 'place' tag
+    from tag_schema. Re-verified: scripts/_practice_unit_scope_check.py shows 0
+    DEAD/0 FLOOR for this file; compile_content.py practice-validate 0 errors."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [turn_direction, street_ordinal, place]
+    semantic: [turn_direction, street_ordinal]
 slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
-  place: &place {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place}}
+  # direction_word: untagged noun pool built ONLY from this unit's OWN lesson01-03
+  # vocabulary (corner/minutes/street/directions plus the turn_direction nouns
+  # left/right) -- replaces the old *place preset, which pointed at unit09's
+  # 'place' semantic tag (bank/hospital/pharmacy/park/restaurant), a lesson
+  # that unit10 does not itself teach. generate_checkpoint() scopes candidates
+  # to THIS unit's own lexemes, so every *place-based template here had 0
+  # unit-scoped candidates (recipe DO-NOT #2). No semantic tag is declared
+  # (SS3.1c): safe here because every frame that uses this preset is a bare
+  # '{item}' (multiple_choice/listen_select/translation) or a matching_pairs
+  # instruction frame -- neither embeds the slot in literal sentence text, so
+  # the widen-at-course-scope grammaticality risk (SS1.1) does not apply.
+  direction_word: &direction_word {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.nl-en.en.a1.unit10.lesson01.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
@@ -112,24 +147,24 @@ templates:
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson02.place_meaning.005
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een plaats uit deze les.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson02.place_pair.006
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: matching_pairs
-    frame: {text: "Koppel de Engelse plaatsen aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_place: *place, second_place: *place, third_place: *place, fourth_place: *place, fifth_place: *place}
-    slot_relations: [{kind: distinct, slots: [first_place, second_place, third_place, fourth_place, fifth_place]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_place, second_place, third_place, fourth_place, fifth_place]}
-    feedback_frame: {text: "Je hebt vijf plaatsen gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *direction_word, second_word: *direction_word, third_word: *direction_word, fourth_word: *direction_word, fifth_word: *direction_word, sixth_word: *direction_word}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
+    feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson03.street_order.001
     lesson_content_key: en.a1.unit10.lesson03.reading_a_route
     type: word_order
@@ -148,9 +183,9 @@ templates:
     lesson_content_key: en.a1.unit10.lesson03.reading_a_route
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson04.turn_order.001
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: word_order
@@ -169,20 +204,20 @@ templates:
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats waarnaar in dit gesprek gevraagd wordt.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson04.place_translate.005
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson04.place_listen.006
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is de plaats die je hoorde.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}

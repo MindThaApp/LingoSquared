@@ -89,15 +89,82 @@ review:
     4, identity 6, well above the >=3 multiple_choice/listen_select floor)
     and compile_content.py practice-validate, 0 errors/0 warnings. Still
     needs the standard fresh-context review before import.
+
+    RE-AUTHORED 2026-07-24 (unit-scope DEAD-template pass): the harness
+    warning in the possessive paragraph above turned out to understate the
+    real defect. scripts/_practice_unit_scope_check.py (the actual per-course
+    unit-scoped model, run against the real backfill_lexemes_nl_en.py)
+    confirmed 3 DEAD templates: lesson03.possessive_order.001 (0 unit-scoped
+    'possessive' candidates -- 'my'/'your' are BOTH pinned to unit25's own
+    lesson_content_key in the A2 dict, since backfill_lexemes*.py's en_specs
+    dict keys by bare token and only ever assigns provenance on first sight
+    per course -- see backfill_lexemes_nl_en.py:2873-2878's own comment),
+    lesson04.identity_choose.002 and lesson04.identity_listen.003 (0
+    unit-scoped 'identity' candidates -- every identity token pinned to
+    unit25/unit28/unit30, none to unit27; the "6 real A2-scoped candidates"
+    claimed above was never unit27-scoped, it was pooled across the whole
+    A2 course).
+
+    FIXES applied, PACK-ONLY (no backfill/realization/overlay edits):
+    (1) lesson03.possessive_order.001 -> RENAMED card_order.001, RE-ANCHORED
+    from 'possessive' to a new 'card_type' tag (noun, semantic: card_type --
+    'debit' is the only A2 course-wide card_type token, and it IS unit27's
+    own, per.a2.unit27.lesson01.banking_vocabulary). This is a genuine
+    single-member anchor (like the recipe's *_single convention, no new
+    backfill tag needed -- card_type already existed in
+    _en_target_lexeme_common.py, just unused by any pack), so the SAME real
+    sentence ("Your debit card will arrive in five to seven business days")
+    is kept, just with 'debit' itself as the slot instead of the (dead)
+    possessive determiner. Deterministic (1 candidate), no self-reference
+    (no literal word in the frame matches 'debit'), no ambiguity.
+    (2) lesson04.identity_choose.002/identity_listen.003 -> DROPPED (not
+    re-anchored): recognition tier already has 7 other live banking_noun/
+    banking_adjective MC+listen templates covering this unit's real 12
+    distinct nouns+adjectives, so re-anchoring these 2 to yet another
+    banking_noun/adjective MC/listen pair would only add redundant
+    recognition-tier depth while doing nothing for the pack's real gap,
+    which was structured tier (only 2 templates: the now-dead
+    possessive_order and the 8-pair banking_noun matching_pairs).
+    (3) ADDED 1 replacement structured template, anchored to genuinely
+    unit27-native vocab: lesson01.match_combined.006 (matching_pairs, 12
+    pairs = banking_noun's 8 UNION banking_adjective's 4, both entirely
+    unit27's own -- within AUTHORING_GUIDE #16's 6-12 range, no other-unit
+    padding). A second attempt -- lesson02.fill.004, fill_in_blank on the
+    same 'card_type' single-member anchor -- was tried and REVERTED:
+    card_type has only 1 candidate ('debit') within the A2 course, but
+    compile_content.py's fill_in_blank ambiguity check pools EVERY level of
+    the direction at once (SS6.5), and A1 unit15's "payment_words" lesson
+    also carries card_type on 'credit' -- 2 distinct direction-wide
+    candidates, hard-failed with "no other visible text in the frame to
+    disambiguate which one is correct". credit/debit are not true synonyms
+    (interchangeable: true would be dishonest here), so the template was
+    dropped rather than forced; card_order.001 (word_order) is unaffected
+    since word_order's grammaticality bar is COURSE-scoped (A2 only, where
+    card_type really does have exactly 1 member), not direction-wide.
+
+    Net result: 16 templates before -> 15 templates after (3 dropped, 1
+    renamed+re-anchored, 1 added), all now unit-scope LIVE. Tier counts
+    after the fix: recognition 9 (banking_noun/adjective MC+listen across
+    all 4 lessons), structured 3 (card_order word_order, banking_noun
+    8-pair match, banking_combined 12-pair match), production 3
+    (banking_noun/adjective translate x3) -- all three tiers now clear the
+    >=3-templates bar from the recipe's SS8 table (previously structured was
+    1 live template after removing the dead possessive_order, well under
+    the bar). Verified 0 DEAD/0 FLOOR for this pack with scripts/
+    _practice_unit_scope_check.py and 0 errors with compile_content.py
+    practice-validate. tag_schema/slot_presets updated: dropped the
+    now-unused 'possessive'/'identity' tags and presets, added 'card_type'
+    and the 'banking_combined' union preset. Still needs the standard
+    fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [banking_noun, banking_adjective, possessive, identity]
+    semantic: [banking_noun, banking_adjective, card_type]
 slot_presets:
   banking_noun: &banking_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: banking_noun}}
   banking_adjective: &banking_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: banking_adjective}}
-  possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
-  identity: &identity {language_code: en, part_of_speech: [pronoun, verb], agreement_tags: {semantic: identity}}
+  banking_combined: &banking_combined {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [banking_noun, banking_adjective]}}
+  card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
 templates:
   - content_key: practice.nl-en.en.a2.unit27.lesson01.choose.001
     lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
@@ -134,6 +201,14 @@ templates:
     slots: {item: *banking_adjective}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a2.unit27.lesson01.match_combined.006
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth} · {ninth} · {tenth} · {eleventh} · {twelfth}", language_code: en, direction: ltr}
+    slots: {first: *banking_combined, second: *banking_combined, third: *banking_combined, fourth: *banking_combined, fifth: *banking_combined, sixth: *banking_combined, seventh: *banking_combined, eighth: *banking_combined, ninth: *banking_combined, tenth: *banking_combined, eleventh: *banking_combined, twelfth: *banking_combined}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit27.lesson02.choose.001
     lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
     type: multiple_choice
@@ -155,13 +230,13 @@ templates:
     slots: {item: *banking_adjective}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit27.lesson03.possessive_order.001
+  - content_key: practice.nl-en.en.a2.unit27.lesson03.card_order.001
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: word_order
-    frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}
-    slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "{item} debit card will arrive in five to seven business days", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het bezittelijk voornaamwoord in deze zin.", language_code: nl, direction: ltr}
+    frame: {text: "Your {item} card will arrive in five to seven business days", language_code: en, direction: ltr}
+    slots: {item: *card_type}
+    answer_derivation: {kind: render_frame, frame: {text: "Your {item} card will arrive in five to seven business days", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} is het soort kaart in deze zin.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a2.unit27.lesson03.choose.002
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: multiple_choice
@@ -191,21 +266,7 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit27.lesson04.identity_choose.002
-    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
-    type: multiple_choice
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een woord uit dit gesprek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit27.lesson04.identity_listen.003
-    lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
-    type: listen_select
-    frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *identity}
-    answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je in dit gesprek hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a2.unit27.lesson04.adj_choose.004
+  - content_key: practice.nl-en.en.a2.unit27.lesson04.adj_choose.002
     lesson_content_key: en.a2.unit27.lesson04.opening_an_account_dialogue
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}

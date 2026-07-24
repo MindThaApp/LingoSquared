@@ -44,18 +44,57 @@ review:
     total_translate (number -> number_no_hundred) to the narrower tags.
     Re-verified with compile_content.py practice-validate (0/0) and a
     standalone harness confirming 'hundred' is no longer reachable in any of
-    the fixed slots. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the quantity_unit (noun) matching_pairs template from 2 to 5 pairs."
+    the fixed slots. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the quantity_unit (noun) matching_pairs template from 2 to 5 pairs.
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX (2026-07-24, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
+    flagged 3 DEAD (lesson02.pounds_translate.003, lesson04.dozen_eggs_order.002, lesson04.total_translate.004) + 2
+    below-floor matching_pairs. Root cause: 'count_plural_no_hundred' and 'number_no_hundred' are (like plain 'number')
+    only ever classified starting at a1.unit03 and never reintroduced with a unit08-scoped lesson_content_key -- the
+    same systemic gap already logged against nl-en a1_unit05/a1_unit07 -- so all 3 slots had 0 unit08-scoped candidates
+    at checkpoint time despite working in Endless Practice. Also confirmed: lesson04 (market_dialogue) introduces ZERO
+    of its own lexemes at all (verified via iter_specs()) -- every one of its templates necessarily draws on lesson01/02/03
+    vocabulary, which is fine for checkpoint satisfiability (unit-scoped, not lesson-scoped) but explains why no genuinely
+    lesson04-native number/count word was ever an option here.
+
+    Fixed lesson02.pounds_translate.003 and lesson04.total_translate.004 (originally: fixed-sentence 'Can I have {item}
+    pounds, please'/'That's {item} dollars' render_frame translations) by re-anchoring to unit08's own price-symbol
+    tokens (just '4', from lesson03.reading_price_labels) and converting both to bare-word translations (frame '{item}',
+    no other literal text) -- removes the DEAD unit-scope issue AND sidesteps the course-scope grammaticality risk a
+    fixed-sentence render would carry (a1-course-wide 'symbol' POS also covers ordinals/dates/dollar-amounts that would
+    NOT make sense substituted into 'pounds'/'dollars' sentences at Endless-Practice course scope; a bare-word translate
+    has no such risk, SS6.6a). DROPPED lesson04.dozen_eggs_order.002 (word_order) outright rather than force the same
+    single-symbol fix onto a word_order frame: 'Can I have 4 dozen eggs, please' is fine for the digit '4', but course-wide
+    'symbol' also includes date/time/price tokens (12th, 3:00, $10, 911, ...) that are NOT sensible as a bare dozen-count,
+    and word_order's grammaticality-in-frame rule is COURSE-scoped (SS1.1/SS6.4) -- unlike bare-word translation this
+    type has no escape hatch from that risk. lesson04 stays structurally fine without it (structured tier: quantity_pair.003
+    + price_question_order.001 + label_pair.002 = 3, still clears the floor) -- replaced the lost template one-for-one
+    with lesson02.fresh_translate.004 (bare-word translation on the unit's only adjective, 'fresh', single unit08-scoped
+    candidate, safe) to keep the pack at its original 12-template count net of the drop, and to give lesson02 a second
+    production-tier item.
+
+    Also widened lesson01.quantity_pair.003 (matching_pairs) from the 'quantity_unit'-only pool (5 pairs, below the
+    recipe's 6-pair standard) to the union of quantity_unit + food_plural (both unit08-native: pound/dozen/bottle/bag/
+    kilo/eggs/tomatoes, 7 distinct glosses -- pond/dozijn/fles/zak/kilo/eieren/tomaten, no duplicates), now declaring the
+    full 6 pairs. Softened its frame text from a units-specific claim to a generic 'de Engelse woorden uit deze les'
+    since the widened pool mixes measurement units with food nouns. Left lesson03.label_pair.002 at its original 5 pairs
+    (still fully generatable, just below the 6-pair standard) rather than union it with the identical food_plural set too
+    -- that would have made it a near-duplicate of the newly-widened lesson01 template over the same closed 7-word pool;
+    the structured tier does not need a third 6-pair matching_pairs to clear its floor.
+
+    Removed the now-unused count_plural/count_plural_no_hundred/number/number_no_hundred tags from tag_schema (no slot
+    references them after this fix). LOGGED for the coordinator: en-target number words need a backfill_lexemes_nl_en.py
+    change to emit unit-scoped specs wherever a later unit's own realization actually uses a number, if checkpoint-visible
+    price/quantity sentences are ever wanted for unit08 (and unit05/unit07, same gap). Re-verified 0 DEAD via
+    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [quantity_unit, food_plural, count_plural, count_plural_no_hundred, number, number_no_hundred]
+    semantic: [quantity_unit, food_plural]
 slot_presets:
   quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
   food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
-  count_plural: &count_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural}}
-  count_plural_no_hundred: &count_plural_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural_no_hundred}}
-  number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
-  number_no_hundred: &number_no_hundred {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number_no_hundred}}
+  quantity_food_union: &quantity_food_union {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit, food_plural]}}
+  price_symbol: &price_symbol {language_code: en, part_of_speech: symbol}
 templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_meaning.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
@@ -75,10 +114,10 @@ templates:
     lesson_content_key: en.a1.unit08.lesson01.quantities
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_unit: *quantity_unit, second_unit: *quantity_unit, third_unit: *quantity_unit, fourth_unit: *quantity_unit, fifth_unit: *quantity_unit}
-    slot_relations: [{kind: distinct, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}
-    feedback_frame: {text: "Je hebt twee hoeveelheidswoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_unit: *quantity_food_union, second_unit: *quantity_food_union, third_unit: *quantity_food_union, fourth_unit: *quantity_food_union, fifth_unit: *quantity_food_union, sixth_unit: *quantity_food_union}
+    slot_relations: [{kind: distinct, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit, sixth_unit]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit, sixth_unit]}
+    feedback_frame: {text: "Je hebt de Engelse woorden uit deze les gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_translate.004
     lesson_content_key: en.a1.unit08.lesson01.quantities
     type: translation
@@ -96,10 +135,17 @@ templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_translate.003
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: translation
-    frame: {text: "Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *count_plural_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} pounds, please", language_code: en, direction: ltr}}
-    feedback_frame: {text: "Can I have {item} pounds, please? betekent Mag ik {item} pond, alstublieft?", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *price_symbol}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit08.lesson02.fresh_translate.004
+    lesson_content_key: en.a1.unit08.lesson02.asking_prices
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: {language_code: en, part_of_speech: adjective}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_meaning.001
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: multiple_choice
@@ -129,17 +175,10 @@ templates:
     slots: {item: *quantity_unit}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit08.lesson04.dozen_eggs_order.002
-    lesson_content_key: en.a1.unit08.lesson04.market_dialogue
-    type: word_order
-    frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}
-    slots: {item: *count_plural_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "Can I have {item} dozen eggs, please", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is het aantal dozijnen eieren in dit verzoek.", language_code: nl, direction: ltr}
-  - content_key: practice.nl-en.en.a1.unit08.lesson04.total_translate.004
+  - content_key: practice.nl-en.en.a1.unit08.lesson04.total_translate.002
     lesson_content_key: en.a1.unit08.lesson04.market_dialogue
     type: translation
-    frame: {text: "Dat is {item} dollar.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *number_no_hundred}
-    answer_derivation: {kind: render_frame, frame: {text: "That's {item} dollars", language_code: en, direction: ltr}}
-    feedback_frame: {text: "That's {item} dollars betekent Dat is {item} dollar.", language_code: nl, direction: ltr}
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *price_symbol}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
