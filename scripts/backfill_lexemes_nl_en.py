@@ -315,7 +315,7 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "door": "deur", "download": "downloaden", "downloads": "downloadt", "drive": "rijden",
     "drives": "rijdt", "employee": "werknemer", "enjoy": "genieten van",
     "envelope": "envelop", "even": "zelfs", "ever": "weleens", "everyone": "iedereen",
-    "everywhere": "overal", "exercise": "sporten / bewegen", "express": "spoedpost",
+    "everywhere": "overal", "exercise": "sporten / bewegen", "express": "uiten",
     "eyes": "ogen", "fast": "snel", "feels": "voelt aan", "fingers": "vingers",
     "finishes": "maakt af", "fish": "vis", "five-minute": "vijf-minuten",
     "forget": "vergeten", "found": "vond", "framed": "ingelijst", "friend": "vriend",
@@ -2117,7 +2117,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "content": ("noun", "de inhoud"), "shift": ("noun", "de verschuiving"),
     "stiff": ("adjective", "stijf"), "appropriate": ("adjective", "passend"),
     "nina": ("proper_noun", "Nina"), "clinic": ("noun", "de kliniek"),
-    "texts": ("verb", "appt; schrijft"), "stays": ("verb", "blijft"),
+    "texts": ("noun", "de teksten"), "stays": ("verb", "blijft"),
     "level": ("noun", "de mate"), "formality": ("noun", "de formaliteit"),
     # B2 unit06 -- abstract values.
     "value": ("noun", "de waarde"), "public": ("adjective", "openbaar"),
@@ -2833,6 +2833,28 @@ def nl_agreement_tags(token: str) -> dict[str, object]:
     return tags
 
 
+NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit01_necessity", "don't"): "hoeven niet",
+    ("b1_unit01_necessity", "right"): "gelijk (hebben)",
+    ("b1_unit09_reported_speech", "direct"): "direct",
+    ("b1_unit13_relative_clauses", "small"): "klein",
+    ("b1_unit13_relative_clauses", "just"): "net/pas",
+    ("b1_unit16_advice", "manager"): "de leidinggevende/manager",
+    ("b1_unit19_summarizing", "left"): "liet weg",
+    ("b2_unit01_argumentation", "next"): "volgende",
+    ("b2_unit04_narrative_time", "walk"): "doorlopen/lopen",
+    ("b2_unit04_narrative_time", "checking"): "aan het controleren/controleren",
+    ("b2_unit05_register", "direct"): "direct",
+}
+
+NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit01_necessity", "right"): "adjective",
+    ("b1_unit19_summarizing", "left"): "verb",
+    ("b2_unit04_narrative_time", "walk"): "verb",
+    ("b2_unit04_narrative_time", "checking"): "verb",
+}
+
+
 def _classify_unit_files(unit_files, level):
     # FRESH dicts per level/course -- Lexeme uniqueness is scoped by
     # `Lexeme.course_id`, and "Engels A1"/"Engels A2" are two entirely
@@ -2880,8 +2902,12 @@ def _classify_unit_files(unit_files, level):
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": EN_POS_ALL[token],
-                            "english_gloss": EN_TARGET_TO_NL_GLOSS[token], "agreement_tags": tags,
+                            "part_of_speech": NL_UNIT_POS_OVERRIDES.get(
+                                (unit_stem, token), EN_POS_ALL[token]
+                            ),
+                            "english_gloss": NL_UNIT_GLOSS_OVERRIDES.get(
+                                (unit_stem, token), EN_TARGET_TO_NL_GLOSS[token]
+                            ), "agreement_tags": tags,
                         }
                     else:
                         for key, value in tags.items():

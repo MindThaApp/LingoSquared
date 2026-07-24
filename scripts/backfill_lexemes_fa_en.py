@@ -975,7 +975,7 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "employee": "کارمند", "enjoy": "لذت بردن", "envelope": "پاکت‌نامه",
     "even": "حتی", "ever": "هیچ‌وقت (در سؤال)", "everyone": "همه",
     "everywhere": "همه‌جا", "exercise": "ورزش کردن",
-    "express": "پیشتاز (پست پیشتاز)", "eyes": "چشم‌ها", "fast": "سریع",
+    "express": "بیان کردن", "eyes": "چشم‌ها", "fast": "سریع",
     "feels": "احساس می‌شود", "fingers": "انگشت‌ها",
     "finishes": "تمام می‌کند", "fish": "ماهی", "five-minute": "پنج‌دقیقه‌ای",
     "forget": "فراموش کردن", "found": "پیدا کرد", "framed": "قاب‌شده",
@@ -2104,11 +2104,25 @@ METALANGUAGE_TOKENS = frozenset({
 TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
 
 
-def _lexeme_pos_and_gloss(level: str, token: str) -> tuple[str, str]:
+UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
+    ("b1_unit01_necessity", "must"): ("verb", "باید"),
+    ("b1_unit01_necessity", "next"): ("adjective", "بعدی"),
+    ("b1_unit01_necessity", "right"): ("adjective", "درست"),
+    ("b1_unit02_abilities", "would"): ("verb", "می‌شد/می‌بود"),
+    ("b1_unit13_relative_clauses", "used"): ("verb", "عادت داشت (used to)"),
+    ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
+    ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
+    ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+}
+
+
+def _lexeme_pos_and_gloss(
+    level: str, unit_stem: str, token: str
+) -> tuple[str, str]:
     """Resolve (part_of_speech, Farsi gloss) for one token at one level.
 
-    Resolution order, most specific first: LEVEL_SENSE_OVERRIDES ->
-    this script's own FA_EN_EXTRA_LEXEMES -> the shared
+    Resolution order, most specific first: UNIT_SENSE_OVERRIDES ->
+    LEVEL_SENSE_OVERRIDES -> this script's own FA_EN_EXTRA_LEXEMES -> the shared
     _en_target_lexeme_common.EN_POS plus this script's own
     EN_TARGET_TO_FA_GLOSS. The local table deliberately wins over the
     shared module for the tokens it owns: its glosses and semantic tags
@@ -2116,6 +2130,9 @@ def _lexeme_pos_and_gloss(level: str, token: str) -> tuple[str, str]:
     sibling lane adding the same token to EN_POS under a different POS must
     not silently repoint a Farsi gloss at a sense it was not written for.
     """
+    override = UNIT_SENSE_OVERRIDES.get((unit_stem, token))
+    if override is not None:
+        return override
     override = LEVEL_SENSE_OVERRIDES.get((level, token))
     if override is not None:
         return override
@@ -2184,7 +2201,9 @@ def _classify(files, level, specs):
                 content_key = item["content_key"]
                 for token in item.get("introduced_tokens", []):
                     token = token.casefold().replace("’", "'")
-                    part_of_speech, gloss = _lexeme_pos_and_gloss(level, token)
+                    part_of_speech, gloss = _lexeme_pos_and_gloss(
+                        level, stem, token
+                    )
                     tags = en_agreement_tags(token)
                     # Keyed by (level, token) -- A1/A2/B1/B2 are separate
                     # courses (separate Lexeme rows are fine/expected even

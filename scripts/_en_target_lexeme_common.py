@@ -393,7 +393,7 @@ EN_POS: dict[str, str] = {
     # Unit 40
     "post office": "noun", "letters": "noun", "letter": "noun", "package": "noun",
     "stamp": "noun", "envelope": "noun", "put": "verb", "mailbox": "noun",
-    "postcard": "noun", "express": "adjective", "mail": "noun", "regular": "adjective",
+    "postcard": "noun", "express": "verb", "mail": "noun", "regular": "adjective",
     "cost": "verb", "chicago": "proper_noun", "receipt": "noun", "around": "preposition",
     "post": "noun", "sent": "verb", "paid": "verb", "wanted": "verb",
     "quickly": "adverb", "ready": "adjective", "clerk": "noun", "weighed": "verb",
