@@ -62,6 +62,16 @@ review:
     practice pack's correctness is independent of that, but the underlying
     lesson content should be re-diffed against this pack once it gets its
     own review pass.
+
+    2026-07-24 tier-thinness polish pass (production tier had only 1 live
+    template): added two bare-word translations -- lesson02.translate.004
+    over activity_leuk (3 unit tokens, zero course-scope extras) and
+    lesson06.translate.003 over preference_item (4 unit tokens; course
+    scope adds Koffie/Thee/koffie/thee/Fietsen, harmless for a typed
+    answer since practice grading casefolds and the prompt varies with
+    the answer). Both reuse existing presets; pools differ from the
+    existing lesson04.translate.001 (taste_preference nouns), so no
+    duplicate templates.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -116,6 +126,19 @@ templates:
     slots: {item: *preference_item}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson02.translate.004
+    lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *activity_leuk}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit13.lesson03.choose.001
     lesson_content_key: nl.a1.unit13.lesson03.houden_van
     type: multiple_choice
@@ -162,3 +185,16 @@ templates:
     slots: {item: *preference_item}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit13.lesson06.translate.003
+    lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *preference_item}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}

@@ -95,7 +95,18 @@ review:
     untouched, including their narrow standalone uses in lesson01/lesson02
     translation/word_order templates, which have no candidate floor and
     were already unit-scope-satisfiable (lang x1, jong x1). Post-fix: 0
-    DEAD, 0 FLOOR for this pack."
+    DEAD, 0 FLOOR for this pack.
+
+    POLISH 2026-07-24 (POS-only matching_pairs pass): the REAUTH's
+    appearance_adj preset (part_of_speech: adjective, no semantic tag) was
+    unit-safe but pooled all 193 course-wide adjectives at Endless-Practice
+    COURSE scope (off-theme pairs). Replaced with a semantic union of the
+    pack's own four already-declared tags (hair_color_adj/eye_color_adj/
+    height_adj/age_adj): 7 distinct unit-scope tokens (blond/bruin/grijs/
+    bruine/groene/lang/jong, 7 distinct glosses) >= 6 slots, and the
+    course-scope pool adds only the 4 on-theme appearance adjectives from
+    sibling units (zwart/blauwe/klein/oud). Removed the now-unused
+    appearance_adj preset."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -106,7 +117,7 @@ slot_presets:
   height_adj: &height_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: height_adj}}
   age_adj: &age_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: age_adj}}
   appearance_ogen_single: &appearance_ogen_single {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: appearance_ogen_single}}
-  appearance_adj: &appearance_adj {language_code: nl, part_of_speech: adjective}
+  appearance_union_adj: &appearance_union_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: [hair_color_adj, eye_color_adj, height_adj, age_adj]}}
   hair_or_eye_color_adj: &hair_or_eye_color_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: [hair_color_adj, eye_color_adj]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit30.lesson01.translate.001
@@ -257,7 +268,7 @@ templates:
     lesson_content_key: nl.a1.unit30.lesson05.sander_fenna_vergelijken
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
-    slots: {first: *appearance_adj, second: *appearance_adj, third: *appearance_adj, fourth: *appearance_adj, fifth: *appearance_adj, sixth: *appearance_adj}
+    slots: {first: *appearance_union_adj, second: *appearance_union_adj, third: *appearance_union_adj, fourth: *appearance_union_adj, fifth: *appearance_union_adj, sixth: *appearance_union_adj}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each appearance word from this unit with its English meaning.", language_code: en, direction: ltr}

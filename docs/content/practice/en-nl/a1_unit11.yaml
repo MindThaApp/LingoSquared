@@ -83,13 +83,28 @@ review:
     Same standing blocking dependency as every earlier en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
     database yet.
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: production
+    tier had only 2 live templates (lesson03.translate.003,
+    lesson05.translate.002). Added lesson02.translate.003, a bare-word
+    translation over a new `accept_decline_noun` preset (lesson02's own
+    nouns: idee/plan/reden/afwijzing = 4 distinct unambiguous glosses at
+    unit scope; course scope adds only tijd "time" -- safe in a bare-word
+    prompt that varies with the answer). tag_schema extended with
+    `accept_decline`. Production tier now 3 live. The weekday-tag
+    contamination documented above is untouched and still stands.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [weekday, plan_vocab]
+    semantic: [weekday, plan_vocab, accept_decline]
 slot_presets:
   weekday: &weekday {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: weekday}}
   plan_vocab: &plan_vocab {language_code: nl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: plan_vocab}}
+  # accept_decline_noun: lesson02's own accept/decline nouns (idee, plan,
+  # reden, afwijzing at unit scope; course scope adds only "tijd"). The noun
+  # part_of_speech filter keeps the tag's function words (Ja/niet/want/...)
+  # and near-synonym adjectives out of the pool. Added 2026-07-24.
+  accept_decline_noun: &accept_decline_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: accept_decline}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit11.lesson01.order.001
     lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
@@ -117,6 +132,19 @@ templates:
     slots: {item: *plan_vocab}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit11.lesson02.translate.003
+    lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *accept_decline_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} is vocabulary for accepting or declining a plan.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit11.lesson03.order.001
     lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
     type: word_order

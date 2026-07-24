@@ -4,7 +4,7 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit08.places
 review:
-  status: reviewed
+  status: unreviewed
   required_next_reviewer: null
   fresh_context: "false"
   notes: >-
@@ -44,6 +44,16 @@ review:
     the compiler (0 errors/0 warnings, run together with units 01-07, 09).
     No self-reference, no capitalization leaks, no jargon leaks, no stray
     YAML booleans elsewhere in the pack.
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: production
+    tier had only 2 live templates (lesson01.translate.003,
+    lesson05.translate.002). Added lesson03.translate.004, a bare-word
+    translation over the existing `position` tag (unit-scoped pool:
+    naast/tegenover/achter = 3 distinct prepositions with unambiguous
+    glosses; course scope adds only `voor`, harmless in a bare-word prompt
+    that varies with the answer). Production tier now 3 live. Reset
+    review.status reviewed -> unreviewed since this adds unreviewed content
+    to a previously reviewed pack.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -118,6 +128,19 @@ templates:
     slots: {item: *position}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the location word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit08.lesson03.translate.004
+    lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *position}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson04.choose.001
     lesson_content_key: nl.a1.unit08.lesson04.waar_en_meer_plaatswoorden
     type: multiple_choice

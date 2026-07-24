@@ -36,7 +36,16 @@ review:
     lexeme_matches()-replicating harness against this script's actual
     output. Needs the standard fresh-context review before import. Same
     blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
-    has not actually been run against a real database yet."
+    has not actually been run against a real database yet.
+
+    2026-07-24 tier-thinness polish pass (production tier had only 1 live
+    template): added two bare-word translations -- lesson02.translate.003
+    over comparative_adj (6 unit tokens, zero course-scope extras) and
+    lesson04.translate.003 over superlative_word (4 unit tokens; course
+    scope adds only 'Beste' = 'Dear (letter/email salutation)', harmless
+    for a typed answer since grading casefolds and the prompt varies with
+    the answer). Both reuse existing presets; neither duplicates the
+    existing lesson03.translate.001 (equal_adj pool)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -79,6 +88,19 @@ templates:
     slots: {item: *comparative_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson02.translate.003
+    lesson_content_key: nl.a1.unit14.lesson02.prijzen_vergelijken
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *comparative_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit14.lesson03.translate.001
     lesson_content_key: nl.a1.unit14.lesson03.net_zo_als
     type: translation
@@ -111,6 +133,19 @@ templates:
     slots: {item: *superlative_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit14.lesson04.translate.003
+    lesson_content_key: nl.a1.unit14.lesson04.de_beste_keuze
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *superlative_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit14.lesson05.choose.001
     lesson_content_key: nl.a1.unit14.lesson05.advertentie_lezen
     type: multiple_choice

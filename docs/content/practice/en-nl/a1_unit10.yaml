@@ -69,10 +69,27 @@ review:
     templates (choose/listen/translate), none of which were flagged --
     they all only need >=1 (translation) or >=3 (MC/listen) candidates,
     comfortably met by the 6 that remain even before counting `eten`.
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: structured
+    tier had only 1 live template (lesson01.match.003). A shared word_order
+    frame remains impossible here (the separable/reflexive ik-forms need
+    op/me aan/af, per the original design note), and a sequence-word
+    word_order allows valid alternative orders ("ik ontbijt daarna") that
+    would grade wrong -- so both additions are fill_in_blank on the unit's
+    own hero sentences instead: lesson04.fill.003 blanks the third opener
+    of the taught sequence "Eerst sta ik op. Dan kleed ik me aan. {item}
+    ontbijt ik." (slot pinned to `drukkeweek_daarna_single` = daarna/Daarna,
+    two case-variant tokens course-wide, hence interchangeable: true --
+    genuinely the same word, and practice grading casefolds anyway; the
+    eerst->dan context forces daarna specifically, so no eerst/dan
+    ambiguity); lesson06.fill.002 blanks eruit in the realization's own
+    "Hoe ziet jouw dag eruit?" (slot pinned to `appearance_eruit_single`,
+    exactly 1 distinct course-wide token, deterministic). tag_schema
+    extended with both singleton tags. Structured tier now 3 live.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [routine_verb_infinitive, sequence_word]
+    semantic: [routine_verb_infinitive, sequence_word, drukkeweek_daarna_single, appearance_eruit_single]
 slot_presets:
   routine_verb_infinitive: &routine_verb_infinitive {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: routine_verb_infinitive}}
   sequence_word: &sequence_word {language_code: nl, part_of_speech: [adverb, particle], agreement_tags: {semantic: sequence_word}}
@@ -169,6 +186,19 @@ templates:
     slots: {item: *sequence_word}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson04.fill.003
+    lesson_content_key: nl.a1.unit10.lesson04.eerst_dan_daarna
+    type: fill_in_blank
+    frame:
+      text: "Eerst sta ik op. Dan kleed ik me aan. {item} ontbijt ik."
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch sentence.", language_code: en, direction: ltr}
+    slots:
+      item: {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: drukkeweek_daarna_single}}
+    answer_derivation: {kind: slot_text, slot: item, interchangeable: true}
+    feedback_frame: {text: "After eerst and dan, {item} introduces the next step, and the verb stays before ik.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit10.lesson05.choose.001
     lesson_content_key: nl.a1.unit10.lesson03.activiteiten_en_tijden
     type: multiple_choice
@@ -188,3 +218,16 @@ templates:
     slots: {item: *routine_verb_infinitive}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the verb you heard in this dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit10.lesson06.fill.002
+    lesson_content_key: nl.a1.unit10.lesson06.een_dag_bij_het_taalcafe
+    type: fill_in_blank
+    frame:
+      text: "Hoe ziet jouw dag {item}?"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Complete the Dutch question.", language_code: en, direction: ltr}
+    slots:
+      item: {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: appearance_eruit_single}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} completes the phrase ziet ... eruit, which asks what something looks like.", language_code: en, direction: ltr}

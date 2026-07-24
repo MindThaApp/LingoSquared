@@ -59,6 +59,16 @@ review:
     the pack's recognition tier from 1 live template (lesson04's
     listen_select alone) to 2 -- still thin, but a pre-existing gap outside
     this fix's scope, noted here for whichever pass next touches this pack.
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: closed the
+    recognition gap flagged above by adding lesson05.choose.004
+    (multiple_choice over `schedule` nouns: rooster/Taalcafé/Welkom/
+    Workshop/workshop/Pauze = 6 unit tokens, 5 distinct glosses -- the
+    Workshop/workshop case pair collapses to one gloss, still well past
+    the 3-option floor). Bare "{item}" frame, no grammaticality-in-frame
+    risk; `schedule` was already declared in tag_schema. Recognition tier
+    now 3 live (lesson04 listen.001, lesson05 choose.004, lesson06
+    choose.001).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -175,6 +185,19 @@ templates:
     slots: {item: *number}
     answer_derivation: {kind: render_frame, frame: {text: "De workshop begint om kwart voor {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "Use om kwart voor {item} for this workshop time.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit04.lesson05.choose.004
+    lesson_content_key: nl.a1.unit04.lesson05.rooster_lezen
+    type: multiple_choice
+    frame:
+      text: "{item}"
+      language_code: nl
+      direction: ltr
+      text_blocks:
+        - {text: "Choose the English meaning.", language_code: en, direction: ltr}
+    slots:
+      item: {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: schedule}}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "{item} is a word from the language café schedule.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson06.choose.001
     lesson_content_key: nl.a1.unit04.lesson06.afspreken_bij_het_taalcafe
     type: multiple_choice

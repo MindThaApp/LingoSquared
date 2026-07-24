@@ -92,15 +92,30 @@ review:
     pre-existing off-by-one in the prose, not something this pass
     introduced); tier balance after fix: recognition 5 live (was 4),
     structured 5 live (was 2), production 4 live (was 3). Post-fix: 0 DEAD,
-    0 FLOOR for this pack."
+    0 FLOOR for this pack.
+
+    POLISH 2026-07-24 (POS-only matching_pairs pass): the REAUTH's
+    unit_content_word preset (part_of_speech only, no semantic tag) was
+    unit-safe but pooled 1000+ course-wide content words at Endless-
+    Practice COURSE scope (off-theme pairs). Replaced with a semantic union
+    [sport_noun, sport_reading]: 9 distinct unit-scope tokens (voetbal/
+    yoga/hardlopen/zwemmen/doet/rustig/bewegen/zwemt/bijna, 9 distinct
+    glosses -- zwemmen 'swimming; to swim' vs zwemt 'swims' is the same
+    accepted inflection-discrimination class as this file's earlier
+    precedents) >= the template's 8 slots, and the course-scope pool adds
+    only 9 sport/frequency-themed tokens from earlier units (keer/week/
+    twee/elke/vaak/houd/houdt/doe/sport). The old pool's hardlopen/
+    Hardlopen case-duplicate ('running; to run' vs 'Running') is gone --
+    Hardlopen carries neither union tag. Added sport_reading to tag_schema;
+    removed the now-unused unit_content_word preset."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [sport_noun, sport_dicht_single]
+    semantic: [sport_noun, sport_dicht_single, sport_reading]
 slot_presets:
   sport_noun: &sport_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: sport_noun}}
   sport_dicht_single: &sport_dicht_single {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: sport_dicht_single}}
-  unit_content_word: &unit_content_word {language_code: nl, part_of_speech: [noun, adjective, adverb]}
+  sport_unit_word: &sport_unit_word {language_code: nl, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: [sport_noun, sport_reading]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit32.lesson01.choose.001
     lesson_content_key: nl.a1.unit32.lesson01.sport_woorden
@@ -211,7 +226,7 @@ templates:
     lesson_content_key: nl.a1.unit32.lesson05.lotte_fenna_sport
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: nl, direction: ltr}
-    slots: {first: *unit_content_word, second: *unit_content_word, third: *unit_content_word, fourth: *unit_content_word, fifth: *unit_content_word, sixth: *unit_content_word, seventh: *unit_content_word, eighth: *unit_content_word}
+    slots: {first: *sport_unit_word, second: *sport_unit_word, third: *sport_unit_word, fourth: *sport_unit_word, fifth: *sport_unit_word, sixth: *sport_unit_word, seventh: *sport_unit_word, eighth: *sport_unit_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Match each word from this unit with its English meaning.", language_code: en, direction: ltr}

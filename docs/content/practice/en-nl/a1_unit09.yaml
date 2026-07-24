@@ -100,10 +100,24 @@ review:
     still has 3 live `word_order` templates
     (`lesson02.order.001`/`lesson04.order.002`/`lesson06.order.002`), so
     the tier survives.
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: production
+    tier had only 1 live template (lesson01.translate.004). Added two:
+    lesson02.translate.004, a bare-word translation over a new
+    `command_verb` preset (unit09's own `imperative_direction` verbs
+    ga/sla/loop + sentence-initial Ga/Sla/Loop; 3 distinct casefolded
+    answers, glosses go/turn/walk unambiguous; case variants harmless --
+    practice grading casefolds typed answers); and lesson06.translate.003,
+    a sentence translation "Go {item}." -> "Ga {item}." over the existing
+    `direction_word` tag (every member -- links/rechts/linksaf/rechtsaf/
+    rechtdoor -- is grammatical after "Ga", checked at course scope where
+    the pool is the same 5 tokens; prompt varies with the gloss so the
+    answer stays deterministic). tag_schema extended with
+    `imperative_direction`. Production tier now 3 live.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [direction_word, direction_word_pure, turn_direction, route_map]
+    semantic: [direction_word, direction_word_pure, turn_direction, route_map, imperative_direction]
 slot_presets:
   direction_word: &direction_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word}}
   # direction_word_pure: exact-case (no capitalized "Rechtdoor" duplicate),
@@ -117,6 +131,11 @@ slot_presets:
   # a dead cross-unit "place_non_station" (unit08-only vocabulary, 0
   # unit09-scoped candidates). See review notes above.
   route_word: &route_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: route_map}}
+  # command_verb: unit09's own lesson02 imperative verbs (ga/sla/loop plus
+  # their sentence-initial Ga/Sla/Loop variants) -- added 2026-07-24 for the
+  # bare-word production template below; case variants are harmless in a
+  # bare-word prompt (typed answers are casefolded at grading).
+  command_verb: &command_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: imperative_direction}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit09.lesson01.choose.001
     lesson_content_key: nl.a1.unit09.lesson01.richtingswoorden
@@ -164,6 +183,19 @@ templates:
     slots: {item: *direction_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the direction word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson02.translate.004
+    lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *command_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch command verb is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit09.lesson03.choose.001
     lesson_content_key: nl.a1.unit09.lesson03.de_weg_vragen
     type: multiple_choice
@@ -235,3 +267,16 @@ templates:
     slots: {item: *turn_direction}
     answer_derivation: {kind: render_frame, frame: {text: "Sla {item} bij het station.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is the direction in this command.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit09.lesson06.translate.003
+    lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
+    type: translation
+    frame:
+      text: "Go {item}."
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *direction_word}
+    answer_derivation: {kind: render_frame, frame: {text: "Ga {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ga {item} tells someone which way to go.", language_code: en, direction: ltr}

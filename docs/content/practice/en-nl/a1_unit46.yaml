@@ -32,6 +32,45 @@ review:
     Confirmation/to remind), comfortably clears 6. Removed the now-unused
     `appointment_scheduling` tag from tag_schema. Verified 0 DEAD, 0
     below-floor via scripts/_practice_unit_scope_check.py after the fix.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass):
+    (1) lesson01.match.002 and volume_match.007 kept the REAUTH's untagged
+    constraint, which is unit-safe but pools 1000+ course-wide content
+    words at Endless-Practice COURSE scope (off-theme pairs). Re-tagged
+    both with a semantic union [appointment_time_availability,
+    appointment_purpose, appointment_wrapup_dialogue] (part_of_speech
+    noun/adjective/preposition): exactly 6 distinct unit-scope tokens/
+    glosses (beschikbaar/Woensdag/computerhulp/Voor/Waarvoor/bevestigd).
+    confirmation_reading was deliberately left OUT of the union: at course
+    scope it carries unit03's 'woensdag' (identical 'Wednesday' gloss --
+    duplicate card next to this unit's 'Woensdag') and unit49's
+    'bevestiging' ('the confirmation', near-duplicate of 'Bevestiging').
+    Verb POS was left out to keep course-wide is/Is ('is'/'is') out.
+    Course extras are appointment-themed (tien/uur/om/afspraak/goed/Mooi/
+    Dank/fijn); the goed/Mooi/fijn gloss proximity ('good'/'nice; good'/
+    'nice') is a known residual, only visible if two of them are sampled
+    into one course-scope instance. The two templates keep identical pools
+    distinguished by text_block, per this file's own REAUTH precedent.
+    (2) Tiers were 1 recognition / 2 structured / 1 production; brought all
+    three to 3 live: recognition += lesson02.choose.001
+    ([appointment_time_availability, appointment_purpose], 5 unit glosses)
+    and lesson03.listen.001 (appointment_purpose, 3 unit glosses exactly at
+    the MC floor -- computer help / for / for what;what for; bare-word
+    frame so defect-1.22-safe); structured += lesson02.order.002 ('Ik ben
+    woensdag {item}.' anchored on the single-member job_beschikbaar_single
+    tag -- course-wide pool is exactly 'beschikbaar' (a1+a2 carry the same
+    token), deterministic and grammatical; lowercase 'woensdag' in the
+    frame is correct Dutch and is not a slot candidate, so no defect-1.14
+    self-reference); production += lesson05.translate.001
+    (confirmation_reading nouns, unit scope = computerhulp/bevestigd/
+    Bevestiging -- the tag is safe in TRANSLATION even though it was
+    excluded from the matching union, because a bare-word translation
+    prompt always names the one exact gloss being asked for, so
+    course-scope near-duplicates never collide inside one instance) and
+    lesson06.translate.001 (appointment_wrapup_dialogue
+    verb -> herinneren, single-member is fine for translation, no candidate
+    floor). Lessons 01/04 have no own backfilled lexemes; lesson01 keeps
+    only its original three untagged/broad templates.
 tag_schema:
   part_of_speech:
   - symbol
@@ -44,20 +83,44 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - appointment_time_availability
+    - appointment_purpose
+    - appointment_wrapup_dialogue
+    - confirmation_reading
+    - job_beschikbaar_single
 slot_presets:
-  unit_word:
+  appointment_match_word: &u46_appointment_match_word
     language_code: nl
-    part_of_speech:
-    - symbol
-    - noun
-    - proper_noun
-    - pronoun
-    - verb
-    - adjective
-    - adverb
-    - preposition
-    - particle
-    - phrase
+    part_of_speech: [noun, adjective, preposition]
+    agreement_tags:
+      semantic: [appointment_time_availability, appointment_purpose, appointment_wrapup_dialogue]
+  appointment_choose_word: &u46_appointment_choose_word
+    language_code: nl
+    part_of_speech: [noun, adjective, preposition]
+    agreement_tags:
+      semantic: [appointment_time_availability, appointment_purpose]
+  appointment_purpose_word: &u46_appointment_purpose_word
+    language_code: nl
+    part_of_speech: [noun, preposition]
+    agreement_tags:
+      semantic: [appointment_purpose]
+  beschikbaar_single: &u46_beschikbaar_single
+    language_code: nl
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: [job_beschikbaar_single]
+  confirmation_noun: &u46_confirmation_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [confirmation_reading]
+  appointment_wrapup_verb: &u46_appointment_wrapup_verb
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: [appointment_wrapup_dialogue]
 templates:
 - content_key: practice.en-nl.nl.a1.unit46.lesson01.choose.001
   lesson_content_key: nl.a1.unit46.lesson01.afspraak_maken
@@ -94,23 +157,12 @@ templates:
     language_code: nl
     direction: ltr
   slots:
-    first: &unit46_match_word
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second: *unit46_match_word
-    third: *unit46_match_word
-    fourth: *unit46_match_word
-    fifth: *unit46_match_word
-    sixth: *unit46_match_word
+    first: *u46_appointment_match_word
+    second: *u46_appointment_match_word
+    third: *u46_appointment_match_word
+    fourth: *u46_appointment_match_word
+    fifth: *u46_appointment_match_word
+    sixth: *u46_appointment_match_word
   slot_relations:
   - kind: distinct
     slots:
@@ -174,23 +226,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first: &unit46_match_word_007
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second: *unit46_match_word_007
-    third: *unit46_match_word_007
-    fourth: *unit46_match_word_007
-    fifth: *unit46_match_word_007
-    sixth: *unit46_match_word_007
+    first: *u46_appointment_match_word
+    second: *u46_appointment_match_word
+    third: *u46_appointment_match_word
+    fourth: *u46_appointment_match_word
+    fifth: *u46_appointment_match_word
+    sixth: *u46_appointment_match_word
   slot_relations:
   - kind: distinct
     slots:
@@ -211,5 +252,92 @@ templates:
     - sixth
   feedback_frame:
     text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit46.lesson02.choose.001
+  lesson_content_key: nl.a1.unit46.lesson02.tijd_beschikbaar
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u46_appointment_choose_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is an appointment word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit46.lesson02.order.002
+  lesson_content_key: nl.a1.unit46.lesson02.tijd_beschikbaar
+  type: word_order
+  frame:
+    text: Ik ben woensdag {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u46_beschikbaar_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik ben woensdag {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik ben woensdag {item}. -- I am {item} on Wednesday.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit46.lesson03.listen.001
+  lesson_content_key: nl.a1.unit46.lesson03.computerhulp
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u46_appointment_purpose_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the word you heard.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit46.lesson05.translate.001
+  lesson_content_key: nl.a1.unit46.lesson05.bevestiging_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u46_confirmation_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit46.lesson06.translate.001
+  lesson_content_key: nl.a1.unit46.lesson06.omar_helpt_herinneren
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u46_appointment_wrapup_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
     language_code: en
     direction: ltr
