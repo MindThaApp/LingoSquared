@@ -6,8 +6,42 @@ unit_content_key: nl.a1.unit44.noodgevallen
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 44. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 44. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass):
+    (1) lesson01.match.002 was 4 slots (below the AUTHORING_GUIDE #16
+    6-pair floor) with a bare-POS constraint that pooled the whole level's
+    vocab at Endless-Practice COURSE scope -- widened to 6 slots over a
+    semantic union [emergency_help, emergency_safety_noun_lesson,
+    emergency_reading] (part_of_speech noun): exactly 6 distinct unit-scope
+    tokens/glosses (hulp/brand/alarmnummer/nooduitgang/brandweer/
+    medewerker), course scope adds only taalcafe+bibliotheek. The
+    politie/Politie case-duplicate pair (identical 'police' gloss, both
+    tagged only emergency_service_noun_lesson) is deliberately excluded
+    from every matching pool -- two identical cards otherwise.
+    (2) Each tier had only 1 live template; brought all three tiers to 3
+    live: recognition += lesson03.choose.001 (emergency_service_noun_lesson
+    nouns -- 4 tokens collapse to 3 distinct glosses police/ambulance/fire
+    brigade, exactly at the MC floor and self-consistent since the
+    politie/Politie gloss dup collapses in options) and lesson02.listen.001
+    ([emergency_help, emergency_safety_noun_lesson] nouns, 4 unit glosses,
+    zero course-scope extras, bare-word frame so defect-1.22-safe);
+    structured += lesson03.order.002 ('Ik bel de {item}.' over
+    emergency_service_noun_lesson nouns -- course-wide pool is exactly
+    politie/ambulance/brandweer/Politie, each grammatical in the frame;
+    frame words Ik/bel/de are not candidates, so no defect-1.14
+    self-reference) and lesson04.match.001 ([emergency_help,
+    emergency_safety_noun_lesson, emergency_wrapup_dialogue] nouns+
+    adjectives = 6 unit tokens incl. lesson04's own Rustig; pool differs
+    from lesson01.match.002's by Rustig-vs-brandweer); production +=
+    lesson02.translate.002 (safety nouns alarmnummer/nooduitgang -- Bel
+    'Call (imperative)' left out of translation pools, awkward as a bare
+    typed answer) and lesson05.translate.001 (emergency_reading nouns, 5
+    unit tokens incl. lesson05's own medewerker). Lesson06 keeps no
+    anchored template: its only own lexeme is the symbol '112'
+    (self-glossing, unusable in any tier's pool).
 tag_schema:
   part_of_speech:
   - symbol
@@ -23,20 +57,41 @@ tag_schema:
   agreement_tags:
     semantic:
     - emergency_help
+    - emergency_safety_noun_lesson
+    - emergency_service_noun_lesson
+    - emergency_reading
+    - emergency_wrapup_dialogue
 slot_presets:
-  unit_word:
+  emergency_match_noun: &u44_emergency_match_noun
     language_code: nl
-    part_of_speech:
-    - symbol
-    - noun
-    - proper_noun
-    - pronoun
-    - verb
-    - adjective
-    - adverb
-    - preposition
-    - particle
-    - phrase
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [emergency_help, emergency_safety_noun_lesson, emergency_reading]
+  emergency_review_word: &u44_emergency_review_word
+    language_code: nl
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: [emergency_help, emergency_safety_noun_lesson, emergency_wrapup_dialogue]
+  emergency_service_noun: &u44_emergency_service_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [emergency_service_noun_lesson]
+  emergency_basic_noun: &u44_emergency_basic_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [emergency_help, emergency_safety_noun_lesson]
+  emergency_safety_noun: &u44_emergency_safety_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [emergency_safety_noun_lesson]
+  emergency_reading_noun: &u44_emergency_reading_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [emergency_reading]
 templates:
 - content_key: practice.en-nl.nl.a1.unit44.lesson01.choose.001
   lesson_content_key: nl.a1.unit44.lesson01.hulp_en_brand
@@ -69,58 +124,16 @@ templates:
   lesson_content_key: nl.a1.unit44.lesson01.hulp_en_brand
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: *u44_emergency_match_noun
+    second: *u44_emergency_match_noun
+    third: *u44_emergency_match_noun
+    fourth: *u44_emergency_match_noun
+    fifth: *u44_emergency_match_noun
+    sixth: *u44_emergency_match_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -128,6 +141,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -135,6 +150,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -162,6 +179,133 @@ templates:
       - particle
       - phrase
       agreement_tags: {semantic: emergency_help}
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson02.listen.001
+  lesson_content_key: nl.a1.unit44.lesson02.alarmnummer_en_nooduitgang
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u44_emergency_basic_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the word you heard.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson02.translate.002
+  lesson_content_key: nl.a1.unit44.lesson02.alarmnummer_en_nooduitgang
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u44_emergency_safety_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson03.choose.001
+  lesson_content_key: nl.a1.unit44.lesson03.politie_ambulance_brandweer
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u44_emergency_service_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is an emergency service from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson03.order.002
+  lesson_content_key: nl.a1.unit44.lesson03.politie_ambulance_brandweer
+  type: word_order
+  frame:
+    text: Ik bel de {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u44_emergency_service_noun
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik bel de {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik bel de {item}. -- I am calling the {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson04.match.001
+  lesson_content_key: nl.a1.unit44.lesson04.brand_bij_het_taalcafe
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Second review matching set for this unit.
+      language_code: en
+      direction: ltr
+  slots:
+    first: *u44_emergency_review_word
+    second: *u44_emergency_review_word
+    third: *u44_emergency_review_word
+    fourth: *u44_emergency_review_word
+    fifth: *u44_emergency_review_word
+    sixth: *u44_emergency_review_word
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit44.lesson05.translate.001
+  lesson_content_key: nl.a1.unit44.lesson05.lezen_over_de_brand
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u44_emergency_reading_noun
   answer_derivation:
     kind: slot_text
     slot: item

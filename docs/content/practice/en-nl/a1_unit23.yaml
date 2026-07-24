@@ -56,15 +56,28 @@ review:
     numbers, not payment words) but not inaccurate enough to warrant a
     learner-facing rewrite; flagging for the reviewer. Verified via
     scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
-    this pass (was 1 DEAD, 0 below-floor)."
+    this pass (was 1 DEAD, 0 below-floor).
+
+    2026-07-24 tier-thinness polish pass (production tier had only 2 live
+    templates, both the fixed 'It costs {item} euros in total.' sentence):
+    added lesson06.translate.003, a bare-word translation over the
+    bill_dialogue tag narrowed to verbs (6 unit tokens: betaalt/betalen/
+    delen/geholpen/hebt/vragen, all with distinct glosses; course scope
+    adds Kan/Zullen/is/kost/pinnen, all safe varied bare-word prompts).
+    Deliberately did NOT use payment_verb for this typed exercise: its
+    pool pairs betalen 'to pay' with afrekenen 'to settle the bill; to
+    pay', and a learner shown the bare prompt 'to pay' who types
+    afrekenen would be marked wrong -- fine for recognition (where those
+    templates already use it), a mis-grade risk for production."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, payment_verb, payment_noun]
+    semantic: [number, payment_verb, payment_noun, bill_dialogue]
 slot_presets:
   number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
   payment_verb: &payment_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: payment_verb}}
   payment_noun: &payment_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun}}
+  bill_verb: &bill_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bill_dialogue}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit23.lesson01.translate.001
     lesson_content_key: nl.a1.unit23.lesson01.hoeveel_kost_het
@@ -208,3 +221,16 @@ templates:
     slots: {item: *payment_verb}
     answer_derivation: {kind: render_frame, frame: {text: "Mag ik {item}?", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is what is being asked for permission.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit23.lesson06.translate.003
+    lesson_content_key: nl.a1.unit23.lesson06.rekening_vragen
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *bill_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}

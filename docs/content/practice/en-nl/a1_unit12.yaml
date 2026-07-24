@@ -61,6 +61,26 @@ review:
     `lesson05.een_kort_verslag_lezen`, the closest earlier lesson already
     proven to resolve for the same tag (used by that lesson's own template
     above) -- a safe, no-forward-reference anchor.
+
+    2026-07-24 tier-thinness polish pass (structured tier had only 1 live
+    template): (a) widened lesson01.match.003 from 4 slots over
+    participle_hebben to the standard 6 slots over the participle_hebben +
+    participle_zijn union (6 distinct tokens / 6 distinct glosses at unit
+    scope, zero course-scope extras). This deliberately relaxes the
+    original "never combine hebben-group and zijn-group in one
+    matching_pairs pair set" audit claim: that rule exists to prevent
+    ungrammatical GENERATIVE sentences (*Ik heb gegaan), and matching
+    bare participles to glosses builds no sentence, so the failure mode
+    cannot occur here. (b) added lesson03.order.003 "Ik ben naar de
+    supermarkt {item}." (participle_zijn; both members grammatical,
+    course pool == unit pool) and lesson05.order.002 "Ik heb veel
+    {item}." (participle_hebben; veel makes all four participles natural
+    without an object -- the reason the original pass authored no bare
+    "Ik heb {item}." frame -- and the capitalized Ik tile pins a unique
+    word order). Deliberately did NOT author a recent_time word_order:
+    with those adverbs both "Gisteren heb ik gewerkt" and "Ik heb
+    gisteren gewerkt" are valid orders, so any such frame mis-grades a
+    correct learner.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -70,6 +90,7 @@ slot_presets:
   infinitive_hebben: &infinitive_hebben {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: infinitive_hebben}}
   participle_zijn: &participle_zijn {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: participle_zijn}}
   recent_time: &recent_time {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: recent_time}}
+  participle_all: &participle_all {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: [participle_hebben, participle_zijn]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit12.lesson01.choose.001
     lesson_content_key: nl.a1.unit12.lesson01.voltooide_tijd
@@ -93,10 +114,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit12.lesson01.match.003
     lesson_content_key: nl.a1.unit12.lesson01.voltooide_tijd
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
-    slots: {first: *participle_hebben, second: *participle_hebben, third: *participle_hebben, fourth: *participle_hebben}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *participle_all, second: *participle_all, third: *participle_all, fourth: *participle_all, fifth: *participle_all, sixth: *participle_all}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each past participle with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson02.choose.001
     lesson_content_key: nl.a1.unit12.lesson02.met_hebben
@@ -154,6 +175,13 @@ templates:
     slots: {item: *participle_zijn}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson03.order.003
+    lesson_content_key: nl.a1.unit12.lesson03.met_zijn
+    type: word_order
+    frame: {text: "Ik ben naar de supermarkt {item}.", language_code: nl, direction: ltr}
+    slots: {item: *participle_zijn}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik ben naar de supermarkt {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is a past participle that takes zijn.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson04.translate.001
     lesson_content_key: nl.a1.unit12.lesson04.wanneer_gebeurde_het
     type: translation
@@ -186,6 +214,13 @@ templates:
     slots: {item: *participle_hebben}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a past participle from the account.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit12.lesson05.order.002
+    lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
+    type: word_order
+    frame: {text: "Ik heb veel {item}.", language_code: nl, direction: ltr}
+    slots: {item: *participle_hebben}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik heb veel {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is a past participle that takes hebben.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson06.listen.001
     lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
     type: listen_select

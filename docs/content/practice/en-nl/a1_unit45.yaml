@@ -6,8 +6,45 @@ unit_content_key: nl.a1.unit45.kwijt
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 45. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 45. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass):
+    (1) lesson01.match.002 and its volume_match.008 duplicate were 4 slots
+    (below the AUTHORING_GUIDE #16 6-pair floor) with bare-POS constraints
+    that pooled the whole level's vocab at Endless-Practice COURSE scope --
+    widened both to 6 slots over a semantic union [lost_found_status,
+    lost_item_noun_lesson, lost_item_wrapup_dialogue] (part_of_speech
+    noun/adjective/adverb), which is exactly this unit's full own 6-token
+    inventory (kwijt/gevonden/portemonnee/Telefoon/spannend/genoeg, 6
+    distinct glosses). The two templates keep identical pools distinguished
+    by text_block, same as this file's pre-existing volume-duplicate
+    precedent. HONEST LIMIT: at COURSE scope the union still admits
+    unit34's lowercase 'telefoon' ('the phone') next to this unit's
+    'Telefoon' ('phone') -- a near-duplicate card pair Endless Practice
+    could sample together; unavoidable because every tag that carries
+    'gevonden' or 'Telefoon' also carries unit34's telefoon, and still a
+    strict improvement over the previous whole-level pull (which contained
+    the same pair plus ~1000 off-theme tokens). Course extras are otherwise
+    lost-item-themed (rugzak/balie/jas) plus Goed/hier/Vandaag/al.
+    (2) Tiers were 1 recognition / 2 structured / 1 production; brought all
+    three to 3 live: recognition += lesson06.choose.001 ([lost_found_status,
+    lost_item_wrapup_dialogue] adjectives+adverbs = kwijt/gevonden/spannend/
+    genoeg, 4 unit glosses -- deliberately phone-free, since a course-scope
+    MC pool holding both Telefoon 'phone' and telefoon 'the phone' can
+    render an ambiguous option list) and lesson01.listen.004 (same
+    4-gloss pool, bare-word frame so defect-1.22-safe); structured +=
+    lesson02.order.001 ('Ik ben mijn {item} kwijt.' anchored on the
+    schermtijd_telefoon_single tag -- course-wide pool is exactly
+    telefoon/Telefoon, both grammatical in the frame; frame words are not
+    candidates, so no defect-1.14 self-reference; unit-scope render shows
+    mid-sentence 'Telefoon', a cosmetic wart inherited from the token
+    itself); production += lesson02.translate.002 (lost_item_noun_lesson
+    nouns portemonnee/Telefoon) and lesson06.translate.002
+    ([lost_item_wrapup_dialogue] adjectives+adverbs kwijt/spannend/genoeg,
+    pool distinct from lesson01.translate.003's kwijt/gevonden). Lessons
+    03/04/05 have no own backfilled lexemes and keep no anchored template.
 tag_schema:
   part_of_speech:
   - symbol
@@ -23,20 +60,35 @@ tag_schema:
   agreement_tags:
     semantic:
     - lost_found_status
+    - lost_item_noun_lesson
+    - lost_item_wrapup_dialogue
+    - schermtijd_telefoon_single
 slot_presets:
-  unit_word:
+  lost_unit_word: &u45_lost_unit_word
     language_code: nl
-    part_of_speech:
-    - symbol
-    - noun
-    - proper_noun
-    - pronoun
-    - verb
-    - adjective
-    - adverb
-    - preposition
-    - particle
-    - phrase
+    part_of_speech: [noun, adjective, adverb]
+    agreement_tags:
+      semantic: [lost_found_status, lost_item_noun_lesson, lost_item_wrapup_dialogue]
+  lost_status_word: &u45_lost_status_word
+    language_code: nl
+    part_of_speech: [adjective, adverb]
+    agreement_tags:
+      semantic: [lost_found_status, lost_item_wrapup_dialogue]
+  lost_item_noun: &u45_lost_item_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [lost_item_noun_lesson]
+  lost_wrapup_word: &u45_lost_wrapup_word
+    language_code: nl
+    part_of_speech: [adjective, adverb]
+    agreement_tags:
+      semantic: [lost_item_wrapup_dialogue]
+  telefoon_single: &u45_telefoon_single
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [schermtijd_telefoon_single]
 templates:
 - content_key: practice.en-nl.nl.a1.unit45.lesson01.choose.001
   lesson_content_key: nl.a1.unit45.lesson01.kwijt_en_gevonden
@@ -69,58 +121,16 @@ templates:
   lesson_content_key: nl.a1.unit45.lesson01.kwijt_en_gevonden
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: *u45_lost_unit_word
+    second: *u45_lost_unit_word
+    third: *u45_lost_unit_word
+    fourth: *u45_lost_unit_word
+    fifth: *u45_lost_unit_word
+    sixth: *u45_lost_unit_word
   slot_relations:
   - kind: distinct
     slots:
@@ -128,6 +138,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -135,6 +147,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -173,7 +187,7 @@ templates:
   lesson_content_key: nl.a1.unit45.lesson01.kwijt_en_gevonden
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
     text_blocks:
@@ -181,54 +195,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: *u45_lost_unit_word
+    second: *u45_lost_unit_word
+    third: *u45_lost_unit_word
+    fourth: *u45_lost_unit_word
+    fifth: *u45_lost_unit_word
+    sixth: *u45_lost_unit_word
   slot_relations:
   - kind: distinct
     slots:
@@ -236,6 +208,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -243,7 +217,96 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit45.lesson01.listen.004
+  lesson_content_key: nl.a1.unit45.lesson01.kwijt_en_gevonden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u45_lost_status_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the word you heard.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit45.lesson02.order.001
+  lesson_content_key: nl.a1.unit45.lesson02.telefoon_rugzak_portemonnee
+  type: word_order
+  frame:
+    text: Ik ben mijn {item} kwijt.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u45_telefoon_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik ben mijn {item} kwijt.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik ben mijn {item} kwijt. -- I have lost my {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit45.lesson02.translate.002
+  lesson_content_key: nl.a1.unit45.lesson02.telefoon_rugzak_portemonnee
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u45_lost_item_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit45.lesson06.choose.001
+  lesson_content_key: nl.a1.unit45.lesson06.sander_checkt_zijn_portemonnee
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u45_lost_status_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit45.lesson06.translate.002
+  lesson_content_key: nl.a1.unit45.lesson06.sander_checkt_zijn_portemonnee
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u45_lost_wrapup_word
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
     language_code: en
     direction: ltr
