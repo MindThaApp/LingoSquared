@@ -60,7 +60,15 @@ review:
     frames have no literal surrounding text, so mixing names and countries in one matcher carries no
     grammaticality risk at either unit or course scope. tag_schema updated: removed
     `volume_en_nl_a1_unit01_item_{02,07,12}_single` (no longer referenced) and added `place_name` (needed
-    by the new union; `person_name`/`country` were already declared).'
+    by the new union; `person_name`/`country` were already declared).
+
+
+    **Tier-polish, 2026-07-24 (wave 2, tier-thinness pass)**: recognition tier had only 1 live template
+    (lesson02 listen.001). Added two multiple_choice templates over unit-native pools: lesson02.choose.004
+    (greeting phrases, 5 unit tokens / 5 distinct glosses) and lesson04.choose.004 (language_or_nationality
+    adjectives Nederlands/Belgisch/Engels/Duits, 4 distinct glosses). Both bare `{item}` frames (no
+    grammaticality-in-frame risk at any scope); both tags were already declared in tag_schema. Recognition
+    tier now 3 live.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -276,6 +284,26 @@ templates:
     text: '{item} opens the exchange.'
     language_code: en
     direction: ltr
+- content_key: practice.en-nl.nl.a1.unit01.lesson02.choose.004
+  lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Choose the English meaning.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a greeting from this unit.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-nl.nl.a1.unit01.lesson03.order.001
   lesson_content_key: nl.a1.unit01.lesson03.namen
   type: word_order
@@ -379,6 +407,30 @@ templates:
       direction: ltr
   feedback_frame:
     text: The speaker comes from {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit01.lesson04.choose.004
+  lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Choose the English meaning.
+      language_code: en
+      direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: language_or_nationality
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} names a language or nationality from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a1.unit01.lesson05.order.001

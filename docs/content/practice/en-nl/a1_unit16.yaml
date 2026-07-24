@@ -27,11 +27,24 @@ review:
     lexeme_matches()-replicating harness against this script's actual
     output. Needs the standard fresh-context review before import. Same
     blocking dependency as every earlier en-nl pack: backfill_lexemes_en_nl.py
-    has not actually been run against a real database yet."
+    has not actually been run against a real database yet.
+
+    2026-07-24 tier-thinness polish pass (production tier had only 1 live
+    template): added two bare-word translations -- lesson02.translate.003
+    over symptom_hebben_pure (4 unit tokens, zero course-scope extras)
+    and lesson04.translate.002 over the pharmacy_visit tag narrowed to
+    nouns (3 unit tokens: apotheek/hoofdpijn/tablet; course scope adds 8
+    sensible nouns like apotheker/pijnstillers/tabletten, all safe as
+    varied bare-word prompts). Note the lesson01.match.003 matching_pairs
+    stays at 4 pairs: the unit has only 4 clean symptom nouns, and every
+    widening union (symptom_zijn brings the ziek/Ziek case-duplicate,
+    fever_cold brings grammar-jargon adjectives like 'bijvoeglijke') would
+    put confusable or off-theme cards in the exercise -- honest-thin by
+    the polish rubric, not fixable pack-side."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [symptom_hebben, symptom_hebben_pure, symptom_zijn]
+    semantic: [symptom_hebben, symptom_hebben_pure, symptom_zijn, pharmacy_visit]
 slot_presets:
   symptom_hebben: &symptom_hebben {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben}}
   # symptom_hebben_pure: exact-case (no capitalized "Koorts" duplicate),
@@ -40,6 +53,7 @@ slot_presets:
   # using the plain "symptom_hebben" tag unchanged.
   symptom_hebben_pure: &symptom_hebben_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben_pure}}
   symptom_zijn: &symptom_zijn {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn}}
+  pharmacy_noun: &pharmacy_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pharmacy_visit}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.order.001
     lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
@@ -75,6 +89,19 @@ templates:
     slots: {item: *symptom_hebben}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson02.translate.003
+    lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *symptom_hebben_pure}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson03.order.001
     lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
     type: word_order
@@ -107,6 +134,19 @@ templates:
     slots: {item: *symptom_hebben}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a symptom from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-nl.nl.a1.unit16.lesson04.translate.002
+    lesson_content_key: nl.a1.unit16.lesson04.bij_de_apotheek
+    type: translation
+    frame:
+      text: "{item}"
+      language_code: en
+      direction: ltr
+      slot_rendering: {item: english_gloss}
+      text_blocks:
+        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+    slots: {item: *pharmacy_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson05.listen.001
     lesson_content_key: nl.a1.unit16.lesson05.advies_lezen
     type: listen_select

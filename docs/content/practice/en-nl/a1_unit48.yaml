@@ -23,6 +23,10 @@ tag_schema:
   agreement_tags:
     semantic:
     - waste_sorting
+    - waste_bin_lesson
+    - recyclable_material_lesson
+    - waste_calendar_reading
+    - waste_sorting_wrapup_dialogue
 slot_presets:
   unit_word:
     language_code: nl
@@ -69,58 +73,26 @@ templates:
   lesson_content_key: nl.a1.unit48.lesson01.afval_scheiden
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
+    first: &u48_match_slot
       language_code: nl
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - waste_sorting
+        - waste_bin_lesson
+        - recyclable_material_lesson
+    second: *u48_match_slot
+    third: *u48_match_slot
+    fourth: *u48_match_slot
+    fifth: *u48_match_slot
+    sixth: *u48_match_slot
   slot_relations:
   - kind: distinct
     slots:
@@ -128,6 +100,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -135,6 +109,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -169,66 +145,31 @@ templates:
     text: Translate into the target language.
     language_code: en
     direction: ltr
-- content_key: practice.en-nl.nl.a1.unit48.lesson01.match.002.volume_match.005
-  lesson_content_key: nl.a1.unit48.lesson01.afval_scheiden
+- content_key: practice.en-nl.nl.a1.unit48.lesson03.match.001
+  lesson_content_key: nl.a1.unit48.lesson03.papier_en_glas
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
-    first:
+    first: &u48_theme_match_slot
       language_code: nl
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - waste_sorting
+        - waste_bin_lesson
+        - recyclable_material_lesson
+        - waste_sorting_wrapup_dialogue
+    second: *u48_theme_match_slot
+    third: *u48_theme_match_slot
+    fourth: *u48_theme_match_slot
+    fifth: *u48_theme_match_slot
+    sixth: *u48_theme_match_slot
   slot_relations:
   - kind: distinct
     slots:
@@ -236,6 +177,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -243,6 +186,106 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit48.lesson05.choose.001
+  lesson_content_key: nl.a1.unit48.lesson05.afvalkalender_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: waste_calendar_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit48.lesson06.translate.001
+  lesson_content_key: nl.a1.unit48.lesson06.lotte_hoort_het
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - waste_calendar_reading
+        - waste_sorting_wrapup_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit48.lesson01.match.002.volume_match.005
+  lesson_content_key: nl.a1.unit48.lesson01.afval_scheiden
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Second review matching set for this unit.
+      language_code: en
+      direction: ltr
+  slots:
+    first: &u48_vol_match_slot
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - waste_calendar_reading
+        - waste_sorting_wrapup_dialogue
+    second: *u48_vol_match_slot
+    third: *u48_vol_match_slot
+    fourth: *u48_vol_match_slot
+    fifth: *u48_vol_match_slot
+    sixth: *u48_vol_match_slot
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en

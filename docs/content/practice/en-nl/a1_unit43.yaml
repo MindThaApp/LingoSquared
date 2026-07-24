@@ -6,8 +6,38 @@ unit_content_key: nl.a1.unit43.seizoenen
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 43. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 43. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass):
+    (1) lesson01.match.002 was 4 slots (below the AUTHORING_GUIDE #16
+    6-pair floor) with a bare-POS constraint that pooled the whole level's
+    vocab at Endless-Practice COURSE scope -- widened to 6 slots over a
+    semantic union [season_noun_lesson, season_reading] (part_of_speech
+    noun): 7 distinct unit-scope tokens/glosses (seizoen/lente/zomer/
+    herfst/winter/gesprek/seizoenen; 'the season' vs 'seasons' is an
+    accepted sg/pl discrimination), course scope adds only zwemmen+tulpen.
+    (2) Each tier had only 1 live template; brought all three tiers to 3
+    live: recognition += lesson02.choose.001 (season_noun_lesson, 5 unit
+    glosses) and lesson05.listen.001 (season_reading nouns, 6 unit glosses,
+    bare-word frame so defect-1.22-safe); structured += lesson05.match.002
+    ([season_reading, season_wrapup_dialogue] nouns, 9 unit tokens) and
+    lesson02.match.003 ([season_noun_lesson, season_wrapup_dialogue] nouns,
+    8 unit tokens, zero course-scope extras) -- all three matching pools
+    are pairwise distinct; production += lesson02.translate.002
+    (union nouns, 7 unit tokens, pool distinct from lesson01.translate.003's
+    5) and lesson03.translate.001 (activity_lesson verb -> schaatsen,
+    single-member is fine for translation, no candidate floor). Honest
+    limits: no word_order/fill_in_blank was addable -- 'seizoen' (het-word)
+    carries every one of this unit's semantic tags while the four season
+    names are de-words, so no article-bearing frame is grammatical for any
+    achievable pool, and the unit has no single-member anchor tags; the
+    structured tier is therefore matching_pairs-only. Lesson06's Vier/
+    favorieten stay out of translation pools deliberately (bare 'Vier' would
+    force a capitalized typed answer for 'four'). Lessons 04/06 keep no
+    anchored template (lesson04 has no own lexemes; lesson06's two tokens
+    are covered by lesson05.match.002's pool).
 tag_schema:
   part_of_speech:
   - symbol
@@ -23,20 +53,40 @@ tag_schema:
   agreement_tags:
     semantic:
     - season_noun_lesson
+    - season_reading
+    - season_wrapup_dialogue
+    - activity_lesson
 slot_presets:
-  unit_word:
+  season_noun: &u43_season_noun
     language_code: nl
-    part_of_speech:
-    - symbol
-    - noun
-    - proper_noun
-    - pronoun
-    - verb
-    - adjective
-    - adverb
-    - preposition
-    - particle
-    - phrase
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [season_noun_lesson]
+  season_reading_noun: &u43_season_reading_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [season_reading]
+  season_union_noun: &u43_season_union_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [season_noun_lesson, season_reading]
+  season_review_noun: &u43_season_review_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [season_reading, season_wrapup_dialogue]
+  season_wrapup_noun: &u43_season_wrapup_noun
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: [season_noun_lesson, season_wrapup_dialogue]
+  activity_verb: &u43_activity_verb
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: [activity_lesson]
 templates:
 - content_key: practice.en-nl.nl.a1.unit43.lesson01.choose.001
   lesson_content_key: nl.a1.unit43.lesson01.lente_en_zomer
@@ -69,58 +119,16 @@ templates:
   lesson_content_key: nl.a1.unit43.lesson01.lente_en_zomer
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
   slots:
-    first:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: *u43_season_union_noun
+    second: *u43_season_union_noun
+    third: *u43_season_union_noun
+    fourth: *u43_season_union_noun
+    fifth: *u43_season_union_noun
+    sixth: *u43_season_union_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -128,6 +136,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -135,6 +145,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -167,5 +179,153 @@ templates:
     slot: item
   feedback_frame:
     text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson02.choose.001
+  lesson_content_key: nl.a1.unit43.lesson02.herfst_en_winter
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u43_season_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a season word from this unit.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson02.translate.002
+  lesson_content_key: nl.a1.unit43.lesson02.herfst_en_winter
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u43_season_union_noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson02.match.003
+  lesson_content_key: nl.a1.unit43.lesson02.herfst_en_winter
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Third review matching set for this unit.
+      language_code: en
+      direction: ltr
+  slots:
+    first: *u43_season_wrapup_noun
+    second: *u43_season_wrapup_noun
+    third: *u43_season_wrapup_noun
+    fourth: *u43_season_wrapup_noun
+    fifth: *u43_season_wrapup_noun
+    sixth: *u43_season_wrapup_noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson03.translate.001
+  lesson_content_key: nl.a1.unit43.lesson03.activiteiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u43_activity_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson05.listen.001
+  lesson_content_key: nl.a1.unit43.lesson05.lezen_seizoenen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *u43_season_reading_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is the word you heard.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.a1.unit43.lesson05.match.002
+  lesson_content_key: nl.a1.unit43.lesson05.lezen_seizoenen
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Second review matching set for this unit.
+      language_code: en
+      direction: ltr
+  slots:
+    first: *u43_season_review_noun
+    second: *u43_season_review_noun
+    third: *u43_season_review_noun
+    fourth: *u43_season_review_noun
+    fifth: *u43_season_review_noun
+    sixth: *u43_season_review_noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word with its English meaning.
     language_code: en
     direction: ltr
