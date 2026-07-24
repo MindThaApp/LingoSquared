@@ -4,9 +4,32 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit30.technology
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: >-
+    TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition, structured and
+    production tiers were 2/2/1 live. Added: lesson01 tech_use_gloss.003
+    (MC on the existing tech_use_word preset, 3 distinct unit glosses
+    mobile phone/computer/internet, exactly at the MC floor) and
+    tech_use_translate.004 (bare-word translation, same preset); lesson02
+    tech_online_gloss.002 (MC on a new tech_online_word preset = union of
+    the unit's own tech_topic_word + online_habit_word tags --
+    online_habit_word reaches the unit's own lesson02 دانلود "download" --
+    7 distinct unit tokens/glosses) and send_verb_translate.003
+    (bare-word translation on phone_action_verb; honest-thin at unit
+    scope: only می‌فرستم is unit-native, می‌زنم/می‌گیرم are reused, but
+    live and unit-taught; course pool's 3 glosses are all distinct);
+    lesson05 tech_reading_pair.001 (matching_pairs, 6 slots, on
+    tech_online_word -- 7 distinct unit tokens/glosses over the 6-pair
+    floor; course scope adds only tech/online nouns: video, messaging
+    app, game). online_habit_word added to tag_schema. All new frames are
+    bare slot placeholders or pure matching placeholders -- no new Dari
+    strings, no literal-text frames. Tiers now 4/3/3 live. Pre-existing
+    below-MC-floor phone_action_gloss.001 (1 unit gloss) left as-is (not
+    in this dispatch); the new MCs give the recognition tier 3
+    floor-passing templates regardless. Status flipped back to unreviewed
+    pending fresh-context review of the additions.
+
     Authored 2026-07-11, same A1 units 25-30 practice-pool
     depth-extension pass as this bundle's a1_unit25.yaml sibling (see
     that file's notes for the shared pass context) -- the last unit in
@@ -55,11 +78,14 @@ review:
 tag_schema:
   part_of_speech: [noun, verb]
   agreement_tags:
-    semantic: [tech_topic_word, tech_use_word, phone_action_verb]
+    semantic: [tech_topic_word, tech_use_word, phone_action_verb, online_habit_word]
 slot_presets:
   tech_topic_word: &tech_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: tech_topic_word}}
   tech_use_word: &tech_use_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: tech_use_word}}
   phone_action_verb: &phone_action_verb {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: phone_action_verb}}
+  # Union of the unit's own tags: online_habit_word reaches the unit's own
+  # lesson02 lexeme دانلود ("download"), giving 7 distinct unit-scoped tokens.
+  tech_online_word: &tech_online_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [tech_topic_word, online_habit_word]}}
 templates:
   # Lesson 1: device vocabulary.
   - content_key: practice.en-prs.prs.a1.unit30.lesson01.tech_gloss.001
@@ -77,6 +103,20 @@ templates:
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit30.lesson01.tech_use_gloss.003
+    lesson_content_key: prs.a1.unit30.lesson01.device_vocabulary
+    type: multiple_choice
+    frame: {text: "{tech_use_word}", language_code: prs, direction: rtl}
+    slots: {tech_use_word: *tech_use_word}
+    answer_derivation: {kind: slot_gloss, slot: tech_use_word}
+    feedback_frame: {text: "{tech_use_word} is a device or service you use every day.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit30.lesson01.tech_use_translate.004
+    lesson_content_key: prs.a1.unit30.lesson01.device_vocabulary
+    type: translation
+    frame: {text: "{tech_use_word}", language_code: en, direction: ltr, slot_rendering: {tech_use_word: english_gloss}}
+    slots: {tech_use_word: *tech_use_word}
+    answer_derivation: {kind: slot_text, slot: tech_use_word}
+    feedback_frame: {text: "{tech_use_word} is the Dari word for this.", language_code: en, direction: ltr}
 
   # Lesson 2: phone actions.
   - content_key: practice.en-prs.prs.a1.unit30.lesson02.phone_action_gloss.001
@@ -86,6 +126,20 @@ templates:
     slots: {phone_action_verb: *phone_action_verb}
     answer_derivation: {kind: slot_gloss, slot: phone_action_verb}
     feedback_frame: {text: "{phone_action_verb} is something you do with a phone.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit30.lesson02.tech_online_gloss.002
+    lesson_content_key: prs.a1.unit30.lesson02.phone_actions
+    type: multiple_choice
+    frame: {text: "{tech_online_word}", language_code: prs, direction: rtl}
+    slots: {tech_online_word: *tech_online_word}
+    answer_derivation: {kind: slot_gloss, slot: tech_online_word}
+    feedback_frame: {text: "{tech_online_word} belongs to this unit's technology vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-prs.prs.a1.unit30.lesson02.send_verb_translate.003
+    lesson_content_key: prs.a1.unit30.lesson02.phone_actions
+    type: translation
+    frame: {text: "{phone_action_verb}", language_code: en, direction: ltr, slot_rendering: {phone_action_verb: english_gloss}}
+    slots: {phone_action_verb: *phone_action_verb}
+    answer_derivation: {kind: slot_text, slot: phone_action_verb}
+    feedback_frame: {text: "{phone_action_verb} is the Dari verb form for this phone action.", language_code: en, direction: ltr}
 
   # Lesson 3: how often do you use it?
   - content_key: practice.en-prs.prs.a1.unit30.lesson03.daily_use_order.001
@@ -95,6 +149,16 @@ templates:
     slots: {tech_use_word: *tech_use_word}
     answer_derivation: {kind: render_frame, frame: {text: "من هر روز از {tech_use_word} استفاده می‌کنم", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: من هر روز از [device] استفاده می‌کنم (I use the [device] every day).", language_code: en, direction: ltr}
+
+  # Lesson 5: technology reading.
+  - content_key: practice.en-prs.prs.a1.unit30.lesson05.tech_reading_pair.001
+    lesson_content_key: prs.a1.unit30.lesson05.reading_technology
+    type: matching_pairs
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *tech_online_word, word_two: *tech_online_word, word_three: *tech_online_word, word_four: *tech_online_word, word_five: *tech_online_word, word_six: *tech_online_word}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit30.lesson06.tech_translate.001

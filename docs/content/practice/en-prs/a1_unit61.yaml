@@ -24,9 +24,14 @@ review:
     است."). bank_notice_word (حداقل) is course-wide 2 (حداقل, ماهانه --
     minimum/monthly, not interchangeable) and formal_possessive_word (قدتان)
     is course-wide 14 nouns -- neither is single, so both stay in
-    bare-word translation only. 8 templates total (2 structured via real
-    single-member anchors, plus 3 recognition + 3 production) --
-    capacity-limited, not padded. No mis-glossed lexemes found. No
+    bare-word translation only. 2026-07-24 polish wave 2: added a 3rd
+    structured word_order (lesson06.order.001, "{item} چند سانتی‌متر است؟" --
+    the unit's own wrap-up question قدتان چند سانتی‌متر است؟; slot uses the
+    lexeme's OTHER tag height_word, course-wide exactly {قد، قدتان}, both
+    grammatical in a how-many-centimetres question, so the frame is
+    course-scope safe where formal_possessive_word was not; height_word
+    added to tag_schema). Structured tier now 3 live; lesson06 gains a
+    structured anchor. 9 templates total. No mis-glossed lexemes found. No
     listen_select (no prs TTS).
 tag_schema:
   part_of_speech:
@@ -46,6 +51,7 @@ tag_schema:
     - measure_unit_word
     - bank_notice_word
     - formal_possessive_word
+    - height_word
 slot_presets:
   unit_word: &uw
     language_code: prs
@@ -62,6 +68,11 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: measure_unit_word
+  height: &hw
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: height_word
 templates:
 # ---- recognition ----
 - content_key: practice.en-prs.prs.a1.unit61.lesson01.choose.001
@@ -120,6 +131,19 @@ templates:
     frame: {text: 'حداقل قد صد و ده {item} است.', language_code: prs, direction: rtl}
   feedback_frame:
     text: 'Word order: حداقل قد صد و ده سانتی‌متر است. (Minimum height is 110 centimetres.)'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit61.lesson06.order.001
+  lesson_content_key: prs.a1.unit61.lesson06.wrap_up
+  type: word_order
+  frame: {text: '{item} چند سانتی‌متر است؟', language_code: prs, direction: rtl}
+  slots:
+    item: *hw
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} چند سانتی‌متر است؟', language_code: prs, direction: rtl}
+  feedback_frame:
+    text: 'Word order: قدتان چند سانتی‌متر است؟ (How many centimetres is your height?)'
     language_code: en
     direction: ltr
 # ---- production ----

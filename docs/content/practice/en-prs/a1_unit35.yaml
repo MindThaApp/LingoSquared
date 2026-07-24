@@ -4,9 +4,23 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit35.post
 review:
-  status: reviewed
-  fresh_context: true
-  notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
+    (1) lesson01.post_noun_gloss.001 (multiple_choice, post_word narrowed to part_of_speech noun -- نامه/پارسل/پُسته, 3
+    distinct unit glosses at the floor; distinct POOL from post_gloss.001''s noun+adjective pool which also holds پُستی);
+    (2) lesson04.post_where_gloss.001 (multiple_choice, frame "{post_word} کجاست" over the same noun pool -- کجاست is
+    course-taught (بانک کجاست/بازار کجاست) and "نامه/پارسل/پُسته کجاست" all read naturally; course scope adds only b1''s
+    duplicate نامه, same token); (3) lesson02.send_item_translate.001 (translation, slotted-English-frame + render_frame
+    shape used across en-fa/nl-en: "I send a {sendable_item_word}." -> "{sendable_item_word} روان می‌کنم", the unit''s own
+    taught sentences "نامه روان می‌کنم."/"پارسل روان می‌کنم." verbatim; prompt varies with the answer so the multi-member
+    pool is determinate, and both glosses (letter/parcel) render cleanly in the English frame). Recognition now 3 live,
+    production 3 live. No new self-reference (کجاست/روان/می‌کنم are not slot candidates). Verified: practice-validate 0
+    errors; _practice_unit_scope_check.py 0 DEAD / tier-short lines gone for this file (the two pre-existing 4-pair
+    matching FLOOR lines are out of this dispatch''s scope and untouched); _practice_self_reference_check.py 0 hits;
+    check_dari_register.py 0 new findings. Prior history below.
+
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
 
     Two groups: "post_word" (پُسته/پُستی/نامه/پارسل, 4 members, lesson01 -- "پُسته خانه" (post office) and "تکت پُستی" (stamp)
@@ -42,6 +56,11 @@ tag_schema:
     - sendable_item_word
     - volume_en_prs_a1_unit35_sendable_item_word_11_single
 slot_presets:
+  post_noun_word: &post_noun
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: post_word
   post_word: &id001
     language_code: prs
     part_of_speech:
@@ -136,6 +155,59 @@ templates:
     slot: post_word
   feedback_frame:
     text: '{post_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit35.lesson01.post_noun_gloss.001
+  lesson_content_key: prs.a1.unit35.lesson01.post_words
+  type: multiple_choice
+  frame:
+    text: '{post_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    post_word: *post_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: post_word
+  feedback_frame:
+    text: '{post_word} is one of this unit''s post-office nouns.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit35.lesson04.post_where_gloss.001
+  lesson_content_key: prs.a1.unit35.lesson04.counter_dialogue
+  type: multiple_choice
+  frame:
+    text: '{post_word} کجاست'
+    language_code: prs
+    direction: rtl
+  slots:
+    post_word: *post_noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: post_word
+  feedback_frame:
+    text: '... کجاست asks "Where is ...?". Pick the English meaning of the mail word.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit35.lesson02.send_item_translate.001
+  lesson_content_key: prs.a1.unit35.lesson02.sending_mail
+  type: translation
+  frame:
+    text: I send a {sendable_item_word}.
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      sendable_item_word: english_gloss
+  slots:
+    sendable_item_word: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{sendable_item_word} روان می‌کنم'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: '[item] روان می‌کنم means "I send the [item]" — روان کردن is the taught verb for sending mail.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit35.lesson02.send_item_order.001.volume_fill.011

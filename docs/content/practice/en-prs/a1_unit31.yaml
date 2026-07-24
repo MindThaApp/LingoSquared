@@ -6,7 +6,15 @@ unit_content_key: prs.a1.unit31.education
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: 'UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass): both lesson01.study_pair.002 and
+  notes: 'TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition was 2 live and production 1 live. Added lesson04.education_gloss.001
+    (MC on the existing study_pair_word union preset, 7 distinct unit tokens/glosses, anchored to the dialogue lesson which
+    has its own vocab), lesson02.field_translate.002 (bare-word translation on field_word, 4 unit-native members) and
+    lesson01.study_pair_translate.003 (bare-word translation on study_pair_word, 7). All corpus-standard bare-slot shapes --
+    no new Dari strings, no literal-text frames, pools all distinct from their siblings. Tiers now 3/3/3 live. Still
+    unreviewed pending fresh-context review.
+
+
+    UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass): both lesson01.study_pair.002 and
     lesson01.study_pair.002.volume_match.010 (matching_pairs, 6 slots) were DEAD. The original notes below counted
     مکتب/محصل (and درس, which the tag_schema/slot never actually referenced beyond the prose) as part of a 6-member
     study_vocab_word pool, but all three -- محصل (unit03), مکتب (unit05), درس (unit18) -- are additive tags on
@@ -178,6 +186,58 @@ templates:
     slot: study_vocab_word
   feedback_frame:
     text: '{study_vocab_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit31.lesson04.education_gloss.001
+  lesson_content_key: prs.a1.unit31.lesson04.education_dialogue
+  type: multiple_choice
+  frame:
+    text: '{study_pair_word}'
+    language_code: prs
+    direction: rtl
+  slots:
+    study_pair_word: *study_pair_word
+  answer_derivation:
+    kind: slot_gloss
+    slot: study_pair_word
+  feedback_frame:
+    text: '{study_pair_word} belongs to this unit''s education vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit31.lesson02.field_translate.002
+  lesson_content_key: prs.a1.unit31.lesson02.fields_of_study
+  type: translation
+  frame:
+    text: '{field_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      field_word: english_gloss
+  slots:
+    field_word: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: field_word
+  feedback_frame:
+    text: '{field_word} is the Dari word for this field of study.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit31.lesson01.study_pair_translate.003
+  lesson_content_key: prs.a1.unit31.lesson01.study_vocabulary
+  type: translation
+  frame:
+    text: '{study_pair_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      study_pair_word: english_gloss
+  slots:
+    study_pair_word: *study_pair_word
+  answer_derivation:
+    kind: slot_text
+    slot: study_pair_word
+  feedback_frame:
+    text: '{study_pair_word} is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit31.lesson01.study_pair.002.volume_match.010
