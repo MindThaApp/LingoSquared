@@ -27,7 +27,115 @@ review:
     per AUTHORING_GUIDE §16: greeting_pair.006 -> closing_pair.006 (farewell x2 + politeness x4 = 6 pairs), question_pair.004
     -> answer_pair.004 (wellbeing_answer x3 + politeness x4 = 7 pairs, politeness newly recapped into lesson04 from lesson02),
     offer_pair.006 -> politeness_pair.006 (politeness x4 alone, offered_item dropped since it''s already covered by offer_order.001/offer_meaning.002).
-    Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).'
+    Re-verified via _practice_slot_check.py (0 problems in this file) and compile_content.py practice-validate (0/0).
+
+    REAUTH PASS 2026-07-24 (fix DEAD templates at checkpoint/UNIT scope --
+    scripts/_practice_unit_scope_check.py, a different check from
+    _practice_slot_check.py''s whole-direction scope the notes above used).
+    generate_checkpoint() scopes candidates to this unit''s own lexemes
+    only. Findings, verified against a fresh iter_specs() dump filtered to
+    ''.a1.unit01.'':
+
+    1. letter_pair.004 (matching_pairs) declared 12 slots but this unit
+    teaches exactly 4 letters (س ل ا م, spelling سلام) -- REAL DEAD. Shrunk
+    to 4 slots (letter_one..letter_four). Honestly thin: 4 is this lesson''s
+    genuine ceiling (below the 6-pair floor), documented, not padded.
+
+    2. dialogue_pair.005''s person_name_one..four (4 slots) drew on a real
+    unit-scoped pool of only 2 (علی، نرگس) -- REAL DEAD (a 2-member pool
+    cannot fill 4 pairwise-distinct slots). Shrunk to person_name_one/two.
+    dialogue_word_one..eight (the template''s other, independent distinct
+    group) was untouched -- verified 45 distinct unit-scoped dialogue_word
+    candidates, nowhere near exhausted. Also reordered the `slots:` mapping
+    to list dialogue_word_one..eight before person_name_one/two: this
+    template''s two `distinct` groups have very different sizes (2 vs 8),
+    and _practice_unit_scope_check.py''s matching_pairs check estimates the
+    whole template''s pool from only the FIRST declared slot -- with
+    person_name first it would still misreport this fixed, working
+    template as DEAD (2 < 8), purely a checker artifact. Listing the
+    larger/well-pooled group first is a no-op for the runtime (slot
+    mapping order has no effect on fill_slots()/lexeme_matches()) and
+    makes the checker read this template correctly too.
+
+    3. name_meaning.003 (multiple_choice, person_name) had only 2 distinct
+    unit-scoped glosses (Ali, Narges) -- below the 3-option MC floor, and
+    this unit genuinely has no third name (a third would come from a LATER
+    unit, forbidden). REPURPOSED to the dialogue_word preset (already
+    defined below, 45 distinct candidates) instead of person_name, renamed
+    to dialogue_choice.003 with feedback text updated to match.
+    identity_order.002 (word_order, person_name, 2 candidates) already
+    covers the two names'' word-order pattern, so this MC losing its
+    person-specific focus is not a coverage loss.
+
+    4. identity_order.002.volume_fill.011''s slot used semantic tag
+    `volume_en_fa_a1_unit01_person_name_11_single` -- a name that promises
+    (by its own "_unit01_..._11_single" naming) to identify a single
+    unit01 person, but a direct iter_specs() query shows it is actually
+    assigned to a1_unit09''s آرش (Arash), not to علی or نرگس here. 0
+    unit-scoped candidates -- REAL DEAD, and unfixable from the pack side
+    (no other single-candidate tag exists for either name; creating one is
+    a backfill_lexemes.py change, out of PACK-ONLY scope). DROPPED.
+    LOGGED for the coordinator: this looks like a volume-tag
+    misassignment/collision in scripts/backfill_lexemes.py, worth checking
+    whether other `volume_..._single` tags in other units have the same
+    tag-name-vs-actual-lexeme mismatch.
+
+    5. politeness_pair.006 (4 slots, politeness_phrase only, below the
+    6-pair floor) was widened by adding farewell_one/two (2 more slots,
+    reusing the farewell tag already proven at 2 distinct elsewhere in this
+    file) -- now 6 slots total, meeting the floor.
+
+    6. closing_pair.006 and answer_pair.004 are flagged DEAD by
+    _practice_unit_scope_check.py, but this is a VERIFIED FALSE POSITIVE,
+    not a real defect -- left UNCHANGED (reordering does not help here,
+    see below). Both declare a SINGLE `distinct` relation spanning ALL
+    their slots, combining two different semantic tags (farewell +
+    politeness_phrase; wellbeing_answer_phrase + politeness_phrase) into
+    one matching exercise -- exactly the deliberate technique this file''s
+    own 2026-07-07 note above describes. _practice_unit_scope_check.py''s
+    matching_pairs check estimates the whole relation''s required pool from
+    only the FIRST declared slot''s own candidate count
+    (`check_pack()`''s `first_slot = next(iter(slots.values()), {})`),
+    which assumes every slot in the group shares one tag -- true for a
+    homogeneous matching_pairs, false here. Verified against
+    backend/app/practice/service.py''s real `_relation_holds()`/
+    `fill_slots()`: a `distinct` relation only requires the ASSIGNED
+    lexemes across its listed slots to have distinct ids; each slot draws
+    its own candidates from its own constraint, so two disjoint-token
+    categories folded into one relation still fill correctly -- the real
+    capacity is the SUM of each distinct slot NAME''s own pool, not
+    whichever slot happens to be listed first. Because both templates use
+    ONE merged relation (not two separate ones), there is no slot order
+    that fixes the checker''s estimate -- unlike dialogue_pair.005 above,
+    reordering only helps when the groups are declared as SEPARATE
+    `distinct` relations. Real math (unit-scoped, matching
+    generate_checkpoint()):
+      - closing_pair.006: farewell (2: خداحافظ، فعلاً) + politeness_phrase
+        (4: خواهش می‌کنم، لطف دارید، زحمت نکشید، ممنون از لطف شما) = 6
+        distinct pairs. Meets the 6-pair floor exactly.
+      - answer_pair.004: wellbeing_answer_phrase (3: خوبم، خیلی خوبم، بد
+        نیستم، ممنون) + politeness_phrase (4, same four as above) = 7
+        distinct pairs. Exceeds the floor.
+    (time_pair.004 -- time_period x4 + farewell x2, two SEPARATE `distinct`
+    relations with time_period, the larger group, already listed first --
+    was never actually flagged DEAD by the script, only an informational
+    FLOOR line ("declares only 4 slots") that undercounts the same way;
+    left as-is, no reorder needed.)
+    No pack change was made for closing_pair.006/answer_pair.004 --
+    restructuring a working, deliberately-designed two-category matching
+    exercise just to satisfy a checker limitation would be a quality
+    regression, not a fix. LOGGED for the coordinator:
+    scripts/_practice_unit_scope_check.py''s matching_pairs check should sum
+    each DISTINCT SLOT NAME''s own candidate count within a relation (and
+    account for `same_tag` relations, see a1_unit02''s country_pair.006)
+    instead of reading only the first slot, to stop flagging this
+    legitimate pattern.
+
+    Re-verified 0 DEAD for this file (the 2 items above are the only
+    residual DEAD lines the script prints, both documented as false
+    positives or honest thinness) via scripts/_practice_unit_scope_check.py,
+    and 0 errors via compile_content.py practice-validate. No backfill/
+    realization/overlay edits made.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -199,14 +307,6 @@ templates:
     letter_two: *id001
     letter_three: *id001
     letter_four: *id001
-    letter_five: *id001
-    letter_six: *id001
-    letter_seven: *id001
-    letter_eight: *id001
-    letter_nine: *id001
-    letter_ten: *id001
-    letter_eleven: *id001
-    letter_twelve: *id001
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -214,14 +314,6 @@ templates:
     - letter_two
     - letter_three
     - letter_four
-    - letter_five
-    - letter_six
-    - letter_seven
-    - letter_eight
-    - letter_nine
-    - letter_ten
-    - letter_eleven
-    - letter_twelve
   slot_relations:
   - kind: distinct
     slots:
@@ -229,14 +321,6 @@ templates:
     - letter_two
     - letter_three
     - letter_four
-    - letter_five
-    - letter_six
-    - letter_seven
-    - letter_eight
-    - letter_nine
-    - letter_ten
-    - letter_eleven
-    - letter_twelve
   feedback_frame:
     text: Match each letter to its sound label.
     language_code: en
@@ -694,7 +778,7 @@ templates:
   lesson_content_key: fa.a1.unit01.lesson05.taarof_basics
   type: matching_pairs
   frame:
-    text: Match each polite expression with its meaning.
+    text: Match each word or phrase with its meaning.
     language_code: en
     direction: ltr
   slots:
@@ -702,6 +786,8 @@ templates:
     politeness_two: *id006
     politeness_three: *id006
     politeness_four: *id006
+    farewell_one: *id005
+    farewell_two: *id005
   slot_relations:
   - kind: distinct
     slots:
@@ -709,6 +795,10 @@ templates:
     - politeness_two
     - politeness_three
     - politeness_four
+  - kind: distinct
+    slots:
+    - farewell_one
+    - farewell_two
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -716,8 +806,10 @@ templates:
     - politeness_two
     - politeness_three
     - politeness_four
+    - farewell_one
+    - farewell_two
   feedback_frame:
-    text: Match each taarof politeness expression to its meaning.
+    text: Match each taarof/closing word or phrase to its meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson06.name_greeting.001
@@ -756,20 +848,20 @@ templates:
     text: من … هستم states the speaker's name.
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit01.lesson06.name_meaning.003
+- content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_choice.003
   lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
   type: multiple_choice
   frame:
-    text: '{person_name}'
+    text: '{dialogue_word}'
     language_code: fa
     direction: rtl
   slots:
-    person_name: *id010
+    dialogue_word: *id011
   answer_derivation:
     kind: slot_gloss
-    slot: person_name
+    slot: dialogue_word
   feedback_frame:
-    text: '{person_name} is one of the people in the dialogue.'
+    text: '{dialogue_word} appears in the first-meeting dialogue.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_gloss.004
@@ -798,10 +890,6 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    person_name_one: *id010
-    person_name_two: *id010
-    person_name_three: *id010
-    person_name_four: *id010
     dialogue_word_one: *id011
     dialogue_word_two: *id011
     dialogue_word_three: *id011
@@ -810,13 +898,11 @@ templates:
     dialogue_word_six: *id011
     dialogue_word_seven: *id011
     dialogue_word_eight: *id011
+    person_name_one: *id010
+    person_name_two: *id010
   answer_derivation:
     kind: matching_pairs
     slots:
-    - person_name_one
-    - person_name_two
-    - person_name_three
-    - person_name_four
     - dialogue_word_one
     - dialogue_word_two
     - dialogue_word_three
@@ -825,15 +911,11 @@ templates:
     - dialogue_word_six
     - dialogue_word_seven
     - dialogue_word_eight
+    - person_name_one
+    - person_name_two
   slot_relations:
   - kind: distinct
     slots:
-    - person_name_one
-    - person_name_two
-    - person_name_three
-    - person_name_four
-  - kind: distinct
-    slots:
     - dialogue_word_one
     - dialogue_word_two
     - dialogue_word_three
@@ -842,6 +924,10 @@ templates:
     - dialogue_word_six
     - dialogue_word_seven
     - dialogue_word_eight
+  - kind: distinct
+    slots:
+    - person_name_one
+    - person_name_two
   feedback_frame:
     text: Match each dialogue item to its English meaning.
     language_code: en
@@ -932,26 +1018,6 @@ templates:
     slot: offered_item
   feedback_frame:
     text: '{offered_item}'
-    language_code: fa
-    direction: rtl
-- content_key: practice.en-fa.fa.a1.unit01.lesson06.identity_order.002.volume_fill.011
-  lesson_content_key: fa.a1.unit01.lesson06.first_meeting_dialogue
-  type: fill_in_blank
-  frame:
-    text: من {person_name} هستم
-    language_code: fa
-    direction: rtl
-  slots:
-    person_name:
-      language_code: fa
-      part_of_speech: proper_noun
-      agreement_tags:
-        semantic: volume_en_fa_a1_unit01_person_name_11_single
-  answer_derivation:
-    kind: slot_text
-    slot: person_name
-  feedback_frame:
-    text: '{person_name}'
     language_code: fa
     direction: rtl
 - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001.volume_order.007

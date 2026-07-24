@@ -21,61 +21,162 @@ review:
     richer 8-candidate pool for multiple_choice/matching_pairs/
     translation than any per-lesson subset would (بهتره already existed
     from unit07 with no semantic tag of its own; this is a clean
-    additive tag). "demonstrative_word" (این/اون, 2 members, matching/
-    translation-only) is intentionally kept separate rather than folded
-    into comparative_word since این/اون are pronouns, not comparative
-    forms. Also reuses the existing course-wide "person_name" tag
-    (already established in units 01/02/07/09-11, now also carrying
-    نیما from the parallel 09-11 lane) for two fixed-comparative
-    sentence templates -- no new recognition triple authored for names
-    here, since person_name is already drilled by earlier units'
-    templates and this pack's own two word_order templates just reuse
-    that existing pool for a comparison-specific sentence shape.
+    additive tag). "demonstrative_word" (این/اون, 2 members course-wide,
+    matching/translation-only) is intentionally kept separate rather
+    than folded into comparative_word since این/اون are pronouns, not
+    comparative forms.
 
-    Four generative word_order templates, all directly mirroring this
-    unit's own realization sentence patterns: (1) "{demonstrative_word}
-    از {demonstrative_word2} {comparative_word}" mirrors lesson01/02's
-    "این از اون بزرگ‌تره" pattern (all 2x8=16 combinations grammatical);
-    (2) "{comparative_word} چون {comparative_word2}" mirrors lesson04's
-    "بهتره چون ارزون‌تره" reason-giving pattern (all distinct-pair
-    combinations grammatical, e.g. بزرگ‌تره چون ارزون‌تره -- "it's
-    bigger because it's cheaper"); (3)/(4) "{person_name} از
-    {person_name2} قد بلند‌تره" / "... جوون‌تره" mirror lesson03's own
-    "نیما از سارا قد بلند‌تره" / "سارا از نیما جوون‌تره" sentences
-    exactly, generalized across the full course-wide person_name pool
-    (any two distinct taught names can be compared this way); (5) a
-    fuller 3-slot compound "{demonstrative_word} از {demonstrative_
-    word2} {comparative_word} چون {comparative_word2}" mirrors the
-    complete lesson04 sentence shape (این از اون بهتره چون ارزون‌تره)
-    with both demonstrative and comparative slots independently distinct.
+    2026-07-24 RE-AUTHORED (unit-scope DEAD-template fix pass, PACK-ONLY,
+    per docs/content/PRACTICE_PACK_RECIPE.md). scripts/_practice_unit_scope_check.py
+    flagged 5 DEAD template-slots -- all recipe DO-NOT #2 (a slot constrained to
+    vocabulary taught in an EARLIER unit is invisible to generate_checkpoint(),
+    which scopes candidates to THIS unit's own lexemes only):
 
-    This unit's real vocabulary is genuinely thinner than units 12-14
-    (comparisons only introduces ~13 new content words total, several
-    of which are near-duplicates of the same "-تره" pattern) -- 10
-    templates total here, below the usual 12-16 aim, is a deliberate
-    reflection of that thinner vocabulary rather than padding; every
-    template draws on real, distinctly-taught content.
+    (a) demonstrative_match.001 (matching_pairs, needed 2 distinct
+    "demonstrative_word" fills). This unit's OWN lesson01 genuinely teaches BOTH
+    این and اون (confirmed directly in docs/content/realizations/fa/
+    a1_unit15_comparisons.yaml), but backfill_lexemes.py keys a bare token to only
+    the FIRST unit that ever introduces it project-wide, and این was already
+    claimed by unit03/lesson05 -- so unit15's own demonstrative_word pool is really
+    just {اون}, 1 member: never enough for a 2-pair (let alone the recipe's 6-pair
+    floor) matching_pairs. DROPPED -- not fixable PACK-ONLY (would need a
+    unit15-scoped "این" provenance in the backfill script); LOGGED for the
+    coordinator's backfill lane, not attempted here.
 
-    Lesson-anchor check: lesson01, lesson03, and lesson04 each
-    genuinely introduce new vocabulary (confirmed by reading the
-    realization file directly) -- safe anchors.
+    (b) person_taller_order.005 and person_younger_order.006 (word_order)
+    constrained person_name_one/two to the course-wide "person_name" tag
+    (نیما/سارا), which THIS unit's own lessons never introduce (established in
+    units 01/02/07/09-11) -- 0 unit-scoped candidates, DEAD by construction.
+    DROPPED and REPLACED with per-lesson templates (see below) so lesson03 stays
+    represented in the checkpoint without leaning on an earlier unit's names.
 
-    Verified with scripts/_practice_slot_check.py against
-    backfill_lexemes.py's actual iter_specs() output -- clean, no
-    zero-candidate slots, no under-3 multiple_choice/matching_pairs
-    slots. scripts/_fill_in_blank_ambiguity_check.py reports zero flags
-    (no fill_in_blank templates in this pack). compile_content.py
-    practice-validate clean (0 errors/0 warnings). Needs the standard
-    fresh-context review before import.
+    Also found and fixed BY HAND two more instances of the identical defect that
+    scripts/_practice_unit_scope_check.py's per-slot check does not catch (it flags
+    a slot with ZERO unit-scoped candidates, but not a `distinct`-related slot pair
+    whose unit-scoped pool has only 1 member -- exactly این/اون's situation):
+    basic_comparison_order.003 and full_comparison_reason_order.007 both declared
+    demonstrative_word_one/word_two as a DISTINCT pair. At unit (checkpoint) scope
+    the pool is {اون} only (1 member) -- fill_slots() can never pick 2 distinct
+    values from it, so both templates were silently dead at the checkpoint despite
+    validating clean and despite genuinely working in Endless Practice, where
+    course scope (a1) also has unit03's این and the pool is 2. This is recipe
+    SS1.1's unit-vs-course distinction exactly. FIXED by keeping این/اون as
+    literal, non-slotted frame text (decorative connective words here, not the
+    slot under test; neither is a candidate value of any slot in the same frame,
+    so there is no self-reference conflict) and slotting only comparative_word,
+    whose unit-native pool is 7 members (8 at a1-course scope with unit07's
+    بهتره; re-checked by hand that "این از اون {comparative_word}" and
+    "... {comparative_word_one} چون {comparative_word_two}" stay grammatical for
+    every member at both scopes -- unit07's بهتره carries a parenthetical
+    "(spoken, 'we'd better')" note in its gloss, but the core comparative sense is
+    identical and this unit's own lesson04 exercise IS literally "این از اون بهتره").
+
+    Widened the pack from 10 to 14 templates using ONLY this unit's own
+    comparative_word (7 native members) and demonstrative_word (اون, 1 native
+    member) pools -- no new backfill tag, no vocabulary from another unit. Added
+    one word_order ("این از اون {comparative_word}"), one multiple_choice, and one
+    bare-word translation per lesson01-03 (comparative_word union, per SS8.1 step
+    2's "anchor per lesson, pool across the unit" pattern), so every lesson with
+    real vocabulary (01-04; 05/06 introduce no new tokens at all per
+    backfill_lexemes.py's iter_specs -- genuinely un-coverable, not a gap fixable
+    PACK-ONLY) now has a live template in all three tiers. Final: 14 templates,
+    recognition 4 / structured 6 / production 4, lessons 01-04 each represented in
+    every tier. This unit's real vocabulary remains genuinely thin (~10 distinct fa
+    tokens total) -- volume comes from re-anchoring the same union pool per lesson,
+    not from padding with untaught/other-unit vocabulary.
+
+    scripts/_practice_unit_scope_check.py: 0 DEAD (was 5), 0 below-floor.
+    compile_content.py practice-validate: 0 errors. No fill_in_blank in this pack.
+    No mis-glossed lexeme found in this unit's own pool (every gloss re-read
+    against docs/content/realizations/fa/a1_unit15_comparisons.yaml).
 tag_schema:
-  part_of_speech: [verb, pronoun, proper_noun]
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
   agreement_tags:
-    semantic: [comparative_word, demonstrative_word, person_name]
+    semantic: [comparative_word, demonstrative_word]
 slot_presets:
   comparative_word: &comparative_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: comparative_word}}
   demonstrative_word: &demonstrative_word {language_code: fa, part_of_speech: pronoun, agreement_tags: {semantic: demonstrative_word}}
-  person_name: &person_name {language_code: fa, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
 templates:
+  # lesson01 -- basic_comparative (اون, بزرگ‌تره, کوچیک‌تره)
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.comparative_choice.001
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: multiple_choice
+    frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_gloss, slot: comparative_word}
+    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.basic_comparison_order.002
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: word_order
+    frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "این از اون marks the comparison point, like این از اون بزرگ‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson01.demonstrative_translate.003
+    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
+    type: translation
+    frame: {text: "{demonstrative_word}", language_code: en, direction: ltr, slot_rendering: {demonstrative_word: english_gloss}}
+    slots: {demonstrative_word: *demonstrative_word}
+    answer_derivation: {kind: slot_text, slot: demonstrative_word}
+    feedback_frame: {text: "The Farsi word is {demonstrative_word}.", language_code: en, direction: ltr}
+
+  # lesson02 -- comparing_prices (گرون‌تره, ارزون‌تره)
+  - content_key: practice.en-fa.fa.a1.unit15.lesson02.comparative_choice.001
+    lesson_content_key: fa.a1.unit15.lesson02.comparing_prices
+    type: multiple_choice
+    frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_gloss, slot: comparative_word}
+    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson02.price_comparison_order.002
+    lesson_content_key: fa.a1.unit15.lesson02.comparing_prices
+    type: word_order
+    frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "این از اون marks the comparison point, like این از اون گرون‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson02.comparative_translate.003
+    lesson_content_key: fa.a1.unit15.lesson02.comparing_prices
+    type: translation
+    frame: {text: "{comparative_word}", language_code: en, direction: ltr, slot_rendering: {comparative_word: english_gloss}}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_text, slot: comparative_word}
+    feedback_frame: {text: "The Farsi word is {comparative_word}.", language_code: en, direction: ltr}
+
+  # lesson03 -- comparing_people (بلند‌تره, جوون‌تره)
+  - content_key: practice.en-fa.fa.a1.unit15.lesson03.comparative_choice.001
+    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
+    type: multiple_choice
+    frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_gloss, slot: comparative_word}
+    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson03.people_comparison_order.002
+    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
+    type: word_order
+    frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: render_frame, frame: {text: "این از اون {comparative_word}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "این از اون marks the comparison point, like این از اون بلند‌تره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit15.lesson03.comparative_translate.003
+    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
+    type: translation
+    frame: {text: "{comparative_word}", language_code: en, direction: ltr, slot_rendering: {comparative_word: english_gloss}}
+    slots: {comparative_word: *comparative_word}
+    answer_derivation: {kind: slot_text, slot: comparative_word}
+    feedback_frame: {text: "The Farsi word is {comparative_word}.", language_code: en, direction: ltr}
+
+  # lesson04 -- giving_reasons (بد‌تره)
   - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_choice.001
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: multiple_choice
@@ -98,29 +199,6 @@ templates:
     slots: {comparative_word: *comparative_word}
     answer_derivation: {kind: slot_text, slot: comparative_word}
     feedback_frame: {text: "The Farsi word is {comparative_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson01.demonstrative_match.001
-    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
-    type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *demonstrative_word, second: *demonstrative_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson01.demonstrative_translate.002
-    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
-    type: translation
-    frame: {text: "{demonstrative_word}", language_code: en, direction: ltr, slot_rendering: {demonstrative_word: english_gloss}}
-    slots: {demonstrative_word: *demonstrative_word}
-    answer_derivation: {kind: slot_text, slot: demonstrative_word}
-    feedback_frame: {text: "The Farsi word is {demonstrative_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson01.basic_comparison_order.003
-    lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
-    type: word_order
-    frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word}", language_code: fa, direction: rtl}
-    slots: {demonstrative_word_one: *demonstrative_word, demonstrative_word_two: *demonstrative_word, comparative_word: *comparative_word}
-    slot_relations: [{kind: distinct, slots: [demonstrative_word_one, demonstrative_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "از marks the comparison point, like این از اون بزرگ‌تره.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_reason_order.004
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: word_order
@@ -129,29 +207,11 @@ templates:
     slot_relations: [{kind: distinct, slots: [comparative_word_one, comparative_word_two]}]
     answer_derivation: {kind: render_frame, frame: {text: "{comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "چون gives a reason, like بهتره چون ارزون‌تره.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson03.person_taller_order.005
-    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
-    type: word_order
-    frame: {text: "{person_name_one} از {person_name_two} قد بلند‌تره", language_code: fa, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name_one} از {person_name_two} قد بلند‌تره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "قد بلند‌تره means taller, like نیما از سارا قد بلند‌تره.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson03.person_younger_order.006
-    lesson_content_key: fa.a1.unit15.lesson03.comparing_people
-    type: word_order
-    frame: {text: "{person_name_one} از {person_name_two} جوون‌تره", language_code: fa, direction: rtl}
-    slots: {person_name_one: *person_name, person_name_two: *person_name}
-    slot_relations: [{kind: distinct, slots: [person_name_one, person_name_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{person_name_one} از {person_name_two} جوون‌تره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "جوون‌تره means younger, like سارا از نیما جوون‌تره.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit15.lesson04.full_comparison_reason_order.007
+  - content_key: practice.en-fa.fa.a1.unit15.lesson04.full_comparison_reason_order.005
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: word_order
-    frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
-    slots: {demonstrative_word_one: *demonstrative_word, demonstrative_word_two: *demonstrative_word, comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
-    slot_relations:
-      - {kind: distinct, slots: [demonstrative_word_one, demonstrative_word_two]}
-      - {kind: distinct, slots: [comparative_word_one, comparative_word_two]}
-    answer_derivation: {kind: render_frame, frame: {text: "{demonstrative_word_one} از {demonstrative_word_two} {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
+    frame: {text: "این از اون {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
+    slots: {comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
+    slot_relations: [{kind: distinct, slots: [comparative_word_one, comparative_word_two]}]
+    answer_derivation: {kind: render_frame, frame: {text: "این از اون {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "این از اون بهتره چون ارزون‌تره means this is better than that because it's cheaper.", language_code: en, direction: ltr}

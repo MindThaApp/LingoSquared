@@ -68,32 +68,88 @@ review:
     multiple_choice) and compile_content.py practice-validate (0 errors/0
     warnings, full en-fa pack). review.status left unreviewed -- this
     pass does not self-certify review.
+
+    REAUTH PASS 2026-07-24 (fix DEAD templates at checkpoint/unit scope --
+    scripts/_practice_unit_scope_check.py). generate_checkpoint() scopes
+    candidates to THIS unit's own lexemes only. Found (each verified
+    against a fresh iter_specs() dump filtered to '.a1.unit08.'):
+    - price_number is a pure DO-NOT #2 defect: its ALL THREE members
+      (سی/بیست/هشت) turn out to be a1_unit03's own numbers (unit03.lesson01/
+      02, zero_to_ten / eleven_to_ninety_nine), not this unit's, contrary
+      to the DEPTH PASS notes above ("this unit's own dialogue actually
+      reuses" was true only at whole-direction scope, not at the unit scope
+      generate_checkpoint() actually uses). price_number_choice.006/
+      price_number_match.007/price_number_translate.008 were all DEAD (0
+      unit-scoped candidates) and there is no salvageable native
+      substitute for "a price number specific to this unit" without either
+      duplicating another tag's pool wholesale or a backfill change.
+      DROPPED all three; the pack still has 13 live templates across all
+      three tiers after this (recognition=3, structured=6, production=4),
+      comfortably clearing the >=12/>=3-per-tier bars. LOGGED for the
+      coordinator: price_number as currently defined in
+      scripts/backfill_lexemes.py has zero a1_unit08-native members: it
+      needs either its own unit08-scoped number tag or to be dropped/
+      renamed direction-wide as misleading.
+    - quantity_unit_word is genuinely only 2 at unit scope (کیلو, نصف --
+      لیوان/بشقاب are a1_unit06's own). quantity_choice.001/
+      quantity_match.002 were DEAD/below-floor. RE-ANCHORED both to a new
+      shop_noun preset (union [quantity_unit_word, dialogue_word,
+      shop_word, service_role_word] restricted to part_of_speech: noun,
+      all native to this unit) -- 8 distinct nouns (کیلو/نصف/تخفیف/حساب/
+      کارت/فروشنده/سیب‌ها/مغازه).
+    - service_role_word is genuinely only 1 at unit scope (فروشنده --
+      گارسون/مشتری are a1_unit06's own, contrary to the DEPTH PASS notes'
+      "3 members" count, again taken at whole-direction not unit scope).
+      service_role_choice.003/service_role_match.004 were DEAD/below-floor.
+      RE-ANCHORED both to the same shop_noun preset (فروشنده is itself a
+      member of it).
+    - shop_word's own shop_match.001 (2 native: مغازه/فروشنده) was below
+      the matching_pairs floor. Widened to the same shop_noun preset for
+      consistency (مغازه/فروشنده are both members of it too).
+    shop_noun's 8-member pool is intentionally reused across quantity_
+    choice/quantity_match/shop_match/service_role_choice/service_role_match
+    (5 templates, 3 different lesson anchors: 01/03/06) rather than
+    invented separately per template -- this is the recipe's own SS8.1
+    "union the unit's lesson tags... reuse across templates" technique;
+    each anchor still gives its own lesson a live recognition/structured
+    template even though the underlying pool overlaps. payment_word (3:
+    نقدی/کارت/حساب, نقدی is an adverb so it's deliberately excluded from
+    shop_noun's noun-only filter) is left untouched -- payment_choice is
+    fine at 3, payment_match's 3<6 floor gap is honest thinness (widening
+    it into shop_noun would silently drop نقدی, the one payment concept
+    shop_noun can't represent, which is a regression, not a fix).
+    quantity_translate/service_role_translate/shop_translate untouched
+    (translation has no floor).
+    dialogue_word added to tag_schema for the above. Re-verified 0 DEAD for
+    this file via scripts/_practice_unit_scope_check.py and 0 errors via
+    compile_content.py practice-validate. No backfill/realization/overlay
+    edits made.
 tag_schema:
   part_of_speech: [noun, adverb, adjective]
   agreement_tags:
-    semantic: [quantity_unit_word, payment_word, shop_word, service_role_word, price_number]
+    semantic: [quantity_unit_word, payment_word, shop_word, service_role_word, dialogue_word]
 slot_presets:
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
   payment_word: &payment_word {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: payment_word}}
   service_role_word: &service_role_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: service_role_word}}
-  price_number: &price_number {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: price_number}}
   shop_word: &shop_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: shop_word}}
+  shop_noun: &shop_noun {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit_word, dialogue_word, shop_word, service_role_word]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_choice.001
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: multiple_choice
     frame: {text: "{quantity_unit_word}", language_code: fa, direction: rtl}
-    slots: {quantity_unit_word: *quantity_unit_word}
+    slots: {quantity_unit_word: *shop_noun}
     answer_derivation: {kind: slot_gloss, slot: quantity_unit_word}
-    feedback_frame: {text: "{quantity_unit_word} is a quantity/counting word used when ordering or shopping.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{quantity_unit_word} is a shopping-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_match.002
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: matching_pairs
-    frame: {text: "Match each quantity word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *quantity_unit_word, second: *quantity_unit_word, third: *quantity_unit_word, fourth: *quantity_unit_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each quantity word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *shop_noun, second: *shop_noun, third: *shop_noun, fourth: *shop_noun, fifth: *shop_noun, sixth: *shop_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_translate.003
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: translation
@@ -126,11 +182,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson01.shop_match.001
     lesson_content_key: fa.a1.unit08.lesson01.shop_vocabulary
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: fa, direction: rtl}
-    slots: {first: *shop_word, second: *shop_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each shopping word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *shop_noun, second: *shop_noun, third: *shop_noun, fourth: *shop_noun, fifth: *shop_noun, sixth: *shop_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson01.shop_translate.002
     lesson_content_key: fa.a1.unit08.lesson01.shop_vocabulary
     type: translation
@@ -142,17 +198,17 @@ templates:
     lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
     type: multiple_choice
     frame: {text: "{service_role_word}", language_code: fa, direction: rtl}
-    slots: {service_role_word: *service_role_word}
+    slots: {service_role_word: *shop_noun}
     answer_derivation: {kind: slot_gloss, slot: service_role_word}
-    feedback_frame: {text: "{service_role_word} names someone in a shop or restaurant scene.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{service_role_word} is a shopping-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_match.004
     lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
     type: matching_pairs
-    frame: {text: "Match each role word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *service_role_word, second: *service_role_word, third: *service_role_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each role word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *shop_noun, second: *shop_noun, third: *shop_noun, fourth: *shop_noun, fifth: *shop_noun, sixth: *shop_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_translate.005
     lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
     type: translation
@@ -160,28 +216,6 @@ templates:
     slots: {service_role_word: *service_role_word}
     answer_derivation: {kind: slot_text, slot: service_role_word}
     feedback_frame: {text: "The Farsi word is {service_role_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_choice.006
-    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
-    type: multiple_choice
-    frame: {text: "{price_number}", language_code: fa, direction: rtl}
-    slots: {price_number: *price_number}
-    answer_derivation: {kind: slot_gloss, slot: price_number}
-    feedback_frame: {text: "{price_number} is a number used in this unit's price/discount talk.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_match.007
-    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
-    type: matching_pairs
-    frame: {text: "Match each number with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *price_number, second: *price_number, third: *price_number}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each number to its English meaning.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit08.lesson04.price_number_translate.008
-    lesson_content_key: fa.a1.unit08.lesson04.asking_for_a_discount
-    type: translation
-    frame: {text: "{price_number}", language_code: en, direction: ltr, slot_rendering: {price_number: english_gloss}}
-    slots: {price_number: *price_number}
-    answer_derivation: {kind: slot_text, slot: price_number}
-    feedback_frame: {text: "The Farsi word is {price_number}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_unit_word_order.009
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: word_order
