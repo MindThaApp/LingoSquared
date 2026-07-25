@@ -8,6 +8,19 @@ review:
   fresh_context: 'false'
   notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-fa A1 unit 36. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+    POLISH 2026-07-24 -- (1) matching_pairs stay POS-only BY NECESSITY, honest note per rubric; this unit's fa lexemes
+    carry NO semantic tags at all (only reviewed_phrase, whose members are long metalinguistic strings unusable as
+    cards), so no semantic union can cover 6 clean tokens; instead both matchers were narrowed from the 9-POS
+    everything list to [noun, verb, adjective, adverb] (drops the metalinguistic phrase monsters and function words
+    from the cards; unit pool still 32 tokens) and expanded from the defective 4 slots to the standard 6 (recipe
+    S6.3, never 2-4). At COURSE scope these pools still pull the whole level's content words -- off-theme pairs in
+    Endless Practice remain possible; fixing that needs semantic tags in backfill_lexemes, out of scope here.
+    (2) Tier-thinness fixed with unit-native POS pools -- +2 recognition MC (lesson02 adjectives, 9 tokens/9 glosses;
+    lesson03 spoken verb forms, 14 tokens/14 glosses), +1 structured (lesson02 adjective-only 6-slot matching), +1
+    production (lesson02 adjective bare-word translation). No word_order was added because with zero semantic tags any slot
+    is POS-only, and the course-wide adjective/verb pools include numbers and fused-copula forms (بزرگه, شلوغه) that
+    are ungrammatical in any predicate frame -- a citation frame was judged padding, so structured depth comes from
+    matching_pairs instead.
 tag_schema:
   part_of_speech:
   - symbol
@@ -66,58 +79,22 @@ templates:
   lesson_content_key: fa.a1.unit36.lesson01.personality_words_one
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u36_content_word
       language_code: fa
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    second: *u36_content_word
+    third: *u36_content_word
+    fourth: *u36_content_word
+    fifth: *u36_content_word
+    sixth: *u36_content_word
   slot_relations:
   - kind: distinct
     slots:
@@ -125,6 +102,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -132,6 +111,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -169,7 +150,7 @@ templates:
   lesson_content_key: fa.a1.unit36.lesson01.personality_words_one
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: fa
     direction: rtl
     text_blocks:
@@ -177,54 +158,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: *u36_content_word
+    second: *u36_content_word
+    third: *u36_content_word
+    fourth: *u36_content_word
+    fifth: *u36_content_word
+    sixth: *u36_content_word
   slot_relations:
   - kind: distinct
     slots:
@@ -232,6 +171,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -239,8 +180,112 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit36.lesson02.choose.001
+  lesson_content_key: fa.a1.unit36.lesson02.personality_words_two
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adjective
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of the personality word {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit36.lesson02.match.002
+  lesson_content_key: fa.a1.unit36.lesson02.personality_words_two
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: fa
+    direction: rtl
+    text_blocks:
+    - text: Adjective-focused matching set for this unit.
+      language_code: en
+      direction: ltr
+  slots:
+    first: &u36_adjective
+      language_code: fa
+      part_of_speech:
+      - adjective
+    second: *u36_adjective
+    third: *u36_adjective
+    fourth: *u36_adjective
+    fifth: *u36_adjective
+    sixth: *u36_adjective
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each adjective with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit36.lesson02.translate.003
+  lesson_content_key: fa.a1.unit36.lesson02.personality_words_two
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adjective
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Farsi adjective for this English word.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit36.lesson03.choose.001
+  lesson_content_key: fa.a1.unit36.lesson03.asking_about_personality
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of the spoken verb form {item}.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit36.lesson01.translate.003.volume_translate.001
