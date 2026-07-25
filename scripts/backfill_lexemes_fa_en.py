@@ -2083,11 +2083,21 @@ LEVEL_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
 # per-unit/per-lesson semantic tags below for these -- deliberately NOT for
 # units 1-48/25-29, whose lexemes are already live and whose agreement_tags
 # should not churn under an unrelated backfill run.
+# Widened 2026-07-25 from the original a1_49-68/a2_30-34/B1/B2 scoping to
+# EVERY unit: the polish wave measured that the untagged bands (a1_30-48
+# especially) leave matching_pairs stuck on bare part_of_speech pools —
+# fine at checkpoint scope, but course-wide off-theme at Endless-Practice
+# scope, with no pack-side fix possible. Widening is purely ADDITIVE: no
+# shipped pack references the new tag names, so no existing candidate pool
+# changes, and the first-introduction-only rule (_unit_semantic_tags
+# docstring) still keeps every generated tag checkpoint-safe. Built from
+# the actual realization stems instead of numeric ranges so it can never
+# drift from the file list.
 AUTO_TAG_UNIT_STEMS = frozenset(
-    [f"a1_unit{n}" for n in range(49, 69)]
-    + [f"a2_unit{n}" for n in range(30, 35)]
-    + [f"b1_unit{n:02d}" for n in range(1, 20)]
-    + [f"b2_unit{n:02d}" for n in range(1, 9)]
+    "_".join(realization.stem.split("_")[:2])
+    for realization, _overlay in (
+        UNIT_FILES + UNIT_FILES_A2 + UNIT_FILES_B1 + UNIT_FILES_B2
+    )
 )
 
 # Grammar metalanguage that the B1/B2 realizations introduce as real tokens
