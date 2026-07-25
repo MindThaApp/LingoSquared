@@ -54,6 +54,7 @@ Add --dry-run to classify without touching the database.
 """
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
@@ -3507,6 +3508,19 @@ def _classify(files, level, specs, derive_phrases=False):
                 # verbatim; nothing is invented.
                 if derive_phrases:
                     target_text = item.get("target", {}).get("text", "").strip()
+                    # Strip a trailing Latin-script parenthetical baked into
+                    # some teach cards' display text (e.g. "از دو روز پیش
+                    # (since two days ago)"). The inline English gloss is
+                    # deliberate on the CARD, but lifted verbatim it made the
+                    # phrase lexeme self-answering wherever it surfaces as a
+                    # matching/translation answer -- the token contains its
+                    # own gloss. tested_text and the overlay gloss are
+                    # already clean. Found by the 2026-07-25 polish wave
+                    # (a2_unit12/13/14); Latin-letter guard keeps genuine
+                    # Dari parentheticals untouched.
+                    target_text = re.sub(
+                        r"\s*\([^()]*[A-Za-z][^()]*\)$", "", target_text
+                    ).strip()
                     introduced = item.get("introduced_tokens", [])
                     if len(introduced) > 1 and target_text and "\n" not in target_text:
                         phrase_tags = prs_agreement_tags(target_text, lesson_key)
