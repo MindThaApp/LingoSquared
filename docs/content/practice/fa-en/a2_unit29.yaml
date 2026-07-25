@@ -136,14 +136,27 @@ review:
     in place). Before: 6 DEAD. After: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR. Re-validated
     with compile_content.py practice-validate (0 errors). review.status left as unreviewed pending a fresh-context
     pass over this reauth.
+
+    Polish wave 2 (2026-07-25, POS-only matching_pairs): the reauth above left match.001 on a bare
+    `part_of_speech: noun` slot -- safe at unit scope but at Endless-Practice COURSE scope it pulls every noun
+    in the level (off-theme pairs), per recipe SS6.3/SS3.1(c). Replaced with the semantic union
+    [maintenance_noun, room_noun, day_part] (all three carried by this unit's own lexemes): unit-scope pool is
+    exactly 6 distinct tokens (sink/plumber/repair via maintenance_noun, kitchen/bathroom via room_noun, morning
+    via day_part), meeting the 6-pair floor; course-wide the union adds only bedroom/garden (room_noun, a1.unit24)
+    and afternoon/evening/night (day_part, a1.unit01/05) -- 11 tokens total, a coherent
+    report-a-problem/schedule-the-repair theme, all 11 Farsi glosses hand-checked distinct and non-confusable.
+    day_part chosen over the wider time_period (which adds the generic "day"). The unit's 6 other untagged nouns
+    (building/manager/apartment/problem/tomorrow/home) drop out of the pool -- acceptable: 6 tagged tokens meet
+    the floor exactly and no backfill edits are allowed in pack polish. `day_part` added to tag_schema; preset
+    renamed unit29_noun -> unit29_match_pool. No other template touched.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [maintenance_noun, room_noun]
+    semantic: [maintenance_noun, room_noun, day_part]
 slot_presets:
   maintenance_noun: &maintenance_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: maintenance_noun}}
   room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
-  unit29_noun: &unit29_noun {language_code: en, part_of_speech: noun}
+  unit29_match_pool: &unit29_match_pool {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [maintenance_noun, room_noun, day_part]}}
 templates:
   - content_key: practice.fa-en.en.a2.unit29.lesson01.choose.001
     lesson_content_key: en.a2.unit29.lesson01.repair_vocabulary
@@ -219,7 +232,7 @@ templates:
     lesson_content_key: en.a2.unit29.lesson04.maintenance_dialogue
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *unit29_noun, second: *unit29_noun, third: *unit29_noun, fourth: *unit29_noun, fifth: *unit29_noun, sixth: *unit29_noun}
+    slots: {first: *unit29_match_pool, second: *unit29_match_pool, third: *unit29_match_pool, fourth: *unit29_match_pool, fifth: *unit29_match_pool, sixth: *unit29_match_pool}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

@@ -11,7 +11,12 @@ review:
     templates / 12 distinct items per tier / 40 per pack). Authored what the real pool supports; did not
     pad with untaught/forward-referenced vocabulary. Flagging for coordinator per hard rule #3. No mis-glossed
     lexemes found on manual gloss read (§0.1); every content-POS token''s english_gloss field matches
-    the sense used in the realization file.'
+    the sense used in the realization file. POLISH 2026-07-25: the backfill now registers 15 content
+    lexemes across all 4 lessons (phrase lexemes were added after the note above was written), so the
+    thinness claim is stale. Added lesson01.order.004 (word_order, lesson01 noun anchor: invitation/picnic,
+    both grammatical in "Thank you for the ___"), lesson04.order.005 (word_order, single anchor wrote)
+    and lesson01.translate.005 (bare-word translation, unit tag narrowed to [noun, verb]: invitation/
+    picnic/wrote) -- structured and production tiers now both have 3 live templates.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -26,6 +31,7 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
+    - fa_en_a1_unit60_lesson01_words
     - fa_en_a1_unit60_lesson04_words
     - fa_en_a1_unit60_words
 templates:
@@ -94,6 +100,53 @@ templates:
     slot: item
   feedback_frame:
     text: پاسخ درست، معادل انگلیسی عبارت فارسی نمایش داده‌شده است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit60.lesson01.order.004
+  lesson_content_key: en.a1.unit60.lesson01.invitation_words
+  type: word_order
+  frame:
+    text: Thank you for the {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: fa_en_a1_unit60_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Thank you for the {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: واژه‌های انگلیسی را به ترتیب درست بچینید تا جمله کامل شود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit60.lesson01.translate.005
+  lesson_content_key: en.a1.unit60.lesson01.invitation_words
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic: fa_en_a1_unit60_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی واژهٔ نمایش داده‌شده است.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit60.lesson04.choose.001
@@ -176,5 +229,28 @@ templates:
     slot: item
   feedback_frame:
     text: جای خالی را با واژهٔ انگلیسی درست پر کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit60.lesson04.order.005
+  lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+  type: word_order
+  frame:
+    text: She {item} a note to her friend
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: fa_en_a1_unit60_lesson04_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She {item} a note to her friend
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} یعنی «نوشت» (زمان گذشته).'
     language_code: fa
     direction: rtl

@@ -26,12 +26,26 @@ review:
     import.
 
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+
+    Polish wave 2 (2026-07-25, tier-thinness, PRACTICE_PACK_RECIPE.md §8): added lesson02.choose.001
+    (3rd recognition, over the unit-native post_noun tag — 5 unit tokens / 5 distinct glosses, a
+    different pool than choose.001's mail_noun so not a duplicate), lesson01.fill.005 +
+    lesson04.order.001 (2nd/3rd structured: fill on the course-singleton
+    volume_prs_en_a1_unit40_item_05_single = "letter"; word_order over sendable_noun whose full
+    course pool {letter, package} is grammatical in "She sent a {item} to her friend"),
+    lesson01.translate.006 (2nd production: gloss-rendered sentence translation over mail_noun —
+    prompt varies with the answer; all 4 course-wide members fit "The {item} is on the table" /
+    "{item} روی میز است") and lesson03.translate.001 (3rd production, fixed sentence on the letter
+    singleton per §6.6(b), echoing the lesson03 dialogue's send-to-Chicago line).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [mail_noun]
+    semantic: [mail_noun, post_noun, sendable_noun, volume_prs_en_a1_unit40_item_05_single]
 slot_presets:
   mail_noun: &mail_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: mail_noun}}
+  post_noun: &post_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: post_noun}}
+  sendable_noun: &sendable_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sendable_noun}}
+  letter_single: &letter_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: volume_prs_en_a1_unit40_item_05_single}}
 templates:
   - content_key: practice.fa-en.en.a1.unit40.lesson01.choose.001
     lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
@@ -62,3 +76,44 @@ templates:
     slots: {item: *mail_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.fill.005
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: fill_in_blank
+    frame: {text: "Put the {item} in the mailbox, please", language_code: en, direction: ltr}
+    slots: {item: *letter_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی نامه.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson01.translate.006
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: translation
+    frame: {text: "{item} روی میز است.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *mail_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "The {item} is on the table", language_code: en, direction: ltr}
+    feedback_frame: {text: "پاسخ درست: The {item} is on the table", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson02.choose.001
+    lesson_content_key: en.a1.unit40.lesson02.sending_mail
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *post_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson03.translate.001
+    lesson_content_key: en.a1.unit40.lesson03.dialogue_at_the_post_office
+    type: translation
+    frame: {text: "می‌خواهم این نامه را به شیکاگو بفرستم.", language_code: fa, direction: rtl}
+    slots: {item: *letter_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I want to send this {item} to Chicago", language_code: en, direction: ltr}
+    feedback_frame: {text: "I want to send this {item} to Chicago یعنی می‌خواهم این نامه را به شیکاگو بفرستم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit40.lesson04.order.001
+    lesson_content_key: en.a1.unit40.lesson04.three_trips_to_the_post_office
+    type: word_order
+    frame: {text: "She sent a {item} to her friend", language_code: en, direction: ltr}
+    slots: {item: *sendable_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "She sent a {item} to her friend", language_code: en, direction: ltr}
+    feedback_frame: {text: "کلمهٔ {item} چیزی است که می‌توان فرستاد.", language_code: fa, direction: rtl}

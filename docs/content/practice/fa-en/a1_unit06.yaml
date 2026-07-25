@@ -26,6 +26,22 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened family_pair.003
     from 2 to 4 pairs (family_singular/noun, real course-wide pool=4 --
     mother/father/brother/sister), no padding with untaught words.
+
+    Tier-thinness polish (2026-07-25, wave-2 PACK-ONLY lane): the
+    structured tier had only 2 live templates (family_pair.003,
+    possessive_order.003 -- below the recipe §8 >=3-per-tier floor).
+    Added family_pair.002, a 6-slot matching_pairs anchored to lesson03
+    (describing_family, which previously carried only one template) over
+    the union [family_singular, family_collective, extended_family],
+    part_of_speech noun -- 11 distinct unit-scope tokens with 11
+    distinct Farsi glosses (mother/father/brother/sister/parents/
+    siblings/grandmother/grandfather/aunt/uncle/cousin), comfortably
+    over the 6-pair floor; no confusable right-hand glosses
+    (عمه؛ خاله vs عمو؛ دایی vs پسرعمو؛ دخترعمو are distinct
+    discriminations). matching_pairs has no literal frame text, so the
+    wider course-scope pool costs nothing grammatically. family_pair.003
+    (4 slots, dispatched-out-of-scope) left untouched per wave rules.
+    NOT fresh-context-reviewed.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
@@ -35,6 +51,7 @@ slot_presets:
   family_collective: &family_collective {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_collective}}
   extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
   possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
+  family_any: &family_any {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [family_singular, family_collective, extended_family]}}
 templates:
   - content_key: practice.fa-en.en.a1.unit06.lesson01.family_gloss.001
     lesson_content_key: en.a1.unit06.lesson01.immediate_family
@@ -93,6 +110,14 @@ templates:
     slots: {family_singular: *family_singular}
     answer_derivation: {kind: slot_text, slot: family_singular}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit06.lesson03.family_pair.002
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: matching_pairs
+    frame: {text: "{family_one} — {family_two} — {family_three} — {family_four} — {family_five} — {family_six}", language_code: en, direction: ltr}
+    slots: {family_one: *family_any, family_two: *family_any, family_three: *family_any, family_four: *family_any, family_five: *family_any, family_six: *family_any}
+    slot_relations: [{kind: distinct, slots: [family_one, family_two, family_three, family_four, family_five, family_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [family_one, family_two, family_three, family_four, family_five, family_six]}
+    feedback_frame: {text: "هر واژهٔ خانواده را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit06.lesson04.family_listen.001
     lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
     type: listen_select
