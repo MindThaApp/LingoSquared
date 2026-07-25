@@ -41,7 +41,27 @@ review:
     untouched since education_noun's 3 members already clear their floors.
     Re-verified 0 DEAD, 0 below-floor with
     scripts/_practice_unit_scope_check.py and 0 errors with
-    compile_content.py practice-validate."
+    compile_content.py practice-validate.
+
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit):
+    structured tier had only 1 live template and production only 2 (<3
+    floor, recipe SS8). Added two word_order templates over
+    education_noun (course-wide pool is exactly
+    class/course/homework/student/subject/test): lesson02.order.001
+    'My {item} is difficult' and lesson04.order.002 'We like our {item}'
+    -- both frames verified grammatical and sensible for all six
+    course-scope members. Added lesson03.translate.001 (NL prompt
+    'Ik vind mijn {item} leuk.' with gloss rendering, EN render_frame
+    'I like my {item}'; 'mijn'/'my' works for every course-scope member,
+    no article-agreement hazard). Tiers now 3/3/3, and lesson03
+    (previously template-less) is now represented. match.003 POS-only
+    audit: left POS-only DELIBERATELY -- the only semantic tags
+    unit36's lexemes carry are education_noun/class_noun/
+    recurring_class_noun, whose unit-scoped union is just 3 distinct
+    tokens (course/homework/subject), below the 6 declared matching
+    slots, so no unit-native semantic union can satisfy the template;
+    per the polish rubric the bare part_of_speech: noun constraint
+    stays."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -92,3 +112,30 @@ templates:
     slots: {item: *education_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson02.order.001
+    lesson_content_key: en.a1.unit36.lesson02.taking_a_class
+    type: word_order
+    frame: {text: "My {item} is difficult", language_code: en, direction: ltr}
+    slots: {item: *education_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "My {item} is difficult", language_code: en, direction: ltr}
+    feedback_frame: {text: "Zo zeg je dat een onderdeel van je studie moeilijk is.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson04.order.002
+    lesson_content_key: en.a1.unit36.lesson04.learning_something_new
+    type: word_order
+    frame: {text: "We like our {item}", language_code: en, direction: ltr}
+    slots: {item: *education_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "We like our {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "Zo zeg je dat jullie iets van de studie leuk vinden.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit36.lesson03.translate.001
+    lesson_content_key: en.a1.unit36.lesson03.dialogue_photography_class
+    type: translation
+    frame: {text: "Ik vind mijn {item} leuk.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *education_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I like my {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "I like my {item} betekent Ik vind mijn {item} leuk.", language_code: nl, direction: ltr}

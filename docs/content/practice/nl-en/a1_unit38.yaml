@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit38.household
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
     a1_unit30.yaml's notes for the sprint context). 4-member
     'household_noun' tag (chore/dishes/laundry/trash, all nouns) for
@@ -27,13 +27,36 @@ review:
     reasoning): lesson_content_keys (lesson01.household_vocabulary, lesson02.doing_chores) resolve to real lessons in en/a1_unit38_household.yaml. household_noun (chore/dishes/laundry/trash = klusje/afwas/was/vuilnis) is recognition-only -- correct, each chore pairs with its own verb. Verb items vacuum/clean correctly excluded for POS uniformity. No bare YAML booleans, no snake_case learner-facing
     leaks. Validation: compiler practice-validate 0/0 across the full
     42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    POLISH 2026-07-25 (wave 2, tier-thinness pass): structured and production
+    tiers each had only 1 live template (match.003 / translate.004).
+    Structured += lesson02.order.001 (word_order 'The {item} can wait until
+    tomorrow.' over household_noun -- course-wide pool is exactly
+    chore/dishes/laundry/trash, each grammatical in the frame, no frame word
+    is a candidate), lesson04.order.001 (word_order 'I forgot about the
+    {item} again.', same pool, same checks) and lesson01.fill.005 (fill
+    'Please take out the {item} tonight.' anchored on the single-member
+    trash_word tag). Production += lesson03.translate.001 (bare-word
+    translation over the unit's 9 plain nouns, part_of_speech noun only --
+    POS-only is safe for bare translation because the prompt varies with the
+    answer; all 9 unit glosses distinct; proper_noun excluded) and
+    lesson04.translate.001 (deterministic sentence translation 'Zet het
+    {item} vanavond buiten, alsjeblieft.' -> 'Please take out the {item}
+    tonight.' on the single-member trash_word slot, so the fixed pair can
+    never desync). Tiers now 3 recognition / 4 structured / 3 production
+    live. A verb bare-word translation was deliberately NOT added: clean and
+    cleaning share the gloss schoonmaken, an ambiguous typed prompt. Reset
+    status reviewed -> unreviewed since this adds unreviewed content to a
+    previously reviewed pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [household_noun]
+    semantic: [household_noun, trash_word]
 slot_presets:
   household_noun: &household_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: household_noun}}
+  trash_single: &trash_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: trash_word}}
+  unit38_noun: &unit38_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.nl-en.en.a1.unit38.lesson01.choose.001
     lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
@@ -71,3 +94,44 @@ templates:
     slots: {item: *household_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit38.lesson02.order.001
+    lesson_content_key: en.a1.unit38.lesson02.doing_chores
+    type: word_order
+    frame: {text: "The {item} can wait until tomorrow.", language_code: en, direction: ltr}
+    slots: {item: *household_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "The {item} can wait until tomorrow.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De juiste volgorde is: The {item} can wait until tomorrow.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit38.lesson04.order.001
+    lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+    type: word_order
+    frame: {text: "I forgot about the {item} again.", language_code: en, direction: ltr}
+    slots: {item: *household_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I forgot about the {item} again.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De juiste volgorde is: I forgot about the {item} again.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit38.lesson01.fill.005
+    lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+    type: fill_in_blank
+    frame: {text: "Please take out the {item} tonight.", language_code: en, direction: ltr}
+    slots: {item: *trash_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Het ontbrekende woord is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit38.lesson03.translate.001
+    lesson_content_key: en.a1.unit38.lesson03.dialogue_cleaning_help
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit38_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit38.lesson04.translate.001
+    lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+    type: translation
+    frame: {text: "Zet het {item} vanavond buiten, alsjeblieft.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *trash_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "Please take out the {item} tonight.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De Engelse zin is: Please take out the {item} tonight.", language_code: nl, direction: ltr}

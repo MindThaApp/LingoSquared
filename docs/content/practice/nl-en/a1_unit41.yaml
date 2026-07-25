@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit41.cooking
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). 3-member
     ''cooking_verb'' tag (chop/boil/taste, all verbs) for bare-word recognition only -- deliberately excludes the lesson''s
     other two vocabulary items (''recipe''/''ingredient'', nouns) to keep part_of_speech uniform within the tag, AND excludes
@@ -23,7 +23,21 @@ review:
     floor and is recognition-only; the homograph ''cook'' is correctly excluded (already classified noun in unit23), and noun
     items recipe/ingredient excluded for POS uniformity. No bare YAML booleans, no snake_case learner-facing leaks. Validation:
     compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py
-    --dry-run clean. Upgrading to reviewed.'
+    --dry-run clean. Upgrading to reviewed.
+
+
+    POLISH 2026-07-25 (wave 2, tier-thinness pass): structured had 2 live templates (both 3-slot matching_pairs) and production
+    only 1 (translate.004). Structured += lesson01.fill.005 (fill Please {item} the onions into small pieces. on the
+    single-member chop_word tag) and lesson02.fill.001 (fill You need to {item} the water for the pasta first. on the
+    single-member volume_fa_en_a1_unit41_item_04_single tag = boil). Production += lesson02.translate.005 (sentence
+    translation Wil je alles {item}? -> Do you want to {item} everything? over cooking_verb -- course-wide pool is exactly
+    chop/boil/taste, each grammatical in both frames, and the prompt varies with the answer via slot_rendering so it stays
+    determinate) and lesson04.translate.001 (deterministic sentence translation Kun je de uien {item}? -> Can you {item}
+    the onions? on the single-member chop_word slot; the Dutch gloss fijnsnijden is an infinitive and fits the Kun je ...
+    {item}? frame). Tiers now 3 recognition / 4 structured / 3 production live. No shared word_order frame was added
+    because chop/boil/taste each need their own object (per the original authoring note above). tag_schema gained the two
+    referenced single-member tags. Reset status reviewed -> unreviewed since this adds unreviewed content to a previously
+    reviewed pack.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -39,12 +53,24 @@ tag_schema:
   agreement_tags:
     semantic:
     - cooking_verb
+    - chop_word
+    - volume_fa_en_a1_unit41_item_04_single
 slot_presets:
   cooking_verb: &id001
     language_code: en
     part_of_speech: verb
     agreement_tags:
       semantic: cooking_verb
+  chop_single: &u41_chop
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: chop_word
+  boil_single: &u41_boil
+    language_code: en
+    part_of_speech: verb
+    agreement_tags:
+      semantic: volume_fa_en_a1_unit41_item_04_single
 templates:
 - content_key: practice.nl-en.en.a1.unit41.lesson01.choose.001
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
@@ -172,5 +198,79 @@ templates:
     - third
   feedback_frame:
     text: Verbind elk woord met de Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit41.lesson01.fill.005
+  lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+  type: fill_in_blank
+  frame:
+    text: Please {item} the onions into small pieces.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *u41_chop
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Het ontbrekende woord is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit41.lesson02.fill.001
+  lesson_content_key: en.a1.unit41.lesson02.preparing_a_meal
+  type: fill_in_blank
+  frame:
+    text: You need to {item} the water for the pasta first.
+    language_code: en
+    direction: ltr
+  slots:
+    item: *u41_boil
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Het ontbrekende woord is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit41.lesson02.translate.005
+  lesson_content_key: en.a1.unit41.lesson02.preparing_a_meal
+  type: translation
+  frame:
+    text: Wil je alles {item}?
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Do you want to {item} everything?
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'De Engelse zin is: Do you want to {item} everything?'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit41.lesson04.translate.001
+  lesson_content_key: en.a1.unit41.lesson04.cooking_together
+  type: translation
+  frame:
+    text: Kun je de uien {item}?
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u41_chop
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Can you {item} the onions?
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'De Engelse zin is: Can you {item} the onions?'
     language_code: nl
     direction: ltr

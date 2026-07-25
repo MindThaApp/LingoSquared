@@ -6,8 +6,28 @@ unit_content_key: en.a1.unit43.colors
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 43. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 43. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-25 (wave 2, tier-thinness + POS-only matching_pairs pass):
+    (1) POS-ONLY MATCHING match.002 and volume_match.006 are LEFT POS-only,
+    honestly: unit43's lexeme specs carry ZERO semantic tags (recombination-style
+    colors unit), so no semantic union of unit-native tags is possible and a
+    wrong union would be worse than the status quo. (2) Tier-thinness:
+    recognition, structured and production each had 2 live templates.
+    Recognition += lesson02.choose.001 (multiple_choice over the unit's 8
+    adjectives, part_of_speech adjective only -- 8 distinct unit glosses, above
+    the 3-option floor and a narrower pool than the all-POS choose.001).
+    Production += lesson04.translate.001 (bare-word translation over the same 8
+    adjectives; POS-only is safe for bare translation because the prompt varies
+    with the answer; all glosses distinct). Structured stays honestly THIN at 2
+    live: with zero semantic tags there is no single-member anchor for
+    fill_in_blank, any POS-only word_order frame must be grammatical for every
+    course-scope a1 adjective/noun (including five-minute, own, several, and
+    possessives classified as nouns) and no frame survives that, and adding a
+    third POS-only matching_pairs would add a new instance of the very defect
+    class this wave retires.
 tag_schema:
   part_of_speech:
   - symbol
@@ -34,6 +54,9 @@ slot_presets:
     - preposition
     - particle
     - phrase
+  unit_adjective: &u43_adj
+    language_code: en
+    part_of_speech: adjective
 templates:
 - content_key: practice.nl-en.en.a1.unit43.lesson01.choose.001
   lesson_content_key: en.a1.unit43.lesson01.colors_vocabulary
@@ -164,6 +187,40 @@ templates:
       - preposition
       - particle
       - phrase
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Geef het Engelse woord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit43.lesson02.choose.001
+  lesson_content_key: en.a1.unit43.lesson02.talking_about_colors
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *u43_adj
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Kies de betekenis van {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit43.lesson04.translate.001
+  lesson_content_key: en.a1.unit43.lesson04.three_friends_three_favorite_colors
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u43_adj
   answer_derivation:
     kind: slot_text
     slot: item

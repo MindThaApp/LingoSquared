@@ -16,7 +16,12 @@ review:
     ever a taught token in this unit). multiple_choice/listen_select clear the 3-distinct-value floor.
     matching_pairs OMITTED: fewer than 6 distinct content-POS tokens in the unit. THIN UNIT: only 3 EN
     content lexemes total -- this pack cannot reach the 12-item checkpoint floor or the recipes per-tier
-    bars; authored honestly per the no-padding rule, flagged to the coordinator as checkpoint-thin.'
+    bars; authored honestly per the no-padding rule, flagged to the coordinator as checkpoint-thin.
+    Polish 2026-07-25: the 3-token content-POS union is byte-identical to both existing recognition
+    pools, so a third content-word recognition template would be a duplicate; added lesson02-anchored
+    phrase multiple_choice choose.001 instead (lesson02 auto-tag, part_of_speech phrase, 6 distinct
+    clean Dutch phrase glosses -- lesson03 dialogue phrases were NOT used because their glosses carry
+    speaker prefixes). Recognition tier now 3 live templates; also gives lesson02 its first template.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -33,6 +38,7 @@ tag_schema:
     semantic:
     - a1_unit66_pharmacy_symptoms
     - a1_unit66_pharmacy_symptoms_lesson01
+    - a1_unit66_pharmacy_symptoms_lesson02
 templates:
 - content_key: practice.nl-en.en.a1.unit66.lesson01.choose.001
   lesson_content_key: en.a1.unit66.lesson01.symptom_words
@@ -214,5 +220,25 @@ templates:
     slot: item
   feedback_frame:
     text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit66.lesson02.choose.001
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: a1_unit66_pharmacy_symptoms_lesson02
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een zin uit deze les.'
     language_code: nl
     direction: ltr

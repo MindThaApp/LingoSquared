@@ -8,12 +8,14 @@ review:
   fresh_context: "false"
   notes: >-
     Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md for the nl-en a1_unit60 vocabulary unit. Recognition (multiple_choice, listen_select) and production (translation bare-word) templates use the unit-wide semantic tag `a1_unit60_invitations` (all lessons unioned, POS-restricted to noun/verb/adjective/adverb, language_code en) anchored per lesson -- the recipe SS8.1 pattern -- so every recognition/production slot clears the >=3-distinct-value floor even where an individual lesson is thin; measured 5 distinct unit-wide content lexemes with zero duplicate english_gloss values (checked by hand against the real backfill_lexemes_nl_en.py output before writing). matching_pairs also draws on the unit-wide tag (6 pairs). Structured tier is carried primarily by matching_pairs (bare frame, no literal text, so no course-scope grammaticality risk per recipe SS1.1) plus one fill_in_blank single-member anchor per SS6.5 where the real lexeme dump yielded exactly one course-wide candidate for its lesson+part_of_speech combination (verified before writing the frame). word_order was used only where lesson01s own verb pool is uniformly a bare infinitive form (this units per-lesson tags cannot exclude a single mixed-conjugation member, recipe SS3.1b) and skipped elsewhere in this batch for that reason; the structured-tier floor is still met via matching_pairs alone. Lessons with zero en-language lexemes in the real backfill output are not anchored (recipe SS0: a lesson with no lexemes cannot be represented in the checkpoint regardless of pack content). THIN UNIT: only 5 distinct en content lexemes exist in the real backfill output for this unit (invitation, picnic, wrote, plus 2 date/time symbols), well below the recipe SS8 breadth target. matching_pairs was DROPPED ENTIRELY (the pool cannot reach the 6-distinct-token floor even including symbol-type tokens) rather than shipped with fewer than 6 pairs (rubric HARD RULE: never ship matching_pairs below 6). Total pack is 7 templates, checkpoint-thin (well under the 12-item floor); the coordinator should route this unit to a lexeme-backfill task rather than expect it to pass generate_checkpoint() on its own, per rubric rule 3 (author what the pool genuinely supports, do not pad with untaught vocabulary) and the recipe's explicit instruction to flag any unit that will still be checkpoint-thin.
+    POLISH 2026-07-25 (tier-thinness wave 2): the earlier matching_pairs omission only considered content-POS tokens; lesson02 holds 6 distinct en phrase lexemes with 6 distinct, non-confusable Dutch glosses, which clears the 6-pair floor. Added lesson02.match.001 (matching_pairs over the lesson02 phrase pool), lesson01.order.001 (word_order, pool = lesson01 nouns invitation/picnic, both grammatical in the frame, no course-scope extras) to bring structured 1 to 3 live, and lesson04.translate.002 (parallel-frame translation, single-member verb slot wrote, deterministic) to bring production 2 to 3 live. Pool sizes verified with pool_check.py.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [a1_unit60_invitations, a1_unit60_invitations_lesson01, a1_unit60_invitations_lesson04]
+    semantic: [a1_unit60_invitations, a1_unit60_invitations_lesson01, a1_unit60_invitations_lesson02, a1_unit60_invitations_lesson04]
 slot_presets:
   unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit60_invitations}}
+  lesson02_phrases: &lesson02_phrases {language_code: en, part_of_speech: phrase, agreement_tags: {semantic: a1_unit60_invitations_lesson02}}
 templates:
   - content_key: practice.nl-en.en.a1.unit60.lesson01.choose.001
     lesson_content_key: en.a1.unit60.lesson01.invitation_words
@@ -64,3 +66,25 @@ templates:
     slots: {item: {language_code: en, part_of_speech: verb, agreement_tags: {semantic: a1_unit60_invitations_lesson04}}}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} past in deze zin.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson02.match.001
+    lesson_content_key: en.a1.unit60.lesson02.invitation_phrases
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *lesson02_phrases, second: *lesson02_phrases, third: *lesson02_phrases, fourth: *lesson02_phrases, fifth: *lesson02_phrases, sixth: *lesson02_phrases}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Verbind elke Engelse zin met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson01.order.001
+    lesson_content_key: en.a1.unit60.lesson01.invitation_words
+    type: word_order
+    frame: {text: "Thank you for the {item}.", language_code: en, direction: ltr}
+    slots: {item: {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit60_invitations_lesson01}}}
+    answer_derivation: {kind: render_frame, frame: {text: "Thank you for the {item}.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Zet de Engelse woorden in de juiste volgorde.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit60.lesson04.translate.002
+    lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
+    type: translation
+    frame: {text: "Zij {item} een uitnodiging.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: {language_code: en, part_of_speech: verb, agreement_tags: {semantic: a1_unit60_invitations_lesson04}}}
+    answer_derivation: {kind: render_frame, frame: {text: "She {item} an invitation", language_code: en, direction: ltr}}
+    feedback_frame: {text: "In het Engels: She {item} an invitation.", language_code: nl, direction: ltr}
