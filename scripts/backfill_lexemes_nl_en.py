@@ -2758,27 +2758,27 @@ NL_QUOTED_ENGLISH: frozenset[str] = frozenset({
     "wondering", "working", "works", "worries", "would", "writing", "you",
 })
 
-# Per-unit and per-lesson semantic tags, applied ONLY to the units added on
-# 2026-07-22 (A1 49-68, A2 30-34, all of B1 and B2). Existing units keep
-# exactly the tag set they had, so no shipped practice pack's candidate pool
-# changes. Without these, a pack for a new unit could only constrain a slot by
-# part_of_speech, which is workable at checkpoint scope (`_material()` is
-# already restricted to the unit's own lessons) but gives Endless Practice a
-# course-wide pool and gives a pack author no way to anchor a slot to one
-# lesson -- and the recipe's bar is "at least one hostable lexeme in EVERY
-# lesson, in EVERY tier". Tag names are derived from the realization filename
-# stem, e.g. `a1_unit49_waste_disposal` plus `a1_unit49_waste_disposal_lesson03`.
-_AUTO_TAGGED_PREFIXES = (
-    ("b1_unit", "b2_unit")
-    + tuple(f"a1_unit{number}" for number in range(49, 69))
-    + tuple(f"a2_unit{number}" for number in range(30, 35))
-)
+# Per-unit and per-lesson semantic tags. Originally applied ONLY to the
+# units added on 2026-07-22 (A1 49-68, A2 30-34, all of B1 and B2) so that
+# already-shipped pools stayed byte-identical; widened to EVERY unit on
+# 2026-07-25 after the polish wave measured that the untagged early-A1
+# bands leave matching_pairs stuck on bare part_of_speech pools (fine at
+# checkpoint scope, course-wide off-theme at Endless-Practice scope, with
+# no pack-side fix possible). The widening is purely ADDITIVE: no shipped
+# pack references the new tag names, so no existing candidate pool
+# changes, and tags are still emitted only on a token's first introduction
+# (checkpoint-safe). Without these, a pack can only constrain a slot by
+# part_of_speech -- workable at checkpoint scope (`_material()` is already
+# restricted to the unit's own lessons) but with no way to anchor a slot
+# to one lesson, and the recipe's bar is "at least one hostable lexeme in
+# EVERY lesson, in EVERY tier". Tag names are derived from the realization
+# filename stem, e.g. `a1_unit49_waste_disposal` plus
+# `a1_unit49_waste_disposal_lesson03`.
 AUTO_TAGGED_UNIT_STEMS: frozenset[str] = frozenset(
     realization.stem
     for realization, _overlay in (
         UNIT_FILES + UNIT_FILES_A2 + UNIT_FILES_B1 + UNIT_FILES_B2
     )
-    if realization.stem.startswith(_AUTO_TAGGED_PREFIXES)
 )
 
 

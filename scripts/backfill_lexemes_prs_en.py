@@ -1920,11 +1920,59 @@ PRS_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
 }
 
 
+# Generated per-unit and per-lesson semantic tags, ported 2026-07-25 from
+# backfill_lexemes_fa_en.py's identical mechanism after the polish wave
+# measured that prs-en lexemes from ~a1_43 onward (and virtually all of
+# B1/B2) carry no semantic tags at all — leaving every matching_pairs
+# there stuck on bare part_of_speech pools (checkpoint-safe but
+# course-wide off-theme in Endless Practice, unfixable pack-side). Two
+# tags per token, e.g. `prs_en_a1_unit50_words` +
+# `prs_en_a1_unit50_lesson03_words`; emitted ONLY on a token's first
+# introduction (a re-used token must never receive a later unit's tag —
+# its provenance lesson belongs to the earlier unit, which is exactly the
+# silent checkpoint_unavailable cause the recipe calls defect #2). Purely
+# additive: no shipped pack references these names, so no existing pool
+# changes until a pack opts in.
+
+# Grammar metalanguage taught as real tokens by B1/B2 grammar cards; they
+# stay lexemes but are kept out of the generated tags so a pack can never
+# build a vocabulary drill whose options are "noun"/"verb"/"clause".
+METALANGUAGE_TOKENS = frozenset({
+    "clause", "commas", "command", "conditional", "continuous", "defining",
+    "direct", "form", "forms", "hypothetical", "noun", "non-defining",
+    "participle", "past", "perfect", "period", "phrase", "present",
+    "relative", "reported", "semicolon", "sentence", "simple", "speech",
+    "tense", "unreal", "verb",
+})
+
+# Function words and proper nouns are excluded: a slot_gloss MC over proper
+# nouns self-glosses, and matching over particles is not a vocabulary check.
+TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
+
+
+def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
+    if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
+        return []
+    if part_of_speech != "phrase" and not all(
+        character.isalpha() or character in "-'" for character in token
+    ):
+        # Digits, currency marks, clock colons or attached punctuation:
+        # real lexemes, poor slot candidates.
+        return []
+    return [
+        f"prs_en_{unit_stem}_words",
+        f"prs_en_{unit_stem}_lesson{lesson_order:02d}_words",
+    ]
+
+
 def _classify(files, level, specs):
     for unit_order, (realization_path, overlay_path) in enumerate(files, 1):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
         teaching_overlays = overlay["teaching"]
+        # "a1_unit49_waste_disposal" -> "a1_unit49": the stable per-unit
+        # key the generated semantic tags are named after.
+        unit_stem = "_".join(realization_path.stem.split("_")[:2])
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
@@ -1959,14 +2007,25 @@ def _classify(files, level, specs):
                     key = (level, token)
                     existing = specs.get(key)
                     if existing is None:
+                        resolved_pos = PRS_UNIT_POS_OVERRIDES.get(
+                            (realization_path.stem, lookup_key), part_of_speech
+                        )
+                        # ONLY on first introduction — see
+                        # _unit_semantic_tags() above.
+                        unit_tags = _unit_semantic_tags(
+                            unit_stem, lesson_order, token, resolved_pos
+                        )
+                        if unit_tags:
+                            semantic = tags.setdefault("semantic", [])
+                            semantic.extend(
+                                tag for tag in unit_tags if tag not in semantic
+                            )
                         specs[key] = {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": content_key,
                             "token": token, "language_code": "en",
-                            "part_of_speech": PRS_UNIT_POS_OVERRIDES.get(
-                                (realization_path.stem, lookup_key), part_of_speech
-                            ),
+                            "part_of_speech": resolved_pos,
                             "english_gloss": PRS_UNIT_GLOSS_OVERRIDES.get(
                                 (realization_path.stem, lookup_key),
                                 EN_TARGET_TO_PRS_GLOSS[lookup_key],
@@ -1986,6 +2045,9 @@ def _classify(files, level, specs):
                 key = (level, token)
                 if key in specs:
                     continue
+                semantic = _unit_semantic_tags(
+                    unit_stem, lesson_order, token, "phrase"
+                )
                 specs[key] = {
                     "level": level,
                     "unit_order": unit_order,
@@ -1996,7 +2058,7 @@ def _classify(files, level, specs):
                     "language_code": "en",
                     "part_of_speech": "phrase",
                     "english_gloss": gloss,
-                    "agreement_tags": {},
+                    "agreement_tags": {"semantic": semantic} if semantic else {},
                 }
 
 
