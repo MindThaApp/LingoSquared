@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: >-
     Authored 2026-07-11 by the prs-en depth-extension worker, same pass
     as unit30-34. Single tag: 6-member 'device_noun' (phone/laptop/
@@ -39,12 +39,27 @@ review:
     sibling block) is harmless, since 'cake' is genuinely taught in en
     unit37 and has a Dari gloss, so it is only ever a valid recognition
     candidate. Upgraded to reviewed: genuinely clean.
+
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2, reverting to
+    unreviewed): all three tiers were <3 live. Added choose.006
+    (lesson04, bare unit-noun pool: 20 distinct unit tokens/glosses),
+    order.007 (lesson03, 'My {item} is slow' -- device_noun course pool
+    is app/camera/computer/laptop/tablet/phone, all grammatical, no
+    self-reference), translate.008 (lesson02, bare-word verb
+    translation: 12 unit verbs) and translate.009 (lesson03, bare-word
+    noun translation over the unit noun pool -- differs from
+    translate.004's device_noun pool). Pre-existing 4-pair match.003
+    floor gap left as-is (out of scope for this pass). Verified with
+    practice-validate, pool_check, self-reference, unit-scope and
+    Dari-register checks.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
     semantic: [device_noun]
 slot_presets:
   device_noun: &device_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: device_noun}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
+  unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
 templates:
   - content_key: practice.prs-en.en.a1.unit35.lesson01.choose.001
     lesson_content_key: en.a1.unit35.lesson01.device_vocabulary
@@ -82,3 +97,31 @@ templates:
     slots: {item: *device_noun}
     answer_derivation: {kind: render_frame, frame: {text: "I have a new {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} وسیله‌ای است که ذکر شد.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit35.lesson04.choose.006
+    lesson_content_key: en.a1.unit35.lesson04.how_they_use_their_phones
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit35.lesson03.order.007
+    lesson_content_key: en.a1.unit35.lesson03.dialogue_new_phone
+    type: word_order
+    frame: {text: "My {item} is slow", language_code: en, direction: ltr}
+    slots: {item: *device_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "My {item} is slow", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وسیله‌ای است که آهسته کار می‌کنه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit35.lesson02.translate.008
+    lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی فعل {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit35.lesson03.translate.009
+    lesson_content_key: en.a1.unit35.lesson03.dialogue_new_phone
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}

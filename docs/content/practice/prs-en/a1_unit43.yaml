@@ -6,8 +6,22 @@ unit_content_key: en.a1.unit43.colors
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for prs-en A1 unit 43. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for prs-en A1 unit 43. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass): the dispatched POS-only matching_pairs defect
+    (match.002, volume_match.006) could NOT be converted to a semantic union -- every one of this unit's 25 lexemes
+    carries ZERO semantic tags (verified via backfill_lexemes_prs_en.iter_specs(); the unit43+ coverage-backfill band
+    never got tag classification), and packs cannot add lexeme tags. Partial mitigation applied instead: both matching
+    templates narrowed from the full 9-POS list to content words [noun, verb, adjective] (22 unit-scope tokens, floor
+    safe), which at least keeps function words like our/everything/especially out of the pairs; they remain POS-only at
+    course scope -- LOGGED for the coordinator as a tag-backfill follow-up. Tier-thinness: added lesson03.choose.001
+    (multiple_choice) and lesson04.translate.001 (bare-word translation), both over a part_of_speech noun pool (8 unit
+    tokens, 8 distinct glosses, recipe 3.1c -- bare-word frames, so no course-scope grammaticality exposure), bringing
+    recognition and production to 3 live each. The structured tier is left honestly thin at 2 live for the same
+    no-tags reason: a third matching_pairs would replicate the POS-only defect, no single-member anchor tag exists for
+    fill_in_blank, and no word_order frame can be grammatical over a bare-POS pool at course scope.
 tag_schema:
   part_of_speech:
   - symbol
@@ -73,51 +87,27 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
   slot_relations:
   - kind: distinct
     slots:
@@ -165,6 +155,44 @@ templates:
     text: معادل انگلیسی را وارد کنین.
     language_code: prs
     direction: rtl
+- content_key: practice.prs-en.en.a1.unit43.lesson03.choose.001
+  lesson_content_key: en.a1.unit43.lesson03.dialogue_choosing_a_shirt_color
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit43.lesson04.translate.001
+  lesson_content_key: en.a1.unit43.lesson04.three_friends_three_favorite_colors
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی را وارد کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit43.lesson01.match.002.volume_match.006
   lesson_content_key: en.a1.unit43.lesson01.colors_vocabulary
   type: matching_pairs
@@ -180,51 +208,27 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
   slot_relations:
   - kind: distinct
     slots:

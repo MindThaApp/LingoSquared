@@ -64,7 +64,19 @@ review:
     unit''s tags provide), production 3 (3 bare-word translations). LOG for the coordinator: a second structured template
     would need either a genuinely single-member native semantic tag (fill_in_blank) or another course-safe multi-member one
     (word_order) added in scripts/backfill_lexemes_prs_en.py -- out of scope here (PACK-ONLY). Verified 0 DEAD via scripts/_practice_unit_scope_check.py
-    and 0 errors via compile_content.py practice-validate.'
+    and 0 errors via compile_content.py practice-validate.
+
+
+    POLISH WAVE 2 (2026-07-24, dispatched TIER-SHORT structured + POS-ONLY-MATCHING content_match.003): the reauth note above
+    stopped at 2 structured templates, but a THIRD frame on the same already-course-verified tag is legal -- templates must
+    differ in frame text, not tag. Structured 2 -> 3 via lesson01.walk_order.004, a second preference_verb_full word_order:
+    course-wide pool is exactly hate/like/love/prefer (the preposition-POS "like" homograph is excluded by part_of_speech:
+    verb) and all four are grammatical in "I''d {item} to go for a walk" ("I''d hate/like/love/prefer to go for a walk");
+    no frame word is a slot candidate (defect 1.14 clean), and the frame echoes lesson01''s own taught invitation ("Would
+    you like to go for a walk?"). content_match.003 deliberately STAYS POS-only per POLISH_TASK_V2''s escape clause: unit17''s
+    own 12 lexemes carry a semantic tag on exactly ONE token (love), so no semantic union can reach the 6-token floor and
+    a wrong union is worse than the status quo. Real fix remains a prs-en semantic-tag backfill (backfill scripts are off-limits
+    to this PACK-ONLY wave).'
 tag_schema:
   part_of_speech:
   - noun
@@ -179,6 +191,25 @@ templates:
     - twelfth
   feedback_frame:
     text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit17.lesson01.walk_order.004
+  lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
+  type: word_order
+  frame:
+    text: I'd {item} to go for a walk
+    language_code: en
+    direction: ltr
+  slots:
+    item: *preference_verb_full
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I'd {item} to go for a walk
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} یعنی چقدر علاقه دارین قدم بزنین.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit17.lesson02.verb_choose.001

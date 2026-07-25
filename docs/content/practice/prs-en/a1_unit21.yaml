@@ -42,12 +42,33 @@ review:
     the matching_pairs template widened from 2 to 5 slots (the full
     course-wide travel_noun pool: ticket/platform/train/departure/
     arrival), per the pre-computed retrofit table.
+
+    POLISH WAVE 2 (2026-07-24, dispatched TIER-SHORT structured):
+    structured tier raised 1 -> 3 via lesson02.order.003 and
+    lesson04.order.003, two word_order frames on the narrower
+    transport_noun tag. travel_noun itself cannot host a literal frame
+    (this note's own original finding: its 5 members don't collocate
+    uniformly) and unit21's only other tagged token is train
+    (transport_noun/vehicle_noun), so transport_noun is the one
+    course-scope-safe widening available: its course-wide pool is
+    exactly bike/bus/car/train (verified via iter_specs), and every
+    member is grammatical and idiomatic in both "I go to Boston by
+    {item}" and "We can take the {item} to Boston"; no frame word is a
+    slot candidate (defect 1.14 clean, checked at course scope). Unit
+    scope each slot holds 1 candidate (train) -- word_order carries no
+    candidate floor, and both templates are live at checkpoint.
+    tag_schema/slot_presets extended with transport_noun accordingly.
+    match.003's 5-pair FLOOR line was NOT dispatched to this wave and
+    is left as-is: no semantic union can reach 6 (travel_noun has 5
+    members, and the only other tagged unit token is train, already in
+    the pool) -- lifting it needs a backfill tag, off-limits here.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [travel_noun]
+    semantic: [travel_noun, transport_noun]
 slot_presets:
   travel_noun: &travel_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: travel_noun}}
+  transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
 templates:
   - content_key: practice.prs-en.en.a1.unit21.lesson01.choose.001
     lesson_content_key: en.a1.unit21.lesson01.travel_vocabulary
@@ -92,6 +113,13 @@ templates:
     slots: {item: *travel_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی این واژهٔ دری {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson02.order.003
+    lesson_content_key: en.a1.unit21.lesson02.buying_a_ticket
+    type: word_order
+    frame: {text: "I go to Boston by {item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I go to Boston by {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وسیله‌ای است که با آن به بوستون سفر می‌کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit21.lesson03.choose.001
     lesson_content_key: en.a1.unit21.lesson03.reading_a_ticket
     type: multiple_choice
@@ -120,3 +148,10 @@ templates:
     slots: {item: *travel_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی این واژهٔ دری {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit21.lesson04.order.003
+    lesson_content_key: en.a1.unit21.lesson04.ticket_counter_dialogue
+    type: word_order
+    frame: {text: "We can take the {item} to Boston", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "We can take the {item} to Boston", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وسیله‌ای است که می‌تانین با آن به بوستون برین.", language_code: prs, direction: rtl}
