@@ -76,6 +76,21 @@ review:
     part_of_speech, real pool=6, verified directly against
     _en_target_lexeme_common.py since this tag isn't in the retrofit
     table). Neither pads with untaught words.
+
+    Tier-thinness polish (2026-07-25, wave-2 PACK-ONLY lane): the
+    production tier had only 2 live templates (number_translate.003
+    lesson01, market_translate.004 lesson04 -- below the recipe §8
+    >=3-per-tier floor). Added vocab_translate.006, a bare-word
+    translation anchored to lesson03 (ages_prices_phones, the one lesson
+    with real vocab and no production template) over the union
+    [age_phrase, price_phrase, phone_phrase] restricted to
+    part_of_speech [noun, adjective, adverb] -- 7 distinct unit-scope
+    tokens/glosses (old/twenty-five/years/much/dollars/phone/number);
+    pronoun deliberately excluded so the contraction "it's" never
+    becomes a bare typed-translation answer. Bare '{item}' frame, so
+    safe at course scope regardless of pool width (recipe §3.1/§6.6a).
+    NOT re-fresh-context-reviewed since the 2026-07-06 review above --
+    that review predates this one added template.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun]
   agreement_tags:
@@ -88,6 +103,7 @@ slot_presets:
   price_noun: &price_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: price_phrase}}
   phone_word: &phone_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: phone_phrase}}
   market_word: &market_word {language_code: en, part_of_speech: [pronoun, noun, adjective], agreement_tags: {semantic: market_dialogue}}
+  lesson3_word: &lesson3_word {language_code: en, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [age_phrase, price_phrase, phone_phrase]}}
   place_singular: &place_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: place_singular}}
 templates:
   # Lesson 1: zero to ten.
@@ -193,6 +209,13 @@ templates:
     # rather than removed.
     answer_derivation: {kind: slot_text, slot: phone_word, interchangeable: true}
     feedback_frame: {text: "{phone_word} این پرسش رایج دربارهٔ تلفن را کامل می‌کند.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit03.lesson03.vocab_translate.006
+    lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *lesson3_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
 
   # Lesson 4: at the market (dialogue).
   - content_key: practice.fa-en.en.a1.unit03.lesson04.market_gloss.001

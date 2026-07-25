@@ -23,7 +23,19 @@ review:
     Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
     listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
     practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
-    upgraded to reviewed.'
+    upgraded to reviewed.
+
+
+    Polish wave-2 2026-07-25 (tier-thinness pass, recipe §8): recognition and production were 2 live each. Added
+    choose_noun.007 (MC over a plain part_of_speech:noun constraint, anchored lesson02 which previously had no
+    template -- the unit natively introduces 15 distinct nouns with distinct Farsi glosses, comfortably over the
+    3-option floor; proper nouns excluded by POS, "exercise" excluded because backfill classifies it as a verb)
+    and translate_sentence.008 ("خواهرم {item} بازی می‌کنه." -> "My sister plays {item}" over ball_sport, anchored
+    lesson03 -- named-relative subject chosen so the typed answer is not underdetermined between He/She the way a
+    bare "اون" would be; ball_sport''s course-wide pool is exactly soccer/tennis/basketball, all grammatical).
+    Tiers now 3/3/3 live. NOT touched (below-floor line not dispatched): match.003 stays at 5 pairs -- sport_noun''s
+    unit-native noun pool is exactly the 5 sports (the 6th tag member "exercise" is a verb, excluded by the
+    preset''s part_of_speech:noun).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -198,3 +210,42 @@ templates:
     text: We play {item}
     language_code: en
     direction: ltr
+- content_key: practice.fa-en.en.a1.unit34.lesson02.choose_noun.007
+  lesson_content_key: en.a1.unit34.lesson02.frequency_and_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit34.lesson03.translate_sentence.008
+  lesson_content_key: en.a1.unit34.lesson03.dialogue_weekend_plans
+  type: translation
+  frame:
+    text: خواهرم {item} بازی می‌کنه.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My sister plays {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: My sister plays {item}. یعنی خواهرم {item} بازی می‌کنه.
+    language_code: fa
+    direction: rtl

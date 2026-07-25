@@ -27,13 +27,19 @@ review:
     FLAG FOR COORDINATOR: checkpoint will very likely stay <12 items
     (checkpoint_unavailable) unless lessons 02/03 get lexeme coverage from a
     backfill_lexemes_fa_en.py extension -- routing recommended.
+    POLISH 2026-07-25: the backfill extension happened -- lessons 02/03 now
+    carry 6+6 phrase lexemes, so the lexeme counts above are stale. Added
+    lesson02.translate.001 (bare-phrase translation over the 6-phrase
+    fa_en_a1_unit62_lesson02_words pool) -- production tier now 3 live
+    templates and lesson02 is checkpoint-visible.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [fa_en_a1_unit62_words, fa_en_a1_unit62_lesson01_words, fa_en_a1_unit62_lesson04_words]
+    semantic: [fa_en_a1_unit62_words, fa_en_a1_unit62_lesson01_words, fa_en_a1_unit62_lesson02_words, fa_en_a1_unit62_lesson04_words]
 slot_presets:
   unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: fa_en_a1_unit62_words}}
   lesson01_single: &lesson01_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit62_lesson01_words}}
+  lesson02_phrases: &lesson02_phrases {language_code: en, part_of_speech: phrase, agreement_tags: {semantic: fa_en_a1_unit62_lesson02_words}}
   lesson04_noun: &lesson04_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit62_lesson04_words}}
   lesson04_adj: &lesson04_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit62_lesson04_words}}
 templates:
@@ -65,6 +71,13 @@ templates:
     slots: {item: *lesson01_single}
     answer_derivation: {kind: render_frame, frame: {text: "The {item} is short", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} یعنی «پیام صوتی».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit62.lesson02.translate.001
+    lesson_content_key: en.a1.unit62.lesson02.phone_phrases
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *lesson02_phrases}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این عبارت است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit62.lesson04.choose.001
     lesson_content_key: en.a1.unit62.lesson04.phone_message
     type: multiple_choice

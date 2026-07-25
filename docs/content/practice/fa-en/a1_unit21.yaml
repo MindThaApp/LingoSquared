@@ -45,6 +45,17 @@ review:
     Retrofit 2026-07-06 (AUTHORING_GUIDE.md §16): widened match.003 from
     2 to 5 pairs (travel_noun/noun, real course-wide pool=5 -- arrival/
     departure/platform/ticket/train), no padding with untaught words.
+
+    Polish wave-2 2026-07-25 (tier-thinness, PRACTICE_PACK_RECIPE.md §8):
+    structured tier had only 1 live template (match.003). Added 2
+    word_order templates (lesson02.order.003 "Can you tell me about the
+    {item}", lesson03.order.003 "This is the {item}"), both on the
+    unit-native travel_noun slot. Grammaticality checked at COURSE scope
+    (recipe §1.1/§6.4): travel_noun's course-wide a1 pool is exactly the
+    5 unit members (arrival/departure/platform/ticket/train -- verified
+    via pool_check), and every one is grammatical in both frames (ticket
+    counter / reading-a-ticket context); no frame literal word is a slot
+    candidate (defect 1.14 clear). Structured tier now 3 live.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -95,6 +106,13 @@ templates:
     slots: {item: *travel_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit21.lesson02.order.003
+    lesson_content_key: en.a1.unit21.lesson02.buying_a_ticket
+    type: word_order
+    frame: {text: "Can you tell me about the {item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Can you tell me about the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} چیزی است که در باجهٔ بلیت درباره‌اش می‌پرسید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit21.lesson03.choose.001
     lesson_content_key: en.a1.unit21.lesson03.reading_a_ticket
     type: multiple_choice
@@ -109,6 +127,13 @@ templates:
     slots: {item: *travel_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit21.lesson03.order.003
+    lesson_content_key: en.a1.unit21.lesson03.reading_a_ticket
+    type: word_order
+    frame: {text: "This is the {item}", language_code: en, direction: ltr}
+    slots: {item: *travel_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "This is the {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} همان چیزی است که روی بلیت نشان داده می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit21.lesson04.listen.001
     lesson_content_key: en.a1.unit21.lesson04.ticket_counter_dialogue
     type: listen_select

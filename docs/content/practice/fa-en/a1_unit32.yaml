@@ -20,6 +20,19 @@ review:
     import.
 
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+
+
+    Polish wave-2 2026-07-25 (tier-thinness pass, recipe §8): all tiers were short (2 recognition / 2 structured /
+    1 production live). Added listen_sentence.006 (listen_select "I have a {item}" over pet_noun, anchored
+    lesson02), order_question.007 (word_order "Do you have a {item}?" over pet_noun, anchored lesson03),
+    translate_sentence.008 ("من یه {item} دارم." -> "I have a {item}", lesson01) and translate_sentence.009
+    ("خواهرم یه {item} داره." -> "My sister has a {item}", lesson04 -- named subject chosen deliberately: a
+    genderless "اون" prompt would be underdetermined between He/She for a typed answer; "sister's" is unit-native
+    lesson01 vocab). pet_noun's course-wide pool is exactly dog/cat/fish/bird, all grammatical in every new frame;
+    Farsi gloss options cannot collide with English audio (defect 1.22). Tiers now 3/3/3 live. NOT fixed
+    (out-of-scope below-floor, not dispatched): match.003 remains 4 pairs -- the unit's tagged vocabulary tops out
+    at 5 distinct tokens (pet_noun 4 + personality_adj "friendly"), below the 6-pair floor, and the only way to 6
+    would be a POS-only constraint, i.e. the exact defect class this wave removes elsewhere.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -63,3 +76,31 @@ templates:
     slots: {item: *pet_noun}
     answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} حیوان خانگی است که ذکر شد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit32.lesson02.listen_sentence.006
+    lesson_content_key: en.a1.unit32.lesson02.describing_pets
+    type: listen_select
+    frame: {text: "I have a {item}", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "حیوان خانگی‌ای که در جمله شنیدید {item} بود.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit32.lesson03.order_question.007
+    lesson_content_key: en.a1.unit32.lesson03.dialogue_mias_cat
+    type: word_order
+    frame: {text: "Do you have a {item}?", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you have a {item}?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "پرسش درست دربارهٔ داشتن {item} همین است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit32.lesson01.translate_sentence.008
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: translation
+    frame: {text: "من یه {item} دارم.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "I have a {item}. یعنی من یه {item} دارم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit32.lesson04.translate_sentence.009
+    lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+    type: translation
+    frame: {text: "خواهرم یه {item} داره.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "My sister has a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "My sister has a {item}. یعنی خواهرم یه {item} داره.", language_code: fa, direction: rtl}
