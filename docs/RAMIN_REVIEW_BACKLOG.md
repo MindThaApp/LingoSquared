@@ -118,11 +118,18 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   documented per pack in review.notes) — they stay POS-only (§3.1c-legal; cost = off-theme pairs
   in Endless Practice only). Durable fix = semantic-tag backfill pass over those bands, then a
   small union re-pass; would also unlock the 4 honest-thin tiers and many of the 144 remaining
-  below-floor matchers. Small concrete backfill bugs found en route: en-prs a2_12/13/14 have one
-  phrase lexeme each with the ENGLISH GLOSS BAKED INTO THE TOKEN («از دو روز پیش (since two days
-  ago)» etc. — self-answering card); fa-en unit32 `walks` gloss ends with a stray Arabic comma;
-  fa-en a1_31 translate_sentence.005 maps genderless «چشماش» onto "Her eyes…" (His/Her
-  underdetermined for typed answers).
+  below-floor matchers. ~~Small concrete backfill bugs found en route: en-prs a2_12/13/14
+  gloss-baked-into-token phrases; fa-en `walks` gloss comma; fa-en a1_31 His/Her frame.~~
+  **FIXED 2026-07-25** (commit cb9e4ef9). STILL OPEN from the same class: **en-fa's 42
+  label-phrase junk lexemes** (units 06/13/16/18/19/23/31-36 + a2 11/15/16/18 — tokens like
+  «امروز (today) / سال (year) / …» with English glosses/slashes baked in, all tagged only
+  `reviewed_phrase`; they can surface as junk tiles in the new course-scope phrase word_orders).
+  The emission guard already exists but is deliberately scoped (see the `_label_guarded` comment
+  in `backfill_lexemes.py` ~line 3259): suppressing them BEFORE deleting the persisted rows
+  verifiably breaks the practice import (102 errors on a dev-DB copy). Paired deploy-side task:
+  (1) delete those 42 Lexeme rows in the DB, (2) widen `_label_guarded` to all units, (3) rerun
+  backfill + practice import. Needs a live dev DB to verify — same procedure the guard's author
+  used.
 - **Duplicate `volume_match`/`volume_translate` templates (units 31–40, all directions):** the
   2026-07-11 authoring pass emitted literal-duplicate matching/translation templates (and a
   degraded bare-`{word}` feedback_frame on the translation ones). Systemic; wants one cleanup pass.
