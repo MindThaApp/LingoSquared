@@ -1065,7 +1065,11 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     "upset": "ناراحت", "us": "ما (حالت مفعولی)", "use": "استفاده کردن",
     "uses": "استفاده می‌کند", "using": "با استفاده از",
     "vacuum": "جارو کردن", "vacuumed": "جارو کرد", "vacuums": "جارو می‌کند",
-    "video": "ویدیویی (در video games)", "walks,": "پیاده‌روی‌ها،",
+    # walks: gloss comma dropped 2026-07-25 -- unlike the mirrored-comma
+    # style on pure display tokens (میا،/خب،/بله،), this one surfaces as a
+    # standalone option in POS-noun practice pools, where the dangling
+    # comma reads as a typo (flagged by the polish wave).
+    "video": "ویدیویی (در video games)", "walks,": "پیاده‌روی‌ها",
     "wanted": "می‌خواست", "wants": "می‌خواهد",
     "warms": "گرم می‌شود (warms up: راحت می‌شود)", "wash": "شستن",
     "washes": "می‌شوید", "washing": "شستن (اسم مصدر)", "watch": "تماشا کردن",

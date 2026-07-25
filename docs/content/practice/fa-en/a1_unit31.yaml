@@ -39,8 +39,9 @@ review:
     distinct unit tokens), translate.008 (bare-word production over trait_adj) -- lesson01 previously had zero
     templates. (3) De-duplicated volume_order.005 (was a byte-identical clone of order.004): frame changed to "His
     eyes are {item}" (all course-scope eye_color members grammatical). Tiers now 3/3/3 live. Pre-existing
-    translate_sentence.005 "چشماش {item}ه." maps a genderless Farsi subject onto "Her eyes are ..." (a learner
-    could reasonably type "His"); left unchanged (not in this pass''s dispatched classes) but flagged for review.'
+    translate_sentence.005 "چشماش {item}ه." mapped a genderless Farsi subject onto "Her eyes are ..." (a learner
+    could reasonably type "His") — FIXED 2026-07-25 by the coordinator: prompt subject pinned to خواهرم and the
+    graded answer changed to "My sister''s eyes are {item}" (a1_32''s named/kinship-subject pattern).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -148,8 +149,12 @@ templates:
 - content_key: practice.fa-en.en.a1.unit31.lesson02.translate_sentence.005
   lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
   type: translation
+  # 2026-07-25: prompt subject pinned to خواهرم — the old genderless
+  # "چشماش" graded only "Her eyes are ..." while "His eyes are ..." was an
+  # equally faithful translation (mis-grade flagged by the polish wave).
+  # Same named/kinship-subject disambiguation as a1_32's sibling.
   frame:
-    text: چشماش {item}ه.
+    text: چشمای خواهرم {item}ه.
     language_code: fa
     direction: rtl
     slot_rendering:
@@ -159,11 +164,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Her eyes are {item}
+      text: My sister's eyes are {item}
       language_code: en
       direction: ltr
   feedback_frame:
-    text: Her eyes are {item}. یعنی چشماش {item}ه.
+    text: My sister's eyes are {item}. یعنی چشمای خواهرم {item}ه.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit31.lesson02.translate_sentence.005.volume_order.005
