@@ -21,6 +21,16 @@ review:
     production(translation)=4, total=7. No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY
     unset -- _material() deletes such templates). No mis-glossed lexemes found in this pool (every gloss
     checked against what the unit realization teaches).
+    POLISH 2026-07-24 (wave 2): the earlier "structured tier is capacity-blocked" claim was too
+    strong -- matching_pairs stays impossible (4 unit tokens < 6-pair floor), but word_order has no
+    candidate floor and the unit realization provides safe hero frames. Structured tier brought 0 ->
+    3 live word_order templates, each mirroring a realization example sentence: lesson01.order.003
+    ("کارت {item} می‌خوام." -> "کارت روزانه می‌خوام."; gym_word+adjective = روزانه, single member
+    course-wide), lesson02.order.003 ("باشگاه {item} داره." -> "باشگاه وزنه داره."; gym_word+noun =
+    وزنه, single member course-wide), lesson04.order.003 (bare '{item}' phrase word_order over the
+    unit's reviewed phrase خانم شریفی; a bare frame is grammatical for every course-scope phrase).
+    No frame word is a slot candidate. Template mix now: recognition=3, structured=3 (word_order),
+    production=4, total=10.
 tag_schema:
   part_of_speech:
   - symbol
@@ -33,6 +43,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - gym_word
 templates:
 - content_key: practice.en-fa.fa.a1.unit55.lesson01.choose.001
   lesson_content_key: fa.a1.unit55.lesson01.new_gym_one
@@ -136,6 +149,73 @@ templates:
     slot: item
   feedback_frame:
     text: The Persian word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit55.lesson01.order.003
+  lesson_content_key: fa.a1.unit55.lesson01.new_gym_one
+  type: word_order
+  frame:
+    text: کارت {item} می‌خوام.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: gym_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: کارت {item} می‌خوام.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: کارت روزانه می‌خوام means 'I want a day pass' -- the request from this unit's dialogue.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit55.lesson02.order.003
+  lesson_content_key: fa.a1.unit55.lesson02.new_gym_two
+  type: word_order
+  frame:
+    text: باشگاه {item} داره.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: gym_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: باشگاه {item} داره.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: باشگاه وزنه داره means 'the gym has weights' -- the pattern from this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit55.lesson04.order.003
+  lesson_content_key: fa.a1.unit55.lesson04.gym_dialogue
+  type: word_order
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: Arrange the Persian words to rebuild this unit's phrase.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit55.lesson04.choose.001

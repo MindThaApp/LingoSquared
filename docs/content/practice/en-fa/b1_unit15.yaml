@@ -10,9 +10,14 @@ review:
     24 distinct fa lexemes across 6 lessons with lexemes (study_goal, saving_goal, work_goal, dialogue_goals,
     reading_goals, wrapup_production). matching_pairs anchored to reading_goals (8 pairs), pooled over
     the unit-wide non-proper-noun distinct tokens (24 available). Template mix: recognition(multiple_choice)=6,
-    structured(matching_pairs)=1, production(translation)=6, total=13. No listen_select authored (fa has
+    structured(matching_pairs x2, word_order x1)=3, production(translation)=6, total=15. No listen_select authored (fa has
     no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed
     lexemes found in this pool (every gloss checked against what the unit realization teaches).
+    Polish 2026-07-25: match.003 slots switched from bare-POS to personal_progress_word + purpose_goal_word
+    (11 unit tokens; sole course-scope extra yaaddaasht-haa from b1.unit16 is a clean matching card) so
+    Endless Practice stays on-theme; added a saving-theme matching (saving_action_word, 6 tokens) and a
+    word_order mirroring the realization pattern (hadaf ... ine ke faarsi-am behtar beshe) anchored by
+    purpose_goal_word narrowed to part_of_speech noun (single course candidate hadaf).
 tag_schema:
   part_of_speech:
   - symbol
@@ -25,6 +30,11 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - personal_progress_word
+    - purpose_goal_word
+    - saving_action_word
 templates:
 - content_key: practice.en-fa.fa.b1.unit15.lesson01.choose.001
   lesson_content_key: fa.b1.unit15.lesson01.study_goal
@@ -346,37 +356,25 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
       - adjective
       - adverb
       - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
-    seventh:
-      language_code: fa
-      part_of_speech: *id001
-    eighth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - personal_progress_word
+        - purpose_goal_word
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+    eighth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -393,5 +391,66 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit15.lesson02.match.003
+  lesson_content_key: fa.b1.unit15.lesson02.saving_goal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &id003
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: saving_action_word
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: Match each Persian saving-and-spending word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit15.lesson04.order.003
+  lesson_content_key: fa.b1.unit15.lesson04.dialogue_goals
+  type: word_order
+  frame:
+    text: '{item} من اینه که فارسی‌ام بهتر بشه.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: purpose_goal_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} من اینه که فارسی‌ام بهتر بشه.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: A goal sentence opens with hadaf plus ine ke, and the ke clause takes a subjunctive verb.
     language_code: en
     direction: ltr

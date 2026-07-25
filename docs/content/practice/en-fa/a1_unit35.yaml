@@ -6,8 +6,34 @@ unit_content_key: fa.a1.unit35.cooking
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-fa A1 unit 35. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-fa A1 unit 35. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-24 (tier-thinness + POS-only matching_pairs pass):
+    (1) POS-only matching (lesson01.match.002 + its volume_match.002
+    duplicate) is LEFT POS-only, honestly: this unit's backfilled lexemes
+    carry no semantic tags at all (only reviewed_phrase on full review
+    phrases, plus an occasional pronoun tag), so no union of unit-native
+    tags can cover the 6-pair floor, and adding tags would mean editing
+    scripts/backfill_lexemes.py -- off-limits to this lane. A wrong union
+    is worse than the status quo (rubric class 1 exception). Both raised
+    from 4 slots to the 6-pair floor (defect 1.19); the unit-scope pool is
+    39 distinct tokens / 39 glosses, so the floor holds at checkpoint scope.
+    (2) Tiers were 1 recognition / 2 structured / 2 production; brought all
+    three to >=3 live using part_of_speech-subset pools -- the only honest
+    differentiation available in an untagged unit; each new pool differs
+    from the broad choose.001/translate.003 pools: recognition +=
+    lesson04.choose.001 (nouns, 6 unit tokens / 6 glosses) and
+    lesson02.choose.001 (verb forms, 15 unit tokens / 15 glosses); structured +=
+    lesson01.order.001 ('{first} و {second}', the unit06
+    food_item_order.009 coordination precedent: every course-scope pool
+    member is a noun and any two nouns coordinate grammatically with و;
+    و itself is POS particle so it is never a slot candidate -- no
+    defect-1.14 self-reference; the gloss hint fixes the tile order, so
+    the answer is not ambiguous); production += lesson03.translate.001
+    (bare-word verb translation; POS-only is sanctioned for bare-word
+    shapes).
 tag_schema:
   part_of_speech:
   - symbol
@@ -66,7 +92,7 @@ templates:
   lesson_content_key: fa.a1.unit35.lesson01.cooking_words
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: fa
     direction: rtl
   slots:
@@ -118,6 +144,30 @@ templates:
       - preposition
       - particle
       - phrase
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - symbol
+      - noun
+      - pronoun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      - particle
+      - phrase
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - symbol
+      - noun
+      - pronoun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      - particle
+      - phrase
   slot_relations:
   - kind: distinct
     slots:
@@ -125,6 +175,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -132,6 +184,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -169,7 +223,7 @@ templates:
   lesson_content_key: fa.a1.unit35.lesson01.cooking_words
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: fa
     direction: rtl
     text_blocks:
@@ -225,6 +279,30 @@ templates:
       - preposition
       - particle
       - phrase
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - symbol
+      - noun
+      - pronoun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      - particle
+      - phrase
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - symbol
+      - noun
+      - pronoun
+      - verb
+      - adjective
+      - adverb
+      - preposition
+      - particle
+      - phrase
   slot_relations:
   - kind: distinct
     slots:
@@ -232,6 +310,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -239,6 +319,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -274,5 +356,95 @@ templates:
     slot: item
   feedback_frame:
     text: Translate into the target language.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit35.lesson04.choose.001
+  lesson_content_key: fa.a1.unit35.lesson04.cooking_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a noun from this unit — choose its English meaning.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit35.lesson02.choose.001
+  lesson_content_key: fa.a1.unit35.lesson02.cooking_actions
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a verb form from this unit — choose its English meaning.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit35.lesson01.order.001
+  lesson_content_key: fa.a1.unit35.lesson01.cooking_words
+  type: word_order
+  frame:
+    text: '{first} و {second}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{first} و {second}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: و ('and') joins the two words in this phrase.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit35.lesson03.translate.001
+  lesson_content_key: fa.a1.unit35.lesson03.cooking_steps
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr

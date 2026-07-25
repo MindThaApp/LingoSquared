@@ -82,6 +82,23 @@ review:
     matching_pairs templates are combinatorial). A faithful offline port of
     generate_checkpoint() returns 15/15 DISTINCT items on 5 different RNG seeds,
     with a real 5 recognition / 5 structured / 5 production format mix every time.
+
+
+    POLISH 2026-07-24 (POS-only matching_pairs fix): the two 6-slot
+    matching_pairs templates (lesson01/lesson03 match.002) now constrain their
+    slots with a semantic union of the only tags that reach this unit's
+    lexemes (politeness + greeting + weather_time_word +
+    recent_event_question_word + work_verb_form + possession_verb), giving 7
+    unit-scope tokens (ممنون/سلام/فردا/دیروز/می‌کنم/می‌کنه/داره) and a 15-card
+    A2 course-scope pool instead of every A2 noun/adverb. HONEST LIMIT: this
+    unit's actual maintenance nouns (لوله/حمام/چکه/شوفاژ/سرایدار/تعمیرکار...)
+    carry NO semantic tags in scripts/backfill_lexemes.py, so the matching
+    cards are the unit's repair-dialogue everyday words, not its theme nouns
+    (which stay covered by the choose/order/translate templates); both
+    feedback_frames re-worded accordingly. The 8-slot lesson04 match.003
+    stays POS-only DELIBERATELY: the union maxes out at 7 unit tokens (8th
+    candidate would be the pronoun شما), and a wrong union is worse than the
+    documented status quo.
 tag_schema:
   part_of_speech:
   - symbol
@@ -94,6 +111,14 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - politeness
+    - greeting
+    - weather_time_word
+    - recent_event_question_word
+    - work_verb_form
+    - possession_verb
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit13.lesson01.choose.001
@@ -124,36 +149,25 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u13_match_l01_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      - verb
+      agreement_tags:
+        semantic:
+        - politeness
+        - greeting
+        - weather_time_word
+        - recent_event_question_word
+        - work_verb_form
+        - possession_verb
+    second: *u13_match_l01_pool
+    third: *u13_match_l01_pool
+    fourth: *u13_match_l01_pool
+    fifth: *u13_match_l01_pool
+    sixth: *u13_match_l01_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -173,7 +187,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: 'Match each Farsi word from this unit''s home-repair vocabulary with its English meaning.'
+    text: 'Match each everyday Farsi word from this unit''s repair-call dialogues with its English meaning.'
     language_code: en
     direction: ltr
 
@@ -345,36 +359,25 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u13_match_l03_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      - verb
+      agreement_tags:
+        semantic:
+        - politeness
+        - greeting
+        - weather_time_word
+        - recent_event_question_word
+        - work_verb_form
+        - possession_verb
+    second: *u13_match_l03_pool
+    third: *u13_match_l03_pool
+    fourth: *u13_match_l03_pool
+    fifth: *u13_match_l03_pool
+    sixth: *u13_match_l03_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -394,7 +397,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: 'Match each Farsi word from this unit''s home-repair vocabulary with its English meaning.'
+    text: 'Match each everyday Farsi word from this unit''s repair-call dialogues with its English meaning.'
     language_code: en
     direction: ltr
 

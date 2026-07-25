@@ -10,9 +10,14 @@ review:
     23 distinct fa lexemes across 6 lessons with lexemes (if_it_rains, if_you_have_time, if_not, dialogue_plan_b,
     reading_plan, wrapup_production). matching_pairs anchored to dialogue_plan_b (8 pairs), pooled over
     the unit-wide non-proper-noun distinct tokens (23 available). Template mix: recognition(multiple_choice)=6,
-    structured(matching_pairs)=1, production(translation)=6, total=13. No listen_select authored (fa has
+    structured(matching_pairs x2, word_order x1)=3, production(translation)=6, total=15. No listen_select authored (fa has
     no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed
     lexemes found in this pool (every gloss checked against what the unit realization teaches).
+    Polish 2026-07-25: match.003 slots switched from bare-POS to the unit's plan_b_word tag (13 unit
+    tokens, no course-scope extras) so Endless Practice stays on-theme; added a conditional-verb-form
+    matching (conditional_verb_word + conditional_imperative_word, 7 tokens) and a word_order on the
+    realization's hero sentence (age baroon biad, barnaame ro avaz mikonim) anchored by plan_core_word
+    (unit candidate barnaame; course extras barnaame/sinamaa both grammatical in the frame).
 tag_schema:
   part_of_speech:
   - symbol
@@ -25,6 +30,12 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - plan_b_word
+    - plan_core_word
+    - conditional_verb_word
+    - conditional_imperative_word
 templates:
 - content_key: practice.en-fa.fa.b1.unit12.lesson01.choose.001
   lesson_content_key: fa.b1.unit12.lesson01.if_it_rains
@@ -346,37 +357,21 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
-    seventh:
-      language_code: fa
-      part_of_speech: *id001
-    eighth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic: plan_b_word
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+    eighth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -393,5 +388,66 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit12.lesson03.match.003
+  lesson_content_key: fa.b1.unit12.lesson03.if_not
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &id003
+      language_code: fa
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic:
+        - conditional_verb_word
+        - conditional_imperative_word
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: Match each Persian conditional verb form with the person and meaning it expresses.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit12.lesson01.order.003
+  lesson_content_key: fa.b1.unit12.lesson01.if_it_rains
+  type: word_order
+  frame:
+    text: اگه بارون بیاد، {item} رو عوض می‌کنیم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: plan_core_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اگه بارون بیاد، {item} رو عوض می‌کنیم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The age clause states the real condition first; the main clause with the changed plan follows.
     language_code: en
     direction: ltr

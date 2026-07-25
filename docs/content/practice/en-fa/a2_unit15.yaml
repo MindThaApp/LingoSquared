@@ -82,6 +82,20 @@ review:
     matching_pairs templates are combinatorial). A faithful offline port of
     generate_checkpoint() returns 15/15 DISTINCT items on 5 different RNG seeds,
     with a real 5 recognition / 5 structured / 5 production format mix every time.
+
+
+    POLISH 2026-07-24 (POS-only matching_pairs fix): all three matching_pairs
+    templates now constrain their slots with a semantic union of the tags
+    that actually reach this unit's lexemes (reviewed_phrase +
+    travel_vocab_word + departure_detail_word + time_unit_word, plus number
+    on match.003), so Endless Practice no longer pools every A2 noun/adverb
+    into the matching exercises. Measured: unit-scope pools 8/8/10 distinct
+    tokens (floors 6/6/8; قطار/بلیط/سکو/حرکت/لغو شدن/مسیر جایگزین/مشکل فنی/
+    نیم + نُه/پنج on match.003), A2 course-scope pools 26/33 clean
+    discriminable vocab cards, no duplicate glosses. match.003's pos set
+    swaps verb for adjective so the number tag can contribute نُه/پنج
+    (this unit's own schedule numerals). All non-matching slots remain
+    POS-only as documented above.
 tag_schema:
   part_of_speech:
   - symbol
@@ -94,6 +108,13 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - reviewed_phrase
+    - travel_vocab_word
+    - departure_detail_word
+    - time_unit_word
+    - number
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit15.lesson01.choose.001
@@ -124,36 +145,22 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u15_match_l01_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - travel_vocab_word
+        - departure_detail_word
+        - time_unit_word
+    second: *u15_match_l01_pool
+    third: *u15_match_l01_pool
+    fourth: *u15_match_l01_pool
+    fifth: *u15_match_l01_pool
+    sixth: *u15_match_l01_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -345,36 +352,22 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u15_match_l03_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - travel_vocab_word
+        - departure_detail_word
+        - time_unit_word
+    second: *u15_match_l03_pool
+    third: *u15_match_l03_pool
+    fourth: *u15_match_l03_pool
+    fifth: *u15_match_l03_pool
+    sixth: *u15_match_l03_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -473,54 +466,26 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u15_match_l04_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-      - verb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    seventh:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    eighth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - travel_vocab_word
+        - departure_detail_word
+        - time_unit_word
+        - number
+    second: *u15_match_l04_pool
+    third: *u15_match_l04_pool
+    fourth: *u15_match_l04_pool
+    fifth: *u15_match_l04_pool
+    sixth: *u15_match_l04_pool
+    seventh: *u15_match_l04_pool
+    eighth: *u15_match_l04_pool
   slot_relations:
   - kind: distinct
     slots:

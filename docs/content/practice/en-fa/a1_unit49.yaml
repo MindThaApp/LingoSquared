@@ -42,6 +42,14 @@ review:
     matching_pairs pool even though proper_noun stays excluded from this
     pack's MC/translation slots). Pool is now exactly 6, still at zero
     slack.
+    POLISH 2026-07-24: recognition and production tiers brought to 3 each
+    (were 2/2). Added lesson03.choose.005, an MC over pool_facility_word
+    only (4 unit tokens / 4 distinct glosses, clears the 3-option floor;
+    pool differs from the two existing MCs, which also union person_name +
+    reviewed_phrase). Added lesson04.translate.004, a bare-word translation
+    over pool_facility_word narrowed to [noun, verb, adjective] (باز /
+    بازه / کمد -- drops the full-question phrase and the proper noun from
+    the typed-answer pool; differs from both existing translate.002 slots).
 tag_schema:
   part_of_speech:
   - symbol
@@ -152,6 +160,22 @@ templates:
     language_code: en
     direction: ltr
 
+- content_key: practice.en-fa.fa.a1.unit49.lesson03.choose.005
+  lesson_content_key: fa.a1.unit49.lesson03.locker_and_hours
+  type: multiple_choice
+  frame: {text: '{item}', language_code: fa, direction: rtl}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective, phrase]
+      agreement_tags:
+        semantic: pool_facility_word
+  answer_derivation: {kind: slot_gloss, slot: item}
+  feedback_frame:
+    text: '{item} is facility vocabulary from this unit''s locker-and-hours lesson.'
+    language_code: en
+    direction: ltr
+
 # --- lesson04 (pool_dialogue) ---
 - content_key: practice.en-fa.fa.a1.unit49.lesson04.choose.001
   lesson_content_key: fa.a1.unit49.lesson04.pool_dialogue
@@ -186,6 +210,26 @@ templates:
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit49.lesson04.translate.004
+  lesson_content_key: fa.a1.unit49.lesson04.pool_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering: {item: english_gloss}
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, verb, adjective]
+      agreement_tags:
+        semantic: pool_facility_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: Type the Farsi facility word for this English meaning.
     language_code: en
     direction: ltr
 

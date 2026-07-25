@@ -19,6 +19,15 @@ review:
     No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes
     such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit
     realization teaches).
+    POLISH 2026-07-24 (wave 2): match.003's bare-POS slots replaced with the semantic union
+    [beach_word, reviewed_phrase] -- same 6 unit-scoped fills at checkpoint (3 beach words + 3 unit
+    phrases), but Endless Practice no longer pulls the whole level's vocab. Structured tier brought
+    to 3 live: added lesson02.order.004 ("اینجا {item} داره." -- variant of the lesson02 examples
+    "ساحل دریا/ماسه داره." with اینجا as subject so ساحل itself stays a valid fill without
+    self-reference; all 3 beach_word nouns grammatical, tag course-unique) and lesson04.order.003
+    (bare '{item}' phrase word_order over the unit's own reviewed phrases; a bare frame is
+    grammatical for every course-scope phrase). Template mix now: recognition=5, structured=3
+    (1 matching + 2 word_order), production=6, total=14.
 tag_schema:
   part_of_speech:
   - symbol
@@ -31,6 +40,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - beach_word
+    - reviewed_phrase
 templates:
 - content_key: practice.en-fa.fa.a1.unit56.lesson01.choose.001
   lesson_content_key: fa.a1.unit56.lesson01.new_beach_one
@@ -300,31 +313,20 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
       - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - beach_word
+        - reviewed_phrase
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -339,5 +341,49 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit56.lesson02.order.004
+  lesson_content_key: fa.a1.unit56.lesson02.new_beach_two
+  type: word_order
+  frame:
+    text: اینجا {item} داره.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: beach_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اینجا {item} داره.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: اینجا ... داره means 'this place has ...' -- like ساحل دریا داره in this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit56.lesson04.order.003
+  lesson_content_key: fa.a1.unit56.lesson04.beach_dialogue
+  type: word_order
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: Arrange the Persian words to rebuild this unit's sentence.
     language_code: en
     direction: ltr

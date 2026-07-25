@@ -18,6 +18,14 @@ review:
     structured(matching_pairs)=1, production(translation)=5, total=10. No listen_select authored (fa has
     no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed
     lexemes found in this pool (every gloss checked against what the unit realization teaches).
+    POLISH 2026-07-24 (wave 2): match.003's bare-POS slots replaced with the semantic union
+    [park_word, reviewed_phrase] -- same 7 unit-scoped fills at checkpoint (4 park words + 3 unit
+    phrases), but Endless Practice no longer pulls the whole level's vocab. Structured tier brought
+    to 3 live: added lesson02.order.004 ("پارک قدم {item}؟" -- mirrors the lesson02 example
+    "پارک قدم بزنیم؟"; slot narrowed to park_word verbs so بزنیم is the only member course-wide)
+    and lesson05.order.003 (bare '{item}' phrase word_order, arrange-the-sentence over the unit's
+    own reviewed phrases; a bare frame is grammatical for every course-scope phrase). Template mix
+    now: recognition=4, structured=3 (1 matching + 2 word_order), production=5, total=12.
 tag_schema:
   part_of_speech:
   - symbol
@@ -30,6 +38,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - park_word
+    - reviewed_phrase
 templates:
 - content_key: practice.en-fa.fa.a1.unit54.lesson01.choose.001
   lesson_content_key: fa.a1.unit54.lesson01.new_park_one
@@ -247,31 +259,21 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
       - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - park_word
+        - reviewed_phrase
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -286,5 +288,49 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit54.lesson02.order.004
+  lesson_content_key: fa.a1.unit54.lesson02.new_park_two
+  type: word_order
+  frame:
+    text: پارک قدم {item}؟
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: verb
+      agreement_tags:
+        semantic: park_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: پارک قدم {item}؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: قدم بزنیم means 'let's stroll' -- the suggestion pattern from this unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit54.lesson05.order.003
+  lesson_content_key: fa.a1.unit54.lesson05.reading_park_sign
+  type: word_order
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: Arrange the Persian words to rebuild this unit's sentence.
     language_code: en
     direction: ltr

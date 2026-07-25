@@ -82,6 +82,17 @@ review:
     matching_pairs templates are combinatorial). A faithful offline port of
     generate_checkpoint() returns 15/15 DISTINCT items on 5 different RNG seeds,
     with a real 5 recognition / 5 structured / 5 production format mix every time.
+
+
+    POLISH 2026-07-24 (POS-only matching_pairs fix): the three matching_pairs
+    templates now constrain their slots with a semantic union of the tags that
+    actually reach this unit's lexemes (reviewed_phrase + money_word +
+    payment_word + time_period + weather_time_word, plus accept_word on
+    match.003), so Endless Practice no longer pools every A2 noun/adverb into
+    the matching exercises. Measured: unit-scope pools 8/8/9 distinct tokens
+    (floors 6/6/8), A2 course-scope pools 26-28 clean discriminable vocab
+    cards, no duplicate glosses. All non-matching slots remain POS-only as
+    documented above (the unit still has no curated unit-specific tag).
 tag_schema:
   part_of_speech:
   - symbol
@@ -94,6 +105,14 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - reviewed_phrase
+    - money_word
+    - payment_word
+    - time_period
+    - weather_time_word
+    - accept_word
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit11.lesson01.choose.001
@@ -124,36 +143,23 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u11_match_l01_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - money_word
+        - payment_word
+        - time_period
+        - weather_time_word
+    second: *u11_match_l01_pool
+    third: *u11_match_l01_pool
+    fourth: *u11_match_l01_pool
+    fifth: *u11_match_l01_pool
+    sixth: *u11_match_l01_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -345,36 +351,23 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u11_match_l03_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - money_word
+        - payment_word
+        - time_period
+        - weather_time_word
+    second: *u11_match_l03_pool
+    third: *u11_match_l03_pool
+    fourth: *u11_match_l03_pool
+    fifth: *u11_match_l03_pool
+    sixth: *u11_match_l03_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -473,54 +466,27 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u11_match_l04_pool
       language_code: fa
       part_of_speech:
       - noun
       - adverb
       - verb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    seventh:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-    eighth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - money_word
+        - payment_word
+        - time_period
+        - weather_time_word
+        - accept_word
+    second: *u11_match_l04_pool
+    third: *u11_match_l04_pool
+    fourth: *u11_match_l04_pool
+    fifth: *u11_match_l04_pool
+    sixth: *u11_match_l04_pool
+    seventh: *u11_match_l04_pool
+    eighth: *u11_match_l04_pool
   slot_relations:
   - kind: distinct
     slots:

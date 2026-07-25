@@ -13,9 +13,16 @@ review:
     1-4 content words per lesson plus proper names / a reading sign / a wrap-up sentence). Authored what
     the pool supports; not padded with untaught vocabulary. matching_pairs anchored to work_goal (6 pairs),
     pooled over the unit-wide non-proper-noun distinct tokens (6 available). Template mix: recognition(multiple_choice)=3,
-    structured(matching_pairs)=1, production(translation)=3, total=7. No listen_select authored (fa has
+    structured(matching_pairs x1, word_order x2)=3, production(translation)=3, total=9. No listen_select authored (fa has
     no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed
     lexemes found in this pool (every gloss checked against what the unit realization teaches).
+    Polish 2026-07-25: match.003 slots switched from bare-POS to teamwork_word + ability_purpose_verb
+    (exactly the unit's 6 content tokens, no course-scope extras) so Endless Practice stays on-theme;
+    structured tier brought to 3 live with two word_order templates: one on the dialogue's
+    yaaddaasht-haa sentence (personal_progress_word noun slot; course extras faarsi-am/faarsi-ash both
+    grammatical objects of morur kardan) and one drilling ro-before-verb order with a teamwork_word
+    noun slot (all four course candidates grammatical objects of shoru kardan). Unit stays
+    capacity-thin by construction (7 fa lexemes) -- not padded with untaught vocabulary.
 tag_schema:
   part_of_speech:
   - symbol
@@ -28,6 +35,11 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - teamwork_word
+    - ability_purpose_verb
+    - personal_progress_word
 templates:
 - content_key: practice.en-fa.fa.b1.unit16.lesson01.choose.001
   lesson_content_key: fa.b1.unit16.lesson01.study_goal
@@ -193,31 +205,20 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - teamwork_word
+        - ability_purpose_verb
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -232,5 +233,53 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit16.lesson04.order.001
+  lesson_content_key: fa.b1.unit16.lesson04.dialogue_goals
+  type: word_order
+  frame:
+    text: بعد از کلاس {item} رو مرور می‌کنم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: personal_progress_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: بعد از کلاس {item} رو مرور می‌کنم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The object marked with ro comes before the verb, which closes the sentence.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit16.lesson02.order.003
+  lesson_content_key: fa.b1.unit16.lesson02.saving_goal
+  type: word_order
+  frame:
+    text: فردا {item} رو شروع می‌کنیم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: teamwork_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: فردا {item} رو شروع می‌کنیم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The time word opens the sentence and the ro-marked object comes right before shoru mikonim.
     language_code: en
     direction: ltr
