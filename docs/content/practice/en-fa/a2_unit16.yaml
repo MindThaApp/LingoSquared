@@ -82,6 +82,22 @@ review:
     matching_pairs templates are combinatorial). A faithful offline port of
     generate_checkpoint() returns 15/15 DISTINCT items on 5 different RNG seeds,
     with a real 5 recognition / 5 structured / 5 production format mix every time.
+
+
+    POLISH 2026-07-24 (POS-only matching_pairs fix): the two 6-slot
+    matching_pairs templates (lesson01/lesson03 match.002) now constrain
+    their slots with a semantic union of the only tags that reach this
+    unit's lexemes (reviewed_phrase + routine_connector + work_verb_form +
+    number + recent_event_word, pos noun/adjective/verb), giving exactly 6
+    unit-scope tokens (شبکه‌ی اجتماعی/مورد علاقه/هر/می‌کنی/دو/خوب -- the
+    unit's habit-description frame words) and a 29-card A2 course-scope pool
+    instead of every A2 noun/adverb. HONEST LIMIT: the unit's remaining
+    theme words (اپلیکیشن/صفحه/خبر/مفید/سرگرم‌کننده/خوندن/دنیا...) carry NO
+    semantic tags in scripts/backfill_lexemes.py and cannot appear in these
+    pools; they stay covered by the choose/order/translate templates. The
+    8-slot lesson04 match.003 stays POS-only DELIBERATELY: the union maxes
+    out at 6 unit tokens (7th candidate would be the pronoun چقدر), and a
+    wrong union is worse than the documented status quo.
 tag_schema:
   part_of_speech:
   - symbol
@@ -94,6 +110,13 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - reviewed_phrase
+    - routine_connector
+    - work_verb_form
+    - number
+    - recent_event_word
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit16.lesson01.choose.001
@@ -124,36 +147,24 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u16_match_l01_pool
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      - adjective
+      - verb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - routine_connector
+        - work_verb_form
+        - number
+        - recent_event_word
+    second: *u16_match_l01_pool
+    third: *u16_match_l01_pool
+    fourth: *u16_match_l01_pool
+    fifth: *u16_match_l01_pool
+    sixth: *u16_match_l01_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -345,36 +356,24 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &u16_match_l03_pool
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
-    second:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    third:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fourth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    fifth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-    sixth:
-      language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
+      - adjective
+      - verb
+      agreement_tags:
+        semantic:
+        - reviewed_phrase
+        - routine_connector
+        - work_verb_form
+        - number
+        - recent_event_word
+    second: *u16_match_l03_pool
+    third: *u16_match_l03_pool
+    fourth: *u16_match_l03_pool
+    fifth: *u16_match_l03_pool
+    sixth: *u16_match_l03_pool
   slot_relations:
   - kind: distinct
     slots:

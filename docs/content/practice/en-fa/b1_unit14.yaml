@@ -10,10 +10,15 @@ review:
     21 distinct fa lexemes across 6 lessons with lexemes (goft_ke_message, khabar_dad_ke, azm_khast_ke,
     dialogue_messages, reading_messages, wrapup_production). matching_pairs anchored to reading_messages
     (8 pairs), pooled over the unit-wide non-proper-noun distinct tokens (21 available). Template mix:
-    recognition(multiple_choice)=6, structured(matching_pairs)=1, production(translation)=6, total=13.
+    recognition(multiple_choice)=6, structured(matching_pairs x2, word_order x1)=3, production(translation)=6, total=15.
     No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes
     such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit
     realization teaches).
+    Polish 2026-07-25: match.003 slots switched from bare-POS to message_summary_word (9 unit tokens,
+    no course-scope extras) so Endless Practice stays on-theme; added a reporting-verb matching
+    (reported_speech_verb, 8 tokens) and a word_order mirroring the realization (goft ke jalase aghab
+    oftaade) anchored by reported_speech_verb narrowed to part_of_speech adverb (single distinct
+    course candidate aghab).
 tag_schema:
   part_of_speech:
   - symbol
@@ -26,6 +31,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - message_summary_word
+    - reported_speech_verb
 templates:
 - content_key: practice.en-fa.fa.b1.unit14.lesson01.choose.001
   lesson_content_key: fa.b1.unit14.lesson01.goft_ke_message
@@ -347,37 +356,22 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
-    seventh:
-      language_code: fa
-      part_of_speech: *id001
-    eighth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic: message_summary_word
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+    eighth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -394,5 +388,65 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit14.lesson03.match.003
+  lesson_content_key: fa.b1.unit14.lesson03.azm_khast_ke
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first: &id003
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: Match each Persian reporting verb form with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit14.lesson01.order.003
+  lesson_content_key: fa.b1.unit14.lesson01.goft_ke_message
+  type: word_order
+  frame:
+    text: علی گفت که جلسه {item} افتاده.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: علی گفت که جلسه {item} افتاده.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: goft ke introduces the reported message; the statement keeps its original spoken order.
     language_code: en
     direction: ltr

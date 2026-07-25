@@ -10,10 +10,15 @@ review:
     19 distinct fa lexemes across 6 lessons with lexemes (future_when_done, past_when_arrived, habitual_whenever,
     dialogue_after_meeting, reading_schedule, wrapup_production). matching_pairs anchored to dialogue_after_meeting
     (8 pairs), pooled over the unit-wide non-proper-noun distinct tokens (19 available). Template mix:
-    recognition(multiple_choice)=6, structured(matching_pairs)=1, production(translation)=6, total=13.
+    recognition(multiple_choice)=6, structured(matching_pairs x1, word_order x2)=3, production(translation)=6, total=15.
     No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes
     such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit
     realization teaches).
+    Polish 2026-07-25: match.003 slots switched from bare-POS to time_clause_verb + polite_request_verb
+    (10 unit verb tokens, no course-scope extras) so Endless Practice stays on-theme; added a word_order
+    on the realization hero (vaghti kelaas tamoom beshe, behet zang mizanam) anchored by class_word
+    (single distinct course token kelaas) and a word_order acceptance-reply frame anchored by accept_word
+    (unit candidate aalie; course extras baashe/ghabuleh both grammatical in the frame).
 tag_schema:
   part_of_speech:
   - symbol
@@ -26,6 +31,12 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - time_clause_verb
+    - polite_request_verb
+    - class_word
+    - accept_word
 templates:
 - content_key: practice.en-fa.fa.b1.unit13.lesson01.choose.001
   lesson_content_key: fa.b1.unit13.lesson01.future_when_done
@@ -347,37 +358,21 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
-      - noun
+      part_of_speech:
       - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
-    seventh:
-      language_code: fa
-      part_of_speech: *id001
-    eighth:
-      language_code: fa
-      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - time_clause_verb
+        - polite_request_verb
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+    seventh: *id001
+    eighth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -393,6 +388,54 @@ templates:
     kind: matching_pairs
     slots: *id002
   feedback_frame:
-    text: Match each Persian word from this unit with its English meaning.
+    text: Match each Persian verb form from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit13.lesson06.order.003
+  lesson_content_key: fa.b1.unit13.lesson06.wrapup_production
+  type: word_order
+  frame:
+    text: وقتی {item} تموم بشه، بهت زنگ می‌زنم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: class_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: وقتی {item} تموم بشه، بهت زنگ می‌زنم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: The vaghti time clause comes first; the main clause with the future action follows.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b1.unit13.lesson04.order.004
+  lesson_content_key: fa.b1.unit13.lesson04.dialogue_after_meeting
+  type: word_order
+  frame:
+    text: '{item}، پس ساعت پنج می‌بینمت.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic: accept_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}، پس ساعت پنج می‌بینمت.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: An acceptance word like aalie opens the reply and the confirmed plan follows after pas.
     language_code: en
     direction: ltr

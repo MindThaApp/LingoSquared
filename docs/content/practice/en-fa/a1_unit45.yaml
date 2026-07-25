@@ -27,10 +27,19 @@ review:
     (5) is below the 6-pair floor even after unioning every available tag
     (pharmacy_word + person_name) -- there is no additional vocabulary to pad
     with without violating the no-padding rule. No mis-glossed lexemes found.
-    No listen_select (Azure TTS key unset for fa). Structured tier is only 1
-    template (below the >=3 bar) for the same reason -- fill_in_blank is not
-    usable either, since no tag in this unit has exactly 1 course-wide
-    candidate (checked: pharmacy_word has 4, not 1).
+    No listen_select (Azure TTS key unset for fa).
+    POLISH 2026-07-24: structured tier brought to 3 (was 1). Added
+    lesson02.order.003, a second citation-style word_order over pharmacy_word
+    (frame "اینجا نوشته {item}." / "Here it says: {item}." -- same
+    course==unit scope argument as lesson01.order.003, all 4 members read as
+    something written on a sign/label). Added lesson03.fill.003, a
+    fill_in_blank whose slot narrows pharmacy_word by part_of_speech: adverb
+    -- قبل is the tag's ONLY adverb across the entire direction (verified via
+    iter_specs()), so the course-wide candidate pool is exactly 1 and the
+    single-candidate compiler rule is satisfied (the earlier note claiming
+    fill_in_blank was unusable overlooked this POS narrowing); frame "قرص رو
+    {item} از غذا بخورید." has visible text besides the blank and none of the
+    slot's candidates appear in the frame literals.
     UPDATED (proper_noun self-gloss sweep): removed proper_noun from every
     MC/translation slot's part_of_speech (was [noun, adverb, proper_noun])
     and dropped person_name from those same slots' semantic list, since a
@@ -154,6 +163,30 @@ templates:
     language_code: en
     direction: ltr
 
+- content_key: practice.en-fa.fa.a1.unit45.lesson02.order.003
+  lesson_content_key: fa.a1.unit45.lesson02.new_pharmacy_two
+  type: word_order
+  frame:
+    text: اینجا نوشته {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: pharmacy_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اینجا نوشته {item}.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'اینجا نوشته قرص. -- Here it says: pill.'
+    language_code: en
+    direction: ltr
+
 # --- lesson03 (dosage_timing) ---
 - content_key: practice.en-fa.fa.a1.unit45.lesson03.choose.001
   lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
@@ -188,6 +221,25 @@ templates:
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit45.lesson03.fill.003
+  lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
+  type: fill_in_blank
+  frame:
+    text: قرص رو {item} از غذا بخورید.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: pharmacy_word
+  answer_derivation: {kind: slot_text, slot: item}
+  feedback_frame:
+    text: قرص رو قبل از غذا بخورید means "take the pill before food" -- قبل is the only adverb in this unit's pharmacy vocabulary.
     language_code: en
     direction: ltr
 

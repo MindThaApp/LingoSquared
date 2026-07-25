@@ -124,6 +124,20 @@ review:
     union with drink_item would just duplicate the widened food_drink_match
     above at the same lesson01 anchor, so it's left alone rather than
     padded into a redundant near-clone).
+
+    POLISH 2026-07-24 (POS-only matching_pairs pass): register_match.004's
+    slots were bare part_of_speech verb (the any_verb preset) -- safe at
+    unit scope but pulling every A1 verb (~93 tokens) at Endless-Practice
+    COURSE scope. Re-anchored to a dialogue_verb preset, semantic union
+    [ordering_register, dialogue_word] with part_of_speech verb: at unit
+    scope this is the exact same 6 verbs the REAUTH pass measured
+    (می‌خواستم/می‌کنید/خوبه/بود/میارم/اومدید, 6 distinct glosses), and at
+    course scope it narrows the pool to dialogue-tagged verbs only. Frame
+    is English-only, so the wider course pool carries no grammaticality
+    risk; both tag values were already in tag_schema. any_verb preset
+    removed (register_match.004 was its only user). food_match.002's
+    pre-existing 4-pair/4-token floor gap remains the documented
+    honest-thin exception above (not part of this pass).
 tag_schema:
   part_of_speech: [noun, verb]
   agreement_tags:
@@ -135,7 +149,7 @@ slot_presets:
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
   quantity_or_dialogue: &quantity_or_dialogue {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit_word, dialogue_word]}}
   ordering_register: &ordering_register {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: ordering_register}}
-  any_verb: &any_verb {language_code: fa, part_of_speech: verb}
+  dialogue_verb: &dialogue_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: [ordering_register, dialogue_word]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit06.lesson01.food_choice.001
     lesson_content_key: fa.a1.unit06.lesson01.food_and_drink_vocabulary
@@ -207,7 +221,7 @@ templates:
     lesson_content_key: fa.a1.unit06.lesson02.polite_ordering_register
     type: matching_pairs
     frame: {text: "Match each Farsi verb with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *any_verb, second: *any_verb, third: *any_verb, fourth: *any_verb, fifth: *any_verb, sixth: *any_verb}
+    slots: {first: *dialogue_verb, second: *dialogue_verb, third: *dialogue_verb, fourth: *dialogue_verb, fifth: *dialogue_verb, sixth: *dialogue_verb}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Each of these verbs appears somewhere in this unit's dialogues.", language_code: en, direction: ltr}

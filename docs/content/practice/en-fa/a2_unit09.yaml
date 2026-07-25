@@ -69,6 +69,14 @@ review:
     practice-validate (0 errors/0 warnings, full en-fa pack).
     review.status left unreviewed -- this pass does not self-certify
     review.
+
+    POLISH 2026-07-24 (wave 2): recognition tier was 2 live (<3 floor).
+    Added lesson03.office_choice.010, a third multiple_choice over the
+    union [bureaucracy_word, paperwork_word] (6 unit-scoped nouns / 6
+    distinct glosses -- وقت/مدرک/آدرس/قبض + اجاره‌نامه/مهلت), anchored
+    to lesson03 where the two paperwork words are taught. Pool differs
+    from bureaucracy_choice.001's (union vs single tag), so it is not a
+    clone. Recognition tier now 3 live.
 tag_schema:
   part_of_speech: [noun, phrase]
   agreement_tags:
@@ -77,6 +85,7 @@ slot_presets:
   bureaucracy_word: &bureaucracy_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_word}}
   paperwork_word: &paperwork_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
   bureaucracy_phrase: &bureaucracy_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: bureaucracy_phrase}}
+  office_word: &office_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [bureaucracy_word, paperwork_word]}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_choice.001
     lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
@@ -156,3 +165,10 @@ templates:
     slots: {bureaucracy_phrase: *bureaucracy_phrase}
     answer_derivation: {kind: slot_text, slot: bureaucracy_phrase}
     feedback_frame: {text: "This phrase or sentence appears in this unit's registry-office scenario.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a2.unit09.lesson03.office_choice.010
+    lesson_content_key: fa.a2.unit09.lesson03.reading_the_notice
+    type: multiple_choice
+    frame: {text: "{office_word}", language_code: fa, direction: rtl}
+    slots: {office_word: *office_word}
+    answer_derivation: {kind: slot_gloss, slot: office_word}
+    feedback_frame: {text: "{office_word} is a paperwork/bureaucracy word from this unit.", language_code: en, direction: ltr}

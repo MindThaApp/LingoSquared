@@ -33,6 +33,14 @@ review:
     "Nina -> Nina" case the recipe warns about for multiple_choice, so they are safe here even though
     proper_noun stays excluded from this pack's MC/translation slots (which do retain that self-gloss
     guard).
+    POLISH 2026-07-24 (wave 2): match.004's bare-POS slots replaced with the semantic union
+    [concert_word, person_name, reviewed_phrase] -- same 6 unit-scoped fills at checkpoint, but
+    Endless Practice no longer pulls the whole level's vocab (course scope now = names + reviewed
+    phrases + this unit's concert words). Structured tier brought to 3 live: added lesson01.order.003
+    ("این {item} خوبه." -- mirrors the lesson02 example "این خواننده خوبه.") and lesson06.order.003
+    ("{item} چطور بود؟ باحال بود!" -- mirrors the wrap-up), both over concert_word (course-unique
+    tag, both members grammatical in both frames; no frame word is a slot candidate). Template mix
+    now: recognition=4, structured=3 (1 matching + 2 word_order), production=4, total=11.
 tag_schema:
   part_of_speech:
   - symbol
@@ -45,6 +53,11 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - concert_word
+    - person_name
+    - reviewed_phrase
 templates:
 - content_key: practice.en-fa.fa.a1.unit53.lesson01.choose.001
   lesson_content_key: fa.a1.unit53.lesson01.new_concert_one
@@ -262,32 +275,22 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first:
+    first: &id001
       language_code: fa
-      part_of_speech: &id001
+      part_of_speech:
       - noun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
       - proper_noun
-    second:
-      language_code: fa
-      part_of_speech: *id001
-    third:
-      language_code: fa
-      part_of_speech: *id001
-    fourth:
-      language_code: fa
-      part_of_speech: *id001
-    fifth:
-      language_code: fa
-      part_of_speech: *id001
-    sixth:
-      language_code: fa
-      part_of_speech: *id001
+      - phrase
+      agreement_tags:
+        semantic:
+        - concert_word
+        - person_name
+        - reviewed_phrase
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -302,5 +305,51 @@ templates:
     slots: *id002
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit53.lesson01.order.003
+  lesson_content_key: fa.a1.unit53.lesson01.new_concert_one
+  type: word_order
+  frame:
+    text: این {item} خوبه.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: concert_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: این {item} خوبه.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: این ... خوبه means 'this ... is good' -- the pattern this unit's dialogue uses.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit53.lesson06.order.003
+  lesson_content_key: fa.a1.unit53.lesson06.wrap_up
+  type: word_order
+  frame:
+    text: '{item} چطور بود؟ باحال بود!'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: concert_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} چطور بود؟ باحال بود!'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: چطور بود؟ asks 'how was it?' and باحال بود answers 'it was cool' -- this unit's wrap-up pattern.
     language_code: en
     direction: ltr

@@ -24,10 +24,17 @@ review:
     unit-specific coined tag with zero course-wide members outside this unit
     (verified via full iter_specs() scan), so course scope == unit scope
     here, and all 3 members (order, chelo kabab, doogh) read grammatically in
-    that frame. Structured tier is only 1 template (below the >=3 bar) for
-    the same reason -- fill_in_blank is not usable either (no tag in this
-    unit has exactly 1 course-wide candidate). No mis-glossed lexemes found.
+    that frame. fill_in_blank is not usable (no tag in this unit has exactly
+    1 course-wide candidate, even after POS narrowing -- all 3
+    restaurant_order_word members are nouns). No mis-glossed lexemes found.
     No listen_select (Azure TTS key unset for fa).
+    POLISH 2026-07-24: structured tier brought to 3 (was 1) with two more
+    word_order templates over restaurant_order_word (course scope == unit
+    scope, tag is unit-exclusive; re-read: all 3 members are grammatical in
+    both new frames): lesson01.order.003 "یک {item} دیگه هم می‌خوام." = "I
+    want another {item} too", lesson03.order.003 "می‌شه {item} رو بیارید؟" =
+    "Could you bring the {item}?". matching_pairs remains unauthorable
+    (5 distinct tokens < 6-pair floor, unchanged).
 tag_schema:
   part_of_speech:
   - symbol
@@ -81,6 +88,30 @@ templates:
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson01.order.003
+  lesson_content_key: fa.a1.unit50.lesson01.new_restaurant_one
+  type: word_order
+  frame:
+    text: یک {item} دیگه هم می‌خوام.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: restaurant_order_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: یک {item} دیگه هم می‌خوام.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: یک دوغ دیگه هم می‌خوام. -- I want another doogh too.
     language_code: en
     direction: ltr
 
@@ -179,6 +210,30 @@ templates:
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-fa.fa.a1.unit50.lesson03.order.003
+  lesson_content_key: fa.a1.unit50.lesson03.doogh_and_bill
+  type: word_order
+  frame:
+    text: می‌شه {item} رو بیارید؟
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: restaurant_order_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: می‌شه {item} رو بیارید؟
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: می‌شه دوغ رو بیارید؟ -- Could you bring the doogh?
     language_code: en
     direction: ltr
 
