@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit40.post
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
     a1_unit30.yaml's notes for the sprint context). 5-member 'post_noun'
     tag (letter/package/stamp/envelope/mailbox, all nouns) for bare-word
@@ -27,13 +27,39 @@ review:
     reasoning): lesson_content_keys (lesson01.post_office_vocabulary, lesson02.sending_mail) resolve to real lessons in en/a1_unit40_post.yaml. post_noun (letter/package/stamp/envelope/mailbox = brief/pakketje/postzegel/envelop/brievenbus) is recognition-only and correctly excludes the two-word compound 'post office'. All 5 glosses distinct. No bare YAML booleans, no snake_case learner-facing
     leaks. Validation: compiler practice-validate 0/0 across the full
     42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    POLISH 2026-07-25 (wave 2, tier-thinness pass): structured and production
+    tiers each had only 1 live template (match.003 / translate.004).
+    Structured += lesson02.order.001 (word_order 'Can you send this {item}
+    for me?' over sendable_noun -- course-wide pool is exactly
+    letter/package, both grammatical in the frame), lesson04.order.001
+    (word_order 'I am looking for the {item}.' over post_noun -- course-wide
+    pool is exactly the unit's 5 nouns, all grammatical, no frame word is a
+    candidate) and lesson01.fill.005 (fill 'He put the {item} in the
+    mailbox.' on the single-member volume_prs_en_a1_unit40_item_05_single
+    tag = letter; mailbox in the frame text is not a candidate of that
+    single-member slot, so no self-reference). Production +=
+    lesson02.translate.005 (sentence translation 'Ik wil vandaag een {item}
+    versturen.' -> 'I want to send a {item} today.' over sendable_noun;
+    'een' fits both brief and pakketje so the rendered Dutch stays
+    grammatical; the prompt varies with the answer via slot_rendering so it
+    stays determinate) and lesson04.translate.001 (deterministic sentence
+    translation 'Ik schreef een {item} aan mijn oma.' -> 'I wrote a {item}
+    to my grandmother.' on the single-member letter slot). Tiers now 3
+    recognition / 4 structured / 3 production live. A POS-only noun
+    bare-word translation was deliberately NOT added: mail and post both
+    gloss to 'post' at unit scope, an ambiguous typed prompt. Reset status
+    reviewed -> unreviewed since this adds unreviewed content to a
+    previously reviewed pack."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [post_noun]
+    semantic: [post_noun, sendable_noun, volume_prs_en_a1_unit40_item_05_single]
 slot_presets:
   post_noun: &post_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: post_noun}}
+  sendable_noun: &sendable_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sendable_noun}}
+  letter_single: &letter_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: volume_prs_en_a1_unit40_item_05_single}}
 templates:
   - content_key: practice.nl-en.en.a1.unit40.lesson01.choose.001
     lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
@@ -71,3 +97,46 @@ templates:
     slots: {item: *post_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit40.lesson02.order.001
+    lesson_content_key: en.a1.unit40.lesson02.sending_mail
+    type: word_order
+    frame: {text: "Can you send this {item} for me?", language_code: en, direction: ltr}
+    slots: {item: *sendable_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "Can you send this {item} for me?", language_code: en, direction: ltr}
+    feedback_frame: {text: "De juiste volgorde is: Can you send this {item} for me?", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit40.lesson04.order.001
+    lesson_content_key: en.a1.unit40.lesson04.three_trips_to_the_post_office
+    type: word_order
+    frame: {text: "I am looking for the {item}.", language_code: en, direction: ltr}
+    slots: {item: *post_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I am looking for the {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De juiste volgorde is: I am looking for the {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit40.lesson01.fill.005
+    lesson_content_key: en.a1.unit40.lesson01.post_office_vocabulary
+    type: fill_in_blank
+    frame: {text: "He put the {item} in the mailbox.", language_code: en, direction: ltr}
+    slots: {item: *letter_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Het ontbrekende woord is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit40.lesson02.translate.005
+    lesson_content_key: en.a1.unit40.lesson02.sending_mail
+    type: translation
+    frame: {text: "Ik wil vandaag een {item} versturen.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *sendable_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I want to send a {item} today.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De Engelse zin is: I want to send a {item} today.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit40.lesson04.translate.001
+    lesson_content_key: en.a1.unit40.lesson04.three_trips_to_the_post_office
+    type: translation
+    frame: {text: "Ik schreef een {item} aan mijn oma.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *letter_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I wrote a {item} to my grandmother.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De Engelse zin is: I wrote a {item} to my grandmother.", language_code: nl, direction: ltr}

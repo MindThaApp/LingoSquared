@@ -27,13 +27,39 @@ review:
     reasoning): lesson_content_keys (lesson01.celebration_vocabulary, lesson02.inviting_and_congratulating) resolve to real lessons in en/a1_unit37_celebrations.yaml. celebration_noun (birthday/party/gift/congratulations = verjaardag/feest/cadeau/felicitaties) is recognition-only -- correct, since the members don't share one verb. Verb items invite/celebrate correctly excluded for POS uniformity. No bare YAML booleans, no snake_case learner-facing
     leaks. Validation: compiler practice-validate 0/0 across the full
     42-pack nl-en set, scripts/_practice_slot_check.py OK,
-    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed."
+    backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    Polish wave 2 (2026-07-25, tier-thinness): structured and production
+    tiers each had only 1 live template (<3 floor, recipe SS8). No
+    unit-native semantic tag reaches 6 tokens (celebration_noun is 4
+    unit-scoped: party/gift/congratulations/cake, and 'congratulations'
+    fits no shared sentence frame), so the structured additions use the
+    single-member anchor pattern (recipe SS3.1d): 'party_word' is
+    corpus-wide exactly {party} (verified against
+    backfill_lexemes_nl_en.iter_specs()), and party is unit37 lesson01's
+    own vocab. Added lesson02.order.001 (word_order 'We are planning a
+    surprise {item}' -- planning/surprise are lesson02's own vocab) and
+    lesson03.fill.001 (fill_in_blank 'They bought a cake for the
+    surprise {item}.' -- single-candidate pool satisfies the compiler's
+    course-wide ambiguity check; cake is lesson03's own vocab). For
+    production, added lesson02.translate.001 (bare-word translation over
+    the unit's own verb pool, part_of_speech: verb with no semantic tag
+    -- unit37's 19 verbs carry no semantic tags in the backfill, all 19
+    unit-scoped glosses distinct; recipe SS3.1(c) blesses POS-only for
+    bare-word translation) and lesson04.translate.001 (fixed NL prompt
+    'Iedereen was op het feest.', EN render_frame 'Everyone was at the
+    {item}' over single-member party_word -- deterministic per recipe
+    SS6.6(b); everyone/were are lesson04's own vocab). Tiers now 3/3/3.
+    match.003 kept on celebration_noun (4 slots over 4 unit tokens) --
+    it already has a semantic constraint, and no unit-native union
+    reaches 6 pairs, documented above."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [celebration_noun]
+    semantic: [celebration_noun, party_word]
 slot_presets:
   celebration_noun: &celebration_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: celebration_noun}}
+  party_word: &party_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: party_word}}
 templates:
   - content_key: practice.nl-en.en.a1.unit37.lesson01.choose.001
     lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
@@ -71,3 +97,35 @@ templates:
     slots: {item: *celebration_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit37.lesson02.order.001
+    lesson_content_key: en.a1.unit37.lesson02.inviting_and_congratulating
+    type: word_order
+    frame: {text: "We are planning a surprise {item}", language_code: en, direction: ltr}
+    slots: {item: *party_word}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "We are planning a surprise {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "Zo zeg je dat jullie een verrassingsfeest organiseren.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit37.lesson03.fill.001
+    lesson_content_key: en.a1.unit37.lesson03.dialogue_surprise_party
+    type: fill_in_blank
+    frame: {text: "They bought a cake for the surprise {item}.", language_code: en, direction: ltr}
+    slots: {item: *party_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zij kochten een taart voor het verrassingsfeest.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit37.lesson02.translate.001
+    lesson_content_key: en.a1.unit37.lesson02.inviting_and_congratulating
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: {language_code: en, part_of_speech: verb}}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit37.lesson04.translate.001
+    lesson_content_key: en.a1.unit37.lesson04.the_surprise_party
+    type: translation
+    frame: {text: "Iedereen was op het feest.", language_code: nl, direction: ltr}
+    slots: {item: *party_word}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "Everyone was at the {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "Everyone was at the party betekent Iedereen was op het feest.", language_code: nl, direction: ltr}

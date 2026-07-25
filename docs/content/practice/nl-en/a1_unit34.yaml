@@ -32,7 +32,16 @@ review:
     6 distinct unit-scoped tokens, matching the declared 6 slots. Left choose.001/listen.002/translate.004 on the original
     noun-only sport_noun preset (id001) untouched -- their 5-distinct pool already clears the 3-floor and was never flagged.
     Verified 0 DEAD / 0 below-floor via scripts/_practice_unit_scope_check.py and compiler practice-validate 0 errors after
-    the fix.'
+    the fix.
+
+
+    Polish wave 2 (2026-07-25, tier-thinness): recognition and production tiers each had only 2 live templates (<3 floor,
+    recipe SS8). Added lesson02.choose.001 (multiple_choice over the existing sport_word preset -- semantic sport_noun
+    with part_of_speech [noun, verb], 6 unit-scoped tokens / 6 distinct glosses, differs from lesson01.choose.001''s
+    noun-only 5-token pool by including ''exercise'') and lesson02.translate.002 (NL prompt ''Zij speelt {item} in het
+    weekend.'' with gloss rendering over play_sport, EN render_frame ''She plays {item} on the weekend'' -- play_sport
+    is exactly soccer/tennis/basketball course-wide, all three take ''plays''/''speelt''; ''weekends'' is lesson02''s own
+    vocab). Both tiers now at 3 live.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -170,6 +179,43 @@ templates:
       direction: ltr
   feedback_frame:
     text: '{item} is de genoemde sport.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit34.lesson02.choose.001
+  lesson_content_key: en.a1.unit34.lesson02.frequency_and_places
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit34.lesson02.translate.002
+  lesson_content_key: en.a1.unit34.lesson02.frequency_and_places
+  type: translation
+  frame:
+    text: Zij speelt {item} in het weekend.
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: She plays {item} on the weekend
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: She plays {item} on the weekend betekent Zij speelt {item} in het weekend.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit34.lesson03.translate.001

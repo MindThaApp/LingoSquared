@@ -43,7 +43,20 @@ review:
     coverage via the existing volume_order.002 word_order template, so no
     tier is lost). Re-verified 0 DEAD, 0 below-floor with
     scripts/_practice_unit_scope_check.py and 0 errors with
-    compile_content.py practice-validate.'
+    compile_content.py practice-validate.
+
+
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit): recognition and production tiers each had only
+    2 live templates (<3 floor, recipe SS8). Added lesson02.choose.002 (multiple_choice over unit35''s own verb pool,
+    part_of_speech: verb with no semantic tag -- the unit''s 12 verbs (call/uses/reads/make/send/text/sends/download/
+    downloads/use/tries/chat) carry no semantic tags in the backfill, so no semantic union is available; 12 unit-scoped
+    tokens / 12 distinct glosses, well above the 3-option floor; bare {item} frame so POS-only is safe) and
+    lesson04.translate.001 (bare-word translation over the same POS-only verb pool -- recipe SS3.1(c) explicitly blesses
+    POS-only for bare-word translation; all 12 unit-scoped glosses distinct, no ambiguous typed prompts at unit scope).
+    Both tiers now at 3 live. match.003 POS-only audit: left POS-only DELIBERATELY -- the only semantic tags unit35''s
+    lexemes carry are device_noun/device_noun_a, whose unit-scoped union is 5 distinct tokens
+    (laptop/tablet/computer/app/camera), below the 6 declared matching slots, so no unit-native semantic union can
+    satisfy the template; per the polish rubric the bare part_of_speech: noun constraint stays.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -196,6 +209,44 @@ templates:
       direction: ltr
   feedback_frame:
     text: I have a {item}. betekent Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit35.lesson02.choose.002
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit35.lesson04.translate.001
+  lesson_content_key: en.a1.unit35.lesson04.how_they_use_their_phones
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit35.lesson02.translate.001.volume_order.002

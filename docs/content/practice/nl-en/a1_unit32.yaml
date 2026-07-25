@@ -19,7 +19,17 @@ review:
     the hypernym ''pet''. Frame ''I have a {item}'' is grammatical for all 4 consonant-initial nouns and matches lesson01''s
     ''I have a dog.''. All glosses accurate and mutually distinct. No bare YAML booleans, no snake_case learner-facing leaks.
     Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py
-    --dry-run clean. Upgrading to reviewed.'
+    --dry-run clean. Upgrading to reviewed.
+
+
+    Polish wave 2 (2026-07-25, tier-thinness): recognition and production tiers each had only 2 live templates (<3 floor,
+    recipe SS8). Added lesson04.choose.001 (multiple_choice over the unit''s own verb pool, part_of_speech: verb with no
+    semantic tag -- unit32''s verbs (likes/loves/named/watch/swim) carry no semantic tags in the backfill, so a semantic
+    union is not available; unit-scoped pool is 5 tokens / 4 distinct glosses, above the 3-option floor; bare {item}
+    frame so POS-only is safe) and lesson04.translate.002 (NL sentence prompt ''Wij kijken naar de {item}.'' with gloss
+    rendering over pet_animal, EN render_frame answer ''We watch the {item}'' -- ''watch'' is lesson04''s own vocab;
+    pet_animal is exactly dog/cat/fish/bird course-wide, all grammatical and sensible in the frame, all de-words in the
+    NL prompt). Both tiers now at 3 live.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -161,6 +171,45 @@ templates:
       direction: ltr
   feedback_frame:
     text: I have a {item}. betekent Ik heb een {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit32.lesson04.choose.001
+  lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit32.lesson04.translate.002
+  lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+  type: translation
+  frame:
+    text: Wij kijken naar de {item}.
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: We watch the {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: We watch the {item} betekent Wij kijken naar de {item}.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit32.lesson02.translate.001.volume_fill.010

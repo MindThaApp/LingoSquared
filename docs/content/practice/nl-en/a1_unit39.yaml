@@ -54,11 +54,39 @@ review:
     feedback_frame text was already generic ('elk woord', not 'elk bijvoeglijk
     naamwoord') so no wording change was needed there. Re-verified 0 DEAD,
     0 below-floor with scripts/_practice_unit_scope_check.py and 0 errors
-    with compile_content.py practice-validate."
+    with compile_content.py practice-validate.
+
+    POLISH 2026-07-25 (wave 2, tier-thinness + POS-only matching_pairs pass):
+    (1) POS-ONLY MATCHING match.003 is LEFT POS-only, honestly: unit39's
+    specs carry only one semantic tag family at unit scope --
+    neighborhood_adj (quiet/noisy = 2 unit tokens) plus a single-member
+    volume tag on noisy -- so no semantic union of unit-native tags can
+    reach the 6 distinct tokens the 6-slot template needs; a wrong union
+    would be worse than the status quo. (2) Tier-thinness: structured and
+    production each had only 1 live template. Structured += lesson02.order.001
+    (word_order 'Our neighborhood is {item}.' over neighborhood_adj
+    adjectives -- course-wide pool is exactly quiet/noisy/friendly, each
+    grammatical as a predicate of neighborhood, no frame word is a
+    candidate) and lesson01.fill.005 (fill 'Our street is very {item} at
+    night.' on the single-member volume_prs_en_a1_unit39_item_07_single tag
+    = noisy). Production += lesson03.translate.001 (sentence translation
+    'Onze buurt is {item}.' -> 'Our neighborhood is {item}.' over
+    neighborhood_adj; the prompt varies with the answer via slot_rendering
+    so it stays determinate; course extra friendly/vriendelijk is
+    grammatical in both frames) and lesson04.translate.001 (bare-word
+    translation over the unit's 10 plain nouns, POS-only -- safe for bare
+    translation because the prompt varies with the answer; all glosses
+    distinct). Tiers now 3/3/3 live. tag_schema gained the two referenced
+    semantic tags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [neighborhood_adj, volume_prs_en_a1_unit39_item_07_single]
 slot_presets:
   neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: [noun, adjective]}
+  area_adj: &area_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
+  noisy_single: &noisy_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: volume_prs_en_a1_unit39_item_07_single}}
+  unit39_noun: &unit39_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.nl-en.en.a1.unit39.lesson01.choose.001
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -96,3 +124,35 @@ templates:
     slots: {item: *neighborhood_adj}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson02.order.001
+    lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+    type: word_order
+    frame: {text: "Our neighborhood is {item}.", language_code: en, direction: ltr}
+    slots: {item: *area_adj}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "Our neighborhood is {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De juiste volgorde is: Our neighborhood is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson01.fill.005
+    lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+    type: fill_in_blank
+    frame: {text: "Our street is very {item} at night.", language_code: en, direction: ltr}
+    slots: {item: *noisy_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Het ontbrekende woord is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson03.translate.001
+    lesson_content_key: en.a1.unit39.lesson03.dialogue_asking_about_the_neighborhood
+    type: translation
+    frame: {text: "Onze buurt is {item}.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *area_adj}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "Our neighborhood is {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "De Engelse zin is: Our neighborhood is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit39.lesson04.translate.001
+    lesson_content_key: en.a1.unit39.lesson04.three_neighborhoods
+    type: translation
+    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit39_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

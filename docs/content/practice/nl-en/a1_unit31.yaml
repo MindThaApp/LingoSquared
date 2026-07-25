@@ -22,7 +22,17 @@ review:
     frame ''Her eyes are {item}'', grammatical for all 3 and matching the unit''s own ''Her eyes are blue.''. All glosses
     accurate and mutually distinct. No bare YAML booleans, no snake_case learner-facing leaks. Validation: compiler practice-validate
     0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py OK, backfill_lexemes_nl_en.py --dry-run clean.
-    Upgrading to reviewed.'
+    Upgrading to reviewed.
+
+    POLISH wave-2 2026-07-25 (TIER-SHORT: recognition and production tiers each had only
+    2 live templates): added lesson02.choose.003 (multiple_choice) and lesson02.translate.004
+    (bare-word translation) over a new appearance_adj slot preset that unions the pack
+    existing tags [trait_adj, eye_color] (recipe SS3.1a OR-match). Unit-scoped pool: 6
+    distinct adjectives / 6 distinct glosses (tall/short/blond/curly/brown/green =
+    lang/kort/blond/krullend/bruin/groen), clearing the MC 3-gloss floor; A1 course scope
+    adds only unit12 blue/blauw, coherent and gloss-distinct (7 total). eye_color alone has
+    just 2 unit members, below the MC floor, hence the union. Both tiers now 3 live. Bare
+    word frames only, so no course-scope grammaticality exposure.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -50,6 +60,11 @@ slot_presets:
     part_of_speech: adjective
     agreement_tags:
       semantic: eye_color
+  appearance_adj: &id003
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: [trait_adj, eye_color]
 templates:
 - content_key: practice.nl-en.en.a1.unit31.lesson01.choose.001
   lesson_content_key: en.a1.unit31.lesson01.height_and_hair
@@ -169,6 +184,40 @@ templates:
       direction: ltr
   feedback_frame:
     text: Her eyes are {item}. betekent Haar ogen zijn {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson02.choose.003
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} beschrijft iemands uiterlijk.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit31.lesson02.translate.004
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit31.lesson02.translate.002.volume_order.005
