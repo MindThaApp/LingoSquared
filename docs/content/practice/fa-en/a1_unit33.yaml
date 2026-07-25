@@ -57,6 +57,23 @@ review:
     out of this pass's scope). Stripping the stray punctuation from those six introduced_tokens
     entries would let a future pass reach the full 6-pair matching_pairs floor and add real
     lesson02-04 template coverage (currently 0/4 non-lesson01 lessons have a template).
+
+
+    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): tiers were 2/1/1 live.
+    Added choose_noun.005 (MC over a plain part_of_speech:noun constraint, anchored lesson03 -- the 2026-07-17
+    backfill punctuation-strip fix landed, so the unit now has 4 clean unit-native nouns bus/bike/parking/office
+    with distinct glosses, clearing the 3-option floor; same POS-only-MC pattern this pack's choose.001 already
+    uses), order.006 ("The {item} is fast", lesson02) and order.007 ("Where is the {item}?", lesson01) -- both
+    over transport_noun, whose full course-wide pool is exactly bus/bike/car/train, every member grammatical in
+    both frames and no frame literal collides with any candidate (defect 1.14) -- plus translate_verb.008
+    (bare-word production over the same POS-only verb pool as choose.001; POS-only is sanctioned for bare
+    translation) and translate_sentence.009 ("اون {item} سریعه." -> "That {item} is fast", deterministic
+    demonstrative subject, all four course-wide fillings grammatical). Tiers now 3/3/3 live; lessons 02/03/04 get
+    their first templates. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY: the unit's
+    only semantic tag is transport_noun with just 2 unit-native members (bus/bike -- train/car belong to
+    unit21/unit20), so no semantic union of unit tags can reach the 6 distinct unit tokens a matching_pairs
+    needs; a wrong union is worse than the status quo. It also stays at 5 pairs (pre-existing below-floor line,
+    not dispatched).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -93,3 +110,38 @@ templates:
     slots: {item: *transport_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این وسیلهٔ نقلیه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson03.choose_noun.005
+    lesson_content_key: en.a1.unit33.lesson03.dialogue_commute_talk
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: {language_code: en, part_of_speech: noun}}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson02.order.006
+    lesson_content_key: en.a1.unit33.lesson02.describing_commutes
+    type: word_order
+    frame: {text: "The {item} is fast", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "The {item} is fast", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} وسیلهٔ نقلیه‌ای است که در جمله آمد.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson01.order.007
+    lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
+    type: word_order
+    frame: {text: "Where is the {item}?", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Where is the {item}?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "پرسش درست دربارهٔ جای {item} همین است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson04.translate_verb.008
+    lesson_content_key: en.a1.unit33.lesson04.two_commuters
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit33_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این فعل است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit33.lesson02.translate_sentence.009
+    lesson_content_key: en.a1.unit33.lesson02.describing_commutes
+    type: translation
+    frame: {text: "اون {item} سریعه.", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "That {item} is fast", language_code: en, direction: ltr}}
+    feedback_frame: {text: "That {item} is fast. یعنی اون {item} سریعه.", language_code: fa, direction: rtl}

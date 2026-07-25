@@ -23,12 +23,18 @@ review:
     membership. No mis-glossed lexeme found. FLAG FOR COORDINATOR:
     checkpoint will very likely stay <12 items unless lessons 02/03 get
     lexeme coverage -- routing to backfill recommended.
+    POLISH 2026-07-25: the backfill extension happened -- lessons 02/03 now
+    carry 6+7 phrase lexemes, so the lexeme counts above are stale. Added
+    lesson02.translate.001 (bare-phrase translation over the 6-phrase
+    fa_en_a1_unit63_lesson02_words pool) -- production tier now 3 live
+    templates and lesson02 is checkpoint-visible.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [fa_en_a1_unit63_words, fa_en_a1_unit63_lesson01_words, fa_en_a1_unit63_lesson04_words]
+    semantic: [fa_en_a1_unit63_words, fa_en_a1_unit63_lesson01_words, fa_en_a1_unit63_lesson02_words, fa_en_a1_unit63_lesson04_words]
 slot_presets:
   unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: fa_en_a1_unit63_words}}
+  lesson02_phrases: &lesson02_phrases {language_code: en, part_of_speech: phrase, agreement_tags: {semantic: fa_en_a1_unit63_lesson02_words}}
   lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
   lesson01_adj: &lesson01_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
   lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit63_lesson01_words}}
@@ -76,6 +82,13 @@ templates:
     slots: {item: *lesson01_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «قفسه».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit63.lesson02.translate.001
+    lesson_content_key: en.a1.unit63.lesson02.help_phrases
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *lesson02_phrases}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این عبارت است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit63.lesson04.choose.001
     lesson_content_key: en.a1.unit63.lesson04.a_helpful_neighbor
     type: multiple_choice

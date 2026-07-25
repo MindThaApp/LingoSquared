@@ -22,15 +22,30 @@ review:
     mis-glossed lexeme found. FLAG FOR COORDINATOR: checkpoint will very
     likely stay <12 items unless lessons 02/04 get lexeme coverage --
     routing to backfill recommended.
+
+    Polish wave 2 (2026-07-25, tier-thinness): the backfill NOW carries 17
+    lexemes for this unit (the note above predates lesson02/04 phrase
+    coverage -- lesson02 has 6 clean phrase lexemes under its own
+    fa_en_a1_unit66_lesson02_words tag). Production tier was 2 live
+    translations (<3): added lesson02.translate.001, a bare phrase
+    translation over that lesson02 tag (6 candidates; tag is unique to
+    this unit so unit scope == course scope; bare '{item}' frame so
+    self-reference/grammaticality are moot; precedent prs-en a1_unit66
+    lesson04.translate.001, here scoped to lesson02 to keep the lesson03
+    narration-glossed dialogue lines and the lesson04 mega-phrase OUT of
+    the typing pool). Production tier now 3 live; lesson02 gains its
+    first template. Glosses of all 6 phrases checked -- clean, distinct,
+    no narration prefixes.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [fa_en_a1_unit66_words, fa_en_a1_unit66_lesson01_words, fa_en_a1_unit66_lesson03_words]
+    semantic: [fa_en_a1_unit66_words, fa_en_a1_unit66_lesson01_words, fa_en_a1_unit66_lesson02_words, fa_en_a1_unit66_lesson03_words]
 slot_presets:
   unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: fa_en_a1_unit66_words}}
   lesson01_noun: &lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit66_lesson01_words}}
   lesson01_verb: &lesson01_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: fa_en_a1_unit66_lesson01_words}}
   lesson03_single: &lesson03_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: fa_en_a1_unit66_lesson03_words}}
+  lesson02_phrase: &lesson02_phrase {language_code: en, part_of_speech: phrase, agreement_tags: {semantic: fa_en_a1_unit66_lesson02_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit66.lesson01.choose.001
     lesson_content_key: en.a1.unit66.lesson01.symptom_words
@@ -67,6 +82,13 @@ templates:
     slots: {item: *lesson01_verb}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «درد می‌کند».", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit66.lesson02.translate.001
+    lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *lesson02_phrase}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این عبارت است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit66.lesson03.choose.001
     lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
     type: multiple_choice

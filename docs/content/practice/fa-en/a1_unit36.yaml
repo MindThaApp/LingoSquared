@@ -58,7 +58,20 @@ review:
     the pack is clearly viable without it (order.004/volume_order.002/translate_sentence.005 keep the
     structured/production tiers alive). LOG for the coordinator: a genuinely unit36-native single-member tag
     (e.g. on "math" or "college") would let a future pass re-add a working fill_in_blank here -- needs a
-    backfill change, out of this pass''s pack-only scope.'
+    backfill change, out of this pass''s pack-only scope.
+
+
+    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): recognition and production
+    were 2 live each. Added choose_verb.007 (MC over a plain part_of_speech:verb constraint, anchored lesson02
+    which previously had no template -- the unit natively introduces 11 distinct verbs with 11 distinct Farsi
+    glosses (study/studies/studying carry distinct discriminable glosses), clearing the 3-option floor; same
+    POS-only bare-word MC pattern as this pack''s choose.001) and translate_verb.008 (bare-word production over
+    the same verb constraint, anchored lesson04 which previously had no template; POS-only is sanctioned for
+    bare-word translation). Tiers now 3/3/3 live. match.006 (dispatched POS-ONLY-MATCHING) is left POS-only
+    DELIBERATELY: the unit''s only tag_schema semantic tag is class_noun with exactly 1 unit-native member
+    ("course" -- class/test belong to unit13), and even adding the shared education_noun tag would reach only 3
+    unit tokens (course/homework/subject), far under the 6 distinct unit tokens the 6-slot template needs; a
+    wrong union is worse than the status quo. This confirms the pack''s own 2026-07-24 re-anchor rationale.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -230,3 +243,39 @@ templates:
     text: I have a {item}
     language_code: en
     direction: ltr
+- content_key: practice.fa-en.en.a1.unit36.lesson02.choose_verb.007
+  lesson_content_key: en.a1.unit36.lesson02.taking_a_class
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: &unit36_verb
+      language_code: en
+      part_of_speech: verb
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit36.lesson04.translate_verb.008
+  lesson_content_key: en.a1.unit36.lesson04.learning_something_new
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *unit36_verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این فعل است.
+    language_code: fa
+    direction: rtl

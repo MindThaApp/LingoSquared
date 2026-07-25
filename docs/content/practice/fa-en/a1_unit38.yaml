@@ -26,12 +26,27 @@ review:
     import.
 
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+
+    Polish wave 2 (2026-07-25, tier-thinness, PRACTICE_PACK_RECIPE.md §8): added lesson03.choose.001
+    (3rd recognition, bare-POS noun pool per §3.1(c), 9 unit nouns / 9 distinct clean Farsi glosses),
+    lesson01.fill.005 + lesson02.order.001 (2nd/3rd structured, both on the course-singleton
+    trash_word tag, deterministic frames echoing the taught "take out the trash" collocation),
+    lesson04.translate.001 (bare-noun production over the same §3.1(c) pool) and
+    lesson02.translate.002 (fixed-sentence production on trash_word, single-member per §6.6(b)).
+    chore_noun deliberately kept out of sentence frames: its members pair with different verbs
+    ("do the dishes/laundry" vs "take out the trash"), so no shared frame is grammatical for the
+    whole pool. match.003 stays at 3 pairs — the unit's only semantically-tagged noun pool has 4
+    unit-scoped members, below the 6-slot standard, and the untagged remainder would need a
+    bare-POS matching constraint (the exact off-theme course-scope defect this wave removes
+    elsewhere), so left as-is.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [chore_noun]
+    semantic: [chore_noun, trash_word]
 slot_presets:
   chore_noun: &chore_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: chore_noun}}
+  trash_single: &trash_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: trash_word}}
+  unit38_noun: &unit38_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.fa-en.en.a1.unit38.lesson01.choose.001
     lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
@@ -60,5 +75,44 @@ templates:
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *chore_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit38.lesson01.fill.005
+    lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
+    type: fill_in_blank
+    frame: {text: "Please take out the {item}", language_code: en, direction: ltr}
+    slots: {item: *trash_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی زباله.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit38.lesson02.order.001
+    lesson_content_key: en.a1.unit38.lesson02.doing_chores
+    type: word_order
+    frame: {text: "He takes out the {item} every day", language_code: en, direction: ltr}
+    slots: {item: *trash_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "He takes out the {item} every day", language_code: en, direction: ltr}
+    feedback_frame: {text: "کلمهٔ {item} یعنی زباله.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit38.lesson02.translate.002
+    lesson_content_key: en.a1.unit38.lesson02.doing_chores
+    type: translation
+    frame: {text: "من زباله را بیرون می‌برم.", language_code: fa, direction: rtl}
+    slots: {item: *trash_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I take out the {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "I take out the {item} یعنی من زباله را بیرون می‌برم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit38.lesson03.choose.001
+    lesson_content_key: en.a1.unit38.lesson03.dialogue_cleaning_help
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit38_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit38.lesson04.translate.001
+    lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit38_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}

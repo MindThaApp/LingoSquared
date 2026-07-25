@@ -24,12 +24,25 @@ review:
     import.
 
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+
+    Polish wave 2 (2026-07-25, tier-thinness, PRACTICE_PACK_RECIPE.md §8): added lesson02.choose.001
+    (3rd recognition, bare-POS noun pool per §3.1(c), 10 unit nouns / 10 distinct Farsi glosses),
+    lesson03.fill.001 + lesson04.order.001 (2nd/3rd structured, both on the course-singleton
+    party_word tag, deterministic frames), lesson02.translate.002 (bare-noun production over the
+    same §3.1(c) pool) and lesson03.translate.002 (fixed-sentence production on party_word,
+    single-member per §6.6(b)). celebration_noun deliberately NOT used in any sentence frame:
+    its course pool adds "birthday" (unit04) and no shared frame is grammatical for
+    cake/congratulations/gift/party/birthday at course scope. Known quirk noted honestly: the
+    bare-POS pools include "break" whose Farsi gloss embeds the English "break room", making that
+    one target a giveaway in choose/translate (backfill gloss, not fixable pack-side).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [celebration_noun]
+    semantic: [celebration_noun, party_word]
 slot_presets:
   celebration_noun: &celebration_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: celebration_noun}}
+  party_single: &party_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: party_word}}
+  unit37_noun: &unit37_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.fa-en.en.a1.unit37.lesson01.choose.001
     lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
@@ -60,3 +73,42 @@ templates:
     slots: {item: *celebration_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit37.lesson02.choose.001
+    lesson_content_key: en.a1.unit37.lesson02.inviting_and_congratulating
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit37_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit37.lesson02.translate.002
+    lesson_content_key: en.a1.unit37.lesson02.inviting_and_congratulating
+    type: translation
+    frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit37_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit37.lesson03.fill.001
+    lesson_content_key: en.a1.unit37.lesson03.dialogue_surprise_party
+    type: fill_in_blank
+    frame: {text: "We're having a surprise {item} for Daniel", language_code: en, direction: ltr}
+    slots: {item: *party_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "{item} یعنی مهمانی.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit37.lesson03.translate.002
+    lesson_content_key: en.a1.unit37.lesson03.dialogue_surprise_party
+    type: translation
+    frame: {text: "داریم برای دنیل یک مهمانی غافلگیری می‌گیریم.", language_code: fa, direction: rtl}
+    slots: {item: *party_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "We're having a surprise {item} for Daniel", language_code: en, direction: ltr}
+    feedback_frame: {text: "We're having a surprise {item} for Daniel یعنی داریم برای دنیل یک مهمانی غافلگیری می‌گیریم.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit37.lesson04.order.001
+    lesson_content_key: en.a1.unit37.lesson04.the_surprise_party
+    type: word_order
+    frame: {text: "The {item} was a wonderful surprise", language_code: en, direction: ltr}
+    slots: {item: *party_single}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "The {item} was a wonderful surprise", language_code: en, direction: ltr}
+    feedback_frame: {text: "کلمهٔ {item} یعنی مهمانی.", language_code: fa, direction: rtl}

@@ -81,6 +81,21 @@ review:
     0 FLOOR for a1_unit10.yaml; compile_content.py practice-validate 0
     errors (see coordinator report for the exact fa-en batch
     invocation).
+
+    Tier-thinness polish (2026-07-25, wave-2 PACK-ONLY lane): the
+    recognition tier had only 2 live templates (place_listen.004,
+    place_meaning.004 -- both on the same untagged noun pool, below the
+    recipe §8 >=3-per-tier floor). Added verb_gloss.004, a bare-word
+    multiple_choice anchored to lesson03 (reading_a_route, which had no
+    recognition template) on a NEW untagged part_of_speech:verb pool --
+    unit10's own 6 verbs (turn/stop/get/can't/miss/take), 6 distinct
+    Farsi glosses, clearing the 3-option floor; differs from both
+    recognition siblings by pool (verb vs noun), so not a clone. Bare
+    '{item}' frame with no literal text, so the POS-only pool is safe at
+    course scope (recipe §3.1c); unit10 has no semantic tag reaching 3
+    verbs (turn_direction/street_ordinal are 2-member and non-verb), so
+    an untagged pool is the only in-scope option, same rationale as the
+    2026-07-24 pass above. NOT fresh-context-reviewed.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
@@ -89,6 +104,7 @@ slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
   unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
+  unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
 templates:
   - content_key: practice.fa-en.en.a1.unit10.lesson01.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
@@ -139,6 +155,13 @@ templates:
     slots: {item: *street_ordinal}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی این عدد ترتیبی {item} است.", language_code: fa, direction: rtl}
+  - content_key: practice.fa-en.en.a1.unit10.lesson03.verb_gloss.004
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit10.lesson04.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
     type: word_order

@@ -59,7 +59,22 @@ review:
     scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR for this pack. Re-validated with
     compile_content.py practice-validate (0 errors) after the change. review.status left at "reviewed" from the prior
     pass since this is a scoped slot-constraint fix on top of already-reviewed content, not a fresh unreviewed author --
-    the coordinator should still confirm the near-duplicate calm/relaxed gloss call above.'
+    the coordinator should still confirm the near-duplicate calm/relaxed gloss call above.
+
+
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3): added
+    lesson04.choose.001 (3rd recognition, over the same id_wide bare-POS adjective pool the matching templates use --
+    12 unit tokens / 12 distinct glosses, differs from choose.001''s personality_adjective pool so not a duplicate)
+    and lesson03.translate.001 (3rd production: gloss-rendered sentence translation over personality_adjective,
+    prompt varies with the answer; the full course pool incl. "friendly"/unit32 is grammatical in both "دنیل خیلی
+    {item} است." and "Daniel is very {item}"; "است" chosen over the colloquial clitic to avoid the "بامزهه"
+    orthography jank in .006). POS-ONLY-MATCHING dispatch on match.003 + volume_match.007 resolved as
+    HONESTLY-UNFIXABLE: the union of every unit-native semantic tag (personality_adjective + personality_adj +
+    the shy singleton) covers only 5 unit-scoped tokens, under the 6-slot matching floor -- replacing id_wide
+    with that union would kill both templates at checkpoint scope (worse than the off-theme course-scope pairs
+    it would fix). Left POS-only per the wave rubric; the coordinator-level fix is a backfill tag on lesson02-04''s
+    7 untagged personality adjectives (comfortable/relaxed/creative/upset/outgoing/organized/patient), which would
+    let both matching templates and a future union constraint clear the floor on-theme.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -152,6 +167,43 @@ templates:
     - sixth
   feedback_frame:
     text: هر صفت را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson04.choose.001
+  lesson_content_key: en.a1.unit42.lesson04.three_friends_three_personalities
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id_wide
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit42.lesson03.translate.001
+  lesson_content_key: en.a1.unit42.lesson03.dialogue_what_is_daniel_like
+  type: translation
+  frame:
+    text: دنیل خیلی {item} است.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Daniel is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Daniel is very {item} یعنی دنیل خیلی {item} است.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit42.lesson01.translate.004

@@ -23,7 +23,18 @@ review:
     Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
     listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
     practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
-    upgraded to reviewed.'
+    upgraded to reviewed.
+
+
+    Polish wave 2 (2026-07-25, tier-thinness, PRACTICE_PACK_RECIPE.md SS8): added lesson03.choose.001 (3rd
+    recognition, bare-POS noun pool per SS3.1(c) -- 11 unit nouns / 11 distinct Farsi glosses; includes the
+    possessive tokens "grandmother''s"/"mother''s", real taught lexemes with clean distinct glosses) and two
+    production templates: lesson01.translate.006 (fixed sentence on the course-singleton chop_word,
+    echoing the taught "Can you chop the onions for me?") and lesson02.translate.001 (fixed sentence on the
+    course-singleton volume_fa_en_a1_unit41_item_04_single = "boil"), both deterministic per SS6.6(b).
+    Structured tier untouched (already 4 live). Bare-POS verb pools deliberately avoided everywhere: the
+    unit-scope verb pool contains "follow" whose Farsi gloss embeds the English "follow-up", which would
+    leak the answer in a typed-production prompt.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -39,6 +50,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - cooking_verb
+    - chop_word
     - volume_fa_en_a1_unit41_item_04_single
 slot_presets:
   cooking_verb: &id001
@@ -196,5 +208,63 @@ templates:
     - third
   feedback_frame:
     text: هر فعل را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit41.lesson03.choose.001
+  lesson_content_key: en.a1.unit41.lesson03.dialogue_cooking_together
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: {language_code: en, part_of_speech: noun}
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit41.lesson01.translate.006
+  lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
+  type: translation
+  frame:
+    text: می‌توانی پیازها را برایم خرد کنی؟
+    language_code: fa
+    direction: rtl
+  slots:
+    item: {language_code: en, part_of_speech: verb, agreement_tags: {semantic: chop_word}}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Can you {item} the onions for me
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Can you {item} the onions for me یعنی می‌توانی پیازها را برایم خرد کنی؟
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit41.lesson02.translate.001
+  lesson_content_key: en.a1.unit41.lesson02.preparing_a_meal
+  type: translation
+  frame:
+    text: اول پاستا را بجوشان.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit41_item_04_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: First, {item} the pasta
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: First, {item} the pasta یعنی اول پاستا را بجوشان.
     language_code: fa
     direction: rtl

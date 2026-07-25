@@ -81,7 +81,22 @@ review:
     flagging near unit34''s pack too, since anything anchored there assuming "neighbor" is unit34-exclusive
     should already account for unit39 re-teaching the same word (checked: unit34''s own pack does not
     currently reference a neighbor-based tag, so no live conflict, but future edits near unit34 should be
-    aware unit39''s lesson01 also teaches this token).'
+    aware unit39''s lesson01 also teaches this token).
+
+
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3):
+    added lesson01.choose.006 (3rd recognition, bare-POS adjective pool per SS3.1(c) -- 5 unit adjectives /
+    5 distinct Farsi glosses; the unit''s only semantic adjective tag, neighborhood_adj, covers just 2 unit
+    tokens, under the 3-gloss MC floor), lesson01.fill.007 (3rd structured, on the course-singleton
+    volume_prs_en_a1_unit39_item_07_single = "noisy", deterministic), lesson02.translate.001 (2nd
+    production: gloss-rendered sentence translation over neighborhood_adj -- prompt varies with the answer,
+    and the full course pool {quiet, noisy, friendly} is grammatical in both the Farsi prompt and the
+    English render) and lesson04.translate.001 (3rd production, fixed sentence on the noisy singleton per
+    SS6.6(b)). POS-ONLY-MATCHING dispatch on match.003 resolved as HONESTLY-UNFIXABLE: this unit''s specs
+    carry NO semantic tag on any noun (neighborhood_adj is adjectives-only, 2 unit members), so no union of
+    unit-native tags can reach the 6-distinct-token matching floor -- per the wave rubric the bare-POS
+    constraint is left in place rather than replaced with a wrong union; a backfill tag on the unit''s 10
+    nouns is the coordinator-level fix.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -97,6 +112,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - neighborhood_adj
+    - volume_prs_en_a1_unit39_item_07_single
 templates:
 - content_key: practice.fa-en.en.a1.unit39.lesson01.choose.001
   lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -201,5 +217,77 @@ templates:
       direction: ltr
   feedback_frame:
     text: '{item} صفتی است که همسایه‌ها را توصیف می‌کند.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit39.lesson01.choose.006
+  lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: {language_code: en, part_of_speech: adjective}
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit39.lesson01.fill.007
+  lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
+  type: fill_in_blank
+  frame:
+    text: My street is very {item} at night
+    language_code: en
+    direction: ltr
+  slots:
+    item: &noisy_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: volume_prs_en_a1_unit39_item_07_single}}
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} یعنی پرسروصدا.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit39.lesson02.translate.001
+  lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+  type: translation
+  frame:
+    text: همسایه‌های من خیلی {item} هستند.
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My neighbors are very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: My neighbors are very {item} یعنی همسایه‌های من خیلی {item} هستند.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit39.lesson04.translate.001
+  lesson_content_key: en.a1.unit39.lesson04.three_neighborhoods
+  type: translation
+  frame:
+    text: ساختمان ما کمی پرسروصداست.
+    language_code: fa
+    direction: rtl
+  slots:
+    item: *noisy_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Our building is a little {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Our building is a little {item} یعنی ساختمان ما کمی پرسروصداست.
     language_code: fa
     direction: rtl

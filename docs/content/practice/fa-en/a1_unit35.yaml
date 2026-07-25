@@ -51,7 +51,21 @@ review:
     apps/map/names, phones/people/maps/recipes/laptops), all distinct Farsi glosses, singular/plural pairs
     (app/apps, map/maps, laptop/laptops) kept per recipe''s allowance, no confusable duplicates. order.005 and
     translate_sentence.006 (both frame-literal generative templates, correctly restricted to the
-    single-vowel-safe device_noun_a tag) are UNCHANGED and were not flagged.'
+    single-vowel-safe device_noun_a tag) are UNCHANGED and were not flagged.
+
+
+    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): recognition and production
+    were 2 live each. Added listen_sentence.007 (listen_select "I have a {item}" over device_noun_a, anchored
+    lesson03 which previously had no template; the tag''s one course-scope extra is "phone", grammatical in the
+    frame; options are Farsi glosses so no distractor can collide with the English audio, defect 1.22) and
+    translate_verb.008 (bare-word production over a plain part_of_speech:verb constraint, anchored lesson02 which
+    previously had no template -- the unit natively introduces 12 distinct verbs, all with distinct Farsi glosses
+    (use/uses and download/downloads pairs carry distinct prompts); POS-only is sanctioned for bare-word
+    translation). Tiers now 3/3/3 live. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY:
+    the unit''s only semantic tags are device_noun (5 unit-native members -- the 6th course member "phone" belongs
+    to unit03) and its subset device_noun_a (4), so no semantic union of unit tags can reach the 6 distinct unit
+    tokens the 6-slot template needs; a wrong union is worse than the status quo. This confirms the pack''s own
+    2026-07-24 re-anchor rationale.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -229,3 +243,39 @@ templates:
     text: I have a {item}
     language_code: en
     direction: ltr
+- content_key: practice.fa-en.en.a1.unit35.lesson03.listen_sentence.007
+  lesson_content_key: en.a1.unit35.lesson03.dialogue_new_phone
+  type: listen_select
+  frame:
+    text: I have a {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: دستگاهی که در جمله شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a1.unit35.lesson02.translate_verb.008
+  lesson_content_key: en.a1.unit35.lesson02.using_your_phone
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این فعل است.
+    language_code: fa
+    direction: rtl
