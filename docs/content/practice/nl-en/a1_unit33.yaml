@@ -66,7 +66,25 @@ review:
     is the only clean noun lesson03/04 contribute. Routing to the
     backfill lane: scripts/backfill_lexemes_nl_en.py should re-strip
     trailing punctuation from these six tokens (and re-check the rest of
-    the corpus for the same class of defect)."
+    the corpus for the same class of defect).
+
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit):
+    structured tier had only 1 live template and production only 2 (<3
+    floor, recipe SS8). Added two word_order templates over vehicle_noun
+    (course-wide pool is exactly bus/train/car/bike): lesson02.order.001
+    'We go to work by {item}' and lesson04.order.002 'He takes the {item}
+    to the office' -- both frames verified idiomatic for all four
+    course-scope members ('by bus/train/car/bike' and 'take the
+    bus/train/car/bike' are all standard English). Added
+    lesson03.translate.001 (NL prompt 'Ik neem de {item} naar het werk.'
+    with gloss rendering, EN render_frame 'I take the {item} to work';
+    all four vehicles are de-words in the NL prompt). Tiers now 3/3/3.
+    match.003 POS-only audit: left POS-only DELIBERATELY -- the only
+    semantic tag unit33's lexemes carry is vehicle_noun/transport_noun
+    (2 unit-scoped tokens: bus, bike); no semantic union of unit-native
+    tags can reach the 5 declared slots, let alone 6, so per the polish
+    rubric the bare part_of_speech: verb constraint stays (a wrong union
+    is worse than the status quo)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -118,3 +136,30 @@ templates:
     slots: {item: *vehicle_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson02.order.001
+    lesson_content_key: en.a1.unit33.lesson02.describing_commutes
+    type: word_order
+    frame: {text: "We go to work by {item}", language_code: en, direction: ltr}
+    slots: {item: *vehicle_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "We go to work by {item}", language_code: en, direction: ltr}
+    feedback_frame: {text: "Met by {item} zeg je hoe je naar je werk reist.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson04.order.002
+    lesson_content_key: en.a1.unit33.lesson04.two_commuters
+    type: word_order
+    frame: {text: "He takes the {item} to the office", language_code: en, direction: ltr}
+    slots: {item: *vehicle_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "He takes the {item} to the office", language_code: en, direction: ltr}
+    feedback_frame: {text: "Zo zeg je met welk vervoer hij naar kantoor gaat.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit33.lesson03.translate.001
+    lesson_content_key: en.a1.unit33.lesson03.dialogue_commute_talk
+    type: translation
+    frame: {text: "Ik neem de {item} naar het werk.", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *vehicle_noun}
+    answer_derivation:
+      kind: render_frame
+      frame: {text: "I take the {item} to work", language_code: en, direction: ltr}
+    feedback_frame: {text: "I take the {item} to work betekent Ik neem de {item} naar het werk.", language_code: nl, direction: ltr}

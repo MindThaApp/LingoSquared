@@ -49,7 +49,24 @@ review:
     checkpoint content increases (0 live matching_pairs -> 1 live
     matching_pairs). Re-verified 0 DEAD, 0 below-floor with
     scripts/_practice_unit_scope_check.py and 0 errors with
-    compile_content.py practice-validate.'
+    compile_content.py practice-validate.
+
+
+    POLISH 2026-07-25 (wave 2, tier-thinness + POS-only matching_pairs
+    pass): (1) POS-ONLY MATCHING match.003 is LEFT POS-only, honestly: the
+    only unit-native semantic tag, personality_adj, covers just 5 unit-scope
+    tokens (friendly belongs to unit32) and the volume single on shy adds
+    nothing new, so no semantic union of unit-native tags reaches the 6-pair
+    floor -- exactly the situation the 2026-07-24 pass above already
+    documented when it widened this template to part_of_speech adjective.
+    (2) Tier-thinness: recognition had 2 live templates and production 2.
+    Recognition += lesson04.choose.001 (multiple_choice over the 12
+    adjectives the unit itself introduces, part_of_speech adjective only --
+    12 distinct unit glosses, well above the 3-option floor; differs from
+    choose.001 in pool). Production += lesson04.translate.001 (bare-word
+    translation over the same 12 adjectives; POS-only is safe for bare
+    translation because the prompt varies with the answer; all glosses
+    distinct). Tiers now 3 recognition / 4 structured / 3 production live.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -72,6 +89,9 @@ slot_presets:
     part_of_speech: adjective
     agreement_tags:
       semantic: personality_adj
+  unit_adjective: &u42_adj
+    language_code: en
+    part_of_speech: adjective
 templates:
 - content_key: practice.nl-en.en.a1.unit42.lesson01.choose.001
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
@@ -241,4 +261,38 @@ templates:
   feedback_frame:
     text: She is {item}
     language_code: en
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson04.choose.001
+  lesson_content_key: en.a1.unit42.lesson04.three_friends_three_personalities
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *u42_adj
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze unit.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit42.lesson04.translate.001
+  lesson_content_key: en.a1.unit42.lesson04.three_friends_three_personalities
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *u42_adj
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
     direction: ltr

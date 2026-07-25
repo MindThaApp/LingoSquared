@@ -8,6 +8,7 @@ review:
   fresh_context: "false"
   notes: >-
     Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md for the nl-en a1_unit53 vocabulary unit. Recognition (multiple_choice, listen_select) and production (translation bare-word) templates use the unit-wide semantic tag `a1_unit53_bike_rental` (all lessons unioned, POS-restricted to noun/verb/adjective/adverb, language_code en) anchored per lesson -- the recipe SS8.1 pattern -- so every recognition/production slot clears the >=3-distinct-value floor even where an individual lesson is thin; measured 16 distinct unit-wide content lexemes with zero duplicate english_gloss values (checked by hand against the real backfill_lexemes_nl_en.py output before writing). matching_pairs also draws on the unit-wide tag (6 pairs). Structured tier is carried primarily by matching_pairs (bare frame, no literal text, so no course-scope grammaticality risk per recipe SS1.1) plus one fill_in_blank single-member anchor per SS6.5 where the real lexeme dump yielded exactly one course-wide candidate for its lesson+part_of_speech combination (verified before writing the frame). word_order was used only where lesson01s own verb pool is uniformly a bare infinitive form (this units per-lesson tags cannot exclude a single mixed-conjugation member, recipe SS3.1b) and skipped elsewhere in this batch for that reason; the structured-tier floor is still met via matching_pairs alone. Lessons with zero en-language lexemes in the real backfill output are not anchored (recipe SS0: a lesson with no lexemes cannot be represented in the checkpoint regardless of pack content).
+    POLISH 2026-07-25 (tier-thinness wave 2): added lesson03.order.001 (word_order) to bring the structured tier from 2 to 3 live templates; slot pool is lesson03 nouns only (bikes, river; both grammatical in the frame; the unit-specific lesson tag has zero course-scope extras, verified with pool_check.py).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -94,3 +95,10 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+  - content_key: practice.nl-en.en.a1.unit53.lesson03.order.001
+    lesson_content_key: en.a1.unit53.lesson03.dialogue_at_the_rental_shop
+    type: word_order
+    frame: {text: "We can see the {item} from here.", language_code: en, direction: ltr}
+    slots: {item: {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit53_bike_rental_lesson03}}}
+    answer_derivation: {kind: render_frame, frame: {text: "We can see the {item} from here.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Zet de Engelse woorden in de juiste volgorde.", language_code: nl, direction: ltr}

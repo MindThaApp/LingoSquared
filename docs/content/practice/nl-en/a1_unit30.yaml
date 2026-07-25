@@ -24,7 +24,16 @@ review:
     glosses (lezen/koken/schilderen/hardlopen), so matching_pairs is answerable. Frame ''I like {item}'' is grammatical for
     every gerund-noun member and matches lesson03.teach.i_like_pattern (''I like reading.''). No bare YAML booleans, no snake_case
     learner-facing leaks. Validation: compiler practice-validate 0/0 across the full 42-pack nl-en set, scripts/_practice_slot_check.py
-    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.'
+    OK, backfill_lexemes_nl_en.py --dry-run clean. Upgrading to reviewed.
+
+    POLISH wave-2 2026-07-25 (TIER-SHORT: recognition and production tiers each had only
+    2 live templates): added lesson02.choose.001 (multiple_choice) and lesson02.translate.002
+    (bare-word translation) over the pre-existing course tag frequency_adverb, whose four
+    unit30 lesson02 members (always/often/rarely/never = altijd/vaak/zelden/nooit) clear the
+    MC 3-gloss floor at unit scope; at A1 course scope the pool adds only unit23
+    sometimes/soms, thematically coherent and gloss-distinct. Both tiers now 3 live.
+    frequency_adverb added to tag_schema. No sentence frame added, so no course-scope
+    grammaticality exposure.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -40,12 +49,18 @@ tag_schema:
   agreement_tags:
     semantic:
     - hobby_activity
+    - frequency_adverb
 slot_presets:
   hobby_activity: &id001
     language_code: en
     part_of_speech: noun
     agreement_tags:
       semantic: hobby_activity
+  frequency_adverb: &id002
+    language_code: en
+    part_of_speech: adverb
+    agreement_tags:
+      semantic: frequency_adverb
 templates:
 - content_key: practice.nl-en.en.a1.unit30.lesson01.choose.001
   lesson_content_key: en.a1.unit30.lesson01.free_time_activities
@@ -120,6 +135,40 @@ templates:
       item: english_gloss
   slots:
     item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson02.choose.001
+  lesson_content_key: en.a1.unit30.lesson02.how_often
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een frequentiewoord uit deze les.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit30.lesson02.translate.002
+  lesson_content_key: en.a1.unit30.lesson02.how_often
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
   answer_derivation:
     kind: slot_text
     slot: item
