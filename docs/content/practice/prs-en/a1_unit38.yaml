@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit38.household
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-37. Two tags: 4-member ''chore_noun''
     (chore/dishes/ laundry/trash), bare-word recognition only. Single-member ''trash_word'' (trash only) for the generative
     "Can you take out the {item}?" frame -- "trash" is the only chore_noun member that fits that fixed idiom, same single-member
@@ -23,7 +23,16 @@ review:
     now carries three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers); no prs-en generative frame is widened ungrammatically
     -- the one cross-block union effect (celebration_noun gains ''cake'' from a sibling block) is harmless, since ''cake''
     is genuinely taught in en unit37 and has a Dari gloss, so it is only ever a valid recognition candidate. Upgraded to reviewed:
-    genuinely clean.'
+    genuinely clean.
+
+
+    POLISH 2026-07-24 (tier-thinness wave 2, reverting to unreviewed): recognition was 2 live and production 1 live. Added
+    lesson02.listen.001 (sentence-frame listen_select "The {item} can wait until tomorrow" over chore_noun -- all 4 course-scope
+    members are grammatical in the frame, no frame word collides with any candidate, options are Dari glosses so defect-1.22-safe),
+    lesson03.translate.001 (Dari prompt renders the gloss, answer render_frame "Can you take out the {item}" over single-member
+    trash_word), and lesson04.translate.001 (bare-word Dari-metalanguage variant over chore_noun, differs from translate.004
+    in frame text). All slots reuse tags already declared in tag_schema. Tiers now 3 recognition / 3 structured / 3 production
+    live at unit scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -172,3 +181,58 @@ templates:
     text: '{item}'
     language_code: en
     direction: ltr
+- content_key: practice.prs-en.en.a1.unit38.lesson02.listen.001
+  lesson_content_key: en.a1.unit38.lesson02.doing_chores
+  type: listen_select
+  frame:
+    text: The {item} can wait until tomorrow
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که در این جمله شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit38.lesson03.translate.001
+  lesson_content_key: en.a1.unit38.lesson03.dialogue_cleaning_help
+  type: translation
+  frame:
+    text: می‌تانین {item} را بیرون ببرین؟
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Can you take out the {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} چیزی است که باید بیرون کدن.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit38.lesson04.translate.001
+  lesson_content_key: en.a1.unit38.lesson04.chores_at_home
+  type: translation
+  frame:
+    text: 'به انگلیسی چی می‌شه: {item}؟'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کار خانه {item} است.
+    language_code: prs
+    direction: rtl

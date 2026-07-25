@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit39.neighborhood
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-38. Single tag: 3-member ''neighborhood_adj''
     (quiet/noisy/ friendly -- "friendly" already classified since unit32, reused additively), verified all three fit "My neighbors
     are very {item}." Kept at 3 members (the mc/listen_select floor), so matching_pairs is deliberately NOT used here. EN_POS/
@@ -23,7 +23,19 @@ review:
     now carries three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers); no prs-en generative frame is widened ungrammatically
     -- the one cross-block union effect (celebration_noun gains ''cake'' from a sibling block) is harmless, since ''cake''
     is genuinely taught in en unit37 and has a Dari gloss, so it is only ever a valid recognition candidate. Upgraded to reviewed:
-    genuinely clean.'
+    genuinely clean.
+
+
+    POLISH 2026-07-24 (tier-thinness wave 2, reverting to unreviewed): recognition was 2 live, structured 2, production 1.
+    Added lesson02.choose.001 -- a bare part_of_speech-adjective pool (recipe 3.1c, same lever as the unit33 reauth) because
+    neighborhood_adj holds only 2 unit-scope members: unit39 owns 5 adjectives with 5 distinct glosses (helpful/quiet/noisy/
+    five-minute/several), clearing the MC floor; bare-word frame so no course-scope grammaticality exposure. Added
+    lesson03.order.001 word_order "This neighborhood is very {item}" over neighborhood_adj -- course pool is quiet/noisy/friendly,
+    all grammatical, none is a frame word. Added lesson04.translate.001 (Dari sentence prompt renders the gloss, answer
+    render_frame "My neighbors are very {item}" over neighborhood_adj -- deterministic per item since the prompt shows the
+    gloss) and lesson02.translate.001 (bare-word Dari-metalanguage variant). Tiers now 3/3/3 live at unit scope. The
+    pre-existing FLOOR lines on choose.001/listen.002 (2 unit-scope glosses) are untouched: not addressable without new
+    lexeme tags, which packs cannot add.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -136,3 +148,79 @@ templates:
     text: '{item}'
     language_code: en
     direction: ltr
+- content_key: practice.prs-en.en.a1.unit39.lesson02.choose.001
+  lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit39.lesson02.translate.001
+  lesson_content_key: en.a1.unit39.lesson02.describing_your_area
+  type: translation
+  frame:
+    text: 'به انگلیسی چی می‌شه: {item}؟'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی صفت {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit39.lesson03.order.001
+  lesson_content_key: en.a1.unit39.lesson03.dialogue_asking_about_the_neighborhood
+  type: word_order
+  frame:
+    text: This neighborhood is very {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: This neighborhood is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفتی است که ذکر شد.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit39.lesson04.translate.001
+  lesson_content_key: en.a1.unit39.lesson04.three_neighborhoods
+  type: translation
+  frame:
+    text: همسایه‌های من بسیار {item} استند.
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My neighbors are very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفتی است که ذکر شد.'
+    language_code: prs
+    direction: rtl

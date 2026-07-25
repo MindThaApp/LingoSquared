@@ -67,6 +67,23 @@ review:
     on occupation_noun's real 3 unit-native members, unaffected by this
     defect. Re-verified 0 DEAD for this pack with
     scripts/_practice_unit_scope_check.py.
+
+    POLISH WAVE 2 (2026-07-24, dispatched TIER-SHORT production +
+    POS-ONLY-MATCHING match.003): production tier raised 2 -> 3 via
+    lesson03.translate.002, a bare-word translation over the same
+    untagged unit_noun pool the 2026-07-24 reauth already vetted (10
+    distinct unit-scoped nouns / 10 distinct glosses, re-read per
+    SS0.1) -- bare "{item}" prompts vary with the answer, so a broad
+    untagged pool is exactly the safe case per recipe SS3.1(c)/SS6.6(a),
+    and POLISH_TASK_V2 explicitly leaves bare-translation POS-only
+    pools alone. This also gives lesson03 (previously MC-only) a
+    production anchor. match.003 deliberately STAYS POS-only per
+    POLISH_TASK_V2's escape clause: unit23's own lexemes carry semantic
+    tags on only nurse/cook/driver (occupation_noun/occupation_a) plus
+    sometimes (frequency_adverb), a maximum semantic-union pool of 4 vs
+    the 6-token floor -- and that union would be POS-mixed
+    (3 nouns + 1 adverb) on top of being short. Real fix remains a
+    prs-en semantic-tag backfill, off-limits to this PACK-ONLY wave.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -119,6 +136,13 @@ templates:
     slots: {item: *occupation_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit23.lesson03.translate.002
+    lesson_content_key: en.a1.unit23.lesson03.reading_a_work_profile
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی کلمه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit23.lesson04.listen.001
     lesson_content_key: en.a1.unit23.lesson04.work_profile_dialogue
     type: listen_select

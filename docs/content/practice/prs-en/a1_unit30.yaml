@@ -45,6 +45,27 @@ review:
     sibling block) is harmless, since 'cake' is genuinely taught in en
     unit37 and has a Dari gloss, so it is only ever a valid recognition
     candidate. Upgraded to reviewed: genuinely clean.
+
+    POLISH WAVE 2 (2026-07-24, dispatched TIER-SHORT structured +
+    production; these 3 added templates postdate the review above and
+    need the standard fresh-context review): structured 2 -> 3 via
+    lesson04.order.001, a second frequency_adverb word_order ("They
+    {item} play video games"; course-wide pool is exactly always/often/
+    sometimes/rarely/never, all grammatical pre-verbally; the unit's
+    own adverb "ever" -- which would NOT fit declaratively -- is
+    untagged and can never enter this slot; no frame word is a slot
+    candidate, defect 1.14 checked at course scope). Production 1 -> 3
+    via lesson03.translate.001 (untagged unit verb pool: goes/cooks/
+    paint/play/paints, 5 distinct glosses) and lesson04.translate.002
+    (untagged unit noun pool: 10 tokens / 10 distinct glosses,
+    including the reading-'کتاب خواندن' vs book-'کتاب' near-pair --
+    distinct strings, discriminable) -- bare-word translations are
+    broad-pool-safe per recipe SS3.1(c)/SS6.6(a); every gloss re-read
+    per SS0.1. This also gives previously anchor-less lesson03/lesson04
+    their own checkpoint anchors. match.003's 4-pair FLOOR line was NOT
+    dispatched to this wave and is left as-is; note for a later wave: a
+    hobby_noun+frequency_adverb union holds 8 distinct unit tokens and
+    could lift it, at the cost of a POS-mixed pair set.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -52,6 +73,8 @@ tag_schema:
 slot_presets:
   hobby_noun: &hobby_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hobby_noun}}
   frequency_adverb: &frequency_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: frequency_adverb}}
+  unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
 templates:
   - content_key: practice.prs-en.en.a1.unit30.lesson01.choose.001
     lesson_content_key: en.a1.unit30.lesson01.free_time_activities
@@ -96,3 +119,24 @@ templates:
     slots: {item: *frequency_adverb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson03.translate.001
+    lesson_content_key: en.a1.unit30.lesson03.dialogue_free_time
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی فعل {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson04.order.001
+    lesson_content_key: en.a1.unit30.lesson04.comparing_hobbies
+    type: word_order
+    frame: {text: "They {item} play video games", language_code: en, direction: ltr}
+    slots: {item: *frequency_adverb}
+    answer_derivation: {kind: render_frame, frame: {text: "They {item} play video games", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} کلمه‌ای است که بسامد را نشان می‌ته.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit30.lesson04.translate.002
+    lesson_content_key: en.a1.unit30.lesson04.comparing_hobbies
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی کلمه {item} است.", language_code: prs, direction: rtl}

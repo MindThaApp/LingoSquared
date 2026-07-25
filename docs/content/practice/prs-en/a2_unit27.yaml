@@ -145,6 +145,29 @@ review:
     Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for
     this pack) and compile_content.py practice-validate. Status stays
     unreviewed -- needs a fresh review pass given the substantive change.
+
+    POLISH WAVE 2 (2026-07-24): structured tier raised 1->3 and
+    production tier 2->3 live, superseding the "honestly thin, not
+    fixable" verdict above WITHOUT the forced heterogeneous-noun frame
+    it rightly warned against: (1) lesson01.match.006 -- a second
+    matching_pairs over the NEW banking_word union preset
+    (banking_noun+banking_adjective, 12 distinct unit tokens, one
+    coherent banking theme, all 12 Dari glosses distinct/
+    non-confusable; differs from lesson04.match.001 in pool and slot
+    count). Both tags re-verified at A2 course scope: no other A2
+    lesson carries any member (the extra carriers are a1/b1/b2, out of
+    course scope), so Endless-Practice pairs stay on-theme. (2)
+    lesson02.order.004 -- word_order "What does {item} mean?" on
+    banking_adjective: unlike the collocation-bound frames the old
+    note rejected, this frame is grammatical for ANY single word, so
+    it is robust at course scope by construction (and the A2
+    course-scope pool is exactly checking/monthly/minimum/direct
+    anyway); no literal frame word is a pool candidate. (3)
+    lesson03.translate.005 -- bare-word translation over the same
+    banking_word union (safe with a broad pool per SS6.6(a)); differs
+    from lesson01.translate.003 (noun-only) and lesson02.
+    adj_translate.003 (adjective-only) by pool, and every union member
+    is already served by those two, so no new gloss-giveaway exposure.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -152,6 +175,7 @@ tag_schema:
 slot_presets:
   banking_noun: &banking_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: banking_noun}}
   banking_adjective: &banking_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: banking_adjective}}
+  banking_word: &banking_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [banking_noun, banking_adjective]}}
 templates:
   - content_key: practice.prs-en.en.a2.unit27.lesson01.choose.001
     lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
@@ -252,3 +276,25 @@ templates:
     slots: {item: *banking_adjective}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit27.lesson01.match.006
+    lesson_content_key: en.a2.unit27.lesson01.banking_vocabulary
+    type: matching_pairs
+    frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
+    slots: {first: *banking_word, second: *banking_word, third: *banking_word, fourth: *banking_word, fifth: *banking_word, sixth: *banking_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit27.lesson02.order.004
+    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
+    type: word_order
+    frame: {text: "What does {item} mean?", language_code: en, direction: ltr}
+    slots: {item: *banking_adjective}
+    answer_derivation: {kind: render_frame, frame: {text: "What does {item} mean?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} واژه‌ای است که در همی درس آمده.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a2.unit27.lesson03.translate.005
+    lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *banking_word}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
