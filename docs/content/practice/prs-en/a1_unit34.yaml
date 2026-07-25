@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit34.sports
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: >-
     Authored 2026-07-11 by the prs-en depth-extension worker, same pass
     as unit30-33. Single tag: 3-member 'play_sport_noun' (soccer/
@@ -41,12 +41,32 @@ review:
     sibling block) is harmless, since 'cake' is genuinely taught in en
     unit37 and has a Dari gloss, so it is only ever a valid recognition
     candidate. Upgraded to reviewed: genuinely clean.
+
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2, reverting to
+    unreviewed): all three tiers were <3 live. Added choose.005
+    (lesson02, sport_noun noun pool: 5 unit tokens/glosses --
+    part_of_speech noun deliberately excludes the 'exercise' verb whose
+    gloss collides with 'sport'), match.006 (lesson04, 6 pairs over the
+    semantic union [sport_noun, neighborhood_noun]: exactly 6 unit-native
+    tokens, 9 clean on-theme tokens at course scope), order.007
+    (lesson01, 'They play {item} on Saturdays' -- play_sport_noun course
+    pool is exactly basketball/soccer/tennis, all grammatical),
+    translate.008 (lesson03, bare-word sport_noun translation; known
+    residual: 'swimming' shares gloss 'شنا کردن' with unit32's verb
+    'swim' at course scope, a learner typing 'swim' would grade wrong)
+    and translate.009 (lesson01, fixed-sentence translation via the
+    single-member volume_nl_en_a1_unit34_item_07_single tag on 'soccer',
+    deterministic per SS6.6(b)). Verified with practice-validate,
+    pool_check, self-reference, unit-scope and Dari-register checks.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [play_sport_noun]
+    semantic: [play_sport_noun, sport_noun, neighborhood_noun, volume_nl_en_a1_unit34_item_07_single]
 slot_presets:
   play_sport_noun: &play_sport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: play_sport_noun}}
+  sport_noun: &sport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: sport_noun}}
+  active_noun: &active_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [sport_noun, neighborhood_noun]}}
+  soccer_single: &soccer_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: volume_nl_en_a1_unit34_item_07_single}}
 templates:
   - content_key: practice.prs-en.en.a1.unit34.lesson01.choose.001
     lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
@@ -76,3 +96,39 @@ templates:
     slots: {item: *play_sport_noun}
     answer_derivation: {kind: render_frame, frame: {text: "We play {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} ورزشی است که ذکر شد.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson02.choose.005
+    lesson_content_key: en.a1.unit34.lesson02.frequency_and_places
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson04.match.006
+    lesson_content_key: en.a1.unit34.lesson04.staying_active_together
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *active_noun, second: *active_noun, third: *active_noun, fourth: *active_noun, fifth: *active_noun, sixth: *active_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.order.007
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: word_order
+    frame: {text: "They play {item} on Saturdays", language_code: en, direction: ltr}
+    slots: {item: *play_sport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "They play {item} on Saturdays", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} ورزشی است که روزهای شنبه بازی می‌شه.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson03.translate.008
+    lesson_content_key: en.a1.unit34.lesson03.dialogue_weekend_plans
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *sport_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی ورزش {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit34.lesson01.translate.009
+    lesson_content_key: en.a1.unit34.lesson01.sports_vocabulary
+    type: translation
+    frame: {text: "ما روزهای شنبه فوتبال بازی می‌کنیم.", language_code: prs, direction: rtl}
+    slots: {item: *soccer_single}
+    answer_derivation: {kind: render_frame, frame: {text: "We play {item} on Saturdays", language_code: en, direction: ltr}}
+    feedback_frame: {text: "همی جمله می‌گه که ما روزهای شنبه {item} بازی می‌کنیم.", language_code: prs, direction: rtl}

@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit42.personality
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-41 -- the last unit in this depth-extension
     batch (units 30-42), closing the gap a depth audit found between existing practice-pool coverage (units 1-29) and prs-en''s
     authored content (units 1-69). Single tag: 6-member ''personality_adj'' (friendly/funny/hardworking/shy/calm/talkative
@@ -24,7 +24,17 @@ review:
     now carries three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers); no prs-en generative frame is widened ungrammatically
     -- the one cross-block union effect (celebration_noun gains ''cake'' from a sibling block) is harmless, since ''cake''
     is genuinely taught in en unit37 and has a Dari gloss, so it is only ever a valid recognition candidate. Upgraded to reviewed:
-    genuinely clean.'
+    genuinely clean.
+
+
+    POLISH 2026-07-24 (tier-thinness wave 2, reverting to unreviewed): recognition was 2 live and production 1 live. Added
+    lesson02.listen.001 (sentence-frame listen_select "My sister is very {item}" over personality_adj -- course pool is
+    funny/hardworking/shy/calm/talkative/friendly, all grammatical in the frame, no frame word collides with any candidate,
+    options are Dari glosses so defect-1.22-safe), lesson03.translate.001 (Dari sentence prompt renders the gloss, answer
+    render_frame "My brother is very {item}" over personality_adj -- deterministic per item since the prompt shows the gloss;
+    frame deliberately uses brother, not neighbor, to stay distinct from order.005), and lesson04.translate.001 (bare-word
+    Dari-metalanguage variant over personality_adj, differs from translate.004 in frame text). All slots reuse tags already
+    declared in tag_schema. Tiers now 3 recognition / 4 structured / 3 production live at unit scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -108,6 +118,61 @@ templates:
     - fourth
   feedback_frame:
     text: هر صفت شخصیت را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit42.lesson02.listen.001
+  lesson_content_key: en.a1.unit42.lesson02.talking_about_someones_character
+  type: listen_select
+  frame:
+    text: My sister is very {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که در این جمله شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit42.lesson03.translate.001
+  lesson_content_key: en.a1.unit42.lesson03.dialogue_what_is_daniel_like
+  type: translation
+  frame:
+    text: برادر من بسیار {item} استه.
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My brother is very {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} صفتی است که ذکر شد.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit42.lesson04.translate.001
+  lesson_content_key: en.a1.unit42.lesson04.three_friends_three_personalities
+  type: translation
+  frame:
+    text: 'به انگلیسی چی می‌شه: {item}؟'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی صفت شخصیت {item} است.
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit42.lesson01.translate.004

@@ -52,6 +52,13 @@ review:
     added (now used by direction_review). Verified: scripts/_practice_unit_scope_check.py now reports 0 DEAD and 0
     below-floor for this pack; compile_content.py practice-validate 0 errors; scripts/check_dari_register.py no new
     findings (only the feedback_frame text changed, reusing this file's own existing phrasing).
+
+    Polish wave 2 (2026-07-24): recognition tier was 2 live templates (<3 floor, scripts/_practice_unit_scope_check.py).
+    Added lesson03 route_choose.004 -- multiple_choice over a new street_route preset unioning street_ordinal+
+    neighborhood_noun (first/second/street: exactly lesson03's own three tagged tokens, 3 distinct unit-scoped glosses
+    اول/دوم/سرک, meets the MC floor; differs from place_meaning.004's direction_review pool by dropping turn_direction).
+    Bare-word frame, so course-scope breadth (adds store/park/neighbor at a1 course scope) carries no grammaticality
+    risk. Recognition now 3 live.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
@@ -60,6 +67,7 @@ slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
   direction_review: &direction_review {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [turn_direction, street_ordinal, neighborhood_noun]}}
+  street_route: &street_route {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: [street_ordinal, neighborhood_noun]}}
 templates:
   - content_key: practice.prs-en.en.a1.unit10.lesson01.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
@@ -110,6 +118,13 @@ templates:
     slots: {item: *street_ordinal}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی عدد ترتیبی {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit10.lesson03.route_choose.004
+    lesson_content_key: en.a1.unit10.lesson03.reading_a_route
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *street_route}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنای دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit10.lesson04.turn_order.001
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: word_order

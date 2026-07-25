@@ -85,6 +85,21 @@ review:
     below-floor for this pack) and compile_content.py practice-validate.
     Reverted status to unreviewed/fresh_context: false -- needs a fresh
     review pass given the substantive change.
+
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2): all three tiers were
+    <3 live. Added choose.007 (lesson03, bare unit-noun pool -- the
+    trailing-punctuation token artifacts this file's earlier note logged
+    are now fixed upstream, so the unit noun pool is 4 clean tokens:
+    bike/bus/office/parking), order.008 (lesson04, 'He takes the {item}
+    to the office') and order.009 (lesson02, 'We go to work by {item}')
+    -- both on transport_noun whose course-scope pool is exactly
+    bike/bus/car/train, all grammatical in both frames -- and
+    translate.010 (lesson02, bare-word adjective translation:
+    late/difficult). No matching_pairs added: the unit still cannot
+    reach 6 semantically-tagged unit-native tokens (only bike/bus carry
+    tags), and a bare-POS matching pool would recreate the POS-only
+    course-scope defect class, so the structured tier is 3x word_order
+    by design here.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -92,6 +107,8 @@ tag_schema:
 slot_presets:
   transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
   unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
+  unit_adj: &unit_adj {language_code: en, part_of_speech: adjective}
 templates:
   - content_key: practice.prs-en.en.a1.unit33.lesson01.choose.001
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
@@ -128,3 +145,31 @@ templates:
     slots: {item: *unit_verb}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی فعل {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson03.choose.007
+    lesson_content_key: en.a1.unit33.lesson03.dialogue_commute_talk
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson04.order.008
+    lesson_content_key: en.a1.unit33.lesson04.two_commuters
+    type: word_order
+    frame: {text: "He takes the {item} to the office", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "He takes the {item} to the office", language_code: en, direction: ltr}}
+    feedback_frame: {text: "او با {item} به دفتر می‌ره.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson02.order.009
+    lesson_content_key: en.a1.unit33.lesson02.describing_commutes
+    type: word_order
+    frame: {text: "We go to work by {item}", language_code: en, direction: ltr}
+    slots: {item: *transport_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "We go to work by {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "ما با {item} به کار می‌رویم.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit33.lesson02.translate.010
+    lesson_content_key: en.a1.unit33.lesson02.describing_commutes
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی صفت {item} است.", language_code: prs, direction: rtl}

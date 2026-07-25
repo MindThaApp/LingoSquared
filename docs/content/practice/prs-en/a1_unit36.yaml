@@ -76,6 +76,22 @@ review:
     below-floor for this pack) and compile_content.py practice-validate.
     Reverted status to unreviewed/fresh_context: false -- needs a fresh
     review pass given the substantive change.
+
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2): all three tiers were
+    <3 live. Added choose.007 (lesson02, bare unit-noun pool: 10
+    distinct unit tokens/glosses), order.008 (lesson02, 'She is taking a
+    {item} at night' -- recurring_class_noun course pool is exactly
+    class/course/test, all grammatical, no self-reference) and
+    translate.009 (lesson03, bare-word adverb translation:
+    how's/sometime/outside/someday; the "how's" apostrophe is covered by
+    en distance-1 typo tolerance). match.003 POS-ONLY DISPATCH NOTE:
+    left POS-only deliberately -- the unit's lexemes carry semantic tags
+    on only 3 unit-native tokens (course/homework/subject via
+    education_noun; recurring_class_noun/class_noun are subsets), so no
+    semantic union can reach the 6-distinct-token matching floor, and
+    tags cannot be added from a pack file. A production verb pool was
+    considered and rejected: 'study'/'studying' glosses differ only by
+    ZWNJ-vs-space (visually identical prompts, mis-grading trap).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -84,6 +100,7 @@ slot_presets:
   education_noun: &education_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: education_noun}}
   recurring_class_noun: &recurring_class_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: recurring_class_noun}}
   unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
+  unit_adv: &unit_adv {language_code: en, part_of_speech: adverb}
 templates:
   - content_key: practice.prs-en.en.a1.unit36.lesson01.choose.001
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
@@ -128,3 +145,24 @@ templates:
     slots: {item: *unit_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit36.lesson02.choose.007
+    lesson_content_key: en.a1.unit36.lesson02.taking_a_class
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_noun}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit36.lesson02.order.008
+    lesson_content_key: en.a1.unit36.lesson02.taking_a_class
+    type: word_order
+    frame: {text: "She is taking a {item} at night", language_code: en, direction: ltr}
+    slots: {item: *recurring_class_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "She is taking a {item} at night", language_code: en, direction: ltr}}
+    feedback_frame: {text: "او شب یک {item} می‌گیره.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit36.lesson03.translate.009
+    lesson_content_key: en.a1.unit36.lesson03.dialogue_photography_class
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_adv}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی قید {item} است.", language_code: prs, direction: rtl}

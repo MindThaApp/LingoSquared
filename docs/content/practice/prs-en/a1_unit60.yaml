@@ -17,10 +17,19 @@ review:
     lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key to
     one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
     Capacity measured with §0/§9''s f".{level}.{unit}." filter: 5 distinct tokens across 2 lesson(s) with
-    lexemes. THIN UNIT: only 5 distinct unit lexemes (< the 6-token matching_pairs floor), so no matching_pairs
-    template could be authored and the structured tier has zero templates for this unit -- flagged for
-    the coordinator, not padded with untaught vocabulary. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md
-    and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید).'
+    lexemes at original authoring time. 2026-07-24 polish (tier-thinness wave 2): the backfill now carries
+    17 unit lexemes across all 4 lessons (lesson02/03 phrase lexemes were added after original authoring),
+    so the previously-empty structured tier was filled with 3 templates: lesson02 word_order (bare {item}
+    over part_of_speech [phrase] -- no literal frame text, so every course-scope candidate is trivially
+    grammatical and self-reference is impossible; all 106 course-scope A1 [phrase] tokens are multi-word,
+    so no degenerate one-tile bank), lesson03 matching_pairs (6 pairs over [phrase], unit pool 12) and
+    lesson01 matching_pairs (6 pairs over [noun, verb, phrase], unit pool 15, admitting lesson01''s
+    invitation/picnic and lesson04''s wrote). The unit''s lexemes still carry NO agreement_tags.semantic,
+    so the matching slots remain POS-constrained (same class as every prs-en matching template): at
+    Endless-Practice course scope the pool widens to the level''s phrases/content words (off-theme but
+    structurally valid pairs). Known wart: lesson04''s long notice phrase is in the [phrase] pool and can
+    appear as a long card / 14-tile bank; it cannot be excluded without semantic tags. Register: colloquial
+    Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -374,3 +383,133 @@ templates:
     text: معنی {item} را انتخاب کنین.
     language_code: prs
     direction: rtl
+- content_key: practice.prs-en.en.a1.unit60.lesson02.order.001
+  lesson_content_key: en.a1.unit60.lesson02.invitation_phrases
+  type: word_order
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}'
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'ترتیب درست همی جمله: {item}'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit60.lesson03.match.001
+  lesson_content_key: en.a1.unit60.lesson03.dialogue_inviting_a_friend
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech:
+      - phrase
+    second:
+      language_code: en
+      part_of_speech:
+      - phrase
+    third:
+      language_code: en
+      part_of_speech:
+      - phrase
+    fourth:
+      language_code: en
+      part_of_speech:
+      - phrase
+    fifth:
+      language_code: en
+      part_of_speech:
+      - phrase
+    sixth:
+      language_code: en
+      part_of_speech:
+      - phrase
+  slot_relations:
+  - kind: distinct
+    slots: &id001
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id001
+  feedback_frame:
+    text: Match each phrase with its meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.prs-en.en.a1.unit60.lesson01.match.004
+  lesson_content_key: en.a1.unit60.lesson01.invitation_words
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+    second:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+    third:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+    fourth:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+    fifth:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+    sixth:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      - phrase
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Match each word or phrase with its meaning.
+    language_code: en
+    direction: ltr

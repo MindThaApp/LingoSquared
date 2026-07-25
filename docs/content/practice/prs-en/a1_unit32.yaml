@@ -4,8 +4,8 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit32.animals
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: false
   notes: >-
     Authored 2026-07-11 by the prs-en depth-extension worker, same pass
     as unit30/31. Single tag: 4-member 'pet_noun' (dog/cat/fish/bird --
@@ -37,12 +37,27 @@ review:
     sibling block) is harmless, since 'cake' is genuinely taught in en
     unit37 and has a Dari gloss, so it is only ever a valid recognition
     candidate. Upgraded to reviewed: genuinely clean.
+
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2, reverting to
+    unreviewed): all three tiers were <3 live templates. Added
+    choose.006 (lesson04, bare unit-verb pool: 5 distinct unit
+    tokens/glosses), order.007 (lesson02, 'My {item} is friendly' --
+    pet_noun course-scope pool is exactly the same 4 pets, all
+    grammatical, no self-reference), translate.008 (lesson04, bare-word
+    verb translation) and translate.009 (lesson01, fixed-sentence
+    translation anchored by the single-member
+    volume_nl_en_a1_unit32_item_10_single tag on 'cat' -- deterministic
+    per recipe SS6.6(b)). Pre-existing 4-pair match.003 floor gap left
+    as-is (out of scope for this pass). Verified with practice-validate,
+    pool_check, self-reference, unit-scope and Dari-register checks.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [pet_noun]
+    semantic: [pet_noun, volume_nl_en_a1_unit32_item_10_single]
 slot_presets:
   pet_noun: &pet_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: pet_noun}}
+  unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
+  cat_single: &cat_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: volume_nl_en_a1_unit32_item_10_single}}
 templates:
   - content_key: practice.prs-en.en.a1.unit32.lesson01.choose.001
     lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
@@ -80,3 +95,31 @@ templates:
     slots: {item: *pet_noun}
     answer_derivation: {kind: render_frame, frame: {text: "I have a {item}", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} حیوان خانگی است که ذکر شد.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit32.lesson04.choose.006
+    lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+    type: multiple_choice
+    frame: {text: "{item}", language_code: en, direction: ltr}
+    slots: {item: *unit_verb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit32.lesson02.order.007
+    lesson_content_key: en.a1.unit32.lesson02.describing_pets
+    type: word_order
+    frame: {text: "My {item} is friendly", language_code: en, direction: ltr}
+    slots: {item: *pet_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "My {item} is friendly", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{item} حیوان خانگی خوش‌رفتار در همی جمله است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit32.lesson04.translate.008
+    lesson_content_key: en.a1.unit32.lesson04.two_pet_owners
+    type: translation
+    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
+    slots: {item: *unit_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "معادل انگلیسی همی فعل {item} است.", language_code: prs, direction: rtl}
+  - content_key: practice.prs-en.en.a1.unit32.lesson01.translate.009
+    lesson_content_key: en.a1.unit32.lesson01.pet_vocabulary
+    type: translation
+    frame: {text: "ما یک پیشک داریم.", language_code: prs, direction: rtl}
+    slots: {item: *cat_single}
+    answer_derivation: {kind: render_frame, frame: {text: "We have a {item}", language_code: en, direction: ltr}}
+    feedback_frame: {text: "همی جمله می‌گه که ما یک {item} داریم.", language_code: prs, direction: rtl}

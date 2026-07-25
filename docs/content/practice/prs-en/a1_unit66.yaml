@@ -6,29 +6,22 @@ unit_content_key: en.a1.unit66.pharmacy_symptoms
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: 'Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured
-    with the f".a1.unit66." filter (backfill_lexemes_prs_en.py): 3 unit lexemes across 2 lesson(s) with
-    lexemes; 3 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'',
-    ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss
-    is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'',
-    ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'',
-    ''the'', ''this'', ''to''] where present) with 3 distinct english_gloss values. No agreement_tags.semantic
-    exist on this direction''s lexemes for this unit (all None at classification time), so every slot
-    is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech
-    -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material()
-    to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint
-    time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A1 course
-    at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a
-    semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step
-    5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence
-    frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality
-    requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to
-    the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank
-    can be added safely. THIN UNIT: only 3 content-word lexemes total in this unit -- below the matching_pairs
-    floor (6), so no matching_pairs template was authored and no structured-tier template exists at all.
-    This unit cannot reach the recipe''s SS8 bars (>=12 templates, >=3 per tier) at its real lexeme capacity;
-    authoring more would mean padding with untaught/forward vocabulary, which the recipe forbids. Flagging
-    as checkpoint-thin for the coordinator to route to a lexeme-backfill task.'
+  notes: 'Authored 2026-07-23; extended 2026-07-24 (polish wave 2, tier-thinness). The prs-en lexeme backfill
+    now carries far more lexemes for this unit than at first authoring (17 matching the new slots'' content
+    POS at unit scope, mostly part_of_speech phrase), so the structured tier is now viable. Added 2 matching_pairs
+    (untagged unit-wide content pool, anchored to lesson02 -- previously template-less -- and lesson03)
+    and 1 word_order with a bare ''{item}'' frame over the unit''s phrase lexemes (no literal frame text,
+    so every course-scope candidate is trivially grammatical in its own frame and self-reference is impossible;
+    precedent en-fa a1_unit37 lesson03.order.004), plus a bare translation whose pool adds phrase POS,
+    anchored to lesson04 (pharmacy_note, previously template-less). matching/translation POS [adjective, noun, verb, phrase]. HONEST-THIN/POS-ONLY
+    NOTE: backfill_lexemes_prs_en.py still carries no usable agreement_tags.semantic for this unit''s lexemes,
+    so every slot stays POS-only (recipe SS3.1(c); direction precedent a1_unit48/56/58/61) -- at Endless-Practice
+    COURSE scope the matching_pairs pools therefore draw off-theme A1-wide cards; fixing that needs a semantic-tag
+    backfill, which is out of scope for pack polish. The lesson04 reading-note mega-phrase is in the phrase
+    pool, so it can surface as a long matching card, a long word_order bank, or an exact-typing translation
+    answer -- accepted, same situation as a1_unit48-61. word_order/fill_in_blank with literal frame text
+    remain unauthored (unsafe with untagged slots at course scope); fill_in_blank is impossible without
+    a single-member anchor tag.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -170,5 +163,123 @@ templates:
     slot: item
   feedback_frame:
     text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit66.lesson02.match.001
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &u66l02m
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+      - phrase
+    second: *u66l02m
+    third: *u66l02m
+    fourth: *u66l02m
+    fifth: *u66l02m
+    sixth: *u66l02m
+  slot_relations:
+  - kind: distinct
+    slots: &u66l02ms
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *u66l02ms
+  feedback_frame:
+    text: هر واژه یا جمله را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit66.lesson02.order.001
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: word_order
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - phrase
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}'
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: کلمه‌های انگلیسی را به ترتیب درست بچینین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit66.lesson03.match.001
+  lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &u66lesson03m
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+      - phrase
+    second: *u66lesson03m
+    third: *u66lesson03m
+    fourth: *u66lesson03m
+    fifth: *u66lesson03m
+    sixth: *u66lesson03m
+  slot_relations:
+  - kind: distinct
+    slots: &u66lesson03ms
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *u66lesson03ms
+  feedback_frame:
+    text: هر واژه یا جمله را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a1.unit66.lesson04.translate.001
+  lesson_content_key: en.a1.unit66.lesson04.pharmacy_note
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - noun
+      - verb
+      - phrase
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی را وارد کنین.
     language_code: prs
     direction: rtl
