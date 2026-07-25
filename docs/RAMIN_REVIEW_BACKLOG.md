@@ -100,25 +100,52 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
 - **1 dead template left:** en-nl a1_29 lesson05.match.001 — a heterogeneous matching whose
   2nd group (freq_adverb) has 2 unit-native members for 4 slots. Non-breaking (pack still
   generates from its other live templates); needs a 4→2 slot trim.
-- **Tier-thinness (335 tier-short lines, mostly PRE-EXISTING):** many packs — especially the
+- ~~**Tier-thinness (335 tier-short lines, mostly PRE-EXISTING):** many packs — especially the
   pre-recipe en-prs/prs-en a1_26–37 range — have <3 live templates in a tier. Predates the
   re-auth (accepted at each pack's original review); the re-auth made a few acute (en-prs a1_34
-  recycles the same 3 words across all tiers). Now gate-able via the validator's tier check.
+  recycles the same 3 words across all tiers). Now gate-able via the validator's tier check.~~
+  **FIXED 2026-07-25 (polish wave 2):** ~48 per-pack agents across all 6 directions (commits
+  0a15fd0e en-nl, 38f99397 en-prs, a4cb5f81 prs-en, dd172bb2 en-fa, b7c40bf4 fa-en, cf8ed1cf
+  nl-en; 240 pack files, ~13.6k insertions). Tier-short 335 → **4** — the residue is documented
+  honest-thin (en-prs a1_34 production + a1_42 recognition, prs-en a1_43 structured, nl-en a1_43
+  structured: unit vocab genuinely exhausted). The same wave converted POS-only matching_pairs
+  to semantic unions wherever the unit's lexemes carry tags. Every direction gated: 0 errors,
+  0 self-reference hits, 0 DEAD, 0 Dari-register findings.
+- **NEW SYSTEMIC (from the wave, needs a backfill-lane pass): X-en semantic-tag deserts.** The
+  backfill scripts carry ~zero `agreement_tags.semantic` for prs-en a1_43–68 + all B1/B2,
+  fa-en/nl-en a1_43+, en-fa a1_31–36 + b1_06/b1_11, en-prs a1_06/25/26/36. In those units the
+  POS-only matching_pairs CANNOT be unioned pack-side (agents measured max reachable pools,
+  documented per pack in review.notes) — they stay POS-only (§3.1c-legal; cost = off-theme pairs
+  in Endless Practice only). Durable fix = semantic-tag backfill pass over those bands, then a
+  small union re-pass; would also unlock the 4 honest-thin tiers and many of the 144 remaining
+  below-floor matchers. Small concrete backfill bugs found en route: en-prs a2_12/13/14 have one
+  phrase lexeme each with the ENGLISH GLOSS BAKED INTO THE TOKEN («از دو روز پیش (since two days
+  ago)» etc. — self-answering card); fa-en unit32 `walks` gloss ends with a stray Arabic comma;
+  fa-en a1_31 translate_sentence.005 maps genderless «چشماش» onto "Her eyes…" (His/Her
+  underdetermined for typed answers).
 - **Duplicate `volume_match`/`volume_translate` templates (units 31–40, all directions):** the
   2026-07-11 authoring pass emitted literal-duplicate matching/translation templates (and a
   degraded bare-`{word}` feedback_frame on the translation ones). Systemic; wants one cleanup pass.
-- **`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
-  after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.
-- **Course-scope grammaticality:** en-prs a1_28 pet-frame `{animal_word}` is fine at checkpoint
+- ~~**`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
+  after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.~~
+  **FIXED 2026-07-24** (commit c2e6caba): re-anchored to noun-only name_word∪relationship_word∪title
+  (5 distinct real glosses); names stay translation-only.
+- ~~**Course-scope grammaticality:** en-prs a1_28 pet-frame `{animal_word}` is fine at checkpoint
   (unit pool = cat/dog/fish/bird) but at Endless-Practice course scope pulls zoo animals →
-  "the lion is my pet." Reframe or subset the tag.
-- **POS-only matching_pairs at course scope (systemic re-auth trade-off):** many re-authored
+  "the lion is my pet." Reframe or subset the tag.~~ **FIXED 2026-07-24** (commit c2e6caba):
+  new `pet_animal` subset tag; both a1_28 claim frames pinned to it (needs lexeme re-backfill
+  on deploy, same run as confirm_word).
+- ~~**POS-only matching_pairs at course scope (systemic re-auth trade-off):** many re-authored
   matching_pairs were fixed by dropping the semantic tag to a bare `part_of_speech` pool. That's
   correct at CHECKPOINT scope (unit pool = the intended few tokens), but Endless Practice serves
   matching at COURSE scope, where POS-only matches the whole level's adjectives/adverbs/nouns
   (e.g. en-prs a1_25 emotion_pair → 163 off-theme tokens). Not a grading/checkpoint defect (the
   launch gate is fine); Endless-Practice coherence only. Follow-up: narrow those matching pools
-  to a real semantic union (keep POS-only for word_order / bare-translation, its stated safe case).
+  to a real semantic union (keep POS-only for word_order / bare-translation, its stated safe case).~~
+  **ADDRESSED 2026-07-25 (polish wave 2, same commits as the tier-thinness fix above):** every
+  flagged matcher whose unit carries semantic tags is now a real union; the rest are measured,
+  documented honest-leaves blocked on the "semantic-tag deserts" backfill item above (each pack's
+  review.notes records the exact max-reachable pool so future waves don't re-litigate).
 - ~~**Invariant-answer frames (pre-recipe):** en-fa a1_01–04 word_order frames with no `{slot}`
   placeholder (self-ref scanner flags them) — SRS mis-attribution; give a real placeholder.~~
   **FIXED 2026-07-24:** all 5 scanner hits (the 4 en-fa + nl-en b1_08 order.001 "as soon as"
