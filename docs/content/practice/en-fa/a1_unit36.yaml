@@ -6,7 +6,8 @@ unit_content_key: fa.a1.unit36.personality
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-fa A1 unit 36. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-fa A1 unit 36. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
     POLISH 2026-07-24 -- (1) matching_pairs stay POS-only BY NECESSITY, honest note per rubric; this unit's fa lexemes
     carry NO semantic tags at all (only reviewed_phrase, whose members are long metalinguistic strings unusable as
@@ -21,6 +22,8 @@ review:
     is POS-only, and the course-wide adjective/verb pools include numbers and fused-copula forms (بزرگه, شلوغه) that
     are ungrammatical in any predicate frame -- a citation frame was judged padding, so structured depth comes from
     matching_pairs instead.
+
+    POLISH WAVE 4 (2026-07-26, commit 05af7ace-successor generated tags): the POS-only honest-leave above is RESOLVED. scripts/backfill_lexemes.py now emits en_fa_a1_unit36_words (and per-lesson en_fa_a1_unit36_lessonNN_words) for every first-introduced content token in this unit, so the matching_pairs slot(s) are re-anchored off bare part_of_speech onto en_fa_a1_unit36_words (26 distinct unit-scoped tokens, each matcher's own content parts of speech (lesson01 [noun,verb,adjective,adverb], shared with its volume_match.001 alias; lesson02 [adjective])); course-scope Endless-Practice pool == unit pool by construction, so the off-theme pulls are eliminated. No duplicate-gloss collisions in the resulting pool. Verified with pool_check.py + unit-scope check (0 DEAD, floor holds).
 tag_schema:
   part_of_speech:
   - symbol
@@ -33,6 +36,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - en_fa_a1_unit36_words
 slot_presets:
   unit_word:
     language_code: fa
@@ -90,6 +96,8 @@ templates:
       - verb
       - adjective
       - adverb
+      agreement_tags:
+        semantic: en_fa_a1_unit36_words
     second: *u36_content_word
     third: *u36_content_word
     fourth: *u36_content_word
@@ -221,6 +229,8 @@ templates:
       language_code: fa
       part_of_speech:
       - adjective
+      agreement_tags:
+        semantic: en_fa_a1_unit36_words
     second: *u36_adjective
     third: *u36_adjective
     fourth: *u36_adjective
