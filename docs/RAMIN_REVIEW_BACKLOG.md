@@ -118,7 +118,12 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   documented per pack in review.notes) — they stay POS-only (§3.1c-legal; cost = off-theme pairs
   in Endless Practice only). Durable fix = semantic-tag backfill pass over those bands, then a
   small union re-pass; would also unlock the 4 honest-thin tiers and many of the 144 remaining
-  below-floor matchers. ~~Small concrete backfill bugs found en route: en-prs a2_12/13/14
+  below-floor matchers. **DONE 2026-07-26 for the X-en directions:** generated tags (05af7ace)
+  + wave-3 union re-pass (09e324d7 prs-en 64 packs, 7d0f8a46 fa-en 18, be6a1955 nl-en 19) —
+  every X-en POS-only matcher now unit-scoped, ledger at 0 DEAD / 2 tier-short (both Dari-side
+  honest-thins: en-prs a1_34 production, a1_42 recognition) / 116 below-floor. STILL OPEN:
+  the Persian-side deserts (en-fa a1_31-36 + b1_06/11, en-prs a1_06/25/26/36) — auto-tagging
+  there needs a Persian-aware metalanguage guard in backfill_lexemes{,_en_prs}.py. ~~Small concrete backfill bugs found en route: en-prs a2_12/13/14
   gloss-baked-into-token phrases; fa-en `walks` gloss comma; fa-en a1_31 His/Her frame.~~
   **FIXED 2026-07-25** (commit cb9e4ef9). STILL OPEN from the same class: **en-fa's 42
   label-phrase junk lexemes** (units 06/13/16/18/19/23/31-36 + a2 11/15/16/18 — tokens like
