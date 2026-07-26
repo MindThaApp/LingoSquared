@@ -96,7 +96,19 @@ review:
     carry NO semantic tag on any noun (neighborhood_adj is adjectives-only, 2 unit members), so no union of
     unit-native tags can reach the 6-distinct-token matching floor -- per the wave rubric the bare-POS
     constraint is left in place rather than replaced with a wrong union; a backfill tag on the unit''s 10
-    nouns is the coordinator-level fix.'
+    nouns is the coordinator-level fix.
+
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2
+    "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit39_lesson01_words`
+    (6 tokens: helpful/nearby/neighborhood/neighbors/noisy/quiet) and `fa_en_a1_unit39_lesson02_words` (4 tokens:
+    five-minute/grocery/live/say) tags. lesson01 alone exactly clears the 6-pair floor; unioned it with lesson02
+    (both lessons are "describing your neighborhood/area" content, all 10 glosses distinct, no confusables) for
+    variety instead of leaving the pool pinned at exactly 6. `unit39_noun` (bare `part_of_speech: noun`, no
+    semantic) is shared with choose.001/listen.002, not dispatched this wave, so left untouched; added a new
+    `unit39_match_pool` anchor for match.003 only, `part_of_speech: [noun, verb, adjective, adverb]` +
+    `semantic: [fa_en_a1_unit39_lesson01_words, fa_en_a1_unit39_lesson02_words]`. Course-scope EXTRA drops from
+    779 off-theme words (verified via pool_check.py) to 0.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -113,6 +125,8 @@ tag_schema:
     semantic:
     - neighborhood_adj
     - volume_prs_en_a1_unit39_item_07_single
+    - fa_en_a1_unit39_lesson01_words
+    - fa_en_a1_unit39_lesson02_words
 templates:
 - content_key: practice.fa-en.en.a1.unit39.lesson01.choose.001
   lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -154,12 +168,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *unit39_noun
-    second: *unit39_noun
-    third: *unit39_noun
-    fourth: *unit39_noun
-    fifth: *unit39_noun
-    sixth: *unit39_noun
+    first: &unit39_match_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: [fa_en_a1_unit39_lesson01_words, fa_en_a1_unit39_lesson02_words]}}
+    second: *unit39_match_pool
+    third: *unit39_match_pool
+    fourth: *unit39_match_pool
+    fifth: *unit39_match_pool
+    sixth: *unit39_match_pool
   slot_relations:
   - kind: distinct
     slots:

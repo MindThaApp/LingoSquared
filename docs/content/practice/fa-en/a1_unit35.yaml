@@ -65,7 +65,18 @@ review:
     the unit''s only semantic tags are device_noun (5 unit-native members -- the 6th course member "phone" belongs
     to unit03) and its subset device_noun_a (4), so no semantic union of unit tags can reach the 6 distinct unit
     tokens the 6-slot template needs; a wrong union is worse than the status quo. This confirms the pack''s own
-    2026-07-24 re-anchor rationale.'
+    2026-07-24 re-anchor rationale.
+
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 blocker above is
+    RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit35_lesson01_words` tag (12 unit-native tokens
+    from lesson01 alone: app/books/call/camera/computer/home/laptop/mom/photos/reads/tablet/uses, all distinct
+    Farsi glosses), clearing the 6-pair floor on its own without needing a unit-wide union (the unit-wide tag is
+    40 tokens across 4 lessons and would dilute the device theme with unrelated lesson02-04 vocabulary, so the
+    lesson-anchored tag is preferred per the wave-3 rubric). Re-anchored match.003''s shared `unit35_noun` anchor
+    (used only by this template, nothing else references it) from bare `part_of_speech: noun` to `part_of_speech:
+    [noun, verb]` + `semantic: fa_en_a1_unit35_lesson01_words`. Course-scope EXTRA drops from 769 off-theme words
+    (verified via pool_check.py) to 0.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -82,6 +93,7 @@ tag_schema:
     semantic:
     - device_noun
     - device_noun_a
+    - fa_en_a1_unit35_lesson01_words
 slot_presets:
   device_noun: &id001
     language_code: en
@@ -134,7 +146,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &unit35_noun {language_code: en, part_of_speech: noun}
+    first: &unit35_noun {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: fa_en_a1_unit35_lesson01_words}}
     second: *unit35_noun
     third: *unit35_noun
     fourth: *unit35_noun

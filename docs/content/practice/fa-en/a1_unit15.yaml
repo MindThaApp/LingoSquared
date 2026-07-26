@@ -115,14 +115,37 @@ review:
     forbidden (defect 1.19, 6-12 range), and adding tags is a backfill
     change, out of PACK-ONLY scope. The off-theme-pairs exposure at
     course scope stands until unit15's backfill gains native tags.
+    [RESOLVED 2026-07-26 -- see wave-3 note below.]
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the
+    unit-scoped semantic tag fa_en_a1_unit15_words (+ per-lesson
+    variants) for every unit's own content lexemes, resolving the
+    wave-2 blocker above. Neither dispatched template's own lesson tag
+    clears the floor (lesson01 covers only 5, lesson03 only 1), so both
+    payment_pair.003 and content_match.005 are re-anchored to the
+    unit-wide fa_en_a1_unit15_words tag, narrowed to [noun, verb] (the
+    tag never applies to the untagged symbol tokens "1"/"10" or the
+    untagged preposition "by", so the POS filter is just documentation
+    here): cash/card/credit/debit/total/cards/pay/tax -- 8 distinct
+    tokens, 8 distinct Farsi glosses, identical pool at unit AND course
+    scope, so the Endless-Practice off-theme pull is gone. Eyeballed
+    all 8 glosses -- no confusable pairs; card/cards is a singular/
+    plural pair with clearly distinct Farsi (کارت vs کارت‌ها), same
+    precedent as unit05's close/closes. Verified via pool_check.py (8
+    unit tokens, 0 course extras), practice-validate 0 errors,
+    unit-scope check 0 DEAD/0 FLOOR.
 tag_schema:
   part_of_speech: [noun, verb, symbol]
   agreement_tags:
-    semantic: [payment_method, card_type]
+    semantic: [payment_method, card_type, fa_en_a1_unit15_words]
 slot_presets:
   payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
   card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
   content_word: &content_word {language_code: en, part_of_speech: [noun, verb, symbol]}
+  # wave 3: generated unit-scoped tag (commit 05af7ace) -- course pool ==
+  # unit pool by construction, so the matchers below no longer pull the
+  # whole level's vocab at Endless-Practice course scope.
+  unit_words: &unit_words {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: fa_en_a1_unit15_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit15.lesson01.payment_meaning.001
     lesson_content_key: en.a1.unit15.lesson01.payment_words
@@ -142,7 +165,7 @@ templates:
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: matching_pairs
     frame: {text: "{first_word} — {second_word} — {third_word} — {fourth_word} — {fifth_word} — {sixth_word}", language_code: en, direction: ltr}
-    slots: {first_word: *content_word, second_word: *content_word, third_word: *content_word, fourth_word: *content_word, fifth_word: *content_word, sixth_word: *content_word}
+    slots: {first_word: *unit_words, second_word: *unit_words, third_word: *unit_words, fourth_word: *unit_words, fifth_word: *unit_words, sixth_word: *unit_words}
     slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
     answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
     feedback_frame: {text: "دو واژهٔ پرداخت را به معنای فارسی آن‌ها وصل کردید.", language_code: fa, direction: rtl}
@@ -192,7 +215,7 @@ templates:
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *unit_words, second: *unit_words, third: *unit_words, fourth: *unit_words, fifth: *unit_words, sixth: *unit_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
