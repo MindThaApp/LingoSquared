@@ -4,7 +4,7 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit14.communication
 review:
-  status: reviewed
+  status: unreviewed
   fresh_context: true
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
@@ -111,9 +111,23 @@ review:
     scripts/_practice_unit_scope_check.py shows 0 DEAD/0 FLOOR for this file;
     compile_content.py practice-validate 0 errors. Still carries the file's own
     prior 'reviewed' status from before this fix -- needs a fresh review pass
-    given how much of the pack changed."
+    given how much of the pack changed.
+
+    WAVE-3 RE-ANCHOR 2026-07-25: commit 05af7ace generated unit-scoped semantic tags, resolving the earlier
+    blocker that unit14 carried no multi-member semantic tag of its own. Re-anchored all four POS-only
+    matching_pairs to 'a1_unit14_communication' + a content-POS filter: lesson01/lesson04 word_pair.002 ->
+    pair_all (noun/verb/adjective/adverb, 14 distinct tokens/glosses), lesson02 word_pair.003 ->
+    pair_verb_adverb (7), lesson03 word_pair.002 -> pair_noun_adj (7). Pools are now identical at unit and
+    course scope (no more level-wide pull at Endless-Practice course scope); the pronoun 'that' and
+    preposition 'about' drop out of the matchers via the content-POS filter (their phrase-y glosses made poor
+    matching items anyway). Removed the now-unused untagged verb_adverb_word/noun_adj_word presets; the
+    untagged bare-word MC/listen/translation presets stay per dispatch scope. Flipped status reviewed ->
+    unreviewed. Verified via pool_check.py (14/7/7 pools, 0 course extras), practice-validate 0 errors,
+    unit-scope check 0 DEAD."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [a1_unit14_communication]
 slot_presets:
   # REAUTH FIX 2026-07-24: person_name (unit01/02's own tag) and place (unit09's
   # own tag) are removed -- both were EARLIER-unit vocabulary reused here
@@ -136,9 +150,16 @@ slot_presets:
   adverb_word: &adverb_word {language_code: en, part_of_speech: adverb}
   adj_word: &adj_word {language_code: en, part_of_speech: adjective}
   prep_word: &prep_word {language_code: en, part_of_speech: preposition}
-  verb_adverb_word: &verb_adverb_word {language_code: en, part_of_speech: [verb, adverb]}
-  noun_adj_word: &noun_adj_word {language_code: en, part_of_speech: [noun, adjective]}
   all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, pronoun, preposition]}
+  # pair_* presets (wave 3): the generated unit-scoped tag a1_unit14_communication
+  # (commit 05af7ace) with a content-POS filter -- the matching_pairs pools are now
+  # identical at unit and course scope (no more level-wide pull at Endless-Practice
+  # course scope). pair_all = 14 tokens (5 nouns, 4 verbs, 2 adjectives, 3 adverbs),
+  # pair_verb_adverb = 7, pair_noun_adj = 7 -- all glosses pairwise distinct.
+  # The old untagged verb_adverb_word/noun_adj_word presets these replace are removed.
+  pair_all: &pair_all {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit14_communication}}
+  pair_verb_adverb: &pair_verb_adverb {language_code: en, part_of_speech: [verb, adverb], agreement_tags: {semantic: a1_unit14_communication}}
+  pair_noun_adj: &pair_noun_adj {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit14_communication}}
 templates:
   - content_key: practice.nl-en.en.a1.unit14.lesson01.word_choose.001
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
@@ -151,7 +172,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word, eighth: *all_word}
+    slots: {first: *pair_all, second: *pair_all, third: *pair_all, fourth: *pair_all, fifth: *pair_all, sixth: *pair_all, seventh: *pair_all, eighth: *pair_all}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Je hebt acht woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -180,7 +201,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *verb_adverb_word, second: *verb_adverb_word, third: *verb_adverb_word, fourth: *verb_adverb_word, fifth: *verb_adverb_word, sixth: *verb_adverb_word}
+    slots: {first: *pair_verb_adverb, second: *pair_verb_adverb, third: *pair_verb_adverb, fourth: *pair_verb_adverb, fifth: *pair_verb_adverb, sixth: *pair_verb_adverb}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -202,7 +223,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *noun_adj_word, second: *noun_adj_word, third: *noun_adj_word, fourth: *noun_adj_word, fifth: *noun_adj_word, sixth: *noun_adj_word}
+    slots: {first: *pair_noun_adj, second: *pair_noun_adj, third: *pair_noun_adj, fourth: *pair_noun_adj, fifth: *pair_noun_adj, sixth: *pair_noun_adj}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -224,7 +245,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slots: {first: *pair_all, second: *pair_all, third: *pair_all, fourth: *pair_all, fifth: *pair_all, sixth: *pair_all}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}

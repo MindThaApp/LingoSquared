@@ -56,7 +56,20 @@ review:
     Both tiers now at 3 live. match.003 POS-only audit: left POS-only DELIBERATELY -- the only semantic tags unit35''s
     lexemes carry are device_noun/device_noun_a, whose unit-scoped union is 5 distinct tokens
     (laptop/tablet/computer/app/camera), below the 6 declared matching slots, so no unit-native semantic union can
-    satisfy the template; per the polish rubric the bare part_of_speech: noun constraint stays.'
+    satisfy the template; per the polish rubric the bare part_of_speech: noun constraint stays.
+    [wave-3 amendment: that blocker is RESOLVED -- commit 05af7ace''s generated tags now cover every content word;
+    see below.]
+
+
+    POLISH wave 3 2026-07-26 (re-anchor POS-only matcher to the generated tags from commit 05af7ace): match.003''s
+    six slots gained agreement_tags semantic: a1_unit35_technology_lesson01 (the generated LESSON tag -- the template
+    is anchored to lesson01.device_vocabulary, and the lesson tag alone clears the floor), keeping part_of_speech:
+    noun. Lesson tag chosen over the unit-wide a1_unit35_technology deliberately per the wave-3 gloss guard: the
+    unit-wide noun pool contains the near-duplicate singular/plural pairs app/apps, laptop/laptops, map/maps
+    (glosses app/apps, laptop/laptops, kaart/kaarten -- confusable right-hand sides, and ''app''/''laptop'' are baked
+    into ''apps''/''laptops''). The lesson01 noun pool has none of those: app, books, camera, computer, home, laptop,
+    mom, photos, tablet -- 9 distinct tokens, 9 distinct glosses, on-theme (device vocabulary). Course scope now
+    equals unit scope (0 course-scope extras per pool_check.py), ending the Endless-Practice off-theme noun pull.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -73,6 +86,7 @@ tag_schema:
     semantic:
     - device_noun
     - device_noun_a
+    - a1_unit35_technology_lesson01
 slot_presets:
   device_noun: &id001
     language_code: en
@@ -125,7 +139,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id003 {language_code: en, part_of_speech: noun}
+    first: &id003 {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit35_technology_lesson01}}
     second: *id003
     third: *id003
     fourth: *id003

@@ -6,8 +6,26 @@ unit_content_key: en.a1.unit47.appointments
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 47. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 47. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-26 (wave 3, generated-tag re-anchor pass): commit
+    05af7ace added a generated unit-wide semantic tag (a1_unit47_appointments,
+    16 unit-scoped members; no lesson alone clears the 6-pair floor, so all
+    three matching_pairs use it, differentiated by part_of_speech
+    narrowing). Re-anchored all 3 POS-only matching_pairs and raised the
+    two lesson01-anchored ones from 4 to 6 slots: lesson01.match.002 ->
+    part_of_speech [noun, verb, adjective, adverb] (16 unit tokens, all
+    distinct glosses). lesson01.match.002.volume_match.002 -> narrowed to
+    part_of_speech: noun (7 tokens: appointment/changes/checkup/dentist/
+    receptionist/service/vet) -- distinct pool from match.002.
+    lesson04.match.005 -> narrowed to part_of_speech: [verb, adjective] (8
+    tokens: available/confirm/reschedule/confirmed/seems/due/yearly/
+    nervous) -- distinct pool from both siblings (verb/adjective-only
+    subset, no overlap with the noun-only volume set). Verified with
+    pool_check.py: all three pools clear their floor with 0 course-scope
+    extras (tag is unit-scoped by construction) and no duplicate glosses.
 tag_schema:
   part_of_speech:
   - symbol
@@ -20,6 +38,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - a1_unit47_appointments
 slot_presets:
   unit_word:
     language_code: en
@@ -67,38 +88,16 @@ templates:
   lesson_content_key: en.a1.unit47.lesson01.appointments_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u47_unit {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit47_appointments}}
+    second: *u47_unit
+    third: *u47_unit
+    fourth: *u47_unit
+    fifth: *u47_unit
+    sixth: *u47_unit
   slot_relations:
   - kind: distinct
     slots:
@@ -106,6 +105,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -113,6 +114,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -151,7 +154,7 @@ templates:
   lesson_content_key: en.a1.unit47.lesson01.appointments_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
     text_blocks:
@@ -159,34 +162,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u47_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit47_appointments}}
+    second: *u47_noun
+    third: *u47_noun
+    fourth: *u47_noun
+    fifth: *u47_noun
+    sixth: *u47_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -194,6 +175,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -201,6 +184,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -299,48 +284,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u47_verb_adj {language_code: en, part_of_speech: [verb, adjective], agreement_tags: {semantic: a1_unit47_appointments}}
+    second: *u47_verb_adj
+    third: *u47_verb_adj
+    fourth: *u47_verb_adj
+    fifth: *u47_verb_adj
+    sixth: *u47_verb_adj
   slot_relations:
   - kind: distinct
     slots:

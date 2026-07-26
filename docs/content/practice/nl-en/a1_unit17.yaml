@@ -65,6 +65,18 @@ review:
     vocabulary; the two word_order templates are the only place this pack
     reaches outside its own 12 lexemes, and only for the semantic TAG
     (not the actual candidate, which stays unit-scoped to 'love').
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the unit-scoped semantic tag
+    a1_unit17_plans, resolving the earlier blocker (this pack's own 2026-07-24 note) that
+    unit17's 12 lexemes shared no pre-existing semantic tag. Re-anchored match.003's
+    untagged POS-only unit_word pool (which pulled 1574 off-theme words at Endless-Practice
+    course scope) to the new pair_word preset (same [noun, verb, adjective, adverb] filter
+    + semantic: a1_unit17_plans) -- token set is unchanged (all 12 of unit17's own lexemes,
+    all pairwise-distinct glosses), pool now identical at unit and course scope. Already at
+    the 6-pair floor with 12 candidates available, no widening needed. The bare-word
+    multiple_choice/listen_select/translation templates keep the untagged unit_word preset
+    per dispatch scope. Verified via pool_check.py (12/12, 0 course extras), practice-
+    validate 0 errors, unit-scope check 0 DEAD.
 tag_schema:
   part_of_speech:
   - symbol
@@ -80,6 +92,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - preference_verb_full
+    - a1_unit17_plans
 slot_presets:
   unit_word: &unit_word
     language_code: en
@@ -89,6 +102,19 @@ slot_presets:
     part_of_speech: verb
     agreement_tags:
       semantic: preference_verb_full
+  # pair_word (wave 3): the generated unit-scoped tag a1_unit17_plans (commit
+  # 05af7ace) narrowed to the same content POS as unit_word -- exactly the
+  # same 12 tokens unit_word already produced (want/movie/weekend/would/walk/
+  # love/busy/maybe/another/lunch/1pm/works) at BOTH unit and course scope,
+  # so match.003 below no longer pulls the whole level's vocabulary (1574
+  # off-theme extras) at Endless-Practice course scope. Used ONLY for
+  # match.003; the other unit_word-anchored bare-word templates are out of
+  # wave-3 scope.
+  pair_word: &pair_word
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: a1_unit17_plans
 templates:
 - content_key: practice.nl-en.en.a1.unit17.lesson01.choose.001
   lesson_content_key: en.a1.unit17.lesson01.proposing_an_activity
@@ -130,12 +156,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *unit_word
-    second: *unit_word
-    third: *unit_word
-    fourth: *unit_word
-    fifth: *unit_word
-    sixth: *unit_word
+    first: *pair_word
+    second: *pair_word
+    third: *pair_word
+    fourth: *pair_word
+    fifth: *pair_word
+    sixth: *pair_word
   slot_relations:
   - kind: distinct
     slots: [first, second, third, fourth, fifth, sixth]

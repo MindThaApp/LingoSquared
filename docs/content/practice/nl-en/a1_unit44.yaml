@@ -6,8 +6,25 @@ unit_content_key: en.a1.unit44.seasons
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 44. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 44. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-26 (wave 3, generated-tag re-anchor pass): commit
+    05af7ace added generated unit/lesson semantic tags. Re-anchored all 3
+    POS-only matching_pairs (previously part_of_speech: [noun, verb,
+    adjective, adverb] with no semantic constraint -- checkpoint-safe but
+    course-wide off-theme in Endless Practice) and raised the two
+    lesson01-anchored ones from 4 to 6 slots now that the pool supports it:
+    lesson01.match.002 -> semantic a1_unit44_seasons_lesson01, same POS
+    list (10 unit tokens, all distinct glosses, 0 course-scope extras).
+    lesson01.match.002.volume_match.005 -> same lesson tag narrowed to
+    part_of_speech: noun (7 tokens: beach/fall/flowers/season/spring/
+    summer/winter) -- distinct pool from match.002 (noun-only subset).
+    lesson04.match.005 -> semantic a1_unit44_seasons (unit-wide, 15
+    tokens spanning all 3 taught lessons), already 6 slots, re-anchored
+    only. Verified with pool_check.py: all three pools clear their floor
+    with 0 course-scope extras (tags are unit-scoped by construction).
 tag_schema:
   part_of_speech:
   - symbol
@@ -20,6 +37,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - a1_unit44_seasons
+    - a1_unit44_seasons_lesson01
 slot_presets:
   unit_word:
     language_code: en
@@ -67,38 +88,16 @@ templates:
   lesson_content_key: en.a1.unit44.lesson01.seasons_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u44_lesson01 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit44_seasons_lesson01}}
+    second: *u44_lesson01
+    third: *u44_lesson01
+    fourth: *u44_lesson01
+    fifth: *u44_lesson01
+    sixth: *u44_lesson01
   slot_relations:
   - kind: distinct
     slots:
@@ -106,6 +105,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -113,6 +114,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -151,7 +154,7 @@ templates:
   lesson_content_key: en.a1.unit44.lesson01.seasons_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
     text_blocks:
@@ -159,34 +162,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u44_lesson01_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit44_seasons_lesson01}}
+    second: *u44_lesson01_noun
+    third: *u44_lesson01_noun
+    fourth: *u44_lesson01_noun
+    fifth: *u44_lesson01_noun
+    sixth: *u44_lesson01_noun
   slot_relations:
   - kind: distinct
     slots:
@@ -194,6 +175,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -201,6 +184,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -299,48 +284,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u44_unit {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit44_seasons}}
+    second: *u44_unit
+    third: *u44_unit
+    fourth: *u44_unit
+    fifth: *u44_unit
+    sixth: *u44_unit
   slot_relations:
   - kind: distinct
     slots:

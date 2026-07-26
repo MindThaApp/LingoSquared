@@ -61,11 +61,27 @@ review:
     tokens (course/homework/subject), below the 6 declared matching
     slots, so no unit-native semantic union can satisfy the template;
     per the polish rubric the bare part_of_speech: noun constraint
-    stays."
+    stays.
+    [wave-3 amendment: that blocker is RESOLVED -- commit 05af7ace's
+    generated tags now cover every content word; see below.]
+
+    POLISH wave 3 2026-07-26 (re-anchor POS-only matcher to the
+    generated unit tag from commit 05af7ace): match.003's six slots
+    gained agreement_tags semantic: a1_unit36_education (the generated
+    unit-scoped tag), keeping part_of_speech: noun. Unit pool unchanged
+    at 10 distinct nouns/10 distinct glosses (course, community,
+    college, homework, subject, math, photography, nights, skills,
+    classes -- lessen/college/gemeenschap/cursus/huiswerk/wiskunde/
+    avonden/fotografie/vaardigheden/vak, eyeballed per the gloss guard:
+    no duplicates, no confusable pair, no gloss baked into another
+    member's token), but course scope now equals unit scope -- 0
+    course-scope extras per pool_check.py, ending the level-wide
+    off-theme noun pull at Endless-Practice scope. All other templates
+    untouched (not dispatched)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [education_noun]
+    semantic: [education_noun, a1_unit36_education]
 slot_presets:
   education_noun: &education_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: education_noun}}
 templates:
@@ -87,7 +103,7 @@ templates:
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
     type: matching_pairs
     frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: &education_noun_broad {language_code: en, part_of_speech: noun}, second: *education_noun_broad, third: *education_noun_broad, fourth: *education_noun_broad, fifth: *education_noun_broad, sixth: *education_noun_broad}
+    slots: {first: &education_noun_broad {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit36_education}}, second: *education_noun_broad, third: *education_noun_broad, fourth: *education_noun_broad, fifth: *education_noun_broad, sixth: *education_noun_broad}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}

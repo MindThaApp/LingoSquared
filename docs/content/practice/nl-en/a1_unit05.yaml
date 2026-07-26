@@ -89,15 +89,27 @@ review:
     Net result: 13 -> 12 templates (all now live), spread 4/4/2/3 across lesson01-04, tiers recognition=4 (noun_choose,
     noun_listen, verb_choose, verb_listen), structured=3 (day_part_order, store_order, noun_pair), production=5
     (noun_translate x2, prep_translate, day_part_translate, verb_translate) -- all comfortably clear the >=3/tier bar.
-    Re-verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate."
+    Re-verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.
+
+    WAVE-3 RE-ANCHOR 2026-07-25: commit 05af7ace generated unit-scoped semantic tags for every unit's own lexemes,
+    resolving the earlier blocker that unit05's vocabulary carried no usable tags. Re-anchored the POS-only
+    noun_pair.001 matcher to 'a1_unit05_time' + noun (time/o'clock/half/quarter/night/store -- 6 distinct tokens,
+    6 distinct Dutch glosses, identical pool at unit AND course scope, so the Endless-Practice off-theme course-scope
+    pull is gone). The bare-word MC/listen/translation templates keep their untagged presets per dispatch scope.
+    Verified via pool_check.py (6/6, 0 course extras), practice-validate 0 errors, unit-scope check 0 DEAD."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [day_part, neighborhood_noun]
+    semantic: [day_part, neighborhood_noun, a1_unit05_time]
 slot_presets:
   day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
   neighborhood_noun: &neighborhood_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: neighborhood_noun}}
   unit05_noun: &unit05_noun {language_code: en, part_of_speech: noun}
+  # unit05_pair_noun (wave 3): the generated unit-scoped tag a1_unit05_time
+  # (commit 05af7ace) narrowed to nouns -- exactly time/o'clock/half/quarter/
+  # night/store at BOTH unit and course scope, so the matching_pairs below no
+  # longer pulls the whole level's nouns at Endless-Practice course scope.
+  unit05_pair_noun: &unit05_pair_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit05_time}}
   unit05_verb: &unit05_verb {language_code: en, part_of_speech: verb}
   unit05_prep: &unit05_prep {language_code: en, part_of_speech: preposition}
 templates:
@@ -133,7 +145,7 @@ templates:
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden uit deze les aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_item: *unit05_noun, second_item: *unit05_noun, third_item: *unit05_noun, fourth_item: *unit05_noun, fifth_item: *unit05_noun, sixth_item: *unit05_noun}
+    slots: {first_item: *unit05_pair_noun, second_item: *unit05_pair_noun, third_item: *unit05_pair_noun, fourth_item: *unit05_pair_noun, fifth_item: *unit05_pair_noun, sixth_item: *unit05_pair_noun}
     slot_relations: [{kind: distinct, slots: [first_item, second_item, third_item, fourth_item, fifth_item, sixth_item]}]
     answer_derivation: {kind: matching_pairs, slots: [first_item, second_item, third_item, fourth_item, fifth_item, sixth_item]}
     feedback_frame: {text: "Je hebt de Engelse woorden uit deze les gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}

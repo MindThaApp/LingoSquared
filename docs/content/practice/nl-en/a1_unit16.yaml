@@ -116,11 +116,23 @@ review:
     (SS8.1's 'anchor per lesson, pool across the unit' pattern), disclosed here
     for the coordinator. Re-verified: scripts/_practice_unit_scope_check.py
     shows 0 DEAD/0 FLOOR for this file; compile_content.py practice-validate 0
-    errors."
+    errors.
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the unit-scoped semantic tag
+    a1_unit16_routines, resolving the earlier blocker (this pack's own 2026-07-24 note)
+    that unit16 carried no tag of its own besides 'meal'. Re-anchored all 4 word_pair.002
+    instances (lesson01/02/03/04, 9/6/6/7 slots) from the untagged POS-only all_word pool
+    (which pulled 777 off-theme words at Endless-Practice course scope) to the new
+    pair_word preset (same content-POS filter + semantic: a1_unit16_routines) -- token set
+    is unchanged (all 9 of unit16's own lexemes: wake/up/dressed/dinner/bed/every/usually/
+    breakfast/after, all pairwise-distinct glosses), pool now identical at unit and course
+    scope. The bare-word multiple_choice/listen_select/translation templates keep the
+    untagged all_word/noun_word presets per dispatch scope. Verified via pool_check.py
+    (9/6/6/7 pools, 0 course extras), practice-validate 0 errors, unit-scope check 0 DEAD."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [meal]
+    semantic: [meal, a1_unit16_routines]
 slot_presets:
   meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
   # REAUTH FIX 2026-07-24: 'number' and 'hour_number' both pointed at unit03's
@@ -138,6 +150,14 @@ slot_presets:
   # keeps the unit's own narrow, already-verified 'meal' tag.
   noun_word: &noun_word {language_code: en, part_of_speech: noun}
   all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, preposition, particle]}
+  # pair_word (wave 3): the generated unit-scoped tag a1_unit16_routines
+  # (commit 05af7ace) narrowed to the same content POS as all_word -- exactly
+  # unit16's own 9 lexemes (wake/up/dressed/dinner/bed/every/usually/breakfast/
+  # after) at BOTH unit and course scope, so the matching_pairs below no
+  # longer pulls the whole level's vocabulary at Endless-Practice course scope.
+  # Used ONLY for word_pair.002 (all 4 lessons); the other all_word-anchored
+  # templates (bare-word recognition/translation) are out of wave-3 scope.
+  pair_word: &pair_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: a1_unit16_routines}}
 templates:
   - content_key: practice.nl-en.en.a1.unit16.lesson01.word_choose.001
     lesson_content_key: en.a1.unit16.lesson01.routine_verbs
@@ -150,7 +170,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson01.routine_verbs
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word, eighth: *all_word, ninth: *all_word}
+    slots: {first: *pair_word, second: *pair_word, third: *pair_word, fourth: *pair_word, fifth: *pair_word, sixth: *pair_word, seventh: *pair_word, eighth: *pair_word, ninth: *pair_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth]}
     feedback_frame: {text: "Je hebt negen woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -172,7 +192,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson02.routine_with_times
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slots: {first: *pair_word, second: *pair_word, third: *pair_word, fourth: *pair_word, fifth: *pair_word, sixth: *pair_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -194,7 +214,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word}
+    slots: {first: *pair_word, second: *pair_word, third: *pair_word, fourth: *pair_word, fifth: *pair_word, sixth: *pair_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
@@ -216,7 +236,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first: *all_word, second: *all_word, third: *all_word, fourth: *all_word, fifth: *all_word, sixth: *all_word, seventh: *all_word}
+    slots: {first: *pair_word, second: *pair_word, third: *pair_word, fourth: *pair_word, fifth: *pair_word, sixth: *pair_word, seventh: *pair_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
     feedback_frame: {text: "Je hebt zeven woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}

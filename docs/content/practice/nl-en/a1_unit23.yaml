@@ -81,15 +81,32 @@ review:
     the 6 distinct unit tokens matching_pairs needs -- a wrong union would
     kill the template at checkpoint scope. Noted for the backfill lane:
     unit23's lesson03/lesson04 content nouns (patients/reports/company/
-    downtown/emails/clients/job) have no semantic tag at all."
+    downtown/emails/clients/job) have no semantic tag at all.
+    [wave-3 amendment: that blocker is RESOLVED -- commit 05af7ace's
+    generated tags now cover every content word; see below.]
+
+    POLISH wave 3 2026-07-25 (re-anchor POS-only matcher to the generated
+    unit tag from commit 05af7ace): match.003's 8 slots moved from the
+    bare unit23_noun preset to a new unit23_unit_noun preset
+    (part_of_speech: noun + agreement_tags semantic: a1_unit23_work, the
+    generated unit-scoped tag). Unit pool unchanged at 10 distinct
+    nouns/10 distinct glosses (nurse, cook, driver, patients, reports,
+    company, downtown, emails, clients, job), but course scope now equals
+    unit scope -- 0 course-scope extras per pool_check.py, ending the
+    course-wide off-theme noun pull at Endless-Practice scope. Gloss
+    guard eyeballed: no duplicate or confusable glosses, no gloss baked
+    into another member's token. lesson03.translate.002 deliberately kept
+    on the POS-only unit23_noun preset (bare-word translation is blessed
+    POS-only, not dispatched)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [occupation_noun, occupation_a]
+    semantic: [occupation_noun, occupation_a, a1_unit23_work]
 slot_presets:
   occupation_noun: &occupation_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_noun}}
   occupation_a: &occupation_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_a}}
   unit23_noun: &unit23_noun {language_code: en, part_of_speech: noun}
+  unit23_unit_noun: &unit23_unit_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit23_work}}
 templates:
   - content_key: practice.nl-en.en.a1.unit23.lesson01.choose.001
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
@@ -109,7 +126,7 @@ templates:
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth} · {seventh} · {eighth}", language_code: en, direction: ltr}
-    slots: {first: *unit23_noun, second: *unit23_noun, third: *unit23_noun, fourth: *unit23_noun, fifth: *unit23_noun, sixth: *unit23_noun, seventh: *unit23_noun, eighth: *unit23_noun}
+    slots: {first: *unit23_unit_noun, second: *unit23_unit_noun, third: *unit23_unit_noun, fourth: *unit23_unit_noun, fifth: *unit23_unit_noun, sixth: *unit23_unit_noun, seventh: *unit23_unit_noun, eighth: *unit23_unit_noun}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}

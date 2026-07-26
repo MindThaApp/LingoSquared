@@ -84,14 +84,34 @@ review:
     (2 unit-scoped tokens: bus, bike); no semantic union of unit-native
     tags can reach the 5 declared slots, let alone 6, so per the polish
     rubric the bare part_of_speech: verb constraint stays (a wrong union
-    is worse than the status quo)."
+    is worse than the status quo).
+    [wave-3 amendment: that blocker is RESOLVED -- commit 05af7ace's
+    generated tags now cover every content word; see below.]
+
+    POLISH wave 3 2026-07-25 (re-anchor POS-only matcher to the generated
+    unit tag from commit 05af7ace): match.003 moved off the shared
+    unit33_verb preset onto a new unit33_unit_word preset
+    (agreement_tags semantic: a1_unit33_transportation, part_of_speech
+    [noun, adjective]). POS deliberately EXCLUDES verb per the wave-3
+    gloss guard: the unit's verb pool has drive and ride both glossed
+    'rijden' (duplicate gloss -- a learner cannot tell the two right-hand
+    sides apart), which the wave-2 pool contained. New pool: bus, bike,
+    office, parking, difficult, late (fiets/bus/kantoor/parkeren/lastig/
+    laat -- 6 distinct tokens, 6 distinct non-confusable glosses), and
+    also raised the template from 5 to 6 declared slots (frame,
+    distinct relation, answer_derivation.slots all extended) to meet the
+    6-pair floor now that the pool supports it. Course scope now equals
+    unit scope (0 course-scope extras per pool_check.py). choose.001/
+    listen.002/choose.002 stay on unit33_verb (not dispatched; MC/listen
+    display distinct strings after gloss dedup, per the 07-24 note)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [vehicle_noun]
+    semantic: [vehicle_noun, a1_unit33_transportation]
 slot_presets:
   vehicle_noun: &vehicle_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: vehicle_noun}}
   unit33_verb: &unit33_verb {language_code: en, part_of_speech: verb}
+  unit33_unit_word: &unit33_unit_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit33_transportation}}
 templates:
   - content_key: practice.nl-en.en.a1.unit33.lesson01.choose.001
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
@@ -110,10 +130,10 @@ templates:
   - content_key: practice.nl-en.en.a1.unit33.lesson01.match.003
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth}", language_code: en, direction: ltr}
-    slots: {first: *unit33_verb, second: *unit33_verb, third: *unit33_verb, fourth: *unit33_verb, fifth: *unit33_verb}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *unit33_unit_word, second: *unit33_unit_word, third: *unit33_unit_word, fourth: *unit33_unit_word, fifth: *unit33_unit_word, sixth: *unit33_unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit33.lesson01.translate.004
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
