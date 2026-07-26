@@ -30,7 +30,23 @@ review:
     travel_noun+transport_noun+vehicle_noun = 3 distinct tokens (train/bus/departure), far below the
     6-pair floor, and every other unit lexeme (21 of 24) is untagged. matching_pairs slots stay
     deliberately POS-only until a backfill pass tags this unit''s disruption vocabulary
-    (delay/cancelled/alternative/notice/station...).'
+    (delay/cancelled/alternative/notice/station...).
+
+    POLISH WAVE 3 (2026-07-26, blocker resolved): commit 05af7ace added generated per-unit/per-lesson
+    semantic tags (prs_en_a2_unit31_words / prs_en_a2_unit31_lessonNN_words, unit-scoped by construction),
+    exactly the backfill pass the wave-2 note above was waiting on. lesson02.match.001 and
+    lesson03.match.001 re-anchored to their OWN lesson tag (each clears the 6-pair floor alone, exactly
+    at 6, and this makes all three pools genuinely distinct instead of drawing the identical whole-unit
+    pool as before): lesson02.match.001 -> prs_en_a2_unit31_lesson02_words (why/train/delayed/another/
+    way/tonight, 6 distinct glosses); lesson03.match.001 -> prs_en_a2_unit31_lesson03_words (departure/
+    time/bus/outside/station/instead, 6 distinct glosses). lesson01.match.001''s own lesson tag has only
+    5 members (delay/cancelled/alternative/notice/signal, below the floor), so it stays on the unit-wide
+    prs_en_a2_unit31_words tag instead (20 tokens total across all 4 lessons, all distinct glosses --
+    delay/delayed and departure/leaves are derivational pairs, not paraphrases, same discrimination class
+    as singular/plural). part_of_speech [adjective, adverb, noun, verb] kept unchanged on all three. The
+    off-theme course-scope pull this pack''s original note flagged is resolved for lesson02/03; lesson01
+    now pulls the unit''s own vocabulary instead of the whole A2 course, which is the intended fix even
+    though its pool is unit-wide rather than lesson-local.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -43,6 +59,11 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a2_unit31_words
+    - prs_en_a2_unit31_lesson02_words
+    - prs_en_a2_unit31_lesson03_words
 templates:
 - content_key: practice.prs-en.en.a2.unit31.lesson01.choose.001
   lesson_content_key: en.a2.unit31.lesson01.disruption_vocabulary
@@ -331,6 +352,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
     second:
       language_code: en
       part_of_speech:
@@ -338,6 +361,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
     third:
       language_code: en
       part_of_speech:
@@ -345,6 +370,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
     fourth:
       language_code: en
       part_of_speech:
@@ -352,6 +379,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
     fifth:
       language_code: en
       part_of_speech:
@@ -359,6 +388,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
     sixth:
       language_code: en
       part_of_speech:
@@ -366,6 +397,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson02_words
   slot_relations:
   - kind: distinct
     slots:
@@ -403,6 +436,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
     second:
       language_code: en
       part_of_speech:
@@ -410,6 +445,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
     third:
       language_code: en
       part_of_speech:
@@ -417,6 +454,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
     fourth:
       language_code: en
       part_of_speech:
@@ -424,6 +463,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
     fifth:
       language_code: en
       part_of_speech:
@@ -431,6 +472,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
     sixth:
       language_code: en
       part_of_speech:
@@ -438,6 +481,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -475,6 +520,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
     second:
       language_code: en
       part_of_speech:
@@ -482,6 +529,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
     third:
       language_code: en
       part_of_speech:
@@ -489,6 +538,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
     fourth:
       language_code: en
       part_of_speech:
@@ -496,6 +547,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
     fifth:
       language_code: en
       part_of_speech:
@@ -503,6 +556,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
     sixth:
       language_code: en
       part_of_speech:
@@ -510,6 +565,8 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit31_words
   slot_relations:
   - kind: distinct
     slots:

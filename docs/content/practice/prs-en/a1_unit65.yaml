@@ -21,7 +21,16 @@ review:
     pool, so it can surface as a long matching card, a long word_order bank, or an exact-typing translation
     answer -- accepted, same situation as a1_unit48-61. word_order/fill_in_blank with literal frame text
     remain unauthored (unsafe with untagged slots at course scope); fill_in_blank is impossible without
-    a single-member anchor tag.'
+    a single-member anchor tag. POLISH WAVE 3 (2026-07-26): backfill_lexemes_prs_en.py now emits
+    generated per-unit/per-lesson semantic tags (commit 05af7ace), resolving the prior POS-only
+    blocker for matching_pairs. Re-anchored both matching_pairs slots to their own lesson''s
+    generated tag (`prs_en_a1_unit65_lesson02_words` / `..._lesson03_words`) rather than the
+    unit-wide tag: each lesson tag alone clears the 6-pair floor exactly (6 phrase tokens each),
+    and keeping them lesson-scoped avoids unioning near-duplicate dialogue lines across lessons
+    (e.g. lesson02''s "this size is too small" next to lesson03''s "yes, here it is. the size is
+    too small" would be a confusable pair under one card). 0 course-scope extras on either pool
+    (pool_check.py verified). Recognition/production slots (choose/listen/translate) remain
+    POS-only by design, per this task''s scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -34,6 +43,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a1_unit65_lesson02_words
+    - prs_en_a1_unit65_lesson03_words
 templates:
 - content_key: practice.prs-en.en.a1.unit65.lesson01.choose.001
   lesson_content_key: en.a1.unit65.lesson01.return_words
@@ -180,6 +193,8 @@ templates:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit65_lesson02_words
     second: *u65l02m
     third: *u65l02m
     fourth: *u65l02m
@@ -238,6 +253,8 @@ templates:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit65_lesson03_words
     second: *u65lesson03m
     third: *u65lesson03m
     fourth: *u65lesson03m

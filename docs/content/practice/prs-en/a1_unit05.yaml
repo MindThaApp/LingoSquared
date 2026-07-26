@@ -142,12 +142,23 @@ review:
     backfill_lexemes_prs_en.iter_specs()), so no union of unit-native semantic tags can reach the 6-distinct-token
     matching floor; adding tags is out of pack-only scope, and a wrong union is worse than the status quo. The untagged
     unit_noun pool (6 unit-scoped nouns, this file's SS3.1c redesign above) stays.
+
+    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated unit-scoped semantic
+    tags in backfill_lexemes_prs_en. Re-anchored both dispatched matchers (lesson01.vocab_pair.004 and
+    lesson02.vocab_pair.004) from the untagged unit_noun pool to a new unit_tag_noun preset (semantic:
+    prs_en_a1_unit05_words + part_of_speech noun). Unit-scope pool is the identical 6 nouns
+    (time/o'clock/half/quarter/night/store, glosses re-read, all distinct), but course scope now equals unit scope, so
+    Endless Practice no longer pulls off-theme course-wide nouns into these pairs. POS kept at noun (not the tag's full
+    9-token noun+verb pool) to exclude "does" (metalanguage gloss: an auxiliary-verb description, not a matchable
+    meaning) and the confusable close/closes gloss pair. Non-dispatched unit_noun templates (bare-word MC/listen/
+    translate, no course-scope grammaticality or theming risk) left as-is.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [time_period, neighborhood_noun]
+    semantic: [time_period, neighborhood_noun, prs_en_a1_unit05_words]
 slot_presets:
   unit_noun: &unit_noun {language_code: en, part_of_speech: noun, agreement_tags: {}}
+  unit_tag_noun: &unit_tag_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: prs_en_a1_unit05_words}}
   time_period: &time_period {language_code: en, part_of_speech: noun, agreement_tags: {semantic: time_period}}
   neighborhood_noun: &neighborhood_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: neighborhood_noun}}
 templates:
@@ -176,7 +187,7 @@ templates:
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: matching_pairs
     frame: {text: "این واژه‌های انگلیسی را به معنای دری‌شان وصل کنین.", language_code: prs, direction: rtl}
-    slots: {word_one: *unit_noun, word_two: *unit_noun, word_three: *unit_noun, word_four: *unit_noun, word_five: *unit_noun, word_six: *unit_noun}
+    slots: {word_one: *unit_tag_noun, word_two: *unit_tag_noun, word_three: *unit_tag_noun, word_four: *unit_tag_noun, word_five: *unit_tag_noun, word_six: *unit_tag_noun}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "هر واژه را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}
@@ -205,7 +216,7 @@ templates:
     lesson_content_key: en.a1.unit05.lesson02.quarter_times
     type: matching_pairs
     frame: {text: "این واژه‌های انگلیسی را به معنای دری‌شان وصل کنین.", language_code: prs, direction: rtl}
-    slots: {word_one: *unit_noun, word_two: *unit_noun, word_three: *unit_noun, word_four: *unit_noun, word_five: *unit_noun, word_six: *unit_noun}
+    slots: {word_one: *unit_tag_noun, word_two: *unit_tag_noun, word_three: *unit_tag_noun, word_four: *unit_tag_noun, word_five: *unit_tag_noun, word_six: *unit_tag_noun}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "هر واژه را به معنای دری خودش وصل کنین.", language_code: prs, direction: rtl}

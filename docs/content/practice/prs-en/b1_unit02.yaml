@@ -9,6 +9,7 @@ review:
   notes: >-
     Grammar-unit recipe (PRACTICE_PACK_RECIPE.md sec8.1) applied, mirroring the fa-en sibling pack's structure (docs/content/practice/fa-en/b1_unit02_*.yaml) since the target (en) and runtime mechanics are identical. UNLIKE fa-en, backfill_lexemes_prs_en.py carries NO semantic tags at all for this unit's lexemes (verified via the sec0 capacity dump) -- every content-word lexeme's agreement_tags is empty. So every slot here deliberately omits agreement_tags.semantic (sec3.1c untagged slot) and constrains only language_code=en + part_of_speech in [adjective, adverb, noun, phrase, verb] (excluding pronoun/particle/preposition/proper_noun/symbol). This pools the WHOLE unit's content words for every slot regardless of which lesson a template is anchored to -- exactly the sec8.1-sanctioned pattern ('Union the unit's lesson tags... it is only the SLOT that widens'); since no lesson-level tag exists to narrow further, the union is total. Safe at checkpoint scope because generate_checkpoint() only ever loads this unit's own lexemes regardless of which lesson introduced them, and the checkpoint never fires before all 4 lessons are complete. 15 templates: per lesson (x4) multiple_choice + listen_select + bare-word translation (12 total: 8 recognition, 4 production), plus 3 matching_pairs (6 pairs each, unit-wide pool) anchored to the reading lesson (full content POS), the dialogue lesson (full content POS), and the grammar lesson (verb/adjective/adverb/phrase only, mirroring fa-en's match_verbal). Deliberately skipped word_order and fill_in_blank: with no semantic tags at all there is no single-member anchor available to build a course-scope-safe hero-sentence frame, and crafting one per unit across this batch was judged too defect-prone for this pass; matching_pairs carries the structured tier instead (no frame-literal-text risk, so no course-scope grammaticality check needed). Flagging this gap (plus the missing prs-en semantic-tag backfill) to the coordinator. Read every gloss in this unit's pool per sec0.1: all distinct-token counts matched distinct-gloss counts (no accidental gloss collisions), and no sense-mismatched gloss was found against what this unit's lessons actually teach. Feedback strings written in colloquial Dari per DARI_REGISTER_REPAIR.md: کلمه not واژه، جواب not پاسخ، استه not است، -ین 2pl endings not -ید (کنین/شنیدین, never Iranian کنید/شنیدید).
     RE-CHECKED 2026-07-24 (POS-only matching polish): the lexeme backfill now carries sparse semantic tags on this unit, but the tag-covered content tokens are only form (bureaucracy_noun), ten (number/count_plural/hour_number), thanks (politeness), like (preference_verb, long parenthetical gloss), am (identity, grammar-y gloss) = 5 distinct at best, so no semantic union can reach the 6-distinct-token matching_pairs floor at unit scope; match_all.001, match_dialogue.001 and match_verbal.001 deliberately stay POS-only (a wrong union is worse than the status quo). Revisit once a fuller semantic-tag backfill lands for b1.unit02.
+    UPDATE 2026-07-26 (wave-3 union re-pass): commit 05af7ace landed generated per-unit/per-lesson tags. match_all.001 (lesson03, reading_the_new_system) -> semantic: prs_en_b1_unit02_lesson03_words (9 distinct tok/gloss: friend, system, people, were, licenses, had, office, changed, home). match_dialogue.001 (lesson04, the_license_dialogue) -> semantic: prs_en_b1_unit02_lesson04_words (7 distinct tok/gloss: wasn't, really, time, save, want, thanks, like). match_verbal.001 (lesson02, verb/adjective/adverb/phrase only) -> its own lesson tag only clears 5 within that POS (am, was, managed, would, help), so it falls back to the unit-wide semantic: prs_en_b1_unit02_words (16 distinct tok/gloss within the same POS filter: able, manage, online, am, was, managed, would, help, were, had, changed, wasn't, really, save, want, like). Read every gloss in all three pools: no duplicate or confusable pair found (want/like share the root gloss خواستن as one of two listed senses for "like", judged an acceptable many-to-one case per recipe sec6.3, same as also/too elsewhere in this batch). The prior blocker is resolved.
 tag_schema:
   part_of_speech:
   - symbol
@@ -21,6 +22,11 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_b1_unit02_words
+    - prs_en_b1_unit02_lesson03_words
+    - prs_en_b1_unit02_lesson04_words
 templates:
 - content_key: practice.prs-en.en.b1.unit02.lesson01.choose.001
   lesson_content_key: en.b1.unit02.lesson01.ability_vocabulary
@@ -298,6 +304,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
     second:
       language_code: en
@@ -307,6 +316,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
     third:
       language_code: en
@@ -316,6 +328,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
     fourth:
       language_code: en
@@ -325,6 +340,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
     fifth:
       language_code: en
@@ -334,6 +352,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
     sixth:
       language_code: en
@@ -343,6 +364,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson03_words
+
 
   slot_relations:
   - kind: distinct
@@ -382,6 +406,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
     second:
       language_code: en
@@ -391,6 +418,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
     third:
       language_code: en
@@ -400,6 +430,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
     fourth:
       language_code: en
@@ -409,6 +442,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
     fifth:
       language_code: en
@@ -418,6 +454,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
     sixth:
       language_code: en
@@ -427,6 +466,9 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit02_lesson04_words
+
 
   slot_relations:
   - kind: distinct
@@ -465,6 +507,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
     second:
       language_code: en
@@ -473,6 +518,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
     third:
       language_code: en
@@ -481,6 +529,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
     fourth:
       language_code: en
@@ -489,6 +540,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
     fifth:
       language_code: en
@@ -497,6 +551,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
     sixth:
       language_code: en
@@ -505,6 +562,9 @@ templates:
       - adjective
       - adverb
       - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit02_words
+
 
   slot_relations:
   - kind: distinct
