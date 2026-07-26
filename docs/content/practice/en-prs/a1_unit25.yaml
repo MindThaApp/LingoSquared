@@ -94,7 +94,7 @@ review:
     no bare YAML booleans, no jargon leaks. practice-validate 0/0 and
     scripts/_practice_slot_check.py clean for the full en-prs set.
 
-    POLISH WAVE 4 (2026-07-26): emotion_pair.002's POS-only honest-leave is RESOLVED -- backfill_lexemes_en_prs.py now emits en_prs_a1_unit25_words, and the matcher's dedicated unit_word_pool preset is re-anchored onto it ([adjective,adverb] preserved; 7 distinct unit-scoped tokens = the 7-pair need exactly, collision-free). Course pool == unit pool. Verified with pool_check.py + unit-scope check.
+    POLISH WAVE 4 (2026-07-26): emotion_pair.002's POS-only honest-leave is RESOLVED -- backfill_lexemes_en_prs.py now emits en_prs_a1_unit25_words, and the matcher's dedicated unit_word_pool preset is re-anchored onto it ([adjective,adverb] preserved; 7 distinct unit-scoped tokens, collision-free). The matcher was trimmed 7 slots -> 6 (the pair floor) so the exactly-7 pool now carries 1 token of slack + sampling variety instead of generating deterministically at the pool ceiling. Course pool == unit pool. Verified with pool_check.py + unit-scope check.
 tag_schema:
   part_of_speech: [adjective, adverb]
   agreement_tags:
@@ -144,11 +144,16 @@ templates:
     # Re-anchored (2026-07-24) to unit_word_pool: emotion_word alone is only
     # 3 unit-scoped tokens (was declared 5 slots -- DEAD). Widened to this
     # unit's full 7-token content-word pool (see preset comment above).
+    # POLISH WAVE 4 follow-up (2026-07-26): trimmed 7 slots -> 6 (the pair
+    # floor). The tagged pool is exactly 7, so 7 slots left zero margin
+    # (deterministic, and one DEAD-adjacent token drop away from failing);
+    # 6 slots draw 6 of 7 each generation -- 1 token of slack plus real
+    # sampling variety, still well within the tagged pool.
     type: matching_pairs
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}", language_code: prs, direction: rtl}
-    slots: {word_one: *unit_word_pool, word_two: *unit_word_pool, word_three: *unit_word_pool, word_four: *unit_word_pool, word_five: *unit_word_pool, word_six: *unit_word_pool, word_seven: *unit_word_pool}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven]}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *unit_word_pool, word_two: *unit_word_pool, word_three: *unit_word_pool, word_four: *unit_word_pool, word_five: *unit_word_pool, word_six: *unit_word_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: why and because.

@@ -3272,7 +3272,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
 # a B1 word-order card. Everything else the audit surfaced was vocabulary
 # (گذشته "last/past", حال "state/mood", آینده "next/future", جمع
 # "total/gathering"), which must stay taggable.
-METALANGUAGE_TOKENS = frozenset({"فعل", "فاعل"})
+METALANGUAGE_TOKENS: frozenset[str] = frozenset({"فعل", "فاعل"})
 
 # noun/verb/adjective/adverb/phrase are drillable vocabulary; pronouns,
 # prepositions, particles, symbols and proper nouns are excluded (matching
