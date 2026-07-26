@@ -56,6 +56,7 @@ from __future__ import annotations
 
 import re
 import sys
+import unicodedata
 from pathlib import Path
 
 import yaml
@@ -3246,6 +3247,58 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
+# Generated per-unit and per-lesson semantic tags, ported 2026-07-26 from
+# the X-en scripts' identical mechanism (backfill_lexemes_prs_en.py /
+# _fa_en.py, commit 05af7ace) to close the LAST remaining semantic-tag
+# deserts -- the Dari-TARGET direction. The polish wave measured that
+# en-prs's a1_06/25/26/36 matching_pairs were stuck on bare part_of_speech
+# pools (checkpoint-safe, but course-wide off-theme in Endless Practice and
+# unfixable pack-side, because those units carry no hand-authored
+# agreement_tags.semantic). Two tags per first-introduced taggable Dari
+# token, e.g. `en_prs_a1_unit06_words` + `en_prs_a1_unit06_lesson01_words`;
+# emitted ONLY on a token's first introduction (a re-used token must never
+# receive a later unit's tag -- that provenance belongs to the earlier
+# unit, exactly the silent checkpoint_unavailable cause the recipe calls
+# defect #2). Purely additive: no shipped pack references these names, so no
+# existing pool changes until a pack opts in.
+
+# Dari-aware metalanguage guard. The English-TARGET directions must keep
+# English grammar terms (noun/verb/clause) out of the generated tags,
+# because their B1/B2 grammar cards teach those words as real English
+# tokens a vocabulary drill could then wrongly quiz. This course teaches
+# grammar almost entirely in the ENGLISH gloss / grammar_note, so an audit
+# of PRS_GLOSSES found only TWO Dari tokens taught as grammar terms --
+# فعل ("verb (grammar term)") and فاعل ("subject (grammar term)"), both from
+# a B1 word-order card. Everything else the audit surfaced was vocabulary
+# (گذشته "last/past", حال "state/mood", آینده "next/future", جمع
+# "total/gathering"), which must stay taggable.
+METALANGUAGE_TOKENS = frozenset({"فعل", "فاعل"})
+
+# noun/verb/adjective/adverb/phrase are drillable vocabulary; pronouns,
+# prepositions, particles, symbols and proper nouns are excluded (matching
+# over particles is not a vocabulary check; a slot_gloss MC over proper
+# nouns self-glosses).
+TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
+
+
+def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
+    if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
+        return []
+    if part_of_speech != "phrase" and not all(
+        character.isalpha()
+        or unicodedata.combining(character)
+        or character in "‌-'"  # ZWNJ (Dari compounds) + hyphen + apostrophe
+        for character in token
+    ):
+        # Digits (ASCII or Persian), currency marks, clock colons, Dari
+        # punctuation (، ؟ ؛) or spaces: real lexemes, poor slot candidates.
+        return []
+    return [
+        f"en_prs_{unit_stem}_words",
+        f"en_prs_{unit_stem}_lesson{lesson_order:02d}_words",
+    ]
+
+
 def _classify(files, level, specs, derive_phrases=False):
     # derive_phrases=True is only ever passed for UNIT_FILES_A2 (see
     # iter_specs() below) -- added 2026-07-07 (A2 tagging-depth pass) to
@@ -3261,6 +3314,9 @@ def _classify(files, level, specs, derive_phrases=False):
         if derive_phrases:
             overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
             teaching_overlays = overlay["teaching"]
+        # "a1_unit06_directions" -> "a1_unit06": the stable per-unit key the
+        # generated semantic tags (_unit_semantic_tags) are named after.
+        unit_stem = "_".join(realization_path.stem.split("_")[:2])
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
@@ -3476,6 +3532,18 @@ def _classify(files, level, specs, derive_phrases=False):
                         )
                     existing = specs.get(key)
                     if existing is None:
+                        # ONLY on first introduction -- see
+                        # _unit_semantic_tags() above. Uses the RESOLVED
+                        # part_of_speech (after the homograph overrides
+                        # above), so e.g. کی's "when"-adverb sense is tagged
+                        # from unit16 while its "who"-pronoun sense is not
+                        # tagged at all.
+                        unit_tags = _unit_semantic_tags(
+                            unit_stem, lesson_order, token, part_of_speech
+                        )
+                        if unit_tags:
+                            semantic = tags.setdefault("semantic", [])
+                            semantic.extend(t for t in unit_tags if t not in semantic)
                         specs[key] = {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
@@ -3524,6 +3592,22 @@ def _classify(files, level, specs, derive_phrases=False):
                     introduced = item.get("introduced_tokens", [])
                     if len(introduced) > 1 and target_text and "\n" not in target_text:
                         phrase_tags = prs_agreement_tags(target_text, lesson_key)
+                        # Generated unit/lesson tags for the derived phrase
+                        # too (POS "phrase"). setdefault() below only writes
+                        # on the phrase's first occurrence, so a re-derived
+                        # phrase keeps its earlier unit's tag -- same
+                        # first-introduction rule as the introduced-token
+                        # path. Single-token matchers narrow POS to
+                        # [noun,verb,adjective,adverb], so a phrase carrying
+                        # this tag is still excluded from them.
+                        phrase_unit_tags = _unit_semantic_tags(
+                            unit_stem, lesson_order, target_text, "phrase"
+                        )
+                        if phrase_unit_tags:
+                            semantic = phrase_tags.setdefault("semantic", [])
+                            semantic.extend(
+                                t for t in phrase_unit_tags if t not in semantic
+                            )
                         phrase_gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
                         specs.setdefault(
                             (level, target_text),
