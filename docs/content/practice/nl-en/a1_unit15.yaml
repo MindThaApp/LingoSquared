@@ -67,18 +67,29 @@ review:
     'woorden' (words) since the pool is no longer payment-only. Removed the
     now-unused 'number'/'number_no_hundred' tags from tag_schema. Re-verified:
     scripts/_practice_unit_scope_check.py shows 0 DEAD/0 FLOOR for this file;
-    compile_content.py practice-validate 0 errors."
+    compile_content.py practice-validate 0 errors.
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the unit-scoped semantic tag
+    a1_unit15_money. Re-anchored payment_pair.003's untagged noun_word pool (POS-only,
+    pulling 773 off-theme nouns at Endless-Practice course scope) to the new pair_noun
+    preset (noun + semantic: a1_unit15_money) -- the token set is unchanged
+    (cash/card/credit/debit/total/cards/tax, 7 distinct, 7 distinct Dutch glosses) but the
+    pool is now identical at unit and course scope, so the course-scope pull is gone.
+    Verified via pool_check.py (7/7, 0 course extras), practice-validate 0 errors,
+    unit-scope check 0 DEAD."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [payment_method, card_type]
+    semantic: [payment_method, card_type, a1_unit15_money]
 slot_presets:
   payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
   card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
-  # noun_word: untagged noun pool built from unit15's OWN vocabulary only
-  # (cash/card/credit/debit/total/cards/tax) -- used ONLY for the matching_pairs
-  # below, whose frame is a static instruction, never a literal sentence (SS3.1c).
-  noun_word: &noun_word {language_code: en, part_of_speech: noun}
+  # pair_noun (wave 3): the generated unit-scoped tag a1_unit15_money (commit
+  # 05af7ace) narrowed to nouns -- exactly cash/card/credit/debit/total/cards/tax
+  # at BOTH unit and course scope (same 7 tokens the old untagged noun_word pool
+  # produced, minus the 773 off-theme course-scope extras it used to pull at
+  # Endless-Practice course scope).
+  pair_noun: &pair_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit15_money}}
 templates:
   - content_key: practice.nl-en.en.a1.unit15.lesson01.payment_meaning.001
     lesson_content_key: en.a1.unit15.lesson01.payment_words
@@ -98,7 +109,7 @@ templates:
     lesson_content_key: en.a1.unit15.lesson01.payment_words
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_word: *noun_word, second_word: *noun_word, third_word: *noun_word, fourth_word: *noun_word, fifth_word: *noun_word, sixth_word: *noun_word, seventh_word: *noun_word}
+    slots: {first_word: *pair_noun, second_word: *pair_noun, third_word: *pair_noun, fourth_word: *pair_noun, fifth_word: *pair_noun, sixth_word: *pair_noun, seventh_word: *pair_noun}
     slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word, seventh_word]}]
     answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word, seventh_word]}
     feedback_frame: {text: "Je hebt zeven woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}

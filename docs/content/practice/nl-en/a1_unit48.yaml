@@ -6,8 +6,30 @@ unit_content_key: en.a1.unit48.library
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 48. Uses the established
+  notes: >-
+    Authored 2026-07-12 as an additive Endless Practice coverage backfill for nl-en A1 unit 48. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
+
+    POLISH 2026-07-26 (wave 3, generated-tag re-anchor pass): commit
+    05af7ace added generated unit/lesson semantic tags. Gloss check found a
+    duplicate-gloss pair in the unit-wide pool: "borrow" (verb) and
+    "borrowing" (noun) both gloss "lenen" -- excluded by POS narrowing
+    (never both in the same pool). Re-anchored all 3 POS-only
+    matching_pairs and raised the two lesson01-anchored ones from 4 to 6
+    slots: lesson01.match.002 -> semantic a1_unit48_library narrowed to
+    part_of_speech: [noun, adjective, adverb] (11 unit tokens, drops verb
+    entirely so "borrow" is excluded and "borrowing" stays -- all 11
+    glosses distinct). lesson01.match.002.volume_match.001 -> same
+    unit-wide tag narrowed to part_of_speech: verb (16 tokens, includes
+    "borrow" but not "borrowing" since that one is POS noun -- no
+    collision, all 16 glosses distinct) -- POS-disjoint from match.002, no
+    overlap at all. lesson04.match.005 -> semantic
+    a1_unit48_library_lesson04 (20 tokens, its own lesson's content words,
+    clears the floor alone) in place of the unit-wide tag; contains
+    "borrowing" but not "borrow" so still collision-free. Verified with
+    pool_check.py: all three pools clear their floor with 0 course-scope
+    extras (tags are unit-scoped by construction) and no duplicate
+    glosses.
 tag_schema:
   part_of_speech:
   - symbol
@@ -20,6 +42,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - a1_unit48_library
+    - a1_unit48_library_lesson04
 slot_presets:
   unit_word:
     language_code: en
@@ -67,38 +93,16 @@ templates:
   lesson_content_key: en.a1.unit48.lesson01.library_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u48_noun_adj_adv {language_code: en, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: a1_unit48_library}}
+    second: *u48_noun_adj_adv
+    third: *u48_noun_adj_adv
+    fourth: *u48_noun_adj_adv
+    fifth: *u48_noun_adj_adv
+    sixth: *u48_noun_adj_adv
   slot_relations:
   - kind: distinct
     slots:
@@ -106,6 +110,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -113,6 +119,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -151,7 +159,7 @@ templates:
   lesson_content_key: en.a1.unit48.lesson01.library_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
     text_blocks:
@@ -159,34 +167,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u48_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: a1_unit48_library}}
+    second: *u48_verb
+    third: *u48_verb
+    fourth: *u48_verb
+    fifth: *u48_verb
+    sixth: *u48_verb
   slot_relations:
   - kind: distinct
     slots:
@@ -194,6 +180,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -201,6 +189,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -299,48 +289,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-      - adjective
-      - adverb
+    first: &u48_lesson04 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit48_library_lesson04}}
+    second: *u48_lesson04
+    third: *u48_lesson04
+    fourth: *u48_lesson04
+    fifth: *u48_lesson04
+    sixth: *u48_lesson04
   slot_relations:
   - kind: distinct
     slots:
