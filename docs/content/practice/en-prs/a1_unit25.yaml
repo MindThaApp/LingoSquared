@@ -93,10 +93,12 @@ review:
     copula forms (not Iranian هستم/هستید); no listen_select/listen_type,
     no bare YAML booleans, no jargon leaks. practice-validate 0/0 and
     scripts/_practice_slot_check.py clean for the full en-prs set.
+
+    POLISH WAVE 4 (2026-07-26): emotion_pair.002's POS-only honest-leave is RESOLVED -- backfill_lexemes_en_prs.py now emits en_prs_a1_unit25_words, and the matcher's dedicated unit_word_pool preset is re-anchored onto it ([adjective,adverb] preserved; 7 distinct unit-scoped tokens = the 7-pair need exactly, collision-free). Course pool == unit pool. Verified with pool_check.py + unit-scope check.
 tag_schema:
   part_of_speech: [adjective, adverb]
   agreement_tags:
-    semantic: [emotion_word, complaint_word]
+    semantic: [emotion_word, complaint_word, en_prs_a1_unit25_words]
 slot_presets:
   emotion_word: &emotion_word {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: emotion_word}}
   # POLISH 2026-07-24 (tier-thinness wave 2): this unit's only tagged
@@ -127,7 +129,7 @@ slot_presets:
   # unit-scoped tokens: sad/angry/worried/broken/why/a little; a bit/
   # sometimes, all genuinely distinct glosses, no case duplicates) without
   # reaching into any other unit's vocabulary.
-  unit_word_pool: &unit_word_pool {language_code: prs, part_of_speech: [adjective, adverb]}
+  unit_word_pool: &unit_word_pool {language_code: prs, part_of_speech: [adjective, adverb], agreement_tags: {semantic: en_prs_a1_unit25_words}}
 templates:
   # Lesson 1: feelings vocabulary.
   - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_gloss.001

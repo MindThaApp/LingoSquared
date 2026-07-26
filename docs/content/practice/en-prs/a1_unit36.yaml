@@ -6,7 +6,8 @@ unit_content_key: prs.a1.unit36.cooking
 review:
   status: unreviewed
   fresh_context: 'false'
-  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
+  notes: >-
+    TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
     (1) lesson02.cooking_this_gloss.001 (multiple_choice, "این {cooking_word} است" -- checked per candidate at COURSE
     scope (6: برنج/نمک/پیاز/گوشت + extras آشپزخانه/غذا): "this is the kitchen/food/rice/salt/onion/meat" all read
     grammatically; این/است are not slot candidates); (2) lesson05.cooking_good_gloss.001 (multiple_choice,
@@ -16,9 +17,9 @@ review:
     en-fa/nl-en: "I cook {cook_object_word}." -> "{cook_object_word} می‌پزم" -- the same 3-token course pool
     (غذا/گوشت/برنج) already vetted per-candidate for the identical word_order frame; glosses food/meat/rice all render
     cleanly in the English frame). Recognition now 3 live, production 3 live. POS-ONLY MATCHING_PAIRS LEFT AS-IS,
-    HONESTLY: the dispatch flagged cooking_pair.002 + volume_match.005 for a semantic-union rewrite, but this unit''s
+    HONESTLY: the dispatch flagged cooking_pair.002 + volume_match.005 for a semantic-union rewrite, but this unit's
     semantic tags top out at 4 distinct unit-scoped tokens (cooking_word 4; cook_object_word and food_item are subsets;
-    the other 8 unit-native tokens -- خرد and the 7 verbs -- carry NO semantic tags), so no union of the unit''s own tags
+    the other 8 unit-native tokens -- خرد and the 7 verbs -- carry NO semantic tags), so no union of the unit's own tags
     reaches the 6-pair floor; adding tags is a backfill_lexemes_en_prs.py change, off-limits pack-only. A wrong union is
     worse than the status quo, so the sanctioned untagged pool stays. Verified: practice-validate 0 errors;
     _practice_unit_scope_check.py 0 DEAD / tier-short lines gone for this file; _practice_self_reference_check.py 0 hits;
@@ -27,36 +28,36 @@ review:
     UNIT-SCOPE DEAD-TEMPLATE FIX 2026-07-24 (checkpoint re-authoring pass), three defects:
 
     (1)+(2) lesson01.cooking_pair.002 and its .volume_match.005 duplicate (both matching_pairs, 6 slots) were DEAD:
-    cooking_word''s unit-scoped pool is only 4 (پیاز/گوشت/نمک/برنج) -- the original notes'' "6 members" counted
+    cooking_word's unit-scoped pool is only 4 (پیاز/گوشت/نمک/برنج) -- the original notes' "6 members" counted
     آشپزخانه and غذا too, but both are additive tags on earlier-unit lexemes (unit19, unit28), so at checkpoint scope
     the real pool is 4, short of the 6-pair floor. RE-ANCHORED (did not drop): added a matching_pairs-only preset
     `cooking_pair_word` that drops the semantic tag and widens part_of_speech to [noun, adjective, verb] (the
-    recipe''s sanctioned technique for a frame with no literal semantic requirement). At unit scope this resolves to
-    all 12 of this unit''s own fresh tokens: the 4 cooking_word nouns, the adjective خرد ("chopped"), and 7 cooking
+    recipe's sanctioned technique for a frame with no literal semantic requirement). At unit scope this resolves to
+    all 12 of this unit's own fresh tokens: the 4 cooking_word nouns, the adjective خرد ("chopped"), and 7 cooking
     action verbs (می‌پزم/می‌پزین/می‌پزد/بپزین "cook", می‌اندازم "add", می‌ریزم "pour", plus هستم "I am" -- a spelling
-    variant of استم that happens to be this lesson''s only non-cooking-specific verb; harmless as a distinct,
+    variant of استم that happens to be this lesson's only non-cooking-specific verb; harmless as a distinct,
     non-confusable pairing but noted here as a minor thematic outlier a future backfill tag could clean up). All 12
     glosses are distinct with no confusable pairs. The MC and translation templates keep the original narrower
     cooking_word preset (4 nouns, already >=3) untouched since they were not broken.
 
     (3) lesson02.cook_object_order.001.volume_fill.009 (fill_in_blank) was DEAD:
-    volume_en_prs_a1_unit36_cook_object_word_09_single''s only member is غذا, which is registered under unit28 --
+    volume_en_prs_a1_unit36_cook_object_word_09_single's only member is غذا, which is registered under unit28 --
     zero unit-scoped candidates, and no other unit36-native token carries an exclusive (single, course-wide) tag of
     its own, so fill_in_blank (which the compiler hard-fails above 1 course-wide candidate) genuinely cannot be
-    authored here without a new backfill tag -- can''t add one pack-only, so DROPPED this template and REPLACED it
-    with another word_order using the pack''s own already-safe cook_object_word tag (3 course-wide members:
+    authored here without a new backfill tag -- can't add one pack-only, so DROPPED this template and REPLACED it
+    with another word_order using the pack's own already-safe cook_object_word tag (3 course-wide members:
     غذا/گوشت/برنج, all genuine food nouns, no self-reference): "{cook_object_word} می‌خورم" ("I eat [X]"), distinct
-    from the existing cook_object_order.001''s "... می‌پزم" ("I cook [X]") frame so the structured tier gains real
+    from the existing cook_object_order.001's "... می‌پزم" ("I cook [X]") frame so the structured tier gains real
     variety instead of a near-duplicate. Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for this
     file) and scripts/compile_content.py practice-validate.
 
-    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
-    (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
+    Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle's a1_unit31.yaml sibling
+    (see that file's notes for the shared pass context). Realization and overlay are both status reviewed.
 
     Two groups: "cooking_word" (آشپزخانه/غذا/پیاز/گوشت/نمک/برنج, 6 members, completes lesson01 -- آشپزخانه/غذا/گوشت are REUSED
     existing lexemes, additive tags) is the recognition pool. "cook_object_word" (غذا/گوشت/برنج, 3) is the strict subset that
     combines grammatically with the taught "... می‌پزم" (I cook X) frame -- پیاز pairs with خرد می‌کنم (chop) and نمک pairs
-    with می‌اندازم (add) instead, so drawing either into a می‌پزم frame would be a composition trap, same class as unit24''s
+    with می‌اندازم (add) instead, so drawing either into a می‌پزم frame would be a composition trap, same class as unit24's
     پیاده/با split.
 
     Word_order template checked for grammaticality: "{cook_object_word} می‌پزم" (lesson02, matches the real taught "غذا می‌پزم."/"گوشت
@@ -76,7 +77,9 @@ review:
     has zero TTS); no bare YAML booleans; no snake_case jargon in learner-facing text. The three unit31/33 homograph splits
     (حقوق law vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are correctly scoped by content_key in _classify()
     and by lesson_key in prs_agreement_tags(), leaving each other sense untouched. practice-validate 0/0 and _practice_slot_check.py
-    clean for the full en-prs set.'
+    clean for the full en-prs set.
+
+    POLISH WAVE 4 (2026-07-26): cooking_pair.002 + volume_match.005's POS-only pools are re-anchored onto the generated en_prs_a1_unit36_words tag (via their shared cooking_pair_word preset; [noun,adjective,verb] preserved, 12 distinct unit-scoped tokens, collision-free). Course pool == unit pool. Verified with pool_check.py + unit-scope check.
 tag_schema:
   part_of_speech:
   - noun
@@ -86,6 +89,7 @@ tag_schema:
     semantic:
     - cooking_word
     - cook_object_word
+    - en_prs_a1_unit36_words
 slot_presets:
   cooking_word: &id001
     language_code: prs
@@ -97,14 +101,17 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: cook_object_word
-  # No semantic tag: matching_pairs' frame is pure placeholders (no
-  # literal grammatical requirement), so this is the recipe's sanctioned
-  # untagged part_of_speech-only pool. At unit (checkpoint) scope it
-  # resolves to exactly this unit's own 12 fresh tokens (see
-  # review.notes).
+  # POLISH WAVE 4 (2026-07-26): re-anchored onto the generated
+  # en_prs_a1_unit36_words tag (emitted by backfill_lexemes_en_prs.py for
+  # every first-introduced content token in this unit). Used only by
+  # cooking_pair.002 + its volume_match.005; at unit (checkpoint) scope it
+  # still resolves to exactly this unit's own [noun,adjective,verb] tokens
+  # (12 distinct, collision-free), and at COURSE scope the pool now == the
+  # unit pool instead of the whole level's content words.
   cooking_pair_word: &cooking_pair_word
     language_code: prs
     part_of_speech: [noun, adjective, verb]
+    agreement_tags: {semantic: en_prs_a1_unit36_words}
 templates:
 - content_key: practice.en-prs.prs.a1.unit36.lesson01.cooking_gloss.001
   lesson_content_key: prs.a1.unit36.lesson01.cooking_words
