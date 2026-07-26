@@ -121,9 +121,23 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   below-floor matchers. **DONE 2026-07-26 for the X-en directions:** generated tags (05af7ace)
   + wave-3 union re-pass (09e324d7 prs-en 64 packs, 7d0f8a46 fa-en 18, be6a1955 nl-en 19) —
   every X-en POS-only matcher now unit-scoped, ledger at 0 DEAD / 2 tier-short (both Dari-side
-  honest-thins: en-prs a1_34 production, a1_42 recognition) / 116 below-floor. STILL OPEN:
+  honest-thins: en-prs a1_34 production, a1_42 recognition) / 116 below-floor. ~~STILL OPEN:
   the Persian-side deserts (en-fa a1_31-36 + b1_06/11, en-prs a1_06/25/26/36) — auto-tagging
-  there needs a Persian-aware metalanguage guard in backfill_lexemes{,_en_prs}.py. ~~Small concrete backfill bugs found en route: en-prs a2_12/13/14
+  there needs a Persian-aware metalanguage guard in backfill_lexemes{,_en_prs}.py.~~
+  **DONE 2026-07-26 (wave 4, Persian-TARGET side):** ported the generated-tag mechanism to
+  `backfill_lexemes.py` (en_fa_) + `backfill_lexemes_en_prs.py` (en_prs_) with the Persian-aware
+  metalanguage guard (en-fa empty — an FA_GLOSSES audit found ZERO Farsi grammar-term lexemes;
+  en-prs excludes only فعل/فاعل; ZWNJ/combining-diacritic-aware alpha-guard) — commit 77c50674,
+  proven additive (spec counts + unit-scope ledger byte-identical). Union re-pass committed
+  54d108f8 (en-fa, 20 matchers across 16 packs: a1_31-36, a2_12/13/14/16, b1_01/02/03/04/06/11 —
+  a full-direction sweep, not just the named subset) + 9587f5ec (en-prs, a1_06/25/26/36). a1_32
+  used a lesson tag (لباس/لباس‌ها collision guard); a1_06 direction_pair.004 trimmed 10→8 to fit
+  the tagged pool + its shared review_choose.001 also scoped; a1_26 de-aliased off the shared
+  unit_noun_pool. Gates all green per direction (0 errors / 0 self-ref / 0 Dari / 0 DEAD, ledger
+  unchanged — the win is Endless-Practice coherence, not a unit-scope metric). The 2 tier-shorts
+  (a1_34/a1_42) assessed and LEFT as honest-thins: each recombination unit has only ~3 own content
+  tokens, so a 3rd tier template would be padding, not vocabulary a tag can supply. Packs stay
+  review.status: unreviewed pending the native pass. ~~Small concrete backfill bugs found en route: en-prs a2_12/13/14
   gloss-baked-into-token phrases; fa-en `walks` gloss comma; fa-en a1_31 His/Her frame.~~
   **FIXED 2026-07-25** (commit cb9e4ef9). STILL OPEN from the same class: **en-fa's 42
   label-phrase junk lexemes** (units 06/13/16/18/19/23/31-36 + a2 11/15/16/18 — tokens like
