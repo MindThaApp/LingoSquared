@@ -13,13 +13,13 @@ review:
     word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member
     anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged
     word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c),
-    which is unsafe for any frame with literal text. matching_pairs is pooled across the WHOLE unit''s
-    lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key to
-    one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
+    which is unsafe for any frame with literal text. matching_pairs was originally pooled across the
+    WHOLE unit''s lexemes (untagged); every template remains anchored via lesson_content_key to one
+    lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
     Capacity measured with §0/§9''s f".{level}.{unit}." filter: 10 distinct tokens across 3 lesson(s)
     with lexemes. Thin unit: only 10 distinct unit lexemes, below the recipe''s ~12-item-per-tier volume
     bar; recognition/production capacity is honest but low. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md
-    and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید).'
+    and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید). Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 3 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_a1_unit59_words (all 3 templates; no single lesson clears the floor alone), preferring a lesson-scoped tag where that lesson alone clears the 6-pair floor and falling back to the unit-wide tag otherwise; declared the referenced tags in tag_schema.agreement_tags.semantic. pool_check.py confirms every re-anchored slot has >=6 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction). Templates and slot counts unchanged (all were already 6 slots).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -32,6 +32,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a1_unit59_words
 templates:
 - content_key: practice.prs-en.en.a1.unit59.lesson01.choose.001
   lesson_content_key: en.a1.unit59.lesson01.banking_words
@@ -129,75 +132,57 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fifth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     sixth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
   slot_relations:
   - kind: distinct
     slots: &id001
@@ -310,75 +295,57 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fifth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     sixth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -491,75 +458,57 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     fifth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
     sixth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit59_words
   slot_relations:
   - kind: distinct
     slots: &id003

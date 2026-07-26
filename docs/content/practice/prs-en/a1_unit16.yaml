@@ -73,7 +73,18 @@ review:
     the polish rubric''s honest-thin rule: unit16 has exactly ONE unit-native semantic tag, meal (dinner/breakfast, 2
     tokens -- re-confirmed against backfill_lexemes_prs_en.iter_specs()), so no union of unit-native semantic tags can
     reach the 6-distinct-token matching floor; adding tags is out of pack-only scope, and a wrong union is worse than
-    the status quo. The untagged full_pool (7 unit-scoped tokens, this file''s own REAUTH redesign above) stays.'
+    the status quo. The untagged full_pool (7 unit-scoped tokens, this file''s own REAUTH redesign above) stays.
+
+    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a unit-scoped semantic
+    tag, prs_en_a1_unit16_words, in backfill_lexemes_prs_en. Re-anchored the dispatched lesson04.hour_match.006 from the
+    untagged full_pool to a new unit_tag_pool preset (semantic prs_en_a1_unit16_words + part_of_speech [noun, verb,
+    adjective, adverb]). Unit-scope pool is the identical 7 tokens (bed/breakfast/dinner/dressed/every/usually/wake --
+    the tag-plus-POS filter naturally excludes "up" (particle) and "after" (preposition), the same two tokens full_pool''s
+    own POS filter already excluded; glosses re-read, all distinct, no token baked into another member''s gloss), but
+    course scope now equals unit scope, so Endless Practice no longer pulls off-theme course-wide nouns/verbs/
+    adjectives/adverbs into this pair. Slot count stays at 7 (already above the 6-pair floor). Every other POS-only
+    template in this file (word_order over `meal`, bare MC/listen/translate over noun_pool/content_pool) is out of this
+    dispatch and left as-is.'
 tag_schema:
   part_of_speech:
   - noun
@@ -83,6 +94,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - meal
+    - prs_en_a1_unit16_words
 slot_presets:
   meal: &meal
     language_code: en
@@ -98,6 +110,11 @@ slot_presets:
   full_pool: &full_pool
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
+  unit_tag_pool: &unit_tag_pool
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit16_words
 templates:
 - content_key: practice.prs-en.en.a1.unit16.lesson02.wake_order.001
   lesson_content_key: en.a1.unit16.lesson02.routine_with_times
@@ -323,13 +340,13 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *full_pool
-    second: *full_pool
-    third: *full_pool
-    fourth: *full_pool
-    fifth: *full_pool
-    sixth: *full_pool
-    seventh: *full_pool
+    first: *unit_tag_pool
+    second: *unit_tag_pool
+    third: *unit_tag_pool
+    fourth: *unit_tag_pool
+    fifth: *unit_tag_pool
+    sixth: *unit_tag_pool
+    seventh: *unit_tag_pool
   slot_relations:
   - kind: distinct
     slots:

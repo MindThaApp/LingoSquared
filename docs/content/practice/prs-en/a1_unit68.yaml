@@ -29,7 +29,20 @@ review:
     backfill_lexemes_prs_en.py iter_specs() -- the unit''s 22 lexemes still carry NO agreement_tags.semantic
     at all (every one None), so no union of unit tags can cover the 6-pair floor and the matching_pairs
     slots stay deliberately POS-only. Course-scope off-theme pairs in Endless Practice remain a known,
-    accepted limitation until a backfill pass tags this unit''s borrowing/lending vocabulary.'
+    accepted limitation until a backfill pass tags this unit''s borrowing/lending vocabulary.
+    POLISH WAVE 3 (2026-07-26): the blocker above is resolved -- backfill_lexemes_prs_en.py now
+    emits generated per-unit/per-lesson semantic tags (commit 05af7ace). Re-anchored all three
+    match.001 templates (lesson01/02/04) from POS-only ([noun, verb]) to the unit-wide
+    `semantic: prs_en_a1_unit68_words`, keeping the [noun, verb] POS filter unchanged: none of
+    the three lessons'' own tags clears the 6-pair floor alone under [noun, verb] (2/1/3 tokens
+    respectively -- lesson02 and lesson04 are dominated by `phrase`-POS dialogue lines, excluded
+    here to keep the cards to single-word vocab as originally authored), so the unit-wide tag is
+    required; it yields the same 6-token pool ([charger, lend, lending, lent, remember, share])
+    all three templates already drew at checkpoint (unit) scope pre-wave-3 -- CHECKPOINT behavior
+    is unchanged, only the Endless-Practice course-scope pool shrinks from the whole A1 noun/verb
+    vocabulary to these same 6 tokens (0 course-scope extras, pool_check.py verified).
+    Recognition/production slots (choose/listen/translate) remain POS-only by design, per this
+    task''s scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -42,6 +55,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a1_unit68_words
 templates:
 - content_key: practice.prs-en.en.a1.unit68.lesson01.choose.001
   lesson_content_key: en.a1.unit68.lesson01.borrowing_words
@@ -237,39 +253,21 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
+    first: &u68l04m
       language_code: en
       part_of_speech:
       - noun
       - verb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
+    second: *u68l04m
+    third: *u68l04m
+    fourth: *u68l04m
+    fifth: *u68l04m
+    sixth: *u68l04m
   slot_relations:
   - kind: distinct
-    slots:
+    slots: &u68l04ms
     - first
     - second
     - third
@@ -278,13 +276,7 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
+    slots: *u68l04ms
   feedback_frame:
     text: هر کلمه را به معنی دری خودش وصل کنین.
     language_code: prs
@@ -297,39 +289,21 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
+    first: &u68l01m
       language_code: en
       part_of_speech:
       - noun
       - verb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
+    second: *u68l01m
+    third: *u68l01m
+    fourth: *u68l01m
+    fifth: *u68l01m
+    sixth: *u68l01m
   slot_relations:
   - kind: distinct
-    slots:
+    slots: &u68l01ms
     - first
     - second
     - third
@@ -338,13 +312,7 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
+    slots: *u68l01ms
   feedback_frame:
     text: هر کلمه را به معنی دری خودش وصل کنین.
     language_code: prs
@@ -357,39 +325,21 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first:
+    first: &u68l02m
       language_code: en
       part_of_speech:
       - noun
       - verb
-    second:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    third:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fourth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    fifth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
-    sixth:
-      language_code: en
-      part_of_speech:
-      - noun
-      - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
+    second: *u68l02m
+    third: *u68l02m
+    fourth: *u68l02m
+    fifth: *u68l02m
+    sixth: *u68l02m
   slot_relations:
   - kind: distinct
-    slots:
+    slots: &u68l02ms
     - first
     - second
     - third
@@ -398,13 +348,7 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots:
-    - first
-    - second
-    - third
-    - fourth
-    - fifth
-    - sixth
+    slots: *u68l02ms
   feedback_frame:
     text: هر کلمه را به معنی دری خودش وصل کنین.
     language_code: prs

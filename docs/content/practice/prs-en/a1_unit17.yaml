@@ -76,7 +76,17 @@ review:
     you like to go for a walk?"). content_match.003 deliberately STAYS POS-only per POLISH_TASK_V2''s escape clause: unit17''s
     own 12 lexemes carry a semantic tag on exactly ONE token (love), so no semantic union can reach the 6-token floor and
     a wrong union is worse than the status quo. Real fix remains a prs-en semantic-tag backfill (backfill scripts are off-limits
-    to this PACK-ONLY wave).'
+    to this PACK-ONLY wave).
+
+    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a unit-scoped semantic
+    tag, prs_en_a1_unit17_words, in backfill_lexemes_prs_en. Re-anchored the dispatched lesson01.content_match.003 from
+    the untagged content_pool to a new unit_tag_content preset (semantic prs_en_a1_unit17_words + part_of_speech [noun,
+    verb, adjective, adverb]). Unit-scope pool is 11 distinct tokens (another/busy/love/lunch/maybe/movie/walk/want/
+    weekend/works/would -- "1pm" is correctly excluded, no semantic tag on a digit-bearing token; glosses re-read, all
+    distinct, no member''s Dari gloss bakes in another member''s English token). Slot count reduced from 12 to 11 to match
+    the real distinct-token ceiling (still within the AUTHORING_GUIDE #16 6-12 range). Course scope now equals unit scope,
+    so Endless Practice no longer pulls off-theme course-wide content words into this pair. The two preference_verb_full
+    word_order templates (lesson01/lesson02, already course-verified) are unaffected and out of this dispatch.'
 tag_schema:
   part_of_speech:
   - noun
@@ -86,6 +96,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - preference_verb_full
+    - prs_en_a1_unit17_words
 slot_presets:
   noun_pool: &noun_pool
     language_code: en
@@ -99,6 +110,11 @@ slot_presets:
   content_pool: &content_pool
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
+  unit_tag_content: &unit_tag_content
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit17_words
   preference_verb_full: &preference_verb_full
     language_code: en
     part_of_speech: verb
@@ -147,18 +163,17 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *content_pool
-    second: *content_pool
-    third: *content_pool
-    fourth: *content_pool
-    fifth: *content_pool
-    sixth: *content_pool
-    seventh: *content_pool
-    eighth: *content_pool
-    ninth: *content_pool
-    tenth: *content_pool
-    eleventh: *content_pool
-    twelfth: *content_pool
+    first: *unit_tag_content
+    second: *unit_tag_content
+    third: *unit_tag_content
+    fourth: *unit_tag_content
+    fifth: *unit_tag_content
+    sixth: *unit_tag_content
+    seventh: *unit_tag_content
+    eighth: *unit_tag_content
+    ninth: *unit_tag_content
+    tenth: *unit_tag_content
+    eleventh: *unit_tag_content
   slot_relations:
   - kind: distinct
     slots:
@@ -173,7 +188,6 @@ templates:
     - ninth
     - tenth
     - eleventh
-    - twelfth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -188,7 +202,6 @@ templates:
     - ninth
     - tenth
     - eleventh
-    - twelfth
   feedback_frame:
     text: هر واژه را به معنی دری خودش وصل کنین.
     language_code: prs
