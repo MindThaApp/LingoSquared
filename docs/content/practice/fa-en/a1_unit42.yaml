@@ -4,8 +4,8 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit42.personality
 review:
-  status: reviewed
-  fresh_context: true
+  status: unreviewed
+  fresh_context: 'false'
   notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 13, final unit of the 30-42 batch, see unit30''s pack notes for
     the full batch rationale).
 
@@ -74,7 +74,20 @@ review:
     with that union would kill both templates at checkpoint scope (worse than the off-theme course-scope pairs
     it would fix). Left POS-only per the wave rubric; the coordinator-level fix is a backfill tag on lesson02-04''s
     7 untagged personality adjectives (comfortable/relaxed/creative/upset/outgoing/organized/patient), which would
-    let both matching templates and a future union constraint clear the floor on-theme.'
+    let both matching templates and a future union constraint clear the floor on-theme.
+
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2
+    "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit42_words` tag,
+    which (being first-introduction-only, content-POS-only, all 4 lessons) carries exactly the same 12
+    adjectives `id_wide` already drew on (calm/comfortable/creative/funny/hardworking/organized/outgoing/
+    patient/relaxed/shy/talkative/upset, verified via pool_check.py -- identical set, all distinct Farsi
+    glosses). Added `semantic: fa_en_a1_unit42_words` to the existing `id_wide` preset alongside its
+    `part_of_speech: adjective` filter -- since the new tag''s adjective members are exactly id_wide''s old
+    unit-scoped pool, the UNIT-scope pool for match.003/match.003.volume_match.007 (and lesson04.choose.001,
+    which also reads *id_wide and gets the same fix for free with no pool change) is unchanged, while the
+    COURSE-scope EXTRA drops from 244 off-theme adjectives to 0. review.status flipped reviewed -> unreviewed
+    per the wave-3 rubric since this pack was touched.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -91,6 +104,7 @@ tag_schema:
     semantic:
     - personality_adjective
     - volume_fa_en_a1_unit42_item_01_single
+    - fa_en_a1_unit42_words
 slot_presets:
   personality_adjective: &id001
     language_code: en
@@ -100,6 +114,8 @@ slot_presets:
   personality_adjective_wide: &id_wide
     language_code: en
     part_of_speech: adjective
+    agreement_tags:
+      semantic: fa_en_a1_unit42_words
 templates:
 - content_key: practice.fa-en.en.a1.unit42.lesson01.choose.001
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary

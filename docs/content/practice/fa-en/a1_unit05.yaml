@@ -155,14 +155,36 @@ review:
     PACK-ONLY scope; a wrong union is worse than the status quo. The
     off-theme-pairs exposure at course scope stands until unit05's
     backfill gains native tags (already logged above as a follow-up).
+    [RESOLVED 2026-07-26 -- see wave-3 note below.]
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated unit-scoped
+    semantic tags (fa_en_a1_unit05_words + per-lesson variants) for every
+    unit's own content lexemes, resolving the wave-2 blocker above.
+    Re-anchored both dispatched POS-only matchers: hour_pair.005 to
+    fa_en_a1_unit05_words + noun (time/o'clock/half/quarter/night/store
+    -- 6 distinct tokens, 6 distinct Farsi glosses, identical pool at
+    unit AND course scope, so the Endless-Practice off-theme pull is
+    gone) and daypart_pair.003 to fa_en_a1_unit05_words + [noun, verb]
+    (the same 6 nouns + closes/does/close = 9 distinct tokens/glosses,
+    exactly the pool the 2026-07-24 pass vetted for this template;
+    close/closes is a base/3sg conjugation pair with clearly distinct
+    glosses, per the unit19 precedent). Bare-word MC/listen/translation
+    templates keep their untagged presets per dispatch scope. Verified
+    via pool_check.py (6 and 9 unit tokens, 0 course extras),
+    practice-validate 0 errors, unit-scope check 0 DEAD/0 FLOOR.
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun, verb, particle, symbol]
   agreement_tags:
-    semantic: [day_part]
+    semantic: [day_part, fa_en_a1_unit05_words]
 slot_presets:
   day_part: &day_part {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_part}}
   unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
   unit_noun_verb: &unit_noun_verb {language_code: en, part_of_speech: [noun, verb]}
+  # wave 3: generated unit-scoped tag (commit 05af7ace) -- course pool == unit
+  # pool by construction, so the matchers below no longer pull the whole
+  # level's vocab at Endless-Practice course scope.
+  unit_words_noun: &unit_words_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit05_words}}
+  unit_words_noun_verb: &unit_words_noun_verb {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: fa_en_a1_unit05_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit05.lesson01.hour_gloss.001
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
@@ -189,7 +211,7 @@ templates:
     lesson_content_key: en.a1.unit05.lesson01.oclock_and_half
     type: matching_pairs
     frame: {text: "{hour_one} — {hour_two} — {hour_three} — {hour_four} — {hour_five} — {hour_six}", language_code: en, direction: ltr}
-    slots: {hour_one: *unit_noun, hour_two: *unit_noun, hour_three: *unit_noun, hour_four: *unit_noun, hour_five: *unit_noun, hour_six: *unit_noun}
+    slots: {hour_one: *unit_words_noun, hour_two: *unit_words_noun, hour_three: *unit_words_noun, hour_four: *unit_words_noun, hour_five: *unit_words_noun, hour_six: *unit_words_noun}
     slot_relations: [{kind: distinct, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six]}]
     answer_derivation: {kind: matching_pairs, slots: [hour_one, hour_two, hour_three, hour_four, hour_five, hour_six]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
@@ -218,7 +240,7 @@ templates:
     lesson_content_key: en.a1.unit05.lesson03.day_parts_schedules
     type: matching_pairs
     frame: {text: "{day_part_one} — {day_part_two} — {day_part_three} — {day_part_four} — {day_part_five} — {day_part_six}", language_code: en, direction: ltr}
-    slots: {day_part_one: *unit_noun_verb, day_part_two: *unit_noun_verb, day_part_three: *unit_noun_verb, day_part_four: *unit_noun_verb, day_part_five: *unit_noun_verb, day_part_six: *unit_noun_verb}
+    slots: {day_part_one: *unit_words_noun_verb, day_part_two: *unit_words_noun_verb, day_part_three: *unit_words_noun_verb, day_part_four: *unit_words_noun_verb, day_part_five: *unit_words_noun_verb, day_part_six: *unit_words_noun_verb}
     slot_relations: [{kind: distinct, slots: [day_part_one, day_part_two, day_part_three, day_part_four, day_part_five, day_part_six]}]
     answer_derivation: {kind: matching_pairs, slots: [day_part_one, day_part_two, day_part_three, day_part_four, day_part_five, day_part_six]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

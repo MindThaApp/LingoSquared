@@ -127,11 +127,37 @@ review:
     all, let alone one covering >= 6 distinct tokens. Adding tags is a
     backfill change, out of PACK-ONLY scope. The off-theme-pairs
     exposure at course scope stands until unit14's backfill gains
-    native tags.
+    native tags. [RESOLVED 2026-07-26 -- see wave-3 note below.]
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated unit-scoped
+    semantic tags (fa_en_a1_unit14_words + per-lesson variants) for
+    every unit's own content lexemes, resolving the wave-2 blocker
+    above. Re-anchored all three dispatched POS-only matchers:
+    phone_match.001 (lesson02) to fa_en_a1_unit14_lesson02_words --
+    the template is lesson-anchored and that lesson tag alone clears
+    the floor (sorry/repeat/speak/more/slowly/hear/well = 7 distinct
+    tokens/glosses); phone_match.003 (lesson03) and phone_match.004
+    (lesson04) to the unit-wide fa_en_a1_unit14_words (13 distinct
+    tokens/glosses -- their own lesson tags cover only 4 and 0 members
+    respectively, below the 6-pair floor, so unit-wide per rubric).
+    All pools identical at unit and course scope by construction, so
+    the Endless-Practice off-theme pull is gone; eyeballed all 13
+    glosses -- no confusable or duplicate-gloss members. Bare-word
+    MC/listen/translation templates keep their untagged preset per
+    dispatch scope. Verified via pool_check.py (7/13/13 unit tokens, 0
+    course extras), practice-validate 0 errors, unit-scope check 0
+    DEAD/0 FLOOR.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fa_en_a1_unit14_words, fa_en_a1_unit14_lesson02_words]
 slot_presets:
   content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb]}
+  # wave 3: generated unit/lesson-scoped tags (commit 05af7ace) -- course pool
+  # == unit pool by construction, so the matchers below no longer pull the
+  # whole level's vocab at Endless-Practice course scope.
+  unit_words: &unit_words {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit14_words}}
+  lesson02_words: &lesson02_words {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit14_lesson02_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit14.lesson01.phone_choose.001
     lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
@@ -151,7 +177,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *lesson02_words, second: *lesson02_words, third: *lesson02_words, fourth: *lesson02_words, fifth: *lesson02_words, sixth: *lesson02_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
@@ -187,7 +213,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *unit_words, second: *unit_words, third: *unit_words, fourth: *unit_words, fifth: *unit_words, sixth: *unit_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
@@ -216,7 +242,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *unit_words, second: *unit_words, third: *unit_words, fourth: *unit_words, fifth: *unit_words, sixth: *unit_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

@@ -71,7 +71,18 @@ review:
     DELIBERATELY: the unit''s only tag_schema semantic tag is class_noun with exactly 1 unit-native member
     ("course" -- class/test belong to unit13), and even adding the shared education_noun tag would reach only 3
     unit tokens (course/homework/subject), far under the 6 distinct unit tokens the 6-slot template needs; a
-    wrong union is worse than the status quo. This confirms the pack''s own 2026-07-24 re-anchor rationale.'
+    wrong union is worse than the status quo. This confirms the pack''s own 2026-07-24 re-anchor rationale.
+
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 blocker above is
+    RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit36_lesson01_words` tag (7 unit-native tokens
+    from lesson01 alone: college/community/course/homework/math/subject/taking, all distinct Farsi glosses),
+    clearing the 6-pair floor on its own; kept lesson-anchored rather than unit-wide (25 tokens across 4 lessons,
+    which would mix in unrelated studying/travel/photography vocabulary) since lesson01 alone already clears
+    the floor. Added a new `unit36_match_pool` preset for match.006 only (`part_of_speech: [noun, verb,
+    adjective, adverb]` + `semantic: fa_en_a1_unit36_lesson01_words`) so the pre-existing shared `unit36_noun`
+    anchor (still feeds choose.001/listen.002/translate.003, not dispatched this wave) is untouched. Course-scope
+    EXTRA drops from 779 off-theme words (verified via pool_check.py) to 0.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -87,12 +98,18 @@ tag_schema:
   agreement_tags:
     semantic:
     - class_noun
+    - fa_en_a1_unit36_lesson01_words
 slot_presets:
   class_noun: &id001
     language_code: en
     part_of_speech: noun
     agreement_tags:
       semantic: class_noun
+  unit36_match_pool: &unit36_match_pool
+    language_code: en
+    part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: fa_en_a1_unit36_lesson01_words
 templates:
 - content_key: practice.fa-en.en.a1.unit36.lesson01.choose.001
   lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
@@ -134,12 +151,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *unit36_noun
-    second: *unit36_noun
-    third: *unit36_noun
-    fourth: *unit36_noun
-    fifth: *unit36_noun
-    sixth: *unit36_noun
+    first: *unit36_match_pool
+    second: *unit36_match_pool
+    third: *unit36_match_pool
+    fourth: *unit36_match_pool
+    fifth: *unit36_match_pool
+    sixth: *unit36_match_pool
   slot_relations:
   - kind: distinct
     slots:
