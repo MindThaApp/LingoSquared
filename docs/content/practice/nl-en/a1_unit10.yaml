@@ -4,7 +4,7 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit10.directions
 review:
-  status: reviewed
+  status: unreviewed
   fresh_context: true
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
@@ -94,11 +94,19 @@ review:
     members. turn_direction/street_ordinal-based templates (word_order/translation)
     were untouched -- they were never dead. Removed the now-unused 'place' tag
     from tag_schema. Re-verified: scripts/_practice_unit_scope_check.py shows 0
-    DEAD/0 FLOOR for this file; compile_content.py practice-validate 0 errors."
+    DEAD/0 FLOOR for this file; compile_content.py practice-validate 0 errors.
+
+    WAVE-3 RE-ANCHOR 2026-07-25: commit 05af7ace generated unit-scoped semantic tags, resolving the earlier
+    blocker that unit10's own vocabulary carried no usable multi-member tag. Re-anchored the POS-only
+    place_pair.006 matcher to 'a1_unit10_directions' + noun (corner/directions/left/minutes/right/street --
+    6 distinct tokens, 6 distinct Dutch glosses, identical pool at unit AND course scope, killing the
+    Endless-Practice course-scope off-theme pull). Bare-word MC/listen/translation templates keep the untagged
+    direction_word preset per dispatch scope. Flipped status reviewed -> unreviewed since the pack changed.
+    Verified via pool_check.py (6/6, 0 course extras), practice-validate 0 errors, unit-scope check 0 DEAD."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [turn_direction, street_ordinal]
+    semantic: [turn_direction, street_ordinal, a1_unit10_directions]
 slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
@@ -114,6 +122,11 @@ slot_presets:
   # instruction frame -- neither embeds the slot in literal sentence text, so
   # the widen-at-course-scope grammaticality risk (SS1.1) does not apply.
   direction_word: &direction_word {language_code: en, part_of_speech: noun}
+  # pair_word (wave 3): the generated unit-scoped tag a1_unit10_directions
+  # (commit 05af7ace) narrowed to nouns -- exactly corner/directions/left/
+  # minutes/right/street at BOTH unit and course scope, so place_pair.006 no
+  # longer pulls the whole level's nouns at Endless-Practice course scope.
+  pair_word: &pair_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit10_directions}}
 templates:
   - content_key: practice.nl-en.en.a1.unit10.lesson01.turn_order.001
     lesson_content_key: en.a1.unit10.lesson01.basic_direction_words
@@ -161,7 +174,7 @@ templates:
     lesson_content_key: en.a1.unit10.lesson02.asking_how_to_get
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_word: *direction_word, second_word: *direction_word, third_word: *direction_word, fourth_word: *direction_word, fifth_word: *direction_word, sixth_word: *direction_word}
+    slots: {first_word: *pair_word, second_word: *pair_word, third_word: *pair_word, fourth_word: *pair_word, fifth_word: *pair_word, sixth_word: *pair_word}
     slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
     answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
     feedback_frame: {text: "Je hebt zes woorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}

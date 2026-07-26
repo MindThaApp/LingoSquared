@@ -28,6 +28,28 @@ review:
     possessives classified as nouns) and no frame survives that, and adding a
     third POS-only matching_pairs would add a new instance of the very defect
     class this wave retires.
+
+    POLISH 2026-07-26 (wave 3, generated-tag re-anchor pass): commit
+    05af7ace added generated unit/lesson semantic tags (a1_unit43_colors,
+    23 unit-scoped members; a1_unit43_colors_lesson01) that resolve both
+    wave-2 honest-leaves above. (1) Re-anchored match.002 to semantic:
+    a1_unit43_colors with part_of_speech [noun, verb, adjective, adverb] --
+    23 unit-scoped tokens, all distinct glosses, 0 course-scope extras --
+    and raised it from 4 to 6 slots now that the pool supports it.
+    Re-anchored volume_match.006 to the same tag narrowed to
+    part_of_speech: adjective (8 unit-scoped tokens: beautiful/bright/dark/
+    everyday/fun/light/professional/yellow), also raised 4 -> 6 slots;
+    distinct pool from match.002 (adjective-only subset vs the full
+    content-POS union), no duplicate glosses in either. (2) Structured
+    tier-thinness fixed: added lesson01.fill.004, a fill_in_blank anchored
+    to a1_unit43_colors_lesson01 narrowed to adjective -- exactly one
+    course-wide candidate (yellow), the single-member anchor wave 2 could
+    not build with zero semantic tags. Frame "The sun is {item}." has
+    visible text besides the blank and is grammatical for its one
+    candidate. Structured now 3 live (match.002, volume_match.006,
+    fill.004). Verified with pool_check.py: both matching_pairs pools
+    clear 6 distinct/6 glosses with 0 course-scope extras; fill.004's slot
+    is a single course-wide candidate.
 tag_schema:
   part_of_speech:
   - symbol
@@ -40,6 +62,10 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - a1_unit43_colors
+    - a1_unit43_colors_lesson01
 slot_presets:
   unit_word:
     language_code: en
@@ -90,62 +116,16 @@ templates:
   lesson_content_key: en.a1.unit43.lesson01.colors_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: &u43_union {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit43_colors}}
+    second: *u43_union
+    third: *u43_union
+    fourth: *u43_union
+    fifth: *u43_union
+    sixth: *u43_union
   slot_relations:
   - kind: distinct
     slots:
@@ -153,6 +133,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -160,6 +142,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en
@@ -192,6 +176,26 @@ templates:
     slot: item
   feedback_frame:
     text: Geef het Engelse woord.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a1.unit43.lesson01.fill.004
+  lesson_content_key: en.a1.unit43.lesson01.colors_vocabulary
+  type: fill_in_blank
+  frame:
+    text: The sun is {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: a1_unit43_colors_lesson01
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} is de kleur van de zon.'
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit43.lesson02.choose.001
@@ -232,7 +236,7 @@ templates:
   lesson_content_key: en.a1.unit43.lesson01.colors_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} — {second} — {third} — {fourth}'
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: en
     direction: ltr
     text_blocks:
@@ -240,58 +244,12 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    first:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    second:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    third:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
-    fourth:
-      language_code: en
-      part_of_speech:
-      - symbol
-      - noun
-      - proper_noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+    first: &u43_adj_pool {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: a1_unit43_colors}}
+    second: *u43_adj_pool
+    third: *u43_adj_pool
+    fourth: *u43_adj_pool
+    fifth: *u43_adj_pool
+    sixth: *u43_adj_pool
   slot_relations:
   - kind: distinct
     slots:
@@ -299,6 +257,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -306,6 +266,8 @@ templates:
     - second
     - third
     - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each word with its meaning.
     language_code: en

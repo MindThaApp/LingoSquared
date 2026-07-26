@@ -77,16 +77,40 @@ review:
     translation over the unit's 10 plain nouns, POS-only -- safe for bare
     translation because the prompt varies with the answer; all glosses
     distinct). Tiers now 3/3/3 live. tag_schema gained the two referenced
-    semantic tags."
+    semantic tags.
+    [wave-3 amendment: the POS-only blocker on match.003 noted above is
+    RESOLVED -- commit 05af7ace's generated tags now cover every content
+    word; see below.]
+
+    POLISH wave 3 2026-07-26 (re-anchor POS-only matcher to the generated
+    unit tag from commit 05af7ace): match.003's six slots moved off the
+    shared neighborhood_adj preset onto a new unit39_match_word preset
+    (agreement_tags semantic: a1_unit39_neighborhood, the generated
+    unit-scoped tag), keeping part_of_speech: [noun, adjective] unchanged.
+    Unit pool unchanged at 15 distinct tokens/15 distinct glosses
+    (building, five-minute, grocery, hallway, helpful, mr, neighborhood,
+    neighborhoods, neighbors, noisy, plants, quiet, restaurants, several,
+    shops), but course scope now equals unit scope -- 0 course-scope
+    extras per pool_check.py, down from 1006, ending the level-wide
+    off-theme noun/adjective pull at Endless-Practice scope. Gloss guard
+    eyeballed: neighborhood/buurt vs neighborhoods/buurten and
+    neighbor(s) singular/plural pairs are the closest pair but remain
+    distinct and tellable apart (no gloss identical to or substring-baked
+    into another member's token beyond the ordinary singular/plural
+    relationship the source lesson itself teaches); no other duplicate or
+    confusable glosses. choose.001/listen.002/translate.004/choose.002
+    deliberately kept on the shared neighborhood_adj preset (not
+    dispatched)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [neighborhood_adj, volume_prs_en_a1_unit39_item_07_single]
+    semantic: [neighborhood_adj, volume_prs_en_a1_unit39_item_07_single, a1_unit39_neighborhood]
 slot_presets:
   neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: [noun, adjective]}
   area_adj: &area_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
   noisy_single: &noisy_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: volume_prs_en_a1_unit39_item_07_single}}
   unit39_noun: &unit39_noun {language_code: en, part_of_speech: noun}
+  unit39_match_word: &unit39_match_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit39_neighborhood}}
 templates:
   - content_key: practice.nl-en.en.a1.unit39.lesson01.choose.001
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
@@ -106,7 +130,7 @@ templates:
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
     type: matching_pairs
     frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *neighborhood_adj, second: *neighborhood_adj, third: *neighborhood_adj, fourth: *neighborhood_adj, fifth: *neighborhood_adj, sixth: *neighborhood_adj}
+    slots: {first: *unit39_match_word, second: *unit39_match_word, third: *unit39_match_word, fourth: *unit39_match_word, fifth: *unit39_match_word, sixth: *unit39_match_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}

@@ -63,16 +63,30 @@ review:
     floor and 'prefer'/'hate' already satisfy them at unit scope).
     Verified 0 DEAD / 0 below-floor via
     scripts/_practice_unit_scope_check.py and compiler practice-validate
-    0 errors after the fix."
+    0 errors after the fix.
+
+    POLISH wave 3 2026-07-25 (re-anchor POS-only matcher to the generated
+    unit tag from commit 05af7ace): verb_pair.003's unit19_content_word
+    preset gained agreement_tags semantic: a1_unit19_preferences (the
+    generated unit-scoped tag), keeping the part_of_speech
+    [verb, adjective, adverb] content filter. Unit pool unchanged at 9
+    distinct tokens/9 distinct glosses (prefer, hate, think, prefers,
+    thinks, calmer, strong, very, why), but the course-scope pool now
+    equals the unit pool -- the Endless-Practice off-theme pull wave 2
+    could not fix (no usable semantic tags then) is eliminated, 0
+    course-scope extras per pool_check.py. Gloss guard eyeballed:
+    prefer/prefers and think/thinks glosses differ by inflection
+    (de voorkeur geven aan / geeft de voorkeur aan, denken/denkt),
+    tellable apart; no duplicate glosses."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [preference_verb, preference_verb_full]
+    semantic: [preference_verb, preference_verb_full, a1_unit19_preferences]
 slot_presets:
   preference_verb: &preference_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb}}
   preference_verb_full: &preference_verb_full {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb_full}}
   unit19_verb: &unit19_verb {language_code: en, part_of_speech: verb}
-  unit19_content_word: &unit19_content_word {language_code: en, part_of_speech: [verb, adjective, adverb]}
+  unit19_content_word: &unit19_content_word {language_code: en, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: a1_unit19_preferences}}
 templates:
   - content_key: practice.nl-en.en.a1.unit19.lesson01.verb_meaning.001
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs

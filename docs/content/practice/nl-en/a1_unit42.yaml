@@ -66,7 +66,20 @@ review:
     choose.001 in pool). Production += lesson04.translate.001 (bare-word
     translation over the same 12 adjectives; POS-only is safe for bare
     translation because the prompt varies with the answer; all glosses
-    distinct). Tiers now 3 recognition / 4 structured / 3 production live.'
+    distinct). Tiers now 3 recognition / 4 structured / 3 production live.
+
+    POLISH 2026-07-26 (wave 3, generated-tag re-anchor pass): commit
+    05af7ace added a generated unit-wide semantic tag (a1_unit42_personality,
+    31 unit-scoped members across all 4 lessons) that resolves the wave-2
+    honest-leave on lesson01.match.003 -- it was POS-only (part_of_speech:
+    adjective, 12 unit tokens / 230 course-scope extras) because the only
+    hand-authored tag (personality_adj) fell one short of the 6-pair floor.
+    Re-anchored match.003 to semantic: a1_unit42_personality with
+    part_of_speech narrowed to [noun, adjective] (drops verb to exclude the
+    "relax"/"relaxed" duplicate-gloss pair, both glossing "ontspannen") --
+    21 unit-scoped tokens, all distinct glosses, 0 course-scope extras
+    (the generated tag is unit-scoped by construction). Verified with
+    pool_check.py: unit 21/21 distinct, no course-scope EXTRA line.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -83,6 +96,7 @@ tag_schema:
     semantic:
     - personality_adj
     - volume_nl_en_a1_unit42_item_01_single
+    - a1_unit42_personality
 slot_presets:
   personality_adj: &id001
     language_code: en
@@ -133,7 +147,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: &id003 {language_code: en, part_of_speech: adjective}
+    first: &id003 {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit42_personality}}
     second: *id003
     third: *id003
     fourth: *id003
