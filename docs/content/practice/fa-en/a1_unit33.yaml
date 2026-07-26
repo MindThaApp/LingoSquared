@@ -74,12 +74,25 @@ review:
     unit21/unit20), so no semantic union of unit tags can reach the 6 distinct unit tokens a matching_pairs
     needs; a wrong union is worse than the status quo. It also stays at 5 pairs (pre-existing below-floor line,
     not dispatched).
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md §3.1, generated-tag re-anchor): the wave-2 blocker above
+    is RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit33_words` tag, first-introduction-only
+    across all 4 lessons (11 unit-native tokens: bike/bus/difficult/drive/drives/late/office/parking/ride/
+    takes/worry, all distinct Farsi glosses -- drive/drives is the same acceptable infinitive/conjugated
+    discrimination the recipe allows for singular/plural pairs). Re-anchored match.003 from the bare
+    `part_of_speech: verb` (*unit33_verb, shared with choose.001/listen.002/translate_verb.008 -- left
+    untouched, not dispatched) to a new `unit33_match_pool` preset (`part_of_speech: [noun, verb, adjective,
+    adverb]` + `semantic: fa_en_a1_unit33_words`) and widened from 5 to 6 slots (the pool now supports it --
+    recipe's own point 2). Feedback text changed from "هر فعل" (each verb) to "هر واژه" (each word) since the
+    pool is no longer verb-only. Course-scope EXTRA drops from 472 off-theme words (verified via pool_check.py)
+    to 0.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [transport_noun]
+    semantic: [transport_noun, fa_en_a1_unit33_words]
 slot_presets:
   transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
+  unit33_match_pool: &unit33_match_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit33_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit33.lesson01.choose.001
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
@@ -99,10 +112,10 @@ templates:
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *unit33_verb, second: *unit33_verb, third: *unit33_verb, fourth: *unit33_verb, fifth: *unit33_verb}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth]}
-    feedback_frame: {text: "هر فعل را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    slots: {first: *unit33_match_pool, second: *unit33_match_pool, third: *unit33_match_pool, fourth: *unit33_match_pool, fifth: *unit33_match_pool, sixth: *unit33_match_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit33.lesson01.translate.004
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: translation

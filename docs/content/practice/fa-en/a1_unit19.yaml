@@ -70,13 +70,32 @@ review:
     recognition, 4 structured, 4 production. Verified with
     scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for
     this file.
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the
+    unit-scoped semantic tag fa_en_a1_unit19_words (+ per-lesson
+    variants) for every unit's own content lexemes. verb_pair.003's own
+    lesson01 tag covers only 2 members (prefer/hate), below the 6-pair
+    floor, so it is re-anchored to the unit-wide fa_en_a1_unit19_words
+    tag instead: prefer/hate/calmer/very/strong/why/think/prefers/
+    thinks -- the same 9 tokens the 2026-07-24 pass already vetted
+    (prefer/prefers and think/thinks are base/3rd-person conjugation
+    pairs with distinct Farsi glosses, already documented above), now
+    identical at unit AND course scope by construction, so the
+    Endless-Practice off-theme pull is gone with zero pool-composition
+    change. Verified via pool_check.py (9 unit tokens, 0 course
+    extras), practice-validate 0 errors, unit-scope check 0 DEAD/0
+    FLOOR.
 tag_schema:
   part_of_speech: [verb, adjective, adverb]
   agreement_tags:
-    semantic: [preference_verb_full]
+    semantic: [preference_verb_full, fa_en_a1_unit19_words]
 slot_presets:
   preference_verb_full: &preference_verb_full {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb_full}}
   content_word: &content_word {language_code: en, part_of_speech: [verb, adjective, adverb]}
+  # wave 3: generated unit-scoped tag (commit 05af7ace) -- course pool ==
+  # unit pool by construction, so the matcher below no longer pulls the
+  # whole level's vocab at Endless-Practice course scope.
+  unit_words: &unit_words {language_code: en, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit19_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit19.lesson01.verb_meaning.001
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
@@ -96,7 +115,7 @@ templates:
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: matching_pairs
     frame: {text: "{first_verb} — {second_verb} — {third_verb} — {fourth_verb} — {fifth_verb} — {sixth_verb}", language_code: en, direction: ltr}
-    slots: {first_verb: *content_word, second_verb: *content_word, third_verb: *content_word, fourth_verb: *content_word, fifth_verb: *content_word, sixth_verb: *content_word}
+    slots: {first_verb: *unit_words, second_verb: *unit_words, third_verb: *unit_words, fourth_verb: *unit_words, fifth_verb: *unit_words, sixth_verb: *unit_words}
     slot_relations: [{kind: distinct, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb, sixth_verb]}]
     answer_derivation: {kind: matching_pairs, slots: [first_verb, second_verb, third_verb, fourth_verb, fifth_verb, sixth_verb]}
     feedback_frame: {text: "دو واژهٔ ترجیح را به معنای فارسی آن‌ها وصل کردید.", language_code: fa, direction: rtl}

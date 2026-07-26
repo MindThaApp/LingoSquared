@@ -117,13 +117,34 @@ review:
     structured, 4 production. Verified with
     scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor for
     this file.
+
+    WAVE-3 RE-ANCHOR 2026-07-26: commit 05af7ace generated the
+    unit-scoped semantic tag fa_en_a1_unit16_words (+ per-lesson
+    variants) for every unit's own content lexemes -- this unit had no
+    prior semantic-union option (the untagged part_of_speech-only pool
+    above was the only choice), so this is a genuine union upgrade, not
+    a wave-2-blocker resolution. Neither dispatched template's own
+    lesson tag clears the 6-pair floor (lesson01 covers only 4,
+    lesson03 only 1), so both routine_match.004 and routine_match.008
+    are re-anchored to the unit-wide fa_en_a1_unit16_words tag: same 7
+    tokens the untagged pool already had (wake/dressed/dinner/bed/
+    every/usually/breakfast -- "up"/"after" stay untagged particle/
+    preposition, correctly excluded), now identical at unit AND course
+    scope, so the Endless-Practice off-theme pull is gone with zero
+    pool-composition change. Eyeballed all 7 glosses -- no confusable
+    pairs. Verified via pool_check.py (7 unit tokens, 0 course extras),
+    practice-validate 0 errors, unit-scope check 0 DEAD/0 FLOOR.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
-    semantic: [meal]
+    semantic: [meal, fa_en_a1_unit16_words]
 slot_presets:
   meal: &meal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: meal}}
   content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb]}
+  # wave 3: generated unit-scoped tag (commit 05af7ace) -- course pool ==
+  # unit pool by construction, so the matchers below no longer pull the
+  # whole level's vocab at Endless-Practice course scope.
+  unit_words: &unit_words {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit16_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit16.lesson01.routine_choose.001
     lesson_content_key: en.a1.unit16.lesson01.routine_verbs
@@ -150,7 +171,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson01.routine_verbs
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *unit_words, second: *unit_words, third: *unit_words, fourth: *unit_words, fifth: *unit_words, sixth: *unit_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
@@ -186,7 +207,7 @@ templates:
     lesson_content_key: en.a1.unit16.lesson03.reading_a_routine
     type: matching_pairs
     frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}
-    slots: {first: *content_word, second: *content_word, third: *content_word, fourth: *content_word, fifth: *content_word, sixth: *content_word}
+    slots: {first: *unit_words, second: *unit_words, third: *unit_words, fourth: *unit_words, fifth: *unit_words, sixth: *unit_words}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}

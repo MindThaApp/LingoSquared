@@ -81,13 +81,33 @@ review:
     sometimes) -- no semantic union of unit-native tags can reach the
     6-distinct-token matching floor (max 4), and tags cannot be added in
     a PACK-ONLY pass; a wrong union is worse than the status quo.
+
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md §3.1, generated-tag
+    re-anchor): the wave-2 "honestly unfixable" call above is RESOLVED --
+    commit 05af7ace added the generated `fa_en_a1_unit23_words` tag,
+    first-introduction-only across all 4 lessons (14 unit-native tokens:
+    answer/clients/company/cook/downtown/driver/emails/help/interesting/
+    job/nurse/patients/reports/sometimes, all distinct Farsi glosses, no
+    confusables). Re-anchored match.003 from the bare `part_of_speech:
+    noun` constraint to a new `unit23_match_pool` preset (`part_of_speech:
+    [noun, verb, adjective, adverb]` + `semantic: fa_en_a1_unit23_words`)
+    -- a separate preset from the pre-existing `unit23_noun` anchor
+    (kept untouched, still feeds lesson03.translate.002, not dispatched
+    this wave) so the widening only touches match.003. Unit-scope pool
+    unchanged in spirit (still every unit-native content word, now all 4
+    POS instead of nouns-only, 14 tokens for 6 slots) but course-scope
+    EXTRA drops from 779 off-theme words (verified via pool_check.py) to
+    0 -- the tag is unit-scoped by construction. Still 6 slots (already
+    at the recipe floor from the 2026-07-24 pass).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [occupation_noun, occupation_a]
+    semantic: [occupation_noun, occupation_a, fa_en_a1_unit23_words]
 slot_presets:
   occupation_noun: &occupation_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_noun}}
   occupation_a: &occupation_a {language_code: en, part_of_speech: noun, agreement_tags: {semantic: occupation_a}}
+  unit23_noun: &unit23_noun {language_code: en, part_of_speech: noun}
+  unit23_match_pool: &unit23_match_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit23_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit23.lesson01.choose.001
     lesson_content_key: en.a1.unit23.lesson01.occupation_words
@@ -108,12 +128,12 @@ templates:
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
     slots:
-      first: &unit23_noun {language_code: en, part_of_speech: noun}
-      second: *unit23_noun
-      third: *unit23_noun
-      fourth: *unit23_noun
-      fifth: *unit23_noun
-      sixth: *unit23_noun
+      first: *unit23_match_pool
+      second: *unit23_match_pool
+      third: *unit23_match_pool
+      fourth: *unit23_match_pool
+      fifth: *unit23_match_pool
+      sixth: *unit23_match_pool
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
