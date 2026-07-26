@@ -8,6 +8,8 @@ review:
   fresh_context: 'false'
   notes: >-
     Generated for the prs-en X->en direction (Dari L1, tested content is English). Follows the established prs-en Endless-Practice pattern (a1_unit45.yaml): bare-{item} frames with untagged slots (language_code: en + part_of_speech in [noun, verb, adjective, adverb, preposition, phrase], no semantic tag) so every slot draws on the WHOLE unit lexeme pool at both unit and course scope, which is safe per PRACTICE_PACK_RECIPE.md SS3.1(c) because none of these frames carry literal English content text besides the {item} placeholder (or plain separators/dashes for matching_pairs). 4 templates per lesson x 4 lessons = 16 templates: multiple_choice + listen_select (recognition), matching_pairs x6 (structured), translation bare-word (production). listen_select is safe here because target_language=en has TTS configured. Measured capacity: 30 unit lexemes, 28 after excluding proper_noun/pronoun/particle/symbol, 28 distinct glosses -- comfortably clears the >=12 floor in every tier and the >=3 MC / >=6 matching_pairs floors. Excluded proper_noun (self-gloss risk, SS6.1), pronoun/particle (function words with no standalone meaning) from all slots. No word_order/fill_in_blank authored: no unit lexeme carries a semantic tag narrow enough to safely anchor a literal-text frame at COURSE scope (SS1.1), and matching_pairs alone clears the structured-tier floor. Feedback strings reused verbatim from the Dari-register exemplar a1_unit45.yaml.
+
+    WAVE 3 (2026-07-26): generated per-unit/per-lesson semantic tags (backfill commit 05af7ace) now exist for this unit, closing the 'no semantic tag' gap flagged above for the 4 matching_pairs templates (recognition/production templates untouched, still deliberately untagged per the paragraph above). lesson01 -> prs_en_b1_unit15_lesson01_words (6 tok/6 gloss, exactly the floor), lesson02 -> prs_en_b1_unit15_lesson02_words (10/10), lesson03 -> prs_en_b1_unit15_lesson03_words (7/7). lesson04 alone is only 5 tok (below the 6-pair floor), so it unions lesson03+lesson04 tags (12 tok/12 gloss) rather than falling back to the full unit-wide tag: the unit-wide pool pairs lesson01's 'damaged' (gloss: خراب، آسیب‌دیده) with lesson03's 'broken' (gloss: خراب) -- both share the خراب root and are not reliably distinguishable to a learner (recipe SS3.1(b) exclusion technique). Dropped 'preposition' from the part_of_speech filter on all 4 (the generated tag never carries preposition members, so it was dead weight).
 tag_schema:
   part_of_speech:
   - symbol
@@ -20,6 +22,12 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_b1_unit15_lesson01_words
+    - prs_en_b1_unit15_lesson02_words
+    - prs_en_b1_unit15_lesson03_words
+    - prs_en_b1_unit15_lesson04_words
 templates:
 - content_key: practice.prs-en.en.b1.unit15.lesson01.choose.001
   lesson_content_key: en.b1.unit15.lesson01.complaints_vocabulary
@@ -86,8 +94,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
     second:
       language_code: en
       part_of_speech:
@@ -95,8 +104,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
     third:
       language_code: en
       part_of_speech:
@@ -104,8 +114,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
     fourth:
       language_code: en
       part_of_speech:
@@ -113,8 +124,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
     fifth:
       language_code: en
       part_of_speech:
@@ -122,8 +134,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
     sixth:
       language_code: en
       part_of_speech:
@@ -131,8 +144,10 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson01_words
+
   slot_relations:
   - kind: distinct
     slots:
@@ -246,8 +261,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
     second:
       language_code: en
       part_of_speech:
@@ -255,8 +271,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
     third:
       language_code: en
       part_of_speech:
@@ -264,8 +281,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
     fourth:
       language_code: en
       part_of_speech:
@@ -273,8 +291,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
     fifth:
       language_code: en
       part_of_speech:
@@ -282,8 +301,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
     sixth:
       language_code: en
       part_of_speech:
@@ -291,8 +311,10 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson02_words
+
   slot_relations:
   - kind: distinct
     slots:
@@ -406,8 +428,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
     second:
       language_code: en
       part_of_speech:
@@ -415,8 +438,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
     third:
       language_code: en
       part_of_speech:
@@ -424,8 +448,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
     fourth:
       language_code: en
       part_of_speech:
@@ -433,8 +458,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
     fifth:
       language_code: en
       part_of_speech:
@@ -442,8 +468,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
     sixth:
       language_code: en
       part_of_speech:
@@ -451,8 +478,10 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit15_lesson03_words
+
   slot_relations:
   - kind: distinct
     slots:
@@ -566,8 +595,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
     second:
       language_code: en
       part_of_speech:
@@ -575,8 +605,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
     third:
       language_code: en
       part_of_speech:
@@ -584,8 +615,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
     fourth:
       language_code: en
       part_of_speech:
@@ -593,8 +625,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
     fifth:
       language_code: en
       part_of_speech:
@@ -602,8 +635,9 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
     sixth:
       language_code: en
       part_of_speech:
@@ -611,8 +645,10 @@ templates:
         - verb
         - adjective
         - adverb
-        - preposition
         - phrase
+      agreement_tags:
+        semantic: [prs_en_b1_unit15_lesson03_words, prs_en_b1_unit15_lesson04_words]
+
   slot_relations:
   - kind: distinct
     slots:

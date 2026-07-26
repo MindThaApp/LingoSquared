@@ -92,15 +92,30 @@ review:
     tags cannot be added from a pack file. A production verb pool was
     considered and rejected: 'study'/'studying' glosses differ only by
     ZWNJ-vs-space (visually identical prompts, mis-grading trap).
+
+    RE-ANCHOR (2026-07-26, polish wave 3): commit 05af7ace added a
+    unit-wide generated tag (prs_en_a1_unit36_words, first-introduction
+    only) that the earlier note's blocker no longer applies to -- it is
+    not the hand-authored education_noun tag, so it isn't limited to 3
+    unit-native members. match.003 re-anchored from bare `part_of_speech:
+    noun` (no semantic, course-scope pool 768 unrelated nouns) to
+    `semantic: prs_en_a1_unit36_words` + `part_of_speech: noun`: unit
+    pool unchanged at 10 distinct tokens/glosses (classes/college/
+    community/course/homework/math/nights/photography/skills/subject --
+    identical set, now course-scope-safe by construction) but course-scope
+    extras drop from 768 to 0. Verbs deliberately excluded from the tagged
+    pool (kept noun-only) for the same study/studying ZWNJ reason noted
+    above. Still 6 slots, no floor change needed.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [education_noun, recurring_class_noun]
+    semantic: [education_noun, recurring_class_noun, prs_en_a1_unit36_words]
 slot_presets:
   education_noun: &education_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: education_noun}}
   recurring_class_noun: &recurring_class_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: recurring_class_noun}}
   unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
   unit_adv: &unit_adv {language_code: en, part_of_speech: adverb}
+  unit_noun_tagged: &unit_noun_tagged {language_code: en, part_of_speech: noun, agreement_tags: {semantic: prs_en_a1_unit36_words}}
 templates:
   - content_key: practice.prs-en.en.a1.unit36.lesson01.choose.001
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
@@ -120,7 +135,7 @@ templates:
     lesson_content_key: en.a1.unit36.lesson01.education_vocabulary
     type: matching_pairs
     frame: {text: "{first} — {second}", language_code: en, direction: ltr}
-    slots: {first: *unit_noun, second: *unit_noun, third: *unit_noun, fourth: *unit_noun, fifth: *unit_noun, sixth: *unit_noun}
+    slots: {first: *unit_noun_tagged, second: *unit_noun_tagged, third: *unit_noun_tagged, fourth: *unit_noun_tagged, fifth: *unit_noun_tagged, sixth: *unit_noun_tagged}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "هر واژه را به معنی دری خودش وصل کنین.", language_code: prs, direction: rtl}
