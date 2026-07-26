@@ -29,6 +29,7 @@ from __future__ import annotations
 import re
 import sys
 import argparse
+import unicodedata
 from pathlib import Path
 
 import yaml
@@ -3126,6 +3127,59 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
+# Generated per-unit and per-lesson semantic tags, ported 2026-07-26 from
+# the X-en scripts' identical mechanism (backfill_lexemes_fa_en.py /
+# _prs_en.py, commit 05af7ace) to close the LAST remaining semantic-tag
+# deserts -- the Persian-TARGET direction. The polish wave measured that
+# en-fa's a1_31-36, a2_12-16 and b1_01-11 matching_pairs were stuck on bare
+# part_of_speech pools (checkpoint-safe, but course-wide off-theme in
+# Endless Practice and unfixable pack-side, because those units carry no
+# hand-authored agreement_tags.semantic). Two tags per first-introduced
+# taggable Farsi token, e.g. `en_fa_a1_unit33_words` +
+# `en_fa_a1_unit33_lesson02_words`; emitted ONLY on a token's first
+# introduction (a re-used token must never receive a later unit's tag --
+# that provenance belongs to the earlier unit, exactly the silent
+# checkpoint_unavailable cause the recipe calls defect #2). Purely
+# additive: no shipped pack references these names, so no existing pool
+# changes until a pack opts in.
+
+# Persian-aware metalanguage guard. The English-TARGET directions must keep
+# English grammar terms (noun/verb/clause) out of the generated tags,
+# because their B1/B2 grammar cards teach those words as real English
+# tokens a vocabulary drill could then wrongly quiz. This course is the
+# mirror image: every grammar term is taught in the ENGLISH gloss /
+# grammar_note, never as a Farsi token. An audit of FA_GLOSSES confirmed
+# ZERO Farsi grammar-metalanguage lexemes (اسم is "name", حرف is
+# "talk/word", حال is "mood", جمع is "gathering" -- all vocabulary), so the
+# set is empty. It exists for parity and as the hook if a grammar-term
+# Farsi token is ever introduced.
+METALANGUAGE_TOKENS: frozenset[str] = frozenset()
+
+# noun/verb/adjective/adverb/phrase are drillable vocabulary; pronouns,
+# prepositions, particles, symbols and proper nouns are excluded (matching
+# over particles is not a vocabulary check; a slot_gloss MC over proper
+# nouns self-glosses).
+TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
+
+
+def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
+    if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
+        return []
+    if part_of_speech != "phrase" and not all(
+        character.isalpha()
+        or unicodedata.combining(character)
+        or character in "‌-'"  # ZWNJ (Persian compounds) + hyphen + apostrophe
+        for character in token
+    ):
+        # Digits (ASCII or Persian), currency marks, clock colons, Persian
+        # punctuation (، ؟ ؛) or spaces: real lexemes, poor slot candidates.
+        return []
+    return [
+        f"en_fa_{unit_stem}_words",
+        f"en_fa_{unit_stem}_lesson{lesson_order:02d}_words",
+    ]
+
+
 def _classify_fa(files, level, fa_specs, seen_en):
     # Keyed by (level, token) -- A1 and A2 are separate courses (separate
     # Lexeme rows are fine/expected even for a token spelled the same in
@@ -3136,6 +3190,9 @@ def _classify_fa(files, level, fa_specs, seen_en):
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         overlay = yaml.safe_load(overlay_path.read_text(encoding="utf-8"))
         teaching_overlays = overlay["teaching"]
+        # "a1_unit33_neighborhood" -> "a1_unit33": the stable per-unit key
+        # the generated semantic tags (_unit_semantic_tags) are named after.
+        unit_stem = "_".join(realization_path.stem.split("_")[:2])
         for lesson_order, lesson in enumerate(realization["units"][0]["lessons"], 1):
             lesson_key = lesson["content_key"]
             for item in lesson["teaching"]:
@@ -3230,6 +3287,17 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         english_gloss = "really?! (surprised reaction)"
                     existing = fa_specs.get(key)
                     if existing is None:
+                        # ONLY on first introduction -- see
+                        # _unit_semantic_tags() above. Uses the RESOLVED
+                        # part_of_speech (after the homograph overrides
+                        # above), so e.g. تو's location-prep sense is
+                        # excluded exactly like its pronoun sense is.
+                        unit_tags = _unit_semantic_tags(
+                            unit_stem, lesson_order, token, part_of_speech
+                        )
+                        if unit_tags:
+                            semantic = tags.setdefault("semantic", [])
+                            semantic.extend(t for t in unit_tags if t not in semantic)
                         fa_specs[key] = {
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
@@ -3298,6 +3366,19 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     and not (_label_guarded and re.search(r"[A-Za-z]", target_text))
                 ):
                     tags = fa_agreement_tags(target_text, lesson_key)
+                    # Generated unit/lesson tags for the derived phrase too
+                    # (POS "phrase"). setdefault() below only writes on the
+                    # phrase's first occurrence, so a re-derived phrase keeps
+                    # its earlier unit's tag -- same first-introduction rule
+                    # as the introduced-token path. Single-token matchers
+                    # narrow POS to [noun,verb,adjective,adverb], so a phrase
+                    # carrying this tag is still excluded from them.
+                    phrase_unit_tags = _unit_semantic_tags(
+                        unit_stem, lesson_order, target_text, "phrase"
+                    )
+                    if phrase_unit_tags:
+                        semantic = tags.setdefault("semantic", [])
+                        semantic.extend(t for t in phrase_unit_tags if t not in semantic)
                     phrase_key = (level, target_text)
                     # Real dead-anchor collision caught 2026-07-09 while
                     # adding unit20 (clothing): unit06's own restaurant
