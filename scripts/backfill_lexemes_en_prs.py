@@ -3274,6 +3274,17 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
 # "total/gathering"), which must stay taggable.
 METALANGUAGE_TOKENS: frozenset[str] = frozenset({"فعل", "فاعل"})
 
+# Off-theme copula outlier. Dari be-forms (است/استم/استی/بود/باشد ...) are
+# on-theme in the units that TEACH them (unit01 introductions, "I am X"), so
+# they stay taggable there. هستم is the one exception: it is a
+# spelling/register variant of استم that this corpus first-introduces only in
+# a1_unit36's COOKING lesson (as the copula inside "من آشپز هستم"), so the
+# generated en_prs_a1_unit36_words tag would otherwise drop "I am" into that
+# unit's cooking_pair vocabulary matcher -- an off-theme tile flagged in the
+# a1_36 review.notes. It is a real lexeme (kept), just never a good
+# cooking-vocab slot candidate, so it is held out of the generated tags.
+OFF_THEME_TOKENS: frozenset[str] = frozenset({"هستم"})
+
 # noun/verb/adjective/adverb/phrase are drillable vocabulary; pronouns,
 # prepositions, particles, symbols and proper nouns are excluded (matching
 # over particles is not a vocabulary check; a slot_gloss MC over proper
@@ -3282,7 +3293,11 @@ TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
 
 
 def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
-    if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
+    if (
+        part_of_speech not in TAGGABLE_POS
+        or token in METALANGUAGE_TOKENS
+        or token in OFF_THEME_TOKENS
+    ):
         return []
     if part_of_speech != "phrase" and not all(
         character.isalpha()

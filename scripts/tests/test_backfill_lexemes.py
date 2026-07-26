@@ -100,6 +100,16 @@ def test_en_prs_unit_semantic_tags_excludes_metalanguage():
     assert tags("b1_unit01", 1, "فعل", "noun") == []
     assert tags("b1_unit01", 1, "فاعل", "noun") == []
 
+    # ...and هستم (an off-theme copula re-taught in the cooking unit) is held
+    # out even though POS=verb, so it never lands in a1_36's cooking_pair pool
+    assert prs.OFF_THEME_TOKENS == {"هستم"}
+    assert tags("a1_unit36", 1, "هستم", "verb") == []
+    # its canonical sibling استم stays taggable (on-theme in unit01 intros)
+    assert tags("a1_unit01", 4, "استم", "verb") == [
+        "en_prs_a1_unit01_words",
+        "en_prs_a1_unit01_lesson04_words",
+    ]
+
 
 def test_en_prs_metalanguage_tokens_carry_no_generated_tag_in_specs():
     # Integration guard: whatever unit فعل/فاعل are introduced in, no spec for

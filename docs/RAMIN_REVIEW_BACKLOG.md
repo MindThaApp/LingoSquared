@@ -97,9 +97,10 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   overrides; verified functionally (small→klein, manager→leidinggevende, must→باید, …).
 
 **Residual follow-ups (NOT blocking; the dead-template family is fixed):**
-- **1 dead template left:** en-nl a1_29 lesson05.match.001 — a heterogeneous matching whose
-  2nd group (freq_adverb) has 2 unit-native members for 4 slots. Non-breaking (pack still
-  generates from its other live templates); needs a 4→2 slot trim.
+- ~~**1 dead template left:** en-nl a1_29 lesson05.match.001 — freq_adverb group 4 slots / 2
+  members; needs a 4→2 slot trim.~~ **DONE (already trimmed in a prior wave; verified 2026-07-27:
+  the freq_adverb distinct group is [seventh, eighth] = 2 slots against its 2 unit-native members
+  nooit/soms; corpus ledger 0 DEAD confirms).**
 - ~~**Tier-thinness (335 tier-short lines, mostly PRE-EXISTING):** many packs — especially the
   pre-recipe en-prs/prs-en a1_26–37 range — have <3 live templates in a tier. Predates the
   re-auth (accepted at each pack's original review); the re-auth made a few acute (en-prs a1_34
@@ -149,9 +150,13 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   (1) delete those 42 Lexeme rows in the DB, (2) widen `_label_guarded` to all units, (3) rerun
   backfill + practice import. Needs a live dev DB to verify — same procedure the guard's author
   used.
-- **Duplicate `volume_match`/`volume_translate` templates (units 31–40, all directions):** the
+- ~~**Duplicate `volume_match`/`volume_translate` templates (units 31–40, all directions):** the
   2026-07-11 authoring pass emitted literal-duplicate matching/translation templates (and a
-  degraded bare-`{word}` feedback_frame on the translation ones). Systemic; wants one cleanup pass.
+  degraded bare-`{word}` feedback_frame on the translation ones).~~ **DONE (resolved by the
+  polish-wave re-authoring; verified 2026-07-27 across all 6 directions' units 31–40: 0
+  literal-duplicate template pairs and 0 bare-placeholder feedback_frames remain. The surviving
+  `volume_*` templates are intentional second-review sets, each carrying a distinguishing
+  `text_blocks` header, not duplicates.)**
 - ~~**`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
   after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.~~
   **FIXED 2026-07-24** (commit c2e6caba): re-anchored to noun-only name_word∪relationship_word∪title
@@ -182,7 +187,11 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
 - **Backfill bugs the agents logged (route to a backfill pass):** tokens with trailing
   punctuation baked in (nl-en/prs-en/fa-en unit33: `work?`,`office.`) — DONE 2026-07-24 (earlier
   session); `hand`→idiom-fragment gloss (nl-en) + `گوش` gloss — DONE 2026-07-24 (Codex gloss2,
-  commit 1bbe5f11); `هستم` off-theme in some prs pools still open.
+  commit 1bbe5f11); ~~`هستم` off-theme in some prs pools still open.~~ **DONE 2026-07-27:**
+  هستم ("I am") is a register variant re-taught only in en-prs a1_unit36's cooking lesson, so the
+  wave-4 generated tag pulled it into that unit's cooking_pair matcher. Held out at the source via
+  `OFF_THEME_TOKENS` in backfill_lexemes_en_prs.py (a1_36 cooking pool 12→11, still ≥floor; the
+  on-theme copulas in their own intro units stay taggable). Ledger unchanged; guard test added.
 
 **DEFERRED — the real root cause, needs your call (a big change):** the backfill classifier
 keys a lexeme to the FIRST unit that teaches a token, so a token re-taught in a later unit
