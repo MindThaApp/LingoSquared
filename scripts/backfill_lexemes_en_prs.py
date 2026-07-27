@@ -3441,6 +3441,16 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "eye_noun")
                         part_of_speech = "noun"
                         english_gloss = "eye"
+                    # خراب: PRS_GLOSSES glosses it "broken" (the a2_unit18
+                    # broken-appliance complaint sense). a1_unit25 re-teaches
+                    # it as "bad or broken" and uses the "bad weather" sense
+                    # (هوا خراب است -- "the weather is bad"); glossing only
+                    # "broken" there made the unit's own taught "bad" sense
+                    # unavailable as the MC/matching answer. Gloss-only
+                    # override for the a1 row (a1 vs a2 already separate the
+                    # two). Native review 2026-07-27.
+                    if token == "خراب" and lesson_key == "prs.a1.unit25.lesson03.more_feelings_and_reasons":
+                        english_gloss = "bad; broken"
                     # B1 unit04 introduces THREE more genuine homographs
                     # against existing A1/A2 entries, found and fixed while
                     # backfilling the B1 course, 2026-07-11:

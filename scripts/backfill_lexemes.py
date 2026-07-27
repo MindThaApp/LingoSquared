@@ -3262,6 +3262,17 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # FA_VERBS membership, so no override needed there).
                     if token == "باشه" and lesson_key in BASHE_SUBJUNCTIVE_LESSONS:
                         english_gloss = "(if) he/she is / be (subjunctive copula)"
+                    # باشید: FA_GLOSSES glosses it "be (polite)" -- the
+                    # a1_unit01 farewell-imperative sense (e.g. موفق باشید).
+                    # In b1_unit03's داشته باشید real-conditional paradigm it
+                    # is the 2nd-plural subjunctive "(if) you (pl.) be",
+                    # consistent with its siblings باشی/باشیم/باشن ("(if)
+                    # [person] be"); the inherited "be (polite)" gloss shown
+                    # as the MC/matching answer there hid the subjunctive
+                    # sense the unit teaches. Gloss-only override (a1 vs b1
+                    # already separate the two rows). Native review 2026-07-27.
+                    if token == "باشید" and lesson_key == "fa.b1.unit03.lesson02.real_condition_all_persons":
+                        english_gloss = "(if) you (pl.) be"
                     # چشم / پس / تا: three more genuine homographs, split
                     # 2026-07-22 -- see CHESHM_EYE_LESSONS,
                     # PAS_RETURN_LESSONS and TA_UNTIL_LESSONS above for
