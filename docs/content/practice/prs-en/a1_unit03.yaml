@@ -83,7 +83,7 @@ review:
 tag_schema:
   part_of_speech: [noun, adjective, adverb, pronoun]
   agreement_tags:
-    semantic: [number, count_plural, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
+    semantic: [number, count_plural_no_hundred, age_phrase, price_phrase, phone_phrase, market_dialogue, place_singular]
 slot_presets:
   number: &number {language_code: en, part_of_speech: noun, agreement_tags: {semantic: number}}
   # Fresh-context review fix, 2026-07-06: "number" includes "one", which
@@ -94,7 +94,12 @@ slot_presets:
   # bare number with an already-plural noun. count_plural (the existing
   # "number minus one" tag in scripts/_en_target_lexeme_common.py, built
   # for exactly this reason by the nl-en lane) fixes that specific case.
-  number_plural: &number_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural}}
+  # Repointed 2026-07-27 (native review): count_plural still includes "hundred"
+  # (صد), so "I'm {number} years old." / "It's {number} dollars." rendered
+  # "I'm hundred years old." / "It's hundred dollars." (missing the taught
+  # article "one hundred") — a grammar error in the graded render. Switched to
+  # count_plural_no_hundred, which drops "hundred" too.
+  number_plural: &number_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: count_plural_no_hundred}}
   age_word: &age_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: age_phrase}}
   age_adjective: &age_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: age_phrase}}
   price_word: &price_word {language_code: en, part_of_speech: [noun, adverb, pronoun], agreement_tags: {semantic: price_phrase}}

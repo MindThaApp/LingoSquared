@@ -52,7 +52,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - number
-    - number_no_hundred
+    - count_plural_no_hundred
     - age_phrase
     - price_phrase
     - phone_phrase
@@ -66,11 +66,18 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: number
+  # Repointed 2026-07-27 (native review): number_no_hundred excludes "hundred"
+  # but still includes "one", so the plural-noun frames that alias this preset
+  # ("I have {item} dollars", "I'm {item} years old") rendered "I have one
+  # dollars" / "I'm one years old" — a grammar error baked into the
+  # render_frame answer key. count_plural_no_hundred (already in
+  # _en_target_lexeme_common.py) drops BOTH "one" and "hundred", the tag built
+  # for exactly this "bare number + already-plural noun" case.
   number_no_hundred: &id002
     language_code: en
     part_of_speech: noun
     agreement_tags:
-      semantic: number_no_hundred
+      semantic: count_plural_no_hundred
   market_noun: &id003
     language_code: en
     part_of_speech: noun
@@ -365,8 +372,11 @@ templates:
 - content_key: practice.nl-en.en.a1.unit03.lesson02.number_sentence.001.volume_fill.011
   lesson_content_key: en.a1.unit03.lesson02.eleven_to_hundred
   type: fill_in_blank
+  # Frame singularized 2026-07-27 (native review): this slot is hard-pinned to
+  # the singleton "one", so the plural "dollars" rendered "I have one dollars".
+  # "one dollar" is the grammatical form for the pinned value.
   frame:
-    text: I have {item} dollars
+    text: I have {item} dollar
     language_code: en
     direction: ltr
   slots:
@@ -385,8 +395,10 @@ templates:
 - content_key: practice.nl-en.en.a1.unit03.lesson03.age_order.001.volume_fill.012
   lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
   type: fill_in_blank
+  # Frame singularized 2026-07-27 (native review): slot hard-pinned to "one",
+  # so plural "years" rendered "I'm one years old"; "one year old" is correct.
   frame:
-    text: I'm {item} years old
+    text: I'm {item} year old
     language_code: en
     direction: ltr
   slots:
