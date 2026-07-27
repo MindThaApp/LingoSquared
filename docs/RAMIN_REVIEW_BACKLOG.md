@@ -55,6 +55,17 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 3 (2026-07-27, IN PROGRESS): next pre-recipe a1 band
+
+fa-en a1_02/03/04/06/08, prs-en a1_06-10, nl-en a1_04/06/07/08/09, en-nl a1_06-10 (4 sonnet
+reviewers). **nl-en reported first:** a1_04/06/08/09 CLEAN (verified 0 DEAD, self-ref, register).
+a1_07 two findings — (1) FIXED: menu_meaning.001 hard-coded "{item} - $3" for every item → bare
+"{item}" (wrong price for tea/soup/sandwich). (2) QUEUED wave: "I'd like a {item}, please" +
+cafe_order.002 include "bread" (uncountable → "I'd like a bread, please"); fix = a narrower
+`food_item_orderable` tag excluding bread (mirrors the existing food_item_non_sandwich pattern),
+backfill_lexemes_nl_en.py, deploy-effect. fa-en / prs-en / en-nl batch-3 reviewers still running
+at handoff — their findings will notify into the next session (process per docs/SESSION_HANDOFF_2026-07-27.md).
+
 ## ⭐ Native review — BATCH 2 (2026-07-27): 4 dirs' pre-recipe a1 reviewed; 1 CRITICAL fixed, rest = waves
 
 Batch 2 = 4 fresh-context sonnet reviewers over the pre-recipe a1 band of the 4 launch directions not
