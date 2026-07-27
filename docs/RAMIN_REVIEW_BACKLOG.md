@@ -11,6 +11,50 @@ or owner-reserved decisions interrupt Ramin. Everything else lands here.
 
 ---
 
+## ⭐ Native review — BATCH 1 (2026-07-27): 20 wave-4 packs reviewed + fixed + flipped
+
+Fresh-context native review (4 sonnet reviewers, AUTHORING_PREFLIGHT.md + realization/overlay +
+live backfill-pool cross-check) of the 20 packs edited in wave 4: en-fa a1_31-36, a2_12/13/14/16,
+b1_01/02/03/04/06/11 + en-prs a1_06/25/26/36. All 20 now `review.status: reviewed`. This is
+batch 1 of the full 509-pack native-review ship-gate (489 remain — see the note at the end).
+
+**CRITICAL found + FIXED (commit 9ce89823):** en-fa units 31-36 lesson01 choose.001 /
+translate.003 / volume_translate drew the units' **junk label-phrase lexemes** (POS 'phrase'
+authoring-label strings the backfill persists because `_label_guarded` is scoped to 25-30/37-57,
+leaving 31-36 in the gap — 51 such rows corpus-wide, 35 in 31-36). choose.001 showed the English
+answer inside the prompt; translate.003's only accepted answer was the unanswerable label string —
+a real checkpoint mis-grade. Fixed pack-side (narrowed those 18 item slots to
+[noun,verb,adjective,adverb], excluding all 'phrase' lexemes). NOTE: the same unrestricted-phrase
+pools exist in en-fa units 53-57 + b1_08-16 (no in-unit junk, so only course-scope Endless-Practice
+exposure — lower severity, NOT yet fixed); and the durable source fix (widen `_label_guarded` +
+delete the 51 persisted rows) still needs a dev DB (BLOCKED).
+
+**MAJOR found + FIXED (commit bca647be):**
+- Mis-glossed lexeme shown as the answer (lesson-scoped backfill gloss overrides; take effect on
+  re-backfill): en-fa `باشید` "be (polite)" → "(if) you (pl.) be" in b1_03's subjunctive paradigm;
+  en-prs `خراب` "broken" → "bad; broken" in a1_25 (weather sense).
+- False unit-attribution feedback over untagged course-scope pools (anchored the shared presets to
+  the wave-4 generated unit tags): en-prs a1_25 adverb_word_pool, a1_26 unit_noun_pool +
+  verb_adjective_pool; en-prs a1_06 people_choose.001 feedback genericized (role_word can draw
+  مشتری from a1_08); en-fa b1_01 lesson04.choose.001 dropped `symbol` (was drawing و glossed
+  "and (links tens+units)").
+
+**RESIDUAL — MINOR / known-limitation (NOT blocking; documented, not fixed):**
+- **Systemic course-scope synonym-collision (corpus/compiler-level):** at Endless-Practice course
+  scope, broad no-semantic-tag MC pools can draw two synonyms with the identical gloss (اگه/اگر
+  "if"; نتونستم/نمی‌تونستم "I couldn't") → two correct MC options. Reachable in en-fa b1_01/02/03/
+  04/06/11 choose.001 (and the already-disclosed A2 بیایید/بیاید, خوب/خوبی). Low per-instance
+  probability; NOT fixable per-pack — needs a runtime/compiler pool-distinctness check OR
+  gloss disambiguation in backfill_lexemes.py. Queued as a corpus-level item.
+- en-fa b1_04/06/11 stale review.notes claim a "dedicated bare-word proper_noun translate" that
+  doesn't exist in those files (only b1_03 has it) → those units' person names are unreachable by
+  any generated exercise. MINOR (coverage gap, not a mis-grade).
+- en-prs a1_36 overlay lesson06 translate_wrap_summary accepts a و-joined variant for an اما
+  ("but") source — MINOR meaning-drift in one accepted answer.
+- en-fa a2_12 نیما self-gloss in match.002 (author-disclosed tradeoff, pool drops to 5 without it);
+  a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
+  b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
+
 ## ⭐ Overnight deep-review + fix waves (2026-07-23 night) — READ THIS FIRST
 
 **Headline / ship-readiness verdict:** the checkpoint publish-gate only ever
