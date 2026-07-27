@@ -157,6 +157,18 @@ was flipped to `review.status: unreviewed` — they need a fresh-context native 
   literal-duplicate template pairs and 0 bare-placeholder feedback_frames remain. The surviving
   `volume_*` templates are intentional second-review sets, each carrying a distinguishing
   `text_blocks` header, not duplicates.)**
+- **Below-floor matchers (116, the "optional wave") — ASSESSED 2026-07-27, intentionally NOT
+  forced.** Below-floor = a matching_pairs with <6 pairs; it is a recipe *preference*, not a
+  gate (the publish/availability gate is maxed at ~92% and unaffected; 4-5-pair matchers generate
+  and grade fine). Programmatic capacity analysis (current-slots vs same-constraint unit-scoped
+  pool): only **6** of the 116 under-use a ≥6 same-theme pool; the other **110 are pool-limited**
+  — their theme has <6 unit-scoped tokens, so raising them needs an off-theme union, which
+  re-introduces exactly the Endless-Practice incoherence wave 3/4 removed ("a wrong union is worse
+  than the status quo"). The 6 "raisable" are all en-nl a2 units (27/28/74/75/77) and are marginal
+  or net-negative: a2_75's two matchers share one 6-token pool (raising both → duplicate matchers);
+  a2_28's pool is exactly 6 (raising → zero-slack exact-fit). Conclusion: the 110 stay honest-thin;
+  the ~6 are low-value churn on non-launch-gating units. If Ramin wants the floor enforced anyway,
+  the 3 with real slack (a2_27 pool 7, a2_74 pool 8, a2_77 pool 7) are the clean candidates.
 - ~~**`proper_noun` self-gloss (§6.1):** en-prs a1_02 name_gloss now has 3/4 name-gloss options
   after a re-auth widening ("spot the non-name" instead of translation). Narrow that one slot.~~
   **FIXED 2026-07-24** (commit c2e6caba): re-anchored to noun-only name_word∪relationship_word∪title
