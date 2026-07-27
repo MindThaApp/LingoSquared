@@ -2604,7 +2604,20 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "bij_de_toonbank_in_de_dierenwinkel": "pet_shop_counter_dialogue",
         "nina_hoort_over_de_dierenwinkel": "pet_shop_wrapup_dialogue",
     }
-    semantic.append(lesson_categories[unit_lesson])
+    # Grammar-note METALABELS (native review 2026-07-27): these tokens are
+    # introduced INSIDE the number/weekday/month lessons only to EXPLAIN the
+    # system (eenheid "unit", tiental "multiple of ten", behalve "except",
+    # hoofdletter "capital letter", dag/Dagen, Maanden, jaar "year"), so the
+    # blanket lesson-category tag below wrongly marked them as number/weekday/
+    # month candidates -- a matching/MC/translate slot then served nonsense
+    # like "hoofdletter is the month you heard" (checkpoint-scope, in-unit).
+    # Hold them out of those counting/calendar categories; they keep POS-only.
+    _cat = lesson_categories[unit_lesson]
+    _METALABELS = {"eenheid", "tiental", "behalve", "hoeveel", "hoofdletter",
+                   "dag", "dagen", "maanden", "jaar"}
+    if not (_cat in {"number", "weekday", "month", "ordinal_number"}
+            and t in _METALABELS):
+        semantic.append(_cat)
     if t in {"jij", "je"}: semantic.append("informal_address")
     if t == "u": semantic.append("polite_address")
     if token in {"Hallo", "Hoi", "Goedemorgen", "Goedemiddag", "Goedenavond"}: semantic.append("greeting")

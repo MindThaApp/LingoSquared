@@ -85,11 +85,15 @@ pools + the real grading code. **FIXED this session (commit for nl-en/prs-en a1_
    wellbeing_translate.004, politeness_translate.003 (post-union), practice_translate.905 (POS-only)
    show only «خوب» and grade one specific English word → underdetermined. Fix: exclude collision
    members from translation-type consumers (recipe defect 1.29 class).
-5. **en-nl blanket-tag contamination (CRITICAL, corpus-wide)** — see the detailed write-up below; the
-   `number`/`weekday`/`month`/`hour_number`/`informal_address` pools carry grammar-note METALABELS
-   (eenheid/tiental/behalve/Hoeveel/hoofdletter/Dagen/Maanden/jaar → in-unit → checkpoint mis-grade)
-   and CAPITALIZED sentence-initial variants (course-scope). Fix wave = metalabel-exclusion +
-   `_pure` exact-case tags + pack repoints in backfill_lexemes_en_nl.py.
+5. **en-nl blanket-tag contamination (CRITICAL, corpus-wide) — METALABEL PART FIXED 2026-07-27.**
+   backfill_lexemes_en_nl.py now holds the grammar-note metalabels (eenheid/tiental/behalve/hoeveel/
+   hoofdletter/dag/dagen/maanden/jaar) out of the number/weekday/month/ordinal_number blanket
+   category (verified: those pools are metalabel-free; real numbers/weekdays/months intact; ledger
+   unchanged, 0 DEAD). This removes the CHECKPOINT-scope "hoofdletter is the month you heard" class.
+   STILL OPEN (course-scope, lower severity): the CAPITALIZED sentence-initial variants (Maandag/
+   Vrijdag/Nul/Twaalf/Jij…) still casefold-match into number/weekday/month/hour_number/
+   informal_address via the explicit appends — needs `_pure` exact-case tags (weekday_pure already
+   exists) + repointing the mid-sentence-frame templates. Deploy-effect.
 6. **prs-en overlay Dari spelling (MAJOR, needs native confirm).** a1_04 overlay glosses "month" as
    «مهی» 26× (standard «ماه» appears 393× elsewhere — almost certainly a dropped-vowel typo);
    a1_03 glosses "number" as «شمیر» in titles/instructions (standard «شماره»/«عدد» dominate — LESS
