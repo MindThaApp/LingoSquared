@@ -24,6 +24,8 @@ review:
     matching_pairs instead.
 
     POLISH WAVE 4 (2026-07-26, commit 05af7ace-successor generated tags): the POS-only honest-leave above is RESOLVED. scripts/backfill_lexemes.py now emits en_fa_a1_unit36_words (and per-lesson en_fa_a1_unit36_lessonNN_words) for every first-introduced content token in this unit, so the matching_pairs slot(s) are re-anchored off bare part_of_speech onto en_fa_a1_unit36_words (26 distinct unit-scoped tokens, each matcher's own content parts of speech (lesson01 [noun,verb,adjective,adverb], shared with its volume_match.001 alias; lesson02 [adjective])); course-scope Endless-Practice pool == unit pool by construction, so the off-theme pulls are eliminated. No duplicate-gloss collisions in the resulting pool. Verified with pool_check.py + unit-scope check (0 DEAD, floor holds).
+
+    CRITICAL FIX 2026-07-27 (native review): lesson01.choose.001, translate.003 and its volume_translate were drawing this unit's junk label-phrase lexemes (POS 'phrase' tokens like 'امروز (today) / سال (year) / ...' -- authoring labels the backfill persists because _label_guarded is scoped to units 25-30/37-57, leaving 31-36 in the gap). choose.001 showed the English answer inside the prompt; translate.003's only accepted answer was the unanswerable label string. Narrowed all three item slots from the full unit_word POS list to [noun,verb,adjective,adverb] (mirrors match.002), excluding every 'phrase' lexeme and thus all the junk. Durable source fix (widen _label_guarded + delete the persisted rows) still needs a dev DB and is queued in the backlog.
 tag_schema:
   part_of_speech:
   - symbol
@@ -65,15 +67,10 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -138,15 +135,10 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
   answer_derivation:
     kind: slot_text
     slot: item
@@ -315,15 +307,10 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
   answer_derivation:
     kind: slot_text
     slot: item
