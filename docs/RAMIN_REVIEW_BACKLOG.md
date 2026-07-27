@@ -90,10 +90,18 @@ pools + the real grading code. **FIXED this session (commit for nl-en/prs-en a1_
    hoofdletter/dag/dagen/maanden/jaar) out of the number/weekday/month/ordinal_number blanket
    category (verified: those pools are metalabel-free; real numbers/weekdays/months intact; ledger
    unchanged, 0 DEAD). This removes the CHECKPOINT-scope "hoofdletter is the month you heard" class.
-   STILL OPEN (course-scope, lower severity): the CAPITALIZED sentence-initial variants (Maandag/
-   Vrijdag/Nul/Twaalf/Jij…) still casefold-match into number/weekday/month/hour_number/
-   informal_address via the explicit appends — needs `_pure` exact-case tags (weekday_pure already
-   exists) + repointing the mid-sentence-frame templates. Deploy-effect.
+   STILL OPEN (needs the `_pure`-tag + repoint wave, NOT an exclusion):
+   (a) the weekday/month/number blanket also tags grammar-note SENTENCE words beyond the curated
+   metalabel set (e.g. "Dagen krijgen normaal geen hoofdletter" → geen/het/krijgen/normaal still
+   carry "weekday"); (b) the CAPITALIZED sentence-initial variants (Maandag/Twaalf/Jij…) still
+   casefold-leak. **LEARNING 2026-07-27: do NOT fix these by excluding caps / blanket-skipping —
+   tried it, it caused 7 DEAD (a1_11/a1_19/b1_09), because some units introduce their OWN
+   weekday/number tokens in capitalized/sentence form, so those ARE the unit's only candidates;
+   excluding them empties the unit-scope checkpoint pool.** The correct fix is the reviewer's:
+   add exact-case `_pure` tags (weekday_pure exists; add number_pure/month_pure/hour_number_pure/
+   informal_address_pure = real lowercase members only) and repoint ONLY the mid-sentence-frame
+   templates to them, leaving "weekday"/"number"/… (both cases, all lesson tokens) for unit-scope
+   satisfiability. Then narrow the affected translate/order/listen templates. Deploy-effect.
 6. **prs-en overlay Dari spelling (MAJOR, needs native confirm).** a1_04 overlay glosses "month" as
    «مهی» 26× (standard «ماه» appears 393× elsewhere — almost certainly a dropped-vowel typo);
    a1_03 glosses "number" as «شمیر» in titles/instructions (standard «شماره»/«عدد» dominate — LESS
