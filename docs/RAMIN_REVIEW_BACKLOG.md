@@ -55,16 +55,109 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
-## ⭐ Native review — BATCH 3 (2026-07-27, IN PROGRESS): next pre-recipe a1 band
+## ⭐ Native review — BATCH 3 (2026-07-27, ALL 4 REPORTED): next pre-recipe a1 band
 
 fa-en a1_02/03/04/06/08, prs-en a1_06-10, nl-en a1_04/06/07/08/09, en-nl a1_06-10 (4 sonnet
-reviewers). **nl-en reported first:** a1_04/06/08/09 CLEAN (verified 0 DEAD, self-ref, register).
-a1_07 two findings — (1) FIXED: menu_meaning.001 hard-coded "{item} - $3" for every item → bare
-"{item}" (wrong price for tea/soup/sandwich). (2) QUEUED wave: "I'd like a {item}, please" +
-cafe_order.002 include "bread" (uncountable → "I'd like a bread, please"); fix = a narrower
-`food_item_orderable` tag excluding bread (mirrors the existing food_item_non_sandwich pattern),
-backfill_lexemes_nl_en.py, deploy-effect. fa-en / prs-en / en-nl batch-3 reviewers still running
-at handoff — their findings will notify into the next session (process per docs/SESSION_HANDOFF_2026-07-27.md).
+reviewers, all completed & coordinator-reviewed). **FIXED + committed this batch:**
+- **nl-en a1_07 menu_meaning.001** hard-coded "{item} - $3" for every item → bare "{item}" (wrong
+  price for tea/soup/sandwich). Commit 76d519de.
+- **prs-en a1_08 پونډ→پوند** (HIGH): the shopping overlay used Pashto/Urdu retroflex پونډ throughout
+  (28×) instead of Dari پوند, incl. inside a graded distractor value the learner sees. Repo-wide
+  replace in that overlay only; graded correct answers unaffected. Commit 359d85be.
+
+**QUEUED fix-waves from batch 3 (none blocking; ranked by value):**
+
+**★ TOP AUTONOMOUS ITEM — en-nl `_distractor_values` casefold-dedup (BACKEND, one change, corpus-wide,
+IMMEDIATE runtime effect, NO re-backfill needed).** Root cause found by the en-nl reviewer:
+`_distractor_values()` in `backend/app/practice/service.py` (~lines 351–388; the dedup is the
+`list(dict.fromkeys(options))` + `str(value) != answer` at ~:386) dedupes multiple_choice /
+listen_select option lists by EXACT string equality only. Many semantic-tag pools contain the same
+word twice as separate Lexeme rows — a lowercase form and a capitalized sentence-initial/label form
+with different-cased glosses (`apples`/`Apples`, `library`/`Library`, `the route`/`Route`,
+`buurtkaart`/`BUURTKAART`, `rechtdoor`/`Rechtdoor`). When the other case-variant survives into the
+random 3-of-N distractor draw, the learner sees TWO options meaning the identical thing, only one
+graded correct — a real "more than one defensible answer" violation reachable in live sessions.
+Confirmed exposed: en-nl a1_07 (`produce`, 3 templates), a1_08 (`place`/`place_non_station`, 7
+templates), a1_09 (`direction_word` + `route_map`, 9 templates). This is CROSS-DIRECTION — any dir
+whose MC/listen templates read a tag with a lowercase/Capitalized lexeme pair is exposed the same
+way. **Fix: dedupe candidate options by casefold (or drop same-token-different-case rows) before
+sampling distractors.** CAUTIONS for whoever implements: (a) don't shrink a pool below the option
+floor — if casefold-dedup drops the pool under the needed distractor count, fall back gracefully;
+(b) dedupe on the DISPLAY value/gloss the learner sees, keeping the graded answer; (c) run the
+backend test suite (look under `backend/` + `scripts/tests/`) — this is generation-time logic that
+grading/checkpoint paths lean on. word_order/translation templates are UNAFFECTED (they don't call
+`_distractor_values`). This is the elegant fix; the content-side alternative (add `_pure` exact-case
+sibling tags for produce/place/direction_word/route + repoint every MC/listen template) is
+deploy-effect and touches ~19 templates — only worth it if the backend fix is rejected.
+
+**en-nl a1_09 `route_word`/`route_map` blanket-tag contamination (same class as batch-2 item 5).**
+The blanket per-lesson tagger (`lesson_categories["route_op_de_kaart"]="route_map"`,
+backfill_lexemes_en_nl.py ~:2074) stamps `route_map` onto EVERY token in the route lesson, so the
+real pool is 10 members incl. unit01/unit08 place nouns (station/bibliotheek/buurtkaart), not the 4
+the 2026-07-24 "fix" claimed. Consequence: false "this unit's route/map word" feedback over place
+nouns, plus more case-dups feeding the bug above. Fix: give `route_word` its own narrow literal-set
+tag `{route, START, DOEL}` (like `place`/`direction_word` already do) instead of the blanket
+category. Deploy-effect. NOTE the 2026-07-24 route_word re-anchor is itself defective — its
+"verified 4 candidates" was wrong (real 10).
+
+**en-nl a1_08 `voor` stale/wrong-sense gloss (MEDIUM).** lesson03.translate.004 draws `voor` from
+the `position` preset; `NL_GLOSSES["voor"]` = "for; about" (canonical unit01 purpose-sense), but
+this lesson drills the POSITIONAL sense "in front of" (its own overlay note flags the homograph).
+Learner sees "Translate: for; about" inside an achter/voor location lesson — defensible but
+wrong-sense. Fix: hardcode this template's slot to `{naast, tegenover, achter}` OR give `voor` a
+position-specific gloss override. Deploy-effect (gloss) or pack-side (slot narrow).
+
+**en-nl a1_09 lesson06.translate.003 "Ga links."/"Ga rechts." (LOW-MEDIUM, native confirm).** The
+`direction_word` slot includes bare links/rechts, but every attested Dutch direction-command in the
+course pairs Ga/Sla only with -af forms or rechtdoor ("Ga rechtdoor.", "Sla linksaf."). "Ga links."
+is unattested (grep = 0 hits) and reads awkward. Confirm with a native speaker or narrow slot to
+`{linksaf, rechtsaf, rechtdoor}`. (en-nl a1_06 + a1_10 CLEAN.)
+
+**fa-en a1_03 "much" leaked-annotation-gloss (CRITICAL).** lesson03.vocab_translate.006 is a bare
+`{item}` frame rendering `english_gloss` over the `lesson3_word` union; the course gloss for "much"
+is «چقدر (در how much)» — so the Farsi PROMPT literally embeds the English answer "how much", while
+grading accepts ONLY the exact string "much" (a learner typing "how much" is marked wrong). Same
+annotation-bleed for "old"→«سال قدمت‌داشتن (در بیان سن یا قدمت)» and "dollars"→«دلار (جمع)». Fix:
+exclude much/old/dollars from this template's pool (or accept "how much"/"how" alternates) AND give
+any sole-frame-rendered slot a CLEAN display gloss, not the parenthetical authoring-note gloss.
+Deploy-effect if fixed via backfill gloss; pack-side if the slot pool is narrowed. Pool analysis
+needed — mixed POS (adv/adj/noun), so no clean POS-narrow.
+
+**fa-en PACK feedback_frame register violation (MAJOR, systemic — likely ALL fa-en packs).** Every
+feedback_frame in fa-en a1_02/03/04/06/08 uses FORMAL written Persian (کنید / می‌کند / می‌شود) while
+the sibling overlays for the SAME units are colloquial (کنین / می‌شه — 31–46 hits each), per the
+CLAUDE.md fa-en register pin. This is the batch-2 W5 register class but on PRACTICE-PACK feedback
+text, not overlays. Clean pack-side (feedback_frame is display-only; graded values untouched) — a
+focused colloquial-conversion sweep over fa-en pack feedback_frames (a1 at least, probably all).
+Same footgun likely in prs-en pack feedback (Dari colloquial) — check when swept.
+
+**prs-en a1_10 place_listen.004 within-unit forward-reference (MEDIUM-HIGH).** lesson02's template
+draws from `direction_review` which includes lesson03 vocab (street_ordinal/neighborhood_noun) → a
+lesson02 exercise references not-yet-taught words. Fix: narrow lesson02's slot to `turn_direction`
+alone, or move the exercise to lesson03+. Pack-side.
+
+**food_item_orderable wave (nl-en a1_07 + prs-en a1_07).** "I'd like a {item}, please" / cafe_order
+include "bread" (uncountable → "I'd like a bread, please"). Fix = a narrower `food_item_orderable`
+tag excluding bread (mirrors food_item_non_sandwich), in the respective backfill_lexemes_*.py.
+Deploy-effect. CHECK all X-en directions' a1_07 (shared realization).
+
+**prs-en small backfill-gloss fixes (LOW, inert until re-backfill).** a1_06 "who" glossed «کیا»
+(Urdu) should be Dari «کی»; a1_07 "cafe" glossed «کیفی» should be «کافه». Both are backfill gloss
+overrides, deploy-effect, no runtime effect today. (prs-en a1_09 CLEAN.)
+
+**Honest-thin / benign / soft (NO action needed — documented for completeness):**
+- fa-en a1_04 month_pair.003 (5 pairs, genuine 5-month ceiling) + a1_06 family_pair.003 (4 pairs,
+  genuine 4-member family pool): disclosed FLOOR items, part of the assessed 116 below-floor. Leave.
+- fa-en a1_08 audit-note inaccuracy: the pack's note claims "apples excluded" but apples (unit03,
+  food_plural noun) IS a valid 8th candidate; benign (cumulative reuse is fine, bare {item} frames).
+  Optionally correct the note.
+- fa-en soft character-canon: unit02 casts Leila as a student/new-library-member; unit03/08 market
+  dialogues implicitly cast her as the vendor. Not a hard contradiction; Ramin's call.
+- shared realization a1_unit02 audio/text mismatch ("What's your name?" vs tested_text "What is your
+  name") — pre-audio-recording, cross-direction (already noted in batch 2).
+
+**CLEAN in batch 3 (flippable to reviewed):** nl-en a1_04/06/08/09; en-nl a1_06/a1_10; prs-en a1_09.
+(Packs with an open finding above are NOT flipped yet.)
 
 ## ⭐ Native review — BATCH 2 (2026-07-27): 4 dirs' pre-recipe a1 reviewed; 1 CRITICAL fixed, rest = waves
 
