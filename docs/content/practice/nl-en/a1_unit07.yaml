@@ -114,10 +114,15 @@ templates:
   - content_key: practice.nl-en.en.a1.unit07.lesson03.menu_meaning.001
     lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
     type: multiple_choice
-    frame: {text: "{item} - $3", language_code: en, direction: ltr}
+    # Frame fixed 2026-07-27 (native review): "{item} - $3" hard-coded $3 for
+    # EVERY drawn food_item, but the unit's menu is coffee $3 / tea $2 / soup
+    # $5 / sandwich $6, so it rendered wrong prices ("Sandwich - $3") the
+    # learner was just taught otherwise. Bare "{item}" (a slot_gloss MC) like
+    # the pack's other choose templates; the graded answer is unchanged.
+    frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *food_item}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het menu-item op deze prijskaart.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een menu-item.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit07.lesson03.menu_pair.002
     lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
     type: matching_pairs
