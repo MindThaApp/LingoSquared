@@ -55,6 +55,77 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 2 (2026-07-27): 4 dirs' pre-recipe a1 reviewed; 1 CRITICAL fixed, rest = waves
+
+Batch 2 = 4 fresh-context sonnet reviewers over the pre-recipe a1 band of the 4 launch directions not
+in batch 1: fa-en a1_01/05/07/14/17, prs-en a1_01-05, nl-en a1_01/02/03/05/16, en-nl a1_01-05 (20
+packs). Reviewers cross-checked against the English/Dutch realizations + L1 overlays + live backfill
+pools + the real grading code. **FIXED this session (commit for nl-en/prs-en a1_03):**
+- **CRITICAL plural-number agreement** (nl-en a1_03 "one", prs-en a1_03 "hundred"): plural-noun
+  render frames drew a number that breaks agreement ("I have one dollars", "I'm hundred years old")
+  as the GRADED answer. Repointed both to `count_plural_no_hundred`; nl-en's two singleton-pinned
+  volume_fills singularized. DONE.
+
+**REMAINING batch-2 findings — QUEUED as fix-waves (none fixed yet; several systemic/deploy-effect):**
+1. **"I'm bad" / "Good day" untaught-in-bare-frame (CRITICAL/MAJOR, 4 directions).** `variety_wellbeing_
+   order` + its volume_fill (hard-pinned to "bad") render "I'm bad." (never taught; the unit teaches
+   "Not bad, thanks."); `variety_time_order` renders "Good day" (dated/untaught). Reachable in
+   fa-en/nl-en/prs-en a1_01 (+ en-nl analog). Fix: exclude bad/day from these bare-frame pools and
+   re-pin/retire the deterministic volume_fill singletons.
+2. **fa-en OVERLAY register violation (MAJOR, systemic).** fa-en a1_01/05/07/14 overlays use FORMAL
+   written Persian (کنید, می‌شود) in instruction/feedback/note strings; the pin is colloquial spoken
+   Persian (کنین, می‌شه). a1_17 is the compliant control. 13–24 formal hits/pack. Fix: colloquial
+   conversion sweep over the early fa-en overlays (likely all a1, not just these 4).
+3. **fa-en a1_07 stale price overlay (CRITICAL, realization/overlay desync).** The realization fixed
+   a coffee+sandwich total $6→$9 but the fa-en overlay still says «شش دلار / six dollars» in
+   teach.thats_x_dollars, teach.closing_price, and exercise02.listen_price (graded answer + feedback
+   both wrong). Fix: update those 3 overlay entries to «نه دلار / nine dollars». Classic
+   realization+overlay-pairing footgun — CHECK the other directions' unit07 overlays for the same.
+4. **fa-en a1_01 gloss-collision translations (CRITICAL).** good/fine/okay all gloss «خوب»;
+   wellbeing_translate.004, politeness_translate.003 (post-union), practice_translate.905 (POS-only)
+   show only «خوب» and grade one specific English word → underdetermined. Fix: exclude collision
+   members from translation-type consumers (recipe defect 1.29 class).
+5. **en-nl blanket-tag contamination (CRITICAL, corpus-wide)** — see the detailed write-up below; the
+   `number`/`weekday`/`month`/`hour_number`/`informal_address` pools carry grammar-note METALABELS
+   (eenheid/tiental/behalve/Hoeveel/hoofdletter/Dagen/Maanden/jaar → in-unit → checkpoint mis-grade)
+   and CAPITALIZED sentence-initial variants (course-scope). Fix wave = metalabel-exclusion +
+   `_pure` exact-case tags + pack repoints in backfill_lexemes_en_nl.py.
+6. **prs-en overlay Dari spelling (MAJOR, needs native confirm).** a1_04 overlay glosses "month" as
+   «مهی» 26× (standard «ماه» appears 393× elsewhere — almost certainly a dropped-vowel typo);
+   a1_03 glosses "number" as «شمیر» in titles/instructions (standard «شماره»/«عدد» dominate — LESS
+   certain, could be a variant). Fix: مهی→ماه is safe; شمیر needs a Dari reference / Ramin's call
+   before touching. (These are overlay TEACHING glosses, not practice-grading data.)
+7. **MINORs:** prs-en a1_05 "afternoon" glossed «بعد از ظهر» vs the course convention «بعد از چاشت»
+   (unit01); nl-en a1_16 + en-nl a1_04 "this unit's own word" feedback over untagged course pools
+   (same false-attribution class fixed in batch 1 — anchor to unit tags); shared realization
+   a1_unit02 audio/text mismatch ("What's your name?" contracted vs "What is your name" tested_text —
+   cross-direction, pre-audio-recording fix).
+
+**CLEAN in batch 2 (no open findings):** fa-en a1_17, nl-en a1_02, nl-en a1_05 (post-rebuild),
+en-nl a1_05, prs-en a1_02 — flippable to reviewed. Everything else in batch 2 has an open finding above.
+
+### en-nl blanket-tag contamination (detail)
+
+**en-nl blanket-tag contamination (CRITICAL, corpus-wide).** `backfill_lexemes_en_nl.py` tags every
+introduced_token in a lesson with that lesson's category tag, so grammar-note METALABELS and
+CAPITALIZED sentence-initial variants leak into the `number`/`weekday`/`month`/`hour_number`/
+`informal_address` pools:
+- Metalabels (in-unit → **checkpoint** mis-grade): `eenheid` "unit", `tiental` "multiple of ten",
+  `behalve` "except", `Hoeveel` "how many" in `number` (unit02); `hoofdletter` "capital letter",
+  `dag`/`Dagen` in `weekday` and `hoofdletter`/`Maanden`/`jaar` in `month` (unit03). A drilled
+  "eenheid is the number you heard" / "hoofdletter is this month" is nonsense shown as ground truth.
+- Capitalized variants (later-unit → **course-scope** Endless-Practice only): `Nul`/`Twaalf`/`Twee`/
+  `Jij`/`Je`/`Donderdag` render a wrong mid-sentence capital baked into the render_frame answer key
+  (`Het is Twaalf uur.`, `Ben Jij nieuw hier?`).
+The backfill already has the fix PATTERN (`weekday_pure` exact-case tag, used by matching_pairs; a
+non-casefold guard on `possessive_flexible`) but it was never extended to number/month/hour_number/
+informal_address or to the translate/order/listen templates that still read the contaminated tags.
+**Fix wave (queued):** (a) exclude the metalabels from the category tags in backfill_lexemes_en_nl.py
+(METALABEL set, like the Persian METALANGUAGE_TOKENS); (b) add `_pure` exact-case tags for
+number/month/hour_number/informal_address; (c) repoint the affected en-nl templates (all units, not
+just a1_01-05) off the contaminated tags. Deploy-effect (runtime pools come from the DB re-backfill).
+fa-en/prs-en/nl-en batch-2 reviewers still running; findings will fold in here.
+
 ## ⭐ Overnight deep-review + fix waves (2026-07-23 night) — READ THIS FIRST
 
 **Headline / ship-readiness verdict:** the checkpoint publish-gate only ever

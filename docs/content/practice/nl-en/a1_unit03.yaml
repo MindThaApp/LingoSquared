@@ -4,39 +4,42 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit03.numbers
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-05 by the Claude session syncing Endless Practice template pools to lesson content growth, per
+  status: reviewed
+  fresh_context: 'true'
+  notes: >-
+    Authored 2026-07-05 by the Claude session syncing Endless Practice template pools to lesson content growth, per
     an explicit scope split from the coordinator (a separate agent covers en-fa/fa-en/en-prs; this session covers nl-en only).
     Keyed to English target lexemes extended into the SHARED scripts/_en_target_lexeme_common.py (EN_POS/en_agreement_tags,
     used by all three X->en backfill scripts: nl-en, fa-en, prs-en, since they teach the identical English realization) plus
-    this pair''s own Dutch glosses/source-side tokens added to scripts/backfill_lexemes_nl_en.py. Flagging the shared-file
+    this pair's own Dutch glosses/source-side tokens added to scripts/backfill_lexemes_nl_en.py. Flagging the shared-file
     dependency explicitly: extending fa-en/prs-en to this same unit03 only needs their own gloss dicts added on top of the
     POS classification already done here, not a re-classification of the English tokens. Deliberately avoided two grammar-agreement
-    traps while designing slots: did not slot on the 2-member ''age_phrase'' tag (old/years) as alternatives -- they are BOTH
-    required together in ''years old'', not interchangeable, so the number itself (a safe 22-member tag) is the only slotted
-    quantity in those templates; and added a narrower ''place_singular'' tag (market/shop only, excluding ''apples'') so ''Daniel
-    is at the {item}.'' can never generate the ungrammatical ''Daniel is at the apples.'' Every slot''s real candidate count
-    was verified with a standalone harness replicating the engine''s lexeme_matches() logic against the real backfill_lexemes_nl_en.iter_specs()
+    traps while designing slots: did not slot on the 2-member 'age_phrase' tag (old/years) as alternatives -- they are BOTH
+    required together in 'years old', not interchangeable, so the number itself (a safe 22-member tag) is the only slotted
+    quantity in those templates; and added a narrower 'place_singular' tag (market/shop only, excluding 'apples') so 'Daniel
+    is at the {item}.' can never generate the ungrammatical 'Daniel is at the apples.' Every slot's real candidate count
+    was verified with a standalone harness replicating the engine's lexeme_matches() logic against the real backfill_lexemes_nl_en.iter_specs()
     output (not just compiler validation, which never touches the database) -- confirmed >=4 candidates for every multiple_choice/listen_select
     slot and >=1 for every other slot. The underlying en realization unit03 IS fresh-context reviewed already (status: reviewed)
     but the nl-en overlay itself is still unreviewed, same as every other nl-en unit past 02 -- needs the standard fresh-context
     review before import, same bar as every other pack. Also still blocked on the same DB-level gap documented for en-nl:
     no backfill_lexemes_nl_en.py run has actually happened against a real database for unit03 yet. FOLLOW-UP FIX 2026-07-06:
-    a fresh-context reviewer flagged that the 22-member ''number'' tag includes bare ''hundred'' with no article, but the
-    real lesson only teaches ''one hundred'' -- bare ''hundred'' drawn into lesson02/lesson03''s price/age sentence frames
-    produced real, shipped nonsense like ''I have hundred dollars.''/''I''m hundred years old.'' Fixed by adding a new ''number_no_hundred''
-    tag (21 members, number minus ''hundred'') to scripts/_en_target_lexeme_common.py and re-pointing every template that
+    a fresh-context reviewer flagged that the 22-member 'number' tag includes bare 'hundred' with no article, but the
+    real lesson only teaches 'one hundred' -- bare 'hundred' drawn into lesson02/lesson03's price/age sentence frames
+    produced real, shipped nonsense like 'I have hundred dollars.'/'I'm hundred years old.' Fixed by adding a new 'number_no_hundred'
+    tag (21 members, number minus 'hundred') to scripts/_en_target_lexeme_common.py and re-pointing every template that
     embeds the number mid-sentence (lesson02.number_sentence/ number_fill, lesson03.age_order/price_fill/age_translate/price_listen)
-    to it -- bare-word recognition templates (lesson01''s four, lesson02''s number_translate.003, lesson04''s market_number.001)
-    correctly kept the broad ''number'' tag since no article is needed there. Re-verified with both compile_content.py practice-validate
-    (0/0) and a standalone harness confirming ''hundred'' is no longer reachable in any of the fixed slots. 2026-07-06 matching_pairs
+    to it -- bare-word recognition templates (lesson01's four, lesson02's number_translate.003, lesson04's market_number.001)
+    correctly kept the broad 'number' tag since no article is needed there. Re-verified with both compile_content.py practice-validate
+    (0/0) and a standalone harness confirming 'hundred' is no longer reachable in any of the fixed slots. 2026-07-06 matching_pairs
     widening (AUTHORING_GUIDE.md #16): expanded the number (noun) matching_pairs template from 2 to 12 pairs (real pool is
-    22 distinct number tokens course-wide; capped at the guide''s 12-pair ceiling). 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md
+    22 distinct number tokens course-wide; capped at the guide's 12-pair ceiling). 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md
     #16): expanded the market_dialogue (noun) matching_pairs template from 2 to 3 pairs (tag not in the precomputed table
     -- independently verified via scripts/_en_target_lexeme_common.py (EN_POS/en_agreement_tags): market_dialogue (noun) has
-    only 3 real distinct course-wide candidates (market/apples/shop; they''re/ok/this are also market_dialogue but not part_of_speech:
-    noun), below the 6-pair floor -- widened to the true max (3) rather than padding with untaught words).'
+    only 3 real distinct course-wide candidates (market/apples/shop; they're/ok/this are also market_dialogue but not part_of_speech:
+    noun), below the 6-pair floor -- widened to the true max (3) rather than padding with untaught words).
+
+    FRESH-CONTEXT NATIVE REVIEW 2026-07-27 (batch 2): reviewed against AUTHORING_PREFLIGHT.md with realization/overlay + live backfill pools + grading code cross-checked; came back CLEAN (nl-en a1_03: its one CRITICAL plural-agreement finding was fixed this pass). Status -> reviewed. See docs/RAMIN_REVIEW_BACKLOG.md 'Native review BATCH 2' for the batch's full finding set.
 tag_schema:
   part_of_speech:
   - symbol
