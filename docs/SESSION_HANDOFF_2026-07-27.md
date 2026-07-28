@@ -29,10 +29,23 @@ merge (needs Postgres — docker not installed here — to confirm no seeded tem
 deferred until it can be integration-tested. NOTE: local Python is 3.9 (backend targets 3.12) so the
 real module won't even import here — the algorithm was proven via a standalone harness instead.
 
-## ▶ START HERE next session — highest-value autonomous items
-1. **Launch native-review BATCH 4** (see coverage below) — keep the review program advancing; this
-   is the main ship-gate and the clearest unblocked win.
-2. **Content-side `_pure`/route_word narrow-tag wave** (en-nl) — the other half of the ambiguous-MC
+## ⏳ IN FLIGHT — native-review BATCH 4 (launched 2026-07-28)
+4 sonnet reviewers running (read-only), reports arrive as `<task-notification>`s in your context:
+- **fa-en** a1_09/10/11/12/13 · **prs-en** a1_11-15 · **nl-en** a1_10/11/12/13/14 · **en-nl** a1_11-15.
+Process each per the pipeline: verify → fix clean pack-side ones + commit → queue deploy/native waves
+→ flip clean packs reviewed. Then launch batch 5 (next a1 band).
+
+## ✅ Batch-3 pack-side wins DONE 2026-07-28 (all committed, ledger 0 DEAD / 2 tier / 116 floor)
+- prs-en a1_08 پونډ→پوند (HIGH, 359d85be) · prs-en a1_10 forward-ref move to lesson04 (d5ffa1d1)
+  · fa-en a1_03 "much" prompt-shows-answer CRITICAL → noun-only slot (1910f052)
+  · backend casefold-dedup PARTIAL (e4144c8e).
+- fa-en pack-feedback register = escalated to a Ramin POLICY call (not drift; 116 formal/0 colloquial
+  is a uniform authored convention; pin is overlay-only). See backlog.
+- REMAINING batch-3 items are all DEPLOY-EFFECT or native/policy — consolidate into the en-nl backfill
+  wave below AFTER batch-4 en-nl findings land (touch backfill_lexemes_en_nl.py once).
+
+## ▶ Next autonomous items (after processing batch-4 reports)
+1. **Consolidated en-nl backfill wave** (deploy-effect) — the other half of the ambiguous-MC
    fix the backend casefold couldn't reach (reworded capitalized variants: the hospital/Hospital,
    the route/Route) PLUS the a1_09 route_word false-attribution contamination. Deploy-effect. See
    the backlog BATCH-3 en-nl items. (Do NOT blanket-exclude caps — caused 7 DEAD before; use `_pure`
