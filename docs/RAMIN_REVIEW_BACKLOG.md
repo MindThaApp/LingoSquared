@@ -55,6 +55,90 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 4 (2026-07-28, ALL 4 REPORTED): fa-en a1_09-13, prs-en a1_11-15, nl-en a1_10-14, en-nl a1_11-15
+
+**KEY RUNTIME FACT (en-nl reviewer, grep-confirmed):** `feedback_frame` is NOT read by
+`generate_batch`/`generate_checkpoint`/`build_prompt` and is absent from `PracticeItemOut`/
+`PracticeAnswerOut` — so ALL feedback_frame defects are content-correctness/source hygiene, NOT live
+learner-facing bugs today (may surface on other/future surfaces). By contrast `frame.language_code`
+(the PROMPT) IS live. Prioritize accordingly.
+
+**DONE this session (all committed, gated):**
+- **nl-en a1_10-14 feedback_frame** (64edd7b4): false-provenance ('uit deze les/dit gesprek/dit
+  bericht' on wide untagged pools → 'Het juiste antwoord is {item}.'), stale match counts
+  (twee→zes/vijf), false specific-facts (Daniel/forecast/label → self-ref/hedged/category). INERT
+  per above but source now truthful.
+- **en-nl a1_15** (434f6669): 6 MC/listen swapped *travel_noun→*travel_noun_pure (kills the
+  Kaartje/kaartje + Perron/perron reworded-capital ambiguity the backend casefold can't reach);
+  travel_noun_pure verified 6 unit15-scoped (no DEAD). **LIVE.**
+- **en-nl a1_12** (434f6669): translate.001 + reverse_translate.002 had frame.language_code:nl while
+  rendering english_gloss → aligned to language_code:en + 'Translate into Dutch.' text_block. **LIVE.**
+- **prs-en a1_12** (منجم→متوسط, earlier commit): 'astronomer' wrongly used for size 'medium' 23×
+  incl. 4 graded fields; aligned to the already-fixed lexeme. **LIVE (overlay).**
+- **fa-en a1_09** (4b42e8de): write_restaurant instruction register-mix (formal خودتان/نپخته‌اید in
+  a colloquial-pinned overlay) → colloquialized. **LIVE (overlay).**
+
+**★ CONSOLIDATED en-nl/prs-en/fa-en BACKFILL WAVE — QUEUED (deploy-effect; touch each backfill_*.py
+once; VERIFY unit-scope per token — see the weekday DEAD trap below):**
+1. **Leaked-annotation glosses (strip the English parenthetical that leaks the answer in bare
+   translate / MC-answer usage):**
+   - fa-en (backfill_lexemes_fa_en.py EN_TARGET_TO_FA_GLOSS): `get`="رسیدن (در get to)"→"رسیدن",
+     `can't`="نمی‌توانی/نمی‌تواند (منفیِ can)"→drop parenthetical (unit10 verb_gloss.004 MC-answer leak,
+     MAJOR). NOTE the annotation is HELPFUL as a translation-PROMPT hint (turn_translate.003) — so
+     the clean fix is to narrow verb_gloss.004's pool, not globally strip, OR accept the prompt-hint
+     tradeoff.
+   - prs-en (backfill_lexemes_prs_en.py): `well`="خوب (در hear well)"→"خوب" (unit14 desc_translate.004
+     100%/sole-prompt leak HIGH + 2 MC leaks); `credit`="اعتباری (در credit card)"→"اعتباری",
+     `debit`="بانکی؛ مستقیم (در debit card)"→"بانکی؛ مستقیم" (unit15 card_type_translate 100% leak HIGH
+     + payment_translate 50% + total_translate 29%).
+   - **CAUTION (learned fa-en a1_03):** stripping a parenthetical can REINTRODUCE a gloss-collision
+     ("well"→"خوب" may collide with "good"→"خوب" if both are in desc_pool). Verify each token's pool
+     for a same-gloss sibling; if collision, narrow the template pool instead (the fa-en a1_03 noun-
+     narrow pattern). card_type (credit/debit only, 2 members) is collision-free → safe to strip.
+2. **_pure / narrow tags for reworded-capital + metalabel contamination (en-nl):**
+   - unit13 `preference_item` (9: Fietsen/Koffie/Thee capitalized from unit33/06 + lowercase) →
+     `preference_item_pure` (unit13-only). 5 MC/listen ambiguous + false-feedback.
+   - unit14 `equal_adj` (3: Mooi interjection from unit08 + mooi/praktisch) → hold Mooi out
+     (METALABELS-style). translate.001 underdetermined (Mooi/goed both satisfy "nice; good").
+   - unit11 `accept_decline_noun` leaks `tijd` (unit04) → false feedback (inert). Classifier holdout.
+   - **⚠ unit11 `weekday` (21 members incl. metalabels geen/het/is/krijgen + capitalized days):
+     do NOT just swap to weekday_pure — VERIFIED weekday_pure has 0 unit11-scoped members (unit11's
+     only OWN weekday is capitalized 'Vrijdag' from a sentence-initial teaching card), so the swap
+     DEADs the 4 render_frame + 1 MC checkpoint templates.** This is the documented _pure trap. Real
+     fix = NORMALIZE weekday token casing at the backfill (unit11's own weekday should be lowercase
+     'vrijdag', not 'Vrijdag' — the token is extracted sentence-initial), then the pure swap is safe.
+     Same weekday contamination affects the 4 render_frame templates (wrong mid-sentence capital in
+     the graded answer, e.g. "Zullen we Vrijdag koffie drinken?") — LIVE, but the fix is deploy-effect.
+3. **Re-anchor bare-POS pools to the unit generated tags (the 'off-theme in Endless Practice' class):**
+   - prs-en unit14: noun_pool/verb_pool/desc_pool/mixed_pool/action_pool/misc_pool (untagged POS-only)
+     → `prs_en_a1_unit14_words`+POS (13-member tag EXISTS; content_match.003 already did it as precedent).
+     10/11 templates. VERIFY per-POS unit-scoped count ≥ floor before swapping (desc≈5, verb≈4, noun≈4).
+   - fa-en unit10 (unit_verb/unit_noun untagged) + nl-en unit10/unit14 (direction_word/noun_word/
+     all_word untagged): SAME class. For nl-en I already genericized the FALSE FEEDBACK (removes the
+     graded-severity defect); the thematic re-anchor (fa_en_/nl_en_a1_unitNN_words) is the deploy-effect
+     polish. Same per-POS DEAD-verification required.
+
+**NATIVE-CONFIRM / JUDGMENT (escalate — Ramin or a native pass):**
+- prs-en unit13: `sad`="خفه؛ غمگین" / `worried`="خفه؛ پریشان" share leading "خفه" → MC harder to
+  distinguish (not a hard dup). Confirm خفه is safe shared, or drop from one.
+- prs-en unit12: `shirt`="شرت" (vs شورت shorts/underwear) — confirm the loanword register.
+- prs-en unit15: "pay by cash" vs "pay in cash" idiom (LOW).
+- fa-en completeness gaps (false-NEGATIVE mis-grades — a correct 'and'-joined answer marked wrong):
+  unit09 reply_location (accepts only "It's next to the park."; add "The bank is next to the park.");
+  unit11/12/13 reply_as_X/speak_X accept only ONE join of a multi-part dialogue reproduction (units
+  09/10 already got the 'and'-joined variant; 11/12/13 didn't). Best as a focused native-EN sweep
+  adding accepted_answers variants (W5-style).
+
+**POLICY (reinforced — 2nd reviewer flagged it):** fa-en pack feedback_frame formal register across
+ALL 5 batch-4 packs too. STILL a policy call (pin is overlay-only; 116 formal/0 colloquial is uniform;
+AND feedback_frame is inert at runtime per above) — do NOT autonomously sweep. See BATCH-3 entry.
+
+**HOUSEKEEPING:** prs-en unit14 `content_pool` + unit15 `number_no_hundred` dead anchors (unused) —
+remove for cleanliness when next editing those packs.
+
+**CLEAN in batch 4 (flippable):** prs-en a1_11 only. All other 19 packs have ≥1 open finding above
+(mostly the queued deploy-effect classes) → NOT flipped.
+
 ## ⭐ Native review — BATCH 3 (2026-07-27, ALL 4 REPORTED): next pre-recipe a1 band
 
 fa-en a1_02/03/04/06/08, prs-en a1_06-10, nl-en a1_04/06/07/08/09, en-nl a1_06-10 (4 sonnet
