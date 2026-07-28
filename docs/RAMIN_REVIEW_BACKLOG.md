@@ -122,7 +122,13 @@ the `position` preset; `NL_GLOSSES["voor"]` = "for; about" (canonical unit01 pur
 this lesson drills the POSITIONAL sense "in front of" (its own overlay note flags the homograph).
 Learner sees "Translate: for; about" inside an achter/voor location lesson — defensible but
 wrong-sense. Fix: hardcode this template's slot to `{naast, tegenover, achter}` OR give `voor` a
-position-specific gloss override. Deploy-effect (gloss) or pack-side (slot narrow).
+position-specific gloss override. NOTE (2026-07-28): a pure pack-side slot-narrow is NOT available —
+`lexeme_matches` filters only by language/POS/agreement-tags, not by token, so you cannot hardcode
+`{naast, tegenover, achter}` in the slot. The fix needs a new `position_unambiguous` semantic tag on
+naast/tegenover/achter (drop voor) in backfill_lexemes_en_nl.py + repoint translate.004, OR a
+voor position-sense gloss override. Either way DEPLOY-EFFECT — fold into the consolidated en-nl
+backfill wave below (route_word narrow-tag + `_pure` reworded-variant tags + food_item_orderable),
+ideally after batch-4's en-nl findings land so the backfill file is touched once.
 
 **en-nl a1_09 lesson06.translate.003 "Ga links."/"Ga rechts." (LOW-MEDIUM, native confirm).** The
 `direction_word` slot includes bare links/rechts, but every attested Dutch direction-command in the
@@ -130,7 +136,11 @@ course pairs Ga/Sla only with -af forms or rechtdoor ("Ga rechtdoor.", "Sla link
 is unattested (grep = 0 hits) and reads awkward. Confirm with a native speaker or narrow slot to
 `{linksaf, rechtsaf, rechtdoor}`. (en-nl a1_06 + a1_10 CLEAN.)
 
-**fa-en a1_03 "much" leaked-annotation-gloss (CRITICAL).** lesson03.vocab_translate.006 is a bare
+**fa-en a1_03 "much" leaked-annotation-gloss (CRITICAL) — DONE 2026-07-28 (commit 1910f052).**
+Narrowed lesson3_word (used only by vocab_translate.006) to part_of_speech: noun, dropping the adverb
+'much' (gloss «چقدر (در how much)» leaked the answer) and the adjective 'old' (verbose author-note
+gloss); 5 clean noun members remain. Original write-up below.
+lesson03.vocab_translate.006 is a bare
 `{item}` frame rendering `english_gloss` over the `lesson3_word` union; the course gloss for "much"
 is «چقدر (در how much)» — so the Farsi PROMPT literally embeds the English answer "how much", while
 grading accepts ONLY the exact string "much" (a learner typing "how much" is marked wrong). Same
@@ -157,10 +167,11 @@ NEW register pin in CLAUDE.md. If "stay formal": add a pin saying so, to stop fu
 re-flagging it. NOTE prs-en packs are already colloquial (matching their colloquial-Dari overlay
 pin) — so this split is fa-en-specific.
 
-**prs-en a1_10 place_listen.004 within-unit forward-reference (MEDIUM-HIGH).** lesson02's template
-draws from `direction_review` which includes lesson03 vocab (street_ordinal/neighborhood_noun) → a
-lesson02 exercise references not-yet-taught words. Fix: narrow lesson02's slot to `turn_direction`
-alone, or move the exercise to lesson03+. Pack-side.
+**prs-en a1_10 place_listen.004 within-unit forward-reference (MEDIUM-HIGH) — DONE 2026-07-28
+(commit d5ffa1d1).** Moved the listen_select from lesson02 to lesson04 (giving_directions_dialogue)
+as place_listen.005, where the full direction_review pool (left/right/first/second/street) is in
+scope. (Narrowing to turn_direction alone would starve the listen_select below the 3-option floor →
+DEAD, which is why the pack originally re-pointed it.) unit-scope unchanged (0 DEAD).
 
 **food_item_orderable wave (nl-en a1_07 + prs-en a1_07).** "I'd like a {item}, please" / cafe_order
 include "bread" (uncountable → "I'd like a bread, please"). Fix = a narrower `food_item_orderable`
