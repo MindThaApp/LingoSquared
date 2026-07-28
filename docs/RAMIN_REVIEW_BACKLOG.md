@@ -140,13 +140,22 @@ any sole-frame-rendered slot a CLEAN display gloss, not the parenthetical author
 Deploy-effect if fixed via backfill gloss; pack-side if the slot pool is narrowed. Pool analysis
 needed — mixed POS (adv/adj/noun), so no clean POS-narrow.
 
-**fa-en PACK feedback_frame register violation (MAJOR, systemic — likely ALL fa-en packs).** Every
-feedback_frame in fa-en a1_02/03/04/06/08 uses FORMAL written Persian (کنید / می‌کند / می‌شود) while
-the sibling overlays for the SAME units are colloquial (کنین / می‌شه — 31–46 hits each), per the
-CLAUDE.md fa-en register pin. This is the batch-2 W5 register class but on PRACTICE-PACK feedback
-text, not overlays. Clean pack-side (feedback_frame is display-only; graded values untouched) — a
-focused colloquial-conversion sweep over fa-en pack feedback_frames (a1 at least, probably all).
-Same footgun likely in prs-en pack feedback (Dari colloquial) — check when swept.
+**fa-en PACK feedback_frame register — RAMIN POLICY DECISION (2026-07-28: downgraded from the
+reviewer's "MAJOR violation"; do NOT autonomously sweep).** The batch-3 reviewer flagged fa-en pack
+feedback_frames as formal (کنید/می‌کند/می‌شود) vs the colloquial overlays, citing the CLAUDE.md
+register pin. BUT I verified: (a) the pin is explicitly the **fa-en OVERLAY lane** ("fa-en overlay
+lane: colloquial spoken Persian", CLAUDE.md §"Per-lane register pins") — it does NOT mention practice
+packs; a sibling pin even keeps **fa.json UI chrome FORMAL**, showing formal learner-facing text is a
+deliberate surface elsewhere. (b) fa-en pack feedback is **uniformly formal across ALL 31 fa-en a1
+packs: 116 formal-marker feedback lines, 0 colloquial** — a consistent authored convention, not
+drift. So converting 116 lines would impose an *undocumented* policy on a uniform surface, and could
+be wrong if formal instructional feedback is intended (mirroring the fa.json chrome). **DECISION
+NEEDED:** should fa-en practice-pack feedback_frames converge to the colloquial overlay lane (for
+learner-experience consistency) or stay formal (distinct instructional surface)? If "converge":
+then a focused native sweep (W5-style, feedback_frame text only, graded values byte-identical) + a
+NEW register pin in CLAUDE.md. If "stay formal": add a pin saying so, to stop future reviewers
+re-flagging it. NOTE prs-en packs are already colloquial (matching their colloquial-Dari overlay
+pin) — so this split is fa-en-specific.
 
 **prs-en a1_10 place_listen.004 within-unit forward-reference (MEDIUM-HIGH).** lesson02's template
 draws from `direction_review` which includes lesson03 vocab (street_ordinal/neighborhood_noun) → a
