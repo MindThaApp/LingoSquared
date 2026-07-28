@@ -383,9 +383,38 @@ def _distractor_values(
         # There is deliberately no language-only fallback. If no declared
         # slot can supply same-category values in the answer language, the
         # caller's minimum-option check rejects this generated instance.
-    values = sorted({str(value) for value in values if str(value) != answer})
-    rng.shuffle(values)
-    return values[:3]
+    # Dedupe by casefold, not exact string. Several semantic-tag pools carry
+    # the same word twice as separate Lexeme rows — a lowercase form and a
+    # capitalized sentence-initial/label form — so exact-string dedup let both
+    # survive and a multiple_choice / listen_select item could show two options
+    # meaning the identical thing with only one graded correct (a real "more
+    # than one defensible answer" defect; found in the 2026-07-27 en-nl native
+    # review: produce / place / direction_word pools). Fold the answer out too
+    # (so its own case-variant can't become a distractor), and keep one
+    # representative per casefold key, preferring a lowercase-initial form so we
+    # never surface an odd capitalized distractor next to lowercase options.
+    # Iterating a sorted set keeps the representative choice — and the
+    # pre-shuffle order — deterministic for a given rng seed. Shrinking a pool
+    # below the caller's minimum-option count is safe: the caller rejects that
+    # instance and falls back to another template, as it already does for thin
+    # pools. SCOPE: this catches pairs whose GLOSS differs only by case
+    # ("apples"/"Apples", "library"/"Library"). It does NOT merge a pair whose
+    # capitalized variant also has a reworded gloss ("the hospital"/"Hospital",
+    # "the route"/"Route") — those are the blanket-tagger's contaminated
+    # capitalized rows and are fixed content-side (the `_pure` / route_word
+    # narrow-tag wave), not here.
+    answer_fold = answer.casefold()
+    representatives: dict[str, str] = {}
+    for value in sorted({str(value) for value in values}):
+        fold = value.casefold()
+        if fold == answer_fold:
+            continue
+        current = representatives.get(fold)
+        if current is None or (current[:1].isupper() and not value[:1].isupper()):
+            representatives[fold] = value
+    deduped = list(representatives.values())
+    rng.shuffle(deduped)
+    return deduped[:3]
 
 
 def build_prompt(
