@@ -67,8 +67,25 @@ reviewers, all completed & coordinator-reviewed). **FIXED + committed this batch
 
 **QUEUED fix-waves from batch 3 (none blocking; ranked by value):**
 
-**★ TOP AUTONOMOUS ITEM — en-nl `_distractor_values` casefold-dedup (BACKEND, one change, corpus-wide,
-IMMEDIATE runtime effect, NO re-backfill needed).** Root cause found by the en-nl reviewer:
+**★ en-nl `_distractor_values` casefold-dedup — DONE 2026-07-28 (PARTIAL fix, commit e4144c8e).**
+Implemented casefold-dedup + answer-variant fold-out + lowercase-representative preference in
+`backend/app/practice/service.py`, with `backend/tests/test_distractor_casefold.py` (DB-free unit
+test) and an algorithm proof harness. **SCOPE CORRECTION (my earlier "kills the whole class corpus-
+wide" was overstated):** casefold on the GLOSS only merges pairs whose glosses differ *only* by case
+(apples/Apples, library/Library, straight ahead/Straight ahead — the produce pool fully, direction_
+word's rechtdoor pair, place's library pair). It does NOT merge a pair whose capitalized variant also
+has a *reworded* gloss (`ziekenhuis`→"the hospital" vs `Ziekenhuis`→"Hospital"; `route`→"the route"
+vs `Route`→"Route"; `buurtkaart`→"the neighbourhood map" vs `BUURTKAART`→"NEIGHBOURHOOD MAP") — those
+contaminated capitalized rows remain and are the content-side `_pure`/route_word wave's job (below).
+**STILL OPEN from this item:** (a) run the backend INTEGRATION suite before merge — needs Postgres
+(docker not installed here) — to confirm no seeded MC/listen template starves below the 3-option
+floor after dedup; (b) a MORE COMPLETE backend fix would dedupe distractors by underlying *token*
+identity (appels/Appels, ziekenhuis/Ziekenhuis, route/Route all share a token) rather than by gloss
+string — that catches the reworded-gloss variants too, but needs the answer's lexeme (not just its
+gloss string) threaded in, and MUST be verified against the integration suite; deferred until infra.
+
+--- original write-up (kept for the root-cause detail) ---
+Root cause found by the en-nl reviewer:
 `_distractor_values()` in `backend/app/practice/service.py` (~lines 351–388; the dedup is the
 `list(dict.fromkeys(options))` + `str(value) != answer` at ~:386) dedupes multiple_choice /
 listen_select option lists by EXACT string equality only. Many semantic-tag pools contain the same

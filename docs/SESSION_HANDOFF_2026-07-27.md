@@ -19,20 +19,31 @@ No reviewers in flight. Nothing pending in this context. Two batch-3 fixes commi
 Everything else from batch 3 is a QUEUED wave, fully written up in
 `docs/RAMIN_REVIEW_BACKLOG.md` → "Native review — BATCH 3" (all 4 dirs' findings, ranked).
 
-## ▶ START HERE next session — the two highest-value autonomous items
-1. **★ en-nl `_distractor_values` casefold-dedup (BACKEND, one change, corpus-wide, IMMEDIATE
-   runtime effect — no re-backfill).** `backend/app/practice/service.py` ~:386. MC/listen option
-   lists dedupe by exact string only, so case-variant lexeme pairs (apples/Apples, library/Library,
-   route/Route) both appear as options → ambiguous MC. Dedupe by casefold before sampling. Full
-   spec + CAUTIONS (pool-floor, dedupe-on-display-value, RUN THE BACKEND TESTS) in the backlog's
-   BATCH-3 "★ TOP AUTONOMOUS ITEM". This is the elegant fix for the whole ambiguous-MC class that
-   the content-side `_pure`-tag wave was chasing — do this instead. Only ~content-side if rejected.
-2. **Launch native-review BATCH 4** (see coverage below) — keep the review program advancing.
+## ✅ DONE since this doc — en-nl `_distractor_values` casefold-dedup (PARTIAL, commit e4144c8e)
+Landed a casefold-dedup on MC/listen distractors (+ `backend/tests/test_distractor_casefold.py`,
+DB-free). It merges pairs whose GLOSS differs only by case (apples/Apples, library/Library) —
+NOT ones whose capitalized variant is also reworded (the hospital/Hospital, the route/Route). Two
+residuals, both in the backlog's BATCH-3 "★" item: (a) run the backend INTEGRATION suite before
+merge (needs Postgres — docker not installed here — to confirm no seeded template starves below the
+3-option floor); (b) a more complete token-identity dedup (catches reworded-gloss variants too) is
+deferred until it can be integration-tested. NOTE: local Python is 3.9 (backend targets 3.12) so the
+real module won't even import here — the algorithm was proven via a standalone harness instead.
+
+## ▶ START HERE next session — highest-value autonomous items
+1. **Launch native-review BATCH 4** (see coverage below) — keep the review program advancing; this
+   is the main ship-gate and the clearest unblocked win.
+2. **Content-side `_pure`/route_word narrow-tag wave** (en-nl) — the other half of the ambiguous-MC
+   fix the backend casefold couldn't reach (reworded capitalized variants: the hospital/Hospital,
+   the route/Route) PLUS the a1_09 route_word false-attribution contamination. Deploy-effect. See
+   the backlog BATCH-3 en-nl items. (Do NOT blanket-exclude caps — caused 7 DEAD before; use `_pure`
+   exact-case tags + selective repoint.)
+3. **If/when Postgres is up:** run the backend suite (`pytest` in backend/) to clear residual (a) on
+   the casefold fix, then take the token-identity dedup (residual (b)).
 
 The other batch-3 queued waves (fa-en a1_03 "much" leaked-gloss CRITICAL; fa-en pack feedback_frame
-register sweep MAJOR-systemic; en-nl route_word contamination; en-nl voor gloss; prs-en a1_10
-forward-ref; food_item_orderable; prs-en who/cafe backfill glosses) are all in the backlog, ranked,
-with fix approaches. Pick them up after the two above (several are deploy-effect / native-confirm).
+register sweep MAJOR-systemic; en-nl voor gloss; prs-en a1_10 forward-ref; food_item_orderable;
+prs-en who/cafe backfill glosses) are all in the backlog, ranked, with fix approaches — several are
+deploy-effect / native-confirm.
 
 ## The pipeline (per reviewer batch)
 1. **Verify every finding against the code/data** — never trust the report.
