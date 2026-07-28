@@ -29,11 +29,23 @@ merge (needs Postgres — docker not installed here — to confirm no seeded tem
 deferred until it can be integration-tested. NOTE: local Python is 3.9 (backend targets 3.12) so the
 real module won't even import here — the algorithm was proven via a standalone harness instead.
 
-## ⏳ IN FLIGHT — native-review BATCH 4 (launched 2026-07-28)
-4 sonnet reviewers running (read-only), reports arrive as `<task-notification>`s in your context:
-- **fa-en** a1_09/10/11/12/13 · **prs-en** a1_11-15 · **nl-en** a1_10/11/12/13/14 · **en-nl** a1_11-15.
-Process each per the pipeline: verify → fix clean pack-side ones + commit → queue deploy/native waves
-→ flip clean packs reviewed. Then launch batch 5 (next a1 band).
+## ✅ BATCH 4 COMPLETE (2026-07-28) — all 4 reviewers processed
+fa-en a1_09-13, prs-en a1_11-15, nl-en a1_10-14, en-nl a1_11-15. 5 clean fixes committed (nl-en
+feedback wave 64edd7b4; en-nl u15 MC-ambiguity + u12 language_code 434f6669; prs-en u12 منجم; fa-en
+u09 register 4b42e8de); prs-en a1_11 flipped reviewed (439d3af2). Everything else = the consolidated
+backfill wave below, fully written up in RAMIN_REVIEW_BACKLOG "BATCH 4".
+
+## ▶ Next autonomous items
+0. **Launch native-review BATCH 5** (next a1 band — fa-en a1_15-19, prs-en a1_16-20, nl-en a1_15-19,
+   en-nl a1_16-20; ~470 packs remain). Keep the ship-gate advancing.
+1. **★ Consolidated deploy-effect BACKFILL WAVE** (RAMIN_REVIEW_BACKLOG "BATCH 4 ★"): leaked-annotation
+   glosses (fa-en get/can't; prs-en well/credit/debit — strip English parentheticals, but VERIFY no
+   gloss-collision reintroduced, per the fa-en a1_03 lesson); `_pure`/narrow tags for en-nl
+   preference_item/equal_adj/accept_decline; bare-POS re-anchoring (prs-en u14, fa-en u10, nl-en
+   u10/14). **⚠ DEAD-TRAP LAW: before ANY `_pure`/unit-tag swap, check the tag's UNIT-scoped member
+   count via iter_specs (unit_order==N filter) — en-nl u11 weekday_pure has 0 unit11-scoped members
+   because unit11's own weekday is capitalized 'Vrijdag'; swapping would DEAD it. Verify first, every
+   time.** This wave is deploy-effect (runtime picks it up on re-backfill/re-seed).
 
 ## ✅ Batch-3 pack-side wins DONE 2026-07-28 (all committed, ledger 0 DEAD / 2 tier / 116 floor)
 - prs-en a1_08 پونډ→پوند (HIGH, 359d85be) · prs-en a1_10 forward-ref move to lesson04 (d5ffa1d1)
