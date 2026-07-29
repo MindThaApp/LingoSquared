@@ -41,7 +41,7 @@ describe("MatchingPairs answer payload", () => {
     const onAnswer = vi.fn();
     render(<MatchingPairs exercise={exercise} onAnswer={onAnswer} disabled={false} />);
 
-    const check = screen.getByRole("button", { name: "Check" });
+    const check = screen.getByRole("button", { name: "common.check" });
     expect(check).toBeDisabled(); // nothing matched yet
 
     // Deliberately match the SECOND pair first: the submitted payload must
