@@ -55,6 +55,18 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ✅ en-nl _pure WAVE — COMPLETE 2026-07-29 (deploy-effect)
+All LIVE en-nl blanket-tag contamination / reworded-capital MC-ambiguity from batches 5+6 is
+source-fixed: 4 safe existing-tag swaps u16-19 (symptom_hebben/work_vocab/room_word/weather_vocab →
+_pure, commit 7870b4ab) + 5 new exact-case classifier tags — symptom_zijn_pure (d2ee6288),
+payment_noun_pure/clothing_fit_pure/room_count_question_pure (039a0a93), phone_identity_pure/
+phone_clarification_pure + u22 match_union rebuilt (174d3854). Each DEAD-verified (unit-scoped count ≥
+floor) + validate 0/0 + unit-scope unchanged. text_message_pure determined UNNEEDED (translate.001's
+[verb,noun] POS filter already yields {bel,stuur,sms}). **STILL OPEN (en-nl, deploy-effect, NOT in
+this wave):** u19 weekday DEAD-trap (needs NL_CITATION_FORMS casing fold, not a _pure swap); u12 voor
+position-sense gloss; u13 preference_item / u14 equal_adj reworded-capital (need their own _pure or
+narrow); u8 route_word contamination. u30 volume_order.006 malformed dup template.
+
 ## ⭐ Native review — BATCH 6 (2026-07-29, ALL 4 REPORTED): fa-en/prs-en/nl-en a1_21-24+30, en-nl a1_21-23/29/30
 
 **prs-en batch 6 (a1_21-24/30):** all 5 OPEN, same recurring classes — ambiguous listen_select
