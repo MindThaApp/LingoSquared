@@ -135,13 +135,12 @@ review:
     unit tokens, 0 course extras), practice-validate 0 errors,
     unit-scope check 0 DEAD/0 FLOOR.
 tag_schema:
-  part_of_speech: [noun, verb, symbol]
+  part_of_speech: [noun, verb]
   agreement_tags:
     semantic: [payment_method, card_type, fa_en_a1_unit15_words]
 slot_presets:
   payment_method: &payment_method {language_code: en, part_of_speech: noun, agreement_tags: {semantic: payment_method}}
   card_type: &card_type {language_code: en, part_of_speech: noun, agreement_tags: {semantic: card_type}}
-  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, symbol]}
   # wave 3: generated unit-scoped tag (commit 05af7ace) -- course pool ==
   # unit pool by construction, so the matchers below no longer pull the
   # whole level's vocab at Endless-Practice course scope.
@@ -201,7 +200,7 @@ templates:
     lesson_content_key: en.a1.unit15.lesson02.asking_about_payment
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_word}
+    slots: {item: *unit_words}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson03.payment_meaning.001
@@ -223,7 +222,7 @@ templates:
     lesson_content_key: en.a1.unit15.lesson03.reading_a_receipt
     type: translation
     frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *content_word}
+    slots: {item: *unit_words}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی {item} است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit15.lesson04.payment_listen.001
