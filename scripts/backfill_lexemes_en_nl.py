@@ -2950,6 +2950,14 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # totaal"), safe for bare-word MC/listen_select (exactly meets the
     # >=3 distinct-gloss floor).
     if t in {"rekening", "wisselgeld", "totaal"}: semantic.append("payment_noun")
+    # Exact-case _pure siblings (2026-07-29 en-nl _pure wave) so recognition slots
+    # never surface a capitalized sentence-initial variant (Rekening/Totaal from
+    # unit23's bill-reading label) as a second correct-looking MC option, and the
+    # blanket-_cat-derived clothing_fit / room_count_question pools shed their
+    # contaminants (the cap "Past"; the unit02 numbers drie/twee). token = exact case.
+    if token in {"rekening", "wisselgeld", "totaal"}: semantic.append("payment_noun_pure")
+    if token in {"is", "past"}: semantic.append("clothing_fit_pure")
+    if token in {"appartement", "kamers", "slaapkamers"}: semantic.append("room_count_question_pure")
     # A2 unit 27 (huisarts/health: a doctor's visit), added 2026-07-07 by the
     # practice-template authoring pass. Narrow generative tags, each verified
     # against the real lesson content before use in a shared frame:
