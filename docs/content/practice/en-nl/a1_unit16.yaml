@@ -44,7 +44,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [symptom_hebben, symptom_hebben_pure, symptom_zijn, pharmacy_visit]
+    semantic: [symptom_hebben, symptom_hebben_pure, symptom_zijn, symptom_zijn_pure, pharmacy_visit]
 slot_presets:
   symptom_hebben: &symptom_hebben {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben}}
   # symptom_hebben_pure: exact-case (no capitalized "Koorts" duplicate),
@@ -53,6 +53,10 @@ slot_presets:
   # using the plain "symptom_hebben" tag unchanged.
   symptom_hebben_pure: &symptom_hebben_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben_pure}}
   symptom_zijn: &symptom_zijn {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn}}
+  # symptom_zijn_pure: exact-case (excludes the capitalized "Ziek" grammar-note
+  # token), so word_order/translate slots never render "Ik ben Ziek." Added
+  # 2026-07-29; classifier sibling in backfill_lexemes_en_nl.py.
+  symptom_zijn_pure: &symptom_zijn_pure {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn_pure}}
   pharmacy_noun: &pharmacy_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pharmacy_visit}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.order.001
@@ -106,7 +110,7 @@ templates:
     lesson_content_key: nl.a1.unit16.lesson03.koorts_en_verkouden
     type: word_order
     frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}
-    slots: {item: *symptom_zijn}
+    slots: {item: *symptom_zijn_pure}
     answer_derivation: {kind: render_frame, frame: {text: "Ik ben {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is the condition in this sentence.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson03.translate.003
@@ -119,7 +123,7 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *symptom_zijn}
+    slots: {item: *symptom_zijn_pure}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson04.choose.001
