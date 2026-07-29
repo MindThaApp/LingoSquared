@@ -90,7 +90,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [room_word, room_word_pure, housing_vocab, housing_vocab_pure, home_adjective, room_count_question]
+    semantic: [room_word, room_word_pure, housing_vocab, housing_vocab_pure, home_adjective, room_count_question, room_count_question_pure]
 slot_presets:
   room_word: &room_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_word}}
   # room_word_pure: exact-case (no capitalized "Appartement" duplicate),
@@ -107,6 +107,10 @@ slot_presets:
   # scope and why this tag is only safe for a bare-word translation, not a
   # sentence frame (course-scope leaks 'twee'/'drie').
   room_count_question: &room_count_question {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_count_question}}
+  # room_count_question_pure: exact-case unit18 nouns {appartement, kamers,
+  # slaapkamers} — excludes the unit02 numbers (drie/twee) the blanket _cat tagger
+  # swept in, so the bare-word translate never surfaces an off-theme number. 2026-07-29.
+  room_count_question_pure: &room_count_question_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: room_count_question_pure}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit18.lesson01.order.001
     lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
@@ -152,7 +156,7 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *room_count_question}
+    slots: {item: *room_count_question_pure}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson03.choose.001

@@ -72,11 +72,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [number, payment_verb, payment_noun, bill_dialogue]
+    semantic: [number, payment_verb, payment_noun, payment_noun_pure, bill_dialogue]
 slot_presets:
   number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
   payment_verb: &payment_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: payment_verb}}
   payment_noun: &payment_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun}}
+  # payment_noun_pure: exact-case (excludes capitalized Rekening/Totaal bill-label
+  # variants that surface as reworded-gloss MC ambiguity). Added 2026-07-29.
+  payment_noun_pure: &payment_noun_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun_pure}}
   bill_verb: &bill_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bill_dialogue}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit23.lesson01.translate.001
@@ -108,7 +111,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *payment_noun}
+    slots: {item: *payment_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson02.choose.001
@@ -153,7 +156,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *payment_noun}
+    slots: {item: *payment_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson03.order.002
@@ -172,14 +175,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *payment_noun}
+    slots: {item: *payment_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a money word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson04.listen.002
     lesson_content_key: nl.a1.unit23.lesson04.wisselgeld
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *payment_noun}
+    slots: {item: *payment_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson05.choose.001
@@ -191,7 +194,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *payment_noun}
+    slots: {item: *payment_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a word from the bill.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson05.translate.002

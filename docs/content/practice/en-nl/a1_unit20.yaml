@@ -67,7 +67,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [clothing_noun, clothing_item_singular, color, clothing_fit, receipt_reading]
+    semantic: [clothing_noun, clothing_item_singular, color, clothing_fit, clothing_fit_pure, receipt_reading]
 slot_presets:
   clothing_noun: &clothing_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_noun}}
   clothing_item_singular: &clothing_item_singular {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: clothing_item_singular}}
@@ -79,6 +79,10 @@ slot_presets:
   # tag had 0 unit-scoped candidates here; clothing_fit is its replacement.
   clothing_noun_or_receipt: &clothing_noun_or_receipt {language_code: nl, part_of_speech: [noun], agreement_tags: {semantic: [clothing_noun, receipt_reading]}}
   clothing_fit: &clothing_fit {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: clothing_fit}}
+  # clothing_fit_pure: exact-case verb {is, past} (excludes the capitalized "Past"
+  # reading-label variant) so word_order/translate never bake "Het Past goed."
+  # Added 2026-07-29.
+  clothing_fit_pure: &clothing_fit_pure {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: clothing_fit_pure}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit20.lesson01.choose.001
     lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
@@ -177,7 +181,7 @@ templates:
     lesson_content_key: nl.a1.unit20.lesson04.past_het
     type: word_order
     frame: {text: "Het {item} goed.", language_code: nl, direction: ltr}
-    slots: {item: *clothing_fit}
+    slots: {item: *clothing_fit_pure}
     answer_derivation: {kind: render_frame, frame: {text: "Het {item} goed.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} describes how it fits.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit20.lesson04.translate.002
@@ -190,7 +194,7 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *clothing_fit}
+    slots: {item: *clothing_fit_pure}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit20.lesson05.choose.001
