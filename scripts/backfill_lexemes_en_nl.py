@@ -2821,6 +2821,10 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Only 2 members -- kept out of multiple_choice/listen_select (which
     # need >=4), used only in word_order/fill_in_blank/translation.
     if t in {"ziek", "verkouden"}: semantic.append("symptom_zijn")
+    # Exact-case sibling (excludes the capitalized "Ziek" grammar-note token from
+    # unit16 lesson03's zijn_note) so word_order/translate slots don't bake a wrong
+    # mid-sentence capital into the answer. Mirrors symptom_hebben_pure above.
+    if token in {"ziek", "verkouden"}: semantic.append("symptom_zijn_pure")
     # Unit 17 (work and occupation): broad 8-member recognition-only tag
     # (bare-word MC/listen_select/translation), safe because it's never
     # used to fill one shared generative sentence -- restaurant/
