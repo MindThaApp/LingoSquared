@@ -926,7 +926,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # precedent throughout units 1-29.
     # Unit 30
     "reading": "کتاب خواندن", "cooking": "آشپزی",
-    "painting": "رنگ‌مالی؛ نقاشی کردن", "running": "دویدن",
+    "painting": "نقاشی", "running": "دویدن",
     "goes": "می‌ره (سوم‌شخص مفرد go)", "video": "ویدیو", "games": "بازی‌ها",
     "always": "همیشه", "often": "اکثراً",
     "cooks": "آشپزی می‌کنه (سوم‌شخص مفرد)", "rarely": "به ندرت",
