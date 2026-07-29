@@ -756,8 +756,8 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # own real Dari phrasing (cash=پیسهٔ نقد، credit card=کارت اعتباری،
     # debit card=کارت بانکی -- genuinely distinct Afghan Dari usage, not
     # a copy of the fa-en script's Farsi).
-    "cash": "پیسهٔ نقد", "card": "کارت", "credit": "اعتباری (در credit card)",
-    "debit": "بانکی؛ مستقیم (در debit card)", "total": "جمع کل",
+    "cash": "پیسهٔ نقد", "card": "کارت", "credit": "اعتباری",
+    "debit": "بانکی؛ مستقیم", "total": "جمع کل",
     "cards": "کارت‌ها", "pay": "پرداخت کردن", "tax": "مالیه",
     "10": "ده", "by": "با (در pay by card)", "1": "یک",
     # Unit 16 (describing a daily routine), added 2026-07-06. Overlay
