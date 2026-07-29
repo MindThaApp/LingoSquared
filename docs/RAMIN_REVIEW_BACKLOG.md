@@ -55,7 +55,7 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
-## ⭐ Native review — BATCH 5 (2026-07-29, IN PROGRESS): fa-en a1_15-20, prs-en a1_16-20, nl-en a1_15-20, en-nl a1_16-20
+## ⭐ Native review — BATCH 5 (2026-07-29, ALL 4 REPORTED): fa-en a1_15-20, prs-en a1_16-20, nl-en a1_15-20, en-nl a1_16-20
 
 **nl-en (a1_15/17/18/19/20) reported first — all findings are already-tracked or runtime-inert; nothing
 new-and-live:**
@@ -75,7 +75,79 @@ new-and-live:**
   known 2 tier-short); naturalness nits (u15 'pay with credit', u20 'bag is faster') = LOW/optional.
 - **No nl-en batch-5 pack flipped** (every unit has ≥1 open finding, all queued classes).
 
-**prs-en / fa-en / en-nl batch-5 reviewers still running** — reports will fold in here.
+**ALL 4 BATCH-5 REVIEWERS REPORTED (2026-07-29).** Findings by systemic class:
+
+**★★ LEAKED-ANNOTATION GLOSS WAVE (prs-en + fa-en) — LIVE, systemic, HIGH.** The gloss dicts use a
+`"<persian> (در <english phrase>)"` convention; where the English TOKEN is a substring of its own
+gloss, any template that renders the gloss as a bare translate-prompt (prompt=gloss, answer=token,
+100% leak) or MC/listen option hands the learner the answer. Traced end-to-end (gloss →
+_distractor_values/derive_answer verbatim → raw render). **prs-en: ~186 Latin-parenthetical glosses;
+92 are true leakers (token ∈ gloss).** Ran a collision analysis (scratch `gloss_leak.py`, logic:
+strip trailing `\s*\([^()]*\)\s*$`, check if the stripped gloss still contains the token, and whether
+it collides with another token's final gloss):
+  - **64 SAFE to strip** (stripped gloss is token-free AND unique) — bulk-strippable. e.g. across/
+    advance/bed/dressed/end/front/gone/hand/lock/love/manage/... (regenerate the full list via the
+    script). credit/debit already DONE (35003d4e).
+  - **28 COLLISION** (stripping re-exposes a shared gloss → do NOT strip; disambiguate in Dari without
+    English, or narrow the consuming template): answer(=reply), away(=far), back(=open), by(=with),
+    community(=outgoing/social), did(=s), direct(=straight), each(=every/per), excuse(=sorry),
+    get(=arrival), journey(=trip), little(=slightly), look(=seem), lot(=very), make(=pick/take),
+    many(=few), miss(=lose), must(=should), other(=another/else), pick, s, set(=put), take, up(=wake),
+    very, wake, well(=fine/good/okay), within(=until).
+  - **`works` gloss = `"مناسب/خوب بودن (در {day} works for me)"` has a literal unrendered `{day}`** —
+    malformed, MUST rewrite (drop the brace + the English leak).
+  - **fa-en equivalent** (own backfill, own collision analysis needed): u16 wake/dressed/bed
+    ("بیدار شدن (در wake up)" etc. → reviewer says safe to pure-Persian: بیدار شدن/پوشیده/رختخواب);
+    u10 get/can't (batch-4); "much" already fixed via the a1_03 template-narrow.
+  - **APPROACH:** bulk-strip the collision-free set per direction (scripted, then iter_specs-verify no
+    "(در" remains + no new collision + no DEAD); for the collision set, prefer a non-English Dari
+    disambiguator or narrow the consuming translate template (fa-en a1_03 precedent). Deploy-effect.
+
+**★ en-nl BLANKET-TAG `_pure` SWAPS (LIVE — MC ambiguity + wrong-capital display).** batch-5 en-nl:
+  - **SAFE now (existing _pure tag, reviewer-verified unit-scoped counts ≥ floor — but RE-VERIFY per
+    the weekday DEAD-trap law before each):** u16 lesson01/02/04/05/06 `symptom_hebben`→`_pure` (4);
+    u17 the 9 recognition/production templates `work_vocab`→`work_vocab_pure` (8); u18 lesson01.order
+    `room_word`→`room_word_pure` (5); u19 the 7 recognition templates `weather_vocab`→`weather_vocab_
+    pure` (8). Pack-side swaps.
+  - **NEEDS A NEW backfill tag** (deploy-effect): `symptom_zijn_pure` (u16, ziek/verkouden),
+    `room_count_question_pure` (u18, appartement/kamers/slaapkamers — excludes cross-unit function
+    words), `clothing_fit_pure` (u20, excludes capitalized `Past`).
+  - **⚠ DEAD-TRAP (do NOT naive-swap):** u19 `weekday` — at unit19 checkpoint scope the only reachable
+    members are capitalized `Zaterdag`/`Zondag` (from unit19's own sentence-initial teaching), and
+    `weekday_pure` has 0 unit19-scoped members → swap would DEAD it. Real fix = an
+    `NL_CITATION_FORMS`-style capital→lowercase fold in backfill_lexemes_en_nl.py (extend the
+    2026-07-22 volume-batch fold to pre-volume A1 units), OR bake a literal weekday into frame text.
+
+**fa-en batch-5 (a1_15/16/18/19/20):**
+  - **u15 content_translate.006 / content_choose.005 (HIGH, LIVE false-NEGATIVE):** `content_word`
+    includes `symbol` POS → digit lexemes "1"/"10" (gloss یک/ده). Translation renders the gloss and
+    grades the bare digit — a learner typing "one" is marked wrong (no typo tolerance <4 chars). Fix:
+    drop `symbol` from content_word POS (→ [noun,verb], like u16/u19). Pack-side; verify pool ≥ floor.
+  - u16 wake/dressed/bed leaked glosses (see leaked-gloss wave).
+  - u19 verb_meaning.001/.004 false "this lesson's preference VERB" feedback over a pool with adj/adv
+    members (INERT — feedback_frame) + `choose_prefer_answer` ambiguous MC (hand-authored: distractor
+    "I like tea because it's calmer" is also correct) → narrow the instruction to name the "prefer" form.
+  - u18 verb_pair.003 / u20 match.003 below-floor (5<6): the generated `fa_en_a1_unit18_words`(12) /
+    `_unit20_words`(10) tags EXIST → widen+re-anchor is available (units 15/16/19 got it; 18/20 were
+    skipped). LOW value (below-floor is the accepted honest-thin ledger) — consistency polish, optional.
+
+**DEFERRED / already-tracked (all dirs):** within-unit forward-reference in lesson01 matching_pairs
+(realization-level, shared across X-en overlays, high revert risk — Ramin's call). Present in nl-en
+u15/18/19/20, prs-en u16/18/19/20, fa-en (implied), en-nl (via realization).
+
+**NATIVE-CONFIRM (prs-en Dari — escalate):** صبح‌چاشت (breakfast? vs صبحانه/ناشتا), تُند (strong coffee?
+vs غلیظ/قوی), قیمتی‌تر (more expensive? vs گران‌تر), زیاتر (typo for زیادتر?), خیر استه (okay? خیر often
+reads "no"); + a gloss embedding literal "Unit 19" metalanguage (u19 `like`). شرت (shirt vs شورت) from
+batch 4.
+
+**INERT (feedback_frame — not read at runtime):** false-provenance / stale-count / echo across many
+packs (nl-en u17/18/19/20, fa-en u19/u20, prs-en). QUEUED as ONE consolidated corpus-wide feedback_
+frame sweep (do once, low priority) OR fold into the unit-tag re-anchors.
+
+**en-nl u20 listen_notice CRITICAL — DONE 2026-07-29 (commit 3bb81f73).** Also: u20 practice pack was
+marked review.status:reviewed despite open findings — should be set back to unreviewed.
+
+**No batch-5 pack flipped reviewed** (every pack has ≥1 open finding).
 
 **DONE from the batch-3/4 ★ backfill wave this session (deploy-effect, source-correct):**
 - **prs-en credit/debit leaked-gloss** (commit 35003d4e): stripped '(در credit/debit card)' → clean
