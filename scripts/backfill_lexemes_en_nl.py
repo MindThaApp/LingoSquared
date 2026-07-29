@@ -2787,7 +2787,11 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # Only 2 members ("net zo {item} als" doesn't take -er/-st at all) --
     # kept out of multiple_choice/listen_select, translation/fill_in_blank
     # only.
-    if t in {"mooi", "praktisch"}: semantic.append("equal_adj")
+    # Exact-case (token, not casefolded t): the pack intends the 2-member
+    # {mooi, praktisch}; a casefold check also swept in the capitalized "Mooi"
+    # (unit08's standalone interjection "Nice.", gloss "nice; good"), which made
+    # u14 translate.001 underdetermined (Mooi/goed both "nice; good"). 2026-07-30.
+    if token in {"mooi", "praktisch"}: semantic.append("equal_adj")
     # 4-member bare-word recognition only -- these superlatives are
     # structurally too different to share one generative frame (duurst/
     # mooist are predicative -st forms, beste is attributive, meest
