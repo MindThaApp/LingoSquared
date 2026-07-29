@@ -22,12 +22,33 @@ def load_backfill_en_prs():
 def test_backfill_specs_cover_both_languages_with_unique_identities():
     backfill = load_backfill()
     specs = list(backfill.iter_specs())
-    identities = {
-        (spec["language_code"], spec["token"], spec["part_of_speech"])
-        for spec in specs
-    }
 
-    assert len(identities) == len(specs)
+    # A Lexeme row is unique per COURSE, language, token, part_of_speech (the DB's
+    # uq_lexemes_course_language_token_pos constraint). iter_specs() now spans
+    # three separate courses (a1/a2/b1 = separate Course rows), so the SAME
+    # surface form taught at more than one level is a legitimately distinct row —
+    # the identity must include `level`. (Keying only on (language, token, pos),
+    # as this test originally did in the single-level era, wrongly flagged ~610
+    # cross-level repeats.)
+    from collections import Counter
+
+    counts = Counter(
+        (spec["level"], spec["language_code"], spec["token"], spec["part_of_speech"])
+        for spec in specs
+    )
+    duplicates = {identity for identity, n in counts.items() if n > 1}
+
+    # The ONLY permitted within-course repeats are two deliberate
+    # same-surface / different-sense phrase splits that iter_specs() keeps
+    # distinct via discriminator keys for gloss/tag fidelity (both documented
+    # inline in backfill_lexemes.py's phrase-derivation path; neither is used as
+    # a practice slot member, so they collapse harmlessly on DB write). Any OTHER
+    # duplicate identity is an accidental double-emission and must fail here.
+    assert duplicates <= {
+        ("a1", "fa", "چند تا", "phrase"),
+        ("a1", "fa", "بله، بفرمایید.", "phrase"),
+    }, sorted(duplicates)
+
     assert sum(spec["language_code"] == "fa" for spec in specs) > 101
     assert sum(spec["language_code"] == "en" for spec in specs) > 100
 
