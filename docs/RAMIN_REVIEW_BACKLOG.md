@@ -55,6 +55,40 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 6 (2026-07-29): fa-en/prs-en/nl-en a1_21-24+30, en-nl a1_21-23/29/30 (prs-en pending)
+
+**FLIPPED reviewed (CLEAN):** en-nl a1_21/29/30, fa-en a1_24 (commit 5c07b220). → 76/553 reviewed.
+
+**OPEN — all recurring known classes (queued into the existing waves):**
+- **en-nl u22/u23 — needs NEW exact-case `_pure` tags** (blanket-tag contamination, LIVE MC/matching
+  ambiguity): u22 `phone_identity_pure`{Met,wie,U,spreekt} + `phone_clarification_pure`{Spreek,hoor}
+  (match.005 — the "met"/"Met"=with/This-is pair genuinely differs → real ambiguous matching_pairs) +
+  `text_message_pure`{bel,stuur,sms} (translate.001); u23 `payment_noun_pure`{rekening,wisselgeld,
+  totaal} (5 templates — "rekening"/"Rekening"=the bill/Bill live MC distractor). Reviewer verified
+  unit-scoped counts safe (no DEAD). backfill_lexemes_en_nl.py + repoint. Deploy-effect. → en-nl _pure wave.
+- **fa-en u23/u30 — leaked-annotation gloss (HIGH, LIVE):** u23 `answer`="جواب دادن (در answer emails)"
+  reachable in match.003 (fa_en_a1_unit23_words); u30 `video`="ویدیویی (در video games)" reachable in
+  lesson03.translate.001 via the UNTAGGED bare-POS `content_word` pool — which at course scope is a
+  wide leak vector for the WHOLE corpus (fa-en gloss dict has ~231 "(در <english>)" tokens, like
+  prs-en's 186). Fix: strip the two glosses (collision-check) + narrow content_word to
+  fa_en_a1_unit30_words. → the leaked-gloss wave (now confirmed BOTH prs-en AND fa-en).
+- **Ambiguous listen_select — distractors literally spoken in the multi-turn audio** (NEW recurring
+  class; realization-level, shared): nl-en+fa-en u21 listen_ticket_request ("One way or round trip?"/
+  "That's forty dollars." are said by the Clerk in the same clip), fa-en u30 listen_dialogue_leila_
+  hobby ("reading" is Leila's own line). Fix: scope the instruction to a speaker/moment ("what X says
+  first") or trim the audio clip. Shared EN realization → affects all X-en. Queue (careful).
+- **Deferred (already-tracked):** lesson01 matching_pairs forward-reference (nl-en u21 match_travel_
+  words 3/8, u24 match_rooms balcony; fa-en implied) — shared-realization, high revert risk, Ramin's call.
+- **fa-en u21/u22 reply-prompt completeness gaps** (a required clause has no cue in target_blocks;
+  units 23/24 do it right → avoidable). Add the missing cue or narrow accepted answer. Native-EN judgment.
+- **nl-en u30 `volume_order.006` malformed dup template** (English feedback, paste-error content_key,
+  TIER-LOAD-BEARING — do NOT blind-delete; give it a proper key + Dutch feedback OR replace with a
+  distinct structured-tier exercise). nl-en u23 lesson01.match.003 lesson-anchoring quirk (silently
+  under-available early, never wrong) → re-point lesson_content_key to lesson04.
+- **Realization fact-drift:** fa-en/shared u30 — Daniel "often" (l3) vs "always" (l4) goes running.
+  Pick one, shared EN realization. LOW (not currently graded).
+- **INERT (feedback_frame):** false-provenance across many u21-24/30 packs → the consolidated sweep.
+
 ## ⭐ Native review — BATCH 5 (2026-07-29, ALL 4 REPORTED): fa-en a1_15-20, prs-en a1_16-20, nl-en a1_15-20, en-nl a1_16-20
 
 **nl-en (a1_15/17/18/19/20) reported first — all findings are already-tracked or runtime-inert; nothing
