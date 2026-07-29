@@ -55,7 +55,18 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
-## ⭐ Native review — BATCH 6 (2026-07-29): fa-en/prs-en/nl-en a1_21-24+30, en-nl a1_21-23/29/30 (prs-en pending)
+## ⭐ Native review — BATCH 6 (2026-07-29, ALL 4 REPORTED): fa-en/prs-en/nl-en a1_21-24+30, en-nl a1_21-23/29/30
+
+**prs-en batch 6 (a1_21-24/30):** all 5 OPEN, same recurring classes — ambiguous listen_select
+(u21 listen_ticket_request, distractors literally spoken in the full-dialogue clip), underdetermined
+production prompts (u21/u22 reply_as_daniel: a required clause has no cue; u23/u24 do it right),
+within-unit forward-ref (u23 "job" first taught lesson04), undisclosed thin below-floor (u22/u24 →
+could add prs_en_a1_unitNN_words tags), **Dari mistranslation `painting`="رنگ‌مالی" (wall-painting) vs
+artistic "نقاشی"** (deploy-effect gloss fix; overlay already uses نقاشی), example_gloss schema-gap
+(u22/u24 pre-1.1), + orthography native-confirms (سکو/سردردی/انجنیر-vs-انجینیر/هیچ‌وقت). NOTE: prs-en
+confirmed NO leaked-gloss reachable in u21-30's slotted tags (that class lives in earlier units).
+No prs-en batch-6 pack flipped.
+
 
 **FLIPPED reviewed (CLEAN):** en-nl a1_21/29/30, fa-en a1_24 (commit 5c07b220). → 76/553 reviewed.
 
@@ -110,6 +121,15 @@ new-and-live:**
 - **No nl-en batch-5 pack flipped** (every unit has ≥1 open finding, all queued classes).
 
 **ALL 4 BATCH-5 REVIEWERS REPORTED (2026-07-29).** Findings by systemic class:
+
+**★★ LEAKED-ANNOTATION GLOSS WAVE — SAFE SETS DONE 2026-07-29 (deploy-effect).** Stripped the
+collision-free-safe leakers: prs-en 63 (commit 2275464d) + fa-en 48 (commit 5343057e) = 111 tokens.
+Verified each: module imports, content suite 34/34, no new collisions possible by construction (safe
+set required each stripped gloss to have exactly one owner). **RESIDUAL (still queued):** prs-en 28
+collision tokens + 'Path' straggler + 'works' {day} bug; fa-en 22 collision tokens + 33 phrase-derived
+safe tokens (not dict keys — need a different fix path). Collision tokens must be disambiguated in
+Persian/Dari (not stripped — stripping re-exposes a shared gloss e.g. well=good/fine/okay) OR the
+consuming template narrowed (fa-en a1_03 precedent). Original analysis below.
 
 **★★ LEAKED-ANNOTATION GLOSS WAVE (prs-en + fa-en) — LIVE, systemic, HIGH.** The gloss dicts use a
 `"<persian> (در <english phrase>)"` convention; where the English TOKEN is a substring of its own
