@@ -55,6 +55,38 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 5 (2026-07-29, IN PROGRESS): fa-en a1_15-20, prs-en a1_16-20, nl-en a1_15-20, en-nl a1_16-20
+
+**nl-en (a1_15/17/18/19/20) reported first — all findings are already-tracked or runtime-inert; nothing
+new-and-live:**
+- **Within-unit forward reference in lesson01 matching_pairs (class 5)** — 4/5 units (15/18/19/20):
+  the realization's fixed lesson01 `match_*` exercise pads past lesson01's own vocab with 1-3 pairs
+  first taught in later lessons of the same unit (e.g. u18 match_past_verbs includes watch/do/be from
+  L2-L4). `canonical_pairs()` grades all-or-nothing. This is the ALREADY-TRACKED, DEFERRED
+  shared-realization class ("~9 files across dirs", high revert risk, Ramin's call) — fix = trim
+  lesson01 pairs to lesson01-native + mirror to every X-en overlay. NOT done (queued, careful paired pass).
+- **feedback_frame false-provenance / stale counts / one echo bug — RUNTIME-INERT** (not read by
+  generate_batch/build_prompt; same finding as a1_10-14). u17 (3× 'uit deze les' over a 1027-word
+  untagged pool), u18 verb_pair.003 ('twee'→should be 'vijf'), u19 (2× false-provenance over 315-verb
+  pool), u20 volume_order.009 (feedback echoes the English prompt instead of Dutch). Fix pattern =
+  the a1_10-14 genericization. QUEUED as part of a CONSOLIDATED corpus-wide feedback_frame sweep (do
+  once, not per-batch, since inert) OR fold into the unit-tag re-anchor.
+- Tier-short (u18 verb_pair past_verb=5, u20 match.003 comparative_adj=5) = hard pool ceilings (the
+  known 2 tier-short); naturalness nits (u15 'pay with credit', u20 'bag is faster') = LOW/optional.
+- **No nl-en batch-5 pack flipped** (every unit has ≥1 open finding, all queued classes).
+
+**prs-en / fa-en / en-nl batch-5 reviewers still running** — reports will fold in here.
+
+**DONE from the batch-3/4 ★ backfill wave this session (deploy-effect, source-correct):**
+- **prs-en credit/debit leaked-gloss** (commit 35003d4e): stripped '(در credit/debit card)' → clean
+  اعتباری / بانکی؛ مستقیم; collision-verified. Fixes unit15 card_type_translate (100% leak) + payment.
+- STILL QUEUED in the ★ wave: prs-en `well`='خوب (در hear well)' — do NOT strip ('خوب' already =
+  good/fine/okay → 4-way collision); fix via the unit14 bare-POS re-anchor (prs_en_a1_unit14_words,
+  DEAD-verify per POS). fa-en get/can't (unit10 verb_gloss). The broader prs-en/fa-en '(در <english>)'
+  gloss-annotation pattern (much/get/next/across/front/excuse/miss/take/little/over/by/wake/...) — these
+  leak ONLY where a template renders the gloss as a bare prompt / MC-answer; per-template audit needed
+  (strip only if collision-free, else narrow the template — fa-en a1_03 precedent).
+
 ## ⭐ Native review — BATCH 4 (2026-07-28, ALL 4 REPORTED): fa-en a1_09-13, prs-en a1_11-15, nl-en a1_10-14, en-nl a1_11-15
 
 **KEY RUNTIME FACT (en-nl reviewer, grep-confirmed):** `feedback_frame` is NOT read by
