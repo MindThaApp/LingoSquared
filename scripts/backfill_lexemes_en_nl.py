@@ -2771,6 +2771,11 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # generatively.
     if t in {"koffie", "thee", "tomatensoep", "fietsen", "wandelen", "winkelen"}:
         semantic.append("preference_item")
+    # Exact-case sibling (2026-07-29): excludes the capitalized Fietsen (unit28
+    # grammar note) / Koffie / Thee (unit06 sentence-initial) variants that surfaced
+    # as reworded-gloss MC/listen ambiguity in unit13's recognition templates.
+    if token in {"koffie", "thee", "tomatensoep", "fietsen", "wandelen", "winkelen"}:
+        semantic.append("preference_item_pure")
     # Unit 14 (making comparisons): 6-member regular comparative tag, all
     # verified safe in "De rugzak is {item} dan de tas." (each -er/-der
     # form takes "dan" grammatically; the real content's own advertisement
