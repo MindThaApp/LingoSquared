@@ -55,6 +55,16 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
+LATER (2026-07-29, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored to
+prs_en_a1_unit14_words (commit 7deec01b); fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی
+(2c9e76fc); en-nl u13 preference_item_pure (453ffb50). **REMAINING en-nl _pure TAIL (incremental,
+deploy-effect, NOT yet done):** u14 equal_adj hold-out 'Mooi' (1 template, translate.001); u12 voor
+position-sense gloss; u8 route_word narrow-tag; u19 weekday (needs NL_CITATION_FORMS casing-fold, not
+a plain _pure swap — DEAD-trap). **NATIVE-JUDGMENT (queued, not auto-fixable):** prs-en 28 + fa-en 22
+collision-token gloss disambiguation (well=خوب etc. — need a non-English Dari/Persian disambiguator);
+prs-en Dari orthography confirms. **SMALLER:** nl-en u30 malformed volume_order.006 dup template.
+
 ## ✅ en-nl _pure WAVE — COMPLETE 2026-07-29 (deploy-effect)
 All LIVE en-nl blanket-tag contamination / reworded-capital MC-ambiguity from batches 5+6 is
 source-fixed: 4 safe existing-tag swaps u16-19 (symptom_hebben/work_vocab/room_word/weather_vocab →
