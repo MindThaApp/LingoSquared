@@ -1,0 +1,96 @@
+name: CI
+
+# Core app CI for backend + frontend + content tooling. Mirrors the manual
+# gate `scripts/verify.sh` (content compiler/tests -> backend pytest -> frontend
+# build) plus the two test suites verify.sh does NOT run (content pytest and
+# frontend vitest) — the gap that let a red backfill test ship unnoticed
+# (2026-07-28 readiness audit). The four existing workflows only cover mobile/.
+#
+# NOTE: the `content` and `frontend` jobs were verified to pass locally. The
+# `backend` job could not be run on the authoring machine (Python 3.9 + no
+# Postgres; backend targets 3.12) — it is written to match backend/tests/
+# conftest.py + verify.sh's Stage 2. If it fails on first run, the most likely
+# cause is a dependency pin that doesn't resolve on public PyPI (the local
+# machine could not resolve fastapi==0.139.0 from its index — verify the pin).
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content:
+    name: Content tooling (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install content deps
+        run: pip install pyyaml pytest
+      - name: Run content test suite
+        run: python -m pytest scripts/tests -q
+
+  frontend:
+    name: Frontend (build + lint + test)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      # Root install — frontend/ is an npm workspace member (depends on
+      # @lingo/shared via workspace linking), same as the mobile CI does.
+      - name: Install dependencies
+        run: npm ci
+      - name: Lint
+        working-directory: frontend
+        run: npm run lint
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+      - name: Test
+        working-directory: frontend
+        run: npm test
+
+  backend:
+    name: Backend (pytest + Postgres)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: lingosquared
+          POSTGRES_PASSWORD: change-me
+          POSTGRES_DB: lingosquared_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U lingosquared"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      # Matches backend/tests/conftest.py's defaults; the suite drops/creates
+      # schema public and seeds against this DB.
+      DATABASE_URL: postgresql+psycopg://lingosquared:change-me@localhost:5432/lingosquared_test
+      JWT_SECRET: test-secret
+      ADMIN_EMAILS: admin@example.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install backend deps
+        run: pip install -r backend/requirements-dev.txt
+      - name: Run backend test suite
+        working-directory: backend
+        run: python -m pytest -q
