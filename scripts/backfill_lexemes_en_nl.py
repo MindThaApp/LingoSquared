@@ -2958,6 +2958,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if token in {"rekening", "wisselgeld", "totaal"}: semantic.append("payment_noun_pure")
     if token in {"is", "past"}: semantic.append("clothing_fit_pure")
     if token in {"appartement", "kamers", "slaapkamers"}: semantic.append("room_count_question_pure")
+    # unit22 phone-call _pure tags: exact-case unit22 forms only, so match_union's
+    # [noun,verb,pronoun,preposition] filter can't pull the unit01 homographs
+    # met(with)/ik/spreek(speak) or unit01-14 function words (Ik/Kun/herhalen/je)
+    # into the matching pool alongside their unit22 senses. 2026-07-29.
+    if token in {"Met", "U", "spreekt", "wie"}: semantic.append("phone_identity_pure")
+    if token in {"Spreek", "hoor"}: semantic.append("phone_clarification_pure")
     # A2 unit 27 (huisarts/health: a doctor's visit), added 2026-07-07 by the
     # practice-template authoring pass. Narrow generative tags, each verified
     # against the real lesson content before use in a shared frame:
