@@ -11,6 +11,32 @@ or owner-reserved decisions interrupt Ramin. Everything else lands here.
 
 ---
 
+## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
+
+Corpus-wide scan found **362** lesson exercises of `type: dialogue_comprehension` with **empty
+`prompt.target_blocks`**. The compiler wires playable audio (`audio_text`) ONLY for `listen_select`/
+`listen_type`/`listen_order` — **never** `dialogue_comprehension` (verified in `compile_exercise`,
+compile_content.py:3638). Their `media_asset_key` points at a pre-recorded asset that is
+`status: pending_generation`. Net: with no audio AND no readable `target_blocks`, the learner sees only
+the (source-language) instruction + answer options — nothing to comprehend.
+
+- **✅ FIXED by me (35 permanent cases): all fa + prs** — those languages have zero TTS/recording network
+  EVER, so text is the only possible stimulus. Populated `target_blocks` from each lesson's own taught
+  dialogue. (This is already the established project convention — pl/hi realizations do it for 100% of
+  their dialogue_comprehension, nl for ~91%.) fa/prs now 0 broken.
+- **🔴 REMAINING ~327 — YOUR CALL, in TTS-capable langs:** en **58**, de **27**, fr **65**, ru **53**,
+  ar **51**, ro **19**, es **22**, nl **32**. These are (intended) LISTENING exercises whose content_keys
+  are literally `listen_*` — they're waiting on audio generation. **In-scope for the 6 review directions:
+  en (58 — affects fa-en/prs-en/nl-en) and nl (32 — affects en-nl).** Two options: (A) generate the
+  audio (English/Dutch/German/French/etc TTS all exist) — preserves the listening-skill assessment; or
+  (B) populate `target_blocks` to convert them to reading-comprehension (mechanical, I have the script) —
+  makes them answerable now but removes the listening practice. **I did NOT touch these** — converting a
+  listening exercise to reading is a pedagogy/product decision, not a coordinator call. If you want (B)
+  for en/nl (or all langs), say so and I'll run the same fix. Until then, every one of these renders
+  unanswerable in the current no-audio build.
+
+---
+
 ## ⭐ Native review — BATCH 1 (2026-07-27): 20 wave-4 packs reviewed + fixed + flipped
 
 Fresh-context native review (4 sonnet reviewers, AUTHORING_PREFLIGHT.md + realization/overlay +
