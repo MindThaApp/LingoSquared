@@ -69,8 +69,8 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   The overlay note claims بطری is "distinct from Iranian باتری" — reviewer (native-ish) says that's wrong.
 - prs-en u31 `curly`="چوقی" (backfill) vs "مجعد" (overlay) — likely mistranslation; u32 `bird`="مرغک"
   (chick) vs "پرنده"; spelling drifts (پشک/پیشک, مو/موی سر, چشمان/چشم‌ها).
-- **`می‌ته` vs `می‌ده` pattern** (prs-en units 30/34/35/36-39) — possible Pashto contamination (ته is a
-  Pashto postposition); reviewer's best guess is it should be می‌ده. Native confirm → global replace.
+- ~~**`می‌ته` vs `می‌ده` pattern**~~ **RESOLVED (batch 9): NOT a defect** — legit Afghan colloquial
+  د→ت shift, corpus-pinned convention. Withdrawn. (See BATCH 9 note.)
 
 **QUEUED — DEPLOY-EFFECT (backfill):**
 - prs-en/fa-en leaked-annotation glosses reachable via bare unit_verb/unit_noun pools: fa-en u33/34/35
@@ -172,9 +172,9 @@ review batches will keep re-finding it, so this decision unblocks the most value
   (invented detail, no graded impact).
 
 **QUEUED — prs-en (native-Dari, do NOT auto-fix — extends the batch-7 queue):**
-- `می‌ته` recurs in u36/u39 overlays (waters="آب می‌ته", teaches="درس می‌ته") — same suspected
-  Pashto contamination as batch 7; native confirm → می‌ده. Ironically prior fresh-context reviewers
-  cited می‌ته as *positive* evidence of Afghan register, so this needs a definitive native ruling.
+- ~~`می‌ته` recurs in u36/u39 overlays~~ **RESOLVED (batch 9): NOT a defect** — the native-Dari reviewer
+  confirmed it's the legit Afghan colloquial د→ت shift (the prior reviewers who cited it as positive
+  Afghan-register evidence were right). Withdrawn.
 - `community`="اجتماعی" (=social, adj) for a noun is a probable mistranslation independent of the leak;
   and stripping its parenthetical collides with `outgoing`→"اجتماعی". Native call.
 - prs-en u40 match.003.volume_match.008 ships a stray authoring note in `frame.text_blocks`
@@ -203,14 +203,14 @@ en-nl u36-40 (schrijf + _pure hygiene); nl-en u36/u37 (inert feedback, deferred)
   a1_unit45_emergencies (32), 4-POS lesson03→a1_unit45_emergencies_lesson03 (11, tag added). u41 clean.
 - FLIPPED reviewed: nl-en a1_41-45; en-nl a1_43/45 (both clean per reviewer).
 
-**QUEUED — fa-en LIVE (production completeness, class 6 — do next, cross-direction shared-realization fix):**
-- fa-en u42 lesson03.exercise04 (speak_response "say something about your own personality") accepted_answers
-  OMITS taught "I'm friendly" / "I'm funny" / "I'm talkative" (only 3 of 6 lesson01 adjectives covered);
-  u43 lesson03.exercise04 (favorite color) OMITS black/white. The gap is in the SHARED `realizations/en/
-  a1_unit42_personality.yaml`/`a1_unit43_colors.yaml` (mirrored into the fa-en overlay), so it affects
-  fa-en AND prs-en AND nl-en — fix = add the variants to the shared realization + all 3 dirs' overlays.
-  (u44/u45 equivalents are complete.) NOTE speak_response STT grading — verify grading.py accepts the
-  added forms. HELD until the prs-en batch-9 reviewer finishes (it's reading these shared files).
+**DONE (LIVE cross-direction fix — speak_response completeness, class 6):**
+- u42 lesson03.exercise04 (respond_own_personality) + u43 lesson03.exercise04 (respond_own_favorite_color)
+  speak_response accepted_answers OMITTED taught answers (u42: standalone "I'm friendly/funny/talkative";
+  u43: black/white) → learner saying a taught answer graded WRONG (grading.py: speak_response multi-answer
+  `accepted` is a closed set, confirmed L643). Added the missing variants to the SHARED
+  `realizations/en/a1_unit42_personality.yaml`/`a1_unit43_colors.yaml` + all 3 dirs' overlays (fa-en/prs-en/
+  nl-en) — 8 files, matching the sibling writing_prompt's already-complete lists. validate 0/0 all 6
+  realization×overlay pairs. This also retroactively validates the nl-en u42/u43 flips.
 
 **QUEUED — en-nl (inert / cosmetic, LOW):**
 - u41/u42 blanket-tag contamination (persoonlijkheid_vocab/kleuren_vocab pull course-wide review tokens
@@ -230,7 +230,25 @@ en-nl u36-40 (schrijf + _pure hygiene); nl-en u36/u37 (inert feedback, deferred)
 - minor near-duplicate templates (same `{item}` frame + overlapping bare-POS pool) u43/u44/u45; calm/relaxed
   →آرام borderline near-synonym in u42 id_wide adjective pool (self-flagged, not identical strings).
 
-**prs-en batch-9: PENDING (reviewer still running at time of writing).**
+**prs-en batch-9 (DONE + one big resolution):**
+- ✅ **`می‌ته` is NOT a defect — RESOLVED.** The native-Dari batch-9 reviewer confirms `می‌ته`/`می‌گه`/
+  `می‌شه` is the legit, corpus-pinned Afghan colloquial د→ت shift (بده→بته etc.), documented in
+  overlays/prs-en/a2_unit36.yaml's own note — not Pashto contamination. This settles the batch-7/8 queued
+  question; the `می‌ته→می‌ده` global-replace item is WITHDRAWN. (prs-en native mistranslation items like
+  battery=بطری from batch 7 still stand — separate from می‌ته.)
+- ✅ **DONE: prs-en u42 match.003 + volume_match.007 widened 4→5 slots** (NOT 6 — the reviewer's "widen to
+  6" hit the DEAD-trap: personality_adj's unit42-scoped pool is only **5**, not 6 — one of friendly/funny/
+  hardworking/shy/calm/talkative isn't reachable at unit42 checkpoint scope. 6 slots DEADed both templates;
+  backed off to 5, the true pool ceiling. Still below the 6-pair floor but +1 pair and non-DEAD). unit-scope
+  0 DEAD, TOTAL back to baseline. Lesson: always verify unit-scoped pool via the tool, not the tag's total.
+- QUEUED LOW: prs-en u41 lesson01 exercises use "cut/cutting" (taught unit41 lesson04) — within-unit
+  forward ref; reword or accept (native-EN). u43/44/45 clean, no bare-POS leaked-gloss exposure in prs-en
+  u41-45 (unlike fa-en). Process/hygiene: fictional `pool_check.py` cited in u43/44/45 notes (script doesn't
+  exist; claims independently re-verified true); 5 redundant tag-append blocks in `_en_target_lexeme_common.py`
+  (harmless — service.py sets() them; cleanup-only).
+
+**FLIP (batch 9, after fixes):** prs-en u43/44/45 clean → flip; prs-en u41 (LOW forward-ref residual) +
+u42 (after floor fix) → flip. All 6 English-target speak_response fixes clear u42/u43 for those dirs too.
 
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
