@@ -461,6 +461,36 @@ Also nl-en u58 city/town→"de stad" synonym false-neg still queued (BATCH-10).
 **FLIP (batch 13):** fa-en u61/62/63 + nl-en u61/62/63/65 + en-nl u64/65 = 9. HELD: fa-en u64/65, prs-en
 u61/62/63/64/65, nl-en u64, en-nl u61/62/63.
 
+## ⭐ Native review — BATCH 14 (2026-07-30): a1_66-68 — LAST a1 X-en band (pharmacy_symptoms/family_news/borrowing_lending; en-nl theater/markt/bakker)
+
+**DONE (flipped):** nl-en u66/67/68 (all clean), fa-en u66/67/68 (u68 lesson02.fill.003 frame fixed
+"Thank you for the {item}." → "Thank you for {item} it." = natural gerund), prs-en u66, en-nl u66/67.
+This COMPLETES the a1 review sweep for nl-en + fa-en (all 68 units flipped-or-held).
+
+**QUEUED — prs-en (deploy-effect backfill gloss, native-Dari):**
+- u67 `must`→"باید (در must be: حتماً)" (backfill_lexemes_prs_en.py:1265) + u68 `lending`→"امانت دادن (شکل
+  ing فعل lend)" (:1268) — Latin embedded in the Dari gloss, LIVE in u67 bare-verb slots + u68's three
+  matching_pairs (confirmed shipped). Native delatinize + re-backfill. u67/u68 held.
+- u67 register: 2 un-repaired formal دارد ("یک طفل نوزاد دارد.") in teach.baby example_gloss + teach.sister_baby
+  gloss (NOT dialogue cards, so not covered by the disclosed dialogue-exclusion) → داره. Compile-time overlay
+  edit but Dari → queued with the must fix (u67 held on must regardless).
+
+**QUEUED — en-nl u68 (live was):** bakker_vocab slots include verb POS (widened to admit the unit's own
+`gebakken`), so the `was`→"do the dishes" homograph is a LIVE candidate → held on the queued was-exclusion.
+(en-nl u66/u67 POS-filter verb out → inert → flipped.)
+
+**QUEUED — fa-en u68 (backfill coverage, non-blocking, self-flagged):** lesson03 has zero lexemes →
+checkpoint <12 generatable items despite the pack clearing the template-count bar. Backfill-lane
+(EN_PHRASE_LEXEME_UNIT_STEMS / lesson03 lexeme registration). Did NOT block u68's flip.
+
+**FLIP (batch 14):** nl-en u66/67/68 + fa-en u66/67/68 + prs-en u66 + en-nl u66/67 = 8. HELD: prs-en
+u67/u68 (must/lending gloss + دارد), en-nl u68 (live was).
+
+**★ a1 STATUS after batch 14:** nl-en a1 fully swept; fa-en a1 fully swept (both dirs' held packs are all
+on deploy-effect backfill/native gloss fixes — a single re-backfill wave + native-Dari/Farsi pass clears
+most). prs-en a1 nearly done (held: leaked-gloss units). en-nl a1 through u68 (u69-72 remain). NEXT:
+en-nl a1_69-72 + open the a2 band (fa-en/prs-en/nl-en a2_01-05).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
