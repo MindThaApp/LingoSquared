@@ -2973,6 +2973,13 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # into the matching pool alongside their unit22 senses. 2026-07-29.
     if token in {"Met", "U", "spreekt", "wie"}: semantic.append("phone_identity_pure")
     if token in {"Spreek", "hoor"}: semantic.append("phone_clarification_pure")
+    # route_map_pure: the real route-map labels only. route_map is a blanket _cat
+    # tag on unit09's route_op_de_kaart lesson, so it also stamps unit01/08 place
+    # nouns (station/bibliotheek/buurtkaart/bank/supermarkt) and function words onto
+    # the pool feeding unit09's 5 route MC/listen templates → false "route word"
+    # feedback + ambiguous options. Exact-token narrow to {route, START, DOEL}
+    # (drops the cap-dup 'Route' too). 2026-07-30.
+    if token in {"route", "START", "DOEL"}: semantic.append("route_map_pure")
     # A2 unit 27 (huisarts/health: a doctor's visit), added 2026-07-07 by the
     # practice-template authoring pass. Narrow generative tags, each verified
     # against the real lesson content before use in a shared frame:
