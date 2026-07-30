@@ -785,6 +785,12 @@ the affected a1 packs flipped. Fix = drop the و-variant from the write_*_contra
 (mechanical; I can run it) — but NATIVE-CONFIRM first whether و ever reads as an acceptable loose paraphrase.
 Distinct from the 3 earlier systemic classes.
 
+**✅ a2 FIX-PASS PROGRESS (2026-07-31):** DONE — (a) NEW-1 attribution splits en-fa a2_10/11/15/17; (b)
+metalanguage stripped from grammar-note target.text on 8 en-fa a2 cards (09/10/11/15/17/18 → pure Farsi, English
+kept in overlay); (c) en-prs a1_57 untaught-conjugation frames rephrased to attested forms (همایون…دید/می‌آورد) +
+FLIPPED; (d) en-fa a2_15 + en-prs a2_15 lesson02 forward-ref prompts fixed by dropping the leading
+متاسفانه/متأسفم. STILL TODO below.
+
 **🔴 a2 FIX-PASS workstream (compile-time, mine — the reverse-dir a2 units need this before flipping):**
 - **NEW-4 forward-ref in graded dialogue_response PROMPTS** (learner must read an untaught token to answer):
   en-fa a2_11 (بکنم, taught lesson04), a2_15 (متأسفانه, lesson04); en-prs a2_12 (مشکل, lesson04 — compiler-WARNed),
