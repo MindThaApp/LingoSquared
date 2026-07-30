@@ -117,7 +117,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [direction_word, direction_word_pure, turn_direction, route_map, imperative_direction]
+    semantic: [direction_word, direction_word_pure, turn_direction, route_map, route_map_pure, imperative_direction]
 slot_presets:
   direction_word: &direction_word {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: direction_word}}
   # direction_word_pure: exact-case (no capitalized "Rechtdoor" duplicate),
@@ -130,7 +130,9 @@ slot_presets:
   # DOEL from lesson05's route_op_de_kaart) -- re-anchored 2026-07-24 from
   # a dead cross-unit "place_non_station" (unit08-only vocabulary, 0
   # unit09-scoped candidates). See review notes above.
-  route_word: &route_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: route_map}}
+  # route_word points at route_map_pure (route/START/DOEL only) — route_map is the
+  # blanket _cat tag polluted with unit01/08 place nouns + function words. 2026-07-30.
+  route_word: &route_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: route_map_pure}}
   # command_verb: unit09's own lesson02 imperative verbs (ga/sla/loop plus
   # their sentence-initial Ga/Sla/Loop variants) -- added 2026-07-24 for the
   # bare-word production template below; case variants are harmless in a
