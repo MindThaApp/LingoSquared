@@ -579,6 +579,43 @@ Fix = isolate the collider into a single-member tag or exclude from the MC/liste
   referent (train vs bus); reviewers judged it acceptable (disambiguated by the question). POLICY question:
   does the "full stop" distractor rule admit a different-referent exception? Your call.
 
+## ⭐ Native review — BATCH 17 (2026-07-30): b1_01-05 opens (necessity/abilities/hypotheticals/debate/workplace) + en-nl a2_73-77
+
+**FLIP (batch 17):** nl-en b1 u01-05 (ALL clean — first fully-anchored, defense-in-depth batch) + en-nl a2 u74 = 6.
+HELD: prs-en b1 u01-05, fa-en b1 u01-05, en-nl a2 u73/75/76/77.
+
+**KEY: nl-en b1 is CLEAN; X-en b1 is uniformly BACKFILL-GLOSS-GATED (like early a1 X-en).** The X-en b1
+recognition-tier templates draw the unit-wide pool which surfaces leaked/grammar-note/wrong-sense glosses.
+All fixes are `scripts/backfill_lexemes_{fa,prs}_en.py` (UNIT_SENSE_OVERRIDES + strip parentheticals), NOT
+pack-YAML. One re-backfill wave clears them.
+
+**QUEUED — prs-en b1 (deploy-effect backfill glosses):** untagged recognition pools surface must/make/don't/
+set/did/done (u01), was/were/had/wasn't/like (u02), doesn't/didn't/**take** (u03, take=گرفتن(در take the
+street) stale A1-directions context), **miss (u04, HIGH — گم کردن=lose-an-OBJECT, should be از دست دادن/دلتنگ
+شدن; overlay gets it right, auto-gloss wrong; 13 live templates)**, little (u05). don't/did/doesn't/didn't
+have ZERO real gloss (only an English grammar footnote) → worst.
+
+**QUEUED — fa-en b1 (deploy-effect backfill glosses + overlay completeness):**
+- **u05 (worst): report/update both wrong-POS** (taught as NOUNs گزارش/گزارش‌پیشرفت but shared-dict has them as
+  VERBS گزارش‌دادن/به‌روزکردن), **course**="دوره"(class) for the idiom "of course"(البته), **sure**="البته" for
+  "make sure"(مطمئن) — course/sure are literally each other's sense. 4 wrong-sense glosses, 5 live templates each.
+  UNIT_SENSE_OVERRIDES for all 4. The shared `_en_target_lexeme_common.py:~297` code comment already flags the
+  report homograph risk.
+- u04 `sense`="حس"(feeling) for "makes sense"(منطقی/معنی); u01 `more`="بیشتر (در more expensive)" leaked (LOW);
+  u03 `much`="چقدر"(interrogative-lean, LOW).
+- **overlay completeness (compile-time, fa-en overlays — exact fixes):** u02 speak_ability_dialogue add
+  "Next time, I'd be able to save time if I did it online too." (I'd contraction); u03 reply_as_leila add an
+  "I'll…I'll…" contracted variant; u03 speak_hypotheticals_dialogue add the "would've signed up" variant
+  (the same unit's write_if_had_known already accepts would've). These 3 are the ONLY blockers for u02/u03 —
+  fixable without a re-backfill; do in a focused fa-en-b1 pass.
+
+**QUEUED — en-nl a2_73-77 near-dup-gloss MC collisions (deploy-effect backfill tag isolation, LIVE):**
+extends the batch-16 en-nl collision class. u73 vaardigheid/vaardigheden (MODERATE) + blanket-tag LOW; u75
+**Probeer/probeer** (HIGH — case-variant, the pack's own note wrongly says bare MC is safe); u76 rooster/agenda
+(MODERATE-HIGH); u77 artikel/exemplaar (LOW) + `regel` (LIVE, confirmed — shopping_complaint_verb, already
+queued was/regel item). Fix = isolate the collider into an exact-case/single-member tag or exclude from the
+MC/listen pool.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
