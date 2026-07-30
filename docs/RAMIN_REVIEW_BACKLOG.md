@@ -712,6 +712,41 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
+## ⭐ Native review — BATCH 21 (2026-07-30): REVERSE dirs open — en-fa a1_03-12 + en-prs a1_01-11
+
+**KEY: the reverse dirs (English→Farsi/Dari) are much CLEANER than the X-en dirs** — their target text is
+hand-authored in realizations/fa + realizations/prs (not shared-dict-generated), so the wrong-sense-gloss-reuse
+class that gates X-en doesn't apply. 16/20 packs flipped this batch.
+
+**FLIP (batch 21):** en-prs a1_01/02/03/04/05/10/11 + en-fa a1_03/05/06/07/08/09/10/11/12 = 16. (en-fa u09
+kept flipped with است — see note.) HELD: en-prs a1_07/08/09, en-fa a1_04.
+
+**QUEUED — en-prs a1_07/08/09 audio-accessibility (compile-time, HIGH, mirror unit10 — focused fix pass):**
+each has `lesson06.exercise01.listen_context` = dialogue_comprehension with `target_blocks: []` +
+`media_asset_key ...pending_generation` (prs has ZERO TTS) → learner sees only the English instruction + 4
+options, nothing to comprehend. Fix (already shipped in en-prs a1_unit10, native in a1_unit11): surface the
+lesson's own teaching-dialogue turns as speaker-labelled `target_blocks` in the realization, change
+`type` to multiple_choice, reword overlay instruction "Listen to"→"Read the conversation." Realization+overlay
+edit, no backfill. (Likely recurs in later en-prs units' lesson06 — sweep.)
+
+**QUEUED — en-fa a1_04 possession-verb agreement (deploy-effect backfill, HIGH):** lesson02.have_order.003
+frame "من یک {kinship_term} {possession_verb}" hardcodes 1st-person من but possession_verb is a flat tag
+mixing persons (دارم/داری/داره/دارد/…) → ~5/7 draws are ungrammatical AS THE CORRECT ANSWER ("من یک برادر
+داری"). Fix: add a `possession_verb_1sg` sub-tag (دارم/ندارم) in fa_agreement_tags() [backfill_lexemes.py,
+re-backfill] + repoint the slot. Secondary: lesson04.kin_order.003 negative-interrogative draws.
+
+**QUEUED — reverse-dir minor/native (LOW):** en-prs پوسته‌خانه (post office, low-conf native-confirm);
+en-fa u09 write_meeting_time_summary uses formal است in a colloquial unit (register nit — proper fix needs
+عصره TAUGHT first, else it's an untaught-token compile error, verified; deferred, u09 flipped as-is since
+است is grammatical + graded-correct); en-fa u12 آرش/سارا character-pairing breaks the settled سارا/نیما duo
+(advisory); en-fa u04/u06 tested_text-vs-audio register cosmetic (non-graded).
+
+**DOC-HYGIENE (found by 3 reverse-dir reviewers):** CLAUDE.md "Per-lane register pins" only defines fa-en/
+prs-en (the X-en dirs); it has NO explicit en-fa/en-prs pin. The operative pin for the reverse dirs lives in
+each realization's own `course.register_policy`/`dialect` (en-fa = Iranian fa_IR standard-colloquial; en-prs =
+Afghan prs_AF kabuli استم/استین/می‌تانین). Add explicit en-fa/en-prs entries to CLAUDE.md so future dispatchers
+don't mis-cite the X-en pin.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
