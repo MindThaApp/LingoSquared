@@ -55,6 +55,44 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   a2_14 lesson04.choose.002 MC at exactly the 3-option floor (zero slack — fragility note);
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
+## ⭐ Native review — BATCH 7 (2026-07-30): fa-en/prs-en/nl-en/en-nl a1_31-35 (recombination units)
+
+**DONE (clean LIVE pack-only fixes committed):**
+- u34 listen_dialogue_favorite distractors (fa-en/prs-en/nl-en, commit 0965a73c): swimming/yoga/soccer
+  are all said by Daniel → replaced with tennis/basketball (CLAUDE.md "full stop" rule; overrode the
+  nl-en author's rationalizing note for cross-direction consistency).
+- en-nl u35 fill.003 Sander→Fenna wrong-fact + u34 order.003 'mijn' determiner (c64c0513).
+
+**QUEUED — NATIVE-JUDGMENT (Dari, prs-en — need Ramin/native confirm, do NOT auto-fix):**
+- **prs-en u35 `battery`="بطری" (CRITICAL): بطری = "bottle" in Dari/Farsi, not battery** (should be
+  باتری or the colloquial بتری the backfill already uses — spelling is also inconsistent بطری/بتری).
+  The overlay note claims بطری is "distinct from Iranian باتری" — reviewer (native-ish) says that's wrong.
+- prs-en u31 `curly`="چوقی" (backfill) vs "مجعد" (overlay) — likely mistranslation; u32 `bird`="مرغک"
+  (chick) vs "پرنده"; spelling drifts (پشک/پیشک, مو/موی سر, چشمان/چشم‌ها).
+- **`می‌ته` vs `می‌ده` pattern** (prs-en units 30/34/35/36-39) — possible Pashto contamination (ته is a
+  Pashto postposition); reviewer's best guess is it should be می‌ده. Native confirm → global replace.
+
+**QUEUED — DEPLOY-EFFECT (backfill):**
+- prs-en/fa-en leaked-annotation glosses reachable via bare unit_verb/unit_noun pools: fa-en u33/34/35
+  (answer/lot/etc.), prs-en u32/33/35 (takes="طول می‌کشه (سوم‌شخص مفرد take)", make="گرفتن (در make an
+  appointment)", "(سوم‌شخص مفرد)" grammar notes). Fix = strip the parentheticals in the gloss dicts
+  (collision-check) OR re-anchor the bare-POS templates to fa_en_a1_unitNN_words / prs_en_a1_unitNN_words
+  (DEAD-verify per POS). Same wave as the earlier leaked-gloss strips — a dedicated `" ("` sweep of both
+  dicts is worthwhile. en-nl u34 `boodschap`/`bericht` synonym false-negative (drop boodschap from
+  lesson02 compound_note introduced_tokens, or add an NL_A1_VOLUME_TAG_EXCLUSIONS tuple).
+
+**QUEUED — JUDGMENT/DESIGN:**
+- nl-en u33 order.002/translate.001 "take the car/bike" contradicts the unit's own teaching (car→drive,
+  bike→ride) — pack author documented "take is standard English", reviewer disagrees. Fix = narrow to
+  {bus,train} (new tag) OR reframe vehicle-neutral "by {item}" (like sibling order.001). Ramin's call.
+- fa-en u31/32 + nl-en u31 + prs-en u31 production-prompt completeness (missing curly/long/short/glasses
+  etc. accepted_answers) — add the taught variants; native-EN judgment.
+- fa-en u34/u35 duplicate templates (order.005 vs volume_order — differentiate the frame, like u31 did).
+- corpus-wide: prompt.target_blocks English text often exceeds taught vocab (~40 instances) — policy call.
+
+**FLIPPED reviewed (unambiguously clean):** en-nl a1_31/32/33; nl-en a1_32/34 (after the distractor fix).
+(prs-en u33/34 + fa-en have residual reachable leaked-gloss / duplicate / mistranslation findings → not flipped.)
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
