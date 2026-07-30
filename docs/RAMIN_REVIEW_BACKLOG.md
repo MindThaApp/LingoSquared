@@ -498,6 +498,47 @@ on deploy-effect backfill/native gloss fixes — a single re-backfill wave + nat
 most). prs-en a1 nearly done (held: leaked-gloss units). en-nl a1 through u68 (u69-72 remain). NEXT:
 en-nl a1_69-72 + open the a2 band (fa-en/prs-en/nl-en a2_01-05).
 
+## ⭐ Native review — BATCH 15 (2026-07-30): a2_25-29 opens (bureaucracy/opinions/banking/doctor/maintenance) + en-nl a1_69-72
+
+**DONE (LIVE fixes committed):**
+- **u25 shared-realization speaker bug (HIGH, cross-direction):** the DMV dialogue transcript
+  (realizations/en/a2_unit25_bureaucracy.yaml) had two consecutive `Clerk:` turns — "Clerk: I see.
+  Could you tell me what I need to bring? Clerk: You'll need..." — the question is Daniel's (the
+  exercises' own tested_text at lesson04 already treat it as Daniel's line). Re-attributed to Daniel.
+  Audio is pending_generation, so the corrected text will TTS correctly. validate 0/0 ×3 dirs.
+- **nl-en a2 u25 checkpoint punctuation** (u60-class): weekday_translate.007 render_frame "come this
+  {item}" lacked the "?" its feedback+Dutch prompt carry → checkpoint marked "...Friday?" wrong. Added "?".
+- **nl-en a2 u26 re-anchor:** opinion_adj preset + content_translate_bare.004 inline slot were POS-only
+  (course-wide pull at Endless-Practice) → +semantic a2_unit26_opinions (5) / a2_unit26_opinions_lesson04
+  (7), declared in tag_schema. 0 DEAD.
+- FLIPPED: fa-en a2 u25/26/28/29; nl-en a2 u25/26/27/28/29; prs-en a2 u25/26/28.
+
+**QUEUED — fa-en + prs-en a2_27 banking (deploy-effect backfill + native-Dari, BOTH dirs):**
+- **`fee`="معاش" is WRONG — معاش means SALARY/wage** (confirmed by a2_unit39 salary=معاش + fa-en's own
+  note "حقوق not معاش"). A bank fee is a charge FROM the customer → should be **کارمزد** (standard Persian/
+  Dari, already used correctly in backfill_lexemes_fa_en.py:893). HIGH — reaches ~12 overlay teach/exercise
+  strings + the backfill gloss dict in both fa-en (:865?) and prs-en. Native-confirm کارمزد, fix overlay
+  text + gloss dict. u27 held (both dirs).
+- **`direct`="مستقیم (در direct deposit)"** leaked English in the gloss, LIVE in banking_adjective/banking_word
+  (fa-en backfill + prs-en backfill:866). Strip the parenthetical. (fa-en also: business=کاری/checking=جاری
+  context-bound gloss defensibility, MEDIUM-LOW.)
+
+**QUEUED — prs-en a2_29 (completeness, prs-en-overlay-only):** lesson04 reply_as_daniel/speak_maintenance_
+dialogue accepted_answers list only the period-split join; lesson02.exercise06 (same clauses) + sibling
+unit28 + nl-en/fa-en overlays all carry the comma+and / and-only variants → a taught-correct join is graded
+wrong. Add the 2 variants to both u29 lesson04 exercises (mirror lesson02.exercise06). prs-en u29 held.
+
+**QUEUED — LOW/cosmetic:** fa-en a2_25 two duplicate word_order templates (`.volume_order` over 1-candidate
+weekday pool → identical exercises; drop one of each pair — pack-only, verify tier floor) + English
+feedback_frame on those (inert); fa-en a2_25/26 matching instruction "وصل کنید" (formal outlier among
+colloquial کنین — one-word fix each); fa-en a2_29 teach.confirmation_text gloss "درخواست تعمیر" vs the
+unit's "گزارش"(report) — non-graded nit; nl-en a2_25 overlay schema 1.0-vs-1.1 example_gloss gap (7 WARN,
+becomes error once retrofitted). All flipped-with-residual or held per severity.
+
+**FLIP (batch 15):** en-nl u69 + fa-en a2 u25/26/28/29 + nl-en a2 u25-29 + prs-en a2 u25/26/28 = 13.
+HELD: fa-en+prs-en a2_27 (fee/direct), prs-en a2_29 (join variants). NEXT: batch 16 = en-nl a2_24-28 +
+fa/prs/nl-en a2_30-34.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
