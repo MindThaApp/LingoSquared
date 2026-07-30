@@ -767,6 +767,56 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
+## ⭐ Native review — BATCH 26 (2026-07-31): reverse-dir a1 tail + a2 open — en-prs a1_57-61 + en-fa/en-prs a2
+
+**FLIP (batch 26): 6 packs** — en-prs a2_09 + a1_59/60/61 + en-fa a2_09/10. (a1 reverse-dir is now DONE bar
+deploy-holds; a2 mostly needs a fix-pass — see below.)
+
+**✅ FIXED by me:** en-fa a2 NEW-1 merged-unattributed-speaker dialogue_comprehension (a2_10/11/15/17
+lesson04 comprehend_* merged two speakers into one em-dash block, no speaker field) → split into speaker-tagged
+blocks. (a2_10 flipped; 11/15/17 still held on other issues below.)
+
+**⚠️ NEW SYSTEMIC #4 — اما→و over-leniency (corpus-wide, ~23 en-prs a1 units + a2):** every `lesson06`/`lesson04`
+wrap-up "write a sentence with اما (but)" exercise's overlay `accepted_answers` includes a variant that swaps the
+contrastive **اما** for additive **و** ("and"), silently accepting a meaning-flipped sentence as a correct
+contrast. Found in en-prs a1_36/39-56/57-61 + a2_10 (write_debate_summary) and the اگر-conditional analog in
+a2_11/12/13. **Over-leniency only — never FAILS a correct learner**, so I've treated it as non-blocking and kept
+the affected a1 packs flipped. Fix = drop the و-variant from the write_*_contrast accepted_answers corpus-wide
+(mechanical; I can run it) — but NATIVE-CONFIRM first whether و ever reads as an acceptable loose paraphrase.
+Distinct from the 3 earlier systemic classes.
+
+**🔴 a2 FIX-PASS workstream (compile-time, mine — the reverse-dir a2 units need this before flipping):**
+- **NEW-4 forward-ref in graded dialogue_response PROMPTS** (learner must read an untaught token to answer):
+  en-fa a2_11 (بکنم, taught lesson04), a2_15 (متأسفانه, lesson04); en-prs a2_12 (مشکل, lesson04 — compiler-WARNed),
+  a2_13 (مشکلی — NEVER taught anywhere; compiler-BLIND because validate_untaught_vocabulary only reports tokens
+  taught in a *later* lesson, silently dropping never-taught ones — compile_content.py:2968); en-prs a2_15/17/18
+  (متأسفم/می‌کنی/مشکلی in lesson02 prompts). Fix = rephrase the lesson02 prompt to an already-taught form, or move
+  the token's intro earlier.
+- **Hard metalanguage baked into grammar-note `target.text`** (English jargon tagged language_code: fa, shown as
+  target): en-fa a2_11 (باز کردن "(to open, light verb)", رو "(object marker)"), a2_17 (-ها "(habitual plural…)"),
+  a2_18 (پس دادن "(to return, light verb)"). Fix = move the jargon to the card's `note:`, keep target.text pure
+  Farsi.
+- **Teaching-card ordering / forward-ref in EXAMPLES (LOW, compiler-blind, examples aren't graded):** en-prs a2_18
+  بخاری used in 4 lesson01 examples before its own card (8th of 9) — reorder heater_word to front; en-prs a2_14
+  (مصاحبه‌کننده/وظیفه/سی‌هزار), a2_15/16/17 minor same-lesson-early example tokens; en-fa a2_15 cancel_word
+  note-vs-example light-verb mismatch (لغو شدن vs لغو کردن).
+- **NEW-2 off-theme course-wide pools + false unit-origin feedback_frame (Endless-Practice-only; checkpoint is
+  unit-scoped so checkpoint-SAFE):** en-fa a2_11/15/17/18 POS-only/`reviewed_phrase`-union `choose`/`match`
+  templates draw any course-wide same-POS token in Endless Practice while feedback_frame claims "from this unit."
+  feedback_frame is runtime-INERT so the false claim isn't rendered, but the off-theme fill is real → re-anchor to
+  a unit semantic tag (DEAD-trap-verify) OR neutralize. Same class as en-fa a1_53's 8 unscoped templates.
+- **NEW-3 grading over-leniency (deploy/backfill):** typo-tolerance (distance-1, ≥4 chars, arabic strict) conflates
+  taught near-pairs بیایید(u12)/بیاید(u13), خوبی(u17)/خوب(u16) — a wrong-but-taught word marked correct in
+  course-wide Endless pools. Disambiguate glosses in backfill_lexemes.py.
+- **en-prs a2_16 cross-lesson attribution:** lesson02 dialogue_response_own_habit instruction attributes a line to
+  زرمینه that lesson04's canonical dialogue gives to همایون. Re-attribute or de-name.
+- **en-prs a2_10 write_debate_summary + a1_57 untaught conjugation** (دیدیم/آوردم in practice frames — never taught;
+  rephrase to attested همایون…دید / او…می‌آورد) **+ a1_58 zoo_word HARD metalanguage** (باغ/وحش glossed
+  "(in باغ وحش: zoo)" — decompose باغ وحش as one atomic item, don't split into [باغ,وحش]) + animal_word pet-in-zoo
+  soft frame (سگ/پشک در باغ وحش).
+- **Meta:** en-prs a2_11/12/13 carry byte-identical templated "2026-07-11 fresh-context review" notes asserting an
+  اگر-issue even in a2_13 which has no اگر — `status: reviewed` on those realizations was not independently earned.
+
 ## ⭐ Native review — BATCH 25 (2026-07-30): reverse dirs — en-fa a1_49-57 + en-prs a1_47-56
 
 **FLIP (batch 25): 16 packs** — en-prs 47/48/49/50/51/52/53/54/55/56 + en-fa 51/52/54/55/56/57.
