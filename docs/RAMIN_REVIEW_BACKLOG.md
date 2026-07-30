@@ -383,7 +383,14 @@ u53/u54 (own-pool leaks), fa-en u51-55 (in-pool gloss defects, deploy-effect), e
   dierentuin/rondvaart/voetbalwedstrijd/pretpark/theater/markt/bakker/ijssalon/bloemist/boekwinkel/
   dierenwinkel all carry `was` in their `_vocab` tag too, same "Was het X" pattern — verify each then exclude).
   Also restaurant_vocab/accommodatie_vocab/wasserette_vocab carry it. Do NOT exclude from unit10's
-  daily_activity (there `was`=dishes is correct). en-nl u56-60 held until this + re-backfill.
+  daily_activity (there `was`=dishes is correct).
+  **★ BATCH-15 confirmed the FULL scope: the single `was` Lexeme carries ~45 outing-unit `_vocab` tags
+  course-wide (verified via iter_specs).** The clean fix is to exclude `was` from EVERY en-nl a1 `_vocab`
+  tag except `daily_activity` (unit10). Per-unit LIVE vs inert depends only on whether that pack's
+  choose/listen/translate slots include verb POS: LIVE (verb POS present) = en-nl u56/57/58/59, u61/62/63,
+  u68, u70/71/72; inert (POS-filtered) = u60, u64/65, u66/67, u69 (those flipped). Same broad tags also
+  admit `is`/`hebt` etc. but those are correct-sense (class-2 LOW, not wrong-answer). One backfill edit +
+  re-backfill unblocks all ~11 held en-nl outing packs at once.
 
 **QUEUED — prs-en (native-Dari / gloss / re-anchor):**
 - u57 `journey`="سفر (بخشی از نام فلم Star Journey)" leaked-gloss IN-pool (unit57's own tag) — the Latin film
