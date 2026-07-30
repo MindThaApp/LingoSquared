@@ -136,6 +136,13 @@ delatinizing the Persian glosses is native-Dari judgment (e.g. `خرید (زما
 Recommend (b)+(c) together, or (a) if you accept the ambiguity tradeoff. **BLOCKED on your call +
 a dev DB to re-backfill.** This is the dominant remaining defect class in the X-en corpus; further
 review batches will keep re-finding it, so this decision unblocks the most value.
+  **Full inventory generated: `docs/LEAKED_GLOSS_INVENTORY.md`** (376 leaked total: fa-en 158, prs-en 218).
+  Classified conservatively (cross-POS collision): **class A disambiguating** (fa 68 / prs 111 — tense/
+  3rd-person/contraction/negation, must delatinize keeping the Persian marker); **class B collision**
+  (fa 52 / prs 90 — bare strip re-exposes a shared gloss like well→خوب=good/fine/okay); **class C
+  collision-free standalone** (fa 38 / prs 17 — candidate strips, but native spot-check the base is a
+  complete answer). NOT auto-stripped: even class C is Persian text under the "no auto-fix Dari" rule;
+  the prior wave's 111 safe strips already took the easy ones, so this residue is the genuinely-hard set.
 
 **DONE (clean LIVE pack-only fixes committed — nl-en, English target, no leak, authors' own pattern):**
 - nl-en u39 choose.001/listen.002/translate.004/choose.002 re-anchored POS-only `neighborhood_adj`
