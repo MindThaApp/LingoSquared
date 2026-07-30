@@ -99,7 +99,7 @@ for one language pair; there is no placement or enrollment state.
 
 ## Authentication and administration
 
-JWT bearer tokens expire after 86,400 seconds (24 hours). There is no refresh flow. Registration grants administrator status only when the normalized email is listed in `ADMIN_EMAILS`. Admin import replaces a course with the same source, target, and title atomically within the request transaction.
+JWT bearer tokens expire after 86,400 seconds (24 hours). A token refresh flow (`/auth/refresh`, plus `/auth/logout`) is available; refresh tokens rotate on use, with reuse detection. Registration grants administrator status only when the normalized email is listed in `ADMIN_EMAILS`. Admin import replaces a course with the same source, target, and title atomically within the request transaction.
 
 All API errors use `{ "error": { "code": "...", "message": "..." } }`. Correct answers are omitted from lesson and review prompts and returned only after answer submission.
 
@@ -182,7 +182,7 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/me/streak
 ## Known limitations
 
 - Listening and speaking exercise types are schema placeholders only.
-- No refresh tokens, password reset/email verification, audio storage, public authoring UI, or public course-create endpoint.
+- No password reset/email verification, public authoring UI, or public course-create endpoint.
 - Writing prompts are exact-match graded; semantic grading requires a future explicit design.
 - Daily goals have persisted defaults but no contract endpoint for changing them.
 - Migrations use a single initial schema revision; future changes should add normal incremental Alembic revisions.
