@@ -365,6 +365,61 @@ already-unit-anchored (recipe §8.1), prs-en still has bare-POS slots.
 **FLIP (batch 11):** nl-en u51-55 (5) + prs-en u51/52/55 (3) + en-nl u51/52/53/55 (4) = 12. HELD: prs-en
 u53/u54 (own-pool leaks), fa-en u51-55 (in-pool gloss defects, deploy-effect), en-nl u54 (regel backend).
 
+## ⭐ Native review — BATCH 12 (2026-07-30): a1_56-60 (restaurant/cinema/museum/banking/invitations/etc.)
+
+**DONE (LIVE fixes committed):**
+- fa-en u57/u58/u59/u60 CLEAN (freshly-authored glosses, no shared-dict reuse) → flipped.
+- prs-en u58/u59: re-anchored bare choose/listen/translate 10-POS slots to prs_en_a1_unit58/59_words
+  (clean pools) → flipped. prs-en u56 re-anchored (clean pool) but HELD (see نزده).
+
+**QUEUED — en-nl u56-60 (ONE root cause, deploy-effect backfill — LIVE bug, but no live flip until re-backfill):**
+- **`was` homograph, LIVE class-1 wrong answer.** `NL_GLOSSES["was"]="do the dishes (with ik)"` (unit10
+  "Ik was de vaat") is the ONLY gloss for `was`, but every outing unit's wrap-up uses the copula "Was het X
+  goed?". The backfill's own docstring CLAIMS `was` is excluded from these `_vocab` tags but
+  `NL_A1_VOLUME_TAG_EXCLUSIONS` (only has koken/bak, post/schrijven, zwembad/regel) — the `was` entries were
+  never added. So a generated MC/translate on `was` shows "do the dishes" as the correct meaning of a copula.
+  FIX (mechanical, matches documented intent): add `("bioscoop","was"),("museum","was"),("concert","was"),
+  ("park","was"),("sportschool","was")` to NL_A1_VOLUME_TAG_EXCLUSIONS — AND sweep units 61-72 (strand/
+  dierentuin/rondvaart/voetbalwedstrijd/pretpark/theater/markt/bakker/ijssalon/bloemist/boekwinkel/
+  dierenwinkel all carry `was` in their `_vocab` tag too, same "Was het X" pattern — verify each then exclude).
+  Also restaurant_vocab/accommodatie_vocab/wasserette_vocab carry it. Do NOT exclude from unit10's
+  daily_activity (there `was`=dishes is correct). en-nl u56-60 held until this + re-backfill.
+
+**QUEUED — prs-en (native-Dari / gloss / re-anchor):**
+- u57 `journey`="سفر (بخشی از نام فلم Star Journey)" leaked-gloss IN-pool (unit57's own tag) — the Latin film
+  title renders in the translate PROMPT (slot_rendering english_gloss) leaking the answer. Rewrite gloss to
+  plain سفر or exclude the token (it's only half a fixed film title). Native/gloss fix → u57 held.
+- u56 `نزده دالر` for "nineteen dollars" (4 sites) — everywhere else the corpus spells 19 as `نوزده`; could
+  be a dropped-letter typo OR a legit colloquial elision (cf. چارده/14 precedent). NATIVE-CONFIRM → u56 held.
+- u60 CLEAN but needs a FULL re-anchor (choose/listen/translate 10-POS + matching_pairs multi-slot +
+  word_order, and prs_en_a1_unit60_words is not yet declared in its tag_schema) — mechanical follow-up,
+  deferred (the matching_pairs inner slots don't match the uniform re-anchor pattern).
+
+**QUEUED — fa-en u56 (deploy-effect UNIT_SENSE_OVERRIDES):**
+- `bill`→"قبض" (utility-bill, shared-dict reuse) but unit teaches restaurant-check "صورت‌حساب" [HIGH];
+  `could`→past-ability "می‌تونستم" but taught as polite-request chunk [MED]. Add
+  UNIT_SENSE_OVERRIDES[("a1_unit56_restaurant","bill")]="صورت‌حساب" / [...,"could"]="می‌شه". u56 held.
+
+**DONE (nl-en):**
+- nl-en u56/u57/u59 CLEAN → flipped. u60: **LIVE checkpoint bug fixed** — translate.002's render_frame answer
+  "She {item} an invitation" lacked the period its feedback + Dutch prompt carry; router sets
+  orthography_strict=True for checkpoints (zero typo tolerance, grade_answer returns incorrect before the
+  Damerau-Levenshtein branch), so a learner typing the natural period-ending form was graded WRONG on
+  checkpoints. Added the period to match. → flipped. (Endless Practice forgave it as "almost"; checkpoint-only blast radius.)
+
+**QUEUED — nl-en u58 (deploy-effect backfill):**
+- city→"de stad" / town→"de stad; het stadje" in a1_unit58_museum translate pool — "de stad" is the whole of
+  city's gloss and a prefix of town's; bare-word translate can't disambiguate (Dutch conflates city/town→stad)
+  → synonym false-negative. Not a re-anchor (already anchored); exclude `city` from the union for translate/
+  choose/listen, or disambiguate the gloss in backfill_lexemes_nl_en.py. u58 held.
+
+**VERIFIED (not a bug):** nl-en u34 matching_pairs `left` is the ENGLISH definition ("a sport played with a
+round ball…"), `right`=English term — correct pattern, NOT Dutch-translated (u58's notes' second-hand claim
+was wrong for u34; my batch-7 flip stands). TODO: separately verify nl-en a2_unit29's matching_pairs left.
+
+**FLIP (batch 12):** fa-en u57/58/59/60 + prs-en u58/59 + nl-en u56/57/59/60 = 10. HELD: fa-en u56 (bill/
+could), prs-en u56 (نزده)/u57 (journey)/u60 (full re-anchor), nl-en u58 (city/town), en-nl u56-60 (was).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
