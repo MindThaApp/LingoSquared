@@ -192,6 +192,46 @@ nl-en a1_38/39/40 (39 after the re-anchor; 38/40 clean modulo disclosed floor). 
 u36-39 + prs-en u36-40 (live leaked-gloss/synonym exposure, blocked on the data-layer decision);
 en-nl u36-40 (schrijf + _pure hygiene); nl-en u36/u37 (inert feedback, deferred).
 
+## ⭐ Native review — BATCH 9 (2026-07-30): fa-en/prs-en/nl-en/en-nl a1_41-45 (cooking/personality/colors/seasons/emergencies)
+
+**DONE (clean LIVE pack-only fixes committed — nl-en re-anchors, same safe pattern as batch 8):**
+- nl-en u42-45: re-anchored POS-only / fully-unrestricted-POS slots (no semantic tag → course-wide
+  pull at Endless-Practice scope) to the generated unit tags. All DEAD-verified + 0 dup-glosses:
+  u42 u42_adj adjective→[noun,adjective]+a1_unit42_personality (21; verb excluded — relax/relaxed
+  →ontspannen collision); u43 inline-10-POS→a1_unit43_colors (25), u43_adj→+a1_unit43_colors (8);
+  u44 10-POS→a1_unit44_seasons (15), 4-POS lesson03/04→a1_unit44_seasons (15); u45 10-POS→
+  a1_unit45_emergencies (32), 4-POS lesson03→a1_unit45_emergencies_lesson03 (11, tag added). u41 clean.
+- FLIPPED reviewed: nl-en a1_41-45; en-nl a1_43/45 (both clean per reviewer).
+
+**QUEUED — fa-en LIVE (production completeness, class 6 — do next, cross-direction shared-realization fix):**
+- fa-en u42 lesson03.exercise04 (speak_response "say something about your own personality") accepted_answers
+  OMITS taught "I'm friendly" / "I'm funny" / "I'm talkative" (only 3 of 6 lesson01 adjectives covered);
+  u43 lesson03.exercise04 (favorite color) OMITS black/white. The gap is in the SHARED `realizations/en/
+  a1_unit42_personality.yaml`/`a1_unit43_colors.yaml` (mirrored into the fa-en overlay), so it affects
+  fa-en AND prs-en AND nl-en — fix = add the variants to the shared realization + all 3 dirs' overlays.
+  (u44/u45 equivalents are complete.) NOTE speak_response STT grading — verify grading.py accepts the
+  added forms. HELD until the prs-en batch-9 reviewer finishes (it's reading these shared files).
+
+**QUEUED — en-nl (inert / cosmetic, LOW):**
+- u41/u42 blanket-tag contamination (persoonlijkheid_vocab/kleuren_vocab pull course-wide review tokens
+  → runtime-INERT false feedback + off-theme distractors; up to 86% false-feedback rate on u41
+  lesson03.choose.001). Fix = new `_pure` tags (unit-scoped allow-list: u41 personality =7, u42 colors =8,
+  both clear floors; but u41 lesson03.choose.001 at [noun,adj,pronoun,verb] has only 2 unit-scoped →
+  narrow POS to [noun,adjective] instead of _pure, per the Vrijdag-DEAD-trap). Deploy-effect. No live bug.
+- u44 lesson03.order.002 "Ik bel de {item}" can draw capitalized `Politie` → "Ik bel de Politie." stray
+  mid-sentence capital (cosmetic; render_frame self-consistent). Exclude the cap form or fold to lowercase.
+
+**QUEUED — fa-en hygiene (LOW):**
+- bare-POS leaked-gloss exposure in u41/u43/u44/u45 lesson01/02/03 recognition+translate slots (already
+  in docs/LEAKED_GLOSS_INVENTORY.md; same data-layer decision as batch 8 — NOT re-fixed per-pack).
+- u41 stale review.status: `reviewed` but wave-2 (2026-07-25) added 3 templates after that review with no
+  re-review — either re-review those 3 or flip to unreviewed. (This batch's reviewer did read them: only
+  the bare-POS hygiene item, no live bug.)
+- minor near-duplicate templates (same `{item}` frame + overlapping bare-POS pool) u43/u44/u45; calm/relaxed
+  →آرام borderline near-synonym in u42 id_wide adjective pool (self-flagged, not identical strings).
+
+**prs-en batch-9: PENDING (reviewer still running at time of writing).**
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
