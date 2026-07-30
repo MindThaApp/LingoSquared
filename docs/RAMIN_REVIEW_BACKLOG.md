@@ -289,16 +289,38 @@ u42 (after floor fix) → flip. All 6 English-target speak_response fixes clear 
 - Both prs-en + en-nl reviewers independently confirm the review-notes cite a FICTIONAL `pool_check.py`
   (doesn't exist); claims were re-verified true via iter_specs. Cosmetic note-accuracy only.
 
-**HELD (fa-en batch-10 reviewer still running — shared realizations/en race):**
-- class-3 speak_response/writing_prompt completeness gaps (verbatim-taught sentence not in accepted_answers,
-  not typo-forgiven): nl-en found u47 (add "Are you available on Friday?"), u49 (add "The green bin is for
-  glass." first-clause variant + "I'll sort everything correctly next time."), u50 (add "Your room has two
-  beds."). All in SHARED realizations/en + the 3 English overlays. Do batched after fa-en lands. (prs-en +
-  en-nl reviewers found NO completeness gaps in their scope — the gaps are English-target-specific.)
+**DONE (fa-en — a key reframe of the "fa-en is blocked" story):**
+- fa-en u46/u47 re-anchored their bare-POS translate/choose slots to fa_en_a1_unit46_words / _unit47_words.
+  This FIXES the fa-en synonym false-negatives (told/said [said=u37], appointment/meeting [meeting=u14],
+  seems/looks [looks=u43] — all CROSS-unit, so unit-scoping excludes the collider) AND, because both unit
+  pools are **leaked-gloss-free + dup-free** (verified), it ELIMINATES the leaked-gloss block for those two
+  packs. **Insight: the fa-en leaked-gloss block is PER-UNIT, not monolithic — any fa-en pack whose own unit
+  pool has no leaked gloss can be re-anchored to full clean.** u46 → flipped. u47 → HELD (see `changes`).
+- fa-en u50 checkout distractor: "ten o'clock" violated the CLAUDE.md full-stop rule (Receptionist says
+  "seven to ten") → swapped to "eight o'clock" (never spoken) in both checkout exercises. fa-en-only —
+  prs-en already used "eight o'clock", nl-en used just nine/noon.
 
-**FLIP (batch 10):** en-nl u46/47/48/50 clean → flipped. nl-en u46/u48 (re-anchored, no class-3) → flip.
-HELD: nl-en u47 (Friday class-3), u49/u50 (class-3); en-nl u49 (_pure); prs-en u46-50 (bare-POS + jar);
-fa-en (pending).
+**QUEUED — fa-en gloss/sense (deploy-effect, native-Farsi):**
+- u47 `changes` classified noun→"تغییرات" but the unit teaches the VERB ("if something changes") → wrong
+  sense; needs a unit-scoped verb override ("تغییر می‌کند"). Holds u47's flip.
+- u48 `used`→"استفاده کرد" but taught only in "used to" (habitual past) → add UNIT_SENSE_OVERRIDE
+  ("عادت داشت"), mirroring the existing b1_unit13 pattern. u48 also has `other`→"دیگر (در on the other
+  hand)" leaked gloss + borrow/borrowing→"قرض گرفتن" dup IN-pool → u48 can't be cleanly re-anchored like
+  u46/47 (the [noun,adj,adv] translate-narrow that dodges borrow re-exposes `other`); needs the gloss fixes
+  first. u48 HELD. (The pack's own note wrongly claims borrow/borrowing is "accepted per recipe §6.3" — true
+  for matching_pairs, FALSE for its bare translation templates.)
+
+**QUEUED — class-3 completeness (CONTESTED → your judgment):** nl-en flagged verbatim-taught sentences
+missing from accepted_answers (u47 "Are you available on Friday?", u49 green-bin/next-time, u50 "Your/Our
+room has two beds" vs accepted "The room..."), but the fa-en + prs-en reviewers independently checked the
+same exercises and found them complete. These are open-ended speak_response/writing_prompt items where
+"which taught phrasings should count" is a policy call (e.g. is the Receptionist's "Your room..." a valid
+learner check-in response?). Deferred rather than adjudicated. All would be shared-realization + 3-overlay
+fixes if you decide to widen them.
+
+**FLIP (batch 10):** en-nl u46/47/48/50 + nl-en u46/48 + fa-en u46 → flipped (7). HELD: nl-en u47 (Friday
+class-3 contested), u49/u50 (class-3); fa-en u47 (`changes`), u48 (`used`/`other`/borrow), u49/u50 (leaked
+`collection`/`under` + gated); en-nl u49 (_pure MC-collision); prs-en u46-50 (bare-POS gated + u49 jar).
 
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
