@@ -56,14 +56,25 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
   b1_01 وقت دارم (a clause) tagged noun in a 6-card matching pool (granularity nit). All ship-acceptable.
 
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
-LATER (2026-07-29, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored to
-prs_en_a1_unit14_words (commit 7deec01b); fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی
-(2c9e76fc); en-nl u13 preference_item_pure (453ffb50). **REMAINING en-nl _pure TAIL (incremental,
-deploy-effect, NOT yet done):** u14 equal_adj hold-out 'Mooi' (1 template, translate.001); u12 voor
-position-sense gloss; u8 route_word narrow-tag; u19 weekday (needs NL_CITATION_FORMS casing-fold, not
-a plain _pure swap — DEAD-trap). **NATIVE-JUDGMENT (queued, not auto-fixable):** prs-en 28 + fa-en 22
-collision-token gloss disambiguation (well=خوب etc. — need a non-English Dari/Persian disambiguator);
-prs-en Dari orthography confirms. **SMALLER:** nl-en u30 malformed volume_order.006 dup template.
+LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
+fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
+(453ffb50); en-nl u14 equal_adj exact-case excl. 'Mooi' (20aa8bca); nl-en u30 malformed dup template
+(2bb61b1d); en-nl u9 route_word→route_map_pure {route,START,DOEL} (8cc4a302); en-nl u8 voor→
+position_no_voor (0bf6a8e7). **en-nl _pure tail now CLEARED except u19 weekday.**
+**REMAINING — all HIGH-RISK or NATIVE-JUDGMENT (NOT auto-fixable; do NOT churn/risk):**
+- **u19 weekday casing-fold (HIGH-RISK, queued for a careful native/integration-tested pass):** the
+  weekday tag is contaminated with metalabels + CAPITALIZED sentence-initial day tokens, and
+  weekday_pure has 0 unit19-scoped members (unit19's own weekday was introduced capitalized) — the
+  DEAD-trap. The real fix is an NL_CITATION_FORMS-style lowercase-fold of weekday tokens in
+  backfill_lexemes_en_nl.py — a broad classifier-mechanism change affecting weekday across ALL units,
+  which needs the integration suite (Postgres, blocked here) + native verification before it's safe.
+- **NATIVE-JUDGMENT (queued):** prs-en 28 + fa-en 22 collision-token gloss disambiguation
+  (well=خوب etc. → non-English Dari/Persian disambiguator); prs-en Dari orthography confirms
+  (سکو/صبح‌چاشت/تُند/قیمتی‌تر/زیاتر/خیر استه/شرت/انجینیر); fa-en 33 phrase-derived leaked-gloss
+  stragglers; the deferred lesson01 matching_pairs forward-reference (shared realization, high revert).
+- **DEPLOY-BLOCKED:** ALL of the above content fixes are deploy-effect — none is live until a
+  re-backfill/re-seed (needs the live server / dev DB). Plus the readiness-audit must-fixes
+  (ADMIN_EMAILS, live deploy, TLS, backend CI run). **Deploy is the lever.**
 
 ## ✅ en-nl _pure WAVE — COMPLETE 2026-07-29 (deploy-effect)
 All LIVE en-nl blanket-tag contamination / reworded-capital MC-ambiguity from batches 5+6 is
