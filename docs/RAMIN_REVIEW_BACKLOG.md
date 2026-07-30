@@ -649,6 +649,38 @@ wave clears all of prs-en/fa-en b1):**
 contraction/no-period/join variants → checkpoint-grades a taught answer wrong. Fixed opportunistically per pack
 (u08 both dirs this batch); a corpus-wide sweep would close the class.
 
+## ⭐ Native review — BATCH 19 (2026-07-30): b1_11-15 (hypotheticals/concession/relative-clauses/professional/complaints) + en-nl b1_06-10
+
+**FLIP (batch 19):** nl-en b1 u11/12/14/15 (completeness variants added to u12/14/15) + fa-en b1 u11 = 5.
+HELD: nl-en b1 u13, fa-en b1 u12/13/14/15, prs-en b1 u11-15, en-nl b1 u06-10 — all on backfill glosses.
+
+**QUEUED — X-en b1 backfill wrong-sense glosses (re-backfill wave; each token: UNIT_SENSE_OVERRIDE or
+FA_EN_EXTRA/EN_TARGET_TO_PRS gloss edit). CONFIRMED course-wide-reachable (untagged pools span the whole
+b1 course → any unit's wrong gloss contaminates all), so one wave fixes all X-en b1 at once:**
+- fa-en: u12 mind(اهمیت‌دادن→نظر "change your mind"); u13 meets(ملاقات→رعایت "meets deadlines")/works(خوب‌بودن→
+  کار‌می‌کند)/desk(میز‌پذیرش→میز‌کار); u14 follow(پیگیری-noun→پیگیری‌کردن "follow up"); u15 name(اسم-noun→
+  نام‌بردن "name the problem")/chair(صندلی‌میزکار compound-bleed→صندلی).
+- prs-en: u12 mind(چیزی‌نگفتن→ذهن/فکر); u13 meets/works/used(استفاده‌کرد→"used to")/desk(میزپذیرش→میز)/just(فقط→تازه
+  "just joined"); u15 sorry(ببخشین→متأسفم "sorry to hear")/ordered(فرمایش‌داد→سفارش‌داد)/name(noun→verb).
+- **ROOT reconfirmed:** single-item recognition templates have NO semantic-tag filter → wrong-sense +
+  metalanguage glosses reach them course-wide. The real systemic fix is to tag those templates (or exclude
+  wrong-sense/metalanguage at pool level); until then every X-en b1 pack is gated on the gloss data.
+
+**QUEUED — en-nl b1_06-10 (backfill NL_GLOSSES + near-dup, deploy-effect):** u06 werk(verb→noun)/eten(verb→
+noun) wrong-sense + moet/moeten & hoef/hoeft near-dup conjugation pairs; u09 waar(where→true) + LIVE was;
+regel LIVE in u06-10; u08 pending your native pass. No clean POS-drop (POS needed for correct tokens).
+
+**QUEUED — nl-en b1 u13 (backfill judgment):** coworker/colleague both glossed collega/de collega (same Dutch
+word) → near-dup MC collision + translation false-negative. Needs a fold-or-distinguish decision (not a YAML
+one-liner). Only nl-en pack held this batch.
+
+**QUEUED — systemic completeness (compile-time, all dirs):** reply_as_*/speak_*/writing_prompt accepted_answers
+routinely omit natural contraction/expansion/no-period variants (I'd/I'll/that's/cannot…) → a taught-correct
+answer graded wrong on checkpoint (grading forgives edit-distance-1 typos, NOT a whole-word contraction). Fixed
+opportunistically where it's the SOLE blocker (nl-en u12/14/15, fa-en u08 this program); a scripted corpus-wide
+sweep would close the whole class. fa-en b1 u12/13/14/15 completeness patches are exact-specified in the batch
+reviews, to apply alongside their backfill fixes.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
