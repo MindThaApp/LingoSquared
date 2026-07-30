@@ -93,6 +93,98 @@ delete the 51 persisted rows) still needs a dev DB (BLOCKED).
 **FLIPPED reviewed (unambiguously clean):** en-nl a1_31/32/33; nl-en a1_32/34 (after the distractor fix).
 (prs-en u33/34 + fa-en have residual reachable leaked-gloss / duplicate / mistranslation findings → not flipped.)
 
+## ⭐ Native review — BATCH 8 (2026-07-30): fa-en/prs-en/nl-en/en-nl a1_36-40 (recombination units)
+
+**THE HEADLINE — a systemic triad, code-verified across all 4 dirs (supersedes/expands the
+"bare-word translation over UNTAGGED pools" note at the bottom of this file):**
+The 2026-07-24/25 DEAD-fix waves widened many recognition/translation slots to **bare
+part_of_speech (no semantic tag)** to escape DEAD templates. Commit `05af7ace` (2026-07-25)
+then generated per-unit tags (`<dir>_a1_unitNN_words`, `a1_unitNN_<topic>`) but **did not
+re-point those bare-POS slots**. So the slots still resolve, at Endless-Practice (course-wide)
+scope, against the whole course pool. Three consequences, by direction:
+- **X-en (fa-en + prs-en) — LIVE, learner-facing:** the shared gloss table
+  `scripts/_en_target_lexeme_common.py` (~L844-992) stores disambiguating **leaked-annotation
+  glosses** — `went→"رفت (زمان گذشتهٔ go)"`, `community→"اجتماعی (در community college)"`,
+  `answer→"جواب دادن (در answer emails)"` (~27 noun/verb/adj entries, ~7% of verbs, ~3% of adj).
+  `derive_answer(slot_gloss)` returns the string **verbatim** as the MC/listen correct option;
+  a `translation` template rendering `slot_rendering: english_gloss` shows it **as the whole
+  Farsi/Dari prompt** → the English answer is leaked inside the prompt. Confirmed in
+  `service.py` (no sanitization) + `_material`/`generate_batch` (course-wide scope).
+- **X-en — LIVE grading bug (class 6, fa-en):** the same bare noun pools contain true-synonym
+  pairs with **identical** Farsi glosses (`shop`/`store`→مغازه, `photo`/`picture`→عکس,
+  `trip`/`journey`→سفر, `mail`/`post`→پست). Whichever the RNG draws is the ONLY accepted
+  answer (`grade()` translation path = exact string); the learner who writes the other
+  equally-correct synonym is marked **wrong**. (prs-en has this too.)
+- **nl-en / en-nl — NOT live:** Dutch glosses carry no English leak, and the contamination's
+  only symptom is the **runtime-INERT** `feedback_frame` ("X is een woord uit deze les" when X
+  is an off-unit review word) + off-theme distractors. Grading stays self-consistent.
+
+**⛔ WHY THIS NEEDS YOUR DECISION (not auto-fixable):** fa-en's reviewer verified that
+**pack-side re-anchoring the X-en bare-POS slots back to a semantic tag RE-CREATES the DEAD
+templates** the widening was meant to solve (the unit-scoped POS pool drops below floor). And
+delatinizing the Persian glosses is native-Dari judgment (e.g. `خرید (زمان گذشتهٔ buy)` → the
+"buy" must go but the past-tense signal must stay, else buy/bought collide). So the real fix is
+**data-layer**, and it's a design call:
+  (a) **sanitize `english_gloss` at point-of-use** in `service.py` (strip the ` (…)` parenthetical
+      before it's used as an MC option / translate prompt) — one place, fixes all X-en units, but
+      re-introduces the buy/bought ambiguity the parenthetical was disambiguating;
+  (b) **maintain a shared bare-POS eligibility exclusion set** (skip leaky-gloss lexemes for
+      untagged slots) — keeps disambiguation for tagged uses, needs list upkeep;
+  (c) **add `interchangeable`-style multi-answer support** to `translation`'s `slot_text`
+      derivation so synonym pairs (class 6) both grade correct — orthogonal, also needed;
+  (d) delatinize the glosses in `_en_target_lexeme_common.py` with native-Dari review (deploy-effect).
+Recommend (b)+(c) together, or (a) if you accept the ambiguity tradeoff. **BLOCKED on your call +
+a dev DB to re-backfill.** This is the dominant remaining defect class in the X-en corpus; further
+review batches will keep re-finding it, so this decision unblocks the most value.
+
+**DONE (clean LIVE pack-only fixes committed — nl-en, English target, no leak, authors' own pattern):**
+- nl-en u39 choose.001/listen.002/translate.004/choose.002 re-anchored POS-only `neighborhood_adj`
+  (651-token course-wide pull) → `unit39_match_word` (a1_unit39_neighborhood, 15 unit-scoped); +
+  `unit39_noun` preset given the same tag (10 nouns). Authors had already done this for match.003 and
+  explicitly left the 4 siblings "not dispatched".
+- nl-en u38 `unit38_noun` (506 course-wide) → +semantic a1_unit38_household (9 nouns);
+  nl-en u37 lesson02.translate.001 bare verb (315 course-wide) → +semantic a1_unit37_celebrations (19).
+
+**QUEUED — en-nl (deploy-effect / hygiene):**
+- **`schrijf` mis-gloss (LIVE):** `NL_GLOSSES["schrijf"]="prescribe; write (with ik)"` (inherited from
+  A2 doctor unit) surfaces as the MC correct-option in u39 lesson02.choose.001/listen.004 (slot_gloss).
+  "write (with ik)" is right for A1 post-office AND for the A2 "schrijf een recept" sense → a single-sense
+  global fix is defensible; or a context override (precedent: Nodig/Regel/Duur folds). Native-Dutch call.
+- **5 new `_pure` tags** (verjaardag/huishouden/buurt/post/koken) for en-nl u36-40 — the `_vocab`/`_cat`
+  tags are contaminated by course-wide review tokens → **inert** false feedback only; LOW priority
+  (allow-list new tokens, repoint choose/translate/listen/match). No `_pure` exists for these 5 topics yet.
+
+**QUEUED — nl-en (hygiene, inert):**
+- u36/u37 choose.001/choose.002/listen.002 on cross-unit `education_noun`/`celebration_noun` → inert
+  false-provenance feedback + off-theme distractors. Blunt re-anchor risks injecting plurals
+  (classes/nights) into the "My {item} is difficult" generative frames → needs a split preset
+  (recognition→unit tag, generative→curated). Deferred (inert).
+- u36 order.001/order.002/translate.001 generative frames apply the full noun pool to
+  "My {item} is difficult"/"We like our {item}" → grammatical-but-odd ("My test is difficult"); LOW.
+- u39 overlay reading-passage renders gender-neutral "neighbor across the street" as female "buurvrouw"
+  (invented detail, no graded impact).
+
+**QUEUED — prs-en (native-Dari, do NOT auto-fix — extends the batch-7 queue):**
+- `می‌ته` recurs in u36/u39 overlays (waters="آب می‌ته", teaches="درس می‌ته") — same suspected
+  Pashto contamination as batch 7; native confirm → می‌ده. Ironically prior fresh-context reviewers
+  cited می‌ته as *positive* evidence of Afghan register, so this needs a definitive native ruling.
+- `community`="اجتماعی" (=social, adj) for a noun is a probable mistranslation independent of the leak;
+  and stripping its parenthetical collides with `outgoing`→"اجتماعی". Native call.
+- prs-en u40 match.003.volume_match.008 ships a stray authoring note in `frame.text_blocks`
+  ("Second review matching set for this unit.") — runtime-inert (build_prompt ignores text_blocks); cosmetic.
+
+**Low-sev forward-refs (all dirs, class 4 — reword or accept):** fa-en u36 write_subject_word uses "study"
+(taught lesson02), u36 choose uses "classes" (lesson04), u37 gift exercises use "someone" (lesson02),
+u39 write_neighbor_word uses "lives" (lesson04). Compiler doesn't check MC/writing_prompt prompts.
+
+**FLOOR (pre-disclosed, informational):** match.003 below 6-pair floor — fa-en u37(4)/u38(3)/u40(4),
+nl-en u37(4)/u38(3)/u40(5), prs-en u37/u38/u40(4), en-nl various. All authored-around, not new.
+
+**FLIPPED reviewed (clean this batch):** fa-en a1_40 (no bare-POS slot anywhere — structurally immune);
+nl-en a1_38/39/40 (39 after the re-anchor; 38/40 clean modulo disclosed floor). NOT flipped: fa-en
+u36-39 + prs-en u36-40 (live leaked-gloss/synonym exposure, blocked on the data-layer decision);
+en-nl u36-40 (schrijf + _pure hygiene); nl-en u36/u37 (inert feedback, deferred).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
