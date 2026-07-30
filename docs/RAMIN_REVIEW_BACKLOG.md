@@ -539,6 +539,46 @@ becomes error once retrofitted). All flipped-with-residual or held per severity.
 HELD: fa-en+prs-en a2_27 (fee/direct), prs-en a2_29 (join variants). NEXT: batch 16 = en-nl a2_24-28 +
 fa/prs/nl-en a2_30-34.
 
+## ⭐ Native review — BATCH 16 (2026-07-30): a2_30-34 (job_interview/travel/online/schedule/complaint) + en-nl a2_24-28
+
+**FLIP (batch 16):** fa-en a2 u33/34 + prs-en a2 u31/32/34 + nl-en a2 u31/33/34 + en-nl a2 u24/28 = 11.
+HELD (all on queued gloss/backfill/native items below): fa-en u30/31/32, prs-en u30/33, nl-en u30/32,
+en-nl u25/26/27.
+
+**QUEUED — wrong-sense backfill glosses (deploy-effect, native — the dominant a2 class, mirrors batch-15
+fee=معاش):** these are shared-dict tokens reused for another unit's sense, reaching MC/translate/matching
+answers. ALL need UNIT/LEVEL_SENSE_OVERRIDES + strip leaked parentheticals; NONE are pack-YAML/re-anchor.
+- fa-en: u30 `next`=کنار(spatial)→بعدی, `meet`=ملاقات→رعایت("meet deadlines"); u31 `way`=طرف→راه(route);
+  u32 `post`=noun پست→verb پست‌کردن (POS wrong too; prs-en already glosses it verb). + leaked parentheticals
+  social/media/being (u30), leaves (u31), staying/touch/lot/many (u32).
+- prs-en: u30 `well`="خوب (در hear well)" wrong-unit note; u33 `look`="معلوم شدن (در look well)" wrong-context.
+- nl-en: u30 `social`/`being`/`next`/`looking` embed the English answer in the Dutch gloss; u32 `touch`/`waste`
+  embed English + `lot`/`many` both→"veel" (synonym false-neg, add NL_UNIT_GLOSS_OVERRIDES veel disambiguation).
+
+**QUEUED — prs-en u33 stale wave-3 migration (PACK-YAML fix, compile-time — straightforward):** its 3
+`match.001` templates still use the pre-wave-3 cross-topic union `[weekday, sport_noun, hobby_noun,
+education_noun, food_item, family_collective, dialogue_word]`; the proper `prs_en_a2_unit33_lesson02_words`
+(7) / `_lesson03_words` (11) / `_lesson04_words` (12) tags already EXIST unused (all ≥6-pair floor) — commit
+09e324d7 re-anchored siblings 30/31/32/34 but skipped 33. Re-point the 3 match.001 to their lesson tags +
+update tag_schema (mirrors siblings exactly). [Doesn't fully flip u33 alone — the `look` gloss also holds it.]
+
+**QUEUED — en-nl a2_25/26/27 near-dup-gloss MC collisions (deploy-effect backfill, LIVE MEDIUM):**
+opinion_verb vind/vindt (ik vs hij/zij conj), bank_verb openen/geopend (inf/pp), visit_noun huisarts/dokter
+(register-variant) — same verb/near-synonym both eligible as MC target+distractor; casefold-dedup misses them.
+Fix = isolate the collider into a single-member tag or exclude from the MC/listen pool (backfill).
+
+**QUEUED — content/native (LOW/judgment):**
+- u34 (shared realization a2_unit34_shopping_complaint) reply_as_leila/speak_complaint prompt says "The clerk
+  says: Can I help you?" but the Clerk never says it — Leila speaks first ("I'd like to return this blender…").
+  Copy-paste from unit31's pattern. Non-grading (prompt text only) → flipped-with-note; reword the prompt
+  (drop the fabricated line / scene-set instead). Affects fa-en/prs-en/nl-en (shared realization).
+- **SYSTEMIC (all a2 units, LOW):** the long `reply_as_*`/`speak_*` dialogue_response exercises accept only
+  ONE join-phrasing (period-split) while shorter writing_prompts in the same units offer comma/and variants →
+  a taught-correct join style is graded wrong. Same class as batch-15 prs-en u29. Add ≥1 alternate join per.
+- prs-en/fa-en u31 listen_bus_departure_time distractor "6:00"/"6.00" — the Agent says it for a DIFFERENT
+  referent (train vs bus); reviewers judged it acceptable (disambiguated by the question). POLICY question:
+  does the "full stop" distractor rule admit a different-referent exception? Your call.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
