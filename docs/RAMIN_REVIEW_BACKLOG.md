@@ -749,9 +749,13 @@ HELD: fa-en b1 u17/18/19, prs-en b1 u16-19, en-nl b1 u11 — all backfill glosse
 
 **QUEUED — en-nl b1_11:** grappig/grappigs near-dup MC collision (checkpoint-live HIGH) + was/regel (queued).
 
-**═══ RE-BACKFILL WAVE (the #1 lever — unblocks ~all held X-en + en-nl packs at once) ═══**
+**═══ RE-BACKFILL WAVE (the #1 lever — unblocks ~all held X-en + en-nl + reverse-dir packs at once) ═══**
 The dominant held-pack class across a1+b1 is deploy-effect gloss data in `scripts/backfill_lexemes_{fa,prs,nl}_en.py`
-+ `_en_target_lexeme_common.py`. Root cause (confirmed program-wide): the single-item recognition templates
++ `_en_target_lexeme_common.py` — **AND (found batch 24) the reverse dirs too**: `backfill_lexemes.py` (en-fa) +
+`backfill_lexemes_en_prs.py` carry the same embedded-metalanguage-gloss class (لازمه "(colloquial contraction…)",
+آقای "(ezafe-linked form…)", قهوه‌یی "(spelling variant…)", اینجا, پُسته, "(spoken)" etc.) that renders verbatim
+as MC answers/translate prompts — pervasive (52/56 templates in en-fa a1_39-43 alone), retroactively affecting
+already-flipped reverse-dir packs. Same fix (split display-gloss from doc-note), same wave. Root cause (confirmed program-wide): the single-item recognition templates
 (choose/listen/translate) carry only a POS filter, NO semantic tag, so wrong-sense + metalanguage glosses reach
 them course-wide. Two remediation paths, YOUR call:
   (A) **Systemic:** give the single-item recognition templates a semantic-tag filter (as matching_pairs already
@@ -762,6 +766,59 @@ Either way needs a dev DB to re-run the backfills (BLOCKED on you). Plus the dis
 confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinner=شب‌چاشت→نان‌شب, میته-resolved) and the en-nl
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
+
+## ⭐ Native review — BATCH 24 (2026-07-30): reverse dirs — en-fa a1_39-48 + en-prs a1_34/35/37/38/41-46
+
+**FLIP (batch 24): 11 packs** — en-fa 44/45/46/47/48 + en-prs 34/37/43/44/45/46.
+
+**✅ FIXED by me (compile-time content-consistency):**
+- **en-prs u44 (waste_disposal) plastic-bin contradiction (HIGH):** lesson01/03 taught & graded plastic→GREEN
+  bin, contradicting lesson02/05 + the unit's own stated design (green=general waste, blue=recyclables incl.
+  plastic) + the lesson05 reading ("plastic is ALSO in blue"). Canonicalized plastic→blue (سطل آبی) across
+  teaching examples / matching_pairs / translation / overlay title+mirrors. Validates 0-err; flipped.
+- **en-prs u46 (pharmacy) residual mistranslation (MED-HIGH):** the 2026-07-10 pass fixed 7/8 occurrences of
+  "این نسخه از همایون است" glossed "This prescription is **from** Homayoun" (implies he wrote it; he's the
+  patient) → "This is Homayoun's prescription." The 8th (matching-pair right-value, realization + overlay) was
+  missed. Fixed both; flipped.
+
+**🔴 HELD on the RE-BACKFILL WAVE — reverse-dir leaked-metalanguage glosses (NEW, deploy-effect, needs dev DB):**
+The X-en `LEAKED_GLOSS_INVENTORY` class ALSO exists in the reverse dirs — `backfill_lexemes.py` (fa) and
+`backfill_lexemes_en_prs.py` (prs) carry glosses with embedded authoring metalanguage that `service.py`'s
+`derive_answer()`/`render_frame()` (slot_gloss/slot_text) render VERBATIM as the MC correct answer, a distractor,
+the translate prompt, or a matching_pairs value. Confirmed instances:
+- **en-fa (pervasive — 52/56 templates across a1_39-43 alone):** لازمه "necessary/needed (colloquial contraction
+  of لازم است)", اورژانسه "is an emergency (spoken)", بزنید "call/hit (polite imperative, in زنگ بزنید…)", آقای
+  "Mr. (ezafe-linked form of آقا)", امانت "loan (in امانت گرفتن…)", پس "back (in پس دادن…)", پلاستیکه/بازیافته/
+  شنبه‌ست "(spoken)", دیدید "did you see? (polite)". Likely present corpus-wide (any fa lexeme with a
+  parenthetical gloss). **Retroactively implicates earlier reverse-dir flips too** — the re-backfill wave must
+  clean fa/prs glosses, not just X-en.
+- **en-prs:** قهوه‌یی "brown (spelling variant of قهوه‌ای…)" (backfill_lexemes_en_prs.py:1212, u38); اینجا "here
+  (spelling variant of این‌جا, no ZWNJ)" (:1238, u41 — GUARANTEED exposure, sole candidate); پُسته/پُستی "post
+  (as in پُسته خانه…)"/"postal (as in تکت پُستی…)" (:1184-1185, u35).
+Fix = split display-gloss from documentation note (trim the learner-facing gloss to just the word; move the
+parenthetical to a doc-comment), re-run the backfills against the DB. Folds into the **RE-BACKFILL WAVE** (see
+that section). **HELD on this: en-fa a1_39/40/41/42/43, en-prs a1_35/38/41.**
+
+**HELD on other deploy/thin:** en-prs a1_42 (thin lexeme pool → 1 tier-short, checkpoint_unavailable; needs
+backfill lexeme extension — native-clean); en-fa a1_40 چتر ("umbrella", core unit40 vocab) tag-scoped to unit07's
+weather lesson so unit40 can't host it (backfill fix); en-fa u41/u42 genuinely thin (zero-lexeme lessons).
+
+**QUEUED — compile-time (do in a focused pass; these units are HELD on the deploy gloss anyway):**
+- **en-fa u41 lesson02.order.003** frame `پنجشنبه {item}` over availability_word draws آزادید (a QUESTION form,
+  taught only as آزادید؟) → generates the statement "پنجشنبه آزادید" (no ؟) which asserts something odd. Split
+  into two single-member word_order templates (آزادم ending `.`, آزادید ending `؟`) or drop آزادید.
+- **en-fa u43 realization** 4 undeclared fused-copula example tokens (زباله‌ست/کاغذه/شیشه‌ست + forward-ref
+  شنبه‌ست) in teaching cards — compiler-invisible (examples aren't graded), LOW; add to their cards'
+  introduced_tokens.
+- **en-prs u38 color contradiction:** Zarmina says "رنگ آبی را دوست دارم" (blue) in lesson04 dialogue but the
+  lesson05 reading narrates "او رنگ سبز را دوست دارد" (green). Reconcile to blue (dialogue = character's own
+  words = canon). Compile-time, but u38 is deploy-held on قهوه‌یی anyway.
+
+**QUEUED — native/minor (non-blocking, flipped packs):** en-fa 44-48 lesson05 `write_*_note` prompts grade only
+the exact example under strict fa grading (underdetermined production — reword "Copy this note" or widen accepted
+variants); en-prs systemic و/اما (contrast instructions accept و for اما — native-confirm, all reverse units);
+en-prs u43 قرض predicative gloss + u46 دانه bare-classifier slot (LOW native-confirm); en-fa u39 order.003
+feedback_frame double-copula (feedback_frame is runtime-INERT → hygiene only).
 
 ## ⭐ Native review — BATCH 23 (2026-07-30): reverse dirs — en-fa a1_23-30/37-38 + en-prs a1_22-33
 
