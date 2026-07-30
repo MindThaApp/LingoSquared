@@ -420,6 +420,47 @@ was wrong for u34; my batch-7 flip stands). TODO: separately verify nl-en a2_uni
 **FLIP (batch 12):** fa-en u57/58/59/60 + prs-en u58/59 + nl-en u56/57/59/60 = 10. HELD: fa-en u56 (bill/
 could), prs-en u56 (نزده)/u57 (journey)/u60 (full re-anchor), nl-en u58 (city/town), en-nl u56-60 (was).
 
+## ⭐ Native review — BATCH 13 (2026-07-30): a1_61-65 (apologies/phone/help/compliments/returns; en-nl outings)
+
+**DONE (LIVE fixes committed):**
+- **u61 writing_prompt completeness (cross-direction):** `write_own_apology_message` ("give the reason")
+  accepted only the "The bus is late." reason; the unit equally teaches "I made a mistake." (lesson01/02) —
+  a learner giving that taught reason was marked wrong. Added 4 "I made a mistake" variants to the SHARED
+  realizations/en/a1_unit61 + fa-en/prs-en/nl-en overlays. validate 0/0 ×3. → fa-en u61 + nl-en u61 flipped.
+- Clean flips: nl-en u62/63/65, en-nl u64/65 (was POS-filtered inert there), fa-en u62/63.
+
+**QUEUED — fa-en (native/content, not re-anchorable — both shape-B already-anchored):**
+- u65 **HIGH**: word_order frame `"Leila {item} it"` over {offered, exchanged} — **Leila isn't a character in
+  unit65** (it's Daniel + the Clerk), and the two verbs have different real subjects (clerk offered / Daniel
+  exchanged). Fix = split into two correct-subject frames or unnamed rewrite. u65 held.
+- u64 `being`→"بودن (در Thanks for being kind)" — the whole English target sentence embedded in the gloss,
+  rendered into the word_order HINT (render_frame default english_gloss) → answer spelled out. Rewrite gloss
+  to plain "بودن". u64 held. (Info: EN_PHRASE_LEXEME_UNIT_STEMS skips a1_unit61_apologies_excuses →
+  unit61 lesson02 got no phrase lexemes; non-blocking coverage gap. lesson03 dialogue lexemes exist in
+  u62-65 but no pack template references them — non-blocking authoring-completeness note.)
+
+**QUEUED — en-nl u61/62/63 (live `was`, blocked on the queued backfill exclusion):**
+- The `was`→"do the dishes" homograph is a LIVE candidate in u61/62/63 (their slots include verb POS); u64/65
+  POS-filter it out (inert, flipped). Same root fix as BATCH-12 (add the outing-unit `was` exclusions to
+  NL_A1_VOLUME_TAG_EXCLUSIONS). en-nl u61/62/63 held until that + re-backfill.
+
+**QUEUED — prs-en (native / gloss / re-anchor):**
+- u65 **register**: learner-facing teach.note strings (lesson03 dialogue_line1/line7) use formal/Iranian
+  بدهد/می‌کند + a bare English "refund" mid-Dari — inconsistent with the item's own colloquial gloss;
+  self-disclosed unfixed. Native-Dari. u65 held.
+- u61 `waiting`→"...(شکل ing فعل wait)" + u64 `being`→"...(شکل ing فعل be)" leaked morphological glosses
+  in-pool (Class-A disambiguating, corpus-wide 218-instance convention) → native delatinize. u61/u64 held.
+- u62/u63 CLEAN pools but need a re-anchor of their narrow-POS ([adj,noun]/[adj,noun,verb]) + phrase +
+  word_order slots (tag not yet declared in tag_schema; the [adj,noun] pool is exactly at the 3-floor) —
+  mechanical follow-up, deferred with u60 (fiddlier than the uniform 10-POS pattern).
+
+**QUEUED — nl-en u64 (backfill, deploy-effect):** `being`→"het zijn (in being kind)" leaked gloss renders in
+the translate prompt + word_order hint → strip to "het zijn" in backfill_lexemes_nl_en.py:1832. u64 held.
+Also nl-en u58 city/town→"de stad" synonym false-neg still queued (BATCH-10).
+
+**FLIP (batch 13):** fa-en u61/62/63 + nl-en u61/62/63/65 + en-nl u64/65 = 9. HELD: fa-en u64/65, prs-en
+u61/62/63/64/65, nl-en u64, en-nl u61/62/63.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
