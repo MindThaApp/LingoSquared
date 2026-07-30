@@ -712,6 +712,46 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
+## ⭐ Native review — BATCH 22 (2026-07-30): reverse dirs — en-fa a1_13-22 + en-prs a1_12-21
+
+**FLIP (batch 22): 22 packs** — en-prs 12/13/14/15/16/17/18/19/20 + en-fa 13/14/15/16/17/18/19/20/21/22
+(plus en-prs 07/08/09 unblocked by the audio-accessibility fix above). All 4 fresh-context reviewers ran the
+full mechanical gate (scope-check, practice-validate, register-check, compiled-JSON audio-accessibility check) —
+reverse dirs stay much cleaner than X-en. **HELD: en-prs a1_21 only** (see below).
+
+**✅ FIXED by me (compile-time, no native confirm) — en-fa a1_14 reading_comprehension:**
+`fa.a1.unit14.lesson06.exercise03.reading_comprehension_who_likes_what` merged two unnamed "من" speakers with
+no attribution → both the correct answer (نیما=tea/warm) and the distractor (سارا=coffee/delicious) were
+verbatim-true in the shown text (unanswerable). Split into two `speaker:`-tagged text_blocks (سارا / نیما) per
+the lesson's own dialogue attribution + unit15/17 precedent. Validates 0-err; pack flipped.
+
+**HELD — en-prs a1_21 (2 issues):**
+- **NATIVE-CONFIRM (HIGH, do NOT auto-change): پنجصد vs پانصد for "500".** Unit21 uses regularized **پنجصد**
+  pervasively (realization media/teaching/dialogue + ~15 overlay accepted_answers). Iranian-standard is the
+  fused **پانصد**. BUT this may be a DELIBERATE Afghan-Dari regularized numeral — the same pattern, **دوصد** for
+  "200", recurs **15× across the corpus** (Iranian دویست appears nowhere). Afghan Dari genuinely favors analytic
+  numeral compounds, so this is plausibly correct register, NOT an error. Needs a native-Dari ruling before any
+  find/replace. If confirmed wrong: mechanical `پنجصد`→`پانصد` (+ audit `دوصد`→`دویست` corpus-wide) then
+  re-validate.
+- **COMPILE-TIME (queued): 3 translate exercises drop the taught "؟".** `lesson03.exercise06.translate_size_question`,
+  `lesson04.exercise06.translate_try_on_request`, `lesson05.exercise05.translate_asking_color` — accepted_answers
+  omit the "؟" that the same phrase's teaching card / recognition tested_text / dialogue line all carry, and
+  Dari gets zero punctuation tolerance in grading (`orthography_strict` unset → `tolerant=script=="latin"`=False)
+  → a learner reproducing the exact taught form is marked wrong. Fix: add the "؟"-bearing form as an accepted
+  variant on all 3. (Deferred with the pack since it's held on the numeral question anyway.)
+
+**QUEUED — reverse-dir minor/native (batch 22, non-blocking, packs already flipped):**
+- **en-fa a1_21 untaught token مجموع** ("total") in `lesson06.exercise03.match_dialogue_facts` pairs — never in
+  any `introduced_tokens`; compiler misses it (doesn't check `pairs`). Fix: add a مجموع teaching card to lesson06
+  OR drop the pair + widen with an already-taught fact. (Content edit, not native-blocking.)
+- **en-fa a1_20 `lesson01.teach.want_word`** gloss/note swapped (gloss holds a full sentence, note holds the
+  explanation) — cosmetic; می‌خوام is a grammar_note, never reaches the pack. Swap to match sibling cards.
+- **en-prs a1_12/13 introduced_tokens punctuation-bundling** (`چطور؟`, `است؟` bundle the "؟" into the token) —
+  cosmetic bookkeeping, no untaught-vocab gap.
+- **en-prs a1_20 `volume_order.002` feedback_frame** is a raw Dari echo with no English gloss — but feedback_frame
+  is runtime-INERT and this is a corpus-wide template-generator artifact (~64 files). Cosmetic; fix at the
+  generator level if ever revisited, not per-file.
+
 ## ⭐ Native review — BATCH 21 (2026-07-30): REVERSE dirs open — en-fa a1_03-12 + en-prs a1_01-11
 
 **KEY: the reverse dirs (English→Farsi/Dari) are much CLEANER than the X-en dirs** — their target text is
@@ -721,13 +761,19 @@ class that gates X-en doesn't apply. 16/20 packs flipped this batch.
 **FLIP (batch 21):** en-prs a1_01/02/03/04/05/10/11 + en-fa a1_03/05/06/07/08/09/10/11/12 = 16. (en-fa u09
 kept flipped with است — see note.) HELD: en-prs a1_07/08/09, en-fa a1_04.
 
-**QUEUED — en-prs a1_07/08/09 audio-accessibility (compile-time, HIGH, mirror unit10 — focused fix pass):**
-each has `lesson06.exercise01.listen_context` = dialogue_comprehension with `target_blocks: []` +
-`media_asset_key ...pending_generation` (prs has ZERO TTS) → learner sees only the English instruction + 4
-options, nothing to comprehend. Fix (already shipped in en-prs a1_unit10, native in a1_unit11): surface the
-lesson's own teaching-dialogue turns as speaker-labelled `target_blocks` in the realization, change
-`type` to multiple_choice, reword overlay instruction "Listen to"→"Read the conversation." Realization+overlay
-edit, no backfill. (Likely recurs in later en-prs units' lesson06 — sweep.)
+**✅ RESOLVED (2026-07-30) — audio-accessibility sweep, en-prs a1_07/08/09 + 12 more units.** Root cause pinned:
+the §14 audio-accessibility retrofit (2026-07-06) converted `listen_type`/`listen_select` but MISSED the
+`dialogue_comprehension`/`listen_context` type; a later 2026-07-07 fix then blanked those exercises'
+`prompt.target_blocks` to `[]`. Net: every `dialogue_comprehension` with empty `target_blocks` renders with no
+audio (fa/prs have zero TTS AND the compiler wires `audio_text` only for listen_* types, never
+dialogue_comprehension — confirmed) and no readable text → unanswerable. Fixed all 17 broken exercises across 15
+units by populating `target_blocks` with the lesson's own taught dialogue (explicit `speaker:` from the `kind:
+dialogue` teaching cards; media-asset transcript fallback for phrase-only lessons) + rewording overlay
+instruction "Listen…"→"Read the conversation." (kept `type: dialogue_comprehension` — renders via the same
+MultipleChoice/TextBlock component, so the `speaker` field shows as "Name:" labels). Units fixed: **en-prs
+01/02/04/05/06/07/08/09** (u01 also lesson05.listen_extended_greeting + lesson06.dialogue_facts) + **en-fa
+06/07/08/09/11/21/22**. All 15 realization/overlay pairs validate 0-err. en-prs 07/08/09 (sole batch-21 blocker
+was this) now FLIPPED.
 
 **QUEUED — en-fa a1_04 possession-verb agreement (deploy-effect backfill, HIGH):** lesson02.have_order.003
 frame "من یک {kinship_term} {possession_verb}" hardcodes 1st-person من but possession_verb is a flat tag
