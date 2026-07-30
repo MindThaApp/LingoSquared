@@ -616,6 +616,39 @@ extends the batch-16 en-nl collision class. u73 vaardigheid/vaardigheden (MODERA
 queued was/regel item). Fix = isolate the collider into an exact-case/single-member tag or exclude from the
 MC/listen pool.
 
+## ⭐ Native review — BATCH 18 (2026-07-30): b1_06-10 (narrative/conditions/sequencing/reported-speech/purpose) + en-nl b1_01-05
+
+**DONE (compile-time fixes committed):**
+- shared `realizations/en/b1_unit06` reply_what_happened: "happened" untaught forward-ref in the English prompt
+  → target_blocks [] (source-language overlay instruction carries the task; both fa-en+nl-en flagged it).
+- fa-en b1_08 + nl-en b1_08 speak/reply accepted_answers: added missing no-period / bare-without-"Sure."
+  variants (taught-correct answer was checkpoint-graded wrong).
+- FLIP: fa-en b1 u07/u08/u10 + nl-en b1 u06/07/08/09/10 + en-nl b1 u04 = 9.
+
+**QUEUED — X-en b1 backfill wrong-sense glosses (THE dominant b1 class; UNIT_SENSE_OVERRIDES + re-backfill; one
+wave clears all of prs-en/fa-en b1):**
+- fa-en: u06 over(ختم‌شدن→pull-over)/when(interrogative→sequencing)/work(verb→noun)/got(took→arrived);
+  u09 asked(درخواست‌کرد→پرسید for "asked whether")/read(infinitive→past)/long(بلند-physical→طولانی-duration).
+- prs-en: u06 over/stopped(transitive→intransitive)/when/got/word(گپ→قول "kept his word")/offered; u07
+  meet(آشنا‌شدن→جلسه‌کردن); u08 **dinner="شب چاشت" (non-standard; overlay uses نان شب)**/gets/start; u10
+  study/studying ZWNJ near-dup collision in the single-item pool (matching_pairs was fixed, single-item wasn't).
+- **ROOT (systemic, X-en):** the single-item recognition templates (choose/listen/translate) have NO
+  semantic-tag filter, only POS — so both wrong-sense glosses AND grammar-jargon METALANGUAGE_TOKENS
+  (tense/clause/verb/speech) reach them. The METALANGUAGE exclusion only covers tag-scoped matching_pairs.
+  A proper fix: give the single-item templates a semantic tag too (or exclude metalanguage/wrong-sense at the
+  pool level). This underlies the entire X-en a1+b1 leaked/wrong-gloss class.
+
+**QUEUED — en-nl b1_01-05 (backfill NL_GLOSSES + near-dup-gloss, deploy-effect):**
+- **HIGH wrong-answer:** u02 `waar` reaches MC as "where" but the unit teaches "waar"="true" (its slot POS list
+  wrongly includes adverb — lessons 02-05 correctly exclude it; drop adverb OR homograph entry); u05 `was`
+  LIVE = "do the dishes" but unit teaches copula "was" (slot includes verb; exclude verb OR was homograph).
+- u01 `werk` verb→should be noun "job"; near-dup-gloss pairs werk/werkt, eet/eten (u02), beginnen/begint (u03),
+  helpen/helpt (u02, cross-unit) — same NL_GLOSSES case-sensitive-only dedup gap. u04 cleanest (flipped).
+
+**QUEUED — systemic completeness (all dirs, LOW):** reply_as_*/speak_* accepted_answers often omit taught
+contraction/no-period/join variants → checkpoint-grades a taught answer wrong. Fixed opportunistically per pack
+(u08 both dirs this batch); a corpus-wide sweep would close the class.
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
