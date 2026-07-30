@@ -767,6 +767,39 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
+## ⭐ Native review — BATCH 25 (2026-07-30): reverse dirs — en-fa a1_49-57 + en-prs a1_47-56
+
+**FLIP (batch 25): 16 packs** — en-prs 47/48/49/50/51/52/53/54/55/56 + en-fa 51/52/54/55/56/57.
+
+**✅ FIXED by me (compile-time):** en-fa 54-57 grammar-note citation errors (learner-facing prose) — داره/بزرگه
+mis-cited "already taught from unit26" (verified real = unit04, corroborated by unit45's own correct note); u56
+خوبه mis-cited "unit01/05/06/07/10/12" (real = unit06/10/12, matching u54's already-fixed note). Fixed 8
+learner-facing strings; left unflagged و citations + internal review-notes prose untouched. Flipped 54-57.
+
+**🔴 HELD — hard leaked-metalanguage glosses (RE-BACKFILL WAVE):** en-fa a1_49 (بازه "is open (spoken)", جعفری
+"(surname)"), a1_50 (سفارش "(in سفارش دادن…)", دوغ), a1_53 (surnames حسینی/شاهین). Same deploy class.
+**a1_53 ALSO needs a re-anchor:** 8 MC/translate templates (lesson01/02/04/06 choose.001/translate.002) have NO
+`agreement_tags.semantic` → in Endless Practice `{item}` draws ANY course-wide token (off-theme) and the
+feedback_frame falsely claims "introduced in this unit." Compile-time fix (add `semantic: [concert_word,
+person_name, reviewed_phrase]`, DEAD-trap-verify) — do it when the gloss deploy unblocks u53.
+
+**QUEUED — native-confirm / hygiene (non-blocking, flipped packs):**
+- **en-prs 52-56 اما→و over-leniency (all 5):** each unit's wrap-up contrast writing_prompt
+  (write_*_contrast / write_like_walking_no_time) accepts a variant swapping اما ("but") for و ("and") —
+  over-lenient (no learner failed), violates AUTHORING_GUIDE §12. Native-confirm whether و reads as an
+  acceptable loose paraphrase; if not, remove the و variant across all 5.
+- **en-prs 52-56 soft multi-sense glosses** (برنامه "schedule; program", کارمند "clerk; employee", کورس
+  "class; course", الماری "locker; cupboard", شروع "start; beginning") — milder than the hard-metalanguage
+  class (both senses valid), but verbose as MC answers/translate prompts; trim to one primary sense in a gloss-
+  hygiene pass. Not confirmed to visibly leak.
+- **en-prs u55 میله** ("picnic/outing" — standard Persian sense is "rod/bar"; Afghan-regional festival sense) +
+  **u51 رستوران vs رستورانت** spelling — LOW native-Dari confirms.
+- **en-prs feedback_frame lang-mistag** (translate.006 pure-Dari text tagged `language_code: en, direction:
+  ltr`) — recurs u49/50/52/54/55/57/58; feedback_frame is runtime-INERT so cosmetic, but could misrender if
+  ever shown; fix at the template generator.
+- **en-fa 49/50/51/52/53 ؟-punctuation** (write_*_message accepts only the ؟-form) — rides the keyboard/grading
+  systemic. **en-fa u53 also** has the soft below-count self-report typo; u52 "7 tokens" off-by-one — cosmetic.
+
 ## ⭐ Native review — BATCH 24 (2026-07-30): reverse dirs — en-fa a1_39-48 + en-prs a1_34/35/37/38/41-46
 
 **FLIP (batch 24): 11 packs** — en-fa 44/45/46/47/48 + en-prs 34/37/43/44/45/46.
