@@ -37,6 +37,31 @@ the (source-language) instruction + answer options — nothing to comprehend.
 
 ---
 
+## 🔴 SYSTEMIC (2026-07-30) — fa/prs translate answers ending in `.`/`!` are UNTYPEABLE (grading vs keyboard) — YOUR CALL
+
+Code-verified by the batch-23 en-prs 29-33 reviewer, two facts combine into a real bug:
+- `backend/app/review/grading.py`: fa/prs resolve to `script="arabic"` → `tolerant=(script=="latin")` is **False**,
+  and `_normalize()` never strips punctuation. So a single missing/extra `.` `!` `؟` `،` is graded flat WRONG.
+- `packages/shared/src/lib/scripts.ts`: the in-app virtual keyboard's Perso-Arabic layer has only digits +
+  `، ؛ ؟` — **no period `.` and no `!` on ANY layout**. A learner without a native device keyboard **physically
+  cannot type** a period or exclamation mark.
+
+⇒ Any translate/free-text exercise whose ONLY `accepted_answers` variant ends in `.` or `!` is **unanswerable**
+via the app keyboard (HIGH); `؟`-only is typeable but needs a symbol-layer toggle (MEDIUM). The corpus already
+has an established mitigation convention — en-fa and en-prs unit29 carry BOTH punctuated and unpunctuated
+variants — but **en-prs a1_30+ dropped it** (8 HIGH period/! cases in u31/32/33 + several MEDIUM ؟ in u30-33).
+Likely present in more unreviewed en-prs a2/b1 too.
+
+**THREE fix options — pick one and I'll execute:** (A) **grading.py mechanism fix** — strip trailing terminal
+punctuation on both sides before comparison (one change, fixes all langs at once; cleanest/altitude-correct, but
+changes grading semantics — your call since it's product behavior). (B) **keyboard fix** — add a period key to
+the Perso-Arabic layout in scripts.ts (fixes typeability, keeps grading strict). (C) **content dual-variant
+pass** — add the unpunctuated companion to every fa/prs free-text `accepted_answers` (matches the existing
+en-fa/u29 convention; additive/safe but touches many overlay files, a band-aid). I recommend (A). Until one
+lands, I'm HOLDING en-prs a1_23/30/31/32/33 (their only/main blocker is this class) rather than flipping them.
+
+---
+
 ## ⭐ Native review — BATCH 1 (2026-07-27): 20 wave-4 packs reviewed + fixed + flipped
 
 Fresh-context native review (4 sonnet reviewers, AUTHORING_PREFLIGHT.md + realization/overlay +
@@ -737,6 +762,48 @@ Either way needs a dev DB to re-run the backfills (BLOCKED on you). Plus the dis
 confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinner=شب‌چاشت→نان‌شب, میته-resolved) and the en-nl
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
+
+## ⭐ Native review — BATCH 23 (2026-07-30): reverse dirs — en-fa a1_23-30/37-38 + en-prs a1_22-33
+
+**FLIP (batch 23): 12 packs** — en-fa 23/24/25/26/27/28/29 + en-prs 22/24/27/28/29.
+
+**✅ FIXED by me (compile-time):**
+- **reading_comprehension merged-unnamed-speaker** (same class as u14) — en-fa u18/u23/u24 lesson06.exercise03
+  merged two first-person speakers into one speakerless block (unanswerable: both correct answer & distractor
+  verbatim-true). Split into سارا/نیما `speaker:`-tagged blocks per each lesson's dialogue attribution. (u18 was
+  already flipped in batch 22; fix improves it retroactively.)
+- **en-prs u23 empty-target_blocks MC** — `lesson04.exercise02.recognize_amount` (instr "Select the correct
+  translation" with NO referent) got `target_blocks: [صد دالر]`; `lesson05.exercise02.reading_comprehension_where`
+  got the exercise01 passage. Both were unanswerable.
+
+**HELD:**
+- **en-prs a1_23/30/31/32/33** — blocked (mainly) on the punctuation/keyboard SYSTEMIC item above (untypeable
+  `.`/`!` answers; u30-33). u23's other 2 defects are fixed; its remaining 2 are `؟`-variant (that class). Plus
+  teaching-card untaught vocab: **دشوار** (u31 lesson02 examples, only introduced 2 lessons later), **خوشمزه** +
+  **می‌گویم** (u32 lesson01 examples; خوشمزه never taught corpus-wide, می‌گویم is A2) — content-quality, fix by
+  retiming the intro or rewording the example.
+- **en-fa a1_30** — `backfill_lexemes.py` tags **رشته‌ی** (bound ezafe fragment, never taught standalone) into
+  `subject_word` with english_gloss `"major of (ezafe-linked form of رشته)"`; render_frame uses english_gloss
+  unscrubbed → this metalanguage string can surface as the MC answer / translate prompt. DEPLOY-EFFECT (backfill
+  fix + re-run, needs dev DB) — same leaked-metalanguage class as the X-en inventory. (Also: u30 vs u18 char
+  canon — نیما/سارا at university vs their jobs — low, native/judgment.)
+- **en-fa a1_37/a1_38** — (a) `dialogue_comprehension` prompt uses untaught reporting verbs می‌پرسه/می‌گه (+ 3rd-
+  person دوست داره in u38) instead of the actual taught dialogue — fix by reverting the prompt to the real
+  transcript (my audio-fix pattern); (b) factually-false word_order frame: u37 `موز {item}.` lets the banana be
+  any of 7 colors (contradicts taught "موز زرده"), u38 `{item} سرده و برفیه.` lets تابستان be "cold and snowy"
+  (contradicts taught "تابستان گرمه") — narrow the pool/frame (DEAD-trap: verify unit-scoped count).
+
+**QUEUED — reverse-dir minor/native (batch 23, non-blocking, flipped packs):**
+- **en-fa a1_26 thinness** — `pet_description_word` tag omits کوچیکه/بزرگه (first-occurrence-wins provenance keeps
+  unit04's `family_description` anchor for the identical token) → lesson04 drills only color, never size. Add a
+  unit26-scoped discriminator key (mirrors the چند تا precedent) + widen. Compile-time/deploy.
+- **en-prs a1_22 گرم gloss** — taught in-unit as "hot" (title/gloss) but its reused lexeme's PRS_GLOSSES entry is
+  "warm" → Endless-Practice could show either. Native-Dari: pick one canonical gloss. LOW.
+- **`(spoken)`/`(informal)` english_gloss annotations** (corpus-wide, backfill_lexemes FA_GLOSSES/PRS) surface
+  verbatim to learners in MC/translate copy (e.g. "how much is it? (spoken)"). Same class as the leaked-gloss
+  inventory — systemic gloss-hygiene, deploy-effect. LOW.
+- **matching_pairs below-floor** — en-prs u23 match_money_words (4), u24 match_transport_words (5), various
+  u30/32/33 (pre-existing, self-reported in pack notes) — §16 "aim" not a hard rule. Cosmetic.
 
 ## ⭐ Native review — BATCH 22 (2026-07-30): reverse dirs — en-fa a1_13-22 + en-prs a1_12-21
 
