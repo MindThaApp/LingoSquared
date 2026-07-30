@@ -2710,6 +2710,12 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # unit's real content, which uses all 4 with the same "is ... het
     # station" sentence shape.
     if t in {"naast", "tegenover", "achter", "voor"}: semantic.append("position")
+    # position_no_voor: excludes 'voor', whose canonical gloss is the unit01 purpose
+    # sense 'for; about' — wrong for unit08's positional 'in front of' drill. Used only
+    # by u08 lesson03.translate.004 (bare-word translate, where the gloss IS the prompt);
+    # the word_order position templates keep 'voor' since their frame gives the
+    # positional context and the gloss is never shown. 2026-07-30.
+    if t in {"naast", "tegenover", "achter"}: semantic.append("position_no_voor")
     # Unit 9 (directions): the 5 core direction words, safe as a group for
     # bare-word recognition only (not a single shared generative frame --
     # "sla" idiomatically only pairs with linksaf/rechtsaf, never rechtdoor,

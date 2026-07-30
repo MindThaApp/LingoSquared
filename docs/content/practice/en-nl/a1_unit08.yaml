@@ -57,11 +57,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [place, place_non_station, position]
+    semantic: [place, place_non_station, position, position_no_voor]
 slot_presets:
   place: &place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place}}
   place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
   position: &position {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: position}}
+  # position_no_voor: {naast, tegenover, achter} — excludes 'voor' (purpose-sense gloss
+  # 'for; about') from the bare-word translate.004 where the gloss is the prompt. 2026-07-30.
+  position_no_voor: &position_no_voor {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: position_no_voor}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit08.lesson01.choose.001
     lesson_content_key: nl.a1.unit08.lesson01.plaatsen
@@ -138,7 +141,7 @@ templates:
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *position}
+    slots: {item: *position_no_voor}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson04.choose.001
