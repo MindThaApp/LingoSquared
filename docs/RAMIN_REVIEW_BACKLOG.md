@@ -250,6 +250,56 @@ en-nl u36-40 (schrijf + _pure hygiene); nl-en u36/u37 (inert feedback, deferred)
 **FLIP (batch 9, after fixes):** prs-en u43/44/45 clean → flip; prs-en u41 (LOW forward-ref residual) +
 u42 (after floor fix) → flip. All 6 English-target speak_response fixes clear u42/u43 for those dirs too.
 
+## ⭐ Native review — BATCH 10 (2026-07-30): a1_46-50 (lost_items/appointments/library/waste/accommodation)
+
+**DONE (clean LIVE pack-only fixes committed — nl-en re-anchors):**
+- nl-en u46/u47: 6 templates each, POS-only/unrestricted slots → +semantic a1_unit46_lost_items /
+  a1_unit47_appointments (keep POS; pools 31/26 and 20/16, 0 dup-glosses, DEAD-verified).
+- nl-en u48: 4 MC templates → a1_unit48_library (keep POS; MC protected by distractor casefold-dedup even
+  though borrow/borrowing→"lenen" dup exists); **the 2 TRANSLATION templates POS-NARROWED** to keep the
+  synonym pair out of a free-text pool: translate.003 → [noun,adjective,adverb] (11, excl. borrow),
+  volume_translate.001 → [verb] (16, excl. borrowing); lesson04.translate.006 → a1_unit48_library_lesson04
+  (20, collision-free by construction). This mirrors the pack's own already-fixed match.002 discipline.
+
+**QUEUED — en-nl u49 LIVE (MC synonym-collision — deploy-effect _pure):**
+- u49 lesson05.choose.001 (`confirmation_reading` pool) has bevestigd="confirmed"/Bevestiging="Confirmation"
+  /bevestiging="the confirmation" — a capitalized-variant reworded-gloss trio that `_distractor_values`
+  casefold-dedup does NOT catch (service.py:386-405) → two defensible "confirmation" MC options, correct
+  learner picking the confusable one marked wrong. Same in lesson06.choose.001/lesson02/lesson03
+  (`accommodatie_vocab`/`accommodation_wrapup_dialogue`: leuk/mooi/mooie trio). u46 predates the
+  NL_CITATION_FORMS folding (scoped 34-42/49-72) so its capitalized "Bevestiging" never folded onto u49's.
+  Fix = _pure unit-scoped tag (u49 nouns kamer/bevestiging/uitchecken ≥3) or POS-narrow. Deploy-effect
+  (backfill). NOT auto-fixed. → u49 held from flip.
+
+**QUEUED — prs-en (native-Dari + gated):**
+- **prs-en u49 `jar`="بوتل شیشه‌ای" (بوتل = bottle, narrow-necked)** — a wide-mouth jar is شیشه in Dari;
+  same lexeme-substitution family as batch-7 battery/بطری but milder (both glass containers; `jar` is a
+  taught token but never the tested fact, so no mis-grade — just wrong vocab). Native-confirm → شیشه.
+  In BOTH the u49 dialogue gloss + reading-passage gloss (shared realization? — check: it's the English
+  realization's introduced-token gloss, prs-en overlay side). Otherwise prs-en u46-50 clean EXCEPT they
+  carry bare-POS leaked-gloss slots (other→"دیگه (در on the other hand)", back→"باز (در come back)") →
+  gated on the data-layer decision like fa-en. → prs-en u46-50 held from flip.
+
+**QUEUED — hygiene (LOW, all dirs):**
+- en-nl u48 `GFT` classified proper_noun in backfill but no template slot allows proper_noun → the unit's
+  central word is unreachable as a candidate. Reclassify GFT→noun in backfill_lexemes_en_nl.py (deploy-effect).
+- nl-en overlays u47/48/49/50 carry `review.status: reviewed` while their notes say "needs fresh-context
+  review" (u46 was corrected 07-23; siblings weren't) — overlay-side metadata self-contradiction; this batch
+  IS that review, so safe to correct the overlay status when convenient (separate from the practice-pack flip).
+- Both prs-en + en-nl reviewers independently confirm the review-notes cite a FICTIONAL `pool_check.py`
+  (doesn't exist); claims were re-verified true via iter_specs. Cosmetic note-accuracy only.
+
+**HELD (fa-en batch-10 reviewer still running — shared realizations/en race):**
+- class-3 speak_response/writing_prompt completeness gaps (verbatim-taught sentence not in accepted_answers,
+  not typo-forgiven): nl-en found u47 (add "Are you available on Friday?"), u49 (add "The green bin is for
+  glass." first-clause variant + "I'll sort everything correctly next time."), u50 (add "Your room has two
+  beds."). All in SHARED realizations/en + the 3 English overlays. Do batched after fa-en lands. (prs-en +
+  en-nl reviewers found NO completeness gaps in their scope — the gaps are English-target-specific.)
+
+**FLIP (batch 10):** en-nl u46/47/48/50 clean → flipped. nl-en u46/u48 (re-anchored, no class-3) → flip.
+HELD: nl-en u47 (Friday class-3), u49/u50 (class-3); en-nl u49 (_pure); prs-en u46-50 (bare-POS + jar);
+fa-en (pending).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
