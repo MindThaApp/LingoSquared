@@ -322,6 +322,49 @@ fixes if you decide to widen them.
 class-3 contested), u49/u50 (class-3); fa-en u47 (`changes`), u48 (`used`/`other`/borrow), u49/u50 (leaked
 `collection`/`under` + gated); en-nl u49 (_pure MC-collision); prs-en u46-50 (bare-POS gated + u49 jar).
 
+## ⭐ Native review — BATCH 11 (2026-07-30): a1_51-55 (pharmacy/personal_care/bike_rental/laundry/swim/etc.)
+
+Directions DIVERGE on the same units (different lane authoring): nl-en + fa-en u51-55 were authored
+already-unit-anchored (recipe §8.1), prs-en still has bare-POS slots.
+
+**DONE (LIVE fixes committed):**
+- nl-en u51-55: all CLEAN by construction → flipped (5).
+- prs-en u51/u52/u55: re-anchored their bare 10-POS choose/listen/translate slots to prs_en_a1_unitNN_words
+  (pools 14/10/23, all leaked-gloss-free + dup-free) → flipped.
+- **prs-en u51 numeral fix (HIGH):** "nine dollars" was glossed «این نو دالر استه» (نو = NEW, not نه = nine)
+  in 7 sites incl. a graded translate PROMPT + the reading passage. Fixed نو→نه to match the corpus's own
+  a1_unit07 («نه دالر»); نو means "new" 50+ places, so this was an unambiguous authoring typo, corpus-backed,
+  not a word-choice judgment. Flagged for your awareness but corrected.
+- en-nl u51/u52/u53/u55: CLEAN → flipped.
+
+**QUEUED — fa-en u51-55 (deploy-effect / native-Farsi — ALL 5 gated, already-anchored so NO re-anchor helps):**
+- Real MISTRANSLATIONS (not just leaks): u51 `hours`→"ساعت‌های کاری" (business-hours) but every use is dosage
+  "every four hours" → plain time-unit; u52 `visit` tagged noun/"مراجعه" (formal) but used as casual verb
+  "coming to visit" → verb "سر زدن به" (a2_unit33 already does this right); u53 `deposit`→"واریز" (bank
+  transfer, shared w/ a2_unit27) but it's a refundable security deposit — the overlay's OWN teaching card
+  uses "ودیعه" (corpus self-contradicts) → FA_EN_EXTRA_LEXEMES override "ودیعه"; u53 `costs`→"قیمتش چقدر است"
+  (a QUESTION!) for a declarative "it costs $10" → declarative gloss. All backfill_lexemes_fa_en.py overrides.
+- Leaked glosses in-pool (Class C strips, already in LEAKED_GLOSS_INVENTORY): u51 runny, u54 pick/broke,
+  u55 diving/board. Deploy-effect.
+
+**QUEUED — prs-en (native-Dari / gated):**
+- u53/u54 own-pool LEAKED glosses (we'd→"...(مخفف we would)", enjoying→"...(شکل ing فعل enjoy)", pick→
+  "...(در pick up)") → native delatinize (deploy-effect). u53/u54 held from flip.
+- u52 + u54 `coffee`→"چای" (tea): could be intentional Afghan localization (tea = the social norm) OR a
+  mistranslation (قهوة is the corpus's coffee term). JUDGMENT/localization confirm. (u52 flipped anyway — the
+  re-anchor makes it otherwise clean and چای-for-coffee is defensible; u54 held for the pick leak regardless.)
+
+**QUEUED — en-nl u54 (backend-data, deploy-effect):**
+- `regel` (A1 "de regel"=the rule) shares NL_GLOSSES with A2-unit77 "arrange (with ik, part of regelen)" →
+  wrong gloss. Backfill already excludes `regel` from zwembad_vocab/_noun (airtight for MC/listen/translate),
+  BUT `_material()`/`_speaking_targets()` (service.py ~:775) select speak_response targets by
+  provenance_lesson_id with NO agreement_tags filter → a learner past u54 lesson05 can get a speak_response
+  cue "arrange (with ik...)" for answer "regel". Fix: correct the A1 `regel` gloss in backfill OR make
+  _material/_speaking_targets respect the tag-exclusion. u54 held.
+
+**FLIP (batch 11):** nl-en u51-55 (5) + prs-en u51/52/55 (3) + en-nl u51/52/53/55 (4) = 12. HELD: prs-en
+u53/u54 (own-pool leaks), fa-en u51-55 (in-pool gloss defects, deploy-effect), en-nl u54 (regel backend).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
