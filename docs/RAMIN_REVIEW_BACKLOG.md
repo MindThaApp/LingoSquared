@@ -681,6 +681,37 @@ opportunistically where it's the SOLE blocker (nl-en u12/14/15, fa-en u08 this p
 sweep would close the whole class. fa-en b1 u12/13/14/15 completeness patches are exact-specified in the batch
 reviews, to apply alongside their backfill fixes.
 
+## ⭐ Native review — BATCH 20 (2026-07-30): b1_16-19 (advice/regret/future/summarizing) + en-nl b1_11 — COMPLETES the 4 English-primary dirs' a1/a2/b1 sweep
+
+**★★ MILESTONE:** with batch 20, **fa-en / prs-en / nl-en / en-nl are fully swept across a1 + a2 + b1.**
+nl-en is 100% flipped. The other three's remaining held packs ALL cluster on one lever (below).
+
+**FLIP (batch 20):** nl-en b1 u16/17/18/19 (u19 completeness variant added) + fa-en b1 u16 = 5.
+HELD: fa-en b1 u17/18/19, prs-en b1 u16-19, en-nl b1 u11 — all backfill glosses.
+
+**QUEUED — X-en b1_16-19 backfill wrong-sense glosses (re-backfill wave; UNIT_SENSE_OVERRIDES):**
+- fa-en: u17 looking(دنبال‌گشتن→نگاه‌به‌گذشته "looking back")/back(برگشتن-verb→به‌عقب-adverb); u18 made(درست‌کرد→
+  گرفته "make a decision")/feels(احساس‌می‌شود-passive→احساس‌می‌کند-active)/experience(soft); u19 moved(نقل‌مکان‌کردم-
+  1st-person→منتقل‌شد "meeting was moved")/many(چند‌تا-interrogative→زیاد-quantity).
+- prs-en: u18/u19 since(از-temporal→چون-causal "since=because"); u17 long(دراز-physical→طولانی-duration); u16
+  form(فورم-document→شکل-grammatical); u16/u19 direct/other stale (در ...) parentheticals; u19 right(راست→درست) LOW.
+
+**QUEUED — en-nl b1_11:** grappig/grappigs near-dup MC collision (checkpoint-live HIGH) + was/regel (queued).
+
+**═══ RE-BACKFILL WAVE (the #1 lever — unblocks ~all held X-en + en-nl packs at once) ═══**
+The dominant held-pack class across a1+b1 is deploy-effect gloss data in `scripts/backfill_lexemes_{fa,prs,nl}_en.py`
++ `_en_target_lexeme_common.py`. Root cause (confirmed program-wide): the single-item recognition templates
+(choose/listen/translate) carry only a POS filter, NO semantic tag, so wrong-sense + metalanguage glosses reach
+them course-wide. Two remediation paths, YOUR call:
+  (A) **Systemic:** give the single-item recognition templates a semantic-tag filter (as matching_pairs already
+      has) — one structural change closes the whole class without per-token overrides. Best long-term.
+  (B) **Per-token:** the ~60 UNIT_SENSE_OVERRIDES / gloss-strip entries catalogued across BATCH 8-20 +
+      docs/LEAKED_GLOSS_INVENTORY.md. Faster to start, but a growing list.
+Either way needs a dev DB to re-run the backfills (BLOCKED on you). Plus the discrete native-Dari/Farsi
+confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinner=شب‌چاشت→نان‌شب, میته-resolved) and the en-nl
+`was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
+(English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
+
 ## ✅ en-nl _pure WAVE + prs-en u14 re-anchor — 2026-07-29 (deploy-effect)
 LATER (2026-07-29/30, loop cont.): also done — prs-en u14 5 bare-POS pools re-anchored (7deec01b);
 fa-en u15 digit fix (4171fccb); prs-en painting→نقاشی (2c9e76fc); en-nl u13 preference_item_pure
