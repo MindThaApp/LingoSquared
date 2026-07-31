@@ -11,9 +11,9 @@ import { Link } from "react-router-dom";
 // Every claim below was verified against the actual codebase on 2026-07-10:
 // - DELETE /me (backend/app/api/router.py) hard-deletes the account and
 //   cascades learning data — the deletion section reflects that.
-// - There is NO self-serve data-export endpoint yet, so the export section
-//   promises "on request," not an in-app tool. Update it if/when GET
-//   /me/export ships.
+// - GET /me/export SHIPPED (backend/app/api/router.py) and is exposed in-app
+//   via the Profile page's "Download data" button (ProfilePage.tsx) — the
+//   export section reflects the self-serve tool.
 // - No analytics/ad-tracking/telemetry code exists anywhere in frontend or
 //   backend (grepped for gtag/mixpanel/posthog/segment/etc.) — the "what we
 //   don't do" section depends on that staying true.
@@ -154,9 +154,10 @@ export function PrivacyPolicyPage() {
 
       <h2>Getting a copy of your data</h2>
       <p>
-        There is no self-serve export tool in the app yet. If you would like a
-        copy of the data associated with your account, request it via the
-        in-app "Give feedback" button and the operator will provide it.
+        You can download a copy of the data associated with your account at any
+        time from your Profile page, using the "Download data" button. If you
+        have any trouble, you can also request a copy via the in-app "Give
+        feedback" button and the operator will provide it.
       </p>
 
       <h2>Data retention and security</h2>
