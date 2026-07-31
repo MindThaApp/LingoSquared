@@ -789,10 +789,9 @@ tails; everything else awaits the deploy wave.
 - **b1_09** — (deploy) شرکت glossed "company" (workplace_word tag) but this unit only teaches شرکت کردن
   ("participate"); reachable & deterministic (single-member pool) via lesson04 match.001 + order.002 → re-gloss/
   re-tag شرکت for this context in the re-backfill wave.
-- **b1_10** — (factually-false auto-frame, needs reframe) `نیما می‌خواد برگرده {item}` with city_name slot = only
-  تهران → always "Nima wants to go back to Tehran," but the unit's own reading has Nima ALREADY living in Tehran
-  wanting to go back to a different (unnamed) city. Deterministic false sentence. Fix = reframe (different subject/
-  verb) or a dedicated non-تهران destination tag; needs a small authoring decision.
+- **b1_10** — ✅ FIXED + FLIPPED (2026-07-31): the factually-false `نیما می‌خواد برگرده {item}`(→تهران) frame
+  (Nima already lives in Tehran) resolved by subject-swap نیما→دوستم (both taught; a friend can be a returning
+  Tehran native). So en-fa b1 holds are now just b1_07 + b1_09 below.
 
 **🔴 NEW SYSTEMIC #5 — grammar_note `target.text` English-metalanguage (corpus-wide, pre-existing):** across the
 en-prs B1 corpus (present since b1_01) — and confirmed as a subset in en-fa a2 (which I fixed, 8 cards) — many
