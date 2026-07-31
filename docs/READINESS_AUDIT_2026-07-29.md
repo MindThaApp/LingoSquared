@@ -46,9 +46,13 @@ missing is shipping it safely + finishing the content vetting.
 **Product decisions (yours):** password-reset flow, social-login UI (backend endpoint exists, no UI),
 legal review (pages are self-flagged unreviewed drafts). Several already "accepted gaps" for beta.
 
-**Cheap cleanups remaining:** stale PrivacyPolicy "no export tool" copy (export shipped); stale
-backend/README "no refresh tokens" (they exist); dead `LearningPath` schema; dead slot anchors
-(prs-en u14 content_pool, u15 number_no_hundred).
+**Cheap cleanups — RESOLVED 2026-07-31:** PrivacyPolicy "no export tool" copy → now points to the
+Profile "Download data" button (export shipped: GET /me/export + ProfilePage.tsx); backend/README
+refresh-token copy already corrected (the /auth/refresh + /auth/logout rotation flow is documented);
+prs-en u14/u15 dead slot anchors already re-anchored away (only review-note prose still mentions
+content_pool/number_no_hundred). **Withdrawn:** the "dead `LearningPath` schema" item — it is
+*intentionally* retained (guarded by backend/tests/test_no_dead_models.py + created in alembic 0005;
+removing it would break migration history), so it is not dead code to delete.
 
 See `docs/RAMIN_REVIEW_BACKLOG.md` for the content-defect detail and `docs/PRE_DEPLOY_RUNBOOK.md`
 for the deploy sequence.
