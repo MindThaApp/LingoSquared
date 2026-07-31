@@ -2264,3 +2264,58 @@ Pack-fix sweep found the duplicate-gloss mis-grading has two layers:
    (a) scope these templates to lesson-taught vocab only; (b) add semantic tags to
    the prs-en/en-prs backfills so slots can be narrowed; (c) accept it (matching
    shows both sides; only bare-word translation is exposed). Your design decision.
+
+---
+
+## BURN-WAVE EXECUTION SESSION — 2026-07-31 (Opus, autonomous)
+
+**FIXED & committed (branch fix/launch-gate-content-review-wave1, NOT pushed):**
+- `304896b4` — stripped the `Second review translation prompt for this unit.` debug
+  placeholder from 37 `volume_translate` templates (it was rendering as the
+  learner-facing instruction; parent translate templates have no text_blocks).
+- `a0c5dcd2` — a2_unit30 `match_interview_words`: dropped the untaught `qualified`
+  pair (taught nowhere in unit or a1/a2, unlike resume/deadline). Realization + all
+  3 consuming overlays (fa-en/prs-en/nl-en) kept in sync; 7 pairs remain.
+- `6fe215ce` — §12 contraction wave: 136 X-en overlay accepted_answer gaps.
+  Free-text is graded ONLY against overlay accepted_answers (tested_text is NOT
+  unioned at runtime) and latin grading marks distance≥2 equivalents incorrect, so
+  a learner typing the un-contracted form of a contraction-only answer failed.
+  Added the fully-expanded variant (88 authored + 48 propagated from a sibling dir).
+  verify.sh = 0/0.
+- `1d8b5596` — (a) en-nl a1_03 `choose_lowercase`/`choose_lowercase_month`: added
+  `case_sensitive: true`. These teach "Dutch weekday/month names are lowercase" with
+  distractors Maandag/MAANDAG/… but MCQ grading casefolds by default, so every
+  capitalized distractor was graded CORRECT. Only 2 case-distinction MCQs exist
+  corpus-wide. (b) a1_02 `reply_as_leila` realization tested_text de-fused
+  ("Are you a new member Yes I am I'm Leila" → "Yes I am I'm Leila"); overlays
+  already graded the correct reply, this removes the source-of-truth desync.
+
+**TRIAGED AS NON-DEFECTS (verified, no action needed):**
+- dialogue_comprehension "empty target_blocks" (58 en + 32 nl): ALL have a
+  media_asset_key — audio listening-comprehension, question posed via overlay
+  instruction + L1 options. By design, fully answerable. NOT the earlier-feared bug.
+- matching_pairs "duplicate right" (7): valid categorization sorts (responses →
+  accepting/declining). matching_pairs "left==right" (50): legit cognates
+  (Dutch/German word == English meaning, e.g. kilo/fruit). Not defects.
+- fa a1_11 `speak_full_routine_scene` wake-time (backlog Class C): the "7" is the
+  GENERIC taught routine (correct); Sara's 8 is a separate exercise
+  (`recognize_saras_wake_time`, correct_option ساعت هشت). Unit is internally
+  consistent — misdiagnosis in the old Class C note.
+- en/a1_02 + fa `reply_as_*` Class C: overlays already grade the correct reply-only
+  answer; only en's realization tested_text was fused (fixed above).
+- Deterministic corpus audits run clean: MCQ correct-option-in-distractors (only the
+  2 case MCQs), matching_pairs ambiguity, full verify.sh (content 0 err/0 warn).
+
+**RESIDUAL / STILL QUEUED:**
+- Merged-speaker legacy teaching cards (en: 2 in a1_02 room_and_member/closing;
+  nl: 30). Format is target-only (`target.text` = "Daniel: … Leila: …", no
+  per-speaker text_blocks) → single-voice TTS. Quality not correctness; migrating to
+  multi-block speaker-tagged risks desyncing overlay teaching glosses. DEFERRED.
+- en-X §12: fa/prs targets are graded EXACT (arabic, non-tolerant) so need every
+  valid answer variant — NATIVE-RESERVED. en-nl Dutch variants — authoring call.
+- German (en-de/de-en) capitalization: free-text grading casefolds, so a learner
+  writing lowercase German nouns / "sie" for "Sie" passes. DESIGN DECISION for Ramin
+  (opt de exercises into case_sensitive?) — not a clear bug.
+- Fresh semantic review of realizations/en: a1_17–37 = NO DEFECTS (agent). a1_01–16
+  & a1_38–53 agent-reviewed this session; a2/b1/b2 + en-nl NOT agent-reviewed
+  (hit the 200-agent session spawn cap).
