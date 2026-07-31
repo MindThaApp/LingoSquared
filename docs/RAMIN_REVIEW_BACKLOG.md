@@ -76,6 +76,36 @@ pack was flipped — no content defect found, but the tracking status is inconsi
 forward-ref dialogue_response prompts (بفرمایید/بکنم/مشکل, taught lesson04) surfaced again — already in the a2
 fix-pass queue. Everything else re-verified **CONFIRM** (en-fa a1_10-56 + a2/b1, en-prs a1_10-61 + b1 — clean).
 
+**WAVE-4 (nl-en + en-nl coverage) — more real defects caught + FIXED (all committed 0-err):**
+- **NEW under-leniency class — §12 join-variant gaps:** two-clause `writing_prompt` exercises accepted ONLY
+  period-joined answers, so a learner using the comma-/"and"-/"because"-join the instruction itself invites
+  ("say X **and** ask Y") was graded WRONG (grading is casefold+whitespace only). Fixed nl-en a1_45/46
+  (`write_own_emergency_message`/`write_own_lost_item_message`) + a1_64/65 (`write_own_kind_message`/
+  `write_own_return_message`, all three X-en dirs). **Corpus-scanned all shared-en `writing_prompt`s → these
+  4 were the only offenders; now zero.** The 2026-07-23 remediation (ae9e0253) had scoped to en-prs/prs-en only.
+- **§16 untaught matching_pairs padding:** a2_31/33/34 lesson01 match exercises padded past real taught vocab
+  with phrases never taught anywhere (verified: only in review-notes prose) — "platform change"/"We're sorry
+  for the inconvenience" (31), "sequencing" (33), "return window" (34). The compiler's untaught-vocab validator
+  doesn't cover matching_pairs, so it slipped. Removed from shared realization + all 3 X-en overlays' mirrored
+  pairs. ("problem" in 34 left per reviewer's non-blocking note.)
+- **en-nl a1_69** teach.hoorntje gloss "the cone / each" → "the cone" ("/ each" copy-pasted from unit68's "stuk").
+- **en-nl a2_74** lesson04 taught+graded "via Amsterdam" but the whole unit reroutes via **Amersfoort** (lesson05
+  even lists Amsterdam as a WRONG distractor) — real cross-lesson graded contradiction; switched lesson04 to
+  Amersfoort (realization + overlay), distractors untouched.
+- **en-nl a1_03** lesson04/06 order+translate paired a free 7-way weekday slot with a fixed "12 april" (a Sunday
+  in 2026) → 6/7 combos calendar-false, and out of sync with the realization's re-anchored "vrijdag 10 april";
+  dropped the numeric date, kept the weekday variable so every generation is true (systemic-#6 class).
+**WAVE-4 QUEUED / re-confirmed (non-blocking or owner-reserved):**
+- **nl-en a1_01** `variety_wellbeing_order.901` word_order still draws "I'm bad" ~1/3 (wrong-valence; unit teaches
+  only "Not bad, thanks."). **RE-CONFIRMED still live** by this pass. This is backlog **W2** — the clean fix needs
+  a positive-only wellbeing sub-tag, i.e. the backfill wave (owner-reserved/dev-DB); the volume_fill child was
+  already fixed (284a7c5b) but the parent can't be pack-only-fixed. Left for the backfill wave.
+- nl-en a1_02 `dialogue_choose.002` feedback_frame asserts "{item} is a profession/role" but the pool includes
+  "library" (a place) — feedback_frame is runtime-INERT so not learner-facing; low.
+- en-nl a1_67 lesson04 reading_comprehension distractors left partly in Dutch ("De Markt."/"Kraam Twee.") — cosmetic.
+- Broad **CONFIRM** coverage this wave: nl-en a1_01-51 (minus the two above) + a2_25-34 + b1_01-19, en-nl a1_02-69
+  + a2_24/28/74 + b1_04, en-prs b1_01-06 — all clean.
+
 ---
 
 ## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
