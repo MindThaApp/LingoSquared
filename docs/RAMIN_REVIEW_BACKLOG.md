@@ -106,6 +106,34 @@ fix-pass queue. Everything else re-verified **CONFIRM** (en-fa a1_10-56 + a2/b1,
 - Broad **CONFIRM** coverage this wave: nl-en a1_01-51 (minus the two above) + a2_25-34 + b1_01-19, en-nl a1_02-69
   + a2_24/28/74 + b1_04, en-prs b1_01-06 — all clean.
 
+### 🔬 en-nl a2/b1 FIRST-PASS REVIEW WAVE (2026-07-31) — 17 unreviewed packs (a2 25/26/27/73/75/76/77 + b1 01/02/03/05/06/07/08/09/10/11)
+
+7 sonnet read-only reviewers; I applied fixes centrally. **NONE flipped** — the whole en-nl corpus is
+held on the systemic "(with ik)"/homograph leaked-gloss class (re-backfill wave, Ramin's dev-DB), so
+these join the held pile even when otherwise clean. Value = the real defects surfaced + fixed.
+
+**FIXED pack-side (committed 0-err):**
+- a2_25 untaught "daarvan" matching pair → swapped to taught "Wat vind je van het nieuwe fietspad?"; §12 "en"-variant.
+- a2_26 "open a {item}" double-article ("a the bank account") → dropped fixed "a ".
+- a2_27 §12 write_summary_recap "en"-variant.
+- a2_77 volume_fill.003 capitalized "Retourbeleid" mid-sentence → deleted (volume_order.003 covers it); overlay write_summary hij/hij → restored to hij/zij (the taught feminine drill).
+- b1_02 lesson06.choose.001 dropped `adverb` so "waar"(=where, wrong sense) can't be a graded MC answer.
+
+**QUEUED → RE-BACKFILL WAVE (backfill_lexemes_en_nl.py homograph/wrong-sense; deploy-gated, same class as the existing en-nl `was`/`regel` cluster — one token carries one global POS+gloss, so a B1 lesson's sense loses to an earlier unit's):**
+- b1_01 `werk` globally verb "work (with ik)" but taught noun "job" (lesson05) → reaches lesson05 choose/match/translate.004 + lesson06 listen/match. Fix like the unit17 `werk` precedent (backfill_lexemes_en_nl.py:376, precedent ~485-492): lesson-scoped noun override / pool exclusion.
+- b1_03 `vragen` globally verb "to ask for" but taught noun "questions" (lesson03) → lesson03 choose/match/translate.003. Needs script-level override (backfill_lexemes_en_nl.py:574). Also `agenda` soft-imprecise gloss (non-blocking).
+- b1_06 `regel` globally verb "arrange (with ik…)" but taught noun "the rule" (lesson06) → lesson06 translate.002 (100%) + listen.001 (~8%). Give the b1_unit06 occurrence its own noun entry "the rule" (do NOT just exclude → would DEAD translate.002).
+- b1_09 `Jij`/`jij`/`je` — capitalized sentence-initial `Jij` shares `informal_address` with b1_01's lowercase `jij`/`je`, so Endless Practice renders "jij zegt dat…" (lowercase sentence start) ~2/3 of the time in lesson03.order.001. Give capitalized `Jij` (nl.b1.unit09.lesson03.teach.jij_zegt_dat) a narrower tag, repoint that one template. (Checkpoint flow unaffected — this is Endless-only.)
+- a2_73 `eens` (globally adj "agreed", but a softening particle here) + `over` (globally "past/after", but "about" here) reach lesson06 choose/match via the `job_interview_dialogue` catch-all → exclude both from that catch-all (like the `_METALABELS` exclusion at ~2616-2620). Plus `kunt` gloss line 547 "can (with je/jij)" → widen to "can (with u/je, formal or informal)" (matches the already-fixed capitalized "Kunt" line 795; unit73 is formal-u register).
+- a2_77 stale capitalized `'Retourbeleid'` key in VOLUME_PRACTICE_SINGLETON_TAGS (now unused after the pack fix, but should be lowercased/removed).
+- **NOTE:** this homograph class is almost certainly in the unreviewed en-nl b1_04-11 too → the re-backfill wave should sweep, not spot-fix.
+
+**QUEUED (other, non-blocking):**
+- b1_07 lesson03 `had … kunnen` (IPP past-regret double-infinitive — the unit's headline grammar) has ZERO checkpoint coverage: backfill yields 0 lexemes for lesson03. Needs new backfill lexemes (dedicated tag like unit06's `past_regret_had_moeten`) + new pack templates. Coverage gap, not a live defect.
+- b1_10/11 feedback_frame false-claims for unioned-in candidates (unnecessary tag unions built to hit the MC/match floor) — **feedback_frame is runtime-INERT** so non-learner-facing (NEW-2 hygiene); optional cheap pack-only union-narrowing.
+- b1_08 lesson05 reading contradiction ("Nu heeft Lotte meer tijd." immediately before the counterfactual "Als ze meer tijd had…") — entangled (that exact sentence is an exercise's tested_text at line ~453, so the reading + exercise must be fixed together); + recognize_als bare-word MC ambiguity (if/when) — both non-blocking, native-pass.
+- a2_75/76, b1_05, b1_08 = reviewed clean (no new blockers) but HELD on the re-backfill wave with the rest.
+
 ---
 
 ## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
