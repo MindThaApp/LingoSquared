@@ -61,6 +61,16 @@ add a slot_relations compatibility feature (engine) OR narrow each offending slo
 into per-candidate fixed frames. Checkpoint-scoped generation can still hit these (they're unit-scoped) → real
 learner exposure, but the clean fix is deploy/schema. QUEUED (not hasty-patched).
 
+**More fixes from the pass (all committed 0-err):** en-fa a2_12/13/14/16 merged-speaker
+dialogue_comprehension (6 exercises, same NEW-1 class as a2_10/11/15/17 — batch-1 packs never got the retro-fix);
+en-fa a1_25 Maryam hair/eye swap (قهوه‌ای→مشکی); en-fa b1_15 six phantom introduced_tokens (بتونه/بتونن/کنن/
+راحت‌تر/پیش/بره) copy-pasted from unit16 → removed (they'd wrongly anchored to unit15, exposing untaught unit16
+vocab in unit15's practice pool).
+**More QUEUED (non-blocking, needs care):** nl-en a1_62 lesson03↔lesson04 "who asks to speak slowly" contradiction
+(dialogue: Leila asks; reading: Mia asks — needs a coherent dialogue+reading+media-transcript rewrite in the
+SHARED realizations/en, affects 3 dirs; breaks no grading, prior reviewer knowingly left it); nl-en a1_55
+respond_own_pool_statement + en-fa a2_16-class over-lenient extra accepted topic not in the prompt (in-sync, never
+fails a learner). — original minor items follow —
 **Minor/queued (non-blocking):** en-fa a1_20 realization+overlay still `review.status: draft` (only the practice
 pack was flipped — no content defect found, but the tracking status is inconsistent); the en-prs a2_11/12
 forward-ref dialogue_response prompts (بفرمایید/بکنم/مشکل, taught lesson04) surfaced again — already in the a2
