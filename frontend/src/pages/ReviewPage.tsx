@@ -53,12 +53,19 @@ export function ReviewPage() {
     enabled: dueCourses.length > 0,
   });
 
+  // Extract the sole-due-course id as a stable primitive so the auto-pick
+  // effect below depends on it (a string|null that only changes when the set
+  // of due courses does) rather than on the `dueCourses` array, which is
+  // rebuilt every render and re-ran the effect on every render (a guarded
+  // no-op, but wasteful).
+  const soleDueCourseId = dueCourses.length === 1 ? dueCourses[0].course_id : null;
+
   useEffect(() => {
-    if (!autoPicked && dueCourses.length === 1) {
-      setCourseId(dueCourses[0].course_id);
+    if (!autoPicked && soleDueCourseId) {
+      setCourseId(soleDueCourseId);
       setAutoPicked(true);
     }
-  }, [autoPicked, dueCourses]);
+  }, [autoPicked, soleDueCourseId]);
 
   useEffect(() => {
     let cancelled = false;
