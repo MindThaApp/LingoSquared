@@ -11,6 +11,36 @@ or owner-reserved decisions interrupt Ramin. Everything else lands here.
 
 ---
 
+## ⭐⭐ RAMIN — CURRENT STATE + DECISION LIST (2026-07-31)
+
+**Where we are:** full native-review sweep done — **297/529 practice packs flipped to `review.status: reviewed`**
+(all validate 0/0; DEAD/floor gate at baseline, no regressions). The **reverse dirs (en-fa + en-prs) a1/a2/b1 are
+complete** this session. **ZERO packs remain genuinely-unreviewed** — the ~232 unflipped packs are all
+reviewed-and-HELD, waiting on a decision below. Claude's autonomous content lane is **exhausted**; the items
+below are owner-reserved (deploy / native / product) and each unblocks a chunk of the held packs.
+
+**Decide in this order (highest leverage first):**
+1. **RE-BACKFILL WAVE** (deploy, needs dev-DB) — THE #1 lever; unblocks the bulk of held X-en + en-nl + some
+   reverse-dir packs at once. First choose the APPROACH (Claude did NOT pre-empt this): (A) sanitize glosses at
+   point-of-use, (B) exclusion-set, or (C) `interchangeable` multi-answer — see the RE-BACKFILL WAVE section +
+   `docs/LEAKED_GLOSS_INVENTORY.md` (376 X-en items, 3 classes) + the batch-24/27 reverse-dir gloss finds
+   (backfill_lexemes.py/_en_prs.py: لازمه/آقای/قهوه‌یی/اینجا/پُسته/شرکت/می‌دید + "(spoken)" class). Mechanical
+   metalanguage-strips are ready to script once you pick the approach; wrong-sense ones need #2.
+2. **NATIVE-Farsi/Dari confirms** (native) — battery=بطری/jar=بوتل, fee=معاش→کارمزد, dinner=شب‌چاشت→نان‌شب,
+   پنجصد/دوصد numerals, میله, رستوران/رستورانت, اما→و acceptability, en-fa b1_07 کاش phrasing, etc. + the **a2
+   forward-ref pre-teach cards** (بکنم/مشکل/مشکلی/می‌کنی — need native example sentences; Claude did NOT author).
+3. **PUNCTUATION** (product/backend) — fa/prs `.`/`!` answers are untypeable on the in-app keyboard; pick: (A)
+   grading strips terminal punctuation [recommended, 1 change], (B) add a period key, or (C) content dual-variant
+   pass. See the keyboard/punctuation SYSTEMIC section.
+4. **اما→و** mechanical drop — ready to run once #2 confirms و is never acceptable.
+5. **grammar-note `target.text` English-metalanguage** (systemic #5) — en-fa a2 done; en-prs b1 = full English
+   paragraphs, needs native judgment for the pure-target form.
+
+Say the word (e.g. "do the re-backfill wave, approach A") and Claude executes whatever is in-lane. Per-batch
+detail follows below.
+
+---
+
 ## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
 
 Corpus-wide scan found **362** lesson exercises of `type: dialogue_comprehension` with **empty
