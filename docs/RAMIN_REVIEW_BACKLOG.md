@@ -767,6 +767,50 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
+## ⭐ Native review — BATCH 27 (2026-07-31): reverse-dir b1 — en-fa b1_05-16 + en-prs b1_01-11 — SWEEP COMPLETE
+
+**FLIP (batch 27): 18 packs** — en-prs b1_01-11 (all clean) + en-fa b1_05/08/12/13/14/15/16. **This completes the
+native-review sweep: all 6 directions × a1/a2/b1 have now been fresh-context reviewed.**
+
+**✅ FIXED by me:** en-fa b1_05 example (enclitic من مسئولم → full copula من مسئول هستم, matching the unit's own
+هستم-teaching point); en-fa b1_09 teach.sara (سارا مسئول این پروژه‌ست — contradicted unit05's established "حسین
+مسئول این پروژه" + used casual ‌ست in a formal unit → یک پروژه هست, resolves both).
+
+**🔴 HELD — en-fa b1 (3 packs):**
+- **b1_07** — (native) کاش-wish construction `کاش دیشب جشن تولد رضا اونجا بودم` reads awkward (missing تو/در before
+  اونجا; native would say `توی جشن تولد رضا بودم`) + strict grading rejects the natural form → native-confirm +
+  add accepted variant. Also (deploy) shared می‌دید mis-gloss in backfill_lexemes.py line 648 ("you give (polite)"
+  — wrong verb; should be "he/she would see", it's دیدن not دادن) — not reachable in this pack but route to the
+  re-backfill wave.
+- **b1_09** — (deploy) شرکت glossed "company" (workplace_word tag) but this unit only teaches شرکت کردن
+  ("participate"); reachable & deterministic (single-member pool) via lesson04 match.001 + order.002 → re-gloss/
+  re-tag شرکت for this context in the re-backfill wave.
+- **b1_10** — (factually-false auto-frame, needs reframe) `نیما می‌خواد برگرده {item}` with city_name slot = only
+  تهران → always "Nima wants to go back to Tehran," but the unit's own reading has Nima ALREADY living in Tehran
+  wanting to go back to a different (unnamed) city. Deterministic false sentence. Fix = reframe (different subject/
+  verb) or a dedicated non-تهران destination tag; needs a small authoring decision.
+
+**🔴 NEW SYSTEMIC #5 — grammar_note `target.text` English-metalanguage (corpus-wide, pre-existing):** across the
+en-prs B1 corpus (present since b1_01) — and confirmed as a subset in en-fa a2 (which I fixed, 8 cards) — many
+`grammar_note` cards embed a full English explanation directly inside `target.text` tagged `language_code: prs/fa,
+direction: rtl`. `TextBlockView` then renders that English paragraph right-to-left with a Persian/Dari TTS
+SpeakButton. `backfill_lexemes_en_prs.py` deliberately disables `derive_phrases` for B1 to keep this shape out of
+the lexeme pool (team is aware) — but the raw lesson-reading UI still shows it. Does NOT affect practice-pack
+flips (templates never reference grammar_note content). Fix = per-card: move the English to the overlay
+note/gloss, keep target.text pure target-language (I did this for en-fa a2; the rest is a systemic content-
+architecture cleanup spanning en-prs b1 + likely other target-lang corpora).
+
+**QUEUED — b1 minor/native (non-blocking, flipped packs):**
+- **b1_03 (en-prs) rain/park frame** — `اگر باران {نبارد}، در خانه می‌مانیم` is a valid sentence but differs from
+  نبارد's teaching pairing (not-rain→park); word_order tests order not fact, so non-blocking → hygiene: split into
+  two single-member frames or align the consequence.
+- **underdetermined write_goal prompts** (en-fa b1_15/16 lesson04/06) — graded against one canned string while the
+  spine outcome calls for personal expression → name the required form or widen accepted_answers.
+- **native-confirm**: en-fa b1_16 lesson05 بتونن/کنن (3pl) vs می‌کنه (3sg) for سارا in one reading sentence.
+- **metadata**: en-prs b1_01 realization/overlay `review.status: reviewed` but review.notes still say "draft,
+  review pending" (stale — reconcile); en-prs b1_09 self-report past_verb_third "4-member" is actually 5 (harmless).
+- compiler-blind teaching-example nits (en-fa b1_14 خلاصه‌ی پیام‌هاست, b1_15/16 سوال می‌پرسه/کردنه, b1_16 مرور).
+
 ## ⭐ Native review — BATCH 26 (2026-07-31): reverse-dir a1 tail + a2 open — en-prs a1_57-61 + en-fa/en-prs a2
 
 **FLIP (batch 26): 6 packs** — en-prs a2_09 + a1_59/60/61 + en-fa a2_09/10. (a1 reverse-dir is now DONE bar
