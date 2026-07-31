@@ -853,13 +853,16 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # homework every Friday" is ungrammatical).
     if token in {"class", "course", "test"}:
         semantics.append("recurring_class_noun")
-    # Unit 37 (celebrations): 4-member bare-word recognition tag
-    # (includes "birthday", already classified since unit04, tagged
-    # additively here). Deliberately NOT used in any shared generative
-    # frame -- these four don't collocate uniformly ("having a
-    # birthday"/"having a gift" both read oddly compared to "having a
-    # party"), same recognition-only discipline as bureaucracy_noun.
-    if token in {"birthday", "party", "gift", "congratulations"}:
+    # Unit 37 (celebrations): bare-word recognition tag, consolidated
+    # 2026-07-31 from three duplicate definitions that diverged on the 4th
+    # member (two used "congratulations", one used "cake"); their runtime
+    # union was 5, so this single definition preserves that exact pool.
+    # "birthday" is classified since unit04, tagged additively here.
+    # Deliberately NOT used in any shared generative frame -- these don't
+    # collocate uniformly ("having a birthday"/"having a gift" both read
+    # oddly compared to "having a party"), same recognition-only discipline
+    # as bureaucracy_noun.
+    if token in {"birthday", "party", "gift", "congratulations", "cake"}:
         semantics.append("celebration_noun")
     # Single-member tag, word_order/translation only (same precedent as
     # the existing single-member "superlative_adj"): "party" is the only
@@ -956,19 +959,9 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # ungrammatical; "I have a subject" isn't a natural claim either).
     if token in {"class", "course", "test"}:
         semantics.append("class_noun")
-    # Unit 37 (celebrations): 4-member bare-word recognition tag. These
-    # nouns don't collocate uniformly with one verb ("have a party"/"have a
-    # cake" work, "have a birthday" reads oddly as a claim, "have a gift" is
-    # ambiguous between giving and receiving), so kept recognition-only,
-    # same discipline as unit25's bureaucracy_noun.
-    if token in {"birthday", "party", "gift", "cake"}:
-        semantics.append("celebration_noun")
-    # Unit 38 (household): 3-member bare-word recognition tag for this
-    # unit's single-token chore nouns. Each pairs with its own fixed verb in
-    # the real content ("do the dishes"/"do the laundry"/"take out the
-    # trash"), so kept recognition-only.
-    if token in {"dishes", "laundry", "trash"}:
-        semantics.append("chore_noun")
+    # (celebration_noun / chore_noun duplicate definitions removed here
+    # 2026-07-31 -- consolidated into the single definitions earlier in this
+    # function; the runtime union pool is unchanged.)
     # Unit 39 (neighborhood): 4-member tag, all safe in "There's a {item}
     # nearby." (mirrors unit24's room_noun "There's a {item}." precedent).
     if token in {"neighbor", "park", "store", "street"}:
@@ -1039,11 +1032,8 @@ def en_agreement_tags(token: str) -> dict[str, object]:
     # (mixed collocations -- "I have a {item}" doesn't generalize).
     if token in {"class", "course", "student", "homework", "subject", "test"}:
         semantics.append("education_noun")
-    # Unit 37 (celebrations): 4-member noun tag, bare-word recognition
-    # only. Excludes "invite"/"celebrate" (verbs, would break
-    # part_of_speech uniformity).
-    if token in {"birthday", "party", "gift", "congratulations"}:
-        semantics.append("celebration_noun")
+    # (celebration_noun duplicate definition removed here 2026-07-31 --
+    # consolidated into the single definition earlier in this function.)
     # Unit 38 (household): 4-member noun tag, bare-word recognition only.
     # Excludes "vacuum"/"clean" (verbs here).
     if token in {"chore", "dishes", "laundry", "trash"}:
