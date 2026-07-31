@@ -853,14 +853,21 @@ deploy-holds; a2 mostly needs a fix-pass — see below.)
 lesson04 comprehend_* merged two speakers into one em-dash block, no speaker field) → split into speaker-tagged
 blocks. (a2_10 flipped; 11/15/17 still held on other issues below.)
 
-**⚠️ NEW SYSTEMIC #4 — اما→و over-leniency (corpus-wide, ~23 en-prs a1 units + a2):** every `lesson06`/`lesson04`
-wrap-up "write a sentence with اما (but)" exercise's overlay `accepted_answers` includes a variant that swaps the
-contrastive **اما** for additive **و** ("and"), silently accepting a meaning-flipped sentence as a correct
-contrast. Found in en-prs a1_36/39-56/57-61 + a2_10 (write_debate_summary) and the اگر-conditional analog in
-a2_11/12/13. **Over-leniency only — never FAILS a correct learner**, so I've treated it as non-blocking and kept
-the affected a1 packs flipped. Fix = drop the و-variant from the write_*_contrast accepted_answers corpus-wide
-(mechanical; I can run it) — but NATIVE-CONFIRM first whether و ever reads as an acceptable loose paraphrase.
-Distinct from the 3 earlier systemic classes.
+**⚠️ NEW SYSTEMIC #4 — conjunction→و over-leniency (EXACT extent: 38 exercises, found by corpus-wide scan
+2026-07-31):** overlay `accepted_answers` that accept a looser **و ("and")** variant alongside the correct
+conjunction the instruction requires, silently rewarding a learner who drops the semantic relationship. TWO
+sub-classes, same root:
+  - **اما→و (contrast, "but"):** en-prs a1_36/39/40/41/42/43/44/45/46/47/48/49/50/51/52/53/54/55/56/57/58/59/60/61
+    (the lesson06 wrap-up write_*_contrast) + a2_10 write_debate_summary + the اگر-conditional analog a2_11/12/13.
+  - **چون→و (cause, "because"):** en-fa a1_14 (×4) + a1_15 (×3, lesson04 translate_this_better/that_worse) +
+    en-prs a1_14 (×4) + a1_15 (×3) — accepts "X و Y" for "X because Y" (drops چون's causal link).
+Full precise list reproducible via the scan (accepted_answers containing both a چون/اما variant AND a و-only
+variant). **Over-leniency only — NEVER fails a correct learner** (the correct چون/اما form is always also
+accepted), so kept the affected packs flipped (non-blocking). Fix = drop the و-only variant from these 38
+exercises' accepted_answers (mechanical; I can run it in one pass) — **NATIVE-CONFIRM first** whether و ever
+reads as an acceptable loose colloquial coordination (reviewers lean "no, و≠چون/اما"). Distinct from systemics
+#1-3, #5. (Contrast: the "این X → 'this, X'" comma-gloss was unambiguously wrong with no defensible reading, so
+that one I already FIXED across a1_49-53; this و-class is a genuine strictness judgment, hence queued.)
 
 **✅ a2 FIX-PASS PROGRESS (2026-07-31) — MECHANICAL fixes COMPLETE:** DONE — (a) NEW-1 attribution splits en-fa
 a2_10/11/15/17; (b) metalanguage stripped from grammar-note target.text on 8 en-fa a2 cards → pure Farsi; (c)
