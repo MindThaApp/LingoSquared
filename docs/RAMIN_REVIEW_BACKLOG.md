@@ -785,11 +785,17 @@ the affected a1 packs flipped. Fix = drop the و-variant from the write_*_contra
 (mechanical; I can run it) — but NATIVE-CONFIRM first whether و ever reads as an acceptable loose paraphrase.
 Distinct from the 3 earlier systemic classes.
 
-**✅ a2 FIX-PASS PROGRESS (2026-07-31):** DONE — (a) NEW-1 attribution splits en-fa a2_10/11/15/17; (b)
-metalanguage stripped from grammar-note target.text on 8 en-fa a2 cards (09/10/11/15/17/18 → pure Farsi, English
-kept in overlay); (c) en-prs a1_57 untaught-conjugation frames rephrased to attested forms (همایون…دید/می‌آورد) +
-FLIPPED; (d) en-fa a2_15 + en-prs a2_15 lesson02 forward-ref prompts fixed by dropping the leading
-متاسفانه/متأسفم. STILL TODO below.
+**✅ a2 FIX-PASS PROGRESS (2026-07-31) — MECHANICAL fixes COMPLETE:** DONE — (a) NEW-1 attribution splits en-fa
+a2_10/11/15/17; (b) metalanguage stripped from grammar-note target.text on 8 en-fa a2 cards → pure Farsi; (c)
+en-prs a1_57 untaught-conjugation frames → attested forms + FLIPPED; (d) en-fa a2_15 + en-prs a2_15 lesson02
+forward-ref prompts fixed (dropped leading متاسفانه/متأسفم); (e) en-fa a2_15 cancel_word example aligned to لغو شدن;
+(f) en-prs a2_16 lesson02 attribution de-named. **FLIPPED this pass: en-fa a2_09/10/15/17/18 + en-prs a2_09/16 +
+a1_57 (10 total incl. batch-26).** **REMAINING = native-judgment only (queued, NOT mine — Ramin's native lane):**
+the STRUCTURAL forward-ref rephrases/pre-teach cards (en-fa a2_11 بکنم; en-prs a2_12 مشکل, a2_13 مشکلی, a2_17
+می‌کنی, a2_18 مشکلی) — these foundational words are oddly first-taught in lesson04 of their own units; correct fix
+= pre-teach in lesson01 (needs a native example sentence) OR native rephrase; I did NOT author fa/prs sentences.
+Plus a2_14 self-answering matching wart (deploy), a2_18 بخاری teaching-order (LOW), NEW-2 off-theme re-anchors
+(hygiene, Endless-only — non-blocking), NEW-3 typo-conflation (deploy).
 
 **🔴 a2 FIX-PASS workstream (compile-time, mine — the reverse-dir a2 units need this before flipping):**
 - **NEW-4 forward-ref in graded dialogue_response PROMPTS** (learner must read an untaught token to answer):
