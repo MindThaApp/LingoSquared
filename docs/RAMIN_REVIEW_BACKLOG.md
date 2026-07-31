@@ -767,10 +767,14 @@ confirmations (battery=بطری, jar=بوتل, fee=معاش→کارمزد, dinn
 `was`-exclusion + near-dup-tag-isolation set. NEXT: batch 21 opens the en-fa / en-prs reverse directions
 (English→Dutch/Farsi/Dari; batch 1 already did ~20 wave-4 packs of those).
 
-## ⭐ Native review — BATCH 27 (2026-07-31): reverse-dir b1 — en-fa b1_05-16 + en-prs b1_01-11 — SWEEP COMPLETE
+## ⭐ Native review — BATCH 27 (2026-07-31): reverse-dir b1 — en-fa b1_05-16 + en-prs b1_01-11 — REVERSE-DIR SWEEP DONE
 
 **FLIP (batch 27): 18 packs** — en-prs b1_01-11 (all clean) + en-fa b1_05/08/12/13/14/15/16. **This completes the
-native-review sweep: all 6 directions × a1/a2/b1 have now been fresh-context reviewed.**
+REVERSE-DIRECTION sweep (en-fa + en-prs, a1/a2/b1 all fresh-context reviewed).** NOTE (accurate state, 296/529
+flipped): the X-en dirs (fa-en/prs-en) + en-nl are mostly NOT flipped — they were reviewed in batches 1-20 and
+HELD on the leaked-gloss re-backfill wave (deploy), and some tails are still unreviewed (prs-en b1 0/19, fa-en b1
+5/19, en-nl a2 3/10, en-nl b1 1/11, prs-en a1/fa-en a1 held). Next REVIEW target = those genuinely-unreviewed
+tails; everything else awaits the deploy wave.
 
 **✅ FIXED by me:** en-fa b1_05 example (enclitic من مسئولم → full copula من مسئول هستم, matching the unit's own
 هستم-teaching point); en-fa b1_09 teach.sara (سارا مسئول این پروژه‌ست — contradicted unit05's established "حسین
