@@ -134,6 +134,35 @@ these join the held pile even when otherwise clean. Value = the real defects sur
 - b1_08 lesson05 reading contradiction ("Nu heeft Lotte meer tijd." immediately before the counterfactual "Als ze meer tijd had…") — entangled (that exact sentence is an exercise's tested_text at line ~453, so the reading + exercise must be fixed together); + recognize_als bare-word MC ambiguity (if/when) — both non-blocking, native-pass.
 - a2_75/76, b1_05, b1_08 = reviewed clean (no new blockers) but HELD on the re-backfill wave with the rest.
 
+### 🔬 fa-en + prs-en 2nd-PASS RE-VERIFY WAVE (2026-07-31) — 61 flipped packs (fa-en a1×25/a2×6/b1×5, prs-en a1×19/a2×6)
+
+5 sonnet reviewers. The shared realizations/en was already 2nd-pass-verified via nl-en, so scrutiny focused on the Farsi/Dari overlays + shared-realization behavior per direction. **No HARD blockers survived** beyond the ones fixed below — the flipped fa-en/prs-en corpus is essentially clean modulo known systemic classes. `check_dari_register.py` = 0 Iranian-leakage across all prs-en packs.
+
+**FIXED (committed 0-err):**
+- §12 join under-leniency I'd MISSED earlier (truncated grep): fa-en + prs-en a1_45 (emergency) & a1_46 (lost-item) overlays kept only 6 period-joined answers — added the 6 comma/"and"-joined variants to all 4; also fa-en a1_02 (reply_as_leila + speak_exchange) + prs-en a1_02 (speak_exchange).
+- prs-en a1_52 reading gloss coffee mistranslation چای(tea)→قهوه(coffee).
+- a1_24 lesson01 match_rooms premature "balcony" (taught lesson04) → dropped the pair (shared realization + all 3 overlays); 5 all-taught pairs.
+
+**QUEUED — pack-side, non-blocking (fix when convenient):**
+- prs-en a1_51 reading_syrup_dosage distractor "every four hours" = the *tablet's* real dosage reused for the *syrup* question (the realization's own note said avoid exactly this) → swap to a value not in the passage (e.g. "after lunch"). Check fa-en/nl-en a1_51 for the same.
+- prs-en a1_08 lesson01 match_quantities "fresh" (taught lesson02) — within-unit forward-ref (shared realization); solvable by elimination.
+- prs-en a1_42 personality_adj matching declares 5 slots but 6 members exist unit-scoped → widen to 6 (clears a below-floor cleanly).
+- speak_response/dialogue_response capstones over-accept one extra dialogue topic beyond the prompt (prs-en a1_51/52/55/58 + a2_25; nl-en a1_55) — over-lenient, never fails a correct learner.
+
+**QUEUED — SHARED realization (affects all X-en), non-blocking / multi-file:**
+- a2_34 reply_as_daniel/speak_complaint prompt "Can I help you?" — no character says it in this unit (Leila self-initiates); copy-paste leftover. Fix: empty target_blocks (self-initiated, per a1_12 precedent) in realizations/en + the overlay instructions.
+- a2_32 lesson02 reply_opinion prompt uses "thing" (taught lesson04) — forward-ref (compiler WARNs, lenient); reword to "…is useful?" or pre-teach.
+
+**QUEUED — SYSTEMIC classes surfaced/confirmed corpus-wide (compiler-blind — the standard gates miss these):**
+- **dialogue_response prompt untaught tokens** never taught ANYWHERE (compiler's `validate_untaught_vocabulary` only flags later-same-file tokens, drops never-taught silently). Hits: fa-en a2_25 (why/do), a2_28 (receptionist/symptoms/asks/how/long/say/whether — worst), a2_29 (ask/asks/describe), b1_16 (give/starting). MITIGATED for X-en (the Farsi/Dari overlay `instruction` paraphrases, and that's the scaffold the learner reads) → non-blocking, but the raw English prompt carries untaught words. Corpus-wide (a1 too). Method to sweep: thread taught-tokens across the real manifest order, then diff prompt_tokens − taught.
+- **match_X_words forward-reference within the unit** (matching a word taught in a later lesson of the same unit): fa-en/prs-en a2_25/26/33/34 + pervasive in a1 (06/08/09/12/13/15…). `scripts/_matching_pairs_forward_reference_check.py` ALREADY catches this but is NOT wired into any gate (verify.sh never calls it). Mild (solvable by elimination). Consider wiring the checker into the gate + a cleanup pass.
+- **Systemic #5 grammar_note target.text metalanguage** confirmed live in fa-en b1_07/08/11/16 (English grammar rule sitting in `target:` instead of `note:`; b1_16 is a full paragraph with metalanguage words in introduced_tokens). Realization-side fix: move rule→note:, put a clean example sentence in target.text.
+- **fa-en a1_37/38 duplicate/conflicting semantic-tag definitions** in `scripts/_en_target_lexeme_common.py` (celebration_noun defined 3× → union of 5 not the documented 4; chore_noun 2× → union of 4 incl. the "chore" category word the pack explicitly meant to exclude; household_noun dup). Benign TODAY (extra members have correct glosses) but latent — dedup to one definition per tag, DEAD-verifying unit scope after (a matching_pairs may rely on the union count).
+
+**QUEUED — provenance / hygiene:**
+- **fa-en b1_16**: practice pack flipped to `reviewed` but its realization + overlay are BOTH still `review.status: unreviewed` (notes:null / "needs fresh-context review") — the flip isn't backed by any review of its own ingredients. Re-review the realization/overlay (also fix its grammar_note paragraph) before trusting the flip.
+- fa-en a1_37 "break" gloss "اتاق استراحت" (= "break room", the compound's sense, not bare "break") — re-backfill (deploy). fa-en a1_32 overlay uses heavy *asterisk* markdown in teaching/feedback text unlike siblings (literal asterisks if unrendered) — verify renderer. a1_66/a1_51 both realize spine `universal.a1.pharmacy.buy_basic_medicine` (duplicate outcome) — maintainer check.
+
 ---
 
 ## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
