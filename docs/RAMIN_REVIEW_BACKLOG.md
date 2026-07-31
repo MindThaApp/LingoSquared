@@ -2319,3 +2319,14 @@ Pack-fix sweep found the duplicate-gloss mis-grading has two layers:
 - Fresh semantic review of realizations/en: a1_17–37 = NO DEFECTS (agent). a1_01–16
   & a1_38–53 agent-reviewed this session; a2/b1/b2 + en-nl NOT agent-reviewed
   (hit the 200-agent session spawn cap).
+
+**NEW (2026-07-31, NATIVE-RESERVED) — under-specified full-turn role-play instructions:**
+fa-en/prs-en dialogue_response & speak_response exercises whose only accepted answer is a
+multi-turn block (3 turns) but whose Farsi/Dari instruction only states the prompt-giver's line
+(the nl-en sibling correctly says "produce the whole turn: X, Y, Z"). A learner giving a partial
+answer is graded wrong (feedback explains the 3 parts but feedback is inert/never rendered).
+Confirmed: en.a2.unit25.lesson04.exercise05.reply_as_daniel. **59 targets** (≈29 fa-en + ≈30
+prs-en) enumerated with the nl-en model instruction in
+`docs/NATIVE_REVIEW_full_turn_instructions_2026-07-31.md`. Fix = rewrite each fa/prs instruction
+to convey "produce the full turn" (native authoring — NOT done here). Note: realizations/en a1
+(units 01–53) got a fresh 3-batch semantic review this session — all clean, NO DEFECTS.
