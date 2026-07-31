@@ -39,6 +39,33 @@ below are owner-reserved (deploy / native / product) and each unblocks a chunk o
 Say the word (e.g. "do the re-backfill wave, approach A") and Claude executes whatever is in-lane. Per-batch
 detail follows below.
 
+### 🔬 QA RE-VERIFICATION PASS (2026-07-31, budget-spend directive) — ~30 adversarial verifiers over flipped packs
+
+Ran a large adversarial re-verification fan-out (sonnet) over the reverse-dir + nl-en flipped packs to catch
+false-flips before ship. **Real defects caught + FIXED (all committed, 0-err):** (1) 8 in my own session edits
+(instruction↔Farsi/Dari desyncs after متاسفانه/متأسفم drops, an incomplete آن drop, missed de-name/attribution
+sibling exercises, a surfaced untaught token); (2) the **این X → "this, X"** comma-mistranslation template artifact
+(en-fa a1_49/50/51/52/53, 12 garbled variants + 6 feedbacks); (3) en-prs a1_57 stale English prompt (person/tense
+mismatch after a conjugation fix); (4) en-prs a1_60 write_football_cricket_contrast instruction dropped the time
+clauses every accepted answer requires (unanswerable-as-instructed); (5) en-fa a1_25 Maryam hair/eye color swap
+(قهوه‌ای→مشکی). **Self-caught regression:** my صدات→introduced_tokens fix broke the en-fa scope-check (needs a
+FA_GLOSSES entry) — reverted; the original صدات-in-dialogue is LOW/non-blocking, requeued.
+
+**⚠️ NEW SYSTEMIC #6 — unconstrained multi-slot word_order frames producing semantically-incoherent combos:**
+a generative frame pairs a fixed word (or a second slot) with a slot whose pool includes incompatible members →
+factually-false/incoherent graded answers. Confirmed: en-prs a1_11 `day_part_order.004` "ساعت نه {time_of_day}" →
+"nine o'clock **noon**" (ظهر); en-prs a1_14 `reason_order.002` "{topic} چون {adjective}" → "I like **music**
+because it's **delicious/warm**"; and the earlier en-fa a1_37 (موز→any color) / a1_38 (تابستان→cold/snowy) /
+en-prs b1_03 (rain نبارد→stay-home). Root: no slot-compatibility constraint (schema only has `distinct`). Fix =
+add a slot_relations compatibility feature (engine) OR narrow each offending slot via a backfill sub-tag OR split
+into per-candidate fixed frames. Checkpoint-scoped generation can still hit these (they're unit-scoped) → real
+learner exposure, but the clean fix is deploy/schema. QUEUED (not hasty-patched).
+
+**Minor/queued (non-blocking):** en-fa a1_20 realization+overlay still `review.status: draft` (only the practice
+pack was flipped — no content defect found, but the tracking status is inconsistent); the en-prs a2_11/12
+forward-ref dialogue_response prompts (بفرمایید/بکنم/مشکل, taught lesson04) surfaced again — already in the a2
+fix-pass queue. Everything else re-verified **CONFIRM** (en-fa a1_10-56 + a2/b1, en-prs a1_10-61 + b1 — clean).
+
 ---
 
 ## 🔴 SYSTEMIC (2026-07-30) — ~327 `dialogue_comprehension` LISTENING exercises unanswerable pending audio (PRODUCT DECISION)
