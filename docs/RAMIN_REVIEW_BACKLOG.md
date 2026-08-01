@@ -2460,3 +2460,31 @@ punctuation-SENSITIVE. That gap lets this class ship green. Fix: for option-base
 (non-free-text) exercise types, require an EXACT (casefold/whitespace-only, mirroring
 the grader) match between some accepted value and the displayed correct_option.
 Acceptance criterion: zero false positives on the current corpus (run it yourself).
+
+---
+
+## CHECKPOINT PUBLISH-GATE — real remaining work (2026-08-01, autonomous)
+
+Measured current practice-pack coverage (not the stale 2026-07-22 "273 packs" figure).
+**en→X (en-nl/en-fa/en-prs) practice packs are 100% covered.** All remaining checkpoint
+failures are X→en and reduce to SIX English A2 units with no lexemes:
+`en.a2.unit35..a2.unit40` (prescription, document_correction, video_calls, repair_visit,
+after_the_interview, online_order_problem). Their realizations exist and teach real vocab,
+but `backfill_lexemes_{nl,fa,prs}_en.py` emit ZERO lexemes for them, so no practice pack can
+help until the backfills are extended (per PRACTICE_PACK_RECIPE §0). (`nl-en a1_unit25` from
+the inventory is a phantom — no such teachable unit; ignore.)
+
+Chain to close these 18 checkpoints (6 units × 3 X→en directions):
+1. Extend the 3 backfill scripts for a2_unit35..40 (add source paths + a lexeme spec dict
+   per unit). The lexeme GLOSS is the learner's L1 word.
+   - **nl-en = Dutch glosses** → being drafted autonomously via Codex (reference lane,
+     Ramin-verifiable). Draft; needs your native Dutch confirm.
+   - **fa-en = Farsi glosses, prs-en = Dari glosses → NATIVE-RESERVED, BLOCKED ON YOU.**
+     A wrong gloss ships as the shown correct answer (§0.1), so these must be authored/
+     confirmed by a native Farsi/Dari speaker. This is the only hard blocker to full X→en
+     checkpoint closure. ~15-20 English tokens × 6 units × 2 directions need L1 glosses.
+2. Then author the 18 practice packs (3 direction-specific files per unit) + fresh review
+   + compile. Autonomously doable ONCE lexemes exist.
+
+So: nl-en checkpoints (6) are being closed autonomously tonight; the fa-en + prs-en 12
+checkpoints wait on native fa/prs lexeme glosses for a2_unit35..40.
