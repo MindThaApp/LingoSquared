@@ -4,7 +4,8 @@
 
 Prereqs are DONE this session: **bun 1.3.14 installed**, **Full Disk Access granted**
 to Terminal (verified: chat.db opens). iMessage is allowlisted to **+447768619958**
-+ self-chat. Telegram: **token still needed** (BotFather → paste to `/telegram:configure <token>`).
++ self-chat. Telegram: **token saved** (`~/.claude/channels/telegram/.env`, policy=pairing —
+DM the bot on first launch → `/telegram:access pair <code>` → then `/telegram:access policy allowlist`).
 
 Relaunch a NEW session with the channel flag (a channel'd session is a FRESH session —
 it won't be the one that made these commits, but it has the same repo/CLAUDE.md/skills):
