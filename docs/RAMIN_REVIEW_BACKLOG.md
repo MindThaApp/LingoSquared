@@ -2330,3 +2330,104 @@ prs-en) enumerated with the nl-en model instruction in
 `docs/NATIVE_REVIEW_full_turn_instructions_2026-07-31.md`. Fix = rewrite each fa/prs instruction
 to convey "produce the full turn" (native authoring — NOT done here). Note: realizations/en a1
 (units 01–53) got a fresh 3-batch semantic review this session — all clean, NO DEFECTS.
+
+---
+
+## OVERLAY ANSWER/GLOSS REVIEW SWEEP — 2026-08-01 (Opus, autonomous; all 420 overlay packs)
+
+First full agent-review of the target-language overlay ANSWER + GLOSS layer:
+**all 7 directions, all 420 packs** (en-nl 88, en-fa 83, en-prs 82, en-de 54,
+en-it 53, en-fr 43, de-en 17). Report-only fan-out (Claude fresh agents + Codex);
+shared rubric in `docs/content/OVERLAY_REVIEW_INSTRUCTIONS_2026-08-01.md`. The
+corpus is overwhelmingly clean — most packs 0 defects.
+
+### APPLIED THIS SESSION (in-lane, committed on branch — safe/mechanical only)
+- **en-nl a1_29** teach.lotte_no_game_draw: stray untranslated Dutch "Maar" in an
+  English gloss → "But".
+- **en-prs a1_33** write_chore_word: accepted_answers omitted taught کار خانه & شستن
+  (both taught in-unit; siblings list full set) → added.
+- **en-prs a1 units 48,49,50,51,52,53,54,58,59,60,61** lesson04.exercise06 (11 files):
+  multi-sentence Dari translate accepted only the trailing-period form; every
+  single-sentence sibling accepts both. Under exact Dari grading a correct answer
+  minus the final "." failed → added the no-trailing-period variant.
+- **de-en a1_01** reply_fine (+ "I'm good, thanks.") & speak_exchange (+ "I'm fine,
+  thanks. And you?"); **de-en a1_02** reply_name (+ "My name is Leila"); all taught,
+  equally-valid English answers that were graded wrong (distance≥2). English target = in-lane.
+- **de-en a1_08** teach.label_text: title "Cafe Menu" (copy-paste from unit07) → "Price
+  label"; the card is a grocery price label.
+
+### QUEUED — NEEDS RAMIN (native / pedagogy / grading-policy). Nothing applied.
+
+**Pedagogy decision (en-nl underdetermined free-text prompts).** Instruction invites
+free personal composition but accepted_answers holds one exact model string; a valid
+different learner answer grades wrong. Fix = dictate exact sentences (pedagogy
+downgrade) OR de-autograde. Occurrences: en-nl a1_10 (write_sequence,
+write_own_routine, speak_day, write_day), a1_12 (write_recent_account).
+
+**NATIVE — Dutch (high-confidence, sibling-confirmed, low-risk; ready on your yes):**
+- en-nl b1_09 translate_jij_zegt_dat (+write_, speak_ parallels): add reduced "Je
+  zegt dat..." variant (only emphatic "Jij..." accepted; je is standard, distance 2).
+- en-nl b1_10 translate_zou_u_kunnen_helpen (+parallels): add reduced "me" variant
+  alongside "mij".
+- en-nl a1_58 nina_antwoord: "heel geweldig" — geweldig not naturally gradable with
+  heel; naturalness nit, learner still graded correct. Low priority.
+
+**NATIVE — Farsi (en-fa):**
+- a1_04 speak_own_family: accepted "یک خواهر دارم" ("I have one sister") doesn't
+  satisfy instruction's "...and no brother". Remove/replace.
+- a1_14 (lesson04 ex04/ex05, lesson05.ex05 write_own_preference, lesson06.ex04
+  dialogue_response_own_preference) + a1_15 (lesson04 ex04/ex05): و-coordinated
+  ("...and it's tasty") variants accepted where the prompt requires چون ("because").
+  LENIENT (accepts non-causal answers) — not a reject-correct bug. Prune or keep. LOW.
+- a1_29 match_dialogue_words: value "آره، خونه از کامپیوتر استفاده می‌کنم." glossed
+  "...at home too" but omits هم. Add هم or drop "too" (matching item; still answerable).
+- a2_16 order_reading_useful_because: word_order tile set is missing a 2nd خبر tile, so
+  the idiom "از دنیا خبر دارم" cannot be formed — only ungrammatical "...از دنیا دارم"
+  is possible. Add the خبر tile. (Real answer-wrong.)
+- b1_07 write_own_wish: sole accepted "کاش دیشب جشن تولد رضا اونجا بودم" — اونجا after a
+  named location is ill-formed; natural "کاش دیشب تو جشن تولد رضا بودم" not accepted
+  (exact grading). Replace/augment.
+
+**NATIVE — Dari (en-prs):**
+- a1_36 match_cooking_words (+teach.in_kitchen_phrase, teach.review_basics): "در
+  آشپزخانه هستم." uses Iranian هستم; whole lane uses Dari استم. Iranian-register leak.
+  Replace هستم→استم in the matching value and both teach notes.
+- a1_21 write_purchase_summary: all 9 accepted values contain "اندازه‌اش بود" —
+  incomplete/unnatural Dari, doesn't state "was her size". Replace across 9 values +
+  matching feedback.
+
+**NATIVE — German (en-de):**
+- a2_26 write_full_opinion: the single accepted answer is self-contradictory —
+  "Ich denke, dass der Kurs interessant ist. Ich bin anderer Meinung, weil der Kurs
+  interessant ist." (disagrees BECAUSE the same proposition). Reauthor the contrast.
+
+**GRADING-POLICY decision — German (systemic, not per-file):**
+- **ß→ss:** free-text answers keyed with ß (Größe, Lindenstraße, Grüßen) reject the
+  fully-co-standard/Swiss ss spelling (distance 2). Confirmed at en-de a1_21, a2_25,
+  a2_27, a2_30 — but it's corpus-wide. Also open: umlaut ae/oe/ue keyboard-fallbacks
+  (Kueche/muede) similarly rejected. And the earlier-noted German **capitalization/
+  casefold** item (lowercase nouns / "sie" for "Sie" pass because free-text casefolds).
+  These are one decision: does the de lane accept ss / umlaut-fallbacks, and opt into
+  case_sensitive for capitalization exercises? Best decided once, then applied corpus-wide.
+
+**NATIVE — French (en-fr) (high-confidence, sibling/realization-confirmed; ready on your yes):**
+- a1_05 reply_vous_avez_choisi: accepts only "Oui, je voudrais un café..."; the exact
+  taught form "Je voudrais un café, s'il vous plaît." (no "Oui,") is graded wrong. Add it.
+- a2_15 translate_prendre_rendez_vous: bare "Translate into French" accepts only
+  "j'aimerais..."; equally-valid "Je voudrais prendre rendez-vous pour la semaine
+  prochaine." rejected. Sibling a2_17 accepts both je voudrais/j'aimerais. Add it.
+
+### NON-DEFECTS / NOTES (verified, no action)
+- en-it a1_12 listen_type_se_stasera_non_va_bene: RESOLVED non-defect — realization
+  tested_text = "Andiamo al cinema stasera", matching the overlay's accepted answer;
+  only the exercise KEY LABEL is misleadingly named. Harmless.
+- en-de a1_15: exercise key `exercise02_choose_teurer` uses "_" where siblings use "."
+  (key-format/compiler nit, not answer/gloss). en-de b1_42: a distractor reads "kein
+  Kaffee" (should be "keinen") — wrong answer regardless, not gradeable.
+- en-fr a1_03 teach.on_est_cinq note: block scalar uses `\"...\"` — backslashes render
+  literally in >- scalars. Possibly corpus-wide; cosmetic. Worth a one-time grep.
+- de-en corpus-wide: listen_select correct_option keeps terminal punctuation but
+  accepted_answers drops it — consistent everywhere, so presumed grader-normalized;
+  worth one confirmation of MCQ punctuation-normalization in the grader.
+- The 5 known en-nl B1 lexeme-gloss bugs (was/waar/vroeg/rust/regel) do NOT reproduce
+  in the overlays — they live in the lexeme-SRS layer (confirmed by the en-nl a2/b1 reviewer).
