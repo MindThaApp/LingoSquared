@@ -2431,3 +2431,32 @@ write_own_routine, speak_day, write_day), a1_12 (write_recent_account).
   worth one confirmation of MCQ punctuation-normalization in the grader.
 - The 5 known en-nl B1 lexeme-gloss bugs (was/waar/vroeg/rust/regel) do NOT reproduce
   in the overlays — they live in the lexeme-SRS layer (confirmed by the en-nl a2/b1 reviewer).
+
+---
+
+## GRADER-CONFIRMED VERDICTS + a real 2-exercise misgrade — 2026-08-01 (follow-up)
+
+Investigated the exact grader normalization (backend/app/review/grading.py; memory
+`reference_grading-normalization-spec`). Verdicts on this session's queued items:
+- The 11 en-prs no-period fixes (committed ae409381) were NECESSARY, not cosmetic —
+  the grader never strips trailing punctuation and fa/prs is graded EXACT.
+- German capitalization (lowercase noun / "sie"→"Sie") passes free-text ONLY when the
+  exercise omits `case_sensitive: true`. So the de-lane capitalization item is real
+  per-exercise; the policy question (opt de free-text into case_sensitive) stands.
+
+### FIXED this session (de-en a1_unit14 — real learner-facing misgrade)
+Two `listen_select` exercises where tapping the visibly-correct option graded WRONG:
+the frontend submits the option's full display string (with terminal punctuation) but
+accepted_answers dropped it, and the choice grader is punctuation-sensitive.
+- en.a1.unit14.lesson01.exercise01.listen_greeting ("Hello, this is Daniel.")
+- en.a1.unit14.lesson02.exercise01.listen_repeat_request ("Sorry, can you repeat that?")
+Fixed by aligning accepted_answers to the displayed option (kept bare form too).
+
+### ROOT CAUSE — validator/grader gap (CODEX lane; recommend fixing)
+`compile_content.py:validate_option_accepted_answers_are_displayed` (~line 1159) uses
+`normalize_dialogue_option()` (~812) which strips terminal punctuation (`[^\w‌]+`
+→ space), so it is punctuation-BLIND — while the runtime choice grader is
+punctuation-SENSITIVE. That gap lets this class ship green. Fix: for option-based
+(non-free-text) exercise types, require an EXACT (casefold/whitespace-only, mirroring
+the grader) match between some accepted value and the displayed correct_option.
+Acceptance criterion: zero false positives on the current corpus (run it yourself).
