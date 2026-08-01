@@ -1,0 +1,371 @@
+schema_version: '1.0'
+pack_key: practice.nl-en.a2.unit36
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit36.document_correction
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-01 (nl-en). This direction tests ENGLISH: the target
+    pool is 16 English lexemes with Dutch glosses across all 4 lessons
+    (lesson01 7, lesson02 3, lesson03 5, lesson04 1). One broad union tag
+    a2_unit36_document_correction pools the whole unit; every slot uses
+    part_of_speech [adjective, adverb, noun, verb], which excludes the
+    only symbol lexeme (3092 -> "3092", a self-gloss) and leaves 15
+    distinct content tokens with 15 distinct Dutch glosses. Templates are
+    anchored one-per-lesson-per-tier for checkpoint lesson stratification,
+    but every SLOT widens to the unit union so each clears its floor:
+    multiple_choice/listen_select > 3 distinct glosses, matching_pairs 6
+    slots over 15 distinct tokens. listen_select is included because the
+    target is English and en TTS is configured; every listen frame is
+    bare '{item}' so no distractor can be a substring of the audio
+    (defect 1.22 safe). word_order uses the generic frame "Please say
+    {item}." (proven in a2_unit34): grammatical for any content POS, no
+    candidate floor, and neither "Please" nor "say" is a taught token in
+    this unit, so no self-reference. bare-word translation prompts the
+    Dutch gloss and accepts the English token.
+    FLAG for the backfill lane (§0.1): the lexeme `correct` carries
+    part_of_speech=adjective and gloss "juist; kloppend" (the
+    right/accurate sense), but unit36 lesson01 teaches `correct` as a
+    VERB (corrigeren, "to change something wrong into something right").
+    The gloss is a real meaning of English "correct", not garbage, so it
+    was KEPT in the pools; a backfill reclassification to verb / gloss
+    "corrigeren" would align it with what the unit teaches. mistake/
+    mistakes ("de fout"/"de fouten") are a singular/plural discrimination
+    (acceptable per §6.3), not a confusable-rights defect. PENDING a
+    fresh-context review.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - a2_unit36_document_correction
+templates:
+- content_key: practice.nl-en.en.a2.unit36.lesson01.choose.001
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &content_pos
+      - adjective
+      - adverb
+      - noun
+      - verb
+      agreement_tags: &unit_tag
+        semantic: a2_unit36_document_correction
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit dit onderdeel.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson01.listen.002
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson01.match.003
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    second:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    third:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    fourth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    fifth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    sixth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  slot_relations:
+  - kind: distinct
+    slots: &match_slots
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *match_slots
+  feedback_frame:
+    text: Verbind elk Engels woord met de juiste Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson01.translate.004
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson02.choose.001
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit dit onderdeel.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson02.order.002
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson02.translate.003
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson03.choose.001
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit dit onderdeel.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson03.match.002
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    second:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    third:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    fourth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    fifth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    sixth:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  slot_relations:
+  - kind: distinct
+    slots: *match_slots
+  answer_derivation:
+    kind: matching_pairs
+    slots: *match_slots
+  feedback_frame:
+    text: Verbind elk Engels woord met de juiste Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson03.translate.003
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson04.listen.001
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson04.order.002
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+- content_key: practice.nl-en.en.a2.unit36.lesson04.translate.003
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
