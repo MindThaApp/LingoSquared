@@ -162,7 +162,7 @@ def check_bug_class_b(lesson_token_counts: dict[str, int]) -> list[dict]:
     violations = []
     for direction in PRACTICE_DIRS:
         pack_dir = REPO_ROOT / "docs/content/practice" / direction
-        for pack_path in sorted(pack_dir.glob("a*_unit*.yaml")):
+        for pack_path in sorted(pack_dir.glob("*_unit*.yaml")):
             doc = yaml.safe_load(pack_path.read_text(encoding="utf-8"))
             if not doc:
                 continue
@@ -197,7 +197,11 @@ def check_bug_class_b(lesson_token_counts: dict[str, int]) -> list[dict]:
 def _boundary_pattern(value: str) -> "re.Pattern":
     escaped = re.escape(value.strip())
     escaped = escaped.replace(r"\ ", r"\s+")
-    return re.compile(r"(?<!\w)" + escaped + r"(?!\w)", re.UNICODE | re.IGNORECASE)
+    # U+200C (ZWNJ) joins Persian/Dari verb prefixes (می‌/نمی‌) to their stem;
+    # \w does not include it, so a bare (?<!\w) boundary would wrongly match a
+    # stem (e.g. رفتم) inside a ZWNJ-joined form (می‌رفتم). Treat ZWNJ as a
+    # word-joiner so those are not flagged as self-reference collisions.
+    return re.compile(r"(?<![\w‌])" + escaped + r"(?![\w‌])", re.UNICODE | re.IGNORECASE)
 
 
 def _collides(value: str, literal_text: str) -> bool:
@@ -251,7 +255,7 @@ def check_bug_class_a(spec_pools: dict[str, list[dict]]) -> list[dict]:
     for direction in PRACTICE_DIRS:
         spec_pool = spec_pools[direction]
         pack_dir = REPO_ROOT / "docs/content/practice" / direction
-        for pack_path in sorted(pack_dir.glob("a*_unit*.yaml")):
+        for pack_path in sorted(pack_dir.glob("*_unit*.yaml")):
             doc = yaml.safe_load(pack_path.read_text(encoding="utf-8"))
             if not doc:
                 continue

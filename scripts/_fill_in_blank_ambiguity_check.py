@@ -195,7 +195,7 @@ def main() -> int:
     total_multi_slot = 0
 
     for label, dirname, (source_language, target_language) in DIRECTIONS:
-        pack_paths = sorted((REPO_ROOT / "docs/content/practice" / dirname).glob("a*_unit*.yaml"))
+        pack_paths = sorted((REPO_ROOT / "docs/content/practice" / dirname).glob("*_unit*.yaml"))
         try:
             lexemes = load_lexemes_for_pair(source_language, target_language)
         except Exception as exc:
