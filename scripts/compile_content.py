@@ -818,6 +818,14 @@ def normalize_dialogue_option(value: Any) -> str | None:
     return normalized or None
 
 
+def normalize_option_strict(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    value = SPEAKER_LABEL_RE.sub("", value, count=1)
+    normalized = " ".join(value.casefold().split())
+    return normalized or None
+
+
 def dialogue_speaker_and_text(
     block: dict[str, Any],
 ) -> tuple[str | None, str | None, bool]:
@@ -1149,10 +1157,10 @@ def validate_audio_distractors_not_heard_by_tested_speaker(
                             )
 
 
-FREE_TEXT_ACCEPTED_ANSWER_EXERCISE_TYPES = {
-    "dialogue_response",
-    "translation",
-    "writing_prompt",
+MULTIPLE_CHOICE_EXERCISE_TYPES = {
+    "dialogue_comprehension",
+    "listen_select",
+    "multiple_choice",
 }
 
 
@@ -1170,66 +1178,39 @@ def validate_option_accepted_answers_are_displayed(
             for exercise in lesson.get("exercises", []):
                 if not isinstance(exercise, dict):
                     continue
-                if exercise.get("type") in FREE_TEXT_ACCEPTED_ANSWER_EXERCISE_TYPES:
+                if exercise.get("type") not in MULTIPLE_CHOICE_EXERCISE_TYPES:
                     continue
 
                 key = exercise.get("content_key", "<unknown>")
                 exercise_overlay = exercise_overlays.get(key, {})
                 if not isinstance(exercise_overlay, dict):
                     continue
-                if (
-                    "correct_option" not in exercise_overlay
-                    or "distractors" not in exercise_overlay
-                ):
+                if "correct_option" not in exercise_overlay:
                     continue
 
-                allowed_norms = {
-                    normalize_dialogue_option(exercise_overlay.get("correct_option"))
-                }
-                for field in ("distractors", "options"):
-                    allowed_norms.update(
-                        normalize_dialogue_option(option)
-                        for option in _option_values(exercise_overlay.get(field))
-                    )
-                allowed_norms.discard(None)
-                if not allowed_norms:
+                correct_option = exercise_overlay.get("correct_option")
+                correct_norm = normalize_option_strict(correct_option)
+                if not correct_norm:
                     continue
 
                 variants = exercise_overlay.get("accepted_answers", [])
                 if not isinstance(variants, list):
                     continue
                 accepted_norms = {
-                    normalize_dialogue_option(
+                    normalize_option_strict(
                         variant.get("value") if isinstance(variant, dict) else variant
                     )
                     for variant in variants
                 }
                 accepted_norms.discard(None)
-                if accepted_norms & allowed_norms:
+                if correct_norm in accepted_norms:
                     continue
-                for index, variant in enumerate(variants):
-                    value = variant.get("value") if isinstance(variant, dict) else variant
-                    normalized = normalize_dialogue_option(value)
-                    location = (
-                        f"overlay.exercises.{key}.accepted_answers[{index}]"
-                    )
-                    if not normalized:
-                        report.error(
-                            location,
-                            "accepted_answers value for an option-based "
-                            "exercise must be a non-empty string matching a "
-                            "displayed option",
-                        )
-                        continue
-                    if normalized not in allowed_norms:
-                        report.error(
-                            location,
-                            "accepted_answers value "
-                            f"{value!r} does not match the displayed "
-                            "correct_option or any displayed option; learners "
-                            "selecting the visible correct option would be "
-                            "graded incorrectly",
-                        )
+                report.error(
+                    f"overlay.exercises.{key}.accepted_answers",
+                    "accepted_answers does not include the displayed "
+                    f"correct_option {correct_option!r}; learners selecting "
+                    "the visible correct option would be graded incorrectly",
+                )
 
 
 def validate_same_speaker_dialogue_distractors(
