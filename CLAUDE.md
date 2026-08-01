@@ -1,16 +1,5 @@
 # Lingo² — project state (read this first)
 
-> ## ⚠️ ACTIVE HANDOVER — read `docs/HANDOVER.md` NOW, before anything else
->
-> The repo moved machines on 2026-07-22 and there is a pending setup +
-> next-actions procedure written FOR YOU in `docs/HANDOVER.md`. It is
-> self-contained: environment setup, the secrets you must ask Ramin for,
-> verification, and the prioritised work board. Do not start work, and do
-> not ask Ramin what to do, until you have read it.
->
-> **Delete this banner once the handover is complete and the board in
-> Part 2 has been picked up.**
-
 Local-first language-learning app, Duolingo/Babbel-caliber, 24 directed
 en↔X learning paths (nl, fr, de, it, es, ru, zh, fa, prs, ar, ko, ja —
 ar approved 2026-07-11 with first content live; ko/ja approved
@@ -142,6 +131,14 @@ work safely. (This file stays rules-only for exactly that reason — see
   diff full-file rewrites against the prior version before applying** (a
   rewrite once silently introduced an unrelated one-line query bug
   alongside a correct fix).
+- **Keep the coordinator chat clean — push the work OUT.** The main
+  session is the orchestrator, not the laborer: delegate authoring,
+  reviewing, bulk edits, and searches to fresh sub-agents / Codex, and
+  keep inline Edit/Bash to the minimum the coordinator alone must do
+  (git commits with explicit pathspecs, central verification, applying a
+  short verified diff). Reading dozens of files or hand-editing many
+  files inline bloats the chat and burns context that orchestration
+  needs — dispatch it instead. (Ramin's standing preference, 2026-08-01.)
 - **Content authorship is now both Codex (from-scratch generation) and
   Claude (adapting public-domain source material into spine-compliant
   drafts — see AUTHORING_GUIDE §10).** Both routes go through the
@@ -176,9 +173,8 @@ node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/c
   with `tested_text` and `prompt.target_blocks` stripped out of it (the
   shell printed `command not found: tested_text` and Codex started anyway
   with a mangled task). The prompt file also survives quoting hell.
-- **`gpt-5.6` is STILL not available on the ChatGPT-account Codex** —
-  re-tested 2026-07-12, identical `400 invalid_request_error`. `gpt-5.5`
-  is the ceiling. Don't burn a round re-testing it.
+- **`gpt-5.6` is not available on the ChatGPT-account Codex** (`400
+  invalid_request_error`); `gpt-5.5` is the ceiling — don't re-test it.
 - **Effort routing:** `high` ONLY for compiler/grading-critical surgery
   (a subtle defect there costs far more than the tokens saved); `medium`/
   `low` for routine round-trips. Ramin's standing preference is the
@@ -239,9 +235,7 @@ not the standing default anymore:
    family.
 
 Rationale: rules prevent known classes, review exists to discover unknown
-ones (the day this was adopted, mature pack-authoring reviews were at 0
-defects while nl-en overlay reviews surfaced a brand-new systemic bug
-class). **Track review yield per lane in the review reports so tier
+ones. **Track review yield per lane in the review reports so tier
 decisions are data, not vibes.** **`docs/CONTENT_DEFECT_REGISTRY.md` is
 the per-lane yield ledger — consult it before any tier decision, and
 append every future fresh-context review's findings (zero-defect included)
@@ -341,7 +335,7 @@ docker/DB/secrets → backend; grading-shape/RTL/build → frontend).
 
 # OPERATIONS
 
-## Tooling (built by INFRA, 2026-07-05)
+## Tooling
 
 - **`scripts/verify.sh`** — one-command: content compiler validation
   (reads `content_manifest.txt`/`practice_manifest.txt` — **update those
