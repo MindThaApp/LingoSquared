@@ -3486,10 +3486,37 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # global `regel` = verb "arrange (with ik, part of regelen)". Without this,
     # translate.002 cued "the rule" and graded the correct answer "regel" wrong.
     ("b1_unit06_verplichtingen", "regel"): "the rule",
+    # --- 2026-08-01 homograph sweep (each verified against the unit's own
+    #     teaching text; keyed to the FIRST sorted introducer per course, which
+    #     is where the single course-scoped lexeme is created). ---
+    # a1_unit54 "de regel" sign ("Ik lees de regel", matching_pair regel->rule);
+    # global says verb "arrange".
+    ("a1_unit54_zwembad", "regel"): "the rule",
+    # b1_unit01 teaches the past/unreal copula ("Als ik rijk was, zou ik..."),
+    # not the household "was" (afwassen); global says "do the dishes (with ik)".
+    ("b1_unit01_hypothetische_situaties", "was"): "was; were (past tense of zijn)",
+    # b1_unit05 (reported speech) teaches "asked" ("Hij vroeg of ik kon helpen");
+    # global adjective gloss is "early".
+    ("b1_unit05_indirecte_rede", "vroeg"): "asked (past tense of vragen)",
+    # b1_unit09 teaches the noun ("mensen meer rust nodig hebben" = need more
+    # rest); global says verb "rest (imperative, with u)".
+    ("b1_unit09_eens_en_oneens", "rust"): "rest; calm",
+    # a2_unit25 teaches "true" ("Dat is waar"); global adverb gloss is "where".
+    ("a2_unit25_meningen", "waar"): "true",
+    # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
+    # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
+    # but a single course-scoped lexeme can carry only one gloss, so overriding
+    # b1_unit02 to "true" would misgloss unit04's "where". Needs a finer
+    # (per-occurrence) mechanism than this one; left as-is for now.
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit06_verplichtingen", "regel"): "noun",
+    ("a1_unit54_zwembad", "regel"): "noun",
+    ("b1_unit05_indirecte_rede", "vroeg"): "verb",
+    ("b1_unit09_eens_en_oneens", "rust"): "noun",
+    ("a2_unit25_meningen", "waar"): "adjective",
+    # ("b1_unit01…", "was") stays a verb -- gloss-only override, no POS change.
 }
 
 
@@ -3616,8 +3643,39 @@ def main() -> int:
                 continue
             db.add(Lexeme(course_id=course.id, provenance_lesson_id=lesson.id, provenance_lesson_content_key=spec.pop("lesson_content_key"), provenance_content_key=spec.pop("content_key"), **spec))
             created += 1
+
+        # Reconcile stale part-of-speech rows. A POS-changing per-unit override
+        # (NL_UNIT_POS_OVERRIDES) writes a NEW (token, new-pos) row while the
+        # upsert -- keyed on (course, token, part_of_speech) -- leaves the old
+        # (token, old-pos) row behind, orphaned with the wrong global gloss.
+        # `specs` holds exactly ONE spec per (course, token) (it is keyed by
+        # token, first sight wins), so any lexeme sharing that (course, token)
+        # with a DIFFERENT part_of_speech is stale by construction. Delete only
+        # those, scoped to tokens this run actually wrote -- unrelated lexemes
+        # are never touched. Fresh imports prune nothing.
+        wanted_pos: dict[tuple[str, str], set[str]] = {}
+        for raw_spec in specs:
+            cid = courses_by_level[raw_spec["level"]].id
+            wanted_pos.setdefault((cid, raw_spec["token"]), set()).add(
+                raw_spec["part_of_speech"]
+            )
+        pruned = 0
+        for (cid, token), keep in wanted_pos.items():
+            for stale in db.scalars(
+                select(Lexeme).where(
+                    Lexeme.course_id == cid,
+                    Lexeme.language_code == "nl",
+                    Lexeme.token == token,
+                    Lexeme.part_of_speech.notin_(list(keep)),
+                )
+            ).all():
+                db.delete(stale)
+                pruned += 1
         db.commit()
-    print(f"Lexeme backfill complete: {created} created, {updated} updated.")
+    print(
+        f"Lexeme backfill complete: {created} created, {updated} updated, "
+        f"{pruned} stale-POS pruned."
+    )
     return 0
 
 
