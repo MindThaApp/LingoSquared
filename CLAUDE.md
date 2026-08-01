@@ -342,7 +342,11 @@ docker/DB/secrets → backend; grading-shape/RTL/build → frontend).
   when you add a course/pack**) + backend pytest (isolated test DB) +
   full frontend build. Flags `--content-only`/`--backend-only`/
   `--frontend-only`/`--skip-*`; `--e2e`/`--e2e-only` adds Playwright
-  (opt-in, needs a live seeded backend).
+  (opt-in, needs a live seeded backend). **Judge it by the printed
+  `content: pass/fail` summary, NOT its exit code — verify.sh can exit 0
+  while a per-course `COMPILE FAILED` (validate-passes-but-assembly-fails,
+  e.g. a matching_pairs mirror break) sits in the log. Always grep the
+  output for `COMPILE FAILED`/`content:  fail`.** Detail: BUILD_LOG 2026-08-01.
 - **`e2e/`** — Playwright (auth, course picker, teaching-card flow,
   practice locked state, nav smoke). Runs its own dev server on port 5175.
   See `e2e/README.md` for coverage boundaries.
