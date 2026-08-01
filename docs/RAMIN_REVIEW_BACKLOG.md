@@ -2488,3 +2488,49 @@ Chain to close these 18 checkpoints (6 units × 3 X→en directions):
 
 So: nl-en checkpoints (6) are being closed autonomously tonight; the fa-en + prs-en 12
 checkpoints wait on native fa/prs lexeme glosses for a2_unit35..40.
+
+---
+
+## nl-en a2_unit35-40 PRACTICE PACKS — authored, reviewed, shipped (2026-08-01)
+
+Closed the nl-en half of the X→en checkpoint gap. Codex extended the nl-en lexeme
+backfill for a2_unit35-40 (committed 304c029e); 6 packs authored by fresh agents,
+each independently fresh-context reviewed (full review tier, launch-gate).
+
+**SHIPPED (5 packs, registered in practice_manifest.txt):** a2_unit35, 36, 38, 39, 40.
+All pack-lane CLEAN: practice-validate 0/0, floors met, self-reference clean, honestly
+thin (12-31 content lexemes each, like sibling a2_unit34 — no padding).
+
+**HELD + re-authored:** a2_unit37 — see homograph note below (`turn`).
+
+### SYSTEMIC ISSUE FOR RAMIN — cross-unit homograph glosses (backfill architecture)
+The backfill keys each English lexeme's gloss by BARE TOKEN, one entry per direction
+(recipe defect 1.29). Several a2_unit35-40 tokens are reused from earlier units where
+they were glossed for a DIFFERENT sense, and `slot_gloss` derives from that single
+backfill gloss (there is NO pack-level gloss override). So the pack surfaces the wrong
+sense as the (auto-graded) answer. NOT a grading bug (no learner marked wrong) — a
+pedagogical display-quality issue, same class as the 5 known-shipped en-nl B1 misglosses
+(was/waar/vroeg/rust/regel). Instances found this wave:
+- **`turn` = "sla af" (turn OFF)** — a2_unit37 teaches "turn ON your camera" (aanzetten).
+  OPPOSITE sense → genuine miseducation. Cannot fix in backfill ("sla af" is correct for
+  the turn-left directions units). No pack override. → a2_unit37 re-authored to EXCLUDE
+  `turn` from all pools (may drop lesson02 recognition; no-misgloss > coverage per recipe).
+- **`order` = "bestellen; de volgorde" (verb)** — a2_unit40 teaches the noun "de bestelling".
+  Defensible alternate sense; shipped with flag.
+- **`correct` = "juist; kloppend" (adjective)** — a2_unit36 teaches the verb "corrigeren".
+  Defensible alternate sense; shipped with flag.
+- **`meeting` = "afspraak" (appointment)** — a2_unit37/39 lean "vergadering" (work meeting);
+  the unit37 overlay itself glosses vergadering. Defensible near-sense.
+- Minor (excluded from pools, no harm): by, food, taking, course, once, fixed, under, turn(37).
+
+**The real fix is an architecture decision (Ramin/Codex):** add per-unit / per-sense gloss
+disambiguation to the backfill (or a pack-level slot_gloss override), which would resolve
+this class corpus-wide (including the B1 five). Until then, the shipped packs carry the
+same flag-and-ship status as existing content.
+
+### FOLLOW-UPS
+- **fa-en + prs-en a2_unit35-40 (12 checkpoints) still BLOCKED** on native Farsi/Dari
+  lexeme glosses in their backfills (backfill_lexemes_{fa,prs}_en.py stop at unit34). NATIVE.
+- **Live confirmation:** these packs make the checkpoints compile/validate; a final
+  `generate_checkpoint()` run against a seeded dev DB should confirm each unit flips from
+  `checkpoint_unavailable` to available (needs Docker + dev-DB sync — not run this session).

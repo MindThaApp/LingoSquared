@@ -1,0 +1,373 @@
+schema_version: '1.0'
+pack_key: practice.nl-en.a2.unit39
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit39.after_the_interview
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-01 (nl-en). English target pool: 17 content-POS
+    (noun/verb/adjective/adverb) lexemes across 4/4 lessons that carry a unit
+    lexeme (Mia=proper_noun and we=pronoun are the only two of the 19 not
+    hosted, deliberately excluded via part_of_speech so proper-noun/pronoun
+    self-glosses never reach MC/matching/translation pools). Every gloss in the
+    dump was read against the realization (§0.1): all 19 glosses are correct
+    Dutch for what the English unit teaches -- no mis-glosses found, nothing to
+    route to the backfill lane. Broad tag a2_unit39_after_the_interview unions
+    the whole unit and drives every recognition (MC/listen) and matching_pairs
+    template so they clear the 3-distinct-value and 6-distinct-token floors
+    (17 distinct content words/glosses, all distinct, no confusable paraphrases,
+    no case duplicates). Lessons 02 and 03 have only 2 content words each, so
+    they CANNOT host a lesson-tag MC/matching -- their per-lesson representation
+    comes from the floor-free word_order + translation templates anchored to
+    each lesson via that lesson's own auto-tag (for checkpoint lesson
+    stratification). word_order uses the generic 'Please say {item}.' frame
+    (grammatical for any part of speech, no candidate floor, zero self-reference
+    risk: neither Please nor say is a taught token in this unit, and the
+    unit/lesson tags restrict the course-scope pool to unit39 lexemes only).
+    listen_select is safe here (target=en, TTS configured). THIN UNIT: 17 EN
+    content lexemes -- each tier hosts ~17 distinct items so the per-tier
+    distinct-item bar is borderline-met, but per-template variant depth is low;
+    authored honestly per the no-padding rule and flagged to the coordinator as
+    checkpoint-thin.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - a2_unit39_after_the_interview
+    - a2_unit39_after_the_interview_lesson01
+    - a2_unit39_after_the_interview_lesson02
+    - a2_unit39_after_the_interview_lesson03
+    - a2_unit39_after_the_interview_lesson04
+templates:
+
+# ---------------------------------------------------------------------------
+# RECOGNITION -- multiple_choice / listen_select over the unit-wide union tag
+# (lessons 02 & 03 have only 2 content words, so recognition must pool the
+# whole unit; templates are anchored per-lesson for checkpoint stratification)
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit39.lesson01.choose.001
+  lesson_content_key: en.a2.unit39.lesson01.offer_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &content_pos
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags: &unit_tag
+        semantic: a2_unit39_after_the_interview
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson02.choose.001
+  lesson_content_key: en.a2.unit39.lesson02.following_up
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson03.choose.001
+  lesson_content_key: en.a2.unit39.lesson03.reading_an_offer_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson04.listen.001
+  lesson_content_key: en.a2.unit39.lesson04.offer_call_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# STRUCTURED -- matching_pairs over the unit union (6 slots) + one floor-free
+# word_order per lesson (anchored via that lesson's own tag)
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit39.lesson04.match.001
+  lesson_content_key: en.a2.unit39.lesson04.offer_call_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &match_word
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    second: *match_word
+    third: *match_word
+    fourth: *match_word
+    fifth: *match_word
+    sixth: *match_word
+  slot_relations:
+  - kind: distinct
+    slots: &match_slots
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *match_slots
+  feedback_frame:
+    text: Verbind elk Engels woord met de juiste Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson01.order.002
+  lesson_content_key: en.a2.unit39.lesson01.offer_vocabulary
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson01
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson02.order.001
+  lesson_content_key: en.a2.unit39.lesson02.following_up
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson02
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson03.order.001
+  lesson_content_key: en.a2.unit39.lesson03.reading_an_offer_message
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson03
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson04.order.002
+  lesson_content_key: en.a2.unit39.lesson04.offer_call_dialogue
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson04
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# PRODUCTION -- bare-word translation per lesson (learner sees the Dutch gloss,
+# types the English token); floor-free, anchored via each lesson's own tag
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit39.lesson01.translate.003
+  lesson_content_key: en.a2.unit39.lesson01.offer_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson01
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson02.translate.002
+  lesson_content_key: en.a2.unit39.lesson02.following_up
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson02
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson03.translate.002
+  lesson_content_key: en.a2.unit39.lesson03.reading_an_offer_message
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson03
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit39.lesson04.translate.002
+  lesson_content_key: en.a2.unit39.lesson04.offer_call_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit39_after_the_interview_lesson04
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr

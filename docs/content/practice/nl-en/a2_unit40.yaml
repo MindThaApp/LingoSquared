@@ -1,0 +1,357 @@
+schema_version: '1.0'
+pack_key: practice.nl-en.a2.unit40
+source_language: nl
+target_language: en
+unit_content_key: en.a2.unit40.online_order_problem
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-01 (nl-en). Direction tests English; target pool is the 12
+    content-POS (noun/verb/adjective/adverb) English lexemes this unit's OWN lessons
+    introduce, across 3/4 lessons that carry any lexeme (lesson04, the dialogue, has
+    ZERO backfill lexemes and therefore cannot be represented in the checkpoint no
+    matter what). The 13th unit lexeme, the order number "8154", is a symbol and is
+    deliberately excluded from every pool via part_of_speech (a self-gloss otherwise).
+    Broad tag a2_unit40_online_order_problem unions the whole unit (12 distinct tokens,
+    clears both the multiple_choice 3-option and matching_pairs 6-pair floors); each
+    word_order/translation pair is additionally anchored per-lesson via that lesson's
+    own auto-tag for checkpoint lesson stratification. word_order uses the generic frame
+    "Please say {item}." deliberately (as in the a2_unit34 sibling pack): grammatical
+    for any part of speech, no candidate floor, zero self-reference risk (neither
+    "please" nor "say" is a taught token in this unit, and only unit40 lexemes ever carry
+    the a2_unit40_* tags, so the slot pool stays unit-scoped even at course scope).
+    MIS-GLOSS FLAGGED for the backfill lane: token "order" carries gloss
+    "bestellen; de volgorde" and part_of_speech verb, but this unit teaches "order" as
+    the noun (de bestelling, "the things you asked a shop to send"). The gloss is not
+    outright false (English "order" is genuinely a verb too) and it is not confusable with
+    any sibling gloss in the pools, so "order" is KEPT; a backfill fold to
+    gloss "de bestelling" / part_of_speech noun would be the clean fix.
+    THIN UNIT: only 12 EN content lexemes total -- this pack cannot reach the recipe's
+    12-item checkpoint floor or the >=12-distinct-items-per-tier bars; authored honestly
+    per the no-padding rule and flagged to the coordinator as checkpoint-thin (same
+    posture as the a2_unit34 sibling). Coverage is nonetheless 12/13 lexemes hostable in
+    every tier.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - a2_unit40_online_order_problem
+    - a2_unit40_online_order_problem_lesson01
+    - a2_unit40_online_order_problem_lesson02
+    - a2_unit40_online_order_problem_lesson03
+templates:
+
+# ---------------------------------------------------------------------------
+# lesson01 -- Orders, deliveries, and damaged parcels (8 lexemes)
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit40.lesson01.choose.001
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &content_pos
+      - adjective
+      - adverb
+      - noun
+      - verb
+      agreement_tags: &unit_tag
+        semantic: a2_unit40_online_order_problem
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson01.match.002
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &match_word
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    second: *match_word
+    third: *match_word
+    fourth: *match_word
+    fifth: *match_word
+    sixth: *match_word
+  slot_relations:
+  - kind: distinct
+    slots: &match_slots
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *match_slots
+  feedback_frame:
+    text: Verbind elk woord met de juiste Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson01.order.003
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson01
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson01.translate.004
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson01
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson01.listen.005
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is het woord dat je hoorde.'
+    language_code: nl
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson02 -- Explaining the problem and asking for a replacement
+#   (2 lexemes: lamp [noun], 8154 [symbol, excluded by part_of_speech])
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit40.lesson02.choose.001
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson02.order.002
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson02
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson02.translate.003
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson02
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
+
+# ---------------------------------------------------------------------------
+# lesson03 -- Reading the shop's answer (3 lexemes: box, put, sent)
+# ---------------------------------------------------------------------------
+- content_key: practice.nl-en.en.a2.unit40.lesson03.choose.001
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is een woord uit deze les.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson03.match.002
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: &match_word3
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags: *unit_tag
+    second: *match_word3
+    third: *match_word3
+    fourth: *match_word3
+    fifth: *match_word3
+    sixth: *match_word3
+  slot_relations:
+  - kind: distinct
+    slots: &match_slots3
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *match_slots3
+  feedback_frame:
+    text: Verbind elk woord met de juiste Nederlandse betekenis.
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson03.order.003
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson03
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} is het gevraagde woord.'
+    language_code: nl
+    direction: ltr
+
+- content_key: practice.nl-en.en.a2.unit40.lesson03.translate.004
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *content_pos
+      agreement_tags:
+        semantic: a2_unit40_online_order_problem_lesson03
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: De Engelse vertaling is {item}.
+    language_code: nl
+    direction: ltr
