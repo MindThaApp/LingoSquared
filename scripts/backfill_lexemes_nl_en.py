@@ -2901,6 +2901,22 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b2_unit04_narrative_time", "walk"): "doorlopen/lopen",
     ("b2_unit04_narrative_time", "checking"): "aan het controleren/controleren",
     ("b2_unit05_register", "direct"): "direct",
+    # --- 2026-08-02 A2 homograph GLOSS fixes (confirmed against each unit's own
+    #     nl-en overlay). Gloss-only on purpose: the token keeps its global POS
+    #     so the existing exact-(course,token,POS) upsert updates the row IN
+    #     PLACE (no new row, no orphan, FK-safe). The learner-facing gloss --
+    #     which slot_gloss renders as the graded answer -- is what was wrong.
+    #     A grammatical-POS refinement (order->noun, correct->verb) needs a
+    #     migrate-in-place upsert and is deferred (see the en_nl override doc). ---
+    # a2_unit36 teaches the verb (overlay: "correct is hier een werkwoord",
+    # gloss "corrigeren, verbeteren"); global adjective gloss is "juist; kloppend".
+    ("a2_unit36_document_correction", "correct"): "corrigeren; verbeteren",
+    # a2_unit37 work video-calls: "meeting" = "vergadering" (overlay uses it
+    # throughout); global is the appointment-sense "afspraak".
+    ("a2_unit37_video_calls", "meeting"): "vergadering",
+    # a2_unit40 teaches the noun (overlay: "order is de bestelling zelf", gloss
+    # "bestelling"); global is the verb "bestellen; de volgorde".
+    ("a2_unit40_online_order_problem", "order"): "de bestelling",
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {

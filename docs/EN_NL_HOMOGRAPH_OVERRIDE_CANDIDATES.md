@@ -40,17 +40,48 @@ unit02/09 imperfect). Same structural class: A1 `was` (correct "do the dishes" a
 its A1 first-introducer unit10, but ~20 later A1 units reuse it as past-tense and
 can't be reached by a first-introducer-keyed override).
 
-## Deploy note — orphan prune (added this session)
+## Deploy note — orphan prune (en_nl) + ⚠️ DEPLOY-SAFETY CAVEAT
 
 A POS-changing override CREATES the new-(token,pos) row while the upsert (keyed on
-token+POS) leaves the old-POS row orphaned. `main()` now reconciles: for every
-(course, token) this run wrote, it deletes lexeme rows sharing that (course,token)
-with a POS not in the current specs (safe — exactly one spec per (course,token)).
-Verified on the dev DB: `4 created, 4 stale-POS pruned`, final state one row per
-(course,token), zero orphans. Fresh imports prune nothing.
+token+POS) leaves the old-POS row orphaned. `backfill_lexemes_en_nl.py:main()`
+reconciles by deleting, for every (course,token) it wrote, lexeme rows with a POS
+not in the current specs. Verified on the dev DB: `4 created, 4 stale-POS pruned`,
+one row per (course,token), zero orphans.
 
-**DEPLOY-GATED** — verified against the local dev DB only; not applied to the live
-server.
+**⚠️ NOT DEPLOY-SAFE AS WRITTEN — must be fixed before any LIVE re-backfill.** The
+prune's `DELETE` fails with a ForeignKeyViolation once any `practice_items`
+(`fk_practice_items_target_lexeme_id`) or `user_lexeme_srs` row references the
+old-POS lexeme — which is exactly the live case with real users (proven this
+session: a played unit40 checkpoint pinned the old `order` lexeme and blocked its
+deletion). The deploy-correct implementation is **migrate-in-place**: look up the
+existing row by (course,token) and update its `part_of_speech`+gloss+tags on the
+SAME row (preserving the lexeme id, so FKs stay valid), instead of create-new +
+delete-old. Attempted this session but it needs an exact-POS-first lookup to avoid
+a `uq_lexemes_course_language_token_pos` collision on tokens that already carry two
+POS rows — a careful backfill-upsert change (Codex lane) worth doing as part of
+deploy prep. Until then these overrides are dev-verified only.
+
+## nl_en A2 homograph GLOSS fixes (gloss-only, deploy-safe) — 2026-08-02
+
+The X→en (`backfill_lexemes_nl_en.py`) direction has the same class; three A2
+tokens carried the wrong-sense Dutch gloss (which slot_gloss renders as the graded
+answer). Fixed **gloss-only** so the existing exact-(course,token,POS) upsert
+updates the row IN PLACE (no new row, no orphan, FK-safe — verified `0 created,
+2927 updated`):
+
+| unit | token | was | now | overlay evidence |
+|---|---|---|---|---|
+| a2_unit36_document_correction | correct | "juist; kloppend" | **"corrigeren; verbeteren"** | "*correct* is hier een werkwoord" |
+| a2_unit37_video_calls | meeting | "afspraak" | **"vergadering"** | overlay uses *vergadering* for the work-meeting sense |
+| a2_unit40_online_order_problem | order | "bestellen; de volgorde" | **"de bestelling"** | "*order* is de bestelling zelf" |
+
+**Deferred:** the grammatical POS still lags the sense (order=verb, correct=adj) —
+the fully-correct fix (order→noun, correct→verb) needs the same migrate-in-place
+upsert as the en_nl caveat above; deferred to that Codex-lane change. `turn`
+(a2_unit37) left excluded — bare "turn" is genuinely ambiguous (turn on=aanzetten
+vs turn off=sla af), the author's exclusion stands.
+
+**DEPLOY-GATED** — dev DB only, not on the live server.
 
 ## BROADER SWEEP (remaining corpus)
 
