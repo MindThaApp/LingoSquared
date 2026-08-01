@@ -51,3 +51,75 @@ Verified on the dev DB: `4 created, 4 stale-POS pruned`, final state one row per
 
 **DEPLOY-GATED** — verified against the local dev DB only; not applied to the live
 server.
+
+## BROADER SWEEP (remaining corpus)
+
+Second pass (2026-08-01, READ-ONLY analysis) over the en-nl units **not** covered by
+the first sweep: all `UNIT_FILES` (a1) and `UNIT_FILES_A2` (a2), plus `UNIT_FILES_B1`
+units 03/04/07/08/10–19 (b1_01/02/05/06/09 already done). No b2 en-nl files exist.
+
+**Method.** Imported `backfill_lexemes_en_nl.py`, traced the FINAL global gloss/POS
+per token (all `NL_GLOSSES.update`/assignments folded, last-wins; `NL_CITATION_FORMS`
+folding replicated for the A1 volume batch), then, per course, listed every unit that
+introduces each token in sorted order. Primary filter = tokens whose global gloss is a
+specific-sense verb marker (`(with …`, `imperative`, `part of `, `separable prefix`,
+`conditional of`) — the high-risk class. Secondary filter = first-introducer taught as
+a bare `de/het` noun while global POS ≠ noun. Each hit was checked against the unit's
+own realization `target`/`example`/`content_key`.
+
+### NEW APPLICABLE — 1 (high confidence)
+
+| unit_stem (first introducer) | token | final global gloss[POS] | unit's taught sense + evidence | first-introducer? | proposed | conf |
+|---|---|---|---|---|---|---|
+| `b1_unit01_hypothetische_situaties` | werk | "work (with ik)" [verb] | NOUN "work; job" — b1_unit01 `tgt: "werk"`, *"Anouk is blij met haar werk."*; b1_unit06 *"Ik was druk met werk."* Both (and only) b1 uses are the noun. | **yes** (b1 first sees `werk` at unit01) | **"work; job" [noun]** | high |
+
+`werk` is the documented verb/noun homograph (module docstring, unit17 note). In the
+**B1** course it is taught *exclusively* as the noun, so the single b1-scoped lexeme —
+created at b1_unit01 and currently carrying the verb gloss "work (with ik)" — is wrong
+for every b1 occurrence. A first-introducer-keyed override cleanly fixes it (unlike the
+A1/A2 cases below, where both senses coexist).
+
+### HELD — 5 (structural; mechanism cannot cleanly fix)
+
+Same class as the first sweep's `waar@b1_unit02` / A1 `was`: the token is taught in
+**two senses within one course**, and a single course-scoped lexeme (keyed at the first
+sorted introducer) can carry only one gloss. Overriding would just move the error.
+
+| course | token | global[POS] | senses in course | why HELD |
+|---|---|---|---|---|
+| a1 | werk | "work (with ik)" [verb] | verb at first intro (unit10 `Ik werk`), NOUN later (unit17 `voor werk`, unit33 `naar werk`) | first introducer is the verb sense; override can't target the later noun units |
+| a1 | ontbijt | "have breakfast (with ik)" [verb] | verb at first intro (unit10 `Ik ontbijt`), NOUN later (unit49 `het ontbijt`, `Is het ontbijt inbegrepen?`) | first introducer is the verb sense |
+| a1 | begin | "start (with ik)" [verb] | verb at first intro (unit17 `Ik begin om negen uur`), NOUN later (unit64 sign `Begin: acht uur`) | first introducer is the verb sense |
+| a1 | sport | "exercise; play sports (with ik)" [verb] | verb at first intro (unit29 `Ik sport op zaterdag`), NOUN later (unit32 `de sport`, `Voetbal is een sport`) | first introducer is the verb sense |
+| a2 | werk | "work (with ik)" [verb] | NOUN at first intro (unit24 `voor werk`), VERB later (unit76 `werk ik`) | overriding unit24→noun would misgloss unit76's verb use |
+
+### Everything else verified consistent
+
+All other verb-marker-gloss tokens (`regel`/a2u77, `rust`/a2, `sport`/a2, `duurt`,
+`stort`, `schrijf`, `vind`, `zit`, `toe`/b1, etc.) teach the SAME sense their global
+gloss records at their first introducer — no collision, correctly left untouched. The
+secondary noun-headword filter surfaced only item-headword false positives (the token
+is an adjective/verb in an item whose `target` headword happens to be a noun) plus the
+already-overridden `regel`.
+
+### Ready-to-paste (APPLICABLE high-confidence only)
+
+```python
+# NL_UNIT_GLOSS_OVERRIDES — add:
+    # b1 teaches `werk` only as the NOUN ("Anouk is blij met haar werk",
+    # "Ik was druk met werk"); global `werk` = verb "work (with ik)".
+    ("b1_unit01_hypothetische_situaties", "werk"): "work; job",
+
+# NL_UNIT_POS_OVERRIDES — add:
+    ("b1_unit01_hypothetische_situaties", "werk"): "noun",
+```
+
+**APPLIED + VERIFIED (2026-08-01).** The `werk`@b1_unit01 override was checked
+against ground truth — DB confirmed b1 `werk` is a single lexeme at unit01 (verb
+"work (with ik)"); b1 realizations introduce `werk` only at unit01 + unit06, both
+the noun ("haar werk", "druk met werk"); the verb "ik werk" in b1_unit04 is
+embedded in a relative-clause example, NOT an introduced token, so it never
+becomes a graded `werk`-target. Applied to both override dicts; re-backfill:
+`1 created, 1 stale-POS pruned`, final b1 `werk` = noun "work; job", a1u10/a2u24
+unchanged (verb). The 5 HELD cases remain deploy-unfixable by this mechanism.
+DEPLOY-GATED — dev DB only, not on the live server.
