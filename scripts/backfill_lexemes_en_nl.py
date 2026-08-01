@@ -3462,6 +3462,37 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     return tags
 
 
+# Per-(unit, token) gloss / POS overrides -- the homograph-disambiguation
+# mechanism ported 2026-08-01 from the sibling `backfill_lexemes_nl_en.py`
+# (its NL_UNIT_GLOSS_OVERRIDES / NL_UNIT_POS_OVERRIDES, applied the same way).
+#
+# WHY this exists (and why the module's older "no second gloss" doctrine is
+# superseded only HERE, deliberately): `NL_GLOSSES` / `nl_part_of_speech()`
+# key a Dutch token to ONE global (gloss, POS). A genuine homograph re-taught
+# in a later unit in a different sense (e.g. `regel` = the verb "arrange"
+# everywhere, but the NOUN "the rule" in b1_unit06) therefore ships the wrong
+# unit's sense as the learner-facing gloss -- which, via slot_gloss, becomes
+# the graded MC/translate answer. The prior fix pattern (exclude the token
+# from the generative tag, or bake it literally) cannot help a slot where the
+# homograph is the SOLE candidate -- b1_unit06 `regel` in translate.002 -- so
+# a per-occurrence override is the only non-destructive fix. Keyed by
+# (realization_path.stem, token); the stem is the unit file's basename, e.g.
+# "b1_unit06_verplichtingen". Overrides win over the global maps; every other
+# token is untouched, so this is additive and each entry is a hand-verified,
+# unit-scoped decision. English-gloss values are authorable here (the learner
+# is an English speaker); Dutch-side sense confirmation is not needed.
+NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    # b1_unit06 teaches the noun "de regel" (nl.b1.unit06.lesson06.teach.de_regel);
+    # global `regel` = verb "arrange (with ik, part of regelen)". Without this,
+    # translate.002 cued "the rule" and graded the correct answer "regel" wrong.
+    ("b1_unit06_verplichtingen", "regel"): "the rule",
+}
+
+NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("b1_unit06_verplichtingen", "regel"): "noun",
+}
+
+
 def _classify_nl(unit_files, level):
     # A FRESH specs dict per level/course -- Lexeme uniqueness is scoped by
     # `Lexeme.course_id`, and "Dutch A1"/"Dutch A2" are two entirely separate
@@ -3469,6 +3500,7 @@ def _classify_nl(unit_files, level):
     # needs its own A2-scoped Lexeme row rather than silently reusing A1's.
     specs: dict[str, dict] = {}
     for unit_order, realization_path in enumerate(unit_files, 1):
+        unit_stem = realization_path.stem
         realization = yaml.safe_load(realization_path.read_text(encoding="utf-8"))
         # NL_CITATION_FORMS is applied ONLY to the 2026-07-22 A1 volume batch
         # (units 34-42 / 49-72). Scoping it to those lessons is load-bearing,
@@ -3503,8 +3535,13 @@ def _classify_nl(unit_files, level):
                             "level": level,
                             "unit_order": unit_order, "lesson_order": lesson_order,
                             "lesson_content_key": lesson_key, "content_key": item["content_key"],
-                            "token": token, "language_code": "nl", "part_of_speech": nl_part_of_speech(token),
-                            "english_gloss": NL_GLOSSES[token], "agreement_tags": tags,
+                            "token": token, "language_code": "nl",
+                            "part_of_speech": NL_UNIT_POS_OVERRIDES.get(
+                                (unit_stem, token), nl_part_of_speech(token)
+                            ),
+                            "english_gloss": NL_UNIT_GLOSS_OVERRIDES.get(
+                                (unit_stem, token), NL_GLOSSES[token]
+                            ), "agreement_tags": tags,
                         }
                     else:
                         prior = existing["agreement_tags"].setdefault("semantic", [])
