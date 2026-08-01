@@ -3503,6 +3503,11 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit09_eens_en_oneens", "rust"): "rest; calm",
     # a2_unit25 teaches "true" ("Dat is waar"); global adverb gloss is "where".
     ("a2_unit25_meningen", "waar"): "true",
+    # b1 introduces `werk` only as the NOUN (b1_unit01 "Anouk is blij met haar
+    # werk", b1_unit06 "druk met werk"); global says verb "work (with ik)". The
+    # verb "ik werk" in b1_unit04 is embedded in a relative-clause example, NOT
+    # an introduced token, so the b1 lexeme (provenance unit01) is noun-only.
+    ("b1_unit01_hypothetische_situaties", "werk"): "work; job",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
@@ -3516,6 +3521,7 @@ NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit05_indirecte_rede", "vroeg"): "verb",
     ("b1_unit09_eens_en_oneens", "rust"): "noun",
     ("a2_unit25_meningen", "waar"): "adjective",
+    ("b1_unit01_hypothetische_situaties", "werk"): "noun",
     # ("b1_unit01…", "was") stays a verb -- gloss-only override, no POS change.
 }
 
