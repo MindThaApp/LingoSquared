@@ -2531,6 +2531,12 @@ same flag-and-ship status as existing content.
 ### FOLLOW-UPS
 - **fa-en + prs-en a2_unit35-40 (12 checkpoints) still BLOCKED** on native Farsi/Dari
   lexeme glosses in their backfills (backfill_lexemes_{fa,prs}_en.py stop at unit34). NATIVE.
-- **Live confirmation:** these packs make the checkpoints compile/validate; a final
-  `generate_checkpoint()` run against a seeded dev DB should confirm each unit flips from
-  `checkpoint_unavailable` to available (needs Docker + dev-DB sync — not run this session).
+- **Live confirmation:** ✅ **DONE 2026-08-01 (autonomous).** Against the seeded dev DB
+  (content already loaded; ran `backfill_lexemes_nl_en.py` → 274 new lexemes for units 35-40,
+  then practice-import of the 6 packs → 78 templates), a direct `generate_checkpoint()` probe
+  for a real user returned **15 items for every one of units 35-40 → all 6 AVAILABLE** (floor is
+  12; the endpoint 409s `checkpoint_unavailable` only below 12). Checkpoint material is
+  completion-independent (generate_checkpoint scopes templates+lexemes to the UNIT's own
+  lesson_ids, not the user's completed lessons — verified in service.py:1748), so this holds for
+  any learner reaching the checkpoint. Probe user cleaned up; DB left correctly in-sync with the
+  committed content (practice_items/checkpoint_attempts back to 0).
