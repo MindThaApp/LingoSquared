@@ -789,6 +789,30 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit34_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/nl-en/a2_unit34.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit35_prescription.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit36_document_correction.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit37_video_calls.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit38_repair_visit.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit39_after_the_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit40_online_order_problem.yaml",
+        REPO_ROOT / "docs/content/overlays/nl-en/a2_unit40.yaml",
+    ),
 )
 
 # B1 units (01-19) and B2 units (01-08) are AGAIN separate course rows
@@ -1881,6 +1905,34 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "blender": ("noun", "de blender"), "working": ("verb", "werkend"),
     "30": ("symbol", "30"), "refunded": ("verb", "terugbetaald"),
     "thirty-five": ("noun", "vijfendertig"),
+    # A2 unit35 -- prescription.
+    "dose": ("noun", "de dosis"), "refill": ("noun", "de herhaalmedicatie"),
+    "side": ("noun", "de bijwerking (in side effects)"),
+    "effects": ("noun", "de bijwerkingen"), "shouldn't": ("verb", "zou niet moeten"),
+    "refills": ("noun", "de herhaalmedicatie"),
+    # A2 unit36 -- document correction.
+    "certificate": ("noun", "het officiële bewijs"), "spelled": ("verb", "gespeld"),
+    "copy": ("noun", "de kopie"), "passport": ("noun", "het paspoort"),
+    "mistakes": ("noun", "de fouten"), "registration": ("noun", "de inschrijving"),
+    "correction": ("noun", "de correctie"), "corrected": ("verb", "gecorrigeerd"),
+    "reference": ("noun", "de referentie"), "3092": ("symbol", "3092"),
+    # A2 unit37 -- video calls.
+    "microphone": ("noun", "de microfoon"), "connection": ("noun", "de verbinding"),
+    "mute": ("verb", "dempen"),
+    "face": ("noun", "het gezicht (in face to face: in levenden lijve)"),
+    "calls": ("noun", "de gesprekken"), "headphones": ("noun", "de koptelefoon"),
+    "asks": ("verb", "stelt"), "question": ("noun", "de vraag"),
+    "classmates": ("noun", "de medestudenten"), "speaking": ("verb", "pratend"),
+    # A2 unit38 -- repair visit.
+    "leak": ("noun", "de lekkage"), "won't": ("verb", "zal niet"),
+    "rescheduled": ("verb", "verzet"), "9am": ("symbol", "9.00 uur"),
+    "11am": ("symbol", "11.00 uur"),
+    # A2 unit39 -- after the interview.
+    "contract": ("noun", "het contract"), "salary": ("noun", "het salaris"),
+    "accept": ("verb", "aannemen"), "interested": ("adjective", "geïnteresseerd"),
+    # A2 unit40 -- online order problem.
+    "delivery": ("noun", "de bezorging"), "parcel": ("noun", "het pakket"),
+    "lamp": ("noun", "de lamp"), "8154": ("symbol", "8154"),
     # B1 unit01 -- necessity and obligation.
     "task": ("noun", "de taak"), "finish": ("verb", "afmaken"),
     "earlier": ("adverb", "eerder"), "forgot": ("verb", "vergat"),
