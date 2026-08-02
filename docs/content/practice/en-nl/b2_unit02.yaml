@@ -1,0 +1,443 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b2.unit02
+source_language: en
+target_language: nl
+unit_content_key: nl.b2.unit02.speculatie
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md to unblock the
+    en-nl B2 unit02 (speculatie) checkpoint (the unit compiles and has lexemes from
+    scripts/backfill_lexemes_en_nl.py but had no practice pack, so
+    generate_checkpoint() returned checkpoint_unavailable). This is a GRAMMAR/function
+    unit (graded-certainty speculation about present AND past causes), so §8.1 was
+    followed, NOT the §8 per-lesson-tag vocabulary pattern: the per-lesson tag is
+    dominated by function words, so broad recognition/production/matching_pairs slots
+    UNION the unit's six lesson tags (certainty_degree, deduction, possibility_guess,
+    past_speculation, speculation_reading, speculation_dialogue), narrowed by
+    part_of_speech to [noun, verb, adjective, adverb] so no function word (er/hij/te/
+    wel/dus/iets/hem/zich/nee/Bram) is ever a candidate. 15 templates across all 6
+    lessons: multiple_choice x4, listen_select x1 (recognition 5), matching_pairs x2 +
+    word_order x4 (structured 6), translation x4 (production 4). Every slot is
+    satisfiable from THIS unit's own lexemes at checkpoint (unit) scope.
+    Single-member anchors used for the deterministic word_order and fixed-sentence
+    translation frames were VERIFIED course-single at b2 scope (whole B2 Course, incl.
+    unit01): schermtijd_telefoon_single -> {telefoon}, symptom_zijn_pure -> {ziek},
+    travel_disruption_verb -> {weten}. The word_order frame "Hij moet de {item} gemist
+    hebben." uses past_speculation+noun which pools {afspraak, trein} at course scope;
+    both are grammatical ("de trein/afspraak missen"), so it is a safe multi-variant
+    (not underdetermined -- word_order shows the gloss hint and renders each target's
+    own answer). Capacity/coverage (recipe §9.4, f'.{LEVEL}.{UNIT}.' filter): 15 live
+    templates, 56 unit lexemes, 6 lessons with lexemes; ALL 82% (46/56 = every
+    content word), recognition 82%, structured 82%, production 82%, and every tier
+    covers 6/6 lessons; no dead templates, no <3-candidate recognition slots. ITEM-7 (whole spine act): two
+    culminating fixed-sentence translations require the full construction, one PAST
+    cause by deduction ("...dus hij moet de trein gemist hebben") and one PRESENT
+    cause ruled out with evidence ("Hij kan niet ziek zijn, want ik zag hem net"),
+    covering speculation about present AND past causes with graded certainty.
+    REVIEWER, double-check: (a) the two broad matching_pairs pool inflection pairs
+    whose glosses differ but are semantically close (komt/komen "comes"/"to come",
+    staat/staan, zien/zag, moet/moeten, gokken/gok, weten/weet, gebeuren/gebeurd) --
+    treated as acceptable singular/plural-style discriminations per §6.3, but confirm
+    a native reads them as answerable; (b) "je kunt dat niet weten" and "de afspraak
+    gemist hebben" read as natural informal Dutch; (c) register is informal jij
+    throughout (je kunt), no formal u. No mis-glossed lexeme found in the unit02 pool
+    (every gloss read against the realization, §0.1). Needs standard fresh-context
+    review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - certainty_degree
+    - deduction
+    - possibility_guess
+    - past_speculation
+    - speculation_reading
+    - speculation_dialogue
+    - schermtijd_telefoon_single
+    - symptom_zijn_pure
+    - travel_disruption_verb
+templates:
+
+# ===== lesson01 hoe_zeker =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson01.choose.001
+  lesson_content_key: nl.b2.unit02.lesson01.hoe_zeker
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic:
+        - certainty_degree
+        - deduction
+        - possibility_guess
+        - past_speculation
+        - speculation_reading
+        - speculation_dialogue
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of this unit''s speculation words.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson01.match.002
+  lesson_content_key: nl.b2.unit02.lesson01.hoe_zeker
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &broad_match
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic:
+        - certainty_degree
+        - deduction
+        - possibility_guess
+        - past_speculation
+        - speculation_reading
+        - speculation_dialogue
+    second: *broad_match
+    third: *broad_match
+    fourth: *broad_match
+    fifth: *broad_match
+    sixth: *broad_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each speculation word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson01.translate.003
+  lesson_content_key: nl.b2.unit02.lesson01.hoe_zeker
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic:
+        - certainty_degree
+        - deduction
+        - possibility_guess
+        - past_speculation
+        - speculation_reading
+        - speculation_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ===== lesson02 deductie =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson02.choose.001
+  lesson_content_key: nl.b2.unit02.lesson02.deductie
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: deduction
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used when you deduce a cause from evidence.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson02.order.002
+  lesson_content_key: nl.b2.unit02.lesson02.deductie
+  type: word_order
+  frame:
+    text: Hij kan niet {item} zijn.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adjective]
+      agreement_tags:
+        semantic: symptom_zijn_pure
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hij kan niet {item} zijn.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Hij kan niet ziek zijn. -- He cannot be sick.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson02.translate.003
+  lesson_content_key: nl.b2.unit02.lesson02.deductie
+  type: translation
+  frame:
+    text: He cannot be sick, because I saw him just now.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adjective]
+      agreement_tags:
+        semantic: symptom_zijn_pure
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hij kan niet {item} zijn, want ik zag hem net.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Hij kan niet ziek zijn, want ik zag hem net.
+    language_code: en
+    direction: ltr
+
+# ===== lesson03 mogelijkheid =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson03.choose.001
+  lesson_content_key: nl.b2.unit02.lesson03.mogelijkheid
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb, adverb]
+      agreement_tags:
+        semantic: possibility_guess
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used when you guess without firm evidence.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson03.order.002
+  lesson_content_key: nl.b2.unit02.lesson03.mogelijkheid
+  type: word_order
+  frame:
+    text: Je kunt dat niet {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb]
+      agreement_tags:
+        semantic: travel_disruption_verb
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je kunt dat niet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Je kunt dat niet weten. -- You can't know that.
+    language_code: en
+    direction: ltr
+
+# ===== lesson04 het_verleden =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson04.listen.001
+  lesson_content_key: nl.b2.unit02.lesson04.het_verleden
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic:
+        - certainty_degree
+        - deduction
+        - possibility_guess
+        - past_speculation
+        - speculation_reading
+        - speculation_dialogue
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson04.match.002
+  lesson_content_key: nl.b2.unit02.lesson04.het_verleden
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *broad_match
+    second: *broad_match
+    third: *broad_match
+    fourth: *broad_match
+    fifth: *broad_match
+    sixth: *broad_match
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each speculation word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson04.order.003
+  lesson_content_key: nl.b2.unit02.lesson04.het_verleden
+  type: word_order
+  frame:
+    text: Hij moet de {item} gemist hebben.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun]
+      agreement_tags:
+        semantic: past_speculation
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hij moet de {item} gemist hebben.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Hij moet de trein gemist hebben. -- He must have missed the train.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson04.translate.004
+  lesson_content_key: nl.b2.unit02.lesson04.het_verleden
+  type: translation
+  frame:
+    text: His phone is off, so he must have missed the train.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun]
+      agreement_tags:
+        semantic: schermtijd_telefoon_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zijn {item} staat uit, dus hij moet de trein gemist hebben.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zijn telefoon staat uit, dus hij moet de trein gemist hebben.
+    language_code: en
+    direction: ltr
+
+# ===== lesson05 een_tekst_lezen =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson05.order.001
+  lesson_content_key: nl.b2.unit02.lesson05.een_tekst_lezen
+  type: word_order
+  frame:
+    text: Zijn {item} staat uit.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun]
+      agreement_tags:
+        semantic: schermtijd_telefoon_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zijn {item} staat uit.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zijn telefoon staat uit. -- His phone is off.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit02.lesson05.translate.002
+  lesson_content_key: nl.b2.unit02.lesson05.een_tekst_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adverb]
+      agreement_tags:
+        semantic: speculation_reading
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ===== lesson06 speculeren_in_gesprek =====
+- content_key: practice.en-nl.nl.b2.unit02.lesson06.choose.001
+  lesson_content_key: nl.b2.unit02.lesson06.speculeren_in_gesprek
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic:
+        - speculation_dialogue
+        - speculation_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} comes up when you speculate out loud in conversation.'
+    language_code: en
+    direction: ltr

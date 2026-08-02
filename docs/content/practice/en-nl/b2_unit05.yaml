@@ -1,0 +1,656 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b2.unit05
+source_language: en
+target_language: nl
+unit_content_key: nl.b2.unit05.register
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md to unblock the
+    en-nl B2 unit05 (register) checkpoint (the unit's lessons already produce 51
+    lexemes via scripts/backfill_lexemes_en_nl.py but had no pack, so
+    generate_checkpoint() returned checkpoint_unavailable). This is a GRAMMAR/FUNCTION
+    unit, so the §8.1 union-of-lesson-tags pattern is used: every slot draws from the
+    unit's own semantic tags, widened by unioning sibling-lesson tags only where a
+    single tag could not clear the MC 3-option or matching 6-token floor, and narrowed
+    by part_of_speech to keep function/proper-noun/mis-glossed tokens out of any pool
+    whose gloss is shown. 20 templates over all 6 lessons that have lexemes:
+    multiple_choice x6, word_order x3, matching_pairs x3, translation x8. Measured with
+    the recipe's capacity model (f'.{LEVEL}.{UNIT}.' filter) against the real backfill
+    data: 39/51 unit lexemes hostable (76%); recognition/structured/production each
+    cover all 6 lessons; per-tier coverage recognition 76% / structured 53% /
+    production 73%. REGISTER: this unit deliberately teaches BOTH the informal jij and
+    the formal u register; every PRODUCTION/word_order exercise is internally
+    consistent to one register (formal: "Ik schrijf u een bericht.", "Zou u het willen
+    doen, alstublieft?", "Zou het mogelijk zijn om onze afspraak te verzetten,
+    alstublieft?"; informal: "Kunnen we de afspraak naar volgende week verzetten?"),
+    and the recognition/matching items are meaning-recognition of the contrast itself
+    (jou vs u, alsjeblieft vs alstublieft, Groetjes vs Hoogachtend), which is the
+    unit's whole point. Item-7 (culminating): the pack renders the SAME reschedule
+    request in BOTH registers as two full-sentence translations
+    (lesson04.translate.004 informal, lesson06.translate.004 formal) so a learner must
+    produce the complete register-appropriate utterance, not just drilled words.
+    MIS-GLOSSES found in the classifier pool and EXCLUDED from every gloss-shown pool
+    (route to backfill lane): (a) 'Met' -> "This is" (phone-identity sense) but this
+    unit uses it in "Met vriendelijke groet"; kept out by dropping preposition POS.
+    (b) 'schrijf' -> "prescribe; write (with ik)" and (c) 'schrijven' -> "write (part
+    of 'inschrijven', to register)" -- both wrong for this unit's "write a message"
+    sense; kept out of MC/matching/translation by using pronoun/noun/adverb POS on
+    lesson01 gloss pools (they still appear only as literal Dutch tiles in the
+    lesson01 word_order frame, where no gloss is shown). REVIEWER, please double-check:
+    (1) 'hé' ("hey") was dropped from every lesson02 pool because its gloss is
+    interchangeable with 'hoi' ("hi") -- an unanswerable pair otherwise; confirm that
+    is acceptable. (2) 'Geachte' ("dear (formal salutation)") and 'Beste' ("Dear
+    (letter/email salutation)") co-occur in the lesson02 pools; this is kept as the
+    unit's taught formal-vs-neutral salutation distinction (parenthetical qualifiers
+    disambiguate), not a paraphrase -- confirm. (3) 'schikken'/'schikt' ("to suit" /
+    "suits") and 'mailen'/'mail' ("to e-mail" / "e-mail (with ik)") are
+    infinitive/conjugated pairs kept together (distinct glosses), same precedent as
+    grappig/grappigs in b1_unit11. (4) 'Zou' displays capitalized (sentence-initial
+    citation form); it is a safe typed answer (practice answers are casefolded) but
+    would display capitalized in a matching left -- it is only used here inside MC
+    recognition and translation prompts, never as a matching left. Needs the standard
+    fresh-context review before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - register_choice_address
+    - polite_address
+    - salutation_signoff
+    - directness_politeness
+    - vervoer_alstublieft_single
+    - reschedule_request
+    - register_two_messages
+    - register_selection
+    - gemeente_schikken_single
+templates:
+
+# ============================ LESSON 01 — jij of u? ============================
+- content_key: practice.en-nl.nl.b2.unit05.lesson01.choose.001
+  lesson_content_key: nl.b2.unit05.lesson01.jij_of_u
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - pronoun
+      agreement_tags:
+        semantic:
+        - register_choice_address
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of the address pronouns this unit uses to set the register.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson01.order.002
+  lesson_content_key: nl.b2.unit05.lesson01.jij_of_u
+  type: word_order
+  frame:
+    text: Ik schrijf {item} een bericht.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - pronoun
+      agreement_tags:
+        semantic:
+        - polite_address
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik schrijf {item} een bericht.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik schrijf u een bericht. -- I am writing you a message. (formal, u)
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson01.translate.003
+  lesson_content_key: nl.b2.unit05.lesson01.jij_of_u
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - pronoun
+      - noun
+      - adverb
+      agreement_tags:
+        semantic:
+        - register_choice_address
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ====================== LESSON 02 — aanhef en afsluiting ======================
+- content_key: practice.en-nl.nl.b2.unit05.lesson02.choose.001
+  lesson_content_key: nl.b2.unit05.lesson02.aanhef_afsluiting
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - particle
+      agreement_tags:
+        semantic:
+        - salutation_signoff
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is one of this unit''s greetings or sign-offs.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson02.match.002
+  lesson_content_key: nl.b2.unit05.lesson02.aanhef_afsluiting
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &l02
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - particle
+      agreement_tags:
+        semantic:
+        - salutation_signoff
+    second: *l02
+    third: *l02
+    fourth: *l02
+    fifth: *l02
+    sixth: *l02
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each greeting or sign-off with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson02.translate.003
+  lesson_content_key: nl.b2.unit05.lesson02.aanhef_afsluiting
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - particle
+      agreement_tags:
+        semantic:
+        - salutation_signoff
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ======================= LESSON 03 — direct of beleefd? =======================
+- content_key: practice.en-nl.nl.b2.unit05.lesson03.choose.001
+  lesson_content_key: nl.b2.unit05.lesson03.directheid
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adjective
+      - phrase
+      agreement_tags:
+        semantic:
+        - directness_politeness
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} belongs to this unit''s direct-versus-polite request vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson03.order.002
+  lesson_content_key: nl.b2.unit05.lesson03.directheid
+  type: word_order
+  frame:
+    text: Zou u het willen doen, {item}?
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - phrase
+      agreement_tags:
+        semantic:
+        - vervoer_alstublieft_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zou u het willen doen, {item}?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zou u het willen doen, alstublieft? -- Would you be willing to do it, please? (formal)
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson03.translate.003
+  lesson_content_key: nl.b2.unit05.lesson03.directheid
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adjective
+      - phrase
+      agreement_tags:
+        semantic:
+        - directness_politeness
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ==================== LESSON 04 — de afspraak verzetten ====================
+- content_key: practice.en-nl.nl.b2.unit05.lesson04.choose.001
+  lesson_content_key: nl.b2.unit05.lesson04.de_afspraak
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - reschedule_request
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is from this unit''s appointment-rescheduling vocabulary.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson04.match.002
+  lesson_content_key: nl.b2.unit05.lesson04.de_afspraak
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &l04
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - adjective
+      - adverb
+      - pronoun
+      agreement_tags:
+        semantic:
+        - reschedule_request
+    second: *l04
+    third: *l04
+    fourth: *l04
+    fifth: *l04
+    sixth: *l04
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each rescheduling word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson04.translate.003
+  lesson_content_key: nl.b2.unit05.lesson04.de_afspraak
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - reschedule_request
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson04.translate.004
+  lesson_content_key: nl.b2.unit05.lesson04.de_afspraak
+  type: translation
+  frame:
+    text: Can we move the appointment to next week? (informal, to your friend Omar)
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic:
+        - reschedule_request
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Kunnen we de afspraak naar {item} week verzetten?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Kunnen we de afspraak naar volgende week verzetten? -- the same request, in the informal register.
+    language_code: en
+    direction: ltr
+
+# ==================== LESSON 05 — twee berichten, twee lezers ====================
+- content_key: practice.en-nl.nl.b2.unit05.lesson05.choose.001
+  lesson_content_key: nl.b2.unit05.lesson05.twee_berichten
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - register_two_messages
+        - register_selection
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is used in the two-messages, two-readers task.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson05.order.002
+  lesson_content_key: nl.b2.unit05.lesson05.twee_berichten
+  type: word_order
+  frame:
+    text: Zou volgende week {item}?
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic:
+        - gemeente_schikken_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zou volgende week {item}?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zou volgende week schikken? -- Would next week suit? (formal)
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson05.translate.003
+  lesson_content_key: nl.b2.unit05.lesson05.twee_berichten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic:
+        - register_two_messages
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+# ==================== LESSON 06 — het juiste register kiezen ====================
+- content_key: practice.en-nl.nl.b2.unit05.lesson06.choose.001
+  lesson_content_key: nl.b2.unit05.lesson06.register_kiezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - register_selection
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is from this unit''s choose-the-right-register lesson.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson06.match.002
+  lesson_content_key: nl.b2.unit05.lesson06.register_kiezen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &l06
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - register_selection
+        - register_two_messages
+    second: *l06
+    third: *l06
+    fourth: *l06
+    fifth: *l06
+    sixth: *l06
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each word with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson06.translate.003
+  lesson_content_key: nl.b2.unit05.lesson06.register_kiezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - register_selection
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit05.lesson06.translate.004
+  lesson_content_key: nl.b2.unit05.lesson06.register_kiezen
+  type: translation
+  frame:
+    text: Would it be possible to reschedule our appointment, please? (formal, to an institution)
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - phrase
+      agreement_tags:
+        semantic:
+        - vervoer_alstublieft_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zou het mogelijk zijn om onze afspraak te verzetten, {item}?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Zou het mogelijk zijn om onze afspraak te verzetten, alstublieft? -- the same request, in the formal register.
+    language_code: en
+    direction: ltr

@@ -1,0 +1,547 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b2.unit01
+source_language: en
+target_language: nl
+unit_content_key: nl.b2.unit01.argumentatie
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md to unblock the
+    en-nl B2 unit01 (argumentatie) checkpoint, which returns checkpoint_unavailable
+    with no pack. This is a GRAMMAR/FUNCTION unit (§8.1): every lesson's per-lesson
+    tag is dominated by function words, so slots use each lesson's own dominant
+    argument_* tag NARROWED by part_of_speech to content words [noun, verb,
+    adjective, adverb] (which excludes de/het/een/dat/niet/ik/je/op etc.), never a
+    bare tag. 21 templates over all 6 lessons: recognition 6 multiple_choice,
+    structured 6 matching_pairs + 2 word_order (hero sentences that put the argument
+    structure in the frame), production 6 bare-word translation + 1 culminating
+    full-argument fixed-sentence translation. Every slot is satisfiable from THIS
+    unit's own lexemes (generate_checkpoint feeds _material only unit01's lesson
+    ids). Measured capacity/coverage with the recipe §9.4 model on the real
+    backfill_lexemes_en_nl data (LEVEL='b2', UNIT='unit01', '.{LEVEL}.{UNIT}.'
+    filter): 96 unit lexemes, ALL coverage 72% (69/96 content words; the other 27
+    are function words no content-word slot hosts), recognition 72% / structured
+    72% / production 72%, all three tiers reach 6/6 lessons, no dead templates, no
+    sub-3 multiple_choice pools. Item-7: lesson06 translate.004 is the culminating
+    production - a fixed English prompt that names the four signposts (Ik vind dat /
+    Ten eerste / Natuurlijk / Toch) and renders the WHOLE spine act (claim +
+    support + concession + rebuttal) as one deterministic four-sentence Dutch
+    answer via a single-member work_vocab_pure anchor (kantoor). Register: informal
+    jij/je throughout (nl lane pin) - je bespaar/mis je/denk je - matching the
+    realization. defect 1.14 checked BY HAND at course scope for both word_order
+    heroes and the culminating frame (a*/b* glob skips b2_ packs); no frame literal
+    word is a candidate of its own slot. listen_select: authored ZERO (not needed;
+    nl TTS is configured but bare-word MC already fills recognition and avoids the
+    1.22 self-distractor class entirely). REVIEWER MUST DOUBLE-CHECK: (1) the
+    culminating translate.004 is graded by exact string match on one rendered
+    answer - a learner who substitutes 'Ik denk dat' for 'Ik vind dat', reorders
+    'veel reistijd', or punctuates the four sentences differently may be marked
+    wrong; the prompt cues the signposts to constrain this but does not eliminate
+    natural variation (the realization file flags the same fragility). Decide
+    whether the checkpoint should carry a full-paragraph production item or a
+    tighter one. (2) Several lessons pool conjugation/number form-variants in the
+    same matching_pairs / multiple_choice pool whose glosses are close but distinct
+    strings: bespaar 'save (time/money)' / bespaart 'saves' / besparen 'to save
+    (time, money)' (lesson02); mis/missen/mist (lesson03); voordeel/voordelen,
+    nadeel/nadelen, wegen/weegt (lesson04); productief/productiever, eerste/tweede
+    (lesson02). These discriminate on real form (like skill/skills in the recipe)
+    and each right uniquely identifies its left, but confirm none reads as
+    unanswerable. No mis-glossed lexeme found in any pool I used (all content-word
+    glosses match what unit01 teaches). Needs the standard fresh-context review
+    before import.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - argument_claim
+    - argument_support
+    - argument_concession
+    - argument_rebuttal
+    - argument_reading
+    - argument_defense_production
+    - infinitive_hebben
+    - source_conflict
+templates:
+# ---------------- lesson01: een standpunt (stating a claim) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson01.choose.001
+  lesson_content_key: nl.b2.unit01.lesson01.een_standpunt
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_claim
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to state a position.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson01.match.002
+  lesson_content_key: nl.b2.unit01.lesson01.een_standpunt
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &claim
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_claim
+    second: *claim
+    third: *claim
+    fourth: *claim
+    fifth: *claim
+    sixth: *claim
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word for stating a position with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson01.order.003
+  lesson_content_key: nl.b2.unit01.lesson01.een_standpunt
+  type: word_order
+  frame:
+    text: Ik vind dat thuiswerken beter is dan op kantoor {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [verb]
+      agreement_tags:
+        semantic: infinitive_hebben
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind dat thuiswerken beter is dan op kantoor {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik vind dat thuiswerken beter is dan op kantoor werken. -- I think working from home is better than working at the office.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson01.translate.004
+  lesson_content_key: nl.b2.unit01.lesson01.een_standpunt
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_claim
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+# ---------------- lesson02: argumenten geven (supporting) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson02.choose.001
+  lesson_content_key: nl.b2.unit01.lesson02.argumenten_geven
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_support
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to support your position with a reason.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson02.match.002
+  lesson_content_key: nl.b2.unit01.lesson02.argumenten_geven
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &support
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_support
+    second: *support
+    third: *support
+    fourth: *support
+    fifth: *support
+    sixth: *support
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word for giving a reason with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson02.translate.003
+  lesson_content_key: nl.b2.unit01.lesson02.argumenten_geven
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_support
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+# ---------------- lesson03: de andere kant (concession) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson03.choose.001
+  lesson_content_key: nl.b2.unit01.lesson03.de_andere_kant
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_concession
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to acknowledge the other side.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson03.match.002
+  lesson_content_key: nl.b2.unit01.lesson03.de_andere_kant
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &concession
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_concession
+    second: *concession
+    third: *concession
+    fourth: *concession
+    fifth: *concession
+    sixth: *concession
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word for acknowledging the other side with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson03.translate.003
+  lesson_content_key: nl.b2.unit01.lesson03.de_andere_kant
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_concession
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+# ---------------- lesson04: weerleggen (rebuttal) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson04.choose.001
+  lesson_content_key: nl.b2.unit01.lesson04.weerleggen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_rebuttal
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to rebut the opposing point.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson04.match.002
+  lesson_content_key: nl.b2.unit01.lesson04.weerleggen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &rebuttal
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_rebuttal
+    second: *rebuttal
+    third: *rebuttal
+    fourth: *rebuttal
+    fifth: *rebuttal
+    sixth: *rebuttal
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word for rebutting the other side with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson04.order.003
+  lesson_content_key: nl.b2.unit01.lesson04.weerleggen
+  type: word_order
+  frame:
+    text: '{item} wegen de voordelen zwaarder dan de nadelen.'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adverb]
+      agreement_tags:
+        semantic: source_conflict
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} wegen de voordelen zwaarder dan de nadelen.'
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Toch wegen de voordelen zwaarder dan de nadelen. -- Still, the advantages weigh heavier than the disadvantages.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson04.translate.004
+  lesson_content_key: nl.b2.unit01.lesson04.weerleggen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_rebuttal
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+# ---------------- lesson05: een betoog lezen (reading an argument) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson05.choose.001
+  lesson_content_key: nl.b2.unit01.lesson05.een_betoog_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_reading
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears in the argumentative reading text.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson05.match.002
+  lesson_content_key: nl.b2.unit01.lesson05.een_betoog_lezen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &reading
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_reading
+    second: *reading
+    third: *reading
+    fourth: *reading
+    fifth: *reading
+    sixth: *reading
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word from the argument text with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson05.translate.003
+  lesson_content_key: nl.b2.unit01.lesson05.een_betoog_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_reading
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+# ---------------- lesson06: een standpunt verdedigen (defend a position) ----------------
+- content_key: practice.en-nl.nl.b2.unit01.lesson06.choose.001
+  lesson_content_key: nl.b2.unit01.lesson06.een_standpunt_verdedigen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_defense_production
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to defend your position in a discussion.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson06.match.002
+  lesson_content_key: nl.b2.unit01.lesson06.een_standpunt_verdedigen
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &defense
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb, preposition, pronoun]
+      agreement_tags:
+        semantic: argument_defense_production
+    second: *defense
+    third: *defense
+    fourth: *defense
+    fifth: *defense
+    sixth: *defense
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: Match each Dutch word from defending a position with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-nl.nl.b2.unit01.lesson06.translate.003
+  lesson_content_key: nl.b2.unit01.lesson06.een_standpunt_verdedigen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: argument_defense_production
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
