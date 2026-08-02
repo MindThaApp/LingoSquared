@@ -1,0 +1,530 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b2.unit07
+source_language: en
+target_language: nl
+unit_content_key: nl.b2.unit07.onderhandelen
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md (§8.1
+    grammar-unit pattern) to unblock the nl B2 unit07 (Onderhandelen /
+    negotiation) checkpoint, which returns checkpoint_unavailable with no pack.
+    16 templates over all 6 lessons that have lexemes: multiple_choice x4,
+    listen_select x1 (recognition), matching_pairs x2 + word_order x3
+    (structured), translation x6 (production). This is a GRAMMAR/function unit,
+    so per §8.1 the per-lesson-tag pattern does not clear the floors; recognition
+    and production templates anchor lesson_content_key per lesson but union the
+    slot semantic tags (OR-matched) to clear the >=3 multiple_choice / >=6
+    matching_pairs floors, and part_of_speech excludes function words. Every slot
+    is satisfiable from THIS unit's own lexemes (generate_checkpoint feeds
+    _material only this unit's lesson ids). Ground-truth pool (backfill iter_specs,
+    unit scope) = 39 lexemes across lesson01(16) lesson02(7) lesson03(7)
+    lesson04(6) lesson05(2) lesson06(1). Measured capacity/coverage (§9 step 4,
+    .{LEVEL}.{UNIT}. filter, TTS=True): ALL 95%, recognition ~87%, structured 74%,
+    production ~87%; every tier covers all 6 lessons; no !! dead/thin templates.
+    COURSE-SCOPE SAFETY (§1.1, defect 1.14 -- integrity script skips b2 packs so
+    checked by hand): all six B2 negotiation semantic tags are polluted course-wide
+    (they appear across ~10 other B2 units via the shared backfill), so every
+    word_order and the fixed-sentence translation uses a slot that resolves to
+    exactly ONE token at COURSE scope -- akkoord (polite_refusal+adjective),
+    alleen (condition_setting+adverb), Nee (negotiation_dialogue+particle) -- making
+    each frame deterministic and trivially grammatical, and no frame's literal words
+    are a candidate value of its own slot. The two matching_pairs use the 6-tag noun
+    union (7 unit nouns; course-wide adds only 'idee', all distinct glosses, no
+    case/exact-gloss dups) and the 6-tag verb union (19 unit verbs; verified ZERO
+    exact-gloss and ZERO case duplicates at course scope). REVIEWER, double-check:
+    (1) the verb matching_pairs (lesson01 match.002) pool contains inflectional
+    twins koken/kook/kookt ("to cook" / "cook (with ik)" / "cooks"), doe/doet,
+    gaat/gaan, afwassen/afwast, betalen/betaalt -- glosses are all DISTINCT and
+    encode the inflection (treated as acceptable sing/plural-style discriminations
+    per §6.3, not interchangeable paraphrases), but confirm they read as answerable;
+    (2) lesson06 translate.001 is the CULMINATING full-negotiation production
+    (item-7): a fixed-sentence render_frame graded by exact string against one
+    canonical three-move answer -- the realization's lesson06 speak_response supplies
+    phrasing variants but a practice pack accepts one form, so the English prompt is
+    written to pin the exact Dutch; (3) capitalized citation forms in the pool (We,
+    Daar, Helemaal, Afgesproken, Nee) are safe as TYPED answers (practice path
+    casefolds) but display capitalized as matching_pairs lefts / MC prompts -- a
+    backfill sentence-initial fold would clean this up (route to backfill lane). No
+    mis-glossed lexeme found: every gloss matches what this from-scratch unit teaches.
+    Register: informal jij/je throughout (nl lane pin).
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - negotiation_proposal
+    - polite_refusal
+    - condition_setting
+    - reaching_agreement
+    - agreement_reading
+    - negotiation_dialogue
+templates:
+
+# ============ RECOGNITION (multiple_choice x4, listen_select x1) ============
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson01.choose.001
+  lesson_content_key: nl.b2.unit07.lesson01.een_voorstel
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: negotiation_proposal
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to make a proposal.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson02.choose.001
+  lesson_content_key: nl.b2.unit07.lesson02.beleefd_weigeren
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: polite_refusal
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use to turn something down politely.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson03.listen.001
+  lesson_content_key: nl.b2.unit07.lesson03.een_voorwaarde
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adverb
+      - noun
+      agreement_tags:
+        semantic: condition_setting
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: You heard {item}, a word for setting a condition.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson04.choose.001
+  lesson_content_key: nl.b2.unit07.lesson04.tot_een_afspraak
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reaching_agreement
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word you use when you reach an agreement or settle the bill.'
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson05.choose.001
+  lesson_content_key: nl.b2.unit07.lesson05.een_afspraak_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - adverb
+      - particle
+      agreement_tags:
+        semantic:
+        - agreement_reading
+        - negotiation_dialogue
+        - reaching_agreement
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} appears when Lotte and Omar read back and confirm what they agreed.'
+    language_code: en
+    direction: ltr
+
+# ============ STRUCTURED (matching_pairs x2, word_order x3) ============
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson01.match.001
+  lesson_content_key: nl.b2.unit07.lesson01.een_voorstel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &noun_slot
+      language_code: nl
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - negotiation_proposal
+        - polite_refusal
+        - condition_setting
+        - reaching_agreement
+        - agreement_reading
+        - negotiation_dialogue
+    second: *noun_slot
+    third: *noun_slot
+    fourth: *noun_slot
+    fifth: *noun_slot
+    sixth: *noun_slot
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each noun from the negotiation with its English meaning.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson01.match.002
+  lesson_content_key: nl.b2.unit07.lesson01.een_voorstel
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &verb_slot
+      language_code: nl
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic:
+        - negotiation_proposal
+        - polite_refusal
+        - condition_setting
+        - reaching_agreement
+        - agreement_reading
+        - negotiation_dialogue
+    second: *verb_slot
+    third: *verb_slot
+    fourth: *verb_slot
+    fifth: *verb_slot
+    sixth: *verb_slot
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each verb with its English meaning; watch the verb form (infinitive vs I/you/he).
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson02.order.001
+  lesson_content_key: nl.b2.unit07.lesson02.beleefd_weigeren
+  type: word_order
+  frame:
+    text: Daar kan ik niet mee {item} gaan.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: polite_refusal
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Daar kan ik niet mee {item} gaan.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Daar kan ik niet mee akkoord gaan. -- I can't agree to that.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson03.order.001
+  lesson_content_key: nl.b2.unit07.lesson03.een_voorwaarde
+  type: word_order
+  frame:
+    text: Ik kan koken, maar {item} als jij afwast.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adverb
+      agreement_tags:
+        semantic: condition_setting
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik kan koken, maar {item} als jij afwast.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Ik kan koken, maar alleen als jij afwast. -- I can cook, but only if you do the dishes.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson06.order.001
+  lesson_content_key: nl.b2.unit07.lesson06.onderhandelen_in_gesprek
+  type: word_order
+  frame:
+    text: '{item}, dat gaat helaas niet.'
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - particle
+      agreement_tags:
+        semantic: negotiation_dialogue
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}, dat gaat helaas niet.'
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Nee, dat gaat helaas niet. -- No, unfortunately that won't work.
+    language_code: en
+    direction: ltr
+
+# ============ PRODUCTION (translation x6) ============
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson01.translate.001
+  lesson_content_key: nl.b2.unit07.lesson01.een_voorstel
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: negotiation_proposal
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson02.translate.001
+  lesson_content_key: nl.b2.unit07.lesson02.beleefd_weigeren
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: polite_refusal
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson03.translate.001
+  lesson_content_key: nl.b2.unit07.lesson03.een_voorwaarde
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - adverb
+      - noun
+      - particle
+      agreement_tags:
+        semantic: condition_setting
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson04.translate.001
+  lesson_content_key: nl.b2.unit07.lesson04.tot_een_afspraak
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - noun
+      - verb
+      - adverb
+      - particle
+      agreement_tags:
+        semantic: reaching_agreement
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson05.translate.001
+  lesson_content_key: nl.b2.unit07.lesson05.een_afspraak_lezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - verb
+      - noun
+      - particle
+      agreement_tags:
+        semantic:
+        - agreement_reading
+        - negotiation_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit07.lesson06.translate.001
+  lesson_content_key: nl.b2.unit07.lesson06.onderhandelen_in_gesprek
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech:
+      - particle
+      agreement_tags:
+        semantic: negotiation_dialogue
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: The Dutch word is {item}.
+    language_code: en
+    direction: ltr

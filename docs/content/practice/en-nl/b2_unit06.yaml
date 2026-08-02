@@ -1,0 +1,417 @@
+schema_version: '1.0'
+pack_key: practice.en-nl.b2.unit06
+source_language: en
+target_language: nl
+unit_content_key: nl.b2.unit06.abstractie
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: >-
+    Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md to unblock the
+    nl B2 unit06 (abstractie) checkpoint, which returned checkpoint_unavailable because
+    the unit had lexemes (from scripts/backfill_lexemes_en_nl.py) but no practice pack.
+    This is a GRAMMAR/FUNCTION unit (opinion frames + qualification + responding to an
+    opposing view), so the §8.1 grammar-unit pattern is used: every broad recognition /
+    production / matching_pairs slot UNIONS the unit's five per-lesson tags
+    (opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons,
+    opinion_reading) and narrows to content POS [noun, verb, adjective, adverb], which
+    excludes the function words (particles ook/af/se, prepositions tot/over/per/voor,
+    pronoun iedereen) so no exercise ever shows a bare preposition/particle as its answer.
+    14 templates across the 5 lessons that have lexemes (lesson06 in_gesprek has zero
+    introduced_tokens => zero lexemes => it cannot be represented, expected):
+    multiple_choice x3, listen_select x2 (recognition); word_order x4, matching_pairs x2
+    (structured); translation x3 (production).
+
+    COURSE-SCOPE SAFETY (recipe §1.1 / §9 step 5): every word_order frame and the one
+    fixed-sentence (culminating) translation was re-read against its slot's WHOLE-nl.b2
+    course-wide candidate pool, not just the unit pool, because Endless Practice
+    (generate_batch) pools across every completed unit of the course. Only ONE
+    single-tag anchor is course-unique (adjective+opinion_adj => {duur}); the other
+    hero-sentence tags are shared with sibling nl.b2 units, so their frames were written
+    to stay grammatical for EVERY course-scope member: "Dat is niet per se {item}." holds
+    for {goed, slecht}; "Ik snap je {item}." holds for {mening, punt}; "{item} is dat
+    goed." holds for {enerzijds, anderzijds}; "Het is te {item}." and the culminating
+    "...niet te {item}." are pinned to the course-unique {duur}. No frame's literal text
+    contains any of its own slot's candidate values (defect 1.14, checked at course
+    scope). matching_pairs carries no frame grammaticality requirement.
+
+    The unit's spine outcome (state and defend a nuanced abstract opinion, reacting to an
+    opposing view) is delivered by the culminating template lesson04.translate.003: a
+    render_frame translation of the WHOLE act -- concede (Dat is waar, maar...) + framed
+    opinion (naar mijn mening...) + abstract-value defense (een autovrije stad niet te
+    duur) -- pinned deterministically on the course-unique {duur} anchor. Register:
+    informal jij-register (nl lane pin); frames are impersonal / first-person / je-address,
+    no formal 'u', internally consistent.
+
+    MEASURED (recipe §9 step 4, f'.{LEVEL}.{UNIT}.' filter): 14 live templates, 44 unit
+    lexemes, 5 lessons with lexemes. Coverage ALL 82% (36/44 hostable; the 8 non-hostable
+    are exactly the excluded function words), recognition 82%, structured 82%, production
+    55%; every tier reaches 5/5 lessons; no dead templates and no <3-candidate recognition
+    template.
+
+    REVIEWER, please double-check: (1) mis-glossed function words tot/over/se carry senses
+    (until / past / necessarily) that do NOT match how this unit uses them (tot op zekere
+    hoogte, over het algemeen, per se) -- all THREE are prepositions/particles, excluded
+    from every pool by the content-POS filter, so never shown as an answer, but they
+    should be re-glossed in the backfill lane. (2) woon and wonen carry the identical gloss
+    'live; reside' -- a legal duplicate-RIGHT in matching_pairs, and both are verbs so they
+    never enter a bare-word translation pool (no underdetermination); flagging it anyway.
+    (3) autovrij 'car-free' vs autovrije 'car-free (inflected)' can both appear in a
+    bare-word translation pool; the '(inflected)' parenthetical is the discriminator --
+    confirm that reads acceptably to a learner. (4) confirm the four course-safe hero frames
+    read naturally in informal Dutch for BOTH of their course-scope members (esp. "Ik snap
+    je mening" alongside "Ik snap je punt", and "Anderzijds is dat goed" alongside
+    "Enerzijds is dat goed").
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - opinion_prompt
+    - nuanced_opinion
+    - counterargument_response
+    - pros_and_cons
+    - opinion_reading
+    - source_agreement
+    - wellbeing_answer
+    - opinion_adj
+templates:
+
+# ============================ LESSON 01 — wat vind jij? ============================
+- content_key: practice.en-nl.nl.b2.unit06.lesson01.choose.001
+  lesson_content_key: nl.b2.unit06.lesson01.wat_vind_jij
+  type: multiple_choice
+  frame:
+    text: "{item}"
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is one of this unit's words for stating and weighing an abstract opinion."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson01.order.002
+  lesson_content_key: nl.b2.unit06.lesson01.wat_vind_jij
+  type: word_order
+  frame:
+    text: "Ik snap je {item}."
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun]
+      agreement_tags:
+        semantic: source_agreement
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "Ik snap je {item}."
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: "Ik snap je punt. -- I get your point."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson01.match.003
+  lesson_content_key: nl.b2.unit06.lesson01.wat_vind_jij
+  type: matching_pairs
+  frame:
+    text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}"
+    language_code: nl
+    direction: ltr
+  slots:
+    first: &mp
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+    second: *mp
+    third: *mp
+    fourth: *mp
+    fifth: *mp
+    sixth: *mp
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: "Match each Dutch word from this unit with its English meaning."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson01.translate.004
+  lesson_content_key: nl.b2.unit06.lesson01.wat_vind_jij
+  type: translation
+  frame:
+    text: "{item}"
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dutch word is {item}."
+    language_code: en
+    direction: ltr
+
+# ============================ LESSON 02 — een genuanceerde mening ============================
+- content_key: practice.en-nl.nl.b2.unit06.lesson02.listen.001
+  lesson_content_key: nl.b2.unit06.lesson02.genuanceerd
+  type: listen_select
+  frame:
+    text: "{item}"
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "You heard {item}."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson02.order.002
+  lesson_content_key: nl.b2.unit06.lesson02.genuanceerd
+  type: word_order
+  frame:
+    text: "Dat is niet per se {item}."
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adjective]
+      agreement_tags:
+        semantic: wellbeing_answer
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "Dat is niet per se {item}."
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: "Dat is niet per se slecht. -- That is not necessarily bad."
+    language_code: en
+    direction: ltr
+
+# ============================ LESSON 03 — reageren op een tegenargument ============================
+- content_key: practice.en-nl.nl.b2.unit06.lesson03.choose.001
+  lesson_content_key: nl.b2.unit06.lesson03.reageren
+  type: multiple_choice
+  frame:
+    text: "{item}"
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is one of this unit's words for stating and weighing an abstract opinion."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson03.order.002
+  lesson_content_key: nl.b2.unit06.lesson03.reageren
+  type: word_order
+  frame:
+    text: "Het is te {item}."
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adjective]
+      agreement_tags:
+        semantic: opinion_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "Het is te {item}."
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: "Het is te duur. -- It is too expensive."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson03.match.003
+  lesson_content_key: nl.b2.unit06.lesson03.reageren
+  type: matching_pairs
+  frame:
+    text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}"
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *mp
+    second: *mp
+    third: *mp
+    fourth: *mp
+    fifth: *mp
+    sixth: *mp
+  slot_relations:
+  - kind: distinct
+    slots: [first, second, third, fourth, fifth, sixth]
+  answer_derivation:
+    kind: matching_pairs
+    slots: [first, second, third, fourth, fifth, sixth]
+  feedback_frame:
+    text: "Match each Dutch word from this unit with its English meaning."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson03.translate.004
+  lesson_content_key: nl.b2.unit06.lesson03.reageren
+  type: translation
+  frame:
+    text: "{item}"
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: "The Dutch word is {item}."
+    language_code: en
+    direction: ltr
+
+# ============================ LESSON 04 — voor en tegen ============================
+- content_key: practice.en-nl.nl.b2.unit06.lesson04.choose.001
+  lesson_content_key: nl.b2.unit06.lesson04.voor_en_tegen
+  type: multiple_choice
+  frame:
+    text: "{item}"
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "{item} is one of this unit's words for stating and weighing an abstract opinion."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson04.order.002
+  lesson_content_key: nl.b2.unit06.lesson04.voor_en_tegen
+  type: word_order
+  frame:
+    text: "{item} is dat goed."
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adverb]
+      agreement_tags:
+        semantic: pros_and_cons
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "{item} is dat goed."
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: "Enerzijds is dat goed. -- On one hand, that is good."
+    language_code: en
+    direction: ltr
+
+- content_key: practice.en-nl.nl.b2.unit06.lesson04.translate.003
+  lesson_content_key: nl.b2.unit06.lesson04.voor_en_tegen
+  type: translation
+  frame:
+    text: "That's true, but in my opinion a car-free city is not too expensive."
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [adjective]
+      agreement_tags:
+        semantic: opinion_adj
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: "Dat is waar, maar naar mijn mening is een autovrije stad niet te {item}."
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: "Dat is waar, maar naar mijn mening is een autovrije stad niet te duur."
+    language_code: en
+    direction: ltr
+
+# ============================ LESSON 05 — een mening lezen ============================
+- content_key: practice.en-nl.nl.b2.unit06.lesson05.listen.001
+  lesson_content_key: nl.b2.unit06.lesson05.een_mening_lezen
+  type: listen_select
+  frame:
+    text: "{item}"
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: [noun, verb, adjective, adverb]
+      agreement_tags:
+        semantic: [opinion_prompt, nuanced_opinion, counterargument_response, pros_and_cons, opinion_reading]
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: "You heard {item}."
+    language_code: en
+    direction: ltr

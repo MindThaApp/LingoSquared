@@ -1842,7 +1842,7 @@ NL_GLOSSES.update({
     "afwast": "do the dishes; wash up (with jij)",
     "afwegend": "weighing up; considering",
     "akkoord": "agreed; in agreement",
-    "autovrij": "car-free",
+    "autovrij": "car-free (base form)",
     "autovrije": "car-free (inflected)",
     "baas": "the boss",
     "bedoel": "mean (with ik)",
