@@ -172,7 +172,7 @@ while IFS='|' read -r DIRECTION PACKS; do
   # practice importer 422s on templates whose lessons aren't in the target
   # course — so group packs by level prefix and import each group only into
   # the matching-level course.
-  for LEVEL in a1 a2 b1 c1 c2; do
+  for LEVEL in a1 a2 b1 b2 c1 c2; do
     LEVEL_PACKS=""
     for P in $PACKS; do
       case "$(basename "$P")" in "$LEVEL"_*) LEVEL_PACKS="$LEVEL_PACKS $P";; esac
