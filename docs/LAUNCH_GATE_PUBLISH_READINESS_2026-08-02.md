@@ -41,7 +41,18 @@ redesign) or accepting no checkpoint. The pack authors already flagged this and
 correctly refused to pad with untaught vocabulary. **Decision for Ramin:** accept
 these breadth units as checkpoint-exempt, or expand their taught vocab. Not a bug.
 
+## Grading correctness — launch gate is 100% clean
+`test_content_answer_shapes.py` over the FULL compiled corpus: **26,257 passed, 1
+failed**, and the single failure is `en-es-b1` (Spanish, a PARKED direction) —
+**zero launch-gate (nl/fa/prs) failures**. So every launch-gate exercise both
+produces a checkpoint AND grades a correct learner answer as correct. (The es defect:
+`es.b1.unit40.lesson01.exercise05.read_which_is_detail` is typed `reading_comprehension`
+— option-based to the frontend — but ships no options; it also has a Mateo/Elena
+character mismatch between realization and overlay. Flagged for the es lane when it
+un-parks; not fixed here — es authoring is sensitive + deprioritized.)
+
 ## Bottom line
 Every en→X course is fully publish-ready. Every X→en course is publish-ready except
-the 12 native-blocked a2_35-40 checkpoints and the 3 thin breadth units. The launch
-gate has no remaining *authorable* content gaps beyond those two buckets.
+the 12 native-blocked a2_35-40 checkpoints and the 3 thin breadth units, and the whole
+launch gate is grading-clean. No remaining *authorable* launch-gate content gaps
+beyond those two buckets.
