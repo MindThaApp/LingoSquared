@@ -494,6 +494,26 @@ by the existing `grade()`.
 
 ---
 
+## Phase H — Dictation exercise type (new modality)
+
+Full spec + a self-contained context-cleared build prompt live in
+**`docs/DICTATION_EXERCISE_SPEC.md`** — read it before starting. Summary:
+hear a TTS target-language sentence (no source text) → type it →
+orthography-strict grading. Reuses `Translation.tsx` verbatim; it is
+`listen_type` with strict grading forced by type. Net work = register the
+type in 9 places (4 backend rows have no automated guard) + force
+strict-by-type grading. Course-content only in v1 (not Endless Practice).
+**nl-first — NOT prs** (Dari has no TTS; a dictation there is an unanswerable
+silent play button). Lanes: Codex = enum + Alembic constraint migration +
+`VALID_EXERCISE_TYPES` + compile audio block + `FREE_TEXT_EXERCISE_TYPES` +
+strict grading; Claude = shared union + renderer case + `PROMPTS` test entry +
+CONTRACT.md. Motivation: the one modality lingua.com leans on that we lack;
+plays into our orthography-strict grading + on-screen keyboard strengths.
+(Related, specced later if pursued: a graded reading/"stories" track;
+skill-targeted practice — both also gated behind the fa/prs TTS fix.)
+
+---
+
 ## Content program (Codex, parallel to code phases — never blocks them)
 
 Continue the roadmap fan-out (Phase 3 Latin cohort es/fr in progress)
