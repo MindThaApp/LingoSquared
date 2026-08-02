@@ -249,6 +249,10 @@ UNIT_FILES_B1 = tuple(sorted(
     (REPO_ROOT / "docs/content/realizations/nl").glob("b1_unit*_*.yaml")
 ))
 
+UNIT_FILES_B2 = tuple(sorted(
+    (REPO_ROOT / "docs/content/realizations/nl").glob("b2_unit*_*.yaml")
+))
+
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
 NL_GLOSSES = {
@@ -1822,6 +1826,195 @@ PROPER_NOUNS.update({"Vrolik"})
 NOUNS.update({"mand", "riem", "speeltje", "voer", "vogelvoer"})
 VERBS.update({"slaapt"})
 
+# --- 2026-08-02: Dutch B2 tier tokens (units 01-08) ---
+# 168 tokens introduced by docs/content/realizations/nl/b2_unit0*.yaml
+# that were absent from NL_GLOSSES. Glosses are the atomic English
+# meaning of each token's TAUGHT sense, taken from the en-nl b2 overlay
+# teaching gloss/note for the card that introduces it. Capitalized
+# sentence-initial forms reuse their lowercase gloss (Dat=dat, De=de,
+# Nee=nee), matching this file's older capitalized-variant convention.
+# DRAFT B2 content pending native-Dutch review.
+NL_GLOSSES.update({
+    "aankleedde": "got dressed",
+    "aankwam": "arrived",
+    "absoluut": "absolutely",
+    "Afgesproken": "agreed; it's a deal",
+    "afwast": "do the dishes; wash up (with jij)",
+    "afwegend": "weighing up; considering",
+    "akkoord": "agreed; in agreement",
+    "autovrij": "car-free",
+    "autovrije": "car-free (inflected)",
+    "baas": "the boss",
+    "bedoel": "mean (with ik)",
+    "begonnen": "begun; started",
+    "beide": "both (the two)",
+    "belangrijk": "important",
+    "bespaar": "save (time/money)",
+    "besparen": "to save (time, money)",
+    "beweert": "claims (with hij/zij)",
+    "beweren": "to claim",
+    "bijvoorbeeld": "for example",
+    "blijken": "to appear; to turn out",
+    "blijkt": "appears; shows (with uit ... dat)",
+    "boodschappen": "the groceries; the shopping",
+    "bron": "the source",
+    "bronnen": "sources",
+    "daardoor": "as a result; because of that",
+    "daarentegen": "by contrast; on the other hand",
+    "daarnaast": "in addition; besides",
+    "Dat": "that",
+    "De": "the",
+    "degelijk": "most certainly (in 'wel degelijk')",
+    "ding": "thing",
+    "donker": "dark",
+    "duurzaamheid": "sustainability",
+    "enigszins": "somewhat; slightly",
+    "erop": "at it; on it (in 'het lijkt erop dat')",
+    "ervan": "of it; about it (in 'ervan overtuigd')",
+    "ervoor": "before that; beforehand (in 'de avond ervoor')",
+    "etentje": "dinner party",
+    "file": "the traffic jam",
+    "Geachte": "dear (formal salutation)",
+    "gebeurd": "happened",
+    "gebeuren": "to happen",
+    "gemist": "missed",
+    "gevallen": "cases (in 'in veel gevallen')",
+    "gezet": "set (put)",
+    "gezonder": "healthier",
+    "gok": "guess (with ik)",
+    "gokken": "to guess",
+    "groetjes": "cheers; take care (informal sign-off)",
+    "haast": "hurry; haste",
+    "hangen": "to depend (in 'afhangen'); to hang",
+    "hangt": "depends (in 'hangt ervan af')",
+    "heer": "sir; gentleman",
+    "helaas": "unfortunately",
+    "Helemaal": "completely; totally",
+    "helft": "half",
+    "hoi": "hi",
+    "Hoogachtend": "yours faithfully (most formal sign-off)",
+    "hoogte": "extent (in 'tot op zekere hoogte'); height",
+    "juist": "precisely; exactly",
+    "kloppen": "to be right; to check out",
+    "klopt": "is right; is correct",
+    "komedie": "a comedy",
+    "kortom": "in short",
+    "langzaam": "slow; slowly",
+    "lijkt": "seems; looks like",
+    "mail": "e-mail (with ik)",
+    "mailen": "to e-mail",
+    "mevrouw": "madam",
+    "missen": "to miss",
+    "mist": "miss (with je)",
+    "miste": "missed",
+    "mits": "provided that",
+    "moeite": "effort; trouble",
+    "nadat": "after (conjunction)",
+    "nadeel": "the disadvantage; drawback",
+    "nadelen": "disadvantages; drawbacks",
+    "Nee": "no",
+    "negatief": "negative",
+    "netjes": "properly; neatly; politely",
+    "nogal": "rather; fairly",
+    "nou": "well (in 'nou juist': exactly)",
+    "onderbouwd": "backed up; well-supported",
+    "onderbouwen": "to back up; to support with evidence",
+    "onderweg": "on the way; en route",
+    "onderzoek": "research",
+    "ongetwijfeld": "undoubtedly",
+    "ontwikkeling": "development",
+    "ontzettend": "incredibly; tremendously",
+    "onze": "our",
+    "overtuigd": "convinced",
+    "overtuigend": "convincing",
+    "Pauw": "Pauw (restaurant name, 'De Pauw')",
+    "pizza": "pizza",
+    "positief": "positive",
+    "prijs": "the price",
+    "productief": "productive",
+    "productiever": "more productive",
+    "recensie": "the review",
+    "recensies": "reviews",
+    "redden": "to save; to rescue",
+    "redt": "saves; rescues",
+    "regende": "rained; was raining",
+    "regenen": "to rain",
+    "reistijd": "commute; travel time",
+    "samenleving": "society",
+    "schikt": "suits; is convenient",
+    "se": "(in 'per se') necessarily; as such",
+    "snappen": "to understand; to get",
+    "sommigen": "some people",
+    "spitsuur": "rush hour",
+    "sprak": "spoke",
+    "standpunt": "a position; point of view",
+    "steden": "cities",
+    "stel": "propose (with ik, in 'stel voor')",
+    "stelt": "states; asserts (with hij/zij)",
+    "succes": "a success",
+    "tegenstelling": "contrast (in 'in tegenstelling tot')",
+    "tellen": "to count; to matter",
+    "telt": "counts; matters",
+    "ten": "(in 'ten eerste/tweede') firstly/secondly; at the",
+    "tenzij": "unless",
+    "terwijl": "while; whereas",
+    "Thomas": "Thomas",
+    "thuiswerken": "working from home",
+    "thuiswerkers": "people who work from home; teleworkers",
+    "toen": "when (past); then",
+    "traag": "slow",
+    "uiteindelijk": "in the end; eventually",
+    "vanochtend": "this morning",
+    "verantwoordelijkheid": "responsibility",
+    "vergeten": "to forget; forgotten",
+    "verschillen": "to differ; to disagree",
+    "verschilt": "differs; disagrees",
+    "verslapen": "to oversleep",
+    "vertrekken": "to leave; to depart",
+    "vertrok": "left; departed",
+    "vertrokken": "left; departed",
+    "vervolgens": "next; subsequently",
+    "verwacht": "expect (with ik); expects",
+    "verwachten": "to expect",
+    "verwarrend": "confusing",
+    "verzetten": "to reschedule; to move (an appointment)",
+    "videobellen": "to video-call",
+    "volgens": "according to",
+    "vond": "thought; found (with je)",
+    "voordat": "before (conjunction)",
+    "voordeel": "the advantage",
+    "voordelen": "advantages",
+    "voorspelbaar": "predictable",
+    "voorstel": "proposal",
+    "Vries": "Vries (surname, 'Lotte de Vries')",
+    "vrijheid": "freedom",
+    "waard": "worth (in 'de moeite waard')",
+    "waarom": "why",
+    "wakker": "awake",
+    "weegt": "weighs; carries weight",
+    "weg": "away; gone",
+    "wegen": "to weigh; to carry weight",
+    "wekker": "the alarm clock",
+    "wellicht": "perhaps; possibly",
+    "werd": "became",
+    "zag": "saw",
+    "zal": "will; shall (with hij/zij)",
+    "zeker": "certainly; for sure",
+    "zekere": "certain (inflected)",
+    "zetten": "to set; to put",
+    "zwaarder": "heavier",
+})
+# Part-of-speech for the same tokens (Dat/De/Nee already classified).
+PROPER_NOUNS.update({"Pauw", "Thomas", "Vries"})
+PRONOUNS.update({"beide", "onze", "sommigen"})
+PREPOSITIONS.update({"ten", "volgens"})
+PARTICLES.update({"Afgesproken", "groetjes", "hoi", "mits", "nadat", "nou", "se", "tenzij", "terwijl", "toen", "voordat"})
+ADJECTIVES.update({"akkoord", "autovrij", "autovrije", "belangrijk", "donker", "Geachte", "gezonder", "langzaam", "negatief", "onderbouwd", "overtuigd", "overtuigend", "positief", "productief", "productiever", "traag", "verwarrend", "voorspelbaar", "waard", "wakker", "zekere", "zwaarder"})
+ADVERBS.update({"absoluut", "bijvoorbeeld", "daardoor", "daarentegen", "daarnaast", "degelijk", "enigszins", "erop", "ervan", "ervoor", "helaas", "Helemaal", "Hoogachtend", "juist", "kortom", "netjes", "nogal", "onderweg", "ongetwijfeld", "ontzettend", "uiteindelijk", "vanochtend", "vervolgens", "waarom", "weg", "wellicht", "zeker"})
+VERBS.update({"aankleedde", "aankwam", "afwast", "afwegend", "bedoel", "begonnen", "bespaar", "besparen", "beweert", "beweren", "blijken", "blijkt", "gebeurd", "gebeuren", "gemist", "gezet", "gok", "gokken", "hangen", "hangt", "kloppen", "klopt", "lijkt", "mail", "mailen", "missen", "mist", "miste", "onderbouwen", "redden", "redt", "regende", "regenen", "schikt", "snappen", "sprak", "stel", "stelt", "tellen", "telt", "vergeten", "verschillen", "verschilt", "verslapen", "vertrekken", "vertrok", "vertrokken", "verwacht", "verwachten", "verzetten", "videobellen", "vond", "weegt", "wegen", "werd", "zag", "zal", "zetten"})
+NOUNS.update({"baas", "boodschappen", "bron", "bronnen", "ding", "duurzaamheid", "etentje", "file", "gevallen", "haast", "heer", "helft", "hoogte", "komedie", "mevrouw", "moeite", "nadeel", "nadelen", "onderzoek", "ontwikkeling", "pizza", "prijs", "recensie", "recensies", "reistijd", "samenleving", "spitsuur", "standpunt", "steden", "succes", "tegenstelling", "thuiswerken", "thuiswerkers", "verantwoordelijkheid", "voordeel", "voordelen", "voorstel", "vrijheid", "wekker"})
+
+
 
 # Sentence-initial / sign-line capitals folded onto their lowercase citation
 # form -- see departure (1) in the block comment above. Applied in
@@ -2603,6 +2796,55 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "de_prijzen_in_de_dierenwinkel": "pet_shop_price_reading",
         "bij_de_toonbank_in_de_dierenwinkel": "pet_shop_counter_dialogue",
         "nina_hoort_over_de_dierenwinkel": "pet_shop_wrapup_dialogue",
+        # Dutch B2 tier lessons (units 01-08), added 2026-08-02. Additive
+        # semantic tags only; none match the number/weekday/month special
+        # cases. "verhaal_lezen" already exists (storytelling_reading).
+        "een_standpunt": "argument_claim",
+        "argumenten_geven": "argument_support",
+        "de_andere_kant": "argument_concession",
+        "weerleggen": "argument_rebuttal",
+        "een_betoog_lezen": "argument_reading",
+        "een_standpunt_verdedigen": "argument_defense_production",
+        "hoe_zeker": "certainty_degree",
+        "deductie": "deduction",
+        "mogelijkheid": "possibility_guess",
+        "het_verleden": "past_speculation",
+        "een_tekst_lezen": "speculation_reading",
+        "speculeren_in_gesprek": "speculation_dialogue",
+        "afzwakken": "hedging_softening",
+        "voorzichtig": "cautious_phrasing",
+        "benadrukken": "emphasis",
+        "focus": "focus_marking",
+        "recensie": "review_reading",
+        "in_gesprek": "opinion_nuance_dialogue",
+        "achtergrond": "narrative_background",
+        "gebeurtenis": "narrative_event_sequence",
+        "toen_terwijl": "narrative_time_conjunctions",
+        "plusquamperfectum": "past_perfect",
+        "verhaal_vertellen": "narrative_production",
+        "jij_of_u": "register_choice_address",
+        "aanhef_afsluiting": "salutation_signoff",
+        "directheid": "directness_politeness",
+        "de_afspraak": "reschedule_request",
+        "twee_berichten": "register_two_messages",
+        "register_kiezen": "register_selection",
+        "wat_vind_jij": "opinion_prompt",
+        "genuanceerd": "nuanced_opinion",
+        "reageren": "counterargument_response",
+        "voor_en_tegen": "pros_and_cons",
+        "een_mening_lezen": "opinion_reading",
+        "een_voorstel": "negotiation_proposal",
+        "beleefd_weigeren": "polite_refusal",
+        "een_voorwaarde": "condition_setting",
+        "tot_een_afspraak": "reaching_agreement",
+        "een_afspraak_lezen": "agreement_reading",
+        "onderhandelen_in_gesprek": "negotiation_dialogue",
+        "wie_zegt_wat": "source_attribution",
+        "vergelijken": "source_comparison",
+        "overeenkomst": "source_agreement",
+        "conflict": "source_conflict",
+        "twee_recensies": "two_reviews_reading",
+        "synthese_in_gesprek": "synthesis_dialogue",
     }
     # Grammar-note METALABELS (native review 2026-07-27): these tokens are
     # introduced INSIDE the number/weekday/month lessons only to EXPLAIN the
@@ -3586,6 +3828,7 @@ def iter_specs():
     yield from _classify_nl(UNIT_FILES, "a1")
     yield from _classify_nl(UNIT_FILES_A2, "a2")
     yield from _classify_nl(UNIT_FILES_B1, "b1")
+    yield from _classify_nl(UNIT_FILES_B2, "b2")
 
 
 def main() -> int:
@@ -3606,7 +3849,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2"), ("b1", "Dutch B1")):
+        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2"), ("b1", "Dutch B1"), ("b2", "Dutch B2")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
