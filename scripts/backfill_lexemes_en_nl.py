@@ -3647,40 +3647,36 @@ def main() -> int:
                 existing.agreement_tags = spec["agreement_tags"]
                 updated += 1
                 continue
+            # No exact (token, part_of_speech) row. A per-unit POS override
+            # (NL_UNIT_POS_OVERRIDES) can flip a token's POS. Creating a new
+            # (token, new-POS) row would orphan the old (token, old-POS) row --
+            # and that row can NOT be deleted once a practice_item /
+            # user_lexeme_srs references it via FK (the live-DB case). Instead
+            # MIGRATE the existing row IN PLACE (same lexeme id -> FKs stay
+            # valid). Safe because `specs` holds exactly one spec per
+            # (course, token) (keyed by token, first sight wins), so at most one
+            # other-POS row exists; the exact-POS SELECT above already ruled out
+            # a same-POS row, so migrating can't collide with the unique
+            # (course, language, token, part_of_speech) constraint.
+            others = db.scalars(
+                select(Lexeme).where(
+                    Lexeme.course_id == course.id,
+                    Lexeme.language_code == "nl",
+                    Lexeme.token == spec["token"],
+                )
+            ).all()
+            if len(others) == 1:
+                row = others[0]
+                row.part_of_speech = spec["part_of_speech"]
+                row.english_gloss = spec["english_gloss"]
+                row.agreement_tags = spec["agreement_tags"]
+                updated += 1
+                continue
             db.add(Lexeme(course_id=course.id, provenance_lesson_id=lesson.id, provenance_lesson_content_key=spec.pop("lesson_content_key"), provenance_content_key=spec.pop("content_key"), **spec))
             created += 1
-
-        # Reconcile stale part-of-speech rows. A POS-changing per-unit override
-        # (NL_UNIT_POS_OVERRIDES) writes a NEW (token, new-pos) row while the
-        # upsert -- keyed on (course, token, part_of_speech) -- leaves the old
-        # (token, old-pos) row behind, orphaned with the wrong global gloss.
-        # `specs` holds exactly ONE spec per (course, token) (it is keyed by
-        # token, first sight wins), so any lexeme sharing that (course, token)
-        # with a DIFFERENT part_of_speech is stale by construction. Delete only
-        # those, scoped to tokens this run actually wrote -- unrelated lexemes
-        # are never touched. Fresh imports prune nothing.
-        wanted_pos: dict[tuple[str, str], set[str]] = {}
-        for raw_spec in specs:
-            cid = courses_by_level[raw_spec["level"]].id
-            wanted_pos.setdefault((cid, raw_spec["token"]), set()).add(
-                raw_spec["part_of_speech"]
-            )
-        pruned = 0
-        for (cid, token), keep in wanted_pos.items():
-            for stale in db.scalars(
-                select(Lexeme).where(
-                    Lexeme.course_id == cid,
-                    Lexeme.language_code == "nl",
-                    Lexeme.token == token,
-                    Lexeme.part_of_speech.notin_(list(keep)),
-                )
-            ).all():
-                db.delete(stale)
-                pruned += 1
         db.commit()
     print(
-        f"Lexeme backfill complete: {created} created, {updated} updated, "
-        f"{pruned} stale-POS pruned."
+        f"Lexeme backfill complete: {created} created, {updated} updated."
     )
     return 0
 

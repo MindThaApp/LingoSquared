@@ -48,18 +48,18 @@ reconciles by deleting, for every (course,token) it wrote, lexeme rows with a PO
 not in the current specs. Verified on the dev DB: `4 created, 4 stale-POS pruned`,
 one row per (course,token), zero orphans.
 
-**⚠️ NOT DEPLOY-SAFE AS WRITTEN — must be fixed before any LIVE re-backfill.** The
-prune's `DELETE` fails with a ForeignKeyViolation once any `practice_items`
-(`fk_practice_items_target_lexeme_id`) or `user_lexeme_srs` row references the
-old-POS lexeme — which is exactly the live case with real users (proven this
-session: a played unit40 checkpoint pinned the old `order` lexeme and blocked its
-deletion). The deploy-correct implementation is **migrate-in-place**: look up the
-existing row by (course,token) and update its `part_of_speech`+gloss+tags on the
-SAME row (preserving the lexeme id, so FKs stay valid), instead of create-new +
-delete-old. Attempted this session but it needs an exact-POS-first lookup to avoid
-a `uq_lexemes_course_language_token_pos` collision on tokens that already carry two
-POS rows — a careful backfill-upsert change (Codex lane) worth doing as part of
-deploy prep. Until then these overrides are dev-verified only.
+**✅ RESOLVED — now deploy-safe (2026-08-02).** The prune was replaced with
+**migrate-in-place**: the write loop first looks up the exact
+(course,language,token,part_of_speech) row (normal tokens + already-correct rows
+update their gloss); if there's no exact-POS match it migrates the token's single
+existing row IN PLACE (sets part_of_speech+gloss+tags on the SAME lexeme id), so
+`practice_items`/`user_lexeme_srs` FKs stay valid — no delete, no orphan. The
+exact-POS-first lookup avoids the `uq_lexemes_course_language_token_pos` collision
+on tokens that already carry two POS rows. Verified on a fresh full dev-DB sync:
+regel→noun "the rule", vroeg→verb "asked", waar→adj "true", werk→noun "work; job",
+was→verb "was; were" — all correct, zero orphans, backfill completed clean. The
+nl_en sibling stays gloss-only (deploy-safe already); its order→noun/correct→verb
+grammatical-POS refinement can now use the same migrate-in-place if wanted.
 
 ## nl_en A2 homograph GLOSS fixes (gloss-only, deploy-safe) — 2026-08-02
 
