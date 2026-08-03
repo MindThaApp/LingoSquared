@@ -7,6 +7,15 @@ Read this when you need to know WHAT EXISTS. Full chronological history is in
 `docs/BUILD_LOG.md`; the current session's state is in the latest
 `docs/SESSION_HANDOFF_*.md`.
 
+## Language-path status (moved from root CLAUDE.md, 2026-08-03)
+
+24 directed en↔X learning paths across nl, fr, de, it, es, ru, zh, fa,
+prs, ar, ko, ja. **ar** approved 2026-07-11 with first content live.
+**ko/ja** approved 2026-07-12 but remain at the groundwork stage:
+typing/IME exercises for ja/ko need a real input-method design decision
+before production-typing exercises ship — recognition/word_order/listen
+types work without it.
+
 ## What's shipped (all live-verified; full detail per phase in BUILD_LOG)
 
 Phases A–F all shipped and live-verified. One line each; the *Invariants*
