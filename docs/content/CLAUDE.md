@@ -216,6 +216,18 @@ built for the automatable ones, but AUTHORS must not reproduce them:
   `tested_text`, NOT `prompt.target_blocks`, so untaught tokens leaked into
   prompts in two separate waves — **hand-check target_blocks** until the
   extended validator lands.
+- **Corollary — NEVER judge "tokens not introduced" findings from a
+  single-unit `validate` run; validate the whole COURSE (all units together,
+  manifest order, per `scripts/content_manifest.txt`).** The introduced-token
+  check accumulates across units, so validating one unit in isolation
+  fabricates ERRORs for every word taught in an earlier unit (a 2026-08-03
+  single-unit sweep reported 1441 phantom "debt" errors corpus-wide; the
+  manifest-driven `verify.sh --content-only` run reported ZERO). Isolated
+  single-unit validation is still fine for a quick 0-error smoke check —
+  phantom errors only ADD false positives, never mask real ones — but any
+  NON-zero token-coverage result must be confirmed course-scoped before
+  acting on it (fixing it, skipping content over it, or logging it as debt).
+  Detail: BUILD_LOG 2026-08-03.
 
 ## Per-lane register pins (prevents cross-unit register drift)
 

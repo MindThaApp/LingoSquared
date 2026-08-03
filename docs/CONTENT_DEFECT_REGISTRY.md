@@ -1546,3 +1546,20 @@ agents: **0 defects each.** ro: subjunctive `să`/conditional `ar`/imperfect-per
 scoping all correct. Cumulative reading-gloss review yield across nl+es+fr+ro+hi:
 **~1 defect / ~180 units** — the recipe is language-agnostic and effectively mature for
 tap-to-gloss on any whitespace-segmented script (Latin, Cyrillic-adjacent, Devanagari).
+
+### 2026-08-03 — CORRECTION: the "token not introduced" debt was a phantom (validation-methodology artifact)
+
+The two entries above recording "pre-existing es/fr realization debt" (and the
+1441-error corpus scan behind them) were WRONG. Those scans validated each unit
+IN ISOLATION; the introduced-token check is COURSE-cumulative, so single-unit
+validation fabricates "tests tokens not introduced" errors for every word taught
+in an earlier unit (es a1_unit09's `y` is taught in a1_unit02 `treinta y cuatro`).
+The authoritative manifest-driven run (`verify.sh --content-only`) reports
+**content: pass, ZERO not-introduced errors corpus-wide** — there is NO deploy-
+blocking token debt in any language. Consequences fixed: es a1_unit09/14
+dictations (skipped over phantom errors) restored; footgun recorded in
+docs/content/CLAUDE.md ("validate the COURSE, not the unit, before acting on
+token-coverage findings"). Codex's fake-teaching-card behavior remains a real
+footgun regardless (fabricated introduced_tokens are wrong even when the error
+they silence is phantom). All 0-defect gloss/dictation review results above are
+unaffected (phantom errors only add false positives, never mask real ones).
