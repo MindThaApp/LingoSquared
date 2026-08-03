@@ -74,8 +74,10 @@ are standing rules, not history:
   path / migration (glosses ride in the existing `ContentItem.content` JSON); the
   320 existing reading cards are untouched. Verified end-to-end (compile 0 errs,
   serve confirmed returning glosses, isolated pytest + vitest green). **Live
-  across nl B1 (11 passages, 259 glosses) + B2 (8 passages, 179 glosses) = 19
-  glossed reading cards** (B1 fresh-context reviewed — launch-gate). Each reading
+  across the full nl A2/B1/B2 stack — A2 (10 passages, 213) + B1 (11, 259) + B2
+  (8, 179) = 29 glossed reading cards, 651 glosses** (A2 + B1 fresh-context
+  reviewed — launch-gate; both SHIP-AS-IS bar one B1 fix). Matches dictation's
+  A2/B1/B2 coverage. Each reading
   lesson = passage + TTS narration + tap-gloss + comprehension questions.
   nl-first (TTS). Known minor: the gloss-key validator's tokenizer splits the
   possessive apostrophe (`collega's`) while the frontend keeps it — a
