@@ -3167,6 +3167,49 @@ def validate_vocabulary_examples(
                         )
 
 
+def validate_reading_glosses(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+) -> None:
+    """Warn when a reading gloss key is not a token in its passage."""
+    teaching_overlays = overlay.get("teaching")
+    if not isinstance(teaching_overlays, dict):
+        return
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for item in lesson.get("teaching", []):
+                if not isinstance(item, dict) or item.get("kind") != "reading":
+                    continue
+                content_key = item.get("content_key")
+                item_overlay = teaching_overlays.get(content_key)
+                if not isinstance(item_overlay, dict):
+                    continue
+                glosses = item_overlay.get("glosses")
+                if not isinstance(glosses, dict):
+                    continue
+                target = item.get("target")
+                target_text = (
+                    target.get("text") if isinstance(target, dict) else None
+                )
+                passage_tokens = (
+                    tokenize(target_text)
+                    if isinstance(target_text, str)
+                    else set()
+                )
+                for token in glosses:
+                    if (
+                        not isinstance(token, str)
+                        or token.casefold() not in passage_tokens
+                    ):
+                        report.warn(
+                            f"overlay.teaching.{content_key}.glosses",
+                            f"gloss key {token!r} is not a whole-word token "
+                            "in the reading card's target.text",
+                        )
+
+
 def validate_audio_references(
     realization: dict[str, Any],
     report: Report,
@@ -3483,6 +3526,10 @@ def compile_teaching_item(
         # against an already-shipped row and update it in place.
         "content_key": item["content_key"],
     }
+
+    glosses = item_overlay.get("glosses")
+    if item["kind"] == "reading" and isinstance(glosses, dict):
+        compiled["glosses"] = copy.deepcopy(glosses)
 
     # AUTHORING_GUIDE.md #19 / CONTRACT.md "Vocabulary-example addition":
     # each realization `example:` entry (a target-language text block)
@@ -3836,6 +3883,7 @@ def validate_documents(
         overlay.get("source_language"),
     )
     validate_vocabulary_examples(realization, overlay, report)
+    validate_reading_glosses(realization, overlay, report)
     validate_underdetermined_production_prompts(realization, overlay, report)
     validate_dialogue_audio_teaching_cards(realization, report)
     validate_listen_select_same_speaker_audio_options(realization, overlay, report)

@@ -663,7 +663,7 @@ def lessons(unit_id:str,db:Session=Depends(get_db)):
 def lesson(lesson_id:str,db:Session=Depends(get_db)):
     l=db.get(Lesson,lesson_id)
     if not l: fail(404,"lesson_not_found","Lesson not found")
-    teaching=[{"kind":item.kind,"title":item.title or None,"text_blocks":item.content.get("text_blocks",[]),"note":item.content.get("note"),"examples":item.content.get("examples")} for item in l.teaching_items]
+    teaching=[{"kind":item.kind,"title":item.title or None,"text_blocks":item.content.get("text_blocks",[]),"note":item.content.get("note"),"examples":item.content.get("examples"),**({"glosses":item.content["glosses"]} if "glosses" in item.content else {})} for item in l.teaching_items]
     return {"id":l.id,"unit_id":l.unit_id,"title":l.title,"teaching":teaching,"exercises":[{"id":e.id,"type":e.type,"order":e.order,"prompt":e.prompt} for e in l.exercises]}
 @router.post("/lessons/{lesson_id}/start",response_model=StartOut)
 def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
