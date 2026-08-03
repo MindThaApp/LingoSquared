@@ -55,7 +55,8 @@ the API-provided field.
 `word_order`, `matching_pairs`, `listening_placeholder`,
 `speaking_placeholder`, `dialogue_response`, `grammar_check`, `flashcard`,
 `reading_comprehension`, `writing_prompt`, `listen_select`, `listen_type`,
-`speak_response`, `listen_order`, `dialogue_comprehension`, `speak_repeat`
+`dictation`, `speak_response`, `listen_order`, `dialogue_comprehension`,
+`speak_repeat`
 
 Placeholder types (`listening_placeholder`, `speaking_placeholder`) render
 as "coming soon" in the frontend — no audio/mic pipeline exists for those
@@ -73,6 +74,15 @@ shape (`listen_select`≈`multiple_choice`, `listen_type`≈`translation`,
 `speak_response`/`dialogue_response` share a component) — see
 `ExerciseRenderer.tsx` for the exact dispatch table, which is the
 authoritative mapping.
+
+`dictation` (added 2026-08-02) ≈ `listen_type` (learner hears a
+target-language sentence via `audio_text`/`media_asset_key` and types what
+they heard, no source text shown — authored with `target_blocks: []`, so it
+renders through the `Translation` component like `listen_type`) but is graded
+**orthography-strict by type**: the backend forces strict spelling grading for
+`dictation` regardless of the Latin-script typo-tolerance default, so a
+single-letter misspelling grades incorrect. See
+`docs/DICTATION_EXERCISE_SPEC.md`.
 
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
 + `audio_language_code` (a target-language phrase to synthesize/play for

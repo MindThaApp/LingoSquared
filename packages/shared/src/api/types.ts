@@ -87,6 +87,7 @@ export type ExerciseType =
   | "writing_prompt"
   | "listen_select"
   | "listen_type"
+  | "dictation"
   | "speak_response"
   | "listen_order"
   | "dialogue_comprehension"

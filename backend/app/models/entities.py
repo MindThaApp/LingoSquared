@@ -47,6 +47,7 @@ class ExerciseType(str, enum.Enum):
     writing_prompt = "writing_prompt"
     listen_select = "listen_select"
     listen_type = "listen_type"
+    dictation = "dictation"
     listen_order = "listen_order"
     dialogue_comprehension = "dialogue_comprehension"
     speak_repeat = "speak_repeat"

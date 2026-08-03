@@ -293,6 +293,7 @@ VALID_EXERCISE_TYPES = {
     "writing_prompt",
     "listen_select",
     "listen_type",
+    "dictation",
     "listen_order",
     "dialogue_comprehension",
     "speak_repeat",
@@ -3619,6 +3620,7 @@ def compile_exercise(
     if exercise["type"] in {
         "listen_select",
         "listen_type",
+        "dictation",
         "listen_order",
     }:
         prompt["audio_text"] = exercise["tested_text"]
