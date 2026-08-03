@@ -132,3 +132,14 @@ feasible language:
    = introduce the tokens earlier or adjust exercises (Codex realization lane).
 2. **fa/prs** reading glosses + dictation (blocked on native review + TTS).
 3. **Dev-DB re-import** of all new content (still deferred; deploy blocked).
+
+## Update 4 — CORRECTION: no token-not-introduced debt exists; es dictations restored
+
+The "pre-existing realization token debt" flagged in Updates 2-3 was a phantom —
+an artifact of validating units in isolation (the check is course-cumulative;
+manifest-driven `verify.sh --content-only` = content: pass, 0 such errors).
+Consequences: es a1_unit09 (`dictation_si_asi_es`) + a1_unit14
+(`dictation_tiene_dos_dormitorios`) restored (they'd been skipped over phantom
+errors); registry correction appended; methodology footgun added to
+docs/content/CLAUDE.md. **There is no deploy-blocking content debt** — the full
+corpus (incl. all this session's 9-language content) passes the real pipeline.
