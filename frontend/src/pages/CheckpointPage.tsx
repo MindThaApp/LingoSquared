@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CheckpointApi } from "@lingo/shared/api/endpoints";
@@ -35,6 +35,11 @@ export function CheckpointPage() {
   const { t } = useTranslation();
   const { unitId = "" } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  // Threaded via route state when the checkpoint is entered from a course
+  // path; may be absent, in which case the drill target still seeds the
+  // feed and PracticeFeedPage resolves the course itself.
+  const courseId = (location.state as { courseId?: string } | null)?.courseId;
 
   const [phase, setPhase] = useState<Phase>("loading");
   const [items, setItems] = useState<PracticeItem[]>([]);
@@ -193,6 +198,17 @@ export function CheckpointPage() {
             </ul>
           </div>
         )}
+        {finalResult.weak_lexeme_ids?.length ? (
+          <div style={{ marginTop: 24 }}>
+            <Link
+              className="btn"
+              to="/practice"
+              state={{ courseId, targetLexemeIds: finalResult.weak_lexeme_ids }}
+            >
+              {t("checkpoint.drill_weak_outcomes")}
+            </Link>
+          </div>
+        ) : null}
         <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24 }}>
           <Link className="btn btn-secondary" to={`/units/${unitId}`}>
             {t("checkpoint.back_to_lessons")}

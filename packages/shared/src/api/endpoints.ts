@@ -248,13 +248,28 @@ export const CheckpointApi = {
 };
 
 export const PracticeApi = {
-  batch: (courseId: string, size?: number, mode?: PracticeBatchMode) =>
-    post<PracticeBatchResult>(
+  // `options.types` filters the batch to a subset of the six drillable
+  // exercise types; `options.targetLexemeIds` seeds a drill of just those
+  // lexemes (e.g. the weak outcomes surfaced by a failed checkpoint). Both
+  // are optional — existing callers pass neither and behave unchanged.
+  batch: (
+    courseId: string,
+    size?: number,
+    mode?: PracticeBatchMode,
+    options?: { types?: string[]; targetLexemeIds?: string[] },
+  ) => {
+    const body: Record<string, unknown> = {};
+    if (size) body.size = size;
+    if (mode && mode !== "mixed") body.mode = mode;
+    if (options?.types?.length) body.types = options.types;
+    if (options?.targetLexemeIds?.length) {
+      body.target_lexeme_ids = options.targetLexemeIds;
+    }
+    return post<PracticeBatchResult>(
       `/practice/${courseId}/batch`,
-      size || (mode && mode !== "mixed")
-        ? { ...(size ? { size } : {}), ...(mode && mode !== "mixed" ? { mode } : {}) }
-        : undefined,
-    ),
+      Object.keys(body).length > 0 ? body : undefined,
+    );
+  },
   answer: (itemId: string, response: AnswerResponse) =>
     post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
   // Endless Practice items are PracticeItem rows, not Exercise rows -
