@@ -95,6 +95,13 @@ TOKEN_RE = re.compile(
     r"[\w\u200c]+",
     re.UNICODE,
 )
+READING_TOKEN_RE = re.compile(
+    rf"(?:[{DEVANAGARI_WORD_CHARS}]"
+    rf"[\w\u200c{DEVANAGARI_WORD_CHARS}]*|[\w\u200c]+)"
+    rf"(?:['’\-](?:[{DEVANAGARI_WORD_CHARS}]"
+    rf"[\w\u200c{DEVANAGARI_WORD_CHARS}]*|[\w\u200c]+))*",
+    re.UNICODE,
+)
 SPEAKER_LABEL_RE = re.compile(
     r"^[ \t]*(?P<label>[^\n:]{1,40}?)[ \t]*:",
     re.MULTILINE,
@@ -243,6 +250,14 @@ def tokenize(text: str) -> set[str]:
     return {
         token.casefold()
         for token in TOKEN_RE.findall(text)
+        if token.strip()
+    }
+
+
+def tokenize_reading(text: str) -> set[str]:
+    return {
+        token.casefold()
+        for token in READING_TOKEN_RE.findall(text)
         if token.strip()
     }
 
@@ -3194,7 +3209,7 @@ def validate_reading_glosses(
                     target.get("text") if isinstance(target, dict) else None
                 )
                 passage_tokens = (
-                    tokenize(target_text)
+                    tokenize_reading(target_text)
                     if isinstance(target_text, str)
                     else set()
                 )
