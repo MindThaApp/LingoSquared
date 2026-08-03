@@ -11980,3 +11980,80 @@ review-cleared growth.
 
 Full chronological build log, every bug found and fixed, and the
 reasoning behind every past decision: `docs/BUILD_LOG.md`.
+
+## Detail relocated from root CLAUDE.md during the 2026-08-03 restructure (396 → ≤200 lines)
+
+Ramin set a hard 200-line ceiling on root `CLAUDE.md` (2026-08-03). The
+rules stayed in root in compressed form; the full incident narratives
+behind the compressed bullets that were not already written up elsewhere
+in this log are preserved verbatim here.
+
+### Codex dispatch: pass the prompt via `--prompt-file`, never inline (2026-07-12)
+
+Backticks in an inline prompt are executed by the shell as command
+substitution and silently deleted from the prompt — a dispatch went out
+with `tested_text` and `prompt.target_blocks` stripped out of it (the
+shell printed `command not found: tested_text` and Codex started anyway
+with a mangled task). The prompt file also survives quoting hell.
+
+### Codex dispatch: a "failed" task may still have done most of the work (2026-07-12)
+
+One task reported failed after ~20 min (ran out mid-turn) but had left
+four complete validators in the working tree. ALWAYS `git status` +
+`git diff --stat` before discarding or re-dispatching — and verify the
+partial work yourself rather than assuming it's junk.
+
+### Codex dispatch: never accept a validator without running it on the full corpus (2026-07-12)
+
+Codex shipped a validator that emitted **360 false positives** (it
+tokenized English gloss text and even content-key fragments like
+`lesson01` as untaught target-language words) while its three sibling
+validators were genuinely good. Make "zero false positives on the
+current corpus" an explicit acceptance criterion in the prompt, then
+re-run it yourself. A noisy hard-error validator is worse than none —
+it trains everyone to ignore the validator.
+
+### Codex dispatch: tests written against the WRONG error envelope (2026-07-12)
+
+Codex asserted FastAPI's default `{"detail": ...}`; this app reshapes
+every HTTPException to `{"error": {code, message}}` in `main.py`. Its
+*endpoint* was correct and its *test* was wrong — only running pytest
+reveals which. Codex has no Docker: running the suite is always the
+coordinator's job.
+
+### Codex dispatch: validator-gaming — masking a validation error with bogus content (2026-08-03, es A1 u09/u14)
+
+Codex will MASK a validation error with bogus content to satisfy a "0
+errors" acceptance criterion. Dispatched to add ONLY a dictation
+exercise to es units, it also silently added teaching `phrase` cards
+whose `introduced_tokens` listed words ABSENT from the card's own text
+(e.g. a card "Sigue derecho por esta calle" declaring it introduces
+`y`), purely to silence a pre-existing "token not introduced" error on
+an unrelated exercise. Caught only by diffing the realization for
+non-dictation additions (`grep '^+' | grep 'kind:\|introduced_tokens'`).
+Always audit a scoped Codex content task for out-of-scope additions,
+and put an explicit STRICT-SCOPE rule in the prompt: "add ONLY X; if a
+validation error blocks you, SKIP and report — never mask it." A
+skipped unit is correct; a masked error is a new defect.
+
+### Tiered review: the sampling experiment that was tried and reversed (2026-07-12)
+
+"Mature lane" is per-RECIPE, not per-language — a lane does NOT stay
+mature when it moves to new TOPICS. Learned the hard way 2026-07-12:
+it/ru were sampled 1-in-3 on the strength of zero-defect A1 13-15
+reviews, so Italian 16-18 was set to merge on validators alone. The
+Russian sample came back with a NEW bug class, which forced a full
+Italian review — and Italian turned out to have **10 compiler-invisible
+defects** (it validated at 0 errors), including three exercises that
+graded a CORRECT learner answer as wrong. Sampling would have shipped
+every one of them. New topics on a proven recipe are still new
+territory; sample only within an unchanged recipe AND unchanged topic
+family.
+
+### verify.sh: exit code vs printed summary (2026-08-01)
+
+Judge `scripts/verify.sh` by the printed `content: pass/fail` summary,
+NOT its exit code — verify.sh can exit 0 while a per-course `COMPILE
+FAILED` (validate-passes-but-assembly-fails, e.g. a matching_pairs
+mirror break) sits in the log. Always grep the output for `COMPILE
+FAILED`/`content:  fail`.
