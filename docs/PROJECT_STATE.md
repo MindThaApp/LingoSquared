@@ -51,6 +51,17 @@ are standing rules, not history:
   (≥80% passes), consolidates SRS only for untracked lexemes (0.5, +3d),
   idempotent, 1-hr retake delay (advisory lock + `429`);
   `GET /courses/{id}/units` returns `checkpoint_passed`. Migration 0012.
+- **Phase H (dictation exercise type)** — 2026-08-03 (migration 0027): hear a
+  TTS target-language sentence (no source text) → type it, graded
+  **orthography-strict by type** (a 1-char typo is wrong, unlike tolerant
+  `listen_type`; author `orthography_strict:false` overrides). Reuses
+  `Translation.tsx` (no new component); registered across all 9 sites
+  (enum/DB-constraint/compiler/grading/shared-union/renderer/PROMPTS-test/
+  CONTRACT). Course-content only (not Endless Practice); TTS-only languages
+  (nl now; fa once Azure key set; NOT prs). Verified: strict grading end-to-end
+  + full pytest + PROMPTS guardrail. **Live in all 11 en-nl B1 units** (22
+  exercises, reusing taught sentences + existing audio). Spec:
+  `docs/DICTATION_EXERCISE_SPEC.md`; authoring: AUTHORING_GUIDE §14a.
 - **E4 (web push)** — 2026-07-07 (`784da03`, migration 0016): VAPID
   subscribe/unsubscribe + admin-triggerable notify-due-reviews. No cron.
 - **Mic-based speaking + STT** — `speak_response`/`speak_repeat` capture +
@@ -146,7 +157,8 @@ through in a live browser yet:
 ## What's built and verified live
 
 Auth; all 10 languages (fa/prs fully separate, correct RTL + script
-metadata); courses → units → lessons → all 19 exercise types; SM-2 review
+metadata); courses → units → lessons → all 20 exercise types (dictation added
+2026-08-03); SM-2 review
 (being replaced by lexeme-level SRS); gamification (XP/streak/achievements);
 reading/writing vs. speaking sections with server-enforced unlock; CEFR
 A1–C2; teaching phase before exercises; in-app content-issue reporting +
