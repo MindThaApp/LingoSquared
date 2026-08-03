@@ -264,6 +264,9 @@ def _teaching_item_fields(card, course_id: str, lesson_id: str, teaching_order: 
                 if card.examples
                 else {}
             ),
+            # Reading-track tap glosses are author-provided and live in
+            # the existing JSON payload. Omit the key for every legacy card.
+            **({"glosses": card.glosses} if card.glosses is not None else {}),
         },
         "content_key": card.content_key,
     }
