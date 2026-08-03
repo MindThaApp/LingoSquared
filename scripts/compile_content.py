@@ -196,6 +196,23 @@ PROMPT_TARGET_EXERCISE_TYPES = {
     "dialogue_response",
     "fill_in_blank",
 }
+GERMAN_FREE_TEXT_EXERCISE_TYPES = {
+    "writing_prompt",
+    "dialogue_response",
+    "listen_type",
+}
+GERMAN_TRANSLITERATION_TABLE = str.maketrans(
+    {
+        "ä": "ae",
+        "ö": "oe",
+        "ü": "ue",
+        "ß": "ss",
+        "Ä": "Ae",
+        "Ö": "Oe",
+        "Ü": "Ue",
+    }
+)
+GERMAN_TRANSLITERATION_CHARACTERS = frozenset("äöüßÄÖÜ")
 
 
 class Report:
@@ -1772,6 +1789,38 @@ def _single_correct_answer_values(
     return answers
 
 
+def _canonical_and_accepted_string_answers(
+    exercise_overlay: dict[str, Any],
+) -> tuple[str | None, set[str]]:
+    """Return the grader's canonical string and all accepted strings."""
+    if "correct_response" in exercise_overlay:
+        value = exercise_overlay["correct_response"]
+        if isinstance(value, str):
+            return value, {value}
+        return None, set()
+
+    canonical = None
+    accepted: set[str] = set()
+    variants = exercise_overlay.get("accepted_answers", [])
+    if not isinstance(variants, list):
+        return canonical, accepted
+
+    for variant in variants:
+        if isinstance(variant, dict):
+            value = variant.get("value")
+            status = variant.get("status", "correct")
+        else:
+            value = variant
+            status = "correct"
+        if not isinstance(value, str):
+            continue
+        accepted.add(value)
+        if canonical is None and status == "correct":
+            canonical = value
+
+    return canonical, accepted
+
+
 def _explicit_word_count(value: Any) -> int | None:
     if not isinstance(value, str):
         return None
@@ -1947,6 +1996,128 @@ def _media_assets_by_key(
         if key:
             assets[key] = item
     return assets
+
+
+def _media_asset_script_or_text(
+    item: dict[str, Any],
+) -> tuple[str, str | None]:
+    """Return an authored scalar transcript without normalizing its bytes."""
+    for field in ("script", "text"):
+        value = item.get(field)
+        if isinstance(value, str):
+            return field, value
+    return "script/text", None
+
+
+def _utf8_value(value: Any) -> str:
+    if not isinstance(value, str):
+        return repr(value)
+    return f"{value!r} (UTF-8 {value.encode('utf-8')!r})"
+
+
+def validate_dictation_byte_equality(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """Warn when strict dictation grading differs from the audio transcript."""
+    assets = _media_assets_by_key(realization)
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "dictation":
+                    continue
+
+                content_key = exercise.get("content_key", "<unknown>")
+                media_key = exercise.get("media_asset_key")
+                asset = assets.get(media_key)
+                asset_field = "script/text"
+                asset_text = None
+                if isinstance(asset, dict):
+                    asset_field, asset_text = _media_asset_script_or_text(asset)
+
+                exercise_overlay = exercise_overlays.get(content_key, {})
+                if not isinstance(exercise_overlay, dict):
+                    exercise_overlay = {}
+                correct_response, _ = _canonical_and_accepted_string_answers(
+                    exercise_overlay
+                )
+                tested_text = exercise.get("tested_text")
+
+                if (
+                    isinstance(tested_text, str)
+                    and isinstance(asset_text, str)
+                    and isinstance(correct_response, str)
+                    and tested_text == asset_text == correct_response
+                ):
+                    continue
+
+                report.warn(
+                    f"realization.exercises.{content_key}",
+                    "dictation byte equality failed for content_key "
+                    f"{content_key!r}: tested_text "
+                    f"{_utf8_value(tested_text)}; media asset "
+                    f"{media_key!r} {asset_field} "
+                    f"{_utf8_value(asset_text)}; overlay correct_response "
+                    f"{_utf8_value(correct_response)}; all three values "
+                    "must be byte-identical",
+                )
+
+
+def validate_german_transliteration_variants(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """Warn when German typed answers omit the full ASCII transliteration."""
+    if realization.get("target_language") != "de":
+        return
+
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        return
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if (
+                    exercise.get("type")
+                    not in GERMAN_FREE_TEXT_EXERCISE_TYPES
+                ):
+                    continue
+
+                content_key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(content_key, {})
+                if not isinstance(exercise_overlay, dict):
+                    continue
+                canonical, accepted = _canonical_and_accepted_string_answers(
+                    exercise_overlay
+                )
+                if (
+                    canonical is None
+                    or not GERMAN_TRANSLITERATION_CHARACTERS.intersection(
+                        canonical
+                    )
+                ):
+                    continue
+
+                transliteration = canonical.translate(
+                    GERMAN_TRANSLITERATION_TABLE
+                )
+                if transliteration in accepted:
+                    continue
+
+                report.warn(
+                    f"overlay.exercises.{content_key}",
+                    "German transliteration variant missing for content_key "
+                    f"{content_key!r}: canonical accepted answer "
+                    f"{canonical!r}; missing accepted variant "
+                    f"{transliteration!r}",
+                )
 
 
 def normalize_speaker(value: Any) -> str | None:
@@ -3900,6 +4071,8 @@ def validate_documents(
     validate_vocabulary_examples(realization, overlay, report)
     validate_reading_glosses(realization, overlay, report)
     validate_underdetermined_production_prompts(realization, overlay, report)
+    validate_dictation_byte_equality(realization, overlay, report)
+    validate_german_transliteration_variants(realization, overlay, report)
     validate_dialogue_audio_teaching_cards(realization, report)
     validate_listen_select_same_speaker_audio_options(realization, overlay, report)
     validate_listen_audio_contains_tested_text(realization, report)
