@@ -64,6 +64,7 @@ function PathNode({
           className="btn btn-secondary"
           style={{ marginTop: 6, fontSize: "0.85rem", padding: "4px 10px" }}
           to={`/units/${unit.id}/checkpoint`}
+          state={{ courseId }}
         >
           {t("course_units.test_out")}
         </Link>

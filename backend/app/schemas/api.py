@@ -246,7 +246,21 @@ class PracticeArtifactImport(BaseModel):
     target_language:str
     packs:list[PracticePackImport]
 class PracticeImportOut(BaseModel): imported_templates:int; updated_templates:int
-class PracticeBatchIn(BaseModel): size:int=Field(default=10,ge=1,le=20); mode:PracticeBatchMode="mixed"
+class PracticeBatchIn(BaseModel):
+    size:int=Field(default=10,ge=1,le=20)
+    mode:PracticeBatchMode="mixed"
+    types:list[str]|None=None
+    target_lexeme_ids:list[str]|None=None
+
+    @model_validator(mode="after")
+    def valid_template_types(self):
+        if self.types is not None:
+            valid_types = {
+                "multiple_choice", "fill_in_blank", "word_order",
+                "translation", "matching_pairs", "listen_select",
+            }
+            self.types = [item_type for item_type in self.types if item_type in valid_types]
+        return self
 class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
 class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None
@@ -310,6 +324,7 @@ class CheckpointResultOut(BaseModel):
     passed: bool|None
     score: float|None
     weak_outcomes: list[str]
+    weak_lexeme_ids: list[str] = []
     checkpoint_passed: bool
 class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str; speaking_rate:float|None=Field(default=None,ge=0.25,le=2.0)
 class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]
