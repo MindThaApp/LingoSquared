@@ -70,3 +70,23 @@ All features: real backend pytest (isolated `lingosquared_test` DB) green; full
 `npm run build` green; live browser play-through of showcase (gloss+comprehension
 grading+dictation) and practice type-filter. Drill-weak-outcomes backend-tested;
 its UI link is build-verified (not clicked live — needs a wrong-answered checkpoint).
+
+## Update — nl reading + dictation BOTH 100% complete; es reading glosses started
+
+- **nl reading track: 100%** (A1/A2/B1/B2). A1 = 62 units glossed across 7 waves,
+  reviewed by 4 agents: 1 defect / 62 units (eruit, fixed) + 1 clarity note (half).
+  Registry logged. Commits: 00662de8, 437a79ef, 708d0c66, 57523635, (eruit fix).
+- **nl dictation: 100%** (A1/A2/B1/B2). A1 = 62 dictation exercises (pilot 06-10 +
+  waves D2-D7), each reusing a single-sentence audio asset, byte-matched,
+  orthography_strict. Verified 0 errors + scripted checks: all audio single-sentence
+  (no dialogue), all sentences taught in-unit. Commits: (pilot), 0359d510, (D4-D5),
+  86de7593.
+- **Dev-DB re-import DEFERRED:** the new A1/B2 content is committed but NOT re-imported
+  to the dev DB (import is API-only `POST /admin/content/import` from a compiled
+  ImportRequest — no one-liner; deploy blocked anyway; showcase already demos on
+  B2 content that IS in the dev DB). Re-import when deploying.
+- **NEXT / in-flight:** es (Spanish) reading-gloss PILOT dispatched (en-es A1 units
+  03-12) — es has 39 reading-card units, fr has 9, both un-glossed and now unparked
+  (nl done). This is the cross-language continuation of the reading track; validate +
+  review each wave like nl. de/it/ru have NO reading cards (nothing to gloss there).
+- Codex used HEAVILY per Ramin's directive: ~19 tasks this session, never quota-erpred.
