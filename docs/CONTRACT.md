@@ -547,6 +547,39 @@ teaching card (each entry's blocks through the standard `TextBlockList`,
 so per-sentence TTS comes for free); cards without `examples` render
 exactly as before.
 
+**Reading-track tap-to-gloss addition (2026-08-03, additive, no breaking
+change; `docs/READING_TRACK_SPEC.md`)**: a `reading` teaching card may
+carry an optional `glosses` map — `{ token → in-context English gloss }`,
+where each key is the **exact surface token** (including
+capitalization/inflection) as it appears in the card's passage
+(`text_blocks[].text`), and each value is a short sense-in-context English
+gloss. It is authored in the overlay (source-direction) alongside the
+whole-passage `gloss`, embedded by the compiler, and served on the
+teaching item:
+
+```json
+{
+  "kind": "reading",
+  "text_blocks": [
+    { "text": "Kasia verandert van baan omdat ze verhuist.", "language_code": "nl", "direction": "ltr" }
+  ],
+  "glosses": {
+    "verandert": "changes",
+    "baan": "job",
+    "verhuist": "is moving"
+  }
+}
+```
+
+Only content words worth helping with are glossed — NOT every token.
+Frontend: a `reading` card whose `glosses` map is present and non-empty
+renders its passage through `GlossableText` (each glossed surface token is
+tappable → a small popover shows the English gloss; non-glossed tokens and
+all separators render as plain text, RTL-aware via the block's
+`direction`), keeping the usual `SpeakButton` narration. Every other card
+kind — and any `reading` card without a `glosses` map (the existing
+corpus) — renders exactly as before through the plain `TextBlockList`.
+
 **Phase D additions (2026-07-05, additive, no breaking change):**
 
 - Every `text_block` (in `teaching` and in exercise `prompt`s) gains an

@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import type { TeachingCard } from "@lingo/shared/api/types";
 import { TextBlockList } from "./TextBlock";
 import { EmphasizedText } from "./EmphasizedText";
+import { GlossableText } from "./GlossableText";
+import { SpeakButton } from "./SpeakButton";
 
 const KIND_KEY: Record<TeachingCard["kind"], string> = {
   vocabulary: "teaching_card.vocabulary",
@@ -29,11 +31,34 @@ export function TeachingCardView({ card }: { card: TeachingCard }) {
   const { t } = useTranslation();
   const showTitle = card.title && !KINDS_WITH_REDUNDANT_TITLE.has(card.kind);
   const examples = card.examples ?? [];
+  // Reading-track tap-to-gloss (docs/READING_TRACK_SPEC.md §5): a `reading`
+  // card that carries a non-empty authored `glosses` map renders its passage
+  // through GlossableText (tappable per-word popovers) + the usual SpeakButton
+  // narration. Every other card — and any reading card without glosses (the
+  // 320 existing ones) — falls back to the unchanged plain TextBlockList.
+  const glossedReadingBlocks =
+    card.kind === "reading" && card.glosses && Object.keys(card.glosses).length > 0
+      ? card.text_blocks
+      : null;
   return (
     <div className="card" style={{ margin: "16px 0" }}>
       <span className="badge">{t(KIND_KEY[card.kind])}</span>
       {showTitle && <h3 style={{ margin: "10px 0 8px" }}>{card.title}</h3>}
-      <TextBlockList blocks={card.text_blocks} />
+      {glossedReadingBlocks ? (
+        <div className="text-block-list">
+          {glossedReadingBlocks.map((block, i) => (
+            <span className="text-block-row" key={i}>
+              {block.speaker && <span className="speaker-label">{block.speaker}:</span>}
+              <span className="text-block">
+                <GlossableText block={block} glosses={card.glosses!} />
+              </span>
+              <SpeakButton text={block.text} languageCode={block.language_code} />
+            </span>
+          ))}
+        </div>
+      ) : (
+        <TextBlockList blocks={card.text_blocks} />
+      )}
       {examples.length > 0 && (
         <div className="teaching-examples">
           <span className="teaching-examples-label">

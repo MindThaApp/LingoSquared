@@ -141,6 +141,11 @@ export interface TeachingCard {
   text_blocks: TextBlock[];
   note?: string;
   examples?: TeachingExample[] | null;
+  // Reading-track tap-to-gloss (docs/READING_TRACK_SPEC.md §4–5). Present
+  // only on `reading` cards whose overlay authors a per-word gloss map:
+  // exact-surface-token -> in-context English gloss. Absent on all other
+  // cards (and on the 320 existing reading cards), which render unchanged.
+  glosses?: Record<string, string>;
 }
 
 export interface Lesson {

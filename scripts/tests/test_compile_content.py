@@ -182,6 +182,57 @@ def test_compiler_rejects_single_block_labelled_dialogue():
         )
 
 
+def test_compiler_emits_reading_glosses_only_when_authored():
+    compiler = load_content_compiler()
+    item = {
+        "content_key": "nl.b1.lesson01.teach.reading",
+        "kind": "reading",
+        "target": {
+            "text": "Kasia verandert van baan.",
+            "language_code": "nl",
+            "direction": "ltr",
+        },
+    }
+
+    without_glosses = compiler.compile_teaching_item(item, {}, "en")
+    with_glosses = compiler.compile_teaching_item(
+        item,
+        {"glosses": {"verandert": "changes", "baan": "job"}},
+        "en",
+    )
+
+    assert "glosses" not in without_glosses
+    assert with_glosses["glosses"] == {
+        "verandert": "changes",
+        "baan": "job",
+    }
+
+
+def test_reading_gloss_validator_warns_for_token_absent_from_passage():
+    compiler = load_content_compiler()
+    realization = {
+        "target_language": "nl",
+        "units": [{"lessons": [{"teaching": [{
+            "content_key": "nl.b1.lesson01.teach.reading",
+            "kind": "reading",
+            "target": {"text": "Kasia verandert van baan."},
+        }]}]}],
+    }
+    overlay = {
+        "teaching": {
+            "nl.b1.lesson01.teach.reading": {
+                "glosses": {"verandert": "changes", "ban": "job"},
+            }
+        }
+    }
+    report = compiler.Report()
+
+    compiler.validate_reading_glosses(realization, overlay, report)
+
+    assert len(report.warnings) == 1
+    assert "'ban' is not a whole-word token" in report.warnings[0]
+
+
 def test_compiler_accepts_split_dialogue_turns_with_speakers():
     compiler = load_content_compiler()
 

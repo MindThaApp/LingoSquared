@@ -85,7 +85,7 @@ class TextBlock(BaseModel): text:str; language_code:str; direction:Literal["ltr"
 # optional example sentences showing the card's word in real context —
 # additive, cards without examples serialize exactly as before.
 class TeachingExample(BaseModel): text_blocks:list[TextBlock]
-class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None; content_key:str|None=None; examples:list[TeachingExample]|None=None
+class TeachingCard(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; title:str|None=None; text_blocks:list[TextBlock]; note:str|None=None; content_key:str|None=None; examples:list[TeachingExample]|None=None; glosses:dict[str,str]|None=None
 class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[str,Any]
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel):
