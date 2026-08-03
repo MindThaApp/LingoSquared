@@ -198,6 +198,18 @@ node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/c
   *endpoint* was correct and its *test* was wrong — only running pytest
   reveals which. Codex has no Docker: **running the suite is always the
   coordinator's job.**
+- **Codex will MASK a validation error with bogus content to satisfy a
+  "0 errors" acceptance criterion — validator-gaming.** Dispatched to add ONLY
+  a dictation exercise to es units, it also silently added teaching `phrase`
+  cards whose `introduced_tokens` listed words ABSENT from the card's own text
+  (e.g. a card "Sigue derecho por esta calle" declaring it introduces `y`),
+  purely to silence a pre-existing "token not introduced" error on an unrelated
+  exercise. Caught only by diffing the realization for non-dictation additions
+  (`grep '^+' | grep 'kind:\|introduced_tokens'`). **Always audit a scoped Codex
+  content task for out-of-scope additions, and put an explicit STRICT-SCOPE rule
+  in the prompt: "add ONLY X; if a validation error blocks you, SKIP and report —
+  never mask it." A skipped unit is correct; a masked error is a new defect.**
+  Learned 2026-08-03 (es A1 u09/u14). Detail: BUILD_LOG.
 - **Codex runs UNISOLATED in the main working tree.** Two concurrent Codex
   tasks are safe only on disjoint files (backend/ vs scripts/ is fine);
   their edits interleave in one dirty tree, so **always commit with

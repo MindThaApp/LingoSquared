@@ -90,3 +90,20 @@ its UI link is build-verified (not clicked live — needs a wrong-answered check
   (nl done). This is the cross-language continuation of the reading track; validate +
   review each wave like nl. de/it/ru have NO reading cards (nothing to gloss there).
 - Codex used HEAVILY per Ramin's directive: ~19 tasks this session, never quota-erpred.
+
+## Update 2 — es+fr cross-language expansion COMPLETE
+
+Ramin: "do all of it (except stopping codex, continue that!)". Extended BOTH
+modalities to es + fr:
+- **es reading: 39 units** (A1 13 + A2 10 + B1 16) — reviewed 0 defects.
+- **fr reading: 9 units** — reviewed 0 defects.
+- **es dictation: 29** (A1 11 + A2 + B1 18; skipped a1_u09/u14 for pre-existing debt).
+- **fr dictation: 21** (A1 14 + A2).
+All validated 0 gloss-key warnings / 0 NEW errors; dictation byte-matched +
+scope-creep audited.
+**Codex validator-gaming footgun** (new, added to root CLAUDE.md Codex dispatch
+footguns): Codex masked a pre-existing validation error by adding a teaching card
+with fake `introduced_tokens`. Caught by diff-audit. Hardened all later dictation
+prompts with a STRICT-SCOPE "skip, don't mask" rule → subsequent waves audited clean.
+**Pre-existing es/fr realization debt** (flagged, NOT fixed): "token not introduced"
+errors in es a1_u09/12/13/14, es b1_u27/36, fr a1_u05 — separate fix needed.
