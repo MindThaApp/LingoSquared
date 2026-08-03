@@ -361,6 +361,146 @@ def test_audio_distractor_validator_accepts_unheard_fixed_distractor():
     assert report.warnings == []
 
 
+def dictation_documents(tested_text, asset_text, correct_response):
+    content_key = "de.test.exercise.dictation_bank"
+    return (
+        {
+            "target_language": "de",
+            "media_assets": [
+                {
+                    "content_key": "de.test.audio.bank",
+                    "script": asset_text,
+                }
+            ],
+            "units": [
+                {
+                    "lessons": [
+                        {
+                            "exercises": [
+                                {
+                                    "content_key": content_key,
+                                    "type": "dictation",
+                                    "tested_text": tested_text,
+                                    "media_asset_key": "de.test.audio.bank",
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+        },
+        {
+            "exercises": {
+                content_key: {"correct_response": correct_response}
+            }
+        },
+    )
+
+
+def test_dictation_byte_equality_validator_warns_on_punctuation_difference():
+    compiler = load_content_compiler()
+    realization, overlay = dictation_documents(
+        "Wo ist die Bank",
+        "Wo ist die Bank?",
+        "Wo ist die Bank",
+    )
+    report = compiler.Report()
+
+    compiler.validate_dictation_byte_equality(realization, overlay, report)
+
+    assert report.errors == []
+    assert len(report.warnings) == 1
+    warning = report.warnings[0]
+    assert "de.test.exercise.dictation_bank" in warning
+    assert "tested_text 'Wo ist die Bank' (UTF-8 b'Wo ist die Bank')" in warning
+    assert (
+        "media asset 'de.test.audio.bank' script "
+        "'Wo ist die Bank?' (UTF-8 b'Wo ist die Bank?')" in warning
+    )
+
+
+def test_dictation_byte_equality_validator_accepts_identical_bytes():
+    compiler = load_content_compiler()
+    realization, overlay = dictation_documents(
+        "Wo ist die Bank?",
+        "Wo ist die Bank?",
+        "Wo ist die Bank?",
+    )
+    report = compiler.Report()
+
+    compiler.validate_dictation_byte_equality(realization, overlay, report)
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
+def german_typed_documents(accepted_answers):
+    content_key = "de.test.exercise.write_umlauts"
+    return (
+        {
+            "target_language": "de",
+            "units": [
+                {
+                    "lessons": [
+                        {
+                            "exercises": [
+                                {
+                                    "content_key": content_key,
+                                    "type": "writing_prompt",
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+        },
+        {"exercises": {content_key: {"accepted_answers": accepted_answers}}},
+    )
+
+
+def test_german_transliteration_validator_warns_with_missing_variant():
+    compiler = load_content_compiler()
+    realization, overlay = german_typed_documents(
+        [{"value": "Ärger über Größe und Öl", "status": "correct"}]
+    )
+    report = compiler.Report()
+
+    compiler.validate_german_transliteration_variants(
+        realization,
+        overlay,
+        report,
+    )
+
+    assert report.errors == []
+    assert len(report.warnings) == 1
+    warning = report.warnings[0]
+    assert "de.test.exercise.write_umlauts" in warning
+    assert "missing accepted variant 'Aerger ueber Groesse und Oel'" in warning
+
+
+def test_german_transliteration_validator_accepts_full_variant():
+    compiler = load_content_compiler()
+    realization, overlay = german_typed_documents(
+        [
+            {"value": "Ärger über Größe und Öl", "status": "correct"},
+            {
+                "value": "Aerger ueber Groesse und Oel",
+                "status": "acceptable_with_note",
+            },
+        ]
+    )
+    report = compiler.Report()
+
+    compiler.validate_german_transliteration_variants(
+        realization,
+        overlay,
+        report,
+    )
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
 def test_audio_distractor_validator_warns_on_different_speaker_line():
     compiler = load_content_compiler()
     report = compiler.Report()
