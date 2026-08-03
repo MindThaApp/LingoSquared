@@ -1536,3 +1536,13 @@ a1_unit12, a1_unit13, a1_unit14 (quiero/un/tiene), es b1_unit27 (cita/documento)
 b1_unit36 (que); fr a1_unit05 (oui). These predate this session and are unrelated
 to the reading/dictation work; flagged for a separate es/fr realization fix. es A1
 dictation for u09/u14 was SKIPPED (clean placement impossible while the debt exists).
+
+### 2026-08-03 — en-ro + en-hi reading glosses fresh-context review (0 defects)
+
+Romanian (12 units) and Hindi (30 units) reading tap-to-gloss reviewed by fresh-context
+agents: **0 defects each.** ro: subjunctive `să`/conditional `ar`/imperfect-perfect forms
++ `nouă`/`noua` homograph all correct. hi (Devanagari): verb gender/number agreement
+(गया/गई, करता/करती), polysemy (कल yesterday/tomorrow, पता address/know), compound-verb
+scoping all correct. Cumulative reading-gloss review yield across nl+es+fr+ro+hi:
+**~1 defect / ~180 units** — the recipe is language-agnostic and effectively mature for
+tap-to-gloss on any whitespace-segmented script (Latin, Cyrillic-adjacent, Devanagari).
