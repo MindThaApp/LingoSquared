@@ -4,7 +4,34 @@
       "Bash(.content-venv/bin/python scripts/compile_content.py validate*)",
       "Bash(npx tsc --noEmit)",
       "Bash(node \"/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" status *)",
-      "Bash(node \"/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" result *)"
+      "Bash(node \"/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs\" result *)",
+      "Bash(curl * http://localhost:8000/*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "IN=$(cat); AID=$(printf \"%s\" \"$IN\" | jq -r \".agent_id // empty\"); [ -n \"$AID\" ] && exit 0; FP=$(printf \"%s\" \"$IN\" | jq -r \".tool_input.file_path // empty\"); case \"$FP\" in */CLAUDE.md) exit 0;; */LingoSquared/frontend/*|*/LingoSquared/backend/*|*/LingoSquared/packages/*|*/LingoSquared/scripts/*|*/LingoSquared/e2e/*|*/LingoSquared/mobile/*|*/LingoSquared/docs/content/*) jq -n \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\\"Coordinator no-inline-coding rule (Ramin 2026-08-03): dispatch this edit to a sub-agent or Codex instead. (Sub-agents are exempt from this hook.)\\\"}}\";; esac",
+            "timeout": 10,
+            "statusMessage": "coordinator no-inline-coding check"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "IN=$(cat); AID=$(printf \"%s\" \"$IN\" | jq -r \".agent_id // empty\"); C=$(printf \"%s\" \"$IN\" | jq -r \".tool_input.command // empty\"); deny(){ jq -n --arg r \"$1\" \"{\\\"hookSpecificOutput\\\":{\\\"hookEventName\\\":\\\"PreToolUse\\\",\\\"permissionDecision\\\":\\\"deny\\\",\\\"permissionDecisionReason\\\":\\$r}}\"; exit 0; }; case \"$C\" in *\"git add -A\"*|*\"git add --all\"*|*\"git add .\"|*\"git add . \"*|*\"git add . &&\"*) deny \"Repo rule: never broad-stage (git add -A/.) — stage explicit pathspecs (swept concurrent sessions twice; BUILD_LOG 2026-07-06/07/08).\";; esac; case \"$C\" in *\"git worktree remove\"*--force*) deny \"Repo rule: no worktree remove --force — it silently destroys uncommitted work (7 dispatches lost; BUILD_LOG 2026-07-10). Run without --force first.\";; esac; case \"$C\" in *\"git stash list\"*) :;; *\"git stash\"*) deny \"Repo rule: never git stash in multi-session work — the stash stack is shared repo-wide (BUILD_LOG 2026-07-10). Use a scratch commit or diff file.\";; esac; if [ -n \"$AID\" ]; then case \"$C\" in *\"git push\"*) deny \"Repo rule: workers never push — only the coordinator pushes after verified merges.\";; esac; fi; case \"$C\" in *\"compose run\"*pytest*|*\"compose exec\"*pytest*) case \"$C\" in *_test*) :;; *) deny \"Repo rule: pytest only against an isolated *_test DB — a shared-DB run wiped the dev DB (2026-08-02). Rewrite DATABASE_URL to lingosquared_test.\";; esac;; esac",
+            "timeout": 10,
+            "statusMessage": "git-safety check"
+          }
+        ]
+      }
     ]
   }
 }
