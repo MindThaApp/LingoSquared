@@ -59,8 +59,11 @@ are standing rules, not history:
   (enum/DB-constraint/compiler/grading/shared-union/renderer/PROMPTS-test/
   CONTRACT). Course-content only (not Endless Practice); TTS-only languages
   (nl now; fa once Azure key set; NOT prs). Verified: strict grading end-to-end
-  + full pytest + PROMPTS guardrail. **Live in all 11 en-nl B1 units** (22
-  exercises, reusing taught sentences + existing audio). Spec:
+  + full pytest + PROMPTS guardrail. **Live across nl A2 (10 units, 20 ex) +
+  all 11 en-nl B1 units (22 ex) = 42 dictation exercises**, each reusing an
+  already-taught sentence + existing audio, orthography stripped of terminal
+  punctuation for consistent strict grading (fresh-context reviewed per tier).
+  Spec:
   `docs/DICTATION_EXERCISE_SPEC.md`; authoring: AUTHORING_GUIDE §14a.
 - **E4 (web push)** — 2026-07-07 (`784da03`, migration 0016): VAPID
   subscribe/unsubscribe + admin-triggerable notify-due-reviews. No cron.
