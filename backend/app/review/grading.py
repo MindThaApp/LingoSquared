@@ -34,6 +34,7 @@ FREE_TEXT_EXERCISE_TYPES = {
     "writing_prompt",
     "dialogue_response",
     "listen_type",
+    "dictation",
     "grammar_check",
     # STT transcripts (speak_response/speak_repeat, added 2026-07-06) are
     # free-typed text same as any other free-text answer, just produced by
@@ -431,7 +432,10 @@ def grade_answer(
       strict for everything else (in particular 'arabic', which covers
       ar/fa/prs). Falls back to a character-based Latin heuristic if the
       caller has no script value handy.
-    - orthography_strict, when not None, overrides the script-based
+    - dictation defaults to orthography-strict regardless of script. An
+      explicitly authored orthography_strict=False still overrides that
+      type-based default.
+    - orthography_strict, when not None, overrides the script/type-based
       default in either direction (author-set per exercise).
     - Invisible formatting characters (Persian ZWNJ U+200C, Arabic harakat
       U+064B-U+0652/U+0670, tatweel U+0640, zero-width/bidi marks) never
@@ -490,6 +494,9 @@ def grade_answer(
 
     if is_too_short_for_typo_tolerance(normalized_correct):
         return "incorrect"
+
+    if orthography_strict is None and exercise_type == "dictation":
+        orthography_strict = True
 
     if orthography_strict is True:
         return "incorrect"

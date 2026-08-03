@@ -373,6 +373,24 @@ real TTS voice from some provider, authoring `listen_type`/
 "audio-only prompt with no working audio," not the exercise type
 itself.
 
+### 14a. `dictation` (added 2026-08-03) — same audio-availability rule, plus it is graded strict
+
+`dictation` (hear a TTS target-language sentence → type it, no source text
+shown) is an **audio-only-prompt** type, so the §14 rule applies in full: **only
+author `dictation` for a target language that has a working TTS voice.** Today
+that means **nl** (Google) and **fa** (Azure, once `AZURE_SPEECH_KEY` is set) —
+**NOT prs** (Dari has zero coverage from any provider; a dictation item there is
+a silent, unanswerable play button). Full spec: `docs/DICTATION_EXERCISE_SPEC.md`.
+
+Authoring shape (realization): `type: dictation`, `tested_text:` the exact
+sentence (already-taught vocab only), `media_asset_key:` its audio, `prompt:
+{target_blocks: []}` (empty, so only the audio button shows). Overlay:
+`correct_response:` **byte-matching** `tested_text`, `orthography_strict: true`,
+a short `feedback:`, and **no** `options`/`distractors`. Note: dictation is
+graded **orthography-strict by type** — a one-character misspelling is marked
+wrong (unlike `listen_type`, which is typo-tolerant on Latin scripts). So the
+`tested_text`/`correct_response` must be the single canonical spelling.
+
 ## 15. Mark target-language words with `*asterisks*` inside mixed-language
 explanatory text (`note`, exercise `feedback`)
 

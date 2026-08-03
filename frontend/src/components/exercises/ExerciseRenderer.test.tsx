@@ -50,6 +50,12 @@ const PROMPTS: Record<ExerciseType, ExercisePrompt> = {
     audio_language_code: "nl",
     answer_language_code: "nl",
   },
+  dictation: {
+    text_blocks: [],
+    audio_text: "Ik heb morgen een afspraak bij de dokter.",
+    audio_language_code: "nl",
+    answer_language_code: "nl",
+  },
   fill_in_blank: { text_blocks: [block("Ik kom ___ België.")], answer_language_code: "nl" },
   word_order: { text_blocks: [block("Zet op volgorde.")], word_bank: ["Ben", "jij", "nieuw", "hier"] },
   listen_order: {
