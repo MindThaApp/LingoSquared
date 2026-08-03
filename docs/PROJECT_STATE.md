@@ -73,9 +73,13 @@ are standing rules, not history:
   RTL-aware, keeps the narration button). No new exercise type / screen / progress
   path / migration (glosses ride in the existing `ContentItem.content` JSON); the
   320 existing reading cards are untouched. Verified end-to-end (compile 0 errs,
-  serve confirmed returning glosses, isolated pytest + vitest green). Pilot:
-  nl b1_unit11 "een verhaal" (16 glosses) + its comprehension question =
-  passage + narration + tap-gloss + questions. nl-first (TTS). Spec:
+  serve confirmed returning glosses, isolated pytest + vitest green). **Live
+  across nl B1 (11 passages, 259 glosses) + B2 (8 passages, 179 glosses) = 19
+  glossed reading cards** (B1 fresh-context reviewed — launch-gate). Each reading
+  lesson = passage + TTS narration + tap-gloss + comprehension questions.
+  nl-first (TTS). Known minor: the gloss-key validator's tokenizer splits the
+  possessive apostrophe (`collega's`) while the frontend keeps it — a
+  tokenizer-alignment follow-up. Spec:
   `docs/READING_TRACK_SPEC.md`. Deferred: dedicated Stories screen, recorded
   narration, auto-gloss-from-Lexeme.
 - **E4 (web push)** — 2026-07-07 (`784da03`, migration 0016): VAPID
