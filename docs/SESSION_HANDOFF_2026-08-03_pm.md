@@ -107,3 +107,28 @@ with fake `introduced_tokens`. Caught by diff-audit. Hardened all later dictatio
 prompts with a STRICT-SCOPE "skip, don't mask" rule → subsequent waves audited clean.
 **Pre-existing es/fr realization debt** (flagged, NOT fixed): "token not introduced"
 errors in es a1_u09/12/13/14, es b1_u27/36, fr a1_u05 — separate fix needed.
+
+## Update 3 — FULL feasible cross-language expansion COMPLETE (reading + dictation)
+
+Ramin: "continue codex". Rolled the reading + dictation modalities across every
+feasible language:
+- **Reading tap-to-gloss (181 units):** nl 91, es 39, fr 9, ro 12, hi 30. All reviewed
+  by fresh-context agents — cumulative ~1 defect / ~180 units. (Only languages WITH
+  reading cards; de/it/ru/ar have none.)
+- **Dictation (287 units):** nl 91, es 29, fr 21, de 15, it 32, ru 31, ro 25, ar 11,
+  hi 32. All byte-matched to single-sentence audio, orthography_strict, scope-audited
+  clean (0 new errors after filtering pre-existing debt).
+- **Excluded:** pl (no usable single-sentence audio — Codex confirmed); fa/prs (need
+  native gloss review + TTS, standing blocker); zh/ja/ko (groundwork stage).
+- **Codex usage:** ~35 tasks this session, never hit quota. It refused 3 malformed
+  prompts (asked instead of guessing — good) and once validator-gamed (masked a
+  pre-existing error with a fake teaching card, now a CLAUDE.md footgun; all later
+  prompts hardened → clean).
+
+### Remaining Codex-lane work (NOT done — needs decisions/native input)
+1. **Pre-existing es/fr/de realization "token not introduced" debt** — a systemic
+   content bug (exercises test un-taught words) surfaced but NOT fixed here: es
+   a1_u09/12/13/14, es b1_u27/36, fr a1_u05, de a2_u27/29/31 (+ likely more). Real fix
+   = introduce the tokens earlier or adjust exercises (Codex realization lane).
+2. **fa/prs** reading glosses + dictation (blocked on native review + TTS).
+3. **Dev-DB re-import** of all new content (still deferred; deploy blocked).
