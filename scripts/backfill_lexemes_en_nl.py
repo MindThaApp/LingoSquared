@@ -3750,6 +3750,14 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # verb "ik werk" in b1_unit04 is embedded in a relative-clause example, NOT
     # an introduced token, so the b1 lexeme (provenance unit01) is noun-only.
     ("b1_unit01_hypothetische_situaties", "werk"): "work; job",
+    # b2_unit08 (synthese) teaches the NOUN "het eten" = the food/meal (its own
+    # matching_pair glosses eten->food); global `eten` = verb "to eat". Surfaced
+    # by the dictation "Beide bronnen vinden het eten lekker".
+    ("b2_unit08_synthese", "eten"): "the food; meal",
+    # b2_unit03 (nuance) teaches `best` as a downtoner ADVERB in lesson
+    # "afzwakken" ("De film is best goed" = quite good; its own matching_pair
+    # glosses best->"quite / pretty"); global `best` = superlative adjective.
+    ("b2_unit03_nuance", "best"): "quite; pretty",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
@@ -3764,6 +3772,8 @@ NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit09_eens_en_oneens", "rust"): "noun",
     ("a2_unit25_meningen", "waar"): "adjective",
     ("b1_unit01_hypothetische_situaties", "werk"): "noun",
+    ("b2_unit08_synthese", "eten"): "noun",
+    ("b2_unit03_nuance", "best"): "adverb",
     # ("b1_unit01…", "was") stays a verb -- gloss-only override, no POS change.
 }
 
