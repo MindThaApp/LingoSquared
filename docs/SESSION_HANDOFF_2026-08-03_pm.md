@@ -143,3 +143,23 @@ Consequences: es a1_unit09 (`dictation_si_asi_es`) + a1_unit14
 errors); registry correction appended; methodology footgun added to
 docs/content/CLAUDE.md. **There is no deploy-blocking content debt** — the full
 corpus (incl. all this session's 9-language content) passes the real pipeline.
+
+## Update 5 (final) — governance/tooling layer installed; session closing
+
+- **Hooks LIVE** (.claude/settings.json, committed): no-inline-coding (coordinator
+  Edit/Write to code/content paths denied; sub-agents exempt via agent_id) +
+  repo-safety pack (broad staging, stashing, forced worktree removal, sub-agent
+  pushes, non-isolated pytest). Both live-fire proven. NOTE: the Bash hook greps
+  the WHOLE command string incl. heredoc/commit-message prose — writing the
+  literal forbidden command strings in prose triggers a (harmless) deny; reword.
+- **AGENTS.md** (repo root, committed): standing Codex rules, auto-loaded by the
+  Codex CLI every task — STRICT SCOPE / skip-don't-mask headline.
+- **.claude/agents/**: content-reviewer (Opus, read-only), content-author (Sonnet),
+  frontend-builder (Sonnet) — dispatch these roles instead of long ad-hoc prompts.
+- **Root CLAUDE.md = 198 lines; 200 MAX is a hard rule** (0c82dbae).
+- **Nightly cron (SESSION-SCOPED — re-create after restart!):** 3:23am, full
+  verify.sh, push branch only if green. Dies with the session; 7-day cap. A
+  durable crontab version was offered, not yet requested.
+- Model: session switched to Fable 5 mid-day. "Ferishta1" was mentioned by Ramin
+  without context and deliberately not recorded pending clarification.
+- Still Ramin's calls: app name, live deploy.
