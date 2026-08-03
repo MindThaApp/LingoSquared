@@ -309,6 +309,18 @@ export function HomePage() {
         )}
       </div>
 
+      <div className="card continue-card">
+        <div className="continue-info">
+          <h3>Try the new features</h3>
+          <span className="muted">
+            Reading with tap-to-gloss, dictation, and skill-targeted practice.
+          </span>
+        </div>
+        <Link className="btn btn-secondary" to="/showcase">
+          Explore
+        </Link>
+      </div>
+
       {achievements.length > 0 && (
         <div className="card">
           <h3 style={{ marginTop: 0 }}>{t("home.recent_achievements")}</h3>
