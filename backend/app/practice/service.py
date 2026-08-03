@@ -1485,6 +1485,7 @@ def generate_speaking_batch(
     course: Course,
     size: int,
     is_admin: bool = False,
+    types: list[str] | None = None,
 ) -> tuple[bool, list[PracticeItem]]:
     completed = _completed_lesson_ids(db, user_id, course.id)
     if not completed:
@@ -1493,6 +1494,10 @@ def generate_speaking_batch(
         completed = _course_lesson_ids(db, course.id)
 
     templates, lexemes = _material(db, course, completed)
+    filtered_templates = [template for template in templates if template.type in types] if types else []
+    # Speaking can use a mode-specific type set, so an irrelevant filter is ignored.
+    if filtered_templates:
+        templates = filtered_templates
     if not templates or not lexemes:
         return False, []
 
@@ -1539,6 +1544,7 @@ def generate_conversation_batch(
     course: Course,
     size: int,
     is_admin: bool = False,
+    types: list[str] | None = None,
 ) -> tuple[bool, list[PracticeItem]]:
     completed = _completed_lesson_ids(db, user_id, course.id)
     if not completed:
@@ -1547,6 +1553,10 @@ def generate_conversation_batch(
         completed = _course_lesson_ids(db, course.id)
 
     templates, lexemes = _material(db, course, completed)
+    filtered_templates = [template for template in templates if template.type in types] if types else []
+    # Conversation can use a mode-specific type set, so an irrelevant filter is ignored.
+    if filtered_templates:
+        templates = filtered_templates
     if not templates or not lexemes:
         return False, []
 
@@ -1599,6 +1609,8 @@ def generate_batch(
     course: Course,
     size: int,
     is_admin: bool = False,
+    types: list[str] | None = None,
+    target_lexeme_ids: list[str] | None = None,
 ) -> tuple[bool, list[PracticeItem]]:
     completed = _completed_lesson_ids(db, user_id, course.id)
     if not completed:
@@ -1607,6 +1619,11 @@ def generate_batch(
         completed = _course_lesson_ids(db, course.id)
 
     templates, lexemes = _material(db, course, completed)
+    if types is not None:
+        templates = [template for template in templates if template.type in types]
+    if target_lexeme_ids is not None:
+        target_ids = set(target_lexeme_ids)
+        lexemes = [lexeme for lexeme in lexemes if str(lexeme.id) in target_ids]
     if not templates or not lexemes:
         return False, []
 

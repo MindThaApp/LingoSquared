@@ -351,6 +351,10 @@ export interface CheckpointResult {
   passed: boolean | null;
   score: number | null;
   weak_outcomes: string[];
+  // Lexeme UUIDs the learner struggled with in this checkpoint — used to
+  // seed a targeted "drill weak outcomes" practice batch (POST
+  // /practice/{course_id}/batch's target_lexeme_ids).
+  weak_lexeme_ids: string[];
   checkpoint_passed: boolean;
 }
 

@@ -22,6 +22,20 @@ import {
 
 const PRACTICE_MODES: PracticeBatchMode[] = ["mixed", "speaking", "conversation"];
 
+// The six drillable exercise types a learner can filter the feed down to.
+// An empty selection means "no filter" (all types), so this is purely
+// additive on top of the mode selector. Kept as plain strings — the batch
+// endpoint accepts this subset (see docs/CONTRACT.md, POST
+// /practice/{course_id}/batch's `types`).
+const PRACTICE_TYPES = [
+  "multiple_choice",
+  "fill_in_blank",
+  "word_order",
+  "translation",
+  "matching_pairs",
+  "listen_select",
+] as const;
+
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
 
@@ -170,12 +184,19 @@ export function PracticeFeedPage() {
   const location = useLocation();
   // Course pre-selection via route state (e.g. VocabularyPage's "Practice
   // these words"), same threading pattern as CourseUnitsPage -> UnitLessonsPage.
-  const requestedCourseId = (location.state as { courseId?: string } | null)?.courseId;
+  const routeState = location.state as
+    | { courseId?: string; targetLexemeIds?: string[] }
+    | null;
+  const requestedCourseId = routeState?.courseId;
+  // A "drill weak outcomes" entry (e.g. from a failed checkpoint) seeds the
+  // feed with just these lexeme UUIDs. Read once at mount, like courseId.
+  const requestedTargetLexemeIds = routeState?.targetLexemeIds;
   const [loadingEligibility, setLoadingEligibility] = useState(true);
   const [eligibilityError, setEligibilityError] = useState(false);
   const [eligibleCourses, setEligibleCourses] = useState<EligibleCourse[]>([]);
   const [courseId, setCourseId] = useState<string | null>(null);
   const [mode, setMode] = useState<PracticeBatchMode>(() => getPracticeModePreference());
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [items, setItems] = useState<PracticeItem[]>([]);
   const [locked, setLocked] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -235,7 +256,10 @@ export function PracticeFeedPage() {
     setLoadingMore(true);
     setFeedError(false);
     try {
-      const res = await PracticeApi.batch(courseId, BATCH_SIZE, mode);
+      const res = await PracticeApi.batch(courseId, BATCH_SIZE, mode, {
+        types: selectedTypes,
+        targetLexemeIds: requestedTargetLexemeIds,
+      });
       setLocked(res.locked);
       if (res.items.length === 0) {
         setExhausted(true);
@@ -252,12 +276,12 @@ export function PracticeFeedPage() {
       loadingMoreRef.current = false;
       setLoadingMore(false);
     }
-  }, [courseId, exhausted, mode]);
+  }, [courseId, exhausted, mode, selectedTypes, requestedTargetLexemeIds]);
 
   useEffect(() => {
     if (courseId) loadMore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId, mode]);
+  }, [courseId, mode, selectedTypes]);
 
   // Switching mode restarts the feed: already-loaded items belong to the
   // previous mode, and "exhausted" in one mode says nothing about another.
@@ -270,6 +294,20 @@ export function PracticeFeedPage() {
     setFeedError(false);
     cardRefs.current.clear();
     setMode(next);
+  }
+
+  // Toggling a type filter restarts the feed for the same reason mode does:
+  // already-loaded items may not match the new filter, and "exhausted"
+  // under one filter says nothing about another. Empty set = all types.
+  function toggleType(type: string) {
+    setItems([]);
+    setExhausted(false);
+    setLocked(false);
+    setFeedError(false);
+    cardRefs.current.clear();
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
+    );
   }
 
   useEffect(() => {
@@ -370,6 +408,26 @@ export function PracticeFeedPage() {
             {t(`practice.mode_${m}`)}
           </button>
         ))}
+      </div>
+
+      <div
+        role="group"
+        aria-label={t("practice.type_filter_label")}
+        style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}
+      >
+        {PRACTICE_TYPES.map((type) => {
+          const active = selectedTypes.includes(type);
+          return (
+            <button
+              key={type}
+              className={`btn ${active ? "" : "btn-secondary"}`}
+              aria-pressed={active}
+              onClick={() => toggleType(type)}
+            >
+              {t(`practice.type_${type}`)}
+            </button>
+          );
+        })}
       </div>
 
       {locked && items.length === 0 && (

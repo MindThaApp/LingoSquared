@@ -1573,6 +1573,25 @@ def checkpoint_result(
     ) or 0
 
     if checkpoint.scored_at is not None:
+        weak_lexeme_ids = [
+            str(lexeme_id)
+            for lexeme_id in db.scalars(
+                select(PracticeItem.target_lexeme_id)
+                .join(
+                    PracticeAttempt,
+                    PracticeAttempt.practice_item_id == PracticeItem.id,
+                )
+                .where(
+                    PracticeAttempt.user_id == user.id,
+                    PracticeItem.session_id == checkpoint.id,
+                    PracticeItem.source == "checkpoint",
+                    PracticeAttempt.correct.is_(False),
+                    PracticeItem.target_lexeme_id.is_not(None),
+                )
+                .distinct()
+                .order_by(PracticeItem.target_lexeme_id)
+            )
+        ]
         return {
             "status": "complete",
             "answered_items": checkpoint.total_items,
@@ -1580,6 +1599,7 @@ def checkpoint_result(
             "passed": checkpoint.passed,
             "score": checkpoint.score,
             "weak_outcomes": checkpoint.weak_outcomes,
+            "weak_lexeme_ids": weak_lexeme_ids,
             "checkpoint_passed": checkpoint_passed_for_unit(
                 db,
                 user.id,
@@ -1595,6 +1615,7 @@ def checkpoint_result(
             "passed": None,
             "score": None,
             "weak_outcomes": [],
+            "weak_lexeme_ids": [],
             "checkpoint_passed": checkpoint_passed_for_unit(
                 db,
                 user.id,
@@ -1639,6 +1660,25 @@ def checkpoint_result(
             .order_by(Lexeme.english_gloss)
         )
     )
+    weak_lexeme_ids = [
+        str(lexeme_id)
+        for lexeme_id in db.scalars(
+            select(PracticeItem.target_lexeme_id)
+            .join(
+                PracticeAttempt,
+                PracticeAttempt.practice_item_id == PracticeItem.id,
+            )
+            .where(
+                PracticeAttempt.user_id == user.id,
+                PracticeItem.session_id == checkpoint.id,
+                PracticeItem.source == "checkpoint",
+                PracticeAttempt.correct.is_(False),
+                PracticeItem.target_lexeme_id.is_not(None),
+            )
+            .distinct()
+            .order_by(PracticeItem.target_lexeme_id)
+        )
+    ]
 
     scored_at = datetime.now(timezone.utc)
     if passed:
@@ -1715,6 +1755,8 @@ def checkpoint_result(
     checkpoint.passed = passed
     checkpoint.score = score
     checkpoint.weak_outcomes = weak_outcomes
+    if hasattr(checkpoint, "weak_lexeme_ids"):
+        checkpoint.weak_lexeme_ids = weak_lexeme_ids
     checkpoint.scored_at = scored_at
     db.commit()
 
@@ -1725,6 +1767,7 @@ def checkpoint_result(
         "passed": passed,
         "score": score,
         "weak_outcomes": weak_outcomes,
+        "weak_lexeme_ids": weak_lexeme_ids,
         "checkpoint_passed": checkpoint_passed_for_unit(
             db,
             user.id,
@@ -1894,6 +1937,12 @@ def practice_batch(
         course,
         body.size if body else 10,
         is_admin=is_admin_user(user),
+        types=body.types if body else None,
+        **(
+            {"target_lexeme_ids": body.target_lexeme_ids}
+            if generator is generate_batch and body
+            else {}
+        ),
     )
     db.commit()
     return {
