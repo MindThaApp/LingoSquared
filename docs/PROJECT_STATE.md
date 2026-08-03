@@ -66,6 +66,18 @@ are standing rules, not history:
   grading (A2/B1 fresh-context reviewed; B2 automated-verified incl.
   asset-text-match). Spec:
   `docs/DICTATION_EXERCISE_SPEC.md`; authoring: AUTHORING_GUIDE §14a.
+- **Phase I (reading track — tap-to-gloss)** — 2026-08-03: `reading` teaching
+  cards gain per-word **tap-to-gloss** (author-provided `glosses:` token→English
+  map in the en-nl overlay, compiled onto the card + served on `GET
+  /lessons/{id}`; frontend `GlossableText` makes only glossed words tappable,
+  RTL-aware, keeps the narration button). No new exercise type / screen / progress
+  path / migration (glosses ride in the existing `ContentItem.content` JSON); the
+  320 existing reading cards are untouched. Verified end-to-end (compile 0 errs,
+  serve confirmed returning glosses, isolated pytest + vitest green). Pilot:
+  nl b1_unit11 "een verhaal" (16 glosses) + its comprehension question =
+  passage + narration + tap-gloss + questions. nl-first (TTS). Spec:
+  `docs/READING_TRACK_SPEC.md`. Deferred: dedicated Stories screen, recorded
+  narration, auto-gloss-from-Lexeme.
 - **E4 (web push)** — 2026-07-07 (`784da03`, migration 0016): VAPID
   subscribe/unsubscribe + admin-triggerable notify-due-reviews. No cron.
 - **Mic-based speaking + STT** — `speak_response`/`speak_repeat` capture +
