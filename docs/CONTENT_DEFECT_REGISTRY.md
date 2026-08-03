@@ -1563,3 +1563,20 @@ token-coverage findings"). Codex's fake-teaching-card behavior remains a real
 footgun regardless (fabricated introduced_tokens are wrong even when the error
 they silence is phantom). All 0-defect gloss/dictation review results above are
 unaffected (phantom errors only add false positives, never mask real ones).
+
+### 2026-08-03 — en-de A1 units 01-10 fresh review (Opus) + same-day fix round
+
+Fresh-context review found **10 findings (6 MAJOR / 4 MINOR)**. Units 02-05
+were clean for unit-specific findings; they were affected only by the systemic
+classes. The systemic grading class was missing ae/oe/ue/ss accepted-answer
+variants for free-text answers containing German umlauts or ß (dictation stays
+orthography-strict). The forward-reference matcher class placed lesson02/03
+material in lesson01 matchers before it was taught. New author-side pattern:
+matching_pairs LEFT/RIGHT descriptions authored in untaught target-language
+German instead of the source language (units 06-10; units 01-05 correctly used
+English). The same-day fix round added the transliterated free-text variants,
+removed off-spec `correct_option` fields from all nine dictation overlays,
+repaired the register distractors, converted affected matcher descriptions to
+English, made the price-sign matcher coherent, and removed forward-referenced
+rows where no later matcher slot existed to reuse. Fix round applied 2026-08-03.
+Instance count: 10 findings (6 MAJOR / 4 MINOR).
