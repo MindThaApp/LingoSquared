@@ -22,6 +22,7 @@ import { ProfilePage } from "./pages/ProfilePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { TermsOfServicePage } from "./pages/TermsOfServicePage";
+import ShowcasePage from "./pages/ShowcasePage";
 
 // Route-level code splitting: AdminContentPage is genuinely admin-only, so it
 // stays out of the initial bundle everyone downloads. Core daily-use pages
@@ -149,6 +150,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <AdminContentPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/showcase"
+                element={
+                  <ProtectedRoute>
+                    <ShowcasePage />
                   </ProtectedRoute>
                 }
               />
