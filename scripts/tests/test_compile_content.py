@@ -233,6 +233,27 @@ def test_reading_gloss_validator_warns_for_token_absent_from_passage():
     assert "'ban' is not a whole-word token" in report.warnings[0]
 
 
+def test_reading_tokenizer_keeps_internal_joiners_without_changing_global_tokenizer():
+    compiler = load_content_compiler()
+    text = "Collega's d'r co-op नमस्ते"
+
+    assert compiler.tokenize_reading(text) == {
+        "collega's",
+        "d'r",
+        "co-op",
+        "नमस्ते",
+    }
+    assert compiler.tokenize(text) == {
+        "collega",
+        "s",
+        "d",
+        "r",
+        "co",
+        "op",
+        "नमस्ते",
+    }
+
+
 def test_compiler_accepts_split_dialogue_turns_with_speakers():
     compiler = load_content_compiler()
 
@@ -449,7 +470,11 @@ def test_audio_distractor_validator_rejects_dialogue_comprehension_speaker_line(
     )
 
 
-def test_option_accepted_answers_must_match_displayed_option():
+def test_option_correct_option_must_be_in_accepted_answers():
+    # The grader is punctuation-sensitive, so a displayed correct_option that
+    # is not itself among the accepted_answers means a learner who picks the
+    # visible correct option is graded wrong. validate_option_accepted_answers_
+    # are_displayed (rewritten in 9e5ca493 to mirror that grader) must flag it.
     compiler = load_content_compiler()
     report = compiler.Report()
 
@@ -488,8 +513,8 @@ def test_option_accepted_answers_must_match_displayed_option():
     )
 
     assert any(
-        "Ich stehe um sieben Uhr auf" in error
-        and "does not match the displayed correct_option" in error
+        "um sieben Uhr" in error
+        and "does not include the displayed correct_option" in error
         for error in report.errors
     )
 
