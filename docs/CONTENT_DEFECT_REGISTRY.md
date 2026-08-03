@@ -1513,3 +1513,26 @@ gloss recipe (established across A2/B1/B2, now proven on A1) is effectively
 mature: ~1.6% defect rate, all low-severity. Validator: 0 errors / 0 gloss-key
 warnings every unit. Commits: 00662de8, 437a79ef, 708d0c66 (+ 57523635, eruit fix).
 Instance count: 2 findings (1 defect, 1 clarity).
+
+### 2026-08-03 — en-es + en-fr reading tap-to-gloss (cross-language expansion) fresh-context review
+
+Extended the reading tap-to-gloss track to Spanish (es: A1 13u + A2 10u + B1 16u
+= 39 units) and French (fr: 9 units), authored by Codex, reviewed by 3 fresh-context
+agents. **Total review yield: 0 defects across all 48 units.** Homograph/accent
+senses all correct — es (`entre` subj vs prep, `mañana` morning/tomorrow, `fui` ir
+not ser, `cuenta` account, `como`), fr (`est/et`, `a/à`, `ou/où`, `son/sont`,
+`la/là`), B1 subjunctive/conditional forms (`sea`, `tuviera`, `pediría`, `hubiera`,
+`viajaría`) all sense-accurate. The gloss recipe (nl-proven) transfers cleanly to
+new Latin-script languages: cumulative ~1 defect / 150+ units across nl+es+fr.
+Commits: es reading (pilot/w2/a2/b1), fr reading; dictation separate. b1_unit26 es
+has no reading card (not glossed — none exists).
+Instance count: 0 findings.
+
+### 2026-08-03 — PRE-EXISTING es/fr realization debt surfaced (NOT introduced here)
+
+Glossing/dictation surfaced pre-existing "tests tokens not introduced" realization
+errors (a real content bug — exercises test un-taught words): es a1_unit09 (y),
+a1_unit12, a1_unit13, a1_unit14 (quiero/un/tiene), es b1_unit27 (cita/documento),
+b1_unit36 (que); fr a1_unit05 (oui). These predate this session and are unrelated
+to the reading/dictation work; flagged for a separate es/fr realization fix. es A1
+dictation for u09/u14 was SKIPPED (clean placement impossible while the debt exists).
