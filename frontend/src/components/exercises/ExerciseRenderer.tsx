@@ -23,6 +23,7 @@ export function ExerciseRenderer(props: ExerciseComponentProps) {
     case "translation":
     case "reverse_translation":
     case "listen_type":
+    case "dictation":
       return <Translation {...props} />;
     case "fill_in_blank":
       return <FillInBlank {...props} />;

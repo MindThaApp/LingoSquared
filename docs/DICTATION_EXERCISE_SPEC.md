@@ -71,7 +71,10 @@ media_assets:
 ```
 
 **Overlay** (source-direction, e.g. `en-nl`): supplies the **accepted typed
-answer** and MUST set strict + MUST NOT carry `options`/`distractors`:
+answer** and MUST set strict + MUST NOT carry `options`/`distractors`.
+**NOTE (corrected 2026-08-03): the en-nl overlay file is a MAPPING keyed by
+`content_key`, not a list** — nest these fields directly under the content_key
+(no leading `- content_key:`), matching the neighboring entries in that file:
 
 ```yaml
 - content_key: nl.b1.unitNN.lessonMM.exerciseKK.dictation_afspraak
