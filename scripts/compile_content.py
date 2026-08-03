@@ -78,6 +78,13 @@ RTL_LANGUAGES = {"fa", "prs", "ar"}
 # language (e.g. a future Urdu path) defaults to no script-purity
 # assumption unless explicitly added here.
 PERSIAN_SCRIPT_LANGUAGES = {"fa", "prs"}
+NON_LATIN_TARGET_SCRIPTS = {
+    "ar": "ARABIC",
+    "fa": "ARABIC",
+    "prs": "ARABIC",
+    "hi": "DEVANAGARI",
+    "ru": "CYRILLIC",
+}
 FORBIDDEN_PERSIAN_CODEPOINTS = {
     "\u064a": "Arabic Yeh U+064A (ي); use Persian Yeh U+06CC (ی)",
     "\u0643": "Arabic Kaf U+0643 (ك); use Persian Keheh U+06A9 (ک)",
@@ -3030,6 +3037,117 @@ def _lesson_introduced_tokens(lesson: dict[str, Any]) -> set[str]:
     return introduced_tokens
 
 
+def _course_target_lexicon(
+    realizations: list[dict[str, Any]],
+) -> set[str]:
+    """Return every authored target token introduced anywhere in a course."""
+    target_lexicon: set[str] = set()
+    for realization in realizations:
+        for unit in realization.get("units", []):
+            if not isinstance(unit, dict):
+                continue
+            for lesson in unit.get("lessons", []):
+                if isinstance(lesson, dict):
+                    target_lexicon.update(_lesson_introduced_tokens(lesson))
+    return target_lexicon
+
+
+def _matching_pair_untaught_target_tokens(
+    value: str,
+    target_language: Any,
+    target_lexicon: set[str],
+    taught: set[str],
+) -> list[str]:
+    """Find untaught target-language tokens in one matching-pair side.
+
+    Latin-script source and target languages cannot be distinguished safely
+    from spelling alone. For those lanes, only tokens independently present
+    in the course's introduced-token lexicon count as target-language. For
+    non-Latin targets, Unicode script is an unambiguous signal and also finds
+    target words which never appear in introduced_tokens at all.
+    """
+    # Numeric pair values are digits, prices, dates, and times rather than
+    # prose descriptions. Skipping the whole value prevents surrounding
+    # currency/unit words ("12 Uhr", "5 Euro") from creating false alarms.
+    if any(character.isdigit() for character in value):
+        return []
+
+    original_tokens = [token for token in TOKEN_RE.findall(value) if token.strip()]
+    cased_tokens = [
+        token
+        for token in original_tokens
+        if any(character.isalpha() and character.isupper() for character in token)
+        or any(character.isalpha() and character.islower() for character in token)
+    ]
+    # A multiword value made entirely of title-cased words is overwhelmingly
+    # a person/place name. Single capitalized German nouns do not meet this
+    # condition, and ordinary sentence/description text has a lowercase word.
+    if len(cased_tokens) >= 2 and all(token.istitle() for token in cased_tokens):
+        return []
+
+    tokens = tokenize(value)
+    target_script = NON_LATIN_TARGET_SCRIPTS.get(target_language)
+    if target_script is not None:
+        candidates = {
+            token
+            for token in tokens
+            if any(
+                target_script in unicodedata.name(character, "")
+                for character in token
+            )
+        }
+    else:
+        # One- and two-letter Latin words collide heavily across languages
+        # (for example English "I would do" vs Polish i/a/do). They are too
+        # weak to establish that an untagged pair side is in the target
+        # language, so require independently-known target lexemes of at least
+        # three characters in Latin-script lanes.
+        candidates = {
+            token
+            for token in tokens & target_lexicon
+            if len(token) >= 3
+        }
+
+    return sorted(candidates - taught)
+
+
+def validate_matching_pairs_untaught_descriptions(
+    exercise: dict[str, Any],
+    exercise_location: str,
+    target_language: Any,
+    target_lexicon: set[str],
+    taught: set[str],
+    report: Report,
+):
+    if exercise.get("type") != "matching_pairs":
+        return
+    pairs = exercise.get("pairs")
+    if not isinstance(pairs, list):
+        return
+
+    key = exercise.get("content_key", "<unknown>")
+    for pair_index, pair in enumerate(pairs):
+        pair_tuple = _matching_pair_tuple(pair)
+        if pair_tuple is None:
+            continue
+        for side, value in zip(("left", "right"), pair_tuple):
+            missing = _matching_pair_untaught_target_tokens(
+                value,
+                target_language,
+                target_lexicon,
+                taught,
+            )
+            if len(missing) < 2:
+                continue
+            report.warn(
+                f"{exercise_location}.pairs[{pair_index}].{side}",
+                "matching_pairs pair-side text uses at least 2 "
+                "untaught target-language tokens; "
+                f"content_key {key!r}; text {value!r}; "
+                f"untaught tokens: {', '.join(missing)}",
+            )
+
+
 def _future_introduced_tokens_by_lesson(
     units: list[Any],
 ) -> dict[tuple[int, int], set[str]]:
@@ -3061,11 +3179,14 @@ def validate_untaught_vocabulary(
     report: Report,
     taught: set[str] | None = None,
     source_language: Any = None,
+    target_lexicon: set[str] | None = None,
 ):
     if taught is None:
         taught = set()
 
     units = realization.get("units", [])
+    if target_lexicon is None:
+        target_lexicon = _course_target_lexicon([realization])
     future_by_lesson = _future_introduced_tokens_by_lesson(units)
     target_language = realization.get("target_language")
     for unit_index, unit in enumerate(units):
@@ -3099,10 +3220,21 @@ def validate_untaught_vocabulary(
             for exercise_index, exercise in enumerate(
                 lesson.get("exercises", [])
             ):
+                exercise_location = (
+                    f"{lesson_location}.exercises[{exercise_index}]"
+                )
+                validate_matching_pairs_untaught_descriptions(
+                    exercise,
+                    exercise_location,
+                    target_language,
+                    target_lexicon,
+                    taught,
+                    report,
+                )
                 tested_text = exercise.get("tested_text", "")
                 if not isinstance(tested_text, str):
                     report.error(
-                        f"{lesson_location}.exercises[{exercise_index}]",
+                        exercise_location,
                         "tested_text must be a string",
                     )
                     continue
@@ -3111,7 +3243,7 @@ def validate_untaught_vocabulary(
                 missing = sorted(tested - taught)
                 if missing:
                     report.error(
-                        f"{lesson_location}.exercises[{exercise_index}]",
+                        exercise_location,
                         "tests tokens not introduced in this or an earlier "
                         f"lesson: {', '.join(missing)}",
                     )
@@ -4019,6 +4151,7 @@ def validate_documents(
     realization: dict[str, Any],
     overlay: dict[str, Any],
     taught_tokens: set[str] | None = None,
+    target_lexicon: set[str] | None = None,
 ) -> Report:
     report = Report()
 
@@ -4067,6 +4200,7 @@ def validate_documents(
         report,
         taught_tokens,
         overlay.get("source_language"),
+        target_lexicon,
     )
     validate_vocabulary_examples(realization, overlay, report)
     validate_reading_glosses(realization, overlay, report)
@@ -4187,6 +4321,9 @@ def main():
 
     report = Report()
     taught_tokens: set[str] = set()
+    target_lexicon = _course_target_lexicon(
+        [document for _, document in realization_documents]
+    )
 
     for (
         realization_path,
@@ -4200,6 +4337,7 @@ def main():
             realization,
             overlay,
             taught_tokens,
+            target_lexicon,
         )
         merge_pair_report(
             report,

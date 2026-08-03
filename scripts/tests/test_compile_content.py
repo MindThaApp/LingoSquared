@@ -1103,3 +1103,81 @@ def test_new_backend_mirror_validators_are_registered_in_validate_documents():
     assert any("not a valid teaching card kind" in e for e in report.errors)
     assert any("not a valid exercise type" in e for e in report.errors)
     assert any("VARCHAR(200)" in e for e in report.errors)
+
+
+def test_matching_pairs_untaught_target_description_warns():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    exercise = {
+        "content_key": "de.a1.unit06.lesson01.exercise04.match_family_words",
+        "type": "matching_pairs",
+        "pairs": [{"left": "männlicher Elternteil", "right": "Vater"}],
+    }
+
+    compiler.validate_matching_pairs_untaught_descriptions(
+        exercise,
+        "realization.units[0].lessons[0].exercises[0]",
+        "de",
+        {"männlicher", "elternteil", "vater"},
+        {"vater"},
+        report,
+    )
+
+    assert len(report.warnings) == 1
+    assert "de.a1.unit06.lesson01.exercise04.match_family_words" in report.warnings[0]
+    assert "text 'männlicher Elternteil'" in report.warnings[0]
+    assert "untaught tokens: elternteil, männlicher" in report.warnings[0]
+
+
+def test_matching_pairs_source_numeric_and_proper_noun_texts_are_clean():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    exercise = {
+        "content_key": "de.a1.unit06.lesson01.exercise04.clean_pairs",
+        "type": "matching_pairs",
+        "pairs": [
+            {"left": "male parent", "right": "Vater"},
+            {"left": "12 Uhr morgens", "right": "Mittag"},
+            {"left": "Anna Schmidt", "right": "Nachbarin"},
+        ],
+    }
+
+    compiler.validate_matching_pairs_untaught_descriptions(
+        exercise,
+        "realization.units[0].lessons[0].exercises[0]",
+        "de",
+        {
+            "anna",
+            "morgens",
+            "nachbarin",
+            "schmidt",
+            "mittag",
+            "uhr",
+            "vater",
+        },
+        {"mittag", "nachbarin", "vater"},
+        report,
+    )
+
+    assert report.warnings == []
+
+
+def test_matching_pairs_taught_vocabulary_phrase_is_clean():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    exercise = {
+        "content_key": "de.a1.unit01.lesson05.exercise04.match_greeting",
+        "type": "matching_pairs",
+        "pairs": [{"left": "Guten Morgen", "right": "good morning"}],
+    }
+
+    compiler.validate_matching_pairs_untaught_descriptions(
+        exercise,
+        "realization.units[0].lessons[0].exercises[0]",
+        "de",
+        {"guten", "morgen"},
+        {"guten", "morgen"},
+        report,
+    )
+
+    assert report.warnings == []
