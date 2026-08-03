@@ -509,8 +509,26 @@ silent play button). Lanes: Codex = enum + Alembic constraint migration +
 strict grading; Claude = shared union + renderer case + `PROMPTS` test entry +
 CONTRACT.md. Motivation: the one modality lingua.com leans on that we lack;
 plays into our orthography-strict grading + on-screen keyboard strengths.
-(Related, specced later if pursued: a graded reading/"stories" track;
-skill-targeted practice — both also gated behind the fa/prs TTS fix.)
+(Related: a graded reading/"stories" track is now specced — see Phase I;
+skill-targeted practice still gated behind the fa/prs TTS fix.)
+
+---
+
+## Phase I — Graded reading track (new modality)
+
+Full spec + a context-cleared build prompt: **`docs/READING_TRACK_SPEC.md`**.
+Summary: an in-lesson reading experience — a `reading` teaching card (passage +
+TTS narration, both ALREADY exist) upgraded with **tap-any-word-to-gloss** (the
+one net-new capability), then `reading_comprehension` questions. Research found
+~70% already ships: the `reading` card kind holds multi-sentence passages (320
+files), narration is free (SpeakButton on every text block), comprehension type
+exists. So: NOT a new exercise type, NOT a new screen, NOT a new progress path.
+Gloss data = author-controlled `glosses:` map (token→gloss) in the en-nl overlay,
+compile-time-embedded + served (NOT auto-from-Lexeme — homograph/inflection
+risk). Lanes: Codex = compiler emit/serve `glosses` + validator; Claude =
+`GlossableText` component + wire into TeachingCardView + CONTRACT. nl-first (TTS).
+Deferred: dedicated Stories screen, recorded narration, passage+question-set
+object.
 
 ---
 
