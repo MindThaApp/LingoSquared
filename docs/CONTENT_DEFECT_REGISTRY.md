@@ -1493,3 +1493,23 @@ All fixed (Sonnet fix agent, 140 tool calls), verified, flipped.
 Manifests: en-de-b1 14u, en-ar-b1 6u, en-pl-b1 8u, en-ro-b1 9u,
 en-hi-b1 9u. Corpus PASS.
 Instance count: 28 findings.
+
+### 2026-08-03 — nl A1 reading-track tap-to-gloss (units 06-72, 62 units) fresh-context review
+
+Extended the reading tap-to-gloss track to the ENTIRE nl A1 tier (previously
+0% glossed), authored by Codex in 7 waves and reviewed by 4 fresh-context
+Claude agents (waves 1 / 2-3 / 4-5 / 6-7). Total review yield across all 62
+units: **1 real learner-facing defect + 1 clarity note**, both fixed.
+- Defect: a1_unit30 `eruit`->"like" — it is the separable particle of
+  *eruitzien* ("Hoe zie jij eruit?" = what do you look like), not a standalone
+  word. Fixed to "(part of 'eruit zien' = to look/appear)".
+- Clarity note: `half` glossed "half past / half to the next hour" is ambiguous
+  (Dutch half+N = half TO N; half acht = 7:30). Reworded across u10/u11.
+Homograph handling was consistently correct throughout the tier (`was`=wash/
+laundry not past-tense, `zin`=desire not sentence, `haar`=hair not her,
+`brand`=fire, `Band`=music-group, `Regel`=rule, `lengte`=height, `Roman`=novel,
+`boeken`=books-noun, `lijn`=leash) — the highest-risk class stayed clean. The
+gloss recipe (established across A2/B1/B2, now proven on A1) is effectively
+mature: ~1.6% defect rate, all low-severity. Validator: 0 errors / 0 gloss-key
+warnings every unit. Commits: 00662de8, 437a79ef, 708d0c66 (+ 57523635, eruit fix).
+Instance count: 2 findings (1 defect, 1 clarity).
