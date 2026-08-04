@@ -118,6 +118,12 @@ DIALOGUE_TURN_RE = re.compile(
     re.UNICODE,
 )
 ACCEPTED_VARIANT_STATUSES = {"correct", "acceptable_with_note"}
+
+# Mirror backend/app/review/grading.py's Ramin-approved 2026-08-04
+# DICTATION_BOUNDARY_PUNCTUATION exactly: scripts cannot import backend code.
+DICTATION_BOUNDARY_PUNCTUATION = frozenset(
+    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،"}
+)
 PRACTICE_EXERCISE_TYPES = {
     "multiple_choice",
     "fill_in_blank",
@@ -2022,12 +2028,31 @@ def _utf8_value(value: Any) -> str:
     return f"{value!r} (UTF-8 {value.encode('utf-8')!r})"
 
 
+def normalize_dictation_boundary_punctuation(value: str) -> str:
+    """Trim whitespace and iteratively remove dictation boundary marks."""
+    normalized = value.strip()
+    while normalized and normalized[0] in DICTATION_BOUNDARY_PUNCTUATION:
+        normalized = normalized[1:].lstrip()
+    while normalized and normalized[-1] in DICTATION_BOUNDARY_PUNCTUATION:
+        normalized = normalized[:-1].rstrip()
+    return normalized
+
+
+def dictation_boundary_values_equal(left: str, right: str) -> bool:
+    """Compare values after boundary normalization, guarding empty results."""
+    normalized_left = normalize_dictation_boundary_punctuation(left)
+    normalized_right = normalize_dictation_boundary_punctuation(right)
+    if not normalized_left or not normalized_right:
+        return left == right
+    return normalized_left == normalized_right
+
+
 def validate_dictation_byte_equality(
     realization: dict[str, Any],
     overlay: dict[str, Any],
     report: Report,
 ):
-    """Warn when strict dictation grading differs from the audio transcript."""
+    """Warn when dictation values differ beyond boundary punctuation."""
     assets = _media_assets_by_key(realization)
     exercise_overlays = overlay.get("exercises", {})
     if not isinstance(exercise_overlays, dict):
@@ -2059,19 +2084,24 @@ def validate_dictation_byte_equality(
                     isinstance(tested_text, str)
                     and isinstance(asset_text, str)
                     and isinstance(correct_response, str)
-                    and tested_text == asset_text == correct_response
+                    and all(
+                        dictation_boundary_values_equal(tested_text, value)
+                        for value in (asset_text, correct_response)
+                    )
                 ):
                     continue
 
                 report.warn(
                     f"realization.exercises.{content_key}",
-                    "dictation byte equality failed for content_key "
+                    "dictation byte equality failed after boundary-punctuation "
+                    "normalization for content_key "
                     f"{content_key!r}: tested_text "
                     f"{_utf8_value(tested_text)}; media asset "
                     f"{media_key!r} {asset_field} "
                     f"{_utf8_value(asset_text)}; overlay correct_response "
-                    f"{_utf8_value(correct_response)}; all three values "
-                    "must be byte-identical",
+                    f"{_utf8_value(correct_response)}; all three values must "
+                    "match after boundary-punctuation normalization, or be "
+                    "byte-identical when normalization is empty",
                 )
 
 

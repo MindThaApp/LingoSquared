@@ -1,5 +1,6 @@
 from app.review.grading import (
     damerau_levenshtein,
+    grade,
     grade_answer,
     is_case_only_difference,
     is_latin_script_text,
@@ -27,6 +28,118 @@ def test_grade_answer_latin_tolerant_by_default():
     assert grade_answer("hola", "hola", exercise_type="translation") == "correct"
     assert grade_answer("hoal", "hola", exercise_type="translation") == "almost"
     assert grade_answer("xyz", "hola", exercise_type="translation") == "incorrect"
+
+
+def test_dictation_accepts_terminal_punctuation_in_either_direction():
+    assert (
+        grade(
+            "Escucha con atención.",
+            {
+                "canonical": "Presta atención",
+                "accepted": ["Presta atención", "Escucha con atención"],
+            },
+            exercise_type="dictation",
+        )
+        == "correct"
+    )
+    assert (
+        grade(
+            "Escucha con atención",
+            {
+                "canonical": "Escucha con atención.",
+                "accepted": ["Escucha con atención."],
+            },
+            exercise_type="dictation",
+        )
+        == "correct"
+    )
+
+
+def test_dictation_accepts_spanish_leading_question_mark_in_either_direction():
+    assert (
+        grade_answer("¿Cómo está?", "Cómo está?", exercise_type="dictation")
+        == "correct"
+    )
+    assert (
+        grade_answer("Cómo está?", "¿Cómo está?", exercise_type="dictation")
+        == "correct"
+    )
+
+
+def test_dictation_accepts_trailing_arabic_comma():
+    assert grade_answer("مرحبًا،", "مرحبًا", exercise_type="dictation") == "correct"
+
+
+def test_dictation_internal_punctuation_remains_strict():
+    assert (
+        grade_answer(
+            "Sí quiero aprender.",
+            "Sí, quiero aprender.",
+            exercise_type="dictation",
+        )
+        == "incorrect"
+    )
+
+
+def test_dictation_case_remains_strict():
+    assert grade_answer("hola.", "Hola.", exercise_type="dictation") == "incorrect"
+
+
+def test_dictation_invisible_formatting_matches_existing_strict_path():
+    response = "میکنم"
+    correct = "می‌کنم"
+    existing_strict_result = grade_answer(
+        response,
+        correct,
+        exercise_type="translation",
+        script="arabic",
+        orthography_strict=True,
+    )
+    dictation_result = grade_answer(response, correct, exercise_type="dictation")
+    accepted_dictation_result = grade(
+        response,
+        {"canonical": correct, "accepted": [correct]},
+        exercise_type="dictation",
+    )
+    assert (
+        dictation_result
+        == accepted_dictation_result
+        == existing_strict_result
+        == "correct"
+    )
+
+
+def test_dictation_visible_diacritics_and_script_remain_strict():
+    assert grade_answer("cafe", "café", exercise_type="dictation") == "incorrect"
+    assert grade_answer("کتاب", "كتاب", exercise_type="dictation") == "incorrect"
+
+
+def test_dictation_empty_boundary_normalization_requires_raw_equality():
+    for response, correct in (("...", "!!!"), ("", "...")):
+        assert grade_answer(response, correct, exercise_type="dictation") == "incorrect"
+        assert (
+            grade(
+                response,
+                {"canonical": correct, "accepted": [correct]},
+                exercise_type="dictation",
+            )
+            == "incorrect"
+        )
+    assert grade_answer("...", "...", exercise_type="dictation") == "correct"
+
+
+def test_dictation_boundary_tolerance_does_not_leak_to_other_types():
+    assert (
+        grade(
+            "Escucha con atención.",
+            {
+                "canonical": "Escucha con atención",
+                "accepted": ["Escucha con atención"],
+            },
+            exercise_type="listen_type",
+        )
+        == "incorrect"
+    )
 
 
 def test_grade_answer_non_latin_strict_by_default():
