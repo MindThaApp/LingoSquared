@@ -39,7 +39,7 @@ self.addEventListener("push", (event) => {
     payload = { body: event.data ? event.data.text() : "" };
   }
   event.waitUntil(
-    self.registration.showNotification(payload.title || "Lingo²", {
+    self.registration.showNotification(payload.title || "Auvel", {
       body: payload.body || "",
       icon: "/icons/icon-192.png",
       badge: "/icons/icon-192.png",

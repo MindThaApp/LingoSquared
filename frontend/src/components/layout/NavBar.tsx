@@ -32,7 +32,7 @@ export function NavBar() {
     <>
       <header className="topbar">
         <NavLink to="/" className="topbar-brand">
-          Lingo²
+          Auvel
         </NavLink>
         <nav className="topbar-links">
           {TABS.map((tab) => (
