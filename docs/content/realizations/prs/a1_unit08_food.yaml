@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Fresh-context review completed 2026-07-05. Verified: spine-outcome discipline against universal.a1.food.order_simple_meal's can_do/assessment_requirements (understand ordering exchange, place order + respond to follow-up, read menu, write simple order -- all covered); recognition->drag/matching->production pacing in all 6 lessons; content_key parity between realization and overlay (27 teaching + 43 exercise keys, exact match both directions); every exercise's tested_text and every overlay accepted_answers/pairs/word_bank value checked programmatically against cumulative introduced_tokens within this file -- zero untaught-vocabulary issues found; script purity (no Arabic-range kaf/yeh codepoints, only Persian keheh/yeh); no bare unquoted yes/no/true/false; no fill_in_blank exercises (confirmed, as expected); no internal jargon leaks in learner-facing strings. FIXED: 8 multiple_choice exercises (lesson02.exercise01/02, lesson03.exercise01/02, lesson04.exercise01/02, lesson05.exercise01/02) where the prompt displayed the exact Dari phrase that was also the literal correct_option string, making them pure visual string-matching with zero comprehension test -- converted correct_option/distractors to English glosses (per AUTHORING_GUIDE §6, matching the already-correct pattern used by this same file's lesson01 word-meaning items and lesson05's chaikhana_meaning item) and updated accepted_answers to match. FIXED: lesson06.exercise07 write_order_summary was missing both the period-joined and the exact no-comma tested_text-matching form among its accepted_answers (§12) -- added both. FIXED: an inaccurate internal register_policy note claiming پلو is 'distinct from plain رنگ برنج' -- the real Persian/Dari term for plain rice is چلو (chelow); corrected (not learner-facing, but factually wrong) plus a stray a/an typo nearby. Actively verified (web search + reasoning) Afghan-specific claims: پلو/قورمه/چایخانه/بل(from English 'bill', consistent with Dari's English-loanword pattern vs Iranian French-loanword pattern)/افغانی are all genuine, accurate Afghan Dari usage; استم/استین and می‌خواهم used consistently wherever personal-state/want constructions would appear (none of this unit's actual content needed استم/استین, which is fine -- no inconsistency); دوصد افغانی (~$2.30) for a plate of پلو+قورمه+چای at a چایخانه is realistic (street kebabs run ~120-180 AFN, a full restaurant meal rarely exceeds $15) -- not comically low or high. Specifically checked and confirmed 'بل چند می‌شه؟' is NOT the banned Iranian-colloquial-می‌شه-for-polite-requests pattern this course's register policy targets (که می‌تانین بگویین replaces) -- چند می‌شه is a distinct, genuinely Afghan-and-Iranian-shared idiom meaning 'how much does it total,' using می‌شه as 'become' not as a request modal; left unchanged. NOT changed (flagged only): lesson01.exercise03's listen_select plays a 5-word audio (نان،پلو،قورمه،چای،آب) while 3 of its 4 multiple_choice options are also literally present in that same audio, making the 'correct' pick technically ambiguous -- but this exact pattern (listen_select over a full audio list, with distractors also present in the recording) is the established, already-shipped convention in reference unit04 (e.g. lesson01.exercise03/lesson02.exercise03/lesson03.exercise03), so left unchanged for course-wide consistency rather than unilaterally diverging unit08's design; worth a course-wide pass if this is ever revisited. Both `validate` and `compile` run clean (0 errors/0 warnings) after all fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03, lesson04.exercise03/06, lesson05.exercise03/06, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. This RESOLVES the lesson01.exercise03 ambiguity flagged (not fixed) above -- it's now multiple_choice with a single visible target word, no longer an audio-list-with-overlapping-distractors design. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation. Noted: lesson05.exercise06 and exercise07 now both translate the identical phrase 'بل چند می‌شه؟' (pre-existing content design, exercise06 was originally a listen-and-transcribe dictation distinct from exercise07's translate task; renamed to translate_bill_request_spoken to avoid a key collision, but the near-duplicate content itself is a minor pre-existing redundancy, not introduced by this retrofit -- flagging for a future content-variety pass, not blocking). MATCHING_PAIRS SCALE RETROFIT (§16, same day): all 5 matching_pairs exercises (5/8/6/5/4 pairs) were already reasonably sized, well past the 2-3 problem case -- no changes needed. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 8 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word, reusing this unit's established Afghan Dari food vocabulary (پلو/قورمه). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 8 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word, reusing this unit's established Afghan Dari food vocabulary (پلو/قورمه). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    MATCHING_PAIRS §16 FOLLOW-UP, 2026-08-05: the 2026-07-06 retrofit's blanket 'no changes needed' call was not exercise-specific -- a fresh per-exercise look found: match_food_words (lesson01) is a genuine hard ceiling -- it is the unit's very first lesson, all 5 food words taught by that point are already used, and no earlier-numbered unit teaches any food/drink vocabulary to pool from; left unchanged at 5. match_quantities expanded 5->7 (pooled چای/آب, taught in lesson01 and already reused in lesson02's match_order_phrases, but not yet used in this exercise). match_dialogue_facts expanded 4->6 (the 2026-07-06 'real ceiling' claim missed two more facts directly quoted from the same dialogue: turn01's دکاندار->\"چی میل دارین؟\" and turn05's \"چشم، همین حالا می‌آرم\"->\"Right away, I'll bring it now.\"). Overlay accepted_answers synced for both expanded exercises. Re-ran validate+compile clean (0 errors/0 warnings)."
 
 course:
   realization_key: prs.a1
@@ -293,8 +295,11 @@ units:
             # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16
             # retrofit): pooled in lesson03's availability phrases,
             # already taught earlier in this same unit -- same
-            # "food & ordering" theme, real vocabulary only.
-            tested_text: یک بشقاب پلو دو تا نان چی دارین پلو قورمه داریم تازه
+            # "food & ordering" theme, real vocabulary only. Expanded
+            # 5->7 2026-08-05: pooled چای/آب, taught in lesson01 and
+            # already reused in lesson02's match_order_phrases, but not
+            # yet used in this exercise.
+            tested_text: یک بشقاب پلو دو تا نان چی دارین پلو قورمه داریم تازه چای آب
             prompt: {target_blocks: []}
             pairs:
               - {left: "یک بشقاب پلو", right: "a plate of rice pilaf"}
@@ -302,6 +307,8 @@ units:
               - {left: "چی دارین؟", right: "What do you have?"}
               - {left: "پلو و قورمه داریم", right: "We have rice pilaf and stew."}
               - {left: تازه, right: fresh}
+              - {left: چای, right: tea}
+              - {left: آب, right: water}
           - content_key: prs.a1.unit08.lesson04.exercise05.order_combined_order
             type: word_order
             tested_text: یک بشقاب پلو و دو تا نان لطفاً
@@ -428,14 +435,20 @@ units:
             # retrofit): added two more facts directly stated in this
             # same dialogue (turn03/turn06), each with a unique right-
             # side value -- real ceiling without inferring unstated
-            # details.
-            tested_text: مشتری پلو قورمه بل دوصد افغانی هردو تازه خوش‌مزه
+            # details. Expanded 4->6 2026-08-05: the earlier "real
+            # ceiling" claim missed two more facts directly quoted from
+            # the same dialogue (turn01/turn05) -- what the shopkeeper
+            # asked, and what the shopkeeper said right after taking the
+            # order.
+            tested_text: مشتری پلو قورمه بل دوصد افغانی هردو تازه خوش‌مزه دکاندار میل حالا می‌آرم
             prompt: {target_blocks: []}
             pairs:
               - {left: مشتری, right: "پلو با قورمه و یک چای"}
               - {left: بل, right: "دوصد افغانی"}
               - {left: هردو, right: تازه}
               - {left: "خیلی خوش‌مزه بود", right: "It was very delicious."}
+              - {left: دکاندار, right: "چی میل دارین؟"}
+              - {left: "چشم، همین حالا می‌آرم", right: "Right away, I'll bring it now."}
           - content_key: prs.a1.unit08.lesson06.exercise04.order_final_request
             type: word_order
             tested_text: بل چند می‌شه

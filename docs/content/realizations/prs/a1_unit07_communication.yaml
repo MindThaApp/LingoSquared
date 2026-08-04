@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Fresh-context, from-scratch review completed 2026-07-05, following an earlier pass that was interrupted by a connection failure partway through (that partial pass had already made one legitimate fix, the الو/بفرمایین phone-answering phrase, left in place) and a subsequent orchestrating-session fix for a YAML structural bug (exercises: merged into teaching:) and one untaught-vocabulary bug (گذاشت used in exercise07 before being taught -- fixed by adding a teaching card in lesson06). This pass independently re-verified all of that AND found one more instance of the exact same untaught-vocabulary bug class: lesson06's exercise04 (match_dialogue_facts) used زمان (\"time\") as a matching-pair label, but زمان was never introduced anywhere in the file -- fixed by simplifying the label to جلسه (already taught), which also better matches the exercise's own tested_text (which never included زمان). Also fixed a minor spelling inconsistency: lesson01's exercise01 distractor used خداحافظ (one word) while the rest of the file consistently uses خدا حافظ (two words, as taught in lesson06) -- standardized to the taught spelling. Verified from scratch: (1) spine-outcome discipline against universal.a1.communication.basic_phone_contact's own can_do and all 4 assessment_requirements (listening/speaking/reading/writing all covered, no drift); (2) recognition->drag->production pacing in all 6 lessons (including lesson06, whose exercises are listed out of content_key numeral order but whose actual list order is correctly paced); (3) dialect authenticity -- independently confirmed الو is genuinely used across the Persian-speaking world including Afghanistan to answer the phone, بلی بفرمایین is a natural reuse of this course's established بفرمایین invitation-to-continue pattern (not an invented calque), زنگ می‌زنم is a standard colloquial \"I'll call\" construction, and می‌رسانم is natural for \"I'll pass a message along\"; (4) read every learner-facing string for jargon leaks -- none found; (5) instruction/answer-data coherence for every exercise, including a programmatic check that no multiple_choice instruction text leaks its own correct_option -- none found; (6) cross-checked every concrete fact (Farid calls Lima; Farid is Homayoun's colleague; the message is for Homayoun; the meeting is tomorrow at nine) across every exercise and teaching card referencing them -- all consistent; (7) multi-clause accepted_answers all have period/comma/و-joined forms as status:correct where two full clauses are genuinely being combined (short interjection-style confirmations, where a triple-و join would be unnatural, are correctly given only period/comma forms); (8) no fill_in_blank exercises exist in this unit, so §13 doesn't apply; (9) script purity confirmed clean (no Arabic-range kaf/yeh codepoints, only Persian keheh/yeh throughout); (10) no ambiguous multiple-choice items found; (11) confirmed a natural modern mobile-phone-era scenario throughout (text messaging alongside calls, no landline/operator-era framing); (12) no bare unquoted yes/no/true/false footguns; (13) content_key parity between realization and overlay reconfirmed programmatically (27/27 teaching keys, 43/43 exercise keys, both directions, no duplicates); (14) every tested_text/accepted_answers/pairs/word_bank token cross-checked programmatically against cumulative introduced_tokens -- found and fixed the زمان instance described above, zero remaining issues after the fix. Re-ran both `validate` and `compile` after all fixes: 0 errors/0 warnings both times. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 7 exercises in this unit (lesson01.exercise03/06, lesson02.exercise03, lesson03.exercise03/06, lesson04.exercise03, lesson06.exercise03) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation. MATCHING_PAIRS SCALE RETROFIT (§16, same day): checked all 6 matching_pairs exercises against every lesson's introduced_tokens -- match_phone_opening (3) and match_dialogue_facts (2) are genuine small closed sets (lesson01 teaches exactly 3 words; lesson06's facts are dialogue-specific) with nothing further to pool without violating §16's anti-padding rule; the other 4 (identity_phrases=6, clarification_phrases=5, message_phrases=5, message_vocab=6) were already reasonably sized, well past the 2-3 problem case, and already pool across lessons -- left unchanged. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after the retrofit. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 3 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 3 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    MATCHING_PAIRS §16 FOLLOW-UP, 2026-08-05: the 2026-07-06 retrofit's blanket 'already reasonably sized' call was not exercise-specific -- a fresh look found real unpooled vocabulary for two of the four exercises it covered. match_clarification_phrases expanded 5->8 (pooled lesson01's phone-opening vocabulary: الو, بلی بفرمایین, تلفن -- taught earlier in the same unit, not yet used here). match_message_phrases expanded 5->8 (pooled lesson02's identity phrases: ببخشین کی صحبت می‌کند؟, من فرید استم, همکار همایون استم -- taught earlier in the same unit, not yet used here). match_phone_opening and match_dialogue_facts remain genuine small closed sets, untouched. Overlay accepted_answers synced for both. Re-ran validate+compile clean (0 errors/0 warnings)."
 
 course:
   realization_key: prs.a1
@@ -214,7 +216,10 @@ units:
             # Expanded 2->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16
             # retrofit): pooled in lesson02's identity phrases, already
             # taught earlier in this same unit -- same "phone
-            # conversation" theme, real vocabulary only.
+            # conversation" theme, real vocabulary only. Expanded 5->8
+            # 2026-08-05: pooled lesson01's phone-opening vocabulary
+            # (الو/بلی بفرمایین/تلفن), already taught earlier in this
+            # same unit and not yet used in this exercise.
             tested_text: آهسته صحبت کنین دوباره بگویین کی صحبت می‌کند فرید همایون
             prompt: {target_blocks: []}
             pairs:
@@ -223,6 +228,9 @@ units:
               - {left: "ببخشین، کی صحبت می‌کند؟", right: "Excuse me, who's speaking?"}
               - {left: "من فرید استم", right: "This is Farid."}
               - {left: "همکار همایون استم", right: "I'm Homayoun's colleague."}
+              - {left: الو, right: "hello (on the phone)"}
+              - {left: "بلی، بفرمایین", right: "Yes, go ahead."}
+              - {left: تلفن, right: telephone}
           - content_key: prs.a1.unit07.lesson03.exercise05.order_speak_slowly
             type: word_order
             tested_text: لطفاً آهسته صحبت کنین
@@ -272,7 +280,11 @@ units:
             # Expanded 3->5 pairs 2026-07-06 (AUTHORING_GUIDE.md #16
             # retrofit): pooled in lesson03's clarification phrases,
             # already taught earlier in this same unit -- same "phone
-            # conversation" theme, real vocabulary only.
+            # conversation" theme, real vocabulary only. Expanded 5->8
+            # 2026-08-05: pooled lesson02's identity phrases (who's
+            # speaking / this is Farid / Homayoun's colleague), already
+            # taught earlier in this same unit and not yet used in this
+            # exercise.
             tested_text: پیام می‌خواهم بگذارم بعد زنگ می‌زنم آهسته صحبت کنین دوباره بگویین
             prompt: {target_blocks: []}
             pairs:
@@ -281,6 +293,9 @@ units:
               - {left: "بعد زنگ می‌زنم", right: "I'll call later."}
               - {left: "لطفاً آهسته صحبت کنین", right: "Please speak slowly."}
               - {left: "می‌تانین دوباره بگویین؟", right: "Could you say it again?"}
+              - {left: "ببخشین، کی صحبت می‌کند؟", right: "Excuse me, who's speaking?"}
+              - {left: "من فرید استم", right: "This is Farid."}
+              - {left: "همکار همایون استم", right: "I'm Homayoun's colleague."}
           - content_key: prs.a1.unit07.lesson04.exercise05.order_leave_message
             type: word_order
             tested_text: می‌خواهم یک پیام بگذارم
