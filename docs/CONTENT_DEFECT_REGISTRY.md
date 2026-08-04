@@ -1625,3 +1625,70 @@ that no prior human pass caught. The 315 dictation-punctuation fixes remain
 pending a grading-policy decision by Ramin.
 New bug class discovered: no — aggregate validator yield and pending-policy record
 Instance count: 817 latent defects surfaced; 315 fixes pending policy
+
+### 2026-08-04 — dictation-tolerance grading diff (adversarial fresh-context review)
+Bug classes found: **FIX-FIRST** — 4 findings: missing Arabic comma behavior
+versus CONTRACT, dropped ZWNJ forgiveness, a missing empty-normalization guard,
+and out-of-sync feedback. All four were fixed the same night; caller tracing
+confirmed **NO scope leak**. Final verification passed with every item VERIFIED
+by execution. One LOW CONTRACT harakat-example misstatement was also found and
+fixed. Shipped as `4994f12d`.
+New bug class discovered: no
+Instance count: 4 grading findings + 1 LOW documentation finding, all fixed
+
+### 2026-08-04 — content-import dictation exemption (`service.py`) fresh-context review
+Bug classes found: none remaining — **VERIFIED**. Root cause was that the import
+validator predated the dictation exercise type, producing a 422 during the
+10-course dev sync.
+New bug class discovered: no
+Instance count: 1 systemic import-validation defect affecting the 10-course sync
+
+### 2026-08-04 — pairs-override compiler feature fresh-context review
+Bug classes found: none blocking — **SHIP**. The answer side was verified against
+content, frontend, and grading behavior; both desynchronization guards were
+present and verified. Shipped as `4c6c2c24`.
+New bug class discovered: no
+Instance count: 0 blocking findings
+
+### 2026-08-04 — nl-en L1 pilot v1 fresh-context review
+Bug classes found: **FIX-FIRST / BLOCKER** — mixed spine-pair orientation meant
+that localizing `right` removed the English target from approximately 57
+exercises. The reviewer found the defect by reading the frontend renderer's
+contract; the Dutch language itself was excellent.
+New bug class discovered: yes — display-affecting content changes can be locally
+valid in YAML while violating the renderer's pair-orientation contract
+Instance count: ~57 affected exercises
+**RULE NOTE**: content reviews of display-affecting changes must include the
+renderer’s contract, not just the YAML.
+
+### 2026-08-04 — en spine orientation normalization (101 transposes) fresh-context review
+Bug classes found: none — transpose-audited with zero warning deltas. **SHIP**.
+Shipped as `81d01723`.
+New bug class discovered: no
+Instance count: 0 findings across 101 transposes
+
+### 2026-08-04 — nl-en L1 pilot v2 fresh-context review
+Bug classes found: none blocking — **SHIP**. All 65/65 exercises had the correct
+orientation; 4 pre-existing instruction bugs were fixed. Unit 03 digit matchers
+were deliberately left unlocalized. Shipped.
+New bug class discovered: no
+Instance count: 4 pre-existing instruction bugs, fixed; 0 orientation defects
+
+### 2026-08-04 — fa-en L1 wave fresh-context review
+Bug classes found: none blocking — **SHIP**. All 63/63 exercises passed, with
+0 RTL defects and a clean colloquial register. The unit 20 comparative-degree
+fix was applied post-review. Native-review queue notes: unit 18 `saw` gloss and
+unit 12 circular definitions.
+New bug class discovered: no
+Instance count: 1 post-review comparative-degree fix + 2 native-review notes
+
+### 2026-08-04 — prs-en L1 wave fresh-context review
+Bug classes found: none blocking — **SHIP**. All 63/63 exercises passed, with
+0 RTL defects and **ZERO Iranian-Farsi contamination**.
+New bug class discovered: no
+Instance count: 1 native-review NIT — bike-pedal phrasing
+
+### 2026-08-04 — native-review queue
+- Dutch A1 matcher clues: 63 exercises awaiting Ramin's native pass.
+- Farsi A1 matcher clues: 63 exercises awaiting Ramin's native pass.
+- Dari A1 matcher clues: 63 exercises awaiting Ramin's native pass.
