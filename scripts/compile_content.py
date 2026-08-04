@@ -1666,6 +1666,33 @@ def _matching_pair_tuple(value: Any) -> tuple[str, str] | None:
     return left, right
 
 
+def _matching_pair_sequence(values: Any) -> list[tuple[str, str]] | None:
+    """Return display pairs in authored order, or None for an invalid shape."""
+    if not isinstance(values, list):
+        return None
+
+    pairs = []
+    for value in values:
+        pair = _matching_pair_tuple(value)
+        if pair is None:
+            return None
+        pairs.append(pair)
+    return pairs
+
+
+def _effective_matching_pair_values(
+    exercise: dict[str, Any],
+    exercise_overlay: Any,
+) -> Any:
+    if (
+        exercise.get("type") == "matching_pairs"
+        and isinstance(exercise_overlay, dict)
+        and "pairs" in exercise_overlay
+    ):
+        return exercise_overlay["pairs"]
+    return exercise.get("pairs")
+
+
 def _matching_pair_counter(values: Any) -> Counter[tuple[str, str]] | None:
     if isinstance(values, dict):
         pairs = []
@@ -1724,6 +1751,79 @@ def _format_pair_counter(counter: Counter[tuple[str, str]]) -> list[str]:
     ]
 
 
+def validate_matching_pairs_overlay_overrides(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """Allow overlays to localize clues without changing tested vocabulary.
+
+    MatchingPairs fixes each left-side value and asks the learner to choose
+    its right-side match. The frontend also speaks the left side using the
+    exercise's answer_language_code, so left is the taught-vocabulary answer
+    side and right is the localizable clue side.
+    """
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        return
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if exercise.get("type") != "matching_pairs":
+                    continue
+
+                key = exercise.get("content_key", "<unknown>")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if (
+                    not isinstance(exercise_overlay, dict)
+                    or "pairs" not in exercise_overlay
+                ):
+                    continue
+
+                location = f"overlay.exercises.{key}.pairs"
+                realization_pairs = _matching_pair_sequence(
+                    exercise.get("pairs")
+                )
+                override_pairs = _matching_pair_sequence(
+                    exercise_overlay["pairs"]
+                )
+                if override_pairs is None:
+                    report.error(
+                        location,
+                        "matching_pairs override must be a list of "
+                        "{left, right} string pairs",
+                    )
+                    continue
+                if realization_pairs is None:
+                    # The realization's malformed display shape is outside
+                    # this overlay-specific invariant and is handled by the
+                    # existing content/compiler checks.
+                    continue
+
+                if len(override_pairs) != len(realization_pairs):
+                    report.error(
+                        location,
+                        "matching_pairs override pair count must match "
+                        "realization pairs exactly: "
+                        f"{len(realization_pairs)} realization pair(s) vs "
+                        f"{len(override_pairs)} override pair(s)",
+                    )
+                    continue
+
+                realization_answers = [left for left, _ in realization_pairs]
+                override_answers = [left for left, _ in override_pairs]
+                if override_answers != realization_answers:
+                    report.error(
+                        location,
+                        "matching_pairs override answer side (left) must be "
+                        "byte-identical to realization pairs as a set and "
+                        "in order; only right-side clues may differ: "
+                        f"expected {realization_answers!r}; "
+                        f"got {override_answers!r}",
+                    )
+
+
 def validate_matching_pairs_overlay_mirror(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -1748,6 +1848,24 @@ def validate_matching_pairs_overlay_mirror(
                 if not isinstance(exercise_overlay, dict):
                     continue
 
+                effective_pairs = realization_pairs
+                expected_name = "realization"
+                expected_count_name = "realization"
+                if "pairs" in exercise_overlay:
+                    override_pairs = _matching_pair_counter(
+                        _effective_matching_pair_values(
+                            exercise,
+                            exercise_overlay,
+                        )
+                    )
+                    if override_pairs is None:
+                        # validate_matching_pairs_overlay_overrides reports the
+                        # invalid display shape at its authoring location.
+                        continue
+                    effective_pairs = override_pairs
+                    expected_name = "effective overlay"
+                    expected_count_name = "expected"
+
                 for answer_location, overlay_pairs in _overlay_matching_pair_answers(
                     exercise_overlay
                 ):
@@ -1757,22 +1875,23 @@ def validate_matching_pairs_overlay_mirror(
                             location,
                             "matching_pairs answer must be a list of "
                             "{left, right} string pairs that mirrors "
-                            "realization pairs",
+                            f"{expected_name} pairs",
                         )
                         continue
 
-                    if overlay_pairs == realization_pairs:
+                    if overlay_pairs == effective_pairs:
                         continue
 
                     missing, extra = _counter_diff(
-                        realization_pairs,
+                        effective_pairs,
                         overlay_pairs,
                     )
                     report.error(
                         location,
-                        "matching_pairs answer does not mirror realization "
+                        f"matching_pairs answer does not mirror {expected_name} "
                         "pairs exactly: "
-                        f"{sum(realization_pairs.values())} realization "
+                        f"{sum(effective_pairs.values())} "
+                        f"{expected_count_name} "
                         "pair(s) vs "
                         f"{sum(overlay_pairs.values())} overlay pair(s); "
                         f"missing from overlay {_format_pair_counter(missing)}; "
@@ -3148,10 +3267,15 @@ def validate_matching_pairs_untaught_descriptions(
     target_lexicon: set[str],
     taught: set[str],
     report: Report,
+    effective_pairs: Any = _MISSING,
 ):
     if exercise.get("type") != "matching_pairs":
         return
-    pairs = exercise.get("pairs")
+    pairs = (
+        exercise.get("pairs")
+        if effective_pairs is _MISSING
+        else effective_pairs
+    )
     if not isinstance(pairs, list):
         return
 
@@ -3210,6 +3334,7 @@ def validate_untaught_vocabulary(
     taught: set[str] | None = None,
     source_language: Any = None,
     target_lexicon: set[str] | None = None,
+    overlay: dict[str, Any] | None = None,
 ):
     if taught is None:
         taught = set()
@@ -3219,6 +3344,13 @@ def validate_untaught_vocabulary(
         target_lexicon = _course_target_lexicon([realization])
     future_by_lesson = _future_introduced_tokens_by_lesson(units)
     target_language = realization.get("target_language")
+    exercise_overlays = (
+        overlay.get("exercises", {})
+        if isinstance(overlay, dict)
+        else {}
+    )
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
     for unit_index, unit in enumerate(units):
         for lesson_index, lesson in enumerate(unit.get("lessons", [])):
             lesson_location = (
@@ -3253,13 +3385,28 @@ def validate_untaught_vocabulary(
                 exercise_location = (
                     f"{lesson_location}.exercises[{exercise_index}]"
                 )
+                pair_location = exercise_location
+                effective_pairs = _MISSING
+                key = exercise.get("content_key")
+                exercise_overlay = exercise_overlays.get(key, {})
+                if (
+                    exercise.get("type") == "matching_pairs"
+                    and isinstance(exercise_overlay, dict)
+                    and "pairs" in exercise_overlay
+                ):
+                    pair_location = f"overlay.exercises.{key}"
+                    effective_pairs = _effective_matching_pair_values(
+                        exercise,
+                        exercise_overlay,
+                    )
                 validate_matching_pairs_untaught_descriptions(
                     exercise,
-                    exercise_location,
+                    pair_location,
                     target_language,
                     target_lexicon,
                     taught,
                     report,
+                    effective_pairs,
                 )
                 tested_text = exercise.get("tested_text", "")
                 if not isinstance(tested_text, str):
@@ -4045,7 +4192,17 @@ def compile_exercise(
 
     for field in ("word_bank", "pairs", "back_text_blocks"):
         if field in exercise:
-            prompt[field] = copy.deepcopy(exercise[field])
+            value = exercise[field]
+            if (
+                field == "pairs"
+                and exercise["type"] == "matching_pairs"
+                and "pairs" in exercise_overlay
+            ):
+                value = _effective_matching_pair_values(
+                    exercise,
+                    exercise_overlay,
+                )
+            prompt[field] = copy.deepcopy(value)
 
     return {
         "type": exercise["type"],
@@ -4224,6 +4381,7 @@ def validate_documents(
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)
     validate_matching_pairs_confusable_lefts(realization, report)
+    validate_matching_pairs_overlay_overrides(realization, overlay, report)
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
     validate_untaught_vocabulary(
         realization,
@@ -4231,6 +4389,7 @@ def validate_documents(
         taught_tokens,
         overlay.get("source_language"),
         target_lexicon,
+        overlay,
     )
     validate_vocabulary_examples(realization, overlay, report)
     validate_reading_glosses(realization, overlay, report)
