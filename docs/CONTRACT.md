@@ -1346,6 +1346,87 @@ with a `retry_after_seconds` field (see the error-shape section above) when
 called again too soon after the same user's most recent attempt for that
 unit, race-safe under concurrent requests.
 
+### Placement test (course-level), 2026-08-05
+
+CEO-approved 2026-08-05 (full design in `docs/PLACEMENT_TEST_SPEC.md`). Distinct
+from the placement-quiz *enrollment* system rejected in favor of the unit
+checkpoint above: this is recognition-only, **assembled from the course's own
+existing reviewed exercises** (no new content authoring), graded by the existing
+`grade()`, and in the MVP writes **nothing** — no `ExerciseAttempt`,
+`LessonProgress`, XP, streak, or SRS rows. It only *recommends* a starting unit;
+the recommendation is persisted client-side (`localStorage`, same mechanism as
+`LevelCheckPage`'s existing per-course level preference), so the MVP needs **zero
+migrations**. Server-side persistence + progress/SRS seeding is a deferred growth
+step (one small `placement_results` table) and is NOT part of this contract yet.
+
+Probes are restricted to `multiple_choice` and `matching_pairs` (self-contained,
+choice-graded, no audio, no free-text) so grading is script-agnostic and RTL/
+`prs`-no-TTS-safe. Items are laddered by the CEFR level of their owning unit
+(parsed from `Unit.content_key`, never `Course.level`), in blocks of 4 per level
+A1→A2→B1→B2, deterministically selected (stable order) so the set is reproducible.
+
+All three endpoints require auth (`current_user`) and are rate-limited under the
+existing per-account answer limit (`ANSWER_RATE_LIMIT`, 120/60s → `429
+answer_rate_limited` with `retry_after_seconds`, same shape as the other answer
+endpoints).
+
+`GET /courses/{course_id}/placement` returns the laddered probe set with answers
+withheld (same `{id, type, prompt}` item shape as lessons/checkpoints, plus a
+per-item `level`):
+
+```json
+{
+  "course_id": "uuid",
+  "levels": ["A1", "A2", "B1", "B2"],
+  "block_size": 4,
+  "pass_threshold": 3,
+  "items": [ { "id": "uuid", "level": "A1", "type": "multiple_choice", "order": 0, "prompt": {} } ]
+}
+```
+
+Returns `404 course_not_found` for an unknown course, and `409
+placement_unavailable` when the course cannot fill even one A1 block (< 4 usable
+probes).
+
+`POST /courses/{course_id}/placement/answer` grades ONE item live (for immediate
+feedback + client-side adaptive early-exit) with **no side effects** — a pure
+`grade()` call, no rows written:
+
+```json
+// request
+{ "exercise_id": "uuid", "response": "<AnswerResponse, same union as POST /exercises/{id}/answer>" }
+// response
+{ "correct": true, "result": "correct", "correct_response": "<shown answer>" }
+```
+
+Returns `400 exercise_not_in_placement` if the `exercise_id` does not belong to
+`course_id`, and `404 course_not_found` for an unknown course.
+
+`POST /courses/{course_id}/placement/result` is the authoritative recommendation:
+the server **re-grades** every submitted answer (so pass thresholds live only
+server-side and cannot be gamed), computes per-level accuracy, maps it to a
+recommended CEFR level, and resolves the first reading/writing unit of that level.
+Also **no side effects** in the MVP:
+
+```json
+// request
+{ "answers": [ { "exercise_id": "uuid", "response": "<AnswerResponse>" } ] }
+// response
+{
+  "recommended_level": "A2",
+  "recommended_unit_id": "uuid",
+  "recommended_unit_content_key": "nl.a2.unit05.slug",
+  "recommended_unit_title": "…",
+  "per_level": { "A1": { "correct": 4, "total": 4 }, "A2": { "correct": 2, "total": 4 } }
+}
+```
+
+Recommendation mapping: fail A1 → course start; pass A1 / fail A2 → first A2 unit;
+pass A1+A2 / fail B1 → first B1 unit; pass all present → first unit of the highest
+level present. A pass of a level's block is `≥ pass_threshold` correct. An empty
+or short `answers` array recommends the course start rather than erroring; `404
+course_not_found` for an unknown course.
+
 ### Web push notifications (Phase E4), 2026-07-10
 
 Standard Web Push with VAPID — no third-party push provider, no new
