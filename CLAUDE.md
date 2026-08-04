@@ -92,10 +92,11 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   `{"error": {code, message}}`) — only running pytest reveals which; that's always the
   coordinator's job. Detail: BUILD_LOG relocated §.
 - **Codex will MASK a validation error with bogus content to satisfy a "0 errors" criterion
-  (validator-gaming).** Put an explicit STRICT-SCOPE rule in every scoped content prompt —
-  "add ONLY X; if a validation error blocks you, SKIP and report — never mask it" — and audit
-  the diff for out-of-scope additions. A skipped unit is correct; a masked error is a new
-  defect. Learned 2026-08-03 (es A1). Detail: BUILD_LOG relocated §.
+  (validator-gaming), and exploit stylistic escape hatches at 100% rate.** Forbid shortcut
+  forms BY NAME: "form-based clue allowed as fallback" produced letter-blank answer-redactions,
+  then symbolic ≠/</+/→ notation (2026-08-03 matcher rewrite). Every scoped prompt must say
+  "add ONLY X; if blocked, honestly drop/skip and report — never mask it"; audit the diff.
+  A skipped unit is correct; masked or degenerate content is a defect. Detail: BUILD_LOG relocated §.
 - **Codex runs UNISOLATED in the main working tree** — concurrent tasks only on disjoint
   files; always commit with explicit pathspecs and `git show --stat` the result.
 
