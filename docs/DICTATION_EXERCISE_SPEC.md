@@ -102,6 +102,21 @@ answer** and MUST set strict + MUST NOT carry `options`/`distractors`.
 - Grade call sites that must apply the strict-by-type rule: `exercise_answer()`
   and `review_answer()` in `backend/app/api/router.py` (practice too, but v1
   excludes practice).
+- **Boundary-punctuation tolerance (approved by Ramin, 2026-08-04):**
+  dictation remains orthography-strict EXCEPT for leading/trailing
+  punctuation. For `dictation` only, compare the learner's typed answer
+  against `correct_response`/`accepted_answers` after (a) trimming
+  whitespace and (b) stripping leading and trailing boundary punctuation
+  from both sides — the set is `. ? ! … ¿ ¡ ؟ । ۔ ،` (the final constant
+  lives in `backend/app/review/grading.py`; treat that as authoritative if
+  this list ever drifts). Internal punctuation, case, diacritics, and
+  script all remain byte-strict — this is a boundary-only relaxation, not
+  general punctuation-insensitivity. Rationale: 315 legacy dictations
+  accepted only punctuation-less typed answers while newer ones accepted
+  only punctuated ones — each direction graded a correct learner answer as
+  wrong. The compiler's dictation byte-equality validator
+  (`tested_text`/`correct_response` match) is relaxed to match:
+  terminal-only differences no longer warn; internal differences still do.
 
 ## 5. TTS gating (unanswerable-audio guard)
 
