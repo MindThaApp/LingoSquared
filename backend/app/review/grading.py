@@ -48,6 +48,14 @@ FREE_TEXT_EXERCISE_TYPES = {
     "speak_repeat",
 }
 
+# Ramin's 2026-08-04 decision: dictation grading ignores only punctuation at
+# the answer boundaries. The realization corpus currently uses leading ¿ and
+# terminal . ? ؟; the wider approved set covers the equivalent boundaries in
+# the other shipped scripts. Keep this in sync with scripts/compile_content.py.
+DICTATION_BOUNDARY_PUNCTUATION: frozenset[str] = frozenset(
+    {".", "?", "!", "…", "¿", "¡", "؟", "।", "۔", "،"}
+)
+
 # Exercise types that are always choice/selection-based and must never
 # produce "almost" - a wrong option is simply incorrect.
 CHOICE_EXERCISE_TYPES = {
@@ -159,6 +167,16 @@ MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE = 4
 def _normalize(value: str, *, case_sensitive: bool = False) -> str:
     folded = value if case_sensitive else value.casefold()
     return " ".join(folded.strip().split())
+
+
+def normalize_dictation_boundary_punctuation(value: str) -> str:
+    """Trim whitespace and iteratively remove dictation boundary marks."""
+    normalized = value.strip()
+    while normalized and normalized[0] in DICTATION_BOUNDARY_PUNCTUATION:
+        normalized = normalized[1:].lstrip()
+    while normalized and normalized[-1] in DICTATION_BOUNDARY_PUNCTUATION:
+        normalized = normalized[:-1].rstrip()
+    return normalized
 
 
 def is_latin_script_text(value: str) -> bool:
@@ -365,6 +383,19 @@ def is_invisible_formatting_only_difference(a: str, b: str) -> bool:
     return _zwnj_flexible_match(stripped_a, stripped_b)
 
 
+def dictation_answers_equal(response: str, correct: str) -> bool:
+    """Compare dictation answers with the approved narrow forgiveness."""
+    normalized_response = normalize_dictation_boundary_punctuation(response)
+    normalized_correct = normalize_dictation_boundary_punctuation(correct)
+    if not normalized_response or not normalized_correct:
+        return response == correct
+    return normalized_response == normalized_correct or (
+        is_invisible_formatting_only_difference(
+            normalized_response, normalized_correct
+        )
+    )
+
+
 def answers_equivalent(a, b) -> bool:
     """Equality for two ALREADY-normalized answer values that ignores
     invisible formatting. Recurses into lists so word_order/listen_order
@@ -432,15 +463,18 @@ def grade_answer(
       strict for everything else (in particular 'arabic', which covers
       ar/fa/prs). Falls back to a character-based Latin heuristic if the
       caller has no script value handy.
-    - dictation defaults to orthography-strict regardless of script. An
-      explicitly authored orthography_strict=False still overrides that
-      type-based default.
-    - orthography_strict, when not None, overrides the script/type-based
-      default in either direction (author-set per exercise).
+    - dictation is byte-strict after trimming surrounding whitespace and
+      iteratively removing approved boundary punctuation, apart from the
+      same invisible-formatting forgiveness applied to every strict path.
+      Case, visible diacritics, script, internal whitespace, and internal
+      punctuation stay strict. If boundary normalization empties either
+      value, raw byte equality is required.
+    - For non-dictation answers, orthography_strict, when not None, overrides
+      the script-based default in either direction (author-set per exercise).
     - Invisible formatting characters (Persian ZWNJ U+200C, Arabic harakat
       U+064B-U+0652/U+0670, tatweel U+0640, zero-width/bidi marks) never
-      decide correct-vs-incorrect: an answer that differs only in those
-      grades "correct", ahead of every strictness branch, in every script.
+      decide correct-vs-incorrect: an answer that differs only in those grades
+      "correct", ahead of every strictness branch, in every script.
       A ZWNJ may correspond to nothing or to a space (می‌کنم = میکنم =
       می کنم) because that is what real Persian keyboards and STT emit; a
       plain word space is still required. See
@@ -457,13 +491,21 @@ def grade_answer(
       different word (Dutch je/ze, hij/zij, in/en), frequently the exact
       contrast being tested. See is_too_short_for_typo_tolerance().
     - case_sensitive (author-set per exercise, same feedback_meta blob as
-      orthography_strict), when True, compares without casefolding and
-      never forgives a case-only mismatch (e.g. "sie" vs "Sie") as a
+      orthography_strict), when True, prevents casefolding of non-dictation
+      answers and never forgives a case-only mismatch (e.g. "sie" vs "Sie") as a
       distance-1 typo either - both the exact-match and the almost-typo
       paths respect it. Defaults to False (the historical always-
       casefold behavior) so every exercise that doesn't opt in keeps
       grading exactly as before.
     """
+    if exercise_type == "dictation":
+        # Do not casefold, collapse internal whitespace, fold visible
+        # diacritics, or apply typo tolerance here. Invisible formatting
+        # retains the same forgiveness as every other strict path.
+        return (
+            "correct" if dictation_answers_equal(response, correct) else "incorrect"
+        )
+
     normalized_response = _normalize(response, case_sensitive=case_sensitive)
     normalized_correct = _normalize(correct, case_sensitive=case_sensitive)
 
@@ -494,9 +536,6 @@ def grade_answer(
 
     if is_too_short_for_typo_tolerance(normalized_correct):
         return "incorrect"
-
-    if orthography_strict is None and exercise_type == "dictation":
-        orthography_strict = True
 
     if orthography_strict is True:
         return "incorrect"
@@ -638,6 +677,12 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             response_tokens = canonical_order_tokens(response,case_sensitive)
             is_ok = response_tokens is not None and any(
                 answers_equivalent(response_tokens, canonical_order_tokens(item,case_sensitive)) for item in correct["accepted"]
+            )
+        elif type_value == "dictation":
+            is_ok = isinstance(response, str) and any(
+                isinstance(item, str)
+                and dictation_answers_equal(response, item)
+                for item in correct["accepted"]
             )
         else:
             # answers_equivalent(), not ==: this branch never reaches

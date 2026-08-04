@@ -397,12 +397,53 @@ def dictation_documents(tested_text, asset_text, correct_response):
     )
 
 
-def test_dictation_byte_equality_validator_warns_on_punctuation_difference():
+def test_dictation_byte_equality_validator_accepts_boundary_punctuation_difference():
     compiler = load_content_compiler()
     realization, overlay = dictation_documents(
-        "Wo ist die Bank",
-        "Wo ist die Bank?",
-        "Wo ist die Bank",
+        "مرحبًا",
+        "مرحبًا،",
+        "مرحبًا",
+    )
+    report = compiler.Report()
+
+    compiler.validate_dictation_byte_equality(realization, overlay, report)
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
+@pytest.mark.parametrize(
+    ("tested_text", "asset_text", "correct_response"),
+    [
+        ("...", "!!!", "..."),
+        ("", "...", ""),
+    ],
+)
+def test_dictation_byte_equality_validator_does_not_tolerate_empty_normalization(
+    tested_text,
+    asset_text,
+    correct_response,
+):
+    compiler = load_content_compiler()
+    realization, overlay = dictation_documents(
+        tested_text,
+        asset_text,
+        correct_response,
+    )
+    report = compiler.Report()
+
+    compiler.validate_dictation_byte_equality(realization, overlay, report)
+
+    assert report.errors == []
+    assert len(report.warnings) == 1
+
+
+def test_dictation_byte_equality_validator_warns_on_internal_punctuation_difference():
+    compiler = load_content_compiler()
+    realization, overlay = dictation_documents(
+        "Ja ich komme.",
+        "Ja, ich komme.",
+        "Ja ich komme",
     )
     report = compiler.Report()
 
@@ -412,10 +453,10 @@ def test_dictation_byte_equality_validator_warns_on_punctuation_difference():
     assert len(report.warnings) == 1
     warning = report.warnings[0]
     assert "de.test.exercise.dictation_bank" in warning
-    assert "tested_text 'Wo ist die Bank' (UTF-8 b'Wo ist die Bank')" in warning
+    assert "tested_text 'Ja ich komme.' (UTF-8 b'Ja ich komme.')" in warning
     assert (
         "media asset 'de.test.audio.bank' script "
-        "'Wo ist die Bank?' (UTF-8 b'Wo ist die Bank?')" in warning
+        "'Ja, ich komme.' (UTF-8 b'Ja, ich komme.')" in warning
     )
 
 

@@ -86,7 +86,12 @@ single-letter misspelling grades incorrect. **Boundary-punctuation exception
 accepted answers are compared after trimming whitespace and stripping
 leading/trailing boundary punctuation (`. ? ! … ¿ ¡ ؟ । ۔ ،` — the final
 constant lives in `backend/app/review/grading.py`); internal punctuation,
-case, diacritics, and script remain byte-strict. See
+case, diacritics, and script remain byte-strict. The pre-existing
+invisible-formatting-only forgiveness (e.g. ZWNJ and Arabic harakat, which
+no keyboard emits) continues to apply to `dictation` ahead of this strict
+comparison, exactly as it does for every other strict grading path —
+"diacritics remain byte-strict" above covers visible diacritics (e.g. é
+vs e), not the invisible-formatting marks forgiven by that function. See
 `docs/DICTATION_EXERCISE_SPEC.md`.
 
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
