@@ -522,6 +522,34 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit34_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/fa-en/a2_unit34.yaml",
     ),
+    # Added 2026-08-05 (fa/prs native-gloss backlog): units 35-40 unblock the
+    # last 6 fa-en A2 checkpoints. English POS ported from the already-shipped
+    # nl-en EN_EXTRA (commit 304c029e); Farsi glosses below are DRAFTS pending
+    # Ramin's native audit.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit35_prescription.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit36_document_correction.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit37_video_calls.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit38_repair_visit.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit39_after_the_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit40_online_order_problem.yaml",
+        REPO_ROOT / "docs/content/overlays/fa-en/a2_unit40.yaml",
+    ),
 )
 
 # B1 and B2 live in their own course rows again ("انگلیسی B1" / "انگلیسی
@@ -1462,6 +1490,54 @@ FA_EN_EXTRA_LEXEMES: dict[str, tuple[str, str]] = {
     "30": ("symbol", "۳۰"),
     "refunded": ("verb", "بازپرداخت شد"),
     "thirty-five": ("noun", "سی و پنج"),
+    # --- a2 unit35: at the pharmacy (a prescription) ----------------------
+    # DRAFT Farsi glosses (2026-08-05), pending Ramin's native audit. POS
+    # ported from nl-en EN_EXTRA. Colloquial Iranian register; senses pinned
+    # to the a2_unit35 overlay's own glossary (دوز/تکرار نسخه/عوارض جانبی).
+    "dose": ("noun", "دوز؛ مقدار هر بار مصرف دارو"),
+    "refill": ("noun", "تکرار نسخه"),
+    "refills": ("noun", "تکرار نسخه"),
+    "side": ("noun", "جانبی (در side effects)"),
+    "effects": ("noun", "عوارض جانبی"),
+    "shouldn't": ("verb", "نباید (مخفف should not)"),
+    # --- a2 unit36: correcting a document ---------------------------------
+    "certificate": ("noun", "گواهی؛ مدرک رسمی"),
+    "spelled": ("verb", "هجی کرد؛ حروفش را گفت"),
+    "copy": ("noun", "کپی؛ رونوشت"),
+    "passport": ("noun", "پاسپورت؛ گذرنامه"),
+    "mistakes": ("noun", "اشتباه‌ها"),
+    "registration": ("noun", "ثبت‌نام"),
+    "correction": ("noun", "اصلاح؛ تصحیح"),
+    "corrected": ("verb", "اصلاح کرد؛ تصحیح کرد"),
+    "reference": ("noun", "مرجع؛ شمارهٔ پیگیری"),
+    "3092": ("symbol", "۳۰۹۲"),
+    # --- a2 unit37: video calls -------------------------------------------
+    "microphone": ("noun", "میکروفون"),
+    "connection": ("noun", "اتصال؛ ارتباط اینترنتی"),
+    "mute": ("verb", "بی‌صدا کردن"),
+    "face": ("noun", "چهره (در face to face: رو در رو)"),
+    "calls": ("noun", "تماس‌ها"),
+    "headphones": ("noun", "هدفون"),
+    "asks": ("verb", "می‌پرسه"),
+    "question": ("noun", "سؤال"),
+    "classmates": ("noun", "هم‌کلاسی‌ها"),
+    "speaking": ("verb", "صحبت کردن (شکل ing فعل speak)"),
+    # --- a2 unit38: a repair visit ----------------------------------------
+    "leak": ("noun", "نشتی"),
+    "won't": ("verb", "نخواهد (مخفف will not)"),
+    "rescheduled": ("verb", "زمانش را عوض کرد؛ موکول کرد"),
+    "9am": ("symbol", "۹ صبح"),
+    "11am": ("symbol", "۱۱ صبح"),
+    # --- a2 unit39: after the interview -----------------------------------
+    "contract": ("noun", "قرارداد"),
+    "salary": ("noun", "حقوق"),
+    "accept": ("verb", "قبول کردن"),
+    "interested": ("adjective", "علاقه‌مند"),
+    # --- a2 unit40: an online order problem -------------------------------
+    "delivery": ("noun", "تحویل؛ ارسال"),
+    "parcel": ("noun", "بسته؛ مرسوله"),
+    "lamp": ("noun", "چراغ"),
+    "8154": ("symbol", "۸۱۵۴"),
     # --- b1 unit01: expressing necessity ----------------------------------
     "task": ("noun", "کار؛ وظیفه"),
     "finish": ("verb", "تمام کردن"),
@@ -2122,6 +2198,10 @@ TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
 
 
 UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
+    # a2_unit36 teaches the VERB ("Could you correct it?"); the shared table
+    # resolves bare `correct` to the adjective ("درست"), which would emit a
+    # wrong-sense vocab card here. Added 2026-08-05 (native-gloss backlog fix).
+    ("a2_unit36_document_correction", "correct"): ("verb", "اصلاح کردن؛ تصحیح کردن"),
     ("b1_unit01_necessity", "must"): ("verb", "باید"),
     ("b1_unit01_necessity", "next"): ("adjective", "بعدی"),
     ("b1_unit01_necessity", "right"): ("adjective", "درست"),

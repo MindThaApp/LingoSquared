@@ -475,6 +475,34 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/en/a2_unit34_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit34.yaml",
     ),
+    # Added 2026-08-05 (fa/prs native-gloss backlog): units 35-40 unblock the
+    # last 6 prs-en A2 checkpoints. English POS ported from the already-shipped
+    # nl-en EN_EXTRA (commit 304c029e); Dari glosses below are DRAFTS pending
+    # Ramin's native audit.
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit35_prescription.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit35.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit36_document_correction.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit36.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit37_video_calls.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit37.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit38_repair_visit.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit38.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit39_after_the_interview.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit39.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/en/a2_unit40_online_order_problem.yaml",
+        REPO_ROOT / "docs/content/overlays/prs-en/a2_unit40.yaml",
+    ),
 )
 
 # B1 and B2 each live in their OWN course row again ("انگلیسی B1" /
@@ -1295,6 +1323,33 @@ EN_TARGET_TO_PRS_GLOSS.update({
     "defective": "خراب", "policy": "پالیسی؛ قاعده", "blender": "بلندر",
     "working": "کار کردن (شکل ing فعل work)", "30": "سی",
     "refunded": "پولش پس داده شد", "thirty-five": "سی‌وپنج",
+    # -- a2 unit35 (at the pharmacy: a prescription) --- DRAFT Dari glosses
+    # (2026-08-05), Kabuli register, pending Ramin's native audit.
+    "dose": "دوز؛ اندازهٔ هر بار خوردن دوا", "refill": "تکرار نسخه",
+    "refills": "تکرار نسخه", "side": "جانبی (در side effects)",
+    "effects": "عوارض جانبی", "shouldn't": "نباید (مخفف should not)",
+    # -- a2 unit36 (correcting a document)
+    "certificate": "تصدیق؛ سند رسمی", "spelled": "هجی کرد؛ حرف‌حرف گفت",
+    "copy": "کاپی؛ نقل", "passport": "پاسپورت", "mistakes": "غلطی‌ها",
+    "registration": "راجستر؛ ثبت‌نام", "correction": "اصلاح؛ درست‌سازی",
+    "corrected": "اصلاح کرد؛ درست کرد", "reference": "مرجع؛ نمبر پیگیری",
+    "3092": "۳۰۹۲",
+    # -- a2 unit37 (video calls)
+    "microphone": "مایکروفون", "connection": "اتصال؛ کنکشن انترنت",
+    "mute": "بی‌آواز کردن", "face": "چهره (در face to face: روبه‌رو)",
+    "calls": "تماس‌ها؛ کال‌ها", "headphones": "هدفون", "asks": "می‌پرسه",
+    "question": "سوال", "classmates": "هم‌صنفی‌ها",
+    "speaking": "گپ زدن (شکل ing فعل speak)",
+    # -- a2 unit38 (a repair visit)
+    "leak": "چکک؛ آب‌آمدن", "won't": "نخواهد (مخفف will not)",
+    "rescheduled": "وختش را تغییر داد؛ به وخت دیگه ماند", "9am": "۹ بجهٔ صبح",
+    "11am": "۱۱ بجهٔ صبح",
+    # -- a2 unit39 (after the interview)
+    "contract": "قرارداد؛ کنترکت", "salary": "معاش", "accept": "قبول کردن",
+    "interested": "علاقه‌مند",
+    # -- a2 unit40 (an online order problem)
+    "delivery": "تحویل‌دهی؛ رسانیدن", "parcel": "بسته؛ پارسل",
+    "lamp": "لمپ؛ چراغ", "8154": "۸۱۵۴",
     # -- b1 unit01 (necessity and obligation)
     "task": "کار، وظیفه", "finish": "تمام کردن", "earlier": "زودتر",
     "forgot": "فراموش کرد", "renew": "تمدید کردن", "membership": "عضویت",
@@ -1676,6 +1731,26 @@ EN_POS_EXTRA: dict[str, str] = {
     # -- a2 unit34 (a shopping complaint)
     "policy": "noun", "blender": "noun", "working": "verb", "30": "symbol",
     "refunded": "verb", "thirty-five": "noun",
+    # -- a2 unit35 (a prescription) --- POS ported from nl-en EN_EXTRA
+    "dose": "noun", "refill": "noun", "refills": "noun", "side": "noun",
+    "effects": "noun", "shouldn't": "verb",
+    # -- a2 unit36 (correcting a document)
+    "certificate": "noun", "spelled": "verb", "copy": "noun",
+    "passport": "noun", "mistakes": "noun", "registration": "noun",
+    "correction": "noun", "corrected": "verb", "reference": "noun",
+    "3092": "symbol",
+    # -- a2 unit37 (video calls)
+    "microphone": "noun", "connection": "noun", "mute": "verb",
+    "face": "noun", "calls": "noun", "headphones": "noun", "asks": "verb",
+    "question": "noun", "classmates": "noun", "speaking": "verb",
+    # -- a2 unit38 (a repair visit)
+    "leak": "noun", "won't": "verb", "rescheduled": "verb", "9am": "symbol",
+    "11am": "symbol",
+    # -- a2 unit39 (after the interview)
+    "contract": "noun", "salary": "noun", "accept": "verb",
+    "interested": "adjective",
+    # -- a2 unit40 (an online order problem)
+    "delivery": "noun", "parcel": "noun", "lamp": "noun", "8154": "symbol",
     # -- b1 unit01 (necessity and obligation)
     "finish": "verb", "earlier": "adverb", "forgot": "verb", "renew": "verb",
     "membership": "noun", "set": "verb", "reminder": "noun", "done": "verb",
@@ -1898,6 +1973,9 @@ EN_POS_EXTRA: dict[str, str] = {
 
 
 PRS_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    # a2_unit36 teaches the VERB ("Could you correct it?"); bare `correct`
+    # otherwise resolves to the adjective ("درست"). Added 2026-08-05.
+    ("a2_unit36_document_correction", "correct"): "اصلاح کردن؛ درست کردن",
     ("b1_unit05_workplace", "short"): "کوتاه/خلاصه",
     ("b1_unit10_purpose", "sound"): "نمودن/معلوم شدن",
     ("b1_unit10_purpose", "order"): "ترتیب",
@@ -1912,6 +1990,7 @@ PRS_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
 }
 
 PRS_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("a2_unit36_document_correction", "correct"): "verb",
     ("b1_unit10_purpose", "sound"): "verb",
     ("b1_unit10_purpose", "order"): "noun",
     ("b2_unit01_argumentation", "sound"): "verb",
