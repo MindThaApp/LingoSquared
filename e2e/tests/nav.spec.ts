@@ -23,6 +23,6 @@ test("every bottom-tab route renders without a crash", async ({ page }) => {
     await page.waitForURL(tab.urlPattern);
     // A React error boundary / thrown render error would leave the
     // app shell (nav) gone; confirm it's still there after navigating.
-    await expect(page.getByRole("link", { name: "Lingo²" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Auvel" })).toBeVisible();
   }
 });
