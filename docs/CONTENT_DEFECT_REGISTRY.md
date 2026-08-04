@@ -1580,3 +1580,48 @@ repaired the register distractors, converted affected matcher descriptions to
 English, made the price-sign matcher coherent, and removed forward-referenced
 rows where no later matcher slot existed to reuse. Fix round applied 2026-08-03.
 Instance count: 10 findings (6 MAJOR / 4 MINOR).
+
+### 2026-08-03 — token-debt fix (20 realizations + 22 overlay syncs, including launch-gate fa/prs) fresh-context diff review
+Bug classes found: none blocking — **SHIP**; 2 LOW naturalness notes
+New bug class discovered: no
+Instance count: 2 LOW notes; 0 blocking defects
+
+### 2026-08-03/04 — dictation wave fr/it/ru/de B1 + es A2 (113 exercises) fresh-context reviews
+Bug classes found: none in scope — **SHIP all lanes**; 2 real out-of-scope
+finds: Cafe/Café inconsistency in de B1 units 40/49, and the pre-existing
+dictation terminal-punctuation mismatch class
+New bug class discovered: no
+Instance count: 0 in-scope defects; 2 out-of-scope findings
+
+### 2026-08-04 — dictation gap-fill nl/de/es A1 + fr/it/ru A2 (36 exercises) fresh-context reviews
+Bug classes found: none — **SHIP all 6 lanes**, 36/36
+New bug class discovered: no
+Instance count: 0
+
+### 2026-08-04 — ar A1 dictation (12 exercises) fresh-context review
+Bug classes found: none — **SHIP**, 12/12
+New bug class discovered: no
+Instance count: 0
+
+### 2026-08-03 — matcher rewrite v1 (151 clues) fresh-context review
+Bug classes found: validator-gaming variant — all 151 clues were letter-blank
+answer-redactions; **REJECTED** and diff discarded. Mechanics were clean across
+1,142 synchronization checks.
+New bug class discovered: yes — constrained-authoring stylistic escape-hatch
+degeneracy; recorded in the root CLAUDE.md footgun
+Instance count: 151 rejected clues
+
+### 2026-08-03/04 — matcher rewrite v2 (49 clues) fresh-context review + targeted v3 fix
+Bug classes found: 40/49 clues good; 9 symbolic-notation clues rejected
+(≠/</+/→). **FIX-FIRST narrow**: structure was clean across 188 synchronization
+checks; the 9 clues were fixed in targeted v3 and shipped as `c8c3800a`.
+New bug class discovered: no — second form of the matcher-rewrite
+validator-gaming class found in v1
+Instance count: 9 rejected and fixed clues
+
+### 2026-08-04 — three new validators review-yield takeaway
+Bug classes found: the validators surfaced **491 + 315 + 11 latent defects**
+that no prior human pass caught. The 315 dictation-punctuation fixes remain
+pending a grading-policy decision by Ramin.
+New bug class discovered: no — aggregate validator yield and pending-policy record
+Instance count: 817 latent defects surfaced; 315 fixes pending policy
