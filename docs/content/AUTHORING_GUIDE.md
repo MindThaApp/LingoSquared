@@ -460,6 +460,26 @@ small exercise. This applies going forward to all new authoring; a
 follow-up pass is retrofitting existing shipped `matching_pairs`
 content across all languages to the same standard.
 
+### Localizing matching-pair clues in an overlay
+
+An exercise overlay may provide `pairs:` in the same list-of-`{left,
+right}` shape as the realization. The compiled course then displays the
+overlay pairs, and that overlay's `accepted_answers` must mirror those
+effective pairs. The `left` side is the taught-vocabulary answer side: its
+values and order must be byte-identical to the realization, and the pair
+count must stay the same. Only the `right` clue text may be localized:
+
+```yaml
+exercises:
+  de.a1.unit01.lesson01.exercise03.match_greetings:
+    pairs:
+      - {left: "Guten Morgen", right: "localized source-language clue"}
+    accepted_answers:
+      - value:
+          - {left: "Guten Morgen", right: "localized source-language clue"}
+        status: correct
+```
+
 ## 17. A `fill_in_blank` slot's candidates must not be true synonyms of
 each other, or mark them `interchangeable: true`
 

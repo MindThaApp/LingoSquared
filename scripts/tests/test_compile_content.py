@@ -1222,3 +1222,258 @@ def test_matching_pairs_taught_vocabulary_phrase_is_clean():
     )
 
     assert report.warnings == []
+
+
+def matching_pairs_override_documents():
+    content_key = "de.test.exercise.match_family"
+    realization_pairs = [
+        {"left": "Vater", "right": "father"},
+        {"left": "Mutter", "right": "mother"},
+    ]
+    realization = {
+        "target_language": "de",
+        "units": [
+            {
+                "lessons": [
+                    {
+                        "teaching": [],
+                        "exercises": [
+                            {
+                                "content_key": content_key,
+                                "type": "matching_pairs",
+                                "tested_text": "Vater Mutter",
+                                "prompt": {"target_blocks": []},
+                                "pairs": realization_pairs,
+                            }
+                        ],
+                    }
+                ]
+            }
+        ],
+    }
+    return content_key, realization_pairs, realization
+
+
+def test_matching_pairs_overlay_override_compiles_effective_pairs():
+    compiler = load_content_compiler()
+    content_key, realization_pairs, realization = (
+        matching_pairs_override_documents()
+    )
+    override_pairs = [
+        {"left": "Vater", "right": "padre"},
+        {"left": "Mutter", "right": "madre"},
+    ]
+    exercise_overlay = {
+        "pairs": override_pairs,
+        "accepted_answers": [
+            {"value": override_pairs, "status": "correct"},
+        ],
+    }
+    overlay = {"exercises": {content_key: exercise_overlay}}
+    report = compiler.Report()
+
+    compiler.validate_matching_pairs_overlay_overrides(
+        realization,
+        overlay,
+        report,
+    )
+    compiler.validate_matching_pairs_overlay_mirror(
+        realization,
+        overlay,
+        report,
+    )
+    compiled = compiler.compile_exercise(
+        realization["units"][0]["lessons"][0]["exercises"][0],
+        exercise_overlay,
+        1,
+        "es",
+        "de",
+        content_key,
+    )
+
+    assert report.errors == []
+    assert compiled["prompt"]["pairs"] == override_pairs
+    assert compiled["prompt"]["pairs"] is not override_pairs
+    assert realization_pairs[0]["right"] == "father"
+
+
+@pytest.mark.parametrize(
+    "override_pairs",
+    [
+        [
+            {"left": "Mutter", "right": "madre"},
+            {"left": "Vater", "right": "padre"},
+        ],
+        [
+            {"left": "Väter", "right": "padres"},
+            {"left": "Mutter", "right": "madre"},
+        ],
+    ],
+)
+def test_matching_pairs_overlay_override_rejects_answer_side_mismatch(
+    override_pairs,
+):
+    compiler = load_content_compiler()
+    content_key, _, realization = matching_pairs_override_documents()
+    report = compiler.Report()
+
+    compiler.validate_matching_pairs_overlay_overrides(
+        realization,
+        {"exercises": {content_key: {"pairs": override_pairs}}},
+        report,
+    )
+
+    assert any(
+        "answer side (left) must be byte-identical" in error
+        and "only right-side clues may differ" in error
+        for error in report.errors
+    ), report.errors
+
+
+def test_matching_pairs_overlay_override_rejects_pair_count_mismatch():
+    compiler = load_content_compiler()
+    content_key, _, realization = matching_pairs_override_documents()
+    report = compiler.Report()
+
+    compiler.validate_matching_pairs_overlay_overrides(
+        realization,
+        {
+            "exercises": {
+                content_key: {
+                    "pairs": [{"left": "Vater", "right": "padre"}],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "override pair count must match realization pairs exactly" in error
+        and "2 realization pair(s) vs 1 override pair(s)" in error
+        for error in report.errors
+    ), report.errors
+
+
+def test_matching_pairs_without_overlay_override_keeps_realization_pairs():
+    compiler = load_content_compiler()
+    content_key, realization_pairs, realization = (
+        matching_pairs_override_documents()
+    )
+    exercise_overlay = {
+        "accepted_answers": [
+            {"value": realization_pairs, "status": "correct"},
+        ],
+    }
+
+    compiled = compiler.compile_exercise(
+        realization["units"][0]["lessons"][0]["exercises"][0],
+        exercise_overlay,
+        1,
+        "en",
+        "de",
+        content_key,
+    )
+
+    assert compiled == {
+        "type": "matching_pairs",
+        "order": 1,
+        "prompt": {
+            "text_blocks": [],
+            "answer_language_code": "de",
+            "pairs": realization_pairs,
+        },
+        "correct_response": realization_pairs,
+        "feedback": None,
+        "xp": 10,
+        "content_key": content_key,
+    }
+
+
+def test_matching_pairs_override_answers_must_mirror_effective_pairs():
+    compiler = load_content_compiler()
+    content_key, realization_pairs, realization = (
+        matching_pairs_override_documents()
+    )
+    override_pairs = [
+        {"left": "Vater", "right": "padre"},
+        {"left": "Mutter", "right": "madre"},
+    ]
+    report = compiler.Report()
+
+    compiler.validate_matching_pairs_overlay_mirror(
+        realization,
+        {
+            "exercises": {
+                content_key: {
+                    "pairs": override_pairs,
+                    "accepted_answers": [
+                        {"value": realization_pairs, "status": "correct"},
+                    ],
+                }
+            }
+        },
+        report,
+    )
+
+    assert any(
+        "answer does not mirror effective overlay pairs exactly" in error
+        and "'Vater' -> 'padre'" in error
+        for error in report.errors
+    ), report.errors
+
+
+def test_matching_pairs_untaught_validator_uses_effective_overlay_pairs():
+    compiler = load_content_compiler()
+    content_key, _, realization = matching_pairs_override_documents()
+    lesson = realization["units"][0]["lessons"][0]
+    lesson["teaching"] = [{"introduced_tokens": ["Vater", "Mutter"]}]
+    target_lexicon = {"vater", "mutter", "männlicher", "elternteil"}
+
+    target_clue_report = compiler.Report()
+    compiler.validate_untaught_vocabulary(
+        realization,
+        target_clue_report,
+        source_language="en",
+        target_lexicon=target_lexicon,
+        overlay={
+            "exercises": {
+                content_key: {
+                    "pairs": [
+                        {
+                            "left": "Vater",
+                            "right": "männlicher Elternteil",
+                        },
+                        {"left": "Mutter", "right": "mother"},
+                    ]
+                }
+            }
+        },
+    )
+
+    assert len(target_clue_report.warnings) == 1
+    assert target_clue_report.warnings[0].startswith(
+        f"overlay.exercises.{content_key}.pairs[0].right"
+    )
+    assert "untaught tokens: elternteil, männlicher" in (
+        target_clue_report.warnings[0]
+    )
+
+    source_clue_report = compiler.Report()
+    compiler.validate_untaught_vocabulary(
+        realization,
+        source_clue_report,
+        source_language="en",
+        target_lexicon=target_lexicon,
+        overlay={
+            "exercises": {
+                content_key: {
+                    "pairs": [
+                        {"left": "Vater", "right": "male parent"},
+                        {"left": "Mutter", "right": "mother"},
+                    ]
+                }
+            }
+        },
+    )
+
+    assert source_clue_report.warnings == []
