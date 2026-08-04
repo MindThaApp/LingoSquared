@@ -97,9 +97,24 @@ def validation_errors(db: Session, data: ImportRequest):
                     errors.append(f"lesson {li} has duplicate exercise order")
 
                 for ei, exercise in enumerate(lesson.exercises):
-                    block_groups = [
-                        ("text_blocks", exercise.prompt.get("text_blocks"))
-                    ]
+                    if exercise.type.value == "dictation":
+                        media_asset_key = exercise.prompt.get("media_asset_key")
+                        if (
+                            not isinstance(media_asset_key, str)
+                            or not media_asset_key.strip()
+                        ):
+                            errors.append(
+                                f"exercise {ei} requires "
+                                "prompt.media_asset_key"
+                            )
+                        block_groups = []
+                    else:
+                        block_groups = [
+                            (
+                                "text_blocks",
+                                exercise.prompt.get("text_blocks"),
+                            )
+                        ]
                     if exercise.type.value == "flashcard":
                         block_groups.append(
                             (

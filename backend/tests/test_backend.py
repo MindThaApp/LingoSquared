@@ -59,6 +59,58 @@ def test_admin_import_course_and_queries(client, admin):
     detail = client.get(f"/lessons/{lessons[0]['id']}").json()
     assert "correct_response" not in detail["exercises"][0]
 
+
+def test_admin_import_accepts_audio_only_dictation(client, admin):
+    body = payload(title="Audio-only dictation")
+    exercise = body["courses"][0]["units"][0]["lessons"][0]["exercises"][0]
+    exercise["type"] = "dictation"
+    exercise["prompt"] = {
+        "target_blocks": [],
+        "media_asset_key": "es.a1.audio.dictation.01",
+    }
+
+    response = client.post("/admin/content/import", headers=admin, json=body)
+
+    assert response.status_code == 200
+    assert response.json()["imported_courses"] == 1
+
+
+def test_admin_import_rejects_dictation_without_media_asset_key(client, admin):
+    body = payload(title="Dictation without audio")
+    exercise = body["courses"][0]["units"][0]["lessons"][0]["exercises"][0]
+    exercise["type"] = "dictation"
+    exercise["prompt"] = {"target_blocks": []}
+
+    response = client.post("/admin/content/import", headers=admin, json=body)
+
+    assert response.status_code == 422
+    assert response.json() == {
+        "error": {
+            "code": "content_invalid",
+            "message": "exercise 0 requires prompt.media_asset_key",
+        }
+    }
+
+
+def test_admin_import_still_rejects_non_dictation_with_empty_prompt(
+    client,
+    admin,
+):
+    body = payload(title="Translation without prompt text")
+    exercise = body["courses"][0]["units"][0]["lessons"][0]["exercises"][0]
+    exercise["prompt"] = {"target_blocks": []}
+
+    response = client.post("/admin/content/import", headers=admin, json=body)
+
+    assert response.status_code == 422
+    assert response.json() == {
+        "error": {
+            "code": "content_invalid",
+            "message": "exercise 0 requires prompt.text_blocks",
+        }
+    }
+
+
 def test_course_units_include_per_user_completed_lesson_counts(client, admin, auth):
     title = f"Completion count course {os.urandom(4).hex()}"
     body = payload(title=title)
