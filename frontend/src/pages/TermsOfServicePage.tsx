@@ -19,21 +19,21 @@ export function TermsOfServicePage() {
     <div className="card" style={{ maxWidth: 720, margin: "24px auto" }}>
       <h1>Terms of Service</h1>
       <p className="muted">
-        Draft for the Lingo² beta — last updated 10 July 2026. These terms may
+        Draft for the Auvel beta — last updated 10 July 2026. These terms may
         be revised during the beta; changes will be posted on this page.
       </p>
 
       <h2>1. Acceptance</h2>
       <p>
         By creating an account, starting a guest session, or otherwise using
-        Lingo², you agree to these terms and to the{" "}
+        Auvel, you agree to these terms and to the{" "}
         <Link to="/privacy">Privacy Policy</Link>. If you don't agree, please
         don't use the app.
       </p>
 
       <h2>2. Beta service</h2>
       <p>
-        Lingo² is in beta. Features and lesson content may change, break, or
+        Auvel is in beta. Features and lesson content may change, break, or
         be removed without notice, and there is no guarantee of availability.
         In rare cases, beta data (including learning progress) may need to be
         reset. We'll try to avoid that, but you accept the possibility by
@@ -93,14 +93,14 @@ export function TermsOfServicePage() {
       <h2>6. Not professional instruction</h2>
       <p>
         Lessons, translations, grading, and speech transcription are provided
-        on a best-effort basis and may contain errors. Lingo² is a learning
+        on a best-effort basis and may contain errors. Auvel is a learning
         aid, not certified language instruction, and its content should not be
         relied on where an accurate translation matters (legal, medical,
         official documents, and the like).
       </p>
 
       <h2>7. Price</h2>
-      <p>Lingo² is free of charge during the beta.</p>
+      <p>Auvel is free of charge during the beta.</p>
 
       <h2>8. Termination</h2>
       <p>

@@ -2,7 +2,7 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
-    app_name: str = "Lingo² API"
+    app_name: str = "Auvel API"
     database_url: str = "postgresql+psycopg://lingosquared:change-me@db:5432/lingosquared"
     jwt_secret: str = "development-only-secret"
     access_token_expire_seconds: int = 1800

@@ -25,13 +25,13 @@ export function PrivacyPolicyPage() {
     <div className="card" style={{ maxWidth: 720, margin: "24px auto" }}>
       <h1>Privacy Policy</h1>
       <p className="muted">
-        Draft for the Lingo² beta — last updated 10 July 2026. This policy may
+        Draft for the Auvel beta — last updated 10 July 2026. This policy may
         be revised during the beta; changes will be posted on this page.
       </p>
 
       <h2>Who we are</h2>
       <p>
-        Lingo² is a language-learning app currently in private beta, operated
+        Auvel is a language-learning app currently in private beta, operated
         by its developer. There is no company entity behind it yet. You can
         reach the operator any time via the in-app "Give feedback" button
         (available on every page, even when logged out).
@@ -170,7 +170,7 @@ export function PrivacyPolicyPage() {
       </p>
 
       <h2>Children</h2>
-      <p>Lingo² is not directed at children under 13.</p>
+      <p>Auvel is not directed at children under 13.</p>
 
       <h2>Contact</h2>
       <p>
