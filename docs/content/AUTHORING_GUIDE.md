@@ -390,6 +390,14 @@ a short `feedback:`, and **no** `options`/`distractors`. Note: dictation is
 graded **orthography-strict by type** — a one-character misspelling is marked
 wrong (unlike `listen_type`, which is typo-tolerant on Latin scripts). So the
 `tested_text`/`correct_response` must be the single canonical spelling.
+**Boundary-punctuation exception (approved 2026-08-04):** grading now
+tolerates a leading/trailing punctuation mismatch (`. ? ! … ¿ ¡ ؟ । ۔ ،` —
+the `backend/app/review/grading.py` constant is authoritative) between the
+learner's typed answer and `correct_response`/`tested_text` — terminal
+punctuation no longer has to match byte-for-byte for GRADING. Authors
+should still byte-match `correct_response` to the audio asset's text
+regardless: the compiler validator tolerates boundary-only differences, but
+any INTERNAL difference between the two is still a defect.
 
 ## 15. Mark target-language words with `*asterisks*` inside mixed-language
 explanatory text (`note`, exercise `feedback`)
