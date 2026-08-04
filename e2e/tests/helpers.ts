@@ -91,7 +91,14 @@ export async function goToCourseUnits(
  * writing, only test artifacts -- do not add it until one exists).
  */
 export const LAUNCH_COURSES = {
-  farsiFoundations: { speak: /English/, learn: /Farsi/, title: "Farsi Foundations" },
+  // The learn-step tile's accessible name is the UI-localized language name
+  // (`language_names.<code>` in en.json), NOT the API's `Language.name` --
+  // en.json now renders fa as "Persian" (`Farsi` no longer appears anywhere
+  // in the step-2 button). The course TITLE below is unaffected: it's a
+  // literal DB `Course.title` string, not a translated language name, and
+  // "Farsi Foundations" is still the real seeded title (verified via
+  // `curl "http://localhost:8020/courses?source=en&target=fa"`).
+  farsiFoundations: { speak: /English/, learn: /Persian/, title: "Farsi Foundations" },
   dariFoundations: { speak: /English/, learn: /Dari/, title: "Dari Foundations" },
 } as const;
 

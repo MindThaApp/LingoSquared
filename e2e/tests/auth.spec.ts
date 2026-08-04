@@ -12,7 +12,7 @@ test("register -> lands on home dashboard with nav visible", async ({ page }) =>
 
   // NavBar renders both a desktop topbar nav and a mobile tabbar nav, so
   // every nav link resolves to two DOM elements -- always .first().
-  await expect(page.getByRole("link", { name: "Lingo²" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Auvel" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Home" }).first()).toBeVisible();
   await expect(page.getByRole("link", { name: "Learn" }).first()).toBeVisible();
 });
