@@ -558,7 +558,7 @@ def export_me(response:Response,user=Depends(current_user),db:Session=Depends(ge
     lexeme_rows=db.execute(select(UserLexemeSRS,Lexeme).join(Lexeme,Lexeme.id==UserLexemeSRS.lexeme_id).where(UserLexemeSRS.user_id==user.id)).all()
     practice_rows=db.execute(select(PracticeAttempt,PracticeItem).join(PracticeItem,PracticeItem.id==PracticeAttempt.practice_item_id).where(PracticeAttempt.user_id==user.id).order_by(PracticeAttempt.created_at)).all()
     earned=db.execute(select(UserAchievement,Achievement).join(Achievement,Achievement.id==UserAchievement.achievement_id).where(UserAchievement.user_id==user.id)).all()
-    response.headers["Content-Disposition"]=f'attachment; filename="lingosquared-export-{datetime.now(timezone.utc).date().isoformat()}.json"'
+    response.headers["Content-Disposition"]=f'attachment; filename="auvel-export-{datetime.now(timezone.utc).date().isoformat()}.json"'
     return {
         "format_version":1,
         "exported_at":datetime.now(timezone.utc),

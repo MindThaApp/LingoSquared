@@ -48,7 +48,7 @@ function RootNavigator() {
   return (
     <Stack>
       <Stack.Protected guard={signedIn}>
-        <Stack.Screen name="index" options={{ title: "Lingo²" }} />
+        <Stack.Screen name="index" options={{ title: "Auvel" }} />
       </Stack.Protected>
       <Stack.Protected guard={!signedIn}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
