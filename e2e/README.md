@@ -1,4 +1,4 @@
-# Lingo² end-to-end suite (Playwright)
+# Auvel end-to-end suite (Playwright)
 
 Built by Session 3 (INFRA) per `docs/SONNET_BUILD_PROMPT_UPGRADES.md` to
 convert flows that have already been manually verified in a live browser
@@ -19,6 +19,15 @@ regression pass.
 3. The seeded en-fa "Farsi Foundations" (A1) course exists -- several
    specs navigate to it by name. If the seed data changes shape, update
    `tests/helpers.ts`'s `goToFarsiFoundationsUnits` accordingly.
+4. The target backend's registration rate limit is raised. This suite
+   registers a fresh account per test, serially, from one IP --
+   `register_rate_limit_max` (`backend/app/core/config.py`, default 5)
+   blows past its window well before the suite finishes and every
+   subsequent test fails on `register_rate_limited` 429s, poisoning
+   further runs for ~an hour. Set `REGISTER_RATE_LIMIT_MAX=1000` and
+   `LOGIN_RATE_LIMIT_MAX=1000` in the target backend's `backend/.env`
+   (local dev only -- never raise these in a prod-facing env) before
+   running.
 
 ## Running
 
