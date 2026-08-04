@@ -81,7 +81,12 @@ they heard, no source text shown — authored with `target_blocks: []`, so it
 renders through the `Translation` component like `listen_type`) but is graded
 **orthography-strict by type**: the backend forces strict spelling grading for
 `dictation` regardless of the Latin-script typo-tolerance default, so a
-single-letter misspelling grades incorrect. See
+single-letter misspelling grades incorrect. **Boundary-punctuation exception
+(approved 2026-08-04):** for `dictation` only, the learner's answer and the
+accepted answers are compared after trimming whitespace and stripping
+leading/trailing boundary punctuation (`. ? ! … ¿ ¡ ؟ । ۔ ،` — the final
+constant lives in `backend/app/review/grading.py`); internal punctuation,
+case, diacritics, and script remain byte-strict. See
 `docs/DICTATION_EXERCISE_SPEC.md`.
 
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
