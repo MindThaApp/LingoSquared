@@ -111,6 +111,114 @@ def test_admin_import_still_rejects_non_dictation_with_empty_prompt(
     }
 
 
+def _keyed_course_body(title, exercises):
+    # A course whose unit + lesson carry content_keys so a re-import
+    # reconciles (recurses) into the lesson's exercises in place instead
+    # of trying to append a whole new lesson.
+    return {
+        "courses": [
+            {
+                "source_language": "en",
+                "target_language": "es",
+                "title": title,
+                "units": [
+                    {
+                        "title": "Unit",
+                        "order": 1,
+                        "content_key": "u1",
+                        "lessons": [
+                            {
+                                "title": "Lesson",
+                                "order": 1,
+                                "content_key": "l1",
+                                "exercises": exercises,
+                            }
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+
+
+def _translation(order, text, correct="a", content_key=None):
+    exercise = {
+        "type": "translation",
+        "order": order,
+        "prompt": {
+            "text_blocks": [
+                {"text": text, "language_code": "en", "direction": "ltr"}
+            ]
+        },
+        "correct_response": correct,
+    }
+    if content_key is not None:
+        exercise["content_key"] = content_key
+    return exercise
+
+
+def _lesson_exercise_texts(client, title):
+    course = next(
+        c
+        for c in client.get("/courses?source=en&target=es").json()
+        if c["title"] == title
+    )
+    unit = client.get(f"/courses/{course['id']}/units").json()[0]
+    lesson = client.get(f"/units/{unit['id']}/lessons").json()[0]
+    detail = client.get(f"/lessons/{lesson['id']}").json()
+    return [ex["prompt"]["text_blocks"][0]["text"] for ex in detail["exercises"]]
+
+
+def test_reimport_updates_exercise_with_same_content_key(client, admin):
+    # Re-importing a course after an author edits an exercise's content
+    # (SAME content_key) must update the shipped row in place and return
+    # 200 -- not fail, not duplicate the exercise.
+    title = "Reimport same content_key"
+    first = _keyed_course_body(title, [_translation(1, "hello", content_key="ex.k1")])
+    assert client.post("/admin/content/import", headers=admin, json=first).status_code == 200
+
+    second = _keyed_course_body(title, [_translation(1, "goodbye", content_key="ex.k1")])
+    resp = client.post("/admin/content/import", headers=admin, json=second)
+    assert resp.status_code == 200
+    assert resp.json()["updated_exercises"] == 1
+    assert resp.json()["created_exercises"] == 0
+
+    texts = _lesson_exercise_texts(client, title)
+    assert texts == ["goodbye"]  # updated in place, no stale duplicate
+
+
+def test_reimport_reorders_matched_exercise_onto_legacy_slot(client, admin):
+    # Regression (reproduced 2026-08-04 on nl/fa/prs-en-a2 after the
+    # matching_pairs overlay-override work): re-importing a course whose
+    # content_key'd exercise moves onto the (lesson_id, order) slot still
+    # held by a RETAINED, content_key-less legacy sibling used to 500 with
+    # psycopg UniqueViolation on exercises_lesson_id_order_key. The
+    # two-phase reorder bumped only the matched row, so its final UPDATE
+    # collided with the un-bumped legacy row.
+    title = "Reimport reorder onto legacy"
+    first = _keyed_course_body(
+        title,
+        [
+            _translation(1, "hello", content_key="ex.k1"),
+            _translation(2, "legacy"),  # no content_key -> unmatchable/retained
+        ],
+    )
+    assert client.post("/admin/content/import", headers=admin, json=first).status_code == 200
+
+    # Matched exercise (ex.k1) MOVES from order 1 to order 2 -- onto the
+    # legacy row's slot -- with mutated content; the legacy row is absent
+    # from the payload (retained, must not be deleted or collided into).
+    second = _keyed_course_body(title, [_translation(2, "goodbye", content_key="ex.k1")])
+    resp = client.post("/admin/content/import", headers=admin, json=second)
+    assert resp.status_code == 200
+    assert resp.json()["updated_exercises"] == 1
+
+    texts = _lesson_exercise_texts(client, title)
+    assert "goodbye" in texts  # matched exercise updated in place
+    assert "legacy" in texts   # retained legacy row preserved, relocated
+    assert "hello" not in texts
+
+
 def test_course_units_include_per_user_completed_lesson_counts(client, admin, auth):
     title = f"Completion count course {os.urandom(4).hex()}"
     body = payload(title=title)

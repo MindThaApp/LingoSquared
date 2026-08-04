@@ -182,16 +182,50 @@ def _match_by_content_key(existing_rows, incoming_items):
     return matched, unmatched
 
 
-def _bump_to_temp_orders(rows):
-    """Phase 1 of a two-phase reorder: give every row about to be
-    updated a guaranteed-unique negative order first, so phase 2 can
-    set everyone's real final order (which may differ from today's --
-    e.g. two exercises swapping position as part of a content fix)
-    without transiently violating the (parent_id, order) unique
-    constraint. Caller must db.flush() after this and again after
-    phase 2."""
+def _bump_to_temp_orders(rows, attr: str = "order"):
+    """Phase 1 of a two-phase reorder: give EVERY existing row being
+    reconciled (matched updates AND retained rows alike -- see
+    `_sync_exercises`) a guaranteed-unique negative order first, so
+    phase 2 can set everyone's real final order (which may differ from
+    today's -- e.g. two exercises swapping position as part of a content
+    fix) without transiently violating the (parent_id, order) unique
+    constraint. Caller must db.flush() after this and again after phase
+    2. `attr` is `order` for units/lessons/exercises and
+    `teaching_order` for teaching cards."""
     for offset, row in enumerate(rows, start=1):
-        row.order = -offset
+        setattr(row, attr, -offset)
+
+
+def _relocate_retained_orders(retained, occupied: set[int], floor: int, attr: str = "order") -> None:
+    """Phase 2 (retained half): assign a final order to every retained
+    row -- an existing DB row whose content_key was NOT in the incoming
+    payload (a legacy content_key-less row, or content an author has
+    since removed).
+
+    A retained row is NEVER deleted and its CONTENT is never touched (it
+    may anchor real user history -- ExerciseAttempt/ReviewItem/etc.). It
+    reclaims its ORIGINAL order when that slot is still free; only when a
+    matched in-place update legitimately claims that exact slot is the
+    retained row relocated -- to a fresh slot at/above `floor` (chosen to
+    sit above every order any matched-update or incoming-insert row
+    wants, so a relocation never steals a real row's slot). This is
+    precisely what lets a matched row reorder onto a legacy
+    content_key-less sibling's slot without a UniqueViolation on
+    (parent_id, order). `occupied` (final orders already claimed) is
+    mutated in place. A None original order (nullable teaching_order) is
+    left as-is -- NULLs never collide."""
+    next_free = floor
+    for row, original_order in retained:
+        if original_order is None or original_order not in occupied:
+            setattr(row, attr, original_order)
+            if original_order is not None:
+                occupied.add(original_order)
+            continue
+        while next_free in occupied:
+            next_free += 1
+        setattr(row, attr, next_free)
+        occupied.add(next_free)
+        next_free += 1
 
 
 def _update_exercise(row: Exercise, exercise_data) -> None:
@@ -219,21 +253,34 @@ def _sync_exercises(
         existing, exercises_data
     )
 
-    _bump_to_temp_orders([row for row, _ in matched])
+    # Park EVERY existing exercise (matched updates AND retained rows) at
+    # a unique temp negative order first. Bumping only the matched rows --
+    # as an earlier version did -- 500s (UniqueViolation on
+    # exercises_lesson_id_order_key) whenever a matched row's new order
+    # lands on a retained row still sitting at that order: e.g. a legacy
+    # content_key-less matcher exercise that a reordered, content_key'd
+    # sibling now overlaps. Reproduced on nl/fa/prs-en-a2 re-imports
+    # 2026-08-04 after the matching_pairs overlay override work.
+    matched_ids = {id(row) for row, _ in matched}
+    retained = [
+        (row, row.order) for row in existing if id(row) not in matched_ids
+    ]
+    _bump_to_temp_orders(existing)
     db.flush()
+
+    occupied_orders: set[int] = set()
     for row, exercise_data in matched:
         _update_exercise(row, exercise_data)
+        occupied_orders.add(exercise_data.order)
+    floor = max(
+        [exercise.order for exercise in exercises_data]
+        + [order for _, order in retained]
+        + [-1]
+    ) + 1
+    _relocate_retained_orders(retained, occupied_orders, floor)
     db.flush()
     counters["updated_exercises"] += len(matched)
 
-    # Recomputed AFTER the update phase so newly-final orders (from the
-    # matched rows above) correctly count as occupied.
-    occupied_orders = {
-        order
-        for (order,) in db.execute(
-            select(Exercise.order).where(Exercise.lesson_id == lesson.id)
-        )
-    }
     for exercise_data in unmatched_incoming:
         if exercise_data.order in occupied_orders:
             # No content_key on the incoming item means this is either
@@ -311,33 +358,45 @@ def _sync_teaching(
     }
     matched = []
     unmatched = []
+    matched_ids = set()
     for position, card in incoming_with_position:
         existing_row = existing_by_key.get(card.content_key) if card.content_key else None
         if existing_row is not None:
             matched.append((existing_row, card, position))
+            matched_ids.add(id(existing_row))
         else:
             unmatched.append((card, position))
 
-    for offset, (row, _card, _position) in enumerate(matched, start=1):
-        row.teaching_order = -offset
+    # Same two-phase-over-ALL-rows reorder as _sync_exercises: park every
+    # existing card (matched + retained) at a unique temp negative
+    # teaching_order so a matched card taking its incoming position can't
+    # transiently collide with a retained card still holding that slot.
+    retained = [
+        (row, row.teaching_order)
+        for row in existing
+        if id(row) not in matched_ids
+    ]
+    _bump_to_temp_orders(existing, attr="teaching_order")
     db.flush()
+
+    occupied_positions: set[int] = set()
     for row, card, position in matched:
         for field, value in _teaching_item_fields(
             card, course_id, lesson.id, position
         ).items():
             setattr(row, field, value)
+        occupied_positions.add(position)
+    floor = max(
+        [position for position, _ in incoming_with_position]
+        + [order for _, order in retained if order is not None]
+        + [-1]
+    ) + 1
+    _relocate_retained_orders(
+        retained, occupied_positions, floor, attr="teaching_order"
+    )
     db.flush()
     counters["updated_teaching_items"] += len(matched)
 
-    occupied_positions = {
-        order
-        for (order,) in db.execute(
-            select(ContentItem.teaching_order).where(
-                ContentItem.lesson_id == lesson.id
-            )
-        )
-        if order is not None
-    }
     for card, position in unmatched:
         if position in occupied_positions:
             # See the matching comment in _sync_exercises: only warn
@@ -392,12 +451,27 @@ def _sync_lessons(
     existing = list(db.scalars(select(Lesson).where(Lesson.unit_id == unit.id)))
     matched, unmatched_incoming = _match_by_content_key(existing, lessons_data)
 
-    _bump_to_temp_orders([row for row, _ in matched])
+    # Two-phase reorder over ALL existing lessons (matched + retained) --
+    # see _sync_exercises for why bumping only matched rows 500s.
+    matched_ids = {id(row) for row, _ in matched}
+    retained = [
+        (row, row.order) for row in existing if id(row) not in matched_ids
+    ]
+    _bump_to_temp_orders(existing)
     db.flush()
+
+    occupied_orders: set[int] = set()
     for row, lesson_data in matched:
         row.title = lesson_data.title
         row.order = lesson_data.order
         row.content_key = lesson_data.content_key
+        occupied_orders.add(lesson_data.order)
+    floor = max(
+        [lesson.order for lesson in lessons_data]
+        + [order for _, order in retained]
+        + [-1]
+    ) + 1
+    _relocate_retained_orders(retained, occupied_orders, floor)
     db.flush()
     counters["updated_lessons"] += len(matched)
     for row, lesson_data in matched:
@@ -419,12 +493,6 @@ def _sync_lessons(
             f"{location}.{lesson_data.content_key}",
         )
 
-    occupied_orders = {
-        order
-        for (order,) in db.execute(
-            select(Lesson.order).where(Lesson.unit_id == unit.id)
-        )
-    }
     for lesson_data in unmatched_incoming:
         if lesson_data.order in occupied_orders:
             # See the matching comment in _sync_exercises.
@@ -485,13 +553,28 @@ def _sync_units(
     existing = list(db.scalars(select(Unit).where(Unit.course_id == course.id)))
     matched, unmatched_incoming = _match_by_content_key(existing, units_data)
 
-    _bump_to_temp_orders([row for row, _ in matched])
+    # Two-phase reorder over ALL existing units (matched + retained) --
+    # see _sync_exercises for why bumping only matched rows 500s.
+    matched_ids = {id(row) for row, _ in matched}
+    retained = [
+        (row, row.order) for row in existing if id(row) not in matched_ids
+    ]
+    _bump_to_temp_orders(existing)
     db.flush()
+
+    occupied_orders: set[int] = set()
     for row, unit_data in matched:
         row.title = unit_data.title
         row.order = unit_data.order
         row.section = unit_data.section
         row.content_key = unit_data.content_key
+        occupied_orders.add(unit_data.order)
+    floor = max(
+        [unit.order for unit in units_data]
+        + [order for _, order in retained]
+        + [-1]
+    ) + 1
+    _relocate_retained_orders(retained, occupied_orders, floor)
     db.flush()
     counters["updated_units"] += len(matched)
     for row, unit_data in matched:
@@ -504,12 +587,6 @@ def _sync_units(
             f"unit {unit_data.content_key}",
         )
 
-    occupied_orders = {
-        order
-        for (order,) in db.execute(
-            select(Unit.order).where(Unit.course_id == course.id)
-        )
-    }
     for unit_data in unmatched_incoming:
         if unit_data.order in occupied_orders:
             # See the matching comment in _sync_exercises.
