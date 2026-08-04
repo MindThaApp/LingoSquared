@@ -1692,3 +1692,37 @@ Instance count: 1 native-review NIT — bike-pedal phrasing
 - Dutch A1 matcher clues: 63 exercises awaiting Ramin's native pass.
 - Farsi A1 matcher clues: 63 exercises awaiting Ramin's native pass.
 - Dari A1 matcher clues: 63 exercises awaiting Ramin's native pass.
+
+### 2026-08-04 — de-en A1 German + nl/fa/prs-en A2 L1 matcher-clue wave (fresh-context review)
+Bug classes found: none — **SHIP all 4 lanes**. Orientation 13/13 + 48/48
+byte-parity, RTL clean, register separation verified. Shipped as `29fc6660`.
+New bug class discovered: no
+Instance count: 0
+
+### 2026-08-04 — nl/fa/prs-en B1/B2 L1 wave + spine pair restoration (fresh-context review)
+Bug classes found: none — **SHIP both parts**. 195/195 overlay parity, 38
+spine exercises restored with 0 consumer coverage gaps, all 75 restored words
+traced to the pre-drop base (0 smuggled), colloquial-Farsi vs Kabuli-Dari
+separation verified by differential lexeme scan. Shipped as `1be1f49f`.
+New bug class discovered: no
+Instance count: 0
+**MILESTONE**: the matching_pairs untaught-token defect class (§1.7/1.8/1.19/
+1.23 lineage) is EXTINCT corpus-wide, validator-enforced against regression.
+
+### 2026-08-04 — process note: Auvel rebrand caught only by live browser render
+Bug classes found: none new — process note, not a content review. Full build
++ grep were green while the login h1 still rendered the old brand; the string
+lived in `packages/shared` i18n locales, outside the change-agent's scope, and
+was caught only by live browser render.
+New bug class discovered: no
+Instance count: 1 process-verification gap (build/grep clean, live render stale)
+**RULE NOTE**: reinforces "reading a diff is not verification" — live browser
+render is the only backstop for strings living outside a change agent's
+declared file scope.
+
+### 2026-08-04 — native-review queue (update)
+Supersedes the queue recorded in the 2026-08-04 "native-review queue" entry
+above. Current state: nl/fa/prs ~62 localized matchers per lane (A1-B2) +
+de-en A1 (9) — all awaiting Ramin's post-hoc native-language audit.
+New bug class discovered: no
+Instance count: 0 (queue status update, not a review)
