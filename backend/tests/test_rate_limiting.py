@@ -117,6 +117,13 @@ def test_normal_registration_usage_unaffected(client):
 
 def test_refresh_rate_limit_returns_429_after_limit_exceeded(client, monkeypatch):
     monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 3)
+    # Freeze the limiter's injectable clock: /auth/refresh does a full-table
+    # bcrypt scan per call, so under machine load each request can take many
+    # seconds. With a live clock those seconds accumulate past the 60s
+    # sliding window and age out the earliest hits, so the 4th call sees < 3
+    # in-window and returns 200 instead of 429 - a real load flake. A frozen
+    # clock makes the window purely about COUNT, which is what this asserts.
+    monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "_clock", lambda: 10_000.0)
     reg = client.post("/auth/register", json={"email": "ratelimit-refresh@example.com", "password": "password123"})
     assert reg.status_code == 201
     refresh_token = reg.json()["refresh_token"]
@@ -140,6 +147,10 @@ def test_refresh_rate_limit_also_counts_invalid_token_probes(client, monkeypatch
     # probing for valid tokens — 401s must count against the limit, same
     # principle as login counting wrong-password attempts.
     monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 3)
+    # Freeze the injectable clock so the 60s sliding window can't age out
+    # early hits during a slow (bcrypt-scan-per-call, load-sensitive) run -
+    # see test_refresh_rate_limit_returns_429_after_limit_exceeded.
+    monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "_clock", lambda: 10_000.0)
 
     for _ in range(3):
         r = client.post("/auth/refresh", json={"refresh_token": "not-a-real-token"})

@@ -39,7 +39,16 @@ def make_course(level_counts, *, section=UnitSection.reading_writing):
     """Create an en->nl course with, for each (level, n) in level_counts,
     one reading/writing unit whose lesson holds ``n`` multiple_choice
     exercises. Correct answer of exercise k is ``"correct-<id>"``. Returns
-    (course_id, {level: [exercise_id, ...]} in stable authored order)."""
+    (course_id, {level: [exercise_id, ...]} in stable authored order).
+
+    Good-citizen note (shared session DB): every course is uniquely tagged
+    (uuid ``tag`` in title/content_key/answers) so these rows never collide
+    with each other or the seed course. Crucially they are ALWAYS
+    multiple_choice (never a free-text/translation type), so the
+    type-filtered ``seeded_exercise_id()`` helpers in other suites
+    (test_rate_limiting / test_security_payload_bounds select
+    ``Exercise.type == translation``) can never pick a placement row - the
+    coupling that first surfaced when this suite began seeding rows."""
     tag = uuid4().hex[:8]
     exercise_ids: dict[str, list[str]] = {}
     with SessionLocal() as db:
