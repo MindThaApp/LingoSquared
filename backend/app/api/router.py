@@ -28,6 +28,7 @@ from app.models import (
     Course,
     Exercise,
     ExerciseAttempt,
+    ExerciseType,
     FeedbackAttachment,
     GrammarProgress,
     Language,
@@ -95,6 +96,11 @@ from app.schemas.api import (
     PracticeBatchIn,
     PracticeBatchOut,
     PracticeImportOut,
+    PlacementAnswerIn,
+    PlacementAnswerOut,
+    PlacementResultIn,
+    PlacementResultOut,
+    PlacementSetOut,
     PushNotifyOut,
     PushSubscribeIn,
     PushUnsubscribeIn,
@@ -125,8 +131,16 @@ from app.review.sm2 import schedule
 from app.review.grading import (
     decode_feedback,
     display_correct_response,
+    exercise_type_value,
     grade,
     select_feedback,
+)
+from app.review.placement import (
+    PLACEMENT_BLOCK_SIZE,
+    PLACEMENT_LEVELS,
+    PLACEMENT_PASS_THRESHOLD,
+    parse_cefr_level,
+    recommend_from_answers,
 )
 from app.services import tts as tts_service
 from app.services import stt as stt_service
@@ -451,6 +465,127 @@ def exercise_answer(db, user, e, response):
         "feedback": select_feedback(feedback_meta, response, result),
     }
 
+PLACEMENT_RATE_LIMIT_MESSAGE = "Too many answers submitted too quickly. Please slow down."
+
+
+def build_placement_set(db, course):
+    """Assemble the laddered probe set for a course (no answers withheld
+    here -- the caller serializes only {id, level, type, order, prompt}).
+
+    Groups the course's reading/writing multiple_choice / matching_pairs
+    exercises by the CEFR level of their owning unit, and for each level
+    A1->A2->B1->B2 that can fill a full block of PLACEMENT_BLOCK_SIZE,
+    deterministically takes the first block ordered by
+    (unit.order, lesson.order, exercise.order, exercise.id). Levels that
+    can't fill a block are dropped from the ladder. Returns
+    ``(levels, items)`` -- ``levels`` empty means placement is unavailable.
+    """
+    rows = db.execute(
+        select(
+            Unit.content_key,
+            Unit.order,
+            Lesson.order,
+            Exercise.order,
+            Exercise.id,
+            Exercise.type,
+            Exercise.prompt,
+        )
+        .join(Lesson, Lesson.unit_id == Unit.id)
+        .join(Exercise, Exercise.lesson_id == Lesson.id)
+        .where(
+            Unit.course_id == course.id,
+            Unit.section == UnitSection.reading_writing,
+            Exercise.type.in_(
+                [ExerciseType.multiple_choice, ExerciseType.matching_pairs]
+            ),
+        )
+        .order_by(Unit.order, Lesson.order, Exercise.order, Exercise.id)
+    ).all()
+
+    by_level: dict[str, list] = {}
+    for content_key, _u_order, _l_order, ex_order, ex_id, ex_type, prompt in rows:
+        level = parse_cefr_level(content_key)
+        if level not in PLACEMENT_LEVELS:
+            continue
+        by_level.setdefault(level, []).append(
+            {
+                "id": ex_id,
+                "level": level,
+                "type": exercise_type_value(ex_type),
+                "order": ex_order,
+                "prompt": prompt,
+            }
+        )
+
+    levels: list[str] = []
+    items: list[dict] = []
+    for level in PLACEMENT_LEVELS:
+        block = by_level.get(level, [])
+        if len(block) < PLACEMENT_BLOCK_SIZE:
+            continue
+        levels.append(level)
+        items.extend(block[:PLACEMENT_BLOCK_SIZE])
+    return levels, items
+
+
+def placement_probe(db, exercise_id, course_id):
+    """Return the Exercise iff it exists, belongs to ``course_id``, is in a
+    reading/writing unit, and is a placement probe type -- else None. Used
+    to validate /answer and /result submissions (a non-match is a 400
+    exercise_not_in_placement)."""
+    e = db.get(Exercise, exercise_id)
+    if not e:
+        return None
+    if exercise_type_value(e.type) not in ("multiple_choice", "matching_pairs"):
+        return None
+    lesson = db.get(Lesson, e.lesson_id)
+    if not lesson:
+        return None
+    unit = db.get(Unit, lesson.unit_id)
+    if not unit or unit.course_id != course_id or unit.section != UnitSection.reading_writing:
+        return None
+    return e
+
+
+def placement_grade(db, e, response):
+    """Pure grade of one probe -- NO rows written. Choice types resolve
+    straight to correct/incorrect, but we still pass the exercise's own
+    strictness inputs for parity with exercise_answer()."""
+    feedback_meta = decode_feedback(e.feedback)
+    return grade(
+        response,
+        e.correct_response,
+        e.type,
+        script=resolve_script(db, e.prompt.get("answer_language_code")),
+        orthography_strict=feedback_meta.get("orthography_strict"),
+        case_sensitive=bool(feedback_meta.get("case_sensitive")),
+    )
+
+
+def first_placement_unit(db, course_id, level):
+    """First reading/writing unit (lowest order) whose parsed CEFR ==
+    ``level``. If ``level`` is None or no unit matches, returns the course's
+    first reading/writing unit (the course start). None only if the course
+    has no reading/writing units at all."""
+    units = list(
+        db.scalars(
+            select(Unit)
+            .where(
+                Unit.course_id == course_id,
+                Unit.section == UnitSection.reading_writing,
+            )
+            .order_by(Unit.order)
+        )
+    )
+    if not units:
+        return None
+    if level is not None:
+        for unit in units:
+            if parse_cefr_level(unit.content_key) == level:
+                return unit
+    return units[0]
+
+
 def speaking_unlocked(db:Session,course_id:str,user_id:str|None) -> bool:
     if not user_id: return False
     reading_units=list(db.scalars(select(Unit).where(Unit.course_id==course_id,Unit.section==UnitSection.reading_writing)))
@@ -694,6 +829,76 @@ def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=D
     unit=db.get(Unit,lesson_row.unit_id)
     require_speaking_unlocked(db,unit,user)
     return exercise_answer(db,user,e,body.response)
+# --- Placement test (course-level), 2026-08-05 -------------------------
+# Recognition-only, side-effect-free (MVP): assembled from the course's own
+# existing multiple_choice/matching_pairs exercises, graded by grade(), and
+# writes NOTHING (no ExerciseAttempt/LessonProgress/XP/streak/SRS). It only
+# recommends a starting unit; persistence is client-side (localStorage).
+# Full design: docs/PLACEMENT_TEST_SPEC.md; contract: docs/CONTRACT.md.
+@router.get("/courses/{course_id}/placement",response_model=PlacementSetOut)
+def placement_set(course_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited",PLACEMENT_RATE_LIMIT_MESSAGE)
+    course=db.get(Course,course_id)
+    if not course: fail(404,"course_not_found","Course not found")
+    levels,items=build_placement_set(db,course)
+    # Contract: 409 when the course can't fill even one A1 block (< 4 usable
+    # A1 probes). Higher tiers may be dropped from the ladder silently; A1
+    # is the floor (spec 4).
+    if "A1" not in levels:
+        fail(409,"placement_unavailable","This course does not have enough recognition exercises to build a placement test")
+    return {
+        "course_id":course_id,
+        "levels":levels,
+        "block_size":PLACEMENT_BLOCK_SIZE,
+        "pass_threshold":PLACEMENT_PASS_THRESHOLD,
+        "items":items,
+    }
+@router.post("/courses/{course_id}/placement/answer",response_model=PlacementAnswerOut)
+def placement_answer(course_id:str,body:PlacementAnswerIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited",PLACEMENT_RATE_LIMIT_MESSAGE)
+    course=db.get(Course,course_id)
+    if not course: fail(404,"course_not_found","Course not found")
+    e=placement_probe(db,body.exercise_id,course_id)
+    if e is None:
+        fail(400,"exercise_not_in_placement","Exercise does not belong to this course's placement set")
+    result=placement_grade(db,e,body.response)
+    # No persistence: pure grade() call, distinct from POST /exercises/{id}/answer.
+    return {
+        "correct":result!="incorrect",
+        "result":result,
+        "correct_response":display_correct_response(e.correct_response),
+    }
+@router.post("/courses/{course_id}/placement/result",response_model=PlacementResultOut)
+def placement_result(course_id:str,body:PlacementResultIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    enforce_rate_limit(ANSWER_RATE_LIMIT,user.id,"answer_rate_limited",PLACEMENT_RATE_LIMIT_MESSAGE)
+    course=db.get(Course,course_id)
+    if not course: fail(404,"course_not_found","Course not found")
+    # Re-grade every submitted answer server-side (thresholds live only
+    # here, un-gameable). Answers that aren't valid probes for this course
+    # are silently ignored. No rows written.
+    graded=[]
+    for ans in body.answers:
+        e=placement_probe(db,ans.exercise_id,course_id)
+        if e is None: continue
+        lesson=db.get(Lesson,e.lesson_id)
+        unit=db.get(Unit,lesson.unit_id)
+        level=parse_cefr_level(unit.content_key)
+        if level is None: continue
+        result=placement_grade(db,e,ans.response)
+        graded.append((level,result!="incorrect"))
+    recommended_level,per_level=recommend_from_answers(graded)
+    unit=first_placement_unit(db,course_id,recommended_level)
+    # Empty/short answers -> recommend the course start; report that unit's
+    # own level as the recommendation rather than null.
+    if recommended_level is None and unit is not None:
+        recommended_level=parse_cefr_level(unit.content_key)
+    return {
+        "recommended_level":recommended_level,
+        "recommended_unit_id":unit.id if unit else None,
+        "recommended_unit_content_key":unit.content_key if unit else None,
+        "recommended_unit_title":unit.title if unit else None,
+        "per_level":per_level,
+    }
 @router.post("/exercises/{exercise_id}/report",response_model=ContentIssueCreatedOut,status_code=201)
 def report_content_issue(exercise_id:str,body:ContentIssueReportIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
     enforce_rate_limit(REPORT_RATE_LIMIT,user.id,"report_rate_limited","Too many reports submitted too quickly. Please slow down.")

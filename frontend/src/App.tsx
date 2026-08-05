@@ -13,6 +13,7 @@ import { LevelCheckPage } from "./pages/LevelCheckPage";
 import { CourseUnitsPage } from "./pages/CourseUnitsPage";
 import { UnitLessonsPage } from "./pages/UnitLessonsPage";
 import { CheckpointPage } from "./pages/CheckpointPage";
+import { PlacementTestPage } from "./pages/PlacementTestPage";
 import { PracticeFeedPage } from "./pages/PracticeFeedPage";
 import { LessonRunnerPage } from "./pages/LessonRunnerPage";
 import { LessonCompletePage } from "./pages/LessonCompletePage";
@@ -70,6 +71,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <LevelCheckPage />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/courses/:courseId/placement"
+                element={
+                  <ProtectedRoute>
+                    <PlacementTestPage />
                   </ProtectedRoute>
                 }
               />
