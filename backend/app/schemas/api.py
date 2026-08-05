@@ -326,6 +326,43 @@ class CheckpointResultOut(BaseModel):
     weak_outcomes: list[str]
     weak_lexeme_ids: list[str] = []
     checkpoint_passed: bool
+# Placement test (course-level), 2026-08-05. Recognition-only, assembled
+# from the course's own existing multiple_choice/matching_pairs exercises;
+# the MVP writes NOTHING (no ExerciseAttempt/LessonProgress/XP/SRS). Full
+# design: docs/PLACEMENT_TEST_SPEC.md; contract: docs/CONTRACT.md placement
+# section. `level` is the CEFR sublevel parsed from the owning Unit's
+# content_key (never Course.level).
+class PlacementProbeOut(BaseModel): id:str; level:str; type:ExerciseType; order:int; prompt:dict[str,Any]
+class PlacementSetOut(BaseModel):
+    course_id:str
+    levels:list[str]
+    block_size:int
+    pass_threshold:int
+    items:list[PlacementProbeOut]
+# One answered probe. Same response union + serialized-size bound as
+# AnswerIn (guards grade()'s O(len*len) comparison against a giant payload).
+# Doubles as both the /answer request body and each element of /result's
+# answers list.
+class PlacementAnswerIn(BaseModel):
+    exercise_id:str
+    response: str|list[Any]|dict[str,Any]|bool|int|float
+    @model_validator(mode="after")
+    def bounded_response(self):
+        _bounded_payload_size(self.response); return self
+# Correct answers are only ever revealed by /answer (per-item, post-grade)
+# -- never in the /placement set payload (PlacementProbeOut omits them).
+class PlacementAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any
+class PlacementResultIn(BaseModel):
+    # Bounded so a single request can't force an unbounded number of
+    # grade() passes (16 probes is a full A1-B2 ladder; 200 is generous).
+    answers:list[PlacementAnswerIn]=Field(default_factory=list,max_length=200)
+class PlacementLevelStatOut(BaseModel): correct:int; total:int
+class PlacementResultOut(BaseModel):
+    recommended_level:str|None
+    recommended_unit_id:str|None
+    recommended_unit_content_key:str|None
+    recommended_unit_title:str|None
+    per_level:dict[str,PlacementLevelStatOut]
 class TTSIn(BaseModel): text:str=Field(min_length=1,max_length=5000); language_code:str; speaking_rate:float|None=Field(default=None,ge=0.25,le=2.0)
 class TTSFallback(BaseModel): use_browser_tts:Literal[True]=True; reason:Literal["unsupported_language","quota_exceeded","provider_error"]
 class STTWordOut(BaseModel): word:str; start:float; end:float; probability:float

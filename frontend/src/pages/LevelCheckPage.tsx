@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -26,6 +26,11 @@ export function LevelCheckPage() {
 
   const relevel = location.state as RelevelState | null;
   const forceShow = Boolean(relevel?.returnTo);
+  // The 3-button self-report is demoted to a fallback behind this toggle --
+  // the primary answer is now the real placement test (docs/PLACEMENT_TEST_SPEC.md
+  // §2.3). Starts collapsed; revealing it changes nothing about what happens
+  // once a level is chosen (choose() below is untouched).
+  const [showSelfReport, setShowSelfReport] = useState(false);
 
   const unitsQuery = useQuery({
     queryKey: ["units", courseId],
@@ -79,21 +84,44 @@ export function LevelCheckPage() {
     <div>
       <h1>{t("level_check.heading")}</h1>
       <p className="muted" style={{ marginBottom: 20 }}>{t("level_check.subheading")}</p>
-      <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 480 }}>
-        {LEVELS.map((level) => (
-          <button
-            key={level}
-            className="card continue-card"
-            style={{ textAlign: "start", cursor: "pointer" }}
-            onClick={() => choose(level)}
-          >
-            <div className="continue-info">
-              <h3 style={{ margin: "0 0 4px" }}>{t(`level_check.${level}_title`)}</h3>
-              <span className="muted">{t(`level_check.${level}_description`)}</span>
-            </div>
-          </button>
-        ))}
+
+      <div className="card continue-card" style={{ maxWidth: 480, marginBottom: 12 }}>
+        <div className="continue-info">
+          <h3 style={{ margin: "0 0 4px" }}>{t("placement.level_check_cta_title")}</h3>
+          <span className="muted">{t("placement.level_check_cta_body")}</span>
+        </div>
+        <button className="btn" onClick={() => navigate(`/courses/${courseId}/placement`)}>
+          {t("placement.take_test_cta")}
+        </button>
       </div>
+
+      {!showSelfReport ? (
+        <button
+          type="button"
+          className="btn btn-secondary"
+          style={{ maxWidth: 480 }}
+          onClick={() => setShowSelfReport(true)}
+        >
+          {t("placement.skip_self_report_toggle")}
+        </button>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, maxWidth: 480 }}>
+          {LEVELS.map((level) => (
+            <button
+              key={level}
+              className="card continue-card"
+              style={{ textAlign: "start", cursor: "pointer" }}
+              onClick={() => choose(level)}
+            >
+              <div className="continue-info">
+                <h3 style={{ margin: "0 0 4px" }}>{t(`level_check.${level}_title`)}</h3>
+                <span className="muted">{t(`level_check.${level}_description`)}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
       {forceShow && (
         <button
           className="btn btn-secondary"

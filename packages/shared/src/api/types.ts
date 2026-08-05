@@ -358,6 +358,59 @@ export interface CheckpointResult {
   checkpoint_passed: boolean;
 }
 
+// Placement test (docs/PLACEMENT_TEST_SPEC.md, docs/CONTRACT.md "Placement
+// test (course-level)") — recognition-only, side-effect-free (MVP writes
+// nothing server-side; the recommendation is persisted client-side, see
+// frontend/src/lib/placementPreferences.ts). Probes are restricted to
+// multiple_choice/matching_pairs so `type`/`prompt` reuse the same shapes
+// as Exercise/PracticeItem.
+export interface PlacementProbe {
+  id: string;
+  level: CefrLevel;
+  type: ExerciseType;
+  order: number;
+  prompt: ExercisePrompt;
+}
+
+// GET /courses/{course_id}/placement
+export interface PlacementSet {
+  course_id: string;
+  levels: CefrLevel[];
+  block_size: number;
+  pass_threshold: number;
+  items: PlacementProbe[];
+}
+
+// POST /courses/{course_id}/placement/answer — pure grade() call, no
+// xp_awarded/feedback fields (those only exist on side-effecting answer
+// endpoints; this one never writes a row).
+export interface PlacementAnswerResult {
+  correct: boolean;
+  result: GradingStatus;
+  correct_response: unknown;
+}
+
+// One entry of POST /courses/{course_id}/placement/result's `answers` array.
+export interface PlacementAnswerIn {
+  exercise_id: string;
+  response: AnswerResponse;
+}
+
+export interface PlacementLevelStat {
+  correct: number;
+  total: number;
+}
+
+// POST /courses/{course_id}/placement/result — the authoritative
+// recommendation; per_level is keyed by CEFR level string ("A1", "A2", …).
+export interface PlacementRecommendation {
+  recommended_level: CefrLevel;
+  recommended_unit_id: string;
+  recommended_unit_content_key: string;
+  recommended_unit_title: string;
+  per_level: Record<string, PlacementLevelStat>;
+}
+
 export interface Xp {
   total_xp: number;
   daily_goal: number;
