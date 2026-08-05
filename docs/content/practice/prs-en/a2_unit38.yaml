@@ -1,0 +1,348 @@
+schema_version: '1.0'
+pack_key: practice.prs-en.a2.unit38
+source_language: prs
+target_language: en
+unit_content_key: en.a2.unit38.repair_visit
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Mirrors the nl-en sibling pack (a2_unit38.yaml, same shared English realization a2_unit38_repair_visit)
+    with ONE deliberate divergence: lesson02''s sole content lexeme, the verb "leave" (from "I will leave
+    the key with my neighbor" = to entrust/leave behind), is MISGLOSSED in this direction (رفتن، ترک کردن
+    (= to depart)), an unrelated or wrong sense unlike the nl-en sibling''s clean gloss for the same token.
+    Because "leave" is lesson02''s ONLY content lexeme, there is no way to keep lesson02 represented without
+    shipping that wrong gloss as the correct answer, so lesson02 is left WITHOUT any template -- same
+    honest posture as a lesson with zero backfill lexemes (recipe SS0/SS10 #1). Routed "leave" to the
+    backfill lane for a gloss fix (entrust/leave-with-someone sense).
+
+
+    FIX (fresh-context review, post-authoring): the first draft used the BROAD unit-wide tag
+    (prs_en_a2_unit38_words) for lesson01.choose.001, lesson01.match.002, and lesson04.listen.001, on the
+    mistaken assumption that simply not authoring a lesson02 template would keep "leave" out of every
+    pool. It does not -- EVERY taggable token in the unit (including "leave") carries the broad unit-wide
+    tag on first introduction, independent of which templates exist, so "leave" was empirically surfacing
+    as a correct answer in all three of those templates. Fixed by replacing the broad tag on exactly those
+    3 templates with a UNION of the two lesson tags that actually exclude "leave" -- [prs_en_a2_unit38_lesson01_words,
+    prs_en_a2_unit38_lesson03_words] -- the same per-lesson-union technique already used correctly elsewhere
+    in this wave (e.g. a2_unit35 lesson04''s lesson02+lesson04 union). Derived pools (unit scope): lesson01_words
+    = {reschedule, neighbor, key, leak, fixed, afternoon, can''t, won''t} (8, all noun/verb) union lesson03_words
+    = {message, rescheduled, door, confirm} (4, all noun/verb) = 12 distinct tokens, zero overlap, "leave"
+    absent from both (it only ever carried the lesson02 tag + the now-removed broad tag). The broad tag
+    (prs_en_a2_unit38_words) and the now-unused prs_en_a2_unit38_lesson04_words entry were removed from
+    tag_schema since no slot references them any more.
+
+
+    18 lexemes across the unit, 13 content-POS (noun/verb): lesson01 8, lesson02 1 (excluded, see above),
+    lesson03 4, lesson04 0 content (only the pronoun "which" + preposition "under"). The lesson01+lesson03
+    union (12 distinct tokens, POS [noun,verb]) now drives every recognition/matching template that isn''t
+    lesson-specific; lesson01/03 word_order+translation use their own lesson tags (subsets of the same
+    union). lesson04''s function words (which/under) are hosted via part_of_speech:[pronoun,preposition]
+    with NO semantic tag (see below). CORRECTION (empirical pool derivation, post-fix re-review): this
+    untagged slot ALSO admits lesson03''s preposition "by" at UNIT scope (it is the only other
+    pronoun/preposition token in the whole unit, and with no semantic tag there is nothing to exclude it
+    by) -- the earlier draft of this note incorrectly claimed "by" was excluded here. Re-reading its gloss
+    ("با (در pay by card)" = "with, as in the instrumental sense of pay-by-card") against this unit''s own
+    usage ("confirm this new time by message" = via/through-medium) shows both are the SAME instrumental
+    "by" sense -- not a wrong-sense defect after all, so "by" is correctly KEPT (not excluded) in this
+    slot''s pool alongside which/under; the previous "mis-glossed, excluded" characterization is retracted.
+    NOTE: unlike the nl-en sibling, this direction''s backfill
+    assigns NO semantic tag at all to pronoun/preposition tokens (agreement_tags={} for both "which" and
+    "under" -- confirmed by inspecting the raw backfill spec), so a semantic-tag-based lesson04 slot silently
+    produces a dead template (0 candidates). Fixed per recipe SS3.1(c): the lesson04 order/translate slots
+    omit agreement_tags entirely and rely on language_code + part_of_speech:[pronoun,preposition] alone
+    -- legal and safe here because word_order''s "Please say {item}." frame and bare-word translation
+    both impose no semantic requirement and are grammatical for literally any word, so the course-scope
+    widening this causes (to every pronoun/preposition in the whole A2 course) is harmless.
+
+
+    10 templates: lesson01 4 (choose/match/order/translate), lesson03 3 (choose/order/translate), lesson04
+    3 (listen/order/translate). Recognition 3, structured 4, production 3 -- all >=3, clears every floor.
+    THIN UNIT, same posture as the nl-en sibling''s own note: authored honestly per the no-padding rule;
+    lesson02 unrepresentable is flagged to the coordinator (fa/prs-specific, the nl-en sibling does cover
+    it). word_order uses the generic "Please say {item}." frame (no candidate floor; zero self-reference
+    at course scope -- all pools are constrained by unit38-specific tags, and "leave" is now confirmed
+    absent from every slot in this pack). PENDING fresh-context re-review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a2_unit38_lesson01_words
+    - prs_en_a2_unit38_lesson03_words
+templates:
+- content_key: practice.prs-en.en.a2.unit38.lesson01.choose.001
+  lesson_content_key: en.a2.unit38.lesson01.repair_visit_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &id001
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson01.match.002
+  lesson_content_key: en.a2.unit38.lesson01.repair_visit_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر کلمه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson01.order.003
+  lesson_content_key: en.a2.unit38.lesson01.repair_visit_vocabulary
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit38_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} همی کلمه‌ای است که خواسته شده بود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson01.translate.004
+  lesson_content_key: en.a2.unit38.lesson01.repair_visit_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit38_lesson01_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson03.choose.001
+  lesson_content_key: en.a2.unit38.lesson03.reading_a_rescheduling_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit38_lesson03_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson03.order.002
+  lesson_content_key: en.a2.unit38.lesson03.reading_a_rescheduling_message
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit38_lesson03_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} همی کلمه‌ای است که خواسته شده بود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson03.translate.003
+  lesson_content_key: en.a2.unit38.lesson03.reading_a_rescheduling_message
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit38_lesson03_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson04.listen.001
+  lesson_content_key: en.a2.unit38.lesson04.repair_visit_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic:
+        - prs_en_a2_unit38_lesson01_words
+        - prs_en_a2_unit38_lesson03_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson04.order.002
+  lesson_content_key: en.a2.unit38.lesson04.repair_visit_dialogue
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - pronoun
+      - preposition
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} همی کلمه‌ای است که خواسته شده بود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit38.lesson04.translate.003
+  lesson_content_key: en.a2.unit38.lesson04.repair_visit_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - pronoun
+      - preposition
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
