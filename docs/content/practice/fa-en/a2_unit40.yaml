@@ -1,0 +1,387 @@
+schema_version: '1.0'
+pack_key: practice.fa-en.a2.unit40
+source_language: fa
+target_language: en
+unit_content_key: en.a2.unit40.online_order_problem
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Mirrors the nl-en sibling pack (a2_unit40.yaml, same shared English realization a2_unit40_online_order_problem)
+    exactly. Target pool: the 12 content-POS (noun/verb/adjective/adverb) lexemes this unit''s own lessons
+    introduce, across the 3/4 lessons that carry any lexeme (lesson04, the dialogue, has ZERO backfill
+    lexemes -- every card it teaches reuses an already-introduced token from lessons 01-03 -- and therefore
+    cannot be represented in the checkpoint no matter what, same as the nl-en sibling). The 13th unit
+    lexeme, the order number "8154", is a symbol and is excluded from every pool via part_of_speech (a
+    self-gloss otherwise).
+
+
+    GLOSS AUDIT: read against docs/content/realizations/en/a2_unit40_online_order_problem.yaml. FLAGGED,
+    KEPT (same posture as the nl-en sibling''s own note on this identical token): "order" carries a verb-only
+    gloss (سفارش دادن (= to place an order)), but this unit teaches "order" only as the NOUN ("my order
+    arrived", "order number"). The gloss is a real dictionary sense of English "order" (not outright false)
+    and is not confusable with any other gloss in the lesson01 pool, and it shares its POS (verb, tagged
+    alongside "arrived") with no finer tag available to isolate it from the other 7 desired lesson01 lexemes,
+    so it is KEPT and routed to the backfill lane for a noun-sense regloss/retag. No other misglosses
+    found; "damaged"/"broken" are near-synonyms in English itself with correspondingly close but non-identical
+    glosses -- a real (if narrow) distinction, not an interchangeable-paraphrase defect, noted for the
+    reviewer to double-check.
+
+
+    Broad unit tag (fa_en_a2_unit40_words) unions the whole unit (12 distinct tokens, clears both the
+    multiple_choice 3-option and matching_pairs 6-pair floors); each word_order/translation pair is additionally
+    anchored per-lesson via that lesson''s own tag for checkpoint stratification. word_order uses the
+    generic "Please say {item}." frame (no candidate floor, zero self-reference -- only unit40 lexemes
+    ever carry the unit40 tags).
+
+
+    12 templates (same count as nl-en): lesson01 5 (choose/match/order/translate/listen), lesson02 3 (choose/order/translate),
+    lesson03 4 (choose/match/order/translate). THIN UNIT: only 12 EN content lexemes total -- cannot reach
+    the recipe''s 12-item/tier floor at full depth; authored honestly per the no-padding rule and flagged
+    checkpoint-thin to the coordinator (same posture as the nl-en sibling). PENDING fresh-context review
+    before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - fa_en_a2_unit40_words
+    - fa_en_a2_unit40_lesson01_words
+    - fa_en_a2_unit40_lesson02_words
+    - fa_en_a2_unit40_lesson03_words
+templates:
+- content_key: practice.fa-en.en.a2.unit40.lesson01.choose.001
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &id001
+      - adjective
+      - adverb
+      - noun
+      - verb
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson01.match.002
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson01.order.003
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} کلمه‌ای است که خواسته شد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson01.translate.004
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson01_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این واژه است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson01.listen.005
+  lesson_content_key: en.a2.unit40.lesson01.online_order_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدید {item} بود.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson02.choose.001
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson02.order.002
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson02_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} کلمه‌ای است که خواسته شد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson02.translate.003
+  lesson_content_key: en.a2.unit40.lesson02.explaining_the_problem
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson02_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این واژه است.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson03.choose.001
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی فارسی {item} را انتخاب کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson03.match.002
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_words
+  slot_relations:
+  - kind: distinct
+    slots: &id003
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id003
+  feedback_frame:
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson03.order.003
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson03_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} کلمه‌ای است که خواسته شد.'
+    language_code: fa
+    direction: rtl
+- content_key: practice.fa-en.en.a2.unit40.lesson03.translate.004
+  lesson_content_key: en.a2.unit40.lesson03.reading_a_return_message
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: fa_en_a2_unit40_lesson03_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: پاسخ درست، معادل انگلیسی این واژه است.
+    language_code: fa
+    direction: rtl
