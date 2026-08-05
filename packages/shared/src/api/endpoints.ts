@@ -35,6 +35,10 @@ import type {
   LexemeSort,
   LexemeSummary,
   MistakeLexemeListResult,
+  PlacementAnswerIn,
+  PlacementAnswerResult,
+  PlacementRecommendation,
+  PlacementSet,
   PracticeAnswerResult,
   PracticeBatchMode,
   PracticeBatchResult,
@@ -245,6 +249,23 @@ export const CheckpointApi = {
   // endpoint as review/practice items.
   answer: (itemId: string, response: AnswerResponse) =>
     post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+};
+
+// Placement test (docs/CONTRACT.md "Placement test (course-level)") —
+// course-wide, side-effect-free in the MVP: /placement/answer grades one
+// item live for immediate feedback + client-driven early-exit;
+// /placement/result is the authoritative (server-re-graded) recommendation.
+// Never call these for progress/XP purposes — use LessonApi/CheckpointApi
+// for anything that should actually record an attempt.
+export const PlacementApi = {
+  start: (courseId: string) => get<PlacementSet>(`/courses/${courseId}/placement`),
+  answer: (courseId: string, exerciseId: string, response: AnswerResponse) =>
+    post<PlacementAnswerResult>(`/courses/${courseId}/placement/answer`, {
+      exercise_id: exerciseId,
+      response,
+    }),
+  result: (courseId: string, answers: PlacementAnswerIn[]) =>
+    post<PlacementRecommendation>(`/courses/${courseId}/placement/result`, { answers }),
 };
 
 export const PracticeApi = {

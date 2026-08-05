@@ -6,6 +6,7 @@ import { Check, List, Lock } from "lucide-react";
 import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import type { UnitSummary } from "@lingo/shared/api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
+import { getPlacementRecommendation } from "../lib/placementPreferences";
 import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferences";
 import { unitIcon } from "@lingo/shared/lib/unitIcons";
 
@@ -201,14 +202,27 @@ export function CourseUnitsPage() {
     unitsQuery.data?.filter((u) => u.section === "reading_writing") ?? [];
   const speaking = unitsQuery.data?.filter((u) => u.section === "speaking") ?? [];
 
+  // Placement test recommendation (docs/PLACEMENT_TEST_SPEC.md §2.3) takes
+  // precedence over the coarse self-report heuristic wherever both exist --
+  // it points at a specific unit, resolved server-side from real graded
+  // answers, not a self-reported bucket. Falls back to the self-report only
+  // when there's no placement recommendation, or its unit isn't found in
+  // this course's current reading/writing list (e.g. content reshuffled).
+  const placementRec = getPlacementRecommendation(courseId);
+  const placementIndex = placementRec
+    ? readingWriting.findIndex((u) => u.id === placementRec.unitId)
+    : -1;
+
   const level = getLevelPreference(courseId);
-  const recommendedIndex =
+  const selfReportIndex =
     level && readingWriting.length > 1
       ? recommendedUnitIndex(
           level,
           readingWriting.map((u) => u.content_key),
         )
       : -1;
+
+  const recommendedIndex = placementIndex !== -1 ? placementIndex : selfReportIndex;
 
   const lastUnitId = getLastVisitedUnit(courseId);
   useEffect(() => {

@@ -309,24 +309,36 @@ export function CoursePickerPage() {
                   <span className="btn">{t("course_picker.start")}</span>
                 </div>
               </Link>
-              {/* Only offered once a level's actually been recorded for this
+              {/* Sibling of the Link above (not nested inside it) to avoid a
+                  button-inside-anchor a11y anti-pattern. "Change level" is
+                  only offered once a level's actually been recorded for this
                   course -- a first-time visit already opens the level check
                   via the card link above, so there's nothing to "change"
-                  yet. Kept as a sibling of the Link (not nested inside it)
-                  to avoid a button-inside-anchor a11y anti-pattern. */}
-              {getLevelPreference(course.id) && (
+                  yet. "Take the test" always shows: it's a direct shortcut
+                  into the real placement test, bypassing the level-check
+                  page entirely. */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
+                {getLevelPreference(course.id) && (
+                  <button
+                    className="btn btn-secondary"
+                    style={{ padding: "4px 12px" }}
+                    onClick={() =>
+                      navigate(`/courses/${course.id}/level`, {
+                        state: { returnTo: "/courses", source, target },
+                      })
+                    }
+                  >
+                    {t("course_picker.change_level")}
+                  </button>
+                )}
                 <button
                   className="btn btn-secondary"
-                  style={{ padding: "4px 12px", marginTop: 4 }}
-                  onClick={() =>
-                    navigate(`/courses/${course.id}/level`, {
-                      state: { returnTo: "/courses", source, target },
-                    })
-                  }
+                  style={{ padding: "4px 12px" }}
+                  onClick={() => navigate(`/courses/${course.id}/placement`)}
                 >
-                  {t("course_picker.change_level")}
+                  {t("placement.course_picker_cta")}
                 </button>
-              )}
+              </div>
             </div>
           ))}
         </>
