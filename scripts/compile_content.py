@@ -213,7 +213,20 @@ GERMAN_FREE_TEXT_EXERCISE_TYPES = {
     "writing_prompt",
     "dialogue_response",
     "listen_type",
+    "translation",
+    "reverse_translation",
+    "grammar_check",
 }
+# Deliberately excluded, cross-checked against
+# backend/app/review/grading.py's FREE_TEXT_EXERCISE_TYPES:
+# - "dictation" stays orthography-strict by explicit content policy (see
+#   docs/CONTENT_DEFECT_REGISTRY.md 2026-08-03 en-de A1 entry) - an ASCII
+#   transliteration is never an intended accepted answer for "type exactly
+#   what you heard," even though grade()'s dictation branch would honor one
+#   if a content author added it to accepted_answers.
+# - "speak_response"/"speak_repeat" are STT transcripts, not keyboard
+#   input - there is no umlaut-keyboard-avoidance rationale for them, and a
+#   German STT engine does not transliterate ä/ö/ü/ß to ae/oe/ue/ss.
 GERMAN_TRANSLITERATION_TABLE = str.maketrans(
     {
         "ä": "ae",

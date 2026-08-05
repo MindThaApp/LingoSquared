@@ -475,7 +475,7 @@ def test_dictation_byte_equality_validator_accepts_identical_bytes():
     assert report.warnings == []
 
 
-def german_typed_documents(accepted_answers):
+def german_typed_documents(accepted_answers, exercise_type="writing_prompt"):
     content_key = "de.test.exercise.write_umlauts"
     return (
         {
@@ -487,7 +487,7 @@ def german_typed_documents(accepted_answers):
                             "exercises": [
                                 {
                                     "content_key": content_key,
-                                    "type": "writing_prompt",
+                                    "type": exercise_type,
                                 }
                             ]
                         }
@@ -529,6 +529,72 @@ def test_german_transliteration_validator_accepts_full_variant():
                 "status": "acceptable_with_note",
             },
         ]
+    )
+    report = compiler.Report()
+
+    compiler.validate_german_transliteration_variants(
+        realization,
+        overlay,
+        report,
+    )
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
+def test_german_transliteration_validator_warns_on_translation_missing_variant():
+    compiler = load_content_compiler()
+    realization, overlay = german_typed_documents(
+        [{"value": "Ärger über Größe und Öl", "status": "correct"}],
+        exercise_type="translation",
+    )
+    report = compiler.Report()
+
+    compiler.validate_german_transliteration_variants(
+        realization,
+        overlay,
+        report,
+    )
+
+    assert report.errors == []
+    assert len(report.warnings) == 1
+    warning = report.warnings[0]
+    assert "de.test.exercise.write_umlauts" in warning
+    assert "missing accepted variant 'Aerger ueber Groesse und Oel'" in warning
+
+
+def test_german_transliteration_validator_accepts_translation_full_variant():
+    compiler = load_content_compiler()
+    realization, overlay = german_typed_documents(
+        [
+            {"value": "Ärger über Größe und Öl", "status": "correct"},
+            {
+                "value": "Aerger ueber Groesse und Oel",
+                "status": "acceptable_with_note",
+            },
+        ],
+        exercise_type="translation",
+    )
+    report = compiler.Report()
+
+    compiler.validate_german_transliteration_variants(
+        realization,
+        overlay,
+        report,
+    )
+
+    assert report.errors == []
+    assert report.warnings == []
+
+
+def test_german_transliteration_validator_ignores_dictation():
+    """dictation stays orthography-strict by explicit content policy - it
+    must never be flagged for a missing ASCII transliteration variant, even
+    though grade()'s dictation branch would honor one if present."""
+    compiler = load_content_compiler()
+    realization, overlay = german_typed_documents(
+        [{"value": "Ärger über Größe und Öl", "status": "correct"}],
+        exercise_type="dictation",
     )
     report = compiler.Report()
 
