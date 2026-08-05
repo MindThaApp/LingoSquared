@@ -1,0 +1,392 @@
+schema_version: '1.0'
+pack_key: practice.prs-en.a2.unit36
+source_language: prs
+target_language: en
+unit_content_key: en.a2.unit36.document_correction
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  notes: 'Mirrors the nl-en sibling pack (a2_unit36.yaml, same shared English realization a2_unit36_document_correction):
+    16 lexemes across 4/4 lessons, 15 content-POS (adjective/adverb/noun/verb) after excluding the one
+    symbol lexeme ("3092", a self-gloss). ONE broad unit-wide tag (prs_en_a2_unit36_words) unions all
+    15 content tokens and is used for every slot in every template (matches the nl-en sibling''s design
+    exactly -- this is a thin unit where per-lesson tags would starve most lessons below the MC/matching
+    floors); each template stays lesson_content_key-anchored to its own lesson for checkpoint stratification.
+
+
+    GLOSS AUDIT: read all 15 content glosses against docs/content/realizations/en/a2_unit36_document_correction.yaml
+    -- no misglosses found. "correct" (verb, lesson01) carries the verb-sense gloss ("to correct/fix"),
+    matching this unit''s actual verb usage ("corrigeren" sense) -- unlike the nl-en sibling, which flagged
+    an adjective-sense Dutch gloss on this same token; fa/prs are clean here. "mistake"/"mistakes" are
+    a legitimate singular/plural discrimination (AUTHORING_GUIDE SS6.3), not a confusable-rights defect;
+    "correct" (verb, infinitive)/"corrected" (verb, past)/"correction" (noun) are three distinct real
+    inflections/forms, not interchangeable paraphrases.
+
+
+    13 templates (same count/layout as the nl-en sibling): lesson01 4 (choose/listen/match/translate),
+    lesson02 3 (choose/order/translate), lesson03 3 (choose/match/translate), lesson04 3 (listen/order/translate).
+    Recognition 4, structured 4, production 4, all 4 lessons represented across the tiers. word_order
+    uses the generic "Please say {item}." frame (no candidate floor, neither "Please" nor "say" is a taught
+    token in this unit at any scope). PENDING fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a2_unit36_words
+templates:
+- content_key: practice.prs-en.en.a2.unit36.lesson01.choose.001
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: &id001
+      - adjective
+      - adverb
+      - noun
+      - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson01.listen.002
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson01.match.003
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: هر کلمه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson01.translate.004
+  lesson_content_key: en.a2.unit36.lesson01.document_vocabulary
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson02.choose.001
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson02.order.002
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} همی کلمه‌ای است که خواسته شده بود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson02.translate.003
+  lesson_content_key: en.a2.unit36.lesson02.asking_for_a_correction
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson03.choose.001
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: معنی دری {item} را انتخاب کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson03.match.002
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: matching_pairs
+  frame:
+    text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
+    language_code: en
+    direction: ltr
+  slots:
+    first:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    second:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    third:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    fourth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    fifth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+    sixth:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  slot_relations:
+  - kind: distinct
+    slots: &id003
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id003
+  feedback_frame:
+    text: هر کلمه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson03.translate.003
+  lesson_content_key: en.a2.unit36.lesson03.reading_a_correction_notice
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson04.listen.001
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: واژه‌ای که شنیدین {item} بود.
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson04.order.002
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: word_order
+  frame:
+    text: Please say {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please say {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} همی کلمه‌ای است که خواسته شده بود.'
+    language_code: prs
+    direction: rtl
+- content_key: practice.prs-en.en.a2.unit36.lesson04.translate.003
+  lesson_content_key: en.a2.unit36.lesson04.correction_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: en
+      part_of_speech: *id001
+      agreement_tags:
+        semantic: prs_en_a2_unit36_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: معادل انگلیسی همی کلمه {item} است.
+    language_code: prs
+    direction: rtl
