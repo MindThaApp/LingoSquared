@@ -2202,6 +2202,17 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     # resolves bare `correct` to the adjective ("درست"), which would emit a
     # wrong-sense vocab card here. Added 2026-08-05 (native-gloss backlog fix).
     ("a2_unit36_document_correction", "correct"): ("verb", "اصلاح کردن؛ تصحیح کردن"),
+    # a2_unit35 (prescription): the shared/EXTRA tables carry the wrong sense
+    # for these three in a pharmacy context. Added 2026-08-05 (native-gloss
+    # review). tablet = pill (not the computer), matching the plural قرص‌ها;
+    # hours = the dosing interval "every eight hours" (not office hours);
+    # stop = cease "do not stop taking" (not physically halt/stand).
+    ("a2_unit35_prescription", "tablet"): ("noun", "قرص"),
+    ("a2_unit35_prescription", "hours"): ("noun", "ساعت"),
+    ("a2_unit35_prescription", "stop"): ("verb", "قطع کردن؛ متوقف کردن"),
+    # a2_unit38 (repair visit): "leave the key with my neighbor" = entrust,
+    # not spend-time (وقت گذاشتن).
+    ("a2_unit38_repair_visit", "leave"): ("verb", "گذاشتن؛ سپردن"),
     ("b1_unit01_necessity", "must"): ("verb", "باید"),
     ("b1_unit01_necessity", "next"): ("adjective", "بعدی"),
     ("b1_unit01_necessity", "right"): ("adjective", "درست"),

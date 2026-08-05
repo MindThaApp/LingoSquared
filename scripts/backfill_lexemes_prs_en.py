@@ -1976,6 +1976,12 @@ PRS_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # a2_unit36 teaches the VERB ("Could you correct it?"); bare `correct`
     # otherwise resolves to the adjective ("درست"). Added 2026-08-05.
     ("a2_unit36_document_correction", "correct"): "اصلاح کردن؛ درست کردن",
+    # a2_unit35 (prescription): pill sense, matching the plural گولی‌ها (not
+    # the computer تبلت). Added 2026-08-05 (native-gloss review).
+    ("a2_unit35_prescription", "tablet"): "گولی",
+    # a2_unit38 (repair visit): "leave the key with my neighbor" = entrust;
+    # Dari ماندن (to put/leave with someone) + سپردن, not رفتن (to depart).
+    ("a2_unit38_repair_visit", "leave"): "ماندن؛ سپردن",
     ("b1_unit05_workplace", "short"): "کوتاه/خلاصه",
     ("b1_unit10_purpose", "sound"): "نمودن/معلوم شدن",
     ("b1_unit10_purpose", "order"): "ترتیب",
