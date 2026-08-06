@@ -29,9 +29,13 @@ export const meta = {
 // agent must NEVER git-add a manifest line — the shared-manifest footgun).
 // ------------------------------------------------------------------------
 
-const items = (args && args.items) || []
+// args may arrive as an object or a JSON string depending on the caller — tolerate both.
+let cfg = args
+if (typeof cfg === 'string') { try { cfg = JSON.parse(cfg) } catch (e) { cfg = {} } }
+cfg = cfg || {}
+const items = cfg.items || []
 if (!items.length) { log('content-tier: args.items is empty — nothing to do'); return { report: [], wireReady: [] } }
-const verifyVotes = (args && args.verifyVotes) || 1
+const verifyVotes = cfg.verifyVotes || 1
 
 const REVIEW_SCHEMA = {
   type: 'object', additionalProperties: false,
