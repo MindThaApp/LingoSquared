@@ -1,5 +1,19 @@
 # HANDOVER — read this first, then act
 
+> **UPDATE 2026-08-30 — for now, work directly IN the iCloud copy; do NOT migrate out.**
+> Ramin retired his other Mac and synced the latest project (including an
+> uncommitted Dutch C1 tier that exists nowhere else) to iCloud. The canonical
+> working copy is now this repo at
+> `~/Library/Mobile Documents/com~apple~CloudDocs/dev/LingoSquared`.
+> **Skip PART 1 / Step 2 below — do NOT re-clone to `~/dev`.** The `~/dev` copies
+> were deleted 2026-08-30 to end the two-copies confusion.
+> The git-in-iCloud corruption risk documented in Step 2 is a known, re-accepted
+> trade-off: **push to `origin` (GitHub, private) often** — that push is the real
+> off-machine backup and the recovery point if iCloud ever mangles `.git`.
+> If files look "missing" right after launching, iCloud may still be downloading:
+> wait until `find . -name '*.icloud' | wc -l` returns `0` before concluding
+> anything is lost. (Everything below this banner is retained for future machines.)
+
 **You are the Claude session taking over LingoSquared on Ramin's new primary
 Mac.** This file is written to YOU, not to Ramin. It is self-contained: do
 not ask him what to do next, and do not make him relay instructions. Work
@@ -24,10 +38,14 @@ Ramin for are two files in step 4b — and even those can be deferred.
 pwd && git log --oneline -1 2>/dev/null
 ```
 
-- **Path contains `Mobile Documents`** → you are in the OLD iCloud copy.
-  Go to step 2 and migrate. Do NOT start working here.
-- **Path is `~/dev/LingoSquared`** → already migrated. Skip to step 3.
-- **No repo at all** → run step 2's clone.
+- **Path contains `Mobile Documents`** → you are in the iCloud copy. Per the
+  2026-08-30 banner above, THIS is now the canonical copy — work here and do NOT
+  run step 2's migration. Skip to step 3.
+- **Path is `~/dev/LingoSquared`** → historical (pre-2026-08-30) location; those
+  `~/dev` copies were removed. Switch to the iCloud copy above.
+- **No repo at all** → iCloud may still be downloading (check
+  `find . -name '*.icloud' | wc -l`); only if the repo is genuinely absent,
+  clone from `origin` into the iCloud path.
 
 ## Step 2. Migrate out of iCloud (clone — never copy the folder)
 
