@@ -1,0 +1,414 @@
+schema_version: "1.1"
+realization_version: "2026.1-draft.1"
+target_language: fr
+cefr_level: C1
+status: unreviewed
+generation_provenance:
+  method: ai_generated
+  authoring_system: claude
+  human_reviewed: false
+  notes: >-
+    French C1 unit 07 on mediating between sources and audiences: distilling
+    two partially conflicting accounts (a town-hall communiqué and a
+    shopkeepers' association statement about pedestrianizing the street where
+    Inès works) and relaying a synthesis to a non-specialist listener.
+    Authored from established French discourse conventions, with no
+    sibling-direction overlay consulted. Character canon was checked in
+    docs/content/realizations/fr/: Inès is the pâtisserie apprentice in Lyon
+    under Monsieur Lefebvre, and Mathieu is her peer and friend; the two
+    address each other with informal tu. This unit keeps that register
+    throughout — Inès relays the synthesis to Mathieu using tu ("je te
+    résume les deux sources"), never vous. The sources themselves are
+    reported in third person (la mairie / l'association), which is the
+    register of attribution, not a formal-vous slip.
+review:
+  status: unreviewed
+  required_next_reviewer: fresh_context_reviewer
+  notes: >-
+    Targets universal.c1.mediation.mediate_and_synthesize_complex_sources.
+    Verify that every claim is attributed to its true source (d'après la
+    mairie vs l'association affirme), that the unresolved conflict (whether
+    the concertation happened) is preserved rather than resolved, that
+    specialist terminology (piétonnisation) is resolved in plain terms for
+    the non-specialist listener, and that the culminating speaking and
+    writing exercises each require the complete act: condense two sources,
+    attribute each claim, preserve the disagreement, resolve terminology,
+    and express uncertainty. All listen/dictation exercises use dedicated
+    single-voice audio assets whose script is byte-identical to tested_text;
+    the full-relay audio is Inès's own single-voice monologue, not a shared
+    multi-turn dialogue asset.
+
+course:
+  realization_key: fr.c1
+  target_language_first: true
+  dialect: fr_FR_standard
+  register_policy: >-
+    Informal tu throughout, matching the established fr-lane canon: Inès and
+    Mathieu are workplace peers in Lyon who address each other with tu. No
+    formal vous is taught or used in this unit. The two mediated sources are
+    third-person reported speech, which is attribution, not register drift.
+
+media_assets:
+  - content_key: fr.c1.audio.mediation.selon_mairie.01
+    language: fr
+    text: "Selon la mairie, la rue sera piétonnisée au mois de mars."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+  - content_key: fr.c1.audio.mediation.association.01
+    language: fr
+    text: "D'après l'association, la concertation n'a jamais eu lieu."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+  - content_key: fr.c1.audio.mediation.travaux.01
+    language: fr
+    text: "Les travaux bloqueront l'accès aux boutiques pendant plusieurs mois."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+  - content_key: fr.c1.audio.mediation.autrement_dit.01
+    language: fr
+    text: "Autrement dit, la rue sera réservée aux piétons."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+  - content_key: fr.c1.audio.mediation.deux_sources.01
+    language: fr
+    text: "Selon la mairie, la rue sera piétonnisée au mois de mars. D'après l'association, la concertation n'a jamais eu lieu."
+    voice_hint: young_woman_neutral
+    status: pending_generation
+
+units:
+  - content_key: fr.c1.unit07.mediation_sources
+    title: "Médier entre des sources"
+    section: reading_writing
+    spine_outcome_ids:
+      - universal.c1.mediation.mediate_and_synthesize_complex_sources
+    planned_lesson_count: 6
+
+    lessons:
+      - content_key: fr.c1.unit07.mediation_sources.lesson01.attribution
+        title: "Attribuer une information"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.teach.une_source
+            kind: phrase
+            target: {text: "une source", language_code: fr, direction: ltr}
+            introduced_tokens: [une, source]
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.teach.selon_la_mairie
+            kind: phrase
+            target: {text: "selon la mairie", language_code: fr, direction: ltr}
+            introduced_tokens: [selon, la, mairie]
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.teach.dapres_lassociation
+            kind: phrase
+            target: {text: "d'après l'association", language_code: fr, direction: ltr}
+            introduced_tokens: ["d'après", "l'association"]
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.teach.affirmer_le_contraire
+            kind: phrase
+            target: {text: "affirmer le contraire", language_code: fr, direction: ltr}
+            introduced_tokens: [affirmer, le, contraire]
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.teach.modele_attribution
+            kind: grammar_note
+            target: {text: "Selon la mairie, la rue sera piétonnisée au mois de mars.", language_code: fr, direction: ltr}
+            introduced_tokens: [rue, sera, piétonnisée, au, mois, de, mars]
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.exercise01.recognize_attribution
+            type: multiple_choice
+            tested_text: "selon la mairie"
+            prompt: {target_blocks: [{text: "Which French phrase attributes a claim to the town hall?", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.exercise02.listen_attribution
+            type: listen_select
+            tested_text: "Selon la mairie, la rue sera piétonnisée au mois de mars."
+            media_asset_key: fr.c1.audio.mediation.selon_mairie.01
+            prompt: {target_blocks: []}
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.exercise03.match_attribution
+            type: matching_pairs
+            tested_text: "une source selon la mairie d'après l'association affirmer le contraire la mairie l'association"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "une source", right: "a source"}
+              - {left: "selon la mairie", right: "according to the town hall"}
+              - {left: "d'après l'association", right: "according to the association"}
+              - {left: "affirmer", right: "to assert"}
+              - {left: "le contraire", right: "the opposite"}
+              - {left: "la mairie", right: "the town hall"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.exercise04.order_attribution
+            type: word_order
+            tested_text: "selon la mairie"
+            prompt: {target_blocks: []}
+            word_bank: [selon, la, mairie]
+          - content_key: fr.c1.unit07.mediation_sources.lesson01.exercise05.write_attribution
+            type: writing_prompt
+            tested_text: "Selon la mairie, la rue sera piétonnisée au mois de mars."
+            prompt: {target_blocks: [{text: "Write the exact sentence attributing the pedestrianization to the town hall: Selon la mairie, la rue sera piétonnisée au mois de mars.", language_code: en, direction: ltr}]}
+
+      - content_key: fr.c1.unit07.mediation_sources.lesson02.desaccord
+        title: "Le point de désaccord"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.se_contredire
+            kind: phrase
+            target: {text: "se contredire", language_code: fr, direction: ltr}
+            introduced_tokens: [se, contredire]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.un_desaccord
+            kind: phrase
+            target: {text: "un point de désaccord", language_code: fr, direction: ltr}
+            introduced_tokens: [un, point, de, désaccord]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.dementir
+            kind: phrase
+            target: {text: "démentir une information", language_code: fr, direction: ltr}
+            introduced_tokens: [démentir, une, information]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.la_concertation
+            kind: phrase
+            target: {text: "la concertation", language_code: fr, direction: ltr}
+            introduced_tokens: [la, concertation]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.elle_affirme
+            kind: phrase
+            target: {text: "elle affirme le contraire", language_code: fr, direction: ltr}
+            introduced_tokens: [elle, affirme]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.teach.modele_desaccord
+            kind: grammar_note
+            target: {text: "Selon la mairie, la concertation a déjà eu lieu. L'association, elle, affirme le contraire : elle n'a jamais eu lieu.", language_code: fr, direction: ltr}
+            introduced_tokens: [a, déjà, eu, lieu, n, jamais]
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.exercise01.recognize_desaccord
+            type: multiple_choice
+            tested_text: "se contredire"
+            prompt: {target_blocks: [{text: "Which French phrase means 'to contradict each other'?", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.exercise02.listen_desaccord
+            type: listen_select
+            tested_text: "D'après l'association, la concertation n'a jamais eu lieu."
+            media_asset_key: fr.c1.audio.mediation.association.01
+            prompt: {target_blocks: []}
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.exercise03.match_desaccord
+            type: matching_pairs
+            tested_text: "se contredire un point de désaccord démentir une information la concertation elle affirme le contraire"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "se contredire", right: "to contradict each other"}
+              - {left: "un point de désaccord", right: "a point of disagreement"}
+              - {left: "démentir", right: "to deny / to refute"}
+              - {left: "une information", right: "a piece of information"}
+              - {left: "la concertation", right: "the consultation"}
+              - {left: "elle affirme le contraire", right: "she asserts the opposite"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.exercise04.order_desaccord
+            type: word_order
+            tested_text: "la concertation a déjà eu lieu"
+            prompt: {target_blocks: []}
+            word_bank: [la, concertation, a, déjà, eu, lieu]
+          - content_key: fr.c1.unit07.mediation_sources.lesson02.exercise05.translate_desaccord
+            type: translation
+            tested_text: "D'après l'association, la concertation n'a jamais eu lieu."
+            prompt: {target_blocks: [{text: "Translate into French: According to the association, the consultation never took place.", language_code: en, direction: ltr}]}
+
+      - content_key: fr.c1.unit07.mediation_sources.lesson03.reformulation
+        title: "Reformuler en termes simples"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.reformuler
+            kind: phrase
+            target: {text: "reformuler en termes simples", language_code: fr, direction: ltr}
+            introduced_tokens: [reformuler, en, termes, simples]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.un_non_specialiste
+            kind: phrase
+            target: {text: "un non-spécialiste", language_code: fr, direction: ltr}
+            introduced_tokens: [un, "non-spécialiste"]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.autrement_dit
+            kind: phrase
+            target: {text: "autrement dit", language_code: fr, direction: ltr}
+            introduced_tokens: [autrement, dit]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.cest_a_dire
+            kind: phrase
+            target: {text: "c'est-à-dire", language_code: fr, direction: ltr}
+            introduced_tokens: ["c'est-à-dire"]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.reservee_aux_pietons
+            kind: phrase
+            target: {text: "réservée aux piétons", language_code: fr, direction: ltr}
+            introduced_tokens: [réservée, aux, piétons]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.teach.modele_reformulation
+            kind: grammar_note
+            target: {text: "La piétonnisation, c'est-à-dire une rue réservée aux piétons.", language_code: fr, direction: ltr}
+            introduced_tokens: [piétonnisation]
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.exercise01.recognize_reformulation
+            type: multiple_choice
+            tested_text: "reformuler en termes simples"
+            prompt: {target_blocks: [{text: "Which French phrase means 'to rephrase in plain terms'?", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.exercise02.listen_reformulation
+            type: listen_select
+            tested_text: "Autrement dit, la rue sera réservée aux piétons."
+            media_asset_key: fr.c1.audio.mediation.autrement_dit.01
+            prompt: {target_blocks: []}
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.exercise03.match_reformulation
+            type: matching_pairs
+            tested_text: "reformuler en termes simples un non-spécialiste autrement dit c'est-à-dire réservée aux piétons"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "reformuler", right: "to rephrase"}
+              - {left: "en termes simples", right: "in plain terms"}
+              - {left: "un non-spécialiste", right: "a non-specialist"}
+              - {left: "autrement dit", right: "in other words"}
+              - {left: "c'est-à-dire", right: "that is to say"}
+              - {left: "réservée aux piétons", right: "reserved for pedestrians"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.exercise04.order_reformulation
+            type: word_order
+            tested_text: "réservée aux piétons"
+            prompt: {target_blocks: []}
+            word_bank: [réservée, aux, piétons]
+          - content_key: fr.c1.unit07.mediation_sources.lesson03.exercise05.speak_reformulation
+            type: speak_response
+            tested_text: "Autrement dit, la rue sera réservée aux piétons."
+            prompt: {target_blocks: [{text: "Say aloud the exact taught rephrasing in plain terms: Autrement dit, la rue sera réservée aux piétons.", language_code: en, direction: ltr}]}
+
+      - content_key: fr.c1.unit07.mediation_sources.lesson04.attribution_fidele
+        title: "Préserver le désaccord"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.preserver
+            kind: phrase
+            target: {text: "préserver le désaccord", language_code: fr, direction: ltr}
+            introduced_tokens: [préserver, le, désaccord]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.attribuer
+            kind: phrase
+            target: {text: "attribuer une information à sa source", language_code: fr, direction: ltr}
+            introduced_tokens: [attribuer, une, information, à, sa, source]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.les_travaux
+            kind: phrase
+            target: {text: "les travaux", language_code: fr, direction: ltr}
+            introduced_tokens: [les, travaux]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.bloqueront_l_acces
+            kind: phrase
+            target: {text: "bloqueront l'accès aux boutiques", language_code: fr, direction: ltr}
+            introduced_tokens: [bloqueront, "l'accès", aux, boutiques]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.pendant_plusieurs_mois
+            kind: phrase
+            target: {text: "pendant plusieurs mois", language_code: fr, direction: ltr}
+            introduced_tokens: [pendant, plusieurs, mois]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.la_clientele
+            kind: phrase
+            target: {text: "la clientèle", language_code: fr, direction: ltr}
+            introduced_tokens: [la, clientèle]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.teach.modele_fidelite
+            kind: grammar_note
+            target: {text: "Les travaux feraient fuir la clientèle, mais la piétonnisation semble décidée.", language_code: fr, direction: ltr}
+            introduced_tokens: [feraient, fuir, mais, semble, décidée]
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.exercise01.recognize_fidelite
+            type: multiple_choice
+            tested_text: "préserver le désaccord"
+            prompt: {target_blocks: [{text: "Which French phrase means 'to preserve the disagreement'?", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.exercise02.listen_travaux
+            type: listen_select
+            tested_text: "Les travaux bloqueront l'accès aux boutiques pendant plusieurs mois."
+            media_asset_key: fr.c1.audio.mediation.travaux.01
+            prompt: {target_blocks: []}
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.exercise03.match_fidelite
+            type: matching_pairs
+            tested_text: "préserver le désaccord attribuer une information à sa source les travaux bloqueront l'accès pendant plusieurs mois la clientèle"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "préserver le désaccord", right: "to preserve the disagreement"}
+              - {left: "attribuer une information à sa source", right: "to attribute information to its source"}
+              - {left: "les travaux", right: "the roadworks"}
+              - {left: "bloqueront l'accès", right: "will block access"}
+              - {left: "pendant plusieurs mois", right: "for several months"}
+              - {left: "la clientèle", right: "the customers / the clientele"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.exercise04.order_fidelite
+            type: word_order
+            tested_text: "préserver le désaccord"
+            prompt: {target_blocks: []}
+            word_bank: [préserver, le, désaccord]
+          - content_key: fr.c1.unit07.mediation_sources.lesson04.exercise05.write_fidelite
+            type: writing_prompt
+            tested_text: "Les travaux feraient fuir la clientèle, mais la piétonnisation semble décidée."
+            prompt: {target_blocks: [{text: "Write the exact sentence that preserves the disagreement and expresses uncertainty: Les travaux feraient fuir la clientèle, mais la piétonnisation semble décidée.", language_code: en, direction: ltr}]}
+
+      - content_key: fr.c1.unit07.mediation_sources.lesson05.relais_oral
+        title: "Relayer à l'oral"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.teach.je_te_resume
+            kind: phrase
+            target: {text: "je te résume", language_code: fr, direction: ltr}
+            introduced_tokens: [je, te, résume]
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.teach.les_deux_sources
+            kind: phrase
+            target: {text: "les deux sources", language_code: fr, direction: ltr}
+            introduced_tokens: [les, deux, sources]
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.teach.commenceront_au_printemps
+            kind: phrase
+            target: {text: "commenceront au printemps", language_code: fr, direction: ltr}
+            introduced_tokens: [commenceront, au, printemps]
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.teach.modele_relais
+            kind: grammar_note
+            target: {text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain.", language_code: fr, direction: ltr}
+            introduced_tokens: [et, son, calendrier, reste, incertain]
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.exercise01.listen_deux_sources
+            type: listen_select
+            tested_text: "Selon la mairie, la rue sera piétonnisée au mois de mars. D'après l'association, la concertation n'a jamais eu lieu."
+            media_asset_key: fr.c1.audio.mediation.deux_sources.01
+            prompt: {target_blocks: []}
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.exercise02.read_sources
+            type: reading_comprehension
+            tested_text: "Selon la mairie, la rue sera piétonnisée au mois de mars. Les travaux commenceront au printemps et la concertation a déjà eu lieu. L'association affirme le contraire : la concertation n'a jamais eu lieu et les travaux bloqueront l'accès aux boutiques pendant plusieurs mois."
+            prompt:
+              target_blocks:
+                - {text: "Selon la mairie, la rue sera piétonnisée au mois de mars. Les travaux commenceront au printemps et la concertation a déjà eu lieu. L'association affirme le contraire : la concertation n'a jamais eu lieu et les travaux bloqueront l'accès aux boutiques pendant plusieurs mois.", language_code: fr, direction: ltr}
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.exercise03.match_relais
+            type: matching_pairs
+            tested_text: "je te résume les deux sources la rue sera piétonnisée en mars la concertation a déjà eu lieu la concertation n'a jamais eu lieu les travaux feraient fuir la clientèle son calendrier reste incertain"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "je te résume les deux sources", right: "I summarize the two sources for you"}
+              - {left: "la rue sera piétonnisée en mars", right: "the street will be pedestrianized in March"}
+              - {left: "la concertation a déjà eu lieu", right: "the consultation has already taken place"}
+              - {left: "la concertation n'a jamais eu lieu", right: "the consultation never took place"}
+              - {left: "les travaux feraient fuir la clientèle", right: "the works would drive customers away"}
+              - {left: "son calendrier reste incertain", right: "its timetable remains uncertain"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson05.exercise04.speak_relais
+            type: speak_response
+            tested_text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain."
+            prompt: {target_blocks: [{text: "Relay aloud to Mathieu the exact complete synthesis: condense the two sources, attribute each claim, preserve the disagreement, resolve the term piétonnisation, and express the remaining uncertainty. Use the exact taught model.", language_code: en, direction: ltr}]}
+
+      - content_key: fr.c1.unit07.mediation_sources.lesson06.brief_ecrit
+        title: "Rédiger la synthèse"
+        spine_outcome_id: universal.c1.mediation.mediate_and_synthesize_complex_sources
+        teaching:
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.teach.modele_brief
+            kind: grammar_note
+            target: {text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain.", language_code: fr, direction: ltr}
+            introduced_tokens: []
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.teach.l_incertitude
+            kind: vocabulary
+            target: {text: "l'incertitude", language_code: fr, direction: ltr}
+            introduced_tokens: [incertitude]
+            example: {text: "Le calendrier reste une source d'incertitude.", language_code: fr, direction: ltr}
+        exercises:
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.exercise01.read_brief
+            type: reading_comprehension
+            tested_text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain."
+            prompt:
+              target_blocks:
+                - {text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain.", language_code: fr, direction: ltr}
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.exercise02.match_brief
+            type: matching_pairs
+            tested_text: "d'après la mairie l'association affirme le contraire les travaux feraient fuir la clientèle une rue réservée aux piétons semble décidée l'incertitude"
+            prompt: {target_blocks: []}
+            pairs:
+              - {left: "d'après la mairie", right: "according to the town hall"}
+              - {left: "l'association affirme le contraire", right: "the association asserts the opposite"}
+              - {left: "les travaux feraient fuir la clientèle", right: "the works would drive customers away"}
+              - {left: "une rue réservée aux piétons", right: "a street reserved for pedestrians"}
+              - {left: "semble décidée", right: "seems decided"}
+              - {left: "l'incertitude", right: "the uncertainty"}
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.exercise03.speak_brief
+            type: speak_response
+            tested_text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain."
+            prompt: {target_blocks: [{text: "Say aloud the exact complete briefing, preserving attribution, disagreement, and uncertainty.", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.exercise04.write_brief
+            type: writing_prompt
+            tested_text: "Je te résume les deux sources. D'après la mairie, la rue sera piétonnisée en mars et la concertation a déjà eu lieu. L'association, elle, affirme le contraire : la concertation n'a jamais eu lieu. Autrement dit, la piétonnisation, c'est-à-dire une rue réservée aux piétons, semble décidée, mais son calendrier reste incertain."
+            prompt: {target_blocks: [{text: "Write the exact complete briefing in accessible language: condense the two sources, attribute each claim, preserve the disagreement, resolve the term piétonnisation, and express the remaining uncertainty.", language_code: en, direction: ltr}]}
+          - content_key: fr.c1.unit07.mediation_sources.lesson06.exercise05.dictation_brief
+            type: dictation
+            tested_text: "Autrement dit, la rue sera réservée aux piétons."
+            media_asset_key: fr.c1.audio.mediation.autrement_dit.01
+            prompt: {target_blocks: []}
