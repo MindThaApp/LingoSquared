@@ -86,3 +86,11 @@ Elena = Italian teacher (insegnante) from Milan, feminine forms. Established col
   `backend/docker-compose.faqa.yml`, `backend/docker-compose.play.yml`, `backend/web_dist/`,
   `frontend/.env.faqa`, `docs/SESSION_HANDOFF_2026-07-17.md`.
 - Branch: `fix/launch-gate-content-review-wave1`. Use explicit pathspecs when committing.
+
+## UPDATE (same session, later) — review + fixes completed
+- **Fresh-context review of the complete it C1 tier ran** (independent reviewer, zero authoring context, all 16 files). Result: **2 blockers, 8 should-fix**, plus nits and 2 native-judgment items. Units 05/07/08 were fully clean; defects concentrated in units 01-03 (authored by the prior Claude/Codex session) + one each in 04 and 06.
+- **Blockers:** B1 = unit03 lesson05.speak_two_tones vs lesson06 model contradiction (emphatic-vs-ironic to Elena, grading one of the two correct answers wrong); B2 = unit02 lesson06.comprehend_full had untaught vocabulary in reading `prompt.target_blocks` (compiler-invisible gap).
+- **Should-fixes:** S1 = unit01 three declared-but-absent `introduced_tokens` (proponi, e, rischi); S2 = unit02 two untaught-vocab accepted answers; S3 = unit02 speaking act missing the "explain the unstated judgement" half; S4 = unit03 diplomatic register label blur + production; S5 = unit04 confusable matching_pairs lefts (match_oral_moves, match_concessione); S6 = unit06 underdetermined translate_toro prompt.
+- **All blockers + should-fixes fixed in one consolidated worker dispatch.** Independently re-verified course-scoped: `en-it-c1` = **0 errors, content: pass** (single pre-existing §16 warning on unit06 L01 ex03, untouched). Blockers B1/B2 spot-checked applied.
+- **Left for native-Italian/human judgment** (NOT fixed, noted): unit06 `modello_pasta` "Ho le mani in pasta in questo progetto" (double "in" — arguably acceptable); unit01 dettato trailing period + parentesi.01 audio truncation (harmless); unit02 listen_irony tested_text vs audio fragment (choice-based, harmless); unit03 lesson01 exercise numbering gap (ex01→ex03, cosmetic, content_key renames risky).
+- **Next:** commit the 11 modified it C1 files (units 01-06) with explicit pathspecs; ask Ramin before pushing; then roll C1 out to fr/ru/ar/ro/pl/hi.
