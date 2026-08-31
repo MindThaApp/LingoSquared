@@ -56,3 +56,25 @@ Fresh-context review: dispatched (pending). None of this is committed yet.
   - Human-check: unit05 pins Inès "originally from Paris" — verify against prior fr content.
   - Recurring nit (not rewritten): writing/speak prompts embed the full target sentence (copy-task trade-off).
 - **Consolidated fix dispatched** (deepseek worker, job bash-26). After fix: re-verify course-scoped, then commit.
+
+## FRENCH C1 — committed (not yet pushed)
+- **Committed** `2011fc19`: 19 files (8 fr realizations + 8 fr overlays + content_manifest en-fr-c1 line + CHANGELOG + DSH handoff), 6155 insertions.
+- All review should-fixes (F1-F5) + Inès-origin canon fix applied and independently re-verified course-scoped (`content: pass`, en-fr-c1 = 0 errors).
+- **Not pushed.** Local ahead of origin by 1 (2011fc19).
+- Next: ask Ramin before push; then roll C1 out to ru (prompts ready in /tmp/ru_c1_unit0*.md).
+
+## FRENCH C1 — pushed
+- Pushed `ca58f533..2011fc19` (fr C1) to origin (owner-authorized). origin == 2011fc19.
+
+## RUSSIAN C1 — in progress
+- **All 8 ru C1 units authored** via deepseek worker (parallel). New course `en-ru-c1` (manifest line after en-ru-b2). Canon: Настя (teacher) / Дима (engineer), informal ты; production avoids forcing speaker-gender. `realization_key: ru.c1`, content keys `ru.c1.unitNN.<slug>`.
+- Wired all 8 into the en-ru-c1 manifest line. **Course-scoped verify: en-ru-c1 = 0 errors, content: pass.**
+- **Fresh-context review dispatched** (deepseek worker, job bash-37). Flag to check: worker added `dictation` exercises in some units — AUTHORING_GUIDE §14a restricts dictation to TTS languages; confirm ru has working TTS or the dictation must be removed/replaced.
+- Next: collect review → fixes → re-verify → commit → ask before push. Then ar/ro/pl/hi.
+
+## RUSSIAN C1 — review + fix
+- **Fresh-context review done**: 3 clean units (01, 04, 07); 2 should-fixes, NO blockers. Dictation is answerable (ru has TTS; §14a guide text is stale and says nl/fa only — flag to update).
+  - F1 unit08 em-dash U+2014 in learner-typed answers (Cyrillic strict grading marks `-`/` ` variants wrong) — the highest-severity defect.
+  - F2 unit03 diplomatic register never PRODUCED in the culminating act.
+  - Low-severity/native-judgment notes: unit06 confusable glosses; unit02 bare-phrase irony MCQ; unit05 near-synonym pairs + tense label.
+- **Consolidated fix dispatched** (job bash-38). After fix: re-verify course-scoped, then commit.
