@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
@@ -9,7 +10,15 @@ import type { ExerciseComponentProps } from "./types";
 export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState<string | null>(null);
-  const options = exercise.prompt.options ?? [];
+  const rawOptions = exercise.prompt.options ?? [];
+  // Display order only: authored content puts the correct option first.
+  // The submitted payload is still the option TEXT.
+  const nonce = useMemo(() => Math.random().toString(36), []);
+  const options = useMemo(
+    () => seededShuffle(rawOptions, `${exercise.id}:${nonce}`),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [exercise.id, nonce, rawOptions.join("\u0001")],
+  );
   // Options are raw strings with no direction of their own (unlike
   // text_blocks) -- pure-RTL options happen to render acceptably via
   // first-strong bidi detection, but an option ending in neutral punctuation
