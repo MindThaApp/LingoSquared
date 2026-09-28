@@ -15,6 +15,7 @@ app/api/router.py's exercise_answer()/review_answer()/practice_answer()
 (resolve_script() stays in the router for exactly that reason).
 """
 import json
+import unicodedata
 from typing import Literal
 
 from app.core.errors import fail
@@ -23,11 +24,10 @@ from app.models import ExerciseType
 Result = Literal["correct", "almost", "incorrect"]
 
 # Exercise types whose correct_response is free-typed text compared against
-# what the learner typed. fill_in_blank and listen_order are deliberately
-# excluded here even though they sometimes carry a plain-string answer -
-# callers must check the actual correct_response shape for those two typez
-# (a list/pair-mapping there means "choice-like", not free text) rather than
-# treat them as free text purely by exercise-type name.
+# what the learner typed. listen_order is deliberately excluded here even
+# though it sometimes carries a plain-string answer - callers must check
+# the actual correct_response shape for it (a list means tile ordering, not
+# free text) rather than treating it as free text by type name alone.
 FREE_TEXT_EXERCISE_TYPES = {
     "translation",
     "reverse_translation",
@@ -46,7 +46,45 @@ FREE_TEXT_EXERCISE_TYPES = {
     # like a dropped accent or a missing period.
     "speak_response",
     "speak_repeat",
+    # A string-valued fill-in blank is a free-text answer. Array-valued
+    # blanks remain shape-checked by the caller below.
+    "fill_in_blank",
 }
+
+QUOTE_FOLD = str.maketrans({
+    "’": "'", "‘": "'", "ʼ": "'", "´": "'", "`": "'",
+    "“": '"', "”": '"', "„": '"', "«": '"', "»": '"',
+})
+INTERNAL_PUNCTUATION = frozenset(",;:.!?¿¡…،؛؟«»\"„")
+
+
+def canonical_text(
+    value: str,
+    *,
+    case_sensitive: bool = False,
+    dictation: bool = False,
+    punctuation_strict: bool = False,
+) -> str:
+    """Normalize text equivalences shared by all grading paths.
+
+    Dictation keeps its byte-sensitive whitespace and punctuation behavior;
+    it only receives Unicode NFC and equivalent quote folding. Other text
+    collapses whitespace and, unless punctuation_strict is set, ignores
+    punctuation at the boundaries and the listed punctuation within text.
+    """
+    text = unicodedata.normalize("NFC", value).translate(QUOTE_FOLD).strip()
+    if dictation:
+        return text
+    if not punctuation_strict:
+        start, end = 0, len(text)
+        while start < end and unicodedata.category(text[start]).startswith("P"):
+            start += 1
+        while end > start and unicodedata.category(text[end - 1]).startswith("P"):
+            end -= 1
+        text = text[start:end]
+        text = "".join(" " if char in INTERNAL_PUNCTUATION else char for char in text)
+    text = text if case_sensitive else text.casefold()
+    return " ".join(text.split())
 
 # Ramin's 2026-08-04 decision: dictation grading ignores only punctuation at
 # the answer boundaries. The realization corpus currently uses leading ¿ and
@@ -164,9 +202,13 @@ STRIPPED_FORMATTING_CHARS: frozenset[str] = (
 MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE = 4
 
 
-def _normalize(value: str, *, case_sensitive: bool = False) -> str:
-    folded = value if case_sensitive else value.casefold()
-    return " ".join(folded.strip().split())
+def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False) -> str:
+    return canonical_text(
+        value,
+        case_sensitive=case_sensitive,
+        dictation=exercise_type == "dictation",
+        punctuation_strict=punctuation_strict,
+    )
 
 
 def normalize_dictation_boundary_punctuation(value: str) -> str:
@@ -385,8 +427,12 @@ def is_invisible_formatting_only_difference(a: str, b: str) -> bool:
 
 def dictation_answers_equal(response: str, correct: str) -> bool:
     """Compare dictation answers with the approved narrow forgiveness."""
-    normalized_response = normalize_dictation_boundary_punctuation(response)
-    normalized_correct = normalize_dictation_boundary_punctuation(correct)
+    normalized_response = normalize_dictation_boundary_punctuation(
+        canonical_text(response, dictation=True)
+    )
+    normalized_correct = normalize_dictation_boundary_punctuation(
+        canonical_text(correct, dictation=True)
+    )
     if not normalized_response or not normalized_correct:
         return response == correct
     return normalized_response == normalized_correct or (
@@ -450,6 +496,7 @@ def grade_answer(
     script: str | None = None,
     orthography_strict: bool | None = None,
     case_sensitive: bool = False,
+    punctuation_strict: bool = False,
 ) -> Result:
     """Grade one free-text answer into correct/almost/incorrect.
 
@@ -506,8 +553,8 @@ def grade_answer(
             "correct" if dictation_answers_equal(response, correct) else "incorrect"
         )
 
-    normalized_response = _normalize(response, case_sensitive=case_sensitive)
-    normalized_correct = _normalize(correct, case_sensitive=case_sensitive)
+    normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
+    normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
 
     # Invisible formatting (Persian ZWNJ, Arabic harakat, tatweel, bidi
     # marks) is resolved HERE, on the fully-correct path, deliberately:
@@ -558,7 +605,7 @@ def grade_answer(
 # ---------------------------------------------------------------------------
 # Exercise-level grading, moved verbatim from app/api/router.py (2026-07-10).
 # ---------------------------------------------------------------------------
-def normalized(v,case_sensitive=False):
+def normalized(v,case_sensitive=False,punctuation_strict=False):
     """Collapse whitespace and (unless case_sensitive) casefold, recursively
     for list/dict values. case_sensitive is a 2026-07-07 addition (German's
     formal "Sie" vs lowercase "sie"/"they" - a real grammatical distinction
@@ -567,10 +614,9 @@ def normalized(v,case_sensitive=False):
     (and every exercise that hasn't opted in) keeps casefolding exactly as
     before."""
     if isinstance(v,str):
-        s = v.strip() if case_sensitive else v.strip().casefold()
-        return " ".join(s.split())
-    if isinstance(v,list): return [normalized(x,case_sensitive) for x in v]
-    if isinstance(v,dict): return {str(k):normalized(x,case_sensitive) for k,x in sorted(v.items())}
+        return canonical_text(v, case_sensitive=case_sensitive, punctuation_strict=punctuation_strict)
+    if isinstance(v,list): return [normalized(x,case_sensitive,punctuation_strict) for x in v]
+    if isinstance(v,dict): return {str(k):normalized(x,case_sensitive,punctuation_strict) for k,x in sorted(v.items())}
     return v
 def is_multi_answer_response(correct):
     return (
@@ -590,11 +636,11 @@ def canonical_pairs(value,case_sensitive=False):
     matching_pairs exercise ungradeable-correct regardless of what the
     learner picked. Accept either shape here so both compare equal."""
     if isinstance(value, dict):
-        return frozenset((normalized(k,case_sensitive), normalized(v,case_sensitive)) for k, v in value.items())
+        return frozenset((normalized(k,case_sensitive,True), normalized(v,case_sensitive,True)) for k, v in value.items())
     if isinstance(value, list) and all(
         isinstance(item, dict) and {"left", "right"} <= set(item) for item in value
     ):
-        return frozenset((normalized(item["left"],case_sensitive), normalized(item["right"],case_sensitive)) for item in value)
+        return frozenset((normalized(item["left"],case_sensitive,True), normalized(item["right"],case_sensitive,True)) for item in value)
     return None
 ORDER_BASED_EXERCISE_TYPES = {"word_order", "listen_order"}
 def canonical_order_tokens(value,case_sensitive=False):
@@ -618,10 +664,10 @@ def canonical_order_tokens(value,case_sensitive=False):
     since both sides go through the identical split, not a separate
     punctuation-stripping step."""
     if isinstance(value, str):
-        collapsed = normalized(value,case_sensitive)
+        collapsed = normalized(value,case_sensitive,True)
         return collapsed.split(" ") if collapsed else []
     if isinstance(value, list):
-        return normalized(value,case_sensitive)
+        return normalized(value,case_sensitive,True)
     return None
 def display_correct_response(correct):
     if is_multi_answer_response(correct):
@@ -655,7 +701,7 @@ def select_feedback(feedback_meta, response, result):
     return feedback_meta.get("generic")
 def exercise_type_value(exercise_type):
     return exercise_type.value if hasattr(exercise_type, "value") else exercise_type
-def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=None,case_sensitive=False):
+def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=None,case_sensitive=False,punctuation_strict=False):
     """Returns the 3-state result: 'correct' | 'almost' | 'incorrect'.
     'almost' (Phase C typo tolerance) is only ever returned for free-typed
     answers on eligible exercise types - flashcard, multi-answer, and
@@ -666,7 +712,7 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
     grade_answer() - defaults to False so every exercise that hasn't opted
     in keeps grading exactly as before."""
     if exercise_type == ExerciseType.flashcard:
-        report=normalized(response)
+        report=normalized(response, punctuation_strict=True)
         if not isinstance(report,str) or report not in {"known","unknown"}:
             fail(422,"invalid_flashcard_response","Flashcard response must be 'known' or 'unknown'")
         return "correct" if report == "known" else "incorrect"
@@ -684,6 +730,21 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
                 and dictation_answers_equal(response, item)
                 for item in correct["accepted"]
             )
+        elif type_value in FREE_TEXT_EXERCISE_TYPES and isinstance(response, str):
+            verdicts = [
+                grade_answer(
+                    response,
+                    item,
+                    exercise_type=type_value,
+                    script=script,
+                    orthography_strict=orthography_strict,
+                    case_sensitive=case_sensitive,
+                    punctuation_strict=punctuation_strict,
+                )
+                for item in correct["accepted"]
+                if isinstance(item, str)
+            ]
+            return "correct" if "correct" in verdicts else "almost" if "almost" in verdicts else "incorrect"
         else:
             # answers_equivalent(), not ==: this branch never reaches
             # grade_answer(), so without it a multi-accepted-answer Persian
@@ -691,13 +752,10 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             # though the single-accepted-answer version of the same
             # exercise passes. Same rule, same place in the flow (the
             # fully-correct path).
-            normalized_response=normalized(response,case_sensitive)
-            is_ok = any(answers_equivalent(normalized_response, normalized(item,case_sensitive)) for item in correct["accepted"])
+            normalized_response=normalized(response,case_sensitive,True)
+            is_ok = any(answers_equivalent(normalized_response, normalized(item,case_sensitive,True)) for item in correct["accepted"])
         return "correct" if is_ok else "incorrect"
-    free_text_eligible = (
-        type_value in FREE_TEXT_EXERCISE_TYPES
-        or type_value in {"fill_in_blank", "listen_order"}
-    )
+    free_text_eligible = type_value in FREE_TEXT_EXERCISE_TYPES or type_value == "listen_order"
     if free_text_eligible and isinstance(response, str) and isinstance(correct, str):
         return grade_answer(
             response,
@@ -706,6 +764,7 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             script=script,
             orthography_strict=orthography_strict,
             case_sensitive=case_sensitive,
+            punctuation_strict=punctuation_strict,
         )
     if type_value == "matching_pairs":
         correct_pairs = canonical_pairs(correct,case_sensitive)
@@ -723,4 +782,4 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
         correct_tokens = canonical_order_tokens(correct,case_sensitive)
         if correct_tokens is not None:
             return "correct" if answers_equivalent(canonical_order_tokens(response,case_sensitive), correct_tokens) else "incorrect"
-    return "correct" if answers_equivalent(normalized(response,case_sensitive), normalized(correct,case_sensitive)) else "incorrect"
+    return "correct" if answers_equivalent(normalized(response,case_sensitive,True), normalized(correct,case_sensitive,True)) else "incorrect"

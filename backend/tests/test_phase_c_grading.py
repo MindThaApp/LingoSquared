@@ -128,18 +128,8 @@ def test_dictation_empty_boundary_normalization_requires_raw_equality():
     assert grade_answer("...", "...", exercise_type="dictation") == "correct"
 
 
-def test_dictation_boundary_tolerance_does_not_leak_to_other_types():
-    assert (
-        grade(
-            "Escucha con atención.",
-            {
-                "canonical": "Escucha con atención",
-                "accepted": ["Escucha con atención"],
-            },
-            exercise_type="listen_type",
-        )
-        == "incorrect"
-    )
+def test_non_dictation_ignores_terminal_punctuation():
+    assert grade("Escucha con atención.", "Escucha con atención", "listen_type") == "correct"
 
 
 def test_grade_answer_non_latin_strict_by_default():
