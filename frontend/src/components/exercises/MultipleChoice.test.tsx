@@ -121,3 +121,33 @@ describe("MultipleChoice answer payload", () => {
     expect(onAnswer).not.toHaveBeenCalled();
   });
 });
+
+describe("MultipleChoice shuffling", () => {
+  it("displays options in a shuffled order across mounts yet submits option text and highlights the correct option", () => {
+    const layouts = new Set<string>();
+    for (let i = 0; i < 12; i++) {
+      const { container, unmount } = render(
+        <MultipleChoice exercise={multipleChoice} onAnswer={vi.fn()} disabled={false} />
+      );
+      layouts.add(
+        Array.from(container.querySelectorAll(".exercise-options button")).map((b) => b.textContent).join("|")
+      );
+      unmount();
+    }
+    expect(layouts.size).toBeGreaterThan(1);
+
+    const onAnswer = vi.fn();
+    const { container } = render(
+      <MultipleChoice
+        exercise={multipleChoice}
+        onAnswer={onAnswer}
+        disabled={true}
+        gradedResult={{ correct: false, correctResponse: "jij / je" }}
+      />
+    );
+    const buttons = Array.from(container.querySelectorAll(".exercise-options button"));
+    expect(buttons.map((b) => b.textContent).sort()).toEqual(["je / u", "jij / je", "jij / u", "u"]);
+    const correct = container.querySelector(".exercise-option.correct");
+    expect(correct?.textContent).toBe("jij / je");
+  });
+});

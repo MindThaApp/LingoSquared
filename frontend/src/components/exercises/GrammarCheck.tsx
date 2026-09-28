@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
@@ -23,7 +24,14 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
   const [selected, setSelected] = useState<string | null>(null);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
-  const options = exercise.prompt.options;
+  const rawOptions = exercise.prompt.options;
+  const nonce = useMemo(() => Math.random().toString(36), []);
+  // Display order only; submitted payload stays the option text.
+  const options = useMemo(
+    () => (rawOptions ? seededShuffle(rawOptions, `${exercise.id}:${nonce}`) : rawOptions),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [exercise.id, nonce, rawOptions?.join("\u0001")],
+  );
 
   if (options && options.length > 0) {
     const correctOption = gradedResult
