@@ -74,3 +74,21 @@ describe("WordOrder answer payload", () => {
     }
   });
 });
+
+describe("WordOrder shuffling", () => {
+  it("never starts with the tiles in authored (answer) order", () => {
+    const ordered: Exercise = {
+      ...exercise,
+      prompt: { ...exercise.prompt, word_bank: ["Ben", "jij", "nieuw"] },
+    };
+    for (let i = 0; i < 40; i++) {
+      const { container, unmount } = render(
+        <WordOrder exercise={{ ...ordered, id: `ex-${i}` }} onAnswer={vi.fn()} disabled={false} />
+      );
+      const tiles = Array.from(container.querySelectorAll(".word-bank button")).map((b) => b.textContent);
+      expect(tiles).not.toEqual(["Ben", "jij", "nieuw"]);
+      expect(tiles.slice().sort()).toEqual(["Ben", "jij", "nieuw"]);
+      unmount();
+    }
+  });
+});

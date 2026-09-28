@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { seededShuffleNotOriginal } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
@@ -11,7 +12,13 @@ import type { ExerciseComponentProps } from "./types";
 export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const wordBank = exercise.prompt.word_bank ?? [];
-  const [available, setAvailable] = useState<string[]>(wordBank);
+  // Display order only: tiles are usually authored in answer order, so shuffle
+  // once per mount (never leaving the initial order equal to the authored
+  // one). The submitted payload is the tapped token sequence.
+  const nonce = useMemo(() => Math.random().toString(36), []);
+  const [available, setAvailable] = useState<string[]>(() =>
+    seededShuffleNotOriginal(wordBank, `${exercise.id}:${nonce}`),
+  );
   const [chosen, setChosen] = useState<string[]>([]);
   const { audio_text, audio_language_code, media_asset_key } = exercise.prompt;
   // word_bank tokens carry no direction of their own (unlike text_blocks) --
