@@ -54,7 +54,7 @@ interface MissedWord {
 // resubmit an already-graded exercise or skip past the live item.
 type HistoryEntry =
   | { kind: "teaching"; card: TeachingCard }
-  | { kind: "exercise"; exercise: Exercise; response: AnswerResponse | undefined; result: AnswerResult };
+  | { kind: "exercise"; exercise: Exercise; response: AnswerResponse | undefined; spoken?: boolean; result: AnswerResult };
 
 const MISS_LIMIT = 2;
 
@@ -112,7 +112,9 @@ export function LessonRunnerPage() {
   const [queue, setQueue] = useState<QueueItem[] | null>(null);
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
   const [reviewResponse, setReviewResponse] = useState<AnswerResponse | undefined>();
+  const [reviewSpoken, setReviewSpoken] = useState(false);
   const [totalXp, setTotalXp] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [lockedError, setLockedError] = useState<string | null>(null);
@@ -219,6 +221,7 @@ export function LessonRunnerPage() {
     if (!item) return;
     setReviewSubmitting(true);
     setReviewResponse(response);
+    setReviewSpoken(meta?.inputMode === "spoken");
     try {
       const res = await ReviewApi.answer(item.id, response, meta);
       setReviewResult(res);
@@ -245,6 +248,7 @@ export function LessonRunnerPage() {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
       const res = await LessonApi.answer(current.exercise.id, response, meta);
@@ -262,7 +266,7 @@ export function LessonRunnerPage() {
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   async function finishLesson() {
@@ -335,7 +339,7 @@ export function LessonRunnerPage() {
   // response line included.
   function renderResultBanner(
     bannerResult: AnswerResult,
-    options?: { response?: AnswerResponse; footer?: ReactNode; exercise?: Exercise; learner?: AnswerResponse },
+    options?: { response?: AnswerResponse; footer?: ReactNode; exercise?: Exercise; learner?: AnswerResponse; spoken?: boolean },
   ) {
     const status = resultStatus(bannerResult);
     if (status === "almost") {
@@ -347,6 +351,7 @@ export function LessonRunnerPage() {
             learner={typeof learnerText === "string" ? learnerText : undefined}
             correct={formatCorrectResponse(bannerResult.correct_response)}
             dir={options?.exercise ? answerDirectionForExercise(options.exercise) : "ltr"}
+            spoken={options?.spoken}
           />
           {bannerResult.feedback && (
             <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
@@ -389,7 +394,7 @@ export function LessonRunnerPage() {
   function handleContinue() {
     if (!result || !queue || !current) return;
     const rest = queue.slice(1);
-    setHistory((h) => [...h, { kind: "exercise", exercise: current.exercise, response: lastResponse, result }]);
+    setHistory((h) => [...h, { kind: "exercise", exercise: current.exercise, response: lastResponse, spoken: lastSpoken, result }]);
     setResult(null);
     setLastResponse(undefined);
 
@@ -526,6 +531,7 @@ export function LessonRunnerPage() {
               <div className="feedback-banner almost" role="status">
                 <AlmostFeedback
                   learner={typeof reviewResponse === "string" ? reviewResponse : undefined}
+                  spoken={reviewSpoken}
                   correct={formatCorrectResponse(reviewResult.correct_response)}
                   dir={answerDirectionForExercise({
                     id: item.id,
@@ -627,7 +633,7 @@ export function LessonRunnerPage() {
               disabled
               gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
             /></CourseTargetLanguage>
-            {renderResultBanner(entry.result, { response: entry.response, exercise: entry.exercise })}
+            {renderResultBanner(entry.result, { response: entry.response, exercise: entry.exercise, spoken: entry.spoken })}
           </>
         )}
         {showQuitConfirm && (
@@ -768,6 +774,7 @@ export function LessonRunnerPage() {
         renderResultBanner(result, {
           exercise: current.exercise,
           learner: lastResponse,
+          spoken: lastSpoken,
           footer: (
             <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
               {t("lesson_runner.continue")}

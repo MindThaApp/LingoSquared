@@ -35,6 +35,7 @@ export function ReviewPage() {
   const [index, setIndex] = useState(0);
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [reviewedCount, setReviewedCount] = useState(0);
   const [submitError, setSubmitError] = useState(false);
@@ -106,6 +107,7 @@ export function ReviewPage() {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
       const res = await ReviewApi.answer(current.id, response, meta);
@@ -119,7 +121,7 @@ export function ReviewPage() {
   }
 
   function handleResubmit() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   function handleQuit() {
@@ -292,6 +294,7 @@ export function ReviewPage() {
             <div className="feedback-banner almost" role="status">
               <AlmostFeedback
                 learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                spoken={lastSpoken}
                 correct={formatCorrectResponse(result.correct_response)}
                 dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
               />
