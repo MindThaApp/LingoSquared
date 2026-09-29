@@ -22,6 +22,10 @@ export function SpeakButton({
     try {
       const played = await speak(text, languageCode, mediaAssetKey);
       if (!played) setUnavailable(true);
+    } catch {
+      // speak() failed outright (sync throw or rejected promise): surface the
+      // same honest "no voice" fallback instead of an unhandled rejection.
+      setUnavailable(true);
     } finally {
       setPlaying(false);
     }
@@ -32,7 +36,7 @@ export function SpeakButton({
       <button
         type="button"
         className="speak-button"
-        aria-label={t("speak.listen_label", { text })}
+        aria-label={t("speak.play_audio")}
         onClick={handleClick}
         disabled={playing}
       >

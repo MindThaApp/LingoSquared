@@ -73,8 +73,8 @@ describe("MultipleChoice answer payload", () => {
 
     // Select a distractor first, then change to the correct option — the
     // payload must be the FINAL selection, not the first click.
-    fireEvent.click(screen.getByRole("button", { name: "u" }));
-    fireEvent.click(screen.getByRole("button", { name: "jij / je" }));
+    fireEvent.click(screen.getByRole("radio", { name: "u" }));
+    fireEvent.click(screen.getByRole("radio", { name: "jij / je" }));
 
     expect(check).toBeEnabled();
     fireEvent.click(check);
@@ -100,7 +100,7 @@ describe("MultipleChoice answer payload", () => {
     expect(container.querySelector(".exercise-audio-prompt .speak-button")).not.toBeNull();
 
     fireEvent.click(
-      screen.getByRole("button", {
+      screen.getByRole("radio", {
         name: "A formally addressed person is asked whether they are new here.",
       })
     );
@@ -146,8 +146,42 @@ describe("MultipleChoice shuffling", () => {
       />
     );
     const buttons = Array.from(container.querySelectorAll(".exercise-options button"));
-    expect(buttons.map((b) => b.textContent).sort()).toEqual(["je / u", "jij / je", "jij / u", "u"]);
+    expect(buttons.map((b) => b.textContent?.replace(/\s*✓.*$/, "")).sort()).toEqual(["je / u", "jij / je", "jij / u", "u"]);
     const correct = container.querySelector(".exercise-option.correct");
-    expect(correct?.textContent).toBe("jij / je");
+    expect(correct?.textContent).toContain("jij / je");
+  });
+
+  it("exposes radiogroup/radio semantics with aria-checked", () => {
+    render(<MultipleChoice exercise={multipleChoice} onAnswer={vi.fn()} disabled={false} />);
+    expect(screen.getByRole("radiogroup")).toBeInTheDocument();
+    const u = screen.getByRole("radio", { name: "u" });
+    expect(u).toHaveAttribute("aria-checked", "false");
+    fireEvent.click(u);
+    expect(u).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("radio", { name: "jij / je" })).toHaveAttribute("aria-checked", "false");
+  });
+
+  it("auto-focuses the first option on mount", () => {
+    render(<MultipleChoice exercise={multipleChoice} onAnswer={vi.fn()} disabled={false} />);
+    expect(screen.getAllByRole("radio")[0]).toHaveFocus();
+  });
+
+  it("adds non-colour markers with hidden text after grading (correct + wrong choice)", () => {
+    const { rerender } = render(
+      <MultipleChoice exercise={multipleChoice} onAnswer={vi.fn()} disabled={false} />,
+    );
+    fireEvent.click(screen.getByRole("radio", { name: "u" }));
+    rerender(
+      <MultipleChoice
+        exercise={multipleChoice}
+        onAnswer={vi.fn()}
+        disabled={true}
+        gradedResult={{ correct: false, correctResponse: "jij / je" }}
+      />,
+    );
+    expect(screen.getByRole("radio", { name: /jij \/ je.*exercise\.option_correct/ })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: /^u.*exercise\.option_incorrect/ })).toBeInTheDocument();
+    expect(screen.getAllByText("✓", { selector: "[aria-hidden='true']" })).toHaveLength(1);
+    expect(screen.getAllByText("✗", { selector: "[aria-hidden='true']" })).toHaveLength(1);
   });
 });
