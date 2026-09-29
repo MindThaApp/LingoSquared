@@ -5,8 +5,24 @@ import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { learnPath } from "../lib/activeCourse";
-import type { LessonProgress } from "@lingo/shared/api/types";
+import type { LessonProgress, Progress, Streak, Xp } from "@lingo/shared/api/types";
 import { PushPrompt } from "../components/PushPrompt";
+
+export function isBrandNewUser(
+  progress: Progress | undefined,
+  xp: Xp | undefined,
+  streak: Streak | undefined,
+): boolean {
+  return Boolean(
+    progress &&
+      xp &&
+      streak &&
+      progress.lessons_started === 0 &&
+      progress.lessons_completed === 0 &&
+      xp.total_xp === 0 &&
+      streak.streak_days === 0,
+  );
+}
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -92,14 +108,23 @@ export function HomePage() {
   // at-risk) for users without push enabled.
   const streakAtRisk = Boolean(streak && streak.streak_days > 0 && !streak.active_today);
 
+  // First visit: all three activity signals loaded and all zero (no lesson ever
+  // started, no XP ever earned, no streak). Requires real data so a failed or
+  // loading query never shows "welcome" to a returning user.
+  const isFirstVisit = isBrandNewUser(progress, xp, streak);
+
   const heroTitle =
     streak && streak.streak_days > 0
       ? user?.display_name
         ? t("home.streak_title_named", { count: streak.streak_days, name: user.display_name })
         : t("home.streak_title", { count: streak.streak_days })
-      : user?.display_name
-        ? t("home.welcome_named", { name: user.display_name })
-        : t("home.welcome");
+      : isFirstVisit
+        ? user?.display_name
+          ? t("home.welcome_first_named", { name: user.display_name })
+          : t("home.welcome_first")
+        : user?.display_name
+          ? t("home.welcome_named", { name: user.display_name })
+          : t("home.welcome");
 
   return (
     <div>
@@ -269,12 +294,12 @@ export function HomePage() {
                           aria-label={t("home.quest_completed")}
                         />
                       )}
-                      {quest.title}
+                      {t(`quests.${quest.code}.title`, { defaultValue: quest.title })}
                     </span>
                     <span className="badge">{t("home.quest_xp_reward", { xp: quest.xp_reward })}</span>
                   </div>
                   <span className="muted" style={{ fontSize: "0.85rem" }}>
-                    {quest.description}
+                    {t(`quests.${quest.code}.description`, { defaultValue: quest.description })}
                   </span>
                   <div className="progress-track" style={{ marginTop: 6 }}>
                     <div className="progress-fill" style={{ width: `${pct}%` }} />
