@@ -4323,19 +4323,6 @@ def compile_exercise(
                 )
             prompt[field] = copy.deepcopy(value)
 
-    if isinstance(prompt.get("word_bank"), list):
-        tiles = [_strip_tile_punctuation(tile) if isinstance(tile, str) else tile
-                 for tile in prompt["word_bank"]]
-        if introduced_tokens is not None and any(
-            not isinstance(tile, str)
-            or not tokenize(tile)
-            or not tokenize(tile) <= introduced_tokens
-            for tile in tiles
-        ):
-            prompt.pop("word_bank", None)
-        else:
-            prompt["word_bank"] = tiles
-
     # A1/A2 free-text answers use a tile bank. Keep this derived field out of
     # the realization and never include any accepted answer variant as a tile.
     if (
