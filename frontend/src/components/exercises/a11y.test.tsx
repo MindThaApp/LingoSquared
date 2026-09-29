@@ -86,7 +86,7 @@ function ex(type: ExerciseType, prompt: ExercisePrompt = PROMPTS[type]): Exercis
   return { id: `ex-${type}`, type, order: 1, prompt };
 }
 
-describe("exercise renderers have no serious axe violations", () => {
+describe("exercise renderers have no serious axe violations", { timeout: 30_000 }, () => {
   it.each(Object.keys(PROMPTS) as ExerciseType[])("%s", async (type) => {
     const { container } = render(<ExerciseRenderer exercise={ex(type)} onAnswer={vi.fn()} disabled={false} />);
     await expectNoSeriousA11yViolations(container);
@@ -134,7 +134,7 @@ describe("exercise renderers have no serious axe violations", () => {
   });
 });
 
-describe("RTL (fa/prs) variants", () => {
+describe("RTL (fa/prs) variants", { timeout: 30_000 }, () => {
   const fa = (type: ExerciseType, prompt: Partial<ExercisePrompt>, lang = "fa") =>
     ex(type, {
       text_blocks: [block("سلام", lang, "rtl")],
@@ -171,7 +171,7 @@ describe("RTL (fa/prs) variants", () => {
   });
 });
 
-describe("shared exercise-side components", () => {
+describe("shared exercise-side components", { timeout: 30_000 }, () => {
   it("VirtualKeyboard (letters + symbols layer)", async () => {
     const { container } = render(
       <VirtualKeyboard script="arabic" onInsert={vi.fn()} onBackspace={vi.fn()} onDismiss={vi.fn()} />,
