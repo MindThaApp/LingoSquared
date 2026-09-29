@@ -1777,3 +1777,22 @@ dictation punctuation strictness)
 Instance count: 12 (7 should-fix + 5 nits), all fixed
 Note: unit07 lesson06 dictation keeps the optional comma before "maar" (nit 8);
 removing it would change meaning/audio, left as is.
+
+### 2026-09-29 — prs توانستن full-form standardization (PR #19; fresh-context review)
+Bug classes found: register/form standardization incomplete across the verb's
+derivatives -- PR #19 converted the present tense to the full form but left
+the past/negative past contracted. 3 learner-facing should-fix: (1) b1_unit01
+teaching notes made false by the form change (نتانستم "negates می‌توانستم",
+"add -ستم to می‌توان ... نتانستم", grammar_review) ; (2) rule/answer-key
+disagreement on the negative past (canonical answers accepted only the
+contracted نتانستم/نتانست while the present was full) ; (3) en-prs b1_unit02
+grammar_agreement claimed the باید endings "م/ی/ه/یم/ین/ن" were what
+"you already know from می‌توانم" (false: full form is م/ی/د/یم/ین/ند). 2 nits:
+DARI_REGISTER_REPAIR.md mapping table still mapped to می‌تانین/می‌تانم; stale
+می‌تانم/می‌تانین YAML comments in practice a1_unit10/21/23. All fixed in this
+change (past + negative past converted to full forms with contracted forms kept
+as extra accepted answers; b1_unit03 negation note also updated).
+New bug class discovered: no (instance of a form-change consistency defect)
+Rule candidate: a register/form standardization must include every
+tense/derivative of the verb and every note that references the old form.
+Instance count: 5 (3 should-fix + 2 nits), all fixed
