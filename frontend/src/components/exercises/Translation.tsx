@@ -15,10 +15,16 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
   const [value, setValue] = useState("");
   const script = answerScriptForExercise(exercise);
   const { audio_text, audio_language_code, media_asset_key } = exercise.prompt;
-  const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
+  const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (disabled || !value.trim()) return;
+    onAnswer(value.trim());
+  }
 
   return (
-    <div className="exercise-shell">
+    <form className="exercise-shell" onSubmit={handleSubmit}>
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       {audio_text && audio_language_code && (
         <div className="exercise-audio-prompt">
@@ -40,18 +46,17 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
       {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
         <VirtualKeyboard
           script={script!}
-          onInsert={(char) => setValue((v) => v + char)}
-          onBackspace={() => setValue((v) => v.slice(0, -1))}
-          onDismiss={dismissKeyboard}
+          {...keyboardProps}
         />
       )}
       <button
+        type="submit"
         className="btn btn-block"
         disabled={disabled || !value.trim()}
-        onClick={() => onAnswer(value.trim())}
+        onMouseDown={(e) => e.preventDefault()}
       >
         {t("common.check")}
       </button>
-    </div>
+    </form>
   );
 }

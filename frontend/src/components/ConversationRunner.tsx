@@ -57,11 +57,15 @@ export function ConversationRunner({
   const [submitting, setSubmitting] = useState(false);
   const [finished, setFinished] = useState(prompt.current_node.terminal);
   const [error, setError] = useState<"retry" | "dead" | null>(null);
-  const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
-
   const answerLang = node.answer_language_code;
   const script = LANGUAGE_SCRIPT[answerLang] ?? null;
   const dir = scriptDirection(script);
+  const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({
+    value,
+    setValue,
+    script,
+    disabled: submitting || finished,
+  });
 
   async function submit() {
     const reply = value.trim();
@@ -125,7 +129,12 @@ export function ConversationRunner({
       {finished ? (
         <p className="muted">{t("practice.conversation_finished")}</p>
       ) : (
-        <>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            void submit();
+          }}
+        >
           <p className="muted" style={{ fontSize: "0.9rem" }}>
             {t("practice.conversation_your_turn")}
           </p>
@@ -139,9 +148,6 @@ export function ConversationRunner({
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") submit();
-              }}
               disabled={submitting}
               placeholder={t("practice.conversation_reply_placeholder")}
               dir={dir}
@@ -151,15 +157,18 @@ export function ConversationRunner({
           {script && scriptNeedsVirtualKeyboard(script) && showKeyboard && (
             <VirtualKeyboard
               script={script}
-              onInsert={(char: string) => setValue((v) => v + char)}
-              onBackspace={() => setValue((v) => v.slice(0, -1))}
-              onDismiss={dismissKeyboard}
+              {...keyboardProps}
             />
           )}
-          <button className="btn btn-block" onClick={submit} disabled={submitting || !value.trim()}>
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={submitting || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
             {t("practice.conversation_send")}
           </button>
-        </>
+        </form>
       )}
 
       {error === "retry" && (
