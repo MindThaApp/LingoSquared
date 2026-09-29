@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type MicRecorderState = "idle" | "requesting" | "recording" | "stopping";
 
@@ -101,6 +101,11 @@ export function useMicRecorder() {
     chunksRef.current = [];
     setState("idle");
   }, []);
+
+  // Release the mic stream/recorder if the host component unmounts mid-recording.
+  const cancelRef = useRef(cancel);
+  cancelRef.current = cancel;
+  useEffect(() => () => cancelRef.current(), []);
 
   return { state, permissionDenied, start, stop, cancel };
 }
