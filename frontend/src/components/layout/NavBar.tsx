@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
 import { ProgressApi } from "@lingo/shared/api/endpoints";
@@ -17,14 +17,16 @@ const TABS = [
 export function NavBar() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [streak, setStreak] = useState<number | null>(null);
-  const [xp, setXp] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!user) return;
-    ProgressApi.streak().then((s) => setStreak(s.streak_days)).catch(() => {});
-    ProgressApi.xp().then((x) => setXp(x.total_xp)).catch(() => {});
-  }, [user]);
+  // Same keys/fetchers as HomePage so the cache is shared and invalidation
+  // after an answer/lesson refreshes the top bar too.
+  const streakQuery = useQuery({
+    queryKey: ["streak"],
+    queryFn: ProgressApi.streak,
+    enabled: !!user,
+  });
+  const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp, enabled: !!user });
+  const streak = streakQuery.data?.streak_days ?? null;
+  const xp = xpQuery.data?.total_xp ?? null;
 
   if (!user) return null;
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
@@ -10,11 +11,13 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { invalidateProgressQueries } from "../lib/invalidateProgress";
 
 type Phase =
   | "loading"
   | "blocked"
   | "unavailable"
+  | "network_error"
   | "in_progress"
   | "scoring"
   | "scoring_error"
@@ -35,6 +38,7 @@ export function CheckpointPage() {
   const { t } = useTranslation();
   const { unitId = "" } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const location = useLocation();
   // Threaded via route state when the checkpoint is entered from a course
   // path; may be absent, in which case the drill target still seeds the
@@ -51,6 +55,8 @@ export function CheckpointPage() {
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  // Bumped by the network-error Retry button to re-run the start effect.
+  const [reloadNonce, setReloadNonce] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,16 +76,22 @@ export function CheckpointPage() {
           const seconds = err.details.retry_after_seconds;
           setRetryAfterSeconds(typeof seconds === "number" ? seconds : null);
           setPhase("blocked");
-        } else {
+        } else if (err instanceof ApiError && err.status >= 400 && err.status < 500) {
           setPhase("unavailable");
+        } else {
+          // Fetch rejection (offline/DNS), 5xx, or anything that isn't a
+          // definitive 4xx: the checkpoint may well exist, so offer Retry
+          // instead of claiming it's unavailable.
+          setPhase("network_error");
         }
       }
     }
+    setPhase("loading");
     start();
     return () => {
       cancelled = true;
     };
-  }, [unitId]);
+  }, [unitId, reloadNonce]);
 
   const current = items[index];
 
@@ -108,6 +120,7 @@ export function CheckpointPage() {
       const scored = await CheckpointApi.result(unitId);
       setFinalResult(scored);
       setPhase("done");
+      invalidateProgressQueries(queryClient);
     } catch {
       setPhase("scoring_error");
     }
@@ -135,6 +148,21 @@ export function CheckpointPage() {
       <div className="card" style={{ textAlign: "center" }}>
         <p className="muted">{t("checkpoint.scoring_error")}</p>
         <button className="btn" onClick={scoreCheckpoint}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "network_error") {
+    return (
+      <div className="card" style={{ textAlign: "center" }}>
+        <p className="muted">
+          {t("checkpoint.load_error", {
+            defaultValue: "Couldn't load this checkpoint — check your connection and try again.",
+          })}
+        </p>
+        <button className="btn" onClick={() => setReloadNonce((n) => n + 1)}>
           {t("common.retry")}
         </button>
       </div>

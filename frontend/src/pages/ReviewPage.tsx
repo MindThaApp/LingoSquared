@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
@@ -11,6 +11,7 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { invalidateProgressQueries } from "../lib/invalidateProgress";
 
 interface CoursePickOption {
   courseId: string;
@@ -21,6 +22,7 @@ interface CoursePickOption {
 export function ReviewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [autoPicked, setAutoPicked] = useState(false);
   const [items, setItems] = useState<PracticeItem[] | null>(null);
@@ -33,6 +35,9 @@ export function ReviewPage() {
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   const [sessionError, setSessionError] = useState(false);
   const [retryError, setRetryError] = useState(false);
+  // Bumped by the session Retry button so the load effect re-runs even though
+  // courseId is unchanged (setCourseId(null); setCourseId(id) batches to a no-op).
+  const [reloadNonce, setReloadNonce] = useState(0);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
@@ -81,15 +86,12 @@ export function ReviewPage() {
     return () => {
       cancelled = true;
     };
-  }, [courseId]);
+  }, [courseId, reloadNonce]);
 
   function handleSessionRetry() {
-    // Re-triggers the session-fetch effect by round-tripping courseId.
-    const id = courseId;
-    setCourseId(null);
     setItems(null);
     setSessionError(false);
-    setCourseId(id);
+    setReloadNonce((n) => n + 1);
   }
 
   const current = items?.[index];
@@ -102,6 +104,7 @@ export function ReviewPage() {
     try {
       const res = await ReviewApi.answer(current.id, response);
       setResult(res);
+      invalidateProgressQueries(queryClient);
     } catch {
       setSubmitError(true);
     } finally {
@@ -229,6 +232,9 @@ export function ReviewPage() {
         <div style={{ fontSize: "3rem" }}>🎉</div>
         <h2>{t("review.all_caught_up")}</h2>
         <p className="muted">{t("review.session_summary", { count: reviewedCount })}</p>
+        <button className="btn btn-block" onClick={() => navigate(courseId ? `/courses/${courseId}` : "/")}>
+          {t("review.continue_learning", { defaultValue: "Continue learning" })}
+        </button>
       </div>
     );
   }
