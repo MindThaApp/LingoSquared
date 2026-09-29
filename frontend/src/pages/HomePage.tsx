@@ -4,7 +4,26 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { learnPath } from "../lib/activeCourse";
+import type { LessonProgress, Progress, Streak, Xp } from "@lingo/shared/api/types";
 import { PushPrompt } from "../components/PushPrompt";
+import { DesktopSidebar } from "../components/layout/DesktopSidebar";
+
+export function isBrandNewUser(
+  progress: Progress | undefined,
+  xp: Xp | undefined,
+  streak: Streak | undefined,
+): boolean {
+  return Boolean(
+    progress &&
+      xp &&
+      streak &&
+      progress.lessons_started === 0 &&
+      progress.lessons_completed === 0 &&
+      xp.total_xp === 0 &&
+      streak.streak_days === 0,
+  );
+}
 
 export function HomePage() {
   const { t } = useTranslation();
@@ -57,9 +76,20 @@ export function HomePage() {
   const quests = questsQuery.data?.quests ?? [];
   const allQuestsComplete = quests.length > 0 && quests.every((q) => q.completed);
 
-  const inProgressLesson = progress?.lesson_progress.find(
-    (lp) => lp.started_at && !lp.completed_at,
-  );
+  // Most recently started unfinished lesson (missing/unparseable started_at
+  // sorts oldest, so a lesson with a real timestamp always wins).
+  const inProgressLesson = (progress?.lesson_progress ?? [])
+    .filter((lp) => lp.started_at && !lp.completed_at)
+    .reduce<LessonProgress | undefined>(
+      (best, lp) => {
+        const ts = Date.parse(lp.started_at ?? "");
+        const bestTs = best ? Date.parse(best.started_at ?? "") : -Infinity;
+        return !best || (Number.isNaN(bestTs) ? -Infinity : bestTs) < (Number.isNaN(ts) ? -Infinity : ts)
+          ? lp
+          : best;
+      },
+      undefined,
+    );
   const lessonsCompleted = progress?.lessons_completed ?? 0;
   const dailyGoal = xp?.daily_goal ?? 20;
   const xpToday = xp?.xp_today ?? 0;
@@ -79,17 +109,27 @@ export function HomePage() {
   // at-risk) for users without push enabled.
   const streakAtRisk = Boolean(streak && streak.streak_days > 0 && !streak.active_today);
 
+  // First visit: all three activity signals loaded and all zero (no lesson ever
+  // started, no XP ever earned, no streak). Requires real data so a failed or
+  // loading query never shows "welcome" to a returning user.
+  const isFirstVisit = isBrandNewUser(progress, xp, streak);
+
   const heroTitle =
     streak && streak.streak_days > 0
       ? user?.display_name
         ? t("home.streak_title_named", { count: streak.streak_days, name: user.display_name })
         : t("home.streak_title", { count: streak.streak_days })
-      : user?.display_name
-        ? t("home.welcome_named", { name: user.display_name })
-        : t("home.welcome");
+      : isFirstVisit
+        ? user?.display_name
+          ? t("home.welcome_first_named", { name: user.display_name })
+          : t("home.welcome_first")
+        : user?.display_name
+          ? t("home.welcome_named", { name: user.display_name })
+          : t("home.welcome");
 
   return (
-    <div>
+    <div className="page-with-aside">
+      <div className="page-main-col">
       {loadFailed && (
         <div className="feedback-banner error" role="alert" style={{ marginBottom: 12 }}>
           <p style={{ margin: "0 0 10px" }}>{t("home.data_fetch_error")}</p>
@@ -222,7 +262,7 @@ export function HomePage() {
       </div>
 
       {quests.length > 0 && (
-        <div className="card">
+        <div className="card home-quests-card">
           <h3 style={{ marginTop: 0 }}>{t("home.daily_quests")}</h3>
           {allQuestsComplete ? (
             <p className="muted" style={{ margin: 0 }}>{t("home.daily_quests_all_complete")}</p>
@@ -256,12 +296,12 @@ export function HomePage() {
                           aria-label={t("home.quest_completed")}
                         />
                       )}
-                      {quest.title}
+                      {t(`quests.${quest.code}.title`, { defaultValue: quest.title })}
                     </span>
-                    <span className="badge">{t("home.quest_xp_reward", { xp: quest.xp_reward })}</span>
+                    <bdi className="badge" dir="ltr">{t("home.quest_xp_reward", { xp: quest.xp_reward })}</bdi>
                   </div>
                   <span className="muted" style={{ fontSize: "0.85rem" }}>
-                    {quest.description}
+                    {t(`quests.${quest.code}.description`, { defaultValue: quest.description })}
                   </span>
                   <div
                     className="progress-track"
@@ -298,9 +338,9 @@ export function HomePage() {
 
       <div className="card continue-card">
         <div className="continue-info">
-          <h3>{inProgressLesson ? t("home.continue_lesson") : t("home.start_learning")}</h3>
+          <h3>{inProgressLesson ? t("home.restart_title") : t("home.start_learning")}</h3>
           <span className="muted">
-            {inProgressLesson ? t("home.pick_up") : t("home.choose_course")}
+            {inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}
           </span>
         </div>
         {inProgressLesson ? (
@@ -308,15 +348,16 @@ export function HomePage() {
             className={dueReviews ? "btn btn-secondary" : "btn"}
             to={`/lessons/${inProgressLesson.lesson_id}`}
           >
-            {t("home.continue")}
+            {t("home.restart")}
           </Link>
         ) : (
-          <Link className={dueReviews ? "btn btn-secondary" : "btn"} to="/courses">
+          <Link className={dueReviews ? "btn btn-secondary" : "btn"} to={learnPath(user?.id)}>
             {t("home.learn")}
           </Link>
         )}
       </div>
 
+      {user?.is_admin === true && (
       <div className="card continue-card">
         <div className="continue-info">
           <h3>Try the new features</h3>
@@ -328,6 +369,7 @@ export function HomePage() {
           Explore
         </Link>
       </div>
+      )}
 
       {achievements.length > 0 && (
         <div className="card">
@@ -344,6 +386,8 @@ export function HomePage() {
           ))}
         </div>
       )}
+      </div>
+      <DesktopSidebar />
     </div>
   );
 }

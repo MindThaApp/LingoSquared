@@ -163,7 +163,8 @@ def test_refresh_rate_limit_also_counts_invalid_token_probes(client, monkeypatch
 
 def test_logout_shares_refresh_rate_limit(client, monkeypatch):
     # /auth/logout takes the same unauthenticated refresh-token body and
-    # pays the same full-table bcrypt scan, so it shares REFRESH_RATE_LIMIT.
+    # uses the same unauthenticated refresh-token path, so it shares
+    # REFRESH_RATE_LIMIT.
     monkeypatch.setattr(router_module.REFRESH_RATE_LIMIT, "limit", 2)
     reg = client.post("/auth/register", json={"email": "ratelimit-logout@example.com", "password": "password123"})
     assert reg.status_code == 201

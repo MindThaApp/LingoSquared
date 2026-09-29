@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AuthApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import { AuthApi, CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { setAccountDeletedNotice } from "../lib/accountDeletedNotice";
@@ -88,6 +88,12 @@ export function ProfilePage() {
     }
   }
   const progressQuery = useQuery({ queryKey: ["progress"], queryFn: ProgressApi.progress });
+  const allCoursesQuery = useQuery({
+    queryKey: ["courses", "all"],
+    queryFn: () => CatalogApi.allCourses(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const courseTitleById = new Map((allCoursesQuery.data ?? []).map((c) => [c.id, c.title]));
   const streakQuery = useQuery({ queryKey: ["streak"], queryFn: ProgressApi.streak });
   const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp });
   const achievementsQuery = useQuery({
@@ -134,7 +140,10 @@ export function ProfilePage() {
           {progressQuery.data.skill_progress.map((skill) => (
             <div key={skill.course_id} style={{ marginBottom: 10 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                <span>{t("course_units.lesson_count", { count: skill.completed_lessons })}</span>
+                <span>
+                  {courseTitleById.get(skill.course_id) ? `${courseTitleById.get(skill.course_id)} · ` : ""}
+                  {t("course_units.lesson_count", { count: skill.completed_lessons })}
+                </span>
                 <span className="muted">
                   {t("profile.mastery", { pct: Math.round(skill.mastery * 100) })}
                 </span>

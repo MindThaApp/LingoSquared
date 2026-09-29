@@ -8,6 +8,9 @@ import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { resultPassed } from "../lib/answerOutcome";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import { setPlacementRecommendation } from "../lib/placementPreferences";
 import { setLevelPreference, type SelfReportedLevel } from "../lib/levelPreferences";
 import type {
@@ -129,7 +132,8 @@ export function PlacementTestPage() {
   // or after the highest available block passes.
   async function handleContinue() {
     if (!current || !lastResponse) return;
-    const wasCorrect = result?.correct ?? false;
+    // "almost" counts toward the block pass, same as correct.
+    const wasCorrect = result ? resultPassed(result) : false;
     const newAnswers = [...answersRef.current, { exercise_id: current.id, response: lastResponse }];
     const newBlockCorrect = blockCorrect + (wasCorrect ? 1 : 0);
     const posInBlock = index % blockSize;
@@ -270,13 +274,26 @@ export function PlacementTestPage() {
       )}
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost" role="status">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: current.id, type: current.type, order: current.order, prompt: current.prompt })}
+              />
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("placement.continue")}
+              </button>
+            </div>
+          );
+        }
         return (
           // role="status" (implicit aria-live="polite") - announces the grading
           // result to screen readers when the banner mounts.
           <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("placement.correct")}
-              {status === "almost" && t("placement.almost")}
               {status === "incorrect" && t("placement.incorrect")}
             </p>
             {status !== "correct" && (

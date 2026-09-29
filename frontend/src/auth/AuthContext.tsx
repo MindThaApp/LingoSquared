@@ -15,6 +15,7 @@ import {
   setUnauthorizedHandler,
 } from "@lingo/shared/api/client";
 import type { AuthUser } from "@lingo/shared/api/types";
+import { queryClient } from "../queryClient";
 
 // Three genuinely different situations used to collapse into `user ===
 // null`, and every consumer read all three as "logged out":
@@ -106,6 +107,13 @@ export function readCachedUser(): AuthUser | null {
   }
 }
 
+// Query keys aren't user-scoped. Registering/logging in while another
+// account's session is still live (never logged out) would otherwise keep
+// showing the previous user's streak/XP/progress from the cache.
+function resetCacheForNewSession() {
+  queryClient.clear();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   // No stored token means there is nothing to verify: start
@@ -136,6 +144,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // refresh token and skips the network call entirely (no loop).
     void AuthApi.logout().catch(() => {});
     clearSession();
+    // Query keys aren't user-scoped: drop every cached result so the next
+    // user on this device never sees this one's progress/streak/XP.
+    queryClient.clear();
     setUser(null);
     setStatus("unauthenticated");
   }, []);
@@ -274,6 +285,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     const result = await AuthApi.login(email, password);
     storeSession(result.user);
+    resetCacheForNewSession();
     setUser(result.user);
     setStatus("authenticated");
   }, []);
@@ -282,6 +294,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (email: string, password: string, displayName?: string) => {
       const result = await AuthApi.register(email, password, displayName);
       storeSession(result.user);
+      resetCacheForNewSession();
       setUser(result.user);
       setStatus("authenticated");
     },
@@ -318,6 +331,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const password = crypto.randomUUID?.() ?? randomId;
       const result = await AuthApi.register(email, password, username);
       storeSession(result.user);
+      resetCacheForNewSession();
       setUser(result.user);
       setStatus("authenticated");
     },

@@ -9,6 +9,7 @@ user-scoped table — and that a second account's export contains none of it.
 """
 import os
 from datetime import datetime, timezone
+from unittest.mock import patch
 
 from sqlalchemy import select
 
@@ -75,7 +76,12 @@ def test_export_contains_real_values_from_each_table(client, admin, auth):
 
     # Real quest award: the lesson completed above completes the
     # "Complete a lesson" daily quest, persisting a QuestCompletion row.
-    assert client.get("/me/quests", headers=auth).status_code == 200
+    from app.services import quests as quest_service
+    legacy = tuple(q for q in quest_service.QUEST_DEFINITIONS if q["code"] in {
+        "clear_reviews", "complete_lesson", "practice_correct_5"
+    })
+    with patch.object(quest_service, "selected_quest_definitions", return_value=legacy):
+        assert client.get("/me/quests", headers=auth).status_code == 200
 
     # Real user-filed report (reporter_user_id-scoped in the export).
     report = client.post(

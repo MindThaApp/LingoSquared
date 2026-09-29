@@ -30,6 +30,51 @@ def test_grade_answer_latin_tolerant_by_default():
     assert grade_answer("xyz", "hola", exercise_type="translation") == "incorrect"
 
 
+def test_hamza_spelling_tolerance_is_arabic_only():
+    assert grade_answer(
+        "اهلا بك",
+        "أهلا بك",
+        exercise_type="translation",
+        script="arabic",
+        language_code="ar",
+    ) == "almost"
+    assert grade(
+        "اهلا بك",
+        "أهلا بك",
+        "translation",
+        script="arabic",
+        language_code="ar",
+    ) == "almost"
+    assert grade_answer(
+        "ادرس",
+        "آدرس",
+        exercise_type="translation",
+        script="arabic",
+        language_code="fa",
+    ) == "incorrect"
+    assert grade_answer(
+        "ادرس",
+        "آدرس",
+        exercise_type="translation",
+        script="arabic",
+        language_code="prs",
+    ) == "incorrect"
+    assert grade_answer(
+        "أهلا بك",
+        "أهلا بك",
+        exercise_type="translation",
+        script="arabic",
+        language_code="ar",
+    ) == "correct"
+    assert grade_answer(
+        "اهلا بك",
+        "أهلا بك",
+        exercise_type="translation",
+        script="arabic",
+        language_code=None,
+    ) == "incorrect"
+
+
 def test_dictation_accepts_terminal_punctuation_in_either_direction():
     assert (
         grade(

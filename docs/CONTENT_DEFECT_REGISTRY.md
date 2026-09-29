@@ -1726,3 +1726,73 @@ above. Current state: nl/fa/prs ~62 localized matchers per lane (A1-B2) +
 de-en A1 (9) — all awaiting Ramin's post-hoc native-language audit.
 New bug class discovered: no
 Instance count: 0 (queue status update, not a review)
+
+### 2026-09-29 — fa A1 dialogue-audio pointers (PR #10, 42 items; fresh-context review)
+Bug classes found: 1.22 (distractor weakened/made contestable by newly attached
+dialogue audio) — 2 nits (unit41/unit42 distractors); plus 1 out-of-scope
+finding: fa unit01 `listen_who_welcomes` had no question (prompt-less item).
+0 blocker, 0 should-fix. All fixed in commit b80c9044.
+New bug class discovered: no
+Instance count: 3 (2 nits + 1 out-of-scope), all fixed
+**RULE NOTE (candidate)**: audio added to an existing item can make a
+distractor true — re-review distractors whenever audio is attached.
+
+### 2026-09-29 — prs A1 dialogue audio (PR #11, 14 items; fresh-context review)
+Bug classes found: 1.22 — 1 should-fix, pre-existing: prs unit15 distractor
+made TRUE by the attached audio (mirrored in fa unit15); 2 nits (1 fixed: false
+"in Kabul" feedback). 0 blockers. Fixed in commit b80c9044.
+New bug class discovered: no
+Instance count: 3 (1 should-fix + 2 nits; fa unit15 mirror fixed with it)
+**RULE NOTE (candidate)**: same as above — re-review distractors whenever
+audio is attached to an existing item.
+
+### 2026-09-29 — es-b1 + de-b1 CI corpus test (answer-shape corpus test)
+Bug classes found: 1.26 (answer-shape corpus regression) — 2 real defects:
+es.b1.unit40 reading_comprehension had no options; de.b1.unit42
+matching_pairs had casefold-duplicate right items. Fixed in commit fa44f6a1.
+New bug class discovered: no (instances of §1.26; compiler-invisible, caught
+only by the answer-shape corpus test once the dictation shape was added)
+Instance count: 2
+
+### 2026-09-29 — fa+prs A2 dialogue-audio pointers (PR #13, 32 items; fresh-context review)
+Bug classes found: none — 0 defects (8 items skipped at authoring; the 4
+unit14 job-interview items are now wired, the ZWNJ speaker-label blocker being
+fixed in commit 5a4ab3c1; a fresh review confirmed the audio supports each
+correct option and no distractor)
+New bug class discovered: no
+Instance count: 0
+
+### 2026-09-29 — nl C1 production rewrite (PR #16, 112 items; fresh-context review)
+Bug classes found: missing natural accepted variants on underdetermined
+production items (word order / synonym / optional particle -- e.g. op-particle
+placement, benoemen for noemen, wellicht for misschien, ook after daarbij) ;
+feedback/grading contradiction (unit06 lesson02 accepted a non-standard direct
+quote while feedback claimed direct quotes work); dictation internal-punctuation
+strictness (unit04 lesson06 two-sentence dictation, ". Toch" vs ", toch" is a
+false-negative risk under strict grading). 0 blocker, 7 should-fix, 5 nit.
+All fixed in this change (dictation cut to one sentence; instruction pinned to
+"behoorlijk" in unit02 lesson04; "Say" -> "Write" on a writing_prompt).
+New bug class discovered: no (instances of underdetermined production and
+dictation punctuation strictness)
+Instance count: 12 (7 should-fix + 5 nits), all fixed
+Note: unit07 lesson06 dictation keeps the optional comma before "maar" (nit 8);
+removing it would change meaning/audio, left as is.
+
+### 2026-09-29 — prs توانستن full-form standardization (PR #19; fresh-context review)
+Bug classes found: register/form standardization incomplete across the verb's
+derivatives -- PR #19 converted the present tense to the full form but left
+the past/negative past contracted. 3 learner-facing should-fix: (1) b1_unit01
+teaching notes made false by the form change (نتانستم "negates می‌توانستم",
+"add -ستم to می‌توان ... نتانستم", grammar_review) ; (2) rule/answer-key
+disagreement on the negative past (canonical answers accepted only the
+contracted نتانستم/نتانست while the present was full) ; (3) en-prs b1_unit02
+grammar_agreement claimed the باید endings "م/ی/ه/یم/ین/ن" were what
+"you already know from می‌توانم" (false: full form is م/ی/د/یم/ین/ند). 2 nits:
+DARI_REGISTER_REPAIR.md mapping table still mapped to می‌تانین/می‌تانم; stale
+می‌تانم/می‌تانین YAML comments in practice a1_unit10/21/23. All fixed in this
+change (past + negative past converted to full forms with contracted forms kept
+as extra accepted answers; b1_unit03 negation note also updated).
+New bug class discovered: no (instance of a form-change consistency defect)
+Rule candidate: a register/form standardization must include every
+tense/derivative of the verb and every note that references the old form.
+Instance count: 5 (3 should-fix + 2 nits), all fixed

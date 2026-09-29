@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
@@ -32,6 +32,30 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
   const [matches, setMatches] = useState<Record<string, number>>({});
   const [activeLeft, setActiveLeft] = useState<string | null>(null);
 
+  const firstLeftRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (!disabled) firstLeftRef.current?.focus({ preventScroll: true });
+    // Focus once on mount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Tapping an already-matched left undoes that match (freeing its right tile
+  // by index) and does NOT select it as active; the learner taps it again to
+  // start a fresh selection.
+  function clickLeft(left: string) {
+    if (disabled) return;
+    if (matches[left] !== undefined) {
+      setMatches((prev) => {
+        const next = { ...prev };
+        delete next[left];
+        return next;
+      });
+      setActiveLeft(null);
+      return;
+    }
+    setActiveLeft(left);
+  }
+
   function chooseRight(rightIndex: number) {
     if (disabled || !activeLeft) return;
     setMatches((prev) => ({ ...prev, [activeLeft]: rightIndex }));
@@ -49,12 +73,13 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       <div className="matching-grid">
         <div>
-          {pairs.map((p) => (
+          {pairs.map((p, pairIndex) => (
             <div key={p.left} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
               <button
+                ref={pairIndex === 0 ? firstLeftRef : undefined}
                 className={`matching-item${activeLeft === p.left ? " selected" : ""}${matches[p.left] !== undefined ? " matched" : ""}`}
-                disabled={disabled || matches[p.left] !== undefined}
-                onClick={() => setActiveLeft(p.left)}
+                disabled={disabled}
+                onClick={() => clickLeft(p.left)}
                 style={{ flex: 1, marginBottom: 0 }}
                 dir={direction}
                 lang={answerLanguageCode}
@@ -87,6 +112,11 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
               disabled={disabled || usedRightIndexes.has(rightIndex) || !activeLeft}
               onClick={() => chooseRight(rightIndex)}
               type="button"
+              // The data doesn't say what language the right column is in
+              // (it is usually the OTHER language from answer_language_code,
+              // where forcing the answer direction would misplace neutral
+              // punctuation), so let each tile's own first-strong text decide.
+              dir="auto"
             >
               {right}
             </button>

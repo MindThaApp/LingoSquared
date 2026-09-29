@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
+from unittest.mock import patch
 
 from sqlalchemy import func, select
 
@@ -39,7 +40,14 @@ def _register(client, email, timezone_name=None):
 
 
 def _quests(client, headers):
-    response = client.get("/me/quests", headers=headers)
+    # These regression tests exercise the original quest behaviors. Pin
+    # their selection while separate rotation tests cover the daily pool.
+    from app.services import quests as quest_service
+    legacy = tuple(q for q in quest_service.QUEST_DEFINITIONS if q["code"] in {
+        "clear_reviews", "complete_lesson", "practice_correct_5"
+    })
+    with patch.object(quest_service, "selected_quest_definitions", return_value=legacy):
+        response = client.get("/me/quests", headers=headers)
     assert response.status_code == 200, response.text
     return {
         quest["code"]: quest
@@ -175,6 +183,16 @@ def test_clear_reviews_completes_only_after_existing_reviews_are_clear(client):
     with SessionLocal() as db:
         review = db.get(UserLexemeSRS, review_id)
         review.due_at = datetime.now(timezone.utc) + timedelta(days=1)
+        review.last_reviewed_at = None
+        db.commit()
+
+    no_review_today = _quests(client, headers)["clear_reviews"]
+    assert no_review_today["completed"] is False
+    assert no_review_today["progress"] == 0
+
+    with SessionLocal() as db:
+        review = db.get(UserLexemeSRS, review_id)
+        review.last_reviewed_at = datetime.now(timezone.utc)
         db.commit()
 
     cleared = _quests(client, headers)["clear_reviews"]
@@ -212,7 +230,10 @@ def test_complete_lesson_reports_complete_and_awards_xp_once(client):
     assert first["target"] == 1
 
     with SessionLocal() as db:
-        xp_after_first = db.get(UserStats, user_id).total_xp
+        stats_after_first = db.get(UserStats, user_id)
+        xp_after_first = stats_after_first.total_xp
+        assert stats_after_first.streak_days == 0
+        assert stats_after_first.last_activity_date is None
         completions_after_first = db.scalar(
             select(func.count(QuestCompletion.id)).where(
                 QuestCompletion.user_id == user_id,

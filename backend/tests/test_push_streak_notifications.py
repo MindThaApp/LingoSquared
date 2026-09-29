@@ -104,6 +104,16 @@ def test_user_with_zero_streak_is_not_notified(client, admin, monkeypatch):
     assert [s for s in sends if s[0] == uid] == []
 
 
+def test_lapsed_streak_is_not_notified(client, admin, monkeypatch):
+    uid = _register(client, "streak-push-lapsed@example.com")
+    _set_stats(uid, streak_days=8, last_activity_date=_utc_today() - timedelta(days=3))
+    sends = _fake_push(monkeypatch)
+
+    response = client.post("/admin/push/notify-streaks-at-risk", headers=admin)
+    assert response.status_code == 200
+    assert [s for s in sends if s[0] == uid] == []
+
+
 def test_today_is_the_users_own_timezone_today(client, admin, monkeypatch):
     # "Active today" must be judged in the USER's timezone, not the
     # server's/UTC (same day boundary record_activity() uses).

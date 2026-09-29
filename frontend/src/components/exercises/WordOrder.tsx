@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { seededShuffleNotOriginal } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { isListeningExercise } from "../../lib/listeningTypes";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
@@ -26,6 +27,13 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
   // left-to-right regardless of the order tiles were tapped in.
   const direction = answerDirectionForExercise(exercise);
 
+  const firstTileRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (!disabled) firstTileRef.current?.focus({ preventScroll: true });
+    // Focus once on mount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function pick(word: string, index: number) {
     if (disabled) return;
     setAvailable((prev) => prev.filter((_, i) => i !== index));
@@ -44,7 +52,7 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       {audio_text && audio_language_code && (
         <div className="exercise-audio-prompt">
-          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} />
+          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} autoPlay={isListeningExercise(exercise.type)} />
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
@@ -57,7 +65,7 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
       </div>
       <div className="word-bank" dir={direction} lang={exercise.prompt.answer_language_code}>
         {available.map((word, i) => (
-          <button type="button" key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
+          <button type="button" key={i} ref={i === 0 ? firstTileRef : undefined} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
             {word}
           </button>
         ))}

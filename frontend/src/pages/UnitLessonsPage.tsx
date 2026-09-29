@@ -1,8 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CheckCircle } from "lucide-react";
 import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import { useAuth } from "../auth/AuthContext";
+import { setActiveCourse } from "../lib/activeCourse";
 import type { LessonProgress } from "@lingo/shared/api/types";
 
 export function UnitLessonsPage() {
@@ -10,6 +13,11 @@ export function UnitLessonsPage() {
   const { unitId = "" } = useParams();
   const location = useLocation();
   const courseId = (location.state as { courseId?: string } | null)?.courseId;
+  const { user } = useAuth();
+  const userId = user?.id;
+  useEffect(() => {
+    if (userId && courseId) setActiveCourse(userId, courseId);
+  }, [userId, courseId]);
 
   const lessonsQuery = useQuery({
     queryKey: ["lessons", unitId],
@@ -79,7 +87,7 @@ export function UnitLessonsPage() {
                 {completed
                   ? t("unit_lessons.review")
                   : inProgress
-                    ? t("unit_lessons.continue")
+                    ? t("unit_lessons.restart")
                     : t("unit_lessons.start")}
               </span>
             </div>

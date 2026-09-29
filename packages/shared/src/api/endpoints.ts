@@ -12,6 +12,7 @@ import {
 } from "./client";
 import type {
   Achievement,
+  AnswerMeta,
   AnswerResponse,
   AnswerResult,
   AuthResult,
@@ -131,12 +132,18 @@ export const CatalogApi = {
     get<LessonSummary[]>(`/units/${unitId}/lessons`),
 };
 
+// Typed answers send exactly { response } — input_mode is added ONLY for
+// voice-produced answers.
+export function answerBody(response: AnswerResponse, meta?: AnswerMeta) {
+  return meta?.inputMode ? { response, input_mode: meta.inputMode } : { response };
+}
+
 export const LessonApi = {
   get: (lessonId: string) => get<Lesson>(`/lessons/${lessonId}`),
   start: (lessonId: string) =>
     post<LessonStartResult>(`/lessons/${lessonId}/start`),
-  answer: (exerciseId: string, response: AnswerResponse) =>
-    post<AnswerResult>(`/exercises/${exerciseId}/answer`, { response }),
+  answer: (exerciseId: string, response: AnswerResponse, meta?: AnswerMeta) =>
+    post<AnswerResult>(`/exercises/${exerciseId}/answer`, answerBody(response, meta)),
   complete: (lessonId: string) =>
     post<LessonCompleteResult>(`/lessons/${lessonId}/complete`),
   reportIssue: (
@@ -156,8 +163,8 @@ export const ProgressApi = {
   progress: () => get<Progress>("/me/progress"),
   reviews: (cursor?: string) =>
     get<ReviewsPage>(`/me/reviews${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`),
-  answerReview: (reviewItemId: string, response: AnswerResponse) =>
-    post<ReviewAnswerResult>(`/reviews/${reviewItemId}/answer`, { response }),
+  answerReview: (reviewItemId: string, response: AnswerResponse, meta?: AnswerMeta) =>
+    post<ReviewAnswerResult>(`/reviews/${reviewItemId}/answer`, answerBody(response, meta)),
   streak: () => get<Streak>("/me/streak"),
   xp: () => get<Xp>("/me/xp"),
   achievements: () => get<Achievement[]>("/me/achievements"),
@@ -181,8 +188,8 @@ export const ReviewApi = {
     post<ReviewItemsResult>(`/reviews/items/${itemId}/retry`),
   // Review items are answered through the shared practice-item endpoint
   // (same server-held-answer/expiry/single-answer semantics).
-  answer: (itemId: string, response: AnswerResponse) =>
-    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+  answer: (itemId: string, response: AnswerResponse, meta?: AnswerMeta) =>
+    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, answerBody(response, meta)),
   // Review items are PracticeItem rows, not Exercise rows - reported
   // through the shared practice-item report endpoint, not
   // /exercises/{id}/report (which 404s for a PracticeItem id).
@@ -247,8 +254,8 @@ export const CheckpointApi = {
     get<CheckpointResult>(`/units/${unitId}/checkpoint/result`),
   // Checkpoint items are answered through the same shared practice-item
   // endpoint as review/practice items.
-  answer: (itemId: string, response: AnswerResponse) =>
-    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+  answer: (itemId: string, response: AnswerResponse, meta?: AnswerMeta) =>
+    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, answerBody(response, meta)),
 };
 
 // Placement test (docs/CONTRACT.md "Placement test (course-level)") —
@@ -291,8 +298,8 @@ export const PracticeApi = {
       Object.keys(body).length > 0 ? body : undefined,
     );
   },
-  answer: (itemId: string, response: AnswerResponse) =>
-    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, { response }),
+  answer: (itemId: string, response: AnswerResponse, meta?: AnswerMeta) =>
+    post<PracticeAnswerResult>(`/practice/items/${itemId}/answer`, answerBody(response, meta)),
   // Endless Practice items are PracticeItem rows, not Exercise rows -
   // reported through the shared practice-item report endpoint.
   reportIssue: (
