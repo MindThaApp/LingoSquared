@@ -3,20 +3,25 @@ import { useTranslation } from "react-i18next";
 import type { ScriptCode } from "@lingo/shared/api/types";
 import { KEYBOARD_LAYOUTS } from "@lingo/shared/lib/scripts";
 
-// Every key uses onMouseDown+preventDefault (not onClick alone) so clicking
-// a key never blurs the associated text input — this is what lets the
-// keyboard's "shows while the input is focused" behavior work without the
-// input closing itself the moment a key is pressed.
+// Every key's onMouseDown ONLY calls preventDefault, so mouse/touch presses
+// never blur the associated text input; the action itself fires in onClick,
+// so Enter/Space on a keyboard-focused key work and a mouse click never
+// double-fires. Focus that lands on a key is kept "inside" by the hook's
+// relatedTarget checks (containerRef / onContainerBlur).
 export function VirtualKeyboard({
   script,
   onInsert,
   onBackspace,
   onDismiss,
+  containerRef,
+  onContainerBlur,
 }: {
   script: ScriptCode;
   onInsert: (char: string) => void;
   onBackspace: () => void;
   onDismiss: () => void;
+  containerRef?: React.Ref<HTMLDivElement>;
+  onContainerBlur?: (e: React.FocusEvent) => void;
 }) {
   const { t } = useTranslation();
   // Secondary digits/punctuation layer (layouts that define one). State must
@@ -27,18 +32,18 @@ export function VirtualKeyboard({
   const symbols = layout.symbols;
   const symbolsActive = showSymbols && symbols !== undefined;
 
-  function keyMouseDown(e: React.MouseEvent, action: () => void) {
+  function keepInputFocus(e: React.MouseEvent) {
     e.preventDefault();
-    action();
   }
 
   return (
-    <div className="virtual-keyboard" dir={layout.direction}>
+    <div className="virtual-keyboard" dir={layout.direction} ref={containerRef} onBlur={onContainerBlur}>
       <div className="virtual-keyboard-row" style={{ justifyContent: "flex-end" }}>
         <button
           type="button"
           className="virtual-keyboard-key virtual-keyboard-key-wide"
-          onMouseDown={(e) => keyMouseDown(e, onDismiss)}
+          onMouseDown={keepInputFocus}
+          onClick={() => onDismiss()}
         >
           {t("keyboard.use_device_keyboard")}
         </button>
@@ -67,7 +72,8 @@ export function VirtualKeyboard({
             key={char}
             type="button"
             className="virtual-keyboard-key"
-            onMouseDown={(e) => keyMouseDown(e, () => onInsert(char))}
+            onMouseDown={keepInputFocus}
+            onClick={() => onInsert(char)}
           >
             {char}
           </button>
@@ -78,7 +84,8 @@ export function VirtualKeyboard({
           <button
             type="button"
             className="virtual-keyboard-key virtual-keyboard-key-wide"
-            onMouseDown={(e) => keyMouseDown(e, () => setShowSymbols((s) => !s))}
+            onMouseDown={keepInputFocus}
+            onClick={() => setShowSymbols((s) => !s)}
             title={showSymbols ? t("keyboard.show_letters") : t("keyboard.show_symbols")}
           >
             {showSymbols ? symbols.lettersLabel : symbols.toggleLabel}
@@ -88,7 +95,8 @@ export function VirtualKeyboard({
           <button
             type="button"
             className="virtual-keyboard-key virtual-keyboard-key-wide"
-            onMouseDown={(e) => keyMouseDown(e, () => onInsert("‌"))}
+            onMouseDown={keepInputFocus}
+            onClick={() => onInsert("‌")}
             title={t("keyboard.zwnj_title")}
           >
             ZWNJ
@@ -97,14 +105,16 @@ export function VirtualKeyboard({
         <button
           type="button"
           className="virtual-keyboard-key virtual-keyboard-key-wide"
-          onMouseDown={(e) => keyMouseDown(e, () => onInsert(" "))}
+          onMouseDown={keepInputFocus}
+          onClick={() => onInsert(" ")}
         >
           {t("keyboard.space")}
         </button>
         <button
           type="button"
           className="virtual-keyboard-key virtual-keyboard-key-wide"
-          onMouseDown={(e) => keyMouseDown(e, onBackspace)}
+          onMouseDown={keepInputFocus}
+          onClick={() => onBackspace()}
         >
           ⌫
         </button>

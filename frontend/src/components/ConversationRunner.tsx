@@ -7,6 +7,7 @@ import { useKeyboardFocus } from "../lib/useKeyboardFocus";
 import { LANGUAGE_SCRIPT, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { PracticeApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
+import { PERMANENT_ANSWER_ERROR_CODES } from "../lib/practiceAnswerErrors";
 
 // Endless conversation practice (backend `mode=conversation`). Unlike every
 // other exercise this is MULTI-TURN: one practice item carries a node graph,
@@ -39,7 +40,7 @@ export type ConversationPrompt = {
   nodes: ConversationNode[];
 };
 
-type Exchange = { app: string; learner: string; correct: boolean };
+type Exchange = { app: string; appDir: string; learner: string; correct: boolean };
 
 export function ConversationRunner({
   itemId,
@@ -57,11 +58,15 @@ export function ConversationRunner({
   const [submitting, setSubmitting] = useState(false);
   const [finished, setFinished] = useState(prompt.current_node.terminal);
   const [error, setError] = useState<"retry" | "dead" | null>(null);
-  const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
-
   const answerLang = node.answer_language_code;
   const script = LANGUAGE_SCRIPT[answerLang] ?? null;
   const dir = scriptDirection(script);
+  const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({
+    value,
+    setValue,
+    script,
+    disabled: submitting || finished,
+  });
 
   async function submit() {
     const reply = value.trim();
@@ -74,7 +79,15 @@ export function ConversationRunner({
         response: reply,
       } as never);
       const next = (res as unknown as { next_node?: ConversationNode }).next_node;
-      setHistory((h) => [...h, { app: node.app_turn.text, learner: reply, correct: res.correct }]);
+      setHistory((h) => [
+        ...h,
+        {
+          app: node.app_turn.text,
+          appDir: node.app_turn.direction ?? "ltr",
+          learner: reply,
+          correct: res.correct,
+        },
+      ]);
       onAnswered(res.correct, res.xp_awarded);
       setValue("");
       if (next) {
@@ -87,7 +100,12 @@ export function ConversationRunner({
     } catch (err) {
       // Same split as PracticeCard: a permanently-dead item can't be retried,
       // anything else keeps the learner's text so they can try again.
-      setError(err instanceof ApiError && err.code === "practice_item_not_found" ? "dead" : "retry");
+      if (err instanceof ApiError && PERMANENT_ANSWER_ERROR_CODES.has(err.code)) {
+        setError("dead");
+        setFinished(true); // hides the input + send button
+      } else {
+        setError("retry");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -99,7 +117,9 @@ export function ConversationRunner({
         <div className="conversation-history">
           {history.map((h, i) => (
             <div key={i} className="conversation-exchange">
-              <p className="conversation-line conversation-line-app">{h.app}</p>
+              <p className="conversation-line conversation-line-app" dir={h.appDir}>
+                {h.app}
+              </p>
               <p
                 className={
                   h.correct
@@ -123,9 +143,16 @@ export function ConversationRunner({
       </div>
 
       {finished ? (
-        <p className="muted">{t("practice.conversation_finished")}</p>
+        // Dead item: show only the "unavailable" banner below — "conversation
+        // finished" would be misleading since the conversation was cut off.
+        error === "dead" ? null : <p className="muted">{t("practice.conversation_finished")}</p>
       ) : (
-        <>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            void submit();
+          }}
+        >
           <p className="muted" style={{ fontSize: "0.9rem" }}>
             {t("practice.conversation_your_turn")}
           </p>
@@ -139,9 +166,6 @@ export function ConversationRunner({
               type="text"
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") submit();
-              }}
               disabled={submitting}
               placeholder={t("practice.conversation_reply_placeholder")}
               dir={dir}
@@ -151,15 +175,18 @@ export function ConversationRunner({
           {script && scriptNeedsVirtualKeyboard(script) && showKeyboard && (
             <VirtualKeyboard
               script={script}
-              onInsert={(char: string) => setValue((v) => v + char)}
-              onBackspace={() => setValue((v) => v.slice(0, -1))}
-              onDismiss={dismissKeyboard}
+              {...keyboardProps}
             />
           )}
-          <button className="btn btn-block" onClick={submit} disabled={submitting || !value.trim()}>
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={submitting || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
             {t("practice.conversation_send")}
           </button>
-        </>
+        </form>
       )}
 
       {error === "retry" && (
