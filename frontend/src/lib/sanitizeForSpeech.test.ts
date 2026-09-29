@@ -29,4 +29,25 @@ describe("sanitizeForSpeech", () => {
     expect(sanitizeForSpeech("(only a gloss)")).toBe("");
     expect(sanitizeForSpeech("   ")).toBe("");
   });
+  it("strips inner speaker labels in multi-turn Latin dialogue", () => {
+    expect(
+      sanitizeForSpeech("Lotte: Hoi, ik ben Lotte. Hoe heet je? Omar: Ik heet Omar. Lotte: Tot volgende week!"),
+    ).toBe("Hoi, ik ben Lotte. Hoe heet je? Ik heet Omar. Tot volgende week!");
+    expect(sanitizeForSpeech("Lotte: Hoi.\nOmar: Hallo!\nLotte: Dag!")).toBe("Hoi. Hallo! Dag!");
+  });
+  it("strips inner speaker labels in Persian-script dialogue", () => {
+    expect(sanitizeForSpeech("علی: سلام، حال شما چطور است؟ مریم: خوبم. علی: خداحافظ!")).toBe(
+      "سلام، حال شما چطور است؟ خوبم. خداحافظ!",
+    );
+  });
+  it("leaves times and mid-sentence colons alone in multi-sentence text", () => {
+    expect(sanitizeForSpeech("Het is laat. Om 8:30 begint het.")).toBe("Het is laat. Om 8:30 begint het.");
+    expect(sanitizeForSpeech("Hij zei. Let op: kom snel.")).toBe("Hij zei. Let op: kom snel.");
+    expect(sanitizeForSpeech("Ik zei het volgende: ja")).toBe("Ik zei het volgende: ja");
+  });
+  it("turns fill-in-blank underscores into a pause", () => {
+    expect(sanitizeForSpeech("Bent ___ nieuw hier?")).toBe("Bent … nieuw hier?");
+    expect(sanitizeForSpeech("Ik ben ______.")).toBe("Ik ben ….");
+    expect(sanitizeForSpeech("snake_case")).toBe("snake_case");
+  });
 });
