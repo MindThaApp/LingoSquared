@@ -90,6 +90,7 @@ TEXT_INPUT_TYPES = {
     "translation",
     "reverse_translation",
     "listen_type",
+    "dictation",
     "fill_in_blank",
     "writing_prompt",
     "dialogue_response",
