@@ -448,10 +448,22 @@ sources of truth for unit ordering.
     "section": "reading_writing",
     "locked": false,
     "checkpoint_passed": false,
-    "content_key": "en.a1.unit06.family"
+    "content_key": "en.a1.unit06.family",
+    "track": "core"
   }
 ]
 ```
+`track` (`"core" | "situation"`, always present, default `"core"`) is an
+additive unit field. Situation units are optional side content: they are
+always unlocked in the UI and never the "next recommended" unit, and
+`speaking_unlocked`, first-placement unit selection and any
+course-completion/progress summary count **core units only**. Content YAML
+sets it via an optional per-unit `track: situation` in realization files
+(absent = core); the compiler validates the value (only `core|situation`) and
+passes it through as the import payload unit's `track`, and
+`POST /admin/content/import` updates it in place on existing units matched by
+`content_key` (no rows moved or renumbered). No units are flagged yet — which
+units to demote is an open product question (A2_REBUILD_PLAN Q8).
 `completed_lesson_count` is learner-specific: with authenticated optional auth
 it counts that user's lessons in the unit whose `LessonProgress.completed_at`
 is non-null; anonymous requests return `0` for every unit.
