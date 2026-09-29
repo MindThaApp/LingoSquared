@@ -52,7 +52,7 @@ export function ReportIssueButton({
   }
 
   if (sent) {
-    return <p className="muted" style={{ fontSize: "0.85rem" }}>{t("report_issue.thanks")}</p>;
+    return <p className="muted" role="status" style={{ fontSize: "0.85rem" }}>{t("report_issue.thanks")}</p>;
   }
 
   if (!open) {

@@ -36,6 +36,8 @@ export function SpeakRepeat({ exercise, onAnswer, disabled }: ExerciseComponentP
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.speak_repeat_type_placeholder")}
+          aria-label={t("exercise.speak_repeat_type_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

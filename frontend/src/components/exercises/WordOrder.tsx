@@ -48,16 +48,16 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="word-answer-row" dir={direction}>
+      <div className="word-answer-row" dir={direction} lang={exercise.prompt.answer_language_code}>
         {chosen.map((word, i) => (
-          <button key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
+          <button type="button" key={i} className="word-chip" onClick={() => unpick(i)} disabled={disabled}>
             {word}
           </button>
         ))}
       </div>
-      <div className="word-bank" dir={direction}>
+      <div className="word-bank" dir={direction} lang={exercise.prompt.answer_language_code}>
         {available.map((word, i) => (
-          <button key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
+          <button type="button" key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
             {word}
           </button>
         ))}

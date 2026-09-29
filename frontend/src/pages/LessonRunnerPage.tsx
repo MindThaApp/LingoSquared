@@ -235,10 +235,10 @@ export function LessonRunnerPage() {
   ) {
     const status = resultStatus(bannerResult);
     return (
-      // role="status" (implicit aria-live="polite") so screen readers announce
-      // the grading result the moment the banner mounts - without it this
-      // banner is completely silent to non-sighted users.
-      <div className={`feedback-banner ${status}`} role="status">
+      // Announced via the persistent live region the caller wraps this in
+      // (a live region must already be in the DOM before its content
+      // changes, or screen readers stay silent).
+      <div className={`feedback-banner ${status}`}>
         <p style={{ margin: "0 0 6px" }}>
           {status === "correct" && t("lesson_runner.correct")}
           {status === "almost" && t("lesson_runner.almost")}
@@ -362,7 +362,7 @@ export function LessonRunnerPage() {
             aria-label={t("lesson_runner.exit_label")}
             onClick={() => setShowQuitConfirm(true)}
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
         <ExerciseRenderer
@@ -376,10 +376,11 @@ export function LessonRunnerPage() {
               : undefined
           }
         />
+        <div role="status" aria-live="polite">
         {reviewResult && (() => {
           const status = resultStatus(reviewResult);
           return (
-            <div className={`feedback-banner ${status}`} role="status">
+            <div className={`feedback-banner ${status}`}>
               <p style={{ margin: "0 0 6px" }}>
                 {status === "correct" && t("lesson_runner.correct")}
                 {status === "almost" && t("lesson_runner.almost")}
@@ -398,6 +399,7 @@ export function LessonRunnerPage() {
             </div>
           );
         })()}
+        </div>
         {showQuitConfirm && (
           <QuitConfirm
             message={t("lesson_runner.quit_confirm_message")}
@@ -427,7 +429,7 @@ export function LessonRunnerPage() {
             onClick={handleReviewBack}
             disabled={!canGoBack}
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={18} aria-hidden="true" />
           </button>
           <span className="badge" style={{ flex: 1, textAlign: "center" }}>
             {t("lesson_runner.review_mode_label")}
@@ -438,7 +440,7 @@ export function LessonRunnerPage() {
             aria-label={t("lesson_runner.review_forward_label")}
             onClick={handleReviewForward}
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={18} aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -446,7 +448,7 @@ export function LessonRunnerPage() {
             aria-label={t("lesson_runner.exit_label")}
             onClick={() => setShowQuitConfirm(true)}
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
         {entry.kind === "teaching" ? (
@@ -460,7 +462,9 @@ export function LessonRunnerPage() {
               disabled
               gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
             />
-            {renderResultBanner(entry.result, { response: entry.response })}
+            <div role="status" aria-live="polite">
+              {renderResultBanner(entry.result, { response: entry.response })}
+            </div>
           </>
         )}
         {showQuitConfirm && (
@@ -488,7 +492,7 @@ export function LessonRunnerPage() {
               aria-label={t("lesson_runner.review_back_label")}
               onClick={handleReviewBack}
             >
-              <ChevronLeft size={18} />
+              <ChevronLeft size={18} aria-hidden="true" />
             </button>
           )}
           <div className="progress-track" style={{ flex: 1 }}>
@@ -500,7 +504,7 @@ export function LessonRunnerPage() {
             aria-label={t("lesson_runner.exit_label")}
             onClick={() => setShowQuitConfirm(true)}
           >
-            <X size={18} />
+            <X size={18} aria-hidden="true" />
           </button>
         </div>
         <span className="muted">
@@ -546,7 +550,7 @@ export function LessonRunnerPage() {
             aria-label={t("lesson_runner.review_back_label")}
             onClick={handleReviewBack}
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={18} aria-hidden="true" />
           </button>
         )}
         <div className="progress-track" style={{ flex: 1 }}>
@@ -561,11 +565,11 @@ export function LessonRunnerPage() {
           aria-label={t("lesson_runner.exit_label")}
           onClick={() => setShowQuitConfirm(true)}
         >
-          <X size={18} />
+          <X size={18} aria-hidden="true" />
         </button>
       </div>
       {current.isConfirmation && result === null && (
-        <div className="feedback-banner incorrect" role="status" style={{ marginBottom: 12 }}>
+        <div className="feedback-banner incorrect" role="note" style={{ marginBottom: 12 }}>
           <p style={{ margin: 0 }}>
             {t("lesson_runner.confirmation_hint", {
               answer: current.correctAnswerHint ?? "",
@@ -590,14 +594,16 @@ export function LessonRunnerPage() {
           </button>
         </div>
       )}
-      {result &&
-        renderResultBanner(result, {
-          footer: (
-            <button className="btn btn-block" onClick={handleContinue}>
-              {t("lesson_runner.continue")}
-            </button>
-          ),
-        })}
+      <div role="status" aria-live="polite">
+        {result &&
+          renderResultBanner(result, {
+            footer: (
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("lesson_runner.continue")}
+              </button>
+            ),
+          })}
+      </div>
       <div style={{ marginTop: 12, textAlign: "center" }}>
         <ReportIssueButton
           lastResponse={lastResponse}

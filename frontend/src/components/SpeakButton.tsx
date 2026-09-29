@@ -36,10 +36,10 @@ export function SpeakButton({
         onClick={handleClick}
         disabled={playing}
       >
-        🔊
+        <span aria-hidden="true">🔊</span>
       </button>
       {unavailable && (
-        <span className="muted" style={{ fontSize: "0.75rem" }}>
+        <span className="muted" role="status" style={{ fontSize: "0.75rem" }}>
           {t("speak.no_voice_available")}
         </span>
       )}

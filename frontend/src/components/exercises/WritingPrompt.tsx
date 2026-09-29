@@ -22,6 +22,8 @@ export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponen
           disabled={disabled}
           rows={4}
           placeholder={t("exercise.writing_placeholder")}
+          aria-label={t("exercise.writing_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

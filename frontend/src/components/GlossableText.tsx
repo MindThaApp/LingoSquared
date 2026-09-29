@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { TextBlock as TextBlockType } from "@lingo/shared/api/types";
 
 // Reading-track tap-to-gloss (docs/READING_TRACK_SPEC.md §5). Pure
@@ -47,6 +47,7 @@ export function GlossableText({
   // Index of the segment whose popover is currently open (null = none).
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLSpanElement>(null);
+  const baseId = useId();
 
   // Dismiss on outside tap / Escape while a popover is open.
   useEffect(() => {
@@ -90,6 +91,7 @@ export function GlossableText({
               type="button"
               className="glossable-word"
               aria-expanded={isOpen}
+              aria-describedby={isOpen ? `${baseId}-gloss-${i}` : undefined}
               onClick={() => setOpenIndex(isOpen ? null : i)}
             >
               {segment.text}
@@ -97,6 +99,7 @@ export function GlossableText({
             {isOpen && (
               <span
                 role="tooltip"
+                id={`${baseId}-gloss-${i}`}
                 className="glossable-popover"
                 // The popover is English (the gloss) regardless of the
                 // passage direction; force LTR so an RTL passage doesn't
