@@ -5,6 +5,7 @@ import { VirtualKeyboard } from "../VirtualKeyboard";
 import { VoiceCaptureControls } from "../VoiceCaptureControls";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { AnswerModeSwitch } from "./AnswerModeSwitch";
 import type { ExerciseComponentProps } from "./types";
 
 // Dialogue-context exercises compile to a free-text reply matched against
@@ -12,7 +13,7 @@ import type { ExerciseComponentProps } from "./types";
 // speak_response (added 2026-07-06) additionally gets a mic/keyboard
 // toggle — dialogue_response (its non-speaking sibling using this same
 // component) stays typed-only, no toggle shown.
-export function DialogueResponse({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
   const script = answerScriptForExercise(exercise);
@@ -38,31 +39,45 @@ export function DialogueResponse({ exercise, onAnswer, disabled }: ExerciseCompo
           disabled={disabled}
         />
       )}
-      <div className="form-field">
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={disabled}
-          placeholder={t("exercise.type_your_reply")}
-          dir={scriptDirection(script)}
-          {...inputProps}
-        />
-      </div>
-      {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
-        <VirtualKeyboard
-          script={script!}
-          {...keyboardProps}
-        />
-      )}
-      <button
-        type="submit"
-        className="btn btn-block"
-        disabled={disabled || !value.trim()}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        {t("exercise.respond")}
-      </button>
+      <AnswerModeSwitch
+        exercise={exercise}
+        courseLevel={courseLevel}
+        lessonExercises={lessonExercises}
+        answerHint={answerHint}
+        enabled={exercise.type === "dialogue_response"}
+        disabled={disabled}
+        onAnswer={onAnswer}
+        renderTyping={(toggle) => (
+          <>
+          <div className="form-field">
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={disabled}
+              placeholder={t("exercise.type_your_reply")}
+              dir={scriptDirection(script)}
+              {...inputProps}
+            />
+          </div>
+          {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
+            <VirtualKeyboard
+              script={script!}
+              {...keyboardProps}
+            />
+          )}
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={disabled || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {t("exercise.respond")}
+          </button>
+            {toggle}
+          </>
+        )}
+      />
     </form>
   );
 }
