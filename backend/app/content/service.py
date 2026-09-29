@@ -517,6 +517,7 @@ def _create_unit(
         order=unit_data.order,
         section=unit_data.section,
         content_key=unit_data.content_key,
+        track=unit_data.track,
     )
     db.add(unit)
     db.flush()
@@ -568,6 +569,7 @@ def _sync_units(
         row.order = unit_data.order
         row.section = unit_data.section
         row.content_key = unit_data.content_key
+        row.track = unit_data.track
         occupied_orders.add(unit_data.order)
     floor = max(
         [unit.order for unit in units_data]

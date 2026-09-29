@@ -99,7 +99,7 @@ class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","inc
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
 class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int; recommended:bool=False
 class CourseDetail(CourseOut): description:str
-class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None
+class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None; track:Literal["core","situation"]="core"
 class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
 class StartOut(BaseModel): started_at:datetime
 class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float
@@ -209,7 +209,7 @@ class ContentCoverageOut(BaseModel): source_language:str; target_language:str; c
 class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); prompt:dict[str,Any]; correct_response:Any; feedback:str|None=None; xp:int=Field(default=10,ge=0); content_key:str|None=None
 class TeachingImport(TeachingCard): pass
 class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]; content_key:str|None=None
-class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]; content_key:str|None=None
+class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]; content_key:str|None=None; track:Literal["core","situation"]="core"
 class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; language_code:str; title:str=""; content:dict[str,Any]
 class CourseImport(BaseModel):
     source_language:str
