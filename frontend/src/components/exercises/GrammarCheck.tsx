@@ -23,7 +23,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
   const [value, setValue] = useState("");
   const [selected, setSelected] = useState<string | null>(null);
   const script = answerScriptForExercise(exercise);
-  const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
+  const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
   const rawOptions = exercise.prompt.options;
   const nonce = useMemo(() => Math.random().toString(36), []);
   // Display order only; submitted payload stays the option text.
@@ -68,8 +68,14 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
     );
   }
 
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (disabled || !value.trim()) return;
+    onAnswer(value.trim());
+  }
+
   return (
-    <div className="exercise-shell">
+    <form className="exercise-shell" onSubmit={handleSubmit}>
       <p className="exercise-instruction">{t("exercise.grammar_check_instruction")}</p>
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       <div className="form-field">
@@ -86,18 +92,17 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
       {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
         <VirtualKeyboard
           script={script!}
-          onInsert={(char) => setValue((v) => v + char)}
-          onBackspace={() => setValue((v) => v.slice(0, -1))}
-          onDismiss={dismissKeyboard}
+          {...keyboardProps}
         />
       )}
       <button
+        type="submit"
         className="btn btn-block"
         disabled={disabled || !value.trim()}
-        onClick={() => onAnswer(value.trim())}
+        onMouseDown={(e) => e.preventDefault()}
       >
         {t("common.check")}
       </button>
-    </div>
+    </form>
   );
 }
