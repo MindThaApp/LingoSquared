@@ -68,7 +68,7 @@ export function PushPrompt() {
         </button>
       </div>
       {error && (
-        <p className="form-error" style={{ marginTop: 10 }}>
+        <p className="form-error" role="alert" style={{ marginTop: 10 }}>
           {error}
         </p>
       )}
