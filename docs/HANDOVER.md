@@ -1,3 +1,5 @@
+> Superseded for environment setup by docs/WSL_SETUP.md (2026-09-30); iCloud/brew instructions below are historical.
+
 # HANDOVER — read this first, then act
 
 > **UPDATE 2026-08-30 — for now, work directly IN the iCloud copy; do NOT migrate out.**

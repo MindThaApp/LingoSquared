@@ -70,7 +70,7 @@ E2E_STATUS="skipped"
 if [ "$RUN_CONTENT" = "1" ]; then
   echo "== Stage 1/3: content compiler validation =========================="
   if [ ! -d .content-venv ]; then
-    echo "!! .content-venv not found -- run: python3 -m venv .content-venv && .content-venv/bin/pip install pyyaml"
+    echo "!! .content-venv not found -- run: python3 -m venv .content-venv && .content-venv/bin/pip install -r scripts/requirements-content.txt"
     CONTENT_STATUS="fail"
   else
     # shellcheck disable=SC1091
@@ -139,8 +139,8 @@ fi
 if [ "$RUN_BACKEND" = "1" ]; then
   echo "== Stage 2/3: backend pytest (isolated test DB) ====================="
   if ! docker compose -f backend/docker-compose.yml ps db 2>/dev/null | grep -q Up; then
-    echo "!! Local Docker stack isn't up. Start it first (see CLAUDE.md):"
-    echo "     colima start && cd backend && docker compose up -d"
+    echo "!! Local Docker stack isn't up. Start Docker first (Docker Desktop, 'sudo service docker start' on WSL, or 'colima start' on macOS), then:"
+    echo "     cd backend && docker compose up -d"
     BACKEND_STATUS="fail"
   else
     ( cd backend && \

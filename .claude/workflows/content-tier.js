@@ -36,6 +36,10 @@ cfg = cfg || {}
 const items = cfg.items || []
 if (!items.length) { log('content-tier: args.items is empty — nothing to do'); return { report: [], wireReady: [] } }
 const verifyVotes = cfg.verifyVotes || 1
+// Repo root: explicit arg > process.cwd() (workflow runs from the repo) > $HOME/dev/LingoSquared
+const REPO_ROOT = cfg.repoRoot
+  || (typeof process !== 'undefined' && process.cwd && process.cwd())
+  || (typeof process !== 'undefined' && process.env && process.env.HOME ? process.env.HOME + '/dev/LingoSquared' : '.')
 
 const REVIEW_SCHEMA = {
   type: 'object', additionalProperties: false,
@@ -76,7 +80,7 @@ const compileCmd = (item) => {
 }
 
 const authorPrompt = (item) => item.authorBrief || (
-  `You are a content-author sub-agent for /Users/raminazizi/dev/LingoSquared. Author the ${item.lang} tier "${item.id}" ` +
+  `You are a content-author sub-agent for ${REPO_ROOT}. Author the ${item.lang} tier "${item.id}" ` +
   `following docs/content/AUTHORING_GUIDE.md (all of it) and the shipped nl B2 exemplar for structure/outcome ids. ` +
   `Create ONLY ${(item.reviewRealizations || []).join(', ')} and ${(item.reviewOverlays || []).join(', ')}. ` +
   `Do NOT touch scripts/content_manifest.txt or any existing file. Never mask a validation error — a smaller clean unit beats a padded one. ` +
@@ -84,7 +88,7 @@ const authorPrompt = (item) => item.authorBrief || (
 )
 
 const reviewPrompt = (item) => (
-  `You are a FRESH-CONTEXT content reviewer for /Users/raminazizi/dev/LingoSquared. Read the files you review IN FULL.\n` +
+  `You are a FRESH-CONTEXT content reviewer for ${REPO_ROOT}. Read the files you review IN FULL.\n` +
   `Review the ${item.lang} tier "${item.id}": realizations ${(item.reviewRealizations || []).join(', ')} + overlays ${(item.reviewOverlays || []).join(', ')}.\n` +
   `Binding standards: docs/content/AUTHORING_GUIDE.md and docs/content/CLAUDE.md.\n\n` +
   `Hunt these known defect classes — each escaped a prior author pass on this project:\n` +
@@ -99,7 +103,7 @@ const reviewPrompt = (item) => (
 )
 
 const fixPrompt = (item, review) => (
-  `You are a content-fix author for /Users/raminazizi/dev/LingoSquared, tier "${item.id}". Apply ONLY these reviewer-approved fixes:\n\n` +
+  `You are a content-fix author for ${REPO_ROOT}, tier "${item.id}". Apply ONLY these reviewer-approved fixes:\n\n` +
   review.findings.map((f, i) => `${i + 1}. [${f.severity}] ${f.file} ${f.location}: ${f.issue}\n   FIX: ${f.fix}`).join('\n') +
   `\n\nRules: change ONLY what the findings specify, only within ${(item.reviewRealizations || []).join(', ')} and ${(item.reviewOverlays || []).join(', ')}. ` +
   `If any fix is blocked, honestly DROP/skip that item and say so — NEVER mask an error with bogus content, letter-blanks, symbolic notation, or padding. ` +
@@ -108,7 +112,7 @@ const fixPrompt = (item, review) => (
 )
 
 const verifyPrompt = (item, review, i) => (
-  `You are an ADVERSARIAL verifier (skeptic #${i + 1}) for /Users/raminazizi/dev/LingoSquared, tier "${item.id}". Default to disbelief.\n` +
+  `You are an ADVERSARIAL verifier (skeptic #${i + 1}) for ${REPO_ROOT}, tier "${item.id}". Default to disbelief.\n` +
   `An author claims these fixes were applied:\n` +
   review.findings.map((f) => `- ${f.location}: ${f.fix}`).join('\n') +
   `\n\nIndependently re-read ${(item.reviewRealizations || []).join(', ')} + ${(item.reviewOverlays || []).join(', ')} and decide:\n` +

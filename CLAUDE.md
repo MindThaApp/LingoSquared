@@ -67,7 +67,7 @@ ledger) · `docs/BUILD_LOG.md` (full history).
   AUTHORING_GUIDE §10). Both routes go through the identical fresh-context review + compiler
   pipeline — Claude-authored content gets zero quality-bar exception.** (Dispatch
   requirements: `docs/content/CLAUDE.md`.)
-- **Codex CLI:** `node "/Users/raminazizi/.claude/plugins/cache/openai-codex/codex/1.0.5/scripts/codex-companion.mjs" task --cwd "$LINGO_REPO" --background --write --resume --prompt-file <file>`;
+- **Codex CLI:** `node "$HOME/.claude/plugins/cache/openai-codex/codex/<version>/scripts/codex-companion.mjs" task --cwd "$LINGO_REPO" --background --write --resume --prompt-file <file>`;
   then `status <job-id> --cwd ... --json` / `result <job-id> --cwd ...` (path moved? look under
   `~/.claude/plugins/cache/openai-codex/`). **Always pass `--cwd` explicitly** — the sandbox
   defaults to the Claude session's cwd. Codex has no Docker/network — real build/test/deploy
@@ -185,7 +185,7 @@ append every fresh-context review's findings (zero-defect included) to its Secti
 - **Live browser verification with a fresh test account for anything user-facing — reading a
   diff is not verification** (this project's worst bugs — six unregistered exercise types, a
   dead Respond button, a deleted logout button — were ALL found only by playing a lesson).
-- Local stack only: `colima start`; `cd backend && docker compose up -d` (isolated
+- Local stack only: start Docker (Docker Desktop / `sudo service docker start` on WSL; `colima start` on macOS); `cd backend && docker compose up -d` (isolated
   `backend/.env`, random JWT secret, never committed).
 - **Deploy authority (Ramin, 2026-07-12): the coordinator may deploy to the live server
   (192.168.4.4) — frontend `web_dist` rsync and backend deploys per
