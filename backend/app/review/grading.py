@@ -201,6 +201,143 @@ STRIPPED_FORMATTING_CHARS: frozenset[str] = (
 # normal-length vocabulary.
 MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE = 4
 
+# Small, table-driven spoken transcript number vocabulary. Persian and Dari
+# share the same spoken number words here; digits are normalized separately.
+SPOKEN_NUMBER_WORDS = {
+    "en": {**dict(enumerate(("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"))), 30: "thirty", 40: "forty", 50: "fifty", 60: "sixty", 70: "seventy", 80: "eighty", 90: "ninety", 100: "hundred"},
+    "nl": {**dict(enumerate(("nul", "een", "twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen", "tien", "elf", "twaalf", "dertien", "veertien", "vijftien", "zestien", "zeventien", "achttien", "negentien", "twintig"))), 30: "dertig", 40: "veertig", 50: "vijftig", 60: "zestig", 70: "zeventig", 80: "tachtig", 90: "negentig", 100: "honderd"},
+    "fr": {**dict(enumerate(("zéro", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf", "vingt"))), 30: "trente", 40: "quarante", 50: "cinquante", 60: "soixante", 70: "soixante-dix", 80: "quatre-vingts", 90: "quatre-vingt-dix", 100: "cent"},
+    "de": {**dict(enumerate(("null", "eins", "zwei", "drei", "vier", "fünf", "sechs", "sieben", "acht", "neun", "zehn", "elf", "zwölf", "dreizehn", "vierzehn", "fünfzehn", "sechzehn", "siebzehn", "achtzehn", "neunzehn", "zwanzig"))), 30: "dreißig", 40: "vierzig", 50: "fünfzig", 60: "sechzig", 70: "siebzig", 80: "achtzig", 90: "neunzig", 100: "hundert"},
+    "es": {**dict(enumerate(("cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve", "diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve", "veinte"))), 30: "treinta", 40: "cuarenta", 50: "cincuenta", 60: "sesenta", 70: "setenta", 80: "ochenta", 90: "noventa", 100: "cien"},
+    "it": {**dict(enumerate(("zero", "uno", "due", "tre", "quattro", "cinque", "sei", "sette", "otto", "nove", "dieci", "undici", "dodici", "tredici", "quattordici", "quindici", "sedici", "diciassette", "diciotto", "diciannove", "venti"))), 30: "trenta", 40: "quaranta", 50: "cinquanta", 60: "sessanta", 70: "settanta", 80: "ottanta", 90: "novanta", 100: "cento"},
+    "fa": {**dict(enumerate(("صفر", "یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "نه", "ده", "یازده", "دوازده", "سیزده", "چهارده", "پانزده", "شانزده", "هفده", "هجده", "نوزده", "بیست"))), 30: "سی", 40: "چهل", 50: "پنجاه", 60: "شصت", 70: "هفتاد", 80: "هشتاد", 90: "نود", 100: "صد"},
+}
+SPOKEN_NUMBER_LANGUAGES = {"prs": "fa"}
+PERSIAN_DIGITS = str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")
+SPOKEN_SHORT_FUNCTION_WORDS = {
+    "en": {"a", "an", "the", "to", "of", "in", "on", "at", "by", "is", "it", "he", "we", "my", "as", "or"},
+    "nl": {"de", "het", "een", "en", "ik", "je", "ze", "te", "op", "in", "er", "om", "is"},
+    "fr": {"le", "la", "les", "de", "du", "un", "en", "et", "à", "au", "ce", "il", "je"},
+    "de": {"der", "die", "das", "ein", "im", "zu", "an", "in", "er", "es", "du"},
+    "es": {"el", "la", "los", "las", "de", "y", "a", "en", "un", "es", "al", "mi"},
+    "it": {"il", "lo", "la", "di", "a", "e", "un", "in", "è", "mi", "si"},
+    "fa": {"به", "از", "در", "که", "و", "را", "با", "تا"},
+    "ar": {"في", "من", "إلى", "على", "عن", "و", "لا", "ما"},
+}
+SPOKEN_SHORT_FUNCTION_WORDS["prs"] = SPOKEN_SHORT_FUNCTION_WORDS["fa"]
+
+
+def _spoken_number_match(left: str, right: str, language_code: str | None) -> bool:
+    language = SPOKEN_NUMBER_LANGUAGES.get(language_code, language_code)
+    words = SPOKEN_NUMBER_WORDS.get(language)
+    if not words:
+        return False
+    left_ascii = left.translate(PERSIAN_DIGITS)
+    right_ascii = right.translate(PERSIAN_DIGITS)
+    for digit, word in words.items():
+        if (left_ascii == str(digit) and right == word) or (
+            right_ascii == str(digit) and left == word
+        ):
+            return True
+    return left_ascii.isdigit() and right_ascii.isdigit() and left_ascii == right_ascii
+
+
+def _spoken_token_match(left: str, right: str, language_code: str | None) -> bool:
+    if left == right or _spoken_number_match(left, right, language_code):
+        return True
+    size = len(right)  # apply the threshold to the target answer token
+    limit = 1 if 4 <= size <= 7 else 2 if size >= 8 else 0
+    return limit > 0 and damerau_levenshtein(left, right) <= limit
+
+
+def _spoken_tokens_match(response: list[str], correct: list[str], language_code: str | None) -> bool:
+    language = SPOKEN_NUMBER_LANGUAGES.get(language_code, language_code)
+    if language == "nl":
+        response = _normalize_dutch_half_hour(response)
+        correct = _normalize_dutch_half_hour(correct)
+    return len(response) == len(correct) and all(
+        _spoken_token_match(left, right, language_code)
+        for left, right in zip(response, correct)
+    )
+
+
+def _normalize_dutch_half_hour(tokens: list[str]) -> list[str]:
+    """Normalize Dutch half-hour speech ("half drie") against 2:30 digits."""
+    number_words = SPOKEN_NUMBER_WORDS["nl"]
+    word_numbers = {word: number for number, word in number_words.items()}
+    normalized: list[str] = []
+    index = 0
+    while index < len(tokens):
+        if (
+            index + 1 < len(tokens)
+            and tokens[index] == "half"
+            and tokens[index + 1] in word_numbers
+            and 1 <= word_numbers[tokens[index + 1]] <= 12
+        ):
+            hour = (word_numbers[tokens[index + 1]] - 1) % 12
+            normalized.append(f"__time_{hour}:30__")
+            index += 2
+        elif (
+            index + 1 < len(tokens)
+            and tokens[index].translate(PERSIAN_DIGITS).isdigit()
+            and tokens[index + 1].translate(PERSIAN_DIGITS) == "30"
+        ):
+            hour = int(tokens[index].translate(PERSIAN_DIGITS)) % 12
+            normalized.append(f"__time_{hour}:30__")
+            index += 2
+        else:
+            normalized.append(tokens[index])
+            index += 1
+    return normalized
+
+
+def _is_short_function_word(token: str, language_code: str | None) -> bool:
+    language = SPOKEN_NUMBER_LANGUAGES.get(language_code, language_code)
+    return len(token) <= 3 and token in SPOKEN_SHORT_FUNCTION_WORDS.get(language, set())
+
+
+def spoken_answer_result(
+    response: str,
+    correct: str,
+    *,
+    language_code: str | None,
+) -> Result:
+    """Grade a microphone transcript with bounded word-level tolerance."""
+    # Spoken grading always follows the transcript normalization contract:
+    # casefold and ignore punctuation, irrespective of typed-answer metadata.
+    normalized_response = _normalize(response)
+    normalized_correct = _normalize(correct)
+    if is_invisible_formatting_only_difference(
+        normalized_response, normalized_correct
+    ):
+        return "correct"
+    if normalized_response == normalized_correct:
+        return "correct"
+    response_tokens = normalized_response.split()
+    correct_tokens = normalized_correct.split()
+    if _spoken_tokens_match(response_tokens, correct_tokens, language_code):
+        return "almost"
+    # Permit exactly one omitted or inserted short token across the answer.
+    for index, token in enumerate(response_tokens):
+        if _is_short_function_word(token, language_code) and _spoken_tokens_match(
+            response_tokens[:index] + response_tokens[index + 1 :],
+            correct_tokens,
+            language_code,
+        ):
+            return "almost"
+    for index, token in enumerate(correct_tokens):
+        if _is_short_function_word(token, language_code) and _spoken_tokens_match(
+            response_tokens,
+            correct_tokens[:index] + correct_tokens[index + 1 :],
+            language_code,
+        ):
+            return "almost"
+    return "incorrect"
+
+
+def _uses_spoken_tolerance(input_mode: str, exercise_type: str) -> bool:
+    return input_mode == "spoken" or exercise_type in {"speak_repeat", "speak_response"}
+
 
 def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False) -> str:
     return canonical_text(
@@ -530,6 +667,7 @@ def grade_answer(
     orthography_strict: bool | None = None,
     case_sensitive: bool = False,
     punctuation_strict: bool = False,
+    input_mode: str = "typed",
 ) -> Result:
     """Grade one free-text answer into correct/almost/incorrect.
 
@@ -580,6 +718,13 @@ def grade_answer(
       casefold behavior) so every exercise that doesn't opt in keeps
       grading exactly as before.
     """
+    if _uses_spoken_tolerance(input_mode, exercise_type):
+        return spoken_answer_result(
+            response,
+            correct,
+            language_code=language_code,
+        )
+
     if exercise_type == "dictation":
         # Do not casefold, collapse internal whitespace, fold visible
         # diacritics, or apply typo tolerance here. Invisible formatting
@@ -751,7 +896,7 @@ def select_feedback(feedback_meta, response, result):
     return feedback_meta.get("generic")
 def exercise_type_value(exercise_type):
     return exercise_type.value if hasattr(exercise_type, "value") else exercise_type
-def grade(response,correct,exercise_type=None,*,script=None,language_code: str | None = None,orthography_strict=None,case_sensitive=False,punctuation_strict=False):
+def grade(response,correct,exercise_type=None,*,script=None,language_code: str | None = None,orthography_strict=None,case_sensitive=False,punctuation_strict=False,input_mode="typed"):
     """Returns the 3-state result: 'correct' | 'almost' | 'incorrect'.
     'almost' (Phase C typo tolerance) is only ever returned for free-typed
     answers on eligible exercise types - flashcard, multi-answer, and
@@ -761,15 +906,36 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
     function and never lets a case-only mismatch through as "almost" via
     grade_answer() - defaults to False so every exercise that hasn't opted
     in keeps grading exactly as before."""
+    type_value = exercise_type_value(exercise_type)
+    if (
+        _uses_spoken_tolerance(input_mode, type_value)
+        and isinstance(response, str)
+        and isinstance(correct, str)
+    ):
+        return spoken_answer_result(
+            response,
+            correct,
+            language_code=language_code,
+        )
     if exercise_type == ExerciseType.flashcard:
         report=normalized(response, punctuation_strict=True)
         if not isinstance(report,str) or report not in {"known","unknown"}:
             fail(422,"invalid_flashcard_response","Flashcard response must be 'known' or 'unknown'")
         return "correct" if report == "known" else "incorrect"
-    type_value = exercise_type_value(exercise_type)
     order_based = type_value in ORDER_BASED_EXERCISE_TYPES
     if is_multi_answer_response(correct):
-        if order_based:
+        if _uses_spoken_tolerance(input_mode, type_value) and isinstance(response, str):
+            verdicts = [
+                spoken_answer_result(
+                    response,
+                    item,
+                    language_code=language_code,
+                )
+                for item in correct["accepted"]
+                if isinstance(item, str)
+            ]
+            return "correct" if "correct" in verdicts else "almost" if "almost" in verdicts else "incorrect"
+        elif order_based:
             response_tokens = canonical_order_tokens(response,case_sensitive)
             is_ok = response_tokens is not None and any(
                 answers_equivalent(response_tokens, canonical_order_tokens(item,case_sensitive)) for item in correct["accepted"]
@@ -794,6 +960,7 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
                     exercise_type=type_value,
                     script=script,
                     language_code=language_code,
+                    input_mode=input_mode,
                     orthography_strict=orthography_strict,
                     case_sensitive=case_sensitive,
                     punctuation_strict=punctuation_strict,
@@ -820,6 +987,7 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
             exercise_type=type_value,
             script=script,
             language_code=language_code,
+            input_mode=input_mode,
             orthography_strict=orthography_strict,
             case_sensitive=case_sensitive,
             punctuation_strict=punctuation_strict,

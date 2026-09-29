@@ -664,6 +664,21 @@ field, existing submission behavior is unchanged.
   determines correctness and SRS scheduling rather than comparing typed
   text.
 
+**Spoken-answer input mode (2026-09-29, additive):** Lesson, review, and
+practice answer requests may include `"input_mode": "typed" | "spoken"`.
+The field is optional and defaults to `"typed"`, preserving existing
+clients and typed grading.
+Clients send `"spoken"` when the submitted answer is a microphone
+transcript. Spoken grading applies to any exercise type and also defaults
+on for `speak_repeat` and `speak_response` exercises when the field is
+omitted. It accepts small transcript differences, including bounded
+word-level edits, one short missing or extra function word, and equivalent
+digit/number-word tokens for supported languages. An answer accepted only
+by this spoken tolerance is returned as `result: "almost"`; as with other
+`almost` results, `correct` remains true and progress/SRS continue.
+Typed requests retain the existing grading rules, including strict
+checkpoint grading. Spoken tolerance applies to checkpoint transcripts too.
+
 Response:
 ```json
 { "correct": true, "result": "correct", "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
