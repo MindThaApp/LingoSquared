@@ -34,7 +34,7 @@ export function NavBar() {
         <NavLink to="/" className="topbar-brand">
           Auvel
         </NavLink>
-        <nav className="topbar-links">
+        <nav className="topbar-links" aria-label={t("nav.main_label")}>
           {TABS.map((tab) => (
             <NavLink
               key={tab.to}
@@ -48,19 +48,29 @@ export function NavBar() {
         </nav>
         <div className="topbar-stats">
           {streak !== null && (
-            <span className="stat-flame" title={t("nav.day_streak")}>
+            <span
+              className="stat-flame"
+              title={t("nav.day_streak")}
+              role="img"
+              aria-label={`${t("nav.day_streak")}: ${streak}`}
+            >
               🔥 {streak}
             </span>
           )}
           {xp !== null && (
-            <span className="stat-xp" title={t("nav.total_xp")}>
+            <span
+              className="stat-xp"
+              title={t("nav.total_xp")}
+              role="img"
+              aria-label={`${t("nav.total_xp")}: ${xp}`}
+            >
               ⭐ {xp}
             </span>
           )}
           <LanguageSwitcher />
         </div>
       </header>
-      <nav className="tabbar">
+      <nav className="tabbar" aria-label={t("nav.tabs_label")}>
         {TABS.map((tab) => (
           <NavLink
             key={tab.to}
@@ -68,7 +78,9 @@ export function NavBar() {
             end={tab.to === "/"}
             className={({ isActive }) => (isActive ? "active" : "")}
           >
-            <span className="tab-icon">{tab.icon}</span>
+            <span className="tab-icon" aria-hidden="true">
+              {tab.icon}
+            </span>
             {t(tab.labelKey)}
           </NavLink>
         ))}

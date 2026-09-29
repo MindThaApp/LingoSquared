@@ -39,6 +39,7 @@ export function RegisterPage() {
             <input
               id="reg-name"
               type="text"
+              autoComplete="name"
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
             />
@@ -48,6 +49,9 @@ export function RegisterPage() {
             <input
               id="reg-email"
               type="email"
+              autoComplete="email"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "reg-error" : undefined}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -58,13 +62,20 @@ export function RegisterPage() {
             <input
               id="reg-password"
               type="password"
+              autoComplete="new-password"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "reg-error" : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
             />
           </div>
-          {error && <div className="form-error">{error}</div>}
+          {error && (
+            <div className="form-error" id="reg-error" role="alert">
+              {error}
+            </div>
+          )}
           <button type="submit" className="btn btn-block" disabled={submitting}>
             {submitting ? t("register.submitting") : t("register.submit")}
           </button>
