@@ -320,6 +320,18 @@ def test_lesson_answer_xp_streak_review(client, auth):
     assert unknown.json()["correct"] is False and unknown.json()["xp_awarded"] == 0
     assert invalid.status_code == 422 and invalid.json()["error"]["code"] == "invalid_flashcard_response"
 
+
+def test_lesson_start_is_idempotent(client, auth):
+    course = client.get("/courses?source=en&target=fa").json()[0]
+    unit = client.get(f"/courses/{course['id']}/units").json()[0]
+    lesson = client.get(f"/units/{unit['id']}/lessons").json()[0]
+
+    first = client.post(f"/lessons/{lesson['id']}/start", headers=auth)
+    second = client.post(f"/lessons/{lesson['id']}/start", headers=auth)
+
+    assert first.status_code == second.status_code == 200
+    assert first.json() == second.json()
+
 def test_review_schedule_update(client, auth):
     from app.core.security import decode_token
     with SessionLocal() as db:
