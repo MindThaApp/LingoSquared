@@ -27,15 +27,37 @@ Ranked fix list from the 4-way review: https://claude.ai/artifact/7xcm4p4jNeqEog
   longer speak the answer; es-b1/de-b1 defects fixed; review ledger updated.
 
 ## Next up
-1. **Deploy to live (192.168.4.4)** — authorized once the verification bar passes. BEFORE
+### Later on 2026-09-29 (all pushed, CI green on all three jobs)
+- Shipped: retention backend (daily-goal picker API, opt-in push scheduler `ENABLE_PUSH_SCHEDULER`,
+  quest rotation, Course.recommended; migration 0029), speaking unlocks per-unit, spoken-answer
+  tolerance (`input_mode: "spoken"`), grader pronoun-drop + Persian joining equivalence, amber
+  "almost" feedback (never blocks progress), voice answers with auto-stop on free-text items,
+  tap-to-build word banks (compiler emits `prompt.word_bank` for A1/A2 free text), desktop layout
+  (rail + sidebar ≥1024px), Dutch C1 production rewrite, Dari standardized on می‌توانم/نتوانستم.
+- **A2 plan** (`docs/A2_REBUILD_PLAN.md` §0 decisions): Blocks A–D first. Spine has the 19
+  A–D outcomes. **Wave-0 pilots committed but NOT wired** into the manifest:
+  nl `a2_unit78_afgelopen_weekend`, fa `a2_unit19_last_weekend`, prs `a2_unit19_last_weekend`
+  (each fresh-reviewed + fixed). Native questions: https://claude.ai/artifact/VuCSx1M3HNB8tbC12awcYa
+  — WAITING ON RAMIN. After his answers: apply, freeze the recipe into the A2 authoring template,
+  wire the manifest, then author the remaining 18 units/lang in batches of 12 with fresh review.
+- Local dev DB (localhost:8020/5180) has all launch courses re-imported with word banks and the
+  three pilots appended as unit 11 of each A2 course (local only).
+
+## Next up
+1. **Ramin's native answers** on the pilots + new quest strings (nl/fa/prs) → apply → A2 waves.
+2. **Deploy to live (192.168.4.4)** — authorized once the verification bar passes. BEFORE
    relying on admin endpoints: run the promote script for the live admin (admin now = DB flag
-   only). Migration 0028 → every user re-logs in once. Then import all reviewed tiers
+   only). Migrations 0028+0029 → every user re-logs in once. Import all reviewed tiers
    (09-02 handoff has the import recipe). Server app containers were down at last check.
-2. Remaining dialogue-text gaps (non-launch): pl A1/A2/B1, hi A1/A2/B1, a few es/ar/fr.
-3. Roadmap from the review: tap-to-build word bank for A1/A2, push-reminder cron + goal picker,
-   rebuild A2 for launch paths (30+ units), replace C1 "repeat the exact paragraph" items,
-   a "recommended course" field (frontend polish item 3 needs it).
-4. Native review of new nl/fa/prs UI strings added today (see commit messages).
+   Mic answers need HTTPS on the live server (Tailscale or Caddy) — browsers block the mic on http.
+3. Remaining dialogue-text gaps (non-launch): pl A1/A2/B1, hi A1/A2/B1, a few es/ar/fr.
+4. Roadmap: set `course.recommended` in overlays (needs Ramin's pick, e.g. Farsi A1 vs Foundations),
+   'Situations' demotion of A1 scenario units (plan §4), cumulative review lessons / grammar SRS,
+   stories / graded listening, prs audio recordings.
+
+## Push gate (learned the hard way)
+Run ALL of: `pytest scripts/tests`, backend pytest CI-style (repo mounted), frontend build +
+vitest, and `scripts/verify.sh --content-only` before every push.
 
 ## Needs Ramin
 - Rotate the server SSH password + live admin login (were plaintext in the 09-02 handoff).
