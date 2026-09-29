@@ -44,11 +44,13 @@ Object.defineProperty(globalThis, "localStorage", {
 });
 
 function LogoutButton() {
-  const { status, logout } = useAuth();
+  const { status, logout, login, register } = useAuth();
   return (
     <>
       <div data-testid="status">{status}</div>
       <button onClick={logout}>logout</button>
+      <button onClick={() => void login("n@b.c", "pw")}>login</button>
+      <button onClick={() => void register("n@b.c", "pw", "N")}>register</button>
     </>
   );
 }
@@ -103,4 +105,17 @@ describe("query cache is cleared when the session ends", () => {
     expect(queryClient.getQueryData(["xp"])).toBeUndefined();
     void ApiError; // (import kept for parity with AuthContext.test.tsx setup)
   });
+
+  it.each(["login", "register"])(
+    "%s over a still-active session drops the previous user's cached data",
+    async (which) => {
+      await mountAuthenticated();
+      const fn = which === "login" ? AuthApi.login : AuthApi.register;
+      vi.mocked(fn).mockResolvedValue({ user: { id: "n", email: "n@b.c", display_name: "N" } } as never);
+      fireEvent.click(screen.getByRole("button", { name: which }));
+      await waitFor(() => expect(fn).toHaveBeenCalled());
+      await waitFor(() => expect(queryClient.getQueryData(["xp"])).toBeUndefined());
+      expect(queryClient.getQueryData(["streak"])).toBeUndefined();
+    },
+  );
 });
