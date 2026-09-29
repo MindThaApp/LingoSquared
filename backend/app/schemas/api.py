@@ -96,7 +96,7 @@ class AnswerIn(BaseModel):
         _bounded_payload_size(self.response); return self
 class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
-class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int
+class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int; recommended:bool=False
 class CourseDetail(CourseOut): description:str
 class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None
 class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
@@ -105,6 +105,8 @@ class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:fl
 class ReviewAnswerOut(AnswerOut): next_due_at:datetime
 class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak_freezes_available:int=0; freeze_used_today:bool=False; active_today:bool=False
 class XPOut(BaseModel): total_xp:int; daily_goal:int; xp_today:int=0
+class DailyGoalIn(BaseModel): daily_goal_xp:Literal[10,20,30,50]
+class DailyGoalOut(BaseModel): daily_goal_xp:int
 class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; completed:bool; progress:int; target:int
 class QuestsOut(BaseModel): quests:list[QuestOut]
 # updated_* counts are additive: content_key-matched rows that were
@@ -214,6 +216,7 @@ class CourseImport(BaseModel):
     title:str
     description:str=""
     level:CEFRLevel=CEFRLevel.A1
+    recommended:bool|None=None
     units:list[UnitImport]
     content_items:list[ContentItemImport]=[]
 

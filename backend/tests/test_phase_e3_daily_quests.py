@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from uuid import uuid4
+from unittest.mock import patch
 
 from sqlalchemy import func, select
 
@@ -39,7 +40,14 @@ def _register(client, email, timezone_name=None):
 
 
 def _quests(client, headers):
-    response = client.get("/me/quests", headers=headers)
+    # These regression tests exercise the original quest behaviors. Pin
+    # their selection while separate rotation tests cover the daily pool.
+    from app.services import quests as quest_service
+    legacy = tuple(q for q in quest_service.QUEST_DEFINITIONS if q["code"] in {
+        "clear_reviews", "complete_lesson", "practice_correct_5"
+    })
+    with patch.object(quest_service, "selected_quest_definitions", return_value=legacy):
+        response = client.get("/me/quests", headers=headers)
     assert response.status_code == 200, response.text
     return {
         quest["code"]: quest
