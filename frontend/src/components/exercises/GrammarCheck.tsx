@@ -44,7 +44,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
     return (
       <div className="exercise-shell">
         <TextBlockList blocks={exercise.prompt.text_blocks} />
-        <div className="exercise-options">
+        <div className="exercise-options" lang={exercise.prompt.answer_language_code}>
           {options.map((option) => (
             <button
               key={option}
@@ -52,6 +52,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
               className={optionClassName(option, selected, gradedResult, correctOption)}
               onClick={() => !disabled && setSelected(option)}
               disabled={disabled}
+              aria-pressed={selected === option}
             >
               {option}
             </button>
@@ -79,6 +80,8 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.grammar_check_placeholder")}
+          aria-label={t("exercise.grammar_check_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

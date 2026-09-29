@@ -22,6 +22,8 @@ export function FillInBlank({ exercise, onAnswer, disabled }: ExerciseComponentP
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.fill_in_blank_placeholder")}
+          aria-label={t("exercise.fill_in_blank_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

@@ -267,7 +267,7 @@ export function FeedbackWidget() {
   return (
     <div className="feedback-widget-panel card">
       {sent ? (
-        <p className="muted" style={{ margin: 0 }}>{t("feedback_widget.thanks")}</p>
+        <p className="muted" role="status" style={{ margin: 0 }}>{t("feedback_widget.thanks")}</p>
       ) : (
         <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
@@ -282,7 +282,7 @@ export function FeedbackWidget() {
               style={{ background: "none", border: "none", cursor: "pointer", fontSize: "1rem" }}
               aria-label={t("common.cancel")}
             >
-              ✕
+              <span aria-hidden="true">✕</span>
             </button>
           </div>
 
@@ -356,6 +356,7 @@ export function FeedbackWidget() {
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder={t("feedback_widget.details_placeholder")}
+                  aria-label={t("feedback_widget.details_placeholder")}
                 />
               </div>
 

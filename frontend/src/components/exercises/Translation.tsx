@@ -33,6 +33,8 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.translation_placeholder")}
+          aria-label={t("exercise.translation_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

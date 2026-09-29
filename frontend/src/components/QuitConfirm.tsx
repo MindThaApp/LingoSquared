@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useTranslation } from "react-i18next";
 
 interface QuitConfirmProps {
@@ -11,10 +12,11 @@ interface QuitConfirmProps {
 // see CLAUDE.md's standing "no new dependency" instruction for this task.
 export function QuitConfirm({ message, onKeepGoing, onQuit }: QuitConfirmProps) {
   const { t } = useTranslation();
+  const messageId = useId();
   return (
-    <div className="confirm-overlay" role="dialog" aria-modal="true">
+    <div className="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby={messageId}>
       <div className="confirm-overlay-card">
-        <p style={{ margin: "0 0 16px" }}>{message}</p>
+        <p id={messageId} style={{ margin: "0 0 16px" }}>{message}</p>
         <div className="confirm-overlay-actions">
           <button type="button" className="btn btn-secondary" onClick={onKeepGoing}>
             {t("common.keep_going")}

@@ -42,7 +42,7 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="exercise-options" dir={direction}>
+      <div className="exercise-options" dir={direction} lang={exercise.prompt.answer_language_code}>
         {options.map((option) => (
           <button
             key={option}
@@ -50,6 +50,7 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
             className={optionClassName(option, selected, gradedResult, correctOption)}
             onClick={() => !disabled && setSelected(option)}
             disabled={disabled}
+            aria-pressed={selected === option}
           >
             {option}
           </button>
