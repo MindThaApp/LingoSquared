@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
 import { ReportIssueButton } from "../components/ReportIssueButton";
@@ -84,9 +85,11 @@ interface EligibleCourse extends CourseDetail {
 
 function PracticeCard({
   item,
+  courseId,
   onAnswered,
 }: {
   item: PracticeItem;
+  courseId: string | null;
   onAnswered: (correct: boolean, xp: number) => void;
 }) {
   const { t } = useTranslation();
@@ -147,14 +150,14 @@ function PracticeCard({
 
   return (
     <div className="card practice-card">
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result) || unavailable || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("practice.submit_error")}</p>
@@ -497,6 +500,7 @@ export function PracticeFeedPage() {
           }}
         >
           <PracticeCard
+            courseId={courseId}
             item={item}
             onAnswered={(correct, xp) => {
               answeredIdsRef.current.add(item.id);

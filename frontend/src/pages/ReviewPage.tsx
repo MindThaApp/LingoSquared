@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { QuitConfirm } from "../components/QuitConfirm";
@@ -265,7 +266,7 @@ export function ReviewPage() {
       <span className="muted">
         {t("review.progress", { current: index + 1, total: items.length })}
       </span>
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={current.id}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
@@ -273,7 +274,7 @@ export function ReviewPage() {
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("review.submit_error")}</p>
