@@ -20,6 +20,36 @@ def load_content_compiler():
     return module
 
 
+def test_unit_track_validation_accepts_situation_and_rejects_unknown_values():
+    compiler = load_content_compiler()
+    accepted = compiler.Report()
+    compiler.validate_unit_tracks({"units": [{"track": "situation"}]}, accepted)
+    assert accepted.errors == []
+
+    rejected = compiler.Report()
+    compiler.validate_unit_tracks({"units": [{"track": "optional"}]}, rejected)
+    assert len(rejected.errors) == 1
+    assert "realization.units[0].track" in rejected.errors[0]
+
+    compiled = compiler.compile_import_request(
+        {
+            "target_language": "es",
+            "cefr_level": "A1",
+            "units": [{"content_key": "es.a1.unit01", "track": "situation", "lessons": []}],
+        },
+        {"source_language": "en", "target_language": "es", "course": {"title": "Test"}},
+    )
+    assert compiled["courses"][0]["units"][0]["track"] == "situation"
+    assert "track" not in compiler.compile_import_request(
+        {
+            "target_language": "es",
+            "cefr_level": "A1",
+            "units": [{"content_key": "es.a1.unit01", "lessons": []}],
+        },
+        {"source_language": "en", "target_language": "es", "course": {"title": "Test"}},
+    )["courses"][0]["units"][0]
+
+
 def test_compiler_preserves_all_accepted_variants_and_canonical_value():
     compiler = load_content_compiler()
 

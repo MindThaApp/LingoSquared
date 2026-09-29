@@ -62,6 +62,9 @@ export interface UnitSummary {
    * per-unit topical icon (see lib/unitIcons.ts); not otherwise
    * meaningful to the frontend. */
   content_key: string | null;
+  /** "core" (the path) or "situation" (optional shelf). Older servers
+   * omit it; treat missing as "core". */
+  track?: "core" | "situation";
 }
 
 export interface LessonSummary {

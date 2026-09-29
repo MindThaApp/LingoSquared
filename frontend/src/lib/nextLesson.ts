@@ -1,5 +1,7 @@
 import type { LessonSummary, UnitSummary } from "@lingo/shared/api/types";
 
+import { isCoreUnit } from "./unitTracks";
+
 export type NextItem =
   | { kind: "lesson"; lessonId: string; unitId: string }
   | { kind: "checkpoint"; unitId: string };
@@ -35,7 +37,9 @@ export function computeNextItem(
 export function findNextUnit(units: UnitSummary[], currentUnitId: string): UnitSummary | null {
   const cur = units.find((u) => u.id === currentUnitId);
   if (!cur) return null;
-  const sameSection = units.filter((u) => u.section === cur.section);
+  // Situation units are an optional shelf, never part of the "next" chain.
+  if (!isCoreUnit(cur)) return null;
+  const sameSection = units.filter((u) => u.section === cur.section && isCoreUnit(u));
   const i = sameSection.findIndex((u) => u.id === currentUnitId);
   return sameSection[i + 1] ?? null;
 }

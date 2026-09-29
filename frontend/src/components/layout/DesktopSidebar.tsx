@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import { isCoreUnit } from "../../lib/unitTracks";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Star } from "lucide-react";
 import { CatalogApi, ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
@@ -29,7 +30,7 @@ export function DesktopSidebar() {
     queryFn: () => CatalogApi.units(activeCourseId as string),
     enabled: !!activeCourseId,
   });
-  const nextUnit = (unitsQuery.data ?? []).find(
+  const nextUnit = (unitsQuery.data ?? []).filter(isCoreUnit).find(
     (u) => !u.locked && u.lesson_count > 0 && u.completed_lesson_count < u.lesson_count,
   );
   const lessonsQuery = useQuery({

@@ -390,6 +390,18 @@ def validate_unit_sections(realization: dict[str, Any], report: Report):
             )
 
 
+def validate_unit_tracks(realization: dict[str, Any], report: Report):
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        if not isinstance(unit, dict) or "track" not in unit:
+            continue
+        track = unit["track"]
+        if track not in ("core", "situation"):
+            report.error(
+                f"realization.units[{unit_index}].track",
+                f"{track!r} is not a valid unit track; must be one of ['core', 'situation']",
+            )
+
+
 def validate_teaching_kinds(realization: dict[str, Any], report: Report):
     """Reject teaching-card `kind` values the backend import schema rejects.
 
@@ -4503,6 +4515,8 @@ def compile_import_request(
                     "content_key": unit["content_key"],
                 }
             )
+            if "track" in unit:
+                compiled_units[-1]["track"] = unit["track"]
 
     first_realization = realizations[0]
     first_overlay = overlays[0]
@@ -4540,6 +4554,7 @@ def validate_documents(
 
     validate_content_keys(realization, report)
     validate_unit_sections(realization, report)
+    validate_unit_tracks(realization, report)
     validate_teaching_kinds(realization, report)
     validate_exercise_types(realization, report)
     validate_content_field_lengths(realization, overlay, report)
