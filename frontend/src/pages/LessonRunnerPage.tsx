@@ -14,6 +14,9 @@ import { QuitConfirm } from "../components/QuitConfirm";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
+import { answerOutcome } from "../lib/answerOutcome";
 import type {
   AnswerResponse,
   AnswerResult,
@@ -109,6 +112,7 @@ export function LessonRunnerPage() {
   const [queue, setQueue] = useState<QueueItem[] | null>(null);
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [reviewResponse, setReviewResponse] = useState<AnswerResponse | undefined>();
   const [totalXp, setTotalXp] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [lockedError, setLockedError] = useState<string | null>(null);
@@ -214,6 +218,7 @@ export function LessonRunnerPage() {
     const item = reviewItems?.[reviewIndex];
     if (!item) return;
     setReviewSubmitting(true);
+    setReviewResponse(response);
     try {
       const res = await ReviewApi.answer(item.id, response);
       setReviewResult(res);
@@ -330,9 +335,28 @@ export function LessonRunnerPage() {
   // response line included.
   function renderResultBanner(
     bannerResult: AnswerResult,
-    options?: { response?: AnswerResponse; footer?: ReactNode },
+    options?: { response?: AnswerResponse; footer?: ReactNode; exercise?: Exercise; learner?: AnswerResponse },
   ) {
     const status = resultStatus(bannerResult);
+    if (status === "almost") {
+      // Amber pass: teaches the correct form, no re-queue (see handleContinue).
+      const learnerText = options?.learner ?? options?.response;
+      return (
+        <div className="feedback-banner almost" role="status">
+          <AlmostFeedback
+            learner={typeof learnerText === "string" ? learnerText : undefined}
+            correct={formatCorrectResponse(bannerResult.correct_response)}
+            dir={options?.exercise ? answerDirectionForExercise(options.exercise) : "ltr"}
+          />
+          {bannerResult.feedback && (
+            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+              <EmphasizedText text={bannerResult.feedback} />
+            </p>
+          )}
+          {options?.footer}
+        </div>
+      );
+    }
     return (
       // role="status" (implicit aria-live="polite") so screen readers announce
       // the grading result the moment the banner mounts - without it this
@@ -340,7 +364,6 @@ export function LessonRunnerPage() {
       <div className={`feedback-banner ${status}`} role="status">
         <p style={{ margin: "0 0 6px" }}>
           {status === "correct" && t("lesson_runner.correct")}
-          {status === "almost" && t("lesson_runner.almost")}
           {status === "incorrect" && t("lesson_runner.incorrect")}
         </p>
         {options?.response !== undefined && (
@@ -370,9 +393,11 @@ export function LessonRunnerPage() {
     setResult(null);
     setLastResponse(undefined);
 
-    const resolved = result.correct || current.isConfirmation;
+    // "almost" is a pass: never re-queued, never a missed word.
+    const outcome = answerOutcome(result, current.isConfirmation);
+    const resolved = outcome.resolved;
 
-    if (!result.correct && !missedExerciseIds.has(current.exercise.id)) {
+    if (outcome.recordMissed && !missedExerciseIds.has(current.exercise.id)) {
       missedExerciseIds.add(current.exercise.id);
       setMissedWords((prev) => [...prev, missedWordFromResult(current.exercise, result)]);
     }
@@ -496,11 +521,29 @@ export function LessonRunnerPage() {
         /></CourseTargetLanguage>
         {reviewResult && (() => {
           const status = resultStatus(reviewResult);
+          if (status === "almost") {
+            return (
+              <div className="feedback-banner almost" role="status">
+                <AlmostFeedback
+                  learner={typeof reviewResponse === "string" ? reviewResponse : undefined}
+                  correct={formatCorrectResponse(reviewResult.correct_response)}
+                  dir={answerDirectionForExercise({
+                    id: item.id,
+                    type: asExerciseType(item.type),
+                    order: 0,
+                    prompt: item.prompt,
+                  })}
+                />
+                <button className="btn btn-block" onClick={handleReviewContinue}>
+                  {t("lesson_runner.continue")}
+                </button>
+              </div>
+            );
+          }
           return (
             <div className={`feedback-banner ${status}`} role="status">
               <p style={{ margin: "0 0 6px" }}>
                 {status === "correct" && t("lesson_runner.correct")}
-                {status === "almost" && t("lesson_runner.almost")}
                 {status === "incorrect" && t("lesson_runner.incorrect")}
               </p>
               {status !== "correct" && (
@@ -584,7 +627,7 @@ export function LessonRunnerPage() {
               disabled
               gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
             /></CourseTargetLanguage>
-            {renderResultBanner(entry.result, { response: entry.response })}
+            {renderResultBanner(entry.result, { response: entry.response, exercise: entry.exercise })}
           </>
         )}
         {showQuitConfirm && (
@@ -723,6 +766,8 @@ export function LessonRunnerPage() {
       )}
       {result &&
         renderResultBanner(result, {
+          exercise: current.exercise,
+          learner: lastResponse,
           footer: (
             <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
               {t("lesson_runner.continue")}
