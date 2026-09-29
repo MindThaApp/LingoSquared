@@ -4,18 +4,21 @@ import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { VoiceAnswerButton } from "../VoiceAnswerButton";
+import { submitAnswer } from "../../lib/voiceAnswer";
 import type { ExerciseComponentProps } from "./types";
 
 export function FillInBlank({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [spoken, setSpoken] = useState(false);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (disabled || !value.trim()) return;
-    onAnswer(value.trim());
+    submitAnswer(onAnswer, value.trim(), spoken);
   }
 
   return (
@@ -32,6 +35,7 @@ export function FillInBlank({ exercise, onAnswer, disabled }: ExerciseComponentP
           {...inputProps}
         />
       </div>
+      <VoiceAnswerButton exercise={exercise} disabled={disabled} onTranscript={(text) => { setValue(text); setSpoken(true); }} />
       {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
         <VirtualKeyboard
           script={script!}
