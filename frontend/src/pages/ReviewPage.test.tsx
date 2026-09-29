@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { setActiveCourse } from "../lib/activeCourse";
 import { ReviewPage } from "./ReviewPage";
 
 vi.mock("react-i18next", () => ({
@@ -16,6 +17,7 @@ vi.mock("@lingo/shared/api/endpoints", () => ({
   CatalogApi: { course: vi.fn() },
 }));
 
+vi.mock("../auth/AuthContext", () => ({ useAuth: () => ({ user: { id: "u1" } }) }));
 vi.mock("../components/exercises/ExerciseRenderer", () => ({ ExerciseRenderer: () => null }));
 vi.mock("../components/ReportIssueButton", () => ({ ReportIssueButton: () => null }));
 
@@ -49,5 +51,24 @@ describe("ReviewPage session retry", () => {
     await waitFor(() => expect(ReviewApi.session).toHaveBeenCalledTimes(2));
     expect(await screen.findByText("review.all_caught_up")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Continue learning" })).toBeInTheDocument();
+  });
+});
+
+describe("ReviewPage empty state", () => {
+  it("offers a Continue learning button routed to the active course", async () => {
+    setActiveCourse("u1", "c-9");
+    vi.mocked(ReviewApi.due).mockResolvedValue({ total_due: 0, by_course: [] } as never);
+    render(
+      <QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
+        <MemoryRouter initialEntries={["/review"]}>
+          <Routes>
+            <Route path="/review" element={<ReviewPage />} />
+            <Route path="/courses/:id" element={<div>course page</div>} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+    fireEvent.click(await screen.findByRole("button", { name: "Continue learning" }));
+    expect(await screen.findByText("course page")).toBeInTheDocument();
   });
 });
