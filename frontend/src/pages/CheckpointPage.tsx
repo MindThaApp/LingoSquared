@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CheckpointApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
@@ -274,7 +275,7 @@ export function CheckpointPage() {
           <X size={18} />
         </button>
       </div>
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={current.id}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
@@ -282,7 +283,7 @@ export function CheckpointPage() {
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("checkpoint.submit_error")}</p>

@@ -2,6 +2,16 @@ import type { TextBlock as TextBlockType } from "@lingo/shared/api/types";
 import { useTranslation } from "react-i18next";
 import { SpeakButton } from "./SpeakButton";
 import { EmphasizedText } from "./EmphasizedText";
+import { useTargetLanguage } from "./targetLanguageContext";
+
+export function shouldShowSpeaker(
+  blockLanguage: string,
+  targetLanguage: string | null | undefined,
+  uiLanguage: string | undefined,
+): boolean {
+  if (targetLanguage) return blockLanguage === targetLanguage.split("-")[0];
+  return !(uiLanguage && blockLanguage === uiLanguage);
+}
 
 // Each block carries its own language/direction (see docs/CONTRACT.md) —
 // never inherit direction from the page or lesson. Every block gets a
@@ -32,12 +42,15 @@ export function TextBlockView({
   block: TextBlockType;
   mediaAssetKey?: string;
 }) {
-  // The target/answer language isn't reachable from here without touching
-  // the runner, so use the in-scope signal: hide the speaker for blocks in
-  // the learner's UI language (English instructions, etc.).
+  // With a target language in context (provided by ExerciseRenderer from the
+  // exercise's answer_language_code, or by a page), speak only blocks in that
+  // language. Without one (teaching cards etc.), fall back to the old
+  // heuristic: hide the speaker for blocks in the UI language.
   const { i18n } = useTranslation();
+  const targetLanguage = useTargetLanguage();
+  const blockLanguage = block.language_code.split("-")[0];
   const uiLanguage = i18n?.language?.split("-")[0];
-  const showSpeaker = !(uiLanguage && block.language_code.split("-")[0] === uiLanguage);
+  const showSpeaker = shouldShowSpeaker(blockLanguage, targetLanguage, uiLanguage);
   return (
     <span className="text-block-row">
       {block.speaker && <span className="speaker-label">{block.speaker}:</span>}
