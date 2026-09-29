@@ -1,8 +1,9 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { SessionUnavailableScreen } from "../components/layout/ProtectedRoute";
+import { redirectFromState } from "../lib/postLoginRedirect";
 import { ApiError } from "@lingo/shared/api/client";
 import {
   clearAccountDeletedNotice,
@@ -13,6 +14,8 @@ export function LoginPage() {
   const { t } = useTranslation();
   const { login, continueAsGuest, status } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = redirectFromState(location.state);
   // One-time confirmation after account deletion (set by ProfilePage's
   // delete flow via sessionStorage — see accountDeletedNotice.ts for why
   // route state can't carry this). Peek in the initializer, clear in an
@@ -38,7 +41,7 @@ export function LoginPage() {
     setSubmitting(true);
     try {
       await login(email, password);
-      navigate("/");
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : t("login.error_default"));
     } finally {
@@ -52,7 +55,7 @@ export function LoginPage() {
     setGuestSubmitting(true);
     try {
       await continueAsGuest(guestName.trim());
-      navigate("/");
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setGuestError(err instanceof ApiError ? err.message : t("login.guest_error_default"));
     } finally {
@@ -71,7 +74,7 @@ export function LoginPage() {
   // anyone). Same reason for the loading gate — a slow/hanging /auth/me
   // must not flash the guest button at someone who is signed in.
   if (status === "unverified") return <SessionUnavailableScreen />;
-  if (status === "authenticated") return <Navigate to="/" replace />;
+  if (status === "authenticated") return <Navigate to={redirectTo} replace />;
   if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
 
   return (
