@@ -212,7 +212,10 @@ class Course(Base):
 
 class Unit(Base):
     __tablename__ = "units"
-    __table_args__ = (UniqueConstraint("course_id", "order"),)
+    __table_args__ = (
+        UniqueConstraint("course_id", "order"),
+        CheckConstraint("track IN ('core','situation')", name="ck_units_track"),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     course_id: Mapped[str] = mapped_column(
@@ -224,6 +227,9 @@ class Unit(Base):
         Enum(UnitSection, native_enum=False),
         default=UnitSection.reading_writing,
         server_default="reading_writing",
+    )
+    track: Mapped[str] = mapped_column(
+        String(16), nullable=False, default="core", server_default="core"
     )
     # Stable authoring key (e.g. "prs.a1.unit01"), nullable — content
     # imported before this column existed has no recoverable key. Unique
