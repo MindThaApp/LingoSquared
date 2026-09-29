@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { CatalogApi, LessonApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import type { LessonCompleteResult } from "@lingo/shared/api/types";
+import { useAuth } from "../auth/AuthContext";
+import { getActiveCourse } from "../lib/activeCourse";
+import { computeNextItem, findNextUnit } from "../lib/nextLesson";
 import { MissedWordsSummary } from "./LessonRunnerPage";
 
 const CONFETTI_COLORS = ["var(--accent)", "var(--gold)", "var(--correct)"];
@@ -74,6 +79,9 @@ function Confetti() {
 export function LessonCompletePage() {
   const { t } = useTranslation();
   const location = useLocation();
+  const { lessonId = "" } = useParams();
+  const { user } = useAuth();
+  const courseId = getActiveCourse(user?.id);
   const state = location.state as
     | {
         completion: LessonCompleteResult;
@@ -90,6 +98,54 @@ export function LessonCompletePage() {
   // a genuine, fresh completion and never replays on a retry/revisit.
   const celebrate = Boolean(state);
   const xp = useCountUp(state?.completion.xp_awarded ?? 0, celebrate);
+
+  // Same query keys as HomePage/NavBar so the invalidation finishLesson()
+  // already does refreshes these too.
+  const streakQuery = useQuery({ queryKey: ["streak"], queryFn: ProgressApi.streak });
+  const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp });
+
+  // "Next" is computed from existing endpoints only: lesson -> its unit_id,
+  // the course's units, that unit's lessons, and (only when this was the last
+  // lesson) the next unit's lessons.
+  const lessonQuery = useQuery({
+    queryKey: ["lesson", lessonId],
+    queryFn: () => LessonApi.get(lessonId),
+    enabled: !!lessonId,
+  });
+  const unitId = lessonQuery.data?.unit_id ?? "";
+  const unitsQuery = useQuery({
+    queryKey: ["units", courseId],
+    queryFn: () => CatalogApi.units(courseId ?? ""),
+    enabled: !!courseId,
+  });
+  const unitLessonsQuery = useQuery({
+    queryKey: ["lessons", unitId],
+    queryFn: () => CatalogApi.lessons(unitId),
+    enabled: !!unitId,
+  });
+  const nextUnit =
+    unitsQuery.data && unitId ? findNextUnit(unitsQuery.data, unitId) : null;
+  const unitLessons = unitLessonsQuery.data;
+  const isLastInUnit =
+    !!unitLessons &&
+    [...unitLessons].sort((a, b) => a.order - b.order).at(-1)?.id === lessonId;
+  const nextUnitId = isLastInUnit && nextUnit && !nextUnit.locked ? nextUnit.id : "";
+  const nextUnitLessonsQuery = useQuery({
+    queryKey: ["lessons", nextUnitId],
+    queryFn: () => CatalogApi.lessons(nextUnitId),
+    enabled: !!nextUnitId,
+  });
+  const nextItem =
+    unitsQuery.data && unitLessons
+      ? computeNextItem(unitsQuery.data, unitId, unitLessons, nextUnitLessonsQuery.data, lessonId)
+      : null;
+  const courseHref = courseId ? `/courses/${courseId}` : "/courses";
+
+  const streakDays = streakQuery.data?.streak_days ?? 0;
+  const dailyGoal = xpQuery.data?.daily_goal ?? 0;
+  const xpToday = xpQuery.data?.xp_today ?? 0;
+  const goalMet = xpQuery.data != null && dailyGoal > 0 && xpToday >= dailyGoal;
+  const goalPct = dailyGoal > 0 ? Math.min(100, Math.max(0, (xpToday / dailyGoal) * 100)) : 0;
 
   return (
     <div
@@ -116,12 +172,66 @@ export function LessonCompletePage() {
         <p className="muted">{t("lesson_complete.finished")}</p>
       )}
       {state?.missedWords && <MissedWordsSummary words={state.missedWords} />}
-      <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 24 }}>
-        <Link className="btn btn-secondary" to="/courses">
-          {t("lesson_complete.back_to_courses")}
+      {streakDays > 0 && (
+        <p style={{ fontWeight: 700, margin: "12px 0 4px" }}>
+          <span className="stat-flame">🔥</span> {t("lesson_complete.streak", { count: streakDays })}
+        </p>
+      )}
+      {xpQuery.data && dailyGoal > 0 && (
+        <div style={{ maxWidth: 360, margin: "8px auto" }}>
+          <span className="muted" style={{ fontSize: "0.9rem" }}>
+            {goalMet
+              ? t("home.daily_goal_done", { earned: xpToday })
+              : t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })}
+          </span>
+          <div
+            className="progress-track"
+            style={{ marginTop: 6 }}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={dailyGoal}
+            aria-valuenow={Math.min(xpToday, dailyGoal)}
+            aria-label={t("home.daily_goal_progress", { earned: xpToday, goal: dailyGoal })}
+          >
+            <div
+              className="progress-fill"
+              style={{ width: `${goalPct}%`, ...(goalMet ? { background: "var(--correct)" } : {}) }}
+            />
+          </div>
+        </div>
+      )}
+      <div
+        style={{
+          display: "flex",
+          gap: 12,
+          justifyContent: "center",
+          flexWrap: "wrap",
+          marginTop: 24,
+        }}
+      >
+        {nextItem?.kind === "lesson" && (
+          <Link
+            className="btn"
+            to={`/lessons/${nextItem.lessonId}`}
+            state={courseId ? { courseId } : undefined}
+          >
+            {t("lesson_complete.next_lesson")}
+          </Link>
+        )}
+        {nextItem?.kind === "checkpoint" && (
+          <Link
+            className="btn"
+            to={`/units/${nextItem.unitId}/checkpoint`}
+            state={courseId ? { courseId } : undefined}
+          >
+            {t("lesson_complete.next_checkpoint")}
+          </Link>
+        )}
+        <Link className={nextItem ? "btn btn-secondary" : "btn"} to="/review">
+          {t("lesson_complete.review")}
         </Link>
-        <Link className="btn" to="/review">
-          {t("lesson_complete.go_to_review")}
+        <Link className="btn btn-secondary" to={courseHref}>
+          {courseId ? t("lesson_complete.back_to_course") : t("lesson_complete.back_to_courses")}
         </Link>
       </div>
     </div>
