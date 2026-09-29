@@ -26,13 +26,15 @@ export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResul
       <div className="card" style={{ marginBottom: 4 }}>
         <TextBlockList blocks={exercise.prompt.text_blocks} />
       </div>
-      <div className="exercise-options">
+      <div className="exercise-options" lang={exercise.prompt.answer_language_code}>
         {options.map((option) => (
           <button
             key={option}
+            type="button"
             className={optionClassName(option, selected, gradedResult, correctOption)}
             disabled={disabled}
             onClick={() => setSelected(option)}
+            aria-pressed={selected === option}
           >
             {option}
           </button>

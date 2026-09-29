@@ -72,8 +72,9 @@ export function ReadingPassageWithQuestions({
                     : undefined
                 }
               />
+              <div role="status" aria-live="polite">
               {result && status && (
-                <div className={`feedback-banner ${status}`} role="status">
+                <div className={`feedback-banner ${status}`}>
                   <p style={{ margin: "0 0 6px" }}>
                     {status === "correct" && t("lesson_runner.correct")}
                     {status === "almost" && t("lesson_runner.almost")}
@@ -93,6 +94,7 @@ export function ReadingPassageWithQuestions({
                   )}
                 </div>
               )}
+              </div>
             </div>
           );
         })}

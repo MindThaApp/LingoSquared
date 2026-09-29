@@ -43,6 +43,7 @@ export function VoiceCaptureControls({
           disabled={disabled}
           onClick={() => handleModeClick("voice")}
           title={t("voice_answer.switch_to_voice")}
+          aria-label={t("voice_answer.switch_to_voice")}
         >
           🎙️
         </button>
@@ -53,6 +54,7 @@ export function VoiceCaptureControls({
           disabled={disabled}
           onClick={() => handleModeClick("type")}
           title={t("voice_answer.switch_to_type")}
+          aria-label={t("voice_answer.switch_to_type")}
         >
           ⌨️
         </button>
@@ -77,7 +79,7 @@ export function VoiceCaptureControls({
         // back to "type" on permission denial/unsupported before this ever
         // renders, so the explanation must survive that mode switch, not
         // live only inside the voice-mode block.
-        <p className="muted" style={{ fontSize: "0.85rem" }}>
+        <p className="muted" role="alert" style={{ fontSize: "0.85rem" }}>
           {t(`voice_answer.error_${error}`)}
         </p>
       )}

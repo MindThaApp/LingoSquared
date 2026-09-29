@@ -105,8 +105,9 @@ export function VirtualKeyboard({
           type="button"
           className="virtual-keyboard-key virtual-keyboard-key-wide"
           onMouseDown={(e) => keyMouseDown(e, onBackspace)}
+          aria-label={t("keyboard.backspace")}
         >
-          ⌫
+          <span aria-hidden="true">⌫</span>
         </button>
       </div>
     </div>
