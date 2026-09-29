@@ -10,6 +10,8 @@ import { ReportIssueButton } from "../components/ReportIssueButton";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
 import { useAuth } from "../auth/AuthContext";
@@ -285,13 +287,26 @@ export function ReviewPage() {
       )}
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost" role="status">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
+              />
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("review.continue")}
+              </button>
+            </div>
+          );
+        }
         return (
           // role="status" (implicit aria-live="polite") - announces the grading
           // result to screen readers when the banner mounts.
           <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("review.correct")}
-              {status === "almost" && t("review.almost")}
               {status === "incorrect" && t("review.incorrect")}
             </p>
             {status !== "correct" && (
