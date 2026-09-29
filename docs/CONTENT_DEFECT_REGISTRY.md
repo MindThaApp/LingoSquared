@@ -1761,3 +1761,19 @@ fixed in commit 5a4ab3c1; a fresh review confirmed the audio supports each
 correct option and no distractor)
 New bug class discovered: no
 Instance count: 0
+
+### 2026-09-29 — nl C1 production rewrite (PR #16, 112 items; fresh-context review)
+Bug classes found: missing natural accepted variants on underdetermined
+production items (word order / synonym / optional particle -- e.g. op-particle
+placement, benoemen for noemen, wellicht for misschien, ook after daarbij) ;
+feedback/grading contradiction (unit06 lesson02 accepted a non-standard direct
+quote while feedback claimed direct quotes work); dictation internal-punctuation
+strictness (unit04 lesson06 two-sentence dictation, ". Toch" vs ", toch" is a
+false-negative risk under strict grading). 0 blocker, 7 should-fix, 5 nit.
+All fixed in this change (dictation cut to one sentence; instruction pinned to
+"behoorlijk" in unit02 lesson04; "Say" -> "Write" on a writing_prompt).
+New bug class discovered: no (instances of underdetermined production and
+dictation punctuation strictness)
+Instance count: 12 (7 should-fix + 5 nits), all fixed
+Note: unit07 lesson06 dictation keeps the optional comma before "maar" (nit 8);
+removing it would change meaning/audio, left as is.
