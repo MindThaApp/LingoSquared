@@ -94,10 +94,19 @@ function speakInBrowser(text: string, languageCode: string): boolean {
 // preservation on by default in every evergreen browser), so recorded
 // audio respects the same preference as the two TTS tiers, just through
 // a different mechanism. See docs/CONTRACT.md's Text-to-speech section.
+// Session-scoped negative cache: asset keys known to be missing (404) are not
+// re-requested on every press. Only definitive 404/410 are cached, never
+// transient network/5xx errors.
+const missingMediaKeys = new Set<string>();
+
 async function playRecordedAsset(mediaAssetKey: string, languageCode: string): Promise<boolean> {
+  if (missingMediaKeys.has(mediaAssetKey)) return false;
   try {
     const response = await fetch(`${BASE_URL}/media/${encodeURIComponent(mediaAssetKey)}`);
-    if (!response.ok) return false;
+    if (!response.ok) {
+      if (response.status === 404 || response.status === 410) missingMediaKeys.add(mediaAssetKey);
+      return false;
+    }
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);

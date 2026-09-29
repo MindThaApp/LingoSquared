@@ -100,4 +100,17 @@ describe("speak() cloud TTS", () => {
     expect(speakSynth.speak).toHaveBeenCalledTimes(1);
     expect(FakeAudio.played).toEqual([]);
   });
+
+  it("does not re-request a media asset that already 404'd", async () => {
+    const fetchMock = vi.fn(async (url: string) => {
+      if (url.includes("/media/")) return new Response("nope", { status: 404 });
+      return audioResponse();
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const { speak } = await import("./tts");
+    await speak("hallo", "nl", "missing/key.mp3");
+    await speak("hallo", "nl", "missing/key.mp3");
+    const mediaCalls = fetchMock.mock.calls.filter((c) => String(c[0]).includes("/media/"));
+    expect(mediaCalls).toHaveLength(1);
+  });
 });
