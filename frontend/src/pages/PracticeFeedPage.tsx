@@ -100,12 +100,12 @@ function PracticeCard({
   const [submitError, setSubmitError] = useState(false);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     setSubmitting(true);
     setLastResponse(response);
     setSubmitError(false);
     try {
-      const res = await PracticeApi.answer(item.id, response);
+      const res = await PracticeApi.answer(item.id, response, meta);
       setResult(res);
       invalidateProgressQueries(queryClient);
       onAnswered(res.correct, res.xp_awarded);
