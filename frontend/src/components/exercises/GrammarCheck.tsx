@@ -3,9 +3,10 @@ import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
-import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
+import { answerDirectionForExercise, answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
-import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
+import { correctOptionFromResponse } from "./optionHighlight";
+import { ChoiceOptions } from "./ChoiceOptions";
 import type { ExerciseComponentProps } from "./types";
 
 // Some grammar_check exercises are authored as a closed yes/no (or other
@@ -34,6 +35,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
   );
 
   if (options && options.length > 0) {
+    const optionsDirection = answerDirectionForExercise(exercise);
     const correctOption = gradedResult
       ? correctOptionFromResponse(gradedResult.correctResponse, options)
       : null;
@@ -44,19 +46,15 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
     return (
       <div className="exercise-shell">
         <TextBlockList blocks={exercise.prompt.text_blocks} />
-        <div className="exercise-options">
-          {options.map((option) => (
-            <button
-              key={option}
-              type="button"
-              className={optionClassName(option, selected, gradedResult, correctOption)}
-              onClick={() => !disabled && setSelected(option)}
-              disabled={disabled}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
+        <ChoiceOptions
+          options={options}
+          selected={selected}
+          onSelect={setSelected}
+          disabled={disabled}
+          gradedResult={gradedResult}
+          correctOption={correctOption}
+          direction={optionsDirection}
+        />
         <button
           className="btn btn-block"
           disabled={disabled || !selected}
