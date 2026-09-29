@@ -9,6 +9,11 @@ import { defineConfig, devices } from "@playwright/test";
 // for the port while staying inside the allowlist.
 const E2E_PORT = 5175;
 const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://localhost:${E2E_PORT}`;
+// Optional: run against an already-installed Chromium binary instead of the
+// one matching this @playwright/test version (e.g. a sandbox with a
+// preinstalled browser and no network for `playwright install`). Unset =
+// Playwright's own managed browser, as before.
+const CHROMIUM_PATH = process.env.PLAYWRIGHT_CHROMIUM_PATH;
 
 export default defineConfig({
   testDir: "./tests",
@@ -21,6 +26,7 @@ export default defineConfig({
     baseURL: BASE_URL,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
+    ...(CHROMIUM_PATH ? { launchOptions: { executablePath: CHROMIUM_PATH } } : {}),
   },
   projects: [
     { name: "chromium", use: { ...devices["Desktop Chrome"] } },

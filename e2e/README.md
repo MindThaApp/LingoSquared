@@ -122,6 +122,66 @@ rebuild needed since the compose file bind-mounts the repo), are in
   migration 0021). Registers 2 fresh accounts, so it draws from the
   same `REGISTER_RATE_LIMIT` budget as the rest of the suite.
 
+- `word-bank.spec.ts` -- beginner tap-to-build word bank on A1
+  `translation` and `writing_prompt` items carrying `prompt.word_bank`:
+  tiles are picked by text (display order is shuffled), a placed tile is
+  tapped back out and reappears in the bank, and Check POSTs
+  `/exercises/{id}/answer` with exactly `{"response": "<space-joined
+  tiles>"}` (the typed-answer string shape; no `input_mode`), then the
+  correct banner and lesson completion.
+- `almost-feedback.spec.ts` -- an `AnswerResult.result: "almost"` verdict
+  renders the amber `.feedback-banner.almost` (headline, correct form, the
+  learner's attempt, `--almost-soft` background, not the red incorrect
+  style), Continue is enabled and advances to the next item, the almost
+  item is never re-queued, and the lesson completes.
+- `desktop-layout.spec.ts` -- at 1280x800 the left side rail ("Main
+  navigation") and the right "Your progress" sidebar are visible and laid
+  out side by side on Home and the course map, the tab bar is hidden, and
+  nothing scrolls horizontally; at 390x844 the tab bar shows, the desktop
+  chrome is hidden, and nothing scrolls horizontally. Both widths also
+  check a lesson screen (word-bank item) for horizontal overflow.
+- `situations-shelf.spec.ts` -- a course whose units include one
+  `track: "situation"` unit shows a "Situations" shelf collapsed by default
+  (`aria-expanded="false"`, unit not rendered); expanding it reveals the
+  unit unlocked (even though the server sent `locked: true`) and opening
+  it works; the "Recommended for you" badge and the sidebar's "Next
+  lesson"/Continue both point at the first CORE unit even though the
+  situation unit comes first in the payload. An all-core course (including
+  a unit with no `track` field, as older servers send) has no shelf.
+
+## Route-mocked specs (no backend needed)
+
+The four specs above (`word-bank`, `almost-feedback`, `desktop-layout`,
+`situations-shelf`) never touch a real backend. `tests/mocks.ts` installs
+one `page.route` that intercepts every `fetch`/XHR to any origin other
+than the SPA's own (so it works whatever `VITE_API_BASE_URL` is), serves
+contract-shaped fixtures (types from `packages/shared/src/api/types.ts`),
+answers anything unhandled with a 404 in the app's `{"error": {code,
+message}}` envelope and logs it as `[mock-api] UNMOCKED ...`, and seeds a
+logged-in session by writing `access_token`/`refresh_token`/`user` to
+localStorage via `addInitScript` (`GET /auth/me` is mocked). No Docker, no
+seeded content, no registration rate limit -- only the frontend dev
+server (which `playwright.config.ts` starts, or point
+`PLAYWRIGHT_BASE_URL` at one already running). Run them alone with:
+
+```bash
+cd e2e
+npx playwright test tests/word-bank.spec.ts tests/almost-feedback.spec.ts \
+  tests/desktop-layout.spec.ts tests/situations-shelf.spec.ts
+```
+
+If the Chromium that matches the pinned `@playwright/test` isn't
+installed (and can't be downloaded), set `PLAYWRIGHT_CHROMIUM_PATH` to an
+existing Chromium/Chrome binary; the config passes it as
+`launchOptions.executablePath`. Unset, Playwright uses its own browser.
+
+To extend: build on `mockedApp(page, baseURL, {units, lessons, storage})`
+and override single endpoints with `api.on(method, "/path/:param", fn)`
+(later registrations win). Lessons are opened through the real course map
+-> unit -> lesson links (`openLessonViaCourseMap`) because the runner reads
+the course (and so its CEFR level, which gates the word bank) from router
+state, not the URL.
+
 ## Resolved flakiness in `goToCourseUnits` (2026-07-05) -- two real bugs, one Playwright API trap
 
 Building `dari-course.spec.ts` (extending coverage from en-fa-only to
