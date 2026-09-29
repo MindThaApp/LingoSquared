@@ -167,6 +167,28 @@ def test_a1_free_text_word_bank_and_skip_rules():
     assert compile_one("A1", "Hello world")[:2] == ["Hello", "world"]
 
 
+def test_long_word_order_keeps_authored_word_bank_unchanged():
+    compiler = load_content_compiler()
+    authored_bank = ["First,", "second", "tile?", *[f"word{i}" for i in range(11)]]
+    exercise = {
+        "type": "word_order",
+        "content_key": "long-authored-order",
+        "word_bank": authored_bank,
+    }
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "one two three", "status": "correct"}]},
+        1,
+        "en",
+        "fa",
+        content_key=exercise["content_key"],
+        cefr_level="A1",
+        introduced_tokens={"first", "second"},
+    )
+
+    assert compiled["prompt"]["word_bank"] == authored_bank
+
+
 def test_word_bank_language_script_letter_and_short_answer_filters():
     compiler = load_content_compiler()
 
