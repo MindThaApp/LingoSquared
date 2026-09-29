@@ -1,4 +1,5 @@
 import type { TextBlock as TextBlockType } from "@lingo/shared/api/types";
+import { useTranslation } from "react-i18next";
 import { SpeakButton } from "./SpeakButton";
 import { EmphasizedText } from "./EmphasizedText";
 
@@ -31,13 +32,21 @@ export function TextBlockView({
   block: TextBlockType;
   mediaAssetKey?: string;
 }) {
+  // The target/answer language isn't reachable from here without touching
+  // the runner, so use the in-scope signal: hide the speaker for blocks in
+  // the learner's UI language (English instructions, etc.).
+  const { i18n } = useTranslation();
+  const uiLanguage = i18n?.language?.split("-")[0];
+  const showSpeaker = !(uiLanguage && block.language_code.split("-")[0] === uiLanguage);
   return (
     <span className="text-block-row">
       {block.speaker && <span className="speaker-label">{block.speaker}:</span>}
       <span dir={block.direction} lang={block.language_code} className="text-block">
         <EmphasizedText text={block.text} />
       </span>
-      <SpeakButton text={block.text} languageCode={block.language_code} mediaAssetKey={mediaAssetKey} />
+      {showSpeaker && (
+        <SpeakButton text={block.text} languageCode={block.language_code} mediaAssetKey={mediaAssetKey} />
+      )}
     </span>
   );
 }
