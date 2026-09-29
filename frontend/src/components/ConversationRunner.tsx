@@ -8,6 +8,9 @@ import { LANGUAGE_SCRIPT, scriptDirection, scriptNeedsVirtualKeyboard } from "@l
 import { PracticeApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
 import { PERMANENT_ANSWER_ERROR_CODES } from "../lib/practiceAnswerErrors";
+import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import type { GradingStatus } from "@lingo/shared/api/types";
+import { AlmostFeedback } from "./AlmostFeedback";
 
 // Endless conversation practice (backend `mode=conversation`). Unlike every
 // other exercise this is MULTI-TURN: one practice item carries a node graph,
@@ -40,7 +43,7 @@ export type ConversationPrompt = {
   nodes: ConversationNode[];
 };
 
-type Exchange = { app: string; appDir: string; learner: string; correct: boolean };
+type Exchange = { app: string; appDir: string; learner: string; correct: boolean; status: GradingStatus; correction?: string };
 
 export function ConversationRunner({
   itemId,
@@ -86,6 +89,9 @@ export function ConversationRunner({
           appDir: node.app_turn.direction ?? "ltr",
           learner: reply,
           correct: res.correct,
+          status: resultStatus(res),
+          // Only a plain-string answer key can be shown/diffed; never invent one.
+          correction: typeof res.correct_response === "string" ? res.correct_response : undefined,
         },
       ]);
       onAnswered(res.correct, res.xp_awarded);
@@ -130,6 +136,12 @@ export function ConversationRunner({
               >
                 {h.learner}
               </p>
+              {h.status === "almost" && (
+                // Amber pass: the reply was accepted; conversation continues as after a correct one.
+                <div className="feedback-banner almost" role="status">
+                  <AlmostFeedback learner={h.learner} correct={h.correction} dir={dir} />
+                </div>
+              )}
             </div>
           ))}
         </div>

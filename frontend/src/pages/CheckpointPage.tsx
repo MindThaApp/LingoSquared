@@ -10,6 +10,8 @@ import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
@@ -294,13 +296,26 @@ export function CheckpointPage() {
       )}
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost" role="status">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
+              />
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("checkpoint.continue")}
+              </button>
+            </div>
+          );
+        }
         return (
           // role="status" (implicit aria-live="polite") - announces the grading
           // result to screen readers when the banner mounts.
           <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("checkpoint.correct")}
-              {status === "almost" && t("checkpoint.almost")}
               {status === "incorrect" && t("checkpoint.incorrect")}
             </p>
             {status !== "correct" && (

@@ -11,6 +11,8 @@ import { invalidateProgressQueries } from "../lib/invalidateProgress";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type {
   AnswerResponse,
   CourseDetail,
@@ -168,17 +170,23 @@ function PracticeCard({
       )}
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost" role="status">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
+              />
+            </div>
+          );
+        }
         return (
           // role="status" (implicit aria-live="polite") - announces the grading
           // result to screen readers when the banner mounts.
           <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: 0 }}>
               {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
-              {status === "almost" &&
-                t("practice.almost", {
-                  xp: result.xp_awarded,
-                  answer: formatCorrectResponse(result.correct_response),
-                })}
               {status === "incorrect" &&
                 t("lesson_runner.correct_answer", {
                   answer: formatCorrectResponse(result.correct_response),
