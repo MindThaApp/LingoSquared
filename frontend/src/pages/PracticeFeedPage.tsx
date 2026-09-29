@@ -40,6 +40,27 @@ const PRACTICE_TYPES = [
 
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
+// Rendered-card cap: an endless feed would otherwise keep every card (and its
+// exercise DOM) mounted forever. When a batch pushes the list past this, the
+// OLDEST already-answered cards are dropped; unanswered/active cards and
+// multi-turn conversation cards (whose completion isn't observable here) are
+// never dropped, so the list can exceed the cap if the learner isn't answering.
+const MAX_RENDERED_CARDS = 30;
+
+function trimAnswered(
+  list: PracticeItem[],
+  answered: ReadonlySet<string>,
+): PracticeItem[] {
+  let excess = list.length - MAX_RENDERED_CARDS;
+  if (excess <= 0) return list;
+  return list.filter((item) => {
+    if (excess > 0 && item.type !== "conversation" && answered.has(item.id)) {
+      excess -= 1;
+      return false;
+    }
+    return true;
+  });
+}
 
 // Old budget-Android WebViews (a real slice of the fa/prs audience) can
 // lack IntersectionObserver entirely -- constructing it unguarded would
@@ -208,7 +229,11 @@ export function PracticeFeedPage() {
   const [exhausted, setExhausted] = useState(false);
   const [combo, setCombo] = useState(0);
   const [xpToast, setXpToast] = useState<number | null>(null);
-  const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  // Keyed by item id (not list index) so trimming old cards can't shift refs.
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  // Ids of cards answered this session. Independent of the (trimmed) render
+  // list; only used to decide which cards are safe to drop.
+  const answeredIdsRef = useRef<Set<string>>(new Set());
   const loadingMoreRef = useRef(false);
   // Bumped whenever mode/type filter changes (the feed restarts). A batch
   // request captures the value at start and drops its result -- items,
@@ -275,7 +300,7 @@ export function PracticeFeedPage() {
       if (res.items.length === 0) {
         setExhausted(true);
       } else {
-        setItems((prev) => [...prev, ...res.items]);
+        setItems((prev) => trimAnswered([...prev, ...res.items], answeredIdsRef.current));
       }
     } catch {
       if (gen !== feedGenRef.current) return;
@@ -310,6 +335,7 @@ export function PracticeFeedPage() {
     setLocked(false);
     setFeedError(false);
     cardRefs.current.clear();
+    answeredIdsRef.current.clear();
   }
 
   // Switching mode restarts the feed: already-loaded items belong to the
@@ -338,7 +364,8 @@ export function PracticeFeedPage() {
     // learner's explicit Retry button is the only way back in.
     if (feedError) return;
     const targetIndex = items.length - PREFETCH_THRESHOLD;
-    const target = targetIndex >= 0 ? cardRefs.current.get(targetIndex) : null;
+    const targetItem = targetIndex >= 0 ? items[targetIndex] : undefined;
+    const target = targetItem ? cardRefs.current.get(targetItem.id) : null;
     if (!target) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -348,7 +375,7 @@ export function PracticeFeedPage() {
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [items.length, loadMore, feedError]);
+  }, [items, loadMore, feedError]);
 
   function handleAnswered(correct: boolean, xp: number) {
     setCombo((c) => (correct ? c + 1 : 0));
@@ -461,15 +488,21 @@ export function PracticeFeedPage() {
         </div>
       )}
 
-      {items.map((item, index) => (
+      {items.map((item) => (
         <div
           key={item.id}
           ref={(el) => {
-            if (el) cardRefs.current.set(index, el);
-            else cardRefs.current.delete(index);
+            if (el) cardRefs.current.set(item.id, el);
+            else cardRefs.current.delete(item.id);
           }}
         >
-          <PracticeCard item={item} onAnswered={handleAnswered} />
+          <PracticeCard
+            item={item}
+            onAnswered={(correct, xp) => {
+              answeredIdsRef.current.add(item.id);
+              handleAnswered(correct, xp);
+            }}
+          />
         </div>
       ))}
 
