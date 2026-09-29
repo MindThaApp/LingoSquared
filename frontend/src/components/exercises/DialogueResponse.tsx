@@ -6,6 +6,8 @@ import { VoiceCaptureControls } from "../VoiceCaptureControls";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import { AnswerModeSwitch } from "./AnswerModeSwitch";
+import { VoiceAnswerButton } from "../VoiceAnswerButton";
+import { submitAnswer } from "../../lib/voiceAnswer";
 import type { ExerciseComponentProps } from "./types";
 
 // Dialogue-context exercises compile to a free-text reply matched against
@@ -16,6 +18,7 @@ import type { ExerciseComponentProps } from "./types";
 export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [spoken, setSpoken] = useState(false);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
   const canSpeak = exercise.type === "speak_response";
@@ -24,7 +27,7 @@ export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, le
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (disabled || !value.trim()) return;
-    onAnswer(value.trim());
+    submitAnswer(onAnswer, value.trim(), spoken);
   }
 
   return (
@@ -35,7 +38,7 @@ export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, le
       {canSpeak && (
         <VoiceCaptureControls
           languageCode={answerLanguageCode}
-          onTranscript={setValue}
+          onTranscript={(text) => { setValue(text); setSpoken(true); }}
           disabled={disabled}
         />
       )}
@@ -60,6 +63,10 @@ export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, le
               {...inputProps}
             />
           </div>
+          {/* speak_response already has its own VoiceCaptureControls above. */}
+          {!canSpeak && (
+            <VoiceAnswerButton exercise={exercise} disabled={disabled} onTranscript={(text) => { setValue(text); setSpoken(true); }} />
+          )}
           {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
             <VirtualKeyboard
               script={script!}
