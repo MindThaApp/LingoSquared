@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
-import { CatalogApi } from "@lingo/shared/api/endpoints";
+import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { BROWSER_TTS_LANG } from "../api/tts";
+import { useAuth } from "../auth/AuthContext";
+import { getActiveCourse } from "../lib/activeCourse";
+import { isNoveltyVoice } from "../lib/voiceFilter";
 import { getVoicePreference, setVoicePreference } from "../lib/voicePreferences";
 import { SAMPLE_SPEECH_TEXT as SAMPLE_TEXT } from "@lingo/shared/lib/sampleSpeechText";
 
@@ -23,7 +26,9 @@ function useBrowserVoices(): SpeechSynthesisVoice[] {
 function voicesForLanguage(voices: SpeechSynthesisVoice[], languageCode: string): SpeechSynthesisVoice[] {
   const tag = BROWSER_TTS_LANG[languageCode];
   const primarySubtag = (tag ?? languageCode).split("-")[0].toLowerCase();
-  return voices.filter((voice) => voice.lang.toLowerCase().startsWith(primarySubtag));
+  return voices.filter(
+    (voice) => !isNoveltyVoice(voice.name) && voice.lang.toLowerCase().startsWith(primarySubtag),
+  );
 }
 
 function LanguageVoiceRow({
@@ -87,7 +92,28 @@ function LanguageVoiceRow({
 export function VoiceSettings() {
   const { t } = useTranslation();
   const voices = useBrowserVoices();
+  const { user } = useAuth();
   const languagesQuery = useQuery({ queryKey: ["languages"], queryFn: CatalogApi.languages });
+  const allCoursesQuery = useQuery({
+    queryKey: ["courses", "all"],
+    queryFn: () => CatalogApi.allCourses(),
+    staleTime: 5 * 60 * 1000,
+  });
+  const progressQuery = useQuery({ queryKey: ["progress"], queryFn: ProgressApi.progress });
+
+  // Target languages = targets of courses the learner has progress in, plus
+  // the active course. If none can be determined yet (new account, data still
+  // loading/failed) fall back to listing every language rather than nothing.
+  const enrolledIds = new Set((progressQuery.data?.skill_progress ?? []).map((sp) => sp.course_id));
+  const activeId = getActiveCourse(user?.id);
+  if (activeId) enrolledIds.add(activeId);
+  const targetCodes = new Set(
+    (allCoursesQuery.data ?? []).filter((c) => enrolledIds.has(c.id)).map((c) => c.target_language),
+  );
+  const shownLanguages =
+    targetCodes.size > 0
+      ? (languagesQuery.data ?? []).filter((l) => targetCodes.has(l.code))
+      : (languagesQuery.data ?? []);
 
   if (!("speechSynthesis" in window)) {
     return (
@@ -104,7 +130,7 @@ export function VoiceSettings() {
       <p className="muted" style={{ marginBottom: 16 }}>
         {t("voice_settings.description")}
       </p>
-      {languagesQuery.data?.map((lang) => (
+      {shownLanguages.map((lang) => (
         <LanguageVoiceRow
           key={lang.code}
           languageCode={lang.code}

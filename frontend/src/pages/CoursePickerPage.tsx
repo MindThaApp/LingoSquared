@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { sortByCefr } from "@lingo/shared/lib/cefr";
 import { LANGUAGE_FLAG } from "@lingo/shared/lib/flags";
 import { localizedLanguageName } from "@lingo/shared/lib/localizedLanguageName";
+import { pickerTargetLanguages, sortLanguagesByLocalizedName } from "../lib/languageSort";
 import { getLevelPreference } from "../lib/levelPreferences";
 import type { CourseSummary, Language } from "@lingo/shared/api/types";
 
@@ -136,7 +137,7 @@ function UiLanguagePrompt({ sourceCode }: { sourceCode: string }) {
 }
 
 export function CoursePickerPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   // Restores step 3's language-pair selection when returning here from
@@ -167,7 +168,23 @@ export function CoursePickerPage() {
   });
 
   const languages = languagesQuery.data ?? [];
+  const uiLocale = i18n.language;
+  const sourceLanguages = sortLanguagesByLocalizedName(languages, t, uiLocale);
+  const targetLanguages = pickerTargetLanguages(languages, source, byPair, t, uiLocale);
   const courses = coursesQuery.data ? sortByCefr(coursesQuery.data) : undefined;
+  // Course descriptions only exist on the per-course detail endpoint.
+  const detailQueries = useQueries({
+    queries: (courses ?? []).map((c) => ({
+      queryKey: ["course", c.id],
+      queryFn: () => CatalogApi.course(c.id),
+      staleTime: 5 * 60 * 1000,
+    })),
+  });
+  const descriptionById = new Map<string, string>();
+  (courses ?? []).forEach((c, i) => {
+    const d = detailQueries[i]?.data?.description;
+    if (d) descriptionById.set(c.id, d);
+  });
   const step = !source ? 1 : !target ? 2 : 3;
 
   // Without this, a failed languages fetch renders an empty tile grid and a
@@ -204,7 +221,7 @@ export function CoursePickerPage() {
         <>
           <h1>{t("course_picker.speak_heading")}</h1>
           <div className="lang-grid">
-            {languages.map((lang) => (
+            {sourceLanguages.map((lang) => (
               <LangTile
                 key={lang.code}
                 lang={lang}
@@ -233,17 +250,12 @@ export function CoursePickerPage() {
             </button>
           </p>
           <div className="lang-grid">
-            {languages.map((lang) => (
+            {targetLanguages.map((lang) => (
               <LangTile
                 key={lang.code}
                 lang={lang}
                 selected={false}
-                disabled={lang.code === source}
-                availability={
-                  lang.code === source
-                    ? "available"
-                    : classifyDepth(byPair.get(`${source}:${lang.code}`) ?? 0)
-                }
+                availability={classifyDepth(byPair.get(`${source}:${lang.code}`) ?? 0)}
                 onClick={() => setTarget(lang.code)}
               />
             ))}
@@ -309,6 +321,11 @@ export function CoursePickerPage() {
                   <span className="btn">{t("course_picker.start")}</span>
                 </div>
               </Link>
+              {descriptionById.get(course.id) && (
+                <p className="muted course-description" style={{ margin: "4px 0 0" }}>
+                  {descriptionById.get(course.id)}
+                </p>
+              )}
               {/* Sibling of the Link above (not nested inside it) to avoid a
                   button-inside-anchor a11y anti-pattern. "Change level" is
                   only offered once a level's actually been recorded for this

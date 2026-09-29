@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
@@ -480,7 +481,7 @@ export function LessonRunnerPage() {
         <p className="muted" style={{ margin: "0 0 12px" }}>
           {t("lesson_runner.review_warmup_hint", { count: reviewItems.length })}
         </p>
-        <ExerciseRenderer
+        <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
           key={item.id}
           exercise={{ id: item.id, type: asExerciseType(item.type), order: 0, prompt: item.prompt }}
           onAnswer={handleReviewAnswer}
@@ -490,7 +491,7 @@ export function LessonRunnerPage() {
               ? { correct: reviewResult.correct, correctResponse: reviewResult.correct_response }
               : undefined
           }
-        />
+        /></CourseTargetLanguage>
         {reviewResult && (() => {
           const status = resultStatus(reviewResult);
           return (
@@ -574,13 +575,13 @@ export function LessonRunnerPage() {
           <TeachingCardView card={entry.card} />
         ) : (
           <>
-            <ExerciseRenderer
+            <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
               key={`review-${reviewCursor}`}
               exercise={entry.exercise}
               onAnswer={() => {}}
               disabled
               gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
-            />
+            /></CourseTargetLanguage>
             {renderResultBanner(entry.result, { response: entry.response })}
           </>
         )}
@@ -698,7 +699,7 @@ export function LessonRunnerPage() {
           </p>
         </div>
       )}
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={`${current.exercise.id}-${current.missCount}`}
         exercise={current.exercise}
         onAnswer={handleAnswer}
@@ -706,7 +707,7 @@ export function LessonRunnerPage() {
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("lesson_runner.submit_error")}</p>
