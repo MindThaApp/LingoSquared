@@ -15,6 +15,7 @@ import {
   setUnauthorizedHandler,
 } from "@lingo/shared/api/client";
 import type { AuthUser } from "@lingo/shared/api/types";
+import { queryClient } from "../queryClient";
 
 // Three genuinely different situations used to collapse into `user ===
 // null`, and every consumer read all three as "logged out":
@@ -136,6 +137,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // refresh token and skips the network call entirely (no loop).
     void AuthApi.logout().catch(() => {});
     clearSession();
+    // Query keys aren't user-scoped: drop every cached result so the next
+    // user on this device never sees this one's progress/streak/XP.
+    queryClient.clear();
     setUser(null);
     setStatus("unauthenticated");
   }, []);
