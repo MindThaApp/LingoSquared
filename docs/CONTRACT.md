@@ -163,6 +163,23 @@ intact — real user history referencing it is never destroyed (and the
 `RESTRICT` foreign keys on `exercise_attempts`/`content_issue_reports`
 wouldn't allow deleting it anyway).
 
+**Retirement of vanished exercises (2026-09-29).** Import now *retires*
+exercises that disappeared from the content: within every lesson present
+in the payload (matched by `content_key`), an existing exercise whose
+non-null `content_key` is absent from the incoming lesson gets `retired_at`
+set (timestamp) instead of staying live. Exercises with no `content_key`
+are never retired. A retired exercise that reappears in a later import is
+un-retired (`retired_at` cleared) and updated in place. Rows are still
+never deleted, so attempt history, SRS and progress keep their ids.
+Lessons/units absent from the payload are untouched (partial/append
+imports stay safe). Retired exercises are excluded from lesson detail
+(`GET /lessons/{id}`), lesson exercise counts, and review/practice/
+checkpoint pools; answers already in flight to a retired exercise are
+still graded (no error).
+
+Request, additive: optional boolean `retire_missing` (default `true`);
+`false` keeps the old keep-everything behavior.
+
 **Pre-existing rows (imported before this feature shipped) have
 `content_key = NULL` forever** unless manually reconciled — this
 migration does not attempt to backfill historical content_keys, since
@@ -179,12 +196,16 @@ new content_key-emitting version.
   "created_units": 2, "updated_units": 1,
   "created_lessons": 6, "updated_lessons": 3,
   "created_exercises": 40, "updated_exercises": 5,
+  "retired_exercises": 3, "unretired_exercises": 0,
   "created_teaching_items": 12, "updated_teaching_items": 8,
   "warnings": [
     "unit prs.a1.unit03: lesson order 2 conflicts with an existing, unaffected lesson; skipped (content_key='prs.a1.unit03.lesson02')"
   ]
 }
 ```
+`retired_exercises`/`unretired_exercises` are ints (0 when `retire_missing`
+is false).
+
 `warnings` is **non-fatal** — populated when an incoming item *does*
 carry a content_key but its `order` still collided with something
 unrelated (an author coordination conflict worth surfacing, not a
