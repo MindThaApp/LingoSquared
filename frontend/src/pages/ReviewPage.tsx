@@ -8,6 +8,7 @@ import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { QuitConfirm } from "../components/QuitConfirm";
+import { FixMistakes } from "../components/FixMistakes";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
@@ -24,7 +25,25 @@ interface CoursePickOption {
   dueCount: number;
 }
 
+// The "Fix your mistakes" section renders below whichever SRS review screen
+// is showing, and renders nothing at all unless mistakes are due.
+// The two runners are never on screen together: the fix section hides while an
+// SRS session is active, and the SRS screen is hidden (display:none, so its
+// state survives) while the fix runner or its summary is active.
 export function ReviewPage() {
+  const [srsActive, setSrsActive] = useState(false);
+  const [fixActive, setFixActive] = useState(false);
+  return (
+    <>
+      <div style={fixActive ? { display: "none" } : undefined}>
+        <SrsReview onSessionActiveChange={setSrsActive} />
+      </div>
+      <FixMistakes hidden={srsActive} onRunnerActiveChange={setFixActive} />
+    </>
+  );
+}
+
+function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: boolean) => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -45,6 +64,11 @@ export function ReviewPage() {
   // Bumped by the session Retry button so the load effect re-runs even though
   // courseId is unchanged (setCourseId(null); setCourseId(id) batches to a no-op).
   const [reloadNonce, setReloadNonce] = useState(0);
+
+  const sessionActive = items !== null;
+  useEffect(() => {
+    onSessionActiveChange(sessionActive);
+  }, [sessionActive, onSessionActiveChange]);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
