@@ -3,7 +3,8 @@ import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
-import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
+import { correctOptionFromResponse } from "./optionHighlight";
+import { ChoiceOptions } from "./ChoiceOptions";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
@@ -42,19 +43,15 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="exercise-options" dir={direction}>
-        {options.map((option) => (
-          <button
-            key={option}
-            type="button"
-            className={optionClassName(option, selected, gradedResult, correctOption)}
-            onClick={() => !disabled && setSelected(option)}
-            disabled={disabled}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
+      <ChoiceOptions
+        options={options}
+        selected={selected}
+        onSelect={setSelected}
+        disabled={disabled}
+        gradedResult={gradedResult}
+        correctOption={correctOption}
+        direction={direction}
+      />
       <button
         className="btn btn-block"
         disabled={disabled || !selected}
