@@ -780,6 +780,12 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
                 and dictation_answers_equal(response, item)
                 for item in correct["accepted"]
             )
+        elif type_value == "matching_pairs":
+            response_pairs = canonical_pairs(response, case_sensitive)
+            is_ok = response_pairs is not None and any(
+                canonical_pairs(item, case_sensitive) == response_pairs
+                for item in correct["accepted"]
+            )
         elif type_value in FREE_TEXT_EXERCISE_TYPES and isinstance(response, str):
             verdicts = [
                 grade_answer(
