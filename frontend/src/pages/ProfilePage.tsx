@@ -115,11 +115,11 @@ export function ProfilePage() {
 
       <div className="stat-grid">
         <div className="stat-card">
-          <span className="stat-value">⭐ {xpQuery.data?.total_xp ?? "—"}</span>
+          <span className="stat-value"><span aria-hidden="true">⭐</span> {xpQuery.data?.total_xp ?? "—"}</span>
           <span className="stat-label">{t("profile.total_xp")}</span>
         </div>
         <div className="stat-card">
-          <span className="stat-value">🔥 {streakQuery.data?.streak_days ?? "—"}</span>
+          <span className="stat-value"><span aria-hidden="true">🔥</span> {streakQuery.data?.streak_days ?? "—"}</span>
           <span className="stat-label">{t("profile.day_streak")}</span>
         </div>
         <div className="stat-card">
@@ -148,7 +148,14 @@ export function ProfilePage() {
                   {t("profile.mastery", { pct: Math.round(skill.mastery * 100) })}
                 </span>
               </div>
-              <div className="progress-track">
+              <div
+                className="progress-track"
+                role="progressbar"
+                aria-label={t("profile.mastery", { pct: Math.round(skill.mastery * 100) })}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(skill.mastery * 100)}
+              >
                 <div
                   className="progress-fill"
                   style={{ width: `${Math.round(skill.mastery * 100)}%` }}
@@ -173,8 +180,10 @@ export function ProfilePage() {
           </div>
         ) : achievementsQuery.data?.length ? (
           achievementsQuery.data.map((achievement) => (
-            <div key={achievement.id} style={{ marginBottom: 8, opacity: achievement.earned ? 1 : 0.4 }}>
-              <span className="badge">🏅 {achievement.title}</span>{" "}
+            <div key={achievement.id} style={{ marginBottom: 8 }}>
+              {/* Unearned = greyed medal only; fading the whole row (old
+                  opacity 0.4) pushed the text far below 4.5:1. */}
+              <span className="badge"><span aria-hidden="true" style={achievement.earned ? undefined : { filter: "grayscale(1)", opacity: 0.5 }}>🏅</span> {achievement.title}</span>{" "}
               <span className="muted" style={{ fontSize: "0.85rem" }}>
                 {achievement.description}
               </span>
@@ -203,7 +212,11 @@ export function ProfilePage() {
       <div className="card" style={{ marginTop: 16 }}>
         <h2 style={{ marginTop: 0 }}>{t("profile.export_title")}</h2>
         <p className="muted">{t("profile.export_body")}</p>
-        {exportError && <div className="form-error">{exportError}</div>}
+        {exportError && (
+          <div className="form-error" role="alert">
+            {exportError}
+          </div>
+        )}
         <button
           type="button"
           className="btn btn-secondary btn-block"
@@ -237,9 +250,16 @@ export function ProfilePage() {
           for a guest in DeleteAccountConfirm (a generated guest email
           can't reasonably be retyped). */}
       {logoutConfirmOpen && (
-        <div className="confirm-overlay" role="dialog" aria-modal="true">
+        <div
+          className="confirm-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="logout-confirm-title"
+        >
           <div className="confirm-overlay-card">
-            <h2 style={{ marginTop: 0 }}>{t("profile.logout_confirm_title")}</h2>
+            <h2 id="logout-confirm-title" style={{ marginTop: 0 }}>
+              {t("profile.logout_confirm_title")}
+            </h2>
             <p style={{ margin: "0 0 8px" }}>{t("profile.logout_confirm_body_guest")}</p>
             <p className="muted" style={{ margin: "0 0 16px" }}>
               {t("profile.logout_confirm_export_hint")}

@@ -274,10 +274,10 @@ export function HomePage() {
               return (
                 <div
                   key={quest.code}
-                  style={{
-                    marginBottom: 12,
-                    opacity: quest.completed ? 0.6 : 1,
-                  }}
+                  // No opacity dim for completed quests: fading the text
+                  // dropped --text-soft copy well under 4.5:1. The check
+                  // icon (with its aria-label) already marks completion.
+                  style={{ marginBottom: 12 }}
                 >
                   <div
                     style={{
@@ -303,7 +303,15 @@ export function HomePage() {
                   <span className="muted" style={{ fontSize: "0.85rem" }}>
                     {t(`quests.${quest.code}.description`, { defaultValue: quest.description })}
                   </span>
-                  <div className="progress-track" style={{ marginTop: 6 }}>
+                  <div
+                    className="progress-track"
+                    style={{ marginTop: 6 }}
+                    role="progressbar"
+                    aria-label={quest.title}
+                    aria-valuemin={0}
+                    aria-valuemax={quest.target}
+                    aria-valuenow={Math.min(quest.progress, quest.target)}
+                  >
                     <div className="progress-fill" style={{ width: `${pct}%` }} />
                   </div>
                   <span className="muted" style={{ fontSize: "0.75rem" }}>
