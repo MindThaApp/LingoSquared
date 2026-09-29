@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
@@ -37,6 +37,8 @@ function LanguageVoiceRow({
 }) {
   const { t } = useTranslation();
   const [selected, setSelected] = useState(() => getVoicePreference(languageCode) ?? "");
+  const uid = useId();
+  const nameId = `${uid}-name`;
   const available = voicesForLanguage(voices, languageCode);
 
   const handleChange = (voiceURI: string) => {
@@ -56,7 +58,9 @@ function LanguageVoiceRow({
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-      <span style={{ minWidth: 90 }}>{displayName}</span>
+      <span id={nameId} lang={languageCode} style={{ minWidth: 90 }}>
+        {displayName}
+      </span>
       {available.length === 0 ? (
         <span className="muted" style={{ fontSize: "0.85rem" }}>
           {t("voice_settings.no_voices")}
@@ -64,6 +68,7 @@ function LanguageVoiceRow({
       ) : (
         <>
           <select
+            aria-labelledby={nameId}
             value={selected}
             onChange={(e) => handleChange(e.target.value)}
             style={{ flex: 1 }}
@@ -75,7 +80,13 @@ function LanguageVoiceRow({
               </option>
             ))}
           </select>
-          <button type="button" className="btn btn-secondary" onClick={preview}>
+          <button
+            type="button"
+            id={`${uid}-preview`}
+            aria-labelledby={`${uid}-preview ${nameId}`}
+            className="btn btn-secondary"
+            onClick={preview}
+          >
             {t("voice_settings.preview")}
           </button>
         </>

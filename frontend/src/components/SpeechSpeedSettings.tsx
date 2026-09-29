@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
@@ -24,6 +24,8 @@ function LanguageSpeedRow({
 }) {
   const { t } = useTranslation();
   const [speed, setSpeed] = useState(() => getSpeedPreference(languageCode));
+  const uid = useId();
+  const nameId = `${uid}-name`;
 
   const handleChange = (value: number) => {
     setSpeed(value);
@@ -36,7 +38,9 @@ function LanguageSpeedRow({
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-      <span style={{ minWidth: 90 }}>{displayName}</span>
+      <span id={nameId} lang={languageCode} style={{ minWidth: 90 }}>
+        {displayName}
+      </span>
       <input
         type="range"
         min={MIN_SPEED}
@@ -53,13 +57,21 @@ function LanguageSpeedRow({
       {speed !== DEFAULT_SPEED && (
         <button
           type="button"
+          id={`${uid}-reset`}
+          aria-labelledby={`${uid}-reset ${nameId}`}
           className="btn btn-secondary"
           onClick={() => handleChange(DEFAULT_SPEED)}
         >
           {t("speech_speed_settings.reset")}
         </button>
       )}
-      <button type="button" className="btn btn-secondary" onClick={preview}>
+      <button
+        type="button"
+        id={`${uid}-preview`}
+        aria-labelledby={`${uid}-preview ${nameId}`}
+        className="btn btn-secondary"
+        onClick={preview}
+      >
         {t("speech_speed_settings.preview")}
       </button>
     </div>

@@ -36,9 +36,16 @@ export function DeleteAccountConfirm({
   const confirmEnabled = (isGuest || emailMatches) && !deleting;
 
   return (
-    <div className="confirm-overlay" role="dialog" aria-modal="true">
+    <div
+      className="confirm-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="delete-confirm-title"
+    >
       <div className="confirm-overlay-card">
-        <h2 style={{ marginTop: 0 }}>{t("profile.delete_confirm_title")}</h2>
+        <h2 id="delete-confirm-title" style={{ marginTop: 0 }}>
+          {t("profile.delete_confirm_title")}
+        </h2>
         <p style={{ margin: "0 0 16px" }}>
           {isGuest
             ? t("profile.delete_confirm_body_guest")
@@ -56,10 +63,15 @@ export function DeleteAccountConfirm({
               onChange={(e) => setTypedEmail(e.target.value)}
               placeholder={t("profile.delete_email_placeholder")}
               autoComplete="off"
+              aria-describedby={error ? "delete-confirm-error" : undefined}
             />
           </div>
         )}
-        {error && <div className="form-error">{error}</div>}
+        {error && (
+          <div className="form-error" id="delete-confirm-error" role="alert">
+            {error}
+          </div>
+        )}
         <div className="confirm-overlay-actions">
           <button
             type="button"
