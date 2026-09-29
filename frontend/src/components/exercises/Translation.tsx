@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { SpeakButton } from "../SpeakButton";
+import { isListeningExercise } from "../../lib/listeningTypes";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import type { ExerciseComponentProps } from "./types";
@@ -28,7 +29,7 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       {audio_text && audio_language_code && (
         <div className="exercise-audio-prompt">
-          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} />
+          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} autoPlay={isListeningExercise(exercise.type)} />
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}

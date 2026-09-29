@@ -3,6 +3,7 @@ import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
+import { isListeningExercise } from "../../lib/listeningTypes";
 import { correctOptionFromResponse } from "./optionHighlight";
 import { ChoiceOptions } from "./ChoiceOptions";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
@@ -39,7 +40,7 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       {audio_text && audio_language_code && (
         <div className="exercise-audio-prompt">
-          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} />
+          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} autoPlay={isListeningExercise(exercise.type)} />
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
