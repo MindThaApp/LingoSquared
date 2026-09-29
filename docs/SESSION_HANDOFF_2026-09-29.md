@@ -2,7 +2,22 @@
 
 Repo is now **`~/dev/LingoSquared`** (moved out of iCloud today; the iCloud copy is stale —
 see `STALE-DO-NOT-USE.md` there). Branch `fix/launch-gate-content-review-wave1`, pushed,
-GitHub CI **green** (first time since 2026-09-01). **Nothing from 09-02 onward is deployed live.**
+GitHub CI **green** (first time since 2026-09-01).
+
+**DEPLOYED LIVE 2026-09-29 evening** (192.168.4.4, frontend :8011, API :8010): backend at
+migration **0030**, full content+lexeme+practice sync (74 courses / 1,191 units), new LAN
+frontend build. Backups in `~/backups/` on the server (`lingosquared_pre_deploy_20260929.sql.gz`,
+`lingosquared_pre_0030_20260929.sql.gz`, `web_dist_20260929/`). Live admin is `admin@example.com`
+(is_admin flag). Deploy recipe that worked: rsync ONLY tracked files
+(`git ls-files backend | sed 's#^backend/##'` → `rsync --files-from`; same for `scripts/`, needed
+by the remote lexeme backfill) — never plain-rsync `backend/` (local untracked `web_dist/`);
+`docker compose build api` then **`up -d --force-recreate api`** (plain `up -d` once kept the old
+image); content via `LINGO_ADMIN_EMAIL=admin@example.com LINGO_ADMIN_PASSWORD_FILE=~/.lingo_admin_pw
+LINGO_BACKFILL_SSH=ramin@192.168.4.4 scripts/sync_dev_db.sh http://192.168.4.4:8010` (updates
+existing units in place by content_key). Mic answers still need HTTPS on live. Throwaway
+`smoke-*@example.com` accounts exist on live (registration is rate-limited after a few).
+Also shipped this evening: Unit.track (core|situation) mechanism + Situations shelf (no unit
+flagged — A2 plan Q8 open); 5 es/fr/ar dialogue_comprehension audio pointers.
 No credentials in this file — keep it that way.
 
 ## What shipped (2026-09-28/29)
