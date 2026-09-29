@@ -282,6 +282,16 @@ def test_course_units_include_per_user_completed_lesson_counts(client, admin, au
     first_lessons = client.get(f"/units/{first_unit['id']}/lessons").json()
 
     assert client.post(f"/lessons/{first_lessons[0]['id']}/start", headers=auth).status_code == 200
+    blocked = client.post(f"/lessons/{first_lessons[0]['id']}/complete", headers=auth)
+    assert blocked.status_code == 409
+    assert blocked.json()["error"]["code"] == "lesson_not_attempted"
+    detail = client.get(f"/lessons/{first_lessons[0]['id']}").json()
+    answer = client.post(
+        f"/exercises/{detail['exercises'][0]['id']}/answer",
+        headers=auth,
+        json={"response": "hola"},
+    )
+    assert answer.status_code == 200 and answer.json()["correct"] is True
     assert client.post(f"/lessons/{first_lessons[0]['id']}/complete", headers=auth).status_code == 200
 
     authenticated_response = client.get(f"/courses/{course['id']}/units", headers=auth)
@@ -729,6 +739,17 @@ def test_speaking_units_lock_and_unlock(client, auth):
     for unit in reading:
         for lesson in client.get(f"/units/{unit['id']}/lessons").json():
             assert client.post(f"/lessons/{lesson['id']}/start",headers=auth).status_code==200
+            detail=client.get(f"/lessons/{lesson['id']}").json()
+            if detail["exercises"]:
+                exercise=detail["exercises"][0]
+                with SessionLocal() as db:
+                    correct_response=db.get(Exercise,exercise["id"]).correct_response
+                answer=client.post(
+                    f"/exercises/{exercise['id']}/answer",
+                    headers=auth,
+                    json={"response":correct_response},
+                )
+                assert answer.status_code==200 and answer.json()["correct"] is True
             assert client.post(f"/lessons/{lesson['id']}/complete",headers=auth).status_code==200
     refreshed=client.get(f"/courses/{course['id']}/units",headers=auth).json()
     assert next(unit for unit in refreshed if unit["section"]=="speaking")["locked"] is False
