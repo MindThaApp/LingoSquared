@@ -209,6 +209,7 @@ def conversation_reply_result(
     response: Any,
     script,
     language_code: str | None,
+    input_mode: str = "typed",
 ) -> tuple[str, str | None]:
     best_result = "incorrect"
     best_variant = None
@@ -219,6 +220,7 @@ def conversation_reply_result(
             "speak_response",
             script=script,
             language_code=language_code,
+            input_mode=input_mode,
         )
         if result == "correct":
             return result, variant
@@ -443,7 +445,7 @@ def stored_exercise_answer(e,attempt):
     }
 
 
-def exercise_answer(db, user, e, response, client_operation_id=None):
+def exercise_answer(db, user, e, response, client_operation_id=None, input_mode="typed"):
     # A stable operation id makes network retries return the original result.
     if client_operation_id:
         previous = db.scalar(select(ExerciseAttempt).where(
@@ -473,6 +475,7 @@ def exercise_answer(db, user, e, response, client_operation_id=None):
         e.type,
         script=script,
         language_code=language_code,
+        input_mode=input_mode,
         orthography_strict=feedback_meta.get("orthography_strict"),
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
         punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
@@ -933,7 +936,7 @@ def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=D
     lesson_row=db.get(Lesson,e.lesson_id)
     unit=db.get(Unit,lesson_row.unit_id)
     require_speaking_unlocked(db,unit,user)
-    return exercise_answer(db,user,e,body.response,body.client_operation_id)
+    return exercise_answer(db,user,e,body.response,body.client_operation_id,body.input_mode)
 # --- Placement test (course-level), 2026-08-05 -------------------------
 # Recognition-only, side-effect-free (MVP): assembled from the course's own
 # existing multiple_choice/matching_pairs exercises, graded by grade(), and
@@ -1240,7 +1243,7 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     feedback_meta=decode_feedback(e.feedback)
     language_code=e.prompt.get("answer_language_code")
     script=resolve_script(db,language_code)
-    result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")))
+    result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")),input_mode=body.input_mode)
     correct=result!="incorrect"
     xp=e.xp if correct else 0
     schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()
@@ -2387,6 +2390,7 @@ def practice_answer(
             response=learner_response,
             script=script,
             language_code=node.get("answer_language_code"),
+            input_mode=body.input_mode,
         )
         correct = result != "incorrect"
         next_node = conversation_next_node(
@@ -2479,6 +2483,7 @@ def practice_answer(
         item_type,
         script=script,
         language_code=language_code,
+        input_mode=body.input_mode,
         orthography_strict=(
             True if item.source == "checkpoint" else None
         ),
