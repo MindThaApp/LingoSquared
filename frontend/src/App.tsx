@@ -12,31 +12,45 @@ import { CoursePickerPage } from "./pages/CoursePickerPage";
 import { LevelCheckPage } from "./pages/LevelCheckPage";
 import { CourseUnitsPage } from "./pages/CourseUnitsPage";
 import { UnitLessonsPage } from "./pages/UnitLessonsPage";
-import { CheckpointPage } from "./pages/CheckpointPage";
-import { PlacementTestPage } from "./pages/PlacementTestPage";
-import { PracticeFeedPage } from "./pages/PracticeFeedPage";
 import { LessonRunnerPage } from "./pages/LessonRunnerPage";
 import { LessonCompletePage } from "./pages/LessonCompletePage";
 import { ReviewPage } from "./pages/ReviewPage";
-import { VocabularyPage } from "./pages/VocabularyPage";
-import { ProfilePage } from "./pages/ProfilePage";
 import { NotFoundPage } from "./pages/NotFoundPage";
-import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
-import { TermsOfServicePage } from "./pages/TermsOfServicePage";
-import ShowcasePage from "./pages/ShowcasePage";
 
-// Route-level code splitting: AdminContentPage is genuinely admin-only, so it
-// stays out of the initial bundle everyone downloads. Core daily-use pages
-// (Home, lesson flow, practice, review) stay statically imported — lazy-loading
-// those would add a network round-trip to the common path for no win.
-// CheckpointPage/LevelCheckPage were measured (2026-07-10) and deliberately NOT
-// lazy-loaded: CheckpointPage shares exercise-runner code with the static
-// LessonRunnerPage, so splitting it forces rolldown to hoist the shared modules
-// into separate eagerly-modulepreloaded chunks — the extra gzip-stream overhead
-// (~+3 kB on the eager payload) outweighed the ~7 kB (minified, ~2.8 kB gzip)
-// of page code it deferred. Re-measure the total eager payload (entry +
-// modulepreload links in dist/index.html, not just the index-*.js line) before
-// lazy-loading any other page here.
+// Route-level code splitting: rarely-visited / non-core pages are lazy so the
+// entry bundle stays small. Core daily-use pages (Login, Register, Home,
+// CoursePicker, LessonRunner, review, level/units) stay static — lazy-loading
+// those would add a round-trip to the common path.
+// The 2026-07-10 measurement had lazy CheckpointPage INCREASE the eager payload
+// (shared exercise-runner code hoisted into modulepreloaded chunks). Re-measured
+// 2026-09-29 on the TOTAL eager payload (entry + every modulepreload/script in
+// dist/index.html, per-file gzip summed): CheckpointPage and PracticeFeedPage
+// both eager 155,122 B; only CheckpointPage lazy 154,746 B; only PracticeFeedPage
+// lazy 153,987 B; both lazy 153,345 B. Each lazy page lowered the payload, so
+// both are lazy now.
+// Re-measure the same way before changing any of this.
+const PrivacyPolicyPage = lazy(() =>
+  import("./pages/PrivacyPolicyPage").then((m) => ({ default: m.PrivacyPolicyPage })),
+);
+const TermsOfServicePage = lazy(() =>
+  import("./pages/TermsOfServicePage").then((m) => ({ default: m.TermsOfServicePage })),
+);
+const VocabularyPage = lazy(() =>
+  import("./pages/VocabularyPage").then((m) => ({ default: m.VocabularyPage })),
+);
+const PlacementTestPage = lazy(() =>
+  import("./pages/PlacementTestPage").then((m) => ({ default: m.PlacementTestPage })),
+);
+const ProfilePage = lazy(() =>
+  import("./pages/ProfilePage").then((m) => ({ default: m.ProfilePage })),
+);
+const CheckpointPage = lazy(() =>
+  import("./pages/CheckpointPage").then((m) => ({ default: m.CheckpointPage })),
+);
+const PracticeFeedPage = lazy(() =>
+  import("./pages/PracticeFeedPage").then((m) => ({ default: m.PracticeFeedPage })),
+);
+const ShowcasePage = lazy(() => import("./pages/ShowcasePage"));
 const AdminContentPage = lazy(() =>
   import("./pages/AdminContentPage").then((m) => ({ default: m.AdminContentPage })),
 );
@@ -54,7 +68,11 @@ function App() {
       <main className="app-main">
         <ErrorBoundary key={location.pathname}>
           <Suspense
-            fallback={<div className="page-loading">{t("common.loading")}</div>}
+            fallback={
+              <div className="page-loading" role="status" aria-live="polite">
+                {t("common.loading")}
+              </div>
+            }
           >
             <Routes>
               <Route path="/login" element={<LoginPage />} />
