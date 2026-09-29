@@ -107,6 +107,13 @@ export function readCachedUser(): AuthUser | null {
   }
 }
 
+// Query keys aren't user-scoped. Registering/logging in while another
+// account's session is still live (never logged out) would otherwise keep
+// showing the previous user's streak/XP/progress from the cache.
+function resetCacheForNewSession() {
+  queryClient.clear();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   // No stored token means there is nothing to verify: start
@@ -278,6 +285,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback(async (email: string, password: string) => {
     const result = await AuthApi.login(email, password);
     storeSession(result.user);
+    resetCacheForNewSession();
     setUser(result.user);
     setStatus("authenticated");
   }, []);
@@ -286,6 +294,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     async (email: string, password: string, displayName?: string) => {
       const result = await AuthApi.register(email, password, displayName);
       storeSession(result.user);
+      resetCacheForNewSession();
       setUser(result.user);
       setStatus("authenticated");
     },
@@ -322,6 +331,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const password = crypto.randomUUID?.() ?? randomId;
       const result = await AuthApi.register(email, password, username);
       storeSession(result.user);
+      resetCacheForNewSession();
       setUser(result.user);
       setStatus("authenticated");
     },

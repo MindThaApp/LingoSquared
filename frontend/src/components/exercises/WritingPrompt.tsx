@@ -18,6 +18,15 @@ export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponen
     onAnswer(value.trim());
   }
 
+  // Enter stays a newline (multi-sentence answers); Cmd/Ctrl+Enter submits.
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      e.preventDefault();
+      if (disabled || !value.trim()) return;
+      onAnswer(value.trim());
+    }
+  }
+
   return (
     <form className="exercise-shell" onSubmit={handleSubmit}>
       <TextBlockList blocks={exercise.prompt.text_blocks} />
@@ -29,8 +38,12 @@ export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponen
           rows={4}
           placeholder={t("exercise.writing_placeholder")}
           dir={scriptDirection(script)}
+          onKeyDown={handleKeyDown}
           {...inputProps}
         />
+        <small className="muted" style={{ display: "block", marginTop: 4 }}>
+          {t("exercise.writing_submit_hint")}
+        </small>
       </div>
       {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
         <VirtualKeyboard

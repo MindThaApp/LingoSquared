@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { SessionUnavailableScreen } from "../components/layout/ProtectedRoute";
@@ -71,6 +71,7 @@ export function LoginPage() {
   // anyone). Same reason for the loading gate — a slow/hanging /auth/me
   // must not flash the guest button at someone who is signed in.
   if (status === "unverified") return <SessionUnavailableScreen />;
+  if (status === "authenticated") return <Navigate to="/" replace />;
   if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
 
   return (

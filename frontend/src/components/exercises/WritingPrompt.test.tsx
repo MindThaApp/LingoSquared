@@ -50,4 +50,21 @@ describe("WritingPrompt answer payload", () => {
     // trim is the component's job — normalization is grade_answer()'s).
     expect(onAnswer.mock.calls[0][0]).toBe("Hoe gaat het met u? Goed, dank u.");
   });
+
+  it("Enter inserts a newline (does not submit); Cmd/Ctrl+Enter submits", () => {
+    const onAnswer = vi.fn();
+    render(<WritingPrompt exercise={exercise} onAnswer={onAnswer} disabled={false} />);
+    const box = screen.getByRole("textbox");
+    fireEvent.change(box, { target: { value: "Goed, dank u." } });
+
+    fireEvent.keyDown(box, { key: "Enter" });
+    expect(onAnswer).not.toHaveBeenCalled();
+
+    fireEvent.keyDown(box, { key: "Enter", ctrlKey: true });
+    expect(onAnswer).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(box, { key: "Enter", metaKey: true });
+    expect(onAnswer).toHaveBeenCalledTimes(2);
+    expect(onAnswer.mock.calls[1][0]).toBe("Goed, dank u.");
+    expect(screen.getByText("exercise.writing_submit_hint")).toBeInTheDocument();
+  });
 });

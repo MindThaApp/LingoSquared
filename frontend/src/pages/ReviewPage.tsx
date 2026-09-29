@@ -11,6 +11,8 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { useAuth } from "../auth/AuthContext";
+import { learnPath } from "../lib/activeCourse";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
 
 interface CoursePickOption {
@@ -23,6 +25,7 @@ export function ReviewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [autoPicked, setAutoPicked] = useState(false);
   const [items, setItems] = useState<PracticeItem[] | null>(null);
@@ -173,6 +176,9 @@ export function ReviewPage() {
         <div style={{ fontSize: "3rem" }}>✅</div>
         <h2>{t("review.none_due_title")}</h2>
         <p className="muted">{t("review.none_due_body")}</p>
+        <button className="btn btn-block" onClick={() => navigate(learnPath(user?.id))}>
+          {t("review.continue_learning", { defaultValue: "Continue learning" })}
+        </button>
       </div>
     );
   }
