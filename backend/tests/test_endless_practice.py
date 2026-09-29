@@ -420,9 +420,9 @@ def test_practice_import_is_idempotent_and_all_prompt_contracts_generate(
     assert second == {"imported_templates": 0, "updated_templates": 6}
     complete_via_api(client, auth, lesson_id)
 
-    # Since Phase A, generate_batch() applies the same due/mastery-based
-    # adaptive ladder as reviews (fresh lexemes are all mastery=0.0, which
-    # prefers recognition-tier types) - a single small batch is no longer
+    # generate_batch() applies the same due/mastery-based adaptive ladder
+    # as reviews. First-try-correct lesson completion now seeds mastery
+    # at 0.5; a single small batch is no longer
     # guaranteed to surface all 6 template types at once, and that's
     # correct, intended behavior, not a bug. To still verify every prompt
     # shape/contract deterministically, isolate one template type at a
@@ -510,7 +510,18 @@ def test_low_mastery_practice_batch_interleaves_broad_mc_with_buildable_formats(
     course_id, lesson_id = create_course_with_lexemes()
     add_extra_word_lexemes(course_id, lesson_id, count=12)
     import_templates(client, admin, course_id, artifact(include_listen=False))
-    complete_via_api(client, auth, lesson_id)
+    started = client.post(f"/lessons/{lesson_id}/start", headers=auth)
+    assert started.status_code == 200
+    detail = client.get(f"/lessons/{lesson_id}").json()
+    for exercise in detail["exercises"]:
+        wrong = client.post(
+            f"/exercises/{exercise['id']}/answer",
+            headers=auth,
+            json={"response": "__wrong__"},
+        )
+        assert wrong.status_code == 200 and wrong.json()["correct"] is False
+    completed = client.post(f"/lessons/{lesson_id}/complete", headers=auth)
+    assert completed.status_code == 200
 
     response = client.post(
         f"/practice/{course_id}/batch",

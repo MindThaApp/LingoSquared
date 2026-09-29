@@ -538,6 +538,30 @@ def exercise_answer(db, user, e, response, client_operation_id=None, input_mode=
             if previous:
                 return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
         raise
+    if result != "correct" and not replay:
+        existing_review = db.scalar(
+            select(ReviewItem.id).where(
+                ReviewItem.user_id == user.id,
+                ReviewItem.exercise_id == e.id,
+            )
+        )
+        if existing_review is None:
+            review = ReviewItem(
+                user_id=user.id,
+                exercise_id=e.id,
+                interval_days=0,
+                ease_factor=2.3,
+                repetitions=0,
+                due_at=datetime.now(timezone.utc) + timedelta(minutes=10),
+            )
+            try:
+                with db.begin_nested():
+                    db.add(review)
+                    db.flush()
+            except IntegrityError:
+                # A simultaneous miss may have inserted this user's review
+                # row after the lookup. Preserve it without resetting state.
+                pass
     lp = db.scalar(
         select(LessonProgress).where(
             LessonProgress.user_id == user.id,
@@ -1052,6 +1076,40 @@ def report_general_feedback(body:GeneralFeedbackIn,request:Request,user=Depends(
     feedback_attachment_service.claim_feedback_attachments(db,issue,body.attachment_keys)
     db.commit(); db.refresh(issue)
     return issue
+def seed_params_for_lesson(db: Session, user_id: str, lesson_id: str, since: datetime | None, now: datetime) -> dict[str, Any]:
+    """Choose initial SRS values from each active exercise's first session answer."""
+    exercises = list(db.scalars(select(Exercise).where(
+        Exercise.lesson_id == lesson_id,
+        Exercise.retired_at.is_(None),
+    )))
+    scores = []
+    found_attempt = False
+    if since is not None:
+        for exercise in exercises:
+            attempt = db.scalar(
+                select(ExerciseAttempt)
+                .where(
+                    ExerciseAttempt.user_id == user_id,
+                    ExerciseAttempt.exercise_id == exercise.id,
+                    ExerciseAttempt.created_at >= since,
+                )
+                .order_by(ExerciseAttempt.created_at, ExerciseAttempt.id)
+                .limit(1)
+            )
+            if attempt is None:
+                scores.append(0.0)
+            else:
+                found_attempt = True
+                outcome = attempt.outcome or ("correct" if attempt.correct else "incorrect")
+                scores.append(1.0 if outcome == "correct" else 0.5 if outcome == "almost" else 0.0)
+    score = sum(scores) / len(exercises) if exercises and scores and found_attempt else None
+    if score is None or 0.6 <= score < 0.9:
+        return {"ease_factor": 2.5, "interval_days": 0, "repetitions": 0, "mastery": 0.0, "due_at": now + timedelta(days=1), "last_reviewed_at": None}
+    if score >= 0.9:
+        return {"ease_factor": 2.5, "interval_days": 3, "repetitions": 1, "mastery": 0.5, "due_at": now + timedelta(days=3), "last_reviewed_at": now}
+    return {"ease_factor": 2.3, "interval_days": 0, "repetitions": 0, "mastery": 0.0, "due_at": now + timedelta(hours=4), "last_reviewed_at": None}
+
+
 @router.post("/lessons/{lesson_id}/complete", response_model=CompleteOut)
 def complete(
     lesson_id: str,
@@ -1129,6 +1187,7 @@ def complete(
 
     if first_completion:
         skill.completed_lessons += 1
+        seed_params = seed_params_for_lesson(db, user.id, lesson_id, session_started_at, now)
         lexemes = list(
             db.scalars(
                 select(Lexeme).where(
@@ -1154,12 +1213,7 @@ def complete(
                         user_id=user.id,
                         lexeme_id=lexeme.id,
                         course_id=lexeme.course_id,
-                        ease_factor=2.5,
-                        interval_days=0,
-                        repetitions=0,
-                        mastery=0.0,
-                        due_at=now + timedelta(days=1),
-                        last_reviewed_at=None,
+                        **seed_params,
                         introduced_at=now,
                         suspended=False,
                         last_session_id=None,
@@ -1192,7 +1246,7 @@ def progress(user=Depends(current_user),db:Session=Depends(get_db)):
 @router.get("/me/reviews")
 def reviews(
     cursor: str | None = None,
-    limit: int = Query(100, ge=1, le=200),
+    limit: int = Query(50, ge=1, le=200),
     user=Depends(current_user),
     db: Session = Depends(get_db),
 ):
@@ -2653,6 +2707,7 @@ def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:dateti
         created_or_completed=True
 
     introduced=0
+    seed_params = seed_params_for_lesson(db, target.id, lesson_row.id, progress.started_at if progress else now, now) if created_or_completed else None
     lexemes=list(db.scalars(select(Lexeme).where(Lexeme.provenance_lesson_id==lesson_row.id)))
     existing=set(
         db.scalars(
@@ -2664,7 +2719,7 @@ def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:dateti
             .with_for_update()
         )
     ) if lexemes else set()
-    for lexeme in lexemes:
+    for lexeme in lexemes if created_or_completed else []:
         if lexeme.id in existing:
             continue
         db.add(
@@ -2672,12 +2727,7 @@ def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:dateti
                 user_id=target.id,
                 lexeme_id=lexeme.id,
                 course_id=lexeme.course_id,
-                ease_factor=2.5,
-                interval_days=0,
-                repetitions=0,
-                mastery=0.0,
-                due_at=now+timedelta(days=1),
-                last_reviewed_at=None,
+                **seed_params,
                 introduced_at=now,
                 suspended=False,
                 last_session_id=None,
