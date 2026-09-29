@@ -297,6 +297,26 @@ export async function getFile(
   return { blob: await res.blob(), filename };
 }
 
+// Additive: authenticated POST that returns the raw Response (any non-401
+// status is returned as-is, not thrown) so callers can branch on
+// content-type / body shape -- used by the web /tts client, whose success
+// body is either audio bytes or a JSON fallback marker. Goes through
+// sendWithAuthRetry so an expired access token refreshes + retries once.
+export async function postRaw(path: string, body?: unknown): Promise<Response> {
+  const { baseUrl, tokenStorage } = requireConfig();
+  const send = (): Promise<Response> => {
+    const token = tokenStorage.get();
+    const headers = new Headers({ "Content-Type": "application/json" });
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    return fetch(`${baseUrl}${path}`, {
+      method: "POST",
+      headers,
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  };
+  return sendWithAuthRetry(send);
+}
+
 export function post<T>(path: string, body?: unknown): Promise<T> {
   return apiFetch<T>(path, {
     method: "POST",
