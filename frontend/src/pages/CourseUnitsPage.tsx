@@ -11,6 +11,7 @@ import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferenc
 import { useAuth } from "../auth/AuthContext";
 import { setActiveCourse } from "../lib/activeCourse";
 import { unitIcon } from "@lingo/shared/lib/unitIcons";
+import { DesktopSidebar } from "../components/layout/DesktopSidebar";
 
 function PathNode({
   unit,
@@ -241,7 +242,8 @@ export function CourseUnitsPage() {
   }, [unitsQuery.data]);
 
   return (
-    <div>
+    <div className="page-with-aside">
+      <div className="page-main-col">
       <h1 style={{ marginBottom: 4 }}>{courseQuery.data?.title ?? t("course_units.default_title")}</h1>
       {courseQuery.data && <p className="muted">{courseQuery.data.description}</p>}
       {skillProgress && totalLessons > 0 && (
@@ -294,6 +296,8 @@ export function CourseUnitsPage() {
           <PathNode key={unit.id} unit={unit} current={unit.id === lastUnitId} courseId={courseId} />
         ))}
       </div>
+      </div>
+      <DesktopSidebar />
     </div>
   );
 }
