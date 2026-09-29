@@ -717,6 +717,66 @@ def test_audio_distractor_validator_rejects_dialogue_comprehension_speaker_line(
     )
 
 
+def test_dialogue_comprehension_compiles_asset_transcript_and_warns_when_missing():
+    compiler = load_content_compiler()
+    text = "Lotte: Hoi, ik ben Lotte."
+    exercise = {
+        "content_key": "nl.test.exercise.dialogue",
+        "type": "dialogue_comprehension",
+        "tested_text": ["Lotte", "name"],
+        "media_asset_key": "nl.test.audio.dialogue",
+    }
+    assets = {"nl.test.audio.dialogue": {"text": text}}
+
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Lotte", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+        media_assets=assets,
+    )
+    assert compiled["prompt"]["audio_text"] == text
+    assert compiled["prompt"]["audio_language_code"] == "nl"
+
+    realization = {
+        "units": [{"lessons": [{"exercises": [exercise]}]}],
+        "media_assets": [],
+    }
+    report = compiler.Report()
+    compiler.validate_dialogue_comprehension_audio(realization, report)
+    without_asset = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Lotte", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+    )
+    assert "audio_text" not in without_asset["prompt"]
+    assert "audio_language_code" not in without_asset["prompt"]
+    assert len(report.warnings) == 1
+    assert "dialogue_comprehension media asset" in report.warnings[0]
+
+
+def test_listen_select_compile_audio_behavior_is_unchanged():
+    compiler = load_content_compiler()
+    exercise = {
+        "type": "listen_select",
+        "tested_text": "Hallo",
+        "media_asset_key": "nl.test.audio.greeting",
+    }
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Hallo", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+        media_assets={"nl.test.audio.greeting": {"text": "Asset transcript"}},
+    )
+    assert compiled["prompt"]["audio_text"] == "Hallo"
+    assert compiled["prompt"]["audio_language_code"] == "nl"
+
+
 def test_option_correct_option_must_be_in_accepted_answers():
     # The grader is punctuation-sensitive, so a displayed correct_option that
     # is not itself among the accepted_answers means a learner who picks the
