@@ -43,7 +43,15 @@ export type ConversationPrompt = {
   nodes: ConversationNode[];
 };
 
-type Exchange = { app: string; appDir: string; learner: string; correct: boolean; status: GradingStatus; correction?: string };
+type Exchange = {
+  app: string;
+  appLang: string;
+  appDir: string;
+  learner: string;
+  correct: boolean;
+  status: GradingStatus;
+  correction?: string;
+};
 
 export function ConversationRunner({
   itemId,
@@ -86,6 +94,7 @@ export function ConversationRunner({
         ...h,
         {
           app: node.app_turn.text,
+          appLang: node.app_turn.language_code,
           appDir: node.app_turn.direction ?? "ltr",
           learner: reply,
           correct: res.correct,
@@ -123,7 +132,11 @@ export function ConversationRunner({
         <div className="conversation-history">
           {history.map((h, i) => (
             <div key={i} className="conversation-exchange">
-              <p className="conversation-line conversation-line-app" dir={h.appDir}>
+              <p
+                className="conversation-line conversation-line-app"
+                lang={h.appLang}
+                dir={h.appDir}
+              >
                 {h.app}
               </p>
               <p
@@ -133,6 +146,7 @@ export function ConversationRunner({
                     : "conversation-line conversation-line-you conversation-line-missed"
                 }
                 dir={dir}
+                lang={answerLang}
               >
                 {h.learner}
               </p>
@@ -147,8 +161,12 @@ export function ConversationRunner({
         </div>
       )}
 
-      <div className="conversation-current">
-        <p className="conversation-line conversation-line-app" dir={node.app_turn.direction ?? "ltr"}>
+      <div className="conversation-current" aria-live="polite">
+        <p
+          className="conversation-line conversation-line-app"
+          dir={node.app_turn.direction ?? "ltr"}
+          lang={node.app_turn.language_code}
+        >
           {node.app_turn.text}
         </p>
         <SpeakButton text={node.app_turn.text} languageCode={node.app_turn.language_code} />
@@ -180,6 +198,8 @@ export function ConversationRunner({
               onChange={(e) => setValue(e.target.value)}
               disabled={submitting}
               placeholder={t("practice.conversation_reply_placeholder")}
+              aria-label={t("practice.conversation_reply_placeholder")}
+              lang={answerLang}
               dir={dir}
               {...inputProps}
             />

@@ -37,6 +37,7 @@ export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResul
         gradedResult={gradedResult}
         correctOption={correctOption}
         direction={direction}
+        lang={exercise.prompt.answer_language_code}
       />
       <button
         className="btn btn-block"

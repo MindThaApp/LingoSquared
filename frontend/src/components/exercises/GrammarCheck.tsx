@@ -54,6 +54,7 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           gradedResult={gradedResult}
           correctOption={correctOption}
           direction={optionsDirection}
+          lang={exercise.prompt.answer_language_code}
         />
         <button
           className="btn btn-block"
@@ -83,6 +84,8 @@ export function GrammarCheck({ exercise, onAnswer, disabled, gradedResult }: Exe
           onChange={(e) => setValue(e.target.value)}
           disabled={disabled}
           placeholder={t("exercise.grammar_check_placeholder")}
+          aria-label={t("exercise.grammar_check_placeholder")}
+          lang={exercise.prompt.answer_language_code}
           dir={scriptDirection(script)}
           {...inputProps}
         />

@@ -160,8 +160,10 @@ function FixMistakesRunner({ items, onDone }: { items: ReviewItem[]; onDone: () 
           </button>
         </div>
       )}
+      {/* Always-mounted live region (empty until graded). */}
+      <div role="status" aria-live="polite">
       {result && status && (
-        <div className={`feedback-banner ${status}`} role="status">
+        <div className={`feedback-banner ${status}`}>
           <p style={{ margin: "0 0 6px" }}>
             {status === "correct" && t("review.correct")}
             {status === "almost" && t("review.almost")}
@@ -177,6 +179,7 @@ function FixMistakesRunner({ items, onDone }: { items: ReviewItem[]; onDone: () 
           </button>
         </div>
       )}
+      </div>
     </div>
   );
 }

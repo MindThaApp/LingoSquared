@@ -50,6 +50,8 @@ export function WritingPrompt({ exercise, onAnswer, disabled, courseLevel, lesso
               disabled={disabled}
               rows={4}
               placeholder={t("exercise.writing_placeholder")}
+              aria-label={t("exercise.writing_placeholder")}
+              lang={exercise.prompt.answer_language_code}
               dir={scriptDirection(script)}
               onKeyDown={handleKeyDown}
               {...inputProps}

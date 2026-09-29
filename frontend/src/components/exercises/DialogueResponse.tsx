@@ -59,6 +59,8 @@ export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, le
               onChange={(e) => setValue(e.target.value)}
               disabled={disabled}
               placeholder={t("exercise.type_your_reply")}
+              aria-label={t("exercise.type_your_reply")}
+              lang={exercise.prompt.answer_language_code}
               dir={scriptDirection(script)}
               {...inputProps}
             />
