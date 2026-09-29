@@ -22,12 +22,17 @@ import type {
   TeachingCard,
 } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { buildLessonBlocks, flattenBlocks } from "../lib/interleave";
 
 interface QueueItem {
   exercise: Exercise;
   missCount: number;
   isConfirmation: boolean;
   correctAnswerHint?: string;
+  // Teaching cards (cumulative) that must have been shown before this
+  // exercise - see lib/interleave. Recycled misses keep their original value,
+  // which is always already satisfied by the time they come around again.
+  cardsBefore: number;
 }
 
 interface MissedWord {
@@ -184,11 +189,16 @@ export function LessonRunnerPage() {
 
   useEffect(() => {
     if (lessonQuery.data && queue === null) {
+      // Cards and exercises are interleaved (a few cards, then the exercises
+      // testing them) instead of all cards up front; teachingIndex still walks
+      // the original card order, the queue just gates how far it must go.
+      const { blocks } = buildLessonBlocks(lessonQuery.data.teaching, lessonQuery.data.exercises);
       setQueue(
-        lessonQuery.data.exercises.map((exercise) => ({
+        flattenBlocks(blocks).map(({ exercise, cardsBefore }) => ({
           exercise,
           missCount: 0,
           isConfirmation: false,
+          cardsBefore,
         })),
       );
     }
@@ -211,6 +221,11 @@ export function LessonRunnerPage() {
     } finally {
       setReviewSubmitting(false);
     }
+  }
+
+  function handleReviewSkip() {
+    setReviewResult(null);
+    setReviewIndex(reviewItems?.length ?? 0);
   }
 
   function handleReviewContinue() {
@@ -369,6 +384,7 @@ export function LessonRunnerPage() {
         ...rest,
         {
           exercise: current.exercise,
+          cardsBefore: current.cardsBefore,
           missCount: newMissCount,
           isConfirmation: newMissCount >= MISS_LIMIT,
           correctAnswerHint:
@@ -461,6 +477,9 @@ export function LessonRunnerPage() {
             <X size={18} />
           </button>
         </div>
+        <p className="muted" style={{ margin: "0 0 12px" }}>
+          {t("lesson_runner.review_warmup_hint", { count: reviewItems.length })}
+        </p>
         <ExerciseRenderer
           key={item.id}
           exercise={{ id: item.id, type: asExerciseType(item.type), order: 0, prompt: item.prompt }}
@@ -495,6 +514,11 @@ export function LessonRunnerPage() {
             </div>
           );
         })()}
+        <div style={{ marginTop: 12, textAlign: "center" }}>
+          <button type="button" className="btn btn-secondary" onClick={handleReviewSkip}>
+            {t("lesson_runner.review_warmup_skip")}
+          </button>
+        </div>
         {showQuitConfirm && (
           <QuitConfirm
             message={t("lesson_runner.quit_confirm_message")}
@@ -571,9 +595,13 @@ export function LessonRunnerPage() {
     );
   }
 
-  if (teachingIndex < teaching.length) {
+  // Show cards up to the next exercise's `cardsBefore` (all remaining cards
+  // when there is no exercise to gate on, e.g. a cards-only lesson).
+  const cardsToShow = current ? Math.min(current.cardsBefore, teaching.length) : teaching.length;
+  if (teachingIndex < cardsToShow) {
     const card = teaching[teachingIndex];
-    const isLast = teachingIndex === teaching.length - 1;
+    // "Start practice" only when the next thing after this card is an exercise.
+    const isLast = current !== undefined && teachingIndex === cardsToShow - 1;
     const pct = ((teachingIndex + 1) / teaching.length) * 100;
     return (
       <div>
