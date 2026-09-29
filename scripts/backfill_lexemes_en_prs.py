@@ -1031,6 +1031,9 @@ PRS_GLOSSES: dict[str, str] = {
     "می‌تانستی": "you could / you were able to",
     "می‌توانستم": "I could / I was able to",
     "می‌توانستی": "you could / you were able to",
+    "توانستم": "I could / I was able to",
+    "نتوانستم": "I could not / I was not able to",
+    "نتوانست": "he/she could not",
     "پسته خانه": "post office", "نرفت": "didn't go",
     "ببری": "(that) you take", "راستی": "by the way",
     "نداشتم": "I didn't have", "ملاقات": "appointment",
@@ -1684,6 +1687,7 @@ PRS_POS: dict[str, str] = {
     "بکنین": "verb", "بیایند": "verb", "آنها": "pronoun",
     "می‌تانستم": "verb", "نتانستم": "verb", "می‌تانستی": "verb",
     "می‌توانستم": "verb", "می‌توانستی": "verb",
+    "توانستم": "verb", "نتوانستم": "verb", "نتوانست": "verb",
     "پسته خانه": "noun", "نرفت": "verb", "ببری": "verb",
     "راستی": "adverb", "نداشتم": "verb", "ملاقات": "noun",
     "برود": "verb", "نتانست": "verb", "نزد": "preposition",
@@ -2803,7 +2807,8 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if token in {"می‌تانم", "می‌تانی", "می‌تانه", "می‌تانیم", "می‌تانین", "می‌تانن",
                  "می‌توانم", "می‌توانی", "می‌تواند", "می‌توانیم", "می‌توانین", "می‌توانند"}:
         semantics.append("ability_verb_present")
-    if token in {"می‌تانستم", "می‌تانستی", "می‌توانستم", "می‌توانستی", "نتانستم", "نتانست"}:
+    if token in {"می‌تانستم", "می‌تانستی", "می‌توانستم", "می‌توانستی", "نتانستم", "نتانست",
+                 "توانستم", "نتوانستم", "نتوانست"}:
         semantics.append("past_ability_verb")
     if token in {
         "بخرم", "ببینم", "بفرستم", "بفرستی", "ببره", "بکنین", "بیایند",
@@ -2816,7 +2821,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("correspondence_word")
     if token == "پسته خانه":
         semantics.append("errand_place_word")
-    if token in {"نرفت", "نتانست", "نداشتم"}:
+    if token in {"نرفت", "نتانست", "نتوانست", "نداشتم"}:
         semantics.append("past_negative_verb")
     if token == "ملاقات":
         # Reuses the "appointment_word" tag name already used for A1
