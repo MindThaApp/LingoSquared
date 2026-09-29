@@ -624,7 +624,12 @@ corpus) — renders exactly as before through the plain `TextBlockList`.
   given string has been recorded.
 
 `POST /exercises/{id}/answer` request: `{ "response": <shape depends on
-exercise type> }`:
+exercise type>, "client_operation_id": "uuid (optional)" }`:
+`client_operation_id` is an optional client-generated operation key (up to
+36 characters). Repeating the same key for the same user returns the stored
+answer result and does not create another attempt or award XP again. Clients
+should use a fresh key for each distinct answer submission. Without this
+field, existing submission behavior is unchanged.
 - Free-text types (`translation`, `writing_prompt`, `fill_in_blank`, etc.):
   a plain `string`.
 - `word_order` / `listen_order`: `string[]` in the order the learner
@@ -657,6 +662,11 @@ Response:
 ```json
 { "correct": true, "result": "correct", "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
 ```
+
+The first `POST /lessons/{lesson_id}/complete` for a lesson with exercises
+requires at least one answer attempt since that lesson session was started.
+Otherwise it returns HTTP 409 with the standard error envelope and code
+`lesson_not_attempted`. Lessons with no exercises remain completable.
 
 **Phase C additions (2026-07-05, additive, no breaking change):**
 
@@ -751,7 +761,10 @@ boundary — clients should use it (rather than re-deriving from
 `last_activity_date` with the device clock, which can disagree with
 the account timezone) to decide whether today's streak-preserving
 activity has already happened; the HomePage streak-at-risk banner is
-its consumer.
+its consumer. The returned `streak_days` is the effective live streak:
+it is zero when the last activity is too old in the account timezone,
+allowing one missed day when a freeze is available. This read calculation
+does not change the stored streak or consume a freeze.
 
 `GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20, "xp_today": 15 }`.
 `xp_today` (added 2026-07-10) is the XP earned within the user's own
