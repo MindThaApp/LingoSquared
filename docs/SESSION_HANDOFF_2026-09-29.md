@@ -16,6 +16,13 @@ image); content via `LINGO_ADMIN_EMAIL=admin@example.com LINGO_ADMIN_PASSWORD_FI
 LINGO_BACKFILL_SSH=ramin@192.168.4.4 scripts/sync_dev_db.sh http://192.168.4.4:8010` (updates
 existing units in place by content_key). Mic answers still need HTTPS on live. Throwaway
 `smoke-*@example.com` accounts exist on live (registration is rate-limited after a few).
+**Later (live at migration 0031):** import retires vanished keyed exercises (`retired_at`; first
+live sync retired 3, all en-A2 for fa/nl speakers); refresh-token pruning
+(`python -m app.scripts.prune_refresh_tokens`); SRS seeded from first-try lesson score;
+wrong/almost lesson answers create ReviewItems → "Fix your mistakes" on Review (browser-verified);
+e2e route-mocked specs (PR #23). Accessibility PR #22 is back with its cloud session for a rebase
+(was 54 commits stale, 17 conflicts) — merge only after full vitest passes. Cloud usage near the
+weekly limit (resets Fri 2026-10-02 17:00).
 Also shipped this evening: Unit.track (core|situation) mechanism + Situations shelf (no unit
 flagged — A2 plan Q8 open); 5 es/fr/ar dialogue_comprehension audio pointers.
 No credentials in this file — keep it that way.
