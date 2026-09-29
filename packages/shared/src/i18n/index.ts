@@ -1,9 +1,33 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en.json";
-import fa from "./locales/fa.json";
-import prs from "./locales/prs.json";
-import nl from "./locales/nl.json";
+import type { BackendModule } from "i18next";
+
+// en is the fallback language and stays in the entry chunk. Every other locale
+// is an explicit dynamic import (its own chunk), fetched by i18next's own
+// backend hook BEFORE changeLanguage switches/emits "languageChanged".
+const LOCALE_LOADERS: Record<string, () => Promise<{ default: Record<string, unknown> }>> = {
+  fa: () => import("./locales/fa.json"),
+  prs: () => import("./locales/prs.json"),
+  nl: () => import("./locales/nl.json"),
+};
+
+const lazyLocaleBackend: BackendModule = {
+  type: "backend",
+  init() {},
+  read(language, _namespace, callback) {
+    const loader = LOCALE_LOADERS[language];
+    // Unknown codes resolve to an empty bundle so lookups fall back to en.
+    if (!loader) {
+      callback(null, {});
+      return;
+    }
+    loader().then(
+      (m) => callback(null, m.default),
+      (err) => callback(err instanceof Error ? err : new Error(String(err)), null),
+    );
+  },
+};
 
 // Platform seam (added when this file moved from frontend/src/i18n/index.ts
 // into @lingo/shared): the original file directly read/wrote
@@ -21,13 +45,9 @@ export interface InitI18nOptions {
 }
 
 export function initI18n({ language, onLanguageChanged }: InitI18nOptions) {
-  i18n.use(initReactI18next).init({
-    resources: {
-      en: { translation: en },
-      fa: { translation: fa },
-      prs: { translation: prs },
-      nl: { translation: nl },
-    },
+  i18n.use(lazyLocaleBackend).use(initReactI18next).init({
+    resources: { en: { translation: en } },
+    partialBundledLanguages: true,
     lng: language,
     fallbackLng: "en",
     interpolation: { escapeValue: false },

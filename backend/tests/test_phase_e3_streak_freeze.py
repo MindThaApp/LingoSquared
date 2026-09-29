@@ -136,3 +136,46 @@ def test_streak_endpoint_reports_active_today(client):
         db.commit()
     body = client.get("/me/streak", headers=headers).json()
     assert body["active_today"] is True
+
+
+def test_streak_read_hides_lapsed_value_without_mutating_storage(client):
+    uid = _register(client, "freeze-stale-read@example.com")
+    login = client.post(
+        "/auth/login",
+        json={"email": "freeze-stale-read@example.com", "password": "password123"},
+    )
+    headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+    stored_date = _today() - timedelta(days=3)
+    with SessionLocal() as db:
+        stats = db.get(UserStats, uid)
+        stats.streak_days = 6
+        stats.last_activity_date = stored_date
+        stats.streak_freezes_available = 0
+        db.commit()
+
+    response = client.get("/me/streak", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["streak_days"] == 0
+    with SessionLocal() as db:
+        stats = db.get(UserStats, uid)
+        assert stats.streak_days == 6
+        assert stats.last_activity_date == stored_date
+
+
+def test_streak_freeze_keeps_streak_effective_for_one_missed_day(client):
+    uid = _register(client, "freeze-effective-read@example.com")
+    login = client.post(
+        "/auth/login",
+        json={"email": "freeze-effective-read@example.com", "password": "password123"},
+    )
+    headers = {"Authorization": f"Bearer {login.json()['access_token']}"}
+    with SessionLocal() as db:
+        stats = db.get(UserStats, uid)
+        stats.streak_days = 6
+        stats.last_activity_date = _today() - timedelta(days=2)
+        stats.streak_freezes_available = 1
+        db.commit()
+
+    response = client.get("/me/streak", headers=headers)
+    assert response.status_code == 200
+    assert response.json()["streak_days"] == 6

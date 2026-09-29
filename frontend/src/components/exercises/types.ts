@@ -1,4 +1,4 @@
-import type { AnswerResponse, Exercise } from "@lingo/shared/api/types";
+import type { AnswerMeta, AnswerResponse, CefrLevel, Exercise } from "@lingo/shared/api/types";
 
 // Passed down from pages once an answer has been graded, so option-based
 // components can highlight the correct/wrong option instead of just
@@ -12,7 +12,13 @@ export interface GradedResult {
 
 export interface ExerciseComponentProps {
   exercise: Exercise;
-  onAnswer: (response: AnswerResponse) => void;
+  onAnswer: (response: AnswerResponse, meta?: AnswerMeta) => void;
   disabled: boolean;
   gradedResult?: GradedResult;
+  // Word-bank (tap-to-build) answer mode inputs. All optional: callers that
+  // omit courseLevel (review/practice/checkpoint) always get the typed input.
+  courseLevel?: CefrLevel | null;
+  lessonExercises?: Exercise[];
+  // Correct answer of the previous miss, already shown on screen.
+  answerHint?: string;
 }

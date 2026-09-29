@@ -41,7 +41,7 @@ for (const name of ["localStorage", "sessionStorage"] as const) {
   }
 }
 
-const { user, course, mcItem } = vi.hoisted(() => {
+const { user, course, mcItem, authState } = vi.hoisted(() => {
 const user = {
   id: "u1",
   email: "learner@example.com",
@@ -69,7 +69,11 @@ const mcItem = {
   },
 };
 
-  return { user, course, mcItem };
+  // LoginPage/RegisterPage redirect an authenticated user away, so those two
+  // tests flip this to "unauthenticated".
+  const authState = { status: "authenticated" as "authenticated" | "unauthenticated" };
+
+  return { user, course, mcItem, authState };
 });
 
 vi.mock("../auth/AuthContext", async (importOriginal) => {
@@ -77,8 +81,8 @@ vi.mock("../auth/AuthContext", async (importOriginal) => {
   return {
     ...actual,
     useAuth: () => ({
-      user,
-      status: "authenticated",
+      user: authState.status === "authenticated" ? user : null,
+      status: authState.status,
       loading: false,
       retrying: false,
       retrySession: vi.fn(),
@@ -192,6 +196,7 @@ function Shell({ children }: { children: ReactNode }) {
 describe("learner-flow pages have no serious/critical axe violations", () => {
   beforeEach(() => {
     localStorage.clear();
+    authState.status = "authenticated";
   });
 
   it("app shell / nav", async () => {
@@ -202,7 +207,7 @@ describe("learner-flow pages have no serious/critical axe violations", () => {
 
   it("HomePage", async () => {
     const { container } = wrap(<Shell><HomePage /></Shell>);
-    await screen.findByText("Earn 20 XP");
+    await screen.findAllByText("Earn 20 XP");
     await expectNoSeriousA11yViolations(container);
   });
 
@@ -274,6 +279,7 @@ describe("learner-flow pages have no serious/critical axe violations", () => {
   });
 
   it("LoginPage (incl. error + guest form)", async () => {
+    authState.status = "unauthenticated";
     const { container } = wrap(<main><LoginPage /></main>, "/login");
     fireEvent.click(await screen.findByRole("button", { name: i18n.t("login.continue_as_guest") }));
     await screen.findByLabelText(i18n.t("login.pick_name"));
@@ -302,6 +308,7 @@ describe("learner-flow pages have no serious/critical axe violations", () => {
   });
 
   it("RegisterPage", async () => {
+    authState.status = "unauthenticated";
     const { container } = wrap(<main><RegisterPage /></main>, "/register");
     await screen.findByLabelText(i18n.t("register.email"));
     await expectNoSeriousA11yViolations(container);
@@ -317,6 +324,23 @@ describe("learner-flow pages have no serious/critical axe violations", () => {
     fireEvent.click(option);
     fireEvent.click(screen.getByRole("button", { name: i18n.t("common.check") }));
     await waitFor(() => expect(region).not.toBeEmptyDOMElement());
-    expect(region!.className).toContain("feedback-banner");
+    expect(region!.firstElementChild!.className).toContain("feedback-banner");
+    // The banner itself must not be a second (nested) live region.
+    expect(region!.querySelector("[role='status']")).toBeNull();
+  });
+
+  it("review page announces the verdict inside a pre-existing live region", async () => {
+    wrap(<Shell><ReviewPage /></Shell>);
+    const option = await screen.findByText("hallo");
+    const region = document.querySelector("main [role='status'][aria-live='polite']");
+    expect(region).not.toBeNull();
+    // The live region must already be in the DOM (empty) BEFORE grading.
+    expect(region).toBeEmptyDOMElement();
+    fireEvent.click(option);
+    fireEvent.click(screen.getByRole("button", { name: i18n.t("common.check") }));
+    await waitFor(() => expect(region).not.toBeEmptyDOMElement());
+    expect(region!.firstElementChild!.className).toContain("feedback-banner");
+    expect(region!.textContent).toContain(i18n.t("review.incorrect"));
+    expect(region!.querySelector("[role='status']")).toBeNull();
   });
 });

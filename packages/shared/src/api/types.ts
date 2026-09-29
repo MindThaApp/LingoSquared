@@ -62,6 +62,9 @@ export interface UnitSummary {
    * per-unit topical icon (see lib/unitIcons.ts); not otherwise
    * meaningful to the frontend. */
   content_key: string | null;
+  /** "core" (the path) or "situation" (optional shelf). Older servers
+   * omit it; treat missing as "core". */
+  track?: "core" | "situation";
 }
 
 export interface LessonSummary {
@@ -162,6 +165,13 @@ export interface MatchingPairAnswer {
 }
 
 export type AnswerResponse = string | string[] | Record<string, string> | MatchingPairAnswer[];
+
+// Optional per-submission metadata. `inputMode: "spoken"` marks an answer that
+// was produced by voice (speak_* exercises or the mic-fill button); typed
+// answers carry no meta at all and the request body has no input_mode key.
+export interface AnswerMeta {
+  inputMode?: "spoken";
+}
 
 // Phase C (docs/CONTRACT.md): "almost" means a free-text answer was within
 // typo tolerance and was ACCEPTED (correct == true, XP awarded) but wasn't

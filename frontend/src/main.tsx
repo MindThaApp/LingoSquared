@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { configureApi } from '@lingo/shared/api/client'
 import { configureAnswerInputModeStore } from '@lingo/shared/lib/answerInputMode'
 import './index.css'
@@ -9,6 +9,7 @@ import './i18n'
 import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext'
 import { installGlobalCrashReporting } from './lib/crashReporter'
+import { queryClient } from './queryClient'
 
 // @lingo/shared's api/client.ts and lib/answerInputMode.ts moved out of
 // frontend/src (Phase 0 of the mobile plan, see CLAUDE.md) and can no
@@ -66,21 +67,6 @@ configureAnswerInputModeStore({
     } catch {
       // Private-browsing/quota errors: not worth surfacing, just don't persist.
     }
-  },
-})
-
-// Default staleTime: 0 (react-query's own default) meant every screen
-// focus/app-switch refetched every mounted query -- expensive network
-// chatter on mobile for data that changes at most once per lesson/review/
-// practice completion. 30s keeps genuinely time-sensitive reads (due
-// counts, quests) reasonably fresh while killing the worst of the
-// refetch-on-focus storm; queries that need to be fresher or staler
-// override this per-query, same as CoursePickerPage already does.
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 30_000,
-    },
   },
 })
 

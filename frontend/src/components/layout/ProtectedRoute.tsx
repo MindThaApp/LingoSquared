@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { readCachedUser, useAuth } from "../../auth/AuthContext";
 
@@ -91,11 +91,19 @@ export function SessionUnavailableScreen() {
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { t } = useTranslation();
   const { user, status } = useAuth();
+  const location = useLocation();
   if (status === "loading") return <div className="page-loading">{t("common.loading")}</div>;
   // A session we couldn't verify is NOT a logged-out session. Redirecting
   // to /login here is what let a transient backend blip turn into a
   // duplicate account and an orphaned one.
   if (status === "unverified") return <SessionUnavailableScreen />;
-  if (!user) return <Navigate to="/login" replace />;
+  if (!user)
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: `${location.pathname}${location.search}${location.hash}` }}
+      />
+    );
   return <>{children}</>;
 }

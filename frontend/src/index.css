@@ -822,6 +822,15 @@ button {
 
 .feedback-banner.correct { background: var(--correct-soft); color: var(--correct); }
 .feedback-banner.almost { background: var(--almost-soft); color: var(--almost); }
+/* "Almost right": amber, counts as a pass; teaches the correct form. */
+.feedback-banner.almost { border: 1px solid var(--almost); }
+.almost-feedback .almost-title { margin: 0 0 6px; }
+.almost-feedback .almost-icon { font-weight: 800; }
+.almost-feedback .almost-line { margin: 0 0 6px; font-weight: 400; }
+.almost-feedback .almost-line-learner { opacity: 0.85; }
+.almost-mark { background: transparent; color: inherit; font-weight: 800; }
+.almost-mark-right { text-decoration: underline; text-underline-offset: 3px; }
+.almost-mark-wrong { text-decoration: line-through; }
 .feedback-banner.incorrect { background: var(--incorrect-soft); color: var(--incorrect); }
 /* Transient submit failure (network error, not a wrong answer) -- kept
    visually distinct from .incorrect so it doesn't read as "you got this
@@ -1399,6 +1408,41 @@ button {
   }
 }
 
+/* Voice answer (mic) — inline button, live level meter, recording pulse. */
+.voice-answer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 4px;
+}
+.voice-answer__status { font-size: 0.85rem; min-height: 1em; }
+.voice-answer__btn.is-recording,
+.btn.is-recording {
+  border-color: var(--accent);
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+.mic-meter {
+  display: inline-block;
+  width: 72px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.mic-meter__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+}
+[dir="rtl"] .mic-meter__fill { transform-origin: right center; }
+
 /* Pronunciation feedback: per-word clarity from the STT confidence signal.
    Unclear words are marked with an underline + tint, never with a "wrong"
    colour — the model's low confidence means it could not make the word out,
@@ -1449,4 +1493,216 @@ button {
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.75rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.exercise-option-icon { font-weight: 700; }
+
+/* ======================================================================
+   Desktop layout (>= 1024px). Everything below 1024px is untouched: all
+   rules here live inside min-width media queries, except the two base
+   rules that hide desktop-only chrome on smaller screens.
+   Logical properties only (rail sits on the inline-start side, so it flips
+   to the right under dir="rtl").
+   ====================================================================== */
+
+.side-rail,
+.desktop-sidebar { display: none; }
+
+@media (min-width: 1024px) {
+  :root {
+    --fs-base: 17px;
+    --space-1: 6px;
+    --space-2: 12px;
+    --space-3: 20px;
+    --space-4: 28px;
+    --rail-w: 232px;
+    --sidebar-w: 320px;
+    font-size: var(--fs-base);
+  }
+
+  /* Left rail replaces the top-bar links + brand; stats/language stay. */
+  .app--rail {
+    padding-inline-start: var(--rail-w);
+  }
+
+  .side-rail {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: var(--rail-w);
+    z-index: 25;
+    padding: var(--space-3) var(--space-2);
+    background: var(--surface);
+    border-inline-end: 1px solid var(--border);
+    overflow-y: auto;
+  }
+
+  .side-rail-brand {
+    font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    padding-inline: var(--space-2);
+  }
+
+  .side-rail-links {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .side-rail-links a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px var(--space-2);
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    font-weight: 700;
+    color: var(--text-soft);
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .side-rail-links a:hover { background: var(--surface-2); }
+
+  .side-rail-links a.active {
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-color: var(--accent);
+  }
+
+  .side-rail-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    width: 1.6rem;
+    text-align: center;
+  }
+
+  .topbar-brand,
+  .topbar-links { display: none; }
+  .topbar { justify-content: flex-end; }
+
+  .app-main {
+    max-width: 800px;
+    padding-inline: var(--space-4);
+    padding-top: var(--space-4);
+  }
+
+  /* Pages with a right sidebar widen to centre column + 320px aside. */
+  .app-main:has(.page-with-aside) {
+    max-width: calc(800px + var(--sidebar-w) + var(--space-4));
+  }
+
+  .page-with-aside {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+    gap: var(--space-4);
+    align-items: start;
+  }
+
+  .page-main-col { min-width: 0; }
+
+  .desktop-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    position: sticky;
+    top: 72px;
+  }
+
+  .desktop-sidebar .card + .card { margin-top: 0; }
+  .desktop-sidebar h3 { margin: 0 0 6px; }
+  .desktop-sidebar p { margin: 0 0 10px; }
+  .desktop-sidebar-next { border-color: var(--accent); background: var(--accent-soft); }
+  .desktop-sidebar-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-3);
+    font-weight: 700;
+  }
+
+  /* Course map: unit cards in two columns where it fits. */
+  .path {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    column-gap: var(--space-3);
+  }
+  .path::before { display: none; }
+  .path-section-label { grid-column: 1 / -1; }
+
+  /* Runner routes: single column, wider, larger type and targets. */
+  .app--runner .app-main {
+    max-width: 760px;
+    font-size: 1.1rem;
+  }
+  /* Lesson prompt / option sizes. Note rem here is 17px and the phone
+     prompt is already 1.35rem, so a real step up needs a larger value. */
+  .app--runner {
+    --lesson-prompt-size: 1.75rem;
+    --lesson-option-size: 1.15rem;
+  }
+  .app--runner .text-block-list { font-size: var(--lesson-prompt-size); }
+  .app--runner .text-block-row { font-size: var(--lesson-prompt-size); }
+  .app--runner .exercise-option {
+    padding: 17px 20px;
+    font-size: var(--lesson-option-size);
+  }
+  .app--runner .word-chip {
+    padding: 13px 20px;
+    font-size: var(--lesson-option-size);
+  }
+  .app--runner .matching-item {
+    padding: 16px 18px;
+    font-size: var(--lesson-option-size);
+  }
+  /* Centre quests card duplicates the sidebar's at desktop widths. */
+  .home-quests-card { display: none; }
+  /* Never 3+1: 2x2 in the narrow centre column, 4 across when it fits. */
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Feedback trigger/panel: inline-start (inside the left rail) so they never
+     cover the right sidebar. */
+  .feedback-widget-trigger,
+  .feedback-widget-panel {
+    inset-inline-end: auto;
+    inset-inline-start: 16px;
+    bottom: 16px;
+  }
+  .feedback-widget-panel { max-height: calc(100vh - 32px); }
+  .app--runner .btn { padding: 15px 26px; font-size: 1.05rem; }
+}
+
+@media (min-width: 1280px) {
+  .stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1440px) {
+  .feedback-widget-trigger,
+  .feedback-widget-panel {
+    inset-inline-start: calc(max(0px, (100vw - 1320px) / 2) + 16px);
+  }
+  :root {
+    --rail-w: 260px;
+    --space-4: 36px;
+  }
+  .app--rail { max-width: 1320px; margin-inline: auto; }
+  .app--rail .side-rail { inset-inline-start: max(0px, calc((100vw - 1320px) / 2)); }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .side-rail-links a { transition: none; }
 }

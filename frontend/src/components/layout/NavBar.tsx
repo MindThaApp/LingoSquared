@@ -1,46 +1,49 @@
-import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
 import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
-
-const TABS = [
-  { to: "/", labelKey: "nav.home", icon: "🏠" },
-  { to: "/courses", labelKey: "nav.learn", icon: "📚" },
-  { to: "/practice", labelKey: "nav.practice", icon: "⚡" },
-  { to: "/review", labelKey: "nav.review", icon: "🔁" },
-  { to: "/vocabulary", labelKey: "nav.vocabulary", icon: "🧠" },
-  { to: "/profile", labelKey: "nav.profile", icon: "👤" },
-];
+import { learnPath } from "../../lib/activeCourse";
+import { NAV_TABS } from "./navTabs";
+import { SideRail } from "./SideRail";
 
 export function NavBar() {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [streak, setStreak] = useState<number | null>(null);
-  const [xp, setXp] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!user) return;
-    ProgressApi.streak().then((s) => setStreak(s.streak_days)).catch(() => {});
-    ProgressApi.xp().then((x) => setXp(x.total_xp)).catch(() => {});
-  }, [user]);
+  const { pathname } = useLocation();
+  // Same keys/fetchers as HomePage so the cache is shared and invalidation
+  // after an answer/lesson refreshes the top bar too.
+  const streakQuery = useQuery({
+    queryKey: ["streak"],
+    queryFn: ProgressApi.streak,
+    enabled: !!user,
+  });
+  const xpQuery = useQuery({ queryKey: ["xp"], queryFn: ProgressApi.xp, enabled: !!user });
+  const streak = streakQuery.data?.streak_days ?? null;
+  const xp = xpQuery.data?.total_xp ?? null;
 
   if (!user) return null;
 
+  // Learn resumes the active course (per user, per device) when one is set.
+  const tabs = NAV_TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
+
   return (
     <>
+      <SideRail />
       <header className="topbar">
-        <NavLink to="/" className="topbar-brand">
+        <Link to="/" className="topbar-brand">
           Auvel
-        </NavLink>
+        </Link>
         <nav className="topbar-links" aria-label={t("nav.main_label")}>
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <NavLink
               key={tab.to}
               to={tab.to}
               end={tab.to === "/"}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) =>
+              isActive || (tab.labelKey === "nav.learn" && pathname.startsWith("/courses")) ? "active" : ""
+            }
             >
               {t(tab.labelKey)}
             </NavLink>
@@ -71,12 +74,14 @@ export function NavBar() {
         </div>
       </header>
       <nav className="tabbar" aria-label={t("nav.tabs_label")}>
-        {TABS.map((tab) => (
+        {tabs.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             end={tab.to === "/"}
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={({ isActive }) =>
+              isActive || (tab.labelKey === "nav.learn" && pathname.startsWith("/courses")) ? "active" : ""
+            }
           >
             <span className="tab-icon" aria-hidden="true">
               {tab.icon}

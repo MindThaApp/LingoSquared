@@ -1,17 +1,23 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
+import hashlib
+import random
 
 from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.models import (
     LessonProgress,
+    CheckpointAttempt,
+    ExerciseAttempt,
     PracticeAttempt,
     QuestCompletion,
     UserLexemeSRS,
 )
 from app.services.progress import (
     activity_day_bounds,
-    record_activity,
+    award_xp,
+    stats_for,
 )
 
 
@@ -37,7 +43,19 @@ QUEST_DEFINITIONS = (
         "xp_reward": 10,
         "target": 5,
     },
+    {"code":"answer_reviews_3","title":"Answer 3 reviews","description":"Complete three reviews today.","xp_reward":10,"target":3},
+    {"code":"accurate_lesson","title":"Finish a lesson accurately","description":"Complete a lesson with at least 80% correct today.","xp_reward":10,"target":1},
+    {"code":"practice_items_10","title":"Practice 10 items","description":"Answer ten practice items today.","xp_reward":10,"target":10},
+    {"code":"earn_daily_goal","title":"Reach your daily XP goal","description":"Earn XP from learning until you reach your daily goal.","xp_reward":10,"target":20},
+    {"code":"complete_checkpoint","title":"Complete a checkpoint","description":"Finish a unit checkpoint today.","xp_reward":15,"target":1},
 )
+
+
+def selected_quest_definitions(user_id: str, quest_date: date) -> tuple[dict, ...]:
+    """Pick a stable three-quest set for this user's local calendar day."""
+    seed = hashlib.sha256(f"{user_id}:{quest_date.isoformat()}".encode()).digest()
+    selected = set(random.Random(int.from_bytes(seed, "big")).sample(range(len(QUEST_DEFINITIONS)), 3))
+    return tuple(item for index, item in enumerate(QUEST_DEFINITIONS) if index in selected)
 
 
 def _live_progress(
@@ -60,6 +78,13 @@ def _live_progress(
             UserLexemeSRS.suspended.is_(False),
         )
     ) or 0
+    reviewed_today = db.scalar(
+        select(func.count(UserLexemeSRS.id)).where(
+            UserLexemeSRS.user_id == user_id,
+            UserLexemeSRS.last_reviewed_at >= day_start,
+            UserLexemeSRS.last_reviewed_at < day_end,
+        )
+    ) or 0
 
     lessons_completed = db.scalar(
         select(func.count(LessonProgress.id)).where(
@@ -77,12 +102,44 @@ def _live_progress(
             PracticeAttempt.created_at < day_end,
         )
     ) or 0
+    practice_count = db.scalar(
+        select(func.count(PracticeAttempt.id)).where(
+            PracticeAttempt.user_id == user_id,
+            PracticeAttempt.created_at >= day_start,
+            PracticeAttempt.created_at < day_end,
+        )
+    ) or 0
+    accurate_lessons = db.scalar(
+        select(func.count(LessonProgress.id)).where(
+            LessonProgress.user_id == user_id,
+            LessonProgress.completed_at >= day_start,
+            LessonProgress.completed_at < day_end,
+            LessonProgress.answer_count > 0,
+            LessonProgress.correct_count * 100 >= LessonProgress.answer_count * 80,
+        )
+    ) or 0
+    checkpoints = db.scalar(
+        select(func.count(CheckpointAttempt.id)).where(
+            CheckpointAttempt.user_id == user_id,
+            CheckpointAttempt.scored_at >= day_start,
+            CheckpointAttempt.scored_at < day_end,
+        )
+    ) or 0
+    review_count = reviewed_today
+    learning_xp = sum((db.scalar(select(func.coalesce(func.sum(model.xp_awarded), 0)).where(
+        model.user_id == user_id, model.created_at >= day_start, model.created_at < day_end,
+    )) or 0) for model in (ExerciseAttempt, PracticeAttempt))
 
     return {
         # A user with no vocabulary has no actionable review quest yet.
-        "clear_reviews": int(lexeme_count > 0 and due_count == 0),
+        "clear_reviews": int(lexeme_count > 0 and reviewed_today > 0 and due_count == 0),
         "complete_lesson": min(lessons_completed, 1),
         "practice_correct_5": min(correct_practice, 5),
+        "answer_reviews_3": min(review_count, 3),
+        "accurate_lesson": min(accurate_lessons, 1),
+        "practice_items_10": min(practice_count, 10),
+        "earn_daily_goal": learning_xp,
+        "complete_checkpoint": min(checkpoints, 1),
     }
 
 
@@ -110,26 +167,26 @@ def daily_quests_for(
     )
 
     results = []
-    for definition in QUEST_DEFINITIONS:
+    daily_goal = stats_for(db, user_id).daily_goal
+    for definition in selected_quest_definitions(user_id, quest_date):
+        if definition["code"] == "earn_daily_goal":
+            definition = {**definition, "target": daily_goal}
         code = definition["code"]
         target = definition["target"]
         progress = progress_by_code[code]
         live_completed = progress >= target
 
         if live_completed and code not in completed_codes:
-            db.add(
-                QuestCompletion(
-                    user_id=user_id,
-                    quest_code=code,
-                    date=quest_date,
+            inserted_id = db.scalar(
+                pg_insert(QuestCompletion)
+                .values(user_id=user_id, quest_code=code, date=quest_date)
+                .on_conflict_do_nothing(
+                    constraint="uq_quest_completions_user_code_date"
                 )
+                .returning(QuestCompletion.id)
             )
-            record_activity(
-                db,
-                user_id,
-                definition["xp_reward"],
-                user_timezone,
-            )
+            if inserted_id:
+                award_xp(db, user_id, definition["xp_reward"])
             completed_codes.add(code)
 
         completed = code in completed_codes

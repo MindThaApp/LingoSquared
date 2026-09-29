@@ -40,3 +40,21 @@ export function optionClassName(
   }
   return `exercise-option${selected === option ? " selected" : ""}`;
 }
+
+/**
+ * Post-grade marker state for one option (same resolution rules as
+ * optionClassName): "correct" for the correct option, "incorrect" for the
+ * learner's wrong choice, null otherwise / before grading.
+ */
+export function optionGradeState(
+  option: string,
+  selected: string | null,
+  gradedResult: GradedResult | undefined,
+  correctOption: string | null,
+): "correct" | "incorrect" | null {
+  if (gradedResult && correctOption) {
+    if (option === correctOption) return "correct";
+    if (option === selected) return "incorrect";
+  }
+  return null;
+}

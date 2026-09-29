@@ -34,6 +34,7 @@ import argparse
 from collections import Counter
 import copy
 import json
+import random
 import re
 import sys
 import unicodedata
@@ -386,6 +387,18 @@ def validate_unit_sections(realization: dict[str, Any], report: Report):
                 f"realization.units[{unit_index}].section",
                 f"{section!r} is not a valid unit section; must be one of "
                 f"{sorted(VALID_UNIT_SECTIONS)}",
+            )
+
+
+def validate_unit_tracks(realization: dict[str, Any], report: Report):
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        if not isinstance(unit, dict) or "track" not in unit:
+            continue
+        track = unit["track"]
+        if track not in ("core", "situation"):
+            report.error(
+                f"realization.units[{unit_index}].track",
+                f"{track!r} is not a valid unit track; must be one of ['core', 'situation']",
             )
 
 
@@ -3787,6 +3800,31 @@ def validate_audio_references(
         )
 
 
+def validate_dialogue_comprehension_audio(
+    realization: dict[str, Any],
+    report: Report,
+):
+    assets = _media_assets_by_key(realization)
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if (
+                    not isinstance(exercise, dict)
+                    or exercise.get("type") != "dialogue_comprehension"
+                ):
+                    continue
+                media_key = exercise.get("media_asset_key")
+                asset = assets.get(media_key) if media_key else None
+                text = asset.get("text") if isinstance(asset, dict) else None
+                if not isinstance(text, str) or not text.strip():
+                    key = exercise.get("content_key", "<unknown>")
+                    report.warn(
+                        f"realization.exercises.{key}.media_asset_key",
+                        "dialogue_comprehension media asset is missing or has "
+                        "no text; audio prompt will be unavailable",
+                    )
+
+
 def validate_course_consistency(
     realizations: list[tuple[Path, dict[str, Any]]],
     overlays: list[tuple[Path, dict[str, Any]]],
@@ -4145,6 +4183,74 @@ def compile_feedback(
     return json.dumps(payload)
 
 
+def _language_script(language: str) -> str:
+    return NON_LATIN_TARGET_SCRIPTS.get(language, "LATIN")
+
+
+def _dominant_script(value: str) -> str:
+    counts: Counter[str] = Counter()
+    for character in value:
+        if not character.isalpha():
+            continue
+        name = unicodedata.name(character, "")
+        script = next(
+            (candidate for candidate in (
+                "ARABIC", "DEVANAGARI", "CYRILLIC", "HEBREW", "GREEK",
+                "HIRAGANA", "KATAKANA", "CJK", "LATIN",
+            ) if candidate in name),
+            "OTHER",
+        )
+        counts[script] += 1
+    return counts.most_common(1)[0][0] if counts else "OTHER"
+
+
+def _strip_tile_punctuation(token: str) -> str:
+    start, end = 0, len(token)
+    while start < end and unicodedata.category(token[start]).startswith("P"):
+        start += 1
+    while end > start and unicodedata.category(token[end - 1]).startswith("P"):
+        end -= 1
+    return token[start:end]
+
+
+def _build_word_bank(
+    prompt: dict[str, Any], tokens: list[str], accepted: list[Any],
+    distractor_tokens: list[Any] | None, answer_language: str,
+    answer_script: str, content_key: str,
+    introduced_tokens: set[str] | None = None,
+) -> None:
+    forbidden = {
+        token.casefold()
+        for value in accepted if isinstance(value, str)
+        for token in value.split()
+    }
+    lexicon = introduced_tokens or set()
+    if introduced_tokens is not None and any(
+        token.casefold() not in lexicon for token in tokens
+    ):
+        return
+    answer_set = {token.casefold() for token in tokens}
+    candidates: list[str] = []
+    for item in distractor_tokens or []:
+        if isinstance(item, (tuple, list)) and len(item) == 2:
+            token, language = item
+        else:
+            token, language = item, answer_language
+        if isinstance(token, str):
+            token = _strip_tile_punctuation(token)
+        if (isinstance(token, str) and token and language == answer_language
+                and introduced_tokens is not None
+                and token.casefold() in lexicon
+                and _dominant_script(token) == answer_script
+                and token.casefold() not in answer_set
+                and token.casefold() not in forbidden):
+            candidates.append(token)
+    candidates = list(dict.fromkeys(candidates))
+    rng = random.Random(content_key)
+    rng.shuffle(candidates)
+    prompt["word_bank"] = tokens + candidates[:4]
+
+
 def compile_exercise(
     exercise: dict[str, Any],
     exercise_overlay: dict[str, Any],
@@ -4152,6 +4258,10 @@ def compile_exercise(
     source_language: str,
     target_language: str,
     content_key: str = "",
+    media_assets: dict[Any, dict[str, Any]] | None = None,
+    cefr_level: str | None = None,
+    distractor_tokens: list[str] | None = None,
+    introduced_tokens: set[str] | None = None,
 ) -> dict[str, Any]:
     prompt = copy.deepcopy(exercise.get("prompt", {}))
     target_blocks = prompt.pop("target_blocks", [])
@@ -4180,6 +4290,14 @@ def compile_exercise(
     }:
         prompt["audio_text"] = exercise["tested_text"]
         prompt["audio_language_code"] = target_language
+
+    if exercise["type"] == "dialogue_comprehension":
+        media_key = exercise.get("media_asset_key")
+        asset = (media_assets or {}).get(media_key)
+        text = asset.get("text") if isinstance(asset, dict) else None
+        if isinstance(text, str) and text.strip():
+            prompt["audio_text"] = text
+            prompt["audio_language_code"] = target_language
 
     if "answer_language_code" in exercise_overlay:
         prompt["answer_language_code"] = exercise_overlay["answer_language_code"]
@@ -4216,6 +4334,41 @@ def compile_exercise(
                     exercise_overlay,
                 )
             prompt[field] = copy.deepcopy(value)
+
+    # A1/A2 free-text answers use a tile bank. Keep this derived field out of
+    # the realization and never include any accepted answer variant as a tile.
+    if (
+        cefr_level in {"A1", "A2"}
+        and exercise.get("type") in {"translation", "writing_prompt", "dialogue_response"}
+        and "word_bank" not in prompt
+        and not exercise_overlay.get("case_sensitive")
+        and not exercise_overlay.get("orthography_strict")
+    ):
+        answer = canonical_response(exercise_overlay)
+        accepted = answer.get("accepted", []) if isinstance(answer, dict) else []
+        canonical = answer.get("canonical") if isinstance(answer, dict) else answer
+        if not isinstance(canonical, str) or len(accepted) > 6:
+            pass
+        else:
+            language = prompt.get("answer_language_code", target_language)
+            if language not in {"zh", "ja", "yue", "cmn"}:
+                tokens = [_strip_tile_punctuation(token) for token in canonical.split()]
+                tokens = [token for token in tokens if token]
+                # A one-tile bank adds no useful construction task. Letter
+                # drills also produce unusable banks, even when multi-tile.
+                if len(tokens) <= 1:
+                    pass
+                elif len(tokens) <= 12 and not all(len(token) <= 1 for token in tokens):
+                    answer_script = _dominant_script(canonical)
+                    target_script = _language_script(target_language)
+                    # A transliterated answer is not suitable for a target
+                    # language tile bank (for example Latin ``salam`` in fa).
+                    if answer_script == target_script and language == target_language:
+                        _build_word_bank(
+                            prompt, tokens, accepted, distractor_tokens,
+                            prompt.get("answer_language_code", target_language),
+                            answer_script, content_key, introduced_tokens,
+                        )
 
     return {
         "type": exercise["type"],
@@ -4255,20 +4408,52 @@ def compile_import_request(
         realizations,
         overlays,
     ):
+        media_assets = _media_assets_by_key(realization_document)
         source_language = overlay_document["source_language"]
         lesson_overlays = overlay_document.get("lessons", {})
         teaching_overlays = overlay_document.get("teaching", {})
         exercise_overlays = overlay_document.get("exercises", {})
 
+        taught_tokens: set[str] = set()
         for unit in realization_document.get("units", []):
             compiled_lessons = []
+            unit_exercises = [
+                exercise
+                for lesson in unit.get("lessons", [])
+                for exercise in lesson.get("exercises", [])
+            ]
+            def answer_tokens(items: list[dict[str, Any]]) -> list[tuple[str, str]]:
+                values: list[tuple[str, str]] = []
+                for item in items:
+                    item_key = item.get("content_key", "")
+                    item_overlay = exercise_overlays.get(item_key, {})
+                    answer = canonical_response(
+                        item_overlay
+                    )
+                    canonical = answer.get("canonical") if isinstance(answer, dict) else answer
+                    if isinstance(canonical, str):
+                        answer_language = item_overlay.get(
+                            "answer_language_code",
+                            source_language if item.get("type") == "reverse_translation"
+                            else realization_document["target_language"],
+                        )
+                        values.extend(
+                            (_strip_tile_punctuation(token), answer_language)
+                            for token in canonical.split()
+                        )
+                return [(token, lang) for token, lang in values if token]
 
             for lesson_order, lesson in enumerate(
                 unit.get("lessons", []),
                 1,
             ):
+                taught_tokens.update(_lesson_introduced_tokens(lesson))
                 lesson_key = lesson["content_key"]
                 lesson_overlay = lesson_overlays.get(lesson_key, {})
+                lesson_exercises = lesson.get("exercises", [])
+                distractors = answer_tokens(lesson_exercises)
+                if not distractors:
+                    distractors = answer_tokens(unit_exercises)
 
                 teaching = [
                     compile_teaching_item(
@@ -4293,6 +4478,10 @@ def compile_import_request(
                             source_language,
                             realization_document["target_language"],
                             content_key=key,
+                            media_assets=media_assets,
+                            cefr_level=realization_document.get("cefr_level"),
+                            distractor_tokens=distractors,
+                            introduced_tokens=taught_tokens,
                         )
                     )
 
@@ -4326,24 +4515,25 @@ def compile_import_request(
                     "content_key": unit["content_key"],
                 }
             )
+            if "track" in unit:
+                compiled_units[-1]["track"] = unit["track"]
 
     first_realization = realizations[0]
     first_overlay = overlays[0]
     course_overlay = first_overlay.get("course", {})
 
-    return {
-        "courses": [
-            {
-                "source_language": first_overlay["source_language"],
-                "target_language": first_realization["target_language"],
-                "title": course_overlay["title"],
-                "description": course_overlay.get("description", ""),
-                "level": first_realization["cefr_level"],
-                "units": compiled_units,
-                "content_items": [],
-            }
-        ]
+    compiled_course = {
+        "source_language": first_overlay["source_language"],
+        "target_language": first_realization["target_language"],
+        "title": course_overlay["title"],
+        "description": course_overlay.get("description", ""),
+        "level": first_realization["cefr_level"],
+        "units": compiled_units,
+        "content_items": [],
     }
+    if "recommended" in course_overlay:
+        compiled_course["recommended"] = course_overlay["recommended"]
+    return {"courses": [compiled_course]}
 
 
 def validate_documents(
@@ -4364,6 +4554,7 @@ def validate_documents(
 
     validate_content_keys(realization, report)
     validate_unit_sections(realization, report)
+    validate_unit_tracks(realization, report)
     validate_teaching_kinds(realization, report)
     validate_exercise_types(realization, report)
     validate_content_field_lengths(realization, overlay, report)
@@ -4413,6 +4604,7 @@ def validate_documents(
     validate_listen_select_same_speaker_audio_options(realization, overlay, report)
     validate_listen_audio_contains_tested_text(realization, report)
     validate_audio_references(realization, report)
+    validate_dialogue_comprehension_audio(realization, report)
 
     return report
 

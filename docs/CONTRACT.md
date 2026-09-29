@@ -163,6 +163,23 @@ intact — real user history referencing it is never destroyed (and the
 `RESTRICT` foreign keys on `exercise_attempts`/`content_issue_reports`
 wouldn't allow deleting it anyway).
 
+**Retirement of vanished exercises (2026-09-29).** Import now *retires*
+exercises that disappeared from the content: within every lesson present
+in the payload (matched by `content_key`), an existing exercise whose
+non-null `content_key` is absent from the incoming lesson gets `retired_at`
+set (timestamp) instead of staying live. Exercises with no `content_key`
+are never retired. A retired exercise that reappears in a later import is
+un-retired (`retired_at` cleared) and updated in place. Rows are still
+never deleted, so attempt history, SRS and progress keep their ids.
+Lessons/units absent from the payload are untouched (partial/append
+imports stay safe). Retired exercises are excluded from lesson detail
+(`GET /lessons/{id}`), lesson exercise counts, and review/practice/
+checkpoint pools; answers already in flight to a retired exercise are
+still graded (no error).
+
+Request, additive: optional boolean `retire_missing` (default `true`);
+`false` keeps the old keep-everything behavior.
+
 **Pre-existing rows (imported before this feature shipped) have
 `content_key = NULL` forever** unless manually reconciled — this
 migration does not attempt to backfill historical content_keys, since
@@ -179,12 +196,16 @@ new content_key-emitting version.
   "created_units": 2, "updated_units": 1,
   "created_lessons": 6, "updated_lessons": 3,
   "created_exercises": 40, "updated_exercises": 5,
+  "retired_exercises": 3, "unretired_exercises": 0,
   "created_teaching_items": 12, "updated_teaching_items": 8,
   "warnings": [
     "unit prs.a1.unit03: lesson order 2 conflicts with an existing, unaffected lesson; skipped (content_key='prs.a1.unit03.lesson02')"
   ]
 }
 ```
+`retired_exercises`/`unretired_exercises` are ints (0 when `retire_missing`
+is false).
+
 `warnings` is **non-fatal** — populated when an incoming item *does*
 carry a content_key but its `order` still collided with something
 unrelated (an author coordination conflict worth surfacing, not a
@@ -423,8 +444,14 @@ own account.
 
 `GET /courses?source=en&target=fa` → flat array:
 ```json
-[ { "id": "uuid", "source_language": "en", "target_language": "fa", "title": "string", "level": "string", "unit_count": 1 } ]
+[ { "id": "uuid", "source_language": "en", "target_language": "fa", "title": "string", "level": "string", "unit_count": 1, "recommended": false } ]
 ```
+
+`recommended` is an additive course-list/detail field. It defaults to
+`false`; course imports may set it to `true` to distinguish the preferred
+course when multiple courses share a CEFR level. Content overlays may set
+`course.recommended`; the compiler forwards it as `courses[].recommended`
+when present and omits it when absent.
 
 `GET /courses/{course_id}` → same shape as one list item, plus
 `"description"`. Does not inline units (fetch those separately) — avoids two
@@ -442,10 +469,22 @@ sources of truth for unit ordering.
     "section": "reading_writing",
     "locked": false,
     "checkpoint_passed": false,
-    "content_key": "en.a1.unit06.family"
+    "content_key": "en.a1.unit06.family",
+    "track": "core"
   }
 ]
 ```
+`track` (`"core" | "situation"`, always present, default `"core"`) is an
+additive unit field. Situation units are optional side content: they are
+always unlocked in the UI and never the "next recommended" unit, and
+`speaking_unlocked`, first-placement unit selection and any
+course-completion/progress summary count **core units only**. Content YAML
+sets it via an optional per-unit `track: situation` in realization files
+(absent = core); the compiler validates the value (only `core|situation`) and
+passes it through as the import payload unit's `track`, and
+`POST /admin/content/import` updates it in place on existing units matched by
+`content_key` (no rows moved or renumbered). No units are flagged yet — which
+units to demote is an open product question (A2_REBUILD_PLAN Q8).
 `completed_lesson_count` is learner-specific: with authenticated optional auth
 it counts that user's lessons in the unit whose `LessonProgress.completed_at`
 is non-null; anonymous requests return `0` for every unit.
@@ -496,7 +535,7 @@ each piece of text as its own `text_block` with its own `language_code` and
           { "text": "Where is the station?", "language_code": "en", "direction": "ltr" }
         ],
         "options": ["...multiple_choice only..."],
-        "word_bank": ["...word_order only..."],
+        "word_bank": ["...word_order tiles, or generated tiles for A1/A2 free-text prompts..."],
         "pairs": ["...matching_pairs only (left/right items, shuffled, no answer key)..."],
         "back_text_blocks": ["...flashcard only — the back-of-card text_blocks, same shape as text_blocks, revealed client-side after the user flips the card..."]
       }
@@ -624,7 +663,12 @@ corpus) — renders exactly as before through the plain `TextBlockList`.
   given string has been recorded.
 
 `POST /exercises/{id}/answer` request: `{ "response": <shape depends on
-exercise type> }`:
+exercise type>, "client_operation_id": "uuid (optional)" }`:
+`client_operation_id` is an optional client-generated operation key (up to
+36 characters). Repeating the same key for the same user returns the stored
+answer result and does not create another attempt or award XP again. Clients
+should use a fresh key for each distinct answer submission. Without this
+field, existing submission behavior is unchanged.
 - Free-text types (`translation`, `writing_prompt`, `fill_in_blank`, etc.):
   a plain `string`.
 - `word_order` / `listen_order`: `string[]` in the order the learner
@@ -653,10 +697,30 @@ exercise type> }`:
   determines correctness and SRS scheduling rather than comparing typed
   text.
 
+**Spoken-answer input mode (2026-09-29, additive):** Lesson, review, and
+practice answer requests may include `"input_mode": "typed" | "spoken"`.
+The field is optional and defaults to `"typed"`, preserving existing
+clients and typed grading.
+Clients send `"spoken"` when the submitted answer is a microphone
+transcript. Spoken grading applies to any exercise type and also defaults
+on for `speak_repeat` and `speak_response` exercises when the field is
+omitted. It accepts small transcript differences, including bounded
+word-level edits, one short missing or extra function word, and equivalent
+digit/number-word tokens for supported languages. An answer accepted only
+by this spoken tolerance is returned as `result: "almost"`; as with other
+`almost` results, `correct` remains true and progress/SRS continue.
+Typed requests retain the existing grading rules, including strict
+checkpoint grading. Spoken tolerance applies to checkpoint transcripts too.
+
 Response:
 ```json
 { "correct": true, "result": "correct", "correct_response": "...", "xp_awarded": 10, "feedback": "string (optional)" }
 ```
+
+The first `POST /lessons/{lesson_id}/complete` for a lesson with exercises
+requires at least one answer attempt since that lesson session was started.
+Otherwise it returns HTTP 409 with the standard error envelope and code
+`lesson_not_attempted`. Lessons with no exercises remain completable.
 
 **Phase C additions (2026-07-05, additive, no breaking change):**
 
@@ -751,9 +815,17 @@ boundary — clients should use it (rather than re-deriving from
 `last_activity_date` with the device clock, which can disagree with
 the account timezone) to decide whether today's streak-preserving
 activity has already happened; the HomePage streak-at-risk banner is
-its consumer.
+its consumer. The returned `streak_days` is the effective live streak:
+it is zero when the last activity is too old in the account timezone,
+allowing one missed day when a freeze is available. This read calculation
+does not change the stored streak or consume a freeze.
 
 `GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20, "xp_today": 15 }`.
+`daily_goal` is the authenticated user's configured target and defaults to
+20 XP. `GET /me/daily-goal` returns `{ "daily_goal_xp": 20 }`.
+`PUT /me/daily-goal` accepts `{ "daily_goal_xp": 10|20|30|50 }` and returns
+the same shape. These values correspond to casual/regular/serious/intense.
+Other values return the standard `422` error envelope.
 `xp_today` (added 2026-07-10) is the XP earned within the user's own
 local day (same `activity_day_bounds()` window streaks/quests use),
 summed live from the persisted per-answer rows: `ExerciseAttempt`
@@ -767,7 +839,7 @@ to a day; the frontend no longer uses that flow.
 
 `GET /me/achievements` → `[ { "id":"...", "code":"...", "title":"...", "description":"...", "earned": true } ]`.
 
-`GET /me/quests` (Phase E3, 2026-07-05) → `{ "quests": [ { "code":"clear_reviews", "title":"...", "description":"...", "xp_reward":10, "completed":false, "progress":0, "target":1 } ] }`.
+`GET /me/quests` (Phase E3, 2026-07-05) → `{ "quests": [ { "code":"clear_reviews", "title":"...", "description":"...", "xp_reward":10, "completed":false, "progress":0, "target":1 } ] }`. Three quests are deterministically selected from the quest pool per user and local date. Quest XP rewards do not count as learning activity or extend a streak; reading quests never awards XP unless the underlying learning action is already complete.
 Server-authoritative daily nudge quests, computed live against the
 user's own local day (same timezone logic as streaks) rather than
 tracked via per-action hooks into every answer endpoint — quest
@@ -1472,10 +1544,11 @@ is not an error) and deliberately NOT gated on `push_configured`, so a
 client can always clean up a local subscription even after the server's
 keys were rotated away.
 
-Admin trigger — manual, not scheduled (this project has no background
-scheduler/cron infrastructure by design; an external cron or a
-Ramin-initiated call fires it whenever a "reviews due" push should go
-out):
+Admin triggers remain available for manual use. An optional in-process
+scheduler also runs the daily reminder triggers every 15 minutes when
+`ENABLE_PUSH_SCHEDULER=true`; it is disabled by default. Sends are guarded
+per user, trigger, and local date, and users without an active push
+subscription receive nothing.
 
 `POST /admin/push/notify-due-reviews` (admin auth) — sends a "Reviews are
 waiting" notification to every user with at least one due, non-suspended
@@ -1485,9 +1558,10 @@ SRS lexeme:
 → { "notified_users": 3, "notifications_sent": 4 }
 ```
 
-This is the only implemented notification trigger today; any future
-trigger (e.g. streaks-at-risk) must be added to this section before being
-built.
+`POST /admin/push/notify-streaks-at-risk` (admin auth) — sends a streak
+warning to users with a live streak who have not been active in their own
+local day. Both trigger types are deduplicated per user, trigger, and local
+date, including when multiple scheduler workers are running.
 
 **Push payload contract (server → service worker)** — the data of every
 push message is JSON:
@@ -1806,15 +1880,13 @@ exercise types (`grammar_check`, `reading_comprehension`, `writing_prompt`,
 is purely a grouping/gating concept over the existing ones).
 `speaking` units are **locked** (backend returns 409
 `speaking_locked` on `POST /lessons/{id}/start` for a lesson in a locked
-unit) until the learner has completed a course-level threshold of
-`reading_writing` units in the same course — backend picks and documents a
-specific, reasonable default (e.g. 100% of `reading_writing` units
-completed, or a %; document whichever is chosen) rather than leaving it
-unspecified. Frontend shows locked speaking units visibly-but-disabled
+unit) until the learner has completed every `reading_writing` unit earlier
+in that course's order. Later reading/writing units do not block an earlier
+speaking unit. Frontend shows locked speaking units visibly-but-disabled
 (not hidden) with a short explanation of what unlocks them, using the
 `locked` field — never infer lock state client-side from other data.
 
-Backend implementation choice: the threshold is 100%. A `reading_writing`
-unit is complete when all of its lessons are complete; all such units in the
-course must be complete. Anonymous unit listings conservatively return
+Backend implementation choice: a `reading_writing` unit is complete when
+all of its lessons are complete; only those preceding the speaking unit in
+course order are prerequisites. Anonymous unit listings conservatively return
 `locked: true` for speaking units because lock state is learner-specific.

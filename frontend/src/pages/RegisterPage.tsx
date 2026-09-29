@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { ApiError } from "@lingo/shared/api/client";
 
 export function RegisterPage() {
   const { t } = useTranslation();
-  const { register } = useAuth();
+  const { register, status } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +27,10 @@ export function RegisterPage() {
       setSubmitting(false);
     }
   }
+
+  // Already signed in: nothing to do here (and a second registration would
+  // orphan the live session's account).
+  if (status === "authenticated") return <Navigate to="/" replace />;
 
   return (
     <div className="auth-page">

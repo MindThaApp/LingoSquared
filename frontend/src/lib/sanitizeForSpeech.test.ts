@@ -1,0 +1,62 @@
+import { describe, expect, it } from "vitest";
+import { sanitizeForSpeech } from "./sanitizeForSpeech";
+
+describe("sanitizeForSpeech", () => {
+  it("strips a leading speaker label", () => {
+    expect(sanitizeForSpeech("Lotte: Hoi, hoe gaat het?")).toBe("Hoi, hoe gaat het?");
+    expect(sanitizeForSpeech("Jan de Vries: Goedemorgen")).toBe("Goedemorgen");
+  });
+  it("strips non-Latin speaker labels", () => {
+    expect(sanitizeForSpeech("علی: سلام")).toBe("سلام");
+    expect(sanitizeForSpeech("Иван: Привет")).toBe("Привет");
+    expect(sanitizeForSpeech("李明：你好")).toBe("你好");
+  });
+  it("strips parenthesized and bracketed glosses", () => {
+    expect(sanitizeForSpeech("Hoi (stressed informal) allemaal")).toBe("Hoi allemaal");
+    expect(sanitizeForSpeech("Goedemorgen [lit. good morning]")).toBe("Goedemorgen");
+  });
+  it("replaces arrows and collapses whitespace", () => {
+    expect(sanitizeForSpeech("huis → house")).toBe("huis, house");
+    expect(sanitizeForSpeech("a -> b => c")).toBe("a, b, c");
+    expect(sanitizeForSpeech("  veel   spaties  ")).toBe("veel spaties");
+  });
+  it("does not strip times or mid-sentence colons", () => {
+    expect(sanitizeForSpeech("10:30 komt de trein")).toBe("10:30 komt de trein");
+    expect(sanitizeForSpeech("Ik zei het volgende: ja")).toBe("Ik zei het volgende: ja");
+    expect(sanitizeForSpeech("Om 10:30 begint het: kom")).toBe("Om 10:30 begint het: kom");
+  });
+  it("returns empty string when nothing speakable remains", () => {
+    expect(sanitizeForSpeech("(only a gloss)")).toBe("");
+    expect(sanitizeForSpeech("   ")).toBe("");
+  });
+  it("strips inner speaker labels in multi-turn Latin dialogue", () => {
+    expect(
+      sanitizeForSpeech("Lotte: Hoi, ik ben Lotte. Hoe heet je? Omar: Ik heet Omar. Lotte: Tot volgende week!"),
+    ).toBe("Hoi, ik ben Lotte. Hoe heet je? Ik heet Omar. Tot volgende week!");
+    expect(sanitizeForSpeech("Lotte: Hoi.\nOmar: Hallo!\nLotte: Dag!")).toBe("Hoi. Hallo! Dag!");
+  });
+  it("strips inner speaker labels in Persian-script dialogue", () => {
+    expect(sanitizeForSpeech("علی: سلام، حال شما چطور است؟ مریم: خوبم. علی: خداحافظ!")).toBe(
+      "سلام، حال شما چطور است؟ خوبم. خداحافظ!",
+    );
+  });
+  it("leaves times and mid-sentence colons alone in multi-sentence text", () => {
+    expect(sanitizeForSpeech("Het is laat. Om 8:30 begint het.")).toBe("Het is laat. Om 8:30 begint het.");
+    expect(sanitizeForSpeech("Hij zei. Let op: kom snel.")).toBe("Hij zei. Let op: kom snel.");
+    expect(sanitizeForSpeech("Ik zei het volgende: ja")).toBe("Ik zei het volgende: ja");
+  });
+  it("turns fill-in-blank underscores into a pause", () => {
+    expect(sanitizeForSpeech("Bent ___ nieuw hier?")).toBe("Bent … nieuw hier?");
+    expect(sanitizeForSpeech("Ik ben ______.")).toBe("Ik ben ….");
+    expect(sanitizeForSpeech("snake_case")).toBe("snake_case");
+  });
+  it("strips Persian labels containing ZWNJ (multi-turn)", () => {
+    expect(
+      sanitizeForSpeech("مصاحبه\u200Cکننده: سلام، حال شما چطور است؟ سارا: خوبم. مصاحبه\u200Cکننده: عالی!"),
+    ).toBe("سلام، حال شما چطور است؟ خوبم. عالی!");
+    expect(sanitizeForSpeech("مصاحبه\u200Cکننده: سلام.\nسارا: درود.")).toBe("سلام. درود.");
+  });
+  it("leaves a ZWNJ word without a colon untouched", () => {
+    expect(sanitizeForSpeech("او مصاحبه\u200Cکننده است.")).toBe("او مصاحبه\u200Cکننده است.");
+  });
+});

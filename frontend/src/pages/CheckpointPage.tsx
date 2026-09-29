@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CheckpointApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { invalidateProgressQueries } from "../lib/invalidateProgress";
 
 type Phase =
   | "loading"
   | "blocked"
   | "unavailable"
+  | "network_error"
   | "in_progress"
   | "scoring"
   | "scoring_error"
@@ -35,6 +41,7 @@ export function CheckpointPage() {
   const { t } = useTranslation();
   const { unitId = "" } = useParams();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const location = useLocation();
   // Threaded via route state when the checkpoint is entered from a course
   // path; may be absent, in which case the drill target still seeds the
@@ -49,8 +56,11 @@ export function CheckpointPage() {
   const [retryAfterSeconds, setRetryAfterSeconds] = useState<number | null>(null);
   const [finalResult, setFinalResult] = useState<CheckpointResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  // Bumped by the network-error Retry button to re-run the start effect.
+  const [reloadNonce, setReloadNonce] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -70,26 +80,33 @@ export function CheckpointPage() {
           const seconds = err.details.retry_after_seconds;
           setRetryAfterSeconds(typeof seconds === "number" ? seconds : null);
           setPhase("blocked");
-        } else {
+        } else if (err instanceof ApiError && err.status >= 400 && err.status < 500) {
           setPhase("unavailable");
+        } else {
+          // Fetch rejection (offline/DNS), 5xx, or anything that isn't a
+          // definitive 4xx: the checkpoint may well exist, so offer Retry
+          // instead of claiming it's unavailable.
+          setPhase("network_error");
         }
       }
     }
+    setPhase("loading");
     start();
     return () => {
       cancelled = true;
     };
-  }, [unitId]);
+  }, [unitId, reloadNonce]);
 
   const current = items[index];
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
-      const res = await CheckpointApi.answer(current.id, response);
+      const res = await CheckpointApi.answer(current.id, response, meta);
       setResult(res);
     } catch {
       setSubmitError(true);
@@ -99,7 +116,7 @@ export function CheckpointPage() {
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   async function scoreCheckpoint() {
@@ -108,6 +125,7 @@ export function CheckpointPage() {
       const scored = await CheckpointApi.result(unitId);
       setFinalResult(scored);
       setPhase("done");
+      invalidateProgressQueries(queryClient);
     } catch {
       setPhase("scoring_error");
     }
@@ -135,6 +153,21 @@ export function CheckpointPage() {
       <div className="card" style={{ textAlign: "center" }}>
         <p className="muted">{t("checkpoint.scoring_error")}</p>
         <button className="btn" onClick={scoreCheckpoint}>
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  if (phase === "network_error") {
+    return (
+      <div className="card" style={{ textAlign: "center" }}>
+        <p className="muted">
+          {t("checkpoint.load_error", {
+            defaultValue: "Couldn't load this checkpoint — check your connection and try again.",
+          })}
+        </p>
+        <button className="btn" onClick={() => setReloadNonce((n) => n + 1)}>
           {t("common.retry")}
         </button>
       </div>
@@ -246,7 +279,7 @@ export function CheckpointPage() {
           <X size={18} />
         </button>
       </div>
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={current.id}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
@@ -254,7 +287,7 @@ export function CheckpointPage() {
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("checkpoint.submit_error")}</p>
@@ -265,13 +298,27 @@ export function CheckpointPage() {
       )}
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost" role="status">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                spoken={lastSpoken}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
+              />
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("checkpoint.continue")}
+              </button>
+            </div>
+          );
+        }
         return (
           // role="status" (implicit aria-live="polite") - announces the grading
           // result to screen readers when the banner mounts.
           <div className={`feedback-banner ${status}`} role="status">
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("checkpoint.correct")}
-              {status === "almost" && t("checkpoint.almost")}
               {status === "incorrect" && t("checkpoint.incorrect")}
             </p>
             {status !== "correct" && (

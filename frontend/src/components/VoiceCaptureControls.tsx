@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { micRecordingSupported } from "../lib/useMicRecorder";
 import { useSpeechAnswer } from "../lib/useSpeechAnswer";
 import { PronunciationFeedback } from "./PronunciationFeedback";
+import { MicLevelMeter } from "./VoiceAnswerButton";
 import type { AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
 
 // Shared mic/keyboard toggle + record/transcribe UI for speak_response and
@@ -19,7 +20,7 @@ export function VoiceCaptureControls({
   disabled: boolean;
 }) {
   const { t } = useTranslation();
-  const { mode, setMode, status, error, words, beginRecording, finishRecording, cancelRecording } =
+  const { mode, setMode, status, error, words, level, beginRecording, finishRecording, cancelRecording } =
     useSpeechAnswer(languageCode, onTranscript);
 
   if (!micRecordingSupported()) {
@@ -63,7 +64,8 @@ export function VoiceCaptureControls({
       {mode === "voice" && (
         <button
           type="button"
-          className="btn btn-block"
+          className={`btn btn-block${status === "recording" ? " is-recording" : ""}`}
+          aria-pressed={status === "recording"}
           disabled={disabled || status === "transcribing"}
           onClick={() => (status === "recording" ? finishRecording() : beginRecording())}
         >
@@ -73,6 +75,12 @@ export function VoiceCaptureControls({
               ? t("voice_answer.transcribing")
               : t("voice_answer.record_start")}
         </button>
+      )}
+      {status === "recording" && (
+        <div className="voice-answer" role="status" aria-live="polite">
+          <MicLevelMeter level={level} />
+          <span className="muted">{t("voice_answer.listening")}</span>
+        </div>
       )}
       {error && (
         // Rendered regardless of current mode — beginRecording() flips mode
