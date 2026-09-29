@@ -4,9 +4,10 @@ import { TextBlockList } from "../TextBlock";
 import { VirtualKeyboard } from "../VirtualKeyboard";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { AnswerModeSwitch } from "./AnswerModeSwitch";
 import type { ExerciseComponentProps } from "./types";
 
-export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function WritingPrompt({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
   const script = answerScriptForExercise(exercise);
@@ -30,35 +31,48 @@ export function WritingPrompt({ exercise, onAnswer, disabled }: ExerciseComponen
   return (
     <form className="exercise-shell" onSubmit={handleSubmit}>
       <TextBlockList blocks={exercise.prompt.text_blocks} />
-      <div className="form-field">
-        <textarea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={disabled}
-          rows={4}
-          placeholder={t("exercise.writing_placeholder")}
-          dir={scriptDirection(script)}
-          onKeyDown={handleKeyDown}
-          {...inputProps}
-        />
-        <small className="muted" style={{ display: "block", marginTop: 4 }}>
-          {t("exercise.writing_submit_hint")}
-        </small>
-      </div>
-      {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
-        <VirtualKeyboard
-          script={script!}
-          {...keyboardProps}
-        />
-      )}
-      <button
-        type="submit"
-        className="btn btn-block"
-        disabled={disabled || !value.trim()}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        {t("common.submit")}
-      </button>
+      <AnswerModeSwitch
+        exercise={exercise}
+        courseLevel={courseLevel}
+        lessonExercises={lessonExercises}
+        answerHint={answerHint}
+        disabled={disabled}
+        onAnswer={onAnswer}
+        renderTyping={(toggle) => (
+          <>
+          <div className="form-field">
+            <textarea
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={disabled}
+              rows={4}
+              placeholder={t("exercise.writing_placeholder")}
+              dir={scriptDirection(script)}
+              onKeyDown={handleKeyDown}
+              {...inputProps}
+            />
+            <small className="muted" style={{ display: "block", marginTop: 4 }}>
+              {t("exercise.writing_submit_hint")}
+            </small>
+          </div>
+          {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
+            <VirtualKeyboard
+              script={script!}
+              {...keyboardProps}
+            />
+          )}
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={disabled || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {t("common.submit")}
+          </button>
+            {toggle}
+          </>
+        )}
+      />
     </form>
   );
 }

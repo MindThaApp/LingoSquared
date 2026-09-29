@@ -24,6 +24,7 @@ import type {
 } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
 import { buildLessonBlocks, flattenBlocks } from "../lib/interleave";
+import { useCourseLevel } from "../lib/useCourseLevel";
 
 interface QueueItem {
   exercise: Exercise;
@@ -87,6 +88,7 @@ export function LessonRunnerPage() {
   const { lessonId = "" } = useParams();
   const location = useLocation();
   const courseId = (location.state as { courseId?: string } | null)?.courseId;
+  const courseLevel = useCourseLevel(courseId);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const finishingRef = useRef(false);
@@ -703,6 +705,9 @@ export function LessonRunnerPage() {
         key={`${current.exercise.id}-${current.missCount}`}
         exercise={current.exercise}
         onAnswer={handleAnswer}
+        courseLevel={courseLevel}
+        lessonExercises={lessonQuery.data?.exercises}
+        answerHint={current.correctAnswerHint}
         disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
