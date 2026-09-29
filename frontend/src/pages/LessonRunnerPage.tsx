@@ -210,12 +210,12 @@ export function LessonRunnerPage() {
   const teaching = lessonQuery.data?.teaching ?? [];
   const current = queue?.[0];
 
-  async function handleReviewAnswer(response: AnswerResponse) {
+  async function handleReviewAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     const item = reviewItems?.[reviewIndex];
     if (!item) return;
     setReviewSubmitting(true);
     try {
-      const res = await ReviewApi.answer(item.id, response);
+      const res = await ReviewApi.answer(item.id, response, meta);
       setReviewResult(res);
     } catch {
       // Item may have expired between fetch and answer - skip it rather
@@ -236,13 +236,13 @@ export function LessonRunnerPage() {
     setReviewIndex((i) => i + 1);
   }
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
     setSubmitError(false);
     try {
-      const res = await LessonApi.answer(current.exercise.id, response);
+      const res = await LessonApi.answer(current.exercise.id, response, meta);
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
     } catch {
