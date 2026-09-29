@@ -84,7 +84,7 @@ describe("ar (true MSA) virtual keyboard -- untypeable-Arabic blocker fix", () =
     // from docs/content/realizations/ar/a1_unit01_greetings.yaml line 196.
     const chars = ["ش", "ك", "ر", "ا"]; // ش ك ر ا
     for (const ch of chars) {
-      fireEvent.mouseDown(screen.getByRole("button", { name: ch }));
+      fireEvent.click(screen.getByRole("button", { name: ch }));
     }
 
     const input = screen.getByRole("textbox") as HTMLInputElement;
