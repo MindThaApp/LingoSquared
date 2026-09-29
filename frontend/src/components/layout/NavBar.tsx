@@ -1,9 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
 import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
+import { learnPath } from "../../lib/activeCourse";
 
 const TABS = [
   { to: "/", labelKey: "nav.home", icon: "🏠" },
@@ -17,6 +18,7 @@ const TABS = [
 export function NavBar() {
   const { t } = useTranslation();
   const { user } = useAuth();
+  const { pathname } = useLocation();
   // Same keys/fetchers as HomePage so the cache is shared and invalidation
   // after an answer/lesson refreshes the top bar too.
   const streakQuery = useQuery({
@@ -30,6 +32,9 @@ export function NavBar() {
 
   if (!user) return null;
 
+  // Learn resumes the active course (per user, per device) when one is set.
+  const tabs = TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
+
   return (
     <>
       <header className="topbar">
@@ -37,12 +42,14 @@ export function NavBar() {
           Auvel
         </NavLink>
         <nav className="topbar-links">
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <NavLink
               key={tab.to}
               to={tab.to}
               end={tab.to === "/"}
-              className={({ isActive }) => (isActive ? "active" : "")}
+              className={({ isActive }) =>
+              isActive || (tab.labelKey === "nav.learn" && pathname.startsWith("/courses")) ? "active" : ""
+            }
             >
               {t(tab.labelKey)}
             </NavLink>
@@ -63,12 +70,14 @@ export function NavBar() {
         </div>
       </header>
       <nav className="tabbar">
-        {TABS.map((tab) => (
+        {tabs.map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
             end={tab.to === "/"}
-            className={({ isActive }) => (isActive ? "active" : "")}
+            className={({ isActive }) =>
+              isActive || (tab.labelKey === "nav.learn" && pathname.startsWith("/courses")) ? "active" : ""
+            }
           >
             <span className="tab-icon">{tab.icon}</span>
             {t(tab.labelKey)}
