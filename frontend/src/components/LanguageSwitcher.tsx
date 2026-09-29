@@ -21,7 +21,7 @@ export function LanguageSwitcher() {
       aria-label={t("language_switcher.aria_label")}
     >
       {UI_LANGUAGES.map((lang) => (
-        <option key={lang.code} value={lang.code}>
+        <option key={lang.code} value={lang.code} lang={lang.code}>
           {lang.nativeName}
         </option>
       ))}

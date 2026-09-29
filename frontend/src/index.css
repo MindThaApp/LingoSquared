@@ -32,6 +32,11 @@
   --text-soft: #6b6b78;
   --text-h: #101018;
   --border: #e3e3ec;
+  /* Form-control boundary (WCAG 1.4.11 non-text contrast, >=3:1 against
+     surface/bg/surface-2). --border is a decorative hairline (1.28:1) and
+     was the only thing marking the edge of inputs. A11y pass 2026-09:
+     #85859a = 3.61 on --surface, 3.38 on --bg, 3.18 on --surface-2. */
+  --input-border: #85859a;
   --accent: #4a3bff;
   --accent-soft: #edebff;
   --accent-contrast: #ffffff;
@@ -90,9 +95,19 @@
     --text-soft: #9a9aa8;
     --text-h: #f5f5fa;
     --border: #2d2d3a;
-    --accent: #7d71ff;
+    /* Dark: #6e6e82 = 3.40 on --surface, 3.72 on --bg, 3.08 on --surface-2. */
+    --input-border: #6e6e82;
+    /* A11y pass 2026-09 (dark accent): the old #7d71ff failed AA as text on
+       --accent-soft (badges, selected rows: 3.85) and --surface-2 (4.15),
+       and white on it as a button fill was 3.70. Lightened to #8d82ff
+       (same hue: 4.59 on --accent-soft, 4.95 on --surface-2, 5.46 on
+       --surface) and --accent-contrast flipped to the dark ink used for
+       --incorrect-contrast (#101018 on #8d82ff = 6.10). White would need a
+       DARKER accent, which would fail the accent-as-text uses -- the two
+       requirements can't both hold with one white-on-accent pair. */
+    --accent: #8d82ff;
     --accent-soft: #2a2745;
-    --accent-contrast: #ffffff;
+    --accent-contrast: #101018;
     /* WCAG AA dark-mode pass, 2026-07-10 (see the light-mode comment above).
        --gold/--flame: the ORIGINAL bright values, which now need explicit
        dark overrides because the :root defaults were darkened for light
@@ -140,6 +155,14 @@ a {
 
 button {
   font: inherit;
+}
+
+/* Global keyboard-focus indicator (both themes; --accent is >=5.8:1 on
+   every background it sits on). Any component that customises focus must
+   supply its own visible replacement -- never a bare `outline: none`. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ---------- app shell ---------- */
@@ -197,7 +220,7 @@ button {
 .language-switcher {
   background: var(--surface-2);
   color: var(--text-h);
-  border: 1px solid var(--border);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
   padding: 4px 8px;
   font-size: 0.85rem;
@@ -739,9 +762,17 @@ button {
   font: inherit;
   color: var(--text);
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--input-border);
   border-radius: var(--radius-sm);
   padding: 11px 12px;
+}
+
+/* Native placeholder color is #757575 in Chromium (3.67:1 on the dark
+   surface) and dimmed by opacity in Firefox; pin it to the AA-checked
+   --text-soft token in both themes. */
+::placeholder {
+  color: var(--text-soft);
+  opacity: 1;
 }
 
 .form-field input:focus,

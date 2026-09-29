@@ -82,6 +82,9 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
                 onClick={() => clickLeft(p.left)}
                 style={{ flex: 1, marginBottom: 0 }}
                 dir={direction}
+                lang={answerLanguageCode}
+                aria-pressed={activeLeft === p.left}
+                type="button"
               >
                 {/* <bdi> isolates each side so the (often English, LTR) match
                     can't reorder around the (possibly RTL) term under the bidi
@@ -108,6 +111,7 @@ export function MatchingPairs({ exercise, onAnswer, disabled }: ExerciseComponen
               className={`matching-item${usedRightIndexes.has(rightIndex) ? " matched" : ""}`}
               disabled={disabled || usedRightIndexes.has(rightIndex) || !activeLeft}
               onClick={() => chooseRight(rightIndex)}
+              type="button"
               // The data doesn't say what language the right column is in
               // (it is usually the OTHER language from answer_language_code,
               // where forcing the answer direction would misplace neutral

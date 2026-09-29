@@ -55,7 +55,7 @@ describe("virtual keyboard: caret-aware editing", () => {
     const input = screen.getByRole("textbox") as HTMLInputElement;
     fireEvent.focus(input);
     typeInto(input, "شكرا", 2);
-    fireEvent.click(screen.getByRole("button", { name: "⌫" }));
+    fireEvent.click(screen.getByRole("button", { name: /⌫|backspace/i }));
     expect(input.value).toBe("شرا");
     expect(input.selectionStart).toBe(1);
   });

@@ -170,39 +170,43 @@ function PracticeCard({
           </button>
         </div>
       )}
-      {result && (() => {
-        const status = resultStatus(result);
-        if (status === "almost") {
+      {/* One live region that is ALWAYS mounted (empty until graded): screen
+          readers only announce changes to a region that already exists, so a
+          role="status" node that mounts together with its text is often
+          silent. The verdict / unavailable notice fills it in. */}
+      <div role="status" aria-live="polite">
+        {result && (() => {
+          const status = resultStatus(result);
+          if (status === "almost") {
+            return (
+              <div className="feedback-banner almost">
+                <AlmostFeedback
+                  learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                  spoken={lastSpoken}
+                  correct={formatCorrectResponse(result.correct_response)}
+                  dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
+                />
+              </div>
+            );
+          }
           return (
-            <div className="feedback-banner almost" role="status">
-              <AlmostFeedback
-                learner={typeof lastResponse === "string" ? lastResponse : undefined}
-                spoken={lastSpoken}
-                correct={formatCorrectResponse(result.correct_response)}
-                dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
-              />
+            <div className={`feedback-banner ${status}`}>
+              <p style={{ margin: 0 }}>
+                {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
+                {status === "incorrect" &&
+                  t("lesson_runner.correct_answer", {
+                    answer: formatCorrectResponse(result.correct_response),
+                  })}
+              </p>
             </div>
           );
-        }
-        return (
-          // role="status" (implicit aria-live="polite") - announces the grading
-          // result to screen readers when the banner mounts.
-          <div className={`feedback-banner ${status}`} role="status">
-            <p style={{ margin: 0 }}>
-              {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
-              {status === "incorrect" &&
-                t("lesson_runner.correct_answer", {
-                  answer: formatCorrectResponse(result.correct_response),
-                })}
-            </p>
+        })()}
+        {unavailable && (
+          <div className="feedback-banner">
+            <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>
           </div>
-        );
-      })()}
-      {unavailable && (
-        <div className="feedback-banner" role="status">
-          <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>
-        </div>
-      )}
+        )}
+      </div>
       <div style={{ marginTop: 12, textAlign: "center" }}>
         {/* item.id is a PracticeItem id, same table review/checkpoint
             items use - reported through the shared practice-item report
@@ -548,9 +552,9 @@ export function PracticeFeedPage() {
         </p>
       )}
 
-      {xpToast !== null && (
-        <div className="practice-xp-toast stat-xp" role="status">+{xpToast} XP</div>
-      )}
+      <div role="status" aria-live="polite">
+        {xpToast !== null && <div className="practice-xp-toast stat-xp">+{xpToast} XP</div>}
+      </div>
     </div>
   );
 }

@@ -83,6 +83,7 @@ export function LoginPage() {
       {accountDeleted && (
         <div
           className="form-error"
+          role="status"
           style={{ background: "var(--correct-soft)", color: "var(--correct)" }}
         >
           {t("login.account_deleted")}
@@ -96,6 +97,9 @@ export function LoginPage() {
             <input
               id="login-email"
               type="email"
+              autoComplete="email"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "login-error" : undefined}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -106,12 +110,19 @@ export function LoginPage() {
             <input
               id="login-password"
               type="password"
+              autoComplete="current-password"
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? "login-error" : undefined}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          {error && <div className="form-error">{error}</div>}
+          {error && (
+            <div className="form-error" id="login-error" role="alert">
+              {error}
+            </div>
+          )}
           <button type="submit" className="btn btn-block" disabled={submitting}>
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
@@ -134,16 +145,26 @@ export function LoginPage() {
               <input
                 id="guest-name"
                 type="text"
+                autoComplete="nickname"
+                aria-describedby={guestError ? "guest-error" : "guest-warning"}
                 value={guestName}
                 onChange={(e) => setGuestName(e.target.value)}
                 required
                 placeholder={t("login.name_placeholder")}
               />
             </div>
-            <div className="form-error" style={{ background: "var(--surface-2)", color: "var(--text-soft)" }}>
+            <div
+              className="form-error"
+              id="guest-warning"
+              style={{ background: "var(--surface-2)", color: "var(--text-soft)" }}
+            >
               {t("login.guest_warning")}
             </div>
-            {guestError && <div className="form-error">{guestError}</div>}
+            {guestError && (
+              <div className="form-error" id="guest-error" role="alert">
+                {guestError}
+              </div>
+            )}
             <button type="submit" className="btn btn-block" disabled={guestSubmitting}>
               {guestSubmitting ? t("login.guest_submitting") : t("login.guest_submit")}
             </button>

@@ -11,6 +11,8 @@ interface ChoiceOptionsProps {
   gradedResult?: GradedResult;
   correctOption: string | null;
   direction?: "ltr" | "rtl";
+  /** BCP-47 code of the option text (target language), for screen readers. */
+  lang?: string;
 }
 
 /**
@@ -27,6 +29,7 @@ export function ChoiceOptions({
   gradedResult,
   correctOption,
   direction,
+  lang,
 }: ChoiceOptionsProps) {
   const { t } = useTranslation();
   const firstRef = useRef<HTMLButtonElement | null>(null);
@@ -37,7 +40,7 @@ export function ChoiceOptions({
   }, []);
 
   return (
-    <div className="exercise-options" dir={direction} role="radiogroup" aria-label={t("exercise.options_label")}>
+    <div className="exercise-options" dir={direction} lang={lang} role="radiogroup" aria-label={t("exercise.options_label")}>
       {options.map((option, i) => {
         const state = optionGradeState(option, selected, gradedResult, correctOption);
         return (
