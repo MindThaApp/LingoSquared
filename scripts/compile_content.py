@@ -3787,6 +3787,31 @@ def validate_audio_references(
         )
 
 
+def validate_dialogue_comprehension_audio(
+    realization: dict[str, Any],
+    report: Report,
+):
+    assets = _media_assets_by_key(realization)
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                if (
+                    not isinstance(exercise, dict)
+                    or exercise.get("type") != "dialogue_comprehension"
+                ):
+                    continue
+                media_key = exercise.get("media_asset_key")
+                asset = assets.get(media_key) if media_key else None
+                text = asset.get("text") if isinstance(asset, dict) else None
+                if not isinstance(text, str) or not text.strip():
+                    key = exercise.get("content_key", "<unknown>")
+                    report.warn(
+                        f"realization.exercises.{key}.media_asset_key",
+                        "dialogue_comprehension media asset is missing or has "
+                        "no text; audio prompt will be unavailable",
+                    )
+
+
 def validate_course_consistency(
     realizations: list[tuple[Path, dict[str, Any]]],
     overlays: list[tuple[Path, dict[str, Any]]],
@@ -4152,6 +4177,7 @@ def compile_exercise(
     source_language: str,
     target_language: str,
     content_key: str = "",
+    media_assets: dict[Any, dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     prompt = copy.deepcopy(exercise.get("prompt", {}))
     target_blocks = prompt.pop("target_blocks", [])
@@ -4180,6 +4206,14 @@ def compile_exercise(
     }:
         prompt["audio_text"] = exercise["tested_text"]
         prompt["audio_language_code"] = target_language
+
+    if exercise["type"] == "dialogue_comprehension":
+        media_key = exercise.get("media_asset_key")
+        asset = (media_assets or {}).get(media_key)
+        text = asset.get("text") if isinstance(asset, dict) else None
+        if isinstance(text, str) and text.strip():
+            prompt["audio_text"] = text
+            prompt["audio_language_code"] = target_language
 
     if "answer_language_code" in exercise_overlay:
         prompt["answer_language_code"] = exercise_overlay["answer_language_code"]
@@ -4255,6 +4289,7 @@ def compile_import_request(
         realizations,
         overlays,
     ):
+        media_assets = _media_assets_by_key(realization_document)
         source_language = overlay_document["source_language"]
         lesson_overlays = overlay_document.get("lessons", {})
         teaching_overlays = overlay_document.get("teaching", {})
@@ -4293,6 +4328,7 @@ def compile_import_request(
                             source_language,
                             realization_document["target_language"],
                             content_key=key,
+                            media_assets=media_assets,
                         )
                     )
 
@@ -4413,6 +4449,7 @@ def validate_documents(
     validate_listen_select_same_speaker_audio_options(realization, overlay, report)
     validate_listen_audio_contains_tested_text(realization, report)
     validate_audio_references(realization, report)
+    validate_dialogue_comprehension_audio(realization, report)
 
     return report
 
