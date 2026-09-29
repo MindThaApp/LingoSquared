@@ -1,6 +1,6 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
@@ -48,6 +48,27 @@ type HistoryEntry =
 
 const MISS_LIMIT = 2;
 
+// LessonApi.start retry backoff (ms): one initial attempt + 3 retries.
+const START_RETRY_DELAYS_MS = [500, 1000, 2000];
+
+// Private-use marker substituted for the interpolated answer so the answer
+// value can be wrapped in <bdi dir="auto"> without touching the shared
+// locale strings (they live in packages/shared and stay plain
+// "Label: {{answer}}"). Without the isolation an RTL answer inside an LTR
+// label (or vice versa) reorders the surrounding punctuation.
+const ANSWER_MARK = "\uE000";
+
+// Where "back" goes: navigate(-1) only when there is in-app history to go
+// back to; a deep-linked / refreshed runner has history.state.idx === 0.
+function canGoBackInApp(): boolean {
+  const idx = (window.history.state as { idx?: unknown } | null)?.idx;
+  return typeof idx === "number" && idx > 0;
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
+
 function missedWordFromResult(exercise: Exercise, result: AnswerResult): MissedWord {
   return {
     text: formatCorrectResponse(result.correct_response),
@@ -61,6 +82,9 @@ export function LessonRunnerPage() {
   const location = useLocation();
   const courseId = (location.state as { courseId?: string } | null)?.courseId;
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const finishingRef = useRef(false);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   // Phase B2: review warm-up, shown before teaching cards. `null` means
   // "not checked yet" so the teaching-card phase never flashes before the
@@ -85,6 +109,7 @@ export function LessonRunnerPage() {
   const missedExerciseIds = useState(() => new Set<string>())[0];
   const [submitError, setSubmitError] = useState(false);
   const [finishError, setFinishError] = useState(false);
+  const [finishing, setFinishing] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   // Read-only back/forward review state - see the HistoryEntry comment above.
@@ -96,14 +121,37 @@ export function LessonRunnerPage() {
     queryFn: () => LessonApi.get(lessonId),
   });
 
+  // Start the lesson, retrying transient failures with backoff. A failed
+  // start used to be swallowed, so /complete later 409'd lesson_not_started.
+  // speaking_locked is a definitive answer, never retried.
   useEffect(() => {
     if (!lessonId) return;
-    LessonApi.start(lessonId).catch((err) => {
-      if (err instanceof ApiError && err.code === "speaking_locked") {
-        setLockedError(t("lesson_runner.speaking_locked"));
+    let cancelled = false;
+    (async () => {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          await LessonApi.start(lessonId);
+          return;
+        } catch (err) {
+          if (err instanceof ApiError && err.code === "speaking_locked") {
+            if (!cancelled) setLockedError(t("lesson_runner.speaking_locked"));
+            return;
+          }
+          if (attempt >= START_RETRY_DELAYS_MS.length) return;
+          await sleep(START_RETRY_DELAYS_MS[attempt]);
+          if (cancelled) return;
+        }
       }
-    });
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [lessonId, t]);
+
+  // Move focus to Continue when the result banner mounts so Enter continues.
+  useEffect(() => {
+    if (result) continueButtonRef.current?.focus();
+  }, [result]);
 
   // Best-effort due-review check. Never blocks the lesson: any failure
   // (no courseId available, network error, nothing due) just resolves to
@@ -195,23 +243,56 @@ export function LessonRunnerPage() {
   }
 
   async function finishLesson() {
+    // Re-entry guard: the ref flips synchronously, unlike state, so a double
+    // click / stray second call can never POST /complete twice.
+    if (finishingRef.current) return;
+    finishingRef.current = true;
+    setFinishing(true);
     setFinishError(false);
     try {
-      const completion = await LessonApi.complete(lessonId);
+      let completion;
+      try {
+        completion = await LessonApi.complete(lessonId);
+      } catch (err) {
+        if (err instanceof ApiError && err.code === "lesson_not_started") {
+          // The initial start never landed: start now, retry complete once.
+          await LessonApi.start(lessonId);
+          completion = await LessonApi.complete(lessonId);
+        } else {
+          throw err;
+        }
+      }
+      for (const key of ["progress", "xp", "streak", "quests", "reviews-due", "units"]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
       navigate(`/lessons/${lessonId}/done`, {
         state: { completion, totalXp, missedWords },
       });
     } catch {
       // Don't lose the just-finished lesson's completion silently -- offer
       // a retry rather than leaving the learner on a dead-end screen.
+      finishingRef.current = false;
+      setFinishing(false);
       setFinishError(true);
     }
   }
 
   function handleQuit() {
     // courseId only exists in route state, not the URL, so there's no
-    // reliable unit-lesson-list path to construct directly here.
-    navigate(-1);
+    // reliable unit-lesson-list path to construct directly here. A
+    // deep-linked runner has no in-app history, so fall back to home.
+    if (canGoBackInApp()) navigate(-1);
+    else navigate("/");
+  }
+
+  function renderAnswerLine(key: "lesson_runner.your_answer" | "lesson_runner.correct_answer", answer: string) {
+    const parts = t(key, { answer: ANSWER_MARK }).split(ANSWER_MARK);
+    return parts.map((part, i) => (
+      <Fragment key={i}>
+        {i > 0 && <bdi dir="auto">{answer}</bdi>}
+        {part}
+      </Fragment>
+    ));
   }
 
   function handleReviewBack() {
@@ -246,12 +327,12 @@ export function LessonRunnerPage() {
         </p>
         {options?.response !== undefined && (
           <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-            {t("lesson_runner.your_answer", { answer: formatCorrectResponse(options.response) })}
+            {renderAnswerLine("lesson_runner.your_answer", formatCorrectResponse(options.response))}
           </p>
         )}
         {status !== "correct" && (
           <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-            {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(bannerResult.correct_response) })}
+            {renderAnswerLine("lesson_runner.correct_answer", formatCorrectResponse(bannerResult.correct_response))}
           </p>
         )}
         {bannerResult.feedback && (
@@ -307,7 +388,7 @@ export function LessonRunnerPage() {
     return (
       <div className="lesson-runner-page">
         <p className="error-text">{lockedError}</p>
-        <button onClick={() => navigate(-1)}>{t("lesson_runner.go_back")}</button>
+        <button onClick={handleQuit}>{t("lesson_runner.go_back")}</button>
       </div>
     );
   }
@@ -316,9 +397,24 @@ export function LessonRunnerPage() {
     return (
       <div className="card" style={{ textAlign: "center" }}>
         <p className="muted">{t("lesson_runner.finish_error")}</p>
-        <button className="btn" onClick={finishLesson}>
-          {t("common.retry")}
-        </button>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <button className="btn" onClick={finishLesson}>
+            {t("common.retry")}
+          </button>
+          <button className="btn btn-secondary" onClick={handleQuit}>
+            {t("lesson_runner.go_back")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Replaces the exercise while /complete is in flight so the last answer
+  // can't be re-submitted (handleContinue clears `result` before this).
+  if (finishing) {
+    return (
+      <div className="page-loading" role="status">
+        {t("lesson_runner.saving", { defaultValue: "Saving…" })}
       </div>
     );
   }
@@ -335,7 +431,7 @@ export function LessonRunnerPage() {
           <button className="btn" onClick={() => lessonQuery.refetch()}>
             {t("common.retry")}
           </button>
-          <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+          <button className="btn btn-secondary" onClick={handleQuit}>
             {t("lesson_runner.go_back")}
           </button>
         </div>
@@ -387,9 +483,10 @@ export function LessonRunnerPage() {
               </p>
               {status !== "correct" && (
                 <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-                  {t("lesson_runner.correct_answer", {
-                    answer: formatCorrectResponse(reviewResult.correct_response),
-                  })}
+                  {renderAnswerLine(
+                    "lesson_runner.correct_answer",
+                    formatCorrectResponse(reviewResult.correct_response),
+                  )}
                 </p>
               )}
               <button className="btn btn-block" onClick={handleReviewContinue}>
@@ -593,7 +690,7 @@ export function LessonRunnerPage() {
       {result &&
         renderResultBanner(result, {
           footer: (
-            <button className="btn btn-block" onClick={handleContinue}>
+            <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
               {t("lesson_runner.continue")}
             </button>
           ),
