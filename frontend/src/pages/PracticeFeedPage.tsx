@@ -101,10 +101,12 @@ function PracticeCard({
   const [unavailable, setUnavailable] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
 
   async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
       const res = await PracticeApi.answer(item.id, response, meta);
@@ -128,7 +130,7 @@ function PracticeCard({
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   // Conversation items are multi-turn: the runner owns its own submit loop and
@@ -175,6 +177,7 @@ function PracticeCard({
             <div className="feedback-banner almost" role="status">
               <AlmostFeedback
                 learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                spoken={lastSpoken}
                 correct={formatCorrectResponse(result.correct_response)}
                 dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
               />

@@ -29,23 +29,40 @@ export function AlmostFeedback({
   learner,
   correct,
   dir,
+  spoken = false,
 }: {
   learner?: string;
   correct?: string;
   dir: Direction;
+  /** The submitted answer came from the mic: say we heard something close, not a spelling slip. */
+  spoken?: boolean;
 }) {
   const { t } = useTranslation();
   const hasCorrect = typeof correct === "string" && correct.length > 0;
   const hasLearner = typeof learner === "string" && learner.trim().length > 0;
-  const diff = hasCorrect && hasLearner ? diffAnswers(learner!, correct!) : null;
+  const heard = spoken && hasLearner;
+  const diff = hasCorrect && !heard && hasLearner ? diffAnswers(learner!, correct!) : null;
   return (
     <div className="almost-feedback">
       <span className="visually-hidden">
-        {hasCorrect ? t("almost_feedback.sr", { answer: correct }) : t("almost_feedback.sr_plain")}
+        {heard
+          ? hasCorrect
+            ? t("almost_feedback.sr_heard", { heard: learner, answer: correct })
+            : t("almost_feedback.sr_heard_plain", { heard: learner })
+          : hasCorrect
+            ? t("almost_feedback.sr", { answer: correct })
+            : t("almost_feedback.sr_plain")}
       </span>
       <p className="almost-title" aria-hidden="true">
-        <span className="almost-icon">≈</span> {t("almost_feedback.title")}
+        <span className="almost-icon">≈</span> {heard ? t("almost_feedback.title_heard") : t("almost_feedback.title")}
       </p>
+      {heard && !hasCorrect && (
+        <div className="almost-lines" dir={dir} aria-hidden="true">
+          <p className="almost-line almost-line-learner">
+            {t("almost_feedback.heard")} <bdi dir={dir}>{learner}</bdi>
+          </p>
+        </div>
+      )}
       {hasCorrect && (
         <div className="almost-lines" dir={dir} aria-hidden="true">
           <p className="almost-line">
@@ -54,7 +71,7 @@ export function AlmostFeedback({
           </p>
           {hasLearner && (
             <p className="almost-line almost-line-learner">
-              {t("almost_feedback.your_answer")}{" "}
+              {heard ? t("almost_feedback.heard") : t("almost_feedback.your_answer")}{" "}
               <bdi dir={dir}>{diff ? <Segments segments={diff.learner} kind="wrong" /> : learner}</bdi>
             </p>
           )}

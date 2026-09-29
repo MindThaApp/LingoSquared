@@ -56,6 +56,7 @@ export function CheckpointPage() {
   const [retryAfterSeconds, setRetryAfterSeconds] = useState<number | null>(null);
   const [finalResult, setFinalResult] = useState<CheckpointResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   // Bumped by the network-error Retry button to re-run the start effect.
@@ -102,6 +103,7 @@ export function CheckpointPage() {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
       const res = await CheckpointApi.answer(current.id, response, meta);
@@ -114,7 +116,7 @@ export function CheckpointPage() {
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   async function scoreCheckpoint() {
@@ -301,6 +303,7 @@ export function CheckpointPage() {
             <div className="feedback-banner almost" role="status">
               <AlmostFeedback
                 learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                spoken={lastSpoken}
                 correct={formatCorrectResponse(result.correct_response)}
                 dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
               />
