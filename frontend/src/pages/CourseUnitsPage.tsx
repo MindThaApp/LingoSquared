@@ -8,6 +8,8 @@ import type { UnitSummary } from "@lingo/shared/api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
 import { getPlacementRecommendation } from "../lib/placementPreferences";
 import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferences";
+import { useAuth } from "../auth/AuthContext";
+import { setActiveCourse } from "../lib/activeCourse";
 import { unitIcon } from "@lingo/shared/lib/unitIcons";
 
 function PathNode({
@@ -172,6 +174,11 @@ function UnitIndex({
 export function CourseUnitsPage() {
   const { t } = useTranslation();
   const { courseId = "" } = useParams();
+  const { user } = useAuth();
+  const userId = user?.id;
+  useEffect(() => {
+    if (userId && courseId) setActiveCourse(userId, courseId);
+  }, [userId, courseId]);
 
   const courseQuery = useQuery({
     queryKey: ["course", courseId],
