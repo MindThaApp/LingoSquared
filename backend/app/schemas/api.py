@@ -116,6 +116,8 @@ class QuestsOut(BaseModel): quests:list[QuestOut]
 # in behavior from before content_key-based updates existed.
 class ImportOut(BaseModel):
     imported_courses:int
+    retired_exercises:int=0
+    unretired_exercises:int=0
     updated_units:int=0
     updated_lessons:int=0
     updated_exercises:int=0
@@ -225,7 +227,7 @@ class CourseImport(BaseModel):
     def distinct(self):
         if self.source_language==self.target_language: raise ValueError("source_language and target_language must differ")
         return self
-class ImportRequest(BaseModel): courses:list[CourseImport]
+class ImportRequest(BaseModel): courses:list[CourseImport]; retire_missing:bool=True
 class ValidateRequest(BaseModel): content:ImportRequest
 PracticeTemplateExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
 PracticeItemExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select","speak_repeat","speak_response","conversation"]

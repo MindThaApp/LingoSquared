@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -245,6 +246,7 @@ def _sync_exercises(
     errors: list[str],
     counters: dict[str, int],
     location: str,
+    retire_missing: bool = True,
 ) -> None:
     existing = list(
         db.scalars(select(Exercise).where(Exercise.lesson_id == lesson.id))
@@ -270,6 +272,9 @@ def _sync_exercises(
 
     occupied_orders: set[int] = set()
     for row, exercise_data in matched:
+        if row.retired_at is not None and retire_missing:
+            counters["unretired_exercises"] += 1
+        row.retired_at = None
         _update_exercise(row, exercise_data)
         occupied_orders.add(exercise_data.order)
     floor = max(
@@ -278,6 +283,12 @@ def _sync_exercises(
         + [-1]
     ) + 1
     _relocate_retained_orders(retained, occupied_orders, floor)
+    if retire_missing:
+        retired_at = datetime.now(timezone.utc)
+        for row, _ in retained:
+            if row.content_key is not None and row.retired_at is None:
+                row.retired_at = retired_at
+                counters["retired_exercises"] += 1
     db.flush()
     counters["updated_exercises"] += len(matched)
 
@@ -447,6 +458,7 @@ def _sync_lessons(
     errors: list[str],
     counters: dict[str, int],
     location: str,
+    retire_missing: bool,
 ) -> None:
     existing = list(db.scalars(select(Lesson).where(Lesson.unit_id == unit.id)))
     matched, unmatched_incoming = _match_by_content_key(existing, lessons_data)
@@ -482,6 +494,7 @@ def _sync_lessons(
             errors,
             counters,
             f"{location}.{lesson_data.content_key}",
+            retire_missing,
         )
         _sync_teaching(
             db,
@@ -534,6 +547,7 @@ def _sync_units(
     units_data,
     errors: list[str],
     counters: dict[str, int],
+    retire_missing: bool,
 ) -> None:
     """Reconcile `units_data` against `course`'s existing units.
 
@@ -587,6 +601,7 @@ def _sync_units(
             errors,
             counters,
             f"unit {unit_data.content_key}",
+            retire_missing,
         )
 
     for unit_data in unmatched_incoming:
@@ -617,6 +632,8 @@ def import_content(db: Session, data: ImportRequest):
         "updated_lessons": 0,
         "created_exercises": 0,
         "updated_exercises": 0,
+        "retired_exercises": 0,
+        "unretired_exercises": 0,
         "created_teaching_items": 0,
         "updated_teaching_items": 0,
     }
@@ -649,7 +666,10 @@ def import_content(db: Session, data: ImportRequest):
             )
             if course_data.recommended is not None:
                 existing.recommended = course_data.recommended
-            _sync_units(db, existing, course_data.units, sync_errors, counters)
+            _sync_units(
+                db, existing, course_data.units, sync_errors, counters,
+                data.retire_missing,
+            )
             continue
 
         course = Course(
