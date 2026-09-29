@@ -645,6 +645,8 @@ def import_content(db: Session, data: ImportRequest):
                 existing.target_language,
                 existing.title,
             )
+            if course_data.recommended is not None:
+                existing.recommended = course_data.recommended
             _sync_units(db, existing, course_data.units, sync_errors, counters)
             continue
 
@@ -654,6 +656,7 @@ def import_content(db: Session, data: ImportRequest):
             title=course_data.title,
             description=course_data.description,
             level=course_data.level,
+            recommended=course_data.recommended or False,
         )
         db.add(course)
         db.flush()

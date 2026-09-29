@@ -202,6 +202,7 @@ class Course(Base):
         default=CEFRLevel.A1,
         server_default="A1",
     )
+    recommended: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     units = relationship(
         "Unit",
         cascade="all, delete-orphan",
@@ -705,6 +706,24 @@ class QuestCompletion(Base):
         DateTime(timezone=True),
         default=now,
     )
+
+
+class PushNotificationGuard(Base):
+    """One committed send attempt per user, trigger, and local calendar day."""
+
+    __tablename__ = "push_notification_guards"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "trigger_code", "local_date",
+            name="uq_push_notification_guards_user_trigger_date",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    trigger_code: Mapped[str] = mapped_column(String(40))
+    local_date: Mapped[date] = mapped_column(Date)
+    attempted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
 class PushSubscription(Base):
