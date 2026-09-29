@@ -18,7 +18,15 @@ from app.core.security import decode_token
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 logger = logging.getLogger("app.main")
 
-s=get_settings(); app=FastAPI(title=s.app_name,version="1.0.0",description="Local-first language learning API")
+def validate_startup_settings(settings):
+    if settings.jwt_secret == "development-only-secret" and settings.app_env.lower() not in {"dev", "development", "test"}:
+        raise RuntimeError(
+            "Refusing to start with the built-in JWT secret; set JWT_SECRET to a strong secret or set APP_ENV=dev/test for local development and tests."
+        )
+
+s=get_settings()
+validate_startup_settings(s)
+app=FastAPI(title=s.app_name,version="1.0.0",description="Local-first language learning API")
 app.add_middleware(CORSMiddleware,allow_origins=s.cors_origin_list,allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 
 # Accept a client-supplied X-Request-ID only if it's a short, safe token —

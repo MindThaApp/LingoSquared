@@ -3,11 +3,11 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     app_name: str = "Auvel API"
+    app_env: str = "production"
     database_url: str = "postgresql+psycopg://lingosquared:change-me@db:5432/lingosquared"
     jwt_secret: str = "development-only-secret"
     access_token_expire_seconds: int = 1800
     refresh_token_expire_seconds: int = 60 * 24 * 60 * 60
-    admin_emails: str = "admin@example.com"
     cors_origins: str = "http://localhost:5173"
     # Raw service-account JSON content (not a file path) — set as a single
     # env var so credentials don't require a mounted file in every deploy
@@ -40,15 +40,11 @@ class Settings(BaseSettings):
     login_rate_limit_max: int = 10
     register_rate_limit_max: int = 5
     # POST /auth/refresh shipped 2026-07-10 with no rate limit at all -- an
-    # unauthenticated endpoint whose token lookup bcrypt-verifies the
-    # presented value against every stored refresh-token hash, so hammering
-    # it (replaying a stolen-but-not-yet-rotated token, or probing for valid
-    # tokens) is both a guessing surface and a CPU sink. Deliberately more
-    # generous than login's 10/min: legitimate clients refresh automatically
-    # on access-token expiry (plus tab wakeups/retries) and several devices
-    # can share one NAT'd IP. The same limiter also covers /auth/logout,
-    # which takes the same unauthenticated refresh-token body and pays the
-    # same full-table bcrypt scan.
+    # unauthenticated endpoint whose token lookup is a fast indexed SHA-256
+    # digest match. The limit still bounds replay and probing attempts, and
+    # is more generous than login's 10/min because clients refresh on access
+    # token expiry and several devices can share one NAT'd IP. The same
+    # limiter covers /auth/logout.
     refresh_rate_limit_max: int = 30
     answer_rate_limit_max: int = 120
     # Phase H2 (2026-07-07 integrity audit): the three limiters above left
@@ -81,8 +77,6 @@ class Settings(BaseSettings):
     apple_audience_ids: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    @property
-    def admin_email_set(self): return {x.strip().lower() for x in self.admin_emails.split(",") if x.strip()}
     @property
     def cors_origin_list(self): return [x.strip() for x in self.cors_origins.split(",") if x.strip()]
     @property

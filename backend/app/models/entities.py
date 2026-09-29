@@ -128,10 +128,12 @@ class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
     __table_args__ = (
         Index("ix_refresh_tokens_user_expires", "user_id", "expires_at"),
+        Index("uq_refresh_tokens_token_sha256", "token_sha256", unique=True),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     token_hash: Mapped[str] = mapped_column(Text, nullable=False)
+    token_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
     user_id: Mapped[str] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
         index=True,

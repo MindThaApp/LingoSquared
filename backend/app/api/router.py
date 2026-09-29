@@ -308,6 +308,7 @@ def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> 
     db.add(
         RefreshToken(
             token_hash=hash_password(raw_token),
+            token_sha256=hashlib.sha256(raw_token.encode("utf-8")).hexdigest(),
             user_id=user_id,
             issued_at=now_value,
             expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
@@ -316,13 +317,14 @@ def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> 
     return raw_token
 
 def find_refresh_token(db:Session,raw_token:str):
-    for token in db.scalars(select(RefreshToken)):
-        try:
-            if verify_password(raw_token,token.token_hash):
-                return token
-        except Exception:
-            continue
-    return None
+    digest=hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
+    return db.scalar(select(RefreshToken).where(RefreshToken.token_sha256==digest))
+
+def delete_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
+    db.execute(delete(RefreshToken).where(
+        RefreshToken.user_id==user_id,
+        (RefreshToken.revoked_at.is_not(None)) | (RefreshToken.expires_at<=now_value),
+    ))
 
 def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
     for token in db.scalars(
@@ -334,6 +336,7 @@ def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
         token.revoked_at=now_value
 
 def auth_response(db:Session,user):
+    delete_stale_refresh_tokens(db,user.id,utc_now())
     refresh_token=issue_refresh_token(db,user.id)
     db.commit()
     return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
@@ -379,7 +382,7 @@ def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
         email=user_email,
         password_hash=None,
         display_name=social_display_name(body,claims,email),
-        is_admin=bool(email and email_verified and email in get_settings().admin_email_set),
+        is_admin=False,
     )
     db.add(user)
     db.flush()
@@ -635,7 +638,7 @@ def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(REGISTER_RATE_LIMIT,client_ip(request),"register_rate_limited","Too many registration attempts from this address. Please try again later.")
     email=body.email.lower()
     if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
-    user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=email in get_settings().admin_email_set,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
+    user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=False,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
     db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
     return auth_response(db,user)
 @router.post("/auth/login",response_model=AuthOut)
@@ -661,10 +664,8 @@ def social_login(body:SocialLoginIn,db:Session=Depends(get_db)):
     return auth_response(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
-    # Rate-limit BEFORE the token lookup: find_refresh_token() bcrypt-checks
-    # against every stored hash, so the limit must gate that cost, and an
-    # invalid-token probe must count against the limit (same principle as
-    # login counting failed password attempts).
+    # Rate-limit before lookup, and count invalid-token probes too (same
+    # principle as login counting failed password attempts).
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     now_value=utc_now()
@@ -685,8 +686,7 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     return response
 @router.post("/auth/logout",status_code=204)
 def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
-    # Same unauthenticated refresh-token-scan surface as /auth/refresh --
-    # shares its limiter and error code (see REFRESH_RATE_LIMIT above).
+    # Shares the refresh endpoint's limiter and error code.
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     if refresh_token and refresh_token.revoked_at is None:
@@ -2479,12 +2479,12 @@ def get_admin_target_user(db:Session,user_id:str) -> User:
     return target
 
 def active_admin_count(db:Session) -> int:
-    admin_emails=get_settings().admin_email_set
-    count=0
-    for candidate in db.scalars(select(User).where(User.is_active.is_(True))):
-        if candidate.is_admin or candidate.email.lower() in admin_emails:
-            count+=1
-    return count
+    return db.scalar(
+        select(func.count(User.id)).where(
+            User.is_active.is_(True),
+            User.is_admin.is_(True),
+        )
+    ) or 0
 
 def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:datetime) -> tuple[bool,int]:
     progress=db.scalar(
@@ -2645,8 +2645,7 @@ def admin_delete_user(user_id:str,user=Depends(admin_user),db:Session=Depends(ge
 def admin_set_admin(user_id:str,body:AdminUserAdminIn,user=Depends(admin_user),db:Session=Depends(get_db)):
     target=get_admin_target_user(db,user_id)
     if not body.is_admin and target.is_active and is_admin_user(target):
-        target_is_bootstrap=target.email.lower() in get_settings().admin_email_set
-        if not target_is_bootstrap and active_admin_count(db)<=1:
+        if active_admin_count(db)<=1:
             fail(409,"last_admin","Cannot demote the last remaining admin")
     target.is_admin=body.is_admin
     db.commit(); db.refresh(target)

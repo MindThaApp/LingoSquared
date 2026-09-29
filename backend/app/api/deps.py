@@ -1,14 +1,13 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
-from app.core.config import get_settings
 from app.core.security import decode_token
 from app.db.session import get_db
 from app.models import User
 
 bearer=HTTPBearer(auto_error=False)
 def is_admin_user(user:User) -> bool:
-    return user.is_admin or user.email.lower() in get_settings().admin_email_set
+    return bool(user.is_admin)
 
 def current_user(auth:HTTPAuthorizationCredentials=Depends(bearer),db:Session=Depends(get_db)):
     try: user=db.get(User,decode_token(auth.credentials)) if auth else None

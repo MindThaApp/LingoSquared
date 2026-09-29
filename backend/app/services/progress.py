@@ -63,6 +63,12 @@ def record_activity(db:Session,user_id:str,xp:int,user_timezone:str|None=None):
         s.last_activity_date = today
         if s.streak_freezes_available == 0 and s.streak_days % STREAK_FREEZE_MILESTONE == 0:
             s.streak_freezes_available = 1
+    award_xp(db,user_id,xp,s)
+    return s
+
+def award_xp(db:Session,user_id:str,xp:int,stats:UserStats|None=None):
+    """Add XP and unlock XP achievements without counting learning activity."""
+    s=stats or stats_for(db,user_id)
     s.total_xp += xp
     for achievement in db.scalars(select(Achievement).where(Achievement.threshold<=s.total_xp)):
         if not db.scalar(select(UserAchievement).where(UserAchievement.user_id==user_id,UserAchievement.achievement_id==achievement.id)):

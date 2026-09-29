@@ -1,3 +1,4 @@
+import hashlib
 from datetime import timedelta
 
 from sqlalchemy import func, select
@@ -38,6 +39,21 @@ def test_refresh_issues_new_working_access_token(client):
     me = client.get("/auth/me", headers=auth_header(body["access_token"]))
     assert me.status_code == 200
     assert me.json()["email"] == "refresh-success@example.com"
+
+
+def test_refresh_uses_digest_lookup_and_rejects_legacy_row(client):
+    first = register(client, "refresh-digest@example.com")
+    user_id = decode_token(first["access_token"])
+
+    with SessionLocal() as db:
+        token = db.scalar(select(RefreshToken).where(RefreshToken.user_id == user_id))
+        assert token.token_sha256 == hashlib.sha256(first["refresh_token"].encode()).hexdigest()
+        token.token_sha256 = None
+        db.commit()
+
+    refreshed = client.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+    assert refreshed.status_code == 401
+    assert refreshed.json()["error"]["code"] == "invalid_refresh_token"
 
 
 def test_refresh_rotation_invalidates_old_refresh_token(client):
