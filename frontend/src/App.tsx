@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import { Route, Routes, matchPath, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "./auth/AuthContext";
 import { NavBar } from "./components/layout/NavBar";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
@@ -62,8 +63,12 @@ function App() {
   const { t } = useTranslation();
   const location = useLocation();
   const isRunner = RUNNER_PATTERNS.some((path) => matchPath({ path, end: true }, location.pathname));
+  const { user } = useAuth();
+  // Shell classes drive the >=1024px desktop layout (left rail / runner width);
+  // below 1024px neither class changes anything.
+  const shellClass = `app${isRunner ? " app--runner" : ""}${!isRunner && user ? " app--rail" : ""}`;
   return (
-    <div className="app">
+    <div className={shellClass}>
       {!isRunner && <NavBar />}
       <main className="app-main">
         <ErrorBoundary key={location.pathname}>

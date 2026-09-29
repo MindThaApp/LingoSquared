@@ -5,15 +5,8 @@ import { useAuth } from "../../auth/AuthContext";
 import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { learnPath } from "../../lib/activeCourse";
-
-const TABS = [
-  { to: "/", labelKey: "nav.home", icon: "🏠" },
-  { to: "/courses", labelKey: "nav.learn", icon: "📚" },
-  { to: "/practice", labelKey: "nav.practice", icon: "⚡" },
-  { to: "/review", labelKey: "nav.review", icon: "🔁" },
-  { to: "/vocabulary", labelKey: "nav.vocabulary", icon: "🧠" },
-  { to: "/profile", labelKey: "nav.profile", icon: "👤" },
-];
+import { NAV_TABS } from "./navTabs";
+import { SideRail } from "./SideRail";
 
 export function NavBar() {
   const { t } = useTranslation();
@@ -33,10 +26,11 @@ export function NavBar() {
   if (!user) return null;
 
   // Learn resumes the active course (per user, per device) when one is set.
-  const tabs = TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
+  const tabs = NAV_TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
 
   return (
     <>
+      <SideRail />
       <header className="topbar">
         <NavLink to="/" className="topbar-brand">
           Auvel

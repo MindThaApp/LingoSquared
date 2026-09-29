@@ -7,6 +7,7 @@ import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { learnPath } from "../lib/activeCourse";
 import type { LessonProgress, Progress, Streak, Xp } from "@lingo/shared/api/types";
 import { PushPrompt } from "../components/PushPrompt";
+import { DesktopSidebar } from "../components/layout/DesktopSidebar";
 
 export function isBrandNewUser(
   progress: Progress | undefined,
@@ -127,7 +128,8 @@ export function HomePage() {
           : t("home.welcome");
 
   return (
-    <div>
+    <div className="page-with-aside">
+      <div className="page-main-col">
       {loadFailed && (
         <div className="feedback-banner error" role="alert" style={{ marginBottom: 12 }}>
           <p style={{ margin: "0 0 10px" }}>{t("home.data_fetch_error")}</p>
@@ -376,6 +378,8 @@ export function HomePage() {
           ))}
         </div>
       )}
+      </div>
+      <DesktopSidebar />
     </div>
   );
 }
