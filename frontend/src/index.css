@@ -1377,6 +1377,41 @@ button {
   }
 }
 
+/* Voice answer (mic) — inline button, live level meter, recording pulse. */
+.voice-answer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block: 4px;
+}
+.voice-answer__status { font-size: 0.85rem; min-height: 1em; }
+.voice-answer__btn.is-recording,
+.btn.is-recording {
+  border-color: var(--accent);
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+@keyframes mic-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-soft); }
+  50% { box-shadow: 0 0 0 8px transparent; }
+}
+.mic-meter {
+  display: inline-block;
+  width: 72px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.mic-meter__fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+}
+[dir="rtl"] .mic-meter__fill { transform-origin: right center; }
+
 /* Pronunciation feedback: per-word clarity from the STT confidence signal.
    Unclear words are marked with an underline + tint, never with a "wrong"
    colour — the model's low confidence means it could not make the word out,

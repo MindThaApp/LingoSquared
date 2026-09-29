@@ -5,6 +5,7 @@ import { VirtualKeyboard } from "../VirtualKeyboard";
 import { VoiceCaptureControls } from "../VoiceCaptureControls";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { submitAnswer } from "../../lib/voiceAnswer";
 import type { ExerciseComponentProps } from "./types";
 
 // speak_repeat: the target phrase is already shown in the prompt — the
@@ -18,6 +19,7 @@ import type { ExerciseComponentProps } from "./types";
 export function SpeakRepeat({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [spoken, setSpoken] = useState(false);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
   const answerLanguageCode = exercise.prompt.answer_language_code ?? "en";
@@ -25,7 +27,7 @@ export function SpeakRepeat({ exercise, onAnswer, disabled }: ExerciseComponentP
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (disabled || !value.trim()) return;
-    onAnswer(value.trim());
+    submitAnswer(onAnswer, value.trim(), spoken);
   }
 
   return (
@@ -34,7 +36,7 @@ export function SpeakRepeat({ exercise, onAnswer, disabled }: ExerciseComponentP
       <p className="muted" style={{ fontSize: "0.9rem" }}>
         {t("exercise.speak_repeat_instruction")}
       </p>
-      <VoiceCaptureControls languageCode={answerLanguageCode} onTranscript={setValue} disabled={disabled} />
+      <VoiceCaptureControls languageCode={answerLanguageCode} onTranscript={(text) => { setValue(text); setSpoken(true); }} disabled={disabled} />
       <div className="form-field">
         <input
           type="text"
