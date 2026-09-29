@@ -9,6 +9,18 @@ touched only where the spine forces it (see §6, open question Q7).
 
 ---
 
+## 0. Decisions (2026-09-29)
+
+Ramin's decisions on this plan:
+
+- **Q1 scope:** Blocks A–D first (19 units per language: A1–A6, B1–B2, C1–C5, D1–D6), starting with a Wave-0 pilot of unit A1 in nl, fa and prs, reviewed by Ramin before scaling. Blocks E–G later.
+- **Q10:** fix the speaking lock now (being done separately in backend).
+- **Q4:** Dari standardizes on **می‌توانم** (formal). A1 and B1 prs content will be retrofitted to match A2 (separately).
+- **Q5:** existing A2 scenario units are interleaved AFTER the grammar block they use (needs a reorder-import safety check first).
+- **Q2, Q3, Q6, Q7, Q8, Q9:** not yet decided; left open.
+
+---
+
 ## 1. Diagnosis — the CEFR ladder is inverted
 
 ### 1.1 Volume per tier (counted from `docs/content/realizations/<lang>/*.yaml`)
@@ -744,8 +756,9 @@ as drip content.
 
 ### Open questions
 
-- **Q1 — scope.** Is 31 new units per language right, or stage Blocks A–D
+- **[DECIDED 2026-09-29] Q1 — scope.** Is 31 new units per language right, or stage Blocks A–D
   first (19 units)?
+  **Decision:** Blocks A–D first (19 units per language), Wave-0 pilot of A1 in nl/fa/prs reviewed by Ramin before scaling; E–G later.
 - **Q2 — fa/prs unit size.** Is 6 lessons × ~6 exercises right? The current
   fa/prs A2 units are 4 × ~5.
 - **Q3 — Dari rulings.** Please rule on:
@@ -755,11 +768,13 @@ as drip content.
     Tehrani;
   - whether *خواهم رفت* is acceptable as taught (not just recognized) in the
     formal realization.
-- **Q4 — prs modal.** Standardize prs A2 on **می‌تانم** (matching A1 and B1)
+- **[DECIDED 2026-09-29] Q4 — prs modal.** Standardize prs A2 on **می‌تانم** (matching A1 and B1)
   before authoring, and retrofit the 84 می‌توانم / می‌توانین uses in
   `realizations/prs/a2_*`?
-- **Q5 — ordering.** Interleave the existing 10 A2 scenario units after their
+  **Decision:** standardize Dari on **می‌توانم** (formal); A1 and B1 prs content to be retrofitted to match A2 (separately). The question's original می‌تانم proposal is superseded.
+- **[DECIDED 2026-09-29] Q5 — ordering.** Interleave the existing 10 A2 scenario units after their
   grammar blocks (recommended; needs §4.4), or leave them first?
+  **Decision:** interleave existing A2 scenario units AFTER the grammar block they use; needs a reorder-import safety check first.
 - **Q6 — B1.** Leave the overlapping B1 units as-is for launch, or schedule a
   light B1 retrofit that removes the now-duplicated A2 layer?
 - **Q7 — X→en.** Add the 31 outcomes to the shared spine now, accepting the
@@ -770,6 +785,7 @@ as drip content.
   (nl 40, fa 18, prs 18), or all of 29+ once the A2 replacements ship?
 - **Q9 — nl voltooid verleden (A6).** Keep it receptive-only at A2, or move
   it to B1?
-- **Q10 — speaking gate.** Should the `speaking_unlocked()` fix (core units
+- **[DECIDED 2026-09-29] Q10 — speaking gate.** Should the `speaking_unlocked()` fix (core units
   only) ship on its own, ahead of this plan? It already gates en-fa A1
   speaking behind ~50 units.
+  **Decision:** fix the speaking lock now, ahead of this plan (being done separately in backend).
