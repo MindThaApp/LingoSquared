@@ -755,6 +755,64 @@ def test_speaking_units_lock_and_unlock(client, auth):
     assert next(unit for unit in refreshed if unit["section"]=="speaking")["locked"] is False
     assert client.post(f"/lessons/{speaking_lesson['id']}/start",headers=auth).status_code==200
 
+def test_speaking_unlock_uses_only_prior_reading_units(client, admin):
+    from app.models import Lesson, LessonProgress, User
+
+    body = payload(title="Speaking local prerequisites")
+    template_lesson = body["courses"][0]["units"][0]["lessons"][0]
+    units = []
+    for title, order, section in (
+        ("Earlier one", 1, "reading_writing"),
+        ("Earlier two", 2, "reading_writing"),
+        ("Speaking", 3, "speaking"),
+        ("Later reading", 4, "reading_writing"),
+    ):
+        units.append({"title": title, "order": order, "section": section, "lessons": [template_lesson]})
+    body["courses"][0]["units"] = units
+    imported = client.post("/admin/content/import", headers=admin, json=body)
+    assert imported.status_code == 200
+
+    course = next(
+        item for item in client.get("/courses?source=en&target=es").json()
+        if item["title"] == "Speaking local prerequisites"
+    )
+    course_units = client.get(f"/courses/{course['id']}/units").json()
+    reading = [unit for unit in course_units if unit["section"] == "reading_writing"]
+    speaking = next(unit for unit in course_units if unit["section"] == "speaking")
+    assert len(reading) == 3
+
+    incomplete = client.post("/auth/register", json={"email": "speaking-incomplete@example.com", "password": "password123"})
+    complete = client.post("/auth/register", json={"email": "speaking-complete@example.com", "password": "password123"})
+    with SessionLocal() as db:
+        incomplete_user_id = db.scalar(select(User.id).where(User.email == "speaking-incomplete@example.com"))
+        complete_user_id = db.scalar(select(User.id).where(User.email == "speaking-complete@example.com"))
+
+    with SessionLocal() as db:
+        lessons_by_unit = {
+            unit["id"]: db.scalars(select(Lesson).where(Lesson.unit_id == unit["id"])).all()
+            for unit in reading
+        }
+        # A gap in the earlier prerequisites keeps speaking locked.
+        for lesson in lessons_by_unit[reading[1]["id"]]:
+            db.add(LessonProgress(user_id=incomplete_user_id, lesson_id=lesson.id, completed_at=datetime.now(timezone.utc)))
+        # Completing both earlier units unlocks speaking while the later
+        # reading unit remains untouched.
+        for unit in reading[:2]:
+            for lesson in lessons_by_unit[unit["id"]]:
+                db.add(LessonProgress(user_id=complete_user_id, lesson_id=lesson.id, completed_at=datetime.now(timezone.utc)))
+        db.commit()
+
+    incomplete_units = client.get(
+        f"/courses/{course['id']}/units",
+        headers={"Authorization": f"Bearer {incomplete.json()['access_token']}"},
+    ).json()
+    complete_units = client.get(
+        f"/courses/{course['id']}/units",
+        headers={"Authorization": f"Bearer {complete.json()['access_token']}"},
+    ).json()
+    assert next(unit for unit in incomplete_units if unit["id"] == speaking["id"])["locked"] is True
+    assert next(unit for unit in complete_units if unit["id"] == speaking["id"])["locked"] is False
+
 def test_speaking_lock_cannot_be_bypassed_via_answer_or_complete(client, auth):
     # Phase H1 (2026-07-07 integrity audit): start() always checked
     # speaking_locked, but exercise_answer()/complete() didn't -- a user

@@ -73,6 +73,7 @@ class Settings(BaseSettings):
     vapid_public_key: str = ""
     vapid_private_key: str = ""
     vapid_subject: str = "mailto:admin@example.com"
+    enable_push_scheduler: bool = False
     google_oauth_client_ids: str = ""
     apple_audience_ids: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

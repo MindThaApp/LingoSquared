@@ -1,6 +1,8 @@
 import logging
 import re
 import secrets
+import asyncio
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,6 +10,7 @@ from fastapi.responses import JSONResponse
 from app.api.router import router
 from app.core.config import get_settings
 from app.core.security import decode_token
+from app.services.push_scheduler import push_scheduler_enabled, run_push_scheduler_once
 
 # Basic logging configuration so app.* loggers actually emit to stdout.
 # uvicorn only configures its own "uvicorn"/"uvicorn.error"/"uvicorn.access"
@@ -26,7 +29,30 @@ def validate_startup_settings(settings):
 
 s=get_settings()
 validate_startup_settings(s)
-app=FastAPI(title=s.app_name,version="1.0.0",description="Local-first language learning API")
+async def _push_scheduler_loop():
+    while True:
+        try:
+            await asyncio.to_thread(run_push_scheduler_once)
+        except Exception:
+            logger.exception("push reminder scheduler iteration failed")
+        await asyncio.sleep(15 * 60)
+
+
+@asynccontextmanager
+async def lifespan(_app):
+    task = asyncio.create_task(_push_scheduler_loop()) if push_scheduler_enabled() else None
+    try:
+        yield
+    finally:
+        if task:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+
+
+app=FastAPI(title=s.app_name,version="1.0.0",description="Local-first language learning API",lifespan=lifespan)
 app.add_middleware(CORSMiddleware,allow_origins=s.cors_origin_list,allow_credentials=True,allow_methods=["*"],allow_headers=["*"])
 
 # Accept a client-supplied X-Request-ID only if it's a short, safe token —

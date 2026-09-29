@@ -39,6 +39,9 @@ the non-negotiable verification bar.
 
 ## Docker / env / seeding
 
+- Set `ENABLE_PUSH_SCHEDULER=true` to run local-time daily and streak push reminders every 15 minutes.
+- The in-process scheduler is disabled by default, including tests and development.
+
 - **`docker compose restart` does NOT reload `.env` — only `up -d` (or
   `--force-recreate`) does.** A stale-env CORS failure once looked like a
   code bug. Detail: BUILD_LOG.

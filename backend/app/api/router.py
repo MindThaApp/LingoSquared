@@ -81,6 +81,8 @@ from app.schemas.api import (
     GeneralFeedbackIn,
     ImportOut,
     ImportRequest,
+    DailyGoalIn,
+    DailyGoalOut,
     LanguageOut,
     LanguagePairOut,
     LessonDetail,
@@ -148,6 +150,7 @@ from app.services import tts as tts_service
 from app.services import stt as stt_service
 from app.services import social_auth
 from app.services import push as push_service
+from app.services.push_scheduler import claim_notification, local_date_for
 from app.services import feedback_attachments as feedback_attachment_service
 from app.practice.service import (
     generate_batch,
@@ -684,10 +687,9 @@ def first_placement_unit(db, course_id, level):
     return units[0]
 
 
-def speaking_unlocked(db:Session,course_id:str,user_id:str|None) -> bool:
+def speaking_unlocked(db:Session,course_id:str,user_id:str|None,unit_order:int) -> bool:
     if not user_id: return False
-    reading_units=list(db.scalars(select(Unit).where(Unit.course_id==course_id,Unit.section==UnitSection.reading_writing)))
-    if not reading_units: return False
+    reading_units=list(db.scalars(select(Unit).where(Unit.course_id==course_id,Unit.section==UnitSection.reading_writing,Unit.order < unit_order).order_by(Unit.order)))
     for unit in reading_units:
         lesson_ids=list(db.scalars(select(Lesson.id).where(Lesson.unit_id==unit.id)))
         if not lesson_ids: return False
@@ -701,8 +703,8 @@ def require_speaking_unlocked(db:Session, unit:"Unit", user) -> None:
     # unit's lessons, answer every exercise by id (earning XP), and complete
     # each lesson without ever unlocking speaking. Shared helper, 3 call
     # sites (start, answer, complete), same check each time.
-    if unit.section==UnitSection.speaking and not is_admin_user(user) and not speaking_unlocked(db,unit.course_id,user.id):
-        fail(409,"speaking_locked","Complete all reading and writing units before starting speaking lessons")
+    if unit.section==UnitSection.speaking and not is_admin_user(user) and not speaking_unlocked(db,unit.course_id,user.id,unit.order):
+        fail(409,"speaking_locked","Complete the earlier reading and writing units before starting speaking lessons")
 
 @router.post("/auth/register",response_model=AuthOut,status_code=201)
 def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
@@ -819,7 +821,7 @@ def languages(db:Session=Depends(get_db)): return list(db.scalars(select(Languag
 def pairs(db:Session=Depends(get_db)):
     rows=db.execute(select(Course.source_language,Course.target_language,func.count(Course.id)).group_by(Course.source_language,Course.target_language)).all()
     return [{"source_language":a,"target_language":b,"course_count":n} for a,b,n in rows]
-def course_shape(db,c): return {"id":c.id,"source_language":c.source_language,"target_language":c.target_language,"title":c.title,"level":c.level,"unit_count":db.scalar(select(func.count(Unit.id)).where(Unit.course_id==c.id))}
+def course_shape(db,c): return {"id":c.id,"source_language":c.source_language,"target_language":c.target_language,"title":c.title,"level":c.level,"unit_count":db.scalar(select(func.count(Unit.id)).where(Unit.course_id==c.id)),"recommended":c.recommended}
 @router.get("/courses",response_model=list[CourseOut])
 def courses(source:str|None=None,target:str|None=None,db:Session=Depends(get_db)):
     q=select(Course); q=q.where(Course.source_language==source) if source else q; q=q.where(Course.target_language==target) if target else q
@@ -833,11 +835,6 @@ def course(course_id:str,db:Session=Depends(get_db)):
 def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(get_db)):
     if not db.get(Course,course_id):
         fail(404,"course_not_found","Course not found")
-    unlocked=(user and is_admin_user(user)) or speaking_unlocked(
-        db,
-        course_id,
-        user.id if user else None,
-    )
     result=[]
     for unit in db.scalars(
         select(Unit)
@@ -879,7 +876,10 @@ def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(g
                     else 0
                 ),
                 "section":unit.section,
-                "locked":unit.section==UnitSection.speaking and not unlocked,
+                "locked":unit.section==UnitSection.speaking and not (
+                    (user and is_admin_user(user))
+                    or speaking_unlocked(db,course_id,user.id if user else None,unit.order)
+                ),
                 "checkpoint_passed":checkpoint_passed,
                 "content_key":unit.content_key,
             }
@@ -1648,17 +1648,20 @@ def admin_push_notify_due_reviews(
     if not push_service.push_configured():
         fail(503, "push_not_configured", "Web push is not configured on this server")
     now = datetime.now(timezone.utc)
-    user_ids = db.scalars(
-        select(UserLexemeSRS.user_id)
+    due_users = db.execute(
+        select(UserLexemeSRS.user_id, User.timezone)
         .where(
             UserLexemeSRS.due_at <= now,
             UserLexemeSRS.suspended.is_(False),
         )
+        .join(User, User.id == UserLexemeSRS.user_id)
         .distinct()
     ).all()
     notified_users = 0
     notifications_sent = 0
-    for uid_ in user_ids:
+    for uid_, user_tz in due_users:
+        if not claim_notification(db, uid_, "daily_reminder", local_date_for(user_tz, now)):
+            continue
         sent = push_service.send_push_to_user(
             db,
             uid_,
@@ -1713,6 +1716,8 @@ def admin_push_notify_streaks_at_risk(
         )
         if effective_days == 0 or last_activity_date == day_start.date():
             # Already active today in their own timezone — streak is safe.
+            continue
+        if not claim_notification(db, uid_, "streak_at_risk", day_start.date()):
             continue
         sent = push_service.send_push_to_user(
             db,
@@ -2255,6 +2260,15 @@ def xp(user=Depends(current_user),db:Session=Depends(get_db)):
         )
     )
     return {"total_xp":s.total_xp,"daily_goal":s.daily_goal,"xp_today":exercise_xp+practice_xp+quest_xp}
+@router.get("/me/daily-goal",response_model=DailyGoalOut)
+def get_daily_goal(user=Depends(current_user),db:Session=Depends(get_db)):
+    return {"daily_goal_xp":stats_for(db,user.id).daily_goal}
+@router.put("/me/daily-goal",response_model=DailyGoalOut)
+def update_daily_goal(body:DailyGoalIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    stats=stats_for(db,user.id)
+    stats.daily_goal=body.daily_goal_xp
+    db.commit()
+    return {"daily_goal_xp":stats.daily_goal}
 @router.get("/me/achievements")
 def achievements(user=Depends(current_user),db:Session=Depends(get_db)):
     earned=set(db.scalars(select(UserAchievement.achievement_id).where(UserAchievement.user_id==user.id)))

@@ -423,8 +423,14 @@ own account.
 
 `GET /courses?source=en&target=fa` → flat array:
 ```json
-[ { "id": "uuid", "source_language": "en", "target_language": "fa", "title": "string", "level": "string", "unit_count": 1 } ]
+[ { "id": "uuid", "source_language": "en", "target_language": "fa", "title": "string", "level": "string", "unit_count": 1, "recommended": false } ]
 ```
+
+`recommended` is an additive course-list/detail field. It defaults to
+`false`; course imports may set it to `true` to distinguish the preferred
+course when multiple courses share a CEFR level. Content overlays may set
+`course.recommended`; the compiler forwards it as `courses[].recommended`
+when present and omits it when absent.
 
 `GET /courses/{course_id}` → same shape as one list item, plus
 `"description"`. Does not inline units (fetch those separately) — avoids two
@@ -496,7 +502,7 @@ each piece of text as its own `text_block` with its own `language_code` and
           { "text": "Where is the station?", "language_code": "en", "direction": "ltr" }
         ],
         "options": ["...multiple_choice only..."],
-        "word_bank": ["...word_order only..."],
+        "word_bank": ["...word_order tiles, or generated tiles for A1/A2 free-text prompts..."],
         "pairs": ["...matching_pairs only (left/right items, shuffled, no answer key)..."],
         "back_text_blocks": ["...flashcard only — the back-of-card text_blocks, same shape as text_blocks, revealed client-side after the user flips the card..."]
       }
@@ -767,6 +773,11 @@ allowing one missed day when a freeze is available. This read calculation
 does not change the stored streak or consume a freeze.
 
 `GET /me/xp` → `{ "total_xp": 120, "daily_goal": 20, "xp_today": 15 }`.
+`daily_goal` is the authenticated user's configured target and defaults to
+20 XP. `GET /me/daily-goal` returns `{ "daily_goal_xp": 20 }`.
+`PUT /me/daily-goal` accepts `{ "daily_goal_xp": 10|20|30|50 }` and returns
+the same shape. These values correspond to casual/regular/serious/intense.
+Other values return the standard `422` error envelope.
 `xp_today` (added 2026-07-10) is the XP earned within the user's own
 local day (same `activity_day_bounds()` window streaks/quests use),
 summed live from the persisted per-answer rows: `ExerciseAttempt`
@@ -780,7 +791,7 @@ to a day; the frontend no longer uses that flow.
 
 `GET /me/achievements` → `[ { "id":"...", "code":"...", "title":"...", "description":"...", "earned": true } ]`.
 
-`GET /me/quests` (Phase E3, 2026-07-05) → `{ "quests": [ { "code":"clear_reviews", "title":"...", "description":"...", "xp_reward":10, "completed":false, "progress":0, "target":1 } ] }`.
+`GET /me/quests` (Phase E3, 2026-07-05) → `{ "quests": [ { "code":"clear_reviews", "title":"...", "description":"...", "xp_reward":10, "completed":false, "progress":0, "target":1 } ] }`. Three quests are deterministically selected from the quest pool per user and local date. Quest XP rewards do not count as learning activity or extend a streak; reading quests never awards XP unless the underlying learning action is already complete.
 Server-authoritative daily nudge quests, computed live against the
 user's own local day (same timezone logic as streaks) rather than
 tracked via per-action hooks into every answer endpoint — quest
@@ -1485,10 +1496,11 @@ is not an error) and deliberately NOT gated on `push_configured`, so a
 client can always clean up a local subscription even after the server's
 keys were rotated away.
 
-Admin trigger — manual, not scheduled (this project has no background
-scheduler/cron infrastructure by design; an external cron or a
-Ramin-initiated call fires it whenever a "reviews due" push should go
-out):
+Admin triggers remain available for manual use. An optional in-process
+scheduler also runs the daily reminder triggers every 15 minutes when
+`ENABLE_PUSH_SCHEDULER=true`; it is disabled by default. Sends are guarded
+per user, trigger, and local date, and users without an active push
+subscription receive nothing.
 
 `POST /admin/push/notify-due-reviews` (admin auth) — sends a "Reviews are
 waiting" notification to every user with at least one due, non-suspended
@@ -1498,9 +1510,10 @@ SRS lexeme:
 → { "notified_users": 3, "notifications_sent": 4 }
 ```
 
-This is the only implemented notification trigger today; any future
-trigger (e.g. streaks-at-risk) must be added to this section before being
-built.
+`POST /admin/push/notify-streaks-at-risk` (admin auth) — sends a streak
+warning to users with a live streak who have not been active in their own
+local day. Both trigger types are deduplicated per user, trigger, and local
+date, including when multiple scheduler workers are running.
 
 **Push payload contract (server → service worker)** — the data of every
 push message is JSON:
@@ -1819,15 +1832,13 @@ exercise types (`grammar_check`, `reading_comprehension`, `writing_prompt`,
 is purely a grouping/gating concept over the existing ones).
 `speaking` units are **locked** (backend returns 409
 `speaking_locked` on `POST /lessons/{id}/start` for a lesson in a locked
-unit) until the learner has completed a course-level threshold of
-`reading_writing` units in the same course — backend picks and documents a
-specific, reasonable default (e.g. 100% of `reading_writing` units
-completed, or a %; document whichever is chosen) rather than leaving it
-unspecified. Frontend shows locked speaking units visibly-but-disabled
+unit) until the learner has completed every `reading_writing` unit earlier
+in that course's order. Later reading/writing units do not block an earlier
+speaking unit. Frontend shows locked speaking units visibly-but-disabled
 (not hidden) with a short explanation of what unlocks them, using the
 `locked` field — never infer lock state client-side from other data.
 
-Backend implementation choice: the threshold is 100%. A `reading_writing`
-unit is complete when all of its lessons are complete; all such units in the
-course must be complete. Anonymous unit listings conservatively return
+Backend implementation choice: a `reading_writing` unit is complete when
+all of its lessons are complete; only those preceding the speaking unit in
+course order are prerequisites. Anonymous unit listings conservatively return
 `locked: true` for speaking units because lock state is learner-specific.
