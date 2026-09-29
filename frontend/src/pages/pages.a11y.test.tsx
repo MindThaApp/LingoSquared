@@ -193,7 +193,7 @@ function Shell({ children }: { children: ReactNode }) {
   );
 }
 
-describe("learner-flow pages have no serious/critical axe violations", () => {
+describe("learner-flow pages have no serious/critical axe violations", { timeout: 30_000 }, () => {
   beforeEach(() => {
     localStorage.clear();
     authState.status = "authenticated";

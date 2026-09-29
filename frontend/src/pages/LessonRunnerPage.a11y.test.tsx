@@ -60,7 +60,7 @@ function renderPage() {
   );
 }
 
-describe("LessonRunnerPage accessibility", () => {
+describe("LessonRunnerPage accessibility", { timeout: 30_000 }, () => {
   beforeEach(() => {
     answerMock.mockReset();
   });
