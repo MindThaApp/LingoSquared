@@ -50,4 +50,13 @@ describe("sanitizeForSpeech", () => {
     expect(sanitizeForSpeech("Ik ben ______.")).toBe("Ik ben ….");
     expect(sanitizeForSpeech("snake_case")).toBe("snake_case");
   });
+  it("strips Persian labels containing ZWNJ (multi-turn)", () => {
+    expect(
+      sanitizeForSpeech("مصاحبه\u200Cکننده: سلام، حال شما چطور است؟ سارا: خوبم. مصاحبه\u200Cکننده: عالی!"),
+    ).toBe("سلام، حال شما چطور است؟ خوبم. عالی!");
+    expect(sanitizeForSpeech("مصاحبه\u200Cکننده: سلام.\nسارا: درود.")).toBe("سلام. درود.");
+  });
+  it("leaves a ZWNJ word without a colon untouched", () => {
+    expect(sanitizeForSpeech("او مصاحبه\u200Cکننده است.")).toBe("او مصاحبه\u200Cکننده است.");
+  });
 });
