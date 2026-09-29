@@ -14,28 +14,12 @@ present, never unattended.**
 ## FIRST: set `$LINGO_REPO` (every command below depends on it)
 
 ```bash
-export LINGO_REPO="$HOME/Library/Mobile Documents/com~apple~CloudDocs/dev/LingoSquared"
+export LINGO_REPO="$HOME/dev/LingoSquared"
 [ -d "$LINGO_REPO/backend" ] || { echo "WRONG PATH — stop"; }
 ```
 
-**Always quote it.** The repo lives in iCloud Drive, so its path contains a
-space (`Mobile Documents`). An unquoted `$LINGO_REPO` splits into two
-arguments and the command silently does the wrong thing.
-
-This bit for real on 2026-07-22: `scripts/sync_dev_db.sh` used an unquoted
-`$PY` (which embeds the repo root), so **every single course failed to
-compile and the dev-DB content import was a complete no-op** — while the
-script printed a plausible "COMPILE FAILED … fix its validation errors
-separately" for each one, which reads like a content problem and is not.
-Fixed by quoting; the `shellcheck disable=SC2086` there is narrow and
-applies ONLY to `$REALS`/`$OVERLAYS`, which must word-split.
-
-These commands previously hardcoded `/Users/raminazizi/dev/LingoSquared`.
-**That directory still exists but is an empty leftover** (it holds only
-`.claude/worktrees`) — so a deploy run against the old paths would fail,
-and the `rsync --delete` in the frontend step would be pointed at a source
-that does not contain the site. Re-verify `$LINGO_REPO` if the repo ever
-moves again.
+The repo lives at `~/dev/LingoSquared` on both macOS and WSL. **Always quote
+`$LINGO_REPO`** so a path with spaces can never word-split.
 
 ## Load-bearing fact: the live server has never been deployed to
 

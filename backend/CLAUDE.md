@@ -152,7 +152,7 @@ worker — see the DB-isolation footgun in root `CLAUDE.md`.)
   it started ("can't start a guest session" was just the first symptom).
   The web frontend is same-origin and masks this gap — probe with an
   OPTIONS request with `Origin: https://localhost` after every deploy.
-- Local stack: `colima start`; `cd backend && docker compose up -d`
+- Local stack: start Docker (Docker Desktop / `sudo service docker start` on WSL; `colima start` on macOS); `cd backend && docker compose up -d`
   (isolated `backend/.env`, random JWT secret, never committed). **Never
   touch the live server (192.168.4.4) unattended — deploys happen with
   Ramin present.**
