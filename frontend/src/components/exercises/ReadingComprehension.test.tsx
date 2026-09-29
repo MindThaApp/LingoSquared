@@ -44,7 +44,7 @@ describe("ReadingComprehension answer payload", () => {
     const check = screen.getByRole("button", { name: "common.check" });
     expect(check).toBeDisabled(); // nothing selected yet
 
-    fireEvent.click(screen.getByRole("button", { name: "M" }));
+    fireEvent.click(screen.getByRole("radio", { name: "M" }));
     expect(check).toBeEnabled();
     fireEvent.click(check);
 

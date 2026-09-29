@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { seededShuffleNotOriginal } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
@@ -25,6 +25,13 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
   // without this, an RTL answer (Farsi/Dari) still visually assembles
   // left-to-right regardless of the order tiles were tapped in.
   const direction = answerDirectionForExercise(exercise);
+
+  const firstTileRef = useRef<HTMLButtonElement | null>(null);
+  useEffect(() => {
+    if (!disabled) firstTileRef.current?.focus({ preventScroll: true });
+    // Focus once on mount only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function pick(word: string, index: number) {
     if (disabled) return;
@@ -57,7 +64,7 @@ export function WordOrder({ exercise, onAnswer, disabled }: ExerciseComponentPro
       </div>
       <div className="word-bank" dir={direction}>
         {available.map((word, i) => (
-          <button key={i} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
+          <button key={i} ref={i === 0 ? firstTileRef : undefined} className="word-chip" onClick={() => pick(word, i)} disabled={disabled}>
             {word}
           </button>
         ))}
