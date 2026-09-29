@@ -6,12 +6,13 @@ import { SpeakButton } from "../SpeakButton";
 import { isListeningExercise } from "../../lib/listeningTypes";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { AnswerModeSwitch } from "./AnswerModeSwitch";
 import type { ExerciseComponentProps } from "./types";
 
 // Shared by "translation", "reverse_translation", and "listen_type" — same
 // UI; listen_type additionally carries audio_text/audio_language_code for
 // a hidden target-language phrase the learner must hear before typing.
-export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function Translation({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
   const script = answerScriptForExercise(exercise);
@@ -33,31 +34,45 @@ export function Translation({ exercise, onAnswer, disabled }: ExerciseComponentP
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="form-field">
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={disabled}
-          placeholder={t("exercise.translation_placeholder")}
-          dir={scriptDirection(script)}
-          {...inputProps}
-        />
-      </div>
-      {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
-        <VirtualKeyboard
-          script={script!}
-          {...keyboardProps}
-        />
-      )}
-      <button
-        type="submit"
-        className="btn btn-block"
-        disabled={disabled || !value.trim()}
-        onMouseDown={(e) => e.preventDefault()}
-      >
-        {t("common.check")}
-      </button>
+      <AnswerModeSwitch
+        exercise={exercise}
+        courseLevel={courseLevel}
+        lessonExercises={lessonExercises}
+        answerHint={answerHint}
+        enabled={exercise.type === "translation"}
+        disabled={disabled}
+        onAnswer={onAnswer}
+        renderTyping={(toggle) => (
+          <>
+          <div className="form-field">
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={disabled}
+              placeholder={t("exercise.translation_placeholder")}
+              dir={scriptDirection(script)}
+              {...inputProps}
+            />
+          </div>
+          {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
+            <VirtualKeyboard
+              script={script!}
+              {...keyboardProps}
+            />
+          )}
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={disabled || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {t("common.check")}
+          </button>
+            {toggle}
+          </>
+        )}
+      />
     </form>
   );
 }
