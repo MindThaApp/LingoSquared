@@ -4,6 +4,7 @@ PracticeAttempt + today's QuestCompletion rewards). daily_goal was a
 dead column before this — nothing ever computed "earned today" against
 it."""
 from datetime import timedelta
+from unittest.mock import patch
 
 from sqlalchemy import select
 
@@ -47,9 +48,17 @@ def test_xp_today_counts_only_todays_awards(client, auth):
     # xp_today too: completing the lesson and then fetching /me/quests
     # awards the complete_lesson quest exactly once.
     assert client.post(f"/lessons/{lesson['id']}/complete", headers=auth).status_code == 200
+    # Pin the legacy quest set so complete_lesson is always offered
+    # (daily quest rotation is covered by separate tests).
+    from app.services import quests as quest_service
+    legacy = tuple(q for q in quest_service.QUEST_DEFINITIONS if q["code"] in {
+        "clear_reviews", "complete_lesson", "practice_correct_5"
+    })
+    with patch.object(quest_service, "selected_quest_definitions", return_value=legacy):
+        quests_response = client.get("/me/quests", headers=auth)
     quests = {
         quest["code"]: quest
-        for quest in client.get("/me/quests", headers=auth).json()["quests"]
+        for quest in quests_response.json()["quests"]
     }
     assert quests["complete_lesson"]["completed"] is True
     quest_xp = sum(

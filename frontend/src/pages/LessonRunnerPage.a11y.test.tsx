@@ -88,9 +88,11 @@ describe("LessonRunnerPage accessibility", () => {
     expect(live).toBeEmptyDOMElement();
     await expectNoSeriousA11yViolations(container);
 
-    fireEvent.click(screen.getByRole("button", { name: "ouders" }));
+    fireEvent.click(screen.getByRole("radio", { name: "ouders" }));
     fireEvent.click(screen.getByRole("button", { name: "common.check" }));
-    await waitFor(() => expect(live).toHaveTextContent(`lesson_runner.${status}`));
+    // "almost" is announced via AlmostFeedback's visually-hidden sr text.
+    const announced = status === "almost" ? "almost_feedback.sr" : `lesson_runner.${status}`;
+    await waitFor(() => expect(live).toHaveTextContent(announced));
     // Same node stayed mounted, so its content change is announced.
     expect(container.querySelector('[role="status"][aria-live="polite"]')).toBe(live);
     await expectNoSeriousA11yViolations(container);

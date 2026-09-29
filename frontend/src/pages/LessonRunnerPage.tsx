@@ -1,9 +1,10 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { LessonApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
@@ -13,6 +14,9 @@ import { QuitConfirm } from "../components/QuitConfirm";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
+import { answerOutcome } from "../lib/answerOutcome";
 import type {
   AnswerResponse,
   AnswerResult,
@@ -22,12 +26,18 @@ import type {
   TeachingCard,
 } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { buildLessonBlocks, flattenBlocks } from "../lib/interleave";
+import { useCourseLevel } from "../lib/useCourseLevel";
 
 interface QueueItem {
   exercise: Exercise;
   missCount: number;
   isConfirmation: boolean;
   correctAnswerHint?: string;
+  // Teaching cards (cumulative) that must have been shown before this
+  // exercise - see lib/interleave. Recycled misses keep their original value,
+  // which is always already satisfied by the time they come around again.
+  cardsBefore: number;
 }
 
 interface MissedWord {
@@ -44,9 +54,30 @@ interface MissedWord {
 // resubmit an already-graded exercise or skip past the live item.
 type HistoryEntry =
   | { kind: "teaching"; card: TeachingCard }
-  | { kind: "exercise"; exercise: Exercise; response: AnswerResponse | undefined; result: AnswerResult };
+  | { kind: "exercise"; exercise: Exercise; response: AnswerResponse | undefined; spoken?: boolean; result: AnswerResult };
 
 const MISS_LIMIT = 2;
+
+// LessonApi.start retry backoff (ms): one initial attempt + 3 retries.
+const START_RETRY_DELAYS_MS = [500, 1000, 2000];
+
+// Private-use marker substituted for the interpolated answer so the answer
+// value can be wrapped in <bdi dir="auto"> without touching the shared
+// locale strings (they live in packages/shared and stay plain
+// "Label: {{answer}}"). Without the isolation an RTL answer inside an LTR
+// label (or vice versa) reorders the surrounding punctuation.
+const ANSWER_MARK = "\uE000";
+
+// Where "back" goes: navigate(-1) only when there is in-app history to go
+// back to; a deep-linked / refreshed runner has history.state.idx === 0.
+function canGoBackInApp(): boolean {
+  const idx = (window.history.state as { idx?: unknown } | null)?.idx;
+  return typeof idx === "number" && idx > 0;
+}
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => setTimeout(resolve, ms));
+}
 
 function missedWordFromResult(exercise: Exercise, result: AnswerResult): MissedWord {
   return {
@@ -60,7 +91,11 @@ export function LessonRunnerPage() {
   const { lessonId = "" } = useParams();
   const location = useLocation();
   const courseId = (location.state as { courseId?: string } | null)?.courseId;
+  const courseLevel = useCourseLevel(courseId);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const finishingRef = useRef(false);
+  const continueButtonRef = useRef<HTMLButtonElement>(null);
 
   // Phase B2: review warm-up, shown before teaching cards. `null` means
   // "not checked yet" so the teaching-card phase never flashes before the
@@ -77,6 +112,9 @@ export function LessonRunnerPage() {
   const [queue, setQueue] = useState<QueueItem[] | null>(null);
   const [result, setResult] = useState<AnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
+  const [reviewResponse, setReviewResponse] = useState<AnswerResponse | undefined>();
+  const [reviewSpoken, setReviewSpoken] = useState(false);
   const [totalXp, setTotalXp] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [lockedError, setLockedError] = useState<string | null>(null);
@@ -85,6 +123,7 @@ export function LessonRunnerPage() {
   const missedExerciseIds = useState(() => new Set<string>())[0];
   const [submitError, setSubmitError] = useState(false);
   const [finishError, setFinishError] = useState(false);
+  const [finishing, setFinishing] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
 
   // Read-only back/forward review state - see the HistoryEntry comment above.
@@ -96,14 +135,37 @@ export function LessonRunnerPage() {
     queryFn: () => LessonApi.get(lessonId),
   });
 
+  // Start the lesson, retrying transient failures with backoff. A failed
+  // start used to be swallowed, so /complete later 409'd lesson_not_started.
+  // speaking_locked is a definitive answer, never retried.
   useEffect(() => {
     if (!lessonId) return;
-    LessonApi.start(lessonId).catch((err) => {
-      if (err instanceof ApiError && err.code === "speaking_locked") {
-        setLockedError(t("lesson_runner.speaking_locked"));
+    let cancelled = false;
+    (async () => {
+      for (let attempt = 0; ; attempt++) {
+        try {
+          await LessonApi.start(lessonId);
+          return;
+        } catch (err) {
+          if (err instanceof ApiError && err.code === "speaking_locked") {
+            if (!cancelled) setLockedError(t("lesson_runner.speaking_locked"));
+            return;
+          }
+          if (attempt >= START_RETRY_DELAYS_MS.length) return;
+          await sleep(START_RETRY_DELAYS_MS[attempt]);
+          if (cancelled) return;
+        }
       }
-    });
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [lessonId, t]);
+
+  // Move focus to Continue when the result banner mounts so Enter continues.
+  useEffect(() => {
+    if (result) continueButtonRef.current?.focus();
+  }, [result]);
 
   // Best-effort due-review check. Never blocks the lesson: any failure
   // (no courseId available, network error, nothing due) just resolves to
@@ -136,11 +198,16 @@ export function LessonRunnerPage() {
 
   useEffect(() => {
     if (lessonQuery.data && queue === null) {
+      // Cards and exercises are interleaved (a few cards, then the exercises
+      // testing them) instead of all cards up front; teachingIndex still walks
+      // the original card order, the queue just gates how far it must go.
+      const { blocks } = buildLessonBlocks(lessonQuery.data.teaching, lessonQuery.data.exercises);
       setQueue(
-        lessonQuery.data.exercises.map((exercise) => ({
+        flattenBlocks(blocks).map(({ exercise, cardsBefore }) => ({
           exercise,
           missCount: 0,
           isConfirmation: false,
+          cardsBefore,
         })),
       );
     }
@@ -149,12 +216,14 @@ export function LessonRunnerPage() {
   const teaching = lessonQuery.data?.teaching ?? [];
   const current = queue?.[0];
 
-  async function handleReviewAnswer(response: AnswerResponse) {
+  async function handleReviewAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     const item = reviewItems?.[reviewIndex];
     if (!item) return;
     setReviewSubmitting(true);
+    setReviewResponse(response);
+    setReviewSpoken(meta?.inputMode === "spoken");
     try {
-      const res = await ReviewApi.answer(item.id, response);
+      const res = await ReviewApi.answer(item.id, response, meta);
       setReviewResult(res);
     } catch {
       // Item may have expired between fetch and answer - skip it rather
@@ -165,18 +234,24 @@ export function LessonRunnerPage() {
     }
   }
 
+  function handleReviewSkip() {
+    setReviewResult(null);
+    setReviewIndex(reviewItems?.length ?? 0);
+  }
+
   function handleReviewContinue() {
     setReviewResult(null);
     setReviewIndex((i) => i + 1);
   }
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
-      const res = await LessonApi.answer(current.exercise.id, response);
+      const res = await LessonApi.answer(current.exercise.id, response, meta);
       setResult(res);
       setTotalXp((xp) => xp + res.xp_awarded);
     } catch {
@@ -191,27 +266,60 @@ export function LessonRunnerPage() {
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   async function finishLesson() {
+    // Re-entry guard: the ref flips synchronously, unlike state, so a double
+    // click / stray second call can never POST /complete twice.
+    if (finishingRef.current) return;
+    finishingRef.current = true;
+    setFinishing(true);
     setFinishError(false);
     try {
-      const completion = await LessonApi.complete(lessonId);
+      let completion;
+      try {
+        completion = await LessonApi.complete(lessonId);
+      } catch (err) {
+        if (err instanceof ApiError && err.code === "lesson_not_started") {
+          // The initial start never landed: start now, retry complete once.
+          await LessonApi.start(lessonId);
+          completion = await LessonApi.complete(lessonId);
+        } else {
+          throw err;
+        }
+      }
+      for (const key of ["progress", "xp", "streak", "quests", "reviews-due", "units"]) {
+        queryClient.invalidateQueries({ queryKey: [key] });
+      }
       navigate(`/lessons/${lessonId}/done`, {
         state: { completion, totalXp, missedWords },
       });
     } catch {
       // Don't lose the just-finished lesson's completion silently -- offer
       // a retry rather than leaving the learner on a dead-end screen.
+      finishingRef.current = false;
+      setFinishing(false);
       setFinishError(true);
     }
   }
 
   function handleQuit() {
     // courseId only exists in route state, not the URL, so there's no
-    // reliable unit-lesson-list path to construct directly here.
-    navigate(-1);
+    // reliable unit-lesson-list path to construct directly here. A
+    // deep-linked runner has no in-app history, so fall back to home.
+    if (canGoBackInApp()) navigate(-1);
+    else navigate("/");
+  }
+
+  function renderAnswerLine(key: "lesson_runner.your_answer" | "lesson_runner.correct_answer", answer: string) {
+    const parts = t(key, { answer: ANSWER_MARK }).split(ANSWER_MARK);
+    return parts.map((part, i) => (
+      <Fragment key={i}>
+        {i > 0 && <bdi dir="auto">{answer}</bdi>}
+        {part}
+      </Fragment>
+    ));
   }
 
   function handleReviewBack() {
@@ -231,9 +339,29 @@ export function LessonRunnerPage() {
   // response line included.
   function renderResultBanner(
     bannerResult: AnswerResult,
-    options?: { response?: AnswerResponse; footer?: ReactNode },
+    options?: { response?: AnswerResponse; footer?: ReactNode; exercise?: Exercise; learner?: AnswerResponse; spoken?: boolean },
   ) {
     const status = resultStatus(bannerResult);
+    if (status === "almost") {
+      // Amber pass: teaches the correct form, no re-queue (see handleContinue).
+      const learnerText = options?.learner ?? options?.response;
+      return (
+        <div className="feedback-banner almost">
+          <AlmostFeedback
+            learner={typeof learnerText === "string" ? learnerText : undefined}
+            correct={formatCorrectResponse(bannerResult.correct_response)}
+            dir={options?.exercise ? answerDirectionForExercise(options.exercise) : "ltr"}
+            spoken={options?.spoken}
+          />
+          {bannerResult.feedback && (
+            <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+              <EmphasizedText text={bannerResult.feedback} />
+            </p>
+          )}
+          {options?.footer}
+        </div>
+      );
+    }
     return (
       // Announced via the persistent live region the caller wraps this in
       // (a live region must already be in the DOM before its content
@@ -241,17 +369,16 @@ export function LessonRunnerPage() {
       <div className={`feedback-banner ${status}`}>
         <p style={{ margin: "0 0 6px" }}>
           {status === "correct" && t("lesson_runner.correct")}
-          {status === "almost" && t("lesson_runner.almost")}
           {status === "incorrect" && t("lesson_runner.incorrect")}
         </p>
         {options?.response !== undefined && (
           <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-            {t("lesson_runner.your_answer", { answer: formatCorrectResponse(options.response) })}
+            {renderAnswerLine("lesson_runner.your_answer", formatCorrectResponse(options.response))}
           </p>
         )}
         {status !== "correct" && (
           <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-            {t("lesson_runner.correct_answer", { answer: formatCorrectResponse(bannerResult.correct_response) })}
+            {renderAnswerLine("lesson_runner.correct_answer", formatCorrectResponse(bannerResult.correct_response))}
           </p>
         )}
         {bannerResult.feedback && (
@@ -267,13 +394,15 @@ export function LessonRunnerPage() {
   function handleContinue() {
     if (!result || !queue || !current) return;
     const rest = queue.slice(1);
-    setHistory((h) => [...h, { kind: "exercise", exercise: current.exercise, response: lastResponse, result }]);
+    setHistory((h) => [...h, { kind: "exercise", exercise: current.exercise, response: lastResponse, spoken: lastSpoken, result }]);
     setResult(null);
     setLastResponse(undefined);
 
-    const resolved = result.correct || current.isConfirmation;
+    // "almost" is a pass: never re-queued, never a missed word.
+    const outcome = answerOutcome(result, current.isConfirmation);
+    const resolved = outcome.resolved;
 
-    if (!result.correct && !missedExerciseIds.has(current.exercise.id)) {
+    if (outcome.recordMissed && !missedExerciseIds.has(current.exercise.id)) {
       missedExerciseIds.add(current.exercise.id);
       setMissedWords((prev) => [...prev, missedWordFromResult(current.exercise, result)]);
     }
@@ -288,6 +417,7 @@ export function LessonRunnerPage() {
         ...rest,
         {
           exercise: current.exercise,
+          cardsBefore: current.cardsBefore,
           missCount: newMissCount,
           isConfirmation: newMissCount >= MISS_LIMIT,
           correctAnswerHint:
@@ -307,7 +437,7 @@ export function LessonRunnerPage() {
     return (
       <div className="lesson-runner-page">
         <p className="error-text">{lockedError}</p>
-        <button onClick={() => navigate(-1)}>{t("lesson_runner.go_back")}</button>
+        <button onClick={handleQuit}>{t("lesson_runner.go_back")}</button>
       </div>
     );
   }
@@ -316,9 +446,24 @@ export function LessonRunnerPage() {
     return (
       <div className="card" style={{ textAlign: "center" }}>
         <p className="muted">{t("lesson_runner.finish_error")}</p>
-        <button className="btn" onClick={finishLesson}>
-          {t("common.retry")}
-        </button>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
+          <button className="btn" onClick={finishLesson}>
+            {t("common.retry")}
+          </button>
+          <button className="btn btn-secondary" onClick={handleQuit}>
+            {t("lesson_runner.go_back")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Replaces the exercise while /complete is in flight so the last answer
+  // can't be re-submitted (handleContinue clears `result` before this).
+  if (finishing) {
+    return (
+      <div className="page-loading" role="status">
+        {t("lesson_runner.saving", { defaultValue: "Saving…" })}
       </div>
     );
   }
@@ -335,7 +480,7 @@ export function LessonRunnerPage() {
           <button className="btn" onClick={() => lessonQuery.refetch()}>
             {t("common.retry")}
           </button>
-          <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+          <button className="btn btn-secondary" onClick={handleQuit}>
             {t("lesson_runner.go_back")}
           </button>
         </div>
@@ -365,7 +510,10 @@ export function LessonRunnerPage() {
             <X size={18} aria-hidden="true" />
           </button>
         </div>
-        <ExerciseRenderer
+        <p className="muted" style={{ margin: "0 0 12px" }}>
+          {t("lesson_runner.review_warmup_hint", { count: reviewItems.length })}
+        </p>
+        <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
           key={item.id}
           exercise={{ id: item.id, type: asExerciseType(item.type), order: 0, prompt: item.prompt }}
           onAnswer={handleReviewAnswer}
@@ -375,22 +523,42 @@ export function LessonRunnerPage() {
               ? { correct: reviewResult.correct, correctResponse: reviewResult.correct_response }
               : undefined
           }
-        />
+        /></CourseTargetLanguage>
         <div role="status" aria-live="polite">
         {reviewResult && (() => {
           const status = resultStatus(reviewResult);
+          if (status === "almost") {
+            return (
+              <div className="feedback-banner almost">
+                <AlmostFeedback
+                  learner={typeof reviewResponse === "string" ? reviewResponse : undefined}
+                  spoken={reviewSpoken}
+                  correct={formatCorrectResponse(reviewResult.correct_response)}
+                  dir={answerDirectionForExercise({
+                    id: item.id,
+                    type: asExerciseType(item.type),
+                    order: 0,
+                    prompt: item.prompt,
+                  })}
+                />
+                <button className="btn btn-block" onClick={handleReviewContinue}>
+                  {t("lesson_runner.continue")}
+                </button>
+              </div>
+            );
+          }
           return (
             <div className={`feedback-banner ${status}`}>
               <p style={{ margin: "0 0 6px" }}>
                 {status === "correct" && t("lesson_runner.correct")}
-                {status === "almost" && t("lesson_runner.almost")}
                 {status === "incorrect" && t("lesson_runner.incorrect")}
               </p>
               {status !== "correct" && (
                 <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
-                  {t("lesson_runner.correct_answer", {
-                    answer: formatCorrectResponse(reviewResult.correct_response),
-                  })}
+                  {renderAnswerLine(
+                    "lesson_runner.correct_answer",
+                    formatCorrectResponse(reviewResult.correct_response),
+                  )}
                 </p>
               )}
               <button className="btn btn-block" onClick={handleReviewContinue}>
@@ -399,6 +567,11 @@ export function LessonRunnerPage() {
             </div>
           );
         })()}
+        </div>
+        <div style={{ marginTop: 12, textAlign: "center" }}>
+          <button type="button" className="btn btn-secondary" onClick={handleReviewSkip}>
+            {t("lesson_runner.review_warmup_skip")}
+          </button>
         </div>
         {showQuitConfirm && (
           <QuitConfirm
@@ -455,15 +628,15 @@ export function LessonRunnerPage() {
           <TeachingCardView card={entry.card} />
         ) : (
           <>
-            <ExerciseRenderer
+            <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
               key={`review-${reviewCursor}`}
               exercise={entry.exercise}
               onAnswer={() => {}}
               disabled
               gradedResult={{ correct: entry.result.correct, correctResponse: entry.result.correct_response }}
-            />
+            /></CourseTargetLanguage>
             <div role="status" aria-live="polite">
-              {renderResultBanner(entry.result, { response: entry.response })}
+              {renderResultBanner(entry.result, { response: entry.response, exercise: entry.exercise, spoken: entry.spoken })}
             </div>
           </>
         )}
@@ -478,9 +651,13 @@ export function LessonRunnerPage() {
     );
   }
 
-  if (teachingIndex < teaching.length) {
+  // Show cards up to the next exercise's `cardsBefore` (all remaining cards
+  // when there is no exercise to gate on, e.g. a cards-only lesson).
+  const cardsToShow = current ? Math.min(current.cardsBefore, teaching.length) : teaching.length;
+  if (teachingIndex < cardsToShow) {
     const card = teaching[teachingIndex];
-    const isLast = teachingIndex === teaching.length - 1;
+    // "Start practice" only when the next thing after this card is an exercise.
+    const isLast = current !== undefined && teachingIndex === cardsToShow - 1;
     const pct = ((teachingIndex + 1) / teaching.length) * 100;
     return (
       <div>
@@ -577,15 +754,18 @@ export function LessonRunnerPage() {
           </p>
         </div>
       )}
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={`${current.exercise.id}-${current.missCount}`}
         exercise={current.exercise}
         onAnswer={handleAnswer}
+        courseLevel={courseLevel}
+        lessonExercises={lessonQuery.data?.exercises}
+        answerHint={current.correctAnswerHint}
         disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("lesson_runner.submit_error")}</p>
@@ -597,8 +777,11 @@ export function LessonRunnerPage() {
       <div role="status" aria-live="polite">
         {result &&
           renderResultBanner(result, {
+            exercise: current.exercise,
+            learner: lastResponse,
+            spoken: lastSpoken,
             footer: (
-              <button className="btn btn-block" onClick={handleContinue}>
+              <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
                 {t("lesson_runner.continue")}
               </button>
             ),

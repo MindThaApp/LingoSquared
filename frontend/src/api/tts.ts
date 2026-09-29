@@ -1,8 +1,32 @@
 import type { TtsFallback } from "@lingo/shared/api/types";
 import { getVoicePreference } from "../lib/voicePreferences";
 import { getSpeedPreference } from "../lib/ttsSpeedPreferences";
+import { postRaw } from "@lingo/shared/api/client";
+import { audioCache, audioCacheKey } from "../lib/audioCache";
+import { sanitizeForSpeech } from "../lib/sanitizeForSpeech";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
+
+// One player at a time: any new speech first stops the previous element
+// and cancels browser speech. `release` revokes a NON-cached URL (recorded
+// clips); cached cloud-TTS URLs are owned by audioCache and never revoked here.
+let current: { audio: HTMLAudioElement; release?: () => void } | null = null;
+
+function stopCurrentPlayback(): void {
+  if (current) {
+    try {
+      current.audio.pause();
+      current.audio.currentTime = 0;
+    } catch {
+      // best-effort
+    }
+    current.release?.();
+    current = null;
+  }
+  if (typeof window !== "undefined" && "speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
 
 // Web Speech API lang tags are best-effort per language. Dari has no
 // standard BCP-47 tag with reliable browser voice support; fa-AF is the
@@ -53,7 +77,7 @@ function speakInBrowser(text: string, languageCode: string): boolean {
     if (match) utterance.voice = match;
   }
 
-  window.speechSynthesis.cancel();
+  stopCurrentPlayback();
   window.speechSynthesis.speak(utterance);
   return true;
 }
@@ -70,22 +94,50 @@ function speakInBrowser(text: string, languageCode: string): boolean {
 // preservation on by default in every evergreen browser), so recorded
 // audio respects the same preference as the two TTS tiers, just through
 // a different mechanism. See docs/CONTRACT.md's Text-to-speech section.
+// Session-scoped negative cache: asset keys known to be missing (404) are not
+// re-requested on every press. Only definitive 404/410 are cached, never
+// transient network/5xx errors.
+const missingMediaKeys = new Set<string>();
+
 async function playRecordedAsset(mediaAssetKey: string, languageCode: string): Promise<boolean> {
+  if (missingMediaKeys.has(mediaAssetKey)) return false;
   try {
     const response = await fetch(`${BASE_URL}/media/${encodeURIComponent(mediaAssetKey)}`);
-    if (!response.ok) return false;
+    if (!response.ok) {
+      if (response.status === 404 || response.status === 410) missingMediaKeys.add(mediaAssetKey);
+      return false;
+    }
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.playbackRate = getSpeedPreference(languageCode);
-    audio.addEventListener("ended", () => URL.revokeObjectURL(url));
-    await audio.play();
+    let released = false;
+    const release = () => {
+      if (!released) {
+        released = true;
+        URL.revokeObjectURL(url);
+      }
+    };
+    audio.addEventListener("ended", release);
+    stopCurrentPlayback();
+    current = { audio, release };
+    try {
+      await audio.play();
+    } catch (err) {
+      release();
+      if (current?.audio === audio) current = null;
+      throw err;
+    }
     return true;
   } catch {
     return false;
   }
 }
 
+// Speech-boundary sanitizing happens here and only here: the sanitized text
+// is what gets synthesized AND what keys the audio cache. Empty after
+// sanitizing -> nothing speakable -> honest `false` (no fallback to the raw
+// text, which would read out the stripped label/gloss).
 export async function speak(
   text: string,
   languageCode: string,
@@ -94,21 +146,48 @@ export async function speak(
   if (mediaAssetKey && (await playRecordedAsset(mediaAssetKey, languageCode))) {
     return true;
   }
-  return speakViaTtsAndBrowser(text, languageCode);
+  const spoken = sanitizeForSpeech(text);
+  if (!spoken) return false;
+  return speakViaTtsAndBrowser(spoken, languageCode);
+}
+
+async function playCloudUrl(url: string): Promise<boolean> {
+  const audio = new Audio(url);
+  stopCurrentPlayback();
+  current = { audio };
+  // Must await, not fire-and-forget: iOS Safari's play() requires
+  // transient user-activation that can expire before this network
+  // round-trip finishes on a slow connection, rejecting with
+  // NotAllowedError. Unawaited, that rejection was silently dropped
+  // and speak() reported success with no sound -- exactly the
+  // "silently dead" outcome this whole fallback chain exists to avoid.
+  try {
+    await audio.play();
+    return true;
+  } catch {
+    if (current?.audio === audio) current = null;
+    return false;
+  }
 }
 
 async function speakViaTtsAndBrowser(text: string, languageCode: string): Promise<boolean> {
-  const token = localStorage.getItem("access_token");
-  const headers = new Headers({ "Content-Type": "application/json" });
-  if (token) headers.set("Authorization", `Bearer ${token}`);
   const speakingRate = getSpeedPreference(languageCode);
+  const key = audioCacheKey(text, languageCode, speakingRate);
 
+  const cached = audioCache.get(key);
+  if (cached !== undefined) {
+    if (await playCloudUrl(cached)) return true;
+    return speakInBrowser(text, languageCode);
+  }
+
+  // Through the shared client so an expired access token gets the normal
+  // refresh-and-retry instead of silently degrading to the browser voice.
   let response: Response;
   try {
-    response = await fetch(`${BASE_URL}/tts`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({ text, language_code: languageCode, speaking_rate: speakingRate }),
+    response = await postRaw("/tts", {
+      text,
+      language_code: languageCode,
+      speaking_rate: speakingRate,
     });
   } catch {
     return speakInBrowser(text, languageCode);
@@ -122,28 +201,26 @@ async function speakViaTtsAndBrowser(text: string, languageCode: string): Promis
   if (contentType.includes("audio")) {
     // The provider already baked speakingRate into this audio — no
     // client-side playbackRate here, or the rate would apply twice.
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audio.addEventListener("ended", () => URL.revokeObjectURL(url));
-    // Must await, not fire-and-forget: iOS Safari's play() requires
-    // transient user-activation that can expire before this network
-    // round-trip finishes on a slow connection, rejecting with
-    // NotAllowedError. Unawaited, that rejection was silently dropped
-    // and speak() reported success with no sound -- exactly the
-    // "silently dead" outcome this whole fallback chain exists to avoid.
+    let url: string;
     try {
-      await audio.play();
-      return true;
+      const blob = await response.blob();
+      url = URL.createObjectURL(blob);
     } catch {
-      URL.revokeObjectURL(url);
       return speakInBrowser(text, languageCode);
     }
+    audioCache.set(key, url);
+    if (await playCloudUrl(url)) return true;
+    return speakInBrowser(text, languageCode);
   }
 
   // application/json — { use_browser_tts: true, reason: ... }
-  const body: TtsFallback = await response.json();
-  if (body.use_browser_tts) {
+  let body: TtsFallback;
+  try {
+    body = await response.json();
+  } catch {
+    return speakInBrowser(text, languageCode);
+  }
+  if (body?.use_browser_tts) {
     return speakInBrowser(text, languageCode);
   }
   return false;

@@ -68,7 +68,7 @@ describe("GrammarCheck answer payload", () => {
     const check = screen.getByRole("button", { name: "common.check" });
     expect(check).toBeDisabled();
 
-    fireEvent.click(screen.getByRole("button", { name: "yes" }));
+    fireEvent.click(screen.getByRole("radio", { name: "yes" }));
     expect(check).toBeEnabled();
     fireEvent.click(check);
 

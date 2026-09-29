@@ -5,6 +5,9 @@ import { VirtualKeyboard } from "../VirtualKeyboard";
 import { VoiceCaptureControls } from "../VoiceCaptureControls";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
+import { AnswerModeSwitch } from "./AnswerModeSwitch";
+import { VoiceAnswerButton } from "../VoiceAnswerButton";
+import { submitAnswer } from "../../lib/voiceAnswer";
 import type { ExerciseComponentProps } from "./types";
 
 // Dialogue-context exercises compile to a free-text reply matched against
@@ -12,54 +15,78 @@ import type { ExerciseComponentProps } from "./types";
 // speak_response (added 2026-07-06) additionally gets a mic/keyboard
 // toggle — dialogue_response (its non-speaking sibling using this same
 // component) stays typed-only, no toggle shown.
-export function DialogueResponse({ exercise, onAnswer, disabled }: ExerciseComponentProps) {
+export function DialogueResponse({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [spoken, setSpoken] = useState(false);
   const script = answerScriptForExercise(exercise);
-  const { showKeyboard, dismissKeyboard, inputProps } = useKeyboardFocus();
+  const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus({ value, setValue, script, disabled });
   const canSpeak = exercise.type === "speak_response";
   const answerLanguageCode = exercise.prompt.answer_language_code ?? "en";
 
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (disabled || !value.trim()) return;
+    submitAnswer(onAnswer, value.trim(), spoken);
+  }
+
   return (
-    <div className="exercise-shell">
+    <form className="exercise-shell" onSubmit={handleSubmit}>
       <div className="dialogue-bubble">
         <TextBlockList blocks={exercise.prompt.text_blocks} />
       </div>
       {canSpeak && (
         <VoiceCaptureControls
           languageCode={answerLanguageCode}
-          onTranscript={setValue}
+          onTranscript={(text) => { setValue(text); setSpoken(true); }}
           disabled={disabled}
         />
       )}
-      <div className="form-field">
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          disabled={disabled}
-          placeholder={t("exercise.type_your_reply")}
-          aria-label={t("exercise.type_your_reply")}
-          lang={exercise.prompt.answer_language_code}
-          dir={scriptDirection(script)}
-          {...inputProps}
-        />
-      </div>
-      {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
-        <VirtualKeyboard
-          script={script!}
-          onInsert={(char) => setValue((v) => v + char)}
-          onBackspace={() => setValue((v) => v.slice(0, -1))}
-          onDismiss={dismissKeyboard}
-        />
-      )}
-      <button
-        className="btn btn-block"
-        disabled={disabled || !value.trim()}
-        onClick={() => onAnswer(value.trim())}
-      >
-        {t("exercise.respond")}
-      </button>
-    </div>
+      <AnswerModeSwitch
+        exercise={exercise}
+        courseLevel={courseLevel}
+        lessonExercises={lessonExercises}
+        answerHint={answerHint}
+        enabled={exercise.type === "dialogue_response"}
+        disabled={disabled}
+        onAnswer={onAnswer}
+        renderTyping={(toggle) => (
+          <>
+          <div className="form-field">
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={disabled}
+              placeholder={t("exercise.type_your_reply")}
+              aria-label={t("exercise.type_your_reply")}
+              lang={exercise.prompt.answer_language_code}
+              dir={scriptDirection(script)}
+              {...inputProps}
+            />
+          </div>
+          {/* speak_response already has its own VoiceCaptureControls above. */}
+          {!canSpeak && (
+            <VoiceAnswerButton exercise={exercise} disabled={disabled} onTranscript={(text) => { setValue(text); setSpoken(true); }} />
+          )}
+          {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
+            <VirtualKeyboard
+              script={script!}
+              {...keyboardProps}
+            />
+          )}
+          <button
+            type="submit"
+            className="btn btn-block"
+            disabled={disabled || !value.trim()}
+            onMouseDown={(e) => e.preventDefault()}
+          >
+            {t("exercise.respond")}
+          </button>
+            {toggle}
+          </>
+        )}
+      />
+    </form>
   );
 }

@@ -128,10 +128,12 @@ class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
     __table_args__ = (
         Index("ix_refresh_tokens_user_expires", "user_id", "expires_at"),
+        Index("uq_refresh_tokens_token_sha256", "token_sha256", unique=True),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     token_hash: Mapped[str] = mapped_column(Text, nullable=False)
+    token_sha256: Mapped[str | None] = mapped_column(String(64), nullable=True)
     user_id: Mapped[str] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"),
         index=True,
@@ -200,6 +202,7 @@ class Course(Base):
         default=CEFRLevel.A1,
         server_default="A1",
     )
+    recommended: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
     units = relationship(
         "Unit",
         cascade="all, delete-orphan",
@@ -209,7 +212,10 @@ class Course(Base):
 
 class Unit(Base):
     __tablename__ = "units"
-    __table_args__ = (UniqueConstraint("course_id", "order"),)
+    __table_args__ = (
+        UniqueConstraint("course_id", "order"),
+        CheckConstraint("track IN ('core','situation')", name="ck_units_track"),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     course_id: Mapped[str] = mapped_column(
@@ -221,6 +227,9 @@ class Unit(Base):
         Enum(UnitSection, native_enum=False),
         default=UnitSection.reading_writing,
         server_default="reading_writing",
+    )
+    track: Mapped[str] = mapped_column(
+        String(16), nullable=False, default="core", server_default="core"
     )
     # Stable authoring key (e.g. "prs.a1.unit01"), nullable — content
     # imported before this column existed has no recoverable key. Unique
@@ -272,7 +281,10 @@ class Lesson(Base):
 
 class Exercise(Base):
     __tablename__ = "exercises"
-    __table_args__ = (UniqueConstraint("lesson_id", "order"),)
+    __table_args__ = (
+        UniqueConstraint("lesson_id", "order"),
+        Index("ix_exercises_retired_at", "retired_at"),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     lesson_id: Mapped[str] = mapped_column(
@@ -301,6 +313,9 @@ class Exercise(Base):
     # create-missing-only behavior silently leaving stale rows forever.
     content_key: Mapped[str | None] = mapped_column(
         String(255), nullable=True
+    )
+    retired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
     )
 
 
@@ -703,6 +718,24 @@ class QuestCompletion(Base):
         DateTime(timezone=True),
         default=now,
     )
+
+
+class PushNotificationGuard(Base):
+    """One committed send attempt per user, trigger, and local calendar day."""
+
+    __tablename__ = "push_notification_guards"
+    __table_args__ = (
+        UniqueConstraint(
+            "user_id", "trigger_code", "local_date",
+            name="uq_push_notification_guards_user_trigger_date",
+        ),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    trigger_code: Mapped[str] = mapped_column(String(40))
+    local_date: Mapped[date] = mapped_column(Date)
+    attempted_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
 class PushSubscription(Base):

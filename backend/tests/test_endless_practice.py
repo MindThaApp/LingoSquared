@@ -8,6 +8,7 @@ from app.core.security import decode_token
 from app.db.session import SessionLocal
 from app.models import (
     Course,
+    Exercise,
     Lesson,
     LessonProgress,
     Lexeme,
@@ -351,6 +352,17 @@ def complete_lesson(auth, lesson_id):
 def complete_via_api(client, auth, lesson_id):
     started = client.post(f"/lessons/{lesson_id}/start", headers=auth)
     assert started.status_code == 200
+    detail = client.get(f"/lessons/{lesson_id}").json()
+    if detail["exercises"]:
+        exercise_id = detail["exercises"][0]["id"]
+        with SessionLocal() as db:
+            response = db.get(Exercise, exercise_id).correct_response
+        answered = client.post(
+            f"/exercises/{exercise_id}/answer",
+            headers=auth,
+            json={"response": response},
+        )
+        assert answered.status_code == 200 and answered.json()["correct"] is True
     completed = client.post(f"/lessons/{lesson_id}/complete", headers=auth)
     assert completed.status_code == 200
     return completed

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { isCoreUnit } from "../lib/unitTracks";
 import { useTranslation } from "react-i18next";
 import { CatalogApi } from "@lingo/shared/api/endpoints";
 import { getLevelPreference, setLevelPreference, type SelfReportedLevel } from "../lib/levelPreferences";
@@ -38,7 +39,7 @@ export function LevelCheckPage() {
   });
 
   const readingWritingCount =
-    unitsQuery.data?.filter((u) => u.section === "reading_writing").length ?? 0;
+    unitsQuery.data?.filter((u) => u.section === "reading_writing" && isCoreUnit(u)).length ?? 0;
 
   // Nothing to ask about: skip straight through if there's only one unit,
   // or the user already answered for this course before -- unless they got

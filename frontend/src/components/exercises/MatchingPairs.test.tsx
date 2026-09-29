@@ -70,4 +70,84 @@ describe("MatchingPairs answer payload", () => {
       { left: "u", right: "formeel of beleefd" },
     ]);
   });
+
+  it("tapping a matched left clears the match, frees its right tile, and re-matching submits the right shape", () => {
+    const onAnswer = vi.fn();
+    const { container } = render(<MatchingPairs exercise={exercise} onAnswer={onAnswer} disabled={false} />);
+    const rights = () =>
+      Array.from(container.querySelectorAll<HTMLButtonElement>(".matching-grid > div:nth-child(2) button"));
+    const lefts = () =>
+      Array.from(container.querySelectorAll<HTMLButtonElement>(".matching-grid > div:nth-child(1) .matching-item"));
+    const rightByText = (text: string) => rights().find((b) => b.textContent === text)!;
+    const check = screen.getByRole("button", { name: "common.check" });
+
+    // First left is auto-focused on mount.
+    expect(lefts()[0]).toHaveFocus();
+
+    fireEvent.click(lefts()[0]);
+    fireEvent.click(rightByText("formeel of beleefd")); // deliberately wrong
+    expect(rightByText("formeel of beleefd")).toBeDisabled();
+    expect(lefts()[0]).toBeEnabled(); // matched left stays tappable
+
+    fireEvent.click(lefts()[0]); // undo
+    expect(rightByText("formeel of beleefd")).toBeDisabled(); // no active left now
+    expect(lefts()[0]).not.toHaveClass("matched");
+    expect(lefts()[0]).not.toHaveClass("selected");
+    fireEvent.click(lefts()[0]);
+    expect(rightByText("formeel of beleefd")).toBeEnabled(); // freed
+
+    fireEvent.click(rightByText("informeel"));
+    fireEvent.click(lefts()[1]);
+    fireEvent.click(rightByText("formeel of beleefd"));
+    expect(check).toBeEnabled();
+    fireEvent.click(check);
+    expect(onAnswer).toHaveBeenCalledWith([
+      { left: "jij / je", right: "informeel" },
+      { left: "u", right: "formeel of beleefd" },
+    ]);
+  });
+
+  it("undo stays index-keyed when two lefts share the same right text", () => {
+    const onAnswer = vi.fn();
+    const dup: Exercise = {
+      ...exercise,
+      id: "ex-dup",
+      prompt: {
+        ...exercise.prompt,
+        pairs: [
+          { left: "a", right: "lekker" },
+          { left: "b", right: "lekker" },
+          { left: "c", right: "leuk" },
+        ],
+      },
+    };
+    const { container } = render(<MatchingPairs exercise={dup} onAnswer={onAnswer} disabled={false} />);
+    const rights = () =>
+      Array.from(container.querySelectorAll<HTMLButtonElement>(".matching-grid > div:nth-child(2) button"));
+    const lefts = () =>
+      Array.from(container.querySelectorAll<HTMLButtonElement>(".matching-grid > div:nth-child(1) .matching-item"));
+    const lekker = () => rights().filter((b) => b.textContent === "lekker");
+
+    fireEvent.click(lefts()[0]);
+    fireEvent.click(lekker()[0]);
+    expect(lekker()[0]).toBeDisabled();
+    expect(lekker()[1]).toBeDisabled(); // no active left yet
+    fireEvent.click(lefts()[1]);
+    expect(lekker()[1]).toBeEnabled(); // second same-text tile still free
+
+    fireEvent.click(lefts()[0]); // undo a
+    fireEvent.click(lefts()[1]);
+    expect(lekker().filter((b) => !b.disabled)).toHaveLength(2);
+    fireEvent.click(lekker()[0]);
+    fireEvent.click(lefts()[0]);
+    fireEvent.click(lekker().find((b) => !b.disabled)!);
+    fireEvent.click(lefts()[2]);
+    fireEvent.click(rights().find((b) => b.textContent === "leuk")!);
+    fireEvent.click(screen.getByRole("button", { name: "common.check" }));
+    expect(onAnswer).toHaveBeenCalledWith([
+      { left: "a", right: "lekker" },
+      { left: "b", right: "lekker" },
+      { left: "c", right: "leuk" },
+    ]);
+  });
 });

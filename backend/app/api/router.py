@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, Up
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
 from sqlalchemy import Float, case, delete, func, or_, select, text
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
@@ -80,6 +81,8 @@ from app.schemas.api import (
     GeneralFeedbackIn,
     ImportOut,
     ImportRequest,
+    DailyGoalIn,
+    DailyGoalOut,
     LanguageOut,
     LanguagePairOut,
     LessonDetail,
@@ -125,7 +128,7 @@ from app.schemas.api import (
     XPOut,
 )
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
-from app.services.progress import activity_day_bounds, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none
+from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
 from app.review.grading import (
@@ -133,6 +136,7 @@ from app.review.grading import (
     display_correct_response,
     exercise_type_value,
     grade,
+    is_arabic_hamza_only_difference,
     select_feedback,
 )
 from app.review.placement import (
@@ -146,6 +150,7 @@ from app.services import tts as tts_service
 from app.services import stt as stt_service
 from app.services import social_auth
 from app.services import push as push_service
+from app.services.push_scheduler import claim_notification, local_date_for
 from app.services import feedback_attachments as feedback_attachment_service
 from app.practice.service import (
     generate_batch,
@@ -203,6 +208,8 @@ def conversation_reply_result(
     node: dict[str, Any],
     response: Any,
     script,
+    language_code: str | None,
+    input_mode: str = "typed",
 ) -> tuple[str, str | None]:
     best_result = "incorrect"
     best_variant = None
@@ -212,6 +219,8 @@ def conversation_reply_result(
             variant,
             "speak_response",
             script=script,
+            language_code=language_code,
+            input_mode=input_mode,
         )
         if result == "correct":
             return result, variant
@@ -304,6 +313,7 @@ def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> 
     db.add(
         RefreshToken(
             token_hash=hash_password(raw_token),
+            token_sha256=hashlib.sha256(raw_token.encode("utf-8")).hexdigest(),
             user_id=user_id,
             issued_at=now_value,
             expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
@@ -312,13 +322,16 @@ def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> 
     return raw_token
 
 def find_refresh_token(db:Session,raw_token:str):
-    for token in db.scalars(select(RefreshToken)):
-        try:
-            if verify_password(raw_token,token.token_hash):
-                return token
-        except Exception:
-            continue
-    return None
+    digest=hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
+    return db.scalar(select(RefreshToken).where(RefreshToken.token_sha256==digest))
+
+def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
+    revoked_cutoff = now_value - timedelta(days=7)
+    db.execute(delete(RefreshToken).where(
+        RefreshToken.user_id==user_id,
+        (RefreshToken.expires_at<=now_value)
+        | (RefreshToken.revoked_at<=revoked_cutoff),
+    ))
 
 def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
     for token in db.scalars(
@@ -330,6 +343,7 @@ def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
         token.revoked_at=now_value
 
 def auth_response(db:Session,user):
+    prune_stale_refresh_tokens(db,user.id,utc_now())
     refresh_token=issue_refresh_token(db,user.id)
     db.commit()
     return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
@@ -375,7 +389,7 @@ def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
         email=user_email,
         password_hash=None,
         display_name=social_display_name(body,claims,email),
-        is_admin=bool(email and email_verified and email in get_settings().admin_email_set),
+        is_admin=False,
     )
     db.add(user)
     db.flush()
@@ -401,16 +415,72 @@ def resolve_script(db, language_code):
         return None
     language = db.get(Language, language_code)
     return language.script if language else None
-def exercise_answer(db, user, e, response):
+def stored_exercise_answer(e,attempt):
     feedback_meta = decode_feedback(e.feedback)
-    script = resolve_script(db, e.prompt.get("answer_language_code"))
+    language_code = e.prompt.get("answer_language_code")
+    result = attempt.outcome or ("correct" if attempt.correct else "incorrect")
+    snapshot = attempt.feedback_snapshot or {}
+    correct_response = snapshot.get("correct_response", display_correct_response(e.correct_response))
+    feedback = snapshot.get("feedback")
+    if "feedback" not in snapshot:
+        feedback = (
+            "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+            if result == "almost"
+            and isinstance(attempt.response, str)
+            and isinstance(e.correct_response, str)
+            and is_arabic_hamza_only_difference(
+                attempt.response,
+                e.correct_response,
+                language_code=language_code,
+                exercise_type=exercise_type_value(e.type),
+                case_sensitive=bool(feedback_meta.get("case_sensitive")),
+                punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
+            )
+            else select_feedback(feedback_meta, attempt.response, result)
+        )
+    return {
+        "correct": attempt.correct,
+        "result": result,
+        "correct_response": correct_response,
+        "xp_awarded": attempt.xp_awarded,
+        "feedback": feedback,
+    }
+
+
+def exercise_answer(db, user, e, response, client_operation_id=None, input_mode="typed"):
+    # A stable operation id makes network retries return the original result.
+    if client_operation_id:
+        previous = db.scalar(select(ExerciseAttempt).where(
+            ExerciseAttempt.user_id == user.id,
+            ExerciseAttempt.client_operation_id == client_operation_id,
+        ))
+        if previous:
+            return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+
+    # This per-user lock also serializes first-correct grading decisions, so
+    # two different simultaneous submits cannot both receive full first-try XP.
+    stats_for(db, user.id, for_update=True)
+    if client_operation_id:
+        previous = db.scalar(select(ExerciseAttempt).where(
+            ExerciseAttempt.user_id == user.id,
+            ExerciseAttempt.client_operation_id == client_operation_id,
+        ))
+        if previous:
+            return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+
+    feedback_meta = decode_feedback(e.feedback)
+    language_code = e.prompt.get("answer_language_code")
+    script = resolve_script(db, language_code)
     result = grade(
         response,
         e.correct_response,
         e.type,
         script=script,
+        language_code=language_code,
+        input_mode=input_mode,
         orthography_strict=feedback_meta.get("orthography_strict"),
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
+        punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
     )
     correct = result != "incorrect"
     previously_correct = db.scalar(
@@ -422,18 +492,52 @@ def exercise_answer(db, user, e, response):
         )
         .limit(1)
     )
-    xp = e.xp if correct and previously_correct is None else 1 if correct else 0
+    replay = previously_correct is not None
+    xp = e.xp if correct and not replay else 0
+    if correct and replay:
+        day_start, day_end = activity_day_bounds(user.timezone)
+        correct_today = db.scalar(
+            select(func.count(ExerciseAttempt.id)).where(
+                ExerciseAttempt.user_id == user.id,
+                ExerciseAttempt.correct.is_(True),
+                ExerciseAttempt.created_at >= day_start,
+                ExerciseAttempt.created_at < day_end,
+            )
+        ) or 0
+        # Replay XP is deliberately bounded to the first 20 correct lesson
+        # answers in the user's local day.
+        xp = 1 if correct_today < 20 else 0
 
-    db.add(
-        ExerciseAttempt(
+    attempt = ExerciseAttempt(
             user_id=user.id,
             exercise_id=e.id,
             response=response,
             correct=correct,
             outcome=result,
             xp_awarded=xp,
+            client_operation_id=client_operation_id,
         )
-    )
+    response_snapshot = stored_exercise_answer(e, attempt)
+    attempt.feedback_snapshot = {
+        "correct_response": response_snapshot["correct_response"],
+        "feedback": response_snapshot["feedback"],
+    }
+    try:
+        with db.begin_nested():
+            db.add(attempt)
+            db.flush()
+    except IntegrityError:
+        # The unique operation constraint is the final arbiter if two retry
+        # requests pass the lookup together. The savepoint keeps the session
+        # usable so we can return the already persisted answer.
+        if client_operation_id:
+            previous = db.scalar(select(ExerciseAttempt).where(
+                ExerciseAttempt.user_id == user.id,
+                ExerciseAttempt.client_operation_id == client_operation_id,
+            ))
+            if previous:
+                return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+        raise
     lp = db.scalar(
         select(LessonProgress).where(
             LessonProgress.user_id == user.id,
@@ -444,7 +548,9 @@ def exercise_answer(db, user, e, response):
         lp = LessonProgress(
             user_id=user.id,
             lesson_id=e.lesson_id,
-            started_at=datetime.now(timezone.utc),
+            # If an answer arrives before the explicit /start call, the
+            # auto-created session begins with this persisted attempt.
+            started_at=attempt.created_at or datetime.now(timezone.utc),
             completed_at=None,
             correct_count=0,
             answer_count=0,
@@ -455,15 +561,12 @@ def exercise_answer(db, user, e, response):
     lp.answer_count += 1
     lp.correct_count += int(correct)
     lp.xp_earned += xp
-    record_activity(db, user.id, xp, user.timezone)
+    if replay:
+        award_xp(db, user.id, xp)
+    else:
+        record_activity(db, user.id, xp, user.timezone)
     db.commit()
-    return {
-        "correct": correct,
-        "result": result,
-        "correct_response": display_correct_response(e.correct_response),
-        "xp_awarded": xp,
-        "feedback": select_feedback(feedback_meta, response, result),
-    }
+    return stored_exercise_answer(e, attempt)
 
 PLACEMENT_RATE_LIMIT_MESSAGE = "Too many answers submitted too quickly. Please slow down."
 
@@ -495,6 +598,8 @@ def build_placement_set(db, course):
         .where(
             Unit.course_id == course.id,
             Unit.section == UnitSection.reading_writing,
+            Unit.track == "core",
+            Exercise.retired_at.is_(None),
             Exercise.type.in_(
                 [ExerciseType.multiple_choice, ExerciseType.matching_pairs]
             ),
@@ -534,7 +639,7 @@ def placement_probe(db, exercise_id, course_id):
     to validate /answer and /result submissions (a non-match is a 400
     exercise_not_in_placement)."""
     e = db.get(Exercise, exercise_id)
-    if not e:
+    if not e or e.retired_at is not None:
         return None
     if exercise_type_value(e.type) not in ("multiple_choice", "matching_pairs"):
         return None
@@ -552,13 +657,16 @@ def placement_grade(db, e, response):
     straight to correct/incorrect, but we still pass the exercise's own
     strictness inputs for parity with exercise_answer()."""
     feedback_meta = decode_feedback(e.feedback)
+    language_code = e.prompt.get("answer_language_code")
     return grade(
         response,
         e.correct_response,
         e.type,
-        script=resolve_script(db, e.prompt.get("answer_language_code")),
+        script=resolve_script(db, language_code),
+        language_code=language_code,
         orthography_strict=feedback_meta.get("orthography_strict"),
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
+        punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
     )
 
 
@@ -573,6 +681,7 @@ def first_placement_unit(db, course_id, level):
             .where(
                 Unit.course_id == course_id,
                 Unit.section == UnitSection.reading_writing,
+                Unit.track == "core",
             )
             .order_by(Unit.order)
         )
@@ -586,10 +695,9 @@ def first_placement_unit(db, course_id, level):
     return units[0]
 
 
-def speaking_unlocked(db:Session,course_id:str,user_id:str|None) -> bool:
+def speaking_unlocked(db:Session,course_id:str,user_id:str|None,unit_order:int) -> bool:
     if not user_id: return False
-    reading_units=list(db.scalars(select(Unit).where(Unit.course_id==course_id,Unit.section==UnitSection.reading_writing)))
-    if not reading_units: return False
+    reading_units=list(db.scalars(select(Unit).where(Unit.course_id==course_id,Unit.section==UnitSection.reading_writing,Unit.track=="core",Unit.order < unit_order).order_by(Unit.order)))
     for unit in reading_units:
         lesson_ids=list(db.scalars(select(Lesson.id).where(Lesson.unit_id==unit.id)))
         if not lesson_ids: return False
@@ -603,15 +711,15 @@ def require_speaking_unlocked(db:Session, unit:"Unit", user) -> None:
     # unit's lessons, answer every exercise by id (earning XP), and complete
     # each lesson without ever unlocking speaking. Shared helper, 3 call
     # sites (start, answer, complete), same check each time.
-    if unit.section==UnitSection.speaking and not is_admin_user(user) and not speaking_unlocked(db,unit.course_id,user.id):
-        fail(409,"speaking_locked","Complete all reading and writing units before starting speaking lessons")
+    if unit.track=="core" and unit.section==UnitSection.speaking and not is_admin_user(user) and not speaking_unlocked(db,unit.course_id,user.id,unit.order):
+        fail(409,"speaking_locked","Complete the earlier reading and writing units before starting speaking lessons")
 
 @router.post("/auth/register",response_model=AuthOut,status_code=201)
 def register(body:RegisterIn,request:Request,db:Session=Depends(get_db)):
     enforce_rate_limit(REGISTER_RATE_LIMIT,client_ip(request),"register_rate_limited","Too many registration attempts from this address. Please try again later.")
     email=body.email.lower()
     if db.scalar(select(User).where(User.email==email)): fail(409,"email_exists","An account with this email already exists")
-    user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=email in get_settings().admin_email_set,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
+    user=User(email=email,password_hash=hash_password(body.password),display_name=body.display_name or email.split("@")[0],is_admin=False,timezone=valid_timezone_or_none(body.timezone)); db.add(user); db.flush()
     db.add(UserStats(user_id=user.id,total_xp=0,streak_days=0,last_activity_date=None,daily_goal=20))
     return auth_response(db,user)
 @router.post("/auth/login",response_model=AuthOut)
@@ -637,15 +745,15 @@ def social_login(body:SocialLoginIn,db:Session=Depends(get_db)):
     return auth_response(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
-    # Rate-limit BEFORE the token lookup: find_refresh_token() bcrypt-checks
-    # against every stored hash, so the limit must gate that cost, and an
-    # invalid-token probe must count against the limit (same principle as
-    # login counting failed password attempts).
+    # Rate-limit before lookup, and count invalid-token probes too (same
+    # principle as login counting failed password attempts).
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     now_value=utc_now()
     if not refresh_token:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    prune_stale_refresh_tokens(db,refresh_token.user_id,now_value)
+    db.commit()
     if refresh_token.revoked_at is not None:
         revoke_all_refresh_tokens(db,refresh_token.user_id,now_value)
         db.commit()
@@ -661,8 +769,7 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     return response
 @router.post("/auth/logout",status_code=204)
 def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
-    # Same unauthenticated refresh-token-scan surface as /auth/refresh --
-    # shares its limiter and error code (see REFRESH_RATE_LIMIT above).
+    # Shares the refresh endpoint's limiter and error code.
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
     refresh_token=find_refresh_token(db,body.refresh_token)
     if refresh_token and refresh_token.revoked_at is None:
@@ -724,7 +831,7 @@ def languages(db:Session=Depends(get_db)): return list(db.scalars(select(Languag
 def pairs(db:Session=Depends(get_db)):
     rows=db.execute(select(Course.source_language,Course.target_language,func.count(Course.id)).group_by(Course.source_language,Course.target_language)).all()
     return [{"source_language":a,"target_language":b,"course_count":n} for a,b,n in rows]
-def course_shape(db,c): return {"id":c.id,"source_language":c.source_language,"target_language":c.target_language,"title":c.title,"level":c.level,"unit_count":db.scalar(select(func.count(Unit.id)).where(Unit.course_id==c.id))}
+def course_shape(db,c): return {"id":c.id,"source_language":c.source_language,"target_language":c.target_language,"title":c.title,"level":c.level,"unit_count":db.scalar(select(func.count(Unit.id)).where(Unit.course_id==c.id,Unit.track=="core")),"recommended":c.recommended}
 @router.get("/courses",response_model=list[CourseOut])
 def courses(source:str|None=None,target:str|None=None,db:Session=Depends(get_db)):
     q=select(Course); q=q.where(Course.source_language==source) if source else q; q=q.where(Course.target_language==target) if target else q
@@ -738,11 +845,6 @@ def course(course_id:str,db:Session=Depends(get_db)):
 def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(get_db)):
     if not db.get(Course,course_id):
         fail(404,"course_not_found","Course not found")
-    unlocked=(user and is_admin_user(user)) or speaking_unlocked(
-        db,
-        course_id,
-        user.id if user else None,
-    )
     result=[]
     for unit in db.scalars(
         select(Unit)
@@ -784,22 +886,26 @@ def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(g
                     else 0
                 ),
                 "section":unit.section,
-                "locked":unit.section==UnitSection.speaking and not unlocked,
+                "locked":unit.track=="core" and unit.section==UnitSection.speaking and not (
+                    (user and is_admin_user(user))
+                    or speaking_unlocked(db,course_id,user.id if user else None,unit.order)
+                ),
                 "checkpoint_passed":checkpoint_passed,
                 "content_key":unit.content_key,
+                "track":unit.track,
             }
         )
     return result
 @router.get("/units/{unit_id}/lessons",response_model=list[LessonOut])
 def lessons(unit_id:str,db:Session=Depends(get_db)):
     if not db.get(Unit,unit_id): fail(404,"unit_not_found","Unit not found")
-    return [{"id":l.id,"title":l.title,"order":l.order,"exercise_count":db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id==l.id))} for l in db.scalars(select(Lesson).where(Lesson.unit_id==unit_id).order_by(Lesson.order))]
+    return [{"id":l.id,"title":l.title,"order":l.order,"exercise_count":db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id==l.id,Exercise.retired_at.is_(None)))} for l in db.scalars(select(Lesson).where(Lesson.unit_id==unit_id).order_by(Lesson.order))]
 @router.get("/lessons/{lesson_id}",response_model=LessonDetail)
 def lesson(lesson_id:str,db:Session=Depends(get_db)):
     l=db.get(Lesson,lesson_id)
     if not l: fail(404,"lesson_not_found","Lesson not found")
     teaching=[{"kind":item.kind,"title":item.title or None,"text_blocks":item.content.get("text_blocks",[]),"note":item.content.get("note"),"examples":item.content.get("examples"),**({"glosses":item.content["glosses"]} if "glosses" in item.content else {})} for item in l.teaching_items]
-    return {"id":l.id,"unit_id":l.unit_id,"title":l.title,"teaching":teaching,"exercises":[{"id":e.id,"type":e.type,"order":e.order,"prompt":e.prompt} for e in l.exercises]}
+    return {"id":l.id,"unit_id":l.unit_id,"title":l.title,"teaching":teaching,"exercises":[{"id":e.id,"type":e.type,"order":e.order,"prompt":e.prompt} for e in l.exercises if e.retired_at is None]}
 @router.post("/lessons/{lesson_id}/start",response_model=StartOut)
 def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     lesson_row=db.get(Lesson,lesson_id)
@@ -808,7 +914,7 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     require_speaking_unlocked(db,unit,user)
     p=db.scalar(select(LessonProgress).where(LessonProgress.user_id==user.id,LessonProgress.lesson_id==lesson_id)); now=datetime.now(timezone.utc)
     if not p:
-        p=LessonProgress(
+        candidate=LessonProgress(
             user_id=user.id,
             lesson_id=lesson_id,
             started_at=now,
@@ -817,7 +923,17 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
             answer_count=0,
             xp_earned=0,
         )
-        db.add(p)
+        try:
+            with db.begin_nested():
+                db.add(candidate)
+                db.flush()
+            p=candidate
+        except IntegrityError:
+            # Another request created the row after our initial lookup.
+            # Keep the outer transaction usable and return that row.
+            p=db.scalar(select(LessonProgress).where(LessonProgress.user_id==user.id,LessonProgress.lesson_id==lesson_id))
+            if p is None:
+                raise
     elif not p.started_at: p.started_at=now
     db.commit(); return {"started_at":p.started_at}
 @router.post("/exercises/{exercise_id}/answer",response_model=AnswerOut)
@@ -828,7 +944,7 @@ def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=D
     lesson_row=db.get(Lesson,e.lesson_id)
     unit=db.get(Unit,lesson_row.unit_id)
     require_speaking_unlocked(db,unit,user)
-    return exercise_answer(db,user,e,body.response)
+    return exercise_answer(db,user,e,body.response,body.client_operation_id,body.input_mode)
 # --- Placement test (course-level), 2026-08-05 -------------------------
 # Recognition-only, side-effect-free (MVP): assembled from the course's own
 # existing multiple_choice/matching_pairs exercises, graded by grade(), and
@@ -964,6 +1080,26 @@ def complete(
     first_completion = p.completed_at is None
     session_started_at = p.completed_at or p.started_at
 
+    if first_completion:
+        exercise_count = db.scalar(
+            select(func.count(Exercise.id)).where(
+                Exercise.lesson_id == lesson_id,
+                Exercise.retired_at.is_(None),
+            )
+        ) or 0
+        answered_in_session = db.scalar(
+            select(func.count(ExerciseAttempt.id))
+            .join(Exercise, Exercise.id == ExerciseAttempt.exercise_id)
+            .where(
+                ExerciseAttempt.user_id == user.id,
+                Exercise.lesson_id == lesson_id,
+                ExerciseAttempt.created_at >= session_started_at,
+                ExerciseAttempt.created_at < now,
+            )
+        ) or 0
+        if exercise_count > 0 and answered_in_session == 0:
+            fail(409, "lesson_not_attempted", "Answer at least one lesson exercise before completing it")
+
     completion_xp = db.scalar(
         select(func.coalesce(func.sum(ExerciseAttempt.xp_awarded), 0))
         .join(Exercise, Exercise.id == ExerciseAttempt.exercise_id)
@@ -1033,9 +1169,12 @@ def complete(
     total = db.scalar(
         select(func.count(Lesson.id))
         .join(Unit)
-        .where(Unit.course_id == unit.course_id)
+        .where(Unit.course_id == unit.course_id, Unit.track == "core")
     ) or 1
     skill.mastery = skill.completed_lessons / total
+
+    if first_completion:
+        record_activity(db, user.id, 0, user.timezone)
 
     db.commit()
     return {
@@ -1059,9 +1198,11 @@ def reviews(
 ):
     q = (
         select(ReviewItem)
+        .join(Exercise, Exercise.id == ReviewItem.exercise_id)
         .where(
             ReviewItem.user_id == user.id,
             ReviewItem.due_at <= datetime.now(timezone.utc),
+            Exercise.retired_at.is_(None),
         )
         .order_by(ReviewItem.due_at, ReviewItem.id)
     )
@@ -1113,12 +1254,16 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     if not r or r.user_id!=user.id: fail(404,"review_not_found","Review item not found")
     e=db.get(Exercise,r.exercise_id)
     feedback_meta=decode_feedback(e.feedback)
-    script=resolve_script(db,e.prompt.get("answer_language_code"))
-    result=grade(body.response,e.correct_response,e.type,script=script,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")))
+    language_code=e.prompt.get("answer_language_code")
+    script=resolve_script(db,language_code)
+    result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")),input_mode=body.input_mode)
     correct=result!="incorrect"
     xp=e.xp if correct else 0
     schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()
-    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":select_feedback(feedback_meta,body.response,result),"next_due_at":r.due_at}
+    feedback = select_feedback(feedback_meta,body.response,result)
+    if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
+        feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":feedback,"next_due_at":r.due_at}
 @router.get("/me/reviews/due", response_model=ReviewDueOut)
 def lexeme_reviews_due(
     user=Depends(current_user),
@@ -1519,17 +1664,20 @@ def admin_push_notify_due_reviews(
     if not push_service.push_configured():
         fail(503, "push_not_configured", "Web push is not configured on this server")
     now = datetime.now(timezone.utc)
-    user_ids = db.scalars(
-        select(UserLexemeSRS.user_id)
+    due_users = db.execute(
+        select(UserLexemeSRS.user_id, User.timezone)
         .where(
             UserLexemeSRS.due_at <= now,
             UserLexemeSRS.suspended.is_(False),
         )
+        .join(User, User.id == UserLexemeSRS.user_id)
         .distinct()
     ).all()
     notified_users = 0
     notifications_sent = 0
-    for uid_ in user_ids:
+    for uid_, user_tz in due_users:
+        if not claim_notification(db, uid_, "daily_reminder", local_date_for(user_tz, now)):
+            continue
         sent = push_service.send_push_to_user(
             db,
             uid_,
@@ -1567,22 +1715,31 @@ def admin_push_notify_streaks_at_risk(
     if not push_service.push_configured():
         fail(503, "push_not_configured", "Web push is not configured on this server")
     rows = db.execute(
-        select(UserStats.user_id, UserStats.streak_days, UserStats.last_activity_date, User.timezone)
+        select(UserStats.user_id, UserStats.streak_days, UserStats.last_activity_date, User.timezone, UserStats.streak_freezes_available)
         .join(User, User.id == UserStats.user_id)
         .where(UserStats.streak_days > 0)
     ).all()
     notified_users = 0
     notifications_sent = 0
-    for uid_, streak_days, last_activity_date, user_tz in rows:
+    for uid_, streak_days, last_activity_date, user_tz, freezes_available in rows:
         day_start, _ = activity_day_bounds(user_tz)
-        if last_activity_date == day_start.date():
+        effective_days = effective_streak_days(
+            streak_days,
+            last_activity_date,
+            user_tz,
+            today=day_start.date(),
+            freezes_available=freezes_available,
+        )
+        if effective_days == 0 or last_activity_date == day_start.date():
             # Already active today in their own timezone — streak is safe.
+            continue
+        if not claim_notification(db, uid_, "streak_at_risk", day_start.date()):
             continue
         sent = push_service.send_push_to_user(
             db,
             uid_,
             title="Your streak is at risk",
-            body=f"Your {streak_days}-day streak ends tonight — come back before midnight!",
+            body=f"Your {effective_days}-day streak ends tonight — come back before midnight!",
             url="/",
         )
         if sent:
@@ -2055,10 +2212,18 @@ def review_retry(
 
 @router.get("/me/streak",response_model=StreakOut)
 def streak(user=Depends(current_user),db:Session=Depends(get_db)):
-    s=stats_for(db,user.id)
     today=datetime.now(resolve_user_tz(user.timezone)).date()
+    s=db.get(UserStats,user.id)
+    if not s:
+        return {
+            "streak_days":0,
+            "last_activity_date":None,
+            "streak_freezes_available":0,
+            "freeze_used_today":False,
+            "active_today":False,
+        }
     return {
-        "streak_days":s.streak_days,
+        "streak_days":effective_streak_days(s.streak_days,s.last_activity_date,user.timezone,today=today,freezes_available=s.streak_freezes_available),
         "last_activity_date":s.last_activity_date,
         "streak_freezes_available":s.streak_freezes_available,
         "freeze_used_today":s.last_freeze_used_date==today,
@@ -2111,6 +2276,15 @@ def xp(user=Depends(current_user),db:Session=Depends(get_db)):
         )
     )
     return {"total_xp":s.total_xp,"daily_goal":s.daily_goal,"xp_today":exercise_xp+practice_xp+quest_xp}
+@router.get("/me/daily-goal",response_model=DailyGoalOut)
+def get_daily_goal(user=Depends(current_user),db:Session=Depends(get_db)):
+    return {"daily_goal_xp":stats_for(db,user.id).daily_goal}
+@router.put("/me/daily-goal",response_model=DailyGoalOut)
+def update_daily_goal(body:DailyGoalIn,user=Depends(current_user),db:Session=Depends(get_db)):
+    stats=stats_for(db,user.id)
+    stats.daily_goal=body.daily_goal_xp
+    db.commit()
+    return {"daily_goal_xp":stats.daily_goal}
 @router.get("/me/achievements")
 def achievements(user=Depends(current_user),db:Session=Depends(get_db)):
     earned=set(db.scalars(select(UserAchievement.achievement_id).where(UserAchievement.user_id==user.id)))
@@ -2228,6 +2402,8 @@ def practice_answer(
             node=node,
             response=learner_response,
             script=script,
+            language_code=node.get("answer_language_code"),
+            input_mode=body.input_mode,
         )
         correct = result != "incorrect"
         next_node = conversation_next_node(
@@ -2313,11 +2489,14 @@ def practice_answer(
         }
 
     script = resolve_script(db, item.prompt.get("answer_language_code"))
+    language_code = item.prompt.get("answer_language_code")
     result = grade(
         body.response,
         item.correct_response,
         item_type,
         script=script,
+        language_code=language_code,
+        input_mode=body.input_mode,
         orthography_strict=(
             True if item.source == "checkpoint" else None
         ),
@@ -2425,7 +2604,7 @@ def admin_user_summary(db:Session,target:User) -> dict:
         "display_name":target.display_name,
         "created_at":target.created_at,
         "xp":stats.total_xp if stats else 0,
-        "streak":stats.streak_days if stats else 0,
+        "streak":effective_streak_days(stats.streak_days,stats.last_activity_date,target.timezone,freezes_available=stats.streak_freezes_available) if stats else 0,
         "last_activity":stats.last_activity_date if stats else None,
         "enrolled_courses":enrolled,
         "is_admin":is_admin_user(target),
@@ -2438,12 +2617,12 @@ def get_admin_target_user(db:Session,user_id:str) -> User:
     return target
 
 def active_admin_count(db:Session) -> int:
-    admin_emails=get_settings().admin_email_set
-    count=0
-    for candidate in db.scalars(select(User).where(User.is_active.is_(True))):
-        if candidate.is_admin or candidate.email.lower() in admin_emails:
-            count+=1
-    return count
+    return db.scalar(
+        select(func.count(User.id)).where(
+            User.is_active.is_(True),
+            User.is_admin.is_(True),
+        )
+    ) or 0
 
 def complete_lesson_for_user(db:Session,target:User,lesson_row:Lesson,now:datetime) -> tuple[bool,int]:
     progress=db.scalar(
@@ -2515,10 +2694,11 @@ def refresh_skill_progress(db:Session,target:User,course_id:str):
         .where(
             LessonProgress.user_id==target.id,
             Unit.course_id==course_id,
+            Unit.track=="core",
             LessonProgress.completed_at.is_not(None),
         )
     ) or 0
-    total=db.scalar(select(func.count(Lesson.id)).join(Unit).where(Unit.course_id==course_id)) or 1
+    total=db.scalar(select(func.count(Lesson.id)).join(Unit).where(Unit.course_id==course_id,Unit.track=="core")) or 1
     skill=db.scalar(select(SkillProgress).where(SkillProgress.user_id==target.id,SkillProgress.course_id==course_id))
     if not skill:
         skill=SkillProgress(user_id=target.id,course_id=course_id,completed_lessons=0,mastery=0.0)
@@ -2604,8 +2784,7 @@ def admin_delete_user(user_id:str,user=Depends(admin_user),db:Session=Depends(ge
 def admin_set_admin(user_id:str,body:AdminUserAdminIn,user=Depends(admin_user),db:Session=Depends(get_db)):
     target=get_admin_target_user(db,user_id)
     if not body.is_admin and target.is_active and is_admin_user(target):
-        target_is_bootstrap=target.email.lower() in get_settings().admin_email_set
-        if not target_is_bootstrap and active_admin_count(db)<=1:
+        if active_admin_count(db)<=1:
             fail(409,"last_admin","Cannot demote the last remaining admin")
     target.is_admin=body.is_admin
     db.commit(); db.refresh(target)
@@ -2638,11 +2817,11 @@ def admin_unlock_user(user_id:str,body:AdminUserUnlockIn,user=Depends(admin_user
             db.scalars(
                 select(Lesson)
                 .join(Unit,Unit.id==Lesson.unit_id)
-                .where(Unit.course_id==course.id)
+                .where(Unit.course_id==course.id,Unit.track=="core")
                 .order_by(Unit.order,Lesson.order)
             )
         )
-        unit_ids=set(db.scalars(select(Unit.id).where(Unit.course_id==course.id)))
+        unit_ids=set(db.scalars(select(Unit.id).where(Unit.course_id==course.id,Unit.track=="core")))
         course_ids.add(course.id)
 
     completed_lessons=0

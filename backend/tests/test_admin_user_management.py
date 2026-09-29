@@ -1,3 +1,5 @@
+from sqlalchemy import select
+
 from app.core.security import decode_token
 from app.db.session import SessionLocal
 from app.models import User
@@ -87,6 +89,18 @@ def test_admin_deactivate_blocks_login_and_existing_access_token(client, admin):
 
 
 def test_last_admin_demotion_refused(client, admin):
+    bootstrap_admin_id = token_user_id(admin)
+    # Earlier tests can promote users and leave them behind in this shared
+    # database. Establish the exact admin set this scenario needs: one active
+    # bootstrap admin, then the managed user promoted below.
+    with SessionLocal() as db:
+        for existing_user in db.scalars(select(User)):
+            existing_user.is_admin = False
+        bootstrap = db.get(User, bootstrap_admin_id)
+        bootstrap.is_active = True
+        bootstrap.is_admin = True
+        db.commit()
+
     created = create_managed_user(
         client,
         admin,
@@ -109,7 +123,6 @@ def test_last_admin_demotion_refused(client, admin):
     )
     assert login.status_code == 200, login.text
     persisted_admin_auth = {"Authorization": f"Bearer {login.json()['access_token']}"}
-    bootstrap_admin_id = token_user_id(admin)
 
     try:
         deactivated_bootstrap = client.post(
@@ -130,4 +143,8 @@ def test_last_admin_demotion_refused(client, admin):
             bootstrap = db.get(User, bootstrap_admin_id)
             if bootstrap:
                 bootstrap.is_active = True
-                db.commit()
+                bootstrap.is_admin = True
+            persisted_admin = db.get(User, persisted_admin_id)
+            if persisted_admin:
+                persisted_admin.is_admin = False
+            db.commit()

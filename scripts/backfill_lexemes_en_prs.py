@@ -548,7 +548,8 @@ PRS_GLOSSES: dict[str, str] = {
     "معلم": "teacher", "مهندس": "engineer", "دوکاندار": "shopkeeper",
     "آرزو": "Arezoo (name)", "دوست": "friend", "جناب": "Mr.; sir",
     "خانم": "Ms.; Mrs.", "نزدیک": "close; near",
-    "می‌تانین": "you can (polite)", "دوباره": "again",
+    "می‌تانین": "you can (polite)", "می‌توانین": "you can (polite)",
+    "دوباره": "again",
     "بگویین": "say (polite imperative)", "مهمانی": "party; gathering",
     "لیلا": "Leila (name)", "دیدن": "seeing; to see",
     "خوشحال": "happy; glad", "کجا": "where",
@@ -688,6 +689,7 @@ PRS_GLOSSES: dict[str, str] = {
     "دوکان": "shop", "قیمت": "price", "ارزان": "cheap", "گران": "expensive",
     "تخفیف": "discount", "قیمتش": "its price", "سیب": "apple(s)",
     "کیلو": "kilo", "می‌تانین": "you can (polite)",
+    "می‌توانین": "you can (polite)",
     "بدهین": "give (polite imperative)",
     "بفرمایین": "please, go ahead / come in (polite)",
     "سیب‌ها": "the apples",
@@ -802,7 +804,7 @@ PRS_GLOSSES: dict[str, str] = {
     "لباس": "clothes", "پیراهن": "shirt", "پطلون": "trousers",
     "کفش": "shoes", "رنگ": "color", "سیاه": "black", "سفید": "white",
     "سرخ": "red", "اندازه": "size", "کوچک": "small",
-    "می‌تانم": "I can", "این‌را": "this (object marker)",
+    "می‌تانم": "I can", "می‌توانم": "I can", "این‌را": "this (object marker)",
     "پرو": "try-on", "پرو کنین": "try it on (polite imperative)",
     "پنجصد": "five hundred", "اندازه‌اش": "its size",
     "می‌خرم": "I buy", "خرید": "bought",
@@ -1017,15 +1019,21 @@ PRS_GLOSSES: dict[str, str] = {
     # A1/A2 (see UNIT_FILES_B1's own comment below for why that's safe).
     # می‌تانم/می‌تانین are REUSED existing A1 lexemes (same paradigm,
     # completed here with the missing persons), not re-added.
-    "می‌تانی": "you can", "بخرم": "(that) I buy", "ببینم": "(that) I see",
+    "می‌تانی": "you can", "می‌توانی": "you can", "بخرم": "(that) I buy", "ببینم": "(that) I see",
     "بفرستم": "(that) I send", "کتاب": "book", "نامه": "letter",
     "بفرستی": "(that) you send", "می‌تانه": "he/she can",
     "می‌تانیم": "we can", "می‌تانن": "they can",
+    "می‌تواند": "he/she can", "می‌توانیم": "we can", "می‌توانند": "they can",
     "ببره": "(that) he/she take", "بکنین": "(that) you (polite) do",
     "بیایند": "(that) they come", "آنها": "they",
     "می‌تانستم": "I could / I was able to",
     "نتانستم": "I could not / I was not able to",
     "می‌تانستی": "you could / you were able to",
+    "می‌توانستم": "I could / I was able to",
+    "می‌توانستی": "you could / you were able to",
+    "توانستم": "I could / I was able to",
+    "نتوانستم": "I could not / I was not able to",
+    "نتوانست": "he/she could not",
     "پسته خانه": "post office", "نرفت": "didn't go",
     "ببری": "(that) you take", "راستی": "by the way",
     "نداشتم": "I didn't have", "ملاقات": "appointment",
@@ -1422,7 +1430,7 @@ PRS_POS: dict[str, str] = {
     "شهر": "noun", "کار": "noun", "داکتر": "noun", "معلم": "noun",
     "مهندس": "noun", "دوکاندار": "noun", "آرزو": "proper_noun",
     "دوست": "noun", "جناب": "noun", "خانم": "noun", "نزدیک": "adjective",
-    "می‌تانین": "verb", "دوباره": "adverb", "بگویین": "verb",
+    "می‌تانین": "verb", "می‌توانین": "verb", "دوباره": "adverb", "بگویین": "verb",
     "مهمانی": "noun", "لیلا": "proper_noun", "دیدن": "noun",
     "خوشحال": "adjective", "کجا": "adverb", "کنم": "verb",
     # Unit 3 (family), added 2026-07-06.
@@ -1522,7 +1530,7 @@ PRS_POS: dict[str, str] = {
     # Unit 10 (shopping and prices), added 2026-07-07.
     "دوکان": "noun", "قیمت": "noun", "ارزان": "adjective",
     "گران": "adjective", "تخفیف": "noun", "قیمتش": "noun",
-    "سیب": "noun", "کیلو": "noun", "می‌تانین": "verb",
+    "سیب": "noun", "کیلو": "noun", "می‌تانین": "verb", "می‌توانین": "verb",
     "بدهین": "verb", "بفرمایین": "verb", "سیب‌ها": "noun",
     # Unit 11 (time), added 2026-07-07.
     "دقیقه": "noun", "نیم": "noun", "ربع": "noun", "ظهر": "noun",
@@ -1567,7 +1575,7 @@ PRS_POS: dict[str, str] = {
     "لباس": "noun", "پیراهن": "noun", "پطلون": "noun", "کفش": "noun",
     "رنگ": "noun", "سیاه": "adjective", "سفید": "adjective",
     "سرخ": "adjective", "اندازه": "noun", "کوچک": "adjective",
-    "می‌تانم": "verb", "این‌را": "pronoun", "پرو": "noun",
+    "می‌تانم": "verb", "می‌توانم": "verb", "این‌را": "pronoun", "پرو": "noun",
     "پرو کنین": "phrase", "پنجصد": "adjective", "اندازه‌اش": "noun",
     "می‌خرم": "verb", "خرید": "verb",
     # Unit 22 (weather), added 2026-07-09.
@@ -1672,11 +1680,14 @@ PRS_POS: dict[str, str] = {
     "روشنش": "noun", "همراه‌تان": "adjective", "رسیدم": "noun",
     "پول‌تان": "noun",
     # B1 unit 01 (abilities), added 2026-07-11.
-    "می‌تانی": "verb", "بخرم": "verb", "ببینم": "verb", "بفرستم": "verb",
+    "می‌تانی": "verb", "می‌توانی": "verb", "بخرم": "verb", "ببینم": "verb", "بفرستم": "verb",
     "کتاب": "noun", "نامه": "noun", "بفرستی": "verb", "می‌تانه": "verb",
     "می‌تانیم": "verb", "می‌تانن": "verb", "ببره": "verb",
+    "می‌تواند": "verb", "می‌توانیم": "verb", "می‌توانند": "verb",
     "بکنین": "verb", "بیایند": "verb", "آنها": "pronoun",
     "می‌تانستم": "verb", "نتانستم": "verb", "می‌تانستی": "verb",
+    "می‌توانستم": "verb", "می‌توانستی": "verb",
+    "توانستم": "verb", "نتوانستم": "verb", "نتوانست": "verb",
     "پسته خانه": "noun", "نرفت": "verb", "ببری": "verb",
     "راستی": "adverb", "نداشتم": "verb", "ملاقات": "noun",
     "برود": "verb", "نتانست": "verb", "نزد": "preposition",
@@ -1924,7 +1935,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("relationship_word")
     if token in {"اجازه", "بدهین", "معرفی", "کنم", "این"} and lesson_key.startswith("prs.a1.unit02.lesson04"):
         semantics.append("introduction_phrase")
-    if token in {"می‌تانین", "دوباره", "بگویین", "نزدیک"}:
+    if token in {"می‌تانین", "می‌توانین", "دوباره", "بگویین", "نزدیک"}:
         semantics.append("politeness")
     if lesson_key.endswith("lesson06.gathering_dialogue"):
         semantics.append("dialogue_word")
@@ -2067,7 +2078,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("food_item")
     if token == "کیلو":
         semantics.append("counting_word")
-    if token in {"می‌تانین", "بدهین"}:
+    if token in {"می‌تانین", "می‌توانین", "بدهین"}:
         semantics.append("polite_request_verb")
 
     # Unit 11 (time) semantic tags, added 2026-07-07.
@@ -2313,7 +2324,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("size_word")
     if token in {"بزرگ", "کوچک"}:
         semantics.append("clothing_size_adjective")
-    if token == "می‌تانم":
+    if token in {"می‌تانم", "می‌توانم"}:
         semantics.append("can_verb")
     if token == "می‌خرم":
         semantics.append("buy_verb")
@@ -2793,9 +2804,11 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # verb" is the past/negative paradigm. "ke_clause_subjunctive" pools
     # every subjunctive verb form this unit teaches after a که-clause
     # (می‌تانم که + subjunctive), spanning lessons 01-05.
-    if token in {"می‌تانم", "می‌تانی", "می‌تانه", "می‌تانیم", "می‌تانین", "می‌تانن"}:
+    if token in {"می‌تانم", "می‌تانی", "می‌تانه", "می‌تانیم", "می‌تانین", "می‌تانن",
+                 "می‌توانم", "می‌توانی", "می‌تواند", "می‌توانیم", "می‌توانین", "می‌توانند"}:
         semantics.append("ability_verb_present")
-    if token in {"می‌تانستم", "می‌تانستی", "نتانستم", "نتانست"}:
+    if token in {"می‌تانستم", "می‌تانستی", "می‌توانستم", "می‌توانستی", "نتانستم", "نتانست",
+                 "توانستم", "نتوانستم", "نتوانست"}:
         semantics.append("past_ability_verb")
     if token in {
         "بخرم", "ببینم", "بفرستم", "بفرستی", "ببره", "بکنین", "بیایند",
@@ -2808,7 +2821,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("correspondence_word")
     if token == "پسته خانه":
         semantics.append("errand_place_word")
-    if token in {"نرفت", "نتانست", "نداشتم"}:
+    if token in {"نرفت", "نتانست", "نتوانست", "نداشتم"}:
         semantics.append("past_negative_verb")
     if token == "ملاقات":
         # Reuses the "appointment_word" tag name already used for A1

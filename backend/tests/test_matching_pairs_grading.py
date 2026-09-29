@@ -2,12 +2,27 @@ from sqlalchemy import select
 
 from app.db.session import SessionLocal
 from app.models import PracticeItem, PracticeTemplate
+from app.models.entities import ExerciseType
+from app.review.grading import grade
 from test_endless_practice import (
     artifact,
     complete_via_api,
     create_course_with_lexemes,
     import_templates,
 )
+
+
+def test_matching_pairs_grades_frontend_list_against_multi_answer_variants():
+    response = [
+        {"left": "jij / je", "right": "informeel"},
+        {"left": "u", "right": "formeel"},
+    ]
+    correct = {
+        "canonical": response,
+        "accepted": [response],
+    }
+
+    assert grade(response, correct, ExerciseType.matching_pairs) == "correct"
 
 
 def matching_pairs_payload(title):

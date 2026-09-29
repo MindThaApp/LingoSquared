@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { ApiError, configureApi } from "@lingo/shared/api/client";
 import { AuthApi } from "@lingo/shared/api/endpoints";
@@ -118,6 +118,7 @@ function renderProbe() {
 async function expectStatus(value: string) {
   await waitFor(() =>
     expect(screen.getByTestId("status")).toHaveTextContent(new RegExp(`^${value}\\|`)),
+    { timeout: 5000 },
   );
 }
 
@@ -240,7 +241,15 @@ describe("recovering from an unverified session", () => {
     renderProbe();
     await expectStatus("unverified");
 
-    window.dispatchEvent(new Event("online"));
+    // The status change can reach the DOM before React has flushed the
+    // passive effect that attaches the "online" listener (that effect is
+    // armed only while unverified). Flush effects inside act first, else
+    // the event can fire into the void under load and no retry ever runs
+    // (the 5s backoff timer is far beyond the assertion timeout).
+    await act(async () => {});
+    await act(async () => {
+      window.dispatchEvent(new Event("online"));
+    });
 
     await expectStatus("authenticated");
   });

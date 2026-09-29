@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Check, List, Lock } from "lucide-react";
+import { Check, ChevronDown, List, Lock } from "lucide-react";
 import { CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import type { UnitSummary } from "@lingo/shared/api/types";
 import { getLevelPreference, recommendedUnitIndex } from "../lib/levelPreferences";
 import { getPlacementRecommendation } from "../lib/placementPreferences";
 import { getLastVisitedUnit, setLastVisitedUnit } from "../lib/lastUnitPreferences";
+import { useAuth } from "../auth/AuthContext";
+import { setActiveCourse } from "../lib/activeCourse";
 import { unitIcon } from "@lingo/shared/lib/unitIcons";
+import { partitionUnits, getSituationsOpen, setSituationsOpen } from "../lib/unitTracks";
+import { DesktopSidebar } from "../components/layout/DesktopSidebar";
 
 function PathNode({
   unit,
@@ -172,6 +176,11 @@ function UnitIndex({
 export function CourseUnitsPage() {
   const { t } = useTranslation();
   const { courseId = "" } = useParams();
+  const { user } = useAuth();
+  const userId = user?.id;
+  useEffect(() => {
+    if (userId && courseId) setActiveCourse(userId, courseId);
+  }, [userId, courseId]);
 
   const courseQuery = useQuery({
     queryKey: ["course", courseId],
@@ -196,11 +205,18 @@ export function CourseUnitsPage() {
   const skillProgress = progressQuery.data?.skill_progress.find(
     (sp) => sp.course_id === courseId,
   );
-  const totalLessons = unitsQuery.data?.reduce((sum, u) => sum + u.lesson_count, 0) ?? 0;
+  // Course-level totals/completion consider CORE units only; the optional
+  // Situations shelf never counts toward course completion.
+  const { core: coreUnits, situation: situationUnits } = partitionUnits(unitsQuery.data ?? []);
+  const totalLessons = coreUnits.reduce((sum, u) => sum + u.lesson_count, 0);
+  const coreCompleted = coreUnits.reduce((sum, u) => sum + u.completed_lesson_count, 0);
+  const [situationsOpen, setSituationsOpenState] = useState(() => getSituationsOpen(courseId));
+  useEffect(() => {
+    setSituationsOpenState(getSituationsOpen(courseId));
+  }, [courseId]);
 
-  const readingWriting =
-    unitsQuery.data?.filter((u) => u.section === "reading_writing") ?? [];
-  const speaking = unitsQuery.data?.filter((u) => u.section === "speaking") ?? [];
+  const readingWriting = coreUnits.filter((u) => u.section === "reading_writing");
+  const speaking = coreUnits.filter((u) => u.section === "speaking");
 
   // Placement test recommendation (docs/PLACEMENT_TEST_SPEC.md §2.3) takes
   // precedence over the coarse self-report heuristic wherever both exist --
@@ -234,13 +250,14 @@ export function CourseUnitsPage() {
   }, [unitsQuery.data]);
 
   return (
-    <div>
+    <div className="page-with-aside">
+      <div className="page-main-col">
       <h1 style={{ marginBottom: 4 }}>{courseQuery.data?.title ?? t("course_units.default_title")}</h1>
       {courseQuery.data && <p className="muted">{courseQuery.data.description}</p>}
       {skillProgress && totalLessons > 0 && (
         <p className="muted course-units__progress-summary">
           {t("course_units.lessons_completed_summary", {
-            completed: skillProgress.completed_lessons,
+            completed: coreCompleted,
             total: totalLessons,
           })}
         </p>
@@ -287,6 +304,46 @@ export function CourseUnitsPage() {
           <PathNode key={unit.id} unit={unit} current={unit.id === lastUnitId} courseId={courseId} />
         ))}
       </div>
+
+      {situationUnits.length > 0 && (
+        <section className="situations-shelf" style={{ marginTop: 24 }}>
+          <button
+            className="btn btn-secondary"
+            aria-expanded={situationsOpen}
+            onClick={() => {
+              const next = !situationsOpen;
+              setSituationsOpenState(next);
+              setSituationsOpen(courseId, next);
+            }}
+            style={{ display: "flex", alignItems: "center", gap: 8, width: "100%", textAlign: "start" }}
+          >
+            <ChevronDown
+              size={16}
+              aria-hidden="true"
+              style={{ transform: situationsOpen ? undefined : "rotate(-90deg)" }}
+            />
+            <span>
+              <strong>{t("course_units.situations")}</strong>
+              <br />
+              <span className="muted">{t("course_units.situations_desc")}</span>
+            </span>
+          </button>
+          {situationsOpen && (
+            <div className="path" style={{ marginTop: 12 }}>
+              {situationUnits.map((unit) => (
+                <PathNode
+                  key={unit.id}
+                  unit={{ ...unit, locked: false }}
+                  current={unit.id === lastUnitId}
+                  courseId={courseId}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
+      </div>
+      <DesktopSidebar />
     </div>
   );
 }

@@ -20,6 +20,36 @@ def load_content_compiler():
     return module
 
 
+def test_unit_track_validation_accepts_situation_and_rejects_unknown_values():
+    compiler = load_content_compiler()
+    accepted = compiler.Report()
+    compiler.validate_unit_tracks({"units": [{"track": "situation"}]}, accepted)
+    assert accepted.errors == []
+
+    rejected = compiler.Report()
+    compiler.validate_unit_tracks({"units": [{"track": "optional"}]}, rejected)
+    assert len(rejected.errors) == 1
+    assert "realization.units[0].track" in rejected.errors[0]
+
+    compiled = compiler.compile_import_request(
+        {
+            "target_language": "es",
+            "cefr_level": "A1",
+            "units": [{"content_key": "es.a1.unit01", "track": "situation", "lessons": []}],
+        },
+        {"source_language": "en", "target_language": "es", "course": {"title": "Test"}},
+    )
+    assert compiled["courses"][0]["units"][0]["track"] == "situation"
+    assert "track" not in compiler.compile_import_request(
+        {
+            "target_language": "es",
+            "cefr_level": "A1",
+            "units": [{"content_key": "es.a1.unit01", "lessons": []}],
+        },
+        {"source_language": "en", "target_language": "es", "course": {"title": "Test"}},
+    )["courses"][0]["units"][0]
+
+
 def test_compiler_preserves_all_accepted_variants_and_canonical_value():
     compiler = load_content_compiler()
 
@@ -144,9 +174,146 @@ def test_practice_compiler_detects_existing_content_key_collision(tmp_path):
         [(tmp_path / "pack.yaml", pack)],
         [(tmp_path / "realization.yaml", existing)],
     )
-
     assert any("duplicate content_key" in error for error in report.errors)
 
+
+def test_a1_free_text_word_bank_and_skip_rules():
+    compiler = load_content_compiler()
+    def compile_one(level, value):
+        item = {"type": "translation", "content_key": "en.fa.a1.lesson.item"}
+        overlay = {"accepted_answers": [{"value": value, "status": "correct"}]}
+        choices = compiler.compile_exercise(
+            item, overlay, 1, "en", "en", content_key=item["content_key"],
+            cefr_level=level,
+            distractor_tokens=["station", "garden", "morning", "quickly", "blue"],
+        )
+        return choices["prompt"].get("word_bank")
+
+    bank = compile_one("A1", "Hello, world!")
+    assert bank[:2] == ["Hello", "world"]
+    assert len(bank) >= 2
+    assert compile_one("B1", "Hello world") is None
+    assert compile_one("A1", " ".join(["word"] * 13)) is None
+    assert compile_one("A1", "Hello world")[:2] == ["Hello", "world"]
+
+
+def test_long_word_order_keeps_authored_word_bank_unchanged():
+    compiler = load_content_compiler()
+    authored_bank = ["First,", "second", "tile?", *[f"word{i}" for i in range(11)]]
+    exercise = {
+        "type": "word_order",
+        "content_key": "long-authored-order",
+        "word_bank": authored_bank,
+    }
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "one two three", "status": "correct"}]},
+        1,
+        "en",
+        "fa",
+        content_key=exercise["content_key"],
+        cefr_level="A1",
+        introduced_tokens={"first", "second"},
+    )
+
+    assert compiled["prompt"]["word_bank"] == authored_bank
+
+
+def test_word_bank_language_script_letter_and_short_answer_filters():
+    compiler = load_content_compiler()
+
+    def bank(value, target="nl", answer_language=None, candidates=(), lexicon=None):
+        item = {"type": "translation", "content_key": "filter-case"}
+        overlay = {"accepted_answers": [{"value": value, "status": "correct"}]}
+        if answer_language:
+            overlay["answer_language_code"] = answer_language
+        return compiler.compile_exercise(
+            item, overlay, 1, "en", target, content_key="filter-case",
+            cefr_level="A1", distractor_tokens=list(candidates),
+            introduced_tokens=lexicon or {*compiler.tokenize(value), *(
+                str(token).casefold() for token, _ in candidates
+                if isinstance(token, str)
+            )},
+        )["prompt"].get("word_bank")
+
+    # English answer-language material cannot leak into a Dutch bank; this
+    # mirrors "Good" and the A2 "suit"/"Would" failures.
+    dutch = bank("Hoe gaat het", candidates=[("Goed", "nl"), ("Good", "en")])
+    assert "Goed" in dutch and "Good" not in dutch
+    assert bank("Goed, dank u", candidates=[("suit", "en"), ("Would", "en")]) == [
+        "Goed", "dank", "u"
+    ]
+
+    # Latin transliteration into fa is skipped; Arabic-script banks cannot
+    # contain single letters, including letters collected from drills.
+    assert bank("salam", target="fa", candidates=[("سلام", "fa")]) is None
+    persian = bank("سلام دنیا", target="fa", candidates=[
+        ("س", "fa"), ("ل", "fa"), ("چ", "fa"), ("yes", "fa"),
+    ], lexicon={"سلام", "دنیا"})
+    assert persian == ["سلام", "دنیا"]
+    dutch_short_word = bank("ik heb", candidates=[("u", "nl")], lexicon={"ik", "heb", "u"})
+    assert "u" in dutch_short_word
+    assert bank("سلام", target="prs", candidates=[("س", "prs"), ("yes", "prs")]) is None
+
+
+def test_word_bank_excludes_other_accepted_answers_and_is_deterministic():
+    compiler = load_content_compiler()
+    exercise = {"type": "writing_prompt", "content_key": "stable-key"}
+    overlay = {"accepted_answers": [
+        {"value": "Cats sleep", "status": "correct"},
+        {"value": "Dogs sleep", "status": "correct"},
+    ]}
+    def run():
+        return compiler.compile_exercise(
+            exercise, overlay, 1, "en", "es", content_key="stable-key",
+            cefr_level="A2", distractor_tokens=["Cats", "Dogs", "sun", "rain", "tree"],
+            introduced_tokens={"cats", "sleep", "sun", "rain", "tree"},
+        )["prompt"]["word_bank"]
+    first, second = run(), run()
+    assert first == second
+    assert "Cats" in first and "sleep" in first
+    assert "Dogs" not in first
+
+
+def test_word_bank_requires_course_taught_tokens_and_strips_unicode_punctuation():
+    compiler = load_content_compiler()
+    exercise = {"type": "translation", "content_key": "lexicon-case"}
+
+    def bank(value, answer_language, candidates, lexicon):
+        overlay = {
+            "answer_language_code": answer_language,
+            "accepted_answers": [{"value": value, "status": "correct"}],
+        }
+        return compiler.compile_exercise(
+            exercise, overlay, 1, "en", answer_language, content_key="lexicon-case",
+            cefr_level="A1", distractor_tokens=candidates,
+            introduced_tokens=lexicon,
+        )["prompt"].get("word_bank")
+
+    # An English answer item can carry Latin-script tokens, but only taught
+    # Dutch tokens from Dutch-answer items may enter this bank.
+    dutch = bank("ik heb", "nl", [
+        ("cat", "en"), ("dog", "en"), ("kat", "nl"), ("hond", "nl"),
+        ], {"ik", "heb", "kat", "hond"})
+    assert dutch[:2] == ["ik", "heb"]
+    assert set(dutch[2:]) <= {"kat", "hond"}
+    assert not ({"cat", "dog"} & set(dutch))
+
+    persian = bank("است؟ باشه،", "fa", [("کتاب؟", "fa")], {
+        "است", "باشه", "کتاب",
+    })
+    assert "است" in persian and "باشه" in persian
+    assert "است؟" not in persian and "باشه،" not in persian
+    assert "کتاب" in persian and "کتاب؟" not in persian
+
+
+def test_compile_forwards_optional_course_recommended():
+    compiler = load_content_compiler()
+    realization = {"target_language": "es", "cefr_level": "A1", "units": []}
+    overlay = {"source_language": "en", "course": {"title": "Spanish", "recommended": True}}
+    assert compiler.compile_import_request(realization, overlay)["courses"][0]["recommended"] is True
+    overlay["course"].pop("recommended")
+    assert "recommended" not in compiler.compile_import_request(realization, overlay)["courses"][0]
 
 def test_practice_compiler_emits_stable_self_describing_artifact(tmp_path):
     compiler = load_content_compiler()
@@ -715,6 +882,66 @@ def test_audio_distractor_validator_rejects_dialogue_comprehension_speaker_line(
         and "tested speaker says anywhere in that audio" in error
         for error in report.errors
     )
+
+
+def test_dialogue_comprehension_compiles_asset_transcript_and_warns_when_missing():
+    compiler = load_content_compiler()
+    text = "Lotte: Hoi, ik ben Lotte."
+    exercise = {
+        "content_key": "nl.test.exercise.dialogue",
+        "type": "dialogue_comprehension",
+        "tested_text": ["Lotte", "name"],
+        "media_asset_key": "nl.test.audio.dialogue",
+    }
+    assets = {"nl.test.audio.dialogue": {"text": text}}
+
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Lotte", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+        media_assets=assets,
+    )
+    assert compiled["prompt"]["audio_text"] == text
+    assert compiled["prompt"]["audio_language_code"] == "nl"
+
+    realization = {
+        "units": [{"lessons": [{"exercises": [exercise]}]}],
+        "media_assets": [],
+    }
+    report = compiler.Report()
+    compiler.validate_dialogue_comprehension_audio(realization, report)
+    without_asset = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Lotte", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+    )
+    assert "audio_text" not in without_asset["prompt"]
+    assert "audio_language_code" not in without_asset["prompt"]
+    assert len(report.warnings) == 1
+    assert "dialogue_comprehension media asset" in report.warnings[0]
+
+
+def test_listen_select_compile_audio_behavior_is_unchanged():
+    compiler = load_content_compiler()
+    exercise = {
+        "type": "listen_select",
+        "tested_text": "Hallo",
+        "media_asset_key": "nl.test.audio.greeting",
+    }
+    compiled = compiler.compile_exercise(
+        exercise,
+        {"accepted_answers": [{"value": "Hallo", "status": "correct"}]},
+        1,
+        "en",
+        "nl",
+        media_assets={"nl.test.audio.greeting": {"text": "Asset transcript"}},
+    )
+    assert compiled["prompt"]["audio_text"] == "Hallo"
+    assert compiled["prompt"]["audio_language_code"] == "nl"
 
 
 def test_option_correct_option_must_be_in_accepted_answers():

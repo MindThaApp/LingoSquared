@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
-import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
+import { correctOptionFromResponse } from "./optionHighlight";
+import { ChoiceOptions } from "./ChoiceOptions";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
 export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResult }: ExerciseComponentProps) {
@@ -17,6 +19,7 @@ export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResul
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [exercise.id, nonce, rawOptions.join("\u0001")],
   );
+  const direction = answerDirectionForExercise(exercise);
   const correctOption = gradedResult
     ? correctOptionFromResponse(gradedResult.correctResponse, options)
     : null;
@@ -26,20 +29,16 @@ export function ReadingComprehension({ exercise, onAnswer, disabled, gradedResul
       <div className="card" style={{ marginBottom: 4 }}>
         <TextBlockList blocks={exercise.prompt.text_blocks} />
       </div>
-      <div className="exercise-options" lang={exercise.prompt.answer_language_code}>
-        {options.map((option) => (
-          <button
-            key={option}
-            type="button"
-            className={optionClassName(option, selected, gradedResult, correctOption)}
-            disabled={disabled}
-            onClick={() => setSelected(option)}
-            aria-pressed={selected === option}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
+      <ChoiceOptions
+        options={options}
+        selected={selected}
+        onSelect={setSelected}
+        disabled={disabled}
+        gradedResult={gradedResult}
+        correctOption={correctOption}
+        direction={direction}
+        lang={exercise.prompt.answer_language_code}
+      />
       <button
         className="btn btn-block"
         disabled={disabled || !selected}

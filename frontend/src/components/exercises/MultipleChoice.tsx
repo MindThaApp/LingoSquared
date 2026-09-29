@@ -3,7 +3,9 @@ import { seededShuffle } from "../../lib/shuffle";
 import { useTranslation } from "react-i18next";
 import { TextBlockList } from "../TextBlock";
 import { SpeakButton } from "../SpeakButton";
-import { correctOptionFromResponse, optionClassName } from "./optionHighlight";
+import { isListeningExercise } from "../../lib/listeningTypes";
+import { correctOptionFromResponse } from "./optionHighlight";
+import { ChoiceOptions } from "./ChoiceOptions";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import type { ExerciseComponentProps } from "./types";
 
@@ -38,24 +40,20 @@ export function MultipleChoice({ exercise, onAnswer, disabled, gradedResult }: E
       <TextBlockList blocks={exercise.prompt.text_blocks} />
       {audio_text && audio_language_code && (
         <div className="exercise-audio-prompt">
-          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} />
+          <SpeakButton text={audio_text} languageCode={audio_language_code} mediaAssetKey={media_asset_key} autoPlay={isListeningExercise(exercise.type)} />
           <span className="muted">{t("exercise.tap_to_listen")}</span>
         </div>
       )}
-      <div className="exercise-options" dir={direction} lang={exercise.prompt.answer_language_code}>
-        {options.map((option) => (
-          <button
-            key={option}
-            type="button"
-            className={optionClassName(option, selected, gradedResult, correctOption)}
-            onClick={() => !disabled && setSelected(option)}
-            disabled={disabled}
-            aria-pressed={selected === option}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
+      <ChoiceOptions
+        options={options}
+        selected={selected}
+        onSelect={setSelected}
+        disabled={disabled}
+        gradedResult={gradedResult}
+        correctOption={correctOption}
+        direction={direction}
+        lang={exercise.prompt.answer_language_code}
+      />
       <button
         className="btn btn-block"
         disabled={disabled || !selected}

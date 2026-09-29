@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { invalidateProgressQueries } from "../lib/invalidateProgress";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type {
   AnswerResponse,
   CourseDetail,
@@ -38,6 +43,27 @@ const PRACTICE_TYPES = [
 
 const BATCH_SIZE = 10;
 const PREFETCH_THRESHOLD = 3;
+// Rendered-card cap: an endless feed would otherwise keep every card (and its
+// exercise DOM) mounted forever. When a batch pushes the list past this, the
+// OLDEST already-answered cards are dropped; unanswered/active cards and
+// multi-turn conversation cards (whose completion isn't observable here) are
+// never dropped, so the list can exceed the cap if the learner isn't answering.
+const MAX_RENDERED_CARDS = 30;
+
+function trimAnswered(
+  list: PracticeItem[],
+  answered: ReadonlySet<string>,
+): PracticeItem[] {
+  let excess = list.length - MAX_RENDERED_CARDS;
+  if (excess <= 0) return list;
+  return list.filter((item) => {
+    if (excess > 0 && item.type !== "conversation" && answered.has(item.id)) {
+      excess -= 1;
+      return false;
+    }
+    return true;
+  });
+}
 
 // Old budget-Android WebViews (a real slice of the fa/prs audience) can
 // lack IntersectionObserver entirely -- constructing it unguarded would
@@ -61,25 +87,31 @@ interface EligibleCourse extends CourseDetail {
 
 function PracticeCard({
   item,
+  courseId,
   onAnswered,
 }: {
   item: PracticeItem;
+  courseId: string | null;
   onAnswered: (correct: boolean, xp: number) => void;
 }) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [submitError, setSubmitError] = useState(false);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
-      const res = await PracticeApi.answer(item.id, response);
+      const res = await PracticeApi.answer(item.id, response, meta);
       setResult(res);
+      invalidateProgressQueries(queryClient);
       onAnswered(res.correct, res.xp_awarded);
     } catch (err) {
       if (err instanceof ApiError && PERMANENT_ANSWER_ERROR_CODES.has(err.code)) {
@@ -98,7 +130,7 @@ function PracticeCard({
   }
 
   function handleRetryAnswer() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   // Conversation items are multi-turn: the runner owns its own submit loop and
@@ -122,14 +154,14 @@ function PracticeCard({
 
   return (
     <div className="card practice-card">
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         exercise={{ id: item.id, type: item.type, order: 0, prompt: item.prompt }}
         onAnswer={handleAnswer}
         disabled={submitting || Boolean(result) || unavailable || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("practice.submit_error")}</p>
@@ -142,32 +174,38 @@ function PracticeCard({
           readers only announce changes to a region that already exists, so a
           role="status" node that mounts together with its text is often
           silent. The verdict / unavailable notice fills it in. */}
-      <div
-        role="status"
-        aria-live="polite"
-        className={
-          result ? `feedback-banner ${resultStatus(result)}` : unavailable ? "feedback-banner" : undefined
-        }
-      >
-        {result &&
-          (() => {
-            const status = resultStatus(result);
+      <div role="status" aria-live="polite">
+        {result && (() => {
+          const status = resultStatus(result);
+          if (status === "almost") {
             return (
+              <div className="feedback-banner almost">
+                <AlmostFeedback
+                  learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                  spoken={lastSpoken}
+                  correct={formatCorrectResponse(result.correct_response)}
+                  dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
+                />
+              </div>
+            );
+          }
+          return (
+            <div className={`feedback-banner ${status}`}>
               <p style={{ margin: 0 }}>
                 {status === "correct" && t("practice.correct", { xp: result.xp_awarded })}
-                {status === "almost" &&
-                  t("practice.almost", {
-                    xp: result.xp_awarded,
-                    answer: formatCorrectResponse(result.correct_response),
-                  })}
                 {status === "incorrect" &&
                   t("lesson_runner.correct_answer", {
                     answer: formatCorrectResponse(result.correct_response),
                   })}
               </p>
-            );
-          })()}
-        {!result && unavailable && <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>}
+            </div>
+          );
+        })()}
+        {unavailable && (
+          <div className="feedback-banner">
+            <p style={{ margin: 0 }}>{t("practice.item_unavailable")}</p>
+          </div>
+        )}
       </div>
       <div style={{ marginTop: 12, textAlign: "center" }}>
         {/* item.id is a PracticeItem id, same table review/checkpoint
@@ -209,8 +247,17 @@ export function PracticeFeedPage() {
   const [exhausted, setExhausted] = useState(false);
   const [combo, setCombo] = useState(0);
   const [xpToast, setXpToast] = useState<number | null>(null);
-  const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  // Keyed by item id (not list index) so trimming old cards can't shift refs.
+  const cardRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  // Ids of cards answered this session. Independent of the (trimmed) render
+  // list; only used to decide which cards are safe to drop.
+  const answeredIdsRef = useRef<Set<string>>(new Set());
   const loadingMoreRef = useRef(false);
+  // Bumped whenever mode/type filter changes (the feed restarts). A batch
+  // request captures the value at start and drops its result -- items,
+  // exhausted, error -- if it changed while in flight, so an old mode's
+  // response can't leak into the new feed.
+  const feedGenRef = useRef(0);
 
   // MUST stay caught: the inner Promise.all means a single failing
   // CatalogApi.course() rejects the whole chain, leaving eligibleCourses
@@ -257,6 +304,7 @@ export function PracticeFeedPage() {
 
   const loadMore = useCallback(async () => {
     if (!courseId || loadingMoreRef.current || exhausted) return;
+    const gen = feedGenRef.current;
     loadingMoreRef.current = true;
     setLoadingMore(true);
     setFeedError(false);
@@ -265,21 +313,27 @@ export function PracticeFeedPage() {
         types: selectedTypes,
         targetLexemeIds: requestedTargetLexemeIds,
       });
+      if (gen !== feedGenRef.current) return;
       setLocked(res.locked);
       if (res.items.length === 0) {
         setExhausted(true);
       } else {
-        setItems((prev) => [...prev, ...res.items]);
+        setItems((prev) => trimAnswered([...prev, ...res.items], answeredIdsRef.current));
       }
     } catch {
+      if (gen !== feedGenRef.current) return;
       // Without this the failure left items=[], exhausted=false,
       // loadingMore=false — a completely blank feed with no message and no
       // way to retry. `exhausted` deliberately stays false so the "you've
       // practiced everything" copy can never stand in for a network error.
       setFeedError(true);
     } finally {
-      loadingMoreRef.current = false;
-      setLoadingMore(false);
+      // A stale request must not clear the in-flight flag the NEW request
+      // owns (restartFeed already reset it for the new generation).
+      if (gen === feedGenRef.current) {
+        loadingMoreRef.current = false;
+        setLoadingMore(false);
+      }
     }
   }, [courseId, exhausted, mode, selectedTypes, requestedTargetLexemeIds]);
 
@@ -288,16 +342,26 @@ export function PracticeFeedPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseId, mode, selectedTypes]);
 
-  // Switching mode restarts the feed: already-loaded items belong to the
-  // previous mode, and "exhausted" in one mode says nothing about another.
-  function handleModeChange(next: PracticeBatchMode) {
-    if (next === mode) return;
-    setPracticeModePreference(next);
+  // Invalidates any in-flight batch and frees the in-flight guard so the
+  // effect above can issue the new mode/filter's load immediately.
+  function restartFeed() {
+    feedGenRef.current += 1;
+    loadingMoreRef.current = false;
+    setLoadingMore(false);
     setItems([]);
     setExhausted(false);
     setLocked(false);
     setFeedError(false);
     cardRefs.current.clear();
+    answeredIdsRef.current.clear();
+  }
+
+  // Switching mode restarts the feed: already-loaded items belong to the
+  // previous mode, and "exhausted" in one mode says nothing about another.
+  function handleModeChange(next: PracticeBatchMode) {
+    if (next === mode) return;
+    setPracticeModePreference(next);
+    restartFeed();
     setMode(next);
   }
 
@@ -305,11 +369,7 @@ export function PracticeFeedPage() {
   // already-loaded items may not match the new filter, and "exhausted"
   // under one filter says nothing about another. Empty set = all types.
   function toggleType(type: string) {
-    setItems([]);
-    setExhausted(false);
-    setLocked(false);
-    setFeedError(false);
-    cardRefs.current.clear();
+    restartFeed();
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
@@ -322,7 +382,8 @@ export function PracticeFeedPage() {
     // learner's explicit Retry button is the only way back in.
     if (feedError) return;
     const targetIndex = items.length - PREFETCH_THRESHOLD;
-    const target = targetIndex >= 0 ? cardRefs.current.get(targetIndex) : null;
+    const targetItem = targetIndex >= 0 ? items[targetIndex] : undefined;
+    const target = targetItem ? cardRefs.current.get(targetItem.id) : null;
     if (!target) return;
     const observer = new IntersectionObserver(
       (entries) => {
@@ -332,7 +393,7 @@ export function PracticeFeedPage() {
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [items.length, loadMore, feedError]);
+  }, [items, loadMore, feedError]);
 
   function handleAnswered(correct: boolean, xp: number) {
     setCombo((c) => (correct ? c + 1 : 0));
@@ -445,15 +506,22 @@ export function PracticeFeedPage() {
         </div>
       )}
 
-      {items.map((item, index) => (
+      {items.map((item) => (
         <div
           key={item.id}
           ref={(el) => {
-            if (el) cardRefs.current.set(index, el);
-            else cardRefs.current.delete(index);
+            if (el) cardRefs.current.set(item.id, el);
+            else cardRefs.current.delete(item.id);
           }}
         >
-          <PracticeCard item={item} onAnswered={handleAnswered} />
+          <PracticeCard
+            courseId={courseId}
+            item={item}
+            onAnswered={(correct, xp) => {
+              answeredIdsRef.current.add(item.id);
+              handleAnswered(correct, xp);
+            }}
+          />
         </div>
       ))}
 

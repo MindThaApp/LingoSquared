@@ -61,10 +61,20 @@ vocabulary usually is not.
 uses — formal written Dari). The pin applies to the **`prs-en` overlay
 lane**, which `docs/content/CLAUDE.md` fixes as *colloquial* Dari.
 
+### توانستن — full form is canonical (Ramin decision 2026-09-29)
+Ramin decision 2026-09-29: full form; contracted forms accepted as variants only.
+Present `می‌توانم/می‌توانی/می‌تواند/می‌توانیم/می‌توانین/می‌توانند`; past
+`توانستم/توانستی/توانست/توانستیم/توانستین/توانستند`; negative past
+`نتوانستم` etc. The contracted forms (`می‌تانم…`, `تانستم`, `نتانستم…`) are
+EXTRA accepted answers only — never canonical, never a correct MCQ option,
+never in teaching text (a parenthetical "colloquial: …" note is allowed).
+A standardization must cover every tense/derivative of the verb and every
+note that references the old form.
+
 ### 2pl `-ید` → `-ین`
 `کنید`→`کنین` · `بنویسید`→`بنویسین` · `بگویید`→`بگویین` ·
 `بدهید`→`بتین` · `دارید`→`دارین` · `بفرمایید`→`بفرمایین` ·
-`می‌توانید`/`می‌تونید`→`می‌تانین`
+`می‌توانید`/`می‌تونید`→`می‌توانین`
 
 ### Formal 3sg `-د` → colloquial `-ه` (prs-en overlay lane only)
 `می‌کند`→`می‌کنه` · `می‌گوید`→`می‌گه` · `می‌شود`→`می‌شه` ·
@@ -73,7 +83,7 @@ lane**, which `docs/content/CLAUDE.md` fixes as *colloquial* Dari.
 ### Tehrani contractions — no Dari counterpart, always wrong here
 `یه`→`یک` · `اون`→`او`/`آن` · `اونجا`/`اونا` · `کدوم`→`کدام` ·
 `همون`→`همو` · `خونه`→`خانه` · `نشون`/`تموم`/`کتابخونه` ·
-`می‌تونم`→`می‌تانم` · `می‌خوام`→`می‌خواهم` · `می‌دونم`→`می‌دانم` ·
+`می‌تونم`→`می‌توانم` · `می‌خوام`→`می‌خواهم` · `می‌دونم`→`می‌دانم` ·
 `چیه`/`کیه` · `بهت`/`بهم`/`ازش`/`توش`/`باهاش` · `آره`/`بله`→`بلی` ·
 `مرسی`→`تشکر` · `بهتره` · `میاد`→`می‌آیه`
 

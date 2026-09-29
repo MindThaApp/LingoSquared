@@ -121,10 +121,11 @@ describe("exercise renderers have no serious axe violations", () => {
 
   it("selected option tile exposes its state", async () => {
     render(<ExerciseRenderer exercise={ex("multiple_choice")} onAnswer={vi.fn()} disabled={false} />);
-    const tile = screen.getByRole("button", { name: "u" });
-    expect(tile).toHaveAttribute("aria-pressed", "false");
+    // Option tiles are a radiogroup (ChoiceOptions): state is aria-checked.
+    const tile = screen.getByRole("radio", { name: "u" });
+    expect(tile).toHaveAttribute("aria-checked", "false");
     fireEvent.click(tile);
-    expect(tile).toHaveAttribute("aria-pressed", "true");
+    expect(tile).toHaveAttribute("aria-checked", "true");
   });
 
   it("text inputs have an accessible name", () => {

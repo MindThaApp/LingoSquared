@@ -184,6 +184,28 @@ def test_existing_course_import_is_non_destructive():
         assert surviving_progress.xp_earned == 30
 
 
+def test_unit_track_import_create_and_content_key_update_in_place():
+    title = f"Track import {uuid4()}"
+    payload = course_payload(title)
+    payload["units"][0]["content_key"] = "test.track.unit"
+    payload["units"][0]["track"] = "situation"
+    request = ImportRequest.model_validate({"courses": [payload]})
+    with SessionLocal() as db:
+        created, errors, _ = import_content(db, request)
+        assert created == 1 and errors == []
+        original = db.scalar(select(Unit).where(Unit.content_key == "test.track.unit"))
+        assert original.track == "situation"
+        original_id = original.id
+        payload["units"][0].pop("track")
+        created, errors, _ = import_content(
+            db, ImportRequest.model_validate({"courses": [payload]})
+        )
+        assert created == 0 and errors == []
+        updated = db.get(Unit, original_id)
+        assert updated.track == "core"
+        assert updated.id == original_id
+
+
 def test_new_course_is_created_alongside_skipped_existing_course():
     existing_title = f"Existing mixed import {uuid4()}"
     new_title = f"New mixed import {uuid4()}"

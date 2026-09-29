@@ -90,20 +90,24 @@ class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel):
     response: str|list[Any]|dict[str,Any]|bool|int|float
+    input_mode: Literal["typed", "spoken"] = "typed"
+    client_operation_id: str|None=Field(default=None,max_length=36)
     @model_validator(mode="after")
     def bounded_response(self):
         _bounded_payload_size(self.response); return self
 class AnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; feedback:str|None=None
 class LanguagePairOut(BaseModel): source_language:str; target_language:str; course_count:int
-class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int
+class CourseOut(BaseModel): id:str; source_language:str; target_language:str; title:str; level:CEFRLevel; unit_count:int; recommended:bool=False
 class CourseDetail(CourseOut): description:str
-class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None
+class UnitOut(BaseModel): id:str; title:str; order:int; lesson_count:int; completed_lesson_count:int=0; section:UnitSection; locked:bool; checkpoint_passed:bool=False; content_key:str|None=None; track:Literal["core","situation"]="core"
 class LessonOut(BaseModel): id:str; title:str; order:int; exercise_count:int
 class StartOut(BaseModel): started_at:datetime
 class CompleteOut(BaseModel): completed_at:datetime; xp_awarded:int; accuracy:float
 class ReviewAnswerOut(AnswerOut): next_due_at:datetime
 class StreakOut(BaseModel): streak_days:int; last_activity_date:Any=None; streak_freezes_available:int=0; freeze_used_today:bool=False; active_today:bool=False
 class XPOut(BaseModel): total_xp:int; daily_goal:int; xp_today:int=0
+class DailyGoalIn(BaseModel): daily_goal_xp:Literal[10,20,30,50]
+class DailyGoalOut(BaseModel): daily_goal_xp:int
 class QuestOut(BaseModel): code:str; title:str; description:str; xp_reward:int; completed:bool; progress:int; target:int
 class QuestsOut(BaseModel): quests:list[QuestOut]
 # updated_* counts are additive: content_key-matched rows that were
@@ -112,6 +116,8 @@ class QuestsOut(BaseModel): quests:list[QuestOut]
 # in behavior from before content_key-based updates existed.
 class ImportOut(BaseModel):
     imported_courses:int
+    retired_exercises:int=0
+    unretired_exercises:int=0
     updated_units:int=0
     updated_lessons:int=0
     updated_exercises:int=0
@@ -205,7 +211,7 @@ class ContentCoverageOut(BaseModel): source_language:str; target_language:str; c
 class ExerciseImport(BaseModel): type:ExerciseType; order:int=Field(ge=1); prompt:dict[str,Any]; correct_response:Any; feedback:str|None=None; xp:int=Field(default=10,ge=0); content_key:str|None=None
 class TeachingImport(TeachingCard): pass
 class LessonImport(BaseModel): title:str; order:int=Field(ge=1); teaching:list[TeachingImport]=Field(default_factory=list); exercises:list[ExerciseImport]; content_key:str|None=None
-class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]; content_key:str|None=None
+class UnitImport(BaseModel): title:str; order:int=Field(ge=1); section:UnitSection=UnitSection.reading_writing; lessons:list[LessonImport]; content_key:str|None=None; track:Literal["core","situation"]="core"
 class ContentItemImport(BaseModel): kind:Literal["vocabulary","phrase","grammar_note","dialogue","pronunciation_note","cultural_note","reading"]; language_code:str; title:str=""; content:dict[str,Any]
 class CourseImport(BaseModel):
     source_language:str
@@ -213,6 +219,7 @@ class CourseImport(BaseModel):
     title:str
     description:str=""
     level:CEFRLevel=CEFRLevel.A1
+    recommended:bool|None=None
     units:list[UnitImport]
     content_items:list[ContentItemImport]=[]
 
@@ -220,7 +227,7 @@ class CourseImport(BaseModel):
     def distinct(self):
         if self.source_language==self.target_language: raise ValueError("source_language and target_language must differ")
         return self
-class ImportRequest(BaseModel): courses:list[CourseImport]
+class ImportRequest(BaseModel): courses:list[CourseImport]; retire_missing:bool=True
 class ValidateRequest(BaseModel): content:ImportRequest
 PracticeTemplateExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select"]
 PracticeItemExerciseType=Literal["multiple_choice","fill_in_blank","word_order","translation","matching_pairs","listen_select","speak_repeat","speak_response","conversation"]

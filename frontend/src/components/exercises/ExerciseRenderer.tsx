@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { TargetLanguageContext, useTargetLanguage } from "../targetLanguageContext";
 import type { ExerciseComponentProps } from "./types";
 import { MultipleChoice } from "./MultipleChoice";
 import { Translation } from "./Translation";
@@ -14,6 +15,16 @@ import { ReadingComprehension } from "./ReadingComprehension";
 import { WritingPrompt } from "./WritingPrompt";
 
 export function ExerciseRenderer(props: ExerciseComponentProps) {
+  const outer = useTargetLanguage();
+  const own = props.exercise.prompt.answer_language_code;
+  return (
+    <TargetLanguageContext.Provider value={outer ?? (typeof own === "string" && own ? own : null)}>
+      <ExerciseSwitch {...props} />
+    </TargetLanguageContext.Provider>
+  );
+}
+
+function ExerciseSwitch(props: ExerciseComponentProps) {
   const { t } = useTranslation();
   switch (props.exercise.type) {
     case "multiple_choice":

@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { QuitConfirm } from "../components/QuitConfirm";
+import { FixMistakes } from "../components/FixMistakes";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
+import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
+import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
+import { useAuth } from "../auth/AuthContext";
+import { learnPath } from "../lib/activeCourse";
+import { invalidateProgressQueries } from "../lib/invalidateProgress";
 
 interface CoursePickOption {
   courseId: string;
@@ -18,21 +25,50 @@ interface CoursePickOption {
   dueCount: number;
 }
 
+// The "Fix your mistakes" section renders below whichever SRS review screen
+// is showing, and renders nothing at all unless mistakes are due.
+// The two runners are never on screen together: the fix section hides while an
+// SRS session is active, and the SRS screen is hidden (display:none, so its
+// state survives) while the fix runner or its summary is active.
 export function ReviewPage() {
+  const [srsActive, setSrsActive] = useState(false);
+  const [fixActive, setFixActive] = useState(false);
+  return (
+    <>
+      <div style={fixActive ? { display: "none" } : undefined}>
+        <SrsReview onSessionActiveChange={setSrsActive} />
+      </div>
+      <FixMistakes hidden={srsActive} onRunnerActiveChange={setFixActive} />
+    </>
+  );
+}
+
+function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: boolean) => void }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   const [courseId, setCourseId] = useState<string | null>(null);
   const [autoPicked, setAutoPicked] = useState(false);
   const [items, setItems] = useState<PracticeItem[] | null>(null);
   const [index, setIndex] = useState(0);
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
+  const [lastSpoken, setLastSpoken] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [reviewedCount, setReviewedCount] = useState(0);
   const [submitError, setSubmitError] = useState(false);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   const [sessionError, setSessionError] = useState(false);
   const [retryError, setRetryError] = useState(false);
+  // Bumped by the session Retry button so the load effect re-runs even though
+  // courseId is unchanged (setCourseId(null); setCourseId(id) batches to a no-op).
+  const [reloadNonce, setReloadNonce] = useState(0);
+
+  const sessionActive = items !== null;
+  useEffect(() => {
+    onSessionActiveChange(sessionActive);
+  }, [sessionActive, onSessionActiveChange]);
 
   const dueQuery = useQuery({
     queryKey: ["reviews-due"],
@@ -81,27 +117,26 @@ export function ReviewPage() {
     return () => {
       cancelled = true;
     };
-  }, [courseId]);
+  }, [courseId, reloadNonce]);
 
   function handleSessionRetry() {
-    // Re-triggers the session-fetch effect by round-tripping courseId.
-    const id = courseId;
-    setCourseId(null);
     setItems(null);
     setSessionError(false);
-    setCourseId(id);
+    setReloadNonce((n) => n + 1);
   }
 
   const current = items?.[index];
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
+    setLastSpoken(meta?.inputMode === "spoken");
     setSubmitError(false);
     try {
-      const res = await ReviewApi.answer(current.id, response);
+      const res = await ReviewApi.answer(current.id, response, meta);
       setResult(res);
+      invalidateProgressQueries(queryClient);
     } catch {
       setSubmitError(true);
     } finally {
@@ -110,7 +145,7 @@ export function ReviewPage() {
   }
 
   function handleResubmit() {
-    if (lastResponse) handleAnswer(lastResponse);
+    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
   }
 
   function handleQuit() {
@@ -170,6 +205,9 @@ export function ReviewPage() {
         <div style={{ fontSize: "3rem" }}>✅</div>
         <h2>{t("review.none_due_title")}</h2>
         <p className="muted">{t("review.none_due_body")}</p>
+        <button className="btn btn-block" onClick={() => navigate(learnPath(user?.id))}>
+          {t("review.continue_learning", { defaultValue: "Continue learning" })}
+        </button>
       </div>
     );
   }
@@ -229,6 +267,9 @@ export function ReviewPage() {
         <div style={{ fontSize: "3rem" }}>🎉</div>
         <h2>{t("review.all_caught_up")}</h2>
         <p className="muted">{t("review.session_summary", { count: reviewedCount })}</p>
+        <button className="btn btn-block" onClick={() => navigate(courseId ? `/courses/${courseId}` : "/")}>
+          {t("review.continue_learning", { defaultValue: "Continue learning" })}
+        </button>
       </div>
     );
   }
@@ -253,7 +294,7 @@ export function ReviewPage() {
       <span className="muted">
         {t("review.progress", { current: index + 1, total: items.length })}
       </span>
-      <ExerciseRenderer
+      <CourseTargetLanguage courseId={courseId}><ExerciseRenderer
         key={current.id}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
@@ -261,7 +302,7 @@ export function ReviewPage() {
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
         }
-      />
+      /></CourseTargetLanguage>
       {submitError && !result && (
         <div className="feedback-banner error" role="alert">
           <p style={{ margin: "0 0 10px" }}>{t("review.submit_error")}</p>
@@ -270,15 +311,30 @@ export function ReviewPage() {
           </button>
         </div>
       )}
+      {/* Always-mounted live region (empty until graded) so screen readers
+          announce the verdict when it appears. */}
+      <div role="status" aria-live="polite">
       {result && (() => {
         const status = resultStatus(result);
+        if (status === "almost") {
+          return (
+            <div className="feedback-banner almost">
+              <AlmostFeedback
+                learner={typeof lastResponse === "string" ? lastResponse : undefined}
+                spoken={lastSpoken}
+                correct={formatCorrectResponse(result.correct_response)}
+                dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
+              />
+              <button className="btn btn-block" onClick={handleContinue}>
+                {t("review.continue")}
+              </button>
+            </div>
+          );
+        }
         return (
-          // role="status" (implicit aria-live="polite") - announces the grading
-          // result to screen readers when the banner mounts.
-          <div className={`feedback-banner ${status}`} role="status">
+          <div className={`feedback-banner ${status}`}>
             <p style={{ margin: "0 0 6px" }}>
               {status === "correct" && t("review.correct")}
-              {status === "almost" && t("review.almost")}
               {status === "incorrect" && t("review.incorrect")}
             </p>
             {status !== "correct" && (
@@ -304,6 +360,7 @@ export function ReviewPage() {
           </div>
         );
       })()}
+      </div>
       <div style={{ marginTop: 12, textAlign: "center" }}>
         {/* current.id is a PracticeItem id (generated by /reviews/session),
             never an Exercise id - must go through the practice-item report

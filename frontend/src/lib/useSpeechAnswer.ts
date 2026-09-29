@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { getAnswerInputMode, setAnswerInputMode, type AnswerInputMode } from "@lingo/shared/lib/answerInputMode";
-import { micRecordingSupported, useMicRecorder } from "./useMicRecorder";
+import { micRecordingSupported, useMicRecorder, type MicAutoStopReason } from "./useMicRecorder";
 import { clientTranscriptionSupported, transcribeClientSide } from "./whisperClient";
 import { transcribeViaServerDetailed, type SpokenWord } from "../api/stt";
 
@@ -20,7 +20,18 @@ export type SpeechAnswerErrorCode =
 // silently dead" pattern used for TTS. onTranscript feeds the resulting
 // text into the same controlled `value` state the typed-input path
 // already uses, so submission/grading is completely unaffected.
-export function useSpeechAnswer(languageCode: string, onTranscript: (text: string) => void) {
+//
+// The recorder auto-stops (silence after speech / max length) and reports
+// via onAutoStop; a no-speech timeout takes the existing no_speech_detected
+// error path. `options.persistMode: false` stops a failure from flipping the
+// persisted speak-exercise mic/keyboard preference (used by the inline mic
+// button on typed-answer exercises, which has no such toggle).
+export function useSpeechAnswer(
+  languageCode: string,
+  onTranscript: (text: string) => void,
+  options?: { persistMode?: boolean },
+) {
+  const persistMode = options?.persistMode !== false;
   const [mode, setModeState] = useState<AnswerInputMode>(() => getAnswerInputMode());
   const [status, setStatus] = useState<SpeechAnswerStatus>("idle");
   const [error, setError] = useState<SpeechAnswerErrorCode | null>(null);
@@ -29,7 +40,8 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
   // stays null on the client path — the UI must treat it as optional, never
   // as "no feedback means perfect".
   const [words, setWords] = useState<SpokenWord[] | null>(null);
-  const recorder = useMicRecorder();
+  const autoStopRef = useRef<(reason: MicAutoStopReason) => void>(() => {});
+  const recorder = useMicRecorder({ onAutoStop: (reason) => autoStopRef.current(reason) });
 
   const setMode = useCallback((next: AnswerInputMode) => {
     setModeState(next);
@@ -40,7 +52,7 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
   const beginRecording = useCallback(async () => {
     setError(null);
     if (!micRecordingSupported()) {
-      setMode("type");
+      if (persistMode) setMode("type");
       setError("mic_unsupported");
       return;
     }
@@ -48,12 +60,12 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
     if (!started) {
       // Covers permission denial, no device found, or any other
       // getUserMedia failure — degrade to typing, don't retry silently.
-      setMode("type");
+      if (persistMode) setMode("type");
       setError("mic_permission_denied");
       return;
     }
     setStatus("recording");
-  }, [recorder, setMode]);
+  }, [recorder, setMode, persistMode]);
 
   const finishRecording = useCallback(async () => {
     const blob = await recorder.stop();
@@ -88,6 +100,16 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
     }
   }, [recorder, languageCode, onTranscript]);
 
+  autoStopRef.current = (reason) => {
+    if (reason === "no_speech") {
+      recorder.cancel();
+      setStatus("error");
+      setError("no_speech_detected");
+      return;
+    }
+    void finishRecording();
+  };
+
   const cancelRecording = useCallback(() => {
     recorder.cancel();
     setStatus("idle");
@@ -101,6 +123,7 @@ export function useSpeechAnswer(languageCode: string, onTranscript: (text: strin
     status,
     error,
     words,
+    level: recorder.level,
     beginRecording,
     finishRecording,
     cancelRecording,
