@@ -10,12 +10,12 @@
 // colon (ASCII or fullwidth / Arabic) and whitespace. "10:30" has digits and
 // no space after the colon so it never matches; mid-sentence colons are
 // untouched because the pattern is anchored at the start.
-const SPEAKER_LABEL = /^\s*[\p{L}\p{M}][\p{L}\p{M}'’.-]*(?:\s+[\p{L}\p{M}][\p{L}\p{M}'’.-]*){0,2}\s*(?::\s+|：\s*)/u;
+const SPEAKER_LABEL = /^\s*[\p{L}\p{M}][\p{L}\p{M}\u200C\u200D'’.-]*(?:\s+[\p{L}\p{M}][\p{L}\p{M}\u200C\u200D'’.-]*){0,2}\s*(?::\s+|：\s*)/u;
 // Inner speaker labels (dialogue turns): after sentence-ending punctuation or a
 // newline, a 1-2 word capitalized (or caseless-script) name then a colon+space.
 // Stricter than the leading pattern: every word must start uppercase / caseless
 // letter, so "Let op: ..." mid-text and digits/times are never touched.
-const NAME_WORD = "(?:\\p{Lu}|\\p{Lo})[\\p{L}\\p{M}'’.-]*";
+const NAME_WORD = "(?:\\p{Lu}|\\p{Lo})[\\p{L}\\p{M}\\u200C\\u200D'’.-]*";
 const INNER_LABEL = new RegExp(
   `([.!?…؟]["”')»]*\\s+|\\n\\s*)${NAME_WORD}(?:\\s+${NAME_WORD})?\\s*(?::\\s+|：\\s*)`,
   "gu",
