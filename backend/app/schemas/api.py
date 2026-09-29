@@ -90,6 +90,7 @@ class ExerciseOut(BaseModel): id:str; type:ExerciseType; order:int; prompt:dict[
 class LessonDetail(BaseModel): id:str; unit_id:str; title:str; teaching:list[TeachingCard]; exercises:list[ExerciseOut]
 class AnswerIn(BaseModel):
     response: str|list[Any]|dict[str,Any]|bool|int|float
+    input_mode: Literal["typed", "spoken"] = "typed"
     client_operation_id: str|None=Field(default=None,max_length=36)
     @model_validator(mode="after")
     def bounded_response(self):
