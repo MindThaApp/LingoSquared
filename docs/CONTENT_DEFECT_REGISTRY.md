@@ -1726,3 +1726,38 @@ above. Current state: nl/fa/prs ~62 localized matchers per lane (A1-B2) +
 de-en A1 (9) — all awaiting Ramin's post-hoc native-language audit.
 New bug class discovered: no
 Instance count: 0 (queue status update, not a review)
+
+### 2026-09-29 — fa A1 dialogue-audio pointers (PR #10, 42 items; fresh-context review)
+Bug classes found: 1.22 (distractor weakened/made contestable by newly attached
+dialogue audio) — 2 nits (unit41/unit42 distractors); plus 1 out-of-scope
+finding: fa unit01 `listen_who_welcomes` had no question (prompt-less item).
+0 blocker, 0 should-fix. All fixed in commit b80c9044.
+New bug class discovered: no
+Instance count: 3 (2 nits + 1 out-of-scope), all fixed
+**RULE NOTE (candidate)**: audio added to an existing item can make a
+distractor true — re-review distractors whenever audio is attached.
+
+### 2026-09-29 — prs A1 dialogue audio (PR #11, 14 items; fresh-context review)
+Bug classes found: 1.22 — 1 should-fix, pre-existing: prs unit15 distractor
+made TRUE by the attached audio (mirrored in fa unit15); 2 nits (1 fixed: false
+"in Kabul" feedback). 0 blockers. Fixed in commit b80c9044.
+New bug class discovered: no
+Instance count: 3 (1 should-fix + 2 nits; fa unit15 mirror fixed with it)
+**RULE NOTE (candidate)**: same as above — re-review distractors whenever
+audio is attached to an existing item.
+
+### 2026-09-29 — es-b1 + de-b1 CI corpus test (answer-shape corpus test)
+Bug classes found: 1.26 (answer-shape corpus regression) — 2 real defects:
+es.b1.unit40 reading_comprehension had no options; de.b1.unit42
+matching_pairs had casefold-duplicate right items. Fixed in commit fa44f6a1.
+New bug class discovered: no (instances of §1.26; compiler-invisible, caught
+only by the answer-shape corpus test once the dictation shape was added)
+Instance count: 2
+
+### 2026-09-29 — fa+prs A2 dialogue-audio pointers (PR #13, 32 items; fresh-context review)
+Bug classes found: none — 0 defects (8 items skipped at authoring; the 4
+unit14 job-interview items are now wired, the ZWNJ speaker-label blocker being
+fixed in commit 5a4ab3c1; a fresh review confirmed the audio supports each
+correct option and no distractor)
+New bug class discovered: no
+Instance count: 0
