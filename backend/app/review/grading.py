@@ -488,12 +488,45 @@ def is_too_short_for_typo_tolerance(correct: str) -> bool:
     return len(correct) < MIN_ANSWER_LENGTH_FOR_TYPO_TOLERANCE
 
 
+def is_arabic_hamza_only_difference(
+    response: str,
+    correct: str,
+    *,
+    language_code: str | None,
+    exercise_type: str,
+    case_sensitive: bool = False,
+    punctuation_strict: bool = False,
+) -> bool:
+    """Whether an Arabic answer differs only by أ/إ/آ versus ا spelling."""
+    if language_code != "ar":
+        return False
+    normalized_response = _normalize(
+        response,
+        case_sensitive=case_sensitive,
+        exercise_type=exercise_type,
+        punctuation_strict=punctuation_strict,
+    )
+    normalized_correct = _normalize(
+        correct,
+        case_sensitive=case_sensitive,
+        exercise_type=exercise_type,
+        punctuation_strict=punctuation_strict,
+    )
+    if normalized_response == normalized_correct:
+        return False
+    fold_hamza = str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا"})
+    return normalized_response.translate(fold_hamza) == normalized_correct.translate(
+        fold_hamza
+    )
+
+
 def grade_answer(
     response: str,
     correct: str,
     *,
     exercise_type: str,
     script: str | None = None,
+    language_code: str | None = None,
     orthography_strict: bool | None = None,
     case_sensitive: bool = False,
     punctuation_strict: bool = False,
@@ -508,8 +541,10 @@ def grade_answer(
       'han'|'arabic') for the *correct* answer, resolved by the caller
       from the Language table. Default strictness: tolerant for 'latin',
       strict for everything else (in particular 'arabic', which covers
-      ar/fa/prs). Falls back to a character-based Latin heuristic if the
-      caller has no script value handy.
+      ar/fa/prs). language_code distinguishes Arabic from Persian/Dari:
+      only 'ar' treats أ/إ/آ versus ا as an "almost" spelling difference.
+      Falls back to a character-based Latin heuristic if the caller has no
+      script value handy.
     - dictation is byte-strict after trimming surrounding whitespace and
       iteratively removing approved boundary punctuation, apart from the
       same invisible-formatting forgiveness applied to every strict path.
@@ -555,6 +590,21 @@ def grade_answer(
 
     normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
     normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
+
+    # Arabic-only hamza spelling tolerance. Keep this keyed to the actual
+    # language code: Persian and Dari use the same script but distinguish
+    # these visible spellings. Exact spelling has already gone through the
+    # invisible-formatting check below; this path earns "almost" only when
+    # folding hamza forms on both sides makes the answers equal.
+    if is_arabic_hamza_only_difference(
+        response,
+        correct,
+        language_code=language_code,
+        exercise_type=exercise_type,
+        case_sensitive=case_sensitive,
+        punctuation_strict=punctuation_strict,
+    ):
+        return "almost"
 
     # Invisible formatting (Persian ZWNJ, Arabic harakat, tatweel, bidi
     # marks) is resolved HERE, on the fully-correct path, deliberately:
@@ -701,7 +751,7 @@ def select_feedback(feedback_meta, response, result):
     return feedback_meta.get("generic")
 def exercise_type_value(exercise_type):
     return exercise_type.value if hasattr(exercise_type, "value") else exercise_type
-def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=None,case_sensitive=False,punctuation_strict=False):
+def grade(response,correct,exercise_type=None,*,script=None,language_code: str | None = None,orthography_strict=None,case_sensitive=False,punctuation_strict=False):
     """Returns the 3-state result: 'correct' | 'almost' | 'incorrect'.
     'almost' (Phase C typo tolerance) is only ever returned for free-typed
     answers on eligible exercise types - flashcard, multi-answer, and
@@ -737,6 +787,7 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
                     item,
                     exercise_type=type_value,
                     script=script,
+                    language_code=language_code,
                     orthography_strict=orthography_strict,
                     case_sensitive=case_sensitive,
                     punctuation_strict=punctuation_strict,
@@ -762,6 +813,7 @@ def grade(response,correct,exercise_type=None,*,script=None,orthography_strict=N
             correct,
             exercise_type=type_value,
             script=script,
+            language_code=language_code,
             orthography_strict=orthography_strict,
             case_sensitive=case_sensitive,
             punctuation_strict=punctuation_strict,

@@ -14,6 +14,7 @@ from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, Up
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
 from sqlalchemy import Float, case, delete, func, or_, select, text
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
@@ -133,6 +134,7 @@ from app.review.grading import (
     display_correct_response,
     exercise_type_value,
     grade,
+    is_arabic_hamza_only_difference,
     select_feedback,
 )
 from app.review.placement import (
@@ -203,6 +205,7 @@ def conversation_reply_result(
     node: dict[str, Any],
     response: Any,
     script,
+    language_code: str | None,
 ) -> tuple[str, str | None]:
     best_result = "incorrect"
     best_variant = None
@@ -212,6 +215,7 @@ def conversation_reply_result(
             variant,
             "speak_response",
             script=script,
+            language_code=language_code,
         )
         if result == "correct":
             return result, variant
@@ -403,14 +407,17 @@ def resolve_script(db, language_code):
     return language.script if language else None
 def exercise_answer(db, user, e, response):
     feedback_meta = decode_feedback(e.feedback)
-    script = resolve_script(db, e.prompt.get("answer_language_code"))
+    language_code = e.prompt.get("answer_language_code")
+    script = resolve_script(db, language_code)
     result = grade(
         response,
         e.correct_response,
         e.type,
         script=script,
+        language_code=language_code,
         orthography_strict=feedback_meta.get("orthography_strict"),
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
+        punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
     )
     correct = result != "incorrect"
     previously_correct = db.scalar(
@@ -462,7 +469,21 @@ def exercise_answer(db, user, e, response):
         "result": result,
         "correct_response": display_correct_response(e.correct_response),
         "xp_awarded": xp,
-        "feedback": select_feedback(feedback_meta, response, result),
+        "feedback": (
+            "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+            if result == "almost"
+            and isinstance(response, str)
+            and isinstance(e.correct_response, str)
+            and is_arabic_hamza_only_difference(
+                response,
+                e.correct_response,
+                language_code=language_code,
+                exercise_type=exercise_type_value(e.type),
+                case_sensitive=bool(feedback_meta.get("case_sensitive")),
+                punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
+            )
+            else select_feedback(feedback_meta, response, result)
+        ),
     }
 
 PLACEMENT_RATE_LIMIT_MESSAGE = "Too many answers submitted too quickly. Please slow down."
@@ -552,13 +573,16 @@ def placement_grade(db, e, response):
     straight to correct/incorrect, but we still pass the exercise's own
     strictness inputs for parity with exercise_answer()."""
     feedback_meta = decode_feedback(e.feedback)
+    language_code = e.prompt.get("answer_language_code")
     return grade(
         response,
         e.correct_response,
         e.type,
-        script=resolve_script(db, e.prompt.get("answer_language_code")),
+        script=resolve_script(db, language_code),
+        language_code=language_code,
         orthography_strict=feedback_meta.get("orthography_strict"),
         case_sensitive=bool(feedback_meta.get("case_sensitive")),
+        punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
     )
 
 
@@ -808,7 +832,7 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     require_speaking_unlocked(db,unit,user)
     p=db.scalar(select(LessonProgress).where(LessonProgress.user_id==user.id,LessonProgress.lesson_id==lesson_id)); now=datetime.now(timezone.utc)
     if not p:
-        p=LessonProgress(
+        candidate=LessonProgress(
             user_id=user.id,
             lesson_id=lesson_id,
             started_at=now,
@@ -817,7 +841,17 @@ def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
             answer_count=0,
             xp_earned=0,
         )
-        db.add(p)
+        try:
+            with db.begin_nested():
+                db.add(candidate)
+                db.flush()
+            p=candidate
+        except IntegrityError:
+            # Another request created the row after our initial lookup.
+            # Keep the outer transaction usable and return that row.
+            p=db.scalar(select(LessonProgress).where(LessonProgress.user_id==user.id,LessonProgress.lesson_id==lesson_id))
+            if p is None:
+                raise
     elif not p.started_at: p.started_at=now
     db.commit(); return {"started_at":p.started_at}
 @router.post("/exercises/{exercise_id}/answer",response_model=AnswerOut)
@@ -1113,12 +1147,16 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     if not r or r.user_id!=user.id: fail(404,"review_not_found","Review item not found")
     e=db.get(Exercise,r.exercise_id)
     feedback_meta=decode_feedback(e.feedback)
-    script=resolve_script(db,e.prompt.get("answer_language_code"))
-    result=grade(body.response,e.correct_response,e.type,script=script,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")))
+    language_code=e.prompt.get("answer_language_code")
+    script=resolve_script(db,language_code)
+    result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")))
     correct=result!="incorrect"
     xp=e.xp if correct else 0
     schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()
-    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":select_feedback(feedback_meta,body.response,result),"next_due_at":r.due_at}
+    feedback = select_feedback(feedback_meta,body.response,result)
+    if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
+        feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+    return {"correct":correct,"result":result,"correct_response":display_correct_response(e.correct_response),"xp_awarded":xp,"feedback":feedback,"next_due_at":r.due_at}
 @router.get("/me/reviews/due", response_model=ReviewDueOut)
 def lexeme_reviews_due(
     user=Depends(current_user),
@@ -2228,6 +2266,7 @@ def practice_answer(
             node=node,
             response=learner_response,
             script=script,
+            language_code=node.get("answer_language_code"),
         )
         correct = result != "incorrect"
         next_node = conversation_next_node(
@@ -2313,11 +2352,13 @@ def practice_answer(
         }
 
     script = resolve_script(db, item.prompt.get("answer_language_code"))
+    language_code = item.prompt.get("answer_language_code")
     result = grade(
         body.response,
         item.correct_response,
         item_type,
         script=script,
+        language_code=language_code,
         orthography_strict=(
             True if item.source == "checkpoint" else None
         ),
