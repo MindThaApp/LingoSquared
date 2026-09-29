@@ -96,13 +96,13 @@ export function CheckpointPage() {
 
   const current = items[index];
 
-  async function handleAnswer(response: AnswerResponse) {
+  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
     setSubmitError(false);
     try {
-      const res = await CheckpointApi.answer(current.id, response);
+      const res = await CheckpointApi.answer(current.id, response, meta);
       setResult(res);
     } catch {
       setSubmitError(true);

@@ -5,18 +5,21 @@ import { VirtualKeyboard } from "../VirtualKeyboard";
 import { answerScriptForExercise, scriptDirection, scriptNeedsVirtualKeyboard } from "@lingo/shared/lib/scripts";
 import { useKeyboardFocus } from "../../lib/useKeyboardFocus";
 import { AnswerModeSwitch } from "./AnswerModeSwitch";
+import { VoiceAnswerButton } from "../VoiceAnswerButton";
+import { submitAnswer } from "../../lib/voiceAnswer";
 import type { ExerciseComponentProps } from "./types";
 
 export function WritingPrompt({ exercise, onAnswer, disabled, courseLevel, lessonExercises, answerHint }: ExerciseComponentProps) {
   const { t } = useTranslation();
   const [value, setValue] = useState("");
+  const [spoken, setSpoken] = useState(false);
   const script = answerScriptForExercise(exercise);
   const { showKeyboard, inputProps, keyboardProps } = useKeyboardFocus<HTMLTextAreaElement>({ value, setValue, script, disabled });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (disabled || !value.trim()) return;
-    onAnswer(value.trim());
+    submitAnswer(onAnswer, value.trim(), spoken);
   }
 
   // Enter stays a newline (multi-sentence answers); Cmd/Ctrl+Enter submits.
@@ -24,7 +27,7 @@ export function WritingPrompt({ exercise, onAnswer, disabled, courseLevel, lesso
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
       e.preventDefault();
       if (disabled || !value.trim()) return;
-      onAnswer(value.trim());
+      submitAnswer(onAnswer, value.trim(), spoken);
     }
   }
 
@@ -55,6 +58,7 @@ export function WritingPrompt({ exercise, onAnswer, disabled, courseLevel, lesso
               {t("exercise.writing_submit_hint")}
             </small>
           </div>
+          <VoiceAnswerButton exercise={exercise} disabled={disabled} onTranscript={(text) => { setValue(text); setSpoken(true); }} />
           {showKeyboard && scriptNeedsVirtualKeyboard(script) && !disabled && (
             <VirtualKeyboard
               script={script!}
