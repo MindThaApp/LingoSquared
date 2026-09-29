@@ -15,6 +15,7 @@ app/api/router.py's exercise_answer()/review_answer()/practice_answer()
 (resolve_script() stays in the router for exactly that reason).
 """
 import json
+import re
 import unicodedata
 from typing import Literal
 
@@ -157,6 +158,27 @@ LATIN_RANGE_STARTS = (0x0041, 0x0061, 0x00C0, 0x0100)
 # ---------------------------------------------------------------------------
 
 ZWNJ = "‌"  # ZERO WIDTH NON-JOINER
+
+# Subject pronouns that may be omitted in these languages. Keep both tables
+# data-driven: the language allowlist is intentionally narrower than the set
+# of languages whose grammars sometimes permit pro-drop.
+OPTIONAL_SUBJECT_PRONOUNS = {
+    "fa": {"من", "تو", "او", "ما", "شما", "آنها", "ایشان", "اونا"},
+    "prs": {"من", "تو", "او", "ما", "شما", "آنها", "ایشان", "اونا"},
+    "es": {"yo", "tú", "él", "ella", "nosotros", "vosotros", "ellos", "ellas", "usted", "ustedes"},
+    "it": {"io", "tu", "lui", "lei", "noi", "voi", "loro"},
+    "pl": {"ja", "ty", "on", "ona", "my", "wy", "oni"},
+    "ro": {"eu", "tu", "el", "ea", "noi", "voi", "ei", "ele"},
+}
+OPTIONAL_PRONOUN_CLAUSE_BOUNDARIES = {
+    "fa": {"و", "ولی", "اما", "بعد"},
+    "prs": {"و", "ولی", "اما", "بعد"},
+    "es": {"y"},
+    "it": {"e", "i"},
+    "pl": {"i"},
+    "ro": {"și"},
+}
+OPTIONAL_PRONOUN_LANGUAGES = frozenset(OPTIONAL_SUBJECT_PRONOUNS)
 
 # Characters with no phonemic, semantic or orthographic content at all:
 # always removed from both sides before comparing, in any script.
@@ -301,12 +323,30 @@ def spoken_answer_result(
     correct: str,
     *,
     language_code: str | None,
+    exercise_type: str | None = None,
+    orthography_strict: bool | None = None,
+    case_sensitive: bool = False,
 ) -> Result:
     """Grade a microphone transcript with bounded word-level tolerance."""
     # Spoken grading always follows the transcript normalization contract:
     # casefold and ignore punctuation, irrespective of typed-answer metadata.
     normalized_response = _normalize(response)
     normalized_correct = _normalize(correct)
+    if (
+        exercise_type in FREE_TEXT_EXERCISE_TYPES
+        and exercise_type != "dictation"
+        and not case_sensitive
+        and orthography_strict is not True
+        and (
+            optional_subject_pronoun_only_difference(
+                response, correct, language_code
+            )
+            or persian_script_joining_only_difference(
+                normalized_response, normalized_correct, language_code
+            )
+        )
+    ):
+        return "correct"
     if is_invisible_formatting_only_difference(
         normalized_response, normalized_correct
     ):
@@ -346,6 +386,95 @@ def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str |
         dictation=exercise_type == "dictation",
         punctuation_strict=punctuation_strict,
     )
+
+
+def _optional_pronoun_clauses(value: str, language_code: str) -> list[tuple[str, list[str]]]:
+    """Split into punctuation/conjunction-delimited clauses, preserving the
+    conjunction that begins each clause so both answers must share structure."""
+    value = unicodedata.normalize("NFC", value).translate(QUOTE_FOLD).casefold()
+    boundaries = OPTIONAL_PRONOUN_CLAUSE_BOUNDARIES[language_code]
+    boundary_pattern = "|".join(
+        sorted((re.escape(word) for word in boundaries), key=len, reverse=True)
+    )
+    pattern = re.compile(
+        rf"[.!?¿¡…،,;:؟]+|(?<!\w)(?:{boundary_pattern})(?!\w)",
+        re.IGNORECASE,
+    )
+    clauses: list[tuple[str, list[str]]] = []
+    start = 0
+    next_prefix = ""
+    for match in pattern.finditer(value):
+        tokens = value[start:match.start()].split()
+        if tokens:
+            clauses.append((next_prefix, tokens))
+        separator = match.group(0)
+        next_prefix = separator.casefold() if separator.casefold() in boundaries else ""
+        start = match.end()
+    tokens = value[start:].split()
+    if tokens:
+        clauses.append((next_prefix, tokens))
+    return clauses
+
+
+def optional_subject_pronoun_only_difference(
+    a: str, b: str, language_code: str | None
+) -> bool:
+    """Whether answers differ only by one optional subject pronoun per clause."""
+    if language_code not in OPTIONAL_PRONOUN_LANGUAGES:
+        return False
+    left = _optional_pronoun_clauses(a.casefold(), language_code)
+    right = _optional_pronoun_clauses(b.casefold(), language_code)
+    if len(left) != len(right):
+        return False
+    pronouns = OPTIONAL_SUBJECT_PRONOUNS[language_code]
+    for (left_prefix, left_tokens), (right_prefix, right_tokens) in zip(left, right):
+        if left_prefix != right_prefix:
+            return False
+        if left_tokens == right_tokens:
+            continue
+        if left_tokens and left_tokens[0] in pronouns and left_tokens[1:] == right_tokens:
+            continue
+        if right_tokens and right_tokens[0] in pronouns and right_tokens[1:] == left_tokens:
+            continue
+        return False
+    return True
+
+
+def _is_arabic_letter(char: str) -> bool:
+    code = ord(char)
+    return unicodedata.category(char).startswith("L") and (
+        0x0600 <= code <= 0x06FF
+        or 0x0750 <= code <= 0x077F
+        or 0x08A0 <= code <= 0x08FF
+        or 0xFB50 <= code <= 0xFDFF
+        or 0xFE70 <= code <= 0xFEFF
+        or 0x1EE00 <= code <= 0x1EEFF
+    )
+
+
+def _arabic_joining_form(value: str) -> str:
+    """Ignore a single space/ZWNJ only when it joins Arabic-script letters."""
+    out: list[str] = []
+    for index, char in enumerate(value):
+        if (
+            char in {" ", ZWNJ}
+            and index > 0
+            and index + 1 < len(value)
+            and _is_arabic_letter(value[index - 1])
+            and _is_arabic_letter(value[index + 1])
+        ):
+            continue
+        out.append(char)
+    return "".join(out)
+
+
+def persian_script_joining_only_difference(
+    a: str, b: str, language_code: str | None
+) -> bool:
+    """Whether Arabic-script joining separators alone distinguish answers."""
+    if language_code not in {"fa", "prs", "ar"}:
+        return False
+    return a != b and _arabic_joining_form(a) == _arabic_joining_form(b)
 
 
 def normalize_dictation_boundary_punctuation(value: str) -> str:
@@ -723,6 +852,9 @@ def grade_answer(
             response,
             correct,
             language_code=language_code,
+            exercise_type=exercise_type,
+            orthography_strict=orthography_strict,
+            case_sensitive=case_sensitive,
         )
 
     if exercise_type == "dictation":
@@ -762,6 +894,22 @@ def grade_answer(
     # see and their keyboard will not type.
     if is_invisible_formatting_only_difference(
         normalized_response, normalized_correct
+    ):
+        return "correct"
+
+    if (
+        exercise_type in FREE_TEXT_EXERCISE_TYPES
+        and exercise_type != "dictation"
+        and not case_sensitive
+        and orthography_strict is not True
+        and (
+            optional_subject_pronoun_only_difference(
+                response, correct, language_code
+            )
+            or persian_script_joining_only_difference(
+                normalized_response, normalized_correct, language_code
+            )
+        )
     ):
         return "correct"
 
@@ -916,6 +1064,9 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
             response,
             correct,
             language_code=language_code,
+            exercise_type=type_value,
+            orthography_strict=orthography_strict,
+            case_sensitive=case_sensitive,
         )
     if exercise_type == ExerciseType.flashcard:
         report=normalized(response, punctuation_strict=True)
@@ -930,6 +1081,9 @@ def grade(response,correct,exercise_type=None,*,script=None,language_code: str |
                     response,
                     item,
                     language_code=language_code,
+                    exercise_type=type_value,
+                    orthography_strict=orthography_strict,
+                    case_sensitive=case_sensitive,
                 )
                 for item in correct["accepted"]
                 if isinstance(item, str)
