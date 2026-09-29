@@ -2,7 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CatalogApi, ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { setActiveCourse, clearActiveCourse } from "../../lib/activeCourse";
 import { NavBar } from "./NavBar";
 import { SideRail } from "./SideRail";
 import { DesktopSidebar } from "./DesktopSidebar";
@@ -17,6 +18,7 @@ vi.mock("react-i18next", () => ({
 vi.mock("@lingo/shared/api/endpoints", () => ({
   ProgressApi: { streak: vi.fn(), xp: vi.fn(), progress: vi.fn(), quests: vi.fn() },
   ReviewApi: { due: vi.fn() },
+  CatalogApi: { units: vi.fn(), lessons: vi.fn() },
 }));
 
 vi.mock("../../auth/AuthContext", () => ({ useAuth: () => ({ user: { id: "u1" } }) }));
@@ -32,6 +34,7 @@ function wrap(ui: React.ReactNode, route = "/") {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  clearActiveCourse("u1");
   vi.mocked(ProgressApi.streak).mockResolvedValue({ streak_days: 7 } as never);
   vi.mocked(ProgressApi.xp).mockResolvedValue({ total_xp: 300, xp_today: 12, daily_goal: 20 } as never);
   vi.mocked(ProgressApi.progress).mockResolvedValue({ lesson_progress: [] } as never);
@@ -40,6 +43,13 @@ beforeEach(() => {
 });
 
 describe("SideRail", () => {
+  it("brand link is not aria-current on Home; only the Home nav item is", () => {
+    wrap(<SideRail />, "/");
+    const nav = screen.getByRole("navigation", { name: "nav.main_nav" });
+    expect(within(nav).getByRole("link", { name: "Auvel" }).getAttribute("aria-current")).toBeNull();
+    expect(within(nav).getByRole("link", { name: /nav\.home/ }).getAttribute("aria-current")).toBe("page");
+  });
+
   it("renders a labelled nav landmark and marks the active link with aria-current=page", () => {
     wrap(<SideRail />, "/practice");
     const nav = screen.getByRole("navigation", { name: "nav.main_nav" });
@@ -56,6 +66,35 @@ describe("DesktopSidebar", () => {
     await waitFor(() => expect(within(aside).getByTestId("sidebar-streak").textContent).toContain("7"));
     expect(await within(aside).findByText("home.daily_goal_progress:12/20")).toBeTruthy();
     expect(await within(aside).findByRole("link", { name: "home.review" })).toBeTruthy();
+  });
+});
+
+describe("DesktopSidebar next-lesson card", () => {
+  it("shows the actual next lesson with a Continue link when an active course exists", async () => {
+    setActiveCourse("u1", "c1");
+    vi.mocked(CatalogApi.units).mockResolvedValue([
+      { id: "uA", title: "Unit A", order: 1, lesson_count: 2, completed_lesson_count: 2, section: "core", locked: false },
+      { id: "uB", title: "Unit B", order: 2, lesson_count: 2, completed_lesson_count: 1, section: "core", locked: false },
+    ] as never);
+    vi.mocked(CatalogApi.lessons).mockResolvedValue([
+      { id: "l2", title: "Second lesson", order: 2, exercise_count: 5 },
+      { id: "l1", title: "First lesson", order: 1, exercise_count: 5 },
+    ] as never);
+    vi.mocked(ProgressApi.progress).mockResolvedValue({
+      lesson_progress: [{ lesson_id: "l1", started_at: "2026-01-01", completed_at: "2026-01-02" }],
+    } as never);
+    wrap(<DesktopSidebar />);
+    const el = await screen.findByTestId("sidebar-next-lesson");
+    expect(el.textContent).toContain("Second lesson");
+    const link = screen.getByRole("link", { name: "home.continue" });
+    expect(link.getAttribute("href")).toBe("/lessons/l2");
+    expect(screen.queryByText("home.choose_course")).toBeNull();
+  });
+
+  it("falls back to choose-a-course when there is no active course", async () => {
+    wrap(<DesktopSidebar />);
+    expect(await screen.findByText("home.choose_course")).toBeTruthy();
+    expect(CatalogApi.units).not.toHaveBeenCalled();
   });
 });
 

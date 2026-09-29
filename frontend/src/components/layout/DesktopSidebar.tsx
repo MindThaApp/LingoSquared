@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Star } from "lucide-react";
-import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { CatalogApi, ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import type { LessonProgress } from "@lingo/shared/api/types";
 import { useAuth } from "../../auth/AuthContext";
-import { learnPath } from "../../lib/activeCourse";
+import { getActiveCourse, learnPath } from "../../lib/activeCourse";
 
 // Right-hand sidebar for Home + course pages. Hidden by CSS below 1024px
 // (.desktop-sidebar), so phones render exactly as before. Reuses HomePage's
@@ -19,6 +19,30 @@ export function DesktopSidebar() {
   const progressQuery = useQuery({ queryKey: ["progress"], queryFn: ProgressApi.progress });
   const dueQuery = useQuery({ queryKey: ["reviews-due"], queryFn: ReviewApi.due });
   const questsQuery = useQuery({ queryKey: ["quests"], queryFn: ProgressApi.quests });
+
+  // Actual next lesson of the learner's active course (per user, per device):
+  // first unlocked, unfinished unit -> its first not-yet-completed lesson.
+  // Same keys/fetchers as CourseUnitsPage so react-query dedupes.
+  const activeCourseId = getActiveCourse(user?.id);
+  const unitsQuery = useQuery({
+    queryKey: ["units", activeCourseId],
+    queryFn: () => CatalogApi.units(activeCourseId as string),
+    enabled: !!activeCourseId,
+  });
+  const nextUnit = (unitsQuery.data ?? []).find(
+    (u) => !u.locked && u.lesson_count > 0 && u.completed_lesson_count < u.lesson_count,
+  );
+  const lessonsQuery = useQuery({
+    queryKey: ["lessons", nextUnit?.id],
+    queryFn: () => CatalogApi.lessons(nextUnit!.id),
+    enabled: !!nextUnit,
+  });
+  const completedIds = new Set(
+    (progressQuery.data?.lesson_progress ?? []).filter((lp) => lp.completed_at).map((lp) => lp.lesson_id),
+  );
+  const nextLesson = [...(lessonsQuery.data ?? [])]
+    .sort((a, b) => a.order - b.order)
+    .find((l) => !completedIds.has(l.id));
 
   const streak = streakQuery.data;
   const xp = xpQuery.data;
@@ -45,13 +69,38 @@ export function DesktopSidebar() {
     <aside className="desktop-sidebar" aria-label={t("nav.sidebar")}>
       <div className="card desktop-sidebar-next">
         <h3>{t("nav.next_lesson")}</h3>
-        <p className="muted">{inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}</p>
-        <Link
-          className="btn btn-block"
-          to={inProgressLesson ? `/lessons/${inProgressLesson.lesson_id}` : learnPath(user?.id)}
-        >
-          {inProgressLesson ? t("home.restart") : t("home.learn")}
-        </Link>
+        {nextLesson && nextUnit ? (
+          <>
+            <p data-testid="sidebar-next-lesson">
+              <strong>{nextLesson.title}</strong>
+              <br />
+              <span className="muted">{nextUnit.title}</span>
+            </p>
+            <Link className="btn btn-block" to={`/lessons/${nextLesson.id}`} state={{ courseId: activeCourseId }}>
+              {t("home.continue")}
+            </Link>
+          </>
+        ) : activeCourseId ? (
+          <>
+            <p className="muted">{inProgressLesson ? t("home.restart_hint") : ""}</p>
+            <Link
+              className="btn btn-block"
+              to={inProgressLesson ? `/lessons/${inProgressLesson.lesson_id}` : `/courses/${activeCourseId}`}
+            >
+              {inProgressLesson ? t("home.restart") : t("home.continue")}
+            </Link>
+          </>
+        ) : (
+          <>
+            <p className="muted">{inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}</p>
+            <Link
+              className="btn btn-block"
+              to={inProgressLesson ? `/lessons/${inProgressLesson.lesson_id}` : learnPath(user?.id)}
+            >
+              {inProgressLesson ? t("home.restart") : t("home.learn")}
+            </Link>
+          </>
+        )}
       </div>
 
       <div className="card">

@@ -1619,23 +1619,51 @@ button {
     max-width: 760px;
     font-size: 1.1rem;
   }
-  .app--runner .text-block-list { font-size: 1.25rem; }
+  /* Lesson prompt / option sizes. Note rem here is 17px and the phone
+     prompt is already 1.35rem, so a real step up needs a larger value. */
+  .app--runner {
+    --lesson-prompt-size: 1.75rem;
+    --lesson-option-size: 1.15rem;
+  }
+  .app--runner .text-block-list { font-size: var(--lesson-prompt-size); }
+  .app--runner .text-block-row { font-size: var(--lesson-prompt-size); }
   .app--runner .exercise-option {
     padding: 17px 20px;
-    font-size: 1.1rem;
+    font-size: var(--lesson-option-size);
   }
   .app--runner .word-chip {
     padding: 13px 20px;
-    font-size: 1.1rem;
+    font-size: var(--lesson-option-size);
   }
   .app--runner .matching-item {
     padding: 16px 18px;
-    font-size: 1.1rem;
+    font-size: var(--lesson-option-size);
   }
+  /* Centre quests card duplicates the sidebar's at desktop widths. */
+  .home-quests-card { display: none; }
+  /* Never 3+1: 2x2 in the narrow centre column, 4 across when it fits. */
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* Feedback trigger/panel: inline-start (inside the left rail) so they never
+     cover the right sidebar. */
+  .feedback-widget-trigger,
+  .feedback-widget-panel {
+    inset-inline-end: auto;
+    inset-inline-start: 16px;
+    bottom: 16px;
+  }
+  .feedback-widget-panel { max-height: calc(100vh - 32px); }
   .app--runner .btn { padding: 15px 26px; font-size: 1.05rem; }
 }
 
+@media (min-width: 1280px) {
+  .stat-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
 @media (min-width: 1440px) {
+  .feedback-widget-trigger,
+  .feedback-widget-panel {
+    inset-inline-start: calc(max(0px, (100vw - 1320px) / 2) + 16px);
+  }
   :root {
     --rail-w: 260px;
     --space-4: 36px;

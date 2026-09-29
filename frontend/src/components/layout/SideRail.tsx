@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
 import { learnPath } from "../../lib/activeCourse";
@@ -15,9 +15,9 @@ export function SideRail() {
   const tabs = NAV_TABS.map((tab) => (tab.to === "/courses" ? { ...tab, to: learnPath(user.id) } : tab));
   return (
     <nav className="side-rail" aria-label={t("nav.main_nav")}>
-      <NavLink to="/" className="side-rail-brand">
+      <Link to="/" className="side-rail-brand">
         Auvel
-      </NavLink>
+      </Link>
       <div className="side-rail-links">
         {tabs.map((tab) => (
           <NavLink
