@@ -325,10 +325,12 @@ def find_refresh_token(db:Session,raw_token:str):
     digest=hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
     return db.scalar(select(RefreshToken).where(RefreshToken.token_sha256==digest))
 
-def delete_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
+def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
+    revoked_cutoff = now_value - timedelta(days=7)
     db.execute(delete(RefreshToken).where(
         RefreshToken.user_id==user_id,
-        (RefreshToken.revoked_at.is_not(None)) | (RefreshToken.expires_at<=now_value),
+        (RefreshToken.expires_at<=now_value)
+        | (RefreshToken.revoked_at<=revoked_cutoff),
     ))
 
 def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
@@ -341,7 +343,7 @@ def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
         token.revoked_at=now_value
 
 def auth_response(db:Session,user):
-    delete_stale_refresh_tokens(db,user.id,utc_now())
+    prune_stale_refresh_tokens(db,user.id,utc_now())
     refresh_token=issue_refresh_token(db,user.id)
     db.commit()
     return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
@@ -597,6 +599,7 @@ def build_placement_set(db, course):
             Unit.course_id == course.id,
             Unit.section == UnitSection.reading_writing,
             Unit.track == "core",
+            Exercise.retired_at.is_(None),
             Exercise.type.in_(
                 [ExerciseType.multiple_choice, ExerciseType.matching_pairs]
             ),
@@ -636,7 +639,7 @@ def placement_probe(db, exercise_id, course_id):
     to validate /answer and /result submissions (a non-match is a 400
     exercise_not_in_placement)."""
     e = db.get(Exercise, exercise_id)
-    if not e:
+    if not e or e.retired_at is not None:
         return None
     if exercise_type_value(e.type) not in ("multiple_choice", "matching_pairs"):
         return None
@@ -749,6 +752,8 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     now_value=utc_now()
     if not refresh_token:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    prune_stale_refresh_tokens(db,refresh_token.user_id,now_value)
+    db.commit()
     if refresh_token.revoked_at is not None:
         revoke_all_refresh_tokens(db,refresh_token.user_id,now_value)
         db.commit()
@@ -894,13 +899,13 @@ def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(g
 @router.get("/units/{unit_id}/lessons",response_model=list[LessonOut])
 def lessons(unit_id:str,db:Session=Depends(get_db)):
     if not db.get(Unit,unit_id): fail(404,"unit_not_found","Unit not found")
-    return [{"id":l.id,"title":l.title,"order":l.order,"exercise_count":db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id==l.id))} for l in db.scalars(select(Lesson).where(Lesson.unit_id==unit_id).order_by(Lesson.order))]
+    return [{"id":l.id,"title":l.title,"order":l.order,"exercise_count":db.scalar(select(func.count(Exercise.id)).where(Exercise.lesson_id==l.id,Exercise.retired_at.is_(None)))} for l in db.scalars(select(Lesson).where(Lesson.unit_id==unit_id).order_by(Lesson.order))]
 @router.get("/lessons/{lesson_id}",response_model=LessonDetail)
 def lesson(lesson_id:str,db:Session=Depends(get_db)):
     l=db.get(Lesson,lesson_id)
     if not l: fail(404,"lesson_not_found","Lesson not found")
     teaching=[{"kind":item.kind,"title":item.title or None,"text_blocks":item.content.get("text_blocks",[]),"note":item.content.get("note"),"examples":item.content.get("examples"),**({"glosses":item.content["glosses"]} if "glosses" in item.content else {})} for item in l.teaching_items]
-    return {"id":l.id,"unit_id":l.unit_id,"title":l.title,"teaching":teaching,"exercises":[{"id":e.id,"type":e.type,"order":e.order,"prompt":e.prompt} for e in l.exercises]}
+    return {"id":l.id,"unit_id":l.unit_id,"title":l.title,"teaching":teaching,"exercises":[{"id":e.id,"type":e.type,"order":e.order,"prompt":e.prompt} for e in l.exercises if e.retired_at is None]}
 @router.post("/lessons/{lesson_id}/start",response_model=StartOut)
 def start(lesson_id:str,user=Depends(current_user),db:Session=Depends(get_db)):
     lesson_row=db.get(Lesson,lesson_id)
@@ -1077,7 +1082,10 @@ def complete(
 
     if first_completion:
         exercise_count = db.scalar(
-            select(func.count(Exercise.id)).where(Exercise.lesson_id == lesson_id)
+            select(func.count(Exercise.id)).where(
+                Exercise.lesson_id == lesson_id,
+                Exercise.retired_at.is_(None),
+            )
         ) or 0
         answered_in_session = db.scalar(
             select(func.count(ExerciseAttempt.id))
@@ -1190,9 +1198,11 @@ def reviews(
 ):
     q = (
         select(ReviewItem)
+        .join(Exercise, Exercise.id == ReviewItem.exercise_id)
         .where(
             ReviewItem.user_id == user.id,
             ReviewItem.due_at <= datetime.now(timezone.utc),
+            Exercise.retired_at.is_(None),
         )
         .order_by(ReviewItem.due_at, ReviewItem.id)
     )

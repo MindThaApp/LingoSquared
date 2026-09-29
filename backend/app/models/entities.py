@@ -281,7 +281,10 @@ class Lesson(Base):
 
 class Exercise(Base):
     __tablename__ = "exercises"
-    __table_args__ = (UniqueConstraint("lesson_id", "order"),)
+    __table_args__ = (
+        UniqueConstraint("lesson_id", "order"),
+        Index("ix_exercises_retired_at", "retired_at"),
+    )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     lesson_id: Mapped[str] = mapped_column(
@@ -310,6 +313,9 @@ class Exercise(Base):
     # create-missing-only behavior silently leaving stale rows forever.
     content_key: Mapped[str | None] = mapped_column(
         String(255), nullable=True
+    )
+    retired_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
     )
 
 
