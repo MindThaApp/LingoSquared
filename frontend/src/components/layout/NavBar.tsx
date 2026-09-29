@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
@@ -32,9 +32,9 @@ export function NavBar() {
     <>
       <SideRail />
       <header className="topbar">
-        <NavLink to="/" className="topbar-brand">
+        <Link to="/" className="topbar-brand">
           Auvel
-        </NavLink>
+        </Link>
         <nav className="topbar-links">
           {tabs.map((tab) => (
             <NavLink

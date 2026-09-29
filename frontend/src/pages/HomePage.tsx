@@ -262,7 +262,7 @@ export function HomePage() {
       </div>
 
       {quests.length > 0 && (
-        <div className="card">
+        <div className="card home-quests-card">
           <h3 style={{ marginTop: 0 }}>{t("home.daily_quests")}</h3>
           {allQuestsComplete ? (
             <p className="muted" style={{ margin: 0 }}>{t("home.daily_quests_all_complete")}</p>
@@ -298,7 +298,7 @@ export function HomePage() {
                       )}
                       {t(`quests.${quest.code}.title`, { defaultValue: quest.title })}
                     </span>
-                    <span className="badge">{t("home.quest_xp_reward", { xp: quest.xp_reward })}</span>
+                    <bdi className="badge" dir="ltr">{t("home.quest_xp_reward", { xp: quest.xp_reward })}</bdi>
                   </div>
                   <span className="muted" style={{ fontSize: "0.85rem" }}>
                     {t(`quests.${quest.code}.description`, { defaultValue: quest.description })}
