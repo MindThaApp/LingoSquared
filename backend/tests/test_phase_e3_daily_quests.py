@@ -175,6 +175,16 @@ def test_clear_reviews_completes_only_after_existing_reviews_are_clear(client):
     with SessionLocal() as db:
         review = db.get(UserLexemeSRS, review_id)
         review.due_at = datetime.now(timezone.utc) + timedelta(days=1)
+        review.last_reviewed_at = None
+        db.commit()
+
+    no_review_today = _quests(client, headers)["clear_reviews"]
+    assert no_review_today["completed"] is False
+    assert no_review_today["progress"] == 0
+
+    with SessionLocal() as db:
+        review = db.get(UserLexemeSRS, review_id)
+        review.last_reviewed_at = datetime.now(timezone.utc)
         db.commit()
 
     cleared = _quests(client, headers)["clear_reviews"]
@@ -212,7 +222,10 @@ def test_complete_lesson_reports_complete_and_awards_xp_once(client):
     assert first["target"] == 1
 
     with SessionLocal() as db:
-        xp_after_first = db.get(UserStats, user_id).total_xp
+        stats_after_first = db.get(UserStats, user_id)
+        xp_after_first = stats_after_first.total_xp
+        assert stats_after_first.streak_days == 0
+        assert stats_after_first.last_activity_date is None
         completions_after_first = db.scalar(
             select(func.count(QuestCompletion.id)).where(
                 QuestCompletion.user_id == user_id,

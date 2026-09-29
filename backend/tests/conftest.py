@@ -2,15 +2,15 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://lingosquared:change-me@localhost:5432/lingosquared_test")
 os.environ.setdefault("JWT_SECRET", "test-secret")
-os.environ.setdefault("ADMIN_EMAILS", "admin@example.com")
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import text
+from sqlalchemy import select, text
 from app.core import rate_limit
-from app.db.session import engine
+from app.db.session import engine, SessionLocal
 from app.main import app
 from app.content.seed import main as seed
+from app.models import User
 
 @pytest.fixture(scope="session", autouse=True)
 def database():
@@ -50,4 +50,9 @@ def admin(client):
     response = client.post("/auth/register", json={"email": "admin@example.com", "password": "password123", "display_name": "Admin"})
     if response.status_code == 409:
         response = client.post("/auth/login", json={"email": "admin@example.com", "password": "password123"})
+    assert response.status_code in (200, 201), response.text
+    with SessionLocal() as db:
+        user = db.scalar(select(User).where(User.email == "admin@example.com"))
+        user.is_admin = True
+        db.commit()
     return {"Authorization": f"Bearer {response.json()['access_token']}"}

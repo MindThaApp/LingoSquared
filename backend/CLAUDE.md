@@ -173,9 +173,8 @@ units; German skipped pending its lane's validator fixes), backfills run
 server-side, all practice packs imported. Frontend served by the `web`
 nginx service on port 8011 (`http://192.168.4.4:8011` is the LAN app
 URL); `CORS_ORIGINS` includes it; Google TTS credentials live and
-smoke-verified (real MP3 returned). `ADMIN_EMAILS` is still
-`admin@example.com` — MUST become Ramin's real email before any external
-beta invite (standing pre-beta checklist item). Ongoing syncs:
+smoke-verified (real MP3 returned). Before external beta invites, promote
+Ramin's existing account with the operator command below. Ongoing syncs:
 `scripts/sync_dev_db.sh http://192.168.4.4:8010` with
 `LINGO_BACKFILL_SSH=ramin@192.168.4.4`.
 
@@ -203,11 +202,9 @@ template on a fresh stack. Detail: BUILD_LOG + runbook.
 
 ## Pre-deploy / pre-beta checklist items
 
-- **Confirm `ADMIN_EMAILS` on the live deployment is Ramin's real private
-  email, not the `.env.example` placeholder, and his account is already
-  registered under it.** `register()` grants `is_admin` to whoever
-  registers first with a listed email; no email verification closes that
-  race. Deployment step, not a code bug. Detail: BUILD_LOG security-audit entry.
+- Admin access comes only from the users table's `is_admin` flag; `ADMIN_EMAILS`
+  does not grant privileges during registration. After the account exists, run
+  `cd backend && python -m app.scripts.promote_admin person@example.com`.
 - **The live server's `CORS_ORIGINS` is currently localhost-only** — must
   list the real origin(s) beta users load the frontend from or their
   requests are rejected. A deployment decision, don't guess-and-fix. (An

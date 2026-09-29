@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 
 from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 from app.models import (
@@ -11,7 +12,7 @@ from app.models import (
 )
 from app.services.progress import (
     activity_day_bounds,
-    record_activity,
+    award_xp,
 )
 
 
@@ -60,6 +61,13 @@ def _live_progress(
             UserLexemeSRS.suspended.is_(False),
         )
     ) or 0
+    reviewed_today = db.scalar(
+        select(func.count(UserLexemeSRS.id)).where(
+            UserLexemeSRS.user_id == user_id,
+            UserLexemeSRS.last_reviewed_at >= day_start,
+            UserLexemeSRS.last_reviewed_at < day_end,
+        )
+    ) or 0
 
     lessons_completed = db.scalar(
         select(func.count(LessonProgress.id)).where(
@@ -80,7 +88,7 @@ def _live_progress(
 
     return {
         # A user with no vocabulary has no actionable review quest yet.
-        "clear_reviews": int(lexeme_count > 0 and due_count == 0),
+        "clear_reviews": int(lexeme_count > 0 and reviewed_today > 0 and due_count == 0),
         "complete_lesson": min(lessons_completed, 1),
         "practice_correct_5": min(correct_practice, 5),
     }
@@ -117,19 +125,16 @@ def daily_quests_for(
         live_completed = progress >= target
 
         if live_completed and code not in completed_codes:
-            db.add(
-                QuestCompletion(
-                    user_id=user_id,
-                    quest_code=code,
-                    date=quest_date,
+            inserted_id = db.scalar(
+                pg_insert(QuestCompletion)
+                .values(user_id=user_id, quest_code=code, date=quest_date)
+                .on_conflict_do_nothing(
+                    constraint="uq_quest_completions_user_code_date"
                 )
+                .returning(QuestCompletion.id)
             )
-            record_activity(
-                db,
-                user_id,
-                definition["xp_reward"],
-                user_timezone,
-            )
+            if inserted_id:
+                award_xp(db, user_id, definition["xp_reward"])
             completed_codes.add(code)
 
         completed = code in completed_codes
