@@ -126,7 +126,7 @@ from app.schemas.api import (
     XPOut,
 )
 from app.api.deps import current_user, optional_current_user, lenient_current_user, admin_user, is_admin_user
-from app.services.progress import activity_day_bounds, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none
+from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
 from app.review.grading import (
@@ -408,7 +408,59 @@ def resolve_script(db, language_code):
         return None
     language = db.get(Language, language_code)
     return language.script if language else None
-def exercise_answer(db, user, e, response):
+def stored_exercise_answer(e,attempt):
+    feedback_meta = decode_feedback(e.feedback)
+    language_code = e.prompt.get("answer_language_code")
+    result = attempt.outcome or ("correct" if attempt.correct else "incorrect")
+    snapshot = attempt.feedback_snapshot or {}
+    correct_response = snapshot.get("correct_response", display_correct_response(e.correct_response))
+    feedback = snapshot.get("feedback")
+    if "feedback" not in snapshot:
+        feedback = (
+            "Check the hamza spelling: أ, إ, and آ are written differently from ا."
+            if result == "almost"
+            and isinstance(attempt.response, str)
+            and isinstance(e.correct_response, str)
+            and is_arabic_hamza_only_difference(
+                attempt.response,
+                e.correct_response,
+                language_code=language_code,
+                exercise_type=exercise_type_value(e.type),
+                case_sensitive=bool(feedback_meta.get("case_sensitive")),
+                punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
+            )
+            else select_feedback(feedback_meta, attempt.response, result)
+        )
+    return {
+        "correct": attempt.correct,
+        "result": result,
+        "correct_response": correct_response,
+        "xp_awarded": attempt.xp_awarded,
+        "feedback": feedback,
+    }
+
+
+def exercise_answer(db, user, e, response, client_operation_id=None):
+    # A stable operation id makes network retries return the original result.
+    if client_operation_id:
+        previous = db.scalar(select(ExerciseAttempt).where(
+            ExerciseAttempt.user_id == user.id,
+            ExerciseAttempt.client_operation_id == client_operation_id,
+        ))
+        if previous:
+            return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+
+    # This per-user lock also serializes first-correct grading decisions, so
+    # two different simultaneous submits cannot both receive full first-try XP.
+    stats_for(db, user.id, for_update=True)
+    if client_operation_id:
+        previous = db.scalar(select(ExerciseAttempt).where(
+            ExerciseAttempt.user_id == user.id,
+            ExerciseAttempt.client_operation_id == client_operation_id,
+        ))
+        if previous:
+            return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+
     feedback_meta = decode_feedback(e.feedback)
     language_code = e.prompt.get("answer_language_code")
     script = resolve_script(db, language_code)
@@ -432,18 +484,52 @@ def exercise_answer(db, user, e, response):
         )
         .limit(1)
     )
-    xp = e.xp if correct and previously_correct is None else 1 if correct else 0
+    replay = previously_correct is not None
+    xp = e.xp if correct and not replay else 0
+    if correct and replay:
+        day_start, day_end = activity_day_bounds(user.timezone)
+        correct_today = db.scalar(
+            select(func.count(ExerciseAttempt.id)).where(
+                ExerciseAttempt.user_id == user.id,
+                ExerciseAttempt.correct.is_(True),
+                ExerciseAttempt.created_at >= day_start,
+                ExerciseAttempt.created_at < day_end,
+            )
+        ) or 0
+        # Replay XP is deliberately bounded to the first 20 correct lesson
+        # answers in the user's local day.
+        xp = 1 if correct_today < 20 else 0
 
-    db.add(
-        ExerciseAttempt(
+    attempt = ExerciseAttempt(
             user_id=user.id,
             exercise_id=e.id,
             response=response,
             correct=correct,
             outcome=result,
             xp_awarded=xp,
+            client_operation_id=client_operation_id,
         )
-    )
+    response_snapshot = stored_exercise_answer(e, attempt)
+    attempt.feedback_snapshot = {
+        "correct_response": response_snapshot["correct_response"],
+        "feedback": response_snapshot["feedback"],
+    }
+    try:
+        with db.begin_nested():
+            db.add(attempt)
+            db.flush()
+    except IntegrityError:
+        # The unique operation constraint is the final arbiter if two retry
+        # requests pass the lookup together. The savepoint keeps the session
+        # usable so we can return the already persisted answer.
+        if client_operation_id:
+            previous = db.scalar(select(ExerciseAttempt).where(
+                ExerciseAttempt.user_id == user.id,
+                ExerciseAttempt.client_operation_id == client_operation_id,
+            ))
+            if previous:
+                return stored_exercise_answer(db.get(Exercise, previous.exercise_id) or e, previous)
+        raise
     lp = db.scalar(
         select(LessonProgress).where(
             LessonProgress.user_id == user.id,
@@ -454,7 +540,9 @@ def exercise_answer(db, user, e, response):
         lp = LessonProgress(
             user_id=user.id,
             lesson_id=e.lesson_id,
-            started_at=datetime.now(timezone.utc),
+            # If an answer arrives before the explicit /start call, the
+            # auto-created session begins with this persisted attempt.
+            started_at=attempt.created_at or datetime.now(timezone.utc),
             completed_at=None,
             correct_count=0,
             answer_count=0,
@@ -465,29 +553,12 @@ def exercise_answer(db, user, e, response):
     lp.answer_count += 1
     lp.correct_count += int(correct)
     lp.xp_earned += xp
-    record_activity(db, user.id, xp, user.timezone)
+    if replay:
+        award_xp(db, user.id, xp)
+    else:
+        record_activity(db, user.id, xp, user.timezone)
     db.commit()
-    return {
-        "correct": correct,
-        "result": result,
-        "correct_response": display_correct_response(e.correct_response),
-        "xp_awarded": xp,
-        "feedback": (
-            "Check the hamza spelling: أ, إ, and آ are written differently from ا."
-            if result == "almost"
-            and isinstance(response, str)
-            and isinstance(e.correct_response, str)
-            and is_arabic_hamza_only_difference(
-                response,
-                e.correct_response,
-                language_code=language_code,
-                exercise_type=exercise_type_value(e.type),
-                case_sensitive=bool(feedback_meta.get("case_sensitive")),
-                punctuation_strict=bool(feedback_meta.get("punctuation_strict")),
-            )
-            else select_feedback(feedback_meta, response, result)
-        ),
-    }
+    return stored_exercise_answer(e, attempt)
 
 PLACEMENT_RATE_LIMIT_MESSAGE = "Too many answers submitted too quickly. Please slow down."
 
@@ -862,7 +933,7 @@ def answer(exercise_id:str,body:AnswerIn,user=Depends(current_user),db:Session=D
     lesson_row=db.get(Lesson,e.lesson_id)
     unit=db.get(Unit,lesson_row.unit_id)
     require_speaking_unlocked(db,unit,user)
-    return exercise_answer(db,user,e,body.response)
+    return exercise_answer(db,user,e,body.response,body.client_operation_id)
 # --- Placement test (course-level), 2026-08-05 -------------------------
 # Recognition-only, side-effect-free (MVP): assembled from the course's own
 # existing multiple_choice/matching_pairs exercises, graded by grade(), and
@@ -998,6 +1069,23 @@ def complete(
     first_completion = p.completed_at is None
     session_started_at = p.completed_at or p.started_at
 
+    if first_completion:
+        exercise_count = db.scalar(
+            select(func.count(Exercise.id)).where(Exercise.lesson_id == lesson_id)
+        ) or 0
+        answered_in_session = db.scalar(
+            select(func.count(ExerciseAttempt.id))
+            .join(Exercise, Exercise.id == ExerciseAttempt.exercise_id)
+            .where(
+                ExerciseAttempt.user_id == user.id,
+                Exercise.lesson_id == lesson_id,
+                ExerciseAttempt.created_at >= session_started_at,
+                ExerciseAttempt.created_at < now,
+            )
+        ) or 0
+        if exercise_count > 0 and answered_in_session == 0:
+            fail(409, "lesson_not_attempted", "Answer at least one lesson exercise before completing it")
+
     completion_xp = db.scalar(
         select(func.coalesce(func.sum(ExerciseAttempt.xp_awarded), 0))
         .join(Exercise, Exercise.id == ExerciseAttempt.exercise_id)
@@ -1070,6 +1158,9 @@ def complete(
         .where(Unit.course_id == unit.course_id)
     ) or 1
     skill.mastery = skill.completed_lessons / total
+
+    if first_completion:
+        record_activity(db, user.id, 0, user.timezone)
 
     db.commit()
     return {
@@ -1605,22 +1696,29 @@ def admin_push_notify_streaks_at_risk(
     if not push_service.push_configured():
         fail(503, "push_not_configured", "Web push is not configured on this server")
     rows = db.execute(
-        select(UserStats.user_id, UserStats.streak_days, UserStats.last_activity_date, User.timezone)
+        select(UserStats.user_id, UserStats.streak_days, UserStats.last_activity_date, User.timezone, UserStats.streak_freezes_available)
         .join(User, User.id == UserStats.user_id)
         .where(UserStats.streak_days > 0)
     ).all()
     notified_users = 0
     notifications_sent = 0
-    for uid_, streak_days, last_activity_date, user_tz in rows:
+    for uid_, streak_days, last_activity_date, user_tz, freezes_available in rows:
         day_start, _ = activity_day_bounds(user_tz)
-        if last_activity_date == day_start.date():
+        effective_days = effective_streak_days(
+            streak_days,
+            last_activity_date,
+            user_tz,
+            today=day_start.date(),
+            freezes_available=freezes_available,
+        )
+        if effective_days == 0 or last_activity_date == day_start.date():
             # Already active today in their own timezone — streak is safe.
             continue
         sent = push_service.send_push_to_user(
             db,
             uid_,
             title="Your streak is at risk",
-            body=f"Your {streak_days}-day streak ends tonight — come back before midnight!",
+            body=f"Your {effective_days}-day streak ends tonight — come back before midnight!",
             url="/",
         )
         if sent:
@@ -2093,10 +2191,18 @@ def review_retry(
 
 @router.get("/me/streak",response_model=StreakOut)
 def streak(user=Depends(current_user),db:Session=Depends(get_db)):
-    s=stats_for(db,user.id)
     today=datetime.now(resolve_user_tz(user.timezone)).date()
+    s=db.get(UserStats,user.id)
+    if not s:
+        return {
+            "streak_days":0,
+            "last_activity_date":None,
+            "streak_freezes_available":0,
+            "freeze_used_today":False,
+            "active_today":False,
+        }
     return {
-        "streak_days":s.streak_days,
+        "streak_days":effective_streak_days(s.streak_days,s.last_activity_date,user.timezone,today=today,freezes_available=s.streak_freezes_available),
         "last_activity_date":s.last_activity_date,
         "streak_freezes_available":s.streak_freezes_available,
         "freeze_used_today":s.last_freeze_used_date==today,
@@ -2466,7 +2572,7 @@ def admin_user_summary(db:Session,target:User) -> dict:
         "display_name":target.display_name,
         "created_at":target.created_at,
         "xp":stats.total_xp if stats else 0,
-        "streak":stats.streak_days if stats else 0,
+        "streak":effective_streak_days(stats.streak_days,stats.last_activity_date,target.timezone,freezes_available=stats.streak_freezes_available) if stats else 0,
         "last_activity":stats.last_activity_date if stats else None,
         "enrolled_courses":enrolled,
         "is_admin":is_admin_user(target),
