@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, matchPath, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { NavBar } from "./components/layout/NavBar";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
@@ -41,13 +41,18 @@ const AdminContentPage = lazy(() =>
   import("./pages/AdminContentPage").then((m) => ({ default: m.AdminContentPage })),
 );
 
+// Full-screen runner routes: no tab bar / feedback widget while mid-exercise.
+const RUNNER_PATTERNS = ["/lessons/:lessonId", "/review", "/units/:unitId/checkpoint"];
+
 function App() {
   const { t } = useTranslation();
+  const location = useLocation();
+  const isRunner = RUNNER_PATTERNS.some((path) => matchPath({ path, end: true }, location.pathname));
   return (
     <div className="app">
-      <NavBar />
+      {!isRunner && <NavBar />}
       <main className="app-main">
-        <ErrorBoundary>
+        <ErrorBoundary key={location.pathname}>
           <Suspense
             fallback={<div className="page-loading">{t("common.loading")}</div>}
           >
@@ -183,7 +188,7 @@ function App() {
           </Suspense>
         </ErrorBoundary>
       </main>
-      <FeedbackWidget />
+      {!isRunner && <FeedbackWidget />}
     </div>
   );
 }
