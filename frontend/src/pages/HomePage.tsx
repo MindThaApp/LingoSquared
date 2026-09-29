@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
+import { learnPath } from "../lib/activeCourse";
+import type { LessonProgress } from "@lingo/shared/api/types";
 import { PushPrompt } from "../components/PushPrompt";
 
 export function HomePage() {
@@ -57,9 +59,20 @@ export function HomePage() {
   const quests = questsQuery.data?.quests ?? [];
   const allQuestsComplete = quests.length > 0 && quests.every((q) => q.completed);
 
-  const inProgressLesson = progress?.lesson_progress.find(
-    (lp) => lp.started_at && !lp.completed_at,
-  );
+  // Most recently started unfinished lesson (missing/unparseable started_at
+  // sorts oldest, so a lesson with a real timestamp always wins).
+  const inProgressLesson = (progress?.lesson_progress ?? [])
+    .filter((lp) => lp.started_at && !lp.completed_at)
+    .reduce<LessonProgress | undefined>(
+      (best, lp) => {
+        const ts = Date.parse(lp.started_at ?? "");
+        const bestTs = best ? Date.parse(best.started_at ?? "") : -Infinity;
+        return !best || (Number.isNaN(bestTs) ? -Infinity : bestTs) < (Number.isNaN(ts) ? -Infinity : ts)
+          ? lp
+          : best;
+      },
+      undefined,
+    );
   const lessonsCompleted = progress?.lessons_completed ?? 0;
   const dailyGoal = xp?.daily_goal ?? 20;
   const xpToday = xp?.xp_today ?? 0;
@@ -290,9 +303,9 @@ export function HomePage() {
 
       <div className="card continue-card">
         <div className="continue-info">
-          <h3>{inProgressLesson ? t("home.continue_lesson") : t("home.start_learning")}</h3>
+          <h3>{inProgressLesson ? t("home.restart_title") : t("home.start_learning")}</h3>
           <span className="muted">
-            {inProgressLesson ? t("home.pick_up") : t("home.choose_course")}
+            {inProgressLesson ? t("home.restart_hint") : t("home.choose_course")}
           </span>
         </div>
         {inProgressLesson ? (
@@ -300,15 +313,16 @@ export function HomePage() {
             className={dueReviews ? "btn btn-secondary" : "btn"}
             to={`/lessons/${inProgressLesson.lesson_id}`}
           >
-            {t("home.continue")}
+            {t("home.restart")}
           </Link>
         ) : (
-          <Link className={dueReviews ? "btn btn-secondary" : "btn"} to="/courses">
+          <Link className={dueReviews ? "btn btn-secondary" : "btn"} to={learnPath(user?.id)}>
             {t("home.learn")}
           </Link>
         )}
       </div>
 
+      {user?.is_admin === true && (
       <div className="card continue-card">
         <div className="continue-info">
           <h3>Try the new features</h3>
@@ -320,6 +334,7 @@ export function HomePage() {
           Explore
         </Link>
       </div>
+      )}
 
       {achievements.length > 0 && (
         <div className="card">
