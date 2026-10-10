@@ -8,10 +8,13 @@ import { freshEmail, registerAndLand } from "./helpers";
 // ProfilePage) is at least caught here as "the route didn't 500 or
 // throw", even though full visual/UX correctness still needs a human.
 
-const TABS: Array<{ name: string; urlPattern: RegExp }> = [
+// `runner: true` marks the full-screen runner routes (App.tsx
+// RUNNER_PATTERNS), which deliberately hide the NavBar, so the shell
+// check differs there and the test steps back to the tabbed shell after.
+const TABS: Array<{ name: string; urlPattern: RegExp; runner?: boolean }> = [
   { name: "Home", urlPattern: /\/$/ },
   { name: "Practice", urlPattern: /\/practice$/ },
-  { name: "Review", urlPattern: /\/review$/ },
+  { name: "Review", urlPattern: /\/review$/, runner: true },
   { name: "Profile", urlPattern: /\/profile$/ },
 ];
 
@@ -21,8 +24,15 @@ test("every bottom-tab route renders without a crash", async ({ page }) => {
   for (const tab of TABS) {
     await page.getByRole("link", { name: tab.name }).first().click();
     await page.waitForURL(tab.urlPattern);
-    // A React error boundary / thrown render error would leave the
-    // app shell (nav) gone; confirm it's still there after navigating.
+    // A thrown render error lands on the ErrorBoundary card; the page
+    // itself must have rendered something into <main>.
+    await expect(page.getByRole("main")).not.toBeEmpty();
+    await expect(page.getByText("Something went wrong")).toHaveCount(0);
+    if (tab.runner) {
+      await expect(page.getByRole("link", { name: "Auvel" })).toHaveCount(0);
+      await page.goBack();
+    }
+    // Confirm the app shell (nav) is there on the tabbed routes.
     await expect(page.getByRole("link", { name: "Auvel" })).toBeVisible();
   }
 });
