@@ -87,6 +87,13 @@ class Settings(BaseSettings):
     vapid_private_key: str = ""
     vapid_subject: str = "mailto:admin@example.com"
     enable_push_scheduler: bool = False
+    # Master switch for Google/Apple sign-in. Off by default: /auth/social
+    # and /auth/social/link answer 503 until it is true AND the provider's
+    # audience list below is non-empty. Apple in particular needs a real
+    # domain with HTTPS (see docs/SOCIAL_SIGN_IN.md).
+    social_sign_in_enabled: bool = False
+    # Lifetime of a server-issued sign-in nonce (POST /auth/social/nonce).
+    social_nonce_ttl_seconds: int = 600
     google_oauth_client_ids: str = ""
     apple_audience_ids: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

@@ -3,6 +3,9 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { SessionUnavailableScreen } from "../components/layout/ProtectedRoute";
+import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { hasAnySocialProvider } from "../lib/socialSignIn";
+import type { SocialCredential } from "@lingo/shared/api/types";
 import { redirectFromState } from "../lib/postLoginRedirect";
 import { ApiError } from "@lingo/shared/api/client";
 import {
@@ -12,7 +15,7 @@ import {
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const { login, continueAsGuest, status } = useAuth();
+  const { login, continueAsGuest, socialSignIn, status } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const redirectTo = redirectFromState(location.state);
@@ -47,6 +50,11 @@ export function LoginPage() {
     } finally {
       setSubmitting(false);
     }
+  }
+
+  async function handleSocial(credential: SocialCredential) {
+    await socialSignIn(credential);
+    navigate(redirectTo, { replace: true });
   }
 
   async function handleGuest(e: FormEvent) {
@@ -127,6 +135,14 @@ export function LoginPage() {
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
         </form>
+        {hasAnySocialProvider() && (
+          <>
+            <p className="muted" style={{ textAlign: "center", margin: "16px 0 12px" }}>
+              {t("social.or")}
+            </p>
+            <SocialSignInButtons onCredential={handleSocial} />
+          </>
+        )}
       </div>
 
       <div className="card" style={{ marginTop: 16 }}>

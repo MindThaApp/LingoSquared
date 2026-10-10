@@ -3,16 +3,24 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
 import { useAuth } from "../auth/AuthContext";
 import { ApiError } from "@lingo/shared/api/client";
+import type { SocialCredential } from "@lingo/shared/api/types";
+import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function RegisterPage() {
   const { t } = useTranslation();
-  const { register, status } = useAuth();
+  const { register, socialSignIn, status } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  async function handleSocial(credential: SocialCredential) {
+    await socialSignIn(credential);
+    navigate("/");
+  }
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -90,6 +98,14 @@ export function RegisterPage() {
             />
           </p>
         </form>
+        {hasAnySocialProvider() && (
+          <>
+            <p className="muted" style={{ textAlign: "center", margin: "16px 0 12px" }}>
+              {t("social.or")}
+            </p>
+            <SocialSignInButtons onCredential={handleSocial} />
+          </>
+        )}
       </div>
       <p className="muted" style={{ textAlign: "center", marginTop: 16 }}>
         {t("register.has_account")} <Link to="/login">{t("register.login_link")}</Link>

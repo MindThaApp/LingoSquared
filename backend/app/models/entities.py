@@ -112,6 +112,8 @@ class UserIdentity(Base):
             name="ck_user_identities_provider",
         ),
         Index("ix_user_identities_user_id", "user_id"),
+        # One sign-in per provider per account (migration 0033).
+        Index("uq_user_identities_user_provider", "user_id", "provider", unique=True),
     )
 
     user_id: Mapped[str] = mapped_column(
@@ -122,6 +124,21 @@ class UserIdentity(Base):
     provider_subject: Mapped[str] = mapped_column(String(255), primary_key=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     user: Mapped[User] = relationship(back_populates="identities")
+
+
+class SocialLoginNonce(Base):
+    """A nonce the server issued for one Google/Apple sign-in attempt.
+
+    Only the SHA-256 digest of the raw nonce is stored (the same digest the
+    provider embeds in its ID token). A row is deleted when a sign-in
+    consumes it, so a captured token-plus-nonce cannot be replayed; expired
+    rows are pruned whenever new nonces are issued.
+    """
+
+    __tablename__ = "social_login_nonces"
+
+    nonce_sha256: Mapped[str] = mapped_column(String(64), primary_key=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
 
 
 class RefreshToken(Base):
