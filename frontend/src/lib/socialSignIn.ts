@@ -1,3 +1,4 @@
+import { AuthApi } from "@lingo/shared/api/endpoints";
 import type { SocialCredential } from "@lingo/shared/api/types";
 
 // Google and Apple sign-in for the web app. Everything here is OFF unless
@@ -51,12 +52,22 @@ async function sha256Hex(value: string): Promise<string> {
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-// The provider embeds the HASHED nonce in its ID token; the raw value goes
-// to our backend, which checks the two match. That ties the token to this
-// sign-in attempt, so a token lifted from elsewhere cannot be replayed.
-export async function createNonce(): Promise<{ raw: string; hashed: string }> {
-  const raw = randomUrlSafe();
-  return { raw, hashed: await sha256Hex(raw) };
+export interface SignInNonce {
+  raw: string;
+  hashed: string;
+  expiresInSeconds: number;
+}
+
+// The backend issues the nonce (POST /auth/social/nonce) and accepts it
+// once, for a few minutes. The provider embeds the HASHED nonce in its ID
+// token; the raw value goes back to our backend with the token, which
+// checks the two match and uses the nonce up, so a captured sign-in
+// request cannot be replayed.
+export async function createNonce(
+  issue: () => Promise<{ nonce: string; expires_in: number }> = AuthApi.socialNonce,
+): Promise<SignInNonce> {
+  const issued = await issue();
+  return { raw: issued.nonce, hashed: await sha256Hex(issued.nonce), expiresInSeconds: issued.expires_in };
 }
 
 const scriptLoads = new Map<string, Promise<void>>();
@@ -101,7 +112,10 @@ function googleIdApi(): GoogleIdApi | null {
 
 // Renders Google's own "Continue with Google" button into `parent` (Google's
 // branding rules require its button, not a look-alike). Each successful
-// sign-in calls onCredential; a fresh nonce is prepared for the next one.
+// sign-in calls onCredential; a fresh nonce is prepared for the next one,
+// and the current one is replaced shortly before it expires, since the
+// button may sit on screen for a while before it is clicked. Returns a
+// function that stops that renewal.
 export async function renderGoogleButton(
   parent: HTMLElement,
   clientId: string,
@@ -110,13 +124,22 @@ export async function renderGoogleButton(
     onCredential: (credential: SocialCredential) => void;
     onError: (error: Error) => void;
   },
-): Promise<void> {
+): Promise<() => void> {
   await loadScript(GOOGLE_SCRIPT);
   const api = googleIdApi();
   if (!api) throw new Error("Google sign-in is unavailable");
 
+  let renewTimer: ReturnType<typeof setTimeout> | undefined;
+  let stopped = false;
   const arm = async () => {
+    clearTimeout(renewTimer);
+    if (stopped) return;
     const nonce = await createNonce();
+    if (stopped) return;
+    renewTimer = setTimeout(
+      () => void arm().catch(options.onError),
+      Math.max(30, nonce.expiresInSeconds - 60) * 1000,
+    );
     api.initialize({
       client_id: clientId,
       nonce: nonce.hashed,
@@ -144,6 +167,10 @@ export async function renderGoogleButton(
     width: Math.min(400, Math.max(200, parent.clientWidth || 320)),
     locale: options.locale,
   });
+  return () => {
+    stopped = true;
+    clearTimeout(renewTimer);
+  };
 }
 
 // ---- Sign in with Apple JS ----------------------------------------------
