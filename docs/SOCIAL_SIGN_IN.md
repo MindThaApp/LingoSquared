@@ -11,11 +11,12 @@ work without one (see [Apple needs a real domain](#apple-needs-a-real-domain-wit
 |---|---|
 | `POST /auth/social`: sign in or sign up with a Google/Apple ID token | `backend/app/api/router.py` |
 | `POST /auth/social/nonce`: single-use, short-lived nonce for the next sign-in | same |
-| `POST /auth/social/link`: attach Google/Apple to the signed-in account; converts a guest in place, keeping all progress; other accounts confirm their password | same |
+| `GET /auth/social/config`: which providers the backend accepts right now (none while the switch is off) | same |
+| `POST /auth/social/link`: attach Google/Apple to the signed-in account; converts a guest in place, keeping all progress; other accounts confirm their password or sign in again with a provider already linked | same |
 | `POST /auth/social/unlink`: remove a linked sign-in (never the last way in) | same |
 | ID-token verification against the provider's JWKS (signature, `iss`, `aud`, `azp`, `exp`, `iat`, `nonce`) | `backend/app/services/social_auth.py` |
 | `user_identities` table (migration 0023) + one identity per provider per account (0033) + issued nonces (0034) | `backend/alembic/versions/` |
-| "Continue with Google" / "Continue with Apple" on Log in and Register, a "Keep your progress" card for guests on Profile, and a "Sign-in methods" card (connect/disconnect, with the current password) for other accounts | `frontend/src/components/SocialSignInButtons.tsx`, `frontend/src/components/ConnectedSignIns.tsx`, `frontend/src/lib/socialSignIn.ts` |
+| "Continue with Google" / "Continue with Apple" on Log in and Register, a "Keep your progress" card for guests on Profile, and a "Sign-in methods" card (connect/disconnect, with the current password, or for an account without one, a fresh sign-in with a linked provider first) for other accounts | `frontend/src/components/SocialSignInButtons.tsx`, `frontend/src/components/ConnectedSignIns.tsx`, `frontend/src/lib/socialSignIn.ts`, `frontend/src/lib/useSocialConfig.ts` |
 
 API details are in `docs/CONTRACT.md` (Auth section).
 
@@ -38,24 +39,27 @@ Account rules:
 
 - An existing identity → that account.
 - Otherwise, an email the provider vouches for that matches an existing
-  account WITHOUT a password → the identity is linked to that account.
-  Apple's verified emails (including private-relay addresses) count. Google's
-  count only for gmail.com/googlemail.com or when the token's `hd`
-  (Workspace domain) matches, which is Google's own guidance.
-- If that account has a password, nothing is linked: the answer is
-  `409 account_exists` ("log in with your password, then connect from your
-  profile"). Registration does not verify email addresses, so otherwise
-  anyone could register a victim's address first and later share the
-  victim's account once the victim continues with Google or Apple. The
-  same rule covers an Apple address that has changed hands since the Apple
-  ID was created.
+  account → `409 account_exists`, and nothing is linked. This holds whether
+  or not that account has a password and whichever provider created it.
+  Registration does not verify email addresses, so otherwise anyone could
+  register a victim's address first and later share the victim's account
+  once the victim continues with Google or Apple. And an address one
+  provider vouches for may have changed hands at the other: an Apple ID
+  keeps the address it was set up with, so an Apple sign-in carrying
+  x@gmail.com does not prove control of the Google account x@gmail.com.
+  (Apple's verified emails count as vouched for; Google's only for
+  gmail.com/googlemail.com or when the token's `hd` Workspace domain
+  matches, which is Google's own guidance.)
 - Otherwise a new passwordless account is created.
 - Accounts are never merged. If a guest tries to link an identity or email
   that belongs to another account, they get a clear 409 instead.
-- Linking from inside an account needs the current password unless the
-  account is a guest. A passwordless account cannot add another sign-in from
-  its profile; signing in with the second provider under the same vouched-for
-  email links it instead.
+- A second provider is connected only from inside the account (Profile →
+  Sign-in methods). A guest needs nothing more. An account with a password
+  confirms it; a mistyped password does not use up the provider sign-in, so
+  the user can correct it and try again without reopening the popup. An
+  account without a password first signs in again with a provider that is
+  already linked (a fresh ID token with its own nonce), then picks the
+  provider to add.
 
 ## Switches and settings
 
@@ -66,9 +70,14 @@ provider off.
 
 | Variable | Value |
 |---|---|
-| `SOCIAL_SIGN_IN_ENABLED` | `true` to turn the endpoints on (default `false` → `503 social_login_unavailable`) |
+| `SOCIAL_SIGN_IN_ENABLED` | `true` to turn the endpoints on (default `false` → `503 social_login_unavailable`, and `GET /auth/social/config` lists no providers, so the web app shows no buttons) |
 | `GOOGLE_OAUTH_CLIENT_IDS` | Comma-separated Google client IDs whose tokens are accepted: the web client, plus any iOS/Android clients later |
 | `APPLE_AUDIENCE_IDS` | Comma-separated Apple audiences: the **Services ID** for the web, plus the iOS **bundle ID** later |
+| `SOCIAL_NONCE_RATE_LIMIT_MAX` | Optional. Sign-in nonces per minute per IP (default 60). Raise it if many users share one address (a school or office network) |
+
+Expired nonces are deleted whenever a new one is issued, and by the regular
+token prune (`python -m app.scripts.prune_refresh_tokens`, for example from a
+daily cron job).
 
 **Frontend** (`frontend/.env` at build time; documented in `frontend/.env.example`)
 
@@ -77,6 +86,10 @@ provider off.
 | `VITE_GOOGLE_CLIENT_ID` | The Google **web** client ID. Unset = no Google button |
 | `VITE_APPLE_CLIENT_ID` | The Apple **Services ID**, e.g. `com.yourdomain.web`. Unset = no Apple button |
 | `VITE_APPLE_REDIRECT_URI` | The Return URL registered for that Services ID, e.g. `https://app.yourdomain.com/auth/apple/callback`. Unset = no Apple button |
+
+A button also stays hidden while the backend does not accept that provider
+(the app asks `GET /auth/social/config` on load), so turning the backend
+switch off hides the buttons without a rebuild.
 
 These are public identifiers, not secrets. They end up in the JavaScript
 bundle anyway. Nothing in the current flow needs a client secret. The Apple
@@ -206,10 +219,13 @@ Services ID.
    - Signing in on a second browser lands in that converted account.
 5. Repeat for the other provider.
 
-To switch a provider off again, empty its `VITE_*` value (the button
-disappears) and/or set `SOCIAL_SIGN_IN_ENABLED=false` (the backend refuses
-with 503). Existing accounts keep their data, and password login is
-unaffected.
+To switch a provider off again, set `SOCIAL_SIGN_IN_ENABLED=false` (the
+backend refuses with 503 and the buttons disappear on the next page load) or
+empty that provider's backend audience variable; emptying its `VITE_*` value
+and rebuilding also removes the button. Existing accounts keep their data,
+and password login is unaffected. Note that accounts created through Google
+or Apple have no password, so while the switch is off their owners cannot
+sign in.
 
 ## Not done yet
 
@@ -219,10 +235,7 @@ unaffected.
   Sign in with Apple (App Store guideline 4.8).
 - Apple token revocation on account deletion (needs the key from step 4).
 - A "set a password" flow for passwordless accounts.
-- Email verification at registration. Until it exists, password accounts
-  are never linked by email automatically.
-- An Apple address that is not a private-relay address can still be linked
-  automatically into a passwordless account with the same address (for
-  example one created through Google Workspace). Closing that would mean
-  trusting only private-relay addresses from Apple.
+- Email verification at registration.
+- Guests connect a provider without any further proof (the session is all a
+  guest has). Whether that should change is an open decision.
 - fa/prs translations of the new strings (they fall back to English).
