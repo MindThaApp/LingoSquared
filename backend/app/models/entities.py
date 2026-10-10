@@ -154,8 +154,13 @@ class RefreshToken(Base):
     replaced_by_id: Mapped[str | None] = mapped_column(
         ForeignKey("refresh_tokens.id", ondelete="SET NULL"),
         nullable=True,
+        # ON DELETE SET NULL looks up referencing rows for every pruned
+        # token; without an index each lookup scans the table.
+        index=True,
     )
     successor_sealed: Mapped[str | None] = mapped_column(Text, nullable=True)
+    # How many retries inside the grace window this rotation has answered.
+    grace_replays: Mapped[int] = mapped_column(Integer, nullable=False, default=0, server_default="0")
 
 
 class LearningPath(Base):
