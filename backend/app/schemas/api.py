@@ -45,7 +45,13 @@ class MeOut(UserOut): created_at:datetime; identities:list[UserIdentityOut]=Fiel
 # names (e.g. "America/Argentina/ComodRivadavia", under 40 chars).
 class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max_length=128); display_name:str|None=Field(default=None,max_length=100); timezone:str|None=Field(default=None,max_length=64)
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
-class SocialLoginIn(BaseModel): provider:Literal["google","apple"]; id_token:str=Field(min_length=1,max_length=8192); display_name:str|None=Field(default=None,max_length=100)
+class SocialLoginIn(BaseModel):
+    provider:Literal["google","apple"]
+    id_token:str=Field(min_length=1,max_length=8192)
+    display_name:str|None=Field(default=None,max_length=100)
+    # Raw nonce whose SHA-256 hex digest the client passed to the provider;
+    # required for Apple, checked for Google when present.
+    nonce:str|None=Field(default=None,min_length=16,max_length=256)
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel):
     refresh_token:str=Field(min_length=1,max_length=512)

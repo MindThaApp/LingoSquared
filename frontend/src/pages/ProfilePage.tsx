@@ -10,10 +10,12 @@ import { VoiceSettings } from "../components/VoiceSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
+import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function ProfilePage() {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, linkSocial } = useAuth();
   const navigate = useNavigate();
   const isGuest = isGuestUser(user);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -110,6 +112,14 @@ export function ProfilePage() {
       {isGuest && (
         <div className="form-error" style={{ background: "var(--surface-2)", color: "var(--text-soft)" }}>
           {t("profile.guest_notice")}
+        </div>
+      )}
+
+      {isGuest && hasAnySocialProvider() && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <h2 style={{ marginTop: 0 }}>{t("social.keep_progress_title")}</h2>
+          <p className="muted">{t("social.keep_progress_body")}</p>
+          <SocialSignInButtons onCredential={linkSocial} />
         </div>
       )}
 

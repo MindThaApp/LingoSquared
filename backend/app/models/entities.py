@@ -112,6 +112,8 @@ class UserIdentity(Base):
             name="ck_user_identities_provider",
         ),
         Index("ix_user_identities_user_id", "user_id"),
+        # One sign-in per provider per account (migration 0033).
+        Index("uq_user_identities_user_provider", "user_id", "provider", unique=True),
     )
 
     user_id: Mapped[str] = mapped_column(

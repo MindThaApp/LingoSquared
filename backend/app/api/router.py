@@ -402,7 +402,28 @@ def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_
     return open_successor_token(presented_raw,token.token_sha256,token.successor_sealed)
 def social_audiences(provider:str) -> set[str]:
     settings=get_settings()
+    if not settings.social_sign_in_enabled:
+        return set()
     return settings.google_oauth_client_id_set if provider=="google" else settings.apple_audience_id_set
+def verified_social_claims(body:SocialLoginIn) -> dict:
+    audiences=social_audiences(body.provider)
+    if not audiences:
+        fail(503,"social_login_unavailable",f"{body.provider.title()} social login is not configured")
+    try:
+        return social_auth.verify_id_token(body.provider,body.id_token,audiences,body.nonce)
+    except social_auth.SocialTokenError:
+        fail(401,"invalid_credentials","Invalid social sign-in token")
+def social_email(claims:dict) -> str|None:
+    raw_email=claims.get("email")
+    return raw_email.strip().lower() if isinstance(raw_email,str) and raw_email.strip() else None
+# Guest accounts are ordinary password accounts the web client registers
+# with a generated address and password that are never shown to the user
+# (frontend AuthContext.continueAsGuest / isGuestUser).
+GUEST_EMAIL_RE=re.compile(r"^guest-[A-Za-z0-9-]+@example\.com$")
+def is_guest_account(user:User) -> bool:
+    return bool(user.email and GUEST_EMAIL_RE.fullmatch(user.email))
+def user_provider_identity(db:Session,user_id:str,provider:str):
+    return db.scalar(select(UserIdentity).where(UserIdentity.user_id==user_id,UserIdentity.provider==provider))
 def social_display_name(body:SocialLoginIn,claims:dict,email:str|None) -> str:
     name=body.display_name or claims.get("name")
     if isinstance(name,str) and name.strip():
@@ -423,17 +444,19 @@ def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
             return user
         fail(401,"invalid_credentials","Invalid social sign-in token")
 
-    raw_email=claims.get("email")
-    email=raw_email.strip().lower() if isinstance(raw_email,str) and raw_email.strip() else None
-    email_verified=social_auth.email_is_verified(provider,claims)
-    if email and email_verified:
-        existing=db.scalar(select(User).where(User.email==email))
-        if existing:
-            db.add(UserIdentity(user_id=existing.id,provider=provider,provider_subject=subject))
-            return existing
-
+    email=social_email(claims)
+    email_trusted=bool(email) and social_auth.email_is_trusted_for_linking(provider,claims,email)
     existing_email_user=db.scalar(select(User).where(User.email==email)) if email else None
-    user_email=email if email and not existing_email_user else synthetic_social_email(provider,subject)
+    if existing_email_user and email_trusted:
+        # Never attach a second account of the same provider to one user.
+        if user_provider_identity(db,existing_email_user.id,provider):
+            fail(409,"provider_already_linked",f"This account is already linked to a different {provider.title()} sign-in")
+        db.add(UserIdentity(user_id=existing_email_user.id,provider=provider,provider_subject=subject))
+        return existing_email_user
+
+    # An address the provider does not vouch for is never stored as the
+    # account email: it would let that sign-in claim the address.
+    user_email=email if email and email_trusted and not existing_email_user else synthetic_social_email(provider,subject)
     user=User(
         email=user_email,
         password_hash=None,
@@ -805,17 +828,54 @@ def login(body:LoginIn,request:Request,db:Session=Depends(get_db)):
     if valid_tz and valid_tz!=user.timezone: user.timezone=valid_tz
     return auth_response(db,user)
 @router.post("/auth/social",response_model=AuthOut)
-def social_login(body:SocialLoginIn,db:Session=Depends(get_db)):
-    audiences=social_audiences(body.provider)
-    if not audiences:
-        fail(503,"social_login_unavailable",f"{body.provider.title()} social login is not configured")
-    try:
-        claims=social_auth.verify_id_token(body.provider,body.id_token,audiences)
-    except social_auth.SocialTokenError:
-        fail(401,"invalid_credentials","Invalid social sign-in token")
+def social_login(body:SocialLoginIn,request:Request,db:Session=Depends(get_db)):
+    enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
+    claims=verified_social_claims(body)
     user=resolve_social_user(db,body,claims)
     if not user.is_active: fail(401,"inactive_user","This account is inactive")
     return auth_response(db,user)
+@router.post("/auth/social/link",response_model=MeOut)
+def link_social(body:SocialLoginIn,request:Request,user=Depends(current_user),db:Session=Depends(get_db)):
+    """Attach a Google/Apple sign-in to the signed-in account.
+
+    For a guest account this is the upgrade path: the account keeps its id,
+    and with it every bit of progress, while its generated email and
+    never-shown password are replaced by the provider identity (and the
+    provider's email when the provider vouches for it and no other account
+    uses it). Accounts are never merged: an identity or email that already
+    belongs to another account is a 409.
+    """
+    enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
+    claims=verified_social_claims(body)
+    provider=body.provider
+    subject=claims["sub"]
+    identity=db.get(UserIdentity,(provider,subject))
+    if identity and identity.user_id!=user.id:
+        fail(409,"identity_in_use",f"This {provider.title()} sign-in already belongs to another account")
+    if not identity:
+        if user_provider_identity(db,user.id,provider):
+            fail(409,"provider_already_linked",f"This account is already linked to a different {provider.title()} sign-in")
+        if is_guest_account(user):
+            email=social_email(claims)
+            email_trusted=bool(email) and social_auth.email_is_trusted_for_linking(provider,claims,email)
+            if email and email_trusted:
+                owner=db.scalar(select(User).where(User.email==email))
+                if owner and owner.id!=user.id:
+                    fail(409,"email_exists","An account with this email already exists. Sign in to that account instead.")
+                user.email=email
+            else:
+                user.email=synthetic_social_email(provider,subject)
+            user.password_hash=None
+            if body.display_name and body.display_name.strip():
+                user.display_name=body.display_name.strip()[:100]
+        db.add(UserIdentity(user_id=user.id,provider=provider,provider_subject=subject))
+        try:
+            db.commit()
+        except IntegrityError:
+            db.rollback()
+            fail(409,"identity_in_use",f"This {provider.title()} sign-in already belongs to another account")
+        db.refresh(user)
+    return me_payload(db,user)
 @router.post("/auth/refresh",response_model=RefreshOut)
 def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     # Rate-limit before lookup, and count invalid-token probes too (same
@@ -860,6 +920,8 @@ def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
     return Response(status_code=204)
 @router.get("/auth/me",response_model=MeOut)
 def me(user=Depends(current_user),db:Session=Depends(get_db)):
+    return me_payload(db,user)
+def me_payload(db:Session,user:User):
     identities=list(db.scalars(select(UserIdentity).where(UserIdentity.user_id==user.id).order_by(UserIdentity.created_at)))
     return {
         "id":user.id,
