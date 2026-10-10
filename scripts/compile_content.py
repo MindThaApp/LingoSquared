@@ -421,6 +421,19 @@ def validate_teaching_kinds(realization: dict[str, Any], report: Report):
             ):
                 if not isinstance(item, dict):
                     continue
+                # compile_teaching_item() emits `target` as text_blocks[0];
+                # the import schema requires a single text-block object there
+                # (a list of blocks is a 422 at import time).
+                target = item.get("target", _MISSING)
+                if target is not _MISSING and not isinstance(target, dict):
+                    report.error(
+                        f"realization.units[{unit_index}]"
+                        f".lessons[{lesson_index}].teaching[{teaching_index}]"
+                        ".target",
+                        "teaching card target must be a single text block "
+                        "object, not a list; put multiple forms in one text "
+                        "(e.g. \"a / b\") or split the card",
+                    )
                 location = (
                     f"realization.units[{unit_index}]"
                     f".lessons[{lesson_index}].teaching[{teaching_index}]"
@@ -822,12 +835,21 @@ def validate_overlay_references(
                 "references an unknown realization lesson",
             )
 
-    for key in overlay.get("teaching", {}):
+    for key, item_overlay in (overlay.get("teaching") or {}).items():
         if key not in teaching_keys:
             report.error(
                 f"overlay.teaching.{key}",
                 "references an unknown realization teaching item",
             )
+        # The gloss becomes text_blocks[1].text, which must be a string.
+        if isinstance(item_overlay, dict):
+            gloss = item_overlay.get("gloss")
+            if gloss is not None and not isinstance(gloss, str):
+                report.error(
+                    f"overlay.teaching.{key}.gloss",
+                    "gloss must be a string, not "
+                    f"{type(gloss).__name__}",
+                )
 
     for key in overlay.get("exercises", {}):
         if key not in exercise_keys:
