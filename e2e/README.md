@@ -16,9 +16,13 @@ regression pass.
    different terminal) already brought it up correctly. It will not
    start Docker, run migrations, or import content itself.
 2. `frontend/.env`'s `VITE_API_BASE_URL` points at that backend.
-3. The seeded en-fa "Farsi Foundations" (A1) course exists -- several
-   specs navigate to it by name. If the seed data changes shape, update
-   `tests/helpers.ts`'s `goToFarsiFoundationsUnits` accordingly.
+3. The demo courses exist -- several specs navigate to "Farsi Foundations"
+   and "Dari Foundations" by name. Since 2026-07-22 the seed CLI no longer
+   creates them by default, so seed them explicitly on the test stack:
+   `cd ../backend && docker compose exec api python -m app.content.seed --with-demo-courses`
+   (or `LINGO_SEED_DEMO_COURSES=1`). Never do this on a real deployment.
+   If the seed data changes shape, update `tests/helpers.ts`'s
+   `goToFarsiFoundationsUnits` accordingly.
 4. The target backend's registration rate limit is raised. This suite
    registers a fresh account per test, serially, from one IP --
    `register_rate_limit_max` (`backend/app/core/config.py`, default 5)
