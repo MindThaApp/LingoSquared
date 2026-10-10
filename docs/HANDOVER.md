@@ -52,9 +52,10 @@ pwd && git log --oneline -1 2>/dev/null
 ## Step 2. Migrate out of iCloud (clone — never copy the folder)
 
 ```bash
-mkdir -p ~/dev
-git clone https://github.com/ramin-azizi/LingoSquared.git ~/dev/LingoSquared
-cd ~/dev/LingoSquared && git log --oneline -1   # newest commit dated 2026-07-22 or later
+REPO="$HOME/<projects-dir>/LingoSquared"   # any path WITHOUT spaces; used as $REPO below
+mkdir -p "$(dirname "$REPO")"
+git clone https://github.com/ramin-azizi/LingoSquared.git "$REPO"
+cd "$REPO" && git log --oneline -1   # newest commit dated 2026-07-22 or later
 ```
 
 **Why cloning, not copying** — hosting this git repo in iCloud caused four
@@ -69,7 +70,7 @@ real failures, and copying the folder would carry them across:
 3. **`.content-venv` broke** — a virtualenv hardcodes absolute interpreter
    paths, so one shared across machines is broken by design.
 4. **The space in `Mobile Documents` silently turned the entire dev-DB sync
-   into a no-op** (details in Part 3). `~/dev/LingoSquared` has no space,
+   into a no-op** (details in Part 3). A checkout path with no space
    which retires that whole bug class and matches the path the deploy
    runbook originally assumed.
 
@@ -104,8 +105,8 @@ so **this Mac already has them.** Just copy them into the new location:
 
 ```bash
 OLD=~/Library/Mobile\ Documents/com~apple~CloudDocs/dev/LingoSquared
-cp "$OLD/backend/.env"  ~/dev/LingoSquared/backend/.env
-cp "$OLD/frontend/.env" ~/dev/LingoSquared/frontend/.env
+cp "$OLD/backend/.env"  "$REPO/backend/.env"
+cp "$OLD/frontend/.env" "$REPO/frontend/.env"
 ```
 
 If they are missing or zero-length, iCloud has not finished materializing —
@@ -113,7 +114,7 @@ wait for it, then retry. Do NOT ask Ramin for them until you have tried this.
 
 | File | Contains |
 |---|---|
-| `backend/.env` | DB URL + password, JWT secret, `ADMIN_EMAILS`, `CORS_ORIGINS`, Google Cloud TTS service-account JSON |
+| `backend/.env` | DB URL + password, JWT secret, `ADMIN_EMAILS` (legacy, not read by the backend), `CORS_ORIGINS`, Google Cloud TTS service-account JSON |
 | `frontend/.env` | `VITE_API_BASE_URL` |
 
 ### 4b. ASK RAMIN for these two — they are NOT in iCloud
@@ -159,7 +160,7 @@ find . -name ".env*" -not -path "./node_modules/*" -not -path "*/node_modules/*"
 Then:
 
 ```bash
-chmod 600 ~/.lingo_admin_pw ~/.ssh/id_ed25519 ~/dev/LingoSquared/backend/.env
+chmod 600 ~/.lingo_admin_pw ~/.ssh/id_ed25519 "$REPO/backend/.env"
 chmod 700 ~/.ssh
 ```
 
@@ -177,7 +178,7 @@ Not in git and NOT worth copying (regenerable): `.content-venv/`,
 ## Step 5. Build the environment
 
 ```bash
-cd ~/dev/LingoSquared
+cd "$REPO"
 
 /usr/bin/python3 -m venv .content-venv
 .content-venv/bin/pip install pyyaml
@@ -188,13 +189,20 @@ npm install          # MUST be at the repo root — npm workspaces.
                      # "verify" against the wrong code.
 
 colima start
-cd backend && docker compose up -d && cd ..
+cd backend && docker compose up -d
+docker compose run --rm api alembic upgrade head
+# Bootstrap the reference rows (16 languages + achievements). Without this
+# every content import in step 7 fails with 422 "language is unsupported".
+# On a dev/test box add --with-demo-courses (backend tests and e2e expect the
+# 4 demo courses); NEVER on the live server.
+docker compose exec api python -m app.content.seed --with-demo-courses
+cd ..
 ```
 
 ## Step 6. Verify — do not start feature work until this passes
 
 ```bash
-cd ~/dev/LingoSquared
+cd "$REPO"
 docker ps --format '{{.Names}}\t{{.Status}}'
 curl -s -o /dev/null -w 'api:%{http_code}\n' http://localhost:8020/health   # expect 200
 ./scripts/verify.sh          # content compiler + backend pytest + frontend build
@@ -215,6 +223,8 @@ Must end `content: pass / backend: pass / frontend: pass`.
 
 ## Step 7. Populate the dev DB (~25 min for the content phase)
 
+The sync logs in as an admin. Admin rights come only from the `users.is_admin` DB column. `ADMIN_EMAILS` is not read by the backend and registering never grants admin. Register the account, then run `docker compose exec api python -m app.scripts.promote_admin <email>` from `backend/` (or an existing admin calls `POST /admin/users/{user_id}/admin`).
+
 ```bash
 LINGO_ADMIN_EMAIL=admin@example.com \
 LINGO_ADMIN_PASSWORD_FILE="$HOME/.lingo_admin_pw" \
@@ -233,7 +243,8 @@ cd backend && docker compose exec -T db psql -U lingosquared -d lingosquared -t 
       union all select 'templates='||count(*) from practice_templates;"
 ```
 
-Expect roughly **53 courses, ~18.9k lexemes, ~3.6k templates**. Zero
+Expect roughly **71 courses (75 with the demo courses), ~16.9k lexemes, ~7.7k
+templates** (as of 2026-10-10; the counts grow with content). Zero
 `COMPILE FAILED` lines in the output. A sync can print per-course
 `COMPILE FAILED … fix its validation errors separately` and be a pure
 path/quoting bug rather than a content problem — that exact thing silently
@@ -249,7 +260,7 @@ and you are back to failure #2.
 OLD=~/Library/Mobile\ Documents/com~apple~CloudDocs/dev/LingoSquared
 cd "$OLD" && git status --porcelain && git log --oneline origin/master..HEAD
 # BOTH must be empty. Then:
-echo "RETIRED $(date +%F). Canonical repo is ~/dev/LingoSquared.
+echo "RETIRED $(date +%F). Canonical repo is $REPO.
 Do NOT edit or commit here. Read-only safety net; delete after ~1 week." \
   > "$OLD/RETIRED_DO_NOT_USE.txt"
 ```
@@ -270,7 +281,7 @@ disabled Respond button, distractors drawn from the whole course, a deleted
 logout button — was found ONLY by playing a lesson.
 
 ```bash
-cd ~/dev/LingoSquared/frontend && npm run dev
+cd "$REPO/frontend" && npm run dev
 ```
 
 Fresh test account. Play **en-nl and en-fa**: a full lesson, a unit
@@ -320,10 +331,11 @@ together from ~45% to ~85%+.
 4. **Run `backend/scripts/remove_demo_courses.sql`** on dev and live. Dry
    run verified (4 matched, 165 real courses untouched). Committing takes a
    deliberate `ROLLBACK;`→`COMMIT;` edit. **Live DB needs Ramin present.**
-5. **`ADMIN_EMAILS` on live is still `admin@example.com`** — must become
-   Ramin's real address before any external beta invite. `register()` grants
-   admin to whoever first registers under a listed email and there is no
-   email verification.
+5. **The live admin account is still `admin@example.com`.** `ADMIN_EMAILS`
+   does not grant anything (the backend never reads it; `register()` always
+   creates non-admin users). Admin is the `users.is_admin` column: promote
+   Ramin's real account with `python -m app.scripts.promote_admin <email>`
+   before any external beta invite, and consider revoking the placeholder.
 
 ---
 
