@@ -44,7 +44,7 @@ case "$REPO_ROOT" in
 !! The repo is under $REPO_ROOT (the Windows filesystem via /mnt/).
    File watching, permissions, symlinks and speed are all broken there.
    Clone into the WSL filesystem instead:
-     mkdir -p ~/dev && git clone <url> ~/dev/LingoSquared
+     git clone <url> ~/<any-dir>/LingoSquared
 MSG
     exit 1 ;;
 esac

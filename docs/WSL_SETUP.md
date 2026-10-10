@@ -1,8 +1,8 @@
 # WSL2 setup (Windows + Ubuntu 24.04)
 
 Supersedes the iCloud/brew instructions in `docs/HANDOVER.md` for environment
-setup. The repo lives **inside the WSL filesystem** at `~/dev/LingoSquared` --
-never under `/mnt/c` (slow, broken file watching and permissions; the
+setup. The repo lives **inside the WSL filesystem** (any directory under your
+WSL home) -- never under `/mnt/c` (slow, broken file watching and permissions; the
 bootstrap script refuses to run there).
 
 ## 1. Windows side
@@ -28,7 +28,7 @@ bootstrap script refuses to run there).
 sudo apt-get update && sudo apt-get install -y git
 # GitHub auth (gh: https://github.com/cli/cli/blob/trunk/docs/install_linux.md)
 gh auth login
-mkdir -p ~/dev && cd ~/dev
+mkdir -p <parent-dir> && cd <parent-dir>   # any directory in the WSL filesystem
 git clone <repo-url> LingoSquared     # directory MUST be named LingoSquared (hooks depend on it)
 cd LingoSquared
 git checkout fix/launch-gate-content-review-wave1   # or the branch you are working on
@@ -41,13 +41,16 @@ Docker check, a fresh `backend/.env` (random JWT secret + DB password; never
 overwrites an existing one) and `frontend/.env`, then `docker compose up -d`
 and `alembic upgrade head`. `jq` is installed because the `.claude` hooks need it.
 
+The script does **not** create the reference data (languages, achievements);
+run the language bootstrap in section 4 once after it finishes.
+
 ## 3. Secrets and local state to transfer by hand (names only)
 
 Move these over a secure channel (USB, password manager). Never chat, email or cloud notes.
 
 | Item | Notes |
 |---|---|
-| `backend/.env` | Keys: `JWT_SECRET`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` (must match the password), `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`, `TTS_MONTHLY_CHAR_BUDGET`, `ADMIN_EMAILS`, `CORS_ORIGINS`, rate-limit settings. Azure keys (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`) are not set yet. If you copy the Mac's file over the generated one, also copy the matching DB volume or reset the DB password. `chmod 600`. |
+| `backend/.env` | Keys: `JWT_SECRET`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `DATABASE_URL` (must match the password), `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON`, `TTS_MONTHLY_CHAR_BUDGET`, `ADMIN_EMAILS` (legacy, not read by the backend; see section 4), `CORS_ORIGINS`, rate-limit settings. Azure keys (`AZURE_SPEECH_KEY`, `AZURE_SPEECH_REGION`) are not set yet. If you copy the Mac's file over the generated one, also copy the matching DB volume or reset the DB password. `chmod 600`. |
 | `~/.lingo_admin_pw` | Admin password file, `chmod 600` (live admin is `admin@example.com`). |
 | `~/.ssh/id_ed25519`, `id_ed25519.pub`, `config`, `known_hosts` | For `ramin@192.168.4.4`. `chmod 700 ~/.ssh; chmod 600 ~/.ssh/id_ed25519 ~/.ssh/config`. |
 | `~/.deepseek_api_key` | DeepSeek worker key. |
@@ -59,7 +62,20 @@ binaries / build output; bootstrap and builds regenerate them).
 
 ## 4. Dev database
 
-Either:
+First bootstrap the reference rows (16 languages + achievements). Without
+this every content import fails with 422 "language is unsupported":
+
+```bash
+cd backend
+docker compose exec api python -m app.content.seed                       # languages + achievements only
+docker compose exec api python -m app.content.seed --with-demo-courses   # dev/test box: also the 4 demo courses backend tests and e2e expect
+```
+
+Never pass `--with-demo-courses` on the live server.
+
+Admin account (needed by `scripts/sync_dev_db.sh`): Admin rights come only from the `users.is_admin` DB column. `ADMIN_EMAILS` is not read by the backend and registering never grants admin. Register the account, then run `docker compose exec api python -m app.scripts.promote_admin <email>` from `backend/` (or an existing admin calls `POST /admin/users/{user_id}/admin`).
+
+Then either:
 - `scripts/sync_dev_db.sh` after the stack is up (about 25 min; imports all content), or
 - restore a dump from the Mac: `pg_dump -Fc` there, then `pg_restore` into the
   compose `db` service here.
@@ -85,7 +101,7 @@ bootstrap brings a fresh DB to head.
 - [ ] `.content-venv/bin/python -m pytest scripts/tests -q`
 - [ ] `cd frontend && npm run build && npx vitest run`
 - [ ] Backend CI-style pytest with the repo mounted (without the mount `test_content_answer_shapes` silently skips), against an isolated `*_test` DB:
-      `cd backend && docker compose run --rm -v "$HOME/dev/LingoSquared:/repo" -w /repo/backend api python -m pytest -q`
+      `cd backend && docker compose run --rm -v "$PWD/..:/repo" -w /repo/backend api python -m pytest -q`
 - [ ] e2e route-mocked specs: `cd e2e && npm ci && npx playwright install --with-deps chromium`, then run the specs per `e2e/README.md`
 - [ ] Dev server: `cd frontend && npm run dev -- --port 5180`, open http://localhost:5180 from Windows
 
