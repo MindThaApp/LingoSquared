@@ -8,7 +8,12 @@ import { freshEmail, registerAndLand } from "./helpers";
  * Refresh-token flow (backend commit 565f66c, 2026-07-10): short-lived
  * 30-min access token + long-lived rotating refresh token, with
  * reuse-detection that revokes ALL of a user's refresh tokens when a
- * rotated-out token is presented again.
+ * rotated-out token is presented again. A rotated-out token presented
+ * again while its successor is still the live head, either within the
+ * short grace window or together with that successor as
+ * next_refresh_token, gets the SAME successor back instead (a retried
+ * request whose response was lost), so these specs provoke real reuse by
+ * moving the chain on first.
  *
  * The first two tests exercise the backend API directly via Playwright's
  * request fixture, NOT the browser -- deliberately, to isolate rotation/
@@ -111,7 +116,7 @@ test("register returns access + refresh tokens and both are genuinely usable", a
   expect(refreshed.status(), await refreshed.text()).toBe(200);
 });
 
-test("refresh rotates the token pair; reuse of the rotated-out token is rejected and revokes everything", async ({ request }) => {
+test("refresh rotates the token pair; reuse of a rotated-out token is rejected and revokes everything", async ({ request }) => {
   const auth = await registerUser(request);
 
   // --- Rotation: a refresh yields a NEW working access token and a NEW
@@ -129,6 +134,22 @@ test("refresh rotates the token pair; reuse of the rotated-out token is rejected
   expect(me.status(), await me.text()).toBe(200);
   expect((await me.json()).email).toBe(auth.email);
 
+  // --- A retry of the original token right away (lost response) is
+  // answered with the same successor, not a new branch.
+  const retried = await request.post(`${API}/auth/refresh`, {
+    data: { refresh_token: auth.refresh_token },
+  });
+  expect(retried.status(), await retried.text()).toBe(200);
+  expect((await retried.json()).refresh_token).toBe(next.refresh_token);
+
+  // --- Move the chain on: the successor itself is rotated, so the
+  // original token no longer has a live successor to hand back.
+  const onward = await request.post(`${API}/auth/refresh`, {
+    data: { refresh_token: next.refresh_token },
+  });
+  expect(onward.status(), await onward.text()).toBe(200);
+  const head: AuthBody = await onward.json();
+
   // --- Reuse detection: the ORIGINAL refresh token was rotated out above;
   // presenting it again must be rejected with the dedicated error code.
   const reused = await request.post(`${API}/auth/refresh`, {
@@ -142,7 +163,7 @@ test("refresh rotates the token pair; reuse of the rotated-out token is rejected
   // whole family is nuked): even the NEWEST refresh token, which was
   // perfectly valid a moment ago, must now be rejected too.
   const afterNuke = await request.post(`${API}/auth/refresh`, {
-    data: { refresh_token: next.refresh_token },
+    data: { refresh_token: head.refresh_token },
   });
   expect(afterNuke.status()).toBe(401);
   expect((await afterNuke.json()).error.code).toBe("refresh_token_reused");
@@ -151,7 +172,7 @@ test("refresh rotates the token pair; reuse of the rotated-out token is rejected
   // tokens only; the still-unexpired access token keeps working until its
   // 30 minutes run out. Assert that so a future change to this contract
   // is a conscious one, not an accident.
-  const meAfterNuke = await whoAmI(request, next.access_token);
+  const meAfterNuke = await whoAmI(request, head.access_token);
   expect(meAfterNuke.status()).toBe(200);
 });
 
@@ -175,12 +196,9 @@ test("app silently refreshes an expired access token and the user stays logged i
   const email = freshEmail("refresh-e2e-browser");
   await registerAndLand(page, email);
 
-  // Let the landing page's own queries finish first. Forging the token
-  // while Home is still firing them makes those requests 401 and start a
-  // refresh that the reload below aborts after the server has already
-  // rotated the token, so the post-reload refresh presents a rotated-out
-  // token and reuse-detection logs the user out. That is a separate race,
-  // not the expired-token-on-load path this test is about.
+  // Let the landing page's own queries finish first, so the refresh token
+  // read below is the one the reload will present. (Reloading while a
+  // refresh is in flight is covered by the next test.)
   await page.waitForLoadState("networkidle");
 
   const refreshTokenBefore = await page.evaluate(() => localStorage.getItem("refresh_token"));
@@ -211,14 +229,70 @@ test("app silently refreshes an expired access token and the user stays logged i
   expect(refreshTokenAfter).toBeTruthy();
   expect(refreshTokenAfter).not.toBe(refreshTokenBefore);
 
-  // The pre-refresh refresh token was rotated out server-side; presenting
-  // it again must now be rejected as reuse -- confirms the client didn't
-  // just fabricate local values but genuinely completed a real rotation
-  // against the backend.
-  const reused = await page.request.post(`${API}/auth/refresh`, {
-    data: { refresh_token: refreshTokenBefore },
+  // The proposal slot is emptied once the rotation is committed.
+  const pendingAfter = await page.evaluate(() => localStorage.getItem("refresh_token_pending"));
+  expect(pendingAfter).toBeNull();
+
+  // The client proposes its own successor, so confirm the server really
+  // knows the stored value: it must work as a refresh token.
+  const confirmed = await page.request.post(`${API}/auth/refresh`, {
+    data: { refresh_token: refreshTokenAfter },
   });
-  expect(reused.status()).toBe(401);
+  expect(confirmed.status(), await confirmed.text()).toBe(200);
+});
+
+// The reported bug: the page is reloaded (or closed) while a refresh is in
+// flight. The server rotates, the response never reaches the page, and the
+// next load used to present the rotated-out token, which counted as reuse
+// and logged the user out -- for a guest, permanently. Reproduced exactly
+// here: the refresh request is forwarded to the real backend (which
+// rotates) but its response is withheld from the page.
+test("reloading while a refresh is in flight keeps the user logged in", async ({ page }) => {
+  const email = freshEmail("refresh-e2e-lost-response");
+  await registerAndLand(page, email);
+  await page.waitForLoadState("networkidle");
+
+  const refreshTokenBefore = await page.evaluate(() => localStorage.getItem("refresh_token"));
+  expect(refreshTokenBefore).toBeTruthy();
+
+  const seen: {
+    body: { refresh_token?: string; next_refresh_token?: string };
+    pendingWhenSent: string | null;
+    serverStatus: number;
+  } = { body: {}, pendingWhenSent: null, serverStatus: 0 };
+  const swallowed = new Promise<void>((resolve) => {
+    void page.route("**/auth/refresh", async (route) => {
+      seen.body = route.request().postDataJSON();
+      seen.pendingWhenSent = await page.evaluate(() => localStorage.getItem("refresh_token_pending"));
+      const response = await route.fetch();
+      seen.serverStatus = response.status();
+      await route.abort("connectionreset");
+      resolve();
+    });
+  });
+
+  await page.evaluate(() => {
+    localStorage.setItem("access_token", "garbage.expired.token");
+  });
+  await page.reload();
+  await swallowed;
+  await page.unroute("**/auth/refresh");
+
+  // The server really did rotate the token the page still holds.
+  expect(seen.serverStatus).toBe(200);
+  expect(seen.body.refresh_token).toBe(refreshTokenBefore);
+  // Store before use: the proposed successor was persisted before sending.
+  expect(seen.body.next_refresh_token).toBeTruthy();
+  expect(seen.pendingWhenSent).toBe(seen.body.next_refresh_token);
+  expect(await page.evaluate(() => localStorage.getItem("refresh_token"))).toBe(refreshTokenBefore);
+
+  // Next load: still logged in, now holding the successor the server issued.
+  await page.reload();
+  await page.waitForURL("/", { timeout: 10000 });
+  await page.getByRole("link", { name: "Learn" }).first().waitFor({ state: "visible" });
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("refresh_token")))
+    .toBe(seen.body.next_refresh_token);
 });
 
 // Logout (ProfilePage's "Log out" button -> AuthContext.logout() ->

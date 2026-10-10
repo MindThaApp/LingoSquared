@@ -21,9 +21,18 @@ export interface ApiTokenStorage {
   // behavior rather than crashing.
   getRefresh?(): string | null;
   setRefresh?(token: string): void;
+  // OPTIONAL "next refresh token" slot. Before each POST /auth/refresh the
+  // client generates its proposed successor and persists it here FIRST, so
+  // that if the page is closed or reloaded while the request is in flight
+  // (the server rotated, the response was lost) the next attempt can resend
+  // the identical request and the server answers it idempotently instead of
+  // treating the old token as stolen. Platforms without it still work; they
+  // just rely on the server's short grace window for that case.
+  getPendingRefresh?(): string | null;
+  setPendingRefresh?(token: string | null): void;
   // clear() must remove BOTH the access and refresh tokens (when the
-  // platform supports refresh tokens at all) -- it is the "session is
-  // dead" operation, not just an access-token reset.
+  // platform supports refresh tokens at all), plus any pending one -- it
+  // is the "session is dead" operation, not just an access-token reset.
   clear(): void;
 }
 
@@ -85,6 +94,8 @@ export function storeAuthTokens(accessToken: string, refreshToken: string): void
   // setRefresh() at all -- either way, storing "undefined" as a literal
   // string would later be presented as a real token.
   if (refreshToken && tokenStorage.setRefresh) tokenStorage.setRefresh(refreshToken);
+  // A brand-new session: any pending successor belonged to the old one.
+  tokenStorage.setPendingRefresh?.(null);
 }
 
 export function getStoredRefreshToken(): string | null {
@@ -121,7 +132,52 @@ type RefreshOutcome = "refreshed" | "invalid" | "unavailable";
 // Without this, each concurrent 401 would spend the (single-use, rotating)
 // refresh token independently -- the first would win and the rest would be
 // treated as token REUSE by the server, which revokes the whole session.
+//
+// That only covers one page. Other tabs share the same stored tokens, so
+// the refresh itself also runs under a cross-tab Web Lock where the
+// platform has one: a tab that waited for the lock and finds the stored
+// refresh token already changed simply adopts the other tab's result.
 let refreshInFlight: Promise<RefreshOutcome> | null = null;
+
+const REFRESH_LOCK_NAME = "lingo-auth-refresh";
+
+// The refresh request runs while holding the cross-tab lock, so a stalled
+// connection (captive portal, half-open TCP) must not hold it until the
+// browser gives up minutes later and freeze refresh in every tab. On
+// timeout the pending successor is kept, so the retry stays idempotent.
+export const REFRESH_TIMEOUT_MS = 15_000;
+
+function timeoutSignal(ms: number): { signal?: AbortSignal; cancel(): void } {
+  if (typeof AbortController !== "function") return { cancel() {} };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return { signal: controller.signal, cancel: () => clearTimeout(timer) };
+}
+
+interface LockManagerLike {
+  request<T>(name: string, callback: () => Promise<T>): Promise<T>;
+}
+
+function crossTabLock(): LockManagerLike | null {
+  const nav = (globalThis as { navigator?: { locks?: LockManagerLike } }).navigator;
+  return nav?.locks && typeof nav.locks.request === "function" ? nav.locks : null;
+}
+
+// 48 random bytes, base64url -- the same shape and strength as a
+// server-issued refresh token. null when the platform has no CSPRNG, in
+// which case no successor is proposed and the server picks one.
+function generateRefreshToken(): string | null {
+  try {
+    const cryptoApi = (globalThis as { crypto?: Crypto }).crypto;
+    if (!cryptoApi?.getRandomValues) return null;
+    const bytes = cryptoApi.getRandomValues(new Uint8Array(48));
+    let binary = "";
+    for (const byte of bytes) binary += String.fromCharCode(byte);
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  } catch {
+    return null;
+  }
+}
 
 function refreshSession(): Promise<RefreshOutcome> {
   if (!refreshInFlight) {
@@ -135,21 +191,66 @@ function refreshSession(): Promise<RefreshOutcome> {
 // Raw fetch on purpose, NOT apiFetch: apiFetch's own 401 handling would
 // recurse straight back into this function.
 async function doRefresh(): Promise<RefreshOutcome> {
-  const { baseUrl, tokenStorage } = requireConfig();
+  const { tokenStorage } = requireConfig();
   if (!tokenStorage.getRefresh || !tokenStorage.setRefresh) return "invalid";
-  const refreshToken = tokenStorage.getRefresh();
+  const seenRefreshToken = tokenStorage.getRefresh();
+  if (!seenRefreshToken) return "invalid";
+  const lock = crossTabLock();
+  if (!lock) return refreshWith(seenRefreshToken);
+  try {
+    return await lock.request(REFRESH_LOCK_NAME, () => refreshWith(seenRefreshToken));
+  } catch {
+    return "unavailable";
+  }
+}
+
+async function refreshWith(seenRefreshToken: string): Promise<RefreshOutcome> {
+  const { baseUrl, tokenStorage } = requireConfig();
+  const refreshToken = tokenStorage.getRefresh?.() ?? null;
   if (!refreshToken) return "invalid";
+  // Another tab rotated the pair while this one waited for the lock: its
+  // result is already in shared storage.
+  if (refreshToken !== seenRefreshToken) return "refreshed";
+
+  // Store before use: reuse a pending successor left by an earlier attempt
+  // whose response never arrived (resending the identical request is what
+  // lets the server answer it idempotently), otherwise create and persist
+  // a new one BEFORE the request goes out.
+  let nextRefreshToken = tokenStorage.getPendingRefresh?.() ?? null;
+  if (nextRefreshToken === refreshToken) nextRefreshToken = null;
+  if (!nextRefreshToken && tokenStorage.setPendingRefresh) {
+    nextRefreshToken = generateRefreshToken();
+    if (nextRefreshToken) tokenStorage.setPendingRefresh(nextRefreshToken);
+  }
+  if (!tokenStorage.setPendingRefresh) nextRefreshToken = null;
+
   let res: Response;
+  const timeout = timeoutSignal(REFRESH_TIMEOUT_MS);
   try {
     res = await fetch(`${baseUrl}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh_token: refreshToken }),
+      body: JSON.stringify(
+        nextRefreshToken
+          ? { refresh_token: refreshToken, next_refresh_token: nextRefreshToken }
+          : { refresh_token: refreshToken },
+      ),
+      signal: timeout.signal,
     });
   } catch {
+    // Network failure or timeout. Keep the pending successor: the request
+    // may have reached the server.
     return "unavailable";
+  } finally {
+    timeout.cancel();
   }
-  if (res.status === 401) return "invalid";
+  if (res.status === 401) {
+    tokenStorage.setPendingRefresh?.(null);
+    return "invalid";
+  }
+  // 422 means the stored proposal itself was unusable (e.g. a corrupted
+  // value); drop it so the next attempt generates a fresh one.
+  if (res.status === 422) tokenStorage.setPendingRefresh?.(null);
   if (!res.ok) return "unavailable";
   let body: { access_token?: string; refresh_token?: string };
   try {
@@ -160,9 +261,11 @@ async function doRefresh(): Promise<RefreshOutcome> {
   if (!body.access_token || !body.refresh_token) return "unavailable";
   // Rotation: the server just revoked the token we presented and issued a
   // fresh pair -- store BOTH, or the next refresh would present a revoked
-  // token and trip the server's reuse-detection (revokes everything).
+  // token and trip the server's reuse-detection (revokes everything). The
+  // response is authoritative even when it differs from our proposal.
+  tokenStorage.setRefresh?.(body.refresh_token);
   tokenStorage.set(body.access_token);
-  tokenStorage.setRefresh(body.refresh_token);
+  tokenStorage.setPendingRefresh?.(null);
   return "refreshed";
 }
 
