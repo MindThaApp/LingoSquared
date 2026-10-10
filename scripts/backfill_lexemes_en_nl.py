@@ -227,8 +227,27 @@ UNIT_FILES = tuple(sorted(
 # is assigned per-course at compile/import time (see scripts/
 # content_manifest.txt's separate "en-nl"/"en-nl-a2" compile groups), so a2_
 # unit24 is unit.order=1 within the "Dutch A2" course, not 24.
+#
+# Restricted to the files scripts/content_manifest.txt's en-nl-a2 line
+# actually imports. A realization file can sit on disk before it is wired
+# into the course (e.g. a2_unit78_afgelopen_weekend.yaml, a pilot still
+# awaiting native review): the DB has no Unit/Lesson rows for it and
+# lesson_categories has no entries for its lessons, so globbing it in
+# crashed nl_agreement_tags() with KeyError: 'wat_heb_je_gedaan'. Mirroring
+# the manifest also keeps position == unit.order, the same invariant
+# UNIT_FILES documents above.
+def _manifest_realizations(group: str) -> frozenset[str]:
+    manifest = REPO_ROOT / "scripts/content_manifest.txt"
+    for line in manifest.read_text(encoding="utf-8").splitlines():
+        if line.startswith(group + "|"):
+            return frozenset(line.split("|")[1].split())
+    raise SystemExit(f"{group!r} group missing from {manifest}")
+
+
+_A2_MANIFEST = _manifest_realizations("en-nl-a2")
 UNIT_FILES_A2 = tuple(sorted(
-    (REPO_ROOT / "docs/content/realizations/nl").glob("a2_unit*_*.yaml")
+    p for p in (REPO_ROOT / "docs/content/realizations/nl").glob("a2_unit*_*.yaml")
+    if p.relative_to(REPO_ROOT).as_posix() in _A2_MANIFEST
 ))
 
 # B1 units (01-11: hypothetical situations, opinion/nuance, workplace
