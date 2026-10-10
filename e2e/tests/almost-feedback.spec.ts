@@ -42,7 +42,11 @@ test("almost verdict shows the amber banner and does not block progress", async 
 
   const banner = page.locator(".feedback-banner.almost");
   await expect(banner).toBeVisible();
-  await expect(banner).toHaveAttribute("role", "status");
+  // Announced through the runner's persistent polite live region that wraps
+  // the banner (a live region has to exist before its content changes), not
+  // a role on the banner itself.
+  await expect(page.locator('[role="status"][aria-live="polite"]').filter({ has: banner })).toHaveCount(1);
+  await expect(banner).toContainText("Almost correct. Correct answer: Ik drink water");
   await expect(banner).toContainText("Almost!");
   await expect(banner).toContainText("Correct answer: Ik drink water");
   await expect(banner).toContainText("You wrote: Ik drinck water");

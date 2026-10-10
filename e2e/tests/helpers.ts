@@ -76,7 +76,12 @@ export async function goToCourseUnits(
       page.waitForURL(/\/courses\/[^/]+$/, { timeout: 8000 }).then(() => "skipped" as const),
     ]).catch(() => "neither" as const);
     if (outcome === "buttons") {
-      await page.locator(".continue-card").first().click({ timeout: 5000 });
+      // Since the placement test landed, the page leads with a placement-test
+      // CTA card (itself a `.continue-card`, but not a level choice) and keeps
+      // the three self-report level buttons behind a "Skip" toggle. Reveal
+      // them and pick the beginner level, which navigates into the course.
+      await page.getByRole("button", { name: "Skip — I'll pick myself" }).click({ timeout: 5000 });
+      await page.getByRole("button", { name: /Complete beginner/ }).click({ timeout: 5000 });
     }
   }
   await page.waitForURL(/\/courses\/[^/]+$/, { timeout: 10000 });

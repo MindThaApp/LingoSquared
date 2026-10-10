@@ -175,6 +175,14 @@ test("app silently refreshes an expired access token and the user stays logged i
   const email = freshEmail("refresh-e2e-browser");
   await registerAndLand(page, email);
 
+  // Let the landing page's own queries finish first. Forging the token
+  // while Home is still firing them makes those requests 401 and start a
+  // refresh that the reload below aborts after the server has already
+  // rotated the token, so the post-reload refresh presents a rotated-out
+  // token and reuse-detection logs the user out. That is a separate race,
+  // not the expired-token-on-load path this test is about.
+  await page.waitForLoadState("networkidle");
+
   const refreshTokenBefore = await page.evaluate(() => localStorage.getItem("refresh_token"));
   expect(refreshTokenBefore, "register must store a refresh token via the tokenStorage seam").toBeTruthy();
 
