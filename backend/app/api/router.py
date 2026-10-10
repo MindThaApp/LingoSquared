@@ -18,7 +18,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
-from app.core.security import create_refresh_token, create_token, hash_password, verify_password
+from app.core.security import create_refresh_token, create_token, hash_password, open_successor_token, seal_successor_token, verify_password
 from app.core.errors import fail
 from app.db.session import get_db
 from app.models import (
@@ -307,23 +307,34 @@ def utc_now():
 def as_aware(value):
     return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
-def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
-    raw_token=create_refresh_token()
-    now_value=now_value or utc_now()
-    db.add(
-        RefreshToken(
-            token_hash=hash_password(raw_token),
-            token_sha256=hashlib.sha256(raw_token.encode("utf-8")).hexdigest(),
-            user_id=user_id,
-            issued_at=now_value,
-            expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
-        )
-    )
-    return raw_token
+def refresh_token_digest(raw_token:str) -> str:
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
-def find_refresh_token(db:Session,raw_token:str):
-    digest=hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
-    return db.scalar(select(RefreshToken).where(RefreshToken.token_sha256==digest))
+def add_refresh_token(db:Session,user_id:str,now_value:datetime|None=None,raw_token:str|None=None) -> tuple[str,RefreshToken]:
+    raw_token=raw_token or create_refresh_token()
+    now_value=now_value or utc_now()
+    row=RefreshToken(
+        token_hash=hash_password(raw_token),
+        token_sha256=refresh_token_digest(raw_token),
+        user_id=user_id,
+        issued_at=now_value,
+        expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
+    )
+    db.add(row)
+    db.flush()
+    return raw_token,row
+
+def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
+    return add_refresh_token(db,user_id,now_value)[0]
+
+def find_refresh_token(db:Session,raw_token:str,for_update:bool=False):
+    query=select(RefreshToken).where(RefreshToken.token_sha256==refresh_token_digest(raw_token))
+    if for_update:
+        # Serializes concurrent refreshes of the same token: the second
+        # request waits for the first to commit and then sees the rotation
+        # (and its recorded successor) instead of rotating a second time.
+        query=query.with_for_update().execution_options(populate_existing=True)
+    return db.scalar(query)
 
 def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
     revoked_cutoff = now_value - timedelta(days=7)
@@ -348,9 +359,47 @@ def auth_response(db:Session,user):
     db.commit()
     return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
 
-def refresh_response(db:Session,user_id:str):
-    refresh_token=issue_refresh_token(db,user_id)
+def refresh_response(user_id:str,refresh_token:str):
     return {"access_token":create_token(user_id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds}
+
+def rotate_refresh_token(db:Session,token:RefreshToken,presented_raw:str,proposed_next:str|None,now_value:datetime) -> str:
+    # A client-proposed successor is honoured only if no token with that
+    # value exists yet; otherwise the server picks one (the response is
+    # always authoritative, the proposal is only a recovery aid).
+    if proposed_next and db.scalar(select(RefreshToken.id).where(RefreshToken.token_sha256==refresh_token_digest(proposed_next))) is not None:
+        proposed_next=None
+    successor_raw,successor=add_refresh_token(db,token.user_id,now_value,proposed_next)
+    token.revoked_at=now_value
+    token.replaced_by_id=successor.id
+    token.successor_sealed=seal_successor_token(presented_raw,token.token_sha256,successor_raw)
+    return successor_raw
+
+def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_next:str|None,now_value:datetime) -> str|None:
+    """Return the successor for a retried rotation, or None for real reuse.
+
+    A rotated-out token is accepted again only while its successor is still
+    the live head of the chain (not itself rotated, revoked or expired), and
+    only when either
+      - the caller also presents that successor as next_refresh_token, which
+        proves it already holds the successor (a retry of the very same
+        request, e.g. after the page was closed mid-request), or
+      - the rotation happened within refresh_reuse_grace_seconds (a reload
+        that lost the response, or a second tab racing the first).
+    The SAME successor is returned; nothing new is minted, so the chain never
+    branches. Logout- and reuse-revoked tokens have no successor and never
+    qualify.
+    """
+    if token.replaced_by_id is None or not token.successor_sealed or token.revoked_at is None:
+        return None
+    successor=db.get(RefreshToken,token.replaced_by_id,with_for_update=True,populate_existing=True)
+    if successor is None or successor.revoked_at is not None or as_aware(successor.expires_at)<=now_value:
+        return None
+    if proposed_next and secrets.compare_digest(refresh_token_digest(proposed_next),successor.token_sha256 or ""):
+        return proposed_next
+    grace=get_settings().refresh_reuse_grace_seconds
+    if grace<=0 or now_value-as_aware(token.revoked_at)>timedelta(seconds=grace):
+        return None
+    return open_successor_token(presented_raw,token.token_sha256,token.successor_sealed)
 def social_audiences(provider:str) -> set[str]:
     settings=get_settings()
     return settings.google_oauth_client_id_set if provider=="google" else settings.apple_audience_id_set
@@ -772,13 +821,23 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     # Rate-limit before lookup, and count invalid-token probes too (same
     # principle as login counting failed password attempts).
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
-    refresh_token=find_refresh_token(db,body.refresh_token)
     now_value=utc_now()
+    refresh_token=find_refresh_token(db,body.refresh_token)
     if not refresh_token:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
     prune_stale_refresh_tokens(db,refresh_token.user_id,now_value)
     db.commit()
+    # Re-read under a row lock for the rotation decision itself.
+    refresh_token=find_refresh_token(db,body.refresh_token,for_update=True)
+    now_value=utc_now()
+    if not refresh_token:
+        fail(401,"invalid_refresh_token","Invalid or expired refresh token")
     if refresh_token.revoked_at is not None:
+        user=db.get(User,refresh_token.user_id)
+        successor_raw=replayed_successor(db,refresh_token,body.refresh_token,body.next_refresh_token,now_value) if user and user.is_active else None
+        if successor_raw is not None:
+            db.commit()
+            return refresh_response(user.id,successor_raw)
         revoke_all_refresh_tokens(db,refresh_token.user_id,now_value)
         db.commit()
         fail(401,"refresh_token_reused","Refresh token was already used or revoked")
@@ -787,10 +846,9 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     user=db.get(User,refresh_token.user_id)
     if not user or not user.is_active:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
-    refresh_token.revoked_at=now_value
-    response=refresh_response(db,user.id)
+    successor_raw=rotate_refresh_token(db,refresh_token,body.refresh_token,body.next_refresh_token,now_value)
     db.commit()
-    return response
+    return refresh_response(user.id,successor_raw)
 @router.post("/auth/logout",status_code=204)
 def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
     # Shares the refresh endpoint's limiter and error code.

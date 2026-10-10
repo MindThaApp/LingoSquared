@@ -255,12 +255,37 @@ hash stored server-side. They live for 60 days by default, are revocable, and
 rotate on every use: when a refresh token is accepted, the server revokes that
 row and returns a fresh access token plus a fresh refresh token. Presenting an
 already-revoked refresh token is treated as possible token reuse/theft; the
-server revokes all refresh tokens for that user and returns 401.
+server revokes all refresh tokens for that user and returns 401
+(`refresh_token_reused`).
+
+One exception keeps a lost response from logging the user out. A token that
+was revoked BY ROTATION (never by logout or reuse detection), whose successor
+is still the live head of the chain (not itself rotated, revoked or expired),
+is answered with that SAME successor plus a new access token when either:
+
+- the request also carries `next_refresh_token` equal to that successor (the
+  caller provably already holds it: an identical retry of the original
+  request), at any age; or
+- the rotation happened at most `REFRESH_REUSE_GRACE_SECONDS` ago (default
+  30; `0` disables) -- a reload that lost the response, or two tabs
+  refreshing at once.
+
+Nothing new is minted on that path, so the chain never branches. Concurrent
+refreshes of one token are serialized with a row lock and all receive the
+same successor. Anything else that presents a rotated-out token is reuse.
 
 `POST /auth/refresh` request:
 ```json
-{ "refresh_token": "opaque-refresh-token" }
+{
+  "refresh_token": "opaque-refresh-token",
+  "next_refresh_token": "optional: client-chosen successor, 43-128 base64url chars"
+}
 ```
+`next_refresh_token` (added 2026-10-10) lets the client generate its next
+refresh token and persist it BEFORE sending, so a page closed mid-request can
+resend the identical request later. The server uses it as the new refresh
+token unless a token with that value already exists, in which case it picks
+one itself. The response's `refresh_token` is always authoritative.
 response:
 ```json
 {

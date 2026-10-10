@@ -46,6 +46,13 @@ class Settings(BaseSettings):
     # token expiry and several devices can share one NAT'd IP. The same
     # limiter covers /auth/logout.
     refresh_rate_limit_max: int = 30
+    # How long after a rotation the immediately previous refresh token may
+    # be presented again and receive the SAME successor back instead of
+    # tripping reuse detection. Covers a response lost to a page reload and
+    # two tabs refreshing at once. Outside this window (or once the
+    # successor itself has been rotated or revoked) a rotated-out token is
+    # treated as theft and revokes every session of the user. 0 disables.
+    refresh_reuse_grace_seconds: int = 30
     answer_rate_limit_max: int = 120
     # Phase H2 (2026-07-07 integrity audit): the three limiters above left
     # /tts, /stt/transcribe, and the three generation endpoints (reviews/
