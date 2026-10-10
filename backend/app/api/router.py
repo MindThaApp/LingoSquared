@@ -13,7 +13,7 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
-from sqlalchemy import Float, case, delete, func, or_, select, text
+from sqlalchemy import Float, case, delete, func, or_, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
@@ -324,6 +324,25 @@ def add_refresh_token(db:Session,user_id:str,now_value:datetime|None=None,raw_to
     db.flush()
     return raw_token,row
 
+def add_proposed_refresh_token(db:Session,user_id:str,now_value:datetime,proposed:str) -> tuple[str,RefreshToken]|None:
+    """Insert a client-proposed token, or return None if that value is taken.
+
+    The existence check alone is not enough: another rotation (any user) may
+    have inserted the same value without committing yet. The insert then
+    waits on the unique index and fails once that transaction commits; the
+    savepoint keeps that failure from aborting the surrounding rotation.
+    """
+    if db.scalar(select(RefreshToken.id).where(RefreshToken.token_sha256==refresh_token_digest(proposed))) is not None:
+        return None
+    savepoint=db.begin_nested()
+    try:
+        added=add_refresh_token(db,user_id,now_value,proposed)
+    except IntegrityError:
+        savepoint.rollback()
+        return None
+    savepoint.commit()
+    return added
+
 def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
     return add_refresh_token(db,user_id,now_value)[0]
 
@@ -344,14 +363,23 @@ def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
         | (RefreshToken.revoked_at<=revoked_cutoff),
     ))
 
+def lock_user_sessions(db:Session,user_id:str):
+    """Serialize every refresh-token rotation and revoke-all of one user.
+
+    Both paths take the user's row lock first (always before any token row
+    lock, so the order cannot invert). Without it, a revoke-all could miss a
+    successor that a concurrent rotation has inserted but not yet committed.
+    """
+    return db.scalar(select(User).where(User.id==user_id).with_for_update().execution_options(populate_existing=True))
+
 def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
-    for token in db.scalars(
-        select(RefreshToken).where(
-            RefreshToken.user_id==user_id,
-            RefreshToken.revoked_at.is_(None),
-        )
-    ):
-        token.revoked_at=now_value
+    lock_user_sessions(db,user_id)
+    db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.user_id==user_id,RefreshToken.revoked_at.is_(None))
+        .values(revoked_at=now_value)
+        .execution_options(synchronize_session="fetch")
+    )
 
 def auth_response(db:Session,user):
     prune_stale_refresh_tokens(db,user.id,utc_now())
@@ -366,12 +394,20 @@ def rotate_refresh_token(db:Session,token:RefreshToken,presented_raw:str,propose
     # A client-proposed successor is honoured only if no token with that
     # value exists yet; otherwise the server picks one (the response is
     # always authoritative, the proposal is only a recovery aid).
-    if proposed_next and db.scalar(select(RefreshToken.id).where(RefreshToken.token_sha256==refresh_token_digest(proposed_next))) is not None:
-        proposed_next=None
-    successor_raw,successor=add_refresh_token(db,token.user_id,now_value,proposed_next)
+    added=add_proposed_refresh_token(db,token.user_id,now_value,proposed_next) if proposed_next else None
+    successor_raw,successor=added or add_refresh_token(db,token.user_id,now_value)
     token.revoked_at=now_value
     token.replaced_by_id=successor.id
     token.successor_sealed=seal_successor_token(presented_raw,token.token_sha256,successor_raw)
+    # The token being rotated now has a successor of its own, so its
+    # predecessor can no longer be answered from the grace path: drop that
+    # sealed copy rather than keep it around until pruning.
+    db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.replaced_by_id==token.id,RefreshToken.successor_sealed.is_not(None))
+        .values(successor_sealed=None)
+        .execution_options(synchronize_session=False)
+    )
     return successor_raw
 
 def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_next:str|None,now_value:datetime) -> str|None:
@@ -384,10 +420,15 @@ def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_
         proves it already holds the successor (a retry of the very same
         request, e.g. after the page was closed mid-request), or
       - the rotation happened within refresh_reuse_grace_seconds (a reload
-        that lost the response, or a second tab racing the first).
-    The SAME successor is returned; nothing new is minted, so the chain never
-    branches. Logout- and reuse-revoked tokens have no successor and never
-    qualify.
+        that lost the response, or a second tab racing the first), and the
+        window has answered fewer than refresh_reuse_grace_max_replays
+        retries of this rotation so far.
+    The SAME refresh successor is returned; no new refresh token is minted,
+    so the chain never branches. Each answer does carry a fresh access
+    token, which is why the time-window path is capped: past the cap a
+    replay is treated as reuse. The proof-of-possession path is not capped,
+    because a caller holding the successor could refresh with it anyway.
+    Logout- and reuse-revoked tokens have no successor and never qualify.
     """
     if token.replaced_by_id is None or not token.successor_sealed or token.revoked_at is None:
         return None
@@ -396,10 +437,16 @@ def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_
         return None
     if proposed_next and secrets.compare_digest(refresh_token_digest(proposed_next),successor.token_sha256 or ""):
         return proposed_next
-    grace=get_settings().refresh_reuse_grace_seconds
+    settings=get_settings()
+    grace=settings.refresh_reuse_grace_seconds
     if grace<=0 or now_value-as_aware(token.revoked_at)>timedelta(seconds=grace):
         return None
-    return open_successor_token(presented_raw,token.token_sha256,token.successor_sealed)
+    if (token.grace_replays or 0)>=settings.refresh_reuse_grace_max_replays:
+        return None
+    successor_raw=open_successor_token(presented_raw,token.token_sha256,token.successor_sealed)
+    if successor_raw is not None:
+        token.grace_replays=(token.grace_replays or 0)+1
+    return successor_raw
 def social_audiences(provider:str) -> set[str]:
     settings=get_settings()
     if not settings.social_sign_in_enabled:
@@ -885,9 +932,15 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     refresh_token=find_refresh_token(db,body.refresh_token)
     if not refresh_token:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
-    prune_stale_refresh_tokens(db,refresh_token.user_id,now_value)
+    user_id=refresh_token.user_id
+    prune_stale_refresh_tokens(db,user_id,now_value)
     db.commit()
-    # Re-read under a row lock for the rotation decision itself.
+    # Re-read under the user's session lock, then the token's row lock, for
+    # the rotation decision itself. The user lock makes a rotation and a
+    # concurrent revoke-all (reuse detection elsewhere in the family) run
+    # one after the other, so the rotation sees the revocation and the
+    # revoke-all sees the successor.
+    lock_user_sessions(db,user_id)
     refresh_token=find_refresh_token(db,body.refresh_token,for_update=True)
     now_value=utc_now()
     if not refresh_token:

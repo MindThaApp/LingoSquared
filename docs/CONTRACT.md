@@ -268,11 +268,17 @@ is answered with that SAME successor plus a new access token when either:
   request), at any age; or
 - the rotation happened at most `REFRESH_REUSE_GRACE_SECONDS` ago (default
   30; `0` disables) -- a reload that lost the response, or two tabs
-  refreshing at once.
+  refreshing at once -- and that window has answered fewer than
+  `REFRESH_REUSE_GRACE_MAX_REPLAYS` (default 3) retries of this rotation.
+  Past that cap a retry is reuse, so the window cannot mint access tokens
+  without limit.
 
-Nothing new is minted on that path, so the chain never branches. Concurrent
-refreshes of one token are serialized with a row lock and all receive the
-same successor. Anything else that presents a rotated-out token is reuse.
+No new refresh token is minted on that path, so the chain never branches.
+Concurrent refreshes of one token are serialized with a row lock and all
+receive the same successor. Every rotation and every revoke-all of a user
+first takes that user's row lock, so a revoke-all cannot miss a successor
+being minted at the same moment. Anything else that presents a rotated-out
+token is reuse.
 
 `POST /auth/refresh` request:
 ```json
@@ -283,9 +289,12 @@ same successor. Anything else that presents a rotated-out token is reuse.
 ```
 `next_refresh_token` (added 2026-10-10) lets the client generate its next
 refresh token and persist it BEFORE sending, so a page closed mid-request can
-resend the identical request later. The server uses it as the new refresh
-token unless a token with that value already exists, in which case it picks
-one itself. The response's `refresh_token` is always authoritative.
+resend the identical request later. It must be at least 43 base64url
+characters (256 bits) and is rejected with 422 when it is trivially
+low-entropy (fewer than 16 distinct characters). The server uses it as the
+new refresh token unless a token with that value already exists (or is being
+created by a concurrent request), in which case it picks one itself. The
+response's `refresh_token` is always authoritative.
 response:
 ```json
 {
