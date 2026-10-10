@@ -5,6 +5,7 @@ import { useAuth } from "../auth/AuthContext";
 import { SessionUnavailableScreen } from "../components/layout/ProtectedRoute";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
+import { useSocialConfig } from "../lib/useSocialConfig";
 import type { SocialCredential } from "@lingo/shared/api/types";
 import { redirectFromState } from "../lib/postLoginRedirect";
 import { ApiError } from "@lingo/shared/api/client";
@@ -16,6 +17,7 @@ import {
 export function LoginPage() {
   const { t } = useTranslation();
   const { login, continueAsGuest, socialSignIn, status } = useAuth();
+  const social = useSocialConfig();
   const navigate = useNavigate();
   const location = useLocation();
   const redirectTo = redirectFromState(location.state);
@@ -135,12 +137,12 @@ export function LoginPage() {
             {submitting ? t("login.submitting") : t("login.submit")}
           </button>
         </form>
-        {hasAnySocialProvider() && (
+        {hasAnySocialProvider(social) && (
           <>
             <p className="muted" style={{ textAlign: "center", margin: "16px 0 12px" }}>
               {t("social.or")}
             </p>
-            <SocialSignInButtons onCredential={handleSocial} />
+            <SocialSignInButtons onCredential={handleSocial} config={social} />
           </>
         )}
       </div>

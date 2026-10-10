@@ -5,8 +5,9 @@ import type { SocialCredential } from "@lingo/shared/api/types";
 // the build is configured: a provider's button only renders when its
 // client ID (and, for Apple, its return URL) is set at build time. See
 // docs/SOCIAL_SIGN_IN.md. The backend has its own switch
-// (SOCIAL_SIGN_IN_ENABLED) and verifies every token itself; nothing here
-// is trusted by the server.
+// (SOCIAL_SIGN_IN_ENABLED), reported by GET /auth/social/config, and the
+// buttons follow it too (useSocialConfig.ts). It verifies every token
+// itself; nothing here is trusted by the server.
 
 const GOOGLE_SCRIPT = "https://accounts.google.com/gsi/client";
 const APPLE_SCRIPT =

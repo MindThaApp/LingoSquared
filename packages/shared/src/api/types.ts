@@ -469,6 +469,9 @@ export interface AuthUser {
   created_at?: string;
   // Linked Google/Apple sign-ins (GET /auth/me, POST /auth/social/link).
   identities?: UserIdentity[];
+  // True when the account has a password the user knows (never for a
+  // guest). Optional for sessions stored before the field existed.
+  has_password?: boolean;
 }
 
 export type SocialProvider = "google" | "apple";
@@ -485,6 +488,12 @@ export interface SocialCredential {
   idToken: string;
   nonce: string;
   displayName?: string;
+}
+
+// GET /auth/social/config: the providers the backend accepts right now
+// (empty while its SOCIAL_SIGN_IN_ENABLED switch is off).
+export interface SocialServerConfig {
+  providers: SocialProvider[];
 }
 
 export interface AuthResult {
