@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 from app.models.entities import CEFRLevel, ExerciseType, UnitSection
 
 ContentIssueCategory=Literal["wrong_answer_key","mistranslation","untaught_vocabulary","audio_issue","unclear_instruction","app_bug","general_feedback","other"]
@@ -47,7 +47,23 @@ class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
 class SocialLoginIn(BaseModel): provider:Literal["google","apple"]; id_token:str=Field(min_length=1,max_length=8192); display_name:str|None=Field(default=None,max_length=100)
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
-class RefreshIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
+class RefreshIn(BaseModel):
+    refresh_token:str=Field(min_length=1,max_length=512)
+    # Optional client-chosen successor: a client that persists this value
+    # BEFORE sending the request still holds its next refresh token even if
+    # the response never arrives (page closed or reloaded mid-request).
+    # At least 256 bits of base64url randomness.
+    next_refresh_token:str|None=Field(default=None,min_length=43,max_length=128,pattern=r"^[A-Za-z0-9_-]+$")
+
+    @field_validator("next_refresh_token")
+    @classmethod
+    def proposal_is_not_trivially_weak(cls,value:str|None) -> str|None:
+        # The server cannot measure entropy, but it can refuse values no
+        # CSPRNG would produce: 43+ random base64url characters use about 30
+        # distinct symbols on average, and fewer than 16 essentially never.
+        if value is not None and len(set(value))<16:
+            raise ValueError("next_refresh_token is not random enough")
+        return value
 class RefreshOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int
 class LogoutIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
 class AdminUserCreateIn(BaseModel): email:EmailStr; display_name:str=Field(min_length=1,max_length=100)
