@@ -141,6 +141,19 @@ let refreshInFlight: Promise<RefreshOutcome> | null = null;
 
 const REFRESH_LOCK_NAME = "lingo-auth-refresh";
 
+// The refresh request runs while holding the cross-tab lock, so a stalled
+// connection (captive portal, half-open TCP) must not hold it until the
+// browser gives up minutes later and freeze refresh in every tab. On
+// timeout the pending successor is kept, so the retry stays idempotent.
+export const REFRESH_TIMEOUT_MS = 15_000;
+
+function timeoutSignal(ms: number): { signal?: AbortSignal; cancel(): void } {
+  if (typeof AbortController !== "function") return { cancel() {} };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return { signal: controller.signal, cancel: () => clearTimeout(timer) };
+}
+
 interface LockManagerLike {
   request<T>(name: string, callback: () => Promise<T>): Promise<T>;
 }
@@ -212,6 +225,7 @@ async function refreshWith(seenRefreshToken: string): Promise<RefreshOutcome> {
   if (!tokenStorage.setPendingRefresh) nextRefreshToken = null;
 
   let res: Response;
+  const timeout = timeoutSignal(REFRESH_TIMEOUT_MS);
   try {
     res = await fetch(`${baseUrl}/auth/refresh`, {
       method: "POST",
@@ -221,10 +235,14 @@ async function refreshWith(seenRefreshToken: string): Promise<RefreshOutcome> {
           ? { refresh_token: refreshToken, next_refresh_token: nextRefreshToken }
           : { refresh_token: refreshToken },
       ),
+      signal: timeout.signal,
     });
   } catch {
-    // Keep the pending successor: the request may have reached the server.
+    // Network failure or timeout. Keep the pending successor: the request
+    // may have reached the server.
     return "unavailable";
+  } finally {
+    timeout.cancel();
   }
   if (res.status === 401) {
     tokenStorage.setPendingRefresh?.(null);

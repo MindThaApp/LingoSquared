@@ -1,15 +1,16 @@
 import hashlib
 import secrets
 import threading
+import time
 from datetime import timedelta
 
 import pytest
-from sqlalchemy import func, select
+from sqlalchemy import func, inspect, select
 
-from app.api.router import utc_now
+from app.api.router import find_refresh_token, lock_user_sessions, rotate_refresh_token, utc_now
 from app.core.config import get_settings
 from app.core.security import decode_token
-from app.db.session import SessionLocal
+from app.db.session import SessionLocal, engine
 from app.models import RefreshToken
 from app.scripts.prune_refresh_tokens import main as prune_refresh_tokens_main
 
@@ -385,7 +386,8 @@ def test_logout_revoked_token_gets_no_grace(client):
 def test_concurrent_refresh_of_one_token_yields_one_successor(client):
     first = register(client, "refresh-concurrent@example.com")
     user_id = decode_token(first["access_token"])
-    workers = 5
+    # One rotation plus the grace window's replay cap.
+    workers = 1 + get_settings().refresh_reuse_grace_max_replays
     barrier = threading.Barrier(workers)
     results = [None] * workers
 
@@ -489,7 +491,10 @@ def test_proposal_that_already_exists_is_ignored(client):
     assert still.status_code == 200, still.text
 
 
-@pytest.mark.parametrize("bad", ["short", "x" * 42, "has spaces " * 5, "y" * 129])
+@pytest.mark.parametrize(
+    "bad",
+    ["short", "x" * 42, "has spaces " * 5, "y" * 129, "A" * 43, "abcdefghij" * 6, "0123456789abcde" * 3],
+)
 def test_malformed_proposal_is_rejected(client, bad):
     first = register(client, f"refresh-proposal-bad-{len(bad)}-{bad[:3].strip()}@example.com")
     response = client.post(
@@ -509,3 +514,106 @@ def test_successor_is_not_stored_in_the_clear(client):
         assert old.replaced_by_id is not None
         assert old.successor_sealed
         assert successor not in old.successor_sealed
+
+
+def test_grace_window_answers_a_bounded_number_of_replays(client):
+    first = register(client, "refresh-grace-cap@example.com")
+    user_id = decode_token(first["access_token"])
+    rotated = client.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+    assert rotated.status_code == 200, rotated.text
+    successor = rotated.json()["refresh_token"]
+
+    for _ in range(get_settings().refresh_reuse_grace_max_replays):
+        retried = client.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+        assert retried.status_code == 200, retried.text
+        assert retried.json()["refresh_token"] == successor
+
+    # Past the cap the window stops minting access tokens: it is reuse.
+    over = client.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+    assert over.status_code == 401
+    assert over.json()["error"]["code"] == "refresh_token_reused"
+    assert live_token_count(user_id) == 0
+
+
+def test_sealed_successor_is_dropped_once_the_successor_rotates(client):
+    first = register(client, "refresh-sealed-dropped@example.com")
+    rotated = client.post("/auth/refresh", json={"refresh_token": first["refresh_token"]})
+    assert rotated.status_code == 200, rotated.text
+    onward = client.post("/auth/refresh", json={"refresh_token": rotated.json()["refresh_token"]})
+    assert onward.status_code == 200, onward.text
+    with SessionLocal() as db:
+        old = db.scalar(select(RefreshToken).where(RefreshToken.token_sha256 == digest(first["refresh_token"])))
+        assert old.replaced_by_id is not None
+        assert old.successor_sealed is None
+
+
+def test_revoke_all_waits_for_a_concurrent_rotation_and_revokes_its_successor(client):
+    # The live head T2 is being rotated (T3 inserted, not yet committed)
+    # while an older T0 is presented. Reuse detection's revoke-all must not
+    # miss T3.
+    first = register(client, "refresh-revoke-race@example.com")
+    user_id = decode_token(first["access_token"])
+    t0 = first["refresh_token"]
+    t1 = client.post("/auth/refresh", json={"refresh_token": t0}).json()["refresh_token"]
+    t2 = client.post("/auth/refresh", json={"refresh_token": t1}).json()["refresh_token"]
+
+    result = {}
+    with SessionLocal() as rotation:
+        lock_user_sessions(rotation, user_id)
+        head = find_refresh_token(rotation, t2, for_update=True)
+        t3 = rotate_refresh_token(rotation, head, t2, None, utc_now())
+
+        def present_stale():
+            result["response"] = client.post("/auth/refresh", json={"refresh_token": t0})
+
+        thief_detected = threading.Thread(target=present_stale)
+        thief_detected.start()
+        time.sleep(1.0)
+        # The reuse request must be waiting on the user lock, not done.
+        assert "response" not in result
+        rotation.commit()
+    thief_detected.join(timeout=30)
+
+    assert result["response"].status_code == 401
+    assert result["response"].json()["error"]["code"] == "refresh_token_reused"
+    assert live_token_count(user_id) == 0
+    survivor = client.post("/auth/refresh", json={"refresh_token": t3})
+    assert survivor.status_code == 401
+
+
+def test_concurrent_identical_proposals_do_not_500(client):
+    # Two different users' rotations propose the same value at once: the
+    # second insert hits the unique index after the existence check passed.
+    first = register(client, "refresh-same-proposal-a@example.com")
+    other = register(client, "refresh-same-proposal-b@example.com")
+    first_user = decode_token(first["access_token"])
+    shared = proposal()
+
+    result = {}
+    with SessionLocal() as rotation:
+        lock_user_sessions(rotation, first_user)
+        head = find_refresh_token(rotation, first["refresh_token"], for_update=True)
+        assert rotate_refresh_token(rotation, head, first["refresh_token"], shared, utc_now()) == shared
+
+        def rotate_other():
+            result["response"] = client.post(
+                "/auth/refresh",
+                json={"refresh_token": other["refresh_token"], "next_refresh_token": shared},
+            )
+
+        racer = threading.Thread(target=rotate_other)
+        racer.start()
+        time.sleep(1.0)
+        rotation.commit()
+    racer.join(timeout=30)
+
+    response = result["response"]
+    assert response.status_code == 200, response.text
+    assert response.json()["refresh_token"] != shared
+    onward = client.post("/auth/refresh", json={"refresh_token": response.json()["refresh_token"]})
+    assert onward.status_code == 200, onward.text
+
+
+def test_successor_reference_is_indexed():
+    indexes = inspect(engine).get_indexes("refresh_tokens")
+    assert any(index["column_names"] == ["replaced_by_id"] for index in indexes)

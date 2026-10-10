@@ -127,6 +127,41 @@ describe("silent refresh", () => {
     expect(store.pending).toBeNull();
   });
 
+  it("gives up on a stalled refresh after the timeout and keeps the pending successor", async () => {
+    vi.useFakeTimers();
+    try {
+      const fetchMock = vi.fn(
+        (url: string, init?: RequestInit) =>
+          new Promise<Response>((_resolve, reject) => {
+            if (!url.endsWith("/auth/refresh")) {
+              _resolve(json(401, {}));
+              return;
+            }
+            // Never answers; only the abort signal ends it.
+            init?.signal?.addEventListener("abort", () =>
+              reject(new DOMException("aborted", "AbortError")),
+            );
+          }),
+      );
+      vi.stubGlobal("fetch", fetchMock);
+      const client = await setup();
+
+      const pendingCall = client.get("/thing");
+      const settled = expect(pendingCall).rejects.toMatchObject({ status: 401 });
+      await vi.advanceTimersByTimeAsync(client.REFRESH_TIMEOUT_MS + 1);
+      await settled;
+
+      const [init] = fetchMock.mock.calls
+        .filter(([url]) => String(url).endsWith("/auth/refresh"))
+        .map(([, requestInit]) => requestInit as RequestInit);
+      expect(init.signal?.aborted).toBe(true);
+      expect(store.refresh).toBe("old-refresh");
+      expect(store.pending).toBeTruthy();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("adopts the server's token when it differs from the proposal", async () => {
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
       if (url.endsWith("/auth/refresh")) {
