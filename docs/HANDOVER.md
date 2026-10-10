@@ -293,7 +293,7 @@ checkpoint, and Endless Practice. Specifically exercise what changed:
   unrecoverable progress.
 - **Backend-unreachable state** — stop the api container mid-session; you
   must get a "can't reach the server" screen with Retry, NOT the login page.
-- **A unit checkpoint** on a unit that has one (52.7% do).
+- **A unit checkpoint** on any A1–B1 unit (all of them have one now).
 - **matching_pairs** — its Check button was hardcoded English; confirm it is
   translated.
 
@@ -304,24 +304,55 @@ checkpoint, and Endless Practice. Specifically exercise what changed:
 | Teaching ≥10h, all 6 directions | ✅ |
 | Practice ≥10h, all 6 | ✅ |
 | Launch-path code blockers | ✅ 0 |
-| **Working checkpoints** | ⚠️ **304/577 (52.7%)** |
+| **Working checkpoints** | ⚠️ **579/603 (96.0%)**, see below |
 
-Measured by calling the real `generate_checkpoint()` on every launch unit:
-en-fa 51/86 · en-nl 54/88 · en-prs 56/84 · fa-en 48/106 · nl-en 48/106 ·
-prs-en 47/107.
+Re-measured 2026-10-11 on a freshly synced DB (all of
+`content_manifest.txt`, every lexeme backfill, every pack in
+`practice_manifest.txt`) by calling the real `generate_checkpoint()` on
+every unit of the 6 launch directions:
 
-**All 273 failures have one cause: no practice pack authored for that
-unit.** Code and lexemes are both solved. Follow
-`docs/content/PRACTICE_PACK_RECIPE.md` (corrected 2026-07-22).
+| direction | available | missing |
+|---|---|---|
+| nl-en | 106/106 | — |
+| fa-en | 106/106 | — |
+| prs-en | 106/106 | — |
+| en-nl | 96/104 | C1 unit01–08 |
+| en-fa | 83/91 | B2 unit01–08 |
+| en-prs | 82/90 | B2 unit01–08 |
 
-**Highest leverage: the three X→en directions (~160 packs) all consume one
-shared English corpus**, so a single push lifts nl-en, fa-en and prs-en
-together from ~45% to ~85%+.
+Every unit that existed when the 52.7% figure was taken now has a
+checkpoint, including the fa-en/prs-en a2_unit35–40 chain and the three
+thin A1 units. The 24 missing units are the tiers added afterwards
+(en-nl C1, en-fa B2, en-prs B2): they have **no lexeme backfill and no
+practice pack** (0 lexemes, 0 templates), so they yield 0 items.
+
+What is still open:
+
+1. **Scope decision (Ramin):** are en-nl C1 and en-fa/en-prs B2 inside the
+   publish gate? If not, the gate is met for the launch scope. If yes, each
+   tier needs its `backfill_lexemes_en_{nl,fa,prs}.py` extended, 8 packs
+   authored per `docs/content/PRACTICE_PACK_RECIPE.md`, full fresh-context
+   review, and (fa/prs) a native audit.
+2. **Native audit (Ramin):** the 78 fa/prs gloss drafts behind the
+   fa-en/prs-en a2_unit35–40 checkpoints
+   (`docs/FA_PRS_GLOSS_DRAFTS_a2_unit35-40.md`, commit `776b830f`) are still
+   unaudited drafts. A wrong gloss ships as the graded answer.
+3. The practice packs themselves are mostly `review.status: unreviewed`
+   (board item 3).
+
+Re-measure after any content, backfill or pack change (read-only: runs in a
+rolled-back transaction):
+
+```bash
+cd backend && docker compose exec -T api python -m app.scripts.checkpoint_coverage
+# --direction fa-en (repeatable) · --all · --json
+```
 
 ## Remaining board, in priority order
 
 1. Live browser verification (above).
-2. Practice packs — X→en first, then en→X.
+2. Practice packs for the tiers that have none (en-nl C1, en-fa B2,
+   en-prs B2), if they are in scope (see above).
 3. **Fresh-context review backlog: ~150 unreviewed files**, including 48
    Dari files repaired on 2026-07-22. Those were set to
    `status: unreviewed` / `required_next_reviewer: fresh_context` because
