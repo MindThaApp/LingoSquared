@@ -339,7 +339,10 @@ issued, unexpired (`SOCIAL_NONCE_TTL_SECONDS`, default 600) and unused; it
 is used up by the first sign-in that presents it, so a captured request
 cannot be replayed. Mandatory for both providers. The nonce endpoint answers
 `503 social_login_unavailable` while the feature flag is off and is rate
-limited per IP. `iat` is required and a 60 s clock skew is tolerated. A token
+limited per IP (`SOCIAL_NONCE_RATE_LIMIT_MAX` per minute, default 60; it has
+its own limiter so users behind one shared address are not held to the
+refresh limit). Expired nonces are deleted whenever a new one is issued and
+by `python -m app.scripts.prune_refresh_tokens`. `iat` is required and a 60 s clock skew is tolerated. A token
 issued to several audiences must carry an `azp` that is one of ours, and a
 present `azp` must always be. A token signed with an unknown key id triggers
 one refetch of the provider's keys (at most once a minute); if the keys
@@ -348,21 +351,19 @@ The endpoint shares the login rate limit.
 
 Account resolution, in order: (1) an existing `(provider, provider_subject)`
 identity row → that user; (2) no identity row but a provider-VERIFIED email
-matching an existing account WITHOUT a password → link a new identity row to
-that account. If that account has a password the answer is
-`409 account_exists` and nothing is linked: registration never verifies the
-address, so the password may belong to someone who registered it in the
-provider user's name. The owner links it from inside the account instead
-(`POST /auth/social/link` with the current password). Apple addresses are
-trusted on the same terms (private relay or otherwise), so an Apple ID whose
-address has since changed hands cannot enter a password account either.
-(Unverified provider emails never link — they create a fresh account, since
-linking on an unverified email would let anyone claim an existing account;
-for Google, `email_verified` is trusted only for gmail.com/googlemail.com
-addresses or when the token's `hd` hosted-domain claim matches the address's
-domain, per Google's guidance; an account that already holds a different
-identity of the same provider is refused with `409 provider_already_linked`);
-(3) otherwise create a new passwordless user (null `password_hash`; the
+matching an existing account → `409 account_exists` and nothing is linked
+(changed 2026-10-11: a new identity is never attached to an existing account
+by email, with or without a password, and whichever provider created it).
+Registration never verifies the address, so a password may belong to
+someone who registered it in the provider user's name; and an address one
+provider vouches for may have changed hands at another (an Apple ID set up
+with an address that has since been reassigned). The owner links the new
+provider from inside the account instead (`POST /auth/social/link`, proving
+it is them with the current password or a fresh sign-in through a provider
+already linked). (Unverified provider emails never match — they create a
+fresh account; for Google, `email_verified` is trusted only for
+gmail.com/googlemail.com addresses or when the token's `hd` hosted-domain
+claim matches the address's domain, per Google's guidance); (3) otherwise create a new passwordless user (null `password_hash`; the
 account email is the provider's address only when the provider vouches for
 it and no account uses it, else a synthetic
 `<provider>-<hash>@social.lingosquared.example` address;
@@ -379,20 +380,33 @@ off, or while a provider's env var is unset/empty, that provider answers
 `503 social_login_unavailable` (same graceful-degradation convention as the
 TTS keys); the other provider and password auth are unaffected.
 
+`GET /auth/social/config` (added 2026-10-11, public, no body): which providers
+the server accepts right now, `{"providers": ["google", "apple"]}`. Empty
+while `SOCIAL_SIGN_IN_ENABLED` is off; otherwise lists each provider whose
+audience variable is non-empty. Clients show a provider's button only when it
+is listed here AND the client itself is configured for it.
+
 A concurrent first sign-in with the same identity returns the account the
 other request created rather than an error.
 
 `POST /auth/social/link` (added 2026-10-10, authenticated): same request body
-as `POST /auth/social` plus an optional `"current_password"`, same
+as `POST /auth/social` plus an optional `"current_password"` and an optional
+`"reauth": {"provider", "id_token", "nonce"}` (added 2026-10-11), same
 verification. Attaches the identity to the signed-in account and returns the
 `GET /auth/me` shape. For a guest account (the web client's generated
 `guest-<id>@example.com` login) this is the upgrade path: the account keeps
 its id and therefore all progress, its email becomes the provider's address
 (when the provider vouches for it) or the synthetic address above, and its
-never-shown password is cleared. Any other account must send its
-`current_password`, so a stolen access token alone cannot attach a
-permanent sign-in; an account without a password (provider-only) cannot add
-one this way. Missing or wrong password: `403 reauthentication_required`.
+never-shown password is cleared. Any other account must prove it is the
+owner, so a stolen access token alone cannot attach a permanent sign-in:
+either its `current_password`, or `reauth`, a second ID token from a
+provider ALREADY linked to this account, with its own fresh nonce from
+`POST /auth/social/nonce` (the only option for an account without a
+password). Missing or wrong proof: `403 reauthentication_required`. That
+check runs before any nonce is used up, so a mistyped password can be
+retried with the same provider sign-in until the nonce expires; on success
+both nonces are used up. An ID token or nonce that fails verification here is
+`403 invalid_credentials` rather than 401, since the session itself is fine.
 Such accounts keep their email and password. Accounts are never merged:
 `409 identity_in_use` when the identity belongs to another account,
 `409 email_exists` when a guest's provider email belongs to another account,
@@ -405,11 +419,15 @@ Removes that linked identity and returns the `GET /auth/me` shape. Never
 removes the last way to sign in: an account without a password keeps at
 least one identity (`409 last_login_method`). `404 identity_not_found` when
 that provider is not linked; `403 reauthentication_required` for a missing or
-wrong password. Existing sessions are not revoked. `GET /auth/me` gains an
+wrong password. `503 social_login_unavailable` while
+`SOCIAL_SIGN_IN_ENABLED` is off (added 2026-10-11). Existing sessions are not revoked. `GET /auth/me` gains an
 additive `"identities": [{"provider": "google", "created_at": "..."}]` field
 (subjects/emails from providers are not echoed back).
 
-`GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at", "identities" }`.
+`GET /auth/me` response: `{ "id", "email", "display_name", "is_admin", "created_at", "identities", "has_password" }`.
+`has_password` (added 2026-10-11) is true when the account has a password the
+user knows (never for a guest), so a client knows whether to ask for the
+password or for a sign-in with a linked provider.
 
 **Admin user management**
 
