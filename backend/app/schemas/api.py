@@ -49,9 +49,19 @@ class SocialLoginIn(BaseModel):
     provider:Literal["google","apple"]
     id_token:str=Field(min_length=1,max_length=8192)
     display_name:str|None=Field(default=None,max_length=100)
-    # Raw nonce whose SHA-256 hex digest the client passed to the provider;
-    # required for Apple, checked for Google when present.
+    # Raw nonce from POST /auth/social/nonce whose SHA-256 hex digest the
+    # client passed to the provider. Required for both providers and
+    # single-use; Optional here only so a missing one is a 401 like any
+    # other failed sign-in rather than a 422.
     nonce:str|None=Field(default=None,min_length=16,max_length=256)
+class SocialLinkIn(SocialLoginIn):
+    # Required when the signed-in account is not a guest and has a password:
+    # a bare access token must not be enough to attach a permanent sign-in.
+    current_password:str|None=Field(default=None,max_length=128)
+class SocialUnlinkIn(BaseModel):
+    provider:Literal["google","apple"]
+    current_password:str|None=Field(default=None,max_length=128)
+class SocialNonceOut(BaseModel): nonce:str; expires_in:int
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel):
     refresh_token:str=Field(min_length=1,max_length=512)

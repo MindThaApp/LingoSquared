@@ -10,21 +10,27 @@ work without one (see [Apple needs a real domain](#apple-needs-a-real-domain-wit
 | Piece | Where |
 |---|---|
 | `POST /auth/social`: sign in or sign up with a Google/Apple ID token | `backend/app/api/router.py` |
-| `POST /auth/social/link`: attach Google/Apple to the signed-in account; converts a guest in place, keeping all progress | same |
-| ID-token verification against the provider's JWKS (signature, `iss`, `aud`, `exp`, `iat`; Apple `nonce`) | `backend/app/services/social_auth.py` |
-| `user_identities` table (migration 0023) + one identity per provider per account (0033) | `backend/alembic/versions/` |
-| "Continue with Google" / "Continue with Apple" on Log in and Register, and a "Keep your progress" card for guests on Profile | `frontend/src/components/SocialSignInButtons.tsx`, `frontend/src/lib/socialSignIn.ts` |
+| `POST /auth/social/nonce`: single-use, short-lived nonce for the next sign-in | same |
+| `POST /auth/social/link`: attach Google/Apple to the signed-in account; converts a guest in place, keeping all progress; other accounts confirm their password | same |
+| `POST /auth/social/unlink`: remove a linked sign-in (never the last way in) | same |
+| ID-token verification against the provider's JWKS (signature, `iss`, `aud`, `azp`, `exp`, `iat`, `nonce`) | `backend/app/services/social_auth.py` |
+| `user_identities` table (migration 0023) + one identity per provider per account (0033) + issued nonces (0034) | `backend/alembic/versions/` |
+| "Continue with Google" / "Continue with Apple" on Log in and Register, a "Keep your progress" card for guests on Profile, and a "Sign-in methods" card (connect/disconnect, with the current password) for other accounts | `frontend/src/components/SocialSignInButtons.tsx`, `frontend/src/components/ConnectedSignIns.tsx`, `frontend/src/lib/socialSignIn.ts` |
 
 API details are in `docs/CONTRACT.md` (Auth section).
 
 How a sign-in works (web):
 
-1. The browser creates a random nonce and gives the provider its SHA-256 digest.
+1. The browser asks the backend for a nonce (valid 10 minutes, usable once)
+   and gives the provider its SHA-256 digest.
 2. The provider's popup returns a signed ID token (a JWT) that contains that digest.
 3. The browser sends the token and the raw nonce to the backend.
-4. The backend fetches the provider's public keys (JWKS, cached 5 minutes) and
-   checks the signature, issuer, audience (must be one of your client IDs),
-   expiry, issue time and nonce.
+4. The backend fetches the provider's public keys (JWKS, cached 5 minutes,
+   refetched at most once a minute for an unknown key id) and checks the
+   signature, issuer, audience (must be one of your client IDs), authorized
+   party, expiry, issue time and nonce, then uses the nonce up. A replayed
+   request is refused. If the provider's keys cannot be fetched the answer
+   is 503, not "invalid token".
 5. The backend finds or creates the account and returns the usual
    access + refresh token pair.
 
@@ -32,13 +38,24 @@ Account rules:
 
 - An existing identity → that account.
 - Otherwise, an email the provider vouches for that matches an existing
-  account → the identity is linked to that account. Apple's verified emails
-  (including private-relay addresses) count. Google's count only for
-  gmail.com/googlemail.com or when the token's `hd` (Workspace domain)
-  matches, which is Google's own guidance.
+  account WITHOUT a password → the identity is linked to that account.
+  Apple's verified emails (including private-relay addresses) count. Google's
+  count only for gmail.com/googlemail.com or when the token's `hd`
+  (Workspace domain) matches, which is Google's own guidance.
+- If that account has a password, nothing is linked: the answer is
+  `409 account_exists` ("log in with your password, then connect from your
+  profile"). Registration does not verify email addresses, so otherwise
+  anyone could register a victim's address first and later share the
+  victim's account once the victim continues with Google or Apple. The
+  same rule covers an Apple address that has changed hands since the Apple
+  ID was created.
 - Otherwise a new passwordless account is created.
 - Accounts are never merged. If a guest tries to link an identity or email
   that belongs to another account, they get a clear 409 instead.
+- Linking from inside an account needs the current password unless the
+  account is a guest. A passwordless account cannot add another sign-in from
+  its profile; signing in with the second provider under the same vouched-for
+  email links it instead.
 
 ## Switches and settings
 
@@ -201,6 +218,11 @@ unaffected.
   to the allowlists. An iOS app that offers Google sign-in must also offer
   Sign in with Apple (App Store guideline 4.8).
 - Apple token revocation on account deletion (needs the key from step 4).
-- Unlinking an identity, and a "set a password" flow for passwordless
-  accounts.
+- A "set a password" flow for passwordless accounts.
+- Email verification at registration. Until it exists, password accounts
+  are never linked by email automatically.
+- An Apple address that is not a private-relay address can still be linked
+  automatically into a passwordless account with the same address (for
+  example one created through Google Workspace). Closing that would mean
+  trusting only private-relay addresses from Apple.
 - fa/prs translations of the new strings (they fall back to English).
