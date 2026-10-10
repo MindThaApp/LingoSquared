@@ -26,6 +26,10 @@ const ACCESS_TOKEN_STORAGE_KEY = 'access_token'
 // separately from the access token, same rationale as the interface
 // comment in @lingo/shared's client.ts.
 const REFRESH_TOKEN_STORAGE_KEY = 'refresh_token'
+// The successor refresh token the client proposes on POST /auth/refresh,
+// persisted before the request is sent (see ApiTokenStorage in
+// @lingo/shared's client.ts) so a page closed mid-refresh can still resume.
+const PENDING_REFRESH_TOKEN_STORAGE_KEY = 'refresh_token_pending'
 
 configureApi({
   baseUrl: import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000',
@@ -41,10 +45,16 @@ configureApi({
     set: (token) => localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token),
     getRefresh: () => localStorage.getItem(REFRESH_TOKEN_STORAGE_KEY),
     setRefresh: (token) => localStorage.setItem(REFRESH_TOKEN_STORAGE_KEY, token),
-    // clear() is the "session is dead" operation -- both tokens go.
+    getPendingRefresh: () => localStorage.getItem(PENDING_REFRESH_TOKEN_STORAGE_KEY),
+    setPendingRefresh: (token) => {
+      if (token) localStorage.setItem(PENDING_REFRESH_TOKEN_STORAGE_KEY, token)
+      else localStorage.removeItem(PENDING_REFRESH_TOKEN_STORAGE_KEY)
+    },
+    // clear() is the "session is dead" operation -- every token goes.
     clear: () => {
       localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY)
       localStorage.removeItem(REFRESH_TOKEN_STORAGE_KEY)
+      localStorage.removeItem(PENDING_REFRESH_TOKEN_STORAGE_KEY)
     },
   },
 })

@@ -13,12 +13,12 @@ from uuid import uuid4
 from fastapi import APIRouter, Depends, File, Form, Query, Request, Response, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.concurrency import run_in_threadpool
-from sqlalchemy import Float, case, delete, func, or_, select, text
+from sqlalchemy import Float, case, delete, func, or_, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, selectinload
 from app.core.config import get_settings
 from app.core.rate_limit import DailyCharBudget, RateLimiter, register_limiter
-from app.core.security import create_refresh_token, create_token, hash_password, verify_password
+from app.core.security import create_refresh_token, create_token, hash_password, open_successor_token, seal_successor_token, verify_password
 from app.core.errors import fail
 from app.db.session import get_db
 from app.models import (
@@ -307,23 +307,53 @@ def utc_now():
 def as_aware(value):
     return value if value.tzinfo else value.replace(tzinfo=timezone.utc)
 
-def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
-    raw_token=create_refresh_token()
-    now_value=now_value or utc_now()
-    db.add(
-        RefreshToken(
-            token_hash=hash_password(raw_token),
-            token_sha256=hashlib.sha256(raw_token.encode("utf-8")).hexdigest(),
-            user_id=user_id,
-            issued_at=now_value,
-            expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
-        )
-    )
-    return raw_token
+def refresh_token_digest(raw_token:str) -> str:
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
-def find_refresh_token(db:Session,raw_token:str):
-    digest=hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
-    return db.scalar(select(RefreshToken).where(RefreshToken.token_sha256==digest))
+def add_refresh_token(db:Session,user_id:str,now_value:datetime|None=None,raw_token:str|None=None) -> tuple[str,RefreshToken]:
+    raw_token=raw_token or create_refresh_token()
+    now_value=now_value or utc_now()
+    row=RefreshToken(
+        token_hash=hash_password(raw_token),
+        token_sha256=refresh_token_digest(raw_token),
+        user_id=user_id,
+        issued_at=now_value,
+        expires_at=now_value+timedelta(seconds=get_settings().refresh_token_expire_seconds),
+    )
+    db.add(row)
+    db.flush()
+    return raw_token,row
+
+def add_proposed_refresh_token(db:Session,user_id:str,now_value:datetime,proposed:str) -> tuple[str,RefreshToken]|None:
+    """Insert a client-proposed token, or return None if that value is taken.
+
+    The existence check alone is not enough: another rotation (any user) may
+    have inserted the same value without committing yet. The insert then
+    waits on the unique index and fails once that transaction commits; the
+    savepoint keeps that failure from aborting the surrounding rotation.
+    """
+    if db.scalar(select(RefreshToken.id).where(RefreshToken.token_sha256==refresh_token_digest(proposed))) is not None:
+        return None
+    savepoint=db.begin_nested()
+    try:
+        added=add_refresh_token(db,user_id,now_value,proposed)
+    except IntegrityError:
+        savepoint.rollback()
+        return None
+    savepoint.commit()
+    return added
+
+def issue_refresh_token(db:Session,user_id:str,now_value:datetime|None=None) -> str:
+    return add_refresh_token(db,user_id,now_value)[0]
+
+def find_refresh_token(db:Session,raw_token:str,for_update:bool=False):
+    query=select(RefreshToken).where(RefreshToken.token_sha256==refresh_token_digest(raw_token))
+    if for_update:
+        # Serializes concurrent refreshes of the same token: the second
+        # request waits for the first to commit and then sees the rotation
+        # (and its recorded successor) instead of rotating a second time.
+        query=query.with_for_update().execution_options(populate_existing=True)
+    return db.scalar(query)
 
 def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
     revoked_cutoff = now_value - timedelta(days=7)
@@ -333,14 +363,23 @@ def prune_stale_refresh_tokens(db:Session,user_id:str,now_value:datetime):
         | (RefreshToken.revoked_at<=revoked_cutoff),
     ))
 
+def lock_user_sessions(db:Session,user_id:str):
+    """Serialize every refresh-token rotation and revoke-all of one user.
+
+    Both paths take the user's row lock first (always before any token row
+    lock, so the order cannot invert). Without it, a revoke-all could miss a
+    successor that a concurrent rotation has inserted but not yet committed.
+    """
+    return db.scalar(select(User).where(User.id==user_id).with_for_update().execution_options(populate_existing=True))
+
 def revoke_all_refresh_tokens(db:Session,user_id:str,now_value:datetime):
-    for token in db.scalars(
-        select(RefreshToken).where(
-            RefreshToken.user_id==user_id,
-            RefreshToken.revoked_at.is_(None),
-        )
-    ):
-        token.revoked_at=now_value
+    lock_user_sessions(db,user_id)
+    db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.user_id==user_id,RefreshToken.revoked_at.is_(None))
+        .values(revoked_at=now_value)
+        .execution_options(synchronize_session="fetch")
+    )
 
 def auth_response(db:Session,user):
     prune_stale_refresh_tokens(db,user.id,utc_now())
@@ -348,9 +387,66 @@ def auth_response(db:Session,user):
     db.commit()
     return {"access_token":create_token(user.id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds,"user":{"id":user.id,"email":user.email,"display_name":user.display_name,"is_admin":is_admin_user(user)}}
 
-def refresh_response(db:Session,user_id:str):
-    refresh_token=issue_refresh_token(db,user_id)
+def refresh_response(user_id:str,refresh_token:str):
     return {"access_token":create_token(user_id),"refresh_token":refresh_token,"token_type":"bearer","expires_in":get_settings().access_token_expire_seconds}
+
+def rotate_refresh_token(db:Session,token:RefreshToken,presented_raw:str,proposed_next:str|None,now_value:datetime) -> str:
+    # A client-proposed successor is honoured only if no token with that
+    # value exists yet; otherwise the server picks one (the response is
+    # always authoritative, the proposal is only a recovery aid).
+    added=add_proposed_refresh_token(db,token.user_id,now_value,proposed_next) if proposed_next else None
+    successor_raw,successor=added or add_refresh_token(db,token.user_id,now_value)
+    token.revoked_at=now_value
+    token.replaced_by_id=successor.id
+    token.successor_sealed=seal_successor_token(presented_raw,token.token_sha256,successor_raw)
+    # The token being rotated now has a successor of its own, so its
+    # predecessor can no longer be answered from the grace path: drop that
+    # sealed copy rather than keep it around until pruning.
+    db.execute(
+        update(RefreshToken)
+        .where(RefreshToken.replaced_by_id==token.id,RefreshToken.successor_sealed.is_not(None))
+        .values(successor_sealed=None)
+        .execution_options(synchronize_session=False)
+    )
+    return successor_raw
+
+def replayed_successor(db:Session,token:RefreshToken,presented_raw:str,proposed_next:str|None,now_value:datetime) -> str|None:
+    """Return the successor for a retried rotation, or None for real reuse.
+
+    A rotated-out token is accepted again only while its successor is still
+    the live head of the chain (not itself rotated, revoked or expired), and
+    only when either
+      - the caller also presents that successor as next_refresh_token, which
+        proves it already holds the successor (a retry of the very same
+        request, e.g. after the page was closed mid-request), or
+      - the rotation happened within refresh_reuse_grace_seconds (a reload
+        that lost the response, or a second tab racing the first), and the
+        window has answered fewer than refresh_reuse_grace_max_replays
+        retries of this rotation so far.
+    The SAME refresh successor is returned; no new refresh token is minted,
+    so the chain never branches. Each answer does carry a fresh access
+    token, which is why the time-window path is capped: past the cap a
+    replay is treated as reuse. The proof-of-possession path is not capped,
+    because a caller holding the successor could refresh with it anyway.
+    Logout- and reuse-revoked tokens have no successor and never qualify.
+    """
+    if token.replaced_by_id is None or not token.successor_sealed or token.revoked_at is None:
+        return None
+    successor=db.get(RefreshToken,token.replaced_by_id,with_for_update=True,populate_existing=True)
+    if successor is None or successor.revoked_at is not None or as_aware(successor.expires_at)<=now_value:
+        return None
+    if proposed_next and secrets.compare_digest(refresh_token_digest(proposed_next),successor.token_sha256 or ""):
+        return proposed_next
+    settings=get_settings()
+    grace=settings.refresh_reuse_grace_seconds
+    if grace<=0 or now_value-as_aware(token.revoked_at)>timedelta(seconds=grace):
+        return None
+    if (token.grace_replays or 0)>=settings.refresh_reuse_grace_max_replays:
+        return None
+    successor_raw=open_successor_token(presented_raw,token.token_sha256,token.successor_sealed)
+    if successor_raw is not None:
+        token.grace_replays=(token.grace_replays or 0)+1
+    return successor_raw
 def social_audiences(provider:str) -> set[str]:
     settings=get_settings()
     return settings.google_oauth_client_id_set if provider=="google" else settings.apple_audience_id_set
@@ -772,13 +868,29 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     # Rate-limit before lookup, and count invalid-token probes too (same
     # principle as login counting failed password attempts).
     enforce_rate_limit(REFRESH_RATE_LIMIT,client_ip(request),"refresh_rate_limited","Too many token refresh attempts from this address. Please wait before trying again.")
+    now_value=utc_now()
     refresh_token=find_refresh_token(db,body.refresh_token)
+    if not refresh_token:
+        fail(401,"invalid_refresh_token","Invalid or expired refresh token")
+    user_id=refresh_token.user_id
+    prune_stale_refresh_tokens(db,user_id,now_value)
+    db.commit()
+    # Re-read under the user's session lock, then the token's row lock, for
+    # the rotation decision itself. The user lock makes a rotation and a
+    # concurrent revoke-all (reuse detection elsewhere in the family) run
+    # one after the other, so the rotation sees the revocation and the
+    # revoke-all sees the successor.
+    lock_user_sessions(db,user_id)
+    refresh_token=find_refresh_token(db,body.refresh_token,for_update=True)
     now_value=utc_now()
     if not refresh_token:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
-    prune_stale_refresh_tokens(db,refresh_token.user_id,now_value)
-    db.commit()
     if refresh_token.revoked_at is not None:
+        user=db.get(User,refresh_token.user_id)
+        successor_raw=replayed_successor(db,refresh_token,body.refresh_token,body.next_refresh_token,now_value) if user and user.is_active else None
+        if successor_raw is not None:
+            db.commit()
+            return refresh_response(user.id,successor_raw)
         revoke_all_refresh_tokens(db,refresh_token.user_id,now_value)
         db.commit()
         fail(401,"refresh_token_reused","Refresh token was already used or revoked")
@@ -787,10 +899,9 @@ def refresh(body:RefreshIn,request:Request,db:Session=Depends(get_db)):
     user=db.get(User,refresh_token.user_id)
     if not user or not user.is_active:
         fail(401,"invalid_refresh_token","Invalid or expired refresh token")
-    refresh_token.revoked_at=now_value
-    response=refresh_response(db,user.id)
+    successor_raw=rotate_refresh_token(db,refresh_token,body.refresh_token,body.next_refresh_token,now_value)
     db.commit()
-    return response
+    return refresh_response(user.id,successor_raw)
 @router.post("/auth/logout",status_code=204)
 def logout(body:LogoutIn,request:Request,db:Session=Depends(get_db)):
     # Shares the refresh endpoint's limiter and error code.
