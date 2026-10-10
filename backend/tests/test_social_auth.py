@@ -1,5 +1,7 @@
 import base64
 import hashlib
+import threading
+import time
 import uuid
 from datetime import datetime, timedelta, timezone
 
@@ -8,9 +10,10 @@ import pytest
 from cryptography.hazmat.primitives.asymmetric import rsa
 from sqlalchemy import func, select
 
+from app.api.router import issue_social_nonce
 from app.core.config import get_settings
 from app.db.session import SessionLocal
-from app.models import User, UserIdentity, UserStats
+from app.models import SocialLoginNonce, User, UserIdentity, UserStats
 from app.services import social_auth
 
 
@@ -60,9 +63,16 @@ def make_id_token(
     email: str,
     email_verified=True,
     expires_delta: timedelta = timedelta(minutes=10),
-    nonce: str | None = None,
+    nonce: str | None = "issue",
     extra: dict | None = None,
+    kid: str = "test-key",
 ):
+    """Sign an ID token. By default it embeds a nonce freshly issued by the
+    server (as POST /auth/social/nonce would); nonce=None leaves the claim
+    out, any other string embeds that value."""
+    if nonce == "issue":
+        with SessionLocal() as db:
+            nonce = issue_social_nonce(db)[0]
     now = datetime.now(timezone.utc)
     claims = {
         "iss": "https://accounts.google.com"
@@ -81,12 +91,29 @@ def make_id_token(
     if nonce is not None:
         claims["nonce"] = hashlib.sha256(nonce.encode()).hexdigest()
     claims.update(extra or {})
-    return jwt.encode(
+    signed = SignedToken(jwt.encode(
         claims,
         private_key,
         algorithm="RS256",
-        headers={"kid": "test-key"},
-    )
+        headers={"kid": kid},
+    ))
+    signed.provider = provider
+    signed.nonce = nonce
+    return signed
+
+
+class SignedToken(str):
+    provider: str
+    nonce: str | None
+
+
+def request_body(token: SignedToken, **extra):
+    """The request body a client sends for this token."""
+    payload = {"provider": token.provider, "id_token": str(token)}
+    if token.nonce is not None:
+        payload["nonce"] = token.nonce
+    payload.update(extra)
+    return payload
 
 
 APPLE_NONCE = "raw-nonce-0123456789abcdef"
@@ -119,7 +146,7 @@ def test_google_social_login_happy_path(client, configured_social, social_keys):
 
     response = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token, "display_name": "Google User"},
+        json=request_body(token, display_name="Google User"),
     )
 
     assert response.status_code == 200, response.text
@@ -145,7 +172,7 @@ def test_social_refresh_token_rotates_through_existing_refresh_endpoint(
     )
     social = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
     assert social.status_code == 200, social.text
 
@@ -173,17 +200,11 @@ def test_apple_social_login_happy_path_with_string_email_verified(
         audience="apple-service",
         email="apple-social@example.com",
         email_verified=True,
-        nonce=APPLE_NONCE,
     )
 
     response = client.post(
         "/auth/social",
-        json={
-            "provider": "apple",
-            "id_token": token,
-            "display_name": "Apple User",
-            "nonce": APPLE_NONCE,
-        },
+        json=request_body(token, display_name="Apple User"),
     )
 
     assert response.status_code == 200, response.text
@@ -208,7 +229,7 @@ def test_social_login_rejects_unallowed_audience(
 
     response = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
 
     assert response.status_code == 401
@@ -227,28 +248,31 @@ def test_social_login_rejects_expired_token(client, configured_social, social_ke
 
     response = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
 
     assert response.status_code == 401
     assert response.json()["error"]["code"] == "invalid_credentials"
 
 
-def test_verified_email_links_existing_password_account(
+def test_verified_email_never_signs_in_to_a_password_account(
     client,
     configured_social,
     social_keys,
 ):
+    # Pre-account hijacking: an attacker registers the victim's address
+    # with a password of their choosing (registration does not verify
+    # email). When the victim later continues with Google, their identity
+    # must not be attached to the attacker's account.
     registered = client.post(
         "/auth/register",
         json={
             "email": "verified-link@gmail.com",
-            "password": "password123",
-            "display_name": "Existing User",
+            "password": "attacker-pass-1",
+            "display_name": "Attacker",
         },
     )
     assert registered.status_code == 201, registered.text
-    existing_user_id = registered.json()["user"]["id"]
     token = make_id_token(
         social_keys,
         provider="google",
@@ -258,17 +282,52 @@ def test_verified_email_links_existing_password_account(
         email_verified=True,
     )
 
-    response = client.post(
-        "/auth/social",
-        json={"provider": "google", "id_token": token},
-    )
+    response = client.post("/auth/social", json=request_body(token))
 
-    assert response.status_code == 200, response.text
-    assert response.json()["user"]["id"] == existing_user_id
-    assert response.json()["user"]["display_name"] == "Existing User"
+    assert response.status_code == 409, response.text
+    assert response.json()["error"]["code"] == "account_exists"
+    assert "access_token" not in response.json()
+    assert identity_count("google", "google-verified-link") == 0
     with SessionLocal() as db:
-        identity = db.get(UserIdentity, ("google", "google-verified-link"))
-        assert identity.user_id == existing_user_id
+        assert db.scalar(select(func.count()).select_from(User).where(User.email == "verified-link@gmail.com")) == 1
+
+
+def test_password_account_owner_links_from_inside_the_account(
+    client,
+    configured_social,
+    social_keys,
+):
+    registered = client.post(
+        "/auth/register",
+        json={"email": "owner-links@gmail.com", "password": "password123"},
+    )
+    assert registered.status_code == 201, registered.text
+    user_id = registered.json()["user"]["id"]
+    link_token = make_id_token(
+        social_keys,
+        provider="google",
+        subject="google-owner-links",
+        audience="google-web",
+        email="owner-links@gmail.com",
+    )
+    linked = client.post(
+        "/auth/social/link",
+        json=request_body(link_token, current_password="password123"),
+        headers=auth_header(registered.json()["access_token"]),
+    )
+    assert linked.status_code == 200, linked.text
+
+    # From then on Google signs in to that account.
+    sign_in = make_id_token(
+        social_keys,
+        provider="google",
+        subject="google-owner-links",
+        audience="google-web",
+        email="owner-links@gmail.com",
+    )
+    response = client.post("/auth/social", json=request_body(sign_in))
+    assert response.status_code == 200, response.text
+    assert response.json()["user"]["id"] == user_id
 
 
 def test_unverified_email_creates_instead_of_linking(
@@ -293,7 +352,7 @@ def test_unverified_email_creates_instead_of_linking(
 
     response = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
 
     assert response.status_code == 200, response.text
@@ -314,7 +373,7 @@ def test_existing_identity_row_is_reused(client, configured_social, social_keys)
     )
     first = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": first_token},
+        json=request_body(first_token),
     )
     assert first.status_code == 200, first.text
     user_id = first.json()["user"]["id"]
@@ -328,7 +387,7 @@ def test_existing_identity_row_is_reused(client, configured_social, social_keys)
 
     second = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": second_token},
+        json=request_body(second_token),
     )
 
     assert second.status_code == 200, second.text
@@ -351,7 +410,7 @@ def test_null_password_hash_login_returns_invalid_credentials(
     )
     social = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
     assert social.status_code == 200, social.text
 
@@ -386,7 +445,7 @@ def test_social_login_returns_503_when_provider_unconfigured(
 
     response = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
 
     assert response.status_code == 503
@@ -404,7 +463,7 @@ def test_auth_me_includes_public_identities(client, configured_social, social_ke
     )
     social = client.post(
         "/auth/social",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
     )
     assert social.status_code == 200, social.text
     access_token = social.json()["access_token"]
@@ -434,74 +493,129 @@ def test_social_login_is_off_unless_the_flag_is_set(client, monkeypatch, social_
             audience="google-web",
             email="flag-off@gmail.com",
         )
-        response = client.post("/auth/social", json={"provider": "google", "id_token": token})
+        response = client.post("/auth/social", json=request_body(token))
         assert response.status_code == 503
         assert response.json()["error"]["code"] == "social_login_unavailable"
     finally:
         get_settings.cache_clear()
 
 
-def test_apple_requires_a_nonce(client, configured_social, social_keys):
-    token = make_id_token(
-        social_keys,
-        provider="apple",
-        subject="apple-no-nonce",
-        audience="apple-service",
-        email="apple-no-nonce@example.com",
-        nonce=APPLE_NONCE,
-    )
-    response = client.post("/auth/social", json={"provider": "apple", "id_token": token})
-    assert response.status_code == 401
-    assert identity_count("apple", "apple-no-nonce") == 0
+def test_social_login_requires_a_nonce(client, configured_social, social_keys):
+    for provider, audience in (("apple", "apple-service"), ("google", "google-web")):
+        token = make_id_token(
+            social_keys,
+            provider=provider,
+            subject=f"{provider}-no-nonce",
+            audience=audience,
+            email=f"{provider}-no-nonce@gmail.com",
+        )
+        payload = request_body(token)
+        del payload["nonce"]
+        response = client.post("/auth/social", json=payload)
+        assert response.status_code == 401, provider
+        assert identity_count(provider, f"{provider}-no-nonce") == 0
 
 
-def test_apple_rejects_a_mismatched_nonce(client, configured_social, social_keys):
+def test_social_login_rejects_a_mismatched_nonce(client, configured_social, social_keys):
     token = make_id_token(
         social_keys,
         provider="apple",
         subject="apple-bad-nonce",
         audience="apple-service",
         email="apple-bad-nonce@example.com",
-        nonce=APPLE_NONCE,
     )
-    response = client.post(
-        "/auth/social",
-        json={"provider": "apple", "id_token": token, "nonce": "some-other-nonce-value"},
-    )
+    with SessionLocal() as db:
+        other_nonce = issue_social_nonce(db)[0]
+    response = client.post("/auth/social", json=request_body(token, nonce=other_nonce))
     assert response.status_code == 401
 
 
-def test_apple_rejects_a_token_without_a_nonce_claim(client, configured_social, social_keys):
-    token = make_id_token(
-        social_keys,
-        provider="apple",
-        subject="apple-unbound",
-        audience="apple-service",
-        email="apple-unbound@example.com",
-    )
-    response = client.post(
-        "/auth/social",
-        json={"provider": "apple", "id_token": token, "nonce": APPLE_NONCE},
-    )
-    assert response.status_code == 401
+def test_social_login_rejects_a_token_without_a_nonce_claim(client, configured_social, social_keys):
+    for provider, audience in (("apple", "apple-service"), ("google", "google-web")):
+        token = make_id_token(
+            social_keys,
+            provider=provider,
+            subject=f"{provider}-unbound",
+            audience=audience,
+            email=f"{provider}-unbound@example.com",
+            nonce=None,
+        )
+        with SessionLocal() as db:
+            issued = issue_social_nonce(db)[0]
+        response = client.post("/auth/social", json=request_body(token, nonce=issued))
+        assert response.status_code == 401, provider
 
 
-def test_google_nonce_is_checked_when_present(client, configured_social, social_keys):
+def test_social_login_rejects_a_nonce_the_server_never_issued(client, configured_social, social_keys):
+    # The nonce matches the token, but this server never handed it out.
+    for provider, audience in (("apple", "apple-service"), ("google", "google-web")):
+        token = make_id_token(
+            social_keys,
+            provider=provider,
+            subject=f"{provider}-self-made-nonce",
+            audience=audience,
+            email=f"{provider}-self-made@gmail.com",
+            nonce=APPLE_NONCE,
+        )
+        response = client.post("/auth/social", json=request_body(token))
+        assert response.status_code == 401, provider
+        assert identity_count(provider, f"{provider}-self-made-nonce") == 0
+
+
+def test_a_captured_sign_in_cannot_be_replayed(client, configured_social, social_keys):
+    for provider, audience in (("apple", "apple-service"), ("google", "google-web")):
+        token = make_id_token(
+            social_keys,
+            provider=provider,
+            subject=f"{provider}-replayed",
+            audience=audience,
+            email=f"{provider}-replayed@gmail.com",
+        )
+        first = client.post("/auth/social", json=request_body(token))
+        assert first.status_code == 200, first.text
+        replayed = client.post("/auth/social", json=request_body(token))
+        assert replayed.status_code == 401, provider
+        assert replayed.json()["error"]["code"] == "invalid_credentials"
+
+
+def test_an_expired_nonce_is_refused(client, configured_social, social_keys):
     token = make_id_token(
         social_keys,
         provider="google",
-        subject="google-nonce",
+        subject="google-stale-nonce",
         audience="google-web",
-        email="google-nonce@gmail.com",
-        nonce=APPLE_NONCE,
+        email="stale-nonce@gmail.com",
     )
-    missing = client.post("/auth/social", json={"provider": "google", "id_token": token})
-    assert missing.status_code == 401
-    ok = client.post(
-        "/auth/social",
-        json={"provider": "google", "id_token": token, "nonce": APPLE_NONCE},
-    )
-    assert ok.status_code == 200, ok.text
+    with SessionLocal() as db:
+        row = db.get(SocialLoginNonce, social_auth.nonce_digest(token.nonce))
+        row.expires_at = datetime.now(timezone.utc) - timedelta(seconds=1)
+        db.commit()
+    response = client.post("/auth/social", json=request_body(token))
+    assert response.status_code == 401
+
+
+def test_nonce_endpoint_issues_single_use_nonces(client, configured_social):
+    first = client.post("/auth/social/nonce")
+    second = client.post("/auth/social/nonce")
+    assert first.status_code == 200, first.text
+    assert first.json()["expires_in"] == get_settings().social_nonce_ttl_seconds
+    assert len(first.json()["nonce"]) >= 43
+    assert first.json()["nonce"] != second.json()["nonce"]
+    with SessionLocal() as db:
+        stored = db.get(SocialLoginNonce, social_auth.nonce_digest(first.json()["nonce"]))
+        assert stored is not None
+        # Only the digest is stored.
+        assert db.get(SocialLoginNonce, first.json()["nonce"]) is None
+
+
+def test_nonce_endpoint_is_off_with_the_flag(client, monkeypatch):
+    monkeypatch.delenv("SOCIAL_SIGN_IN_ENABLED", raising=False)
+    get_settings.cache_clear()
+    try:
+        response = client.post("/auth/social/nonce")
+        assert response.status_code == 503
+    finally:
+        get_settings.cache_clear()
 
 
 def test_social_login_rejects_wrong_issuer(client, configured_social, social_keys):
@@ -513,7 +627,7 @@ def test_social_login_rejects_wrong_issuer(client, configured_social, social_key
         email="bad-iss@gmail.com",
         extra={"iss": "https://evil.example.com"},
     )
-    response = client.post("/auth/social", json={"provider": "google", "id_token": token})
+    response = client.post("/auth/social", json=request_body(token))
     assert response.status_code == 401
 
 
@@ -526,7 +640,7 @@ def test_social_login_rejects_token_signed_by_another_key(client, configured_soc
         audience="google-web",
         email="forged@gmail.com",
     )
-    response = client.post("/auth/social", json={"provider": "google", "id_token": token})
+    response = client.post("/auth/social", json=request_body(token))
     assert response.status_code == 401
     assert identity_count("google", "google-forged") == 0
 
@@ -549,18 +663,24 @@ def test_google_non_gmail_address_without_hosted_domain_does_not_link(
         audience="google-web",
         email="corp-user@example.org",
     )
-    response = client.post("/auth/social", json={"provider": "google", "id_token": token})
+    response = client.post("/auth/social", json=request_body(token))
     assert response.status_code == 200, response.text
     assert response.json()["user"]["id"] != registered.json()["user"]["id"]
     assert response.json()["user"]["email"].endswith("@social.lingosquared.example")
 
 
-def test_google_hosted_domain_address_links(client, configured_social, social_keys):
-    registered = client.post(
-        "/auth/register",
-        json={"email": "ws-user@example.net", "password": "password123"},
+def test_google_hosted_domain_address_links_to_a_passwordless_account(client, configured_social, social_keys):
+    # An account created through Apple (no password) with a verified
+    # address; Google vouches for the same Workspace address via hd.
+    apple = make_id_token(
+        social_keys,
+        provider="apple",
+        subject="apple-ws-first",
+        audience="apple-service",
+        email="ws-user@example.net",
     )
-    assert registered.status_code == 201, registered.text
+    created = client.post("/auth/social", json=request_body(apple))
+    assert created.status_code == 200, created.text
     token = make_id_token(
         social_keys,
         provider="google",
@@ -569,9 +689,51 @@ def test_google_hosted_domain_address_links(client, configured_social, social_ke
         email="ws-user@example.net",
         extra={"hd": "example.net"},
     )
-    response = client.post("/auth/social", json={"provider": "google", "id_token": token})
+    response = client.post("/auth/social", json=request_body(token))
     assert response.status_code == 200, response.text
-    assert response.json()["user"]["id"] == registered.json()["user"]["id"]
+    assert response.json()["user"]["id"] == created.json()["user"]["id"]
+
+
+def test_google_hosted_domain_address_does_not_sign_in_to_a_password_account(client, configured_social, social_keys):
+    registered = client.post(
+        "/auth/register",
+        json={"email": "ws-password@example.net", "password": "password123"},
+    )
+    assert registered.status_code == 201, registered.text
+    token = make_id_token(
+        social_keys,
+        provider="google",
+        subject="google-ws-password",
+        audience="google-web",
+        email="ws-password@example.net",
+        extra={"hd": "example.net"},
+    )
+    response = client.post("/auth/social", json=request_body(token))
+    assert response.status_code == 409
+    assert response.json()["error"]["code"] == "account_exists"
+
+
+@pytest.mark.parametrize(
+    "email",
+    ["former-staff@example.com", "relay-user@privaterelay.appleid.com"],
+)
+def test_apple_email_never_signs_in_to_a_password_account(client, configured_social, social_keys, email):
+    # Apple verified a non-relay address only when the Apple ID was set up;
+    # it may belong to someone else by now. Neither kind of Apple address
+    # is enough to enter an account that has a password.
+    registered = client.post("/auth/register", json={"email": email, "password": "password123"})
+    assert registered.status_code == 201, registered.text
+    token = make_id_token(
+        social_keys,
+        provider="apple",
+        subject=f"apple-pw-{email}",
+        audience="apple-service",
+        email=email,
+    )
+    response = client.post("/auth/social", json=request_body(token))
+    assert response.status_code == 409
+    assert response.json()["error"]["code"] == "account_exists"
+    assert identity_count("apple", f"apple-pw-{email}") == 0
 
 
 def test_email_link_refuses_a_second_identity_of_the_same_provider(
@@ -584,7 +746,7 @@ def test_email_link_refuses_a_second_identity_of_the_same_provider(
         audience="google-web",
         email="dup-provider@gmail.com",
     )
-    assert client.post("/auth/social", json={"provider": "google", "id_token": first}).status_code == 200
+    assert client.post("/auth/social", json=request_body(first)).status_code == 200
     second = make_id_token(
         social_keys,
         provider="google",
@@ -592,7 +754,7 @@ def test_email_link_refuses_a_second_identity_of_the_same_provider(
         audience="google-web",
         email="dup-provider@gmail.com",
     )
-    response = client.post("/auth/social", json={"provider": "google", "id_token": second})
+    response = client.post("/auth/social", json=request_body(second))
     assert response.status_code == 409
     assert response.json()["error"]["code"] == "provider_already_linked"
 
@@ -634,7 +796,7 @@ def test_guest_converts_to_google_account_and_keeps_progress(
 
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
         headers=auth_header(guest["access_token"]),
     )
 
@@ -650,7 +812,14 @@ def test_guest_converts_to_google_account_and_keeps_progress(
         assert db.get(UserStats, guest_id).total_xp == 420
 
     # A later Google sign-in on another device lands in the same account.
-    again = client.post("/auth/social", json={"provider": "google", "id_token": token})
+    later = make_id_token(
+        social_keys,
+        provider="google",
+        subject="google-guest-convert",
+        audience="google-web",
+        email="Converted.Guest@gmail.com",
+    )
+    again = client.post("/auth/social", json=request_body(later))
     assert again.status_code == 200, again.text
     assert again.json()["user"]["id"] == guest_id
     xp = client.get("/me/xp", headers=auth_header(again.json()["access_token"]))
@@ -666,11 +835,10 @@ def test_guest_converts_to_apple_private_relay_account(client, configured_social
         subject="apple-guest-convert",
         audience="apple-service",
         email="abc123@privaterelay.appleid.com",
-        nonce=APPLE_NONCE,
     )
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "apple", "id_token": token, "nonce": APPLE_NONCE, "display_name": "Jo"},
+        json=request_body(token, display_name="Jo"),
         headers=auth_header(guest["access_token"]),
     )
     assert linked.status_code == 200, linked.text
@@ -690,7 +858,7 @@ def test_guest_with_unverified_email_gets_a_synthetic_address(client, configured
     )
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
         headers=auth_header(guest["access_token"]),
     )
     assert linked.status_code == 200, linked.text
@@ -716,7 +884,7 @@ def test_guest_conversion_refuses_an_email_owned_by_another_account(
     )
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "google", "id_token": token},
+        json=request_body(token),
         headers=auth_header(guest["access_token"]),
     )
     assert linked.status_code == 409
@@ -728,19 +896,30 @@ def test_guest_conversion_refuses_an_email_owned_by_another_account(
         assert user.password_hash is not None
 
 
-def test_link_refuses_an_identity_owned_by_another_account(client, configured_social, social_keys):
-    token = make_id_token(
+def google_token(social_keys, subject, email):
+    return make_id_token(
         social_keys,
         provider="google",
-        subject="google-owned-elsewhere",
+        subject=subject,
         audience="google-web",
-        email="owned-elsewhere@gmail.com",
+        email=email,
     )
-    assert client.post("/auth/social", json={"provider": "google", "id_token": token}).status_code == 200
+
+
+def register_password_account(client, email):
+    response = client.post("/auth/register", json={"email": email, "password": "password123"})
+    assert response.status_code == 201, response.text
+    return response.json()
+
+
+def test_link_refuses_an_identity_owned_by_another_account(client, configured_social, social_keys):
+    first = google_token(social_keys, "google-owned-elsewhere", "owned-elsewhere@gmail.com")
+    assert client.post("/auth/social", json=request_body(first)).status_code == 200
     guest = register_guest(client)
+    again = google_token(social_keys, "google-owned-elsewhere", "owned-elsewhere@gmail.com")
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "google", "id_token": token},
+        json=request_body(again),
         headers=auth_header(guest["access_token"]),
     )
     assert linked.status_code == 409
@@ -749,16 +928,17 @@ def test_link_refuses_an_identity_owned_by_another_account(client, configured_so
 
 def test_link_is_idempotent_for_the_same_account(client, configured_social, social_keys):
     guest = register_guest(client)
-    token = make_id_token(
-        social_keys,
-        provider="google",
-        subject="google-idempotent-link",
-        audience="google-web",
-        email="idempotent-link@gmail.com",
-    )
     headers = auth_header(guest["access_token"])
-    first = client.post("/auth/social/link", json={"provider": "google", "id_token": token}, headers=headers)
-    second = client.post("/auth/social/link", json={"provider": "google", "id_token": token}, headers=headers)
+    first = client.post(
+        "/auth/social/link",
+        json=request_body(google_token(social_keys, "google-idempotent-link", "idempotent-link@gmail.com")),
+        headers=headers,
+    )
+    second = client.post(
+        "/auth/social/link",
+        json=request_body(google_token(social_keys, "google-idempotent-link", "idempotent-link@gmail.com")),
+        headers=headers,
+    )
     assert first.status_code == 200, first.text
     assert second.status_code == 200, second.text
     assert identity_count("google", "google-idempotent-link") == 1
@@ -767,22 +947,12 @@ def test_link_is_idempotent_for_the_same_account(client, configured_social, soci
 def test_password_account_can_link_and_keeps_its_email_and_password(
     client, configured_social, social_keys
 ):
-    registered = client.post(
-        "/auth/register",
-        json={"email": "keeps-password@example.com", "password": "password123"},
-    )
-    assert registered.status_code == 201, registered.text
-    token = make_id_token(
-        social_keys,
-        provider="google",
-        subject="google-keeps-password",
-        audience="google-web",
-        email="other-address@gmail.com",
-    )
+    registered = register_password_account(client, "keeps-password@example.com")
+    token = google_token(social_keys, "google-keeps-password", "other-address@gmail.com")
     linked = client.post(
         "/auth/social/link",
-        json={"provider": "google", "id_token": token},
-        headers=auth_header(registered.json()["access_token"]),
+        json=request_body(token, current_password="password123"),
+        headers=auth_header(registered["access_token"]),
     )
     assert linked.status_code == 200, linked.text
     assert linked.json()["email"] == "keeps-password@example.com"
@@ -793,36 +963,269 @@ def test_password_account_can_link_and_keeps_its_email_and_password(
     assert login.status_code == 200
 
 
+@pytest.mark.parametrize("current_password", [None, "wrong-password"])
+def test_password_account_link_needs_the_current_password(
+    client, configured_social, social_keys, current_password
+):
+    # A stolen access token alone must not be enough to attach the
+    # thief's own Google account for permanent access.
+    registered = register_password_account(client, f"link-needs-password-{current_password}@example.com")
+    subject = f"google-thief-{current_password}"
+    token = google_token(social_keys, subject, f"thief-{current_password}@gmail.com")
+    extra = {} if current_password is None else {"current_password": current_password}
+    linked = client.post(
+        "/auth/social/link",
+        json=request_body(token, **extra),
+        headers=auth_header(registered["access_token"]),
+    )
+    assert linked.status_code == 403
+    assert linked.json()["error"]["code"] == "reauthentication_required"
+    assert identity_count("google", subject) == 0
+
+
+def test_passwordless_account_cannot_link_with_an_access_token_alone(
+    client, configured_social, social_keys
+):
+    created = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-passwordless-owner", "passwordless-owner@gmail.com")),
+    )
+    assert created.status_code == 200, created.text
+    apple = make_id_token(
+        social_keys,
+        provider="apple",
+        subject="apple-passwordless-thief",
+        audience="apple-service",
+        email="thief@privaterelay.appleid.com",
+    )
+    linked = client.post(
+        "/auth/social/link",
+        json=request_body(apple),
+        headers=auth_header(created.json()["access_token"]),
+    )
+    assert linked.status_code == 403
+    assert linked.json()["error"]["code"] == "reauthentication_required"
+    assert identity_count("apple", "apple-passwordless-thief") == 0
+
+
 def test_link_refuses_a_second_identity_of_the_same_provider(client, configured_social, social_keys):
-    guest = register_guest(client)
-    headers = auth_header(guest["access_token"])
-    first = make_id_token(
-        social_keys,
-        provider="google",
-        subject="google-link-one",
-        audience="google-web",
-        email="link-one@gmail.com",
+    registered = register_password_account(client, "second-identity@example.com")
+    headers = auth_header(registered["access_token"])
+    first = google_token(social_keys, "google-link-one", "link-one@gmail.com")
+    assert client.post(
+        "/auth/social/link",
+        json=request_body(first, current_password="password123"),
+        headers=headers,
+    ).status_code == 200
+    second = google_token(social_keys, "google-link-two", "link-two@gmail.com")
+    response = client.post(
+        "/auth/social/link",
+        json=request_body(second, current_password="password123"),
+        headers=headers,
     )
-    assert client.post("/auth/social/link", json={"provider": "google", "id_token": first}, headers=headers).status_code == 200
-    second = make_id_token(
-        social_keys,
-        provider="google",
-        subject="google-link-two",
-        audience="google-web",
-        email="link-two@gmail.com",
-    )
-    response = client.post("/auth/social/link", json={"provider": "google", "id_token": second}, headers=headers)
     assert response.status_code == 409
     assert response.json()["error"]["code"] == "provider_already_linked"
 
 
 def test_link_requires_a_signed_in_account(client, configured_social, social_keys):
-    token = make_id_token(
-        social_keys,
-        provider="google",
-        subject="google-anon-link",
-        audience="google-web",
-        email="anon-link@gmail.com",
-    )
-    response = client.post("/auth/social/link", json={"provider": "google", "id_token": token})
+    token = google_token(social_keys, "google-anon-link", "anon-link@gmail.com")
+    response = client.post("/auth/social/link", json=request_body(token))
     assert response.status_code == 401
+
+
+# --- Unlinking --------------------------------------------------------------
+
+
+def test_password_account_can_unlink_with_its_password(client, configured_social, social_keys):
+    registered = register_password_account(client, "unlink-owner@example.com")
+    headers = auth_header(registered["access_token"])
+    token = google_token(social_keys, "google-unlink-me", "unlink-me@gmail.com")
+    assert client.post(
+        "/auth/social/link",
+        json=request_body(token, current_password="password123"),
+        headers=headers,
+    ).status_code == 200
+
+    refused = client.post("/auth/social/unlink", json={"provider": "google"}, headers=headers)
+    assert refused.status_code == 403
+    assert identity_count("google", "google-unlink-me") == 1
+
+    unlinked = client.post(
+        "/auth/social/unlink",
+        json={"provider": "google", "current_password": "password123"},
+        headers=headers,
+    )
+    assert unlinked.status_code == 200, unlinked.text
+    assert unlinked.json()["identities"] == []
+    assert identity_count("google", "google-unlink-me") == 0
+
+    # The Google account no longer signs in to it.
+    again = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-unlink-me", "unlink-me@gmail.com")),
+    )
+    assert again.status_code == 200, again.text
+    assert again.json()["user"]["id"] != registered["user"]["id"]
+
+
+def test_unlink_never_removes_the_last_way_to_sign_in(client, configured_social, social_keys):
+    created = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-only-method", "only-method@gmail.com")),
+    )
+    assert created.status_code == 200, created.text
+    headers = auth_header(created.json()["access_token"])
+    response = client.post("/auth/social/unlink", json={"provider": "google"}, headers=headers)
+    assert response.status_code == 409
+    assert response.json()["error"]["code"] == "last_login_method"
+    assert identity_count("google", "google-only-method") == 1
+
+
+def test_passwordless_account_with_two_providers_can_drop_one(client, configured_social, social_keys):
+    apple = make_id_token(
+        social_keys,
+        provider="apple",
+        subject="apple-two-methods",
+        audience="apple-service",
+        email="two-methods@gmail.com",
+    )
+    created = client.post("/auth/social", json=request_body(apple))
+    assert created.status_code == 200, created.text
+    google = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-two-methods", "two-methods@gmail.com")),
+    )
+    assert google.status_code == 200, google.text
+    assert google.json()["user"]["id"] == created.json()["user"]["id"]
+    headers = auth_header(created.json()["access_token"])
+
+    dropped = client.post("/auth/social/unlink", json={"provider": "apple"}, headers=headers)
+    assert dropped.status_code == 200, dropped.text
+    assert [identity["provider"] for identity in dropped.json()["identities"]] == ["google"]
+    last = client.post("/auth/social/unlink", json={"provider": "google"}, headers=headers)
+    assert last.status_code == 409
+
+
+def test_unlink_of_a_provider_that_is_not_linked_is_404(client, configured_social, social_keys):
+    registered = register_password_account(client, "unlink-none@example.com")
+    response = client.post(
+        "/auth/social/unlink",
+        json={"provider": "apple", "current_password": "password123"},
+        headers=auth_header(registered["access_token"]),
+    )
+    assert response.status_code == 404
+
+
+# --- Provider keys, audiences and concurrency -------------------------------
+
+
+def test_unknown_key_id_refetches_the_key_set_once(client, configured_social, social_keys, monkeypatch):
+    rotated_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    numbers = rotated_key.public_key().public_numbers()
+    rotated_jwk = {
+        "kty": "RSA",
+        "use": "sig",
+        "kid": "rotated-key",
+        "alg": "RS256",
+        "n": _b64url_int(numbers.n),
+        "e": _b64url_int(numbers.e),
+    }
+    published = {"keys": []}
+    fetches = []
+
+    def fake_fetch(provider):
+        fetches.append(provider)
+        return {"keys": list(published["keys"])}
+
+    monkeypatch.setattr(social_auth, "fetch_jwks", fake_fetch)
+    social_auth.clear_jwks_cache()
+
+    # The key set is cached before the provider publishes the new key.
+    early = make_id_token(
+        rotated_key, provider="google", subject="google-rotated", audience="google-web",
+        email="rotated@gmail.com", kid="rotated-key",
+    )
+    assert client.post("/auth/social", json=request_body(early)).status_code == 401
+    assert len(fetches) == 1
+
+    # Published now; a refetch inside the minimum interval is not allowed,
+    # so an attacker cannot make us fetch on every request.
+    published["keys"].append(rotated_jwk)
+    blocked = make_id_token(
+        rotated_key, provider="google", subject="google-rotated", audience="google-web",
+        email="rotated@gmail.com", kid="rotated-key",
+    )
+    assert client.post("/auth/social", json=request_body(blocked)).status_code == 401
+    assert len(fetches) == 1
+
+    # Once the interval has passed, the unknown kid triggers one refetch.
+    monkeypatch.setattr(social_auth, "JWKS_REFETCH_MIN_SECONDS", 0)
+    token = make_id_token(
+        rotated_key, provider="google", subject="google-rotated", audience="google-web",
+        email="rotated@gmail.com", kid="rotated-key",
+    )
+    response = client.post("/auth/social", json=request_body(token))
+    assert response.status_code == 200, response.text
+    assert len(fetches) == 2
+
+
+def test_provider_key_fetch_failure_is_503(client, configured_social, monkeypatch):
+    def failing_fetch(provider):
+        raise social_auth.httpx.ConnectError("unreachable")
+
+    monkeypatch.setattr(social_auth, "fetch_jwks", failing_fetch)
+    social_auth.clear_jwks_cache()
+    key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+    token = make_id_token(
+        key, provider="google", subject="google-offline", audience="google-web", email="offline@gmail.com",
+    )
+    response = client.post("/auth/social", json=request_body(token))
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "social_provider_unavailable"
+    social_auth.clear_jwks_cache()
+
+
+def test_multiple_audiences_need_an_authorized_party_of_ours(client, configured_social, social_keys):
+    def multi(subject, extra):
+        return make_id_token(
+            social_keys, provider="google", subject=subject, audience="google-web",
+            email=f"{subject}@gmail.com", extra={"aud": ["google-web", "someone-else"], **extra},
+        )
+
+    missing = client.post("/auth/social", json=request_body(multi("google-azp-missing", {})))
+    assert missing.status_code == 401
+    foreign = client.post("/auth/social", json=request_body(multi("google-azp-foreign", {"azp": "someone-else"})))
+    assert foreign.status_code == 401
+    ours = client.post("/auth/social", json=request_body(multi("google-azp-ours", {"azp": "google-web"})))
+    assert ours.status_code == 200, ours.text
+
+
+def test_concurrent_first_sign_in_does_not_500(client, configured_social, social_keys):
+    # Another request is creating the account for this identity right now
+    # (inserted, not yet committed). Ours waits on the unique key, fails,
+    # and must then return the account the other request created.
+    with SessionLocal() as other:
+        user = User(email="race-first@gmail.com", password_hash=None, display_name="Race", is_admin=False)
+        other.add(user)
+        other.flush()
+        other.add(UserStats(user_id=user.id, total_xp=0, streak_days=0, last_activity_date=None, daily_goal=20))
+        other.add(UserIdentity(user_id=user.id, provider="google", provider_subject="google-race"))
+        other.flush()
+        token = google_token(social_keys, "google-race", "race-first@gmail.com")
+        result = {}
+
+        def sign_in():
+            result["response"] = client.post("/auth/social", json=request_body(token))
+
+        racer = threading.Thread(target=sign_in)
+        racer.start()
+        time.sleep(1.0)
+        assert "response" not in result
+        other.commit()
+        user_id = user.id
+    racer.join(timeout=30)
+
+    response = result["response"]
+    assert response.status_code == 200, response.text
+    assert response.json()["user"]["id"] == user_id
+    assert identity_count("google", "google-race") == 1

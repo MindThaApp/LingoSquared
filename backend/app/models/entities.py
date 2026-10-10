@@ -126,6 +126,21 @@ class UserIdentity(Base):
     user: Mapped[User] = relationship(back_populates="identities")
 
 
+class SocialLoginNonce(Base):
+    """A nonce the server issued for one Google/Apple sign-in attempt.
+
+    Only the SHA-256 digest of the raw nonce is stored (the same digest the
+    provider embeds in its ID token). A row is deleted when a sign-in
+    consumes it, so a captured token-plus-nonce cannot be replayed; expired
+    rows are pruned whenever new nonces are issued.
+    """
+
+    __tablename__ = "social_login_nonces"
+
+    nonce_sha256: Mapped[str] = mapped_column(String(64), primary_key=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+
+
 class RefreshToken(Base):
     __tablename__ = "refresh_tokens"
     __table_args__ = (
