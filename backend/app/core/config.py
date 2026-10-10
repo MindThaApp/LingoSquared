@@ -94,6 +94,11 @@ class Settings(BaseSettings):
     social_sign_in_enabled: bool = False
     # Lifetime of a server-issued sign-in nonce (POST /auth/social/nonce).
     social_nonce_ttl_seconds: int = 600
+    # Nonces per minute per IP. A sign-in or link page asks for one on load
+    # and again before each expires, so a school, office or carrier network
+    # sharing one address needs more room than the refresh limit gives.
+    # Each nonce is a small row that expires with the TTL above.
+    social_nonce_rate_limit_max: int = 60
     google_oauth_client_ids: str = ""
     apple_audience_ids: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")

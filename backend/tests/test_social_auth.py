@@ -608,6 +608,32 @@ def test_nonce_endpoint_issues_single_use_nonces(client, configured_social):
         assert db.get(SocialLoginNonce, first.json()["nonce"]) is None
 
 
+def test_nonce_rate_limit_has_its_own_ceiling(client, configured_social):
+    from app.api.router import SOCIAL_NONCE_RATE_LIMIT
+
+    settings = get_settings()
+    assert SOCIAL_NONCE_RATE_LIMIT.limit == settings.social_nonce_rate_limit_max
+    assert settings.social_nonce_rate_limit_max > settings.refresh_rate_limit_max
+    for _ in range(settings.social_nonce_rate_limit_max):
+        assert client.post("/auth/social/nonce").status_code == 200
+    limited = client.post("/auth/social/nonce")
+    assert limited.status_code == 429
+
+
+def test_prune_removes_expired_nonces_only(client, configured_social):
+    from app.scripts.prune_refresh_tokens import prune_social_nonces
+
+    fresh = client.post("/auth/social/nonce").json()["nonce"]
+    stale = client.post("/auth/social/nonce").json()["nonce"]
+    with SessionLocal() as db:
+        row = db.get(SocialLoginNonce, social_auth.nonce_digest(stale))
+        row.expires_at = datetime.now(timezone.utc) - timedelta(seconds=1)
+        db.commit()
+        assert prune_social_nonces(db) >= 1
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(stale)) is None
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(fresh)) is not None
+
+
 def test_nonce_endpoint_is_off_with_the_flag(client, monkeypatch):
     monkeypatch.delenv("SOCIAL_SIGN_IN_ENABLED", raising=False)
     get_settings.cache_clear()
@@ -669,9 +695,10 @@ def test_google_non_gmail_address_without_hosted_domain_does_not_link(
     assert response.json()["user"]["email"].endswith("@social.lingosquared.example")
 
 
-def test_google_hosted_domain_address_links_to_a_passwordless_account(client, configured_social, social_keys):
+def test_google_hosted_domain_address_does_not_join_a_passwordless_account(client, configured_social, social_keys):
     # An account created through Apple (no password) with a verified
-    # address; Google vouches for the same Workspace address via hd.
+    # address; Google vouches for the same Workspace address via hd. Still
+    # not linked: a new provider is connected only from inside the account.
     apple = make_id_token(
         social_keys,
         provider="apple",
@@ -690,8 +717,9 @@ def test_google_hosted_domain_address_links_to_a_passwordless_account(client, co
         extra={"hd": "example.net"},
     )
     response = client.post("/auth/social", json=request_body(token))
-    assert response.status_code == 200, response.text
-    assert response.json()["user"]["id"] == created.json()["user"]["id"]
+    assert response.status_code == 409, response.text
+    assert response.json()["error"]["code"] == "account_exists"
+    assert identity_count("google", "google-ws-hd") == 0
 
 
 def test_google_hosted_domain_address_does_not_sign_in_to_a_password_account(client, configured_social, social_keys):
@@ -736,7 +764,7 @@ def test_apple_email_never_signs_in_to_a_password_account(client, configured_soc
     assert identity_count("apple", f"apple-pw-{email}") == 0
 
 
-def test_email_link_refuses_a_second_identity_of_the_same_provider(
+def test_email_never_joins_an_account_that_has_the_same_provider(
     client, configured_social, social_keys
 ):
     first = make_id_token(
@@ -756,7 +784,42 @@ def test_email_link_refuses_a_second_identity_of_the_same_provider(
     )
     response = client.post("/auth/social", json=request_body(second))
     assert response.status_code == 409
-    assert response.json()["error"]["code"] == "provider_already_linked"
+    assert response.json()["error"]["code"] == "account_exists"
+    assert identity_count("google", "google-dup-2") == 0
+
+
+def test_apple_email_never_joins_an_account_created_through_google(
+    client, configured_social, social_keys
+):
+    # Probe from the R25 review: an account created through Google for
+    # x@gmail.com, then an Apple sign-in carrying the same non-relay
+    # address. The Apple ID's address may have changed hands since it was
+    # set up, so it must not land in the Google user's account.
+    google = make_id_token(
+        social_keys,
+        provider="google",
+        subject="google-cross-provider-owner",
+        audience="google-web",
+        email="cross-provider@gmail.com",
+    )
+    created = client.post("/auth/social", json=request_body(google))
+    assert created.status_code == 200, created.text
+    apple = make_id_token(
+        social_keys,
+        provider="apple",
+        subject="apple-cross-provider-intruder",
+        audience="apple-service",
+        email="cross-provider@gmail.com",
+    )
+    response = client.post("/auth/social", json=request_body(apple))
+    assert response.status_code == 409, response.text
+    assert response.json()["error"]["code"] == "account_exists"
+    assert identity_count("apple", "apple-cross-provider-intruder") == 0
+    with SessionLocal() as db:
+        owners = db.scalar(
+            select(func.count()).select_from(User).where(User.email == "cross-provider@gmail.com")
+        )
+    assert owners == 1
 
 
 # --- Linking to the signed-in account / guest conversion ------------------
@@ -1033,7 +1096,244 @@ def test_link_requires_a_signed_in_account(client, configured_social, social_key
     assert response.status_code == 401
 
 
+def reauth_body(token: SignedToken):
+    return {"provider": token.provider, "id_token": str(token), "nonce": token.nonce}
+
+
+def apple_token(social_keys, subject, email):
+    return make_id_token(
+        social_keys,
+        provider="apple",
+        subject=subject,
+        audience="apple-service",
+        email=email,
+    )
+
+
+def test_wrong_password_does_not_use_up_the_link_nonce(client, configured_social, social_keys):
+    registered = register_password_account(client, "typo-password@example.com")
+    headers = auth_header(registered["access_token"])
+    token = google_token(social_keys, "google-typo-password", "typo-password@gmail.com")
+
+    typo = client.post(
+        "/auth/social/link",
+        json=request_body(token, current_password="password12"),
+        headers=headers,
+    )
+    assert typo.status_code == 403
+    assert typo.json()["error"]["code"] == "reauthentication_required"
+    with SessionLocal() as db:
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(token.nonce)) is not None
+
+    # Same provider sign-in, corrected password: no second popup needed.
+    linked = client.post(
+        "/auth/social/link",
+        json=request_body(token, current_password="password123"),
+        headers=headers,
+    )
+    assert linked.status_code == 200, linked.text
+    assert identity_count("google", "google-typo-password") == 1
+
+    # The nonce is now used up, so the request cannot be replayed.
+    with SessionLocal() as db:
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(token.nonce)) is None
+    replayed = client.post(
+        "/auth/social/link",
+        json=request_body(token, current_password="password123"),
+        headers=headers,
+    )
+    assert replayed.status_code == 403
+    assert replayed.json()["error"]["code"] == "invalid_credentials"
+
+
+def test_link_with_an_invalid_token_is_403_not_401(client, configured_social, social_keys):
+    # A 401 would make the client throw away a perfectly good session.
+    registered = register_password_account(client, "bad-link-token@example.com")
+    token = google_token(social_keys, "google-bad-link-token", "bad-link-token@gmail.com")
+    response = client.post(
+        "/auth/social/link",
+        json=request_body(token, nonce="not-the-nonce-0123456789", current_password="password123"),
+        headers=auth_header(registered["access_token"]),
+    )
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "invalid_credentials"
+
+
+def test_passwordless_account_links_a_second_provider_after_signing_in_again(
+    client, configured_social, social_keys
+):
+    created = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-reauth-owner", "reauth-owner@gmail.com")),
+    )
+    assert created.status_code == 200, created.text
+    assert created.json()["user"]["id"]
+    headers = auth_header(created.json()["access_token"])
+    me = client.get("/auth/me", headers=headers)
+    assert me.json()["has_password"] is False
+
+    reauth = google_token(social_keys, "google-reauth-owner", "reauth-owner@gmail.com")
+    apple = apple_token(social_keys, "apple-reauth-second", "reauth-second@privaterelay.appleid.com")
+    linked = client.post(
+        "/auth/social/link",
+        json=request_body(apple, reauth=reauth_body(reauth)),
+        headers=headers,
+    )
+    assert linked.status_code == 200, linked.text
+    assert sorted(identity["provider"] for identity in linked.json()["identities"]) == ["apple", "google"]
+    # Both nonces are used up.
+    with SessionLocal() as db:
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(apple.nonce)) is None
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(reauth.nonce)) is None
+
+    # The new provider now signs in to the same account.
+    again = client.post(
+        "/auth/social",
+        json=request_body(apple_token(social_keys, "apple-reauth-second", "reauth-second@privaterelay.appleid.com")),
+    )
+    assert again.status_code == 200, again.text
+    assert again.json()["user"]["id"] == created.json()["user"]["id"]
+
+
+def test_reauth_must_be_a_provider_linked_to_this_account(client, configured_social, social_keys):
+    victim = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-reauth-victim", "reauth-victim@gmail.com")),
+    )
+    assert victim.status_code == 200, victim.text
+    # The holder of the victim's access token signs in with their own
+    # Google account, which is not linked to the victim's account.
+    outsider = google_token(social_keys, "google-reauth-outsider", "reauth-outsider@gmail.com")
+    apple = apple_token(social_keys, "apple-reauth-outsider", "reauth-outsider@privaterelay.appleid.com")
+    response = client.post(
+        "/auth/social/link",
+        json=request_body(apple, reauth=reauth_body(outsider)),
+        headers=auth_header(victim.json()["access_token"]),
+    )
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "reauthentication_required"
+    assert identity_count("apple", "apple-reauth-outsider") == 0
+    # Nothing was used up by the refused attempt.
+    with SessionLocal() as db:
+        assert db.get(SocialLoginNonce, social_auth.nonce_digest(apple.nonce)) is not None
+
+
+def test_reauth_with_an_invalid_token_is_refused(client, configured_social, social_keys):
+    created = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-reauth-bad", "reauth-bad@gmail.com")),
+    )
+    assert created.status_code == 200, created.text
+    stale = google_token(social_keys, "google-reauth-bad", "reauth-bad@gmail.com")
+    apple = apple_token(social_keys, "apple-reauth-bad", "reauth-bad@privaterelay.appleid.com")
+    reauth = reauth_body(stale)
+    reauth["nonce"] = "some-other-nonce-0123456789"
+    response = client.post(
+        "/auth/social/link",
+        json=request_body(apple, reauth=reauth),
+        headers=auth_header(created.json()["access_token"]),
+    )
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "invalid_credentials"
+    assert identity_count("apple", "apple-reauth-bad") == 0
+
+
+def test_reauth_cannot_be_replayed(client, configured_social, social_keys):
+    created = client.post(
+        "/auth/social",
+        json=request_body(google_token(social_keys, "google-reauth-replay", "reauth-replay@gmail.com")),
+    )
+    assert created.status_code == 200, created.text
+    headers = auth_header(created.json()["access_token"])
+    reauth = google_token(social_keys, "google-reauth-replay", "reauth-replay@gmail.com")
+    first = client.post(
+        "/auth/social/link",
+        json=request_body(
+            apple_token(social_keys, "apple-reauth-replay-1", "replay-1@privaterelay.appleid.com"),
+            reauth=reauth_body(reauth),
+        ),
+        headers=headers,
+    )
+    assert first.status_code == 200, first.text
+    unlinked = client.post("/auth/social/unlink", json={"provider": "apple"}, headers=headers)
+    assert unlinked.status_code == 200, unlinked.text
+    second = client.post(
+        "/auth/social/link",
+        json=request_body(
+            apple_token(social_keys, "apple-reauth-replay-2", "replay-2@privaterelay.appleid.com"),
+            reauth=reauth_body(reauth),
+        ),
+        headers=headers,
+    )
+    assert second.status_code == 403
+    assert second.json()["error"]["code"] == "invalid_credentials"
+    assert identity_count("apple", "apple-reauth-replay-2") == 0
+
+
+def test_me_reports_whether_the_account_has_a_password(client, configured_social, social_keys):
+    registered = register_password_account(client, "has-password@example.com")
+    me = client.get("/auth/me", headers=auth_header(registered["access_token"]))
+    assert me.json()["has_password"] is True
+    guest = register_guest(client)
+    me = client.get("/auth/me", headers=auth_header(guest["access_token"]))
+    assert me.json()["has_password"] is False
+
+
+# --- Client configuration ---------------------------------------------------
+
+
+def test_social_config_lists_nothing_while_the_flag_is_off(client, monkeypatch):
+    monkeypatch.delenv("SOCIAL_SIGN_IN_ENABLED", raising=False)
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_IDS", "google-web")
+    monkeypatch.setenv("APPLE_AUDIENCE_IDS", "apple-service")
+    get_settings.cache_clear()
+    try:
+        response = client.get("/auth/social/config")
+        assert response.status_code == 200
+        assert response.json() == {"providers": []}
+    finally:
+        get_settings.cache_clear()
+
+
+def test_social_config_lists_the_configured_providers(client, configured_social):
+    response = client.get("/auth/social/config")
+    assert response.status_code == 200
+    assert response.json() == {"providers": ["google", "apple"]}
+
+
+def test_social_config_leaves_out_a_provider_without_audiences(client, monkeypatch):
+    monkeypatch.setenv("SOCIAL_SIGN_IN_ENABLED", "true")
+    monkeypatch.setenv("GOOGLE_OAUTH_CLIENT_IDS", "google-web")
+    monkeypatch.setenv("APPLE_AUDIENCE_IDS", "")
+    get_settings.cache_clear()
+    try:
+        assert client.get("/auth/social/config").json() == {"providers": ["google"]}
+    finally:
+        get_settings.cache_clear()
+
+
 # --- Unlinking --------------------------------------------------------------
+
+
+def test_unlink_is_off_with_the_flag(client, configured_social, social_keys, monkeypatch):
+    registered = register_password_account(client, "unlink-flag-off@example.com")
+    headers = auth_header(registered["access_token"])
+    token = google_token(social_keys, "google-unlink-flag-off", "unlink-flag-off@gmail.com")
+    assert client.post(
+        "/auth/social/link",
+        json=request_body(token, current_password="password123"),
+        headers=headers,
+    ).status_code == 200
+    monkeypatch.setenv("SOCIAL_SIGN_IN_ENABLED", "false")
+    get_settings.cache_clear()
+    response = client.post(
+        "/auth/social/unlink",
+        json={"provider": "google", "current_password": "password123"},
+        headers=headers,
+    )
+    assert response.status_code == 503
+    assert response.json()["error"]["code"] == "social_login_unavailable"
+    assert identity_count("google", "google-unlink-flag-off") == 1
 
 
 def test_password_account_can_unlink_with_its_password(client, configured_social, social_keys):
@@ -1091,13 +1391,23 @@ def test_passwordless_account_with_two_providers_can_drop_one(client, configured
     )
     created = client.post("/auth/social", json=request_body(apple))
     assert created.status_code == 200, created.text
+    headers = auth_header(created.json()["access_token"])
+    again = make_id_token(
+        social_keys,
+        provider="apple",
+        subject="apple-two-methods",
+        audience="apple-service",
+        email="two-methods@gmail.com",
+    )
     google = client.post(
-        "/auth/social",
-        json=request_body(google_token(social_keys, "google-two-methods", "two-methods@gmail.com")),
+        "/auth/social/link",
+        json=request_body(
+            google_token(social_keys, "google-two-methods", "two-methods@gmail.com"),
+            reauth=reauth_body(again),
+        ),
+        headers=headers,
     )
     assert google.status_code == 200, google.text
-    assert google.json()["user"]["id"] == created.json()["user"]["id"]
-    headers = auth_header(created.json()["access_token"])
 
     dropped = client.post("/auth/social/unlink", json={"provider": "apple"}, headers=headers)
     assert dropped.status_code == 200, dropped.text

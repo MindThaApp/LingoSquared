@@ -36,7 +36,7 @@ class ORM(BaseModel): model_config=ConfigDict(from_attributes=True)
 # and reacting to the 403 after the fact.
 class UserOut(ORM): id:str; email:EmailStr; display_name:str; is_admin:bool=False
 class UserIdentityOut(ORM): provider:Literal["google","apple"]; created_at:datetime
-class MeOut(UserOut): created_at:datetime; identities:list[UserIdentityOut]=Field(default_factory=list)
+class MeOut(UserOut): created_at:datetime; identities:list[UserIdentityOut]=Field(default_factory=list); has_password:bool=False
 # Phase H3 (2026-07-07 integrity audit): display_name/timezone were the
 # only free-form string fields on the auth path with no length bound --
 # an unbounded display_name persists verbatim and is echoed on every
@@ -54,14 +54,24 @@ class SocialLoginIn(BaseModel):
     # single-use; Optional here only so a missing one is a 401 like any
     # other failed sign-in rather than a 422.
     nonce:str|None=Field(default=None,min_length=16,max_length=256)
+class SocialReauthIn(BaseModel):
+    # A fresh sign-in through a provider already linked to the account,
+    # with its own nonce from POST /auth/social/nonce.
+    provider:Literal["google","apple"]
+    id_token:str=Field(min_length=1,max_length=8192)
+    nonce:str|None=Field(default=None,min_length=16,max_length=256)
 class SocialLinkIn(SocialLoginIn):
-    # Required when the signed-in account is not a guest and has a password:
-    # a bare access token must not be enough to attach a permanent sign-in.
+    # A non-guest account proves it is the owner with one of these: a bare
+    # access token must not be enough to attach a permanent sign-in.
+    # current_password for an account with a password; reauth for any
+    # account (the only option for one without a password).
     current_password:str|None=Field(default=None,max_length=128)
+    reauth:SocialReauthIn|None=None
 class SocialUnlinkIn(BaseModel):
     provider:Literal["google","apple"]
     current_password:str|None=Field(default=None,max_length=128)
 class SocialNonceOut(BaseModel): nonce:str; expires_in:int
+class SocialConfigOut(BaseModel): providers:list[Literal["google","apple"]]
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
 class RefreshIn(BaseModel):
     refresh_token:str=Field(min_length=1,max_length=512)

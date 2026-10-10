@@ -1,11 +1,16 @@
-"""Delete expired refresh tokens and tokens revoked over seven days ago."""
+"""Delete expired refresh tokens, tokens revoked over seven days ago, and
+expired social sign-in nonces.
+
+Run on a schedule (for example daily from cron):
+    python -m app.scripts.prune_refresh_tokens
+"""
 
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import delete, or_
 
 from app.db.session import SessionLocal
-from app.models import RefreshToken
+from app.models import RefreshToken, SocialLoginNonce
 
 
 def prune_refresh_tokens(db, now_value: datetime | None = None) -> int:
@@ -23,10 +28,21 @@ def prune_refresh_tokens(db, now_value: datetime | None = None) -> int:
     return result.rowcount or 0
 
 
+def prune_social_nonces(db, now_value: datetime | None = None) -> int:
+    """Expired nonces are also deleted whenever a new one is issued; this
+    catches the ones left behind once nobody asks for a new one."""
+    now_value = now_value or datetime.now(timezone.utc)
+    result = db.execute(delete(SocialLoginNonce).where(SocialLoginNonce.expires_at <= now_value))
+    db.commit()
+    return result.rowcount or 0
+
+
 def main() -> int:
     with SessionLocal() as db:
         deleted = prune_refresh_tokens(db)
+        nonces = prune_social_nonces(db)
     print(f"Pruned {deleted} refresh token rows.")
+    print(f"Pruned {nonces} expired sign-in nonces.")
     return deleted
 
 

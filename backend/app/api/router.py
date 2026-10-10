@@ -119,7 +119,9 @@ from app.schemas.api import (
     ReviewSessionIn,
     SocialLinkIn,
     SocialLoginIn,
+    SocialConfigOut,
     SocialNonceOut,
+    SocialReauthIn,
     SocialUnlinkIn,
     STTOut,
     StartOut,
@@ -265,9 +267,10 @@ REGISTER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.re
 # token-probing surface AND a CPU sink. Shared limiter, per-IP, same
 # convention as REPORT_RATE_LIMIT's shared coverage of its 3 endpoints.
 REFRESH_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
-# POST /auth/social/nonce: each call stores a row, so it is capped like
-# refresh rather than left open.
-SOCIAL_NONCE_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.refresh_rate_limit_max, window_seconds=60))
+# POST /auth/social/nonce: each call stores a short-lived row, so it is
+# capped rather than left open; its own ceiling (see Settings) because a
+# shared network address fetches nonces for every user behind it.
+SOCIAL_NONCE_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.social_nonce_rate_limit_max, window_seconds=60))
 ANSWER_RATE_LIMIT = register_limiter(RateLimiter(limit=_rate_limit_settings.answer_rate_limit_max, window_seconds=60))
 # Phase H2 (2026-07-07 integrity audit, docs/SONNET_BUILD_PROMPT_LAUNCH.md):
 # /tts, /stt/transcribe, and the three generation endpoints were completely
@@ -478,21 +481,28 @@ def consume_social_nonce(db:Session,raw_nonce:str) -> bool:
     ).first()
     db.commit()
     return consumed is not None
-def verified_social_claims(db:Session,body:SocialLoginIn) -> dict:
+def verify_social_token(body:SocialLoginIn|SocialReauthIn,invalid_status:int=401) -> dict:
+    """Check the ID token itself (signature, claims, and that its nonce claim
+    matches the raw nonce sent with it). Does NOT use the nonce up: callers
+    do that with use_social_nonce before acting on the claims."""
     audiences=social_audiences(body.provider)
     if not audiences:
         fail(503,"social_login_unavailable",f"{body.provider.title()} social login is not configured")
     try:
-        claims=social_auth.verify_id_token(body.provider,body.id_token,audiences,body.nonce)
+        return social_auth.verify_id_token(body.provider,body.id_token,audiences,body.nonce)
     except social_auth.ProviderUnavailable:
         fail(503,"social_provider_unavailable",f"{body.provider.title()} sign-in is temporarily unavailable. Please try again.")
     except social_auth.SocialTokenError:
-        fail(401,"invalid_credentials","Invalid social sign-in token")
+        fail(invalid_status,"invalid_credentials","Invalid social sign-in token")
+def use_social_nonce(db:Session,raw_nonce:str|None,invalid_status:int=401):
     # The token's nonce matched the raw nonce sent with it; it must also be
     # one this server issued and not yet used, or a captured request could
     # be replayed until the ID token expires.
-    if not consume_social_nonce(db,body.nonce):
-        fail(401,"invalid_credentials","Invalid social sign-in token")
+    if not raw_nonce or not consume_social_nonce(db,raw_nonce):
+        fail(invalid_status,"invalid_credentials","Invalid social sign-in token")
+def verified_social_claims(db:Session,body:SocialLoginIn) -> dict:
+    claims=verify_social_token(body)
+    use_social_nonce(db,body.nonce)
     return claims
 def social_email(claims:dict) -> str|None:
     raw_email=claims.get("email")
@@ -529,19 +539,18 @@ def resolve_social_user(db:Session,body:SocialLoginIn,claims:dict):
     email_trusted=bool(email) and social_auth.email_is_trusted_for_linking(provider,claims,email)
     existing_email_user=db.scalar(select(User).where(User.email==email)) if email else None
     if existing_email_user and email_trusted:
+        # A new identity is never attached to an existing account by email.
         # Registration never proves ownership of the address, so an account
         # with a password may have been created by someone else in the
-        # provider user's name. Signing in to it here would hand that
-        # person the provider user's account (pre-account hijacking). Such
-        # an account is linked only from inside it: log in with the
-        # password, then connect the provider (POST /auth/social/link).
+        # provider user's name (pre-account hijacking). An account created
+        # through one provider is no safer: the address that provider
+        # vouched for may since have changed hands at the other one (an
+        # Apple ID keeps the address it was set up with). The owner links
+        # the new provider from inside the account (POST /auth/social/link),
+        # proving it is them with a password or a linked provider.
         if existing_email_user.password_hash is not None:
             fail(409,"account_exists",f"An account with this email already exists. Log in with your password, then connect {provider.title()} from your profile.")
-        # Never attach a second account of the same provider to one user.
-        if user_provider_identity(db,existing_email_user.id,provider):
-            fail(409,"provider_already_linked",f"This account is already linked to a different {provider.title()} sign-in")
-        db.add(UserIdentity(user_id=existing_email_user.id,provider=provider,provider_subject=subject))
-        return existing_email_user
+        fail(409,"account_exists",f"An account with this email already exists. Sign in the way you did before, then connect {provider.title()} from your profile.")
 
     # An address the provider does not vouch for is never stored as the
     # account email: it would let that sign-in claim the address.
@@ -933,20 +942,37 @@ def social_login(body:SocialLoginIn,request:Request,db:Session=Depends(get_db)):
             fail(409,"social_sign_in_conflict","This sign-in is being set up by another request. Please try again.")
     if not user.is_active: fail(401,"inactive_user","This account is inactive")
     return auth_response(db,user)
-def require_recent_proof(user:User,current_password:str|None):
+def require_recent_proof(db:Session,user:User,current_password:str|None,reauth:SocialReauthIn|None=None) -> str|None:
     """A bare access token is not enough to change how an account signs in.
 
     Guests have no usable password and nothing to protect beyond the
-    session itself, so they pass. An account with a password must send it.
-    An account that signs in only through a provider has no password to
-    check, so it cannot add or remove sign-ins this way.
+    session itself, so they pass. Any other account either sends its
+    password or signs in again through a provider already linked to it
+    (reauth; the only way for an account without a password). Nothing is
+    used up here, so a mistyped password can be retried; the caller uses up
+    the returned reauth nonce, if any, once every check has passed.
     """
     if is_guest_account(user):
-        return
+        return None
+    if reauth is not None:
+        claims=verify_social_token(reauth,invalid_status=403)
+        owner=db.get(UserIdentity,(reauth.provider,claims["sub"]))
+        if owner is None or owner.user_id!=user.id:
+            fail(403,"reauthentication_required","Sign in again with a sign-in method already connected to this account.")
+        return reauth.nonce
     if user.password_hash is None:
-        fail(403,"reauthentication_required","Sign in again with your current sign-in method to change linked sign-ins.")
+        fail(403,"reauthentication_required","Sign in again with a sign-in method already connected to this account to change linked sign-ins.")
     if not current_password or not verify_password(current_password,user.password_hash):
         fail(403,"reauthentication_required","Enter your current password to change linked sign-ins.")
+    return None
+def has_known_password(user:User) -> bool:
+    return user.password_hash is not None and not is_guest_account(user)
+@router.get("/auth/social/config",response_model=SocialConfigOut)
+def social_config():
+    """Which providers this server accepts right now (none while the
+    feature flag is off). Clients show a provider's button only when it is
+    listed here and they are configured for it themselves."""
+    return {"providers":[provider for provider in ("google","apple") if social_audiences(provider)]}
 @router.post("/auth/social/nonce",response_model=SocialNonceOut)
 def social_nonce(request:Request,db:Session=Depends(get_db)):
     """A single-use nonce for the next Google/Apple sign-in or link.
@@ -968,19 +994,30 @@ def link_social(body:SocialLinkIn,request:Request,user=Depends(current_user),db:
     and with it every bit of progress, while its generated email and
     never-shown password are replaced by the provider identity (and the
     provider's email when the provider vouches for it and no other account
-    uses it). Any other account must confirm its current password (see
+    uses it). Any other account must prove it is the owner (see
     require_recent_proof). Accounts are never merged: an identity or email
     that already belongs to another account is a 409.
+
+    Token and nonce failures are 403, not 401: the session is valid, and a
+    401 would make the client discard it.
     """
     enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
-    claims=verified_social_claims(db,body)
+    claims=verify_social_token(body,invalid_status=403)
     provider=body.provider
     subject=claims["sub"]
     identity=db.get(UserIdentity,(provider,subject))
-    if identity and identity.user_id!=user.id:
-        fail(409,"identity_in_use",f"This {provider.title()} sign-in already belongs to another account")
-    if not identity:
-        require_recent_proof(user,body.current_password)
+    if identity:
+        use_social_nonce(db,body.nonce,invalid_status=403)
+        if identity.user_id!=user.id:
+            fail(409,"identity_in_use",f"This {provider.title()} sign-in already belongs to another account")
+    else:
+        # Proof first, nonces after: a wrong password leaves the provider
+        # sign-in usable for another try (still once, and only until the
+        # nonce expires), instead of sending the user back to the popup.
+        reauth_nonce=require_recent_proof(db,user,body.current_password,body.reauth)
+        use_social_nonce(db,body.nonce,invalid_status=403)
+        if reauth_nonce is not None:
+            use_social_nonce(db,reauth_nonce,invalid_status=403)
         if user_provider_identity(db,user.id,provider):
             fail(409,"provider_already_linked",f"This account is already linked to a different {provider.title()} sign-in")
         if is_guest_account(user):
@@ -1013,16 +1050,17 @@ def unlink_social(body:SocialUnlinkIn,request:Request,user=Depends(current_user)
     it; one without (two providers linked) needs no password to drop one.
     """
     enforce_rate_limit(LOGIN_RATE_LIMIT,client_ip(request),"login_rate_limited","Too many login attempts. Please wait before trying again.")
+    if not get_settings().social_sign_in_enabled:
+        fail(503,"social_login_unavailable","Social login is not configured")
     identity=user_provider_identity(db,user.id,body.provider)
     if identity is None:
         fail(404,"identity_not_found",f"No {body.provider.title()} sign-in is linked to this account")
-    if user.password_hash is not None and not is_guest_account(user):
-        require_recent_proof(user,body.current_password)
+    if has_known_password(user):
+        require_recent_proof(db,user,body.current_password)
     other_identities=db.scalar(
         select(func.count()).select_from(UserIdentity).where(UserIdentity.user_id==user.id,UserIdentity.provider!=body.provider)
     ) or 0
-    has_password=user.password_hash is not None and not is_guest_account(user)
-    if not has_password and other_identities==0:
+    if not has_known_password(user) and other_identities==0:
         fail(409,"last_login_method","This is the only way to sign in to this account, so it cannot be removed.")
     db.delete(identity)
     db.commit()
@@ -1087,6 +1125,7 @@ def me_payload(db:Session,user:User):
         "is_admin":is_admin_user(user),
         "created_at":user.created_at,
         "identities":[{"provider":identity.provider,"created_at":identity.created_at} for identity in identities],
+        "has_password":has_known_password(user),
     }
 @router.get("/me/export")
 def export_me(response:Response,user=Depends(current_user),db:Session=Depends(get_db)):

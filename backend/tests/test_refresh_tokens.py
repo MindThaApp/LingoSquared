@@ -288,7 +288,7 @@ def test_global_refresh_token_pruner_removes_only_expired_or_old_revoked(client,
         db.commit()
 
     prune_refresh_tokens_main()
-    assert capsys.readouterr().out == "Pruned 2 refresh token rows.\n"
+    assert capsys.readouterr().out.splitlines()[0] == "Pruned 2 refresh token rows."
     with SessionLocal() as db:
         remaining = set(db.scalars(select(RefreshToken.id).where(RefreshToken.user_id == user_id)))
     assert "global-expired" not in remaining
