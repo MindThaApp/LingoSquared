@@ -4,9 +4,9 @@ user_identities itself shipped in 0023. Social sign-in now links accounts
 by verified email and lets a guest account adopt a provider identity, and
 both paths rely on an account holding at most one identity per provider.
 This enforces that with a unique index. Fresh 0001 schemas already create
-it from the ORM model, so the DDL is guarded; an existing database that
-somehow already holds duplicates is left untouched (and reported) rather
-than failing the deploy.
+it from the ORM model, so the DDL is guarded. If an existing database
+already holds duplicates the migration fails, naming the affected accounts,
+instead of stamping 0033 without the index: the code relies on it.
 """
 
 import sqlalchemy as sa
@@ -32,16 +32,17 @@ def upgrade():
         return
     duplicates = bind.execute(
         sa.text(
-            "SELECT count(*) FROM (SELECT user_id, provider FROM user_identities "
-            "GROUP BY user_id, provider HAVING count(*) > 1) AS d"
+            "SELECT user_id, provider, count(*) FROM user_identities "
+            "GROUP BY user_id, provider HAVING count(*) > 1 ORDER BY user_id, provider"
         )
-    ).scalar()
+    ).all()
     if duplicates:
-        print(
-            f"0033: {duplicates} account(s) hold several identities of one provider; "
-            f"{_INDEX} not created. Resolve them, then run alembic downgrade 0032 and upgrade head."
+        listed = ", ".join(f"{row[0]} ({row[1]} x{row[2]})" for row in duplicates[:20])
+        raise RuntimeError(
+            f"0033: {len(duplicates)} account(s) hold several identities of one provider: "
+            f"{listed}. Decide which identity each account keeps, delete the others from "
+            f"user_identities, then run alembic upgrade head again."
         )
-        return
     op.create_index(_INDEX, _TABLE, ["user_id", "provider"], unique=True)
 
 
