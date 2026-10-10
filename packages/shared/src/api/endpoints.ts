@@ -17,6 +17,8 @@ import type {
   AnswerResult,
   AuthResult,
   AuthUser,
+  SocialCredential,
+  SocialProvider,
   CheckpointResult,
   ContentIssue,
   ContentIssueCategory,
@@ -65,6 +67,15 @@ function clientTimezone(): string | undefined {
   }
 }
 
+function socialBody(credential: SocialCredential) {
+  return {
+    provider: credential.provider,
+    id_token: credential.idToken,
+    nonce: credential.nonce,
+    display_name: credential.displayName || undefined,
+  };
+}
+
 export const AuthApi = {
   // register/login persist BOTH halves of the session (short-lived access
   // token + long-lived rotating refresh token) through the platform's
@@ -88,6 +99,32 @@ export const AuthApi = {
     storeAuthTokens(result.access_token, result.refresh_token);
     return result;
   },
+  // POST /auth/social: sign in (or sign up) with a verified Google/Apple
+  // ID token. Same session handling as login.
+  social: async (credential: SocialCredential) => {
+    const result = await post<AuthResult>("/auth/social", socialBody(credential));
+    storeAuthTokens(result.access_token, result.refresh_token);
+    return result;
+  },
+  // POST /auth/social/link: attach a Google/Apple sign-in to the signed-in
+  // account. For a guest account this converts it in place, keeping its
+  // progress. Returns the updated /auth/me shape.
+  // Any account other than a guest must confirm its current password.
+  linkSocial: (credential: SocialCredential, currentPassword?: string) =>
+    post<AuthUser>("/auth/social/link", {
+      ...socialBody(credential),
+      current_password: currentPassword || undefined,
+    }),
+  // POST /auth/social/unlink: remove a linked sign-in. Never removes the
+  // last way to sign in; an account with a password must confirm it.
+  unlinkSocial: (provider: SocialProvider, currentPassword?: string) =>
+    post<AuthUser>("/auth/social/unlink", {
+      provider,
+      current_password: currentPassword || undefined,
+    }),
+  // POST /auth/social/nonce: single-use nonce for the next Google/Apple
+  // sign-in (see socialSignIn.ts).
+  socialNonce: () => post<{ nonce: string; expires_in: number }>("/auth/social/nonce", {}),
   me: () => get<AuthUser>("/auth/me"),
   // Revokes the refresh token server-side (best-effort) and clears both
   // tokens locally. Local clearing happens FIRST, synchronously (before

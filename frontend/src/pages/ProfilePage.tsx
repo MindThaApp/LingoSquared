@@ -10,10 +10,13 @@ import { VoiceSettings } from "../components/VoiceSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
+import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { ConnectedSignIns } from "../components/ConnectedSignIns";
+import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function ProfilePage() {
   const { t } = useTranslation();
-  const { user, logout } = useAuth();
+  const { user, logout, linkSocial } = useAuth();
   const navigate = useNavigate();
   const isGuest = isGuestUser(user);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -112,6 +115,16 @@ export function ProfilePage() {
           {t("profile.guest_notice")}
         </div>
       )}
+
+      {isGuest && hasAnySocialProvider() && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <h2 style={{ marginTop: 0 }}>{t("social.keep_progress_title")}</h2>
+          <p className="muted">{t("social.keep_progress_body")}</p>
+          <SocialSignInButtons onCredential={(credential) => linkSocial(credential)} />
+        </div>
+      )}
+
+      {!isGuest && hasAnySocialProvider() && <ConnectedSignIns />}
 
       <div className="stat-grid">
         <div className="stat-card">
