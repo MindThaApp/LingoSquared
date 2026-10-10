@@ -6,10 +6,12 @@ import { ApiError } from "@lingo/shared/api/client";
 import type { SocialCredential } from "@lingo/shared/api/types";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
+import { useSocialConfig } from "../lib/useSocialConfig";
 
 export function RegisterPage() {
   const { t } = useTranslation();
   const { register, socialSignIn, status } = useAuth();
+  const social = useSocialConfig();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,12 +100,12 @@ export function RegisterPage() {
             />
           </p>
         </form>
-        {hasAnySocialProvider() && (
+        {hasAnySocialProvider(social) && (
           <>
             <p className="muted" style={{ textAlign: "center", margin: "16px 0 12px" }}>
               {t("social.or")}
             </p>
-            <SocialSignInButtons onCredential={handleSocial} />
+            <SocialSignInButtons onCredential={handleSocial} config={social} />
           </>
         )}
       </div>

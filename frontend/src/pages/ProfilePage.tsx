@@ -13,10 +13,12 @@ import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
 import { ConnectedSignIns } from "../components/ConnectedSignIns";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
+import { useSocialConfig } from "../lib/useSocialConfig";
 
 export function ProfilePage() {
   const { t } = useTranslation();
   const { user, logout, linkSocial } = useAuth();
+  const social = useSocialConfig();
   const navigate = useNavigate();
   const isGuest = isGuestUser(user);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -116,15 +118,15 @@ export function ProfilePage() {
         </div>
       )}
 
-      {isGuest && hasAnySocialProvider() && (
+      {isGuest && hasAnySocialProvider(social) && (
         <div className="card" style={{ marginBottom: 16 }}>
           <h2 style={{ marginTop: 0 }}>{t("social.keep_progress_title")}</h2>
           <p className="muted">{t("social.keep_progress_body")}</p>
-          <SocialSignInButtons onCredential={(credential) => linkSocial(credential)} />
+          <SocialSignInButtons onCredential={(credential) => linkSocial(credential)} config={social} />
         </div>
       )}
 
-      {!isGuest && hasAnySocialProvider() && <ConnectedSignIns />}
+      {!isGuest && hasAnySocialProvider(social) && <ConnectedSignIns config={social} />}
 
       <div className="stat-grid">
         <div className="stat-card">

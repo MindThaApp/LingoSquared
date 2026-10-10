@@ -6,24 +6,27 @@ import {
   isAppleCancellation,
   renderGoogleButton,
   signInWithApple,
-  socialConfig,
   type SocialConfig,
 } from "../lib/socialSignIn";
+import { useSocialConfig } from "../lib/useSocialConfig";
 
 interface Props {
   // Receives a provider credential; resolve on success, throw to show an
   // error under the buttons.
   onCredential: (credential: SocialCredential) => Promise<void>;
-  // Injected in tests; defaults to the build-time configuration.
+  // Which providers to offer. Defaults to the build's configuration
+  // narrowed to what the backend accepts (useSocialConfig).
   config?: SocialConfig;
 }
 
 // "Continue with Google" / "Continue with Apple". Renders nothing at all
-// unless at least one provider is configured for this build, so a build
-// without social sign-in looks exactly as before.
+// unless at least one provider is configured for this build AND accepted
+// by the backend, so a build or server without social sign-in looks
+// exactly as before.
 export function SocialSignInButtons({ onCredential, config }: Props) {
   const { t, i18n } = useTranslation();
-  const resolved = config ?? socialConfig();
+  const serverConfig = useSocialConfig(config !== undefined);
+  const resolved = config ?? serverConfig;
   const googleRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);

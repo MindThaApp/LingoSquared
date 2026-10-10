@@ -19,6 +19,7 @@ import type {
   AuthUser,
   SocialCredential,
   SocialProvider,
+  SocialServerConfig,
   CheckpointResult,
   ContentIssue,
   ContentIssueCategory,
@@ -109,11 +110,16 @@ export const AuthApi = {
   // POST /auth/social/link: attach a Google/Apple sign-in to the signed-in
   // account. For a guest account this converts it in place, keeping its
   // progress. Returns the updated /auth/me shape.
-  // Any account other than a guest must confirm its current password.
-  linkSocial: (credential: SocialCredential, currentPassword?: string) =>
+  // Any account other than a guest proves it is the owner: with its
+  // current password, or with `reauth`, a fresh sign-in through a provider
+  // already linked to it (the only option for an account without one).
+  linkSocial: (credential: SocialCredential, currentPassword?: string, reauth?: SocialCredential) =>
     post<AuthUser>("/auth/social/link", {
       ...socialBody(credential),
       current_password: currentPassword || undefined,
+      reauth: reauth
+        ? { provider: reauth.provider, id_token: reauth.idToken, nonce: reauth.nonce }
+        : undefined,
     }),
   // POST /auth/social/unlink: remove a linked sign-in. Never removes the
   // last way to sign in; an account with a password must confirm it.
@@ -125,6 +131,9 @@ export const AuthApi = {
   // POST /auth/social/nonce: single-use nonce for the next Google/Apple
   // sign-in (see socialSignIn.ts).
   socialNonce: () => post<{ nonce: string; expires_in: number }>("/auth/social/nonce", {}),
+  // GET /auth/social/config: which providers the backend accepts. Clients
+  // show a provider's button only when it is listed here.
+  socialConfig: () => get<SocialServerConfig>("/auth/social/config"),
   me: () => get<AuthUser>("/auth/me"),
   // Revokes the refresh token server-side (best-effort) and clears both
   // tokens locally. Local clearing happens FIRST, synchronously (before

@@ -69,8 +69,9 @@ interface AuthContextValue {
   socialSignIn: (credential: SocialCredential) => Promise<void>;
   // Attach Google/Apple to the signed-in account (POST /auth/social/link).
   // For a guest this converts the account in place, keeping its progress;
-  // any other account must confirm its current password.
-  linkSocial: (credential: SocialCredential, currentPassword?: string) => Promise<void>;
+  // any other account proves it is the owner with its current password or,
+  // without one, with `reauth`: a fresh sign-in through a linked provider.
+  linkSocial: (credential: SocialCredential, currentPassword?: string, reauth?: SocialCredential) => Promise<void>;
   // Remove a linked sign-in (POST /auth/social/unlink).
   unlinkSocial: (provider: SocialProvider, currentPassword?: string) => Promise<void>;
   logout: () => void;
@@ -359,10 +360,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setStatus("authenticated");
   }, []);
 
-  const linkSocial = useCallback(async (credential: SocialCredential, currentPassword?: string) => {
+  const linkSocial = useCallback(async (credential: SocialCredential, currentPassword?: string, reauth?: SocialCredential) => {
     // Same account, same tokens: only the user object changes (a converted
     // guest gets its new email and identity), so the query cache stays.
-    const updated = await AuthApi.linkSocial(credential, currentPassword);
+    const updated = await AuthApi.linkSocial(credential, currentPassword, reauth);
     storeSession(updated);
     setUser(updated);
   }, []);
