@@ -272,6 +272,15 @@ UNIT_FILES_B2 = tuple(sorted(
     (REPO_ROOT / "docs/content/realizations/nl").glob("b2_unit*_*.yaml")
 ))
 
+# C1 units (01-08: extended discourse, implicature, register control,
+# concession, counterfactuals, idiom, mediation, persuasion) are a FIFTH
+# separate course row ("Dutch C1"). Same plain-glob reasoning as B1/B2: every
+# token every one of the 8 files introduces is hand-glossed in the C1 block
+# below, and a future c1_unit09+ will hard-crash this script until glossed.
+UNIT_FILES_C1 = tuple(sorted(
+    (REPO_ROOT / "docs/content/realizations/nl").glob("c1_unit*_*.yaml")
+))
+
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
 NL_GLOSSES = {
@@ -2035,6 +2044,410 @@ NOUNS.update({"baas", "boodschappen", "bron", "bronnen", "ding", "duurzaamheid",
 
 
 
+# --- 2026-10-10: Dutch C1 tier (units 01-08) ---------------------------------
+# C1 capitals are folded onto their lowercase citation form (the same data-
+# quality reasoning as NL_CITATION_FORMS: a sentence-initial "Terzijde" or
+# "Desalniettemin" would otherwise display capitalized as a matching_pairs left
+# and in the "correct answer" line). Scoped to the C1 course only, so no
+# A1-B2 lexeme can change. Genuine capitals -- names, the language/nationality
+# adjectives and the letter salutations -- are kept.
+NL_C1_KEEP_CAPITALIZED = frozenset({
+    "Amsterdam", "Lotte", "Omar", "Vries",
+    "Engels", "Engelse", "Nederlands",
+    "Beste", "Geachte",
+})
+
+
+def nl_c1_citation_form(token: str) -> str:
+    # c1_unit06 lists the casefold "eén" of its sentence-initial "Eén" as an
+    # introduced token; the citation spelling is "één".
+    if token in {"Eén", "eén"}:
+        return "één"
+    if token[:1].isupper() and token not in NL_C1_KEEP_CAPITALIZED:
+        return token[:1].lower() + token[1:]
+    return token
+
+
+# Extra C1-only semantic tags, keyed by (folded) token: single-member anchors
+# (`*_single`) for fill_in_blank / fixed-sentence frames, and curated content
+# groups for matching_pairs. Applied only to tokens introduced in a C1 lesson.
+NL_C1_EXTRA_TAGS: dict[str, list[str]] = {}
+
+# C1 tokens absent from NL_GLOSSES (362 after capital folding). Each gloss is the
+# atomic English meaning of the sense the C1 unit actually teaches (from the
+# card text and the en-nl c1 overlay), with a form cue where the unit pools
+# several forms of one lemma. DRAFT pending native-Dutch review, like the units.
+NL_GLOSSES.update({
+    'aangeboden': 'offered (past participle)',
+    'aangenomen': 'accepted; took (a job) (past participle)',
+    'aantoonbaar': 'demonstrably; provably',
+    'aantrekkelijke': 'attractive (inflected)',
+    'aantrekkelijker': 'more attractive',
+    'achteraf': 'afterwards; in retrospect',
+    'afgewezen': 'rejected; turned down (past participle)',
+    'afgewogen': 'weighed (up) (past participle)',
+    'afstand': 'the distance (also social distance)',
+    'afweging': 'the weighing-up; the trade-off',
+    'alweer': 'yet again; once again',
+    'ambtenaar': 'the civil servant; the official',
+    'ander': "other (in 'de ander' = the other person)",
+    'antwoord': 'the answer; the reply',
+    'antwoordde': 'answered; replied (with hij/zij)',
+    'antwoorden': 'to answer; to reply',
+    'appèl': 'the appeal (rhetorical device)',
+    "auto's": 'cars',
+    'autoluwe': 'low-traffic (inflected)',
+    'baat': "benefit (in 'er baat bij hebben')",
+    'bal': 'the ball',
+    'beantwoordt': 'answers; responds to (with hij/zij/het)',
+    'bedoeling': 'the intention',
+    'beeldspraak': 'figurative language; imagery',
+    'begon': 'began; started (with hij/zij)',
+    'begrenzing': 'the delimitation; the limiting',
+    'begrijp': "understand (with ik, or inverted 'begrijp je')",
+    'begrijpelijke': 'understandable (inflected)',
+    'begrijpt': 'understands (with hij/zij)',
+    'behoorlijk': 'quite; considerably',
+    'behoud': 'the preservation; the conservation',
+    'behouden': 'to retain; to keep',
+    'behoudens': 'except for; barring',
+    'bekijken': 'to look at; to examine',
+    'belangrijkste': 'most important; main',
+    'beleefdheid': 'the politeness',
+    'bemiddelen': 'to mediate',
+    'bemiddelt': 'mediates (with hij/zij)',
+    'benadrukken': 'to emphasize; to stress',
+    'benoemt': 'names; identifies (with hij/zij/het)',
+    'bepaal': "determine; decide (with ik, or 'bepaal je')",
+    'bepaald': "exactly (in 'niet bepaald': not exactly)",
+    'bepalen': 'to determine',
+    'beperkt': 'limits; restricts (with hij/zij/het)',
+    'beperkte': 'limited (inflected)',
+    'bereik': 'the reach; the scope',
+    'beschermt': 'protects (with hij/zij/het)',
+    'beslissen': 'to decide',
+    'beslissing': 'the decision',
+    'besprak': 'discussed (with hij/zij)',
+    'bespreek': 'discuss (with ik)',
+    'bestuur': 'the board; the executive committee',
+    'betekenis': 'the meaning',
+    'betogende': 'argumentative; persuasive (inflected)',
+    'betoog': 'the argument (persuasive text or speech)',
+    'beweegt': 'moves (with hij/zij/het)',
+    'bewezen': 'proven',
+    'bewoners': 'residents',
+    'bezoekers': 'visitors',
+    'bezorgdheid': 'concern; worry',
+    'bezwaar': 'the objection',
+    'binnenstad': 'the city centre; the town centre',
+    'blokkeert': 'blocks (with hij/zij/het)',
+    'bouw': 'build (with ik; inverted with je)',
+    'bouwen': 'to build',
+    'bracht': 'brought (with hij/zij)',
+    'buren': 'neighbours',
+    'bus': "the tin; the bus (in 'dat klopt als een bus')",
+    'buurtbijeenkomst': 'the neighbourhood meeting',
+    'buurthuis': 'the community centre',
+    'buurtonderzoek': 'the neighbourhood survey',
+    'calque': 'the calque; the loan translation',
+    'centrale': 'central (inflected)',
+    'chaotisch': 'chaotic; chaotically',
+    'chef': 'the boss',
+    'combineren': 'to combine',
+    'concessie': 'the concession',
+    'conclusie': 'the conclusion',
+    'context': 'the context',
+    'controle': 'checks; supervision',
+    'daarbij': 'in addition (to that); with that',
+    'daarom': "therefore; that's why",
+    'daarvoor': 'for that; for this purpose',
+    'decibel': 'the decibel',
+    'desalniettemin': 'nonetheless (formal)',
+    'deur': "the door (in 'met de deur in huis vallen')",
+    'dia': 'the slide (in a presentation)',
+    'diplomatie': 'diplomacy',
+    'diplomatieke': 'diplomatic (inflected)',
+    'direct': 'directly; straightforwardly',
+    'directeur': 'the director; head',
+    'directheid': 'directness',
+    'doel': 'the goal; the aim',
+    'doeltreffend': 'effective (achieving its aim)',
+    'doorslaggevend': 'decisive',
+    'draagt': 'carries (with hij/zij/het)',
+    'duidelijk': 'clear',
+    'echte': 'real; genuine (inflected)',
+    'eindelijk': 'finally; at last',
+    'eindigt': 'ends (with hij/zij/het)',
+    'eindoordeel': 'the final judgement; the verdict',
+    'energie': 'energy',
+    'Engelse': 'English (inflected)',
+    'enthousiast': 'enthusiastic',
+    'falen': "to fail (in 'bij herhaald falen' = upon repeated failure)",
+    'feit': 'the fact',
+    'figuurlijk': 'figurative',
+    'filiaal': 'the branch (of a chain)',
+    'financiële': 'financial (inflected)',
+    'focuszin': "the focus sentence (cleft: 'Wat ik wil benadrukken, is ...')",
+    'formulering': 'the wording; the phrasing',
+    'fouten': 'mistakes; errors',
+    'frisse': 'fresh (inflected)',
+    'gaten': "holes (in 'in de gaten houden')",
+    'gegrepen': 'seized; grabbed (past participle)',
+    'gehad': 'had (past participle of hebben)',
+    'geldt': 'applies; holds (with hij/zij/het)',
+    'geleidelijke': 'gradual (inflected)',
+    'geluid': 'the sound; noise',
+    'geluidsoverlast': 'noise nuisance',
+    'gemeentelijk': 'municipal',
+    'gemengde': 'mixed (inflected)',
+    'gemeten': 'measured',
+    'gemotiveerd': 'reasoned; well-argued',
+    'gevoel': 'the feeling',
+    'gevolg': 'the consequence; the result',
+    'gewenste': 'desired (inflected)',
+    'gewicht': 'the weight',
+    'gezien': "seen (in 'achteraf gezien': in hindsight)",
+    'gooide': 'threw (with hij/zij)',
+    'gooien': 'to throw',
+    'gooit': 'throws (with hij/zij)',
+    'groeit': 'grows (with hij/zij/het)',
+    'groenstrook': 'the green strip (strip of green space)',
+    'hand': "the hand (in 'aan de hand zijn', 'in de hand werken')",
+    'handdoek': 'the towel',
+    'handelen': 'to act; to take action',
+    'hart': 'the heart',
+    'heden': 'the present (time)',
+    'helder': 'clear',
+    'herhaald': 'repeated',
+    'hinder': 'the hindrance; the bother',
+    'hoofdgedachte': 'the main idea; the central point',
+    'hoort': "belongs; goes with (with hij/zij, in 'hoort bij')",
+    'impliceren': 'to imply',
+    'ingehouden': 'restrained; suppressed',
+    'inhoud': 'the content',
+    'intensiteit': 'the intensity',
+    'ironie': 'irony',
+    'ironisch': 'ironic; ironically',
+    'kans': 'the chance; the opportunity',
+    'keert': "turns (with hij/zij; 'keert ... om' = reverses)",
+    'kernpunt': 'the key point; the crux',
+    'keten': 'the chain',
+    'klonken': 'sounded (with plural subject)',
+    'klopten': 'were correct; added up (plural, past)',
+    'knie': "the knee (in 'iets onder de knie hebben')",
+    'koffiedik': "coffee grounds (in 'koffiedik kijken')",
+    'kop': "the head (of a nail, in 'de spijker op de kop slaan')",
+    'koude': 'cold (inflected)',
+    'kracht': 'the strength; the force',
+    'krachtiger': 'more powerful; more forceful',
+    'kreeg': 'got; received (past, with ik/hij/zij)',
+    'kritiek': 'criticism',
+    'kritische': 'critical (inflected)',
+    'kwalificatie': 'the qualification (limiting statement)',
+    'kwam': 'came (with hij/zij)',
+    'kwamen': 'came (with we/zij plural)',
+    'laatste': 'last; final (inflected)',
+    'leek': 'the layperson',
+    'leg': "lay; put (imperative; 'leg ... uit' = explain)",
+    'legt': "lays; puts (with hij/zij; 'legt ... uit' = explains)",
+    'leken': 'laypeople',
+    'letterlijk': 'literally',
+    'letterlijke': 'literal (inflected)',
+    'leven': 'the life',
+    'levendig': 'lively; vivid',
+    'leveren': "to deliver; to yield (in 'leveren ... op')",
+    'levering': 'the delivery',
+    'levert': "delivers; yields (with hij/zij, in 'levert ... op')",
+    'lezing': 'the reading (interpretation)',
+    'lid': 'the member',
+    'ligt': 'lies; is (with hij/zij/het)',
+    'lijnen': "lines (in 'in grote lijnen')",
+    'lof': 'praise',
+    'lucht': 'the air',
+    'luisteraar': 'the listener',
+    'luistert': 'listens (with hij/zij)',
+    'maatschappelijk': 'societal; social (uninflected)',
+    'maatschappelijke': 'societal; social (inflected)',
+    'meebrengen': 'to entail; to bring with it',
+    'meen': "mean (with ik; 'dat meen ik' = I mean it)",
+    'microfoon': 'the microphone',
+    'middelen': 'means; devices',
+    'mild': 'mild',
+    'milde': 'mild (inflected)',
+    'minimaal': 'minimal',
+    'misging': 'went wrong (with het, past of misgaan)',
+    'mislukt': 'failed; gone wrong (past participle of mislukken)',
+    'mogen': 'to be allowed to; may',
+    'molens': 'mills; windmills',
+    'mouw': "the sleeve (in 'de aap komt uit de mouw')",
+    'mug': 'the mosquito; the gnat',
+    'nadenken': 'to think (about); to reflect',
+    'nadruk': 'the emphasis',
+    'namelijk': 'namely; that is',
+    'negatieve': 'negative (inflected)',
+    'niemand': 'nobody; no one',
+    'noemen': 'to mention; to name',
+    'noodzakelijk': 'necessary; essential',
+    'nut': 'the usefulness; the value',
+    'omkeren': 'to reverse; to turn around',
+    'omstandigheden': 'circumstances; conditions',
+    'omzetverlies': 'the loss of revenue; lost sales',
+    'onbetaalbaar': 'unaffordable',
+    'onderwerp': 'the subject; the topic',
+    'ongepast': 'inappropriate; unsuitable',
+    'ongezond': 'unhealthy',
+    'ongezonder': 'unhealthier; less healthy',
+    'ontevreden': 'dissatisfied',
+    'ontevredenheid': 'the dissatisfaction',
+    'ontmoet': 'met (past participle)',
+    'ontstaat': 'arises; comes into being (with hij/zij/het)',
+    'onwerkelijke': 'unreal (inflected)',
+    'openblijft': 'stays open (with hij/zij/het)',
+    'opgelost': 'solved; resolved (past participle of oplossen)',
+    'opgeven': 'to give up',
+    'oprecht': 'sincerely; in earnest',
+    'oproep': 'the call (to action)',
+    'overlast': 'the nuisance; the disturbance',
+    'overtuigen': 'to persuade; to convince',
+    'parallellisme': 'the parallelism (repeated structure)',
+    'parkeerterrein': 'the car park; the parking lot',
+    'passende': 'fitting; appropriate (inflected)',
+    'personeel': 'the staff; personnel',
+    'personeelskosten': 'staff costs; personnel costs',
+    'pet': "the cap (in 'er met de pet naar gooien')",
+    'pleit': "argues; makes the case (with hij/zij, in 'pleit voor')",
+    'plek': 'the place; the spot',
+    'positieve': 'positive (inflected)',
+    'presentatie': 'the presentation',
+    'problemen': 'problems',
+    'raad': "the council; advice (in 'zich geen raad weten')",
+    'ramp': 'the disaster',
+    'rampzalig': 'disastrous',
+    'reageert': 'responds; reacts (with u or hij/zij)',
+    'rechtstreeks': 'directly',
+    'rechtvaardigt': 'justifies (with hij/zij/het)',
+    'relatie': 'the relationship',
+    'retorische': 'rhetorical (inflected)',
+    'ring': 'the ring',
+    'roept': "calls (with hij/zij/het; 'roept ... op' = calls on)",
+    'ruimere': 'more extensive; longer (inflected)',
+    'samenvatten': 'to summarize; to sum up',
+    'schets': 'sketch; outline (with ik)',
+    'schone': 'clean (inflected)',
+    'schonere': 'cleaner (inflected)',
+    'serieus': 'serious',
+    'situatie': 'the situation',
+    'slaat': 'hit; strike (present, with je)',
+    'sloeg': 'struck; hit (past, with ik/hij)',
+    'slot': "the conclusion (in 'tot slot' = finally)",
+    'soepel': 'smooth; smoothly',
+    'spijker': "the nail (in 'de spijker op de kop slaan')",
+    'spijt': 'regret',
+    'sprake': "mention (in 'ter sprake brengen')",
+    'stem': "vote (imperative; 'stem voor' = vote for)",
+    'steun': 'the support; the backing',
+    'stijgen': 'rise; increase (with plural subject)',
+    'stilte': 'the silence',
+    'streng': 'strict; stern',
+    'studenten': 'students',
+    'stukje': 'the little piece; the bit',
+    'suggereert': 'suggests (with hij/zij)',
+    'taal': 'the language',
+    'tegenargument': 'the counterargument',
+    'tegenbewijs': 'the counterevidence',
+    'tegenfeitelijke': 'counterfactual (inflected)',
+    'tegenspraak': 'the contradiction',
+    'tegenstrijdig': 'contradictory; conflicting',
+    'tekst': 'the text',
+    'teleurgesteld': 'disappointed',
+    'ter': "to; at (fixed, in 'ter sprake brengen')",
+    'term': 'the term',
+    'termijn': 'the time frame; the deadline',
+    'terrein': 'the site; the plot of land',
+    'terzijde': 'as an aside',
+    'tijdlijn': 'the timeline',
+    'toegankelijkheid': 'the accessibility',
+    'toespraak': 'the speech',
+    'toon': 'the tone',
+    'trekt': 'draws; attracts (with hij/zij)',
+    'uitdrukken': 'to express',
+    'uitdrukking': 'the expression; the idiom',
+    'uitgedrukt': 'expressed; put (past participle of uitdrukken)',
+    'uitgesloten': 'ruled out; excluded',
+    'uitleggen': 'to explain',
+    'uitstapje': 'the digression (lit. the little outing)',
+    'uitstekend': 'excellent; excellently',
+    'uitstel': 'the postponement; the delay',
+    'uitzondering': 'the exception',
+    'vakterm': 'the technical term',
+    'vaktermen': 'technical terms',
+    'vaste': 'fixed; set (inflected)',
+    'vat': "grasps (with hij/zij; 'vat ... samen' = sums up)",
+    'verbergen': 'to conceal; to hide',
+    'verbetering': 'the improvement',
+    'verbindt': 'connects; links (with hij/zij/het)',
+    'verdedigt': 'defends (with hij/zij)',
+    'verdient': 'deserves (with hij/zij/het)',
+    'verdwijnt': 'disappears (with hij/zij/het)',
+    'vergelijk': "the settlement; the compromise (in 'tot een vergelijk komen')",
+    'verhogen': 'to raise; to increase',
+    'verhoogt': 'raises; increases (with hij/zij/het)',
+    'verhuisd': 'moved house (past participle)',
+    'verkleint': 'reduces; makes smaller (with hij/zij/het)',
+    'verleden': 'the past',
+    'verliep': 'proceeded; unfolded (past of verlopen)',
+    'verluidt': "is rumoured (in 'naar verluidt' = reportedly)",
+    'vermeld': "mention; state (with ik, or 'vermeld je')",
+    'vermijd': 'avoid (imperative; with ik)',
+    'versie': 'the version',
+    'versterken': 'to strengthen; to reinforce',
+    'versterkt': 'strengthens; reinforces (with hij/zij/het)',
+    'vertaald': 'translated',
+    'vertalen': 'to translate',
+    'vertaling': 'the translation',
+    'vertalingen': 'translations',
+    'verzachten': 'to soften; to tone down',
+    'verzwijgen': 'to conceal; to keep quiet about',
+    'viel': "fell (with hij/zij; 'viel uit': cut out)",
+    'vlakke': 'flat (inflected; of a tone)',
+    'vlekkeloos': 'flawless',
+    'voorbehoud': 'the reservation; qualification',
+    'voorrang': "priority (in 'met voorrang' = as a priority)",
+    'voortreffelijk': 'superb; first-rate (more elevated than uitstekend)',
+    'vraag': 'the question',
+    'vreest': 'fears (with hij/zij)',
+    'vrezen': 'to fear',
+    'waarde': 'the value; the worth',
+    'waardering': 'the appreciation',
+    'waarin': 'in which',
+    'weglaten': 'to leave out; to omit',
+    'werkelijk': 'really; truly',
+    'werkelijkheid': 'reality',
+    'werkenden': 'working people; people in work',
+    'wijst': "points (with hij/zij; 'wijst op' = points to)",
+    'wijzen': "to point; to indicate (in 'wijzen op')",
+    'wilde': 'wanted (past, with ik/hij/zij)',
+    'windmolenpark': 'the wind farm',
+    'winkeliers': 'shopkeepers; retailers',
+    'woonde': 'lived (past, with ik/hij/zij)',
+    'woordkeus': 'the choice of words; wording',
+    'zacht': "soft; gently (in 'zacht uitgedrukt': to put it mildly)",
+    'zat': 'sat; was (past of zitten, with ik/hij/zij)',
+    'zet': "put; set (with ik; 'zet ... om' = convert)",
+    'zichtbaar': 'visible',
+    'zinnen': 'sentences; clauses',
+    "zo'n": 'such a',
+    'zorg': 'the concern; the worry',
+    'zorgt': "provides (with hij/zij; 'zorgt voor')",
+})
+ADJECTIVES.update({'aantrekkelijke', 'aantrekkelijker', 'autoluwe', 'begrijpelijke', 'belangrijkste', 'beperkte', 'betogende', 'centrale', 'chaotisch', 'diplomatieke', 'doeltreffend', 'doorslaggevend', 'duidelijk', 'echte', 'Engelse', 'enthousiast', 'figuurlijk', 'financiële', 'frisse', 'geleidelijke', 'gemeentelijk', 'gemengde', 'gemotiveerd', 'gewenste', 'helder', 'herhaald', 'ingehouden', 'ironisch', 'koude', 'krachtiger', 'kritische', 'laatste', 'letterlijke', 'levendig', 'maatschappelijk', 'maatschappelijke', 'mild', 'milde', 'minimaal', 'negatieve', 'noodzakelijk', 'onbetaalbaar', 'ongepast', 'ongezond', 'ongezonder', 'ontevreden', 'onwerkelijke', 'passende', 'positieve', 'rampzalig', 'retorische', 'ruimere', 'schone', 'schonere', 'serieus', 'soepel', 'streng', 'tegenfeitelijke', 'tegenstrijdig', 'teleurgesteld', 'uitstekend', 'vaste', 'vertaald', 'vlakke', 'vlekkeloos', 'voortreffelijk', 'zacht', 'zichtbaar'})
+ADVERBS.update({'aantoonbaar', 'achteraf', 'alweer', 'behoorlijk', 'bepaald', 'daarbij', 'daarom', 'daarvoor', 'desalniettemin', 'direct', 'eindelijk', 'letterlijk', 'namelijk', 'oprecht', 'rechtstreeks', 'terzijde', 'waarin', 'werkelijk'})
+NOUNS.update({'afstand', 'afweging', 'ambtenaar', 'antwoord', 'appèl', "auto's", 'baat', 'bal', 'bedoeling', 'beeldspraak', 'begrenzing', 'behoud', 'beleefdheid', 'bereik', 'beslissing', 'bestuur', 'betekenis', 'betoog', 'bewoners', 'bezoekers', 'bezorgdheid', 'bezwaar', 'binnenstad', 'buren', 'bus', 'buurtbijeenkomst', 'buurthuis', 'buurtonderzoek', 'calque', 'chef', 'concessie', 'conclusie', 'context', 'controle', 'decibel', 'deur', 'dia', 'diplomatie', 'directeur', 'directheid', 'doel', 'eindoordeel', 'energie', 'feit', 'filiaal', 'focuszin', 'formulering', 'fouten', 'gaten', 'geluid', 'geluidsoverlast', 'gevoel', 'gevolg', 'gewicht', 'groenstrook', 'hand', 'handdoek', 'hart', 'heden', 'hinder', 'hoofdgedachte', 'inhoud', 'intensiteit', 'ironie', 'kans', 'kernpunt', 'keten', 'knie', 'koffiedik', 'kop', 'kracht', 'kritiek', 'kwalificatie', 'leek', 'leken', 'leven', 'levering', 'lezing', 'lid', 'lijnen', 'lof', 'lucht', 'luisteraar', 'microfoon', 'middelen', 'molens', 'mouw', 'mug', 'nadruk', 'nut', 'omstandigheden', 'omzetverlies', 'onderwerp', 'ontevredenheid', 'oproep', 'overlast', 'parallellisme', 'parkeerterrein', 'personeel', 'personeelskosten', 'pet', 'plek', 'presentatie', 'problemen', 'raad', 'ramp', 'relatie', 'ring', 'situatie', 'slot', 'spijker', 'spijt', 'sprake', 'steun', 'stilte', 'studenten', 'stukje', 'taal', 'tegenargument', 'tegenbewijs', 'tegenspraak', 'tekst', 'term', 'termijn', 'terrein', 'tijdlijn', 'toegankelijkheid', 'toespraak', 'toon', 'uitdrukking', 'uitstapje', 'uitstel', 'uitzondering', 'vakterm', 'vaktermen', 'verbetering', 'vergelijk', 'verleden', 'versie', 'vertaling', 'vertalingen', 'voorbehoud', 'voorrang', 'vraag', 'waarde', 'waardering', 'werkelijkheid', 'werkenden', 'windmolenpark', 'winkeliers', 'woordkeus', 'zinnen', 'zorg'})
+PREPOSITIONS.update({'behoudens', 'ter'})
+PRONOUNS.update({'ander', 'niemand', "zo'n"})
+VERBS.update({'aangeboden', 'aangenomen', 'afgewezen', 'afgewogen', 'antwoordde', 'antwoorden', 'beantwoordt', 'begon', 'begrijp', 'begrijpt', 'behouden', 'bekijken', 'bemiddelen', 'bemiddelt', 'benadrukken', 'benoemt', 'bepaal', 'bepalen', 'beperkt', 'beschermt', 'beslissen', 'besprak', 'bespreek', 'beweegt', 'bewezen', 'blokkeert', 'bouw', 'bouwen', 'bracht', 'combineren', 'draagt', 'eindigt', 'falen', 'gegrepen', 'gehad', 'geldt', 'gemeten', 'gezien', 'gooide', 'gooien', 'gooit', 'groeit', 'handelen', 'hoort', 'impliceren', 'keert', 'klonken', 'klopten', 'kreeg', 'kwam', 'kwamen', 'leg', 'legt', 'leveren', 'levert', 'ligt', 'luistert', 'meebrengen', 'meen', 'misging', 'mislukt', 'mogen', 'nadenken', 'noemen', 'omkeren', 'ontmoet', 'ontstaat', 'openblijft', 'opgelost', 'opgeven', 'overtuigen', 'pleit', 'reageert', 'rechtvaardigt', 'roept', 'samenvatten', 'schets', 'slaat', 'sloeg', 'stem', 'stijgen', 'suggereert', 'trekt', 'uitdrukken', 'uitgedrukt', 'uitgesloten', 'uitleggen', 'vat', 'verbergen', 'verbindt', 'verdedigt', 'verdient', 'verdwijnt', 'verhogen', 'verhoogt', 'verhuisd', 'verkleint', 'verliep', 'verluidt', 'vermeld', 'vermijd', 'versterken', 'versterkt', 'vertalen', 'verzachten', 'verzwijgen', 'viel', 'vreest', 'vrezen', 'weglaten', 'wijst', 'wijzen', 'wilde', 'woonde', 'zat', 'zet', 'zorgt'})
+
+
 # Sentence-initial / sign-line capitals folded onto their lowercase citation
 # form -- see departure (1) in the block comment above. Applied in
 # `_classify_nl()` BEFORE the gloss lookup, so the capitalized spelling never
@@ -2873,7 +3286,15 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # month candidates -- a matching/MC/translate slot then served nonsense
     # like "hoofdletter is the month you heard" (checkpoint-scope, in-unit).
     # Hold them out of those counting/calendar categories; they keep POS-only.
-    _cat = lesson_categories[unit_lesson]
+    if lesson_key.startswith("nl.c1."):
+        # C1 lesson slugs are not unique across units ("publiek" is both
+        # c1_unit03 lesson01 and c1_unit07 lesson04), so the C1 tier derives
+        # one tag per (unit, lesson) instead of extending the slug-keyed dict:
+        # nl.c1.unit03.lesson01.publiek -> "c1u03_publiek".
+        _cat = f"c1u{lesson_key.split('.')[2][len('unit'):]}_{unit_lesson}"
+        semantic.extend(NL_C1_EXTRA_TAGS.get(token, ()))
+    else:
+        _cat = lesson_categories[unit_lesson]
     _METALABELS = {"eenheid", "tiental", "behalve", "hoeveel", "hoofdletter",
                    "dag", "dagen", "maanden", "jaar"}
     if not (_cat in {"number", "weekday", "month", "ordinal_number"}
@@ -3777,6 +4198,91 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # "afzwakken" ("De film is best goed" = quite good; its own matching_pair
     # glosses best->"quite / pretty"); global `best` = superlative adjective.
     ("b2_unit03_nuance", "best"): "quite; pretty",
+# C1 per-unit homograph / sense overrides (first C1 introducer of each token).
+    # Card 'Een aantrekkelijke binnenstad trekt juist bezoekers.' = 'actually draws visitors'; overlay note: juist marks the result as contrary to the feare
+    ('c1_unit01_betoogstructuur', 'juist'): 'actually; on the contrary (contrastive); precisely',
+    # Card 'Minder auto's leveren schonere lucht op' = 'Fewer cars ...'; with a countable plural noun English needs 'fewer', global gloss has only 'less'.
+    ('c1_unit01_betoogstructuur', 'minder'): 'less; fewer',
+    # Card 'Eerst schets ik het probleem; daarna ...' uses eerst as a sequencing adverb (it triggers inversion like daarna/vervolgens); global POS 'particle
+    ('c1_unit01_betoogstructuur', 'eerst'): 'first',
+    # Card 'tussen de regels door' (overlay: between the lines) uses regels = lines of text, not 'rules'.
+    ('c1_unit02_tussen_de_regels', 'regels'): "lines (in 'tussen de regels door')",
+    # Unit uses zijn only possessively: 'dat zijn stilte afwijzing betekent', 'Zijn woorden klonken beleefd'; global is the verb 'are'.
+    ('c1_unit02_tussen_de_regels', 'zijn'): 'his',
+    # Card 'Hij was behoorlijk ontevreden' = past of zijn; global 'do the dishes (with ik)' is the verb wassen, a different word.
+    ('c1_unit02_tussen_de_regels', 'was'): 'was (with hij/zij, past of zijn)',
+    # Card 'Letterlijk ontkent ze alleen dat het rampzalig was' = only, not 'alone'.
+    ('c1_unit02_tussen_de_regels', 'alleen'): 'only; alone',
+    # Card 'ontkent ze alleen dat het rampzalig was' (overlay: 'only literally denies'); 'negates' is not the sense taught.
+    ('c1_unit02_tussen_de_regels', 'ontkent'): 'denies (with hij/zij)',
+    # Card overlay: 'his silence means rejection'; global 'decline' is ambiguous (could read as 'decrease').
+    ('c1_unit02_tussen_de_regels', 'afwijzing'): 'the rejection; refusal',
+    # Card 'zonder die rechtstreeks uit te spreken' = uitspreken (voice openly); global cue 'part of afspreken' points to the wrong verb.
+    ('c1_unit02_tussen_de_regels', 'spreken'): "to speak (in 'uitspreken': to voice, say outright)",
+    # Card 'Op zich was het geen ramp' teaches the fixed expression op zich = in itself / as such.
+    ('c1_unit02_tussen_de_regels', 'zich'): "oneself; itself (in 'op zich': in itself)",
+    # Card weer_voortreffelijk 'Nou, dat is weer voortreffelijk geregeld.' and cue card 'Weer en nou kunnen bij herhaald falen...' teach the adverb 'again' 
+    ('c1_unit03_registerbeheersing', 'weer'): 'again',
+    # Card ik_zou_het_waarderen 'Ik zou het op prijs stellen als u vandaag reageert.' uses stellen in the fixed expression 'op prijs stellen'; global 'to pr
+    ('c1_unit03_registerbeheersing', 'stellen'): "to put; to set (in 'op prijs stellen' = to appreciate)",
+    # Same card: prijs occurs only inside the idiom 'op prijs stellen'; literal gloss kept, idiom cue added per idiom-component convention.
+    ('c1_unit03_registerbeheersing', 'prijs'): "the price (in 'op prijs stellen' = to appreciate)",
+    # Card wellicht 'Wellicht kunt u dit met voorrang bekijken.' uses kunt with formal u; global 'can (with je/jij)' omits the form this unit teaches.
+    ('c1_unit03_registerbeheersing', 'kunt'): 'can (with u or jij)',
+    # Unit uses the plural noun: 'extra kosten meebrengen', 'een proef de kosten beperkt', 'Enerzijds stijgen de kosten'; global gloss is the verb 'to cost'
+    ('c1_unit04_toegeven_en_wegen', 'kosten'): 'costs; expenses',
+    # Unit uses the noun: 'dat een proef de kosten beperkt', 'een beperkte proef'; global gloss is the verb 'taste (with ik)'.
+    ('c1_unit04_toegeven_en_wegen', 'proef'): 'the trial; the pilot',
+    # Card 'Dat is tot op zekere hoogte waar.' uses predicative 'waar' = true; global gloss is the adverb 'where'.
+    ('c1_unit04_toegeven_en_wegen', 'waar'): 'true',
+    # Cards 'voordat het antwoord volgt' and 'voordat de conclusie volgt' mean 'follows / comes next'; global gloss 'takes (a course)' is a different sense.
+    ('c1_unit04_toegeven_en_wegen', 'volgt'): 'follows (with hij/zij/het)',
+    # Reading text 'wegen ... zwaarder dan het financiële nadeel' uses comparative 'dan' = than; global gloss is 'then'.
+    ('c1_unit04_toegeven_en_wegen', 'dan'): 'than (in comparisons)',
+    # Global gloss 'stay (with we)' pins a finite plural form; leestekst card uses the infinitive: 'want ik wilde hier blijven'.
+    ('c1_unit05_contrafeitelijk_redeneren', 'blijven'): 'to stay; to remain',
+    # Card ik_had_beter teaches 'er ... over nadenken' = think about it; the global gloss omits the 'about' sense.
+    ('c1_unit05_contrafeitelijk_redeneren', 'over'): 'about; past; after; in (a duration)',
+    # Cards use it adverbially: 'Achteraf gezien had ik anders moeten kiezen' (differently) and 'Anders zat ik nu in Amsterdam' (otherwise); global is adjec
+    ('c1_unit05_contrafeitelijk_redeneren', 'anders'): 'differently; otherwise',
+    # Card voltooid_verleden: 'in de voltooid verleden tijd' = the pluperfect tense; realization pairs gloss it 'pluperfect tense'.
+    ('c1_unit05_contrafeitelijk_redeneren', 'tijd'): 'time; tense (grammar)',
+    # Card gaten: 'Ik houd het goed in de gaten' (in de gaten houden = keep an eye on); global 'love; am fond of' is the houden van sense, wrong here.
+    ('c1_unit06_idioom_en_beeldspraak', 'houd'): 'keep; hold (with ik)',
+    # Card koffiedik: 'Dat is koffiedik kijken' uses the infinitive; global 'watch (with we)' pins a finite form and the wrong sense.
+    ('c1_unit06_idioom_en_beeldspraak', 'kijken'): "to look (in 'koffiedik kijken')",
+    # Card collocatie: 'Sommige woorden horen vast bij elkaar' = belong firmly together; global 'surely; definitely' is the modal sense, wrong here.
+    ('c1_unit06_idioom_en_beeldspraak', 'vast'): 'firmly; fixed',
+    # Card collocatie: 'woorden horen vast bij elkaar' = belong together; global 'to hear' alone misleads.
+    ('c1_unit06_idioom_en_beeldspraak', 'horen'): 'to belong (horen bij); to hear',
+    # Leestekst: 'dat binnen een maand moet beslissen' = within a month; global 'inside' (adverb) is the spatial sense.
+    ('c1_unit06_idioom_en_beeldspraak', 'binnen'): 'within (time)',
+    # Card register: 'is idioom heel gewoon' = very common/normal; global 'just; simply' (adverb) is the particle sense.
+    ('c1_unit06_idioom_en_beeldspraak', 'gewoon'): 'normal; common',
+    # Card twee_uitdrukkingen: 'klinkt je verhaal levendig en natuurlijk'; card calque_note: 'natuurlijk Nederlands' — adjective 'natural', not 'of course'.
+    ('c1_unit06_idioom_en_beeldspraak', 'natuurlijk'): 'natural',
+    # Card collocatie: 'zo'n paar heet een vaste verbinding' = fixed word combination; plain 'the connection' obscures the taught sense.
+    ('c1_unit06_idioom_en_beeldspraak', 'verbinding'): 'the combination (vaste verbinding = collocation); the connection',
+    # Card onderzoek_tegen: 'Het buurtonderzoek spreekt dat tegen' — the unit teaches separable tegenspreken (to contradict); bare 'speaks' misleads.
+    ('c1_unit07_bronnen_bemiddelen', 'spreekt'): "speaks (with hij/zij; 'spreekt ... tegen' = contradicts)",
+    # Card dat_wil_zeggen: 'Een decibel is een maat voor geluid' — sense is 'measure', not 'size'.
+    ('c1_unit07_bronnen_bemiddelen', 'maat'): 'the measure; the size',
+    # Card dat_wil_zeggen: 'hoe hard iets klinkt' = how loud something sounds; global 'hard; fast' lacks the loudness sense.
+    ('c1_unit07_bronnen_bemiddelen', 'hard'): 'hard; loud (of sound)',
+    # Card samenvatting_note: 'dat iets niet bevestigd is' — past participle in a passive; global POS 'noun' is wrong.
+    ('c1_unit07_bronnen_bemiddelen', 'bevestigd'): 'confirmed',
+    # Card volgens_onderzoek/leestekst: 'het onderzoek' refers to a specific study/survey (the buurtonderzoek), countable with article; optional, global 're
+    ('c1_unit07_bronnen_bemiddelen', 'onderzoek'): 'the study; research',
+    # Unit uses the noun: 'Meer groen, meer lucht, meer rust', 'het groen te houden', 'het laatste stukje groen'; global gloss is the adjective 'green'.
+    ('c1_unit08_retorisch_overtuigen', 'groen'): 'green space; greenery (het groen)',
+    # Unit uses the noun: 'meer lucht, meer rust'; 'zorgt voor frisse lucht, rust'; global gloss is the imperative verb 'rest (with u)'.
+    ('c1_unit08_retorisch_overtuigen', 'rust'): 'the peace and quiet; the calm',
+    # Card 'een beroep doen op' / 'Ik doe een beroep op u' teaches the idiom sense; global 'the occupation' alone is not the taught sense. Wording keeps it 
+    ('c1_unit08_retorisch_overtuigen', 'beroep'): "the occupation; appeal (in 'een beroep doen op' = to call upon)",
+    # Scenario card: 'Omar wil de buurt overtuigen om het groen te houden' = to keep; global leads with 'to love' (which is 'houden van').
+    ('c1_unit08_retorisch_overtuigen', 'houden'): 'to keep; to hold',
+    # Reading text: 'De buurt heeft steeds minder ruimte'; global 'still (part of nog steeds)' is a different sense.
+    ('c1_unit08_retorisch_overtuigen', 'steeds'): "increasingly; more and more (in 'steeds minder' = less and less)",
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
@@ -3793,6 +4299,21 @@ NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit01_hypothetische_situaties", "werk"): "noun",
     ("b2_unit08_synthese", "eten"): "noun",
     ("b2_unit03_nuance", "best"): "adverb",
+    # C1 per-unit POS overrides (sense evidence in NL_UNIT_GLOSS_OVERRIDES).
+    ('c1_unit01_betoogstructuur', 'eerst'): 'adverb',
+    ('c1_unit02_tussen_de_regels', 'zijn'): 'pronoun',
+    ('c1_unit03_registerbeheersing', 'weer'): 'adverb',
+    ('c1_unit04_toegeven_en_wegen', 'kosten'): 'noun',
+    ('c1_unit04_toegeven_en_wegen', 'proef'): 'noun',
+    ('c1_unit04_toegeven_en_wegen', 'waar'): 'adjective',
+    ('c1_unit05_contrafeitelijk_redeneren', 'anders'): 'adverb',
+    ('c1_unit06_idioom_en_beeldspraak', 'vast'): 'adverb',
+    ('c1_unit06_idioom_en_beeldspraak', 'binnen'): 'preposition',
+    ('c1_unit06_idioom_en_beeldspraak', 'gewoon'): 'adjective',
+    ('c1_unit06_idioom_en_beeldspraak', 'natuurlijk'): 'adjective',
+    ('c1_unit07_bronnen_bemiddelen', 'bevestigd'): 'verb',
+    ('c1_unit08_retorisch_overtuigen', 'groen'): 'noun',
+    ('c1_unit08_retorisch_overtuigen', 'rust'): 'noun',
     # ("b1_unit01…", "was") stays a verb -- gloss-only override, no POS change.
 }
 
@@ -3830,6 +4351,8 @@ def _classify_nl(unit_files, level):
                     # hard-blocked to `incorrect`).
                     if in_volume_batch:
                         token = NL_CITATION_FORMS.get(token, token)
+                    elif level == "c1":
+                        token = nl_c1_citation_form(token)
                     if token not in NL_GLOSSES:
                         raise ValueError(f"missing explicit Dutch gloss for {token!r}")
                     tags = nl_agreement_tags(token, lesson_key)
@@ -3858,6 +4381,7 @@ def iter_specs():
     yield from _classify_nl(UNIT_FILES_A2, "a2")
     yield from _classify_nl(UNIT_FILES_B1, "b1")
     yield from _classify_nl(UNIT_FILES_B2, "b2")
+    yield from _classify_nl(UNIT_FILES_C1, "c1")
 
 
 def main() -> int:
@@ -3869,7 +4393,12 @@ def main() -> int:
         a1_count = sum(spec["level"] == "a1" for spec in specs)
         a2_count = sum(spec["level"] == "a2" for spec in specs)
         b1_count = sum(spec["level"] == "b1" for spec in specs)
-        print(f"Lexeme backfill dry run: {len(specs)} nl ({a1_count} a1, {a2_count} a2, {b1_count} b1).")
+        b2_count = sum(spec["level"] == "b2" for spec in specs)
+        c1_count = sum(spec["level"] == "c1" for spec in specs)
+        print(
+            f"Lexeme backfill dry run: {len(specs)} nl ({a1_count} a1, {a2_count} a2, "
+            f"{b1_count} b1, {b2_count} b2, {c1_count} c1)."
+        )
         return 0
 
     from sqlalchemy import select
@@ -3878,7 +4407,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2"), ("b1", "Dutch B1"), ("b2", "Dutch B2")):
+        for level, title in (("a1", "Dutch A1"), ("a2", "Dutch A2"), ("b1", "Dutch B1"), ("b2", "Dutch B2"), ("c1", "Dutch C1")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
