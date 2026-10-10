@@ -11,6 +11,7 @@ import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { ConnectedSignIns } from "../components/ConnectedSignIns";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
 
 export function ProfilePage() {
@@ -119,9 +120,11 @@ export function ProfilePage() {
         <div className="card" style={{ marginBottom: 16 }}>
           <h2 style={{ marginTop: 0 }}>{t("social.keep_progress_title")}</h2>
           <p className="muted">{t("social.keep_progress_body")}</p>
-          <SocialSignInButtons onCredential={linkSocial} />
+          <SocialSignInButtons onCredential={(credential) => linkSocial(credential)} />
         </div>
       )}
+
+      {!isGuest && hasAnySocialProvider() && <ConnectedSignIns />}
 
       <div className="stat-grid">
         <div className="stat-card">

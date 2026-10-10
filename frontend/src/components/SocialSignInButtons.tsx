@@ -56,6 +56,7 @@ export function SocialSignInButtons({ onCredential, config }: Props) {
     const parent = googleRef.current;
     if (!googleClientId || !parent) return;
     let cancelled = false;
+    let stopRenewal: (() => void) | undefined;
     renderGoogleButton(parent, googleClientId, {
       locale: i18n.language,
       onCredential: (credential) => {
@@ -64,11 +65,18 @@ export function SocialSignInButtons({ onCredential, config }: Props) {
       onError: () => {
         if (!cancelled) setError(t("social.error_default"));
       },
-    }).catch(() => {
-      if (!cancelled) setError(t("social.unavailable"));
-    });
+    })
+      .then((stop) => {
+        if (typeof stop !== "function") return;
+        if (cancelled) stop();
+        else stopRenewal = stop;
+      })
+      .catch(() => {
+        if (!cancelled) setError(t("social.unavailable"));
+      });
     return () => {
       cancelled = true;
+      stopRenewal?.();
       parent.replaceChildren();
     };
   }, [googleClientId, i18n.language, t]);

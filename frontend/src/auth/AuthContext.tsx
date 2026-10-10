@@ -14,7 +14,7 @@ import {
   clearAuthTokens,
   setUnauthorizedHandler,
 } from "@lingo/shared/api/client";
-import type { AuthUser, SocialCredential } from "@lingo/shared/api/types";
+import type { AuthUser, SocialCredential, SocialProvider } from "@lingo/shared/api/types";
 import { queryClient } from "../queryClient";
 
 // Three genuinely different situations used to collapse into `user ===
@@ -68,8 +68,11 @@ interface AuthContextValue {
   // Google/Apple sign-in (POST /auth/social).
   socialSignIn: (credential: SocialCredential) => Promise<void>;
   // Attach Google/Apple to the signed-in account (POST /auth/social/link).
-  // For a guest this converts the account in place, keeping its progress.
-  linkSocial: (credential: SocialCredential) => Promise<void>;
+  // For a guest this converts the account in place, keeping its progress;
+  // any other account must confirm its current password.
+  linkSocial: (credential: SocialCredential, currentPassword?: string) => Promise<void>;
+  // Remove a linked sign-in (POST /auth/social/unlink).
+  unlinkSocial: (provider: SocialProvider, currentPassword?: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -356,10 +359,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setStatus("authenticated");
   }, []);
 
-  const linkSocial = useCallback(async (credential: SocialCredential) => {
+  const linkSocial = useCallback(async (credential: SocialCredential, currentPassword?: string) => {
     // Same account, same tokens: only the user object changes (a converted
     // guest gets its new email and identity), so the query cache stays.
-    const updated = await AuthApi.linkSocial(credential);
+    const updated = await AuthApi.linkSocial(credential, currentPassword);
+    storeSession(updated);
+    setUser(updated);
+  }, []);
+
+  const unlinkSocial = useCallback(async (provider: SocialProvider, currentPassword?: string) => {
+    const updated = await AuthApi.unlinkSocial(provider, currentPassword);
     storeSession(updated);
     setUser(updated);
   }, []);
@@ -376,9 +385,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       continueAsGuest,
       socialSignIn,
       linkSocial,
+      unlinkSocial,
       logout,
     }),
-    [user, status, retrying, retrySession, login, register, continueAsGuest, socialSignIn, linkSocial, logout],
+    [user, status, retrying, retrySession, login, register, continueAsGuest, socialSignIn, linkSocial, unlinkSocial, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
