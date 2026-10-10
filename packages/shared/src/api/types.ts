@@ -467,6 +467,24 @@ export interface AuthUser {
   // actual security boundary for every /admin/* route.
   is_admin?: boolean;
   created_at?: string;
+  // Linked Google/Apple sign-ins (GET /auth/me, POST /auth/social/link).
+  identities?: UserIdentity[];
+}
+
+export type SocialProvider = "google" | "apple";
+
+export interface UserIdentity {
+  provider: SocialProvider;
+  created_at: string;
+}
+
+// What a provider's client-side sign-in hands back, ready for the backend.
+// `nonce` is the RAW nonce; the provider only ever saw its SHA-256 digest.
+export interface SocialCredential {
+  provider: SocialProvider;
+  idToken: string;
+  nonce: string;
+  displayName?: string;
 }
 
 export interface AuthResult {

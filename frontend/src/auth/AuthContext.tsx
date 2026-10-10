@@ -14,7 +14,7 @@ import {
   clearAuthTokens,
   setUnauthorizedHandler,
 } from "@lingo/shared/api/client";
-import type { AuthUser } from "@lingo/shared/api/types";
+import type { AuthUser, SocialCredential } from "@lingo/shared/api/types";
 import { queryClient } from "../queryClient";
 
 // Three genuinely different situations used to collapse into `user ===
@@ -65,6 +65,11 @@ interface AuthContextValue {
     displayName?: string,
   ) => Promise<void>;
   continueAsGuest: (username: string) => Promise<void>;
+  // Google/Apple sign-in (POST /auth/social).
+  socialSignIn: (credential: SocialCredential) => Promise<void>;
+  // Attach Google/Apple to the signed-in account (POST /auth/social/link).
+  // For a guest this converts the account in place, keeping its progress.
+  linkSocial: (credential: SocialCredential) => Promise<void>;
   logout: () => void;
 }
 
@@ -338,6 +343,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [],
   );
 
+  const socialSignIn = useCallback(async (credential: SocialCredential) => {
+    // Same guard as continueAsGuest: never replace the tokens of a session
+    // that merely could not be verified.
+    if (statusRef.current === "unverified") {
+      throw new Error("Refusing to sign in while an existing session is unverified.");
+    }
+    const result = await AuthApi.social(credential);
+    storeSession(result.user);
+    resetCacheForNewSession();
+    setUser(result.user);
+    setStatus("authenticated");
+  }, []);
+
+  const linkSocial = useCallback(async (credential: SocialCredential) => {
+    // Same account, same tokens: only the user object changes (a converted
+    // guest gets its new email and identity), so the query cache stays.
+    const updated = await AuthApi.linkSocial(credential);
+    storeSession(updated);
+    setUser(updated);
+  }, []);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -348,9 +374,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       register,
       continueAsGuest,
+      socialSignIn,
+      linkSocial,
       logout,
     }),
-    [user, status, retrying, retrySession, login, register, continueAsGuest, logout],
+    [user, status, retrying, retrySession, login, register, continueAsGuest, socialSignIn, linkSocial, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
