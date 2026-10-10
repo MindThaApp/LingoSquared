@@ -144,6 +144,18 @@ class RefreshToken(Base):
         DateTime(timezone=True),
         nullable=True,
     )
+    # Set only when this token was revoked by ROTATION (never by logout or
+    # reuse detection): the token issued in its place, and that successor's
+    # raw value sealed under this token's own raw value (see
+    # app.core.security.seal_successor_token). Together they let /auth/refresh
+    # answer a lost-response retry idempotently instead of treating it as
+    # theft. Both are NULL for logout/reuse revocations, which therefore
+    # never qualify for the retry path.
+    replaced_by_id: Mapped[str | None] = mapped_column(
+        ForeignKey("refresh_tokens.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    successor_sealed: Mapped[str | None] = mapped_column(Text, nullable=True)
 
 
 class LearningPath(Base):

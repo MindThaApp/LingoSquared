@@ -47,7 +47,13 @@ class RegisterIn(BaseModel): email:EmailStr; password:str=Field(min_length=8,max
 class LoginIn(BaseModel): email:EmailStr; password:str=Field(max_length=128); timezone:str|None=Field(default=None,max_length=64)
 class SocialLoginIn(BaseModel): provider:Literal["google","apple"]; id_token:str=Field(min_length=1,max_length=8192); display_name:str|None=Field(default=None,max_length=100)
 class AuthOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int; user:UserOut
-class RefreshIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
+class RefreshIn(BaseModel):
+    refresh_token:str=Field(min_length=1,max_length=512)
+    # Optional client-chosen successor: a client that persists this value
+    # BEFORE sending the request still holds its next refresh token even if
+    # the response never arrives (page closed or reloaded mid-request).
+    # At least 256 bits of base64url randomness.
+    next_refresh_token:str|None=Field(default=None,min_length=43,max_length=128,pattern=r"^[A-Za-z0-9_-]+$")
 class RefreshOut(BaseModel): access_token:str; refresh_token:str; token_type:Literal["bearer"]="bearer"; expires_in:int
 class LogoutIn(BaseModel): refresh_token:str=Field(min_length=1,max_length=512)
 class AdminUserCreateIn(BaseModel): email:EmailStr; display_name:str=Field(min_length=1,max_length=100)
