@@ -68,7 +68,8 @@ docker compose run --rm api python -m app.content.seed
 # Follow API logs
 docker compose logs -f api
 
-# Export content (TOKEN must belong to ADMIN_EMAILS)
+# Export content (TOKEN must belong to an admin; grant with
+# `python -m app.scripts.promote_admin <email>`)
 curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/admin/content/export > content.json
 
 # Import that content
@@ -99,7 +100,7 @@ for one language pair; there is no placement or enrollment state.
 
 ## Authentication and administration
 
-JWT bearer tokens expire after 86,400 seconds (24 hours). A token refresh flow (`/auth/refresh`, plus `/auth/logout`) is available; refresh tokens rotate on use, with reuse detection. Registration grants administrator status only when the normalized email is listed in `ADMIN_EMAILS`. Admin import replaces a course with the same source, target, and title atomically within the request transaction.
+JWT bearer tokens expire after 86,400 seconds (24 hours). A token refresh flow (`/auth/refresh`, plus `/auth/logout`) is available; refresh tokens rotate on use, with reuse detection. Registration never grants administrator status (`ADMIN_EMAILS` is not read). Admin is the `users.is_admin` column: promote an existing account with `docker compose exec api python -m app.scripts.promote_admin <email>`, or an existing admin calls `POST /admin/users/{user_id}/admin`. Admin import replaces a course with the same source, target, and title atomically within the request transaction.
 
 All API errors use `{ "error": { "code": "...", "message": "..." } }`. Correct answers are omitted from lesson and review prompts and returned only after answer submission.
 
