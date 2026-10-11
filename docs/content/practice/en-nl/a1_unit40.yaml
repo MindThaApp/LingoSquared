@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit40.koken
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Vocabulary unit (koken / cooking), 15 unit lexemes across all 6 lessons per
     scripts/backfill_lexemes_en_nl.py. Union tag koken_vocab (13 distinct tokens)
@@ -25,6 +25,25 @@ review:
     RECIPE S3.1b). word_order/fill_in_blank both anchor on the single-member
     koken_tomaat_single tag (tomaat), course-scope-safe by construction.
     Capacity/coverage measured via RECIPE S9 step 4 (see report).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all templates against the real unit- and course-scope pools,
+    every gloss vs the unit40 realization, frame grammar/taught
+    vocabulary, self-reference, matching confusability, booleans and
+    jargon. FIXED (untaught-vocab): lesson01.order.003 'Ik snijd de {item}
+    in stukjes.' used never-taught 'stukjes' -> 'Ik snijd de {item} voor
+    het eten.' (lesson01's own taught sentence); lesson01.fill.004 'Kun je
+    de ___ even wassen?' used never-taught 'wassen' and was equally
+    satisfied by the unit's 'ui' -> 'Ik snijd de ui en de {item}.'
+    (feedbacks updated). FIXED (feedback-hint): choose feedbacks in
+    lesson01/02/03/04/05 asserted category facts false for course-scope
+    pool members (heb, opstaan, uitlaten, scheidbaar, keuken...) ->
+    'Remember the English meaning of {item}.'; match feedback -> 'Match
+    each word with its English meaning.'. DEFERRED (lexeme-gloss):
+    bakken/bak in lesson02 are glossed 'bins'/'bin' (waste-sorting sense)
+    but this unit teaches 'to fry'/'fry (with ik)'; the pack already keeps
+    them out of every pool (they lack koken_vocab), backfill gloss fix
+    needed. No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -63,7 +82,7 @@ templates:
       agreement_tags: {semantic: ingredient_cutting}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used when preparing vegetables to cook.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 
@@ -90,7 +109,7 @@ templates:
   lesson_content_key: nl.a1.unit40.lesson01.de_ui_de_tomaat_snijden
   type: word_order
   frame:
-    text: Ik snijd de {item} in stukjes.
+    text: Ik snijd de {item} voor het eten.
     language_code: nl
     direction: ltr
   slots:
@@ -101,11 +120,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Ik snijd de {item} in stukjes.
+      text: Ik snijd de {item} voor het eten.
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Ik snijd de tomaat in stukjes. -- I cut the tomato into pieces.
+    text: Ik snijd de tomaat voor het eten. -- I cut the tomato for the meal.
     language_code: en
     direction: ltr
 
@@ -113,7 +132,7 @@ templates:
   lesson_content_key: nl.a1.unit40.lesson01.de_ui_de_tomaat_snijden
   type: fill_in_blank
   frame:
-    text: Kun je de {item} even wassen?
+    text: Ik snijd de ui en de {item}.
     language_code: nl
     direction: ltr
   slots:
@@ -123,7 +142,7 @@ templates:
       agreement_tags: {semantic: koken_tomaat_single}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: Kun je de tomaat even wassen? -- Can you wash the tomato for a moment?
+    text: Ik snijd de ui en de tomaat. -- I cut the onion and the tomato.
     language_code: en
     direction: ltr
 
@@ -168,7 +187,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: Match each cooking word with its English meaning.
+    text: Match each word with its English meaning.
     language_code: en
     direction: ltr
 
@@ -187,7 +206,7 @@ templates:
       agreement_tags: {semantic: koken_noun}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is a word for a cooking item or ingredient.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 
@@ -225,7 +244,7 @@ templates:
       agreement_tags: {semantic: preparing_tasting}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is about preparing or tasting food.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 
@@ -263,7 +282,7 @@ templates:
       agreement_tags: {semantic: koken_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is cooking vocabulary from this unit.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 
@@ -301,7 +320,7 @@ templates:
       agreement_tags: {semantic: koken_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is cooking vocabulary from this unit.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 

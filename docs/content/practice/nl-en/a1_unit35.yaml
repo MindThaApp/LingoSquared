@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). Two tags:
     ''device_noun'' (all 6 lesson01 vocabulary items -- phone/laptop/ tablet/computer/app/camera, all nouns) for bare-word
     recognition/ matching, and a narrower 5-member ''device_noun_a'' (excludes ''app'') for the generative frame ''I have
@@ -69,7 +69,10 @@ review:
     (glosses app/apps, laptop/laptops, kaart/kaarten -- confusable right-hand sides, and ''app''/''laptop'' are baked
     into ''apps''/''laptops''). The lesson01 noun pool has none of those: app, books, camera, computer, home, laptop,
     mom, photos, tablet -- 9 distinct tokens, 9 distinct glosses, on-theme (device vocabulary). Course scope now
-    equals unit scope (0 course-scope extras per pool_check.py), ending the Endless-Practice off-theme noun pull.'
+    equals unit scope (0 course-scope extras per pool_check.py), ending the Endless-Practice off-theme noun pull.
+
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 9 templates against unit- and course-scoped pools, every gloss against the unit35 realization, the I have a {item} frames at course scope (phone included), YAML booleans and jargon. 1 defect fixed: lesson04.translate.001 (bare-word translation, part_of_speech verb with no semantic tag) drew from the whole A1 verb pool in Endless Practice, where several Dutch glosses map to more than one English verb (komen = get/come, praten = speak/talk, rijden = drive/ride, dragen = wear/carry) or are context phrases (niet leuk vinden = don''t, kunt beter = should) -- the single graded answer would mark correct learners wrong. Narrowed the slot to semantic a1_unit35_technology (added to tag_schema): same 12 unit verbs, all distinct glosses, course scope now equals unit scope. Also fixed fresh_context, which was a bare YAML boolean. No native-judgment flags.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -87,6 +90,7 @@ tag_schema:
     - device_noun
     - device_noun_a
     - a1_unit35_technology_lesson01
+    - a1_unit35_technology
 slot_presets:
   device_noun: &id001
     language_code: en
@@ -256,6 +260,8 @@ templates:
     item:
       language_code: en
       part_of_speech: verb
+      agreement_tags:
+        semantic: a1_unit35_technology
   answer_derivation:
     kind: slot_text
     slot: item

@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit14.communication
 review:
-  status: unreviewed
-  fresh_context: true
+  status: reviewed
+  fresh_context: 'true'
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
@@ -123,7 +123,20 @@ review:
     matching items anyway). Removed the now-unused untagged verb_adverb_word/noun_adj_word presets; the
     untagged bare-word MC/listen/translation presets stay per dispatch scope. Flipped status reviewed ->
     unreviewed. Verified via pool_check.py (14/7/7 pools, 0 course extras), practice-validate 0 errors,
-    unit-scope check 0 DEAD."
+    unit-scope check 0 DEAD.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read every template against its unit- and course-scoped pools. Fixed:
+    (1) the untagged noun/verb/adverb/adjective/preposition/all presets pooled the whole
+    A1 level at course scope (bare-word translations with gloss collisions graded correct
+    answers wrong); all narrowed to a1_unit14_communication (unit pools unchanged). (2)
+    lesson04.prep_translate.003 showed the gloss 'wat dacht je van' and accepted only
+    'about' ('how about' graded wrong); now a deterministic sentence 'Wat dacht je van
+    vanavond?' -> 'How about tonight'. Deferred (lexeme glosses, scripts lane): slowly ->
+    'langzamer' (means 'slower'; should be 'langzaam'); speak -> 'praten' (bare
+    translation rejects 'talk'; 'spreken' is cleaner); about -> 'wat dacht je van'
+    (phrase gloss on a single preposition, still shown in lesson04 MC); meeting ->
+    'afspraak' (translation rejects 'appointment'); 6pm -> '18.00 uur' (translation
+    accepts only '6pm')."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -145,12 +158,12 @@ slot_presets:
   # sentence text, so the SS1.1 course-scope grammatical-in-frame risk that
   # applies to word_order/fixed-sentence translation does not apply. No
   # word_order template uses an untagged pool in this file for that reason.
-  noun_word: &noun_word {language_code: en, part_of_speech: noun}
-  verb_word: &verb_word {language_code: en, part_of_speech: verb}
-  adverb_word: &adverb_word {language_code: en, part_of_speech: adverb}
-  adj_word: &adj_word {language_code: en, part_of_speech: adjective}
-  prep_word: &prep_word {language_code: en, part_of_speech: preposition}
-  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, pronoun, preposition]}
+  noun_word: &noun_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit14_communication}}
+  verb_word: &verb_word {language_code: en, part_of_speech: verb, agreement_tags: {semantic: a1_unit14_communication}}
+  adverb_word: &adverb_word {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: a1_unit14_communication}}
+  adj_word: &adj_word {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: a1_unit14_communication}}
+  prep_word: &prep_word {language_code: en, part_of_speech: preposition, agreement_tags: {semantic: a1_unit14_communication}}
+  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, pronoun, preposition], agreement_tags: {semantic: a1_unit14_communication}}
   # pair_* presets (wave 3): the generated unit-scoped tag a1_unit14_communication
   # (commit 05af7ace) with a content-POS filter -- the matching_pairs pools are now
   # identical at unit and course scope (no more level-wide pull at Endless-Practice
@@ -252,7 +265,10 @@ templates:
   - content_key: practice.nl-en.en.a1.unit14.lesson04.prep_translate.003
     lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
     type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    # 2026-10-10 review: was a bare-word item showing the gloss 'wat dacht je
+    # van' and accepting only 'about' (a learner typing 'how about' was marked
+    # wrong). Now a deterministic sentence over the single-member slot.
+    frame: {text: "Wat dacht je van vanavond?", language_code: nl, direction: ltr}
     slots: {item: *prep_word}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "How {item} tonight", language_code: en, direction: ltr}}
+    feedback_frame: {text: "Wat dacht je van vanavond? is in het Engels: How {item} tonight?", language_code: nl, direction: ltr}

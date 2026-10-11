@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.b2.unit05.register
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Authored 2026-08-02 against docs/content/PRACTICE_PACK_RECIPE.md to unblock the
     en-nl B2 unit05 (register) checkpoint (the unit's lessons already produce 51
@@ -52,6 +52,31 @@ review:
     would display capitalized in a matching left -- it is only used here inside MC
     recognition and translation prompts, never as a matching left. Needs the standard
     fresh-context review before import.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked every
+    template against its real unit- and course-scope pools (practice_dump), every
+    gloss shown as an answer, every fixed-sentence frame's course-wide pool (all
+    single-member), feedback text, jargon and boolean quoting. FIXED (1):
+    lesson03.choose.001 -- at course scope the directness_politeness verb pool holds
+    both unit05 'Zou' ("Would (conditional of zullen)") and unit02 'zou' ("would"),
+    the same word as a capitalized duplicate row; the runtime casefold dedupe does
+    not merge them because the glosses differ, so an Endless-Practice item for
+    Zou/zou could show both correct meanings with only one graded right. Narrowed
+    part_of_speech to [adjective, phrase] (unit pool
+    alsjeblieft/alstublieft/vriendelijk/mogelijk, 4 options; doen/willen/wilt/Zou
+    stay covered by lesson03.translate.003). DEFERRED (backfill lane, not fixable
+    here without gutting pools): (a) moet "must; is due" vs moeten "must; need to"
+    (unit02) enter the lesson05/06 register_selection verb pools at course scope --
+    as MC distractors for each other both read as correct, and they co-occur in the
+    lesson06 matching course pool; re-gloss to form-marked senses (e.g. moet "must
+    (with ik/hij/zij)", moeten "to have to"). (b) jou "you (informal object)" in the
+    lesson01 translation pool: unstressed 'je' is an equally correct answer to that
+    prompt; gloss should say stressed ("you (informal, stressed object)"). (c) Beste
+    "Dear (letter/email salutation)" vs Geachte "dear (formal salutation)": Beste's
+    gloss does not exclude formal use; suggest Beste "Dear (neutral salutation)".
+    (d) systemic: the two fixed-sentence translations (lesson04.translate.004,
+    lesson06.translate.004) accept exactly one rendering, so equally correct
+    word-order variants are rejected (engine limitation).
 tag_schema:
   part_of_speech:
   - symbol
@@ -263,7 +288,6 @@ templates:
     item:
       language_code: nl
       part_of_speech:
-      - verb
       - adjective
       - phrase
       agreement_tags:

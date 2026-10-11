@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit11.plans
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: >-
     Original authoring notes (2026-07-06): leans on the ALREADY-ESTABLISHED
     "weekday" tag (11 real candidates, both cases, introduced in units 3-4)
@@ -93,6 +93,21 @@ review:
     prompt that varies with the answer). tag_schema extended with
     `accept_decline`. Production tier now 3 live. The weekday-tag
     contamination documented above is untouched and still stands.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 11 templates at unit and course scope. 1 defect class fixed: the two
+    bare-word translations (lesson02.translate.003 accept_decline nouns,
+    lesson05.translate.002 plan_vocab) show glosses "the plan" / "the
+    message" / "the invitation" but accept only the bare noun, rejecting
+    "het plan" / "het bericht" -- both prompts now "{item} (one Dutch word,
+    without de/het)". Deferred: the unit's only weekday lexeme is the
+    capitalized Vrijdag (lesson05), so checkpoint word_order/translation
+    answers display "Zullen we Vrijdag ..." with a mid-sentence capital
+    (grading is casefolded; course scope also carries
+    Zaterdag/Zondag/Woensdag/Maandag/Donderdag rows) -- needs a backfill
+    case-fold, which would also leave lesson01.choose.003 (already below the
+    3-option floor at unit scope, 1 value) with no unit candidates. No
+    native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -136,7 +151,7 @@ templates:
     lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (one Dutch word, without de/het)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
@@ -188,7 +203,7 @@ templates:
     lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (one Dutch word, without de/het)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}

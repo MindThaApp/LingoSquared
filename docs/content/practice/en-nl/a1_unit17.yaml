@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit17.work
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session closing the en-nl
     practice-pool gap behind its lesson content (lesson content already
     goes through unit23; practice templates previously stopped at unit16).
@@ -111,7 +111,21 @@ review:
     gloss.
 
     tag_schema updated: removed hour_number and person_name (no longer
-    referenced anywhere in this pack after the above)."
+    referenced anywhere in this pack after the above).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read
+    all 16 templates against unit- and course-scoped pools and the nl
+    a1_unit17 realization. 3 defects fixed: lesson04.translate.002 English
+    prompt rendered ungrammatical 'Lotte works as cook.' and, together with
+    lesson04.order.001, asserted 'Lotte werkt als kok', contradicting the
+    unit's own canon (Lotte is the verpleegkundige, Omar the kok) -- both
+    frames, the answer frame and feedback now use Hij werkt als {item}. / He
+    works as a {item}. (Hij taught in lesson04; both pool members take 'a');
+    lesson05.choose.001 feedback 'a word from the work profiles' was false
+    for beroep/kantoor/baan -> 'a work-related word from this unit';
+    lesson06.listen.001 feedback 'heard in this dialogue' was false for
+    beroep/kantoor/pauze -> '{item} is the word you heard.'. No native-judgment
+    flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -215,23 +229,23 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit17.lesson04.order.001
     lesson_content_key: nl.a1.unit17.lesson04.collegas_beschrijven
     type: word_order
-    frame: {text: "Lotte werkt als {item}.", language_code: nl, direction: ltr}
+    frame: {text: "Hij werkt als {item}.", language_code: nl, direction: ltr}
     slots: {item: *occupation}
-    answer_derivation: {kind: render_frame, frame: {text: "Lotte werkt als {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Lotte werkt als {item} -- third person adds -t to the verb.", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij werkt als {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij werkt als {item} -- third person adds -t to the verb.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit17.lesson04.translate.002
     lesson_content_key: nl.a1.unit17.lesson04.collegas_beschrijven
     type: translation
     frame:
-      text: "Lotte works as {item}."
+      text: "He works as a {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *occupation}
-    answer_derivation: {kind: render_frame, frame: {text: "Lotte werkt als {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Lotte werkt als {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "Hij werkt als {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Hij werkt als {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit17.lesson04.listen.003
     lesson_content_key: nl.a1.unit17.lesson04.collegas_beschrijven
     type: listen_select
@@ -250,7 +264,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *work_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a word from the work profiles.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a work-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit17.lesson05.translate.002
     lesson_content_key: nl.a1.unit17.lesson05.werkprofielen_lezen
     type: translation
@@ -270,7 +284,7 @@ templates:
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *work_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit17.lesson06.order.002
     lesson_content_key: nl.a1.unit17.lesson06.werk_gesprek
     type: word_order

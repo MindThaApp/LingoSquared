@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit08.shopping
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: 'true'
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
@@ -85,16 +85,28 @@ review:
     references them after this fix). LOGGED for the coordinator: en-target number words need a backfill_lexemes_nl_en.py
     change to emit unit-scoped specs wherever a later unit's own realization actually uses a number, if checkpoint-visible
     price/quantity sentences are ever wanted for unit08 (and unit05/unit07, same gap). Re-verified 0 DEAD via
-    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate."
+    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read every template against its unit- and course-scoped pools. Fixed:
+    (1) lesson02.fresh_translate.004 used an untagged adjective slot (145 adjectives at
+    course scope with gloss collisions, e.g. 'goed' -> good/fine, 'oké' -> okay/ok, so a
+    correct answer could be graded wrong); narrowed to a1_unit08_shopping_lesson02 (fresh,
+    same as unit scope). (2) price_symbol (pounds_translate.003, total_translate.002) was
+    untagged and widened at course scope to times/ordinals/dollar amounts with one fixed
+    answer each; narrowed to a1_unit08_shopping_lesson03 (the unit's own '4'). (3)
+    label_pair.002 feedback said 'twee' for a 5-pair exercise -- reworded. (4)
+    price_question_order.001 feedback 'waarnaar geprijsd wordt gevraagd' was not
+    idiomatic Dutch -- reworded. Not changed: label_pair.002 has 5 pairs (unit has only 5
+    quantity_unit lexemes)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [quantity_unit, food_plural]
+    semantic: [quantity_unit, food_plural, a1_unit08_shopping_lesson02, a1_unit08_shopping_lesson03]
 slot_presets:
   quantity_unit: &quantity_unit {language_code: en, part_of_speech: noun, agreement_tags: {semantic: quantity_unit}}
   food_plural: &food_plural {language_code: en, part_of_speech: noun, agreement_tags: {semantic: food_plural}}
   quantity_food_union: &quantity_food_union {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit, food_plural]}}
-  price_symbol: &price_symbol {language_code: en, part_of_speech: symbol}
+  price_symbol: &price_symbol {language_code: en, part_of_speech: symbol, agreement_tags: {semantic: a1_unit08_shopping_lesson03}}
 templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson01.quantity_meaning.001
     lesson_content_key: en.a1.unit08.lesson01.quantities
@@ -131,7 +143,7 @@ templates:
     frame: {text: "How much are the {item}", language_code: en, direction: ltr}
     slots: {item: *food_plural}
     answer_derivation: {kind: render_frame, frame: {text: "How much are the {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} is waarnaar geprijsd wordt gevraagd.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "Je vraagt naar de prijs van: {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_translate.003
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: translation
@@ -143,7 +155,7 @@ templates:
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: {language_code: en, part_of_speech: adjective}}
+    slots: {item: {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: a1_unit08_shopping_lesson02}}}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_meaning.001
@@ -160,7 +172,7 @@ templates:
     slots: {first_unit: *quantity_unit, second_unit: *quantity_unit, third_unit: *quantity_unit, fourth_unit: *quantity_unit, fifth_unit: *quantity_unit}
     slot_relations: [{kind: distinct, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}]
     answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}
-    feedback_frame: {text: "Je hebt twee eenheden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "Je hebt de eenheden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_translate.003
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: translation

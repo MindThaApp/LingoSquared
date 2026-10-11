@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a2.unit32.online_habits
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-23 (nl-en batch B). English target pool: 35 content-POS (noun/verb/adjective/adverb)
     lexemes across 4/4 lessons that carry any EN lexeme at all (this direction tests English; language_code=nl
     lexemes in the backfill are unrelated pollution from quoted-English-inside-Dutch-gloss parsing and
@@ -15,7 +15,7 @@ review:
     has no candidate floor, and has zero self-reference risk (neither please nor say is ever a taught
     token in this unit). multiple_choice/listen_select clear the 3-distinct-value floor. matching_pairs
     clears the 6-distinct-token floor. Capacity is ample; see the coordinators report for the measured
-    coverage numbers.'
+    coverage numbers. Fresh-context review 2026-10-10 (content-reviewer.md checklist): read every template against the real unit pool (35 lexemes) and every gloss against the en a2_unit32 realization. 2 fixed: (1) lexeme lot (from a lot) is glossed veel, so the bare-word translation prompt veel demanded the answer lot, which no learner would type (a lot / many were graded wrong); lot is now unsampleable in every translation slot: lesson01.translate.003 narrowed to POS [adverb, verb] (unit tag), lesson02.translate.003 narrowed to POS [adjective, adverb, verb], lesson04.translate.003 switched from the unit tag to the union lesson01+lesson03+lesson04 (lesson04 tag added to tag_schema). Collateral: lesson02 nouns (evening, apps, family, cooking, touch, waste) lose production-tier hosting; lesson02 stays covered in production via its verbs/adverbs/adjectives. (2) lesson01.choose.001 pools the whole unit, so its feedback (een woord uit deze les) was false for lessons 02-04 words; now uit dit onderdeel. Deferred to the backfill lane (lexeme glosses, not fixable here): too glossed ook but the unit teaches too much (= te veel); staying glossed verblijvend; logerend but the unit teaches staying in touch (contact houden); post is tagged noun with gloss post (Dutch = mail) but the unit teaches the verb post photos (posten/plaatsen); lot should be the phrase a lot. No native-judgment flags.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -34,6 +34,7 @@ tag_schema:
     - a2_unit32_online_habits_lesson01
     - a2_unit32_online_habits_lesson02
     - a2_unit32_online_habits_lesson03
+    - a2_unit32_online_habits_lesson04
 templates:
 - content_key: practice.nl-en.en.a2.unit32.lesson01.choose.001
   lesson_content_key: en.a2.unit32.lesson01.online_habits_vocabulary
@@ -56,7 +57,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is een woord uit deze les.'
+    text: '{item} is een woord uit dit onderdeel.'
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a2.unit32.lesson04.listen.001
@@ -186,7 +187,6 @@ templates:
       language_code: en
       part_of_speech:
       - adverb
-      - noun
       - verb
       agreement_tags: *id002
   answer_derivation:
@@ -283,7 +283,10 @@ templates:
   slots:
     item:
       language_code: en
-      part_of_speech: *id006
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
       agreement_tags: *id007
   answer_derivation:
     kind: slot_text
@@ -383,7 +386,11 @@ templates:
       - adverb
       - noun
       - verb
-      agreement_tags: *id011
+      agreement_tags:
+        semantic:
+        - a2_unit32_online_habits_lesson01
+        - a2_unit32_online_habits_lesson03
+        - a2_unit32_online_habits_lesson04
   answer_derivation:
     kind: slot_text
     slot: item

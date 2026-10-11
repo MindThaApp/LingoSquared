@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit34.technologie
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. en-nl A1
     unit34 (technologie: phone/computer/internet/app/message/look-up vocab) is a
@@ -37,6 +37,22 @@ review:
     app"/"the message"/"to send"/"sends (with hij/zij/u)"/"reads (with hij/
     zij)"), which is exactly the tag lesson02's own vocab carries. Verified 0
     DEAD via scripts/_practice_unit_scope_check.py after the fix.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 12 templates against unit- and course-scoped pools, every rendering,
+    gloss senses vs the nl a1_unit34 realization, matching confusables,
+    self-reference, booleans and jargon. 1 defect fixed:
+    lesson02.translate.002 (bare-word, app_message) could prompt 'the
+    message' with the only accepted answer boodschap, while lesson02 teaches
+    het bericht as the word for message (boodschap appears only inside a
+    grammar note) -- a learner typing bericht would be marked wrong; slot
+    narrowed to part_of_speech [verb] (sturen/stuurt/leest unit-native).
+    Deferred (backfill lane): zoekt is glossed 'is looking for' though
+    unit34 uses it in 'zoekt ... op' (looks up) -- still a valid sense, so
+    left in pools; kent 'know (with hij/zij/je)' (course scope) also fits
+    weet; Telefoon (unit45, capitalized) joins schermtijd_telefoon_single
+    course-wide and displays mid-sentence in order.003 tiles (display only,
+    casefolded grading). No native-judgment flag.
 tag_schema:
   part_of_speech:
   - symbol
@@ -154,7 +170,10 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech: [noun, verb]
+      # verb-only (2026-10-10): the noun boodschap is glossed 'the message',
+      # but lesson02 teaches het bericht for 'message', so a bare-word
+      # prompt 'the message' graded only against boodschap is underdetermined.
+      part_of_speech: [verb]
       agreement_tags: {semantic: app_message}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:

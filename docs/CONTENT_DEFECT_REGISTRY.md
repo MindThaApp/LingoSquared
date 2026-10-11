@@ -709,6 +709,46 @@ sources where available; if OCR sourcing is unavoidable, add a manual
 native-reviewer spot-check step before authoring from OCR'd text.
 **Lane**: content-lane sourcing discipline (Hindi).
 
+### 1.40 English "the X" lexeme glosses on bare-noun answers (en-nl practice translation)
+**Description**: en-nl lexemes for nouns carry an English gloss with the
+article ("the room", "the help", "the flower") while the token is the bare
+Dutch noun (`kamer`). A bare-word `translation` practice template shows the
+gloss and accepts only the token, so the natural answer "de kamer" /
+"het station" is graded wrong (≥2 edits). Same family: a gloss naming a
+contraction ("can't", "isn't") or a phrase ("wake" → "wakker worden" when the
+learner types "wake up") in nl-en, and bare-verb glosses on inflected forms
+("have" for `heb`, "can" for `kun`, "good" for `goede`).
+**First found**: 2026-10-10, Dutch-direction review backlog (reported by 8
+of 20 practice-pack reviewers independently).
+**Instances**: course-wide in en-nl A1-B2 (dozens of noun lexemes); ~40
+nl-en lexemes across A1-B2 (see the 2026-10-10 Section 4 entries).
+**Root cause**: glosses written for recognition display, reused verbatim as
+production prompts; practice translation templates carry exactly one answer
+string (no `accepted` list).
+**Prevention status**: UNPREVENTED. Worked around per pack where possible
+(prompt suffix "(the Dutch noun only, without de/het)", slot narrowing).
+**Fix options (needs a decision)**: (a) backfill glosses without the article
+for nouns, or (b) grading/engine: accept an optional leading article on
+bare-noun translation answers and contraction expansions on English answers.
+**Lane**: backfill scripts (Codex) or backend grading (Codex).
+
+### 1.41 Practice `feedback_frame` claims false at Endless-Practice (course) scope
+**Description**: practice feedback frames assert provenance ("{item} is a
+word from this dialogue", "...belongs to this unit's florist vocabulary",
+"...is een woord uit deze les") that is false for most candidates once the
+slot pool widens to the whole CEFR level (or the whole unit for
+lesson-anchored templates).
+**First found**: 2026-10-10, Dutch-direction review backlog (~150 frames in
+en-nl alone; fixed in every reviewed Dutch pack).
+**Learner impact**: currently LATENT — reviewers confirmed `feedback_frame`
+is stored but never read by `backend/app/practice/service.py` or rendered by
+`frontend/src`. It becomes live the moment feedback is wired up.
+**Prevention status**: UNPREVENTED for unreviewed directions (fa-en, prs-en,
+en-fa, en-prs packs still carry the pattern). **Avoid**: feedback frames must
+be true for every course-scoped candidate ("The Dutch word is {item}.").
+**Lane**: content (packs); a validator could flag frames containing
+"this dialogue/lesson/unit's" over non-single-member slots.
+
 ---
 
 ## Section 2: Per-language/direction ledger
@@ -1835,3 +1875,97 @@ Tooling gaps confirmed: _practice_content_integrity_check.py /
 _fill_in_blank_ambiguity_check.py still glob a*_unit*.yaml and skip every
 c1_ pack (defect-1.14 self-reference checked by hand: 0 instances).
 Instance count: 117, all addressed.
+
+### 2026-10-10 — Dutch-direction review backlog: 161 files (fresh-context review, 34 parallel reviewers; branch content/review-backlog-dutch)
+Scope: every `review.status: unreviewed` file in the Dutch directions except
+the shared English realizations — practice/en-nl 64, practice/nl-en 36,
+overlays/nl-en 27, overlays/en-nl 17 + realizations/nl 17. fa/prs untouched;
+en-nl C1 practice packs and lexemes untouched (owned by another session).
+Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS
++ PRACTICE_PACK_RECIPE; practice pools checked against real `iter_specs()`
+data at unit AND course scope.
+Bug classes found: 1.21 (missing valid accepted answers: contractions,
+V2/word-order variants, je/jij, taught synonyms — the largest class, ~120),
+underdetermined production prompts (instructions that never named the
+content/form graded, ~35), confusable matching_pairs sides (omdat/want,
+allebei/beide, stijgen/groeit, although/even though, envelope/mailbox, ~15),
+1.17-family double-correct distractors and synonym pools (moet/moeten,
+betalen/afrekenen, rooster/agenda, Appartement/appartement, city/town,
+bakker/bakkerij, ~25), 1.16 ambiguous fill_in_blank frames (~12), untaught
+vocabulary in practice frames (~10), ungrammatical rendered frames ("I'd
+like a bread", "Het is kwart over 14", "Ze vinden mijn.", "a the coat", ~15),
+wrong glosses/senses (postbus, opwarmen, daarentegen="on the contrary",
+works="komt uit", Van="Of", calm definition, ~20), keyed answers false
+against the text/audio (en-nl b2_unit05 read_signal and
+comprehend_register_fit), distractors also true per the audio (1.22, 4),
+character-canon (en-nl a1_unit17 "Lotte werkt als kok"), false grammar notes
+(~10), 1.12 unquoted booleans (2), and new classes 1.40 and 1.41 (~150
+feedback frames).
+New bug class discovered: yes — §1.40 (article/contraction glosses vs single-
+answer practice translations) and §1.41 (false practice feedback frames,
+latent). Pack-authoring lane note: the 2026-07-12 "3 consecutive zero-defect
+reviews → eligible for 1-in-3 sampling" call for the pack lane does NOT
+survive this review (~180 pack defects across 100 packs); keep packs at Full.
+Instance count: ~383 fixed (en-nl practice 138, nl-en practice 39, nl-en
+overlays 115, en-nl overlays + nl realizations 91), 35 native-judgment flags
+recorded in the files' notes for Ramin's pass, deferred items below.
+
+Per direction/level (files reviewed → fixed):
+- en-nl practice: A1 39 → 90 · A2 7 → 15 · B1 10 → 13 · B2 8 → 20
+- nl-en practice: A1 19 → 24 · A2 8 → 8 · B1 1 → 3 · B2 8 → 4
+- nl-en overlays: A1 11 → 34 · A2 8 → 45 · B1 8 → 36
+- en-nl overlays + nl realizations: A2 (unit78 pilot) 2 → 1 · B2 16 → 64 · C1 16 → 26
+
+**Deliberately NOT fixed (deferred), 2026-10-10** — each is recorded in the
+affected file's `review.notes`:
+1. *Lexeme glosses in `scripts/backfill_lexemes_en_nl.py` (off-limits to this
+   run; en-nl C1 lexemes are owned by another session)*: §1.40 "the X" noun
+   glosses (course-wide); `gedaan`/`klaar` both "done"; `schrijf` "prescribe;
+   write"; `bakken`/`bak` "bins/bin" in the cooking unit; `Ze` "she" (rejects
+   zij); `bakker` "the bakery" = `bakkerij`; `Politie`, `Telefoon`,
+   `Medewerker`, `Huisarts`, `Vrijdag`, `Jij`, `Je` capitalised duplicates;
+   `Opa` in the person_name pool; `voor` lacks "in front of"; `aankleden`
+   "to get dressed" (needs zich); `bezoek` noun gloss in a verb unit;
+   `één` renders "one euros"; `Kan`/`Zullen` vs kun/zal; `zoekt`; `kent`/`weet`;
+   `Van` "Of" (u73, worked around); `Kan`/`kunt`; `goede`/`belangrijke`,
+   `ga`, `heb`, `kun` bare glosses on inflected forms; `vragen`, `agenda`
+   senses (B1); `moet`/`moeten`, `ben`/`zijn` overlapping glosses (B1/B2);
+   `jou`, `Beste`/`Geachte`, `alleen` "alone" (taught "only"), `helft`,
+   `beide`/`allebei`, `wat` "what" (taught "something"), `zit`, `vast`/`zeker`,
+   `misschien`/`wellicht`, `zin`, `best`/`nogal`, `vertrok`/`vertrokken`,
+   `miste`/`gemist`, `was`/`heb`/`gekomen` (B2). `waar` "where" is still in the
+   data but no reviewed template can reach it.
+2. *Lexeme glosses in `scripts/backfill_lexemes_nl_en.py`*: A1 `wake`, `up`/`on`
+   ("op"), `usually`/`mostly`, `1pm`, `6pm`, `maybe`/`might`, `love` ("graag
+   willen"), `don't` ("niet leuk vinden"), `doesn't`, `need`, `if`/`as`,
+   `directions` ("route"), `slowly` ("langzamer"), `speak` ("praten"), `about`
+   ("wat dacht je van"), `meeting` ("afspraak"), `test` ("examen/toets"),
+   `max's` lowercase, `waste`, `kinds`, `loved`, `view`, `being`; A2 `next`
+   ("naast"), `small` ("kleine maat"), `looking`, `too` ("ook"), `staying`,
+   `post`, `lot`, `effects`, `pick`, `shouldn't`, `fixed` ("vast"), `yet`,
+   `put`, `sent`, `can't`/`won't`; B1 `desk` ("balie"), `works` ("komt uit",
+   worked around), `coworker`/`colleague`; B2 `like`, `quarter`, `meeting`,
+   `review`, `claim`, `looking`, `must`, `run`, `rules`, `might`, `cannot`,
+   `tentative`, `gone`, `been`, `present`, `written`, `different`, `isn't`,
+   `moved`, `entered`, `got`, `had`, `rain`, `simple`, `shift`, `person's`,
+   `push`, `account`, `name`, lowercase weekday tokens.
+3. *Engine limitation*: practice `translation` templates hold one answer
+   string, so equally correct word orders / synonyms / contractions are
+   rejected in ~15 fixed-sentence templates (listed per pack in notes).
+4. *Shared English realization (`realizations/en/**`, consumed by nl-en,
+   fa-en, prs-en, de-en — out of this run's scope)*: a1_unit30 "watch video
+   games", "goes painting"; a1_unit40 match_post_words confusable meanings;
+   a1_unit41 "This soup needs you to add some salt."; a1_unit42 calm
+   definition and Mia asking "What's he like?" about her close friend
+   Daniel; a1_unit45 ungrammatical ", and send" accepted answers;
+   b1_unit13 who/that match rights; b1_unit15_complaints is itself still
+   unreviewed (63 English realizations remain `unreviewed`).
+5. *Content calls left for a decision*: British spelling ("favourite colour")
+   not accepted anywhere in nl-en (course teaches US English); en-nl
+   b2_unit04 listen_wekker distractor and "too late for the station" gloss;
+   en-nl c1_unit05 Omar's five-years-ago Amsterdam job vs his Utrecht
+   timeline (soft canon tension); en-nl a1_unit42 lesson05 fill "op de ___"
+   (markt also fits); 9 matching_pairs sets still below the 6-pair floor
+   where the unit pool is too small (en-nl a2_unit75/77, nl-en a1_unit08).
+6. *Tooling*: `_practice_unit_scope_check.py` (like the integrity and fill
+   checks) globs `a*_unit*` and silently skips every b1/b2 pack.
