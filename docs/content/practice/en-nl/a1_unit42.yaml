@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit42.kleuren
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Vocabulary unit (kleuren / colours) -- the THINNEST of this batch: only 8
     unit lexemes total (per scripts/backfill_lexemes_en_nl.py), and lessons04
@@ -26,6 +26,26 @@ review:
     counts will likely sit below the recipe's 40%/60% guidance because the
     unit itself only has 8 lexemes to work with -- this is a capacity
     ceiling, not a design shortfall; see the S9 step 4 numbers in the report.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all templates against the real unit- and course-scope pools,
+    every gloss vs the unit42 realization, frame grammar/taught
+    vocabulary, self-reference, matching confusability, booleans and
+    jargon. FIXED (untaught-vocab): lesson01.order.003 'Deze tulp is
+    {item}.' used singular 'tulp', never taught (only tulpen) -> 'Deze
+    tulpen zijn {item}.' (lesson01's own taught pattern; feedback
+    updated). FIXED (frame-pool): lesson02.choose.001 and
+    lesson03.choose.001 narrowed from kleuren_vocab adjectives to
+    [colour_red_yellow, colour_white_orange, colour_pink_purple] (same 6
+    unit colours; course scope no longer adds leuk/mooi, for which the
+    feedback 'is a colour word' was false). FIXED (feedback-hint):
+    lesson01.choose.001 feedback 'is a colour word from this lesson' was
+    false for tulpen -> '{item} comes from this lesson about red and
+    yellow tulips.'; lesson05.choose.001 'is colour vocabulary from this
+    unit' false for tulpen/bloemenmarkt and course-scope
+    zaterdag/vijf/euro -> 'Remember the English meaning of {item}.'; match
+    feedback -> 'Match each word with its English meaning.'. 0 deferred.
+    No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -63,7 +83,7 @@ templates:
       agreement_tags: {semantic: colour_red_yellow}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is a colour word from this lesson.'
+    text: '{item} comes from this lesson about red and yellow tulips.'
     language_code: en
     direction: ltr
 
@@ -90,7 +110,7 @@ templates:
   lesson_content_key: nl.a1.unit42.lesson01.rood_en_geel
   type: word_order
   frame:
-    text: Deze tulp is {item}.
+    text: Deze tulpen zijn {item}.
     language_code: nl
     direction: ltr
   slots:
@@ -101,11 +121,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Deze tulp is {item}.
+      text: Deze tulpen zijn {item}.
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Deze tulp is rood. -- This tulip is red.
+    text: Deze tulpen zijn rood. -- These tulips are red.
     language_code: en
     direction: ltr
 
@@ -150,7 +170,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: Match each colour word with its English meaning.
+    text: Match each word with its English meaning.
     language_code: en
     direction: ltr
 
@@ -166,7 +186,7 @@ templates:
     item:
       language_code: nl
       part_of_speech: adjective
-      agreement_tags: {semantic: kleuren_vocab}
+      agreement_tags: {semantic: [colour_red_yellow, colour_white_orange, colour_pink_purple]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is a colour word.'
@@ -204,7 +224,7 @@ templates:
     item:
       language_code: nl
       part_of_speech: adjective
-      agreement_tags: {semantic: kleuren_vocab}
+      agreement_tags: {semantic: [colour_red_yellow, colour_white_orange, colour_pink_purple]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is a colour word.'
@@ -245,7 +265,7 @@ templates:
       agreement_tags: {semantic: kleuren_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is colour vocabulary from this unit.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 
