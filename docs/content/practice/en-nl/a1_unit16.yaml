@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit16.health
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
     template pools to lesson content growth (en-nl lane, continuing after
     unit15). This unit (unit16) covers describing a basic health problem:
@@ -40,7 +40,20 @@ review:
     widening union (symptom_zijn brings the ziek/Ziek case-duplicate,
     fever_cold brings grammar-jargon adjectives like 'bijvoeglijke') would
     put confusable or off-theme cards in the exercise -- honest-thin by
-    the polish rubric, not fixable pack-side."
+    the polish rubric, not fixable pack-side.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read
+    all 12 templates against unit- and course-scoped pools and the nl
+    a1_unit16 realization. 2 defects fixed: lesson01.match.003 had only 4
+    pairs (recipe floor is 6) -- widened via new preset symptom_any_pure =
+    union of symptom_hebben_pure + symptom_zijn_pure (noun/adjective),
+    giving exactly 6 clean cards (hoofdpijn, buikpijn, keelpijn, koorts,
+    ziek, verkouden; no Ziek case-duplicate, no course-scope extras) and
+    expanded to 6 slots; lesson06.listen.002 feedback 'heard in this
+    dialogue' was false for buikpijn/keelpijn/koorts (only hoofdpijn is in
+    the lesson06 dialogue) -> '{item} is the word you heard.'. Deferred
+    (lexeme-gloss convention): 'a tablet' / 'the pharmacy' prompts accept
+    only the bare noun. No native-judgment flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -57,6 +70,10 @@ slot_presets:
   # token), so word_order/translate slots never render "Ik ben Ziek." Added
   # 2026-07-29; classifier sibling in backfill_lexemes_en_nl.py.
   symptom_zijn_pure: &symptom_zijn_pure {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: symptom_zijn_pure}}
+  # symptom_any_pure: union of the two exact-case symptom tags (4 nouns +
+  # ziek/verkouden) so the matching_pairs reaches 6 pairs without the
+  # ziek/Ziek case-duplicate.
+  symptom_any_pure: &symptom_any_pure {language_code: nl, part_of_speech: [noun, adjective], agreement_tags: {semantic: [symptom_hebben_pure, symptom_zijn_pure]}}
   pharmacy_noun: &pharmacy_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: pharmacy_visit}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.order.001
@@ -69,10 +86,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit16.lesson01.match.003
     lesson_content_key: nl.a1.unit16.lesson01.niet_lekker_voelen
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
-    slots: {first: *symptom_hebben_pure, second: *symptom_hebben_pure, third: *symptom_hebben_pure, fourth: *symptom_hebben_pure}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *symptom_any_pure, second: *symptom_any_pure, third: *symptom_any_pure, fourth: *symptom_any_pure, fifth: *symptom_any_pure, sixth: *symptom_any_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each symptom word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit16.lesson02.choose.001
     lesson_content_key: nl.a1.unit16.lesson02.wat_scheelt_eraan
@@ -171,4 +188,4 @@ templates:
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *symptom_hebben_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
