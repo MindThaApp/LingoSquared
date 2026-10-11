@@ -1796,3 +1796,42 @@ New bug class discovered: no (instance of a form-change consistency defect)
 Rule candidate: a register/form standardization must include every
 tense/derivative of the verb and every note that references the old form.
 Instance count: 5 (3 should-fix + 2 nits), all fixed
+
+### 2026-10-10 — en-nl C1 practice packs + C1 lexeme backfill (8 packs, 174 templates; fresh-context review)
+Scope: the first C1 practice tier (docs/content/practice/en-nl/c1_unit01-08) and
+the C1 extension of scripts/backfill_lexemes_en_nl.py (676 C1 lexemes). One
+read-only reviewer per unit (content-reviewer.md), zero access to authoring.
+Per-unit yield (findings / blockers): u01 8/1, u02 17/5, u03 16/7, u04 12/3,
+u05 12/3, u06 15/5, u07 17/7, u08 20/4 -- total 117 (35 blocker, 82 minor).
+Bug classes found (all slipped a 0-error practice-validate):
+- **Typed-translation synonym ambiguity** (dominant): a bare-word translation
+  shows the gloss and grades the typed token by exact match, so any gloss an
+  equally correct Dutch word also answers fails correct learners (wellicht /
+  misschien, noodzakelijk / nodig, serieus / ernstig, helder / duidelijk,
+  chef / baas, ga / gaan, "maak (with je)" -> je maakt). Includes the
+  CROSS-UNIT form: two C1 lexemes with identical glosses in a course-scope pool.
+- **Open fill_in_blank**: the runtime shows no English cue, so a blank that is
+  not inside a fixed idiom admits several correct words (dat zegt
+  genoeg/alles/veel). Fixed by converting to word_order on the same anchor.
+- **Self-quoting glosses**: backfill glosses carrying their own idiom in Dutch
+  ("lines (in 'in grote lijnen')") give the answer away in MC/matching/
+  translation; identical cognates (plan, mild, warm, ring) likewise.
+- **Under-pinned fixed-sentence translations** (besluit/beslissing, bezorging/
+  levering, werkende mensen/werkenden).
+- **Over-claiming feedback_frame** ("{item} is a word from Omar's speech" for
+  pool members that are not).
+All fixed (regloss where an honest gloss pins the token, otherwise the token
+leaves the translation pool via curated c1u<NN>_ tags); a pool-level scan of
+every gloss-showing slot at unit and whole-C1 scope confirms 0 self-quoting,
+0 duplicate glosses, 0 typed-translation tokens sharing a gloss with another C1
+lexeme. Re-review not yet run on the fixed packs.
+New bug class discovered: no new class -- but **rule candidates** for the
+validator backlog (Codex lane): (1) practice-validate should flag a gloss that
+contains its own token; (2) it should flag a bare-word translation slot whose
+course-scope pool has two members with identical glosses; (3) it should flag
+fill_in_blank frames whose single anchor is not inside a declared fixed idiom
+(or simply warn on every fill_in_blank, since no cue is shown).
+Tooling gaps confirmed: _practice_content_integrity_check.py /
+_fill_in_blank_ambiguity_check.py still glob a*_unit*.yaml and skip every
+c1_ pack (defect-1.14 self-reference checked by hand: 0 instances).
+Instance count: 117, all addressed.
