@@ -4,9 +4,9 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit10.routines
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
-  fresh_context: "false"
+  fresh_context: "true"
   notes: >-
     Original authoring notes (2026-07-06): 7-member "routine_verb_infinitive"
     tag (opstaan/aankleden/ontbijten/werken/eten/afwassen/slapen) used ONLY
@@ -86,6 +86,20 @@ review:
     "Hoe ziet jouw dag eruit?" (slot pinned to `appearance_eruit_single`,
     exactly 1 distinct course-wide token, deterministic). tag_schema
     extended with both singleton tags. Structured tier now 3 live.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 13 templates at unit and course scope against the nl.a1.unit10
+    realization. 2 defects fixed. (1) The two bare-word routine-verb
+    translations accepted only "aankleden" for "to get dressed", but the
+    unit teaches "zich aankleden" (teach cards and matching pairs), so the
+    taught form was rejected -- prompt now "{item} (one Dutch word, the
+    infinitive)". (2) lesson04.reverse_translate.002 had its frame labelled
+    nl although it shows the English gloss, and its feedback "De Engelse
+    vertaling is {item}." renders the DUTCH answer (false statement, in
+    Dutch) -- frame relabelled en, feedback now "The Dutch word is {item}."
+    (it remains a functional duplicate of lesson04.translate.001). Deferred:
+    lexeme aankleden is glossed "to get dressed" though the reflexive zich
+    is required for that sense (backfill gloss). No native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -125,7 +139,7 @@ templates:
     lesson_content_key: nl.a1.unit10.lesson01.dagelijkse_activiteiten
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (one Dutch word, the infinitive)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
@@ -145,7 +159,7 @@ templates:
     lesson_content_key: nl.a1.unit10.lesson02.scheidbare_werkwoorden
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (one Dutch word, the infinitive)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
@@ -182,10 +196,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit10.lesson04.reverse_translate.002
     lesson_content_key: nl.a1.unit10.lesson04.eerst_dan_daarna
     type: translation
-    frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *sequence_word}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit10.lesson04.fill.003
     lesson_content_key: nl.a1.unit10.lesson04.eerst_dan_daarna
     type: fill_in_blank

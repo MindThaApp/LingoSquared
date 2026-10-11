@@ -4,9 +4,9 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit09.directions
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
-  fresh_context: "false"
+  fresh_context: "true"
   notes: >-
     Original authoring notes (2026-07-06): added a 5-member "direction_word"
     tag for bare-word recognition and a narrower 2-member "turn_direction"
@@ -114,6 +114,19 @@ review:
     the pool is the same 5 tokens; prompt varies with the gloss so the
     answer stays deterministic). tag_schema extended with
     `imperative_direction`. Production tier now 3 live.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 15 templates at unit and course scope. 2 defects fixed. (1)
+    lesson06.translate.003 rendered "Go {gloss}." over direction_word,
+    giving prompts like "Go to the left; turn left." and an underdetermined
+    pair ("Go left." -> only "Ga links.", though "Ga linksaf." is equally
+    valid). Now slots turn_direction (linksaf/rechtsaf) with the prompt
+    "Give this direction as a command with sla: {gloss}" -> "Sla
+    linksaf."/"Sla rechtsaf.", the unit's taught commands; feedback updated.
+    (2) lesson02.translate.004 bare-word "go"/"walk"/"turn" accepted only
+    the imperative ga/loop/sla, while the infinitive (gaan/lopen) is an
+    equally valid translation of the bare English verb -- prompt now "{item}
+    (command form)". No native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -189,7 +202,7 @@ templates:
     lesson_content_key: nl.a1.unit09.lesson02.bevelsvormen
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (command form)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
@@ -273,12 +286,12 @@ templates:
     lesson_content_key: nl.a1.unit09.lesson06.vanaf_het_taalcafe
     type: translation
     frame:
-      text: "Go {item}."
+      text: "Give this direction as a command with sla: {item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *direction_word}
-    answer_derivation: {kind: render_frame, frame: {text: "Ga {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ga {item} tells someone which way to go.", language_code: en, direction: ltr}
+    slots: {item: *turn_direction}
+    answer_derivation: {kind: render_frame, frame: {text: "Sla {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Sla {item} tells someone which way to turn.", language_code: en, direction: ltr}
