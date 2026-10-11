@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit73.sollicitatiegesprek
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Authored 2026-07-22 as the PILOT pack proving docs/content/PRACTICE_PACK_RECIPE.md.
     en-nl A2 unit73 (sollicitatiegesprek / job application at Kantoor Bloem) had a full
@@ -39,6 +39,21 @@ review:
     (Kan / Typen / Vertelt / Van / Zij / Daar / Mooi / Ervaring / Werktijden) -- those are
     reachable only through option-rendering types, because grading is case-sensitive.
     Needs the standard fresh-context review before import.
+
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): all 18 templates checked against unit- and
+    course-scoped lexeme pools (glosses, frame grammaticality per candidate, distractor overlap, matching_pairs
+    confusability, fixed-answer translations, feedback, jargon, booleans). 3 defects fixed: (1) lesson02.order.002
+    feedback hard-coded dinsdag/Tuesday although the weekday_pure slot also renders maandag/vrijdag
+    (woensdag/donderdag course-wide) -- feedback now renders {item} and no longer names a fixed day; (2)
+    lesson03.translate.003 sampled the inflected adjectives belangrijke/goede as typed answers for the prompts
+    important/good, marking the citation forms belangrijk/goed wrong -- slot narrowed to part_of_speech noun; (3)
+    lesson06.choose.001 could show Van with the wrong gloss Of (the unit teaches Van negen tot vijf uur = From
+    nine to five) -- preposition removed from the slot. Deferred: lexeme gloss Van => Of should be From
+    (backfill_lexemes_en_nl.py; worked around here); in Endless Practice lesson02.choose.001 can pair Kan (can)
+    with kunt (can (with je/jij), although the unit itself uses Kunt u) as a near-equivalent distractor -- not
+    fixable in-pack without dropping below the 3-option checkpoint floor. Note: feedback_frame is stored but not
+    currently rendered by the practice runtime. No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -231,7 +246,7 @@ templates:
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Kunt u dinsdag om tien uur langskomen? -- Can you come by on Tuesday at ten o'clock?
+    text: 'Kunt u {item} om tien uur langskomen? -- Can you come by at ten o''clock on that day?'
     language_code: en
     direction: ltr
 
@@ -338,9 +353,7 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech:
-      - noun
-      - adjective
+      part_of_speech: noun
       agreement_tags:
         semantic: experience_and_skills
   answer_derivation:
@@ -517,7 +530,6 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
       - pronoun
       agreement_tags:
         semantic: job_interview_dialogue
