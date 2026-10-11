@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit49.accommodatie
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Vocabulary unit (accommodatie / booking a room), 17 unit lexemes across
     all 6 lessons per scripts/backfill_lexemes_en_nl.py. lesson02
@@ -20,6 +20,19 @@ review:
     anchor on the single-member accommodatie_bevestiging_single tag
     (bevestiging). Capacity/coverage measured via RECIPE S9 step 4 (see
     report).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 15 templates against
+    unit- and course-scoped pools, glosses vs the realization, frame grammar/self-reference, floors,
+    booleans and jargon. FIXED lesson05.choose.001: confirmation_reading pooled the unit46 
+    case-duplicate Bevestiging => 'Confirmation' at course scope, so 'the confirmation' and 'Confirmation'
+    could both appear as options (two correct answers); switched the slot to accommodatie_vocab [noun,
+    verb] (unit pool 11 incl. lesson05's bevestiging/uitchecken) and made the feedback text match. FIXED
+    lesson05.fill.004: 'Kunt u mij de {item} sturen?' was equally satisfied by reservering (taught
+    lesson04) and graded only bevestiging; frame now 'Kunt u mij de {item} van de reservering sturen?'
+    (feedback updated). DEFERRED (lexeme gloss, backfill lane): noun glosses carry 'the' while tokens
+    are bare (kamer 'the room', sleutel 'the key', wifiwachtwoord, receptionist, reservering,
+    bevestiging), so typing 'de kamer' in the bare-word translations is graded wrong -- glosses should
+    drop 'the'. No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -252,10 +265,10 @@ templates:
     item:
       language_code: nl
       part_of_speech: [noun, verb]
-      agreement_tags: {semantic: confirmation_reading}
+      agreement_tags: {semantic: accommodatie_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} appears in the booking confirmation.'
+    text: '{item} is accommodation vocabulary from this unit.'
     language_code: en
     direction: ltr
 
@@ -305,7 +318,7 @@ templates:
   lesson_content_key: nl.a1.unit49.lesson05.bevestiging_lezen
   type: fill_in_blank
   frame:
-    text: Kunt u mij de {item} sturen?
+    text: Kunt u mij de {item} van de reservering sturen?
     language_code: nl
     direction: ltr
   slots:
@@ -315,7 +328,7 @@ templates:
       agreement_tags: {semantic: accommodatie_bevestiging_single}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: Kunt u mij de bevestiging sturen? -- Can you send me the confirmation?
+    text: Kunt u mij de bevestiging van de reservering sturen? -- Can you send me the confirmation of the reservation?
     language_code: en
     direction: ltr
 
