@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit27.huisarts
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-07: the first en-nl A2 practice pack, closing the
     real content gap flagged this session -- en-nl practice templates
     stopped at unit23 (A1) while units 24-28 (A2) already had full lesson
@@ -44,11 +44,43 @@ review:
     flagged. Needs the standard fresh-context review before import. Same
     blocking dependency as every earlier en-nl pack:
     backfill_lexemes_en_nl.py has not actually been run against a real
-    database yet."
+    database yet.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 15 templates against unit- and course-scoped pools, glosses, frames,
+    distractor overlap, matching confusability, booleans and jargon. Fixed:
+    (1) lesson01.translate.001 'I would like to make an appointment with the
+    doctor.' -> answer '...bij de dokter' while lesson01 itself teaches that
+    exact English for '...bij de huisarts' (and huisarts/Huisarts are in the
+    pool), so a correct learner answer was graded wrong; converted to the
+    bare-word translation shape over visit_noun_pure. (2) choose.003 /
+    listen.004 / lesson04.listen.002 used visit_noun, which contains
+    'Huisarts' (gloss 'Doctor (family doctor/GP)') next to dokter 'the
+    doctor' and, at course scope, huisarts 'the family doctor' --
+    distractors that are also correct; switched to visit_noun_pure. (3)
+    Three matching_pairs had 4, 2 and 3 pairs (below the 6-pair floor); all
+    now 6 pairs over visit_noun_pure, visit_noun_pure+separable_health_verb,
+    and symptom_word+visit_noun_pure unions respectively (feedback
+    neutralised). (4) lesson02/lesson05 translations prompted 'My symptom:
+    {item}.' but accepted only 'Ik heb {item}.' (not a translation of the
+    prompt) -- now 'I have {item}.' over symptom_hebben_pure
+    (hoofdpijn/koorts, glossed 'a headache'/'a fever'); feedback
+    language_code en -> nl. (5) choose.003 feedback '...this unit's
+    doctor's-visit vocabulary' false at course scope -> 'The Dutch word is
+    {item}.'. Deferred: lexeme 'Huisarts' (speaker label, unit27 lesson06)
+    has capitalised token and gloss 'Doctor (family doctor/GP)'; it still
+    feeds lesson01.order.002, where it renders 'bij de Huisarts' mid-
+    sentence (grading casefolded, display only) -- needs a backfill fold
+    onto huisarts / 'the family doctor'. Deferred (systemic, not fixable in-
+    pack): bare-word translation glosses carry the English article ('the
+    flower') while the single accepted answer is the bare token (bloem), so
+    a learner typing 'de bloem' is graded wrong; needs an engine-side
+    article tolerance or a gloss convention change. No native-judgment
+    flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [medical_professional, symptom_word, visit_noun, visit_noun_pure, reassurance_adj, separable_health_verb]
+    semantic: [medical_professional, symptom_word, symptom_hebben_pure, visit_noun, visit_noun_pure, reassurance_adj, separable_health_verb]
 slot_presets:
   medical_professional: &medical_professional {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: medical_professional}}
   symptom_word: &symptom_word {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_word}}
@@ -56,20 +88,23 @@ slot_presets:
   visit_noun_pure: &visit_noun_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: visit_noun_pure}}
   reassurance_adj: &reassurance_adj {language_code: nl, part_of_speech: adjective, agreement_tags: {semantic: reassurance_adj}}
   separable_health_verb: &separable_health_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: separable_health_verb}}
+  symptom_hebben_pure: &symptom_hebben_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: symptom_hebben_pure}}
+  visit_or_health_verb: &visit_or_health_verb {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: [visit_noun_pure, separable_health_verb]}}
+  symptom_or_visit_noun: &symptom_or_visit_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: [symptom_word, visit_noun_pure]}}
 templates:
   - content_key: practice.en-nl.nl.a2.unit27.lesson01.translate.001
     lesson_content_key: nl.a2.unit27.lesson01.afspraak_bij_huisarts
     type: translation
     frame:
-      text: "I would like to make an appointment with {item}."
+      text: "{item}"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *medical_professional}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een afspraak maken bij de {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik wil graag een afspraak maken bij de {item}.", language_code: en, direction: ltr}
+    slots: {item: *visit_noun_pure}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson01.order.002
     lesson_content_key: nl.a2.unit27.lesson01.afspraak_bij_huisarts
     type: word_order
@@ -86,37 +121,37 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *visit_noun}
+    slots: {item: *visit_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a word from this unit's doctor's-visit vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson01.listen.004
     lesson_content_key: nl.a2.unit27.lesson01.afspraak_bij_huisarts
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *visit_noun}
+    slots: {item: *visit_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson01.match.005
     lesson_content_key: nl.a2.unit27.lesson01.afspraak_bij_huisarts
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third} · {fourth}", language_code: nl, direction: ltr}
-    slots: {first: *visit_noun_pure, second: *visit_noun_pure, third: *visit_noun_pure, fourth: *visit_noun_pure}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *visit_noun_pure, second: *visit_noun_pure, third: *visit_noun_pure, fourth: *visit_noun_pure, fifth: *visit_noun_pure, sixth: *visit_noun_pure}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word or phrase with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson02.translate.001
     lesson_content_key: nl.a2.unit27.lesson02.wat_zijn_de_klachten
     type: translation
     frame:
-      text: "My symptom: {item}."
+      text: "I have {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *symptom_word}
+    slots: {item: *symptom_hebben_pure}
     answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik heb {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson02.order.002
     lesson_content_key: nl.a2.unit27.lesson02.wat_zijn_de_klachten
     type: word_order
@@ -153,31 +188,31 @@ templates:
   - content_key: practice.en-nl.nl.a2.unit27.lesson04.match.001
     lesson_content_key: nl.a2.unit27.lesson04.recept_en_advies
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: nl, direction: ltr}
-    slots: {first: *separable_health_verb, second: *separable_health_verb}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "Match each separable-verb infinitive with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *visit_or_health_verb, second: *visit_or_health_verb, third: *visit_or_health_verb, fourth: *visit_or_health_verb, fifth: *visit_or_health_verb, sixth: *visit_or_health_verb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson04.listen.002
     lesson_content_key: nl.a2.unit27.lesson04.recept_en_advies
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *visit_noun}
+    slots: {item: *visit_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson05.translate.001
     lesson_content_key: nl.a2.unit27.lesson05.samenvatting_lezen
     type: translation
     frame:
-      text: "My symptom: {item}."
+      text: "I have {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *symptom_word}
+    slots: {item: *symptom_hebben_pure}
     answer_derivation: {kind: render_frame, frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik heb {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik heb {item}.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit27.lesson06.order.001
     lesson_content_key: nl.a2.unit27.lesson06.huisarts_consult
     type: word_order
@@ -188,8 +223,8 @@ templates:
   - content_key: practice.en-nl.nl.a2.unit27.lesson06.match.002
     lesson_content_key: nl.a2.unit27.lesson06.huisarts_consult
     type: matching_pairs
-    frame: {text: "{first} · {second} · {third}", language_code: nl, direction: ltr}
-    slots: {first: *symptom_word, second: *symptom_word, third: *symptom_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each symptom word with its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
+    slots: {first: *symptom_or_visit_noun, second: *symptom_or_visit_noun, third: *symptom_or_visit_noun, fourth: *symptom_or_visit_noun, fifth: *symptom_or_visit_noun, sixth: *symptom_or_visit_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}

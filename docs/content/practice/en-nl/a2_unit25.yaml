@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit25.meningen
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-07 by the Claude session filling en-nl's A2
     practice-pool gap (see a2_unit24.yaml's own notes for the full
     background). This file covers unit25 (meningen/opinions: giving
@@ -46,7 +46,21 @@ review:
     x1, translation x2. Needs the standard fresh-context review before
     import. Blocking dependency, same as every other en-nl pack: backfill_
     lexemes_en_nl.py has not actually been run against a real database
-    yet."
+    yet.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 14 templates against unit- and course-scoped pools (course pool
+    equals unit pool for every tag here), glosses, frames, distractor
+    overlap, matching confusability, booleans and jargon. Fixed:
+    lesson02.translate.004 feedback_frame is Dutch text but was tagged
+    language_code en -- set to nl. Otherwise 0 learner-facing defects found.
+    Noted, not changed: lesson06.match.001 has 14 pairs (AUTHORING_GUIDE aim
+    is 6-12; not a grading defect). Deferred (systemic, not fixable in-
+    pack): bare-word translation glosses carry the English article ('the
+    flower') while the single accepted answer is the bare token (bloem), so
+    a learner typing 'de bloem' is graded wrong; needs an engine-side
+    article tolerance or a gloss convention change. No native-judgment
+    flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -124,7 +138,7 @@ templates:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *opinion_adj}
     answer_derivation: {kind: render_frame, frame: {text: "Volgens mij is het fietspad {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Volgens mij is het fietspad {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Volgens mij is het fietspad {item}.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit25.lesson03.choose.001
     lesson_content_key: nl.a2.unit25.lesson03.eens_of_niet_eens
     type: multiple_choice
