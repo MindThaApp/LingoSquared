@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.b1.unit13.relative_clauses
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md as part of the nl-en B1 unit02-unit14
     practice-pack wave (batch C) that unblocks these units'' checkpoints (units already had lexemes from
     scripts/backfill_lexemes_nl_en.py but no pack, so generate_checkpoint() returned checkpoint_unavailable).
@@ -22,7 +22,7 @@ review:
     nl-en B1 course) candidate pool and confirmed to have exactly 1 member, and neither frame''s literal
     text contains that slot''s own candidate word (defect 1.14). Every gloss in every pool was read against
     this unit''s own realization content (recipe §0.1); no mis-glossed lexeme was found for this unit.
-    Needs the standard fresh-context review before import.'
+    Needs the standard fresh-context review before import. Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 12 templates against the real unit pools (practice_dump) and the en b1_unit13 realization. 3 defects fixed. (1) Mis-glossed lexeme `works` -> ''komt uit'' (lesson03 verb; the unit teaches ''works with several people'' = werkt) was in every union pool and would be shown/accepted as the correct meaning. (2) `coworker` -> ''collega'' (lesson01) and `colleague` -> ''de collega'' (lesson02) shared one union pool, so an MC could offer both ''collega'' and ''de collega'' (distractor also correct) and a matching_pairs could pair both (interchangeable rights). Fix for (1)+(2): the single union tag was replaced by three narrower slot pools -- lesson01.choose/translate use the lesson01 tag with [noun, verb] (approved, downtown, coworker, studies); lesson03.choose/match/translate use [lesson02, lesson03] with [noun, adjective, adverb] (20 tokens, excludes works); lesson01.listen, lesson02.choose and lesson04.choose/match/translate use [lesson02, lesson04] with all content POS (30 tokens); lesson01/lesson03 tags added to tag_schema. Cost: lesson03 verbs meets/approve/eats/finishing/has already lose pack coverage until `works` is re-glossed in the backfill (then the union can be restored). (3) lesson04.fill.001 frame ''Our new office is ___ than the old one.'' accepted any comparative (bigger/nicer...) but graded only ''smaller'' -- reworded to ''Her old office was not as big as ours. It was much ___ than ours.'' (dialogue fact: her old office was much smaller than ours), feedback updated with Dutch ''Haar oude kantoor was niet zo groot als het onze. Het was veel kleiner dan het onze.'' DEFERRED (backfill lane): `works` gloss should be ''werkt''; `desk` -> ''balie'' (counter) while the unit means an office desk = ''het bureau'' (kept in pool: not false, but wrong sense); `march` citation form is lowercase (should display ''March''); coworker/colleague both translate to ''collega'', so the bare-word translation of either can mark the synonym wrong (engine one-answer limit). No native-judgment flags.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -38,7 +38,9 @@ tag_schema:
   agreement_tags:
     semantic:
     - b1_unit13_relative_clauses
+    - b1_unit13_relative_clauses_lesson01
     - b1_unit13_relative_clauses_lesson02
+    - b1_unit13_relative_clauses_lesson03
     - b1_unit13_relative_clauses_lesson04
 templates:
 - content_key: practice.nl-en.en.b1.unit13.lesson01.choose.001
@@ -54,10 +56,8 @@ templates:
       part_of_speech:
       - noun
       - verb
-      - adjective
-      - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: b1_unit13_relative_clauses_lesson01
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -80,10 +80,8 @@ templates:
       part_of_speech:
       - noun
       - verb
-      - adjective
-      - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: b1_unit13_relative_clauses_lesson01
   answer_derivation:
     kind: slot_text
     slot: item
@@ -107,7 +105,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -131,7 +129,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -174,11 +172,10 @@ templates:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -198,56 +195,50 @@ templates:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
     second:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
     third:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
     fourth:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
     fifth:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
     sixth:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
   slot_relations:
   - kind: distinct
     slots:
@@ -284,11 +275,10 @@ templates:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson03]
   answer_derivation:
     kind: slot_text
     slot: item
@@ -312,7 +302,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -336,7 +326,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
     second:
       language_code: en
       part_of_speech:
@@ -345,7 +335,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
     third:
       language_code: en
       part_of_speech:
@@ -354,7 +344,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
     fourth:
       language_code: en
       part_of_speech:
@@ -363,7 +353,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
     fifth:
       language_code: en
       part_of_speech:
@@ -372,7 +362,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
     sixth:
       language_code: en
       part_of_speech:
@@ -381,7 +371,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
   slot_relations:
   - kind: distinct
     slots:
@@ -408,7 +398,7 @@ templates:
   lesson_content_key: en.b1.unit13.lesson04.the_new_coworker_dialogue
   type: fill_in_blank
   frame:
-    text: Our new office is {item} than the old one.
+    text: Her old office was not as big as ours. It was much {item} than ours.
     language_code: en
     direction: ltr
   slots:
@@ -421,7 +411,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: Our new office is smaller than the old one. -- Ons nieuwe kantoor is kleiner dan het oude.
+    text: Her old office was not as big as ours. It was much smaller than ours. -- Haar oude kantoor was niet zo groot als het onze. Het was veel kleiner dan het onze.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.b1.unit13.lesson04.translate.001
@@ -442,7 +432,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: b1_unit13_relative_clauses
+        semantic: [b1_unit13_relative_clauses_lesson02, b1_unit13_relative_clauses_lesson04]
   answer_derivation:
     kind: slot_text
     slot: item
