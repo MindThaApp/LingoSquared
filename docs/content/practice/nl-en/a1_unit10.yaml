@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit10.directions
 review:
-  status: unreviewed
-  fresh_context: true
+  status: reviewed
+  fresh_context: 'true'
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended
@@ -102,11 +102,20 @@ review:
     6 distinct tokens, 6 distinct Dutch glosses, identical pool at unit AND course scope, killing the
     Endless-Practice course-scope off-theme pull). Bare-word MC/listen/translation templates keep the untagged
     direction_word preset per dispatch scope. Flipped status reviewed -> unreviewed since the pack changed.
-    Verified via pool_check.py (6/6, 0 course extras), practice-validate 0 errors, unit-scope check 0 DEAD."
+    Verified via pool_check.py (6/6, 0 course extras), practice-validate 0 errors, unit-scope check 0 DEAD.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read every template against its unit- and course-scoped pools. Fixed:
+    the untagged direction_word preset (used by 3 listen_select, 2 multiple_choice and
+    1 translation) pooled all 506 A1 nouns at course scope; narrowed to
+    a1_unit10_directions (unit pool unchanged). lesson04.place_translate.005 now uses a
+    new translate_word preset (lesson01+lesson02 nouns: left/right/corner/minutes) because
+    'directions' is glossed 'route', which a learner can correctly answer as English
+    'route'. Deferred: lexeme gloss directions -> 'route' (better 'routebeschrijving');
+    still shown as the correct MC/listen option, acceptable for recognition."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [turn_direction, street_ordinal, a1_unit10_directions]
+    semantic: [turn_direction, street_ordinal, a1_unit10_directions, a1_unit10_directions_lesson01, a1_unit10_directions_lesson02]
 slot_presets:
   turn_direction: &turn_direction {language_code: en, part_of_speech: noun, agreement_tags: {semantic: turn_direction}}
   street_ordinal: &street_ordinal {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: street_ordinal}}
@@ -121,7 +130,14 @@ slot_presets:
   # '{item}' (multiple_choice/listen_select/translation) or a matching_pairs
   # instruction frame -- neither embeds the slot in literal sentence text, so
   # the widen-at-course-scope grammaticality risk (SS1.1) does not apply.
-  direction_word: &direction_word {language_code: en, part_of_speech: noun}
+  # 2026-10-10 review: the untagged pool was 506 nouns at Endless-Practice
+  # course scope (gloss collisions made bare-word translation ambiguous), so
+  # direction_word is now narrowed to a1_unit10_directions (same 6 nouns at
+  # unit scope as before).
+  direction_word: &direction_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit10_directions}}
+  # translate_word: direction_word minus 'directions' (Dutch gloss 'route',
+  # which a learner can correctly translate as English 'route') and 'street'.
+  translate_word: &translate_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [a1_unit10_directions_lesson01, a1_unit10_directions_lesson02]}}
   # pair_word (wave 3): the generated unit-scoped tag a1_unit10_directions
   # (commit 05af7ace) narrowed to nouns -- exactly corner/directions/left/
   # minutes/right/street at BOTH unit and course scope, so place_pair.006 no
@@ -224,7 +240,7 @@ templates:
     lesson_content_key: en.a1.unit10.lesson04.giving_directions_dialogue
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *direction_word}
+    slots: {item: *translate_word}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit10.lesson04.place_listen.006

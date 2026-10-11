@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit19.preferences
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, continuing
     past the coordinator's requested 11-16 range). Keyed to English target
@@ -77,7 +77,9 @@ review:
     course-scope extras per pool_check.py. Gloss guard eyeballed:
     prefer/prefers and think/thinks glosses differ by inflection
     (de voorkeur geven aan / geeft de voorkeur aan, denken/denkt),
-    tellable apart; no duplicate glosses."
+    tellable apart; no duplicate glosses.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 13 templates against unit and course pools. 2 fixed: (1) lesson01.verb_translate.004 used the preference_verb pool, which at course scope contains don't (gloss niet leuk vinden), so the prompt niet leuk vinden demanded the bare answer don't and rejected don't like / dislike; slot switched to preference_verb_full (like/love/prefer/hate; unit pool unchanged prefer/hate). (2) verb_meaning.001/.004 feedback called every candidate a voorkeurswerkwoord although the untagged verb pool includes think/thinks and the whole A1 verb list; now {item} is een woord dat je hebt geleerd. Deferred (lexeme-level, not worked around): love carries gloss graag willen (unit17 I'd love to sense) while unit19 teaches love as houden van (I love my family), so the course-scope I {item} tea/coffee word_order hint reads I graag willen tea for love; don't carries gloss niet leuk vinden (still shown as the MC/listen answer for don't via the untagged verb pool at course scope)."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -94,7 +96,7 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *unit19_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een voorkeurswerkwoord uit deze les.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een woord dat je hebt geleerd.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit19.lesson01.verb_listen.002
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: listen_select
@@ -114,7 +116,7 @@ templates:
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *preference_verb}
+    slots: {item: *preference_verb_full}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit19.lesson02.tea_order.001
@@ -158,7 +160,7 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *unit19_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een voorkeurswerkwoord.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een woord dat je hebt geleerd.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit19.lesson04.verb_listen.001
     lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
     type: listen_select
