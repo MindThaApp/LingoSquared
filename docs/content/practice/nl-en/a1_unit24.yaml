@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit24.housing
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: 'true'
   notes: "Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
     lane of the Endless Practice template-pool sync (see a1_unit22.yaml's
     notes for the parallel-worker split context). This unit (unit24,
@@ -29,13 +29,16 @@ review:
     harness against this script's actual output. Needs the standard
     fresh-context review before import. Same blocking dependency as
     every earlier nl-en pack: backfill_lexemes_nl_en.py has not
-    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the room_noun (noun) matching_pairs template from 2 to 4 pairs."
+    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the room_noun (noun) matching_pairs template from 2 to 4 pairs.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 10 templates against the real unit- and course-scoped pools (room_noun = bedroom/kitchen/bathroom/garden; course scope equals unit scope), every gloss against the unit24 realization, every rendering of the There's a {item} word_order frame, YAML booleans and jargon. 1 defect fixed: lesson01.match.003 was a 4-pair matching_pairs (below the 6-pair floor, recipe DO-NOT #5); moved it to a new home_noun preset (part_of_speech noun, semantic union a1_unit24_housing_lesson01 + a1_unit24_housing_lesson04) with 6 slots -- pool bedroom/kitchen/bathroom/room/garden/balcony (slaapkamer/keuken/badkamer/kamer/tuin/balkon), 6 distinct non-confusable glosses, unit-only tags so course scope equals unit scope; generic Verbind elk woord feedback. Plural duplicates rooms/bedrooms deliberately left out. Everything else clean; no native-judgment flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [room_noun]
+    semantic: [room_noun, a1_unit24_housing_lesson01, a1_unit24_housing_lesson04]
 slot_presets:
   room_noun: &room_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: room_noun}}
+  home_noun: &home_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [a1_unit24_housing_lesson01, a1_unit24_housing_lesson04]}}
 templates:
   - content_key: practice.nl-en.en.a1.unit24.lesson01.choose.001
     lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
@@ -54,11 +57,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit24.lesson01.match.003
     lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *room_noun, second: *room_noun, third: *room_noun, fourth: *room_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Verbind elke kamer met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *home_noun, second: *home_noun, third: *home_noun, fourth: *home_noun, fifth: *home_noun, sixth: *home_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit24.lesson01.translate.004
     lesson_content_key: en.a1.unit24.lesson01.rooms_of_a_home
     type: translation

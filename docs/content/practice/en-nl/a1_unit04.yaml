@@ -4,7 +4,7 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit04.time
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
   fresh_context: "true"
   notes: >-
@@ -69,10 +69,33 @@ review:
     risk; `schedule` was already declared in tag_schema. Recognition tier
     now 3 live (lesson04 listen.001, lesson05 choose.004, lesson06
     choose.001).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 13 templates at unit and course scope against the nl.a1.unit04
+    realization. 7 defects fixed. The six kwart over/voor templates
+    (lesson02/03/05 order + translate) slotted hour_number, whose ONLY
+    unit-scoped members are 14/18, so every checkpoint item rendered "Het is
+    kwart over 14." / "De workshop begint om kwart voor 18." (not Dutch --
+    kwart over/voor takes 12-hour words; the unit itself teaches 14:15 as
+    "kwart over twee" / "veertien uur vijftien") with English prompts like
+    "a quarter past 14"; course scope added further bad fillers (twintig,
+    achttien, 20). Rewrote them as the unit's own fixed sentences over
+    single-member anchors: lesson02 "Het is kwart {over} twee." (over via
+    preposition+text_exchange_reading, a1-wide singleton) and lesson03/05
+    "Het taalcafe {begint} om kwart over twee." / "De workshop {begint} om
+    kwart voor drie." (begint via verb+schedule, singleton); English prompts
+    are now fixed and match the single answer; feedback frames rewritten to
+    match. (7) lesson06.choose.001 pos [noun, particle, adverb] pooled
+    course-wide het ("the; it") and de ("the"), so "the" was an also-correct
+    distractor for het -- narrowed to [noun, adverb] (unit pool
+    uur/kwart/workshop/hoe/vrijdagmiddag, 5 distinct). Deferred (engine
+    limit): lesson01 translate "It is {gloss} o'clock." draws both digit (2,
+    14) and word (twee) lexemes; the single accepted string rejects the
+    other written form. No native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [register_language, wellbeing, name_exchange, origin_language, cafe_small_talk, first_meeting_dialogue, number, hour_number, contact_number, age_quantity, price, library_registration, weekday, month, ordinal_number, date_expression, library_date, cafe_appointment, clock_time, quarter_hour, time_question, time_of_day, day_period, schedule, cafe_meetup_time, informal_address, polite_address, greeting, wellbeing_answer, person_name, place_name, country, language_or_nationality]
+    semantic: [register_language, wellbeing, name_exchange, origin_language, cafe_small_talk, first_meeting_dialogue, number, hour_number, contact_number, age_quantity, price, library_registration, weekday, month, ordinal_number, date_expression, library_date, cafe_appointment, clock_time, quarter_hour, time_question, time_of_day, day_period, schedule, cafe_meetup_time, informal_address, polite_address, greeting, wellbeing_answer, person_name, place_name, country, language_or_nationality, text_exchange_reading]
     register: [informal, polite]
 slot_presets:
   informal_address: &informal_address {language_code: nl, part_of_speech: pronoun, agreement_tags: {semantic: informal_address}}
@@ -84,6 +107,13 @@ slot_presets:
   month: &month {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: month}}
   ordinal_number: &ordinal_number {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: ordinal_number}}
   time_of_day: &time_of_day {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: day_period}}
+  # Single-member anchors (a1 course-wide pool is exactly one token): `over`
+  # (preposition + text_exchange_reading) and `begint` (verb + schedule). Used
+  # by the fixed kwart over/voor sentences, which cannot take an hour slot:
+  # this unit's only hour_number lexemes are 14/18, and "kwart over 14" is
+  # not Dutch (kwart over/voor uses 12-hour words: kwart over twee).
+  over_single: &over_single {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: text_exchange_reading}}
+  begint_single: &begint_single {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: schedule}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit04.lesson01.order.001
     lesson_content_key: nl.a1.unit04.lesson01.hele_en_halve_uren
@@ -108,43 +138,41 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit04.lesson02.order.001
     lesson_content_key: nl.a1.unit04.lesson02.kwartieren
     type: word_order
-    frame: {text: "Het is kwart over {item}.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het is kwart over {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The time is a quarter past {item}.", language_code: en, direction: ltr}
+    frame: {text: "Het is kwart {item} twee.", language_code: nl, direction: ltr}
+    slots: {item: *over_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is kwart {item} twee.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Kwart {item} twee = 2:15.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson02.translate.003
     lesson_content_key: nl.a1.unit04.lesson02.kwartieren
     type: translation
     frame:
-      text: "It is a quarter past {item}."
+      text: "It is a quarter past two."
       language_code: en
       direction: ltr
-      slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het is kwart over {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The time is a quarter past {item}.", language_code: en, direction: ltr}
+    slots: {item: *over_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Het is kwart {item} twee.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Kwart {item} twee = 2:15.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson03.order.001
     lesson_content_key: nl.a1.unit04.lesson03.hoe_laat
     type: word_order
-    frame: {text: "Het taalcafé begint om kwart over {item}.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé begint om kwart over {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The language café begins at kwart over {item}.", language_code: en, direction: ltr}
+    frame: {text: "Het taalcafé {item} om kwart over twee.", language_code: nl, direction: ltr}
+    slots: {item: *begint_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé {item} om kwart over twee.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "The language café starts (Dutch: {item}) at a quarter past two.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson03.translate.003
     lesson_content_key: nl.a1.unit04.lesson03.hoe_laat
     type: translation
     frame:
-      text: "The language café starts at a quarter past {item}."
+      text: "The language café starts at a quarter past two."
       language_code: en
       direction: ltr
-      slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé begint om kwart over {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Use om kwart over {item} for this start time.", language_code: en, direction: ltr}
+    slots: {item: *begint_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Het taalcafé {item} om kwart over twee.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Use {item} om kwart over twee for this start time.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson04.listen.001
     lesson_content_key: nl.a1.unit04.lesson04.digitale_tijd_en_dagdelen
     type: listen_select
@@ -168,23 +196,22 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit04.lesson05.order.001
     lesson_content_key: nl.a1.unit04.lesson05.rooster_lezen
     type: word_order
-    frame: {text: "De workshop begint om kwart voor {item}.", language_code: nl, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "De workshop begint om kwart voor {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "The workshop begins at kwart voor {item}.", language_code: en, direction: ltr}
+    frame: {text: "De workshop {item} om kwart voor drie.", language_code: nl, direction: ltr}
+    slots: {item: *begint_single}
+    answer_derivation: {kind: render_frame, frame: {text: "De workshop {item} om kwart voor drie.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "The workshop starts (Dutch: {item}) at a quarter to three.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson05.translate.003
     lesson_content_key: nl.a1.unit04.lesson05.rooster_lezen
     type: translation
     frame:
-      text: "The workshop starts at a quarter to {item}."
+      text: "The workshop starts at a quarter to three."
       language_code: en
       direction: ltr
-      slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *number}
-    answer_derivation: {kind: render_frame, frame: {text: "De workshop begint om kwart voor {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Use om kwart voor {item} for this workshop time.", language_code: en, direction: ltr}
+    slots: {item: *begint_single}
+    answer_derivation: {kind: render_frame, frame: {text: "De workshop {item} om kwart voor drie.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Use {item} om kwart voor drie for this workshop time.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson05.choose.004
     lesson_content_key: nl.a1.unit04.lesson05.rooster_lezen
     type: multiple_choice
@@ -208,7 +235,7 @@ templates:
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots:
-      item: {language_code: nl, part_of_speech: [noun, particle, adverb], agreement_tags: {semantic: cafe_meetup_time}}
+      item: {language_code: nl, part_of_speech: [noun, adverb], agreement_tags: {semantic: cafe_meetup_time}}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "Choose the English meaning of {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit04.lesson06.translate.003

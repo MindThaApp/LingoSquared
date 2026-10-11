@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit23.money
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session extending the en-nl
     Endless Practice pool to cover the real content gap flagged this
     session: en-nl practice templates only went through unit16 while the
@@ -68,18 +68,49 @@ review:
     pool pairs betalen 'to pay' with afrekenen 'to settle the bill; to
     pay', and a learner shown the bare prompt 'to pay' who types
     afrekenen would be marked wrong -- fine for recognition (where those
-    templates already use it), a mis-grade risk for production."
+    templates already use it), a mis-grade risk for production.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all 14 templates against unit- and course-scoped pools,
+    every rendering, gloss senses vs the nl a1_unit23 realization,
+    matching confusables/case duplicates, self-reference, booleans and
+    jargon. 3 defects fixed: (1) the number preset included the symbol
+    digit lexemes (0-112, 06, 00, 2026), so course-scoped
+    translate.001/translate.002 could render 'It costs 06 euros in
+    total.' with a digit answer; narrowed to part_of_speech [noun]. (2)
+    lesson02.choose.001, lesson02.listen.002 and lesson06.listen.001
+    drew from payment_verb, which pairs betalen 'to pay' with afrekenen
+    'to settle the bill; to pay' -- each gloss is a second correct
+    option for the other; switched to bill_verb (bill_dialogue verbs,
+    distinct glosses, no afrekenen). (3) lesson02.match.003 unioned
+    payment_verb with number: same afrekenen/betalen confusable rights
+    plus course-scope case duplicates (twaalf/Twaalf, nul/Nul,
+    twee/Twee, vier/Vier, achtenveertig/Achtenveertig); re-pooled to
+    bill_dialogue (9 unit-native verb/noun lexemes, no case duplicates).
+    Deferred: course-scoped number lexeme een-with-accents renders 'It
+    costs one euros in total.' and its answer needs the accented form
+    (lexeme/engine limit, one member of ~60); bill_dialogue course
+    glosses 'can' -> Kan and 'Shall' -> Zullen admit other forms
+    (kun/zal) in translate.003 (lexeme-gloss, backfill lane). NATIVE
+    FLAG: order.002 renders 'Mag ik vragen?' and 'Mag ik delen?' --
+    grammatical but possibly incomplete-sounding without an object; for
+    Ramin."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
     semantic: [number, payment_verb, payment_noun, payment_noun_pure, bill_dialogue]
 slot_presets:
-  number: &number {language_code: nl, part_of_speech: [symbol, noun], agreement_tags: {semantic: number}}
+  # noun-only: the 'symbol' digit lexemes (5, 06, 2026, 112...) rendered
+  # 'It costs 06 euros in total.' with a digit-only answer. Narrowed 2026-10-10.
+  number: &number {language_code: nl, part_of_speech: [noun], agreement_tags: {semantic: number}}
   payment_verb: &payment_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: payment_verb}}
   payment_noun: &payment_noun {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun}}
   # payment_noun_pure: exact-case (excludes capitalized Rekening/Totaal bill-label
   # variants that surface as reworded-gloss MC ambiguity). Added 2026-07-29.
   payment_noun_pure: &payment_noun_pure {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: payment_noun_pure}}
+  # bill_verb is also the MC/listen pool (2026-10-10): payment_verb holds
+  # afrekenen ('to settle the bill; to pay'), whose gloss makes betalen's
+  # 'to pay' a second correct option and vice versa.
   bill_verb: &bill_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: bill_dialogue}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit23.lesson01.translate.001
@@ -123,14 +154,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *payment_verb}
+    slots: {item: *bill_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a payment word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson02.listen.002
     lesson_content_key: nl.a1.unit23.lesson02.pinnen_of_contant
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *payment_verb}
+    slots: {item: *bill_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson02.match.003
@@ -138,12 +169,12 @@ templates:
     type: matching_pairs
     frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: nl, direction: ltr}
     slots:
-      first: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
-      second: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
-      third: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
-      fourth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
-      fifth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
-      sixth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [payment_verb, number]}}
+      first: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
+      second: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
+      third: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
+      fourth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
+      fifth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
+      sixth: {language_code: nl, part_of_speech: [verb, noun], agreement_tags: {semantic: [bill_dialogue]}}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
@@ -214,7 +245,7 @@ templates:
     lesson_content_key: nl.a1.unit23.lesson06.rekening_vragen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *payment_verb}
+    slots: {item: *bill_verb}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit23.lesson06.order.002

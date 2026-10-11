@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit26.bankrekening
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-07 by the Claude session filling en-nl's A2
     practice-pool gap (see a2_unit24.yaml's own notes for the full
     background). This file covers unit26 (bankrekening/banking: opening a
@@ -71,7 +71,25 @@ review:
     this same pack) and updated its feedback text from verb to word
     accordingly. Removed the now-unused bank_nodig_single tag/preset from
     tag_schema. Verified 0 DEAD, 0 below-floor via
-    scripts/_practice_unit_scope_check.py after the fix."
+    scripts/_practice_unit_scope_check.py after the fix.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 12 templates against unit- and course-scoped pools, glosses, frames,
+    distractor overlap, matching confusability, booleans and jargon. Fixed:
+    lesson02.translate.002 prompt 'I would like to open {item}.' renders the
+    gloss with 'the' ('...open the bank account.') but the single accepted
+    answer used 'een' -- a learner translating faithfully ('de
+    bankrekening') was graded wrong; answer frame changed to 'Ik wil graag
+    de {item} openen.' and its feedback_frame language_code corrected en ->
+    nl. Deferred: lexeme 'Medewerker' (from the dialogue speaker label)
+    keeps a capitalised citation form, which displays capitalised as a
+    matching left / MC prompt (grading is casefolded, so display-only) --
+    needs a backfill citation fold. Deferred (systemic, not fixable in-
+    pack): bare-word translation glosses carry the English article ('the
+    flower') while the single accepted answer is the bare token (bloem), so
+    a learner typing 'de bloem' is graded wrong; needs an engine-side
+    article tolerance or a gloss convention change. No native-judgment
+    flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -135,8 +153,8 @@ templates:
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *bank_account_noun}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag een {item} openen.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik wil graag een {item} openen.", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik wil graag de {item} openen.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik wil graag de {item} openen.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a2.unit26.lesson03.choose.001
     lesson_content_key: nl.a2.unit26.lesson03.bij_de_bank
     type: multiple_choice

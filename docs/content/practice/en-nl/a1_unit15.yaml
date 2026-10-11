@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit15.travel
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session syncing Endless Practice
     template pools to lesson content growth (en-nl lane, continuing after
     unit14). This unit (unit15) covers traveling by train: buying a ticket,
@@ -39,7 +39,19 @@ review:
     ambiguity hard-fail cannot trigger). Also fixed a learner-facing
     grammar bug in lesson04.translate.003: its prompt frame 'Where is the
     {item}?' rendered the gloss WITH its own article ('Where is the the
-    entrance?'); now 'Where is {item}?'."
+    entrance?'); now 'Where is {item}?'.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read
+    all 12 templates against unit- and course-scoped pools and the nl
+    a1_unit15 realization. 2 defects fixed: lesson05.choose.001 feedback 'a
+    word from the ticket' was false for
+    vertraging/ingang/uitgang/wachtruimte (not on the lesson05 ticket) -> 'a
+    travel word from this unit'; lesson06.listen.001 feedback 'heard in this
+    dialogue' was false for kaartje/ingang/uitgang/wachtruimte -> '{item} is
+    the word you heard.'. Deferred (lexeme-gloss convention, backfill lane):
+    noun glosses carry 'the' (the ticket, the waiting room) while the bare-word
+    translation accepts only the bare noun, so a learner typing het
+    kaartje / de wachtruimte is marked wrong. No native-judgment flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -167,11 +179,11 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *travel_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a word from the ticket.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a travel word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit15.lesson06.listen.001
     lesson_content_key: nl.a1.unit15.lesson06.lotte_en_omar_op_reis
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *travel_noun_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
