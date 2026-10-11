@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit41.persoonlijkheid
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: >-
     Vocabulary unit (persoonlijkheid / personality traits), 15 unit lexemes
     across lessons 01-05 per scripts/backfill_lexemes_en_nl.py; lesson06
@@ -21,6 +21,28 @@ review:
     persoonlijkheid_persoon_single tag (persoon), course-scope-safe by
     construction. Capacity/coverage measured via RECIPE S9 step 4 (see
     report).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all templates against the real unit- and course-scope pools,
+    every gloss vs the unit41 realization (taalcafe canon: Lotte
+    aardig/geduldig, Sander grappig, Fenna nieuwsgierig, Nina verlegen),
+    frame grammar/taught vocabulary, self-reference, matching
+    confusability, booleans and jargon. FIXED (frame-pool):
+    lesson01.choose.001, lesson01.listen.003, lesson02.choose.001 slot
+    narrowed from persoonlijkheid_vocab to [trait_kind_funny,
+    trait_calm_patient, trait_curious_shy] adjectives (same 5 unit
+    lexemes; course scope now adds only rustig) -- the old course pool
+    made the feedback 'describes a personality trait' false (nieuw,
+    Spaans, lang) and put leuk 'nice; pleasant' beside aardig 'nice; kind'
+    as competing options. FIXED (untaught-vocab): lesson03.order.003 'Mijn
+    zusje is heel {item}.' used never-taught 'zusje' -> 'Mijn zus is heel
+    {item}.' (zus taught unit05; feedback updated). FIXED (feedback-hint):
+    match feedback 'personality word' -> 'Match each word with its English
+    meaning.' (course pool includes ben, taalcafe, verpleegkundige).
+    DEFERRED (lexeme-gloss, course scope): Ze is glossed 'she', so a
+    lesson04/lesson05 bare-word translation prompt 'she' accepts only ze
+    and rejects the equally correct zij; gloss should read 'she
+    (unstressed)' in the backfill. No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -57,7 +79,7 @@ templates:
     item:
       language_code: nl
       part_of_speech: adjective
-      agreement_tags: {semantic: persoonlijkheid_vocab}
+      agreement_tags: {semantic: [trait_kind_funny, trait_calm_patient, trait_curious_shy]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} describes a personality trait.'
@@ -94,7 +116,7 @@ templates:
     item:
       language_code: nl
       part_of_speech: adjective
-      agreement_tags: {semantic: persoonlijkheid_vocab}
+      agreement_tags: {semantic: [trait_kind_funny, trait_calm_patient, trait_curious_shy]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: You heard {item}.
@@ -113,7 +135,7 @@ templates:
     item:
       language_code: nl
       part_of_speech: adjective
-      agreement_tags: {semantic: persoonlijkheid_vocab}
+      agreement_tags: {semantic: [trait_kind_funny, trait_calm_patient, trait_curious_shy]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} describes a personality trait.'
@@ -181,7 +203,7 @@ templates:
   lesson_content_key: nl.a1.unit41.lesson03.nieuwsgierig_verlegen
   type: word_order
   frame:
-    text: Mijn zusje is heel {item}.
+    text: Mijn zus is heel {item}.
     language_code: nl
     direction: ltr
   slots:
@@ -192,11 +214,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Mijn zusje is heel {item}.
+      text: Mijn zus is heel {item}.
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Mijn zusje is heel nieuwsgierig. -- My little sister is very curious.
+    text: Mijn zus is heel nieuwsgierig. -- My sister is very curious.
     language_code: en
     direction: ltr
 
@@ -241,7 +263,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: Match each personality word with its English meaning.
+    text: Match each word with its English meaning.
     language_code: en
     direction: ltr
 
