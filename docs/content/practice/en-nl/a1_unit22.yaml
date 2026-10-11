@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit22.communication
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session extending the en-nl
     Endless Practice pool to cover the real content gap flagged this
     session: en-nl practice templates only went through unit16 while the
@@ -88,11 +88,27 @@ review:
     still under the recipe's >=3-per-tier bar), and lesson06 had no
     production-tier template at all. Verified via
     scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
-    this pass (was 5 DEAD, 1 below-floor)."
+    this pass (was 5 DEAD, 1 below-floor).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all 14 templates against unit- and course-scoped pools,
+    every rendering, gloss senses vs the nl a1_unit22 realization,
+    matching confusables, self-reference, booleans and jargon. 2 defects
+    fixed: (1) lesson01.order.001 'Ik {item} je.' over text_message
+    verbs rendered 'Ik stuur je.' (sturen needs its object, the taught
+    sentence is 'Ik stuur je een sms.'); slot narrowed to the new
+    bel_only preset (verb + emergency_service_noun_lesson = exactly bel
+    course-wide), so it renders only the taught 'Ik bel je.'. (2)
+    lesson06.order.002 'Ik moet {item}.' rendered the incomplete 'Ik
+    moet vertellen.' / 'Ik moet horen.'; frame changed to the taught 'Ik
+    {item} je later terug.' over bel_only (feedback frame adjusted).
+    Structured tier still has 3 templates; stuur/vertellen/horen stay
+    covered by the translate/MC/listen/match templates. No
+    native-judgment flag."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [communication_word, text_message, phone_identity, phone_identity_pure, phone_clarification, phone_clarification_pure]
+    semantic: [communication_word, text_message, phone_identity, phone_identity_pure, phone_clarification, phone_clarification_pure, emergency_service_noun_lesson]
 slot_presets:
   communication_word: &communication_word {language_code: nl, part_of_speech: [noun, verb], agreement_tags: {semantic: communication_word}}
   # verb-only narrowing of communication_word -- safe inside a generative
@@ -102,6 +118,10 @@ slot_presets:
   # verb-only narrowing of text_message -- for 'Ik {item} je.', where the
   # noun member ('sms') doesn't conjugate into that slot.
   text_message_verb: &text_message_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: text_message}}
+  # bel-only (verb + emergency_service_noun_lesson = exactly {bel} course-wide):
+  # 'Ik stuur je.' (stuur via text_message) lacks its object, and
+  # 'Ik moet vertellen./horen.' are incomplete -- these frames only fit bel.
+  bel_only: &bel_only {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: emergency_service_noun_lesson}}
   # Union of this unit's own lesson tags (see review.notes' 2026-07-24
   # entry) -- widens lesson01.match.005's pool to the 6-pair floor with
   # real unit22-native vocabulary, not padding.
@@ -111,7 +131,7 @@ templates:
     lesson_content_key: nl.a1.unit22.lesson01.ik_bel_je
     type: word_order
     frame: {text: "Ik {item} je.", language_code: nl, direction: ltr}
-    slots: {item: *text_message_verb}
+    slots: {item: *bel_only}
     answer_derivation: {kind: render_frame, frame: {text: "Ik {item} je.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is what you are doing to reach them.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson01.translate.002
@@ -222,10 +242,10 @@ templates:
   - content_key: practice.en-nl.nl.a1.unit22.lesson06.order.002
     lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
     type: word_order
-    frame: {text: "Ik moet {item}.", language_code: nl, direction: ltr}
-    slots: {item: *communication_word_verb}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik moet {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is what you need to do.", language_code: en, direction: ltr}
+    frame: {text: "Ik {item} je later terug.", language_code: nl, direction: ltr}
+    slots: {item: *bel_only}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik {item} je later terug.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "{item} is what you will do later.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit22.lesson06.translate.003
     lesson_content_key: nl.a1.unit22.lesson06.telefoontje_na_dienst
     type: translation

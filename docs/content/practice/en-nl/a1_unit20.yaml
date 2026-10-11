@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit20.clothing
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session extending the en-nl
     Endless Practice pool to cover the real content gap flagged this
     session: en-nl practice templates only went through unit16 while the
@@ -63,7 +63,24 @@ review:
     slot -- the underdetermined-production-prompt defect) to a bare-word
     translation over the same clothing_fit tag, which is safe with any
     pool size. Verified via scripts/_practice_unit_scope_check.py: 0
-    DEAD, 0 below-floor after this pass (was 3 DEAD, 0 below-floor)."
+    DEAD, 0 below-floor after this pass (was 3 DEAD, 0 below-floor).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked all 14 templates against unit- and course-scoped pools
+    (practice_dump), every rendering, gloss senses vs the nl a1_unit20
+    realization, matching confusables/case duplicates, self-reference,
+    booleans and jargon. 1 defect fixed: lesson01.translate.005 rendered
+    the prompt 'I am looking for a the coat.' / 'I am looking for a the
+    pants; the trousers.' because the lexeme glosses carry 'the'; prompt
+    changed to 'I am looking for {item}.' and the answer/feedback frame
+    to 'Ik zoek de {item}.' (every course-wide pool member
+    jas/broek/trui is a de-word, so the article now matches the English
+    and the answer stays deterministic). Noted, not changed:
+    feedback_frame strings like 'kleur is a clothing word' are loose but
+    feedback_frame is not rendered by the current practice service; the
+    lesson01.order.004 hint line still shows 'Ik zoek een *the coat*.'
+    (word-by-word gloss hint, engine behaviour). No native-judgment
+    flag."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -122,15 +139,15 @@ templates:
     lesson_content_key: nl.a1.unit20.lesson01.ik_zoek_een_jas
     type: translation
     frame:
-      text: "I am looking for a {item}."
+      text: "I am looking for {item}."
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *clothing_item_singular}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik zoek een {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik zoek een {item}.", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "Ik zoek de {item}.", language_code: nl, direction: ltr}}
+    feedback_frame: {text: "Ik zoek de {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit20.lesson02.choose.001
     lesson_content_key: nl.a1.unit20.lesson02.welke_maat
     type: multiple_choice
