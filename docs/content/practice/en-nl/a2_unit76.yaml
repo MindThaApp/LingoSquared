@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit76.drukke_week
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-11, alongside the sibling a2_unit74/75/77.yaml packs -- see a2_unit74.yaml''s own review notes
     for the shared background. This file covers unit76 (drukke week: a weekly schedule, sequencing with eerst/daarna/ten slotte,
     weekday-vs- weekend contrast, and a full agenda).
@@ -74,7 +74,21 @@ review:
     tag_schema updated: removed the no-longer-used weekday/weekday_pure
     entries, added sequencing_activities and weekly_schedule_reading.
     Verified 0 DEAD, 0 below-floor via scripts/_practice_unit_scope_check.py
-    after the fix.'
+    after the fix.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): all 21 templates checked against unit- and
+    course-scoped pools. 2 defects fixed: (1) the weekly_schedule_vocab pool held both rooster (schedule) and
+    agenda (the schedule; planner), so in lesson01.choose.001, lesson01.listen.002, lesson03.listen.001,
+    lesson06.listen.001 and volume_listen.002 a distractor was also a correct answer, and lesson02 matching_pairs
+    could show two interchangeable rights -- the *id001 preset and the volume_listen.002 slot now union
+    weekly_schedule_days + drukkeweek_volgorde_single + drukkeweek_verschil_single
+    (rooster/cursus/volgorde/verschil at unit scope), and the *id012 matching preset unions weekly_schedule_days +
+    drukkeweek_verschil_single + sequencing_activities (9 unit-scoped, 6 still clear); weekly_schedule_days added
+    to tag_schema; (2) lesson04.translate.002 and volume_translate.002 render My schedule is completely full this
+    week. with the single answer Mijn agenda zit deze week helemaal vol., while rooster is also taught as schedule
+    and is ... vol is also correct -- instruction now names agenda and zit ... vol. Native flag:
+    lesson06.translate.002 accepts only ... is altijd hetzelfde; ... is altijd dezelfde (de volgorde) may also be
+    acceptable.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -90,6 +104,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - weekly_schedule_vocab
+    - weekly_schedule_days
     - sequence_connector
     - sequencing_activities
     - weekly_schedule_reading
@@ -106,7 +121,10 @@ slot_presets:
     language_code: nl
     part_of_speech: noun
     agreement_tags:
-      semantic: weekly_schedule_vocab
+      semantic:
+      - weekly_schedule_days
+      - drukkeweek_volgorde_single
+      - drukkeweek_verschil_single
   sequence_connector: &id004
     language_code: nl
     part_of_speech:
@@ -122,7 +140,8 @@ slot_presets:
     - verb
     agreement_tags:
       semantic:
-      - weekly_schedule_vocab
+      - weekly_schedule_days
+      - drukkeweek_verschil_single
       - sequencing_activities
   weekly_schedule_reading: &id008
     language_code: nl
@@ -358,7 +377,7 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Translate into Dutch.
+    - text: Translate into Dutch, using agenda and zit ... vol.
       language_code: en
       direction: ltr
   slots:
@@ -592,7 +611,10 @@ templates:
       language_code: nl
       part_of_speech: noun
       agreement_tags:
-        semantic: weekly_schedule_vocab
+        semantic:
+        - weekly_schedule_days
+        - drukkeweek_volgorde_single
+        - drukkeweek_verschil_single
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -610,7 +632,7 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Translate into Dutch.
+    - text: Translate into Dutch, using agenda and zit ... vol.
       language_code: en
       direction: ltr
   slots:
