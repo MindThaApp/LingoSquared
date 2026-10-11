@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit18.housing
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by the Claude session closing the en-nl
     practice-pool gap behind its lesson content (lesson content already
     goes through unit23; practice templates previously stopped at
@@ -86,7 +86,18 @@ review:
     and declared a 6th slot, clearing the AUTHORING_GUIDE §16 6-pair
     floor (was FLOOR at 5). Verified via
     scripts/_practice_unit_scope_check.py: 0 DEAD, 0 below-floor after
-    this pass (was 2 DEAD, 1 below-floor)."
+    this pass (was 2 DEAD, 1 below-floor).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): read
+    all 14 templates against unit- and course-scoped pools and the nl
+    a1_unit18 realization. 1 defect fixed (7 slots): every
+    multiple_choice/listen_select slot used the plain housing_vocab tag,
+    whose pool holds both appartement -> 'apartment' and Appartement ->
+    'Apartment', so an option set could contain two options equal ignoring
+    case (one correct, one a duplicate distractor); all seven now use
+    housing_vocab_pure (7 clean members, no course-scope extras).
+    Ad/dialogue feedback claims verified true for every pool member. No
+    native-judgment flags."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -128,14 +139,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a home-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson01.listen.003
     lesson_content_key: nl.a1.unit18.lesson01.mijn_appartement
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson01.match.004
@@ -168,14 +179,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a home-related word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson03.listen.002
     lesson_content_key: nl.a1.unit18.lesson03.balkon_en_tuin
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson04.translate.001
@@ -202,7 +213,7 @@ templates:
     lesson_content_key: nl.a1.unit18.lesson04.groot_of_klein
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson05.choose.001
@@ -214,7 +225,7 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a word from the housing ad.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson05.match.002
@@ -229,7 +240,7 @@ templates:
     lesson_content_key: nl.a1.unit18.lesson06.nieuw_appartement
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *housing_vocab}
+    slots: {item: *housing_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a word from this dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit18.lesson06.translate.002

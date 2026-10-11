@@ -4,9 +4,9 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a1.unit08.places
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: null
-  fresh_context: "false"
+  fresh_context: "true"
   notes: >-
     Original authoring notes (2026-07-05): added a "place" tag (7 members,
     both lowercase and capitalized map-label variants) plus a narrower
@@ -54,14 +54,40 @@ review:
     that varies with the answer). Production tier now 3 live. Reset
     review.status reviewed -> unreviewed since this adds unreviewed content
     to a previously reviewed pack.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    all 14 templates at unit and course scope. 3 defect classes fixed. (1)
+    place / place_non_station pool both the lowercase nouns (ziekenhuis "the
+    hospital") and the capitalized map-label rows (Ziekenhuis "Hospital");
+    the glosses differ by more than case, so the runtime casefold dedup kept
+    both and multiple_choice/listen_select could show "Hospital" as a
+    distractor for "the hospital" (both correct). All 11 such slots now use
+    the existing common_place tag (6 lowercase unit nouns + bibliotheek
+    course-wide). (2) The bare-word translations show glosses like "the
+    station" but accept only the bare noun, so the natural answer "het
+    station" was rejected -- both translation frames now read "{item} (the
+    Dutch noun only, without de/het)". (3) word_order lesson02/03/06 and
+    listen lesson03 used position, which course-wide adds voor ("for;
+    about") and Voor ("for"): a misleading hint gloss in the word_order
+    frames and an also-correct "for" distractor in the listen item --
+    switched to position_no_voor (naast/tegenover/achter). Deferred: voor's
+    lexeme gloss "for; about" does not cover the locative "in front of"
+    sense lesson03 teaches (backfill). No native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [place, place_non_station, position, position_no_voor]
+    semantic: [place, place_non_station, common_place, position, position_no_voor]
 slot_presets:
   place: &place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place}}
   place_non_station: &place_non_station {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: place_non_station}}
   position: &position {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: position}}
+  # common_place: the six lowercase place nouns (station, supermarkt, ziekenhuis,
+  # bank, postkantoor, bushalte; + bibliotheek course-wide). Replaces place /
+  # place_non_station in every template: those tags also hold the capitalized
+  # map-label rows (Ziekenhuis => "Hospital", Bank => "Bank", ...), whose glosses
+  # are true synonyms of the lowercase rows' ("the hospital") and so surfaced as
+  # also-correct distractors in multiple_choice / listen_select. 2026-10-10.
+  common_place: &common_place {language_code: nl, part_of_speech: noun, agreement_tags: {semantic: common_place}}
   # position_no_voor: {naast, tegenover, achter} — excludes 'voor' (purpose-sense gloss
   # 'for; about') from the bare-word translate.004 where the gloss is the prompt. 2026-07-30.
   position_no_voor: &position_no_voor {language_code: nl, part_of_speech: preposition, agreement_tags: {semantic: position_no_voor}}
@@ -75,34 +101,34 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson01.listen.002
     lesson_content_key: nl.a1.unit08.lesson01.plaatsen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson01.translate.003
     lesson_content_key: nl.a1.unit08.lesson01.plaatsen
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (the Dutch noun only, without de/het)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *place}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson02.order.001
     lesson_content_key: nl.a1.unit08.lesson02.naast_en_tegenover
     type: word_order
     frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}
-    slots: {item: *position}
+    slots: {item: *position_no_voor}
     answer_derivation: {kind: render_frame, frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} says where the library is relative to the station.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson02.choose_place.003
@@ -114,21 +140,21 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson03.order.001
     lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
     type: word_order
     frame: {text: "Het ziekenhuis is {item} de bibliotheek.", language_code: nl, direction: ltr}
-    slots: {item: *position}
+    slots: {item: *position_no_voor}
     answer_derivation: {kind: render_frame, frame: {text: "Het ziekenhuis is {item} de bibliotheek.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} says where the hospital is relative to the library.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson03.listen.003
     lesson_content_key: nl.a1.unit08.lesson03.achter_en_voor
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *position}
+    slots: {item: *position_no_voor}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the location word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson03.translate.004
@@ -153,14 +179,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a place word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson04.listen.002
     lesson_content_key: nl.a1.unit08.lesson04.waar_en_meer_plaatswoorden
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the place word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson05.choose.001
@@ -172,33 +198,33 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a place word from the map.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson05.translate.002
     lesson_content_key: nl.a1.unit08.lesson05.eenvoudige_kaart
     type: translation
     frame:
-      text: "{item}"
+      text: "{item} (the Dutch noun only, without de/het)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson06.listen.001
     lesson_content_key: nl.a1.unit08.lesson06.waar_is_de_bushalte
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: *place_non_station}
+    slots: {item: *common_place}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the place word you heard in this dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit08.lesson06.order.002
     lesson_content_key: nl.a1.unit08.lesson06.waar_is_de_bushalte
     type: word_order
     frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}
-    slots: {item: *position}
+    slots: {item: *position_no_voor}
     answer_derivation: {kind: render_frame, frame: {text: "De bibliotheek is {item} het station.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} says where the library is relative to the station.", language_code: en, direction: ltr}

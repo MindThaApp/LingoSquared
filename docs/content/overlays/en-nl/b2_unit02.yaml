@@ -6,15 +6,8 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Dutch confirmation needed (DRAFT). Confirm the English glosses
-    match the intended graded certainty (misschien/wellicht < waarschijnlijk
-    < vast wel < zal wel < ongetwijfeld/zeker), that every matching_pairs
-    right-hand gloss discriminates its left on real meaning, and that the
-    culminating writing/speaking answers (lesson06) accept the punctuation
-    forms a correct learner would actually produce. See the realization
-    file's review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: ramin_native_pass
   notes: >-
     Overlay for nl's second B2 unit (speculation), authored alongside the
     realization (no adaptable upper-intermediate public-domain Dutch source
@@ -34,6 +27,35 @@ review:
     lesson06 writing prompt names both the tense and the certainty word
     required for each sentence so a correct answer is well-determined. No
     sibling-direction file (nl-en b2) was consulted.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked
+    every instruction, gloss, MCQ/listen distractor, matching pair and
+    accepted-answer set against the realization. Fixed (missing valid
+    answers): lesson01 exercise05 + 'Waarschijnlijk is hij onderweg' (V2
+    inversion); lesson01 exercise06 + 'Ongetwijfeld is hij druk', 'Hij heeft
+    het ongetwijfeld druk'; lesson01 exercise07 + 'Bram is nog niet hier';
+    lesson02 exercise07 + perfect-tense 'want ik heb hem net gezien'
+    (with/without comma); lesson03 exercise06 + 'Hij is misschien nog
+    thuis'; lesson04 exercise04/exercise05 + 'Hij moet de trein hebben
+    gemist' (alternative verb-cluster order, which the word_order tiles also
+    allow); lesson04 exercise06 + 'Er moet iets zijn gebeurd'; lesson04
+    exercise07 and lesson06 exercise04 + 'Hij zou zich kunnen hebben
+    verslapen'; lesson05 exercise06 + 'Zijn telefoon is uit'; lesson06
+    exercise06 + the cluster-order and 'Waarschijnlijk staat hij' variants.
+    Fixed (underdetermined prompt): lesson06 exercise07 instruction now
+    names the target content and the forms (zal wel / moet wel, stuck in
+    traffic) instead of an open 'confident present deduction'. NATIVE-FLAG:
+    'Hij is ongetwijfeld druk' (see realization note). No defects found in
+    glosses or distractors.
+
+    Native-pass checklist (moved here from required_next_reviewer, unchanged):
+    Native-Dutch confirmation needed (DRAFT). Confirm the English glosses
+    match the intended graded certainty (misschien/wellicht < waarschijnlijk <
+    vast wel < zal wel < ongetwijfeld/zeker), that every matching_pairs right-
+    hand gloss discriminates its left on real meaning, and that the
+    culminating writing/speaking answers (lesson06) accept the punctuation
+    forms a correct learner would actually produce. See the realization file's
+    review block for the full priority list.
 
 course:
   title: Dutch B2
@@ -320,16 +342,20 @@ exercises:
     instruction: "Translate into Dutch, using waarschijnlijk: He is probably on the way."
     accepted_answers:
       - {value: "Hij is waarschijnlijk onderweg", status: correct}
+      - {value: "Waarschijnlijk is hij onderweg", status: correct}
     feedback: "Hij is waarschijnlijk onderweg means he is probably on the way."
   nl.b2.unit02.lesson01.exercise06.speak_ongetwijfeld:
     instruction: "Say aloud in Dutch, using ongetwijfeld: He is undoubtedly busy."
     accepted_answers:
       - {value: "Hij is ongetwijfeld druk", status: correct}
+      - {value: "Ongetwijfeld is hij druk", status: correct}
+      - {value: "Hij heeft het ongetwijfeld druk", status: correct}
     feedback: "Hij is ongetwijfeld druk means he is undoubtedly busy."
   nl.b2.unit02.lesson01.exercise07.write_bram_te_laat:
     instruction: "Write in Dutch: Bram isn't here yet."
     accepted_answers:
       - {value: "Bram is er nog niet", status: correct}
+      - {value: "Bram is nog niet hier", status: correct}
     feedback: "Bram is er nog niet means Bram isn't here yet."
 
   nl.b2.unit02.lesson02.exercise01.recognize_moet:
@@ -375,6 +401,8 @@ exercises:
     accepted_answers:
       - {value: "Hij kan niet ziek zijn, want ik zag hem net", status: correct}
       - {value: "Hij kan niet ziek zijn want ik zag hem net", status: correct}
+      - {value: "Hij kan niet ziek zijn, want ik heb hem net gezien", status: correct}
+      - {value: "Hij kan niet ziek zijn want ik heb hem net gezien", status: correct}
     feedback: "Hij kan niet ziek zijn, want ik zag hem net means he cannot be sick, because I saw him just now."
 
   nl.b2.unit02.lesson03.exercise01.recognize_wellicht:
@@ -409,6 +437,7 @@ exercises:
     instruction: "Say aloud in Dutch, guessing: Maybe he is still at home."
     accepted_answers:
       - {value: "Misschien is hij nog thuis", status: correct}
+      - {value: "Hij is misschien nog thuis", status: correct}
     feedback: "Misschien is hij nog thuis means maybe he is still at home."
   nl.b2.unit02.lesson03.exercise07.write_niet_zeker:
     instruction: "Write in Dutch, signalling you are only guessing: I don't know for sure."
@@ -438,21 +467,25 @@ exercises:
     instruction: "Put the words in order: He must have missed the train."
     accepted_answers:
       - {value: "Hij moet de trein gemist hebben", status: correct}
+      - {value: "Hij moet de trein hebben gemist", status: correct}
     feedback: "Hij moet de trein gemist hebben -- the auxiliary hebben goes to the very end."
   nl.b2.unit02.lesson04.exercise05.translate_moet_gemist:
     instruction: "Translate into Dutch, using moet ... hebben (must have): He must have missed the train."
     accepted_answers:
       - {value: "Hij moet de trein gemist hebben", status: correct}
+      - {value: "Hij moet de trein hebben gemist", status: correct}
     feedback: "Hij moet de trein gemist hebben means he must have missed the train."
   nl.b2.unit02.lesson04.exercise06.write_iets_gebeurd:
     instruction: "Write in Dutch, using moet ... zijn (must have): Something must have happened."
     accepted_answers:
       - {value: "Er moet iets gebeurd zijn", status: correct}
+      - {value: "Er moet iets zijn gebeurd", status: correct}
     feedback: "Er moet iets gebeurd zijn means something must have happened -- gebeuren takes zijn, not hebben."
   nl.b2.unit02.lesson04.exercise07.translate_zou_kunnen_verslapen:
     instruction: "Translate into Dutch, using zou ... kunnen hebben (might have): He might have overslept."
     accepted_answers:
       - {value: "Hij zou zich verslapen kunnen hebben", status: correct}
+      - {value: "Hij zou zich kunnen hebben verslapen", status: correct}
     feedback: "Hij zou zich verslapen kunnen hebben means he might have overslept -- a hedged past possibility."
 
   nl.b2.unit02.lesson05.exercise01.read_fact:
@@ -489,6 +522,7 @@ exercises:
     instruction: "Translate into Dutch: His phone is off."
     accepted_answers:
       - {value: "Zijn telefoon staat uit", status: correct}
+      - {value: "Zijn telefoon is uit", status: correct}
     feedback: "Zijn telefoon staat uit means his phone is off -- Dutch says the phone 'stands off'."
   nl.b2.unit02.lesson05.exercise07.write_spitsuur:
     instruction: "Write in Dutch: It is rush hour."
@@ -518,6 +552,7 @@ exercises:
     instruction: "Put the words in order: He might have overslept."
     accepted_answers:
       - {value: "Hij zou zich verslapen kunnen hebben", status: correct}
+      - {value: "Hij zou zich kunnen hebben verslapen", status: correct}
     feedback: "Hij zou zich verslapen kunnen hebben -- the four-verb cluster zou ... kunnen hebben stacks at the end."
   nl.b2.unit02.lesson06.exercise05.speak_moet_wel:
     instruction: "Bram's car is gone and it is rush hour, but he isn't here. Speculate aloud about the present cause, using moet wel (deduction): He must be stuck in traffic."
@@ -529,9 +564,12 @@ exercises:
     accepted_answers:
       - {value: "Hij moet de trein gemist hebben. Hij staat waarschijnlijk in de file.", status: correct}
       - {value: "Hij moet de trein gemist hebben. Hij staat waarschijnlijk in de file", status: correct}
+      - {value: "Hij moet de trein hebben gemist. Hij staat waarschijnlijk in de file", status: correct}
+      - {value: "Hij moet de trein gemist hebben. Waarschijnlijk staat hij in de file", status: correct}
+      - {value: "Hij moet de trein hebben gemist. Waarschijnlijk staat hij in de file", status: correct}
     feedback: "Two speculations at different certainty levels: Hij moet de trein gemist hebben (past, a firm deduction). Hij staat waarschijnlijk in de file (present, only probable)."
   nl.b2.unit02.lesson06.exercise07.respond_speculate:
-    instruction: "Bram is late. Reply to 'Waarom is Bram zo laat?' with a confident present deduction."
+    instruction: "Bram is late and it is rush hour. Reply to 'Waarom is Bram zo laat?' with a confident present deduction, using zal wel or moet wel: He is most likely stuck in traffic."
     accepted_answers:
       - {value: "Hij zal wel in de file staan", status: correct}
       - {value: "Hij moet wel in de file staan", status: correct}

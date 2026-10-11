@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.b1.unit07.kunnen_en_konden
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md, as part of the en-nl B1 unit01-11
     practice-pack wave that unblocks these units'' checkpoints (the units already had lexemes from scripts/backfill_lexemes_en_nl.py
     but no pack at all, so generate_checkpoint() returned checkpoint_unavailable). 14 templates across
@@ -27,7 +27,7 @@ review:
     Endless Practice cannot render an ungrammatical sentence; (b) no frame''s literal text contains any
     of its own slot''s candidate values (defect 1.14); (c) listen_select frames are bare ''{item}'' so
     no distractor can be a word the audio itself says (defect 1.22); (d) matching_pairs pools were read
-    by hand for interchangeable English glosses. Needs the standard fresh-context review before import.'
+    by hand for interchangeable English glosses. Needs the standard fresh-context review before import. Fresh-context review 2026-10-10 (content-reviewer.md checklist): read all 14 templates against unit- and course-scoped pools (frame grammaticality, derived answers, distractor/gloss collisions, matching confusables, self-reference, booleans, jargon). FIXED: (1) lesson04.order.002 frame ''Kun jij die {item} ook?'' rendered the nonsense ''Kun jij die gemeente ook?'' for the pool member gemeente (no tag separates it from dag) - frame rewritten to ''Dat is een goede {item}.'', grammatical for every unit/course member (afspraak, gemeente, dag, maand), feedback example updated. (2) lesson04.translate.004 showed the bare prompt ''can'' with the single answer ''Kun'', so a learner typing the equally correct ''kan'' was not graded correct - verb dropped from the slot POS (pool now afspraak/gemeente/dag; maken loses this production template only). (3) lesson05.choose.001 feedback claimed every option ''appears in the text about Lotte and her passport'', false for mogelijkheid/goede (lesson06) and for course-scope members - neutralised to ''{item} is a word from your lessons.'' DEFERRED: lexeme glosses moet ''must; is due'' vs moeten ''must; need to'' are interchangeable as matching rights and both reach lesson04.match.003 at course scope (moeten via b1_unit_review) - fix belongs in backfill_lexemes_en_nl.py (e.g. moet ''must (ik/jij/hij moet)''); fixed-sentence translation.005 accepts one word order only (systemic). 3 defects fixed, 2 deferred, no native flag.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -288,7 +288,7 @@ templates:
   lesson_content_key: nl.b1.unit07.lesson04.zou_kunnen_afspraak
   type: word_order
   frame:
-    text: Kun jij die {item} ook?
+    text: Dat is een goede {item}.
     language_code: nl
     direction: ltr
   slots:
@@ -301,11 +301,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Kun jij die {item} ook?
+      text: Dat is een goede {item}.
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Kun jij die dag ook? -- Can you make that day too?
+    text: Dat is een goede dag. -- That is a good day.
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.b1.unit07.lesson04.match.003
@@ -430,7 +430,6 @@ templates:
       language_code: nl
       part_of_speech:
       - noun
-      - verb
       - adjective
       agreement_tags:
         semantic: hypothetical_ability_zou_kunnen
@@ -463,7 +462,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} appears in the text about Lotte and her passport.'
+    text: '{item} is a word from your lessons.'
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.b1.unit07.lesson05.order.002

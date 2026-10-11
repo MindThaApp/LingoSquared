@@ -4,8 +4,8 @@ source_language: en
 target_language: nl
 unit_content_key: nl.a2.unit75.schermtijd
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: 'true'
   notes: 'Authored 2026-07-11, alongside the sibling a2_unit74/76/77.yaml packs -- see a2_unit74.yaml''s own review notes
     for the shared background (zero Endless Practice coverage existed for any of the four newest Dutch A2 units before this
     pass). This file covers unit75 (schermtijd: phone/social-media habits, screen time as an opinion topic reusing unit25''s
@@ -27,7 +27,19 @@ review:
     wegleggen_single) have exactly 1 course-wide candidate by construction -- re-verified by re-running scripts/_fill_in_blank_ambiguity_check.py
     after adding this file''s PACKS entry, 0 flagged. Needs the standard fresh-context review before import. Same blocking
     dependency as every other en-nl pack: backfill_lexemes_en_nl.py has not actually been run against a real database yet
-    (only --dry-run, which succeeds).'
+    (only --dry-run, which succeeds).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): all 18 templates checked against unit- and
+    course-scoped pools. 2 defects fixed: (1) lesson02.choose.001 used screen_time_verb, whose pool holds both
+    Probeer (Try (imperative)) and probeer (try (with ik)) -- the same word, so either gloss is a correct answer
+    for either item; slot replaced by the union schermtijd_chat_single/doorbrengen_single/wegleggen_single (3
+    options, still clears the floor); (2) lesson03.translate.002 and its volume_translate.003 twin translate I
+    think ... with a single accepted answer using vind, so the equally correct Ik denk dat ik te veel schermtijd
+    heb was graded wrong -- instruction now says to use vinden for think. Deferred (engine: one accepted string
+    per translation template): lesson05.translate.002 accepts only Het is een slechte gewoonte om steeds op je
+    telefoon te kijken; naar je telefoon kijken and blijven kijken are also natural -- flagged for the native
+    pass. Observation: the two matching_pairs templates have 5 and 3 pairs (below the recipe 6-pair standard; pool
+    only has 6 nouns) -- left as is.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -165,7 +177,14 @@ templates:
       language_code: en
       direction: ltr
   slots:
-    item: *id003
+    item:
+      language_code: nl
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - schermtijd_chat_single
+        - schermtijd_doorbrengen_single
+        - schermtijd_wegleggen_single
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -249,7 +268,7 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Translate into Dutch.
+    - text: Translate into Dutch, using vinden for "think".
       language_code: en
       direction: ltr
   slots:
@@ -459,7 +478,7 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Translate into Dutch.
+    - text: Translate into Dutch, using vinden for "think".
       language_code: en
       direction: ltr
   slots:
