@@ -4,8 +4,8 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit22.health
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: "Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
     lane of the Endless Practice template-pool sync (main session was
     alternating between nl-en and en-nl directions this whole
@@ -32,13 +32,17 @@ review:
     against this script's actual output. Needs the standard
     fresh-context review before import. Same blocking dependency as
     every earlier nl-en pack: backfill_lexemes_nl_en.py has not
-    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the symptom_noun (noun) matching_pairs template from 2 to 4 pairs."
+    actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the symptom_noun (noun) matching_pairs template from 2 to 4 pairs.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 10 templates against unit and course pools. 1 fixed: lesson01.match.003 had only 4 pairs (symptom_noun has 4 members), below the 6-pair floor (recipe DO-NOT #5); now 6 pairs drawn from the unit tag a1_unit22_health narrowed to noun/adjective (headache/stomachache/fever/cough/sore/throat/wrong/doctor/better, all distinct glosses, identical at unit and course scope, 6 available after lesson01 alone), frame lists all six slots, feedback reworded to woord since sore/wrong/doctor/better are not complaints. Deferred (lexeme-level, not in this pack's pools): doesn't glossed doet niet, need glossed moeten; nodig hebben, if (particle) and as share gloss als."
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [symptom_noun]
+    semantic: [symptom_noun, a1_unit22_health]
 slot_presets:
   symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
+  # Fresh-context review 2026-10-10: unit-scoped noun/adjective pool for match.003 (6 pairs; symptom_noun alone has only 4 members).
+  pair_word: &pair_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit22_health}}
 templates:
   - content_key: practice.nl-en.en.a1.unit22.lesson01.choose.001
     lesson_content_key: en.a1.unit22.lesson01.common_symptoms
@@ -57,11 +61,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit22.lesson01.match.003
     lesson_content_key: en.a1.unit22.lesson01.common_symptoms
     type: matching_pairs
-    frame: {text: "{first} · {second}", language_code: en, direction: ltr}
-    slots: {first: *symptom_noun, second: *symptom_noun, third: *symptom_noun, fourth: *symptom_noun}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Verbind elke klacht met de Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: en, direction: ltr}
+    slots: {first: *pair_word, second: *pair_word, third: *pair_word, fourth: *pair_word, fifth: *pair_word, sixth: *pair_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Verbind elk woord met de Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit22.lesson01.translate.004
     lesson_content_key: en.a1.unit22.lesson01.common_symptoms
     type: translation
