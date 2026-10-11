@@ -6,18 +6,8 @@ target_language: nl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Dutch confirmation needed (DRAFT). Confirm the English glosses
-    match the intended negotiation functions (propose / decline politely /
-    conditional concession / agree), that every matching_pairs right-hand
-    gloss discriminates its left on real meaning, and that the culminating
-    speaking/writing answers (lesson06) accept the punctuation forms a
-    correct learner would actually produce (comma-present, comma-absent,
-    trailing-period and no-trailing-period variants are supplied). See the
-    realization file's review block for the full priority list, especially
-    the subordinate-clause 'afwast' word order and the two-sentence
-    culminating move.
+  status: reviewed
+  required_next_reviewer: ramin_native_pass
   notes: >-
     Overlay for nl's B2 negotiation unit, authored alongside the
     realization (no adaptable upper-intermediate public-domain Dutch source
@@ -38,6 +28,40 @@ review:
     concession) and the writing prompt names both the revised term and the
     condition word required, so a correct answer is well-determined. No
     sibling-direction file (nl-en b2) was consulted.
+
+    Native-pass priority checks (moved here from
+    required_next_reviewer): Native-Dutch confirmation needed (DRAFT).
+    Confirm the English glosses match the intended negotiation functions
+    (propose / decline politely / conditional concession / agree), that
+    every matching_pairs right-hand gloss discriminates its left on real
+    meaning, and that the culminating speaking/writing answers
+    (lesson06) accept the punctuation forms a correct learner would
+    actually produce (comma-present, comma-absent, trailing-period and
+    no-trailing-period variants are supplied). See the realization
+    file's review block for the full priority list, especially the
+    subordinate-clause 'afwast' word order and the two-sentence
+    culminating move.
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist):
+    checked instructions, accepted answers (word-order/V2 variants,
+    jij/je, punctuation), distractors, glosses, matching_pairs
+    distinctness, listen distractors vs audio. Fixed:
+    lesson06.exercise07 instruction now states the exact English (the
+    condition 'jij afwast' was previously unspecified) and accepts 'Ja,
+    ik kook ...' and je variants; lesson02.exercise04 (word_order) added
+    'Ik kan daar niet mee akkoord gaan'; lesson04.exercise04
+    (word_order) added 'We delen samen de rekening' / 'Samen delen we de
+    rekening' / 'De rekening delen we samen'; lesson06.exercise04
+    (word_order) added 'Op voorwaarde dat jij afwast ga ik akkoord';
+    lesson02.exercise06 and lesson05.exercise06 added the 'Dat doe ik
+    liever niet' order (taught in the lesson02 grammar note);
+    lesson01.exercise07 added 'Vanavond geven we een etentje' and 'Wij
+    geven ...'; lesson06.exercise05 added the 'Ik doe de boodschappen
+    liever niet' order (the English prompt does not force
+    topicalisation) plus je variants; unstressed 'je' subject variants
+    added to lesson01.exercise06, lesson03.exercise05/06/07,
+    lesson06.exercise06. 0 deferred. Native pass still to confirm the
+    added variants.
 
 course:
   title: Dutch B2
@@ -304,11 +328,14 @@ exercises:
     instruction: "Say aloud in Dutch, stating a term with mijn voorstel is: My proposal is that you cook."
     accepted_answers:
       - {value: "Mijn voorstel is dat jij kookt", status: correct}
+      - {value: "Mijn voorstel is dat je kookt", status: correct}
     feedback: "Mijn voorstel is dat jij kookt means my proposal is that you cook."
   nl.b2.unit07.lesson01.exercise07.write_etentje:
     instruction: "Write in Dutch: We're throwing a dinner party tonight."
     accepted_answers:
       - {value: "We geven vanavond een etentje", status: correct}
+      - {value: "Vanavond geven we een etentje", status: correct}
+      - {value: "Wij geven vanavond een etentje", status: correct}
     feedback: "We geven vanavond een etentje means we're throwing a dinner party tonight."
   nl.b2.unit07.lesson01.exercise08.dictation_stel_voor:
     instruction: "Type what you hear."
@@ -338,6 +365,7 @@ exercises:
     instruction: "Put the words in order: I can't agree to that."
     accepted_answers:
       - {value: "Daar kan ik niet mee akkoord gaan", status: correct}
+      - {value: "Ik kan daar niet mee akkoord gaan", status: correct}
     feedback: "Daar kan ik niet mee akkoord gaan -- daar...mee wraps around akkoord gaan ('to agree to')."
   nl.b2.unit07.lesson02.exercise05.translate_gaat_niet:
     instruction: "Translate into Dutch, declining politely with dat gaat helaas niet: Unfortunately, that won't work."
@@ -348,6 +376,7 @@ exercises:
     instruction: "Write in Dutch, declining softly with liever niet: I'd rather not do that."
     accepted_answers:
       - {value: "Ik doe dat liever niet", status: correct}
+      - {value: "Dat doe ik liever niet", status: correct}
     feedback: "Ik doe dat liever niet means I'd rather not do that -- the gentlest way to decline."
   nl.b2.unit07.lesson02.exercise07.translate_niet_alles:
     instruction: "Translate into Dutch, using kan niet: I can't do everything."
@@ -383,18 +412,24 @@ exercises:
     accepted_answers:
       - {value: "Ik doe de boodschappen, op voorwaarde dat jij kookt", status: correct}
       - {value: "Ik doe de boodschappen op voorwaarde dat jij kookt", status: correct}
+      - {value: "Ik doe de boodschappen, op voorwaarde dat je kookt", status: correct}
+      - {value: "Ik doe de boodschappen op voorwaarde dat je kookt", status: correct}
     feedback: "Ik doe de boodschappen, op voorwaarde dat jij kookt -- op voorwaarde dat sends the verb (kookt) to the end of its clause."
   nl.b2.unit07.lesson03.exercise06.speak_conditional:
     instruction: "Offer a conditional concession aloud, using maar alleen als: I can cook, but only if you do the dishes."
     accepted_answers:
       - {value: "Ik kan koken, maar alleen als jij afwast", status: correct}
       - {value: "Ik kan koken maar alleen als jij afwast", status: correct}
+      - {value: "Ik kan koken, maar alleen als je afwast", status: correct}
+      - {value: "Ik kan koken maar alleen als je afwast", status: correct}
     feedback: "Ik kan koken, maar alleen als jij afwast -- give ground, but on a condition."
   nl.b2.unit07.lesson03.exercise07.write_ga_akkoord:
     instruction: "Write in Dutch, agreeing with a condition using ik ga akkoord and op voorwaarde dat: I agree, on condition that you do the shopping."
     accepted_answers:
       - {value: "Ik ga akkoord, op voorwaarde dat jij de boodschappen doet", status: correct}
       - {value: "Ik ga akkoord op voorwaarde dat jij de boodschappen doet", status: correct}
+      - {value: "Ik ga akkoord, op voorwaarde dat je de boodschappen doet", status: correct}
+      - {value: "Ik ga akkoord op voorwaarde dat je de boodschappen doet", status: correct}
     feedback: "Ik ga akkoord, op voorwaarde dat jij de boodschappen doet -- ik ga akkoord means 'I agree', and the condition sends doet to the end."
   nl.b2.unit07.lesson03.exercise08.dictation_alleen_als:
     instruction: "Type what you hear."
@@ -424,6 +459,9 @@ exercises:
     instruction: "Put the words in order: We split the bill together."
     accepted_answers:
       - {value: "We delen de rekening samen", status: correct}
+      - {value: "We delen samen de rekening", status: correct}
+      - {value: "Samen delen we de rekening", status: correct}
+      - {value: "De rekening delen we samen", status: correct}
     feedback: "We delen de rekening samen means we split the bill together."
   nl.b2.unit07.lesson04.exercise05.translate_dat_is_goed:
     instruction: "Translate into Dutch, accepting an offer with dat is goed: That's fine."
@@ -477,6 +515,8 @@ exercises:
     accepted_answers:
       - {value: "Ik doe dat liever niet, want ik moet werken", status: correct}
       - {value: "Ik doe dat liever niet want ik moet werken", status: correct}
+      - {value: "Dat doe ik liever niet, want ik moet werken", status: correct}
+      - {value: "Dat doe ik liever niet want ik moet werken", status: correct}
     feedback: "Ik doe dat liever niet, want ik moet werken -- want introduces your reason and keeps normal word order."
   nl.b2.unit07.lesson05.exercise07.write_morgen:
     instruction: "Write in Dutch: We'll talk about the groceries tomorrow."
@@ -508,6 +548,7 @@ exercises:
     instruction: "Put the words in order: I agree, on condition that you do the dishes."
     accepted_answers:
       - {value: "Ik ga akkoord op voorwaarde dat jij afwast", status: correct}
+      - {value: "Op voorwaarde dat jij afwast ga ik akkoord", status: correct}
     feedback: "Ik ga akkoord, op voorwaarde dat jij afwast -- concede, then attach the condition."
   nl.b2.unit07.lesson06.exercise05.speak_full_move:
     instruction: "You and Omar are hosting a dinner. Negotiate your whole part aloud in THREE moves -- STATE your terms (ik stel voor dat ik kook), DECLINE one task (the shopping, with liever niet), and OFFER A CONDITIONAL CONCESSION (op voorwaarde dat): I propose that I cook. I'd rather not do the shopping, but I agree on condition that you do the dishes."
@@ -516,16 +557,28 @@ exercises:
       - {value: "Ik stel voor dat ik kook. De boodschappen doe ik liever niet, maar ik ga akkoord op voorwaarde dat jij afwast", status: correct}
       - {value: "Ik stel voor dat ik kook. De boodschappen doe ik liever niet, maar ik ga akkoord, op voorwaarde dat jij afwast.", status: correct}
       - {value: "Ik stel voor dat ik kook. De boodschappen doe ik liever niet, maar ik ga akkoord, op voorwaarde dat jij afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. De boodschappen doe ik liever niet, maar ik ga akkoord op voorwaarde dat je afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. De boodschappen doe ik liever niet, maar ik ga akkoord, op voorwaarde dat je afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. Ik doe de boodschappen liever niet, maar ik ga akkoord op voorwaarde dat jij afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. Ik doe de boodschappen liever niet, maar ik ga akkoord, op voorwaarde dat jij afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. Ik doe de boodschappen liever niet, maar ik ga akkoord op voorwaarde dat je afwast", status: correct}
+      - {value: "Ik stel voor dat ik kook. Ik doe de boodschappen liever niet, maar ik ga akkoord, op voorwaarde dat je afwast", status: correct}
     feedback: "The whole move: state a term (Ik stel voor dat ik kook), decline one (De boodschappen doe ik liever niet), and concede on a condition (maar ik ga akkoord op voorwaarde dat jij afwast)."
   nl.b2.unit07.lesson06.exercise06.write_revised_terms:
     instruction: "Write a reply proposing DIFFERENT terms with a condition attached. Offer to do the shopping yourself (ik doe de boodschappen) and attach a condition with mits: I'll do the shopping, provided that you cook."
     accepted_answers:
       - {value: "Ik doe de boodschappen, mits jij kookt", status: correct}
       - {value: "Ik doe de boodschappen mits jij kookt", status: correct}
+      - {value: "Ik doe de boodschappen, mits je kookt", status: correct}
+      - {value: "Ik doe de boodschappen mits je kookt", status: correct}
     feedback: "Ik doe de boodschappen, mits jij kookt -- you propose a new term (you shop) and attach the condition (mits jij kookt) that you cook in return."
   nl.b2.unit07.lesson06.exercise07.respond_negotiate:
-    instruction: "Reply to 'Wil jij vanavond koken?' by agreeing on a condition, using op voorwaarde dat."
+    instruction: "Reply to 'Wil jij vanavond koken?' by agreeing on a condition, using op voorwaarde dat: I'll cook, on condition that you do the dishes."
     accepted_answers:
       - {value: "Ik kook, op voorwaarde dat jij afwast", status: correct}
       - {value: "Ik kook op voorwaarde dat jij afwast", status: correct}
+      - {value: "Ik kook, op voorwaarde dat je afwast", status: correct}
+      - {value: "Ik kook op voorwaarde dat je afwast", status: correct}
+      - {value: "Ja, ik kook, op voorwaarde dat jij afwast", status: correct}
+      - {value: "Ja, ik kook op voorwaarde dat jij afwast", status: correct}
     feedback: "Ik kook, op voorwaarde dat jij afwast -- you agree to cook, but only on the condition that the other person does the dishes."
