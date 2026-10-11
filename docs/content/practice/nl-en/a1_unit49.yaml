@@ -4,16 +4,19 @@ source_language: nl
 target_language: en
 unit_content_key: en.a1.unit49.waste_disposal
 review:
-  status: unreviewed
-  fresh_context: "false"
+  status: reviewed
+  fresh_context: "true"
   notes: >-
     Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md for the nl-en a1_unit49 vocabulary unit. Recognition (multiple_choice, listen_select) and production (translation bare-word) templates use the unit-wide semantic tag `a1_unit49_waste_disposal` (all lessons unioned, POS-restricted to noun/verb/adjective/adverb, language_code en) anchored per lesson -- the recipe SS8.1 pattern -- so every recognition/production slot clears the >=3-distinct-value floor even where an individual lesson is thin; measured 22 distinct unit-wide content lexemes with zero duplicate english_gloss values (checked by hand against the real backfill_lexemes_nl_en.py output before writing). matching_pairs also draws on the unit-wide tag (6 pairs). Structured tier is carried primarily by matching_pairs (bare frame, no literal text, so no course-scope grammaticality risk per recipe SS1.1) plus one fill_in_blank single-member anchor per SS6.5 where the real lexeme dump yielded exactly one course-wide candidate for its lesson+part_of_speech combination (verified before writing the frame). word_order was used only where lesson01s own verb pool is uniformly a bare infinitive form (this units per-lesson tags cannot exclude a single mixed-conjugation member, recipe SS3.1b) and skipped elsewhere in this batch for that reason; the structured-tier floor is still met via matching_pairs alone. Lessons with zero en-language lexemes in the real backfill output are not anchored (recipe SS0: a lesson with no lexemes cannot be represented in the checkpoint regardless of pack content).
+
+    Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 16 templates (4 multiple_choice, 4 listen_select, 4 translation, 2 matching_pairs, 1 fill_in_blank, 1 word_order) against the real unit/course lexeme pools; recognition/matching glosses distinct and non-confusable, fill_in_blank (correctly) and word_order (sort/recycle) render grammatically, no jargon or boolean issues. FIXED (frame-pool): the four bare-word translation templates drew on tuesdays (op dinsdag), fridays (op vrijdag), correctly (goed; correct) and afterward (daarna; achteraf), where the natural learner answer (on Tuesday, correct/well, afterwards/then) is graded wrong against the single accepted token; added slot preset translate_pool (part_of_speech noun/verb, semantic union lesson01+lesson02+lesson04; 16 unit candidates) and pointed all four translation templates at it. Lesson03 lexemes remain covered by recognition, matching and the fill_in_blank. DEFERRED (lexeme-gloss, backfill_lexemes_nl_en.py): waste gloss 'afval; (waste time) verspillen' prints the English answer word inside the Dutch prompt of the translation item; kinds 'de soorten' also admits sorts/types. No native-judgment flags.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
     semantic: [a1_unit49_waste_disposal, a1_unit49_waste_disposal_lesson01, a1_unit49_waste_disposal_lesson02, a1_unit49_waste_disposal_lesson03, a1_unit49_waste_disposal_lesson04]
 slot_presets:
   unit_pool: &unit_pool {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: a1_unit49_waste_disposal}}
+  translate_pool: &translate_pool {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: [a1_unit49_waste_disposal_lesson01, a1_unit49_waste_disposal_lesson02, a1_unit49_waste_disposal_lesson04]}}
 templates:
   - content_key: practice.nl-en.en.a1.unit49.lesson01.choose.001
     lesson_content_key: en.a1.unit49.lesson01.waste_disposal_vocabulary
@@ -75,28 +78,28 @@ templates:
     lesson_content_key: en.a1.unit49.lesson01.waste_disposal_vocabulary
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit_pool}
+    slots: {item: *translate_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit49.lesson02.translate.001
     lesson_content_key: en.a1.unit49.lesson02.sorting_your_waste
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit_pool}
+    slots: {item: *translate_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit49.lesson03.translate.001
     lesson_content_key: en.a1.unit49.lesson03.dialogue_sorting_the_recycling
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit_pool}
+    slots: {item: *translate_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit49.lesson04.translate.001
     lesson_content_key: en.a1.unit49.lesson04.how_waste_sorting_works
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit_pool}
+    slots: {item: *translate_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit49.lesson01.match.001
