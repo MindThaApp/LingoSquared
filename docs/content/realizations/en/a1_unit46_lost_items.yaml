@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft. Realizes universal.a1.lost_items.report_lost_item, the
     next unrealized outcome in the shared English realization (fa-en/nl-en/
@@ -137,6 +137,30 @@ review:
     the mandatory fresh-context review before any overlay authors build on
     it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    against the nl-en overlay of this unit (and the fa-en/prs-en overlays
+    where accepted answers are copied), listen distractors against the full
+    dialogue audio, speaker attribution, matching lefts, and course-wide
+    untaught tokens (only the usual English meta-instruction words flagged,
+    by convention). translation answer-leak target_block removed
+    (coordinator sweep):
+    en.a1.unit46.lesson02.exercise05.translate_i_lost_my_wallet now has
+    target_blocks: []. Fixes:
+    en.a1.unit46.lesson04.exercise04.write_own_lost_item_message -- Removed
+    the ungrammatical statement-plus-command/question ', and' joins from
+    this key in this file and in the nl-en, fa-en and prs-en overlays (3
+    entries). and added 'I lost my keys. Has anyone found them?', 'I lost my
+    backpack. Has anyone found it?', 'I lost my wallet. Have you seen it?'
+    (the prompt asks whether anyone has found it) here and in fa-en/prs-en
+    (nl-en already had them).
+    en.a1.unit46.lesson03.exercise04.respond_own_lost_item_report -- copied
+    the nl-en widened list (Have you seen my wallet/backpack?, Has anyone
+    found my keys/wallet/backpack?, Where is the lost and found?, I
+    have/I've lost my ... variants) into this file and the fa-en and prs-en
+    overlays. fa-en/prs-en lesson02.exercise05 also accept 'I have lost my
+    wallet.' / 'I've lost my wallet.' (as nl-en does). No native flags;
+    nothing deferred.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -191,7 +215,7 @@ units:
           - {content_key: "en.a1.unit46.lesson02.exercise02.choose_has_anyone_found_meaning", type: "multiple_choice", tested_text: "Has anyone found a backpack?", prompt: {target_blocks: [{text: "Which phrase asks whether someone else found your bag?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson02.exercise03.choose_its_black_meaning", type: "multiple_choice", tested_text: "It's black with a red strap.", prompt: {target_blocks: [{text: "Which phrase describes what a lost item looks like?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson02.exercise04.order_have_you_seen_sentence", type: "word_order", tested_text: "Have you seen my keys?", word_bank: ["Have", "you", "seen", "my", "keys?"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit46.lesson02.exercise05.translate_i_lost_my_wallet", type: "translation", tested_text: "I lost my wallet.", prompt: {target_blocks: [{text: "Translate: \"I lost my wallet.\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit46.lesson02.exercise05.translate_i_lost_my_wallet", type: "translation", tested_text: "I lost my wallet.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit46.lesson03.dialogue_missing_backpack"
         title: "Dialogue: A missing backpack"
@@ -208,7 +232,7 @@ units:
           - {content_key: "en.a1.unit46.lesson03.exercise01.comprehension_whats_inside", type: "multiple_choice", tested_text: "camera", prompt: {target_blocks: [{text: "According to the dialogue, what is inside Mia's backpack?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson03.exercise02.comprehension_where_they_were", type: "multiple_choice", tested_text: "near the fountain", prompt: {target_blocks: [{text: "According to the dialogue, where were Daniel and Mia when the backpack went missing?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson03.exercise03.listen_dialogue_strap_color", type: "listen_select", tested_text: "yellow", media_asset_key: "en.a1.audio.dialogue.lost_items.01", prompt: {target_blocks: [{text: "According to the dialogue, what color is the strap on Mia's backpack?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit46.lesson03.exercise04.respond_own_lost_item_report", type: "speak_response", tested_text: "I lost my wallet", accepted_answers: ["I lost my wallet", "I lost my wallet.", "I lost my keys", "I lost my keys.", "I lost my backpack", "I lost my backpack.", "Have you seen my keys?", "Has anyone found a backpack?", "Where's the lost and found?"], prompt: {target_blocks: [{text: "Say that you lost an item, or ask whether someone found it.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit46.lesson03.exercise04.respond_own_lost_item_report", type: "speak_response", tested_text: "I lost my wallet", accepted_answers: ["I lost my wallet", "I lost my wallet.", "I lost my keys", "I lost my keys.", "I lost my backpack", "I lost my backpack.", "Have you seen my keys?", "Has anyone found a backpack?", "Where's the lost and found?", "Where is the lost and found?", "Have you seen my wallet?", "Have you seen my backpack?", "Has anyone found my keys?", "Has anyone found my wallet?", "Has anyone found my backpack?", "Has anyone found a wallet?", "I have lost my wallet.", "I have lost my keys.", "I have lost my backpack.", "I've lost my wallet.", "I've lost my keys.", "I've lost my backpack."], prompt: {target_blocks: [{text: "Say that you lost an item, or ask whether someone found it.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit46.lesson04.lost_and_found_notice"
         title: "Reading: The lost and found"
@@ -219,4 +243,4 @@ units:
           - {content_key: "en.a1.unit46.lesson04.exercise01.reading_first_step", type: "multiple_choice", tested_text: "think about where you last had it", prompt: {target_blocks: [{text: "According to the notice, what should you do first if you lose an item in the park?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson04.exercise02.reading_what_to_describe", type: "multiple_choice", tested_text: "its color and special details", prompt: {target_blocks: [{text: "According to the notice, what should you describe about the lost item?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit46.lesson04.exercise03.reading_who_mia_told", type: "multiple_choice", tested_text: "Leila", prompt: {target_blocks: [{text: "According to the reading, who did Mia tell about the whole story afterward?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit46.lesson04.exercise04.write_own_lost_item_message", type: "writing_prompt", tested_text: "I lost my wallet. Has anyone found it?", prompt: {target_blocks: [{text: "Write a short message: say that you lost an item and ask whether anyone has found it.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I lost my keys. Have you seen them?", "I lost my keys. Have you seen them.", "I lost my keys, have you seen them?", "I lost my keys, and have you seen them?", "I lost my wallet. Has anyone found it?", "I lost my wallet. Has anyone found it.", "I lost my wallet, has anyone found it?", "I lost my wallet, and has anyone found it?", "I lost my backpack. Have you seen it?", "I lost my backpack. Have you seen it.", "I lost my backpack, have you seen it?", "I lost my backpack, and have you seen it?"]}
+          - {content_key: "en.a1.unit46.lesson04.exercise04.write_own_lost_item_message", type: "writing_prompt", tested_text: "I lost my wallet. Has anyone found it?", prompt: {target_blocks: [{text: "Write a short message: say that you lost an item and ask whether anyone has found it.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I lost my keys. Have you seen them?", "I lost my keys. Have you seen them.", "I lost my keys, have you seen them?", "I lost my wallet. Has anyone found it?", "I lost my wallet. Has anyone found it.", "I lost my wallet, has anyone found it?", "I lost my backpack. Have you seen it?", "I lost my backpack. Have you seen it.", "I lost my backpack, have you seen it?", "I lost my keys. Has anyone found them?", "I lost my wallet. Have you seen it?", "I lost my backpack. Has anyone found it?"]}
