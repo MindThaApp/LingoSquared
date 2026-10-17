@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Second German (de) unit, continuing the Anna/Felix storyline from
     unit01 (they met as neighbors in the stairwell, exchanged greetings
@@ -107,6 +107,27 @@ review:
     lesson04's own "komme aus + country" grammar point, reinforcing
     rather than duplicating what's about to be taught. schema_version
     bumped to 1.1.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    Checked pacing, token coverage, accepted-answer completeness against
+    taught forms, cue/dialogue consistency, register, and
+    learner-visible wording, together with the en-de overlay. Fixes:
+    de.a1.unit02.lesson05.exercise06.reply_as_anna and
+    lesson05.exercise07.speak_bushaltestelle_dialogue
+    prompt.target_blocks "Guten Tag! Wie heißen Sie? ... Ganz
+    meinerseits. Woher kommen Sie?" -> "Ich heiße Felix. Und Sie?" (the
+    cue opened with Anna's own line, and 'Ganz meinerseits' preceded the
+    'Freut mich' the learner is asked to produce); overlay side:
+    instructions now say "the formal goodbye" (Tschüss was taught), "Ich
+    bin Anna. ..." variant (+ unpunctuated) accepted for both, 'heisse'
+    variants added to exercise07 for parity with exercise06, exercise06
+    instruction de-sequenced to match the cue;
+    lesson01.exercise05.reply_and_pleased "A friend" -> "Someone your
+    age"; internal token "unit01" -> "Unit 1" in 7 learner-visible
+    overlay notes/feedback. No NATIVE flags. DEFERRED (pipeline,
+    Codex/frontend lane): listen_select lesson05.exercise02 audio_text =
+    tested_text over a full-dialogue asset (TTS fallback could speak
+    only the answer).
 
 course:
   realization_key: "de.a1"
@@ -250,10 +271,10 @@ units:
           - content_key: "de.a1.unit02.lesson05.exercise06.reply_as_anna"
             type: "dialogue_response"
             tested_text: "Ich heiße Anna Freut mich Ich komme aus Deutschland Und Sie Auf Wiedersehen"
-            prompt: {target_blocks: [{text: "Guten Tag! Wie heißen Sie? ... Ganz meinerseits. Woher kommen Sie?", language_code: "de", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "Ich heiße Felix. Und Sie?", language_code: "de", direction: "ltr"}]}
           - content_key: "de.a1.unit02.lesson05.exercise07.speak_bushaltestelle_dialogue"
             type: "speak_response"
             tested_text: "Ich heiße Anna Freut mich Ich komme aus Deutschland Und Sie Auf Wiedersehen"
-            prompt: {target_blocks: [{text: "Guten Tag! Wie heißen Sie? ... Ganz meinerseits. Woher kommen Sie?", language_code: "de", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "Ich heiße Felix. Und Sie?", language_code: "de", direction: "ltr"}]}
           - {content_key: "de.a1.unit02.lesson05.exercise08.read_profile_name", type: "reading_comprehension", tested_text: "Felix", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit02.lesson05.exercise09.read_profile_country", type: "reading_comprehension", tested_text: "England", prompt: {target_blocks: []}}
