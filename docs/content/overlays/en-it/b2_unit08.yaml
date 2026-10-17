@@ -6,7 +6,7 @@ target_language: it
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-Italian confirmation needed (DRAFT). Confirm every English gloss
     matches idiomatic Italian, that every matching_pairs right-hand gloss
@@ -25,6 +25,38 @@ review:
     point of"), so it's glossed as a whole unit; (3) "tutto sommato" (all
     things considered) is idiomatic and doesn't translate word-for-word. No
     sibling-direction file (it-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    reviewed together with realizations/it/b2_unit08_sintesi.yaml (see its
+    review block for the full list). Fixes:
+    it.b2.unit08.lesson01.exercise01.recognize_secondo distractor 'second'
+    (a real meaning of bare secondo) replaced by 'despite';
+    lesson02.exercise03.match_comparison_words dropped the 'tutte e due'
+    pair (interchangeable with entrambe) from realization pairs, tested_text
+    and overlay accepted value; lesson01.exercise05.translate_afferma
+    feedback and lesson01.teach.afferma_che note softened (affermare che
+    usually takes the indicative, sostenere che often the congiuntivo) so
+    they no longer contradict the accepted 'afferma che sia' variant;
+    lesson06.teach.grammar_sintesi_completa gloss changed from 'I agree/I
+    disagree' to 'They agree/They disagree' plus a note that sono d'accordo
+    can mean I agree or they agree; lesson06.exercise07.respond_judgement
+    prompt changed from 'Quale recensione è la più convincente?' to 'Chi è
+    il più convincente?' (agrees with the required 'Il più convincente è
+    Marco'), overlay instruction updated to match;
+    lesson06.exercise05.speak_sintesi accepts the three-sentence form
+    without ma (with and without final period). NATIVE FLAGS: 'dà una
+    ragione' for 'gives a reason' (dare ragione = agree someone is right;
+    consider 'dà una motivazione'); 'sul punto di' taught standalone as 'on
+    the point of' (essere sul punto di = to be about to); 'Il cibo a La
+    Bottega', 'Marco al contrario è negativo' (commas), 'Giulia è positiva'
+    of a reviewer; order_secondo_giulia also allows 'Il cibo è buono secondo
+    Giulia' (capitalized tile pins the order; confirm grader case handling);
+    'chi' in the new respond_judgement prompt is not an introduced token in
+    this file (basic A1 word; lesson01 title already uses it). DEFERRED:
+    course.description differs across en-it B2 overlays (b2_unit01,
+    b2_unit07, b2_unit08) -- owner decision on unification; confirm the
+    'self-contained vocabulary per tier (separate Course row)' scoping
+    assumption with the owner.
 
 course:
   title: Italian B2
@@ -80,7 +112,7 @@ teaching:
   it.b2.unit08.lesson01.teach.afferma_che:
     title: "to state/claim (afferma) that"
     gloss: "to state/claim (afferma) that"
-    note: "*Affermare* is assertive/declarative, so it takes the INDICATIVE (*è*) -- unlike *sostenere che*, which pairs with the congiuntivo (*sia*)."
+    note: "*Affermare che* usually takes the indicative (*è*); *sostenere che* often takes the congiuntivo (*sia*), though the indicative is also common."
     example_gloss: "Marco claims that it's too expensive."
   it.b2.unit08.lesson01.teach.si_capisce_che:
     title: "the review makes clear that"
@@ -223,14 +255,14 @@ teaching:
     gloss: "Sam: We agree about the food, then, but not about the price."
   it.b2.unit08.lesson06.teach.grammar_sintesi_completa:
     title: "A full synthesis"
-    gloss: "I agree about the food. I disagree about the price. The most convincing is Marco, because he gives a reason."
-    note: "A complete synthesis names the agreement, names the conflict, and gives a reasoned judgement -- all three parts, not just one."
+    gloss: "They agree about the food. They disagree about the price. The most convincing is Marco, because he gives a reason."
+    note: "A complete synthesis names the agreement, names the conflict, and gives a reasoned judgement -- all three parts, not just one. *Sono d'accordo* can mean 'I agree' or 'they agree' -- context decides."
 
 exercises:
   it.b2.unit08.lesson01.exercise01.recognize_secondo:
     instruction: "What does this word mean?"
     correct_option: "according to"
-    distractors: [second, "because of", "instead of"]
+    distractors: [despite, "because of", "instead of"]
     accepted_answers: [{value: "according to", status: correct}]
     feedback: "*Secondo* means according to."
   it.b2.unit08.lesson01.exercise02.listen_secondo_giulia:
@@ -255,7 +287,7 @@ exercises:
     accepted_answers:
       - {value: "Marco afferma che è troppo caro", status: correct}
       - {value: "Marco afferma che sia troppo caro", status: correct}
-    feedback: "*Marco afferma che è troppo caro* means Marco claims that it is too expensive -- *affermare* is assertive and takes the indicative (*è*), not the congiuntivo."
+    feedback: "*Marco afferma che è troppo caro* means Marco claims that it is too expensive -- *affermare* usually takes the indicative (*è*)."
   it.b2.unit08.lesson01.exercise06.speak_secondo_giulia:
     instruction: "Say aloud in Italian, using secondo: According to Giulia, it isn't expensive."
     accepted_answers:
@@ -287,7 +319,7 @@ exercises:
   it.b2.unit08.lesson02.exercise03.match_comparison_words:
     instruction: "Match each Italian word or phrase with its meaning."
     accepted_answers:
-      - value: {entrambe: "both (of them)", "tutte e due": "both (the two)", mentre: whereas, "al contrario": "by contrast", "a differenza di": "in contrast to", "da un lato ... dall'altro": "on one hand ... on the other", economico: "cheap / inexpensive"}
+      - value: {entrambe: "both (of them)", mentre: whereas, "al contrario": "by contrast", "a differenza di": "in contrast to", "da un lato ... dall'altro": "on one hand ... on the other", economico: "cheap / inexpensive"}
         status: correct
     feedback: "These are this lesson's comparison words."
   it.b2.unit08.lesson02.exercise04.order_entrambe_buono:
@@ -466,6 +498,8 @@ exercises:
     accepted_answers:
       - {value: "Sono d'accordo sul cibo, ma non sono d'accordo sul prezzo. Il più convincente è Marco.", status: correct}
       - {value: "Sono d'accordo sul cibo, ma non sono d'accordo sul prezzo. Il più convincente è Marco", status: correct}
+      - {value: "Sono d'accordo sul cibo. Non sono d'accordo sul prezzo. Il più convincente è Marco.", status: correct}
+      - {value: "Sono d'accordo sul cibo. Non sono d'accordo sul prezzo. Il più convincente è Marco", status: correct}
     feedback: "*Sono d'accordo sul cibo, ma non sono d'accordo sul prezzo. Il più convincente è Marco.*"
   it.b2.unit08.lesson06.exercise06.write_sintesi:
     instruction: "Write a THREE-sentence synthesis of the two reviews. (1) Name their AGREEMENT, using essere d'accordo su: They agree about the food. (2) Name their CONFLICT, using non essere d'accordo su: They disagree about the price. (3) Give a reasoned JUDGEMENT, using il più convincente è + perché: The most convincing is Marco, because he gives a reason."
@@ -475,7 +509,7 @@ exercises:
       - {value: "Sono d'accordo sul cibo. Non sono d'accordo sul prezzo. Il più convincente è Marco, perché lui dà una ragione", status: correct}
     feedback: "*Sono d'accordo sul cibo. Non sono d'accordo sul prezzo. Il più convincente è Marco, perché lui dà una ragione.*"
   it.b2.unit08.lesson06.exercise07.respond_judgement:
-    instruction: "Reply to 'Quale recensione è la più convincente?' (Which review is the most convincing?) with a reasoned judgement, using perché: The most convincing is Marco, because he gives a reason."
+    instruction: "Reply to 'Chi è il più convincente?' (Who is the most convincing?) with a reasoned judgement, using perché: The most convincing is Marco, because he gives a reason."
     accepted_answers:
       - {value: "Il più convincente è Marco, perché lui dà una ragione", status: correct}
       - {value: "Il più convincente è Marco perché lui dà una ragione", status: correct}
