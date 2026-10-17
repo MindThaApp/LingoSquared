@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked course-cumulative token use, Настя/Дима character canon (u12, u17), prompt determinacy (overlay instruction + realization target_blocks are both learner-visible), accepted-answer completeness (§12), gendered first-person answers, example_gloss accuracy, and learner-visible notes. Fixes: ru.a1.unit23.lesson03.exercise09.write_basic_call prompt (overlay instruction + realization target_blocks) pinned to open with 'Hello, this is Dima.', plus comma- and и-joined variants accepted; ru.a1.unit23.lesson03.teach.nastya_govori_medlenno note replaced (was course-construction text) with a language note; ru.a1.unit23.lesson03.exercise08.write_phone_message accepts 'Говори медленно, пожалуйста, и повтори, пожалуйста.' and the comma-joined form; ru.a1.unit23.lesson02.exercise08.write_repeat_request and lesson03.exercise06.reply_vstrecha accept 'Пожалуйста, повтори.'; ru.a1.unit23.lesson01.teach.medlenno note trimmed to 'медленно means slowly.' (dropped confusing 'more' claim). NATIVE FLAG: natives often say 'Говори помедленнее' rather than 'Говори медленно'; acceptable at A1. DEFERRED: none."
 
 course:
   title: "Russian A1"
@@ -22,12 +25,12 @@ lessons:
 teaching:
   ru.a1.unit23.lesson01.teach.allo_eto_dima: {title: "Алло, это Дима.", gloss: "Hello, this is Dima.", note: "Алло is used when answering or opening a phone call.", example_gloss: "Hello, Nastya? This is Dima."}
   ru.a1.unit23.lesson01.teach.govori: {title: "говори", gloss: "speak", note: "говори is an informal request to one person.", example_gloss: "Speak slowly."}
-  ru.a1.unit23.lesson01.teach.medlenno: {title: "медленно", gloss: "slowly", note: "медленно means \"slowly.\" English speakers often try to add an extra word for \"more,\" but this simple request is enough.", example_gloss: "Speak slowly, please."}
+  ru.a1.unit23.lesson01.teach.medlenno: {title: "медленно", gloss: "slowly", note: "медленно means \"slowly.\"", example_gloss: "Speak slowly, please."}
   ru.a1.unit23.lesson02.teach.povtori: {title: "Повтори, пожалуйста.", gloss: "Repeat, please.", note: "Повтори is informal, suitable for a friend.", example_gloss: "Dima, repeat, please."}
   ru.a1.unit23.lesson02.teach.napishi: {title: "напиши", gloss: "write / text", note: "напиши can mean write or text someone in this context.", example_gloss: "Text me."}
   ru.a1.unit23.lesson02.teach.soobshchenie: {title: "сообщение", gloss: "message", note: "сообщение means \"message.\"", example_gloss: "This is a message from Dima."}
   ru.a1.unit23.lesson03.teach.dima_allo_nastya: {title: "Dima opens the call", gloss: "Dima: Hello, Nastya? This is Dima.", note: "Дима identifies himself clearly on the phone."}
-  ru.a1.unit23.lesson03.teach.nastya_govori_medlenno: {title: "Nastya asks him to speak slowly", gloss: "Nastya: Hi, Dima. Speak slowly, please.", note: "This fulfills the clarification request part of the phone outcome."}
+  ru.a1.unit23.lesson03.teach.nastya_govori_medlenno: {title: "Nastya asks him to speak slowly", gloss: "Nastya: Hi, Dima. Speak slowly, please.", note: "Говори медленно, пожалуйста asks someone to speak slowly; Привет is an informal greeting for a friend."}
   ru.a1.unit23.lesson03.teach.dima_vstrecha_sem: {title: "Dima gives the detail", gloss: "Dima: The meeting is at seven o'clock.", note: "The key detail is the time."}
   ru.a1.unit23.lesson03.teach.nastya_povtori: {title: "Nastya asks for repetition", gloss: "Nastya: Repeat, please.", note: "Повтори, пожалуйста is a second clarification strategy."}
   ru.a1.unit23.lesson03.teach.dima_v_sem_u_kino: {title: "Dima repeats with location", gloss: "Dima: At seven o'clock by the movie theater.", note: "He repeats and adds the meeting place."}
@@ -143,6 +146,8 @@ exercises:
     accepted_answers:
       - {value: "Повтори, пожалуйста.", status: "correct"}
       - {value: "Повтори пожалуйста", status: "correct"}
+      - {value: "Пожалуйста, повтори.", status: "correct"}
+      - {value: "Пожалуйста повтори", status: "correct"}
     feedback: "Повтори, пожалуйста. is a polite informal request."
 
   ru.a1.unit23.lesson03.exercise01.choose_ask_slowly:
@@ -185,6 +190,8 @@ exercises:
     accepted_answers:
       - {value: "Повтори, пожалуйста.", status: "correct"}
       - {value: "Повтори пожалуйста", status: "correct"}
+      - {value: "Пожалуйста, повтори.", status: "correct"}
+      - {value: "Пожалуйста повтори", status: "correct"}
     feedback: "Повтори, пожалуйста. asks the speaker to repeat."
   ru.a1.unit23.lesson03.exercise07.complete_vstrecha:
     instruction: "Complete the sentence: Встреча в ___ часов. (seven)"
@@ -197,10 +204,14 @@ exercises:
     accepted_answers:
       - {value: "Говори медленно, пожалуйста. Повтори, пожалуйста.", status: "correct"}
       - {value: "Говори медленно пожалуйста. Повтори пожалуйста.", status: "correct"}
+      - {value: "Говори медленно, пожалуйста, и повтори, пожалуйста.", status: "correct"}
+      - {value: "Говори медленно, пожалуйста, повтори, пожалуйста.", status: "correct"}
     feedback: "A complete answer uses both Говори медленно and Повтори."
   ru.a1.unit23.lesson03.exercise09.write_basic_call:
-    instruction: "Write a short phone call opening, then ask the friend to speak slowly and repeat."
+    instruction: "Write a short phone call: open with \"Hello, this is Dima.\", then ask the friend to speak slowly and to repeat."
     accepted_answers:
       - {value: "Алло, это Дима. Говори медленно, пожалуйста. Повтори, пожалуйста.", status: "correct"}
       - {value: "Алло это Дима. Говори медленно пожалуйста. Повтори пожалуйста.", status: "correct"}
+      - {value: "Алло, это Дима. Говори медленно, пожалуйста, и повтори, пожалуйста.", status: "correct"}
+      - {value: "Алло, это Дима. Говори медленно, пожалуйста, повтори, пожалуйста.", status: "correct"}
     feedback: "A complete answer opens the call with Алло, это Дима and uses both clarification requests."
