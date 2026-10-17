@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked grading (strict Cyrillic), underdetermined/incoherent production prompts, gendered first person (all согласен/согласна answers pinned by speaker), learner-visible notes, example_gloss vs example, character canon (Настя teacher holds the school view). Fixes: ru.a2.unit26.lesson03.exercise06.write_opinion_response rewritten (it had Настя argue Dima's view then disagree with herself, and was an open prompt with fixed answers) - instruction in overlay and realization prompt now pins the reply \"I understand, but I disagree\" + reason about working together with people at school, tested_text/accepted_answers/feedback updated to Понимаю, но я не согласна, потому что в школе лучше работать вместе с людьми (with Я понимаю / sentence-split / without с людьми variants); ru.a2.unit26.lesson03.exercise05.respond_opinion instruction pinned to the disagree + school reason and accepted widened with вместе с людьми and sentence-split variants; ru.a2.unit26.lesson01.exercise06.write_opinion accepts ... потому что это быстро; ru.a2.unit26.lesson03.exercise04.order_dlya_menya accepts Для меня спокойнее дома; ru.a2.unit26.lesson03.teach.nastya_ne_soglasna note no longer mentions canon; ru.a2.unit26.lesson02.teach.ne_soglasna example now illustrates the phrase (Я не согласна, потому что это трудно. / I disagree because this is hard.). NATIVE FLAG: ru.a2.unit26.lesson03.teach.dima_ponimayu example (Это удобно, но трудно.) does not illustrate its line (it carries the но token; kept). DEFERRED: grader-level ё/е equivalence (owner decision)."
 
 course:
   title: "Russian A2"
@@ -24,11 +27,11 @@ teaching:
   ru.a2.unit26.lesson01.teach.ya_dumayu: {title: "Я думаю, что это важно.", gloss: "I think that this is important.", note: "Unlike English, Russian often keeps *что* after *Я думаю*.", example_gloss: "I think Russian is important."}
   ru.a2.unit26.lesson01.teach.potomu_chto: {title: "потому что", gloss: "because", note: "*потому что* introduces the reason.", example_gloss: "It is convenient because it is quick."}
   ru.a2.unit26.lesson02.teach.soglasen: {title: "согласен", gloss: "agree", note: "*согласен* is for a male speaker; *согласна* is for a female speaker.", example_gloss: "Dima agrees."}
-  ru.a2.unit26.lesson02.teach.ne_soglasna: {title: "Я не согласна.", gloss: "I disagree. (female speaker)", note: "Настя uses *согласна* because she is female.", example_gloss: "This is hard."}
+  ru.a2.unit26.lesson02.teach.ne_soglasna: {title: "Я не согласна.", gloss: "I disagree. (female speaker)", note: "Настя uses *согласна* because she is female.", example_gloss: "I disagree because this is hard."}
   ru.a2.unit26.lesson02.teach.ponimayu: {title: "понимаю", gloss: "I understand", note: "*Понимаю* softens a disagreement before giving your own view.", example_gloss: "I understand your opinion."}
   ru.a2.unit26.lesson03.teach.nastya_kak_dumayesh: {title: "Nastya asks for Dima's opinion", gloss: "Nastya: Dima, what do you think, is working at home convenient?", note: "Friends use informal *ты*."}
   ru.a2.unit26.lesson03.teach.dima_udobno: {title: "Dima gives an opinion and reason", gloss: "Dima: In my opinion, it is convenient because there is no need to travel to the office.", note: "This line has both the opinion and the reason."}
-  ru.a2.unit26.lesson03.teach.nastya_ne_soglasna: {title: "Nastya gives a contrasting opinion", gloss: "Nastya: I disagree. At school it is better to work together with people.", note: "Her reason fits her established teacher canon."}
+  ru.a2.unit26.lesson03.teach.nastya_ne_soglasna: {title: "Nastya gives a contrasting opinion", gloss: "Nastya: I disagree. At school it is better to work together with people.", note: "Настя is a teacher, so she values working with people at school."}
   ru.a2.unit26.lesson03.teach.dima_ponimayu: {title: "Dima responds", gloss: "Dima: I understand. For me, it is calmer at home.", note: "This responds to someone else's opinion without changing register.", example_gloss: "It is convenient, but difficult."}
 
 exercises:
@@ -78,6 +81,8 @@ exercises:
       - {value: "По-моему, это удобно, потому что быстро.", status: "correct"}
       - {value: "По-моему это удобно потому что быстро", status: "correct"}
       - {value: "Я думаю, что это удобно, потому что быстро.", status: "correct"}
+      - {value: "По-моему, это удобно, потому что это быстро.", status: "correct"}
+      - {value: "Я думаю, что это удобно, потому что это быстро.", status: "correct"}
     feedback: "A complete answer includes an opinion plus *потому что*."
   ru.a2.unit26.lesson02.exercise01.recognize_soglasen:
     instruction: "Which word means \"agree\" for a male speaker?"
@@ -145,18 +150,24 @@ exercises:
     feedback: "These lines ask, give, and respond to opinions."
   ru.a2.unit26.lesson03.exercise04.order_dlya_menya:
     instruction: "Put the words in order to say \"For me, it is calmer at home.\""
-    accepted_answers: [{value: ["Для", "меня", "дома", "спокойнее"], status: "correct"}]
+    accepted_answers: [{value: ["Для", "меня", "дома", "спокойнее"], status: "correct"}, {value: ["Для", "меня", "спокойнее", "дома"], status: "correct"}]
     feedback: "The correct order is *Для меня дома спокойнее*."
   ru.a2.unit26.lesson03.exercise05.respond_opinion:
-    instruction: "Dima says \"По-моему, работать дома удобно.\" Respond with a contrasting female-speaker opinion and a reason about school."
+    instruction: "Dima says \"По-моему, работать дома удобно.\" Respond as Настя: say you disagree and give the reason that at school it is better to work together with people."
     accepted_answers:
       - {value: "Я не согласна, потому что в школе лучше работать вместе.", status: "correct"}
       - {value: "Я не согласна потому что в школе лучше работать вместе", status: "correct"}
+      - {value: "Я не согласна, потому что в школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Я не согласна. В школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Я не согласна. В школе лучше работать вместе.", status: "correct"}
     feedback: "The answer names disagreement and gives the reason."
   ru.a2.unit26.lesson03.exercise06.write_opinion_response:
-    instruction: "As Настя, write two short sentences: give an opinion about working at home with a reason, then respond to the contrasting opinion with \"I understand, but I disagree\" and a reason."
+    instruction: "As Настя, reply to Dima's view that working at home is convenient: say \"I understand, but I disagree\" and give the reason that at school it is better to work together with people."
     accepted_answers:
-      - {value: "По-моему, работать дома удобно, потому что дома спокойнее. Я понимаю, но я не согласна, потому что в школе лучше работать вместе.", status: "correct"}
-      - {value: "По-моему работать дома удобно потому что дома спокойнее. Я понимаю но я не согласна потому что в школе лучше работать вместе.", status: "correct"}
-      - {value: "Я думаю, что работать дома удобно, потому что дома спокойнее. Я понимаю, но я не согласна, потому что в школе лучше работать вместе.", status: "correct"}
-    feedback: "A complete response gives your opinion, reason, and a response to the other view."
+      - {value: "Понимаю, но я не согласна, потому что в школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Я понимаю, но я не согласна, потому что в школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Понимаю, но я не согласна. В школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Я понимаю, но я не согласна. В школе лучше работать вместе с людьми.", status: "correct"}
+      - {value: "Понимаю, но я не согласна, потому что в школе лучше работать вместе.", status: "correct"}
+      - {value: "Я понимаю, но я не согласна, потому что в школе лучше работать вместе.", status: "correct"}
+    feedback: "The model answer is *Понимаю, но я не согласна, потому что в школе лучше работать вместе с людьми*."
