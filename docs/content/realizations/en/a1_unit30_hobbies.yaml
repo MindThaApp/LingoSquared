@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Four-lesson draft, authored directly (Codex usage-limited at time
     of authoring, standing outage contingency). Realizes
@@ -25,6 +25,29 @@ review:
     example sentence, no future retrofit needed. Audio remains
     pending generation. Draft only — needs the mandatory fresh-context
     review before any overlay authors build on it.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md
+    checklist): checked against nl-en overlay a1_unit25 and
+    fa-en/prs-en a1_unit30. Fixes: lesson02.teach.never example 'I
+    never watch video games late at night.' -> 'I never play video
+    games at night.' (wrong collocation; 'late' untaught; now
+    matches the existing fa-en example_gloss exactly).
+    lesson02.teach.rarely example 'He rarely goes painting in
+    winter.' -> 'He rarely paints in winter.' (non-standard go +
+    painting; kept 'winter' so the existing fa-en example_gloss
+    stays accurate without a Persian edit).
+    lesson02.exercise05.translate_free_time_question: translation
+    answer-leak target_block removed (coordinator sweep).
+    lesson03.exercise04.respond_to_question: 'I like playing video
+    games' added (realization inline + nl-en/fa-en/prs-en).
+    lesson04.exercise04.write_own_hobby: 'I like playing video
+    games' / 'I love playing video games' added (realization
+    inline + nl-en/fa-en/prs-en). NATIVE FLAGS: reading passage
+    'They both like video games' sits uneasily with Leila's
+    'Rarely. I prefer reading a book.'; nl-en gloss renders both
+    'I like reading' and 'I love painting' as 'Ik hou van ...'
+    (like/love blur, Dutch native call). DEFERRED: none beyond the
+    class-wide items handled by the coordinator.
 
 course:
   realization_key: "en.a1"
@@ -73,15 +96,15 @@ units:
           - {content_key: "en.a1.unit30.lesson02.teach.always", kind: "vocabulary", target: {text: "always", language_code: "en", direction: "ltr"}, introduced_tokens: ["always"], example: {text: "I always go running on Saturdays.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit30.lesson02.teach.often", kind: "vocabulary", target: {text: "often", language_code: "en", direction: "ltr"}, introduced_tokens: ["often", "She", "cooks", "dinner", "for", "her", "family"], example: {text: "She often cooks dinner for her family.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit30.lesson02.teach.sometimes", kind: "vocabulary", target: {text: "sometimes", language_code: "en", direction: "ltr"}, introduced_tokens: ["sometimes"], example: {text: "We sometimes play video games together.", language_code: "en", direction: "ltr"}}
-          - {content_key: "en.a1.unit30.lesson02.teach.rarely", kind: "vocabulary", target: {text: "rarely", language_code: "en", direction: "ltr"}, introduced_tokens: ["rarely"], example: {text: "He rarely goes painting in winter.", language_code: "en", direction: "ltr"}}
-          - {content_key: "en.a1.unit30.lesson02.teach.never", kind: "vocabulary", target: {text: "never", language_code: "en", direction: "ltr"}, introduced_tokens: ["never"], example: {text: "I never watch video games late at night.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit30.lesson02.teach.rarely", kind: "vocabulary", target: {text: "rarely", language_code: "en", direction: "ltr"}, introduced_tokens: ["rarely"], example: {text: "He rarely paints in winter.", language_code: "en", direction: "ltr"}}
+          - {content_key: "en.a1.unit30.lesson02.teach.never", kind: "vocabulary", target: {text: "never", language_code: "en", direction: "ltr"}, introduced_tokens: ["never"], example: {text: "I never play video games at night.", language_code: "en", direction: "ltr"}}
           - {content_key: "en.a1.unit30.lesson02.teach.free_time_question", kind: "phrase", target: {text: "What do you do in your free time?", language_code: "en", direction: "ltr"}, introduced_tokens: ["What", "do", "you", "in", "your", "free", "time"]}
         exercises:
           - {content_key: "en.a1.unit30.lesson02.exercise01.listen_frequency", type: "listen_select", tested_text: "often", media_asset_key: "en.a1.audio.hobbies.frequency.often.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit30.lesson02.exercise02.choose_never_meaning", type: "multiple_choice", tested_text: "never", prompt: {target_blocks: [{text: "Which word means zero times, not ever?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson02.exercise03.choose_most_frequent", type: "multiple_choice", tested_text: "always", prompt: {target_blocks: [{text: "Which word means every single time, 100% of the time?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson02.exercise04.order_frequency_sentence", type: "word_order", tested_text: "She often cooks dinner for her family.", word_bank: ["She", "often", "cooks", "dinner", "for", "her", "family"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit30.lesson02.exercise05.translate_free_time_question", type: "translation", tested_text: "What do you do in your free time?", prompt: {target_blocks: [{text: "Translate: \"What do you do in your free time?\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit30.lesson02.exercise05.translate_free_time_question", type: "translation", tested_text: "What do you do in your free time?", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit30.lesson03.dialogue_free_time"
         title: "Dialogue: Free time"
@@ -97,7 +120,7 @@ units:
           - {content_key: "en.a1.unit30.lesson03.exercise01.comprehension_daniel_hobby", type: "multiple_choice", tested_text: "running", prompt: {target_blocks: [{text: "According to the dialogue, what does Daniel often do?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson03.exercise02.comprehension_leila_frequency", type: "multiple_choice", tested_text: "Rarely", prompt: {target_blocks: [{text: "How often does Leila play video games?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson03.exercise03.listen_dialogue_leila_hobby", type: "listen_select", tested_text: "painting", media_asset_key: "en.a1.audio.dialogue.hobbies.01", prompt: {target_blocks: [{text: "What does Leila love doing?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit30.lesson03.exercise04.respond_to_question", type: "speak_response", tested_text: "I like reading", accepted_answers: ["I like reading", "I like reading.", "I like cooking", "I like cooking.", "I like painting", "I like painting.", "I like running", "I like running.", "I like video games", "I like video games."], prompt: {target_blocks: [{text: "Answer: What do you do in your free time?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit30.lesson03.exercise04.respond_to_question", type: "speak_response", tested_text: "I like reading", accepted_answers: ["I like reading", "I like reading.", "I like cooking", "I like cooking.", "I like painting", "I like painting.", "I like running", "I like running.", "I like video games", "I like video games.", "I like playing video games", "I like playing video games."], prompt: {target_blocks: [{text: "Answer: What do you do in your free time?", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit30.lesson04.comparing_hobbies"
         title: "Comparing hobbies"
@@ -108,4 +131,4 @@ units:
           - {content_key: "en.a1.unit30.lesson04.exercise01.reading_who_runs", type: "multiple_choice", tested_text: "Daniel", prompt: {target_blocks: [{text: "According to the reading, who goes running?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson04.exercise02.reading_leila_frequency", type: "multiple_choice", tested_text: "never", prompt: {target_blocks: [{text: "How often does Leila go running?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit30.lesson04.exercise03.reading_shared_hobby", type: "multiple_choice", tested_text: "video games", prompt: {target_blocks: [{text: "Which hobby do both Daniel and Leila enjoy?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit30.lesson04.exercise04.write_own_hobby", type: "writing_prompt", tested_text: "I like", prompt: {target_blocks: [{text: "Write one sentence about a hobby you enjoy, using \"I like\" or \"I love\".", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I like reading", "I like reading.", "I like cooking", "I like cooking.", "I like painting", "I like painting.", "I like running", "I like running.", "I like video games", "I like video games.", "I love reading", "I love reading.", "I love cooking", "I love cooking.", "I love painting", "I love painting.", "I love running", "I love running.", "I love video games", "I love video games."]}
+          - {content_key: "en.a1.unit30.lesson04.exercise04.write_own_hobby", type: "writing_prompt", tested_text: "I like", prompt: {target_blocks: [{text: "Write one sentence about a hobby you enjoy, using \"I like\" or \"I love\".", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I like reading", "I like reading.", "I like cooking", "I like cooking.", "I like painting", "I like painting.", "I like running", "I like running.", "I like video games", "I like video games.", "I love reading", "I love reading.", "I love cooking", "I love cooking.", "I love painting", "I love painting.", "I love running", "I love running.", "I love video games", "I love video games.", "I like playing video games", "I like playing video games.", "I love playing video games", "I love playing video games."]}

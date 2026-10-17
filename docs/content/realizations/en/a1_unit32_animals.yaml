@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft, authored directly (Codex usage-limited at time
     of authoring, standing outage contingency). Realizes
@@ -39,6 +39,24 @@ review:
     introduced_tokens on dialogue_line5 updated (dropped "don't", which
     the new text no longer contains; "want" still introduced here as
     before).
+
+    Fresh-context review 2026-10-11 (content-reviewer.md
+    checklist): checked against nl-en/fa-en/prs-en a1_unit32.
+    Fixes: lesson02.exercise05.translate_walk_dog: translation
+    answer-leak target_block removed (coordinator sweep).
+    lesson01.exercise03.match_animals pair {pet: 'dog or cat'} ->
+    {pet: 'an animal that lives with you at home'} (old definition
+    taught that fish/birds are not pets); nl-en pair + accepted
+    value mirrored ('een dier dat bij je thuis woont').
+    lesson04.exercise04.write_own_pet_sentence: 'I want a fish' /
+    'I want a bird' added to the realization inline list and
+    fa-en/prs-en (nl-en already had them). nl-en
+    lesson03.exercise03.listen_dialogue_toy distractors 'a toy
+    mouse'/'a rope' -> 'toy mouse'/'rope' (correct 'ball' was the
+    only article-less option). DEFERRED: fa-en match_animals pet
+    right ('e.g. dog or cat', Persian text; not false, but could
+    mirror the new definition) and fa-en listen_dialogue_toy
+    distractors (mixed article forms) -- fa/prs lane.
 
 course:
   realization_key: "en.a1"
@@ -75,7 +93,7 @@ units:
         exercises:
           - {content_key: "en.a1.unit32.lesson01.exercise01.listen_animal", type: "listen_select", tested_text: "cat", media_asset_key: "en.a1.audio.animals.pets.cat.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit32.lesson01.exercise02.choose_swims_meaning", type: "multiple_choice", tested_text: "fish", prompt: {target_blocks: [{text: "Which animal usually lives in water?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit32.lesson01.exercise03.match_animals", type: "matching_pairs", tested_text: "dog cat fish bird pet", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "dog", right: "the pet you walk"}, {left: "cat", right: "says meow"}, {left: "fish", right: "lives in water"}, {left: "bird", right: "can fly and sing"}, {left: "pet", right: "dog or cat"}]}
+          - {content_key: "en.a1.unit32.lesson01.exercise03.match_animals", type: "matching_pairs", tested_text: "dog cat fish bird pet", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "dog", right: "the pet you walk"}, {left: "cat", right: "says meow"}, {left: "fish", right: "lives in water"}, {left: "bird", right: "can fly and sing"}, {left: "pet", right: "an animal that lives with you at home"}]}
           - {content_key: "en.a1.unit32.lesson01.exercise04.order_dog_sentence", type: "word_order", tested_text: "I have a dog.", word_bank: ["I", "have", "a", "dog."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit32.lesson01.exercise05.write_pet_word", type: "writing_prompt", tested_text: "bird", prompt: {target_blocks: [{text: "Write the word for an animal that can fly and sing.", language_code: "en", direction: "ltr"}]}}
 
@@ -93,7 +111,7 @@ units:
           - {content_key: "en.a1.unit32.lesson02.exercise02.choose_friendly_meaning", type: "multiple_choice", tested_text: "friendly", prompt: {target_blocks: [{text: "Which word means an animal that is nice to people?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit32.lesson02.exercise03.choose_walk_meaning", type: "multiple_choice", tested_text: "walk", prompt: {target_blocks: [{text: "Which word means taking your dog outside for exercise?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit32.lesson02.exercise04.order_play_sentence", type: "word_order", tested_text: "My dog likes to play.", word_bank: ["My", "dog", "likes", "to", "play."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit32.lesson02.exercise05.translate_walk_dog", type: "translation", tested_text: "I walk my dog every day.", prompt: {target_blocks: [{text: "Translate: \"I walk my dog every day.\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit32.lesson02.exercise05.translate_walk_dog", type: "translation", tested_text: "I walk my dog every day.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit32.lesson03.dialogue_mias_cat"
         title: "Dialogue: Mia's cat"
@@ -119,4 +137,4 @@ units:
           - {content_key: "en.a1.unit32.lesson04.exercise01.reading_max_size", type: "multiple_choice", tested_text: "big and very friendly", prompt: {target_blocks: [{text: "According to the reading, what is Max like?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit32.lesson04.exercise02.reading_who_walks_dog", type: "multiple_choice", tested_text: "Leila", prompt: {target_blocks: [{text: "According to the reading, who walks their dog every morning?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit32.lesson04.exercise03.reading_daniels_pet", type: "multiple_choice", tested_text: "a fish", prompt: {target_blocks: [{text: "According to the reading, what pet does Daniel have?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit32.lesson04.exercise04.write_own_pet_sentence", type: "writing_prompt", tested_text: "have", prompt: {target_blocks: [{text: "Write one sentence about a pet you have or want, using \"I have\" or \"I want\".", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I have a dog", "I have a dog.", "I have a cat", "I have a cat.", "I have a fish", "I have a fish.", "I have a bird", "I have a bird.", "I want a dog", "I want a dog.", "I want a cat", "I want a cat."]}
+          - {content_key: "en.a1.unit32.lesson04.exercise04.write_own_pet_sentence", type: "writing_prompt", tested_text: "have", prompt: {target_blocks: [{text: "Write one sentence about a pet you have or want, using \"I have\" or \"I want\".", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I have a dog", "I have a dog.", "I have a cat", "I have a cat.", "I have a fish", "I have a fish.", "I have a bird", "I have a bird.", "I want a dog", "I want a dog.", "I want a cat", "I want a cat.", "I want a fish", "I want a fish.", "I want a bird", "I want a bird."]}
