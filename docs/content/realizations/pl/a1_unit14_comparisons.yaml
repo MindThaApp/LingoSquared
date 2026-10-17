@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fourteenth Polish unit, continuing directly from pl/a1_unit13_preferences.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-13). Realizes
@@ -215,6 +215,26 @@ review:
     line numbers backing the -szy pattern, the dobry/zły irregular pair, and
     the niż + nominative construction.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1) canon
+    -- unit10/unit06 establish Ewa = coffee, Marek = tea (unit13 corrected the
+    same way in this pass); the lesson03 dialogue had Marek arguing coffee and
+    Ewa tea. Swapped line01 Marek -> 'Herbata jest lepsza niż kawa!', line02
+    Ewa -> 'Nie, nie! Kawa jest lepsza niż herbata!', line04 Ewa -> '... Ale
+    kawa jest lepsza!'; exercise01 now asks which line says tea is better than
+    coffee; exercise02/03 blocks and distractors, exercise10 prompt/answer
+    updated; overlay glosses/notes mirrored. Ewa 32 / Marek 28 age canon
+    (unit02) confirmed consistent. (2) missing-accepted-answer --
+    lesson03.exercise10 add 'Nie, kawa jest lepsza niż herbata' / 'Nie! Kawa
+    ...' variants (instruction only says 'disagree', not 'Nie, nie');
+    lesson03.exercise11 add 'Ja jestem starsza'.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -291,21 +311,15 @@ units:
           - content_key: pl.a1.unit14.lesson01.exercise01.select_starszy
             type: multiple_choice
             tested_text: "starszy"
-            prompt:
-              target_blocks:
-                - {text: "starszy", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson01.exercise02.select_mlodszy
             type: multiple_choice
             tested_text: "młodszy"
-            prompt:
-              target_blocks:
-                - {text: "młodszy", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson01.exercise03.select_niz
             type: multiple_choice
             tested_text: "niż"
-            prompt:
-              target_blocks:
-                - {text: "niż", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson01.exercise04.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "stary młody starszy starsza młodszy młodsza niż"
@@ -389,21 +403,15 @@ units:
           - content_key: pl.a1.unit14.lesson02.exercise01.select_zly
             type: multiple_choice
             tested_text: "zły"
-            prompt:
-              target_blocks:
-                - {text: "zły", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson02.exercise02.select_lepsza
             type: multiple_choice
             tested_text: "lepsza"
-            prompt:
-              target_blocks:
-                - {text: "lepsza", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson02.exercise03.select_gorszy
             type: multiple_choice
             tested_text: "gorszy"
-            prompt:
-              target_blocks:
-                - {text: "gorszy", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson02.exercise04.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "dobry zły lepszy lepsza gorszy gorsza kawa herbata"
@@ -463,7 +471,7 @@ units:
           - content_key: pl.a1.unit14.lesson03.teach.dialogue.line01
             kind: dialogue
             target:
-              text: "Kawa jest lepsza niż herbata!"
+              text: "Herbata jest lepsza niż kawa!"
               language_code: pl
               direction: ltr
               speaker: Marek
@@ -471,7 +479,7 @@ units:
           - content_key: pl.a1.unit14.lesson03.teach.dialogue.line02
             kind: dialogue
             target:
-              text: "Nie, nie! Herbata jest lepsza niż kawa!"
+              text: "Nie, nie! Kawa jest lepsza niż herbata!"
               language_code: pl
               direction: ltr
               speaker: Ewa
@@ -487,7 +495,7 @@ units:
           - content_key: pl.a1.unit14.lesson03.teach.dialogue.line04
             kind: dialogue
             target:
-              text: "Tak, jestem starsza. Ale herbata jest lepsza!"
+              text: "Tak, jestem starsza. Ale kawa jest lepsza!"
               language_code: pl
               direction: ltr
               speaker: Ewa
@@ -495,22 +503,18 @@ units:
         exercises:
           - content_key: pl.a1.unit14.lesson03.exercise01.select_kawa_lepsza_line
             type: multiple_choice
-            tested_text: "Kawa jest lepsza niż herbata"
-            prompt:
-              target_blocks:
-                - {text: "Kawa jest lepsza niż herbata!", language_code: pl, direction: ltr}
+            tested_text: "Herbata jest lepsza niż kawa"
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson03.exercise02.select_marek_mlodszy_line
             type: multiple_choice
             tested_text: "Ale ja jestem młodszy niż ty"
-            prompt:
-              target_blocks:
-                - {text: "Dobrze, dobrze. Ale ja jestem młodszy niż ty!", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit14.lesson03.exercise03.comprehend_ewa_older
             type: dialogue_comprehension
             tested_text: "starsza"
             prompt:
               target_blocks:
-                - {text: "Tak, jestem starsza. Ale herbata jest lepsza!", language_code: pl, direction: ltr}
+                - {text: "Tak, jestem starsza. Ale kawa jest lepsza!", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit14.lesson03.exercise04.comprehend_marek_younger
             type: dialogue_comprehension
             tested_text: "młodszy"
@@ -556,10 +560,10 @@ units:
                 - {text: "Tak, jestem starszy.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit14.lesson03.exercise10.reply_kawa_lepsza
             type: dialogue_response
-            tested_text: "Nie nie Herbata jest lepsza niż kawa"
+            tested_text: "Nie nie Kawa jest lepsza niż herbata"
             prompt:
               target_blocks:
-                - {text: "Kawa jest lepsza niż herbata!", language_code: pl, direction: ltr}
+                - {text: "Herbata jest lepsza niż kawa!", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit14.lesson03.exercise11.speak_jestem_starsza
             type: speak_response
             tested_text: "Jestem starsza"

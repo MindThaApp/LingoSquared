@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Twelfth Polish unit, continuing directly from pl/a1_unit11_plans.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-11).
@@ -220,6 +220,21 @@ review:
     GUIDE §11: see the fact-consistency paragraph above (Ewa/cinema,
     Marek/dinner, stated once each, never contradicted).
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): 1 fix.
+    lesson01.teach.gender_past_note -- 'Czasy przeszłe mają końcówkę zależną
+    od osoby' -> 'W czasie przeszłym końcówka zależy od płci osoby'
+    (false-grammar: the -em/-am split is about gender, not person). NATIVE CHECK:
+    'Co było wczoraj?' as 'What happened yesterday?' (a native might prefer
+    'Co robiłaś wczoraj?'); 'Cześć Ewa!' uses nominative rather than
+    vocative 'Ewo' -- common colloquially, confirm acceptable for teaching.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -270,7 +285,7 @@ units:
               - {text: "Byłam wczoraj w kinie.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit12.lesson01.teach.gender_past_note
             kind: grammar_note
-            target: {text: "Czasy przeszłe mają końcówkę zależną od osoby, która mówi: -em, gdy mówi mężczyzna (byłem), -am, gdy mówi kobieta (byłam). To dotyczy każdego czasownika w czasie przeszłym, nie tylko być.", language_code: pl, direction: ltr}
+            target: {text: "W czasie przeszłym końcówka zależy od płci osoby, która mówi: -em, gdy mówi mężczyzna (byłem), -am, gdy mówi kobieta (byłam). To dotyczy każdego czasownika w czasie przeszłym, nie tylko być.", language_code: pl, direction: ltr}
             introduced_tokens: []
           - content_key: pl.a1.unit12.lesson01.teach.w_kinie_locative_note
             kind: grammar_note
@@ -288,21 +303,15 @@ units:
           - content_key: pl.a1.unit12.lesson01.exercise01.select_wczoraj
             type: multiple_choice
             tested_text: "wczoraj"
-            prompt:
-              target_blocks:
-                - {text: "wczoraj", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson01.exercise02.select_bylo
             type: multiple_choice
             tested_text: "było"
-            prompt:
-              target_blocks:
-                - {text: "było", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson01.exercise03.select_bylem
             type: multiple_choice
             tested_text: "byłem"
-            prompt:
-              target_blocks:
-                - {text: "byłem", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson01.exercise04.match_wczoraj_vocabulary
             type: matching_pairs
             tested_text: "wczoraj było byłem byłam kinie co"
@@ -391,21 +400,15 @@ units:
           - content_key: pl.a1.unit12.lesson02.exercise01.select_film
             type: multiple_choice
             tested_text: "film"
-            prompt:
-              target_blocks:
-                - {text: "film", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson02.exercise02.select_zobaczylem
             type: multiple_choice
             tested_text: "zobaczyłem"
-            prompt:
-              target_blocks:
-                - {text: "zobaczyłem", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson02.exercise03.select_pyszny
             type: multiple_choice
             tested_text: "pyszny"
-            prompt:
-              target_blocks:
-                - {text: "pyszny", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson02.exercise04.match_film_vocabulary
             type: matching_pairs
             tested_text: "film dobry zobaczyłem zobaczyłam zrobiłem zrobiłam obiad pyszny"
@@ -512,15 +515,11 @@ units:
           - content_key: pl.a1.unit12.lesson03.exercise01.select_ask_what_happened_line
             type: multiple_choice
             tested_text: "Cześć Ewa Co było wczoraj"
-            prompt:
-              target_blocks:
-                - {text: "Cześć Ewa! Co było wczoraj?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson03.exercise02.select_ewa_cinema_line
             type: multiple_choice
             tested_text: "Byłam w kinie Zobaczyłam dobry film"
-            prompt:
-              target_blocks:
-                - {text: "Byłam w kinie! Zobaczyłam dobry film.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit12.lesson03.exercise03.comprehend_ewa_location
             type: dialogue_comprehension
             tested_text: "kinie"

@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Thirteenth en-pl overlay, written for pl/a1_unit13_preferences.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start). No
@@ -18,6 +18,21 @@ review:
     authored), so the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't
     apply here -- noted for whoever authors pl-en next: do not open this file
     for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1) canon
+    -- unit10 (routines) and unit06 establish Ewa drinks coffee and Marek
+    drinks tea ('Ale piję herbatę, nie kawę'); this unit had them reversed.
+    Swapped: dialogue line04 Ewa 'Wolę herbatę.' -> 'Wolę kawę.', line05 Marek
+    'Ja wolę kawę.' -> 'Ja wolę herbatę.'; lesson02.exercise07/08 'Mówi Marek'
+    -> 'Mówi Ewa' (coffee lines); lesson03.exercise02 distractor, exercise03
+    (Marek -> tea), exercise04 (Ewa -> coffee), exercise07 word_order -> 'Ja
+    wolę herbatę', exercise10 reply -> 'Wolę kawę' with overlay
+    keys/glosses/instructions updated to match. (2) missing-accepted-answer --
+    lesson01.exercise09 add 'Ja lubię muzykę'; lesson03.exercise10 add 'Ja
+    wolę kawę' (subject-pronoun variant taught in this unit);
+    lesson01.exercise06 word_order add 'Lubię bardzo muzykę'. NATIVE CHECK:
+    whether 'Lubię bardzo muzykę' should stay accepted (grammatical, slightly
+    less neutral than 'Bardzo lubię muzykę').
 
 answer_policy:
   diacritics: >-
@@ -175,12 +190,12 @@ teaching:
     gloss: "Me too. Coffee or tea?"
     note: "Ja też lubię confirms Marek's own answer before he changes the subject with a new either/or question."
   pl.a1.unit13.lesson03.teach.dialogue.line04:
-    title: "Ewa prefers tea"
-    gloss: "I prefer tea."
-    note: "Ewa's own stated preference, using wolę."
-  pl.a1.unit13.lesson03.teach.dialogue.line05:
-    title: "Marek prefers coffee"
+    title: "Ewa prefers coffee"
     gloss: "I prefer coffee."
+    note: "Ewa's own stated preference, using wolę -- the same coffee-drinker we met in the routines unit."
+  pl.a1.unit13.lesson03.teach.dialogue.line05:
+    title: "Marek prefers tea"
+    gloss: "I prefer tea."
     note: "Marek's own stated preference -- the opposite choice from Ewa's."
 
 exercises:
@@ -218,7 +233,9 @@ exercises:
 
   pl.a1.unit13.lesson01.exercise06.order_bardzo_lubie_muzyke:
     instruction: "Put the sentence 'I like music a lot' in order."
-    correct_response: ["Bardzo", "lubię", "muzykę"]
+    accepted_answers:
+      - {value: ["Bardzo", "lubię", "muzykę"], status: correct}
+      - {value: ["Lubię", "bardzo", "muzykę"], status: correct}
 
   pl.a1.unit13.lesson01.exercise07.fill_lubisz_marek:
     instruction: "Complete Marek's question: 'Do you like music?'"
@@ -237,6 +254,8 @@ exercises:
     accepted_answers:
       - "Lubię muzykę."
       - "Lubię muzykę"
+      - "Ja lubię muzykę."
+      - "Ja lubię muzykę"
 
   pl.a1.unit13.lesson02.exercise01.select_wole:
     instruction: "Which word means 'I prefer'?"
@@ -275,12 +294,12 @@ exercises:
     correct_response: ["Wolę", "herbatę"]
 
   pl.a1.unit13.lesson02.exercise07.fill_wole_marek:
-    instruction: "Complete Marek's sentence: 'I prefer coffee.'"
+    instruction: "Complete Ewa's sentence: 'I prefer coffee.'"
     accepted_answers: ["Wolę"]
-    feedback: "Mówi Marek: Wolę kawę -- wolę is 'I prefer.'"
+    feedback: "Mówi Ewa: Wolę kawę -- wolę is 'I prefer.'"
 
   pl.a1.unit13.lesson02.exercise08.fix_wole_kawe_case:
-    instruction: "Fix the sentence -- Marek is talking about coffee, so kawa needs to become kawę."
+    instruction: "Fix the sentence -- Ewa is talking about coffee, so kawa needs to become kawę."
     accepted_answers:
       - "Wolę kawę."
       - "Wolę kawę"
@@ -307,23 +326,13 @@ exercises:
     correct_option: "Tak, bardzo lubię! A ty?"
     distractors:
       - "Ja też lubię. Kawa czy herbata?"
-      - "Ja wolę kawę."
+      - "Ja wolę herbatę."
     accepted_answers:
       - "Tak, bardzo lubię! A ty?"
       - "Tak, bardzo lubię! A ty"
 
   pl.a1.unit13.lesson03.exercise03.comprehend_marek_preference:
     instruction: "Read the line. What does Marek prefer to drink?"
-    correct_option: "coffee"
-    distractors:
-      - "tea"
-      - "music"
-    accepted_answers:
-      - "kawę"
-      - "coffee"
-
-  pl.a1.unit13.lesson03.exercise04.comprehend_ewa_preference:
-    instruction: "Read the line. What does Ewa prefer to drink?"
     correct_option: "tea"
     distractors:
       - "coffee"
@@ -331,6 +340,16 @@ exercises:
     accepted_answers:
       - "herbatę"
       - "tea"
+
+  pl.a1.unit13.lesson03.exercise04.comprehend_ewa_preference:
+    instruction: "Read the line. What does Ewa prefer to drink?"
+    correct_option: "coffee"
+    distractors:
+      - "tea"
+      - "music"
+    accepted_answers:
+      - "kawę"
+      - "coffee"
 
   pl.a1.unit13.lesson03.exercise05.match_lesson3_vocabulary:
     instruction: "Match each Polish word or phrase to its English meaning."
@@ -348,8 +367,8 @@ exercises:
     correct_response: ["Ja", "też", "lubię"]
 
   pl.a1.unit13.lesson03.exercise07.order_ja_wole_kawe:
-    instruction: "Put the sentence 'I prefer coffee' (emphasizing 'I') in order."
-    correct_response: ["Ja", "wolę", "kawę"]
+    instruction: "Put Marek's sentence 'I prefer tea' (emphasizing 'I') in order."
+    correct_response: ["Ja", "wolę", "herbatę"]
 
   pl.a1.unit13.lesson03.exercise08.fill_a_ty:
     instruction: "Complete Ewa's line: 'Yes, I like it a lot! And you?'"
@@ -364,10 +383,12 @@ exercises:
     feedback: "Wolę herbatę, not Wolę herbata -- the object of wolę takes the accusative ending."
 
   pl.a1.unit13.lesson03.exercise10.reply_kawa_czy_herbata:
-    instruction: "Answer as Ewa: say you prefer tea."
+    instruction: "Answer as Ewa: say you prefer coffee."
     accepted_answers:
-      - "Wolę herbatę."
-      - "Wolę herbatę"
+      - "Wolę kawę."
+      - "Wolę kawę"
+      - "Ja wolę kawę."
+      - "Ja wolę kawę"
 
   pl.a1.unit13.lesson03.exercise11.speak_czy_lubisz_muzyke:
     instruction: "Say, to a friend: 'Do you like music?'"

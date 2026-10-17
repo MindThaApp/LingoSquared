@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Second Polish unit, continuing directly from pl/a1_unit01_greetings.yaml
     (same Ewa/Marek characters, same formal pan/pani register established
@@ -87,6 +87,18 @@ review:
     numbers chosen for the scenario (28, 32, a 5-digit sample phone
     number, a 30-złoty ticket price, a 100-złoty round price), are freshly
     authored, continuing unit01's characters and formal register.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    lesson03.exercise05 matching pairs rebuilt so no two lefts share an
+    interchangeable answer and the age pairing matches canon (Marek 28).
+    Mirrored in the en-pl overlay; see its notes.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
 
 course:
   realization_key: pl.a1
@@ -175,21 +187,15 @@ units:
           - content_key: pl.a1.unit02.lesson01.exercise01.select_dwa
             type: multiple_choice
             tested_text: "dwa"
-            prompt:
-              target_blocks:
-                - {text: "dwa", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson01.exercise02.select_siedem
             type: multiple_choice
             tested_text: "siedem"
-            prompt:
-              target_blocks:
-                - {text: "siedem", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson01.exercise03.select_dziesiec
             type: multiple_choice
             tested_text: "dziesięć"
-            prompt:
-              target_blocks:
-                - {text: "dziesięć", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson01.exercise04.match_digits_zero_to_ten
             type: matching_pairs
             tested_text: "zero jeden dwa trzy cztery pięć sześć siedem osiem dziewięć dziesięć"
@@ -294,15 +300,11 @@ units:
           - content_key: pl.a1.unit02.lesson02.exercise01.select_dwadziescia
             type: multiple_choice
             tested_text: "dwadzieścia"
-            prompt:
-              target_blocks:
-                - {text: "dwadzieścia", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson02.exercise02.select_sto
             type: multiple_choice
             tested_text: "sto"
-            prompt:
-              target_blocks:
-                - {text: "sto", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson02.exercise03.match_teens_and_tens
             type: matching_pairs
             tested_text: "jedenaście dwanaście piętnaście dwadzieścia trzydzieści pięćdziesiąt sto"
@@ -438,15 +440,11 @@ units:
           - content_key: pl.a1.unit02.lesson03.exercise01.select_formal_phone_question_man
             type: multiple_choice
             tested_text: "Jaki jest pana numer telefonu"
-            prompt:
-              target_blocks:
-                - {text: "Jaki jest pana numer telefonu?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson03.exercise02.select_informal_phone_question
             type: multiple_choice
             tested_text: "Jaki jest twój numer telefonu"
-            prompt:
-              target_blocks:
-                - {text: "Jaki jest twój numer telefonu?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit02.lesson03.exercise03.comprehend_marek_number
             type: dialogue_comprehension
             tested_text: "sześć jeden pięć zero dwa"
@@ -461,15 +459,15 @@ units:
                 - {text: "Mam dwadzieścia osiem lat. A pani?", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit02.lesson03.exercise05.match_questions_and_answers
             type: matching_pairs
-            tested_text: "Jaki jest pana numer telefonu Numer to sześć jeden pięć zero dwa Jaki jest twój numer telefonu Numer to Ile masz lat Mam dwadzieścia osiem lat Ile pan ma lat Mam trzydzieści dwa lata Ile to kosztuje To kosztuje sto złotych Miło było porozmawiać Do zobaczenia"
+            tested_text: "Jaki jest pana numer telefonu Numer to sześć jeden pięć zero dwa Ile pan ma lat Mam dwadzieścia osiem lat Ile to kosztuje To kosztuje sto złotych Miło było porozmawiać Do zobaczenia Jak się pan ma Dobrze dziękuję Skąd pan jest Jestem z Kanady"
             prompt: {target_blocks: []}
             pairs:
               - {left: "Jaki jest pana numer telefonu?", right: "Numer to sześć, jeden, pięć, zero, dwa."}
-              - {left: "Jaki jest twój numer telefonu?", right: "Numer to..."}
-              - {left: "Ile masz lat?", right: "Mam dwadzieścia osiem lat."}
-              - {left: "Ile pan ma lat?", right: "Mam trzydzieści dwa lata."}
+              - {left: "Ile pan ma lat?", right: "Mam dwadzieścia osiem lat."}
               - {left: "Ile to kosztuje?", right: "To kosztuje sto złotych."}
               - {left: "Miło było porozmawiać.", right: "Do zobaczenia!"}
+              - {left: "Jak się pan ma?", right: "Dobrze, dziękuję."}
+              - {left: "Skąd pan jest?", right: "Jestem z Kanady."}
           - content_key: pl.a1.unit02.lesson03.exercise06.order_thirty_two
             type: word_order
             tested_text: "trzydzieści dwa"

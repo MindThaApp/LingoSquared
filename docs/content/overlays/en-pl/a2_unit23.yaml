@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Third en-pl A2 overlay, written for pl/a2_unit23_w_banku.yaml
     (schema_version 1.1, §19 format from the start). No sibling-direction
@@ -26,6 +26,23 @@ review:
     token-for-token against the realization's own pairs/word_bank. No stray
     YAML boolean coercion. Pending fresh-context review per AUTHORING_GUIDE
     §9; not self-certified.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    teach.pieniadze note -- "Always plural in Polish, like English money
+    itself" was false (English money is singular) -> "unlike English money,
+    which is singular"; potrzebuje_zeby_phrase gloss + lesson02.exercise05/09
+    instructions -- dropped the ungrammatical English comma before "in order
+    to"; lesson02.exercise06 -- instruction "'___ I would like to open a bank
+    account.'" was garbled and did not pin gender (chciałabym also fits) ->
+    "Complete Marek's sentence: '___ to open a bank account.' (I would like)";
+    lesson02.exercise08 -- added *Chciałbym otworzyć konto.*;
+    lesson02.exercise10 + lesson03.exercise11 speak -- pinned "As Marek, say"
+    (masculine chciałbym); lesson03.exercise05 -- instruction matched to the
+    now-shown line; lesson03.exercise07 word_order -- added valid *Czy pan ma
+    dowód osobisty i numer PESEL*; lesson03.exercise09 feedback updated to the
+    new scrambled prompt; lesson03.exercise10 -- added *Sto złotych.*
+    (instruction literally says "say one hundred zloty") and *Chciałbym
+    wpłacić sto złotych.*
 
 answer_policy:
   diacritics: >-
@@ -79,7 +96,7 @@ teaching:
   pl.a2.unit23.lesson01.teach.pieniadze:
     title: "Money"
     gloss: "money"
-    note: "Always plural in Polish, like English \"money\" itself."
+    note: "Always plural in Polish -- unlike English \"money\", which is singular."
     example_gloss: "I have a lot of money."
 
   pl.a2.unit23.lesson01.teach.pesel:
@@ -116,7 +133,7 @@ teaching:
 
   pl.a2.unit23.lesson02.teach.potrzebuje_zeby_phrase:
     title: "I need an ID card in order to open an account"
-    gloss: "I need an ID card, in order to open an account."
+    gloss: "I need an ID card in order to open an account."
     note: "Combines this lesson's two new grammar points in one natural sentence."
 
   pl.a2.unit23.lesson03.teach.sto_zlotych:
@@ -255,11 +272,11 @@ exercises:
     correct_response: ["Chciałbym", "otworzyć", "konto", "bankowe"]
 
   pl.a2.unit23.lesson02.exercise05.order_potrzebuje_zeby:
-    instruction: "Put the sentence 'I need an ID card, in order to open an account' in order (no punctuation needed)."
+    instruction: "Put the sentence 'I need an ID card in order to open an account' in order (no punctuation needed)."
     correct_response: ["Potrzebuję", "dowodu", "osobistego", "żeby", "otworzyć", "konto"]
 
   pl.a2.unit23.lesson02.exercise06.fill_chcialbym:
-    instruction: "Complete the sentence: '___ I would like to open a bank account.'"
+    instruction: "Complete Marek's sentence: '___ to open a bank account.' (I would like)"
     accepted_answers: ["Chciałbym"]
     feedback: "Chciałbym otworzyć konto bankowe -- Chciałbym is the polite masculine 'I would like'."
 
@@ -275,15 +292,16 @@ exercises:
     accepted_answers:
       - "Chciałbym otworzyć konto bankowe."
       - "Chciałbym otworzyć konto bankowe"
+      - "Chciałbym otworzyć konto."
 
   pl.a2.unit23.lesson02.exercise09.write_potrzebuje_zeby:
-    instruction: "Write: 'I need an ID card, in order to open an account.'"
+    instruction: "Write: 'I need an ID card in order to open an account.'"
     accepted_answers:
       - "Potrzebuję dowodu osobistego, żeby otworzyć konto."
       - "Potrzebuję dowodu osobistego, żeby otworzyć konto"
 
   pl.a2.unit23.lesson02.exercise10.speak_chcialbym_otworzyc_konto:
-    instruction: "Say: 'I would like to open a bank account.'"
+    instruction: "As Marek, say: 'I would like to open a bank account.'"
     accepted_answers:
       - "Chciałbym otworzyć konto bankowe."
       - "Chciałbym otworzyć konto bankowe"
@@ -329,7 +347,7 @@ exercises:
       - "one hundred zloty"
 
   pl.a2.unit23.lesson03.exercise05.read_account_ready:
-    instruction: "According to the dialogue, is Marek's account ready?"
+    instruction: "Read the employee's last line. Is Marek's account ready?"
     correct_option: "yes, it's ready"
     distractors:
       - "no, he must come back tomorrow"
@@ -353,7 +371,9 @@ exercises:
 
   pl.a2.unit23.lesson03.exercise07.order_czy_ma_pan_dowod:
     instruction: "Put the question 'Do you have your ID card and PESEL number, sir?' in order."
-    correct_response: ["Czy", "ma", "pan", "dowód", "osobisty", "i", "numer", "PESEL"]
+    accepted_answers:
+      - "Czy ma pan dowód osobisty i numer PESEL"
+      - "Czy pan ma dowód osobisty i numer PESEL"
 
   pl.a2.unit23.lesson03.exercise08.fill_ile_pieniedzy_wplacic:
     instruction: "Complete the question: 'How much money would you like to ___, sir?' (deposit)"
@@ -365,16 +385,18 @@ exercises:
     accepted_answers:
       - "Chcę wpłacić sto złotych."
       - "Chcę wpłacić sto złotych"
-    feedback: "Chcę wpłacić sto złotych, not Sto złotych chcę wpłacić -- Chcę comes first here."
+    feedback: "Chcę wpłacić sto złotych, not Wpłacić złotych chcę sto -- the verbs come first, then the amount, with sto before złotych."
 
   pl.a2.unit23.lesson03.exercise10.reply_ile_pieniedzy_chce_pan_wplacic:
     instruction: "The employee asks: 'How much money would you like to deposit, sir?' Answer as Marek: say one hundred zloty."
     accepted_answers:
       - "Chcę wpłacić sto złotych."
       - "Chcę wpłacić sto złotych"
+      - "Sto złotych."
+      - "Chciałbym wpłacić sto złotych."
 
   pl.a2.unit23.lesson03.exercise11.speak_chcialbym_otworzyc_konto:
-    instruction: "Say: 'I would like to open a bank account.'"
+    instruction: "As Marek, say: 'I would like to open a bank account.'"
     accepted_answers:
       - "Chciałbym otworzyć konto bankowe."
       - "Chciałbym otworzyć konto bankowe"

@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Sixth en-pl A2 overlay, written for
     pl/a2_unit26_rozmowa_kwalifikacyjna.yaml (schema_version 1.1, §19
@@ -26,6 +26,24 @@ review:
     token-for-token against the realization's own pairs/word_bank. No
     stray YAML boolean coercion. Pending fresh-context review per
     AUTHORING_GUIDE §9; not self-certified.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    false-grammar -- grammar_check prompts "Pytania mam." and "Od razu
+    jestem dostępny." are grammatical Polish presented as errors: replaced
+    with genuine verb-agreement errors -- lesson01.exercise08 -> "Ja ma
+    pytania.", lesson02.exercise07 -> "Ja jest dostępny od razu."; overlay
+    instructions/feedback rewritten, Ja mam pytania / Ja jestem dostępny
+    od razu / Od razu jestem dostępny accepted. (2)
+    comprehension-without-text --
+    lesson03.exercise05.read_working_hours_answer showed only the
+    question: added Marek's question + the recruiter's answer blocks. (3)
+    missing-accepted-answer -- lesson02.exercise08 (yes/no question "Ma
+    pan doświadczenie?") + Tak, pracowałem trzy lata jako inżynier and
+    natural reorders; lesson02.exercise09/10 and lesson03.exercise11 +
+    natural reorders; lesson03.exercise10 + unpunctuated variants. (4)
+    underdetermined-prompt -- lesson02.exercise09/10 and
+    lesson03.exercise11 pinned "as Marek" (dostępny/pracowałem vs feminine
+    forms). NATIVE CHECK: none.
 
 answer_policy:
   diacritics: >-
@@ -197,11 +215,13 @@ exercises:
     feedback: "Mam duże doświadczenie -- doświadczenie is the word for experience."
 
   pl.a2.unit26.lesson01.exercise08.fix_mam_pytania:
-    instruction: "Fix the word order -- put the sentence 'I have questions' in the natural order."
+    instruction: "Fix the error in the sentence 'I have questions'."
     accepted_answers:
       - "Mam pytania."
       - "Mam pytania"
-    feedback: "Mam pytania, not Pytania mam -- the verb comes first here."
+      - "Ja mam pytania."
+      - "Ja mam pytania"
+    feedback: "Mam pytania, not Ja ma pytania -- with ja (I) the verb form is mam; ma means he/she has."
 
   pl.a2.unit26.lesson01.exercise09.write_doswiadczenie:
     instruction: "Write the Polish word for 'experience'."
@@ -248,29 +268,46 @@ exercises:
     feedback: "Pracowałem trzy lata jako inżynier -- jako is the word for as."
 
   pl.a2.unit26.lesson02.exercise07.fix_jestem_dostepny_od_razu:
-    instruction: "Fix the word order -- put the sentence 'I'm available right away' in the natural order."
+    instruction: "Fix the error in Marek's sentence 'I'm available right away'."
     accepted_answers:
       - "Jestem dostępny od razu."
       - "Jestem dostępny od razu"
-    feedback: "Jestem dostępny od razu, not Od razu jestem dostępny -- Jestem comes first here."
+      - "Ja jestem dostępny od razu."
+      - "Ja jestem dostępny od razu"
+      - "Od razu jestem dostępny."
+      - "Od razu jestem dostępny"
+    feedback: "Jestem dostępny od razu, not Ja jest dostępny od razu -- with ja (I) the verb form is jestem; jest means he/she/it is."
 
   pl.a2.unit26.lesson02.exercise08.reply_jakie_ma_pan_doswiadczenie:
     instruction: "The recruiter asks: 'Do you have experience, sir?' Answer as Marek: say you worked three years as an engineer."
     accepted_answers:
       - "Pracowałem trzy lata jako inżynier."
       - "Pracowałem trzy lata jako inżynier"
+      - "Tak, pracowałem trzy lata jako inżynier."
+      - "Tak, pracowałem trzy lata jako inżynier"
+      - "Tak. Pracowałem trzy lata jako inżynier."
+      - "Trzy lata pracowałem jako inżynier."
+      - "Trzy lata pracowałem jako inżynier"
+      - "Pracowałem jako inżynier trzy lata."
+      - "Pracowałem jako inżynier trzy lata"
 
   pl.a2.unit26.lesson02.exercise09.write_jestem_dostepny_od_razu:
-    instruction: "Write: 'I'm available right away.'"
+    instruction: "Write, as Marek: 'I'm available right away.'"
     accepted_answers:
       - "Jestem dostępny od razu."
       - "Jestem dostępny od razu"
+      - "Od razu jestem dostępny."
+      - "Od razu jestem dostępny"
 
   pl.a2.unit26.lesson02.exercise10.speak_pracowalem_trzy_lata:
-    instruction: "Say: 'I worked three years as an engineer.'"
+    instruction: "Say, as Marek: 'I worked three years as an engineer.'"
     accepted_answers:
       - "Pracowałem trzy lata jako inżynier."
       - "Pracowałem trzy lata jako inżynier"
+      - "Trzy lata pracowałem jako inżynier."
+      - "Trzy lata pracowałem jako inżynier"
+      - "Pracowałem jako inżynier trzy lata."
+      - "Pracowałem jako inżynier trzy lata"
 
   pl.a2.unit26.lesson03.exercise01.select_marek_describes_experience:
     instruction: "Which line shows Marek describing his experience?"
@@ -355,9 +392,13 @@ exercises:
     accepted_answers:
       - "Tak. Jakie są godziny pracy?"
       - "Tak, jakie są godziny pracy?"
+      - "Tak. Jakie są godziny pracy"
+      - "Tak, jakie są godziny pracy"
 
   pl.a2.unit26.lesson03.exercise11.speak_jestem_dostepny_od_razu:
-    instruction: "Say: 'I'm available right away.'"
+    instruction: "Say, as Marek: 'I'm available right away.'"
     accepted_answers:
       - "Jestem dostępny od razu."
       - "Jestem dostępny od razu"
+      - "Od razu jestem dostępny."
+      - "Od razu jestem dostępny"

@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: null
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Sixth Polish A2 unit, continuing from pl/a2_unit25_naprawa_w_
     mieszkaniu.yaml -- completes the full six-outcome A2 spine set for
@@ -81,6 +81,31 @@ review:
     untaught-vocabulary check. Pending fresh-context review per
     AUTHORING_GUIDE §9; not self-certified.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    false-grammar -- grammar_check prompts "Pytania mam." and "Od razu
+    jestem dostępny." are grammatical Polish presented as errors: replaced
+    with genuine verb-agreement errors -- lesson01.exercise08 -> "Ja ma
+    pytania.", lesson02.exercise07 -> "Ja jest dostępny od razu."; overlay
+    instructions/feedback rewritten, Ja mam pytania / Ja jestem dostępny
+    od razu / Od razu jestem dostępny accepted. (2)
+    comprehension-without-text --
+    lesson03.exercise05.read_working_hours_answer showed only the
+    question: added Marek's question + the recruiter's answer blocks. (3)
+    missing-accepted-answer -- lesson02.exercise08 (yes/no question "Ma
+    pan doświadczenie?") + Tak, pracowałem trzy lata jako inżynier and
+    natural reorders; lesson02.exercise09/10 and lesson03.exercise11 +
+    natural reorders; lesson03.exercise10 + unpunctuated variants. (4)
+    underdetermined-prompt -- lesson02.exercise09/10 and
+    lesson03.exercise11 pinned "as Marek" (dostępny/pracowałem vs feminine
+    forms). NATIVE CHECK: none.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a2
   target_language_first: true
@@ -139,21 +164,15 @@ units:
           - content_key: pl.a2.unit26.lesson01.exercise01.select_praca
             type: multiple_choice
             tested_text: "praca"
-            prompt:
-              target_blocks:
-                - {text: "praca", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson01.exercise02.select_doswiadczenie
             type: multiple_choice
             tested_text: "doświadczenie"
-            prompt:
-              target_blocks:
-                - {text: "doświadczenie", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson01.exercise03.select_pytania
             type: multiple_choice
             tested_text: "pytania"
-            prompt:
-              target_blocks:
-                - {text: "pytania", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson01.exercise04.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "praca rozmowa kwalifikacyjna doświadczenie pytania inżynier"
@@ -185,7 +204,7 @@ units:
             tested_text: "Mam pytania"
             prompt:
               target_blocks:
-                - {text: "Pytania mam.", language_code: pl, direction: ltr}
+                - {text: "Ja ma pytania.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit26.lesson01.exercise09.write_doswiadczenie
             type: writing_prompt
             tested_text: "doświadczenie"
@@ -229,15 +248,11 @@ units:
           - content_key: pl.a2.unit26.lesson02.exercise01.select_pracowalem_trzy_lata
             type: multiple_choice
             tested_text: "Pracowałem trzy lata jako inżynier"
-            prompt:
-              target_blocks:
-                - {text: "Pracowałem trzy lata jako inżynier.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson02.exercise02.select_jestem_dostepny_od_razu
             type: multiple_choice
             tested_text: "Jestem dostępny od razu"
-            prompt:
-              target_blocks:
-                - {text: "Jestem dostępny od razu.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson02.exercise03.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "praca doświadczenie pracowałem jako dostępny od razu"
@@ -270,7 +285,7 @@ units:
             tested_text: "Jestem dostępny od razu"
             prompt:
               target_blocks:
-                - {text: "Od razu jestem dostępny.", language_code: pl, direction: ltr}
+                - {text: "Ja jest dostępny od razu.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit26.lesson02.exercise08.reply_jakie_ma_pan_doswiadczenie
             type: dialogue_response
             tested_text: "Pracowałem trzy lata jako inżynier"
@@ -356,15 +371,11 @@ units:
           - content_key: pl.a2.unit26.lesson03.exercise01.select_marek_describes_experience
             type: multiple_choice
             tested_text: "Pracowałem trzy lata jako inżynier"
-            prompt:
-              target_blocks:
-                - {text: "Pracowałem trzy lata jako inżynier.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson03.exercise02.select_marek_asks_hours
             type: multiple_choice
             tested_text: "Tak Jakie są godziny pracy"
-            prompt:
-              target_blocks:
-                - {text: "Tak. Jakie są godziny pracy?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit26.lesson03.exercise03.comprehend_experience_length
             type: dialogue_comprehension
             tested_text: "trzy lata"
@@ -382,6 +393,8 @@ units:
             tested_text: "elastyczne"
             prompt:
               target_blocks:
+                - {text: "Tak. Jakie są godziny pracy?", language_code: pl, direction: ltr}
+                - {text: "Godziny pracy są elastyczne.", language_code: pl, direction: ltr}
                 - {text: "Jakie są godziny pracy według rekruterki?", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit26.lesson03.exercise06.match_lesson3_vocabulary
             type: matching_pairs
