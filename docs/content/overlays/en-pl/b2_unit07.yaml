@@ -6,14 +6,8 @@ target_language: pl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Polish confirmation needed (DRAFT). Confirm the English glosses
-    match idiomatic Polish, that every matching_pairs right-hand gloss
-    discriminates its left on real meaning, and that the culminating
-    speaking/writing answers (lesson06) accept the punctuation forms a
-    correct learner would actually produce. See the realization file's
-    review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for pl's seventh B2 unit (negotiation), authored alongside the
     realization. English speakers' real interference risks for this
@@ -30,6 +24,29 @@ review:
     equivalent to keep them distinct, though all three are broadly
     interchangeable in this unit's actual usage. No sibling-direction
     file (pl-en) was consulted.
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    Realization: lesson05 exercise01-04 (reading_comprehension) -- prompt
+    never showed the dialogue text -> added it as a pl target_block before
+    the question (comprehension-without-text); lesson03 exercise03
+    match_conditions -- lefts 'pod warunkiem że' (on condition that) and
+    'o ile' (provided that) had interchangeable glosses -> replaced the o
+    ile pair with ugotujesz: you'll cook (taught in the same lesson),
+    tested_text updated (duplicate/ambiguous). Overlay: matching key
+    mirrored; lesson03 exercise02 listen distractor 'I can't cook unless
+    you do the dishes.' is logically equivalent to the correct 'I can
+    cook, but only if you do the dishes.' -> 'I can't cook today.'
+    (second-correct-distractor); missing accepted answers added: lesson01
+    exercise05 + A może razem to zrobimy; exercise07 + Dziś/Dzisiaj robimy
+    razem kolację, Robimy dzisiaj razem kolację; lesson02 exercise07 + Nie
+    mogę wszystkiego zrobić; lesson03 exercise05/07 and lesson06
+    exercise06 + ty-dropped variants (że ugotujesz / jeśli zmyjesz -- the
+    grader's pronoun-drop rule only covers a clause-initial pronoun);
+    exercise06/07 + 'zmyjesz naczynia' variants (prompt says 'do the
+    dishes'), exercise06 + perfective Mogę ugotować; lesson04 exercise07 +
+    Dzielimy się rachunkiem / Podzielmy rachunek; lesson06 exercise05 +
+    fully pronoun-dropped variant. NATIVE CHECK: 'Proponuję, że ja
+    ugotuję' (proponować + że + future) -- colloquially common, but
+    confirm it is acceptable vs 'Proponuję, że(by)m ja ugotował(a)'.
 
 course:
   title: Polish B2
@@ -247,6 +264,7 @@ exercises:
     instruction: "Translate into Polish, proposing with a może: How about we do it together?"
     accepted_answers:
       - {value: "A może zrobimy to razem", status: correct}
+      - {value: "A może razem to zrobimy", status: correct}
     feedback: "A może zrobimy to razem means how about we do it together?"
   pl.b2.unit07.lesson01.exercise06.speak_moj_pomysl:
     instruction: "Say aloud in Polish, stating your idea with mój pomysł to: My idea is cooking together."
@@ -258,6 +276,9 @@ exercises:
     accepted_answers:
       - {value: "Robimy dziś razem kolację", status: correct}
       - {value: "Robimy dziś razem kolację.", status: correct}
+      - {value: "Dziś robimy razem kolację", status: correct}
+      - {value: "Dzisiaj robimy razem kolację", status: correct}
+      - {value: "Robimy dzisiaj razem kolację", status: correct}
     feedback: "Robimy dziś razem kolację means we're making dinner together today."
   pl.b2.unit07.lesson01.exercise08.dictation_robie_zakupy:
     instruction: "Type what you hear."
@@ -305,6 +326,7 @@ exercises:
     instruction: "Translate into Polish, using nie mogę: I can't do everything."
     accepted_answers:
       - {value: "Nie mogę zrobić wszystkiego", status: correct}
+      - {value: "Nie mogę wszystkiego zrobić", status: correct}
     feedback: "Nie mogę zrobić wszystkiego means I can't do everything."
 
   pl.b2.unit07.lesson03.exercise01.recognize_pod_warunkiem:
@@ -316,13 +338,13 @@ exercises:
   pl.b2.unit07.lesson03.exercise02.listen_moge_gotowac_tylko_jesli:
     instruction: "Listen and select what you hear."
     correct_option: "I can cook, but only if you do the dishes."
-    distractors: ["I can cook, but only if you do the shopping.", "I can't cook unless you do the dishes.", "I want to cook, but only if you help."]
+    distractors: ["I can cook, but only if you do the shopping.", "I can't cook today.", "I want to cook, but only if you help."]
     accepted_answers: [{value: "I can cook, but only if you do the dishes.", status: correct}]
     feedback: "Mogę gotować, ale tylko jeśli ty zmyjesz means I can cook, but only if you do the dishes."
   pl.b2.unit07.lesson03.exercise03.match_conditions:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {"pod warunkiem że": "on condition that", "o ile": "provided that", "chyba że": unless, "ale tylko jeśli": "but only if", "zgadzam się": "I agree", "zmywać naczynia": "to do the dishes"}
+      - value: {"pod warunkiem że": "on condition that", ugotujesz: "you'll cook", "chyba że": unless, "ale tylko jeśli": "but only if", "zgadzam się": "I agree", "zmywać naczynia": "to do the dishes"}
         status: correct
     feedback: "These are this lesson's conditional-concession words."
   pl.b2.unit07.lesson03.exercise04.order_core_move:
@@ -335,17 +357,26 @@ exercises:
     accepted_answers:
       - {value: "Zrobię zakupy, pod warunkiem że ty ugotujesz", status: correct}
       - {value: "Zrobię zakupy, pod warunkiem że ty ugotujesz.", status: correct}
+      - {value: "Zrobię zakupy, pod warunkiem że ugotujesz", status: correct}
     feedback: "Zrobię zakupy, pod warunkiem że ty ugotujesz means I'll do the shopping, on condition that you cook."
   pl.b2.unit07.lesson03.exercise06.speak_conditional:
     instruction: "Offer a conditional concession aloud, using ale tylko jeśli: I can cook, but only if you do the dishes."
     accepted_answers:
       - {value: "Mogę gotować, ale tylko jeśli ty zmyjesz", status: correct}
+      - {value: "Mogę gotować, ale tylko jeśli zmyjesz", status: correct}
+      - {value: "Mogę gotować, ale tylko jeśli ty zmyjesz naczynia", status: correct}
+      - {value: "Mogę gotować, ale tylko jeśli zmyjesz naczynia", status: correct}
+      - {value: "Mogę ugotować, ale tylko jeśli ty zmyjesz", status: correct}
+      - {value: "Mogę ugotować, ale tylko jeśli ty zmyjesz naczynia", status: correct}
     feedback: "Mogę gotować, ale tylko jeśli ty zmyjesz means I can cook, but only if you do the dishes."
   pl.b2.unit07.lesson03.exercise07.write_zgadzam_sie:
     instruction: "Write in Polish, agreeing with a condition, using zgadzam się and ale tylko jeśli: I agree, but only if you do the dishes."
     accepted_answers:
       - {value: "Zgadzam się, ale tylko jeśli ty zmyjesz", status: correct}
       - {value: "Zgadzam się, ale tylko jeśli ty zmyjesz.", status: correct}
+      - {value: "Zgadzam się, ale tylko jeśli zmyjesz", status: correct}
+      - {value: "Zgadzam się, ale tylko jeśli ty zmyjesz naczynia", status: correct}
+      - {value: "Zgadzam się, ale tylko jeśli zmyjesz naczynia", status: correct}
     feedback: "Zgadzam się, ale tylko jeśli ty zmyjesz means I agree, but only if you do the dishes."
   pl.b2.unit07.lesson03.exercise08.dictation_zmywam_naczynia:
     instruction: "Type what you hear."
@@ -392,6 +423,8 @@ exercises:
     instruction: "Translate into Polish, proposing to split the bill: We're splitting the bill."
     accepted_answers:
       - {value: "Dzielimy rachunek", status: correct}
+      - {value: "Dzielimy się rachunkiem", status: correct}
+      - {value: "Podzielmy rachunek", status: correct}
     feedback: "Dzielimy rachunek means we're splitting the bill."
 
   pl.b2.unit07.lesson05.exercise01.read_agreed:
@@ -464,12 +497,14 @@ exercises:
     accepted_answers:
       - {value: "Proponuję, że ja ugotuję. Niestety nie mogę zrobić zakupów, ale zgadzam się, pod warunkiem że ty zmyjesz naczynia", status: correct}
       - {value: "Proponuję, że ja ugotuję. Niestety nie mogę zrobić zakupów, ale zgadzam się, pod warunkiem że ty zmyjesz naczynia.", status: correct}
+      - {value: "Proponuję, że ugotuję. Niestety nie mogę zrobić zakupów, ale zgadzam się, pod warunkiem że zmyjesz naczynia", status: correct}
     feedback: "A full three-move negotiation: Proponuję, że ja ugotuję. Niestety nie mogę zrobić zakupów, ale zgadzam się, pod warunkiem że ty zmyjesz naczynia."
   pl.b2.unit07.lesson06.exercise06.write_revised_terms:
     instruction: "Write a reply proposing DIFFERENT terms with a condition attached. Offer to do the shopping yourself (zrobię zakupy) and attach a condition with o ile: I'll do the shopping, provided that you cook."
     accepted_answers:
       - {value: "Zrobię zakupy, o ile ty ugotujesz", status: correct}
       - {value: "Zrobię zakupy, o ile ty ugotujesz.", status: correct}
+      - {value: "Zrobię zakupy, o ile ugotujesz", status: correct}
     feedback: "Zrobię zakupy, o ile ty ugotujesz means I'll do the shopping, provided that you cook."
   pl.b2.unit07.lesson06.exercise07.respond_negotiate:
     instruction: "Czy chcesz dziś ugotować?"
