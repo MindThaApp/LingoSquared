@@ -13,13 +13,54 @@ generation_provenance:
     authoring. Characters: Sam (American ingegnere) and Elena (Italian insegnante),
     established colleagues using informal tu. No sibling-direction consulted.
 review:
-  status: unreviewed
+  status: needs_revision
   required_next_reviewer: fresh_context_reviewer
   notes: >-
     Italian C1 unit 02 on universal.c1.inference.infer_implicit_meaning.
     Verify: (1) Sam remains an engineer, Elena remains a teacher;
     (2) all four modalities (listening, speaking, reading, writing) have exercises;
     (3) informal tu throughout, never Lei.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    every item's answer key vs prompt, glosses vs examples, notes, and
+    matching discrimination for the realization and en-it overlay. Item
+    fixes applied: lesson06.teach.facile example misspelling 'completerlo'
+    -> 'completarlo'; lesson06.exercise01.comprehend_full passage given
+    context ('Non è facile completarlo. Sì, naturalmente, questo progetto è
+    davvero facile!') so the ironic reading is recoverable, feedback
+    updated; lesson05.exercise01.speak_understatement instruction pinned
+    (reply ironically in Italian 'Yes, of course, we have such a relaxing
+    life', then say plainly 'Life is not so relaxing'), no-period variant
+    accepted; lesson06.exercise02.write_implicit_judgement instruction
+    pinned to 'This project is really easy. The project is not really
+    easy.', no-period variant accepted; lesson04.exercise01.listen_irony
+    instruction/prompt now give context (Elena has just finished a difficult
+    project that went very well); lesson01.teach.sottinteso title -> 'the
+    implication / unspoken meaning' and example_gloss now translates its
+    example; lesson03.teach.intenzione example_gloss no longer adds 'but to
+    criticize'; lesson05.teach.rispondere_ironico Italian example 'critichi
+    silenziosamente' -> 'critichi in modo indiretto' (matches its gloss
+    'indirectly'); lesson04.teach.così/abbiamo/vita example_glosses now
+    translate their examples; lesson03.exercise01.infer_meaning feedback no
+    longer calls understatement 'saying the opposite';
+    lesson06.teach.osservazione note fragment and lesson06.teach.facile note
+    (mixed understatement with irony) rewritten;
+    lesson02.exercise01.match_context instruction -> 'Match each Italian
+    term to its meaning.' and right 'Saying opposite' -> 'saying the
+    opposite of what you mean' (realization pairs, overlay pairs and
+    accepted value). STATUS needs_revision because high-severity structural
+    problems remain unresolved: lessons 1-5 have one exercise each (sibling
+    units have 7-8 per lesson), there is no dictation or speak_response,
+    pacing and CEFR fit are far below C1 (abbiamo, la vita, sì, questo
+    taught as new C1 vocabulary), and the unit departs from the schema
+    (options/correct_option with English text and pairs inside the
+    realization, duplicate gloss keys on overlay exercises, non-ASCII
+    content_keys teach.sì / teach.così). DEFERRED (owner decision /
+    re-author, content keys deliberately not renamed): full re-authoring of
+    this unit (realization + en-it overlay); course.description unification
+    across en-it C1 overlays. NATIVE FLAGS: whether 'Non è male, per un
+    inizio' works as understatement of an impressive accomplishment at all;
+    'Una vita rilassante è quello che vogliamo' ('ciò che' more standard).
 
 course:
   realization_key: it.c1
@@ -95,7 +136,7 @@ units:
             prompt:
               pairs:
                 - {left: "Non è male", right: "Understatement"}
-                - {left: "L'ironia", right: "Saying opposite"}
+                - {left: "L'ironia", right: "saying the opposite of what you mean"}
                 - {left: "Il contesto", right: "Situation"}
             tested_text: "Non è male. L'ironia. Il contesto."
 
@@ -167,7 +208,7 @@ units:
             type: listen_select
             prompt:
               target_blocks:
-                - {text: "What does the phrase signal?", language_code: en, direction: ltr}
+                - {text: "Elena has just finished a difficult project that went very well. She says this about it. What does 'Non è male' signal?", language_code: en, direction: ltr}
             correct_option: "Understatement of an accomplishment"
             options:
               - "Understatement of an accomplishment"
@@ -184,14 +225,14 @@ units:
             kind: phrase
             target: {text: "Rispondere con ironia", language_code: it, direction: ltr}
             introduced_tokens: [Rispondere, con, ironia]
-            example: {text: "Quando critichi silenziosamente, rispondi con ironia.", language_code: it, direction: ltr}
+            example: {text: "Quando critichi in modo indiretto, rispondi con ironia.", language_code: it, direction: ltr}
 
         exercises:
           - content_key: it.c1.unit02.lesson05.exercise01.speak_understatement
             type: dialogue_response
             prompt:
               target_blocks:
-                - {text: "Your boss said you have too much free time. Use the exact taught ironic model, then explain the unstated judgement it conveys.", language_code: en, direction: ltr}
+                - {text: "Your boss says you have too much free time at work. Reply ironically in Italian: 'Yes, of course, we have such a relaxing life.' Then say plainly in Italian: 'Life is not so relaxing.'", language_code: en, direction: ltr}
             tested_text: "Sì, naturalmente, abbiamo una vita così rilassante. La vita non è così rilassante."
             correct_response: "Sì, naturalmente, abbiamo una vita così rilassante. La vita non è così rilassante."
             feedback: "Good. You used irony to signal skepticism, then stated the unstated judgement."
@@ -229,14 +270,14 @@ units:
             kind: vocabulary
             target: {text: "facile", language_code: it, direction: ltr}
             introduced_tokens: [facile]
-            example: {text: "Non è facile completerlo.", language_code: it, direction: ltr}
+            example: {text: "Non è facile completarlo.", language_code: it, direction: ltr}
 
         exercises:
           - content_key: it.c1.unit02.lesson06.exercise01.comprehend_full
             type: reading_comprehension
             prompt:
               target_blocks:
-                - {text: "Questo progetto è davvero facile.", language_code: it, direction: ltr}
+                - {text: "Non è facile completarlo. Sì, naturalmente, questo progetto è davvero facile!", language_code: it, direction: ltr}
             correct_option: "No, the speaker is being ironic"
             options:
               - "No, the speaker is being ironic"
@@ -248,11 +289,13 @@ units:
             type: writing_prompt
             prompt:
               target_blocks:
-                - {text: "Write an ironic message that says the project is easy, then state the unstated judgement that it is not really easy.", language_code: en, direction: ltr}
+                - {text: "Write an ironic message in Italian, then state plainly what you mean: 'This project is really easy. The project is not really easy.'", language_code: en, direction: ltr}
             tested_text: "Questo progetto è davvero facile. Il progetto non è davvero facile."
             accepted_answers:
               - value: "Questo progetto è davvero facile. Il progetto non è davvero facile."
                 status: correct
               - value: "Sì, naturalmente, questo progetto è davvero facile. Il progetto non è davvero facile."
+                status: correct
+              - value: "Questo progetto è davvero facile. Il progetto non è davvero facile"
                 status: correct
             feedback: "You used irony to imply the opposite of the literal claim, then stated the unstated judgement."
