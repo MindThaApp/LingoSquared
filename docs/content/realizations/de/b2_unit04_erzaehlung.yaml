@@ -25,8 +25,8 @@ generation_provenance:
     sibling-direction file. No en-de sibling (de-en) overlay/realization
     was consulted.
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fourth German B2 unit. Targets the CEFR B2 narrative outcome
     (universal.b2.narrative.recount_complex_events_with_shifting_time):
@@ -57,6 +57,55 @@ review:
     Plusquamperfekt word order (hatte ... nicht gestellt; war ... schon
     abgefahren) in lesson04; (4) the culminating writing exercise (lesson06
     exercise06) accepted-answer punctuation variants.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading shapes, boolean coercion, jargon/AI leaks, character
+    canon, als/wenn/während and Plusquamperfekt examples, cumulative token
+    coverage and underdetermined production prompts. Fixes: overlay
+    lesson01.teach.grammar_praeteritum note rewritten (Präteritum vs
+    Perfekt is a spoken/written register split with the sein/haben/modal
+    exception, not a background/foreground tense), with linked notes
+    softened on lesson01.teach.regnen, lesson01.teach.es_eilig_haben,
+    lesson02.teach.habe_verpasst, lesson01.exercise01.recognize_regnete
+    feedback and the overlay course description;
+    lesson06.teach.dialogue_felix_background and audio
+    de.b2.audio.erzaehlung.dialogue.warum_spaet.01 (pending_generation)
+    "also war ich schon müde, als ich aufwachte" -> "also wachte ich spät
+    auf" (non-sequitur causality; matches the L05 reading),
+    introduced_tokens [aufwachte] -> [], overlay gloss updated;
+    lesson04.teach.bevor example "Bevor ich losfuhr, hatte ich den Wecker
+    nicht gestellt." -> "Der Zug war schon abgefahren, bevor ich am
+    Bahnhof ankam." (+example_gloss); lesson05.exercise02.read_result
+    prompt -> "Which event does the writer introduce with zuerst (first)?"
+    (false premise: waking up late is the first morning event);
+    lesson05.exercise04.read_prepast prompt -> Plusquamperfekt + "reached
+    the station" (ambiguous "arrived"); lesson01.exercise03 noch right
+    "still (not yet)" -> "still"; overlay
+    lesson06.teach.grammar_volle_geschichte note "all four" -> "three"
+    time relations, and its lesson-construction sentence replaced by a
+    language point; accepted answers widened:
+    lesson06.exercise07.respond_why_late (+Ich hatte den Wecker am Abend
+    zuvor nicht gestellt, Ich habe den Bus verpasst, Der Zug fuhr gerade
+    ab, als ich am Bahnhof ankam),
+    lesson02/lesson06.exercise04.order_bus_verpasst (+Ich habe zuerst den
+    Bus verpasst), lesson03.exercise04 (+main-clause-first order),
+    lesson03.exercise05/06/07 and lesson04.exercise06/07 (+reversed clause
+    order, with/without comma), lesson04.exercise05 (+middle-field and
+    fronted "am Abend zuvor"), lesson01.exercise05 and lesson05.exercise06
+    (+fronted "An diesem Morgen"), lesson02.exercise05 (+Ich bin zu spät
+    angekommen). Word_order variants produce the expected "scrambled
+    permutation" WARNs. NATIVE FLAGS: "Warum kamen Sie heute so spät an?"
+    reads bookish in speech ("Warum sind Sie heute so spät gekommen?");
+    L01 "Ich hatte es eilig, denn es war noch dunkel" has odd causality;
+    translate_waehrend could also accept a Perfekt main clause ("..., hat
+    mein Chef angerufen"). DEFERRED: the L05 reading "Als ich ankam, war
+    der Zug schon weg -- er war schon abgefahren, bevor ich dort war"
+    contradicts L03/L06 ("fuhr der Zug gerade ab"); making them consistent
+    means reshaping read_prepast (its tested_text and options) and the
+    reading's introduced tokens (weg, dort), so it needs an author
+    decision on which version is canon. The coordinator should confirm
+    that the warum_spaet dialogue audio was not yet generated (status
+    still pending_generation).
 
 course:
   realization_key: de.b2
@@ -93,8 +142,8 @@ media_assets:
     language: de
     text: >-
       Frau Vogel: Warum kamen Sie heute so spät an? Felix: Ich hatte den
-      Wecker am Abend zuvor nicht gestellt, also war ich schon müde, als
-      ich aufwachte. Zuerst habe ich den Bus verpasst. Frau Vogel: Und
+      Wecker am Abend zuvor nicht gestellt, also wachte ich spät auf.
+      Zuerst habe ich den Bus verpasst. Frau Vogel: Und
       dann? Felix: Als ich am Bahnhof ankam, fuhr der Zug gerade ab.
       Während ich auf den nächsten wartete, rief mein Chef an. Frau Vogel:
       Das klingt nach einem schweren Morgen.
@@ -165,7 +214,7 @@ units:
               - {left: draußen, right: outside}
               - {left: kalt, right: cold}
               - {left: "es eilig haben", right: "to be in a hurry"}
-              - {left: noch, right: "still (not yet)"}
+              - {left: noch, right: still}
               - {left: dunkel, right: dark}
           - content_key: de.b2.unit04.lesson01.exercise04.order_noch_dunkel
             type: word_order
@@ -381,7 +430,7 @@ units:
             kind: vocabulary
             target: {text: "bevor", language_code: de, direction: ltr}
             introduced_tokens: [bevor]
-            example: {text: "Bevor ich losfuhr, hatte ich den Wecker nicht gestellt.", language_code: de, direction: ltr}
+            example: {text: "Der Zug war schon abgefahren, bevor ich am Bahnhof ankam.", language_code: de, direction: ltr}
           - content_key: de.b2.unit04.lesson04.teach.nachdem
             kind: vocabulary
             target: {text: "nachdem", language_code: de, direction: ltr}
@@ -457,7 +506,7 @@ units:
           - content_key: de.b2.unit04.lesson05.exercise02.read_result
             type: reading_comprehension
             tested_text: "Zuerst habe ich den Bus verpasst"
-            prompt: {target_blocks: [{text: "What was the first event of the morning itself (not counting the night before)?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Which event does the writer introduce with zuerst (first)?", language_code: en, direction: ltr}]}
           - content_key: de.b2.unit04.lesson05.exercise03.read_outcome
             type: reading_comprehension
             tested_text: "zwei Stunden zu spät"
@@ -465,7 +514,7 @@ units:
           - content_key: de.b2.unit04.lesson05.exercise04.read_prepast
             type: reading_comprehension
             tested_text: "war schon abgefahren, bevor ich dort war"
-            prompt: {target_blocks: [{text: "Which sentence marks an event that had ALREADY finished before Felix arrived?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Which sentence uses the Plusquamperfekt to mark an event that had already finished before Felix reached the station?", language_code: en, direction: ltr}]}
           - content_key: de.b2.unit04.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "wachte auf dort zwei Stunden Büro regnete"
@@ -508,8 +557,8 @@ units:
             introduced_tokens: []
           - content_key: de.b2.unit04.lesson06.teach.dialogue_felix_background
             kind: dialogue
-            target: {text: "Ich hatte den Wecker am Abend zuvor nicht gestellt, also war ich schon müde, als ich aufwachte.", language_code: de, direction: ltr, speaker: Felix}
-            introduced_tokens: [aufwachte]
+            target: {text: "Ich hatte den Wecker am Abend zuvor nicht gestellt, also wachte ich spät auf.", language_code: de, direction: ltr, speaker: Felix}
+            introduced_tokens: []
           - content_key: de.b2.unit04.lesson06.teach.dialogue_felix_first_event
             kind: dialogue
             target: {text: "Zuerst habe ich den Bus verpasst.", language_code: de, direction: ltr, speaker: Felix}

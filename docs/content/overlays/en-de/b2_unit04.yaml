@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for de's fourth B2 unit, authored alongside the realization.
     English speakers' real interference risks for this outcome: (1)
@@ -25,12 +25,61 @@ review:
     distinction in lesson01/02's notes. No sibling direction file (de-en
     b2) was consulted.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading shapes, boolean coercion, jargon/AI leaks, character
+    canon, als/wenn/während and Plusquamperfekt examples, cumulative token
+    coverage and underdetermined production prompts. Fixes: overlay
+    lesson01.teach.grammar_praeteritum note rewritten (Präteritum vs
+    Perfekt is a spoken/written register split with the sein/haben/modal
+    exception, not a background/foreground tense), with linked notes
+    softened on lesson01.teach.regnen, lesson01.teach.es_eilig_haben,
+    lesson02.teach.habe_verpasst, lesson01.exercise01.recognize_regnete
+    feedback and the overlay course description;
+    lesson06.teach.dialogue_felix_background and audio
+    de.b2.audio.erzaehlung.dialogue.warum_spaet.01 (pending_generation)
+    "also war ich schon müde, als ich aufwachte" -> "also wachte ich spät
+    auf" (non-sequitur causality; matches the L05 reading),
+    introduced_tokens [aufwachte] -> [], overlay gloss updated;
+    lesson04.teach.bevor example "Bevor ich losfuhr, hatte ich den Wecker
+    nicht gestellt." -> "Der Zug war schon abgefahren, bevor ich am
+    Bahnhof ankam." (+example_gloss); lesson05.exercise02.read_result
+    prompt -> "Which event does the writer introduce with zuerst (first)?"
+    (false premise: waking up late is the first morning event);
+    lesson05.exercise04.read_prepast prompt -> Plusquamperfekt + "reached
+    the station" (ambiguous "arrived"); lesson01.exercise03 noch right
+    "still (not yet)" -> "still"; overlay
+    lesson06.teach.grammar_volle_geschichte note "all four" -> "three"
+    time relations, and its lesson-construction sentence replaced by a
+    language point; accepted answers widened:
+    lesson06.exercise07.respond_why_late (+Ich hatte den Wecker am Abend
+    zuvor nicht gestellt, Ich habe den Bus verpasst, Der Zug fuhr gerade
+    ab, als ich am Bahnhof ankam),
+    lesson02/lesson06.exercise04.order_bus_verpasst (+Ich habe zuerst den
+    Bus verpasst), lesson03.exercise04 (+main-clause-first order),
+    lesson03.exercise05/06/07 and lesson04.exercise06/07 (+reversed clause
+    order, with/without comma), lesson04.exercise05 (+middle-field and
+    fronted "am Abend zuvor"), lesson01.exercise05 and lesson05.exercise06
+    (+fronted "An diesem Morgen"), lesson02.exercise05 (+Ich bin zu spät
+    angekommen). Word_order variants produce the expected "scrambled
+    permutation" WARNs. NATIVE FLAGS: "Warum kamen Sie heute so spät an?"
+    reads bookish in speech ("Warum sind Sie heute so spät gekommen?");
+    L01 "Ich hatte es eilig, denn es war noch dunkel" has odd causality;
+    translate_waehrend could also accept a Perfekt main clause ("..., hat
+    mein Chef angerufen"). DEFERRED: the L05 reading "Als ich ankam, war
+    der Zug schon weg -- er war schon abgefahren, bevor ich dort war"
+    contradicts L03/L06 ("fuhr der Zug gerade ab"); making them consistent
+    means reshaping read_prepast (its tested_text and options) and the
+    reading's introduced tokens (weg, dort), so it needs an author
+    decision on which version is canon. The coordinator should confirm
+    that the warum_spaet dialogue audio was not yet generated (status
+    still pending_generation).
+
 course:
   title: German B2
   description: >-
     Upper-intermediate German: recount a complex sequence of events with
-    shifting time reference -- background versus foreground (Präteritum vs.
-    Perfekt), a single past event versus an ongoing one (als vs. während),
+    shifting time reference -- scene-setting and a sequence of events
+    (Präteritum and Perfekt), a single past event versus an ongoing one (als vs. während),
     and an event before other past events (Plusquamperfekt) -- through the
     story of a chaotic morning that made a colleague late for work.
 
@@ -64,7 +113,7 @@ teaching:
   de.b2.unit04.lesson01.teach.regnen:
     title: "to rain"
     gloss: "to rain"
-    note: "*Regnete* is the Präteritum of *regnen* -- background weather description, not a foregrounded event."
+    note: "*Regnete* is the Präteritum of *regnen* -- here it describes the weather at the start of the story."
     example_gloss: "It was raining that morning."
   de.b2.unit04.lesson01.teach.draussen_kalt:
     title: "cold outside"
@@ -72,7 +121,7 @@ teaching:
   de.b2.unit04.lesson01.teach.es_eilig_haben:
     title: "to be in a hurry"
     gloss: "to be in a hurry"
-    note: "*Hatte* is the Präteritum of *haben* -- like *war*, a background verb even in spoken narration."
+    note: "*Hatte* is the Präteritum of *haben* -- like *war*, normally used in Präteritum even in spoken narration."
     example_gloss: "I was in a hurry."
   de.b2.unit04.lesson01.teach.noch_dunkel:
     title: "still dark"
@@ -80,7 +129,7 @@ teaching:
   de.b2.unit04.lesson01.teach.grammar_praeteritum:
     title: "I was tired. It was raining, and it was cold outside. I was in a hurry, because it was still dark."
     gloss: "I was tired. It was raining, and it was cold outside. I was in a hurry, because it was still dark."
-    note: "Background sets the scene before the story's events happen -- in German, background description uses PRÄTERITUM (war, regnete, hatte), even though the sequence of events themselves (next lesson) will use PERFEKT. English has no equivalent tense split; both are simply 'was/were' or simple past."
+    note: "In spoken German, a few very common verbs (sein, haben, the modals) are normally used in Präteritum (war, hatte), while most other verbs tell events in Perfekt; in written storytelling, Präteritum is used throughout. German has no separate 'background tense' -- the time relations are signalled by words like zuerst, als, während and by the Plusquamperfekt."
 
   de.b2.unit04.lesson02.teach.bus_verpassen:
     title: "to miss the bus"
@@ -88,7 +137,7 @@ teaching:
   de.b2.unit04.lesson02.teach.habe_verpasst:
     title: "I missed the bus."
     gloss: "I missed the bus."
-    note: "*Habe ... verpasst* is PERFEKT -- the tense German uses for foregrounded, sequenced events in a spoken/informal narrative, in contrast to the Präteritum background of lesson01."
+    note: "*Habe ... verpasst* is PERFEKT -- the usual past tense for most verbs when you tell a story aloud. In written storytelling the same event would normally be in Präteritum (*verpasste*)."
   de.b2.unit04.lesson02.teach.ankommen:
     title: "to arrive"
     gloss: "to arrive"
@@ -169,7 +218,7 @@ teaching:
     title: before
     gloss: before
     note: "*Bevor* introduces the LATER event in the sentence, even though it names what comes chronologically after in English word order habits -- read the whole sentence before deciding which event is earlier."
-    example_gloss: "Before I set off, I had not set the alarm."
+    example_gloss: "The train had already departed before I arrived at the station."
   de.b2.unit04.lesson04.teach.nachdem:
     title: after
     gloss: after
@@ -206,8 +255,8 @@ teaching:
     title: "Frau Vogel: Why did you arrive so late today?"
     gloss: "Frau Vogel: Why did you arrive so late today?"
   de.b2.unit04.lesson06.teach.dialogue_felix_background:
-    title: "Felix: I had not set the alarm the evening before, so I was already tired when I woke up."
-    gloss: "Felix: I had not set the alarm the evening before, so I was already tired when I woke up."
+    title: "Felix: I had not set the alarm the evening before, so I woke up late."
+    gloss: "Felix: I had not set the alarm the evening before, so I woke up late."
   de.b2.unit04.lesson06.teach.dialogue_felix_first_event:
     title: "Felix: First I missed the bus."
     gloss: "Felix: First I missed the bus."
@@ -223,7 +272,7 @@ teaching:
   de.b2.unit04.lesson06.teach.grammar_volle_geschichte:
     title: "I had not set the alarm. First I missed the bus. When I arrived at the station, the train was just departing."
     gloss: "I had not set the alarm. First I missed the bus. When I arrived at the station, the train was just departing."
-    note: "A complete complex narrative layers all four time relations: prior-past background (Plusquamperfekt), sequenced foreground events (Perfekt), and a single-moment simultaneity (als). This is exactly what you produce in the speaking and writing tasks of this lesson."
+    note: "A complete complex narrative layers three time relations: prior-past background (Plusquamperfekt), sequenced events (Perfekt with zuerst), and a single-moment simultaneity (als). Each layer has its own marker, so the listener can always reconstruct the order of events."
 
 exercises:
   de.b2.unit04.lesson01.exercise01.recognize_regnete:
@@ -231,7 +280,7 @@ exercises:
     correct_option: "was raining"
     distractors: ["is raining", "will rain", "had rained"]
     accepted_answers: [{value: "was raining", status: correct}]
-    feedback: "Regnete is the Präteritum of regnen -- was raining, background description."
+    feedback: "Regnete is the Präteritum of regnen -- was raining."
   de.b2.unit04.lesson01.exercise02.listen_regnete:
     instruction: "Listen and select what you hear."
     correct_option: "It was raining that morning, and it was cold outside."
@@ -241,7 +290,7 @@ exercises:
   de.b2.unit04.lesson01.exercise03.match_background_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {"Ich war müde.": "I was tired.", "an diesem Morgen": "that morning", regnete: "was raining", draußen: outside, kalt: cold, "es eilig haben": "to be in a hurry", noch: "still (not yet)", dunkel: dark}
+      - value: {"Ich war müde.": "I was tired.", "an diesem Morgen": "that morning", regnete: "was raining", draußen: outside, kalt: cold, "es eilig haben": "to be in a hurry", noch: still, dunkel: dark}
         status: correct
     feedback: "These are this lesson's background-scene words."
   de.b2.unit04.lesson01.exercise04.order_noch_dunkel:
@@ -253,6 +302,7 @@ exercises:
     instruction: "Translate into German: It was raining that morning."
     accepted_answers:
       - {value: "Es regnete an diesem Morgen", status: correct}
+      - {value: "An diesem Morgen regnete es", status: correct}
     feedback: "Es regnete an diesem Morgen means it was raining that morning."
   de.b2.unit04.lesson01.exercise06.write_ich_war_muede:
     instruction: "Write in German, using denn: I was tired, because it was still dark."
@@ -294,12 +344,14 @@ exercises:
     instruction: "Put the words in order: First I missed the bus."
     accepted_answers:
       - {value: "Zuerst habe ich den Bus verpasst", status: correct}
+      - {value: "Ich habe zuerst den Bus verpasst", status: correct}
     feedback: "Zuerst habe ich den Bus verpasst means first I missed the bus."
   de.b2.unit04.lesson02.exercise05.translate_bin_angekommen:
     instruction: "Translate into German, using bin ... angekommen: I arrived late."
     accepted_answers:
       - {value: "Ich bin spät angekommen", status: correct}
       - {value: "Ich bin spaet angekommen", status: correct}
+      - {value: "Ich bin zu spät angekommen", status: correct}
     feedback: "Ich bin spät angekommen means I arrived late."
   de.b2.unit04.lesson02.exercise06.write_schliesslich:
     instruction: "Write in German, using schließlich: Finally, I arrived at the office."
@@ -340,12 +392,15 @@ exercises:
     instruction: "Put the words in order: When I arrived at the station, the train was just departing."
     accepted_answers:
       - {value: "Als ich am Bahnhof ankam fuhr der Zug gerade ab", status: correct}
+      - {value: "Der Zug fuhr gerade ab als ich am Bahnhof ankam", status: correct}
     feedback: "Als ich am Bahnhof ankam, fuhr der Zug gerade ab means when I arrived at the station, the train was just departing."
   de.b2.unit04.lesson03.exercise05.translate_als:
     instruction: "Translate into German, using als: When I arrived at the station, the train was just departing."
     accepted_answers:
       - {value: "Als ich am Bahnhof ankam, fuhr der Zug gerade ab", status: correct}
       - {value: "Als ich am Bahnhof ankam fuhr der Zug gerade ab", status: correct}
+      - {value: "Der Zug fuhr gerade ab, als ich am Bahnhof ankam", status: correct}
+      - {value: "Der Zug fuhr gerade ab als ich am Bahnhof ankam", status: correct}
     feedback: "Als ich am Bahnhof ankam, fuhr der Zug gerade ab means when I arrived at the station, the train was just departing."
   de.b2.unit04.lesson03.exercise06.translate_waehrend:
     instruction: "Translate into German, using während: While I was waiting for the next train, my boss called."
@@ -353,6 +408,8 @@ exercises:
       - {value: "Während ich auf den nächsten Zug wartete, rief mein Chef an", status: correct}
       - {value: "Während ich auf den nächsten Zug wartete rief mein Chef an", status: correct}
       - {value: "Waehrend ich auf den naechsten Zug wartete, rief mein Chef an", status: correct}
+      - {value: "Mein Chef rief an, während ich auf den nächsten Zug wartete", status: correct}
+      - {value: "Mein Chef rief an während ich auf den nächsten Zug wartete", status: correct}
     feedback: "Während ich auf den nächsten Zug wartete, rief mein Chef an means while I was waiting for the next train, my boss called."
   de.b2.unit04.lesson03.exercise07.write_wenn_habit:
     instruction: "Write in German, using wenn for a HABITUAL pattern (not a single past event): Whenever I'm late, I always call."
@@ -360,6 +417,8 @@ exercises:
       - {value: "Wenn ich zu spät komme, rufe ich immer an", status: correct}
       - {value: "Wenn ich zu spät komme rufe ich immer an", status: correct}
       - {value: "Wenn ich zu spaet komme, rufe ich immer an", status: correct}
+      - {value: "Ich rufe immer an, wenn ich zu spät komme", status: correct}
+      - {value: "Ich rufe immer an wenn ich zu spät komme", status: correct}
     feedback: "Wenn ich zu spät komme, rufe ich immer an means whenever I'm late, I always call -- wenn for a repeated pattern, not als."
 
   de.b2.unit04.lesson04.exercise01.recognize_gestellt:
@@ -389,18 +448,24 @@ exercises:
     instruction: "Translate into German, using hatte ... gestellt (had set): I had not set the alarm the evening before."
     accepted_answers:
       - {value: "Ich hatte den Wecker am Abend zuvor nicht gestellt", status: correct}
+      - {value: "Ich hatte am Abend zuvor den Wecker nicht gestellt", status: correct}
+      - {value: "Am Abend zuvor hatte ich den Wecker nicht gestellt", status: correct}
     feedback: "Ich hatte den Wecker am Abend zuvor nicht gestellt means I had not set the alarm the evening before."
   de.b2.unit04.lesson04.exercise06.write_schon_abgefahren:
     instruction: "Write in German, using war ... abgefahren (had departed) and bevor: The train had already departed, before I arrived at the station."
     accepted_answers:
       - {value: "Der Zug war schon abgefahren, bevor ich am Bahnhof ankam", status: correct}
       - {value: "Der Zug war schon abgefahren bevor ich am Bahnhof ankam", status: correct}
+      - {value: "Bevor ich am Bahnhof ankam, war der Zug schon abgefahren", status: correct}
+      - {value: "Bevor ich am Bahnhof ankam war der Zug schon abgefahren", status: correct}
     feedback: "Der Zug war schon abgefahren, bevor ich am Bahnhof ankam means the train had already departed, before I arrived at the station."
   de.b2.unit04.lesson04.exercise07.translate_nachdem:
     instruction: "Translate into German, using nachdem: After the train had departed, I waited at the station."
     accepted_answers:
       - {value: "Nachdem der Zug abgefahren war, wartete ich am Bahnhof", status: correct}
       - {value: "Nachdem der Zug abgefahren war wartete ich am Bahnhof", status: correct}
+      - {value: "Ich wartete am Bahnhof, nachdem der Zug abgefahren war", status: correct}
+      - {value: "Ich wartete am Bahnhof nachdem der Zug abgefahren war", status: correct}
     feedback: "Nachdem der Zug abgefahren war, wartete ich am Bahnhof means after the train had departed, I waited at the station."
 
   de.b2.unit04.lesson05.exercise01.read_earliest:
@@ -410,7 +475,7 @@ exercises:
     accepted_answers: [{value: "Not setting the alarm the evening before.", status: correct}]
     feedback: "Ich hatte den Wecker am Abend zuvor nicht gestellt (Plusquamperfekt) marks this as the earliest event, before the story's main timeline even starts."
   de.b2.unit04.lesson05.exercise02.read_result:
-    instruction: "What was the first event of the morning itself (not counting the night before)?"
+    instruction: "Which event does the writer introduce with zuerst (first)?"
     correct_option: "He missed the bus."
     distractors: ["He missed the train.", "His boss called.", "He woke up early."]
     accepted_answers: [{value: "He missed the bus.", status: correct}]
@@ -422,7 +487,7 @@ exercises:
     accepted_answers: [{value: "He arrived at the office two hours late.", status: correct}]
     feedback: "Schließlich bin ich zwei Stunden zu spät im Büro angekommen is the story's outcome."
   de.b2.unit04.lesson05.exercise04.read_prepast:
-    instruction: "Which sentence marks an event that had ALREADY finished before Felix arrived?"
+    instruction: "Which sentence uses the Plusquamperfekt to mark an event that had already finished before Felix reached the station?"
     correct_option: "The train had already departed, before he was there."
     distractors: ["He missed the bus.", "His boss called.", "He arrived at the office."]
     accepted_answers: [{value: "The train had already departed, before he was there.", status: correct}]
@@ -439,6 +504,8 @@ exercises:
       - {value: "Es regnete an diesem Morgen, und ich war müde", status: correct}
       - {value: "Es regnete an diesem Morgen und ich war müde", status: correct}
       - {value: "Es regnete an diesem Morgen, und ich war muede", status: correct}
+      - {value: "An diesem Morgen regnete es, und ich war müde", status: correct}
+      - {value: "An diesem Morgen regnete es und ich war müde", status: correct}
     feedback: "Es regnete an diesem Morgen, und ich war müde means it was raining that morning, and I was tired."
   de.b2.unit04.lesson05.exercise07.write_zwei_stunden:
     instruction: "Write in German: I arrived at the office two hours late."
@@ -469,6 +536,7 @@ exercises:
     instruction: "Put the words in order: First I missed the bus."
     accepted_answers:
       - {value: "Zuerst habe ich den Bus verpasst", status: correct}
+      - {value: "Ich habe zuerst den Bus verpasst", status: correct}
     feedback: "Zuerst habe ich den Bus verpasst means first I missed the bus."
   de.b2.unit04.lesson06.exercise05.speak_recount:
     instruction: "Recount the story aloud in German, keeping the timeline clear. Say these three sentences, using the prior-past, sequence, and simultaneity markers already taught: (1) I had not set the alarm. (2) First I missed the bus. (3) When I arrived at the station, the train was just departing."
@@ -488,4 +556,7 @@ exercises:
       - {value: "Ich hatte den Wecker nicht gestellt", status: correct}
       - {value: "Zuerst habe ich den Bus verpasst", status: correct}
       - {value: "Als ich am Bahnhof ankam, fuhr der Zug gerade ab", status: correct}
+      - {value: "Ich hatte den Wecker am Abend zuvor nicht gestellt", status: correct}
+      - {value: "Ich habe den Bus verpasst", status: correct}
+      - {value: "Der Zug fuhr gerade ab, als ich am Bahnhof ankam", status: correct}
     feedback: "Ich hatte den Wecker nicht gestellt means I had not set the alarm -- a natural reply explaining the root cause. Zuerst habe ich den Bus verpasst (first I missed the bus) and Als ich am Bahnhof ankam, fuhr der Zug gerade ab (the train was just departing when I arrived) are the other true causes Felix recounts in this same story."
