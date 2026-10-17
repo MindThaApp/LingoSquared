@@ -6,17 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    the intended negotiation functions (propose / decline politely /
-    conditional concession / agree), that every matching_pairs right-hand
-    gloss discriminates its left on real meaning, and that the culminating
-    speaking/writing answers (lesson06) accept the punctuation forms a
-    correct learner would actually produce. See the realization file's
-    review block for the full priority list, especially the если/но только
-    если/при условии что/разве что distinctions and the two-move
-    culminating speaking task.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's B2 negotiation unit, authored alongside the
     realization (no adaptable intermediate/upper-level public-domain
@@ -39,6 +30,47 @@ review:
     writing prompt names both the revised term and the condition word
     required, so a correct answer is well-determined. No sibling-direction
     file (ru-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage course-wide, character canon, dialogue cards
+    vs audio, listen/dialogue distractors, example_glosses, overlay
+    coverage, YAML booleans, internal-jargon notes, ё/е, pronoun and
+    word-order grading gaps. Fixes (realization + en-ru overlay):
+    lesson06.teach.sam_khochesh overlay entry added (title/gloss/note,
+    сам vs сама); lesson06.exercise05.speak_full_move realization
+    target_blocks aligned with the overlay instruction (learner plays
+    Дима, so the male согласен key is determined) +"Я лучше не буду
+    покупать украшения" order and уберешь variants;
+    lesson06.exercise06.write_revised_terms prompt (realization +
+    overlay) pinned to "a reply to Дима" so сам is determined;
+    lesson04.teach.prishli_k_soglasheniyu title/gloss and
+    lesson04.exercise03.match_agreeing pair right "we reach" -> "we
+    reached an agreement" (realization + overlay);
+    lesson05.exercise01-04 read_* now show the exchange as a ru
+    target_block before the question; accepted answers widened:
+    lesson01.exercise06.speak_moyo_predlozhenie (+"ты испечёшь торт"
+    order, е variants), lesson01.exercise07.write_den_rozhdeniya
+    (+"...день рождения вместе"),
+    lesson02.exercise06.write_luchshe_ne_nado (+"Лучше не надо это/этого
+    делать"), lesson02.exercise07.translate_ne_vsyo (+все and "не могу
+    всё сделать" order), lesson03.exercise05.translate_pri_uslovii
+    (+испечешь), lesson03.exercise07.write_ya_soglasen and
+    lesson06.exercise07.respond_negotiate (+уберешь),
+    lesson04.exercise06.write_polnostyu_soglasna (+"Я полностью
+    согласна"), lesson04.exercise07.translate_podelim_schyot (+разделим
+    and счет variants), lesson05.exercise06.translate_nekogda (+"Я не
+    куплю украшения..."), lesson05.exercise07.write_zavtra (+3 natural
+    word orders). NATIVE FLAGS: разве что + present "хочешь"
+    (teach.razve_chto, sam_khochesh, write_revised_terms) may need
+    "захочешь" / "если только ты сам не хочешь", and the note calling
+    разве что "the negative conditional" needs checking; "Это лучше не
+    надо делать" is colloquial. DEFERRED (owner/author decision, needs
+    new audio): lesson06 dialogue logic -- Дима declines the decorations
+    and "concedes" only by asking Настя to also clean up, so the
+    showcase conditional concession gives nothing back (dialogue audio,
+    teach.dialogue_dima_decline_concede, comprehend_condition,
+    speak_full_move, grammar_polnyj); grader-level ё/е fold and ru
+    optional subject pronouns (Codex lane).
 
 course:
   title: "Russian B2"
@@ -199,8 +231,8 @@ teaching:
     gloss: "Shall we split the bill equally?"
     note: "*Давай поделим счёт поровну* = 'shall we split the bill equally?'. *Поделить* = 'to split / divide'; *поровну* = 'equally / evenly'."
   ru.b2.unit07.lesson04.teach.prishli_k_soglasheniyu:
-    title: "We reach an agreement."
-    gloss: "We reach an agreement."
+    title: "We reached an agreement."
+    gloss: "We reached an agreement."
     note: "*Прийти к соглашению* = 'to reach an agreement / come to terms'. *Мы пришли к соглашению* = 'we reached an agreement' -- the goal of the whole exchange."
   ru.b2.unit07.lesson04.teach.grammar_soglashenie:
     title: "Shall we split the bill equally? It's a deal. That's fine, completely agreed."
@@ -230,6 +262,10 @@ teaching:
     title: "Will you buy the decorations, then?"
     gloss: "Will you buy the decorations, then?"
     note: "*А украшения купишь ты тогда?* = 'and will you buy the decorations, then?'. *А* introduces a follow-up question."
+  ru.b2.unit07.lesson06.teach.sam_khochesh:
+    title: "Unless you want to yourself."
+    gloss: "Unless you want to (do it) yourself."
+    note: "*Сам* = '(your)self' (said to a male; to a female: *сама*). *Хочешь* = 'you want'."
   ru.b2.unit07.lesson06.teach.dialogue_nastya_open:
     title: "Nastya: Shall we organize a birthday party together?"
     gloss: "Nastya: Shall we organize a birthday party together?"
@@ -293,11 +329,15 @@ exercises:
     instruction: "Say aloud in Russian, stating a term with моё предложение: My proposal is that you bake the cake."
     accepted_answers:
       - {value: "Моё предложение торт испечёшь ты", status: "correct"}
+      - {value: "Мое предложение торт испечешь ты", status: "correct"}
+      - {value: "Моё предложение ты испечёшь торт", status: "correct"}
+      - {value: "Мое предложение ты испечешь торт", status: "correct"}
     feedback: "Моё предложение — торт испечёшь ты means my proposal is that you bake the cake."
   ru.b2.unit07.lesson01.exercise07.write_den_rozhdeniya:
     instruction: "Write in Russian: We're organizing a birthday party together."
     accepted_answers:
       - {value: "Мы вместе устраиваем день рождения", status: "correct"}
+      - {value: "Мы устраиваем день рождения вместе", status: "correct"}
     feedback: "Мы вместе устраиваем день рождения means we're organizing a birthday party together."
   ru.b2.unit07.lesson01.exercise08.dictation_predlagayu_ispech:
     instruction: "Type what you hear."
@@ -344,11 +384,16 @@ exercises:
     instruction: "Write in Russian, declining softly with лучше не надо: It's better not to do that."
     accepted_answers:
       - {value: "Это лучше не надо делать", status: "correct"}
+      - {value: "Лучше не надо это делать", status: "correct"}
+      - {value: "Лучше не надо этого делать", status: "correct"}
     feedback: "Это лучше не надо делать means it's better not to do that -- the gentlest way to decline."
   ru.b2.unit07.lesson02.exercise07.translate_ne_vsyo:
     instruction: "Translate into Russian, using не могу: I can't do everything."
     accepted_answers:
       - {value: "Я не могу сделать всё", status: "correct"}
+      - {value: "Я не могу сделать все", status: "correct"}
+      - {value: "Я не могу всё сделать", status: "correct"}
+      - {value: "Я не могу все сделать", status: "correct"}
     feedback: "Я не могу сделать всё means I can't do everything -- the reason a negotiation is needed."
 
   ru.b2.unit07.lesson03.exercise01.recognize_pri_uslovii:
@@ -386,6 +431,7 @@ exercises:
       - {value: "Я куплю украшения при условии что ты испечёшь торт", status: "correct"}
       - {value: "Я куплю украшения, при условии что ты испечёшь торт", status: "correct"}
       - {value: "Я куплю украшения, при условии, что ты испечёшь торт", status: "correct"}
+      - {value: "Я куплю украшения, при условии, что ты испечешь торт", status: "correct"}
     feedback: "Я куплю украшения, при условии, что ты испечёшь торт."
   ru.b2.unit07.lesson03.exercise06.speak_conditional:
     instruction: "Offer a conditional concession aloud, using но только если: I can bake the cake, but only if you buy the decorations."
@@ -399,6 +445,7 @@ exercises:
       - {value: "Я согласен при условии что ты уберёшь после", status: "correct"}
       - {value: "Я согласен, при условии что ты уберёшь после", status: "correct"}
       - {value: "Я согласен, при условии, что ты уберёшь после", status: "correct"}
+      - {value: "Я согласен, при условии, что ты уберешь после", status: "correct"}
     feedback: "Я согласен, при условии, что ты уберёшь после -- я согласен means 'I agree' (male speaker form)."
   ru.b2.unit07.lesson03.exercise08.dictation_no_tolko_esli:
     instruction: "Type what you hear."
@@ -427,7 +474,7 @@ exercises:
           - {left: "полностью согласен", right: "completely agreed (male speaker)"}
           - {left: "счёт", right: "the bill"}
           - {left: "поровну", right: "equally / evenly"}
-          - {left: "мы пришли к соглашению", right: "we reach an agreement"}
+          - {left: "мы пришли к соглашению", right: "we reached an agreement"}
         status: "correct"
     feedback: "Sealing the deal (договорились, хорошо, полностью согласен) plus the money side (счёт, поровну)."
   ru.b2.unit07.lesson04.exercise04.order_podelim_schyot:
@@ -444,11 +491,15 @@ exercises:
     instruction: "This is Настя's reply. Write in Russian: Completely agreed."
     accepted_answers:
       - {value: "Полностью согласна", status: "correct"}
+      - {value: "Я полностью согласна", status: "correct"}
     feedback: "Полностью согласна means completely agreed (female speaker form)."
   ru.b2.unit07.lesson04.exercise07.translate_podelim_schyot:
     instruction: "Translate into Russian, proposing with давай: Shall we split the bill equally?"
     accepted_answers:
       - {value: "Давай поделим счёт поровну", status: "correct"}
+      - {value: "Давай разделим счёт поровну", status: "correct"}
+      - {value: "Давай поделим счет поровну", status: "correct"}
+      - {value: "Давай разделим счет поровну", status: "correct"}
     feedback: "Давай поделим счёт поровну? means shall we split the bill equally?"
 
   ru.b2.unit07.lesson05.exercise01.read_agreed:
@@ -492,11 +543,15 @@ exercises:
     accepted_answers:
       - {value: "Я не буду покупать украшения потому что мне некогда", status: "correct"}
       - {value: "Я не буду покупать украшения, потому что мне некогда", status: "correct"}
+      - {value: "Я не куплю украшения, потому что мне некогда", status: "correct"}
     feedback: "Я не буду покупать украшения, потому что мне некогда."
   ru.b2.unit07.lesson05.exercise07.write_zavtra:
     instruction: "Write in Russian: We'll talk about the decorations tomorrow."
     accepted_answers:
       - {value: "Про украшения поговорим завтра", status: "correct"}
+      - {value: "Поговорим про украшения завтра", status: "correct"}
+      - {value: "Завтра поговорим про украшения", status: "correct"}
+      - {value: "Мы поговорим про украшения завтра", status: "correct"}
     feedback: "Про украшения поговорим завтра means we'll talk about the decorations tomorrow."
 
   ru.b2.unit07.lesson06.exercise01.comprehend_proposal:
@@ -529,9 +584,12 @@ exercises:
       - {value: "Я предлагаю, чтобы торт испекла ты. Украшения я лучше не буду покупать, но я согласен, при условии, что ты уберёшь после", status: "correct"}
       - {value: "Я предлагаю чтобы торт испекла ты. Украшения я лучше не буду покупать, но я согласен при условии что ты уберёшь после.", status: "correct"}
       - {value: "Я предлагаю чтобы торт испекла ты. Украшения я лучше не буду покупать, но я согласен при условии что ты уберёшь после", status: "correct"}
+      - {value: "Я предлагаю, чтобы торт испекла ты. Украшения я лучше не буду покупать, но я согласен, при условии, что ты уберешь после.", status: "correct"}
+      - {value: "Я предлагаю, чтобы торт испекла ты. Я лучше не буду покупать украшения, но я согласен, при условии, что ты уберёшь после.", status: "correct"}
+      - {value: "Я предлагаю, чтобы торт испекла ты. Я лучше не буду покупать украшения, но я согласен, при условии, что ты уберешь после.", status: "correct"}
     feedback: "The whole move: state a term (Я предлагаю, чтобы торт испекла ты), decline one (Украшения я лучше не буду покупать), and concede on a condition (но я согласен, при условии, что ты уберёшь после)."
   ru.b2.unit07.lesson06.exercise06.write_revised_terms:
-    instruction: "Write a reply proposing DIFFERENT terms with a condition attached. Offer to buy the decorations yourself (украшения куплю я) and attach a condition with разве что: I'll buy the decorations, unless you'd rather do it yourself."
+    instruction: "Write a reply to Дима proposing DIFFERENT terms with a condition attached. Offer to buy the decorations yourself (украшения куплю я) and attach a condition with разве что: I'll buy the decorations, unless you'd rather do it yourself."
     accepted_answers:
       - {value: "Украшения куплю я разве что ты сам хочешь", status: "correct"}
       - {value: "Украшения куплю я, разве что ты сам хочешь", status: "correct"}
@@ -542,4 +600,5 @@ exercises:
       - {value: "Я испеку торт при условии что ты уберёшь после", status: "correct"}
       - {value: "Я испеку торт, при условии что ты уберёшь после", status: "correct"}
       - {value: "Я испеку торт, при условии, что ты уберёшь после", status: "correct"}
+      - {value: "Я испеку торт, при условии, что ты уберешь после", status: "correct"}
     feedback: "Я испеку торт, при условии, что ты уберёшь после -- you agree to bake, but only on the condition that the other person cleans up after."
