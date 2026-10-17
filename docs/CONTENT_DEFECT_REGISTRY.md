@@ -2189,5 +2189,8 @@ Remaining:
   order, which raises intended "scrambled permutation" warnings (en-hi 39 → 46
   warnings).
 - §1.27 (comprehension `correct_response` = Hindi source) was not seen in
-  this pass. `test_content_answer_shapes.py` was run against the full corpus
-  (see the PR for the result).
+  this pass.
+Verification: `scripts/verify.sh --content-only` passes (en-hi 0 errors / 46
+warnings, a2 0/15, b1 0/21, b2 0/0, c1 0/0). The full backend suite was run
+against local Postgres with the whole repo (`LINGO_REPO_ROOT` set): 33305
+passed, 0 skipped. `test_content_answer_shapes.py` alone: 32845 passed.
