@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: null
+  status: "reviewed"
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Seventeenth Polish B1 unit, continuing from pl/b1_unit16_warunki_
     realne_i_nierealne.yaml. Realizes universal.b1.conditions.express_
@@ -84,6 +84,23 @@ review:
     file having been compiled first. Pending fresh-context review per
     AUTHORING_GUIDE #9; not self-certified.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    lesson01.teach.negacja_note -- Polish said 'wynik zostaje bez zmian'
+    (the result stays unchanged), contradicting the overlay gloss, the
+    review_note ('wynik inny') and the examples (different result) -> 'a
+    wynik to osobne, inne zdanie' (false-grammar). (2)
+    lesson04.exercise07 -- removed the English free-production prompt
+    block ('about your own everyday planning') that contradicted the
+    overlay's fixed translation instruction/exact key
+    (underdetermined-prompt). No NATIVE CHECK items.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.b1
   target_language_first: true
@@ -121,7 +138,7 @@ units:
               {text: "A jeśli nie zdążę na czas, złapię następny pociąg.", language_code: pl, direction: ltr}
           - content_key: pl.b1.unit17.lesson01.teach.negacja_note
             kind: grammar_note
-            target: {text: "Negacja warunku: \"jeśli nie\" + czasownik -- neguje TYLKO zdanie warunkowe, wynik zostaje bez zmian.", language_code: pl, direction: ltr}
+            target: {text: "Negacja warunku: \"jeśli nie\" + czasownik -- neguje TYLKO zdanie warunkowe, a wynik to osobne, inne zdanie.", language_code: pl, direction: ltr}
             introduced_tokens: ["Jutro", "rano", "A"]
           - content_key: pl.b1.unit17.lesson01.teach.recap_basics
             kind: vocabulary
@@ -133,15 +150,11 @@ units:
           - content_key: pl.b1.unit17.lesson01.exercise01.select_jesli_zdaze_na_czas
             type: multiple_choice
             tested_text: "Jeśli zdążę na czas złapię pociąg o ósmej"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli zdążę na czas, złapię pociąg o ósmej.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson01.exercise02.select_jesli_nie_zdaze
             type: multiple_choice
             tested_text: "Jeśli nie zdążę na czas złapię następny pociąg"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli nie zdążę na czas, złapię następny pociąg.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson01.exercise03.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "jeśli zdążę na czas złapię pociąg ósmej nie następny dzisiaj jadę do pracy pociągiem"
@@ -208,15 +221,11 @@ units:
           - content_key: pl.b1.unit17.lesson02.exercise01.select_jesli_starczy_mi_pieniedzy
             type: multiple_choice
             tested_text: "Jeśli starczy mi pieniędzy kupię nowe buty"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli starczy mi pieniędzy, kupię nowe buty.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson02.exercise02.select_jesli_nie_starczy
             type: multiple_choice
             tested_text: "Jeśli nie starczy mi pieniędzy poczekam do przyszłego miesiąca"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli nie starczy mi pieniędzy, poczekam do przyszłego miesiąca.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson02.exercise03.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "starczy mi pieniędzy kupię nowe buty poczekam do przyszłego miesiąca idę zakupy"
@@ -315,15 +324,11 @@ units:
           - content_key: pl.b1.unit17.lesson03.exercise01.select_ewa_pyta_o_godzine
             type: multiple_choice
             tested_text: "O której jedziesz jutro na spotkanie"
-            prompt:
-              target_blocks:
-                - {text: "O której jedziesz jutro na spotkanie?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson03.exercise02.select_marek_o_pociagu
             type: multiple_choice
             tested_text: "Jeśli zdążę na czas złapię pociąg o ósmej jeśli nie zdążę złapię następny"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli zdążę na czas, złapię pociąg o ósmej. Jeśli nie zdążę, złapię następny.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson03.exercise03.comprehend_marek_pyta_o_zakupy
             type: dialogue_comprehension
             tested_text: "idziesz jutro na zakupy po nowe buty"
@@ -393,9 +398,7 @@ units:
           - content_key: pl.b1.unit17.lesson04.exercise01.select_jesli_zdaze_review
             type: multiple_choice
             tested_text: "Jeśli zdążę na czas złapię pociąg o ósmej"
-            prompt:
-              target_blocks:
-                - {text: "Jeśli zdążę na czas, złapię pociąg o ósmej.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson04.exercise02.match_unit_review
             type: matching_pairs
             tested_text: "jeśli zdążę złapię pociąg jeśli nie zdążę następny starczy poczekam"
@@ -432,9 +435,7 @@ units:
           - content_key: pl.b1.unit17.lesson04.exercise07.write_warunki_realne_podsumowanie
             type: writing_prompt
             tested_text: "Jeśli zdążę na czas złapię pociąg o ósmej Jeśli nie zdążę na czas złapię następny pociąg"
-            prompt:
-              target_blocks:
-                - {text: "Write one real/possible condition about your own everyday planning using 'jeśli' + future, AND its negation using 'jeśli nie' + future, with a different result.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit17.lesson04.exercise08.reply_jakie_masz_plany_na_jutro
             type: dialogue_response
             tested_text: "Jeśli zdążę na czas złapię pociąg o ósmej"
