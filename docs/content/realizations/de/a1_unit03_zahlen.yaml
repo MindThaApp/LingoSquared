@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Third German unit, continuing the Anna/Felix storyline (still on
     the formal Sie register established in unit01, unbroken through
@@ -92,6 +92,24 @@ review:
     "Das kostet [N] Euro" for 30-100 (lesson03, real price usage,
     previewing unit07's own Euro-pricing content). schema_version
     bumped to 1.1.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    Checked pacing, token coverage, accepted-answer completeness, number
+    spelling, cue/dialogue consistency, and learner-visible wording,
+    together with the en-de overlay. Fixes: lesson02.teach.elf_zwoelf /
+    dreizehn_bis_sechzehn / siebzehn_bis_zwanzig examples "Ich wohne in
+    Hausnummer N." -> "Meine Hausnummer ist N." (10 sentences; overlay
+    example_gloss -> "My house number is N."); overlay
+    lesson03.teach.dreissig_bis_fuenfzig note and
+    lesson03.exercise01.choose_dreissig feedback no longer claim 30 is
+    "the one irregular multiple of ten" (zwanzig is too);
+    lesson05.teach.line02 note "unit02" -> "Unit 2". NATIVE FLAG: "Ich
+    habe null Äpfel." is grammatical but unidiomatic (natives say "keine
+    Äpfel") -- kept as a counting demo pending native judgment; the new
+    "Meine Hausnummer ist N." examples also want a native glance.
+    DEFERRED (pipeline, Codex/frontend lane): listen_select
+    lesson05.exercise02 audio_text = tested_text over a full-dialogue
+    asset (TTS fallback could speak "einunddreißig" alone).
 
 course:
   realization_key: "de.a1"
@@ -176,26 +194,26 @@ units:
             target: {text: "elf, zwölf", language_code: "de", direction: "ltr"}
             introduced_tokens: ["elf", "zwölf"]
             example:
-              - {text: "Ich wohne in Hausnummer elf.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer zwölf.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist elf.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist zwölf.", language_code: "de", direction: "ltr"}
           - content_key: "de.a1.unit03.lesson02.teach.dreizehn_bis_sechzehn"
             kind: "vocabulary"
             target: {text: "dreizehn, vierzehn, fünfzehn, sechzehn", language_code: "de", direction: "ltr"}
             introduced_tokens: ["dreizehn", "vierzehn", "fünfzehn", "sechzehn"]
             example:
-              - {text: "Ich wohne in Hausnummer dreizehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer vierzehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer fünfzehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer sechzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist dreizehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist vierzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist fünfzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist sechzehn.", language_code: "de", direction: "ltr"}
           - content_key: "de.a1.unit03.lesson02.teach.siebzehn_bis_zwanzig"
             kind: "vocabulary"
             target: {text: "siebzehn, achtzehn, neunzehn, zwanzig", language_code: "de", direction: "ltr"}
             introduced_tokens: ["siebzehn", "achtzehn", "neunzehn", "zwanzig"]
             example:
-              - {text: "Ich wohne in Hausnummer siebzehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer achtzehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer neunzehn.", language_code: "de", direction: "ltr"}
-              - {text: "Ich wohne in Hausnummer zwanzig.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist siebzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist achtzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist neunzehn.", language_code: "de", direction: "ltr"}
+              - {text: "Meine Hausnummer ist zwanzig.", language_code: "de", direction: "ltr"}
         exercises:
           - {content_key: "de.a1.unit03.lesson02.exercise01.listen_dreizehn", type: "listen_select", tested_text: "dreizehn", media_asset_key: "de.a1.audio.zahlen.dreizehn.01", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit03.lesson02.exercise02.choose_sechzehn", type: "multiple_choice", tested_text: "sechzehn", prompt: {target_blocks: []}}
