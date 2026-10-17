@@ -21,7 +21,7 @@ generation_provenance:
     fr_FR_standard_metropolitan) was consulted, which is not a
     sibling-direction violation.
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed. This is a DRAFT. Priority checks
     for the reviewer: (1) naturalness/idiom of every connective frame
@@ -61,6 +61,42 @@ review:
     so a B2 learner never sees B1 lexemes at runtime -- same
     self-containment precedent as nl's first B2 unit). No sibling-direction
     file was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked realization + en-fr overlay for unit01 (answer keys,
+    elision/gender/word-order variants, matching-pair
+    discriminability, listen/dialogue distractors vs audio, dialogue
+    cards vs audio script, Inès/Mathieu canon, course-scoped token
+    coverage, YAML booleans, learner-visible notes). Fixes:
+    lesson04.exercise03.match_rebuttal_words: cependant/however pair
+    (interchangeable with pourtant, whose gloss already says 'yet /
+    still / however') -> peser/'to weigh (carry weight)' in pairs,
+    tested_text and overlay value; lesson05.exercise01-04
+    reading_comprehension prompts now carry the French passage as the
+    first target_block (the question previously never showed the
+    text); lesson05.exercise06.translate_convaincu accepts feminine
+    'Je suis convaincue que...' (convaincue introduced on
+    lesson05.teach.texte, gloss updated);
+    lesson02.exercise07.write_two_reasons accepts '...tu es plus
+    productive' (productive introduced on lesson02.teach.productif,
+    note added); lesson03.exercise06.speak_deux_cotes accepts the
+    idiomatic '..., de l'autre tes collègues te manquent';
+    lesson03.exercise07.write_evidemment accepts 'Évidemment, parfois
+    tes collègues te manquent'; lesson04.teach.cela_nempeche_pas_que
+    note now states that careful French uses the subjunctive after it
+    and the indicative is an everyday-speech variant. NATIVE FLAGS:
+    cela n'empêche pas que + indicative 'tu peux' throughout (lesson05
+    reading, lesson06 dialogue card + audio
+    fr.b2.unit01.audio.argumentation.dialogue.teletravail.01,
+    lesson06.exercise04 tiles) -- standard is 'tu puisses'; Mathieu
+    opens with 'De l'autre côté, ...' without a preceding 'd'un côté'
+    ('D'un autre côté' is more natural standalone);
+    lesson03.exercise04 'Parfois tes collègues te manquent' and
+    lesson04.exercise04 'Les avantages pèsent pourtant plus lourd' are
+    valid tile orders but cannot be accepted (the compiler warns on
+    reordered word_order answers). DEFERRED: switching the unit to
+    cela n'empêche pas que + subjunctive (audio text, reading,
+    word_order tiles) pending native confirmation.
 
 course:
   realization_key: fr.b2
@@ -254,7 +290,7 @@ units:
           - content_key: fr.b2.unit01.lesson02.teach.productif
             kind: vocabulary
             target: {text: "productif", language_code: fr, direction: ltr}
-            introduced_tokens: [productif]
+            introduced_tokens: [productif, productive]
             example: {text: "À la maison, je suis plus productif.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit01.lesson02.teach.grammar_raisons
             kind: grammar_note
@@ -480,13 +516,13 @@ units:
             prompt: {target_blocks: []}
           - content_key: fr.b2.unit01.lesson04.exercise03.match_rebuttal_words
             type: matching_pairs
-            tested_text: "pourtant en revanche mais cependant cela n'empêche pas que bref avantages inconvénients"
+            tested_text: "pourtant en revanche mais peser cela n'empêche pas que bref avantages inconvénients"
             prompt: {target_blocks: []}
             pairs:
               - {left: pourtant, right: "yet / still"}
               - {left: "en revanche", right: "by contrast"}
               - {left: mais, right: but}
-              - {left: cependant, right: however}
+              - {left: peser, right: "to weigh (carry weight)"}
               - {left: "cela n'empêche pas que...", right: "that does not change the fact that..."}
               - {left: bref, right: "in short"}
               - {left: "les avantages", right: advantages}
@@ -528,24 +564,24 @@ units:
                 que les inconvénients.
               language_code: fr
               direction: ltr
-            introduced_tokens: [à, la, maison, en, gens, travaillent, convaincu, bonne, évolution, et, télétravailleurs, sont, souvent, productifs, disent, "qu'à", peux, encore, appeler, faire, des, visioconférences]
+            introduced_tokens: [à, la, maison, en, gens, travaillent, convaincu, convaincue, bonne, évolution, et, télétravailleurs, sont, souvent, productifs, disent, "qu'à", peux, encore, appeler, faire, des, visioconférences]
         exercises:
           - content_key: fr.b2.unit01.lesson05.exercise01.read_claim
             type: reading_comprehension
             tested_text: "une bonne évolution"
-            prompt: {target_blocks: [{text: "What is the author's main claim about working from home?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "De plus en plus de gens travaillent à la maison. Je suis convaincu que c'est une bonne évolution. Premièrement, tu économises beaucoup de temps de trajet, et une étude montre que les télétravailleurs sont souvent plus productifs. Évidemment, certains disent qu'à la maison, tes collègues te manquent. C'est vrai, mais cela n'empêche pas que tu peux encore appeler et faire des visioconférences. Bref, les avantages pèsent plus lourd que les inconvénients.", language_code: fr, direction: ltr}, {text: "What is the author's main claim about working from home?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit01.lesson05.exercise02.read_objection
             type: reading_comprehension
             tested_text: "tes collègues te manquent"
-            prompt: {target_blocks: [{text: "Which objection does the author acknowledge before answering it?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "De plus en plus de gens travaillent à la maison. Je suis convaincu que c'est une bonne évolution. Premièrement, tu économises beaucoup de temps de trajet, et une étude montre que les télétravailleurs sont souvent plus productifs. Évidemment, certains disent qu'à la maison, tes collègues te manquent. C'est vrai, mais cela n'empêche pas que tu peux encore appeler et faire des visioconférences. Bref, les avantages pèsent plus lourd que les inconvénients.", language_code: fr, direction: ltr}, {text: "Which objection does the author acknowledge before answering it?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit01.lesson05.exercise03.read_rebuttal
             type: reading_comprehension
             tested_text: "appeler et faire des visioconférences"
-            prompt: {target_blocks: [{text: "How does the author answer that objection?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "De plus en plus de gens travaillent à la maison. Je suis convaincu que c'est une bonne évolution. Premièrement, tu économises beaucoup de temps de trajet, et une étude montre que les télétravailleurs sont souvent plus productifs. Évidemment, certains disent qu'à la maison, tes collègues te manquent. C'est vrai, mais cela n'empêche pas que tu peux encore appeler et faire des visioconférences. Bref, les avantages pèsent plus lourd que les inconvénients.", language_code: fr, direction: ltr}, {text: "How does the author answer that objection?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit01.lesson05.exercise04.read_conclusion
             type: reading_comprehension
             tested_text: "les avantages pèsent plus lourd"
-            prompt: {target_blocks: [{text: "What is the author's overall conclusion?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "De plus en plus de gens travaillent à la maison. Je suis convaincu que c'est une bonne évolution. Premièrement, tu économises beaucoup de temps de trajet, et une étude montre que les télétravailleurs sont souvent plus productifs. Évidemment, certains disent qu'à la maison, tes collègues te manquent. C'est vrai, mais cela n'empêche pas que tu peux encore appeler et faire des visioconférences. Bref, les avantages pèsent plus lourd que les inconvénients.", language_code: fr, direction: ltr}, {text: "What is the author's overall conclusion?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit01.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "de plus en plus gens convaincu évolution télétravailleurs visioconférences"
