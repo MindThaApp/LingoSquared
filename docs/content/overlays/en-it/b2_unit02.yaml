@@ -6,7 +6,7 @@ target_language: it
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-Italian confirmation needed (DRAFT). Confirm every English gloss
     matches idiomatic Italian, that every matching_pairs right-hand gloss
@@ -27,6 +27,36 @@ review:
     style flipped constructions do not recur in this unit (that was unit01)
     so no new risk there. No sibling-direction file (it-en b2) was
     consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    accepted-answer completeness and word-order variants, underdetermined
+    prompts, matching_pairs discrimination and realization/overlay mirrors,
+    learner-visible internal ids, grammar-note accuracy, example_gloss vs
+    example, YAML booleans. Fixes: lesson01.teach.sara title +
+    lesson01.exercise03.match_certainty_words pair (realization and overlay
+    mirror) "is probably (future of certainty)" -> "is probably (future of
+    probability)"; lesson01.exercise05 accepted + "Probabilmente è in
+    ritardo"; lesson01.exercise06 accepted + "È senza dubbio in ritardo";
+    lesson01.exercise07 accepted + "Sam non c'è ancora";
+    lesson02.exercise05, lesson06.exercise05, lesson06.exercise07 accepted +
+    elided "Dev'essere bloccato nel traffico"; lesson03.teach.immagino_che
+    note: dropped the "(unit01)" internal id;
+    lesson03.exercise06.speak_magari_ancora prompt (realization target_block
+    + overlay instruction) pinned "guessing with magari";
+    lesson03.exercise07.write_non_sicuro accepted + "Non ne sono sicura",
+    "Non sono sicuro", "Non sono sicura" (gender rule) and feedback mentions
+    sicura; lesson04.exercise06 accepted + "Dev'essere successo qualcosa",
+    "Qualcosa deve essere successo"; lesson04.teach.grammar_passato note
+    corrected (aver, or essere for verbs like succedere, essersi for
+    reflexives); lesson06.exercise06 accepted + adverb-first and
+    comma-joined variants (3); lesson06.exercise07.respond_speculate
+    instruction pinned to "...a confident present deduction that he is stuck
+    in traffic". NATIVE FLAGS: certainty-scale ranking (sarà vs
+    probabilmente, sicuramente vs senza dubbio) and near-synonym rights for
+    di sicuro/senza dubbio/sicuramente in match_certainty_words;
+    lesson06.exercise06 train + traffic causes are mutually odd (coherence).
+    DEFERRED: per-unit course.description under the shared "Italian B2"
+    course (structural/compiler question).
 
 course:
   title: Italian B2
@@ -73,7 +103,7 @@ teaching:
     gloss: probably
     example_gloss: "He is probably late."
   it.b2.unit02.lesson01.teach.sara:
-    title: "is probably (future of certainty)"
+    title: "is probably (future of probability)"
     gloss: "he's probably / he must be (epistemic future)"
     note: "Italian famously uses the FUTURE TENSE to express present probability: *sarà in ritardo* does not mean 'he will be late' here, it means 'he's probably late / he must be late'. This is a very common everyday construction with no direct English equivalent -- English uses a modal, Italian uses a tense."
     example_gloss: "He's probably late."
@@ -146,7 +176,7 @@ teaching:
   it.b2.unit02.lesson03.teach.immagino_che:
     title: "I imagine that"
     gloss: "I imagine that / I'd guess that"
-    note: "*Immaginare che* is an opinion verb like *credere che* (unit01) and also triggers the congiuntivo: *immagino che sia a casa*, not *è*."
+    note: "*Immaginare che* is an opinion verb like *credere che* and also triggers the congiuntivo: *immagino che sia a casa*, not *è*."
     example_gloss: "I imagine he's at home."
   it.b2.unit02.lesson03.teach.scommetto_che:
     title: "I bet that"
@@ -191,7 +221,7 @@ teaching:
   it.b2.unit02.lesson04.teach.grammar_passato:
     title: "Speculating about the past"
     gloss: "He must have missed the train. Something must have happened. He might have overslept."
-    note: "Past speculation = *dovere*/*potere* + *aver*/*essersi* + past participle. *Deve* gives a confident past deduction; *potrebbe* gives a tentative past guess."
+    note: "Past speculation = *dovere*/*potere* + *aver* (or *essere* for verbs like *succedere*; *essersi* for reflexive verbs) + past participle. *Deve* gives a confident past deduction; *potrebbe* gives a tentative past guess."
 
   it.b2.unit02.lesson05.teach.testo:
     title: "Reading: is Sam stuck in traffic?"
@@ -259,7 +289,7 @@ exercises:
   it.b2.unit02.lesson01.exercise03.match_certainty_words:
     instruction: "Match each Italian word or phrase with its meaning."
     accepted_answers:
-      - value: {forse: maybe, probabilmente: probably, sarà: "is probably (future of certainty)", "di sicuro": "for sure", "senza dubbio": "without a doubt", sicuramente: certainly, "in ritardo": late, ancora: yet}
+      - value: {forse: maybe, probabilmente: probably, sarà: "is probably (future of probability)", "di sicuro": "for sure", "senza dubbio": "without a doubt", sicuramente: certainly, "in ritardo": late, ancora: yet}
         status: correct
     feedback: "These are this lesson's certainty-scale words."
   it.b2.unit02.lesson01.exercise04.order_sara_ritardo:
@@ -271,16 +301,19 @@ exercises:
     instruction: "Translate into Italian, using probabilmente: He is probably late."
     accepted_answers:
       - {value: "È probabilmente in ritardo", status: correct}
+      - {value: "Probabilmente è in ritardo", status: correct}
     feedback: "*È probabilmente in ritardo* means he is probably late."
   it.b2.unit02.lesson01.exercise06.speak_senza_dubbio:
     instruction: "Say aloud in Italian, using senza dubbio: Without a doubt, he is late."
     accepted_answers:
       - {value: "Senza dubbio è in ritardo", status: correct}
+      - {value: "È senza dubbio in ritardo", status: correct}
     feedback: "*Senza dubbio è in ritardo* means without a doubt, he is late."
   it.b2.unit02.lesson01.exercise07.write_sam_non_e_qui:
     instruction: "Write in Italian: Sam isn't here yet."
     accepted_answers:
       - {value: "Sam non è ancora qui", status: correct}
+      - {value: "Sam non c'è ancora", status: correct}
     feedback: "*Sam non è ancora qui* means Sam isn't here yet."
   it.b2.unit02.lesson01.exercise08.dictation_sara_ritardo:
     instruction: "Type what you hear."
@@ -315,6 +348,7 @@ exercises:
     instruction: "Translate into Italian, using deve (deduction): He must be stuck in traffic."
     accepted_answers:
       - {value: "Deve essere bloccato nel traffico", status: correct}
+      - {value: "Dev'essere bloccato nel traffico", status: correct}
     feedback: "*Deve essere bloccato nel traffico* means he must be stuck in traffic."
   it.b2.unit02.lesson02.exercise06.write_non_puo_malato:
     instruction: "Write in Italian, using non può essere: He cannot be sick."
@@ -362,7 +396,7 @@ exercises:
       - {value: "Potrebbe essere a casa", status: correct}
     feedback: "*Potrebbe essere a casa* means he might be at home."
   it.b2.unit02.lesson03.exercise06.speak_magari_ancora:
-    instruction: "Say aloud in Italian, guessing: Maybe he is still at home."
+    instruction: "Say aloud in Italian, guessing with magari: Maybe he is still at home."
     accepted_answers:
       - {value: "Magari è ancora a casa", status: correct}
     feedback: "*Magari è ancora a casa* means maybe he is still at home."
@@ -370,7 +404,10 @@ exercises:
     instruction: "Write in Italian, signalling you are only guessing: I'm not sure."
     accepted_answers:
       - {value: "Non ne sono sicuro", status: correct}
-    feedback: "*Non ne sono sicuro* means I'm not sure."
+      - {value: "Non ne sono sicura", status: correct}
+      - {value: "Non sono sicuro", status: correct}
+      - {value: "Non sono sicura", status: correct}
+    feedback: "*Non ne sono sicuro* (or *sicura*, said by a woman) means I'm not sure."
 
   it.b2.unit02.lesson04.exercise01.recognize_perso:
     instruction: "What does this word mean?"
@@ -404,6 +441,8 @@ exercises:
     instruction: "Write in Italian, using deve essere... (must have): Something must have happened."
     accepted_answers:
       - {value: "Deve essere successo qualcosa", status: correct}
+      - {value: "Dev'essere successo qualcosa", status: correct}
+      - {value: "Qualcosa deve essere successo", status: correct}
     feedback: "*Deve essere successo qualcosa* means something must have happened."
   it.b2.unit02.lesson04.exercise07.translate_potrebbe_svegliato:
     instruction: "Translate into Italian, using potrebbe essersi... (might have, reflexive): He might have overslept."
@@ -479,15 +518,20 @@ exercises:
     instruction: "Sam's car is gone and it's rush hour, but he isn't here. Speculate aloud about the present cause, using deve essere (deduction): He must be stuck in traffic."
     accepted_answers:
       - {value: "Deve essere bloccato nel traffico", status: correct}
+      - {value: "Dev'essere bloccato nel traffico", status: correct}
     feedback: "*Deve essere bloccato nel traffico* means he must be stuck in traffic."
   it.b2.unit02.lesson06.exercise06.write_past_and_present:
     instruction: "Write TWO Italian sentences speculating about why Sam is late, at DIFFERENT certainty levels. (1) A PAST cause you are sure of (deduction), using deve aver...: He must have missed the train. (2) A PRESENT cause you are less sure of, using probabilmente: He is probably stuck in traffic."
     accepted_answers:
       - {value: "Deve aver perso il treno. È probabilmente bloccato nel traffico", status: correct}
+      - {value: "Deve aver perso il treno. Probabilmente è bloccato nel traffico", status: correct}
+      - {value: "Deve aver perso il treno, è probabilmente bloccato nel traffico", status: correct}
+      - {value: "Deve aver perso il treno, probabilmente è bloccato nel traffico", status: correct}
     feedback: "*Deve aver perso il treno. È probabilmente bloccato nel traffico.*"
   it.b2.unit02.lesson06.exercise07.respond_speculate:
-    instruction: "Sam is late. Reply to 'Perché Sam è così in ritardo?' with a confident present deduction."
+    instruction: "Sam is late. Reply to 'Perché Sam è così in ritardo?' with a confident present deduction that he is stuck in traffic."
     accepted_answers:
       - {value: "Sarà bloccato nel traffico", status: correct}
       - {value: "Deve essere bloccato nel traffico", status: correct}
+      - {value: "Dev'essere bloccato nel traffico", status: correct}
     feedback: "*Sarà bloccato nel traffico* -- a confident present deduction about why he is late."

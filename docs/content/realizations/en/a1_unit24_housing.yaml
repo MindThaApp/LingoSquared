@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Initial four-lesson draft, authored directly (Codex usage-limited
     at time of authoring). Audio remains pending generation. This is
@@ -26,6 +26,42 @@ review:
     by fa-en/nl-en/prs-en/de-en; example_gloss added to one paired
     overlay as part of this same pass (see that overlay's own notes).
 
+    Fresh-context review 2026-10-11 (content-reviewer.md
+    checklist): checked every exercise against the
+    position-matched nl-en overlay (unit24) plus fa-en/prs-en
+    accepted answers, grading normalization (case/punctuation
+    only; contractions NOT equated), answer leaks in
+    target_blocks, distractor/audio overlap. Fixes:
+    lesson02.exercise04.reply_how_many_rooms target_block 'How
+    many rooms are there?' -> 'Is there a kitchen?' (expected
+    reply 'There's a small kitchen' did not answer the old
+    question); 'Yes, there's/there is a small kitchen.' added to
+    nl-en/fa-en/prs-en accepted answers and nl-en instruction
+    re-pinned to 'Is er een keuken?'.
+    lesson02.exercise02.choose_there_is_sentence target_block
+    (contained the correct option verbatim) -> [].
+    lesson02.exercise05.write_next_to and
+    lesson03.exercise05.write_own_home target_blocks (answer
+    sentence shown near-verbatim) -> []. Media asset
+    en.a1.audio.housing.question.01 text 'How many rooms are
+    there? What's your favorite room?' -> 'How many rooms are
+    there?' (second question untaught until lesson04 and made the
+    single-answer listen_select ambiguous; asset
+    pending_generation, used only here).
+    lesson04.exercise05.reply_as_daniel /
+    exercise06.speak_home_dialogue: added three uncontracted
+    variants (There is / It is / it is, plus 'there is not') to
+    nl-en/fa-en/prs-en. nl-en
+    lesson04.exercise02.listen_favorite_room distractor 'the
+    kitchen' (Daniel says it in the same sentence) -> 'the
+    garden'. DEFERRED: same listen_favorite_room distractor in
+    fa-en/prs-en (option change, fa/prs lane); fa-en/prs-en
+    reply_how_many_rooms instructions already ask what room is in
+    the home, so no Persian change needed; splitting
+    reply_as_daniel/speak_home_dialogue into one exercise per
+    question (mixed contracted/uncontracted 45-word answers still
+    reject) is a shape/owner decision.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -34,7 +70,7 @@ course:
 
 media_assets:
   - {content_key: "en.a1.audio.housing.rooms.living_room.01", language: "en", text: "living room", voice_hint: "neutral_adult", status: "pending_generation"}
-  - {content_key: "en.a1.audio.housing.question.01", language: "en", text: "How many rooms are there? What's your favorite room?", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "en.a1.audio.housing.question.01", language: "en", text: "How many rooms are there?", voice_hint: "neutral_adult", status: "pending_generation"}
   - {content_key: "en.a1.audio.housing.description.01", language: "en", text: "My apartment has two bedrooms and one bathroom. There's a small kitchen next to the living room.", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a1.audio.dialogue.describing_home.01"
     language: "en"
@@ -76,10 +112,10 @@ units:
           - {content_key: "en.a1.unit24.lesson02.teach.next_to", kind: "vocabulary", target: {text: "next to", language_code: "en", direction: "ltr"}, introduced_tokens: ["next", "to"], example: {text: "The chair is next to the table.", language_code: "en", direction: "ltr"}}
         exercises:
           - {content_key: "en.a1.unit24.lesson02.exercise01.listen_question", type: "listen_select", tested_text: "How many rooms are there", media_asset_key: "en.a1.audio.housing.question.01", prompt: {target_blocks: []}}
-          - {content_key: "en.a1.unit24.lesson02.exercise02.choose_there_is_sentence", type: "multiple_choice", tested_text: "There's a small kitchen.", prompt: {target_blocks: [{text: "How do you say there's a small kitchen?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit24.lesson02.exercise02.choose_there_is_sentence", type: "multiple_choice", tested_text: "There's a small kitchen.", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit24.lesson02.exercise03.order_next_to_kitchen", type: "word_order", tested_text: "The living room is next to the kitchen", prompt: {target_blocks: []}, word_bank: ["living", "room", "is", "next", "to", "the", "kitchen", "The"]}
-          - {content_key: "en.a1.unit24.lesson02.exercise04.reply_how_many_rooms", type: "dialogue_response", tested_text: "There's a small kitchen", prompt: {target_blocks: [{text: "How many rooms are there?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit24.lesson02.exercise05.write_next_to", type: "writing_prompt", tested_text: "The kitchen is next to the living room.", prompt: {target_blocks: [{text: "Write that the kitchen is next to the living room.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit24.lesson02.exercise04.reply_how_many_rooms", type: "dialogue_response", tested_text: "There's a small kitchen", prompt: {target_blocks: [{text: "Is there a kitchen?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit24.lesson02.exercise05.write_next_to", type: "writing_prompt", tested_text: "The kitchen is next to the living room.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit24.lesson03.reading_a_home_description"
         title: "Reading a home description"
@@ -92,7 +128,7 @@ units:
           - {content_key: "en.a1.unit24.lesson03.exercise02.read_bathroom_count", type: "reading_comprehension", tested_text: "one", prompt: {target_blocks: [{text: "How many bathrooms does the apartment have?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit24.lesson03.exercise03.choose_kitchen_location", type: "multiple_choice", tested_text: "next to the living room", prompt: {target_blocks: [{text: "Where is the kitchen?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit24.lesson03.exercise04.order_two_bedrooms", type: "word_order", tested_text: "My apartment has two bedrooms and one bathroom", prompt: {target_blocks: []}, word_bank: ["apartment", "has", "two", "bedrooms", "and", "one", "bathroom", "My"]}
-          - {content_key: "en.a1.unit24.lesson03.exercise05.write_own_home", type: "writing_prompt", tested_text: "My apartment has two bedrooms and one bathroom.", prompt: {target_blocks: [{text: "Write that your apartment has two bedrooms and one bathroom.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit24.lesson03.exercise05.write_own_home", type: "writing_prompt", tested_text: "My apartment has two bedrooms and one bathroom.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit24.lesson04.home_description_dialogue"
         title: "Talking about your home"

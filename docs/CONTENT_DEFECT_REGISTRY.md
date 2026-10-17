@@ -2028,3 +2028,54 @@ Native-judgment flags for Ramin are recorded per pack in review.notes.
 Rule candidates (validator backlog, Codex lane): flag a bare-word translation
 gloss that starts with "the"; flag a C1 translation pool member whose gloss
 alternative equals any gloss alternative of another lexeme in the course.
+
+### 2026-10-17 — remaining review backlog: en-de/it/ru/ro/es/fr + shared English (87 commits, fresh-context review; branch content/review-backlog-rest, PR #31)
+Scope: the `review.status: unreviewed` backlog outside the Dutch directions
+and outside the en-nl C1 packs — overlays + realizations for en-de (A1
+u01-10, B1 u35-53, B2, C1), en-it (A1 u19-24, A2, B1, B2, C1), en-ru (A1
+u19-24, A2, B1, B2, C1), en-ro (A1 u20, A2 u21-26, B2, C1), en-es (A1
+u04-15, A2 u16-21, B2 u01-03, C1 u02-04 + u08), en-fr (A1 u04-14, A2 u15);
+the shared English realizations (`realizations/en/**`, A1 u01-68, A2
+u25-40, B1 u15-19) with their nl-en/fa-en/prs-en/de-en overlays; plus
+en-nl practice A1 u12-13. ~660 files touched.
+Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS
++ PRACTICE_PACK_RECIPE.
+Bug classes found: reading/comprehension questions that never showed the
+notice, sentence or passage they ask about (the most widespread class, every
+direction); 1.21 missing valid accepted answers (word-order variants,
+gender/formality variants, du/ihr, ё/е spellings, taught synonyms,
+contractions); underdetermined open speak/write prompts graded against one
+exact text (now pinned or given the model text); answers given away by the
+prompt, the option's punctuation or by being the only plausible option;
+1.17-family second-correct distractors and interchangeable matching pairs;
+wrong comprehension keys and listen distractors the audio actually says
+(1.22); false grammar/register notes (en-de Präteritum/Perfekt
+"background/foreground" rule, en-ro -ul vs -i and puteți "conditional",
+en-es quisiera, en-fr partitive, en-ru register claims); illogical or
+garbled lines (en-de "noch nicht zu Hause", "kommt an auf"); character-canon
+slips (en-es Elena location, en-fr contradictions); translation
+target_blocks that printed the answer (shared English A1 u39-68); missing
+overlay entries and internals/placeholder `review.notes` rewritten.
+New bug class discovered: no — all instances fit existing classes.
+Instance count: 842 fixes counted in commit subjects (59 commits); 28 further
+commits (all en-es and en-fr, most en-ru B1 u40+, en-ro C1 u04-08 and B2
+u06-08, two notes/answer-leak sweeps) list fix categories but no count.
+
+Per direction/level (commits → fixes counted in subjects; "+n" = commits
+without a count; mixed-level commits shown under both levels joined):
+- shared en (+ nl/fa/prs/de-en overlays): A1 10 → 148 (+1) · A1+A2 1 → 13 ·
+  A2 2 → 19 · B1 1 → 9 — total 189
+- en-de: A1 3 → 53 · A1+B1 1 → 19 · B1 5 → 48 · B1+B2 1 → 11 · B2 2 → 65 ·
+  B2+C1 1 → 6 · C1 3 → 56 — total 258
+- en-it: A1 2 → 27 · A2 3 → 18 · A2+B1 1 → 9 · B1 6 → 32 (+1) · B1+B2 1 → 21 ·
+  B2 2 → 47 · B2+C1 1 → 27 · C1 2 → 18 — total 199
+- en-ro: A1+A2 1 → 38 · A2 1 → 20 · A2+B2 1 → 24 · B2 2 → 12 (+1) ·
+  C1 3 → 12 (+2) — total 106
+- en-ru: A1 2 → 12 · A2 3 → 36 · A2+B1 1 → 22 · B1 5 → 12 (+4) · B1+B2 (+1) ·
+  B2 (+2) · B2+C1 (+1) · C1 (+2) — total 82
+- en-es: A1 (+4) · A2 (+2) · B2 (+1) · C1 (+2) — no counts in subjects
+- en-fr: A1 (+3) · A1+A2 (+1) — no counts in subjects
+- en-nl practice: A1 1 → 8
+
+Remaining: en-fr A2 u16 onward through C1 (~47 units), not reviewed — run
+cut off.

@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for de's first B2 unit, authored alongside the realization (no
     adaptable upper-intermediate public-domain German source exists; see
@@ -24,6 +24,40 @@ review:
     'besser, als im Büro zu arbeiten' (als + zu-infinitive) has no direct
     English equivalent word order -- flagged in lesson01. No sibling
     direction file (de-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked German accuracy, connective word order, register, prompt
+    determinacy and accepted-answer completeness (grading is
+    case/punctuation-insensitive), matching pairs, distractors,
+    learner-visible grammar notes. Fixes:
+    de.b2.unit01.lesson06.exercise05.speak_full_argument and
+    lesson06.exercise06.write_full_argument prompts/instructions now
+    name Ich finde, dass as a signpost and say 'I think that ...'
+    (previously correct 'Ich finde, Homeoffice ist ...' / 'Meiner
+    Meinung nach ...' answers were graded wrong); overlay accepted
+    answers for both also take '... vermisst man die Kollegen manchmal
+    ...' (umlaut + ASCII for the write task).
+    de.b2.unit01.lesson03.exercise04.order_natuerlich_vermisst: added
+    'Natürlich vermisst man die Kollegen manchmal' (the tiles build it;
+    the compiler's alternative-order warning is expected).
+    de.b2.unit01.lesson04.exercise07.write_kurz_gesagt: added the
+    inverted 'Kurz gesagt überwiegen die Vorteile die Nachteile' (+ ue
+    variant); lesson04.teach.kurz_gesagt note no longer implies
+    inversion is wrong.
+    de.b2.unit01.lesson05.exercise07.write_immer_mehr: added '...
+    arbeiten von zu Hause' and '... arbeiten zu Hause'.
+    de.b2.unit01.lesson05.exercise06.translate_ueberzeugt: added 'Ich
+    bin überzeugt, dass das eine gute Entwicklung ist' (+ ue variant).
+    de.b2.unit01.lesson04.teach.dagegen note corrected (dagegen follows
+    the contrasted element zu Hause, not a subject). NATIVE FLAGS:
+    lesson04 match_rebuttal_words pairs aber 'but' and jedoch 'however',
+    which are near-synonyms (borderline confusable pair); article-less
+    'Homeoffice' as a subject (vs 'das Homeoffice' / 'Arbeiten im
+    Homeoffice'); lesson04 write_aendert_nichts 'dass die Freiheit
+    überwiegt' may read oddly; lesson03 translate_obwohl -- 'schön' for
+    'nice' is untaught and not accepted. DEFERRED: the orphaned
+    b2_unit54_argumentation realization and en-de/b2_unit54 overlay (in
+    no manifest) need an owner decision on deletion; untouched.
 
 course:
   title: German B2
@@ -216,7 +250,7 @@ teaching:
   de.b2.unit01.lesson04.teach.dagegen:
     title: "by contrast"
     gloss: "by contrast / on the other hand"
-    note: "*Dagegen* sets one thing directly against another: 'at the office it's loud; at home, by contrast, it's quiet'. It typically follows the subject it contrasts, as in the example."
+    note: "*Dagegen* sets one thing directly against another: 'at the office it's loud; at home, by contrast, it's quiet'. It typically comes right after the element it contrasts (here *zu Hause*), as in the example."
     example_gloss: "At the office it is loud; at home, by contrast, it is quiet."
   de.b2.unit01.lesson04.teach.aber:
     title: but
@@ -235,7 +269,7 @@ teaching:
   de.b2.unit01.lesson04.teach.kurz_gesagt:
     title: "in short"
     gloss: "in short"
-    note: "*Kurz gesagt* signposts your conclusion -- it wraps the argument up: 'in short, ...'. Set off by a comma, it doesn't itself trigger inversion: the subject follows directly, then the verb, as in *Kurz gesagt, Homeoffice ist besser*."
+    note: "*Kurz gesagt* signposts your conclusion -- it wraps the argument up: 'in short, ...'. Set off by a comma, it can stand outside the sentence (*Kurz gesagt, Homeoffice ist besser*); without the comma it takes the first position and the verb follows (*Kurz gesagt ist Homeoffice besser*). Both are correct."
     example_gloss: "In short, home office is better."
   de.b2.unit01.lesson04.teach.vorteile:
     title: advantages
@@ -431,6 +465,7 @@ exercises:
     instruction: "Put the words in order: Of course, you sometimes miss your colleagues."
     accepted_answers:
       - {value: "Natürlich vermisst man manchmal die Kollegen", status: correct}
+      - {value: "Natürlich vermisst man die Kollegen manchmal", status: correct}
     feedback: "Natürlich vermisst man manchmal die Kollegen means of course, you sometimes miss your colleagues."
   de.b2.unit01.lesson03.exercise05.translate_obwohl:
     instruction: "Translate into German, using obwohl: Although home office is nice, you sometimes miss your colleagues."
@@ -492,6 +527,8 @@ exercises:
       - {value: "Kurz gesagt, die Vorteile überwiegen die Nachteile", status: correct}
       - {value: "Kurz gesagt die Vorteile überwiegen die Nachteile", status: correct}
       - {value: "Kurz gesagt, die Vorteile ueberwiegen die Nachteile", status: correct}
+      - {value: "Kurz gesagt überwiegen die Vorteile die Nachteile", status: correct}
+      - {value: "Kurz gesagt ueberwiegen die Vorteile die Nachteile", status: correct}
     feedback: "Kurz gesagt, die Vorteile überwiegen die Nachteile means in short, the advantages outweigh the disadvantages."
 
   de.b2.unit01.lesson05.exercise01.read_claim:
@@ -529,11 +566,15 @@ exercises:
     accepted_answers:
       - {value: "Ich bin davon überzeugt, dass das eine gute Entwicklung ist", status: correct}
       - {value: "Ich bin davon ueberzeugt, dass das eine gute Entwicklung ist", status: correct}
+      - {value: "Ich bin überzeugt, dass das eine gute Entwicklung ist", status: correct}
+      - {value: "Ich bin ueberzeugt, dass das eine gute Entwicklung ist", status: correct}
     feedback: "Ich bin davon überzeugt, dass das eine gute Entwicklung ist means I am convinced that this is a good development."
   de.b2.unit01.lesson05.exercise07.write_immer_mehr:
     instruction: "Write in German: More and more people work from home."
     accepted_answers:
       - {value: "Immer mehr Menschen arbeiten von zu Hause aus", status: correct}
+      - {value: "Immer mehr Menschen arbeiten von zu Hause", status: correct}
+      - {value: "Immer mehr Menschen arbeiten zu Hause", status: correct}
     feedback: "Immer mehr Menschen arbeiten von zu Hause aus means more and more people work from home."
 
   de.b2.unit01.lesson06.exercise01.comprehend_claim:
@@ -560,17 +601,20 @@ exercises:
       - {value: "Das ändert nichts daran dass man Videoanrufe machen kann", status: correct}
     feedback: "Das ändert nichts daran, dass man Videoanrufe machen kann means that does not change the fact that you can video-call."
   de.b2.unit01.lesson06.exercise05.speak_full_argument:
-    instruction: "Defend a position aloud in German with a full argument. Say these four sentences, using erstens, natürlich and trotzdem as signposts: (1) I think home office is better than working at the office. (2) Firstly, you save a lot of commute time. (3) Of course, you sometimes miss your colleagues. (4) Still, the advantages prevail."
+    instruction: "Defend a position aloud in German with a full argument. Say these four sentences, using Ich finde, dass, erstens, natürlich and trotzdem as signposts: (1) I think that home office is better than working at the office. (2) Firstly, you save a lot of commute time. (3) Of course, you sometimes miss your colleagues. (4) Still, the advantages prevail."
     accepted_answers:
       - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile", status: correct}
       - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile.", status: correct}
+      - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man die Kollegen manchmal. Trotzdem überwiegen die Vorteile.", status: correct}
     feedback: "A full spoken argument: Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile."
   de.b2.unit01.lesson06.exercise06.write_full_argument:
-    instruction: "Write a full argument in German defending your position. Write these four sentences, using erstens, natürlich and trotzdem as signposts: (1) I think home office is better than working at the office. (2) Firstly, you save a lot of commute time. (3) Of course, you sometimes miss your colleagues. (4) Still, the advantages prevail."
+    instruction: "Write a full argument in German defending your position. Write these four sentences, using Ich finde, dass, erstens, natürlich and trotzdem as signposts: (1) I think that home office is better than working at the office. (2) Firstly, you save a lot of commute time. (3) Of course, you sometimes miss your colleagues. (4) Still, the advantages prevail."
     accepted_answers:
       - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile.", status: correct}
       - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile", status: correct}
       - {value: "Ich finde, dass Homeoffice besser ist, als im Buero zu arbeiten. Erstens spart man viel Pendelzeit. Natuerlich vermisst man manchmal die Kollegen. Trotzdem ueberwiegen die Vorteile.", status: correct}
+      - {value: "Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man die Kollegen manchmal. Trotzdem überwiegen die Vorteile.", status: correct}
+      - {value: "Ich finde, dass Homeoffice besser ist, als im Buero zu arbeiten. Erstens spart man viel Pendelzeit. Natuerlich vermisst man die Kollegen manchmal. Trotzdem ueberwiegen die Vorteile.", status: correct}
     feedback: "A complete written argument -- claim, support, acknowledged objection, rebuttal: Ich finde, dass Homeoffice besser ist, als im Büro zu arbeiten. Erstens spart man viel Pendelzeit. Natürlich vermisst man manchmal die Kollegen. Trotzdem überwiegen die Vorteile."
   de.b2.unit01.lesson06.exercise07.respond_defend:
     instruction: "You are defending home office. Which reply best supports your position with a reason and evidence?"

@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft. Realizes universal.a1.personality.
     describe_basic_personality_traits, the next unrealized outcome in the
@@ -123,6 +123,28 @@ review:
     the mandatory fresh-context review before any overlay authors build on
     it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked the realization against its nl-en/fa-en/prs-en overlays (no
+    de-en overlay for this unit), compiled nl-en, and checked Daniel/Mia
+    history across units 31-41. Fixes:
+    en.a1.unit42.lesson02.exercise05.translate_whats_he_like --
+    translation answer-leak target_block removed (coordinator sweep);
+    en.a1.unit42.lesson01.exercise03.match_personality_words
+    realization-default pair calm 'quiet in a noisy place' -> 'stays
+    relaxed and doesn't get upset easily' (mis-defined calm and overlapped
+    shy; nl-en already overrides it). DEFERRED (owner decision):
+    en.a1.unit42.lesson03.teach.dialogue_line1 'I'm starting a new project
+    with Daniel next week. What's he like?' contradicts the established
+    cast (Mia has known Daniel since unit31; this unit's reading calls
+    them close friends). Smallest fix is '... What's he like at work?'
+    with matching audio text en.a1.audio.dialogue.personality.01 and
+    at/work in introduced_tokens, but the fa-en/prs-en dialogue glosses
+    and notes need Persian/Dari updates (overlays/fa-en/a1_unit42.yaml,
+    overlays/prs-en/a1_unit42.yaml) plus the nl-en gloss; the alternative
+    is rewriting the dialogue around a new coworker. DEFERRED:
+    fa-en/prs-en calm definitions ('calm in a noisy place') inherit the
+    old mis-definition and need Persian/Dari text.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -159,7 +181,7 @@ units:
         exercises:
           - {content_key: "en.a1.unit42.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "hardworking", media_asset_key: "en.a1.audio.personality.words.hardworking.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit42.lesson01.exercise02.choose_shy_meaning", type: "multiple_choice", tested_text: "shy", prompt: {target_blocks: [{text: "Which word describes someone who feels nervous meeting new people?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit42.lesson01.exercise03.match_personality_words", type: "matching_pairs", tested_text: "friendly funny hardworking shy calm talkative", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "friendly", right: "kind and easy to talk to"}, {left: "funny", right: "makes people laugh"}, {left: "hardworking", right: "works hard and doesn't give up easily"}, {left: "shy", right: "nervous or quiet around new people"}, {left: "calm", right: "quiet in a noisy place"}, {left: "talkative", right: "talks a lot"}]}
+          - {content_key: "en.a1.unit42.lesson01.exercise03.match_personality_words", type: "matching_pairs", tested_text: "friendly funny hardworking shy calm talkative", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "friendly", right: "kind and easy to talk to"}, {left: "funny", right: "makes people laugh"}, {left: "hardworking", right: "works hard and doesn't give up easily"}, {left: "shy", right: "nervous or quiet around new people"}, {left: "calm", right: "stays relaxed and doesn't get upset easily"}, {left: "talkative", right: "talks a lot"}]}
           - {content_key: "en.a1.unit42.lesson01.exercise04.order_hardworking_sentence", type: "word_order", tested_text: "She is a hardworking employee.", word_bank: ["She", "is", "a", "hardworking", "employee."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit42.lesson01.exercise05.write_calm_word", type: "writing_prompt", tested_text: "calm", prompt: {target_blocks: [{text: "Write the word for someone who doesn't get upset or nervous easily.", language_code: "en", direction: "ltr"}]}}
 
@@ -178,7 +200,7 @@ units:
           - {content_key: "en.a1.unit42.lesson02.exercise02.choose_sense_of_humor_meaning", type: "multiple_choice", tested_text: "have a great sense of humor", prompt: {target_blocks: [{text: "Which phrase means someone is very funny and makes people laugh?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit42.lesson02.exercise03.choose_warm_up_quickly_meaning", type: "multiple_choice", tested_text: "warm up quickly", prompt: {target_blocks: [{text: "Which phrase means someone becomes comfortable soon after meeting new people?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit42.lesson02.exercise04.order_coworker_sentence", type: "word_order", tested_text: "My coworker is very hardworking.", word_bank: ["My", "coworker", "is", "very", "hardworking."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit42.lesson02.exercise05.translate_whats_he_like", type: "translation", tested_text: "What's he like?", prompt: {target_blocks: [{text: "Translate: \"What's he like?\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit42.lesson02.exercise05.translate_whats_he_like", type: "translation", tested_text: "What's he like?", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit42.lesson03.dialogue_what_is_daniel_like"
         title: "Dialogue: What is Daniel like?"

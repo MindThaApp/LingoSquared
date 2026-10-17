@@ -27,8 +27,8 @@ generation_provenance:
     or short-adjective forms tied to the speaker — готов agrees with отчёт),
     so a learner of either gender can reproduce it verbatim.
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Targets universal.c1.register.control_tone_and_register_precisely.
     Priority checks for the reviewer: (1) confirm the four tones — formal,
@@ -48,6 +48,36 @@ review:
     only inside the message to the superior, never between Настя and Дима;
     (7) confirm listen/dictation exercises each use a dedicated asset whose
     text matches tested_text byte-for-byte.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    grading behavior (no ё/е folding; spoken short tokens exact),
+    prompt/answer consistency, matching_pairs discrimination, distractor
+    validity, learner-visible meta text. Fixes:
+    lesson02.exercise01.recognize_diplomatichny target_block no longer names
+    К сожалению (now 'Which Russian sentence states the bad news
+    diplomatically, softening it with an expression of regret?');
+    lesson02.exercise05.translate_diplomatichny target_block 'Write the
+    exact taught diplomatic message: <Russian answer>' -> 'Translate into
+    Russian: Unfortunately, the report will be ready a bit later. I hope for
+    your understanding.' (answer leak + contradiction with the overlay);
+    lesson04.exercise01.recognize_emfatichesky target_block no longer names
+    Честно говоря; lesson05.exercise04.match_sravnenie pair 'Ну конечно'
+    right 'irony' -> 'pretended agreement (irony)' (was interchangeable with
+    'как всегда' = 'ironic aside'; overlay mirrored). Overlay-side fixes
+    listed in the en-ru overlay review. NATIVE FLAGS: (a) the ironic model
+    'Ну конечно, отчёт будет готов ещё вчера, как всегда' blends future
+    будет готов with ещё вчера -- the natural sarcastic idiom is 'отчёт
+    нужен был ещё вчера' / 'должен был быть готов ещё вчера'; changing it
+    means every copy, the audio asset and the glosses; (b) formal-letter
+    convention: '!' after the salutation and capitalized 'Вам' for a single
+    addressee -- not graded (case-insensitive), but the unit teaches formal
+    register. DEFERRED: dictation_ves_akt (orthography_strict, single
+    correct_response with отчёт) marks a learner typing отчет wrong -- needs
+    an owner decision on ru ё/е folding in backend/app/review/grading.py
+    (Codex lane), which would also make the е-variant additions redundant
+    and cover mixed ё/е spellings; English target_blocks that duplicate the
+    overlay instruction (compiler prints both) are a structural ru-C1
+    authoring pattern -- owner decision.
 
 course:
   realization_key: ru.c1
@@ -177,7 +207,7 @@ units:
           - content_key: ru.c1.unit03.ton_i_registr.lesson02.exercise01.recognize_diplomatichny
             type: multiple_choice
             tested_text: "К сожалению, отчёт будет готов немного позже."
-            prompt: {target_blocks: [{text: "Which Russian phrase softens bad news diplomatically, opening with К сожалению?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Which Russian sentence states the bad news diplomatically, softening it with an expression of regret?", language_code: en, direction: ltr}]}
           - content_key: ru.c1.unit03.ton_i_registr.lesson02.exercise02.listen_diplomatichny
             type: listen_select
             tested_text: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание."
@@ -202,7 +232,7 @@ units:
           - content_key: ru.c1.unit03.ton_i_registr.lesson02.exercise05.translate_diplomatichny
             type: writing_prompt
             tested_text: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание."
-            prompt: {target_blocks: [{text: "Write the exact taught diplomatic message: К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Translate into Russian: Unfortunately, the report will be ready a bit later. I hope for your understanding.", language_code: en, direction: ltr}]}
             accepted_answers:
               - {value: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание.", status: correct}
               - {value: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание", status: correct}
@@ -278,7 +308,7 @@ units:
           - content_key: ru.c1.unit03.ton_i_registr.lesson04.exercise01.recognize_emfatichesky
             type: multiple_choice
             tested_text: "Честно говоря, отчёт почти готов."
-            prompt: {target_blocks: [{text: "Which Russian phrase is emphatic — stressing the truth with Честно говоря?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Which Russian phrase is emphatic — stressing the truth of what follows?", language_code: en, direction: ltr}]}
           - content_key: ru.c1.unit03.ton_i_registr.lesson04.exercise02.listen_emfatichesky
             type: listen_select
             tested_text: "Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня."
@@ -344,7 +374,7 @@ units:
               - {left: "Уважаемый Иван Петрович", right: "formal salutation"}
               - {left: "сообщаю вам", right: "formal reporting verb"}
               - {left: "К сожалению", right: "diplomatic softening"}
-              - {left: "Ну конечно", right: "irony"}
+              - {left: "Ну конечно", right: "pretended agreement (irony)"}
               - {left: "Честно говоря", right: "emphasis"}
               - {left: "как всегда", right: "ironic aside"}
 

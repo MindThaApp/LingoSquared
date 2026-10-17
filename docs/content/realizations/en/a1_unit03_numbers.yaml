@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fresh-context review: verified spine_outcome_id (numbers) is served
     by every lesson with no drift; adversarial learner pass confirmed
@@ -30,6 +30,27 @@ review:
     example_gloss so far. schema_version bumped to 1.1. Reverted
     review.status from "reviewed" to "unreviewed" since this is a real
     content addition needing its own fresh-context check.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked spine fit, pacing, taught-token coverage of prompts,
+    answer derivability, register and the X-en overlays' English
+    answer sets. Fixes: lesson03.exercise06.write_price target_block
+    Write the price: $10. -> $10 (untaught Write/price);
+    lesson03.exercise05.reply_phone prompt now also shows 555-1234 so
+    every direction knows which number to give (nl-en instruction also
+    pinned); lesson04.exercise04.order_apples_question
+    tested_text/word_bank how -> How (all four overlay answer arrays
+    updated). Overlay answer widening: write_price (It is ten
+    dollars.), reply_as_leila (It is five dollars. They are two
+    dollars.). nl-en Dutch fixes: teach.price_two gloss (Ze kosten
+    twee dollar), garbled teach.fifteen note rewritten. NATIVE FLAG:
+    the market dialogue has Leila quoting prices without an
+    established seller role, and OK, how old is this shop? is an odd
+    follow-up (grammatical; naturalness only). DEFERRED:
+    lesson01.exercise05.order_seven is a one-tile word_order that
+    tests nothing; reshaping it to multiple_choice/writing_prompt
+    changes the exercise shape mirrored by all four overlays
+    (fa-en/prs-en need Persian/Dari text).
 
 course:
   realization_key: "en.a1"
@@ -134,8 +155,8 @@ units:
           - content_key: "en.a1.unit03.lesson03.exercise05.reply_phone"
             type: "dialogue_response"
             tested_text: "What's your phone number It's five five five one two three four"
-            prompt: {target_blocks: [{text: "What's your phone number?", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit03.lesson03.exercise06.write_price", type: "writing_prompt", tested_text: "It's ten dollars", prompt: {target_blocks: [{text: "Write the price: $10.", language_code: "en", direction: "ltr"}]}}
+            prompt: {target_blocks: [{text: "What's your phone number?", language_code: "en", direction: "ltr"}, {text: "555-1234", language_code: "en", direction: "ltr"}]}
+          - {content_key: "en.a1.unit03.lesson03.exercise06.write_price", type: "writing_prompt", tested_text: "It's ten dollars", prompt: {target_blocks: [{text: "$10", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit03.lesson04.market_dialogue"
         title: "At the market: ages, prices, and quantities"
@@ -156,7 +177,7 @@ units:
             type: "multiple_choice"
             tested_text: "It's twenty years old"
             prompt: {target_blocks: [{text: "How old is this shop?", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit03.lesson04.exercise04.order_apples_question", type: "word_order", tested_text: "how much are the apples", prompt: {target_blocks: []}, word_bank: ["much", "are", "the", "apples", "how"]}
+          - {content_key: "en.a1.unit03.lesson04.exercise04.order_apples_question", type: "word_order", tested_text: "How much are the apples", prompt: {target_blocks: []}, word_bank: ["much", "are", "the", "apples", "How"]}
           - content_key: "en.a1.unit03.lesson04.exercise05.reply_as_leila"
             type: "dialogue_response"
             tested_text: "It's five dollars They're two dollars"

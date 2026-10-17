@@ -6,7 +6,7 @@ target_language: it
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-Italian confirmation needed (DRAFT). Confirm every English gloss
     matches idiomatic Italian, that every matching_pairs right-hand gloss
@@ -27,6 +27,40 @@ review:
     between imperfetto/passato prossimo/trapassato are the highest-risk
     area of this whole unit for an English speaker. No sibling-direction
     file (it-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    accepted-answer completeness and word-order variants, gendered
+    first-person answers, distractors that are also correct, dialogue/audio
+    chronology, grammar-note accuracy, construction notes, example_gloss vs
+    example, YAML booleans. Fixes: lesson01.exercise05 accepted + "Quella
+    mattina pioveva"; lesson05.exercise06 accepted + "Quella mattina pioveva
+    e avevo fretta"; lesson01.exercise06 accepted + "Ero stanca" (gender
+    rule); lesson03.exercise05 and lesson04.exercise07 accepted + "arrivata"
+    variants (with and without comma); lesson05.exercise07 accepted + "Per
+    questo mi sono svegliata tardi"; lesson06.exercise05 accepted +
+    comma-less and "arrivata" variants; lesson03.teach.se_abitudine note no
+    longer claims quando cannot mark a habit, and
+    lesson03.teach.grammar_quando_mentre note notes that present-tense
+    quando can also mark a habit; lesson03.exercise01.recognize_quando
+    distractor "whenever (a habit)" (a real meaning of quando) -> "because";
+    lesson06.exercise02.comprehend_last distractor "Arriving at the
+    airport." (arguably the true last event, since the flight left before
+    Sam arrived) -> "Getting dressed.";
+    lesson06.exercise03.comprehend_prepast distractor "He had already missed
+    the alarm." (arguably true) -> "He had already checked in.";
+    lesson06.exercise06 accepted + "Quella mattina pioveva" first sentence
+    and comma-after-"La sera prima" variants (3);
+    lesson06.exercise07.respond_why_late instruction no longer calls mi sono
+    svegliato a trapassato prossimo ("...with the cause, using the passato
+    prossimo") and accepted + "Perché mi sono svegliato tardi" plus
+    svegliata forms; lesson06 grammar card note no longer describes the
+    lesson's tasks. NATIVE FLAGS: "l'aereo partiva" vs "stava partendo";
+    "arrivato all'aeroporto" not accepted alongside "in aeroporto" in
+    lesson03.exercise05; lesson05 reading "Ma questo era iniziato prima"
+    (natives may prefer "Ma tutto era cominciato prima"); poi vs
+    successivamente near-synonym rights in match_sequence_words. DEFERRED:
+    per-unit course.description under the shared "Italian B2" course
+    (structural/compiler question).
 
 course:
   title: Italian B2
@@ -156,11 +190,11 @@ teaching:
   it.b2.unit04.lesson03.teach.se_abitudine:
     title: "If I'm late, I always call the boss."
     gloss: "If I'm late, I always call the boss."
-    note: "*Se* here marks a HABIT in the present tense ('whenever'), not a single past event -- do not use *quando* for a repeated pattern like this."
+    note: "*Se* here marks a HABIT in the present tense ('if/whenever'), not a single past event. (*Quando* can also express a habit like this; the contrast with the past *quando* above is the tense, not the word.)"
   it.b2.unit04.lesson03.teach.grammar_quando_mentre:
     title: "Quando, mentre, se"
     gloss: "When I arrived, the plane was leaving. While I was getting dressed, the boss called. If I'm late, I always call the boss."
-    note: "*Quando* = a single past interruption; *mentre* = an ongoing background action interrupted by an event; *se* = a habitual pattern, not tied to one specific past moment."
+    note: "*Quando* = a single past interruption; *mentre* = an ongoing background action interrupted by an event; *se* = a habitual pattern, not tied to one specific past moment (in the present, *quando* can also mark a habit)."
 
   it.b2.unit04.lesson04.teach.non:
     title: not
@@ -248,7 +282,7 @@ teaching:
   it.b2.unit04.lesson06.teach.grammar_storia_completa:
     title: "The whole story, three time layers"
     gloss: "It was raining that morning. The evening before, I hadn't set my alarm. In the end I missed the flight."
-    note: "A complete narrative has three layers: background (imperfetto), pre-past cause (trapassato prossimo), and foreground outcome (passato prossimo) -- exactly what the speaking and writing tasks of this lesson ask you to produce."
+    note: "A complete narrative has three layers: background (imperfetto), pre-past cause (trapassato prossimo), and foreground outcome (passato prossimo). Telling the events out of order is fine: the tenses show which came first."
 
 exercises:
   it.b2.unit04.lesson01.exercise01.recognize_pioveva:
@@ -278,12 +312,14 @@ exercises:
     instruction: "Translate into Italian, setting the background scene with the imperfetto: It was raining that morning."
     accepted_answers:
       - {value: "Pioveva quella mattina", status: correct}
+      - {value: "Quella mattina pioveva", status: correct}
     feedback: "*Pioveva quella mattina* means it was raining that morning."
   it.b2.unit04.lesson01.exercise06.write_ero_stanco:
     instruction: "Write in Italian, using the imperfetto for background: I was tired."
     accepted_answers:
       - {value: "Ero stanco", status: correct}
-    feedback: "*Ero stanco* means I was tired."
+      - {value: "Ero stanca", status: correct}
+    feedback: "*Ero stanco* (or *stanca*, said by a woman) means I was tired."
   it.b2.unit04.lesson01.exercise07.speak_avevo_fretta:
     instruction: "Say aloud in Italian, using the imperfetto: I was in a hurry."
     accepted_answers:
@@ -342,7 +378,7 @@ exercises:
   it.b2.unit04.lesson03.exercise01.recognize_quando:
     instruction: "What does this word mean?"
     correct_option: "when (a single past moment)"
-    distractors: ["while (ongoing)", "whenever (a habit)", "after"]
+    distractors: ["while (ongoing)", because, "after"]
     accepted_answers: [{value: "when (a single past moment)", status: correct}]
     feedback: "*Quando* marks a single past interruption."
   it.b2.unit04.lesson03.exercise02.listen_quando_aeroporto:
@@ -367,6 +403,8 @@ exercises:
     accepted_answers:
       - {value: "Quando sono arrivato in aeroporto, l'aereo partiva", status: correct}
       - {value: "Quando sono arrivato in aeroporto l'aereo partiva", status: correct}
+      - {value: "Quando sono arrivata in aeroporto, l'aereo partiva", status: correct}
+      - {value: "Quando sono arrivata in aeroporto l'aereo partiva", status: correct}
     feedback: "*Quando sono arrivato in aeroporto, l'aereo partiva* means when I arrived at the airport, the plane was leaving."
   it.b2.unit04.lesson03.exercise06.translate_mentre:
     instruction: "Translate into Italian, using mentre for the ongoing action: While I was getting dressed, the boss called."
@@ -419,6 +457,8 @@ exercises:
     accepted_answers:
       - {value: "Quando sono arrivato, il volo era già partito", status: correct}
       - {value: "Quando sono arrivato il volo era già partito", status: correct}
+      - {value: "Quando sono arrivata, il volo era già partito", status: correct}
+      - {value: "Quando sono arrivata il volo era già partito", status: correct}
     feedback: "*Quando sono arrivato, il volo era già partito* means by the time I arrived, the flight had already left -- già plus the trapassato prossimo already carries the 'by the time' meaning, with no dedicated connective needed."
 
   it.b2.unit04.lesson05.exercise01.read_earliest:
@@ -455,12 +495,14 @@ exercises:
     instruction: "Translate into Italian, joining two background clauses with e: It was raining that morning and I was in a hurry."
     accepted_answers:
       - {value: "Pioveva quella mattina e avevo fretta", status: correct}
+      - {value: "Quella mattina pioveva e avevo fretta", status: correct}
     feedback: "*Pioveva quella mattina e avevo fretta* means it was raining that morning and I was in a hurry."
   it.b2.unit04.lesson05.exercise07.write_per_questo:
     instruction: "Write in Italian, starting with Per questo (as a result): As a result, I woke up late."
     accepted_answers:
       - {value: "Per questo mi sono svegliato tardi", status: correct}
-    feedback: "*Per questo mi sono svegliato tardi* means as a result, I woke up late."
+      - {value: "Per questo mi sono svegliata tardi", status: correct}
+    feedback: "*Per questo mi sono svegliato tardi* (or *svegliata*, said by a woman) means as a result, I woke up late."
 
   it.b2.unit04.lesson06.exercise01.comprehend_earliest:
     instruction: "Sam tells the story out of order. In the TRUE sequence, which event happened FIRST of all?"
@@ -471,13 +513,13 @@ exercises:
   it.b2.unit04.lesson06.exercise02.comprehend_last:
     instruction: "In the TRUE sequence of events, which happened LAST?"
     correct_option: "Missing the flight."
-    distractors: ["Waking up late.", "Not setting the alarm.", "Arriving at the airport."]
+    distractors: ["Waking up late.", "Not setting the alarm.", "Getting dressed."]
     accepted_answers: [{value: "Missing the flight.", status: correct}]
     feedback: "*Ho perso il volo* is the final event in the true chronology."
   it.b2.unit04.lesson06.exercise03.comprehend_prepast:
     instruction: "When Sam reached the airport, what had ALREADY happened by that time?"
     correct_option: "The flight had already left."
-    distractors: ["He had already missed the alarm.", "The boss had already called.", "It had already stopped raining."]
+    distractors: ["He had already checked in.", "The boss had already called.", "It had already stopped raining."]
     accepted_answers: [{value: "The flight had already left.", status: correct}]
     feedback: "*Era già partito* -- the flight had already left by the time Sam arrived."
   it.b2.unit04.lesson06.exercise04.order_svegliato_tardi:
@@ -489,14 +531,23 @@ exercises:
     instruction: "Recount the incident aloud in TWO sentences, with the time layers marked. (1) The background, using the imperfetto joined with e: It was raining and I was in a hurry. (2) A foregrounded event with something that had already happened, using quando + the trapassato prossimo: When I arrived at the airport, the flight had already left."
     accepted_answers:
       - {value: "Pioveva e avevo fretta. Quando sono arrivato in aeroporto, il volo era già partito", status: correct}
+      - {value: "Pioveva e avevo fretta. Quando sono arrivato in aeroporto il volo era già partito", status: correct}
+      - {value: "Pioveva e avevo fretta. Quando sono arrivata in aeroporto, il volo era già partito", status: correct}
+      - {value: "Pioveva e avevo fretta. Quando sono arrivata in aeroporto il volo era già partito", status: correct}
     feedback: "*Pioveva e avevo fretta. Quando sono arrivato in aeroporto, il volo era già partito.*"
   it.b2.unit04.lesson06.exercise06.write_full_account:
     instruction: "Write a short THREE-sentence account of why you were late, with all three time layers. (1) The background, using the imperfetto: It was raining that morning. (2) A PRE-PAST cause, using the trapassato prossimo (avevo + participle): The evening before, I hadn't set my alarm. (3) The foreground outcome, using the passato prossimo with alla fine: In the end I missed the flight."
     accepted_answers:
       - {value: "Pioveva quella mattina. La sera prima non avevo impostato la sveglia. Alla fine ho perso il volo", status: correct}
+      - {value: "Quella mattina pioveva. La sera prima non avevo impostato la sveglia. Alla fine ho perso il volo", status: correct}
+      - {value: "Pioveva quella mattina. La sera prima, non avevo impostato la sveglia. Alla fine ho perso il volo", status: correct}
+      - {value: "Quella mattina pioveva. La sera prima, non avevo impostato la sveglia. Alla fine ho perso il volo", status: correct}
     feedback: "*Pioveva quella mattina. La sera prima non avevo impostato la sveglia. Alla fine ho perso il volo.*"
   it.b2.unit04.lesson06.exercise07.respond_why_late:
-    instruction: "Reply to 'Perché sei arrivato in ritardo?' with a pre-past cause, using the trapassato prossimo idea (mi sono svegliato tardi): I woke up late."
+    instruction: "Reply to 'Perché sei arrivato in ritardo?' with the cause, using the passato prossimo (mi sono svegliato tardi): I woke up late."
     accepted_answers:
       - {value: "Mi sono svegliato tardi", status: correct}
+      - {value: "Perché mi sono svegliato tardi", status: correct}
+      - {value: "Mi sono svegliata tardi", status: correct}
+      - {value: "Perché mi sono svegliata tardi", status: correct}
     feedback: "*Mi sono svegliato tardi* means I woke up late."

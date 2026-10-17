@@ -39,32 +39,8 @@ generation_provenance:
     learner reproduces a fixed, gender-pinned line rather than choosing
     their own gendered form.
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Fresh-context review needed. This is a DRAFT. Priority checks for the
-    reviewer: (1) naturalness of every opinion/qualification frame in
-    everyday informal Russian -- я считаю, что / по-моему / я убеждён(а),
-    что / до некоторой степени / в целом / не обязательно / это зависит /
-    это правда, но / я понимаю твою мысль, но всё же / я (не) согласен(на)
-    -- confirm each reads as current spoken register at B2, not stilted or
-    bookish; (2) confirm "я с этим не согласен, потому что" and "я с этим
-    согласен" are the natural spoken frames for disagreeing/agreeing with a
-    stated point (vs. more bookish alternatives), and that the short-form
-    adjective агreement (убеждён/убеждена, согласен/согласна) is applied
-    correctly to each attributed speaker throughout; (3) confirm "с одной
-    стороны ... с другой стороны" and "не обязательно" read naturally in
-    their model sentences; (4) confirm "командная работа" (teamwork),
-    "удалённая работа" (remote work), "эффективность" (efficiency) and
-    "общество" (society) are current, natural everyday vocabulary for this
-    debate, not overly technical/bureaucratic register; (5) the culminating
-    writing exercise (lesson06 exercise06) is graded against a fixed
-    two-sentence string with an internal period -- confirm the supplied
-    punctuation variants cover what a real learner would type; (6) confirm
-    Дима's position in lesson06 reads as a genuinely QUALIFIED disagreement
-    (partial agreement, "до некоторой степени", "это зависит"), not a flat
-    no, and that Настя's "я убеждена" reads as firm conviction rather than
-    a flat unqualified assertion (this unit's core teaching point is
-    QUALIFYING an opinion, and both speakers must model that).
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Sixth Russian B2 unit; abstraction unit; second of the second-half wave
     (units 05-08), building on units 01-05 within the same B2 course.
@@ -95,6 +71,37 @@ review:
     own exercises is introduced within units 01-06 of this course (B2 is a
     separate Course row, so a B2 learner never sees A1/A2/B1 lexemes at
     runtime). No sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage course-wide, character canon, dialogue cards
+    vs audio, listen/dialogue distractors, example_glosses, overlay
+    coverage, YAML booleans, internal-jargon notes, ё/е and word-order
+    grading gaps. Fixes (realization + en-ru overlay):
+    lesson01.teach.po_moemu gloss "in my opinion / my way" -> "in my
+    opinion"; lesson01.teach.grammar_mneniya note ordering fixed (casual
+    по-моему, neutral я считаю, что, firm я убеждён/убеждена, что);
+    lesson02.exercise05.translate_v_celom +удаленная and
+    "Удалённая/Удаленная работа в целом лучше" variants;
+    lesson03.exercise07.write_ponimayu_mysl +"все же" variant;
+    lesson04.teach.minus example "Есть и минус." -> "Это большой минус."
+    with большой moved into its introduced_tokens (was only nominally
+    introduced on grammar_vzveshivanie, whose text lacks it),
+    example_gloss "That's a big disadvantage.", note glosses большой;
+    lesson05.exercise01-04 read_* now show the reading passage as a ru
+    target_block before the question;
+    lesson06.exercise05.speak_qualified_opinion +"До некоторой степени
+    это правда, но..." order and удаленная variants;
+    lesson06.exercise06.write_qualified_response +"не всем это подходит"
+    (taught chunk) and удаленная variants;
+    lesson06.exercise07.respond_qualified instruction pinned to the
+    exact content ("That is true to a certain extent, but in my opinion
+    remote work is better for freedom.") +taught-order and удаленная
+    variants. NATIVE FLAGS: free-standing "Это зависит" (vs "Смотря как"
+    / "Это зависит от ситуации"); speak_ubezhdena puts "командная работа
+    важнее" in Настя's mouth while she argues for remote work elsewhere
+    (stance inconsistency, not a grading defect). DEFERRED: dictation
+    lesson01.exercise08 requires "удалённая" byte-exact (dictation ё
+    policy, owner decision); grader-level ё/е fold (Codex lane).
 
 course:
   realization_key: ru.b2
@@ -393,8 +400,8 @@ units:
           - content_key: ru.b2.unit06.lesson04.teach.minus
             kind: vocabulary
             target: {text: "минус", language_code: ru, direction: ltr}
-            introduced_tokens: [минус]
-            example: {text: "Есть и минус.", language_code: ru, direction: ltr}
+            introduced_tokens: [минус, большой]
+            example: {text: "Это большой минус.", language_code: ru, direction: ltr}
           - content_key: ru.b2.unit06.lesson04.teach.obshchestvo
             kind: vocabulary
             target: {text: "общество", language_code: ru, direction: ltr}
@@ -408,7 +415,7 @@ units:
           - content_key: ru.b2.unit06.lesson04.teach.grammar_vzveshivanie
             kind: grammar_note
             target: {text: "С одной стороны есть плюс, с другой стороны есть минус. Это хорошо для общества.", language_code: ru, direction: ltr}
-            introduced_tokens: [большой]
+            introduced_tokens: []
         exercises:
           - content_key: ru.b2.unit06.lesson04.exercise01.recognize_plyus
             type: multiple_choice
@@ -473,19 +480,19 @@ units:
           - content_key: ru.b2.unit06.lesson05.exercise01.read_stance
             type: reading_comprehension
             tested_text: "удалённая работа это хорошо"
-            prompt: {target_blocks: [{text: "What is the author's overall opinion?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Я считаю, что удалённая работа — это хорошо. С одной стороны, это лучше для свободы, с другой стороны, я понимаю, что не всем это подходит. До некоторой степени это правда. Всё же я убеждён, что командная работа от этого не страдает. Это не обязательно легко, но это того стоит.", language_code: ru, direction: ltr}, {text: "What is the author's overall opinion?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit06.lesson05.exercise02.read_qualification
             type: reading_comprehension
             tested_text: "до некоторой степени"
-            prompt: {target_blocks: [{text: "What does the author CONCEDE to the opposing side?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Я считаю, что удалённая работа — это хорошо. С одной стороны, это лучше для свободы, с другой стороны, я понимаю, что не всем это подходит. До некоторой степени это правда. Всё же я убеждён, что командная работа от этого не страдает. Это не обязательно легко, но это того стоит.", language_code: ru, direction: ltr}, {text: "What does the author CONCEDE to the opposing side?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit06.lesson05.exercise03.read_final_value
             type: reading_comprehension
             tested_text: "командная работа от этого не страдает"
-            prompt: {target_blocks: [{text: "On what basis does the author still support remote work?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Я считаю, что удалённая работа — это хорошо. С одной стороны, это лучше для свободы, с другой стороны, я понимаю, что не всем это подходит. До некоторой степени это правда. Всё же я убеждён, что командная работа от этого не страдает. Это не обязательно легко, но это того стоит.", language_code: ru, direction: ltr}, {text: "On what basis does the author still support remote work?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit06.lesson05.exercise04.read_hedge
             type: reading_comprehension
             tested_text: "не обязательно легко"
-            prompt: {target_blocks: [{text: "Does the author claim it would be easy?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Я считаю, что удалённая работа — это хорошо. С одной стороны, это лучше для свободы, с другой стороны, я понимаю, что не всем это подходит. До некоторой степени это правда. Всё же я убеждён, что командная работа от этого не страдает. Это не обязательно легко, но это того стоит.", language_code: ru, direction: ltr}, {text: "Does the author claim it would be easy?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit06.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "подходит легко того стоит страдает всем не обязательно"

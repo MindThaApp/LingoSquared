@@ -6,8 +6,8 @@ target_language: "de"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Ninth en-de overlay, authored from the start in the AUTHORING_GUIDE
     §19 format (schema_version 1.1) -- includes a full teaching:
@@ -26,6 +26,29 @@ review:
     speak_wegbeschreibung. See the realization's own review notes for
     the full list including the one review-notes-only correction
     (gegenüber's grammatical classification).
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every instruction/distractor/accepted-answer set against
+    tested_text, the grader and the dialogue audio, gloss coverage,
+    grammar notes. Fixes: lesson04.teach.line01-line04: German titles
+    and German-text glosses replaced with English ('Felix asks the way'
+    / 'Felix says: Excuse me, where is the pharmacy?' ... 'Anna says:
+    No, it's not far. It's between the bank and the park.');
+    lesson03.teach.sie_ist_neben note: removed the false claim that
+    Sie/sie conjugate identically in every form -> now explains the verb
+    ist rules out formal 'Sie sind'; lesson03.exercise04.reply_lage:
+    added 'Die Bank ist neben dem Park(.)';
+    lesson03.exercise05.write_nicht_weit instruction 'Write that the
+    place is not far.' -> 'Someone asks if it's far. Answer: no, it's
+    not far.' and added 'Es ist nicht weit(.)';
+    lesson04.exercise01.listen_apotheke_lage distractor 'Nein, es ist
+    nicht weit' (Anna says it in the audio) -> 'Sie ist hinter der
+    Bank'; lesson04.exercise02.listen_zwischen same distractor -> 'Sie
+    ist vor dem Krankenhaus'; lesson04.teach.entschuldigung_wo note:
+    dropped 'to a stranger' (Felix asks his neighbour). NATIVE FLAG:
+    lesson02.teach.gegenueber_von calls vom 'the everyday spoken
+    contraction'; vom is also standard written German -- slightly
+    misleading wording, left for a native pass.
 
 course:
   title: "German A1"
@@ -48,15 +71,15 @@ teaching:
   de.a1.unit09.lesson02.teach.vor: {title: "Der Park ist vor dem Krankenhaus.", gloss: "The park is in front of the hospital.", note: "*vor* means 'in front of' -- *dem Krankenhaus* is the neuter dative form."}
 
   de.a1.unit09.lesson03.teach.wo_ist_die_bank: {title: "Wo ist die Bank?", gloss: "Where is the bank?", note: "*Wo ist...?* is the standard way to ask where something is."}
-  de.a1.unit09.lesson03.teach.sie_ist_neben: {title: "Sie ist neben dem Park.", gloss: "It's next to the park.", note: "*Sie* here means 'it' (referring to *die Bank*, feminine), not the formal 'you' -- only sentence context resolves this, since German conjugates *Sie*/*sie* identically in every verb form."}
+  de.a1.unit09.lesson03.teach.sie_ist_neben: {title: "Sie ist neben dem Park.", gloss: "It's next to the park.", note: "*Sie* here means 'it' (referring to *die Bank*, feminine). It's capitalized only because it starts the sentence. The verb *ist* shows it isn't the formal 'you', which would be *Sie sind*."}
   de.a1.unit09.lesson03.teach.ist_es_weit: {title: "Ist es weit von hier?", gloss: "Is it far from here?", note: "*weit* means far. *es* here is a generic placeholder for the situation, not agreeing with any specific noun's gender."}
   de.a1.unit09.lesson03.teach.nicht_weit: {title: "Nein, es ist nicht weit.", gloss: "No, it's not far.", note: "*nicht* negates the adjective *weit*."}
 
-  de.a1.unit09.lesson04.teach.entschuldigung_wo: {title: "Entschuldigung, wo ist die Apotheke?", gloss: "Excuse me, where is the pharmacy?", note: "*Entschuldigung* was already taught in unit01 as 'excuse me / sorry' -- here it politely opens a question to a stranger."}
-  de.a1.unit09.lesson04.teach.line01: {title: "Felix fragt nach dem Weg", gloss: "Felix: Entschuldigung, wo ist die Apotheke?", note: "The same polite opener as the standalone phrase above, now in a real conversation."}
-  de.a1.unit09.lesson04.teach.line02: {title: "Antwort zur Lage", gloss: "Anna: Sie ist gegenüber vom Krankenhaus.", note: "A complete answer states the pharmacy's location relative to a known landmark."}
-  de.a1.unit09.lesson04.teach.line03: {title: "Felix fragt nach der Entfernung", gloss: "Felix: Ist es weit von hier?", note: "A natural follow-up question once you know the general direction."}
-  de.a1.unit09.lesson04.teach.line04: {title: "Antwort zur Entfernung", gloss: "Anna: Nein, es ist nicht weit. Sie ist zwischen der Bank und dem Park.", note: "A complete answer reassures the distance, then gives a second, more precise landmark."}
+  de.a1.unit09.lesson04.teach.entschuldigung_wo: {title: "Entschuldigung, wo ist die Apotheke?", gloss: "Excuse me, where is the pharmacy?", note: "*Entschuldigung* was already taught in unit01 as 'excuse me / sorry' -- here it politely opens a question."}
+  de.a1.unit09.lesson04.teach.line01: {title: "Felix asks the way", gloss: "Felix says: Excuse me, where is the pharmacy?", note: "The same polite opener as the standalone phrase above, now in a real conversation."}
+  de.a1.unit09.lesson04.teach.line02: {title: "Anna gives the location", gloss: "Anna says: It's across from the hospital.", note: "A complete answer states the pharmacy's location relative to a known landmark."}
+  de.a1.unit09.lesson04.teach.line03: {title: "Felix asks how far it is", gloss: "Felix says: Is it far from here?", note: "A natural follow-up question once you know the general direction."}
+  de.a1.unit09.lesson04.teach.line04: {title: "Anna answers about the distance", gloss: "Anna says: No, it's not far. It's between the bank and the park.", note: "A complete answer reassures the distance, then gives a second, more precise landmark."}
 
 exercises:
   de.a1.unit09.lesson01.exercise01.listen_ort:
@@ -145,24 +168,28 @@ exercises:
     accepted_answers:
       - {value: "Sie ist neben dem Park.", status: "correct"}
       - {value: "Sie ist neben dem Park", status: "correct"}
+      - {value: "Die Bank ist neben dem Park.", status: "correct"}
+      - {value: "Die Bank ist neben dem Park", status: "correct"}
     feedback: "*Sie ist neben dem Park* means 'It's next to the park.'"
   de.a1.unit09.lesson03.exercise05.write_nicht_weit:
-    instruction: "Write that the place is not far."
+    instruction: "Someone asks if it's far. Answer: no, it's not far."
     accepted_answers:
       - {value: "Nein, es ist nicht weit", status: "correct"}
       - {value: "Nein, es ist nicht weit.", status: "correct"}
+      - {value: "Es ist nicht weit", status: "correct"}
+      - {value: "Es ist nicht weit.", status: "correct"}
     feedback: "*Nein, es ist nicht weit* means 'No, it's not far.'"
 
   de.a1.unit09.lesson04.exercise01.listen_apotheke_lage:
     instruction: "Listen to the dialogue. Where does Anna say the pharmacy is?"
     correct_option: "Sie ist gegenüber vom Krankenhaus"
-    distractors: ["Sie ist neben dem Park", "Ist es weit von hier", "Nein, es ist nicht weit"]
+    distractors: ["Sie ist neben dem Park", "Ist es weit von hier", "Sie ist hinter der Bank"]
     accepted_answers: [{value: "Sie ist gegenüber vom Krankenhaus", status: "correct"}]
     feedback: "Anna says *Sie ist gegenüber vom Krankenhaus* -- 'It's across from the hospital.'"
   de.a1.unit09.lesson04.exercise02.listen_zwischen:
     instruction: "Listen again. What's the second landmark Anna gives?"
     correct_option: "Sie ist zwischen der Bank und dem Park"
-    distractors: ["Sie ist hinter dem Restaurant", "Ist es weit von hier", "Nein, es ist nicht weit"]
+    distractors: ["Sie ist hinter dem Restaurant", "Ist es weit von hier", "Sie ist vor dem Krankenhaus"]
     accepted_answers: [{value: "Sie ist zwischen der Bank und dem Park", status: "correct"}]
     feedback: "*Sie ist zwischen der Bank und dem Park* means 'It's between the bank and the park.'"
   de.a1.unit09.lesson04.exercise03.choose_weit_antwort:

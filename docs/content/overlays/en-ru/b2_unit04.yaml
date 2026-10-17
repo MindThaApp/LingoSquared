@@ -6,15 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    idiomatic Russian, that the пока/когда/как только distinction reads
-    correctly, and that накануне вечером reads unambiguously as
-    "the evening before" (pre-past), not "yesterday evening" in general.
-    Also confirm every first-person exercise instruction is unambiguously
-    framed as reproducing Dima's account, not the learner's own story --
-    see the realization file's review block for the full priority list.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's fourth B2 unit, authored alongside the realization.
     English speakers' real interference risks for this outcome: (1)
@@ -29,6 +22,42 @@ review:
     habitual time clause in other contexts -- this unit's model sentences
     only use the single-point sense. No sibling-direction file (ru-en b2)
     was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-safety of free-text accepted answers against the
+    strict Cyrillic grader (no ё/е equivalence, em dash kept as a token,
+    3-letter шёл gets no spoken tolerance), prompt/key determinacy,
+    timeline coherence, reading-question answerability and
+    learner-visible notes. Fixes: lesson03.exercise07.speak_full_lesson
+    tested_text + keys: the em dash removed from the spoken answer ("не
+    успел — автобус" -> "не успел, автобус"), since a speech transcript
+    can never contain it; lesson06.exercise05.speak_full_narrative
+    dash-variant keys dropped (comma variants remain); е-spelling
+    variants added for every free-text accepted answer containing ё
+    (lesson01.exercise05/06/07, lesson03.exercise07,
+    lesson04.exercise07, lesson06.exercise05/06);
+    lesson05.exercise06.translate_prishlos_zhdat also accepts "Мне
+    пришлось ждать следующий" and the genitive "(Мне) пришлось ждать
+    следующего"; lesson04.exercise05.translate_snachala also accepts
+    "... зарядить свой телефон"; reading passage added to the
+    target_blocks of all four lesson05 reading_comprehension prompts;
+    overlay notes for lesson02 teach.claim_model, lesson03
+    teach.grammar_tri_svyazki and lesson04 teach.grammar_polnyj_rasskaz
+    no longer cite internal lesson numbers or task structure. NATIVE
+    FLAGS: "Накануне вечером" in a same-day conversation ("Вчера
+    вечером" more natural); dialogue "Когда он наконец пришёл" --
+    nearest masculine antecedent is дождь ("Когда автобус наконец
+    пришёл" safer, needs audio change); reading "не успел сесть" vs "не
+    смог сесть / не влез"; genitive/word-order variants ("ждал
+    автобуса", "не увидел сообщения", "Автобус уже был переполнен") not
+    accepted (systemic). DEFERRED: lesson03
+    teach.claim_model/claim_model_2 timeline contradiction ("Как только
+    автобус пришёл, я вошёл внутрь" followed by "Но сегодня я не успел")
+    -- a rewrite needs the kak_tolko_voshel audio asset and listen ex02
+    / word_order ex04 / matching ex03 / speak ex07 changed, owner/native
+    decision; dictation ё/е (lesson01.exercise08) and the grader-level
+    ё/е fold + dash stripping (backend/app/review/grading.py,
+    Codex/owner decision).
 
 course:
   title: Russian B2
@@ -116,7 +145,7 @@ teaching:
   ru.b2.unit04.lesson02.teach.claim_model:
     title: "The evening before, I forgot to charge my phone."
     gloss: "The evening before, I forgot to charge my phone."
-    note: "This is Dima's account -- the event that happened even before the background scene of lesson01."
+    note: "This is Dima's account -- the event that happened even before the background scene (waiting for the bus)."
   ru.b2.unit04.lesson02.teach.poetomu:
     title: "therefore / so"
     gloss: "therefore / so"
@@ -163,7 +192,7 @@ teaching:
   ru.b2.unit04.lesson03.teach.grammar_tri_svyazki:
     title: "Пока is the background, ongoing. Когда is one interrupting event. Как только is immediately after, with no pause."
     gloss: "Пока is the background, ongoing. Когда is one interrupting event. Как только is immediately after, with no pause."
-    note: "All three connectives from lesson01-03 side by side: choose based on whether you're describing an ongoing scene, a single interrupting event, or immediate succession."
+    note: "All three connectives side by side: choose based on whether you're describing an ongoing scene, a single interrupting event, or immediate succession."
 
   ru.b2.unit04.lesson04.teach.snachala:
     title: first
@@ -186,7 +215,7 @@ teaching:
   ru.b2.unit04.lesson04.teach.grammar_polnyj_rasskaz:
     title: "First, the evening before, I forgot to charge my phone. Then I waited for the bus in the rain, and when it came, it was overcrowded. In the end I was late."
     gloss: "First, the evening before, I forgot to charge my phone. Then, in the morning, I was waiting for the bus -- it was raining. When the bus finally came, it was overcrowded. In the end I was late for work."
-    note: "The full chain in order: pre-past event (сначала, накануне вечером) -> background (потом, пока) -> interrupting event (когда) -> outcome (в итоге). This is exactly what you produce in this lesson's writing task."
+    note: "The full chain in order: pre-past event (сначала, накануне вечером) -> background (потом, пока) -> interrupting event (когда) -> outcome (в итоге)."
 
   ru.b2.unit04.lesson05.teach.tekst:
     title: "Reading: Dima's message to Nastya"
@@ -268,17 +297,22 @@ exercises:
     accepted_answers:
       - {value: "Когда автобус наконец пришёл, он был переполнен", status: "correct"}
       - {value: "Когда автобус наконец пришёл он был переполнен", status: "correct"}
+      - {value: "Когда автобус наконец пришел, он был переполнен", status: "correct"}
+      - {value: "Когда автобус наконец пришел он был переполнен", status: "correct"}
     feedback: "Когда автобус наконец пришёл, он был переполнен means when the bus finally came, it was overcrowded."
   ru.b2.unit04.lesson01.exercise06.speak_poka_shel_dozhd:
     instruction: "This is Dima's account. Say aloud in Russian: While I was waiting for the bus, it was raining."
     accepted_answers:
       - {value: "Пока я ждал автобус, шёл дождь", status: "correct"}
+      - {value: "Пока я ждал автобус, шел дождь", status: "correct"}
     feedback: "Пока я ждал автобус, шёл дождь means while I was waiting for the bus, it was raining."
   ru.b2.unit04.lesson01.exercise07.write_claim:
     instruction: "This is Dima's account. Write in Russian: I was waiting for the bus. It was raining."
     accepted_answers:
       - {value: "Я ждал автобус. Шёл дождь", status: "correct"}
       - {value: "Я ждал автобус. Шёл дождь.", status: "correct"}
+      - {value: "Я ждал автобус. Шел дождь", status: "correct"}
+      - {value: "Я ждал автобус. Шел дождь.", status: "correct"}
     feedback: "Я ждал автобус. Шёл дождь means I was waiting for the bus. It was raining."
   ru.b2.unit04.lesson01.exercise08.dictation_zhdal_dozhd:
     instruction: "Type what you hear."
@@ -384,8 +418,10 @@ exercises:
   ru.b2.unit04.lesson03.exercise07.speak_full_lesson:
     instruction: "This is Dima's account. Say aloud in Russian: As soon as the bus came, I got on. But today I didn't make it in time -- the bus was already overcrowded."
     accepted_answers:
-      - {value: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел — автобус был уже переполнен", status: "correct"}
-      - {value: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел — автобус был уже переполнен.", status: "correct"}
+      - {value: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел, автобус был уже переполнен", status: "correct"}
+      - {value: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел, автобус был уже переполнен.", status: "correct"}
+      - {value: "Как только автобус пришел, я вошел внутрь. Но сегодня я не успел, автобус был уже переполнен", status: "correct"}
+      - {value: "Как только автобус пришел, я вошел внутрь. Но сегодня я не успел, автобус был уже переполнен.", status: "correct"}
     feedback: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел — автобус был уже переполнен means as soon as the bus came, I got on. But today I didn't make it in time -- the bus was already overcrowded."
 
   ru.b2.unit04.lesson04.exercise01.recognize_v_itoge:
@@ -423,6 +459,8 @@ exercises:
     accepted_answers:
       - {value: "Сначала я забыл зарядить телефон", status: "correct"}
       - {value: "Сначала я забыл зарядить телефон.", status: "correct"}
+      - {value: "Сначала я забыл зарядить свой телефон", status: "correct"}
+      - {value: "Сначала я забыл зарядить свой телефон.", status: "correct"}
     feedback: "Сначала я забыл зарядить телефон means first, I forgot to charge my phone."
   ru.b2.unit04.lesson04.exercise06.write_potom:
     instruction: "This is Dima's account. Write in Russian: Then I was waiting for the bus."
@@ -438,6 +476,11 @@ exercises:
       - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус - шёл дождь. Когда автобус наконец пришёл, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
       - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус, шёл дождь. Когда автобус наконец пришёл, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
       - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус. Шёл дождь. Когда автобус наконец пришёл, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус — шел дождь. Когда автобус наконец пришел, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус — шел дождь. Когда автобус наконец пришел, он был переполнен. В итоге я опоздал на работу", status: "correct"}
+      - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус - шел дождь. Когда автобус наконец пришел, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус, шел дождь. Когда автобус наконец пришел, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус. Шел дождь. Когда автобус наконец пришел, он был переполнен. В итоге я опоздал на работу.", status: "correct"}
     feedback: "Dima's full account: Сначала, накануне вечером, я забыл зарядить телефон. Потом, утром, я ждал автобус — шёл дождь. Когда автобус наконец пришёл, он был переполнен. В итоге я опоздал на работу."
 
   ru.b2.unit04.lesson05.exercise01.read_earliest_event:
@@ -481,6 +524,12 @@ exercises:
     accepted_answers:
       - {value: "Пришлось ждать следующий", status: "correct"}
       - {value: "Пришлось ждать следующий.", status: "correct"}
+      - {value: "Мне пришлось ждать следующий", status: "correct"}
+      - {value: "Мне пришлось ждать следующий.", status: "correct"}
+      - {value: "Пришлось ждать следующего", status: "correct"}
+      - {value: "Пришлось ждать следующего.", status: "correct"}
+      - {value: "Мне пришлось ждать следующего", status: "correct"}
+      - {value: "Мне пришлось ждать следующего.", status: "correct"}
     feedback: "Пришлось ждать следующий means I had to wait for the next one."
   ru.b2.unit04.lesson05.exercise07.write_ne_uspel_sest:
     instruction: "This is Dima's message. Write in Russian: I didn't make it in time to get on."
@@ -517,8 +566,8 @@ exercises:
     accepted_answers:
       - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
       - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу.", status: "correct"}
-      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
-      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шел дождь. Когда он наконец пришел, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
+      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шел дождь. Когда он наконец пришел, был уже переполнен. В итоге я опоздал на работу.", status: "correct"}
     feedback: "Dima's full spoken account: Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу."
   ru.b2.unit04.lesson06.exercise06.write_full_narrative:
     instruction: "Retell Dima's full account in writing in Russian, using накануне вечером, пока, когда, and в итоге as signposts: (1) The evening before, I forgot to charge my phone. (2) While I was waiting for the bus, it was raining. (3) When it finally came, it was already overcrowded. (4) In the end I was late for work."
@@ -527,6 +576,8 @@ exercises:
       - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
       - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу.", status: "correct"}
       - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
+      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шел дождь. Когда он наконец пришел, был уже переполнен. В итоге я опоздал на работу.", status: "correct"}
+      - {value: "Накануне вечером я забыл зарядить телефон. Пока я ждал автобус — шел дождь. Когда он наконец пришел, был уже переполнен. В итоге я опоздал на работу", status: "correct"}
     feedback: "Dima's full written account: Накануне вечером я забыл зарядить телефон. Пока я ждал автобус, шёл дождь. Когда он наконец пришёл, был уже переполнен. В итоге я опоздал на работу."
   ru.b2.unit04.lesson06.exercise07.respond_what_happened:
     instruction: "You're retelling Dima's morning. Which answer correctly recounts the background and the interrupting event, in the right order?"
