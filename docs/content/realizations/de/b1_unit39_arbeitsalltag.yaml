@@ -4,7 +4,10 @@ target_language: "de"
 cefr_level: "B1"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "Fifth de B1 unit. Uses Felix Weber (Ingenieur, established a1_unit18/b1_unit35-37) at work with a new colleague, Frau Bauer (Ingenieurin) -- grepped canon first, no conflicting facts found for a workplace colleague. Formal Sie throughout, matching the de-en lane register pin. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "Fifth de B1 unit. Uses Felix Weber (Ingenieur, established a1_unit18/b1_unit35-37) at work with a new colleague, Frau Bauer (Ingenieurin) -- grepped canon first, no conflicting facts found for a workplace colleague. Formal Sie throughout, matching the de-en lane register pin. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-de overlay for unit39 (teaching-before-testing, prompt determinacy, accepted-answer completeness, distractors, matching-pair mirrors, dialogue/audio coverage). Fixes: de.b1.unit39.lesson02.exercise06.write_status_update -- sentence was never shown and nothing required aber; prompt now shows the English sentence with 'formal Sie' and 'join with aber', and no-comma variants added to accepted_answers; de.b1.unit39.lesson03.exercise01.choose_bauer_question -- prompt was word-for-word the correct option (answered itself); now shows the German line 'Frau Bauer: Guten Tag, Felix. Wofür sind Sie diese Woche zuständig?' (language_code de); de.b1.unit39.lesson03 teaching -- added dialogue card de.b1.unit39.lesson03.teach.bauer_agree_help ('Ja, gern.', Frau Bauer) + overlay gloss, since the audio's final turn and match_dialogue_arbeitsalltag's 'Ja, gern.' pair were never shown as a card; de.b1.unit39.lesson01.exercise04.match_zustaendigkeit -- replaced pairs testing lesson03-only material (Wofür sind Sie zuständig?, diese Woche, der Stand) with lesson01-taught 'Ich bin für das Projekt zuständig.', 'Ich bin für die Planung zuständig.', 'für' (realization pairs + overlay accepted value + feedback). NATIVE FLAG: 'Ich bin zuständig für das Projekt.' (Ausklammerung) is common acceptable German and would be graded wrong in lesson01 exercise06; consider adding as a variant. DEFERRED: none."
 
 course:
   realization_key: "de.b1"
@@ -57,9 +60,9 @@ units:
               - {left: "zuständig sein für", right: "to be responsible for"}
               - {left: "das Projekt", right: "the project"}
               - {left: "die Planung", right: "the planning"}
-              - {left: "Wofür sind Sie zuständig?", right: "What are you responsible for?"}
-              - {left: "diese Woche", right: "this week"}
-              - {left: "der Stand", right: "the status"}
+              - {left: "Ich bin für das Projekt zuständig.", right: "I'm responsible for the project."}
+              - {left: "Ich bin für die Planung zuständig.", right: "I'm responsible for the planning."}
+              - {left: "für", right: "for"}
           - {content_key: "de.b1.unit39.lesson01.exercise05.order_zustaendig_projekt", type: "word_order", tested_text: "Ich bin für das Projekt zuständig", prompt: {target_blocks: []}, word_bank: ["Ich", "bin", "für", "das", "Projekt", "zuständig"]}
           - {content_key: "de.b1.unit39.lesson01.exercise06.write_zustaendig_projekt", type: "writing_prompt", tested_text: "Ich bin für das Projekt zuständig", prompt: {target_blocks: [{text: "Write exactly this sentence naming your work responsibility: I'm responsible for the project.", language_code: "en", direction: "ltr"}]}}
 
@@ -85,7 +88,7 @@ units:
               - {left: "aber", right: "but"}
               - {left: "gern", right: "gladly"}
           - {content_key: "de.b1.unit39.lesson02.exercise05.order_status_update", type: "word_order", tested_text: "Ich arbeite noch am Bericht aber können Sie mir bitte helfen", prompt: {target_blocks: []}, word_bank: ["Ich", "arbeite", "noch", "am", "Bericht,", "aber", "können", "Sie", "mir", "bitte", "helfen?"]}
-          - {content_key: "de.b1.unit39.lesson02.exercise06.write_status_update", type: "writing_prompt", tested_text: "Ich arbeite noch am Bericht aber können Sie mir bitte helfen", prompt: {target_blocks: [{text: "Write exactly this sentence: give a status update saying you're still working on the report, and then ask your colleague to please help you.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit39.lesson02.exercise06.write_status_update", type: "writing_prompt", tested_text: "Ich arbeite noch am Bericht aber können Sie mir bitte helfen", prompt: {target_blocks: [{text: "Write exactly this sentence (formal Sie), joining the status update and the request with aber: I'm still working on the report, but can you please help me?", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "de.b1.unit39.lesson03.buero_dialogue"
         title: "Dialog: Zuständigkeit, Status und Hilfe"
@@ -95,8 +98,9 @@ units:
           - {content_key: "de.b1.unit39.lesson03.teach.felix_zustaendig", kind: "dialogue", target: {text: "Guten Tag, Frau Bauer. Ich bin für das Projekt zuständig.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
           - {content_key: "de.b1.unit39.lesson03.teach.bauer_ask_stand", kind: "dialogue", target: {text: "Und wie ist der Stand beim Bericht?", language_code: "de", direction: "ltr", speaker: "Frau Bauer"}, introduced_tokens: ["wie", "der", "Stand", "beim"]}
           - {content_key: "de.b1.unit39.lesson03.teach.felix_status_and_ask", kind: "dialogue", target: {text: "Ich arbeite noch am Bericht, aber können Sie mir bitte helfen?", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: []}
+          - {content_key: "de.b1.unit39.lesson03.teach.bauer_agree_help", kind: "dialogue", target: {text: "Ja, gern.", language_code: "de", direction: "ltr", speaker: "Frau Bauer"}, introduced_tokens: []}
         exercises:
-          - {content_key: "de.b1.unit39.lesson03.exercise01.choose_bauer_question", type: "multiple_choice", tested_text: "wofür sind sie diese Woche zuständig", prompt: {target_blocks: [{text: "What are you responsible for this week?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit39.lesson03.exercise01.choose_bauer_question", type: "multiple_choice", tested_text: "wofür sind sie diese Woche zuständig", prompt: {target_blocks: [{text: "Frau Bauer: Guten Tag, Felix. Wofür sind Sie diese Woche zuständig?", language_code: "de", direction: "ltr"}]}}
           - {content_key: "de.b1.unit39.lesson03.exercise02.choose_felix_status", type: "multiple_choice", tested_text: "ich arbeite noch am Bericht aber können Sie mir bitte helfen", prompt: {target_blocks: [{text: "What does Felix say about the report, and what does he ask for?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "de.b1.unit39.lesson03.exercise03.listen_dialogue_arbeitsalltag", type: "listen_select", tested_text: "ich bin für das Projekt zuständig", media_asset_key: "de.b1.audio.dialogue.arbeitsalltag_buero.01", prompt: {target_blocks: [{text: "Listen to the dialogue. What is Felix responsible for this week?", language_code: "en", direction: "ltr"}]}}
           - content_key: "de.b1.unit39.lesson03.exercise04.match_dialogue_arbeitsalltag"
