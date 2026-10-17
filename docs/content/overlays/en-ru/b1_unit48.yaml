@@ -3,12 +3,12 @@ overlay_version: "2026.1-draft.1"
 overlay_key: "en-ru.b1.unit48"
 source_language: "en"
 target_language: "ru"
-status: "unreviewed"
+status: "reviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
   status: "reviewed"
   required_next_reviewer: "native_speaker_pass"
-  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-ru overlay for dialogue/audio speaker match, character canon, distractors, accepted-answer completeness (incl. ё/е spelling and first-person gender), YAML boolean/jargon leaks, overlay coverage of every teaching card, and example_gloss accuracy. Fixes: ru.b1.unit48.lesson01.exercise06.write_v_subbotu — added е-spelling answer (идем); ru.b1.unit48.lesson03.exercise06.write_full_plans — prompt/instruction pinned to exactly three given sentences (we-plan), added идем variants and the equally correct Завтра, наверное, будет дождь order; ru.b1.unit48.lesson03.exercise02.dialogue_comprehension_plans — correct_option/accepted answer now say Nastya (not both) is going to the cinema and already has tickets, matching the audio; ru.b1.unit48.lesson01.teach.present_fixed_plan_grammar and ru.b1.unit48.lesson02.teach.sobirayus_grammar — example_gloss now translates the example sentence. NATIVE FLAG: ru.b1.unit48.lesson03.teach.dima_agree 'Побегаю в субботу вместо этого.' may sound stilted ('Тогда побегаю в субботу.' more natural; Saturday is also Nastya's cinema day). DEFERRED: ru.b1.unit48.lesson01.v_subbotu_idyom.exercise07.dictation is orthography_strict with ё (идём) in its single correct_response; needs grader ё/е equivalence (backend/app/review/grading.py, Codex lane, owner decision)."
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-ru overlay for dialogue/audio speaker match, character canon, distractors, accepted-answer completeness (incl. ё/е spelling and first-person gender), YAML boolean/jargon leaks, overlay coverage of every teaching card, and example_gloss accuracy. Fixes: ru.b1.unit48.lesson01.exercise06.write_v_subbotu — added е-spelling answer (идем); ru.b1.unit48.lesson03.exercise06.write_full_plans — prompt/instruction pinned to exactly three given sentences (we-plan), added идем variants and the equally correct Завтра, наверное, будет дождь order; ru.b1.unit48.lesson03.exercise02.dialogue_comprehension_plans — correct_option/accepted answer now say Nastya (not both) is going to the cinema and already has tickets, matching the audio; ru.b1.unit48.lesson01.teach.present_fixed_plan_grammar and ru.b1.unit48.lesson02.teach.sobirayus_grammar — example_gloss now translates the example sentence. NATIVE FLAG: ru.b1.unit48.lesson03.teach.dima_agree 'Побегаю в субботу вместо этого.' may sound stilted ('Тогда побегаю в субботу.' more natural; Saturday is also Nastya's cinema day). DEFERRED: ru.b1.unit48.lesson01.v_subbotu_idyom.exercise07.dictation is orthography_strict with ё (идём) in its single correct_response; needs grader ё/е equivalence (backend/app/review/grading.py, Codex lane, owner decision).\n\nFresh-context review 2026-10-17 (round 2, backlog it/ru): 3 fixes — lesson01.exercise05.order_v_subbotu and lesson01.exercise06.write_v_subbotu accept the equally natural 'Мы идём в кино в субботу' order (plus е/ё and no-period variants); lesson03.exercise04.order_nastya_prediction accepts 'Завтра наверное будет дождь'. NATIVE FLAGS: none new (prior dima_agree flag stands; gender-neutral Дима/Настя dialogue otherwise consistent). DEFERRED: dictation ё/е equivalence (as above); ru B1 grammar-card jargon tokens (настоящее, время, точный, план, намерение) register as learner vocabulary, noted only (known ru B1 defect)."
 
 course:
   title: "Russian B1"
@@ -50,13 +50,18 @@ exercises:
           - {left: "точный план", right: "a fixed plan"}
         status: "correct"
     feedback: "These build the fixed-plan statement."
-  ru.b1.unit48.lesson01.exercise05.order_v_subbotu: {instruction: "Put the words in order to say \"On Saturday we're going to the cinema.\"", accepted_answers: [{value: ["В", "субботу", "мы", "идём", "в", "кино"], status: "correct"}], feedback: "The correct order is *В субботу мы идём в кино*."}
+  ru.b1.unit48.lesson01.exercise05.order_v_subbotu: {instruction: "Put the words in order to say \"On Saturday we're going to the cinema.\"", accepted_answers: [{value: ["В", "субботу", "мы", "идём", "в", "кино"], status: "correct"}, {value: ["Мы", "идём", "в", "кино", "в", "субботу"], status: "correct"}], feedback: "The correct order is *В субботу мы идём в кино*."}
   ru.b1.unit48.lesson01.exercise06.write_v_subbotu:
     instruction: "Write exactly this fixed-plan sentence using the present tense for a scheduled future event: On Saturday we're going to the cinema."
     accepted_answers:
       - {value: "В субботу мы идём в кино.", status: "correct"}
       - {value: "В субботу мы идём в кино", status: "correct"}
       - {value: "В субботу мы идем в кино.", status: "correct"}
+      - {value: "В субботу мы идем в кино", status: "correct"}
+      - {value: "Мы идём в кино в субботу.", status: "correct"}
+      - {value: "Мы идём в кино в субботу", status: "correct"}
+      - {value: "Мы идем в кино в субботу.", status: "correct"}
+      - {value: "Мы идем в кино в субботу", status: "correct"}
     feedback: "The model answer is *В субботу мы идём в кино*."
   ru.b1.unit48.lesson02.exercise01.recognize_sobirayus: {instruction: "Which Russian phrase means \"I'm planning to start running in the mornings\"?", correct_option: "я собираюсь начать бегать по утрам", distractors: ["в субботу мы идём в кино", "наверное завтра будет дождь", "может быть ты тоже начнёшь"], accepted_answers: [{value: "я собираюсь начать бегать по утрам", status: "correct"}], feedback: "*собираюсь* + infinitive states an intention."}
   ru.b1.unit48.lesson02.exercise02.recognize_mozhet_byt: {instruction: "Which Russian phrase means \"maybe you'll start running too?\"", correct_option: "может быть ты тоже начнёшь бегать", distractors: ["я собираюсь начать бегать", "у нас уже есть билеты", "наверное завтра будет дождь"], accepted_answers: [{value: "может быть ты тоже начнёшь бегать", status: "correct"}], feedback: "*Может быть* invites the listener to share the intention."}
@@ -99,7 +104,7 @@ exercises:
           - {left: "дождь", right: "rain"}
         status: "correct"
     feedback: "These phrases build the full plans-and-prediction dialogue."
-  ru.b1.unit48.lesson03.exercise04.order_nastya_prediction: {instruction: "Put the words in order to say \"It'll probably rain tomorrow.\"", accepted_answers: [{value: ["Наверное", "завтра", "будет", "дождь"], status: "correct"}], feedback: "The correct order is *Наверное, завтра будет дождь*."}
+  ru.b1.unit48.lesson03.exercise04.order_nastya_prediction: {instruction: "Put the words in order to say \"It'll probably rain tomorrow.\"", accepted_answers: [{value: ["Наверное", "завтра", "будет", "дождь"], status: "correct"}, {value: ["Завтра", "наверное", "будет", "дождь"], status: "correct"}], feedback: "The correct order is *Наверное, завтра будет дождь*."}
   ru.b1.unit48.lesson03.exercise05.reply_saturday_plan:
     instruction: "Nastya says \"В субботу мы идём в кино. У нас уже есть билеты.\" Reply with exactly this intention: \"А я собираюсь начать бегать по утрам.\""
     accepted_answers:
