@@ -5,7 +5,7 @@ target_language: nl
 unit_content_key: nl.a1.unit12.past_events
 review:
   status: reviewed
-  required_next_reviewer: null
+  required_next_reviewer: native_speaker_pass
   fresh_context: "false"
   notes: >-
     Original authoring notes (2026-07-06): hebben/zijn auxiliary choice is a
@@ -81,6 +81,38 @@ review:
     with those adverbs both "Gisteren heb ik gewerkt" and "Ik heb
     gisteren gewerkt" are valid orders, so any such frame mis-grades a
     correct learner.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every template against the unit12 realization/overlay, real
+    lexeme pools at unit and course scope (participle_hebben 4,
+    participle_zijn 2, participle_all 6 distinct glosses, recent_time 4,
+    infinitive_hebben 1 at unit scope / 4 at course scope), frame
+    vocabulary, distractor correctness, feedback truthfulness, YAML
+    booleans and jargon. Fixes: lesson05.order.002 REMOVED (frame "Ik
+    heb veel {item}." used veel, which is not taught anywhere in A1
+    units 01-13; no taught adverb makes all four hebben participles
+    natural without an object, so no replacement frame was authored).
+    lesson03.translate.001 instruction "Translate into Dutch." ->
+    "Translate into Dutch (past participle)." (gloss "went; gone"/"came;
+    come" would otherwise invite ging, glossed "went" in unit22, which
+    the template marks wrong). lesson03.reverse_translate.002 and
+    lesson04.reverse_translate.002 DELETED as exact duplicates of
+    lesson03.translate.001 / lesson04.translate.001 (same type, slot and
+    en-to-nl direction). lesson06.listen.001 feedback "{item} is the
+    participle you heard in this dialogue." -> "{item} is the participle
+    you heard." (audio is a single word; template is anchored to the
+    lesson05 reading). NATIVE FLAGS (not counted as defects):
+    lesson03.order.003 accepts only participle-final "Ik ben naar de
+    supermarkt gegaan." (the taught order; spoken "Ik ben gegaan naar de
+    supermarkt." is rejected), and "... gekomen" is grammatical but
+    semantically slightly odd; recent_time translation accepts only
+    vanmorgen for "this morning" (vanochtend untaught in A1). DEFERRED
+    (scripts/backfill_lexemes_en_nl.py, owned by another session):
+    recent_time pool carries case duplicates Gisteren/Vanmorgen with
+    capitalized glosses; lesson02.choose.001 (infinitive_hebben) has
+    only 1 candidate (kopen) at unit scope so it never builds at the
+    checkpoint (works in Endless Practice) -- pack owner to decide
+    whether to keep it.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -160,20 +192,7 @@ templates:
       direction: ltr
       slot_rendering: {item: english_gloss}
       text_blocks:
-        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *participle_zijn}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit12.lesson03.reverse_translate.002
-    lesson_content_key: nl.a1.unit12.lesson03.met_zijn
-    type: translation
-    frame:
-      text: "{item}"
-      language_code: en
-      direction: ltr
-      slot_rendering: {item: english_gloss}
-      text_blocks:
-        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
+        - {text: "Translate into Dutch (past participle).", language_code: en, direction: ltr}
     slots: {item: *participle_zijn}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
@@ -185,19 +204,6 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "Ik ben naar de supermarkt {item}.", language_code: nl, direction: ltr}}
     feedback_frame: {text: "{item} is a past participle that takes zijn.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson04.translate.001
-    lesson_content_key: nl.a1.unit12.lesson04.wanneer_gebeurde_het
-    type: translation
-    frame:
-      text: "{item}"
-      language_code: en
-      direction: ltr
-      slot_rendering: {item: english_gloss}
-      text_blocks:
-        - {text: "Translate into Dutch.", language_code: en, direction: ltr}
-    slots: {item: *recent_time}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "The Dutch word is {item}.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit12.lesson04.reverse_translate.002
     lesson_content_key: nl.a1.unit12.lesson04.wanneer_gebeurde_het
     type: translation
     frame:
@@ -222,17 +228,10 @@ templates:
     slots: {item: *participle_hebben}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a past participle from the account.", language_code: en, direction: ltr}
-  - content_key: practice.en-nl.nl.a1.unit12.lesson05.order.002
-    lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
-    type: word_order
-    frame: {text: "Ik heb veel {item}.", language_code: nl, direction: ltr}
-    slots: {item: *participle_hebben}
-    answer_derivation: {kind: render_frame, frame: {text: "Ik heb veel {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "{item} is a past participle that takes hebben.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson06.listen.001
     lesson_content_key: nl.a1.unit12.lesson05.een_kort_verslag_lezen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *participle_hebben}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the participle you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the participle you heard.", language_code: en, direction: ltr}
