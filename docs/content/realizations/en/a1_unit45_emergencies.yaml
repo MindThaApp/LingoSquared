@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Four-lesson draft. Realizes universal.a1.emergencies.handle_basic_emergency,
     the next unrealized outcome in the shared English realization (fa-en/
@@ -144,6 +144,33 @@ review:
     Audio remains pending generation. Draft only -- needs the mandatory
     fresh-context review before any overlay authors build on it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    against the nl-en overlay of this unit (and the fa-en/prs-en overlays
+    where accepted answers are copied), listen distractors against the full
+    dialogue audio, speaker attribution, matching lefts, and course-wide
+    untaught tokens (only the usual English meta-instruction words flagged,
+    by convention). translation answer-leak target_block removed
+    (coordinator sweep):
+    en.a1.unit45.lesson02.exercise05.translate_i_need_help now has
+    target_blocks: []. Fixes:
+    en.a1.unit45.lesson03.exercise04.respond_own_emergency_request --
+    dropped 'What's your emergency?' (the operator's line, not a request for
+    help) and widened the list to match the nl-en 2026-10-10 list (taught
+    'Send the police/an ambulance/the fire department' with and without
+    'please', 'Please send ...', 'There is a fire.', 'Call 911!'), here and
+    in the fa-en and prs-en overlays.
+    en.a1.unit45.lesson04.exercise04.write_own_emergency_message -- Removed
+    the ungrammatical statement-plus-command/question ', and' joins from
+    this key in this file and in the nl-en, fa-en and prs-en overlays (3
+    entries). and copied the nl-en uncontracted 'There is ...' / 'Please
+    send ...' / 'This is an emergency. ...' variants into this file and the
+    fa-en and prs-en overlays. nl-en overlay lesson03.exercise01 distractor
+    'burnt food' (near-inferable from 'is something burning?') replaced with
+    'perfume'. NATIVE FLAG: fa-en/prs-en lesson03.exercise01 distractors
+    ('food', 'fire') are similarly close to the dialogue; not changed
+    (distractor edits in fa-en/prs-en are outside this worker's scope).
+    DEFERRED: none beyond that flag.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -198,7 +225,7 @@ units:
           - {content_key: "en.a1.unit45.lesson02.exercise02.choose_send_ambulance_meaning", type: "multiple_choice", tested_text: "Send an ambulance, please.", prompt: {target_blocks: [{text: "Which phrase asks for the vehicle that takes injured people to the hospital?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson02.exercise03.choose_whats_your_emergency_meaning", type: "multiple_choice", tested_text: "What's your emergency?", prompt: {target_blocks: [{text: "Which phrase does an emergency operator usually ask first when you call for help?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson02.exercise04.order_send_police_sentence", type: "word_order", tested_text: "Send the police, please.", word_bank: ["Send", "the", "police,", "please."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit45.lesson02.exercise05.translate_i_need_help", type: "translation", tested_text: "I need help!", prompt: {target_blocks: [{text: "Translate: \"I need help!\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit45.lesson02.exercise05.translate_i_need_help", type: "translation", tested_text: "I need help!", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit45.lesson03.dialogue_kitchen_fire"
         title: "Dialogue: A fire in the kitchen"
@@ -215,7 +242,7 @@ units:
           - {content_key: "en.a1.unit45.lesson03.exercise01.comprehension_leila_smells", type: "multiple_choice", tested_text: "smoke", prompt: {target_blocks: [{text: "According to the dialogue, what does Leila smell?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson03.exercise02.comprehension_daniel_why_fire", type: "multiple_choice", tested_text: "cooking dinner", prompt: {target_blocks: [{text: "According to the dialogue, what was Daniel doing when the pan caught fire?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson03.exercise03.listen_dialogue_leila_request", type: "listen_select", tested_text: "the fire department", media_asset_key: "en.a1.audio.dialogue.emergencies.01", prompt: {target_blocks: [{text: "According to the dialogue, what does Leila ask the emergency operator to send?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit45.lesson03.exercise04.respond_own_emergency_request", type: "speak_response", tested_text: "I need help", accepted_answers: ["I need help", "I need help.", "Call the police", "Call the police.", "Call an ambulance", "Call an ambulance.", "There's a fire", "There's a fire.", "Send the fire department", "Send the fire department.", "What's your emergency?"], prompt: {target_blocks: [{text: "Say that you need help, or say which service should be sent.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit45.lesson03.exercise04.respond_own_emergency_request", type: "speak_response", tested_text: "I need help", accepted_answers: ["I need help", "I need help.", "Call the police", "Call the police.", "Call an ambulance", "Call an ambulance.", "There's a fire", "There's a fire.", "Send the fire department", "Send the fire department.", "Send the police", "Send the police.", "Send an ambulance", "Send an ambulance.", "Send the police, please.", "Send an ambulance, please.", "Send the fire department, please.", "Please send the fire department.", "Please send the police.", "Please send an ambulance.", "There is a fire.", "Call 911!"], prompt: {target_blocks: [{text: "Say that you need help, or say which service should be sent.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit45.lesson04.emergency_notice"
         title: "Reading: What to do in an emergency"
@@ -226,4 +253,4 @@ units:
           - {content_key: "en.a1.unit45.lesson04.exercise01.reading_first_step", type: "multiple_choice", tested_text: "stay calm", prompt: {target_blocks: [{text: "According to the notice, what should you do first if there is a fire?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson04.exercise02.reading_use_instead_of_elevator", type: "multiple_choice", tested_text: "the stairs", prompt: {target_blocks: [{text: "According to the notice, what should you use instead of the elevator?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit45.lesson04.exercise03.reading_who_checked_on_them", type: "multiple_choice", tested_text: "Mia", prompt: {target_blocks: [{text: "According to the reading, who came to check on Daniel and Leila afterward?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit45.lesson04.exercise04.write_own_emergency_message", type: "writing_prompt", tested_text: "There's a fire. Send the fire department.", prompt: {target_blocks: [{text: "Write a short message: say there is an emergency and what help you need.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["There's a fire. Send the fire department.", "There's a fire. Send the fire department, please.", "There's a fire, send the fire department.", "There's a fire, and send the fire department.", "I need help. Send an ambulance.", "I need help. Send an ambulance, please.", "I need help, send an ambulance.", "I need help, and send an ambulance.", "There's an emergency. Send the police.", "There's an emergency. Send the police, please.", "There's an emergency, send the police.", "There's an emergency, and send the police."]}
+          - {content_key: "en.a1.unit45.lesson04.exercise04.write_own_emergency_message", type: "writing_prompt", tested_text: "There's a fire. Send the fire department.", prompt: {target_blocks: [{text: "Write a short message: say there is an emergency and what help you need.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["There's a fire. Send the fire department.", "There's a fire. Send the fire department, please.", "There's a fire, send the fire department.", "I need help. Send an ambulance.", "I need help. Send an ambulance, please.", "I need help, send an ambulance.", "There's an emergency. Send the police.", "There's an emergency. Send the police, please.", "There's an emergency, send the police.", "There is a fire. Send the fire department.", "There is a fire. Send the fire department, please.", "There's a fire. Please send the fire department.", "There is a fire. Please send the fire department.", "I need help. Please send an ambulance.", "There is an emergency. Send the police.", "There is an emergency. Send the police, please.", "There's an emergency. Please send the police.", "This is an emergency. Send the police.", "This is an emergency. Send the police, please.", "This is an emergency. Send an ambulance.", "This is an emergency. Send an ambulance, please.", "This is an emergency. Send the fire department.", "This is an emergency. Send the fire department, please."]}
