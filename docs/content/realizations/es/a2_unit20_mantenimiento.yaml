@@ -30,8 +30,8 @@ generation_provenance:
     (a leak), and every sentence are freshly written for Mateo's own
     storyline.
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fifth Spanish A2 unit (spine outcome:
     universal.a2.housing.report_maintenance_problem), continuing
@@ -88,6 +88,33 @@ review:
 
     Pending fresh-context review and Ramin's native-speaker pass. Audio
     assets declared for generation, not yet recorded.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked teaching/exercise alignment, accepted-answer coverage,
+    matching_pairs, reading/dialogue consistency with the audio,
+    learner-visible notes, and grammar claims against the en-es overlay.
+    Fixes: es.a2.unit20.lesson05.exercise01/02/03
+    (reading_comprehension) -- the confirmation passage was never shown
+    in the exercise; added it as the first prompt.target_block (es)
+    before the question.
+    es.a2.unit20.lesson05.teach.este_disponible_note -- false claim that
+    beba shares the -e ending corrected: now says -ar verbs take -e, -er
+    verbs like beba take -a.
+    es.a2.unit20.lesson06.exercise08.write_visit_summary -- prompt now
+    names "the landlord (la casera)" so the accepted la casera answer is
+    determined (overlay instruction matched). Overlay fixes listed in
+    the en-es overlay's own review note. DEFERRED: the "¿Podría venir el
+    jueves a las tres?" role logic (the landlord asks Mateo to 'come' to
+    his own flat) is structural -- it touches the lesson04
+    title/teaching and its exercises, lesson06 line05 and its overlay
+    gloss, and the podria_venir_jueves / dialogue audio assets and voice
+    hints; owner decision needed (reframe as "¿Podría estar en casa...?"
+    or have Mateo ask and the landlord answer). NATIVE FLAG: line08
+    "Muchas gracias por su ayuda rápida." reads stiffly ("por su rápida
+    ayuda" / "por ayudarme tan rápido"); not changed because the
+    dialogue audio and listen_type exercise use it. NATIVE FLAG: dialect
+    mix (plomero = Latin American, casera = Spain-leaning) in an
+    es_neutral course, noted only.
 
 course:
   realization_key: es.a2
@@ -246,12 +273,12 @@ units:
             introduced_tokens: [Problema, reportado, gotera, en, el, baño, desde, esta, mañana, Técnico, asignado, se, confirma, la, visita, para, jueves, a, las, tres, de, tarde, Por, favor, esté, disponible, esa, hora]
           - content_key: es.a2.unit20.lesson05.teach.este_disponible_note
             kind: grammar_note
-            target: {text: "*Esté disponible* (be available) is a formal usted-command using the subjunctive form, the same *-e* ending pattern as *revisemos*/*beba*/*llegue* from earlier units.", language_code: en, direction: ltr}
+            target: {text: "*Esté disponible* (be available) is a formal usted-command using the subjunctive form, the same form as *revisemos*/*llegue* from earlier units (-ar verbs take *-e*; -er verbs like *beba* take *-a*).", language_code: en, direction: ltr}
             introduced_tokens: []
         exercises:
-          - {content_key: es.a2.unit20.lesson05.exercise01.read_problem_reported, type: reading_comprehension, tested_text: "gotera en el baño desde esta mañana", prompt: {target_blocks: [{text: "What problem was reported, and since when?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a2.unit20.lesson05.exercise02.read_visit_time, type: reading_comprehension, tested_text: "el jueves a las tres de la tarde", prompt: {target_blocks: [{text: "When is the technician's visit confirmed for?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a2.unit20.lesson05.exercise03.read_instruction, type: reading_comprehension, tested_text: "esté disponible a esa hora", prompt: {target_blocks: [{text: "What does the notice ask Mateo to do?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a2.unit20.lesson05.exercise01.read_problem_reported, type: reading_comprehension, tested_text: "gotera en el baño desde esta mañana", prompt: {target_blocks: [{text: "Problema reportado: gotera en el baño, desde esta mañana. Técnico asignado: se confirma la visita para el jueves a las tres de la tarde. Por favor, esté disponible a esa hora.", language_code: es, direction: ltr}, {text: "What problem was reported, and since when?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a2.unit20.lesson05.exercise02.read_visit_time, type: reading_comprehension, tested_text: "el jueves a las tres de la tarde", prompt: {target_blocks: [{text: "Problema reportado: gotera en el baño, desde esta mañana. Técnico asignado: se confirma la visita para el jueves a las tres de la tarde. Por favor, esté disponible a esa hora.", language_code: es, direction: ltr}, {text: "When is the technician's visit confirmed for?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a2.unit20.lesson05.exercise03.read_instruction, type: reading_comprehension, tested_text: "esté disponible a esa hora", prompt: {target_blocks: [{text: "Problema reportado: gotera en el baño, desde esta mañana. Técnico asignado: se confirma la visita para el jueves a las tres de la tarde. Por favor, esté disponible a esa hora.", language_code: es, direction: ltr}, {text: "What does the notice ask Mateo to do?", language_code: en, direction: ltr}]}}
           - {content_key: es.a2.unit20.lesson05.exercise04.listen_confirmacion, type: listen_select, tested_text: "esté disponible a esa hora", media_asset_key: es.a2.audio.mantenimiento.confirmacion.01, prompt: {target_blocks: []}}
           - content_key: es.a2.unit20.lesson05.exercise05.match_confirmacion_points
             type: matching_pairs
@@ -282,6 +309,6 @@ units:
           - {content_key: es.a2.unit20.lesson06.exercise05.order_hay_gotera_bano_dialogue, type: word_order, tested_text: "Hay una gotera en el baño", prompt: {target_blocks: []}, word_bank: [Hay, una, gotera, en, el, baño]}
           - {content_key: es.a2.unit20.lesson06.exercise06.respond_desde_cuando_gotera_dialogue, type: dialogue_response, tested_text: "Desde esta mañana y está empeorando", prompt: {target_blocks: [{text: "¿Desde cuándo tiene la gotera?", language_code: es, direction: ltr}]}}
           - {content_key: es.a2.unit20.lesson06.exercise07.listen_type_thanks, type: listen_type, tested_text: "Muchas gracias por su ayuda rápida", media_asset_key: es.a2.audio.mantenimiento.dialogue.gracias_ayuda.01, prompt: {target_blocks: []}}
-          - {content_key: es.a2.unit20.lesson06.exercise08.write_visit_summary, type: writing_prompt, tested_text: "Mateo reportó una gotera en el baño La casera enviará al técnico el jueves a las tres", prompt: {target_blocks: [{text: "Write two Spanish sentences: Mateo reported a leak in the bathroom, and the landlord will send the technician on Thursday at three.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a2.unit20.lesson06.exercise08.write_visit_summary, type: writing_prompt, tested_text: "Mateo reportó una gotera en el baño La casera enviará al técnico el jueves a las tres", prompt: {target_blocks: [{text: "Write two Spanish sentences: Mateo reported a leak in the bathroom, and the landlord (la casera) will send the technician on Thursday at three.", language_code: en, direction: ltr}]}}
           - {content_key: es.a2.unit20.lesson06.exercise09.dictation_calentador, type: dictation, tested_text: "El calentador no funciona.", media_asset_key: es.a2.audio.mantenimiento.no_funciona_calentador.01, prompt: {target_blocks: []}}
           - {content_key: es.a2.unit20.lesson06.exercise10.dictation_gotera, type: dictation, tested_text: "Hay una gotera en el baño.", media_asset_key: es.a2.audio.mantenimiento.hay_gotera_bano.01, prompt: {target_blocks: []}}
