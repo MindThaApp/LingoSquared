@@ -2174,9 +2174,9 @@ Deferred / remaining:
    ru 35. These are UNVERIFIED. Many are probably legitimate "What does X
    mean?" items with English options; only items whose block equals the
    overlay `correct_option` give the answer away. A per-language check is
-   worth one scripted pass (cf. the scratch checker described in PR #34).
+   worth one scripted pass (overlay correct_option vs realization block).
 4. A validator for "MC prompt block == correct_option" would make the
    biggest class here structurally impossible (Codex lane).
-5. B1 u10 and other units contain the content key
-   `comprehend_ewa_powiedzialam_ze_pociąg`, which has a non-ASCII ą. Left
+5. B1 u19 contains the content key
+   `comprehend_ewa_powiedzialam_ze_pociąg`, with a non-ASCII ą. Left
    as is to keep content keys stable.
