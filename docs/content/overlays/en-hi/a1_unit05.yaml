@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fifth en-hi overlay, written for hi/a1_unit05_family.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start;
@@ -23,6 +23,26 @@ review:
     been authored), so the sibling-isolation rule (AUTHORING_GUIDE §8)
     doesn't apply here -- noted for whoever authors hi-en next: do not
     open this file for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked with hi/a1_unit05_family.yaml. Fixes:
+    lesson03.teach.accha_phir_milenge note said 'unit 1' -> 'unit 2'
+    (where the phrase was taught); lesson01.exercise10 instruction asks
+    for brother but sister answers were accepted -> removed, added 'मेरा
+    भाई है'; lesson02.exercise08 fill-in was underdetermined
+    (माँ/दादी/नानी also feminine) -> instruction pinned to 'Where does
+    your sister live?'; lesson02.exercise10 accept short 'दिल्ली में
+    रहता है'; lesson02.exercise11 accept every दादा/नाना x दिल्ली/मुंबई
+    combination (open prompt); lesson03.exercise10/11/12 accept
+    unhyphenated 'माता पिता' (common spelling, STT output);
+    lesson03.exercise11/12 open-ended instructions pinned to the
+    accepted statements; lesson02.exercise06 and lesson03.exercise06
+    word_order also accept 'मुंबई में मेरी बहन रहती है' and 'मेरी एक
+    छोटी बहन भी है' (compiler scrambled-permutation warning
+    intentional). Native-speaker check needed: the alternate word
+    orders; character canon -- Priya said 'मैं अमेरिका से हूँ' in unit01
+    but here her parents and grandparents all live in India (plausible,
+    not changed).
 
 answer_policy:
   nasalization_marks: >-
@@ -209,7 +229,7 @@ teaching:
   hi.a1.unit05.lesson03.teach.accha_phir_milenge:
     title: "Okay, see you again"
     gloss: "Okay! See you again."
-    note: "A friendly closing, reused from unit 1's own farewell vocabulary."
+    note: "A friendly closing, reused from unit 2's own farewell vocabulary."
 
   hi.a1.unit05.lesson03.teach.theek_hai_phir_milte_hain:
     title: "Alright, see you soon"
@@ -304,8 +324,7 @@ exercises:
     accepted_answers:
       - "यह मेरा भाई है।"
       - "यह मेरा भाई है"
-      - "यह मेरी बहन है।"
-      - "यह मेरी बहन है"
+      - "मेरा भाई है।"
 
   hi.a1.unit05.lesson01.exercise11.speak_about_sibling:
     instruction: "Say that you have a brother (or a sister)."
@@ -352,7 +371,9 @@ exercises:
 
   hi.a1.unit05.lesson02.exercise06.order_meri_behan_mumbai_mein_rehti_hai:
     instruction: "Put the sentence in order: My sister lives in Mumbai."
-    correct_response: ["मेरी", "बहन", "मुंबई", "में", "रहती", "है"]
+    accepted_answers:
+      - {value: ["मेरी", "बहन", "मुंबई", "में", "रहती", "है"], status: correct}
+      - {value: ["मुंबई", "में", "मेरी", "बहन", "रहती", "है"], status: correct}
 
   hi.a1.unit05.lesson02.exercise07.fill_dada_rehte:
     instruction: "Complete the sentence: My grandfather lives in Delhi."
@@ -360,7 +381,7 @@ exercises:
     feedback: "Mere dada Dilli mein rehte hain -- rehte hain shows respect for a family elder."
 
   hi.a1.unit05.lesson02.exercise08.fill_tumhari_behan:
-    instruction: "Complete the question, based on tumhari agreeing with a feminine word."
+    instruction: "Complete the question: Where does your sister live?"
     accepted_answers: ["बहन"]
     feedback: "Tumhari behan kahan rehti hai? -- tumhari agrees with the feminine behan."
 
@@ -376,6 +397,7 @@ exercises:
     accepted_answers:
       - "मेरा भाई दिल्ली में रहता है।"
       - "मेरा भाई दिल्ली में रहता है"
+      - "दिल्ली में रहता है।"
 
   hi.a1.unit05.lesson02.exercise11.speak_about_grandparents:
     instruction: "Say where your grandfather lives."
@@ -384,6 +406,8 @@ exercises:
       - "मेरे दादा दिल्ली में रहते हैं"
       - "मेरे नाना मुंबई में रहते हैं।"
       - "मेरे नाना मुंबई में रहते हैं"
+      - "मेरे दादा मुंबई में रहते हैं।"
+      - "मेरे नाना दिल्ली में रहते हैं।"
 
   hi.a1.unit05.lesson03.exercise01.select_bada_bhai_meaning:
     instruction: "What does this phrase mean?"
@@ -419,7 +443,9 @@ exercises:
 
   hi.a1.unit05.lesson03.exercise06.order_meri_bhi_ek_choti_behan_hai:
     instruction: "Put the sentence in order: I also have one younger sister."
-    correct_response: ["मेरी", "भी", "एक", "छोटी", "बहन", "है"]
+    accepted_answers:
+      - {value: ["मेरी", "भी", "एक", "छोटी", "बहन", "है"], status: correct}
+      - {value: ["मेरी", "एक", "छोटी", "बहन", "भी", "है"], status: correct}
 
   hi.a1.unit05.lesson03.exercise07.match_family_review:
     instruction: "Match each Hindi word to its English meaning."
@@ -451,9 +477,10 @@ exercises:
     accepted_answers:
       - "मेरे माता-पिता दिल्ली में रहते हैं।"
       - "मेरे माता-पिता दिल्ली में रहते हैं"
+      - "मेरे माता पिता दिल्ली में रहते हैं।"
 
   hi.a1.unit05.lesson03.exercise11.write_about_family:
-    instruction: "Write one sentence about your family."
+    instruction: "Write one sentence about your family: say that you have an older brother, that you have a younger sister, or that your parents live in Delhi."
     accepted_answers:
       - "मेरा एक बड़ा भाई है"
       - "मेरा एक बड़ा भाई है।"
@@ -461,9 +488,11 @@ exercises:
       - "मेरी एक छोटी बहन है।"
       - "मेरे माता-पिता दिल्ली में रहते हैं"
       - "मेरे माता-पिता दिल्ली में रहते हैं।"
+      - "मेरे माता पिता दिल्ली में रहते हैं।"
 
   hi.a1.unit05.lesson03.exercise12.speak_about_family:
-    instruction: "Say something about your family, following the pattern from the dialogue."
+    instruction: "Say that your parents live in Delhi, following the pattern from the dialogue."
     accepted_answers:
       - "मेरे माता-पिता दिल्ली में रहते हैं।"
       - "मेरे माता-पिता दिल्ली में रहते हैं"
+      - "मेरे माता पिता दिल्ली में रहते हैं।"
