@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: null
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked grading (strict Cyrillic, no ё/е fold), underdetermined production prompts, learner-visible notes, example_gloss vs example, dictation instructions, character canon. Fixes: ru.a2.unit27.lesson01.exercise06.write_account_request accepts счет spelled with е; ru.a2.unit27.lesson03.exercise06.write_bank_message accepts счет with е for all variants plus a variant without Скажите, пожалуйста; ru.a2.unit27.lesson02.exercise06.write_card_question accepts Карта будет бесплатной? and feedback changed from a misleading fuller-model wording to The model answer is ...; ru.a2.unit27.lesson03.exercise05.reply_bank_questions accepts Да, у меня есть паспорт. Адрес новый. / Да, у меня есть паспорт. У меня новый адрес.; dictations lesson03.exercise07/08 given the standard Type what you hear. instruction. No NATIVE flags. DEFERRED: grader-level ё/е equivalence (backend/app/review/grading.py, owner decision) - dictation of Я хочу открыть счёт. stays strict, so счет fails there."
 
 course:
   title: "Russian A2"
@@ -56,6 +59,8 @@ exercises:
       - {value: "Здравствуйте. Я хочу открыть счёт.", status: "correct"}
       - {value: "Здравствуйте, я хочу открыть счёт.", status: "correct"}
       - {value: "Здравствуйте я хочу открыть счёт", status: "correct"}
+      - {value: "Здравствуйте. Я хочу открыть счет.", status: "correct"}
+      - {value: "Здравствуйте, я хочу открыть счет.", status: "correct"}
     feedback: "The model answer is *Здравствуйте. Я хочу открыть счёт*."
   ru.a2.unit27.lesson02.exercise01.recognize_nomer: {instruction: "Which phrase means \"phone number\"?", correct_option: "номер телефона", distractors: ["обслуживание", "адрес", "заявление"], accepted_answers: [{value: "номер телефона", status: "correct"}], feedback: "*номер телефона* means \"phone number.\""}
   ru.a2.unit27.lesson02.exercise02.recognize_besplatnoe: {instruction: "Which word means \"free of charge\"?", correct_option: "бесплатное", distractors: ["новый", "нужен", "конечно"], accepted_answers: [{value: "бесплатное", status: "correct"}], feedback: "*бесплатное* means \"free of charge.\""}
@@ -78,7 +83,8 @@ exercises:
     accepted_answers:
       - {value: "Скажите, пожалуйста, карта будет бесплатной?", status: "correct"}
       - {value: "Скажите пожалуйста карта будет бесплатной?", status: "correct"}
-    feedback: "The fuller formal model is *Скажите, пожалуйста, карта будет бесплатной?*"
+      - {value: "Карта будет бесплатной?", status: "correct"}
+    feedback: "The model answer is *Скажите, пожалуйста, карта будет бесплатной?*"
   ru.a2.unit27.lesson03.exercise01.choose_open_account: {instruction: "What should Dima say to request a new bank account?", correct_option: "Я хочу открыть счёт.", distractors: ["Карта будет бесплатной?", "Нужен номер телефона.", "Адрес новый."], accepted_answers: [{value: "Я хочу открыть счёт.", status: "correct"}], feedback: "*Я хочу открыть счёт* requests the account."}
   ru.a2.unit27.lesson03.exercise02.dialogue_comprehension_bank:
     instruction: "Listen to the dialogue. What does Dima want, what is required, and what card feature does he ask about?"
@@ -104,6 +110,8 @@ exercises:
     accepted_answers:
       - {value: "Да, паспорт есть. Адрес новый.", status: "correct"}
       - {value: "Да паспорт есть. Адрес новый", status: "correct"}
+      - {value: "Да, у меня есть паспорт. Адрес новый.", status: "correct"}
+      - {value: "Да, у меня есть паспорт. У меня новый адрес.", status: "correct"}
     feedback: "The model answer is *Да, паспорт есть. Адрес новый*."
   ru.a2.unit27.lesson03.exercise06.write_bank_message:
     instruction: "Write a short formal message to a bank: say you want to open an account, say you have a passport and address, and ask whether the card will be free."
@@ -111,6 +119,11 @@ exercises:
       - {value: "Здравствуйте. Я хочу открыть счёт. У меня есть паспорт и адрес. Скажите, пожалуйста, карта будет бесплатной?", status: "correct"}
       - {value: "Здравствуйте, я хочу открыть счёт. У меня есть паспорт и адрес. Скажите, пожалуйста, карта будет бесплатной?", status: "correct"}
       - {value: "Здравствуйте. Я хочу открыть счёт. У меня есть паспорт и адрес. Скажите пожалуйста карта будет бесплатной?", status: "correct"}
+      - {value: "Здравствуйте. Я хочу открыть счёт. У меня есть паспорт и адрес. Карта будет бесплатной?", status: "correct"}
+      - {value: "Здравствуйте. Я хочу открыть счет. У меня есть паспорт и адрес. Скажите, пожалуйста, карта будет бесплатной?", status: "correct"}
+      - {value: "Здравствуйте, я хочу открыть счет. У меня есть паспорт и адрес. Скажите, пожалуйста, карта будет бесплатной?", status: "correct"}
+      - {value: "Здравствуйте. Я хочу открыть счет. У меня есть паспорт и адрес. Скажите пожалуйста карта будет бесплатной?", status: "correct"}
+      - {value: "Здравствуйте. Я хочу открыть счет. У меня есть паспорт и адрес. Карта будет бесплатной?", status: "correct"}
     feedback: "A complete message requests the account, answers identity/address basics, and asks about the card feature."
-  ru.a2.unit27.lesson03.exercise07.dictation_otkryt_schet: {correct_response: "Я хочу открыть счёт.", orthography_strict: true, feedback: "Type the sentence exactly as you hear it."}
-  ru.a2.unit27.lesson03.exercise08.dictation_pasport_adres: {correct_response: "Нужен паспорт и адрес.", orthography_strict: true, feedback: "Type the sentence exactly as you hear it."}
+  ru.a2.unit27.lesson03.exercise07.dictation_otkryt_schet: {instruction: "Type what you hear.", correct_response: "Я хочу открыть счёт.", orthography_strict: true, feedback: "Type the sentence exactly as you hear it."}
+  ru.a2.unit27.lesson03.exercise08.dictation_pasport_adres: {instruction: "Type what you hear.", correct_response: "Нужен паспорт и адрес.", orthography_strict: true, feedback: "Type the sentence exactly as you hear it."}
