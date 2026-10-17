@@ -1970,6 +1970,65 @@ affected file's `review.notes`:
 6. *Tooling*: `_practice_unit_scope_check.py` (like the integrity and fill
    checks) globs `a*_unit*` and silently skips every b1/b2 pack.
 
+### 2026-10-11 — en-nl C1 practice packs + C1 lexemes: SECOND fresh-context review (8 packs; branch content/en-nl-c1-review2)
+Scope: docs/content/practice/en-nl/c1_unit01-08 and the C1 block of
+scripts/backfill_lexemes_en_nl.py, re-reviewed after the 2026-10-10 fixes. One
+fresh reviewer per unit with NO access to the authoring notes or the first
+review (review.notes stripped, registry/git history off-limits), working from
+real course-scope candidate pools rendered from iter_specs(); then a third
+fresh-context verification pass on the fixed packs.
+Second-review yield (findings / blockers): u01 24/10, u02 16/3, u03 19/3,
+u04 28/13, u05 15/2, u06 18/4, u07 9/0, u08 17/5 -- total 146 (40 blocker).
+Third-pass yield on the fixed packs: u01 7/2, u02 3/0, u03 4/0, u04 9/1,
+u05 5/0, u06 2/0, u07 4/0, u08 0 -- total 34 (3 blocker), all fixed.
+By category (second review, approx.): typed-translation alternatives ~95
+(of which the "the X" article gloss class in every unit, ~150 lexemes),
+lexeme gloss/sense/POS ~25, false feedback ~10, word_order alternative
+orders ~20 (deferred, engine), open fill blanks 3 (+1 native flag), duplicate pools 3,
+gloss-reveals 3, wrong English/grammar feedback 3.
+Bug classes: no new class. The dominant class is again typed-translation
+synonym ambiguity -- the first review's fix pass fixed the listed tokens but
+the same class remained in ~60 other pool members, i.e. the first pass fixed
+instances, not the class. Also 1.40 confirmed in C1 (every unit).
+Fixes: (1) C1-scoped backfill rule nl_c1_bare_gloss drops a leading English
+"the" from every C1 noun gloss (151 lexemes; A1-B2 specs verified byte-
+identical); (2) ~75 tokens taken out of translation (or matching) pools (kept for MC and
+matching where safe) and ~70 glosses narrowed; (3) 3 open fill_in_blank frames converted
+to word_order (u05 lesson03/06, u06 lesson01), 3 fixed sentences pinned; (4) duplicated
+template pools split (u02 by part of speech, u03 and u05 by lesson half);
+(5) false feedback and grammar notes corrected. Pool scan after fixes: 0
+duplicate glosses in any MC/matching/translation pool, 0 self-quoting
+glosses, 0 translation tokens sharing a gloss alternative with another C1
+lexeme except form-cued pairs (vaste/vast, moet/moeten).
+Status: u08 -> reviewed (third pass clean). u01-u07 stay unreviewed: their
+third pass found defects (fixed), so each needs one more clean pass.
+Native-judgment flags for Ramin are recorded per pack in review.notes.
+
+**Deliberately NOT fixed (deferred), 2026-10-11:**
+1. *Engine limitation*: practice word_order and fixed-sentence translation
+   accept one string. Equally valid alternative orders remain graded wrong
+   (the word_order hint line shows the expected order, which mitigates):
+   u01 lesson01.order.002 / lesson06.order.003; u03 lesson05.order.004 /
+   lesson03.order.003; u04 lesson04.order.002 / lesson05.order.002 /
+   lesson02.order.003; u05 lesson02.order.003 (feedback softened);
+   u06 lesson04.order.003 / lesson03.order.002; u07 lesson03/05/06 order
+   templates; u08 lesson01.order.003 / lesson02.order.002 / lesson04.order.003.
+   Fix needs an `accepted` list on practice templates (Codex lane).
+2. *Stray generic semantic tags on C1 lexemes* (ordinal_number on -de/-te
+   words such as wilde, woonde, belangrijkste, waarde, Beste; weather on weer;
+   work_vocab on beroep): latent, no C1 template selects them. A C1 template
+   that ever selects those tags would leak them -- clean up in nl_agreement_tags.
+3. *u02 lesson01.choose.001* (c1u02_kern, all parts of speech) still overlaps
+   the other u02 MC pools (repetition only, nothing graded wrong).
+4. *Out of scope (overlay)*: overlays/en-nl/c1_unit06 lesson02 dialogue line
+   renders Dutch "chef" as English "chef" (false friend; means boss).
+5. *Tooling (unchanged)*: _practice_content_integrity_check.py /
+   _fill_in_blank_ambiguity_check.py / _practice_unit_scope_check.py glob
+   a*_unit* and skip every c1_ pack.
+Rule candidates (validator backlog, Codex lane): flag a bare-word translation
+gloss that starts with "the"; flag a C1 translation pool member whose gloss
+alternative equals any gloss alternative of another lexeme in the course.
+
 ### 2026-10-17 — remaining review backlog: en-de/it/ru/ro/es/fr + shared English (87 commits, fresh-context review; branch content/review-backlog-rest, PR #31)
 Scope: the `review.status: unreviewed` backlog outside the Dutch directions
 and outside the en-nl C1 packs — overlays + realizations for en-de (A1
