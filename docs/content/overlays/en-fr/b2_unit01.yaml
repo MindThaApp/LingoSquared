@@ -6,7 +6,7 @@ target_language: fr
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed (DRAFT). Confirm the English glosses
     match idiomatic French, that every matching_pairs right-hand gloss
@@ -32,6 +32,42 @@ review:
     actually appear -- the culminating lesson06 prompts name the required
     signposts so a correct answer is well-determined. No sibling-direction
     file (fr-en b2) was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked realization + en-fr overlay for unit01 (answer keys,
+    elision/gender/word-order variants, matching-pair
+    discriminability, listen/dialogue distractors vs audio, dialogue
+    cards vs audio script, Inès/Mathieu canon, course-scoped token
+    coverage, YAML booleans, learner-visible notes). Fixes:
+    lesson04.exercise03.match_rebuttal_words: cependant/however pair
+    (interchangeable with pourtant, whose gloss already says 'yet /
+    still / however') -> peser/'to weigh (carry weight)' in pairs,
+    tested_text and overlay value; lesson05.exercise01-04
+    reading_comprehension prompts now carry the French passage as the
+    first target_block (the question previously never showed the
+    text); lesson05.exercise06.translate_convaincu accepts feminine
+    'Je suis convaincue que...' (convaincue introduced on
+    lesson05.teach.texte, gloss updated);
+    lesson02.exercise07.write_two_reasons accepts '...tu es plus
+    productive' (productive introduced on lesson02.teach.productif,
+    note added); lesson03.exercise06.speak_deux_cotes accepts the
+    idiomatic '..., de l'autre tes collègues te manquent';
+    lesson03.exercise07.write_evidemment accepts 'Évidemment, parfois
+    tes collègues te manquent'; lesson04.teach.cela_nempeche_pas_que
+    note now states that careful French uses the subjunctive after it
+    and the indicative is an everyday-speech variant. NATIVE FLAGS:
+    cela n'empêche pas que + indicative 'tu peux' throughout (lesson05
+    reading, lesson06 dialogue card + audio
+    fr.b2.unit01.audio.argumentation.dialogue.teletravail.01,
+    lesson06.exercise04 tiles) -- standard is 'tu puisses'; Mathieu
+    opens with 'De l'autre côté, ...' without a preceding 'd'un côté'
+    ('D'un autre côté' is more natural standalone);
+    lesson03.exercise04 'Parfois tes collègues te manquent' and
+    lesson04.exercise04 'Les avantages pèsent pourtant plus lourd' are
+    valid tile orders but cannot be accepted (the compiler warns on
+    reordered word_order answers). DEFERRED: switching the unit to
+    cela n'empêche pas que + subjunctive (audio text, reading,
+    word_order tiles) pending native confirmation.
 
 course:
   title: French B2
@@ -147,6 +183,7 @@ teaching:
   fr.b2.unit01.lesson02.teach.productif:
     title: productive
     gloss: productive
+    note: "*Productif* is the masculine form; the feminine is *productive* (*je suis productive* when a woman talks about herself)."
     example_gloss: "At home, I am more productive."
   fr.b2.unit01.lesson02.teach.grammar_raisons:
     title: "Firstly, you save a lot of commute time. In addition, you are more productive at home."
@@ -228,7 +265,7 @@ teaching:
   fr.b2.unit01.lesson04.teach.cela_nempeche_pas_que:
     title: "that does not change the fact that..."
     gloss: "that does not change the fact that..."
-    note: "*Cela n'empêche pas que...* is a set B2 rebuttal frame: you accept the objection, but say it does not undo your claim."
+    note: "*Cela n'empêche pas que...* is a set B2 rebuttal frame: you accept the objection, but say it does not undo your claim. In careful written French the verb after it is usually in the subjunctive (*cela n'empêche pas que tu puisses...*); in everyday speech the indicative (*tu peux*) is also heard when you stress that something really is the case."
   fr.b2.unit01.lesson04.teach.bref:
     title: "in short"
     gloss: "in short"
@@ -270,7 +307,7 @@ teaching:
       en: "increasingly (de plus en plus = more and more)"
       gens: "people"
       travaillent: "work (from travailler, to work)"
-      convaincu: "convinced"
+      convaincu: "convinced (feminine: convaincue)"
       bonne: "good (feminine of bon)"
       évolution: "development"
       et: "and"
@@ -405,6 +442,7 @@ exercises:
       - {value: "Premièrement, tu économises beaucoup de temps de trajet. De plus, tu es plus productif.", status: correct}
       - {value: "Premièrement tu économises beaucoup de temps de trajet. De plus tu es plus productif", status: correct}
       - {value: "Premièrement tu économises beaucoup de temps de trajet. De plus tu es plus productif.", status: correct}
+      - {value: "Premièrement, tu économises beaucoup de temps de trajet. De plus, tu es plus productive.", status: correct}
     feedback: "Two signposted reasons: Premièrement, tu économises beaucoup de temps de trajet. De plus, tu es plus productif."
   fr.b2.unit01.lesson02.exercise08.dictation_premierement:
     instruction: "Type what you hear."
@@ -445,11 +483,13 @@ exercises:
     instruction: "Say aloud in French: On the one hand it's nice, on the other hand you miss your colleagues."
     accepted_answers:
       - {value: "D'un côté c'est agréable, de l'autre côté tes collègues te manquent", status: correct}
+      - {value: "D'un côté c'est agréable, de l'autre tes collègues te manquent", status: correct}
     feedback: "D'un côté c'est agréable, de l'autre côté tes collègues te manquent means on the one hand it's nice, on the other hand you miss your colleagues."
   fr.b2.unit01.lesson03.exercise07.write_evidemment:
     instruction: "Write in French: Of course, you sometimes miss your colleagues."
     accepted_answers:
       - {value: "Évidemment, tes collègues te manquent parfois", status: correct}
+      - {value: "Évidemment, parfois tes collègues te manquent", status: correct}
     feedback: "Évidemment, tes collègues te manquent parfois means of course, you sometimes miss your colleagues."
 
   fr.b2.unit01.lesson04.exercise01.recognize_pourtant:
@@ -467,7 +507,7 @@ exercises:
   fr.b2.unit01.lesson04.exercise03.match_rebuttal_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {pourtant: "yet / still", "en revanche": "by contrast", mais: but, cependant: however, "cela n'empêche pas que...": "that does not change the fact that...", bref: "in short", "les avantages": advantages, "les inconvénients": disadvantages}
+      - value: {pourtant: "yet / still", "en revanche": "by contrast", mais: but, peser: "to weigh (carry weight)", "cela n'empêche pas que...": "that does not change the fact that...", bref: "in short", "les avantages": advantages, "les inconvénients": disadvantages}
         status: correct
     feedback: "These are this lesson's rebuttal and conclusion words."
   fr.b2.unit01.lesson04.exercise04.order_pourtant_avantages:
@@ -526,6 +566,7 @@ exercises:
     instruction: "Translate into French: I am convinced that this is a good development."
     accepted_answers:
       - {value: "Je suis convaincu que c'est une bonne évolution", status: correct}
+      - {value: "Je suis convaincue que c'est une bonne évolution", status: correct}
     feedback: "Je suis convaincu que c'est une bonne évolution means I am convinced that this is a good development."
   fr.b2.unit01.lesson05.exercise07.write_de_plus_en_plus:
     instruction: "Write in French: More and more people work from home."
