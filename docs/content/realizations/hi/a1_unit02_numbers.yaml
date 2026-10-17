@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Second Hindi unit, continuing directly from
     hi/a1_unit01_greetings.yaml (same Priya/Arjun characters, same
@@ -80,6 +80,18 @@ review:
     30, 50, 100) are simply not introduced yet, left for a future
     numbers-depth pass, rather than papering over the irregularity
     with an invented compositional rule.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked with overlays/en-hi/a1_unit02.yaml. Fixes: teach.das
+    example मेरे हाथ में दस उंगलियाँ हैं (one hand, ten fingers -
+    factually false) -> मेरे हाथों में दस उंगलियाँ हैं;
+    lesson03.exercise07.match_questions_and_answers had
+    interchangeable pairs (two age questions and two phone questions
+    with swappable answers) -> dropped आपकी उम्र / तुम्हारा फ़ोन
+    नंबर pairs, pooled unit01's आपका नाम क्या है / आप कैसे हैं pairs
+    (tested_text and overlay mirror updated). Native-speaker check
+    needed: यह पचास रुपये की है in the exercise08 prompt (की vs का
+    agreement).
 
 course:
   realization_key: hi.a1
@@ -174,7 +186,7 @@ units:
             kind: vocabulary
             target: {text: "दस", language_code: hi, direction: ltr}
             introduced_tokens: ["दस"]
-            example: {text: "मेरे हाथ में दस उंगलियाँ हैं।", language_code: hi, direction: ltr}
+            example: {text: "मेरे हाथों में दस उंगलियाँ हैं।", language_code: hi, direction: ltr}
         exercises:
           - content_key: hi.a1.unit02.lesson01.exercise01.select_do
             type: multiple_choice
@@ -483,15 +495,15 @@ units:
             word_bank: ["उम्र", "आपकी", "क्या", "है"]
           - content_key: hi.a1.unit02.lesson03.exercise07.match_questions_and_answers
             type: matching_pairs
-            tested_text: "आपका फ़ोन नंबर क्या है मेरा नंबर छह दो आठ तीन पाँच है तुम्हारी उम्र क्या है मेरी उम्र तीस साल है आपकी उम्र क्या है मेरी उम्र बीस साल है इसकी कीमत क्या है इसकी कीमत सौ रुपये है तुम्हारा फ़ोन नंबर क्या है मेरा नंबर अच्छा फिर मिलेंगे ठीक है फिर मिलते हैं"
+            tested_text: "आपका फ़ोन नंबर क्या है मेरा नंबर छह दो आठ तीन पाँच है तुम्हारी उम्र क्या है मेरी उम्र तीस साल है इसकी कीमत क्या है इसकी कीमत सौ रुपये है अच्छा फिर मिलेंगे ठीक है फिर मिलते हैं आपका नाम क्या है मेरा नाम प्रिया है आप कैसे हैं मैं ठीक हूँ शुक्रिया"
             prompt: {target_blocks: []}
             pairs:
               - {left: "आपका फ़ोन नंबर क्या है?", right: "मेरा नंबर छह, दो, आठ, तीन, पाँच है।"}
               - {left: "तुम्हारी उम्र क्या है?", right: "मेरी उम्र तीस साल है।"}
-              - {left: "आपकी उम्र क्या है?", right: "मेरी उम्र बीस साल है।"}
               - {left: "इसकी कीमत क्या है?", right: "इसकी कीमत सौ रुपये है।"}
-              - {left: "तुम्हारा फ़ोन नंबर क्या है?", right: "मेरा नंबर..."}
               - {left: "अच्छा! फिर मिलेंगे।", right: "ठीक है, फिर मिलते हैं!"}
+              - {left: "आपका नाम क्या है?", right: "मेरा नाम प्रिया है।"}
+              - {left: "आप कैसे हैं?", right: "मैं ठीक हूँ, शुक्रिया।"}
           - content_key: hi.a1.unit02.lesson03.exercise08.fill_priya_age
             type: fill_in_blank
             tested_text: "तीस"
