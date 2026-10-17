@@ -34,8 +34,8 @@ generation_provenance:
     Mihai's established jobs connect to medical work.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fourth Romanian A2 unit. Targets universal.a2.health.
     attend_doctor_appointment (confirmed by grepping
@@ -65,7 +65,7 @@ review:
 
     Checked this choice against AUTHORING_GUIDE #11 before finalizing.
     Facts this unit newly states: Ana has had a headache for three
-    days, describes it as quite severe when asked, and is prescribed
+    days, describes it as very bad when asked, and is prescribed
     rest and medication to take twice a day for five days by
     Doctorița Vasile. Grepped unit16 to confirm this doesn't conflict:
     unit16's own dialogue has MIHAI as the patient with a headache on
@@ -79,7 +79,7 @@ review:
     Checked every fill_in_blank slot against AUTHORING_GUIDE #17: each
     blank's instruction explicitly states the target English meaning
     (lesson01's blank=trei instruction names "three days" explicitly;
-    lesson02's blank=tare instruction names "quite severe"
+    lesson02's blank=tare instruction names "very badly"
     explicitly). Checked every listen_select/dialogue_comprehension
     distractor against the standing same-speaker-audio rule for
     lesson04's dialogue -- Doctorița Vasile's and Ana's own lines were
@@ -94,6 +94,41 @@ review:
     entry in this same file (both checked proactively before running
     the compiler). Needs a fresh-context content review before import,
     same as every other language's content.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked answer shapes, grading of every accepted_answers set,
+    distractors vs audio, open writing prompts, learner-visible notes
+    for internal ids/construction meta, example_gloss accuracy (all 7
+    correct), character canon. Fixes: 'quite severely' -> 'very badly'
+    for foarte tare (foarte = very) in teach.foarte_tare_vocab
+    title/gloss/example_gloss, teach.doare_foarte_tare_phrase title,
+    line03 gloss, lesson02.exercise01.choose_foarte_tare
+    prompt+instruction, exercise04.match_doctor2 pair (realization +
+    overlay mirror), exercise07.complete_doare_foarte_tare
+    prompt+instruction, exercise08.translate_it_hurts_severely prompt;
+    lesson03.exercise01/02 read_* realization prompt.target_blocks now
+    carry the confirmation passage (ro) before the question;
+    listen_select distractors in all three listen exercises had final
+    punctuation stripped so they match the unpunctuated correct option
+    (form give-away); lesson03.exercise06.write_appointment_request
+    pinned to 'Write: I would like an appointment, because my head has
+    hurt for three days.'; lesson04.exercise07.write_visit_summary
+    pinned to 'Write: My head has hurt for three days.', accepted ['Mă
+    doare capul de trei zile.'] (old answers used untaught a mers / i-a
+    recomandat / să ia); teach.doare_foarte_tare_phrase and
+    teach.confirmare_reading notes 'spine outcome' removed;
+    teach.reminder_recomand_medicament_control title 'Reminder:' -> 'New
+    words:'; unit-number/lesson-id references rewritten in plain wording
+    in notes of reminder_ma_doare_capul_bolnav_doctor,
+    de_trei_zile_vocab, ma_doare_de_trei_zile_phrase,
+    reminder_recomand_medicament_control, line01, line02, line03,
+    line05, line06, line07. NATIVE FLAG: vocative 'Bună ziua,
+    Doctoriță!' / 'Mulțumesc mult, Doctoriță!' and mid-sentence 'la
+    Doctorița Vasile' -- standard polite address is 'doamna doctor' /
+    'la doamna doctor Vasile'; needs a native decision (touches
+    dialogue, audio text, matching pairs and the who-says-this option).
+    DEFERRED: course.description unit-specific blurb on the shared
+    course; writing_prompt exact-match grading model (owner decision).
 
 course:
   realization_key: ro.a2
@@ -256,7 +291,7 @@ units:
             tested_text: "foarte tare"
             prompt:
               target_blocks:
-                - {text: "quite severely", language_code: en, direction: ltr}
+                - {text: "very badly", language_code: en, direction: ltr}
           - content_key: ro.a2.unit24.lesson02.exercise02.choose_dimineata
             type: multiple_choice
             tested_text: "dimineața"
@@ -274,7 +309,7 @@ units:
             prompt: {target_blocks: []}
             pairs:
               - {left: "Cât de tare?", right: "How severely?"}
-              - {left: "Foarte tare", right: "quite severely"}
+              - {left: "Foarte tare", right: "very badly"}
               - {left: "Mai ales dimineața", right: "especially in the morning"}
               - {left: "De trei zile", right: "for three days"}
               - {left: "Mă doare capul.", right: "My head hurts."}
@@ -295,13 +330,13 @@ units:
             tested_text: "tare"
             prompt:
               target_blocks:
-                - {text: "Complete the sentence, quite severely: Mă doare foarte ___, mai ales dimineața.", language_code: ro, direction: ltr}
+                - {text: "Complete the sentence, very badly: Mă doare foarte ___, mai ales dimineața.", language_code: ro, direction: ltr}
           - content_key: ro.a2.unit24.lesson02.exercise08.translate_it_hurts_severely
             type: translation
             tested_text: "mă doare foarte tare mai ales dimineața"
             prompt:
               target_blocks:
-                - {text: "It hurts quite severely, especially in the morning.", language_code: en, direction: ltr}
+                - {text: "It hurts very badly, especially in the morning.", language_code: en, direction: ltr}
 
           - {content_key: ro.a2.unit24.lesson02.exercise09.dictation_cat_de_tare_va_doare, type: dictation, tested_text: "Cât de tare vă doare", media_asset_key: ro.a2.audio.doctor.cat_de_tare.01, prompt: {target_blocks: []}}
       - content_key: ro.a2.unit24.lesson03.confirmarea_programarii
@@ -339,12 +374,14 @@ units:
             tested_text: "miercuri, ora unsprezece"
             prompt:
               target_blocks:
+                - {text: "Programarea dumneavoastră este confirmată pentru miercuri, ora unsprezece, la Doctorița Vasile. Vă rugăm să veniți cu cincisprezece minute mai devreme.", language_code: ro, direction: ltr}
                 - {text: "When is the confirmed appointment?", language_code: en, direction: ltr}
           - content_key: ro.a2.unit24.lesson03.exercise02.read_arrival_instruction
             type: reading_comprehension
             tested_text: "cu cincisprezece minute mai devreme"
             prompt:
               target_blocks:
+                - {text: "Programarea dumneavoastră este confirmată pentru miercuri, ora unsprezece, la Doctorița Vasile. Vă rugăm să veniți cu cincisprezece minute mai devreme.", language_code: ro, direction: ltr}
                 - {text: "How early should the patient arrive?", language_code: en, direction: ltr}
           - content_key: ro.a2.unit24.lesson03.exercise03.listen_confirmare
             type: listen_select

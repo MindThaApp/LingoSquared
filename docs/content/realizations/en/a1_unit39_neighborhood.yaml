@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft. Realizes universal.a1.neighborhood.describe_
     neighborhood, the next unrealized outcome in the shared English
@@ -111,6 +111,23 @@ review:
     generation. Draft only -- needs the mandatory fresh-context review
     before any overlay authors build on it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked the realization against its nl-en/fa-en/prs-en overlays (no
+    de-en overlay for this unit), compiled nl-en, and checked cast
+    history. Fixes: en.a1.unit39.lesson02.exercise05.translate_whats_your_
+    neighborhood_like -- translation answer-leak target_block removed
+    (coordinator sweep);
+    en.a1.unit39.lesson03.exercise01.comprehension_mia_nearby_place prompt
+    'what does Mia say is nearby her apartment?' -> 'what does Mia say is
+    near her apartment?' (nearby is taught only as an adverb);
+    en.a1.unit39.lesson01.exercise03.match_neighborhood_words
+    realization-default pair friendly 'nice to neighbors' -> 'kind and
+    nice to other people' (latent: all overlays replace these pairs).
+    DEFERRED: the fa-en/prs-en friendly definitions
+    (overlays/fa-en/a1_unit39.yaml, overlays/prs-en/a1_unit39.yaml) carry
+    the same too-narrow 'nice to neighbors' sense and need Persian/Dari
+    text changes.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -147,7 +164,7 @@ units:
         exercises:
           - {content_key: "en.a1.unit39.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "neighbor", media_asset_key: "en.a1.audio.neighborhood.words.neighbor.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit39.lesson01.exercise02.choose_neighborhood_meaning", type: "multiple_choice", tested_text: "neighborhood", prompt: {target_blocks: [{text: "Which word means the area around your home, including nearby streets and buildings?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit39.lesson01.exercise03.match_neighborhood_words", type: "matching_pairs", tested_text: "neighborhood neighbor nearby quiet noisy friendly", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "neighborhood", right: "your home and nearby streets"}, {left: "neighbor", right: "a person who lives next to you or close to your home"}, {left: "nearby", right: "close to a place, not far away"}, {left: "quiet", right: "not noisy"}, {left: "noisy", right: "full of loud sounds"}, {left: "friendly", right: "nice to neighbors"}]}
+          - {content_key: "en.a1.unit39.lesson01.exercise03.match_neighborhood_words", type: "matching_pairs", tested_text: "neighborhood neighbor nearby quiet noisy friendly", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "neighborhood", right: "your home and nearby streets"}, {left: "neighbor", right: "a person who lives next to you or close to your home"}, {left: "nearby", right: "close to a place, not far away"}, {left: "quiet", right: "not noisy"}, {left: "noisy", right: "full of loud sounds"}, {left: "friendly", right: "kind and nice to other people"}]}
           - {content_key: "en.a1.unit39.lesson01.exercise04.order_quiet_sentence", type: "word_order", tested_text: "My street is very quiet at night.", word_bank: ["My", "street", "is", "very", "quiet", "at", "night."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson01.exercise05.write_neighbor_word", type: "writing_prompt", tested_text: "neighbor", prompt: {target_blocks: [{text: "Write the word for a person who lives next to you or close to your home.", language_code: "en", direction: "ltr"}]}}
 
@@ -166,7 +183,7 @@ units:
           - {content_key: "en.a1.unit39.lesson02.exercise02.choose_get_along_meaning", type: "multiple_choice", tested_text: "get along with your neighbors", prompt: {target_blocks: [{text: "Which phrase means having a good, friendly relationship with the people who live near you?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson02.exercise03.choose_five_minute_walk_meaning", type: "multiple_choice", tested_text: "a five-minute walk", prompt: {target_blocks: [{text: "Which phrase means only a short walk away, about five minutes?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson02.exercise04.order_say_hello_sentence", type: "word_order", tested_text: "I always say hello to my neighbor in the morning.", word_bank: ["I", "always", "say", "hello", "to", "my", "neighbor", "in", "the", "morning."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit39.lesson02.exercise05.translate_whats_your_neighborhood_like", type: "translation", tested_text: "What's your neighborhood like?", prompt: {target_blocks: [{text: "Translate: \"What's your neighborhood like?\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit39.lesson02.exercise05.translate_whats_your_neighborhood_like", type: "translation", tested_text: "What's your neighborhood like?", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit39.lesson03.dialogue_asking_about_the_neighborhood"
         title: "Dialogue: Asking about the neighborhood"
@@ -180,7 +197,7 @@ units:
           - {content_key: "en.a1.unit39.lesson03.teach.dialogue_line6", kind: "dialogue", target: {text: "Very friendly! My neighbor Mr. Lopez waters my plants when I'm away.", language_code: "en", direction: "ltr", speaker: "Mia"}, introduced_tokens: ["Very", "friendly", "My", "neighbor", "Mr", "Lopez", "waters", "my", "plants", "when", "I'm", "away"]}
           - {content_key: "en.a1.unit39.lesson03.teach.dialogue_line7", kind: "dialogue", target: {text: "That's so nice. I think I'd like to live near you!", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["That's", "so", "nice", "I", "think", "I'd", "like", "to", "live", "near", "you"]}
         exercises:
-          - {content_key: "en.a1.unit39.lesson03.exercise01.comprehension_mia_nearby_place", type: "multiple_choice", tested_text: "a park", prompt: {target_blocks: [{text: "According to the dialogue, what does Mia say is nearby her apartment?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit39.lesson03.exercise01.comprehension_mia_nearby_place", type: "multiple_choice", tested_text: "a park", prompt: {target_blocks: [{text: "According to the dialogue, what does Mia say is near her apartment?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson03.exercise02.comprehension_grocery_store_distance", type: "multiple_choice", tested_text: "a five-minute walk", prompt: {target_blocks: [{text: "According to the dialogue, how far is the grocery store from Mia's building?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson03.exercise03.listen_dialogue_neighbor_favor", type: "listen_select", tested_text: "waters my plants", media_asset_key: "en.a1.audio.dialogue.neighborhood.01", prompt: {target_blocks: [{text: "According to the dialogue, what does Mia's neighbor do for her?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit39.lesson03.exercise04.respond_own_neighborhood", type: "speak_response", tested_text: "I live in a quiet neighborhood", accepted_answers: ["I live in a quiet neighborhood", "I live in a quiet neighborhood.", "My neighborhood is nice", "My neighborhood is nice.", "My neighbor is very friendly", "My neighbor is very friendly.", "There is a park nearby", "There is a park nearby.", "My neighborhood is noisy", "My neighborhood is noisy."], prompt: {target_blocks: [{text: "Say something about your own neighborhood or a neighbor.", language_code: "en", direction: "ltr"}]}}

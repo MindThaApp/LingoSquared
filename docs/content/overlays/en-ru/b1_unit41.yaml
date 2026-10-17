@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: null
+  notes: "New Claude-authored B1 draft. Needs fresh-context review. Fresh-context review 2026-10-11 (content-reviewer.md checklist): Checked teaching cards vs overlay entries, example_gloss accuracy, audio vs dialogue cards, distractors, production-prompt determinacy, gendered first-person answers, ё/е accepted-answer variants (grading has no ё folding), and the matching realization/overlay pair; en-ru-b1 course validate 0 errors. Fixes: non-native negated быть-future with nominative predicate replaced by instrumental \"не будет хорошей\" consistently - teach.esli_ne_budet_pogoda target/example + overlay title (note now explains the instrumental; хорошей added to introduced_tokens), lesson01.exercise02.recognize_negated_condition tested_text/correct_option/accepted value, distractors in lesson01.exercise01 and lesson02.exercise02; lesson02.exercise06.write_negated_help accepted_answers widened with вам and \"Если утром у меня не будет времени\" order variants; lesson03.exercise06.write_full_plan instruction (realization prompt + overlay) pinned to the exact three English sentences (addressed to Настя, so тебе); е-spelling (пойдем) variants added to lesson01.exercise06, lesson03.exercise05 and lesson03.exercise06. No native flags. DEFERRED: none."
 
 course:
   title: "Russian B1"
@@ -21,7 +24,7 @@ lessons:
 
 teaching:
   ru.b1.unit41.lesson01.teach.esli_pogoda_budet: {title: "Если погода будет хорошая, мы пойдём в парк.", gloss: "If the weather is good, we'll go to the park.", note: "Russian uses future tense in BOTH clauses for a real future condition, unlike English present+future.", example_gloss: "Nastya, if the weather is good, we'll go to the park."}
-  ru.b1.unit41.lesson01.teach.esli_ne_budet_pogoda: {title: "Если погода не будет хорошая, мы останемся дома.", gloss: "If the weather is not good, we'll stay home.", note: "Negate the condition with *не* before *будет*.", example_gloss: "If the weather is not good tomorrow, we'll stay home."}
+  ru.b1.unit41.lesson01.teach.esli_ne_budet_pogoda: {title: "Если погода не будет хорошей, мы останемся дома.", gloss: "If the weather is not good, we'll stay home.", note: "Negate the condition with *не* before *будет*; after *не будет* the adjective takes the instrumental form *хорошей*.", example_gloss: "If the weather is not good tomorrow, we'll stay home."}
   ru.b1.unit41.lesson01.teach.chto_budesh_delat: {title: "Что ты будешь делать, если будет дождь?", gloss: "What will you do if it rains?", note: "*если будет дождь* states the real future condition.", example_gloss: "Dima, what will you do if it rains?"}
   ru.b1.unit41.lesson02.teach.esli_u_nasti_budet: {title: "Если у Насти будет время, она поможет Диме.", gloss: "If Nastya has time, she'll help Dima.", note: "*у Насти будет время* = \"Nastya will have time\" (possession construction).", example_gloss: "If Nastya has time tomorrow, she'll help Dima."}
   ru.b1.unit41.lesson02.teach.esli_ne_budet_vremeni: {title: "Если у Насти не будет времени, она не поможет.", gloss: "If Nastya doesn't have time, she won't help.", note: "The negated condition pairs with a negated consequence.", example_gloss: "If Nastya doesn't have time today, she won't help."}
@@ -33,8 +36,8 @@ teaching:
   ru.b1.unit41.lesson03.teach.dima_no_time: {title: "Dima adds a negated condition", gloss: "Dima: If I don't have time in the morning, I'll call you later.", note: "Completes the dialogue with a negated condition."}
 
 exercises:
-  ru.b1.unit41.lesson01.exercise01.recognize_condition: {instruction: "Which Russian phrase means \"if the weather is good\"?", correct_option: "если погода будет хорошая", distractors: ["если будет дождь", "если мы пойдём в парк", "если погода не будет хорошая"], accepted_answers: [{value: "если погода будет хорошая", status: "correct"}], feedback: "*если погода будет хорошая* states the real future condition."}
-  ru.b1.unit41.lesson01.exercise02.recognize_negated_condition: {instruction: "Which Russian phrase means \"if the weather is not good\"?", correct_option: "если погода не будет хорошая", distractors: ["если погода будет хорошая", "если мы останемся дома", "если будет дождь"], accepted_answers: [{value: "если погода не будет хорошая", status: "correct"}], feedback: "*не* before *будет* negates the condition."}
+  ru.b1.unit41.lesson01.exercise01.recognize_condition: {instruction: "Which Russian phrase means \"if the weather is good\"?", correct_option: "если погода будет хорошая", distractors: ["если будет дождь", "если мы пойдём в парк", "если погода не будет хорошей"], accepted_answers: [{value: "если погода будет хорошая", status: "correct"}], feedback: "*если погода будет хорошая* states the real future condition."}
+  ru.b1.unit41.lesson01.exercise02.recognize_negated_condition: {instruction: "Which Russian phrase means \"if the weather is not good\"?", correct_option: "если погода не будет хорошей", distractors: ["если погода будет хорошая", "если мы останемся дома", "если будет дождь"], accepted_answers: [{value: "если погода не будет хорошей", status: "correct"}], feedback: "*не* before *будет* negates the condition."}
   ru.b1.unit41.lesson01.exercise03.listen_select_condition: {instruction: "Listen. What will they do if the weather is good?", correct_option: "They'll go to the park.", distractors: ["They'll stay home.", "They'll call later.", "They'll check the weather."], accepted_answers: [{value: "They'll go to the park.", status: "correct"}], feedback: "The recording says *если погода будет хорошая, мы пойдём в парк*."}
   ru.b1.unit41.lesson01.exercise04.match_condition_words:
     instruction: "Match each Russian word to its meaning."
@@ -60,9 +63,11 @@ exercises:
       - {value: "Если погода будет хорошей, мы пойдём в парк", status: "correct"}
       - {value: "Если погода будет хорошая мы пойдём в парк", status: "correct"}
       - {value: "Если погода будет хорошей мы пойдём в парк", status: "correct"}
+      - {value: "Если погода будет хорошая, мы пойдем в парк.", status: "correct"}
+      - {value: "Если погода будет хорошей, мы пойдем в парк.", status: "correct"}
     feedback: "The model answer is *Если погода будет хорошая, мы пойдём в парк*."
   ru.b1.unit41.lesson02.exercise01.recognize_help_condition: {instruction: "Which Russian sentence means \"If Nastya has time, she'll help Dima\"?", correct_option: "если у насти будет время она поможет диме", distractors: ["если у насти не будет времени она не поможет", "если погода будет хорошая мы пойдём в парк", "если будет дождь мы останемся дома"], accepted_answers: [{value: "если у насти будет время она поможет диме", status: "correct"}], feedback: "*у Насти будет время* states the real condition; *она поможет Диме* is the consequence."}
-  ru.b1.unit41.lesson02.exercise02.recognize_negated_help: {instruction: "Which Russian sentence means \"If Nastya doesn't have time, she won't help\"?", correct_option: "если у насти не будет времени она не поможет", distractors: ["если у насти будет время она поможет диме", "если у меня не будет времени утром я позвоню тебе позже", "если погода не будет хорошая мы останемся дома"], accepted_answers: [{value: "если у насти не будет времени она не поможет", status: "correct"}], feedback: "*не* negates both the condition and the consequence here."}
+  ru.b1.unit41.lesson02.exercise02.recognize_negated_help: {instruction: "Which Russian sentence means \"If Nastya doesn't have time, she won't help\"?", correct_option: "если у насти не будет времени она не поможет", distractors: ["если у насти будет время она поможет диме", "если у меня не будет времени утром я позвоню тебе позже", "если погода не будет хорошей мы останемся дома"], accepted_answers: [{value: "если у насти не будет времени она не поможет", status: "correct"}], feedback: "*не* negates both the condition and the consequence here."}
   ru.b1.unit41.lesson02.exercise03.listen_select_negated_help: {instruction: "Listen. What happens if Nastya doesn't have time?", correct_option: "She won't help.", distractors: ["She'll call later.", "She'll go to the park.", "She'll stay home."], accepted_answers: [{value: "She won't help.", status: "correct"}], feedback: "The recording says *если у Насти не будет времени, она не поможет*."}
   ru.b1.unit41.lesson02.exercise04.match_help_words:
     instruction: "Match each Russian word or phrase to its meaning."
@@ -84,6 +89,9 @@ exercises:
       - {value: "Если у меня не будет времени утром я позвоню тебе позже.", status: "correct"}
       - {value: "Если у меня не будет времени утром, я позвоню тебе позже", status: "correct"}
       - {value: "Если у меня не будет времени утром я позвоню тебе позже", status: "correct"}
+      - {value: "Если у меня не будет времени утром, я позвоню вам позже.", status: "correct"}
+      - {value: "Если утром у меня не будет времени, я позвоню тебе позже.", status: "correct"}
+      - {value: "Если утром у меня не будет времени, я позвоню вам позже.", status: "correct"}
     feedback: "The model answer is *Если у меня не будет времени утром, я позвоню тебе позже*."
   ru.b1.unit41.lesson03.exercise01.choose_complete_conditions: {instruction: "Which answer states a real condition and consequence, AND a negated condition and its consequence?", correct_option: "Если будет дождь, мы останемся дома. Если погода будет хорошая, мы пойдём в парк. Если у меня не будет времени утром, я позвоню тебе позже.", distractors: ["Сначала я читал письмо, потом коллега позвонил.", "Я работаю, чтобы зарабатывать деньги.", "Она сказала, что встреча уже началась."], accepted_answers: [{value: "Если будет дождь, мы останемся дома. Если погода будет хорошая, мы пойдём в парк. Если у меня не будет времени утром, я позвоню тебе позже.", status: "correct"}], feedback: "The correct answer states two real conditions and one negated condition, each with its consequence."}
   ru.b1.unit41.lesson03.exercise02.dialogue_comprehension_plan:
@@ -112,14 +120,18 @@ exercises:
       - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошей, мы пойдём в парк.", status: "correct"}
       - {value: "Если будет дождь мы останемся дома. Если погода будет хорошая мы пойдём в парк.", status: "correct"}
       - {value: "Если будет дождь мы останемся дома. Если погода будет хорошей мы пойдём в парк.", status: "correct"}
+      - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошая, мы пойдем в парк.", status: "correct"}
+      - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошей, мы пойдем в парк.", status: "correct"}
     feedback: "The model answer gives both real conditions with their consequences."
   ru.b1.unit41.lesson03.exercise06.write_full_plan:
-    instruction: "As Дима, write three sentences about the weekend plan: a real condition with its consequence (rain -> stay home), another real condition with its consequence (good weather -> go to the park), and one NEGATED condition with its consequence (no time in the morning -> call later)."
+    instruction: "As Дима, talking to Настя, write these three sentences in Russian: If it rains, we'll stay home. If the weather is good, we'll go to the park. If I don't have time in the morning, I'll call you later."
     accepted_answers:
       - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошая, мы пойдём в парк. Если у меня не будет времени утром, я позвоню тебе позже.", status: "correct"}
       - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошей, мы пойдём в парк. Если у меня не будет времени утром, я позвоню тебе позже.", status: "correct"}
       - {value: "Если будет дождь мы останемся дома. Если погода будет хорошая мы пойдём в парк. Если у меня не будет времени утром я позвоню тебе позже.", status: "correct"}
       - {value: "Если будет дождь мы останемся дома. Если погода будет хорошей мы пойдём в парк. Если у меня не будет времени утром я позвоню тебе позже.", status: "correct"}
+      - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошая, мы пойдем в парк. Если у меня не будет времени утром, я позвоню тебе позже.", status: "correct"}
+      - {value: "Если будет дождь, мы останемся дома. Если погода будет хорошей, мы пойдем в парк. Если у меня не будет времени утром, я позвоню тебе позже.", status: "correct"}
     feedback: "A complete answer states two real conditions and one negated condition, each with its consequence."
   ru.b1.unit41.lesson01.pogoda_i_park.exercise07.dictation:
     instruction: "Type what you hear."

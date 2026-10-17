@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fresh-context review: verified spine_outcome_id
     (food/order_simple_meal) matches every lesson and all four
@@ -37,6 +37,27 @@ review:
     teach.closing_price, exercise02.listen_price) to "nine dollars,"
     matching the German-side unit07's own already-fixed parallel bug
     (Kaffee 3€ + Sandwich 6€ = neun Euro, not sechs).
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    spine fit, pacing, token derivability, dialogue cards vs audio
+    transcript, menu prices/arithmetic, boolean coercion, jargon leaks, and
+    all four X-en overlays' answers. Fixes:
+    en.a1.unit07.lesson01.exercise04.match_food_words coffee pair right 'hot
+    drink' -> 'hot drink made from beans' (tea is also a hot drink; nl-en
+    mirror 'warme drank' -> 'warme drank van gebrande bonen'; de-en/fa-
+    en/prs-en already bean-specific);
+    en.a1.unit07.lesson01.exercise03.choose_bread prompt 'Which word means
+    bread?' -> 'Which word means a baked food made from flour?' (prompt
+    contained the answer). Overlay accepted answers widened:
+    lesson02.exercise04.reply_anything_else ('No, that's all, thank you.'
+    everywhere; 'No, thanks.' / 'No, that's all.' in nl-en/fa-en/prs-en
+    whose instruction allows them), lesson02.exercise05.write_order ('Can I
+    have a coffee, please?' in de-en; 'I would like a coffee, please.'
+    everywhere), lesson04.exercise05.reply_as_leila and
+    exercise06.speak_order (the dialogue's 'Hi, I'd like...' and the taught
+    'Can I have...' forms). NATIVE FLAG: teach.water and teach.soup examples
+    'I'd like a water, please.' / 'I'd like a soup, please.' are acceptable
+    US cafe speech but borderline as A1 model sentences. Deferred: none.
 
 course:
   realization_key: "en.a1"
@@ -82,8 +103,8 @@ units:
           - content_key: "en.a1.unit07.lesson01.exercise03.choose_bread"
             type: "multiple_choice"
             tested_text: "bread"
-            prompt: {target_blocks: [{text: "Which word means bread?", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit07.lesson01.exercise04.match_food_words", type: "matching_pairs", tested_text: "coffee tea water bread", prompt: {target_blocks: []}, pairs: [{left: "coffee", right: "hot drink"}, {left: "tea", right: "hot drink with leaves"}, {left: "water", right: "drink with no taste"}, {left: "bread", right: "baked food"}, {left: "soup", right: "warm liquid food"}, {left: "salad", right: "mixed vegetable dish"}, {left: "sandwich", right: "bread with something inside"}]}
+            prompt: {target_blocks: [{text: "Which word means a baked food made from flour?", language_code: "en", direction: "ltr"}]}
+          - {content_key: "en.a1.unit07.lesson01.exercise04.match_food_words", type: "matching_pairs", tested_text: "coffee tea water bread", prompt: {target_blocks: []}, pairs: [{left: "coffee", right: "hot drink made from beans"}, {left: "tea", right: "hot drink with leaves"}, {left: "water", right: "drink with no taste"}, {left: "bread", right: "baked food"}, {left: "soup", right: "warm liquid food"}, {left: "salad", right: "mixed vegetable dish"}, {left: "sandwich", right: "bread with something inside"}]}
           - {content_key: "en.a1.unit07.lesson01.exercise05.write_sandwich", type: "writing_prompt", tested_text: "sandwich", prompt: {target_blocks: [{text: "Write the word for bread with something inside it.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit07.lesson02.ordering_phrases"

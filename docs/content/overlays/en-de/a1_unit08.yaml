@@ -6,8 +6,8 @@ target_language: "de"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Eighth en-de overlay, authored from the start in the AUTHORING_GUIDE
     §19 format (schema_version 1.1) -- includes a full teaching:
@@ -34,6 +34,34 @@ review:
     reply_als_anna (removed). See the realization's own review notes
     for the full list. Re-validated clean after every fix.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every instruction/accepted-answer set against tested_text
+    and the grader, gloss coverage, matching mirrors. Fixes:
+    lesson04.teach.line01-line06: German titles and German-text glosses
+    replaced with English ('Felix asks the price' / 'Felix says: How
+    much are the apples?' ... 'Anna gives the total' / 'Anna says:
+    That's eight euros.'); lesson01.exercise04.match_mengen lefts
+    mirrored to the realization fix ('a unit of weight, about half a
+    kilo' / 'a unit of weight of 1000 grams');
+    lesson01.exercise03.choose_flasche instruction 'one container of
+    water' -> 'a bottle of water' (a Tüte is also a container);
+    lesson01.exercise05.write_kilo instruction 'Write how you ask for
+    one kilo of tomatoes.' -> 'Write the German for 'a kilo of
+    tomatoes'.'; lesson02.exercise05.write_anfrage instruction 'Write
+    how you politely ask for two pounds.' -> 'Write 'Can I have two
+    pounds, please?'' and added 'Kann ich bitte zwei Pfund haben(?)';
+    lesson02.exercise04.reply_preis: added 'Die Äpfel/Aepfel kosten zwei
+    Euro das Pfund'; lesson03.exercise05.write_apfel_gesamt instruction
+    -> 'Write a full sentence: apples cost 2 euros per pound.' and
+    accepted answers widened to every (Die) Äpfel/Aepfel x 2€/2 €/2
+    Euro/zwei Euro x pro Pfund/das Pfund combination (the lesson's own
+    example sentence was previously graded wrong);
+    lesson04.exercise04.order_pfund_anfrage: added tile order 'Kann ich
+    bitte zwei Pfund haben'. NATIVE FLAG: '2€' vs '3 €' spacing
+    inconsistency (see realization). DEFERRED: Anna-as-market-seller
+    canon conflict (owner decision, realization + audio); course-wide €
+    input policy.
+
 course:
   title: "German A1"
   description: "Learn A1-level German for everyday greetings and short social exchanges, with detailed English explanations."
@@ -57,12 +85,12 @@ teaching:
   de.a1.unit08.lesson03.teach.preisschild_text: {title: "Markt-Preisschild", gloss: "Market price sign", note: "A simple price sign listing three items with their unit prices."}
 
   de.a1.unit08.lesson04.teach.das_macht_acht_euro: {title: "Das macht acht Euro.", gloss: "That's eight euros.", note: "*Das macht...* is the standard way to state a total price, already seen in unit07."}
-  de.a1.unit08.lesson04.teach.line01: {title: "Felix fragt nach dem Preis", gloss: "Felix: Was kosten die Äpfel?", note: "Same question as lesson02, now in a real conversation."}
-  de.a1.unit08.lesson04.teach.line02: {title: "Antwort zum Preis", gloss: "Anna: Sie kosten zwei Euro das Pfund.", note: "A complete answer states the price per unit."}
-  de.a1.unit08.lesson04.teach.line03: {title: "Felix bestellt", gloss: "Felix: Gut, kann ich zwei Pfund haben, bitte?", note: "*Gut* here means 'okay/good,' accepting the price before ordering."}
-  de.a1.unit08.lesson04.teach.line04: {title: "Anna fragt nach mehr", gloss: "Anna: Natürlich. Sonst noch etwas?", note: "*Natürlich* means 'of course/naturally.'"}
-  de.a1.unit08.lesson04.teach.line05: {title: "Felix bestellt mehr", gloss: "Felix: Ja, auch ein Dutzend Eier.", note: "*auch* means 'also/too.'"}
-  de.a1.unit08.lesson04.teach.line06: {title: "Anna nennt die Gesamtsumme", gloss: "Anna: Das macht acht Euro.", note: "Two pounds of apples (4€) plus a dozen eggs (4€) totals eight euros."}
+  de.a1.unit08.lesson04.teach.line01: {title: "Felix asks the price", gloss: "Felix says: How much are the apples?", note: "Same question as lesson02, now in a real conversation."}
+  de.a1.unit08.lesson04.teach.line02: {title: "Anna gives the price", gloss: "Anna says: They're two euros a pound.", note: "A complete answer states the price per unit."}
+  de.a1.unit08.lesson04.teach.line03: {title: "Felix orders", gloss: "Felix says: Okay, can I have two pounds, please?", note: "*Gut* here means 'okay/good,' accepting the price before ordering."}
+  de.a1.unit08.lesson04.teach.line04: {title: "Anna asks if there's anything else", gloss: "Anna says: Of course. Anything else?", note: "*Natürlich* means 'of course/naturally.'"}
+  de.a1.unit08.lesson04.teach.line05: {title: "Felix orders more", gloss: "Felix says: Yes, a dozen eggs too.", note: "*auch* means 'also/too.'"}
+  de.a1.unit08.lesson04.teach.line06: {title: "Anna gives the total", gloss: "Anna says: That's eight euros.", note: "Two pounds of apples (4€) plus a dozen eggs (4€) totals eight euros."}
 
 exercises:
   de.a1.unit08.lesson01.exercise01.listen_menge:
@@ -78,7 +106,7 @@ exercises:
     accepted_answers: [{value: "ein Dutzend", status: "correct"}]
     feedback: "*ein Dutzend* means 'a dozen.'"
   de.a1.unit08.lesson01.exercise03.choose_flasche:
-    instruction: "Which phrase means one container of water?"
+    instruction: "Which phrase means a bottle of water?"
     correct_option: "eine Flasche Wasser"
     distractors: ["eine Tüte Wasser", "ein Kilo Wasser", "ein Pfund Wasser"]
     accepted_answers: [{value: "eine Flasche Wasser", status: "correct"}]
@@ -87,16 +115,16 @@ exercises:
     instruction: "Match each description to the correct word."
     accepted_answers:
       - value:
-          - {left: "unit of weight used for apples", right: "Pfund"}
+          - {left: "a unit of weight, about half a kilo", right: "Pfund"}
           - {left: "twelve items together", right: "Dutzend"}
           - {left: "container used for water", right: "Flasche"}
           - {left: "bag used for rice", right: "Tüte"}
-          - {left: "unit of weight used for tomatoes", right: "Kilo"}
+          - {left: "a unit of weight of 1000 grams", right: "Kilo"}
           - {left: "currency used to pay", right: "Euro"}
         status: "correct"
     feedback: "*Pfund*=pound, *Dutzend*=dozen, *Flasche*=bottle, *Tüte*=bag, *Kilo*=kilo, *Euro*=euro."
   de.a1.unit08.lesson01.exercise05.write_kilo:
-    instruction: "Write how you ask for one kilo of tomatoes."
+    instruction: "Write the German for 'a kilo of tomatoes'."
     accepted_answers:
       - {value: "ein Kilo Tomaten", status: "correct"}
       - {value: "ein Kilo Tomaten.", status: "correct"}
@@ -123,12 +151,17 @@ exercises:
     accepted_answers:
       - {value: "Sie kosten zwei Euro das Pfund.", status: "correct"}
       - {value: "Sie kosten zwei Euro das Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten zwei Euro das Pfund.", status: "correct"}
+      - {value: "Die Äpfel kosten zwei Euro das Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten zwei Euro das Pfund", status: "correct"}
     feedback: "*Sie kosten zwei Euro das Pfund* means 'They're two euros a pound.'"
   de.a1.unit08.lesson02.exercise05.write_anfrage:
-    instruction: "Write how you politely ask for two pounds."
+    instruction: "Write 'Can I have two pounds, please?'"
     accepted_answers:
       - {value: "Kann ich zwei Pfund haben, bitte?", status: "correct"}
       - {value: "Kann ich zwei Pfund haben, bitte", status: "correct"}
+      - {value: "Kann ich bitte zwei Pfund haben?", status: "correct"}
+      - {value: "Kann ich bitte zwei Pfund haben", status: "correct"}
     feedback: "*Kann ich zwei Pfund haben, bitte?* means 'Can I have two pounds, please?'"
 
   de.a1.unit08.lesson03.exercise01.read_apfel_preis:
@@ -159,12 +192,42 @@ exercises:
         status: "correct"
     feedback: "*Äpfel*=2€/*Pfund*, *Eier*=4€/*Dutzend*, and *Reis*=3€/*Tüte*."
   de.a1.unit08.lesson03.exercise05.write_apfel_gesamt:
-    instruction: "Write the price of apples per pound."
+    instruction: "Write a full sentence: apples cost 2 euros per pound."
     accepted_answers:
       - {value: "Äpfel kosten 2€ pro Pfund", status: "correct"}
       - {value: "Äpfel kosten 2€ pro Pfund.", status: "correct"}
       - {value: "Aepfel kosten 2€ pro Pfund", status: "correct"}
       - {value: "Aepfel kosten 2€ pro Pfund.", status: "correct"}
+      - {value: "Äpfel kosten 2€ das Pfund", status: "correct"}
+      - {value: "Äpfel kosten 2 € pro Pfund", status: "correct"}
+      - {value: "Äpfel kosten 2 € das Pfund", status: "correct"}
+      - {value: "Äpfel kosten 2 Euro pro Pfund", status: "correct"}
+      - {value: "Äpfel kosten 2 Euro das Pfund", status: "correct"}
+      - {value: "Äpfel kosten zwei Euro pro Pfund", status: "correct"}
+      - {value: "Äpfel kosten zwei Euro das Pfund", status: "correct"}
+      - {value: "Aepfel kosten 2€ das Pfund", status: "correct"}
+      - {value: "Aepfel kosten 2 € pro Pfund", status: "correct"}
+      - {value: "Aepfel kosten 2 € das Pfund", status: "correct"}
+      - {value: "Aepfel kosten 2 Euro pro Pfund", status: "correct"}
+      - {value: "Aepfel kosten 2 Euro das Pfund", status: "correct"}
+      - {value: "Aepfel kosten zwei Euro pro Pfund", status: "correct"}
+      - {value: "Aepfel kosten zwei Euro das Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2€ pro Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2€ das Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2 € pro Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2 € das Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2 Euro pro Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten 2 Euro das Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten zwei Euro pro Pfund", status: "correct"}
+      - {value: "Die Äpfel kosten zwei Euro das Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2€ pro Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2€ das Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2 € pro Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2 € das Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2 Euro pro Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten 2 Euro das Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten zwei Euro pro Pfund", status: "correct"}
+      - {value: "Die Aepfel kosten zwei Euro das Pfund", status: "correct"}
     feedback: "*Äpfel kosten 2€ pro Pfund* means 'Apples cost 2€ per pound.'"
 
   de.a1.unit08.lesson04.exercise01.listen_apfel_preis:
@@ -187,7 +250,7 @@ exercises:
     feedback: "*ein Dutzend Eier* means 'a dozen eggs.'"
   de.a1.unit08.lesson04.exercise04.order_pfund_anfrage:
     instruction: "Put the words in order to say 'Can I have two pounds, please?'"
-    accepted_answers: [{value: ["Kann", "ich", "zwei", "Pfund", "haben", "bitte"], status: "correct"}]
+    accepted_answers: [{value: ["Kann", "ich", "zwei", "Pfund", "haben", "bitte"], status: "correct"}, {value: ["Kann", "ich", "bitte", "zwei", "Pfund", "haben"], status: "correct"}]
     feedback: "The correct order is *Kann ich zwei Pfund haben, bitte?*"
   de.a1.unit08.lesson04.exercise05.reply_als_anna:
     instruction: "Felix asks: Was kosten die Äpfel? Kann ich zwei Pfund haben, bitte? Ja, auch ein Dutzend Eier. Reply as Anna: state the price per pound, agree, ask if that's all, then give the total."

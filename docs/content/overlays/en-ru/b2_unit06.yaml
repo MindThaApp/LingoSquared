@@ -6,18 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    the intended qualification force (до некоторой степени = "to a certain
-    extent", не обязательно = "not necessarily", это зависит = "that
-    depends"), that every matching_pairs right-hand gloss discriminates its
-    left on real meaning, that the respond-to-opposing frames read as a
-    concession-then-pushback rather than a flat rejection, and that the
-    gendered short-form adjectives (убеждён/убеждена, согласен/согласна)
-    are glossed and attributed consistently to the correct speaker
-    throughout. See the realization file's review block for the full
-    priority list.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's B2 abstraction unit, authored alongside the
     realization (no adaptable intermediate/upper-level public-domain
@@ -40,6 +30,37 @@ review:
     names both the frame and the content required for each sentence so a
     correct answer is well-determined. No sibling-direction file (ru-en b2)
     was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage course-wide, character canon, dialogue cards
+    vs audio, listen/dialogue distractors, example_glosses, overlay
+    coverage, YAML booleans, internal-jargon notes, ё/е and word-order
+    grading gaps. Fixes (realization + en-ru overlay):
+    lesson01.teach.po_moemu gloss "in my opinion / my way" -> "in my
+    opinion"; lesson01.teach.grammar_mneniya note ordering fixed (casual
+    по-моему, neutral я считаю, что, firm я убеждён/убеждена, что);
+    lesson02.exercise05.translate_v_celom +удаленная and
+    "Удалённая/Удаленная работа в целом лучше" variants;
+    lesson03.exercise07.write_ponimayu_mysl +"все же" variant;
+    lesson04.teach.minus example "Есть и минус." -> "Это большой минус."
+    with большой moved into its introduced_tokens (was only nominally
+    introduced on grammar_vzveshivanie, whose text lacks it),
+    example_gloss "That's a big disadvantage.", note glosses большой;
+    lesson05.exercise01-04 read_* now show the reading passage as a ru
+    target_block before the question;
+    lesson06.exercise05.speak_qualified_opinion +"До некоторой степени
+    это правда, но..." order and удаленная variants;
+    lesson06.exercise06.write_qualified_response +"не всем это подходит"
+    (taught chunk) and удаленная variants;
+    lesson06.exercise07.respond_qualified instruction pinned to the
+    exact content ("That is true to a certain extent, but in my opinion
+    remote work is better for freedom.") +taught-order and удаленная
+    variants. NATIVE FLAGS: free-standing "Это зависит" (vs "Смотря как"
+    / "Это зависит от ситуации"); speak_ubezhdena puts "командная работа
+    важнее" in Настя's mouth while she argues for remote work elsewhere
+    (stance inconsistency, not a grading defect). DEFERRED: dictation
+    lesson01.exercise08 requires "удалённая" byte-exact (dictation ё
+    policy, owner decision); grader-level ё/е fold (Codex lane).
 
 course:
   title: "Russian B2"
@@ -87,7 +108,7 @@ teaching:
     example_gloss: "Freedom is important."
   ru.b2.unit06.lesson01.teach.po_moemu:
     title: "in my opinion"
-    gloss: "in my opinion / my way"
+    gloss: "in my opinion"
     note: "*По-моему* = 'in my opinion' -- a touch more casual than *я считаю, что*, common in everyday spoken Russian."
   ru.b2.unit06.lesson01.teach.ya_ubezhdyon:
     title: "I'm convinced that... (убеждён / убеждена)"
@@ -101,7 +122,7 @@ teaching:
   ru.b2.unit06.lesson01.teach.grammar_mneniya:
     title: "I think remote work is good. In my opinion, freedom is important. I'm convinced that teamwork matters more."
     gloss: "I think remote work is good. In my opinion, freedom is important. I'm convinced that teamwork matters more."
-    note: "Three ways to open an opinion, from everyday to firm: *я считаю, что* < *по-моему* < *я убеждён/убеждена, что*. At B2 you pair one of these with a QUALIFIER (next lesson) so your opinion is nuanced, not flat."
+    note: "Three ways to open an opinion: casual *по-моему*, neutral *я считаю, что*, and firm *я убеждён/убеждена, что*. At B2 you pair one of these with a QUALIFIER (next lesson) so your opinion is nuanced, not flat."
 
   ru.b2.unit06.lesson02.teach.do_nekotoroy_stepeni:
     title: "to a certain extent"
@@ -176,8 +197,8 @@ teaching:
   ru.b2.unit06.lesson04.teach.minus:
     title: "disadvantage"
     gloss: "the disadvantage / minus"
-    note: "*Минус* = 'disadvantage / minus' -- the mirror of *плюс*. Naming both sides is what makes an opinion balanced rather than one-sided."
-    example_gloss: "There's a disadvantage too."
+    note: "*Минус* = 'disadvantage / minus' -- the mirror of *плюс*. Naming both sides is what makes an opinion balanced rather than one-sided. *Большой* = 'big'."
+    example_gloss: "That's a big disadvantage."
   ru.b2.unit06.lesson04.teach.obshchestvo:
     title: "society"
     gloss: "society"
@@ -340,6 +361,9 @@ exercises:
     instruction: "Translate into Russian, using в целом: In general, remote work is better."
     accepted_answers:
       - {value: "В целом удалённая работа лучше", status: "correct"}
+      - {value: "В целом удаленная работа лучше", status: "correct"}
+      - {value: "Удалённая работа в целом лучше", status: "correct"}
+      - {value: "Удаленная работа в целом лучше", status: "correct"}
     feedback: "В целом удалённая работа лучше means in general, remote work is better."
   ru.b2.unit06.lesson02.exercise06.write_eto_zavisit:
     instruction: "Write in Russian: That depends."
@@ -397,6 +421,7 @@ exercises:
     accepted_answers:
       - {value: "Я понимаю твою мысль но всё же я думаю по-другому", status: "correct"}
       - {value: "Я понимаю твою мысль, но всё же я думаю по-другому", status: "correct"}
+      - {value: "Я понимаю твою мысль, но все же я думаю по-другому", status: "correct"}
     feedback: "Я понимаю твою мысль, но всё же я думаю по-другому means I understand your point, but still I think differently."
 
   ru.b2.unit06.lesson04.exercise01.recognize_plyus:
@@ -525,6 +550,9 @@ exercises:
     accepted_answers:
       - {value: "Это до некоторой степени правда но удалённая работа лучше для свободы", status: "correct"}
       - {value: "Это до некоторой степени правда, но удалённая работа лучше для свободы", status: "correct"}
+      - {value: "Это до некоторой степени правда, но удаленная работа лучше для свободы", status: "correct"}
+      - {value: "До некоторой степени это правда, но удалённая работа лучше для свободы", status: "correct"}
+      - {value: "До некоторой степени это правда, но удаленная работа лучше для свободы", status: "correct"}
     feedback: "Это до некоторой степени правда, но удалённая работа лучше для свободы -- you concede partly (qualified), then answer with your own view."
   ru.b2.unit06.lesson06.exercise06.write_qualified_response:
     instruction: "Someone argues that everyone should work in the office. Write TWO Russian sentences responding with a QUALIFIED opinion that answers them directly. (1) Concede partly, using это правда, но...: That's true, but it doesn't suit everyone. (2) Give your own qualified opinion, using по-моему: In my opinion, remote work is better."
@@ -533,10 +561,16 @@ exercises:
       - {value: "Это правда, но это не подходит всем. По-моему, удалённая работа лучше", status: "correct"}
       - {value: "Это правда но это не подходит всем. По-моему удалённая работа лучше.", status: "correct"}
       - {value: "Это правда но это не подходит всем. По-моему удалённая работа лучше", status: "correct"}
+      - {value: "Это правда, но это не подходит всем. По-моему, удаленная работа лучше.", status: "correct"}
+      - {value: "Это правда, но не всем это подходит. По-моему, удалённая работа лучше.", status: "correct"}
+      - {value: "Это правда, но не всем это подходит. По-моему, удаленная работа лучше.", status: "correct"}
     feedback: "Это правда, но это не подходит всем. По-моему, удалённая работа лучше -- you concede the point, then answer with a qualified opinion of your own."
   ru.b2.unit06.lesson06.exercise07.respond_qualified:
-    instruction: "Someone states the opposing view 'Все должны работать в офисе' (everyone should work in the office). Answer them directly with a QUALIFIED opinion, using до некоторой степени to concede partly, then но and по-моему to give your view."
+    instruction: "Someone states the opposing view 'Все должны работать в офисе' (everyone should work in the office). Answer them directly with a QUALIFIED opinion, using до некоторой степени to concede partly, then но and по-моему: That is true to a certain extent, but in my opinion remote work is better for freedom."
     accepted_answers:
       - {value: "Это до некоторой степени правда но по-моему удалённая работа лучше для свободы", status: "correct"}
       - {value: "Это до некоторой степени правда, но по-моему удалённая работа лучше для свободы", status: "correct"}
+      - {value: "Это до некоторой степени правда, но по-моему удаленная работа лучше для свободы", status: "correct"}
+      - {value: "До некоторой степени это правда, но по-моему удалённая работа лучше для свободы", status: "correct"}
+      - {value: "До некоторой степени это правда, но по-моему удаленная работа лучше для свободы", status: "correct"}
     feedback: "Это до некоторой степени правда, но по-моему удалённая работа лучше для свободы -- a qualified concession that answers the opposing view head-on."

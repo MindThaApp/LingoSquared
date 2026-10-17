@@ -8,11 +8,36 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: "Initial four-lesson draft, authored directly (Codex usage-limited at time of authoring). Audio remains pending generation.
 
-    2026-07-07 §19 retrofit: added `example:` to all 7 kind:vocabulary cards (sunny/rainy/cloudy/cold/hot/windy/tomorrow). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays."
+    2026-07-07 §19 retrofit: added `example:` to all 7 kind:vocabulary cards (sunny/rainy/cloudy/cold/hot/windy/tomorrow). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    spine fit, pacing, token derivability, dialogue cards vs audio
+    transcript, forecast facts, boolean coercion, jargon leaks, and all four
+    X-en overlays' answers. Fixes:
+    en.a1.unit11.lesson04.exercise05.reply_as_daniel and
+    exercise06.speak_weather_plan prompt 'What's the weather like today?
+    What about tomorrow?' -> 'What's the weather like today? ... Great,
+    let's go to the park.' (the graded answer replies to Leila's park
+    suggestion, which the prompt did not show; nl-en instructions rewritten
+    to ask for agreeing and proposing to go today). Overlay fixes:
+    lesson02.exercise04.reply_umbrella accepts 'You should take an
+    umbrella.' in nl-en/fa-en/prs-en (de-en already did);
+    lesson04.exercise03.choose_reason_go_today distractor 'today is sunny'
+    (also true per the dialogue) -> 'it's cold today' in nl-en/fa-en/prs-en;
+    de-en lesson04.exercise02.listen_tomorrow_weather distractor 'Let's go
+    to the park.' (heard in the audio under a choose-what-you-hear
+    instruction) -> 'It's cold today.'. No native flags. Deferred: (1) owner
+    call - lesson03 forecast says tomorrow is sunny and warm while the
+    lesson04 dialogue says it will rain tomorrow; either treat them as
+    separate scenarios or change the dialogue line (e.g. 'rain on Saturday')
+    with its exercises and all overlays. (2) prs-en reply_as_daniel
+    instruction still says only 'answer about today's and tomorrow's
+    weather' (Dari text; the new prompt now shows the park suggestion, so
+    the expected answer is recoverable)."
 
 course:
   realization_key: "en.a1"
@@ -124,8 +149,8 @@ units:
           - content_key: "en.a1.unit11.lesson04.exercise05.reply_as_daniel"
             type: "dialogue_response"
             tested_text: "It's sunny and warm Good idea But it's going to rain tomorrow so let's go today"
-            prompt: {target_blocks: [{text: "What's the weather like today? What about tomorrow?", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's the weather like today? ... Great, let's go to the park.", language_code: "en", direction: "ltr"}]}
           - content_key: "en.a1.unit11.lesson04.exercise06.speak_weather_plan"
             type: "speak_response"
             tested_text: "It's sunny and warm Good idea But it's going to rain tomorrow so let's go today"
-            prompt: {target_blocks: [{text: "What's the weather like today? What about tomorrow?", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's the weather like today? ... Great, let's go to the park.", language_code: "en", direction: "ltr"}]}

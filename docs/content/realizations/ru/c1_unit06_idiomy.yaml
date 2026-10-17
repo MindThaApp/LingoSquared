@@ -28,8 +28,8 @@ generation_provenance:
     past form agrees with a noun, never with я) so a learner of either gender
     reproduces them verbatim.
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Targets universal.c1.idiom.use_idiomatic_and_figurative_language. Priority
     checks for the reviewer: (1) confirm the culminating speaking exercise
@@ -45,6 +45,31 @@ review:
     listen/dictation exercises each use a dedicated single-sentence asset
     whose text matches tested_text byte-for-byte; (6) confirm register is
     informal ты with no formal вы anywhere.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    grading against backend/app/review/grading.py (casefold, internal
+    punctuation, no ё/е folding, equal-token spoken grading, byte-strict
+    dictation), prompt visibility (instruction + target_blocks only),
+    accepted-answer coverage, glosses, titles and learner-visible notes.
+    Fixes: lesson06.exercise01.recognize_polnyj: the Russian description was
+    only in tested_text -> added it as a ru target_block and re-asked as 'In
+    what order does this description present its ideas?' (old stem spelled out
+    the answer); lesson06.exercise03.speak_polnyj: open prompt pinned to the
+    exact taught model (Новость пришла как снег на голову, но мы засучили
+    рукава. В итоге дело в шляпе.) and the equally correct three-sentence
+    variant without но accepted; lesson06.exercise04.write_polnyj: accepted
+    the ', но мы засучили рукава' joined rewrite (±period);
+    lesson05.exercise03.match_rewrite: instruction -> 'Match each Russian
+    sentence or word to its English meaning.'; lesson03.teach.modello_itog +
+    lesson03.exercise02.listen_itog: дело glossed as 'deal' -> 'In the end,
+    it's in the bag.' / 'In the end, it's all settled.' (distractor 'we lost
+    the deal' -> 'we lost everything', feedback aligned); lesson05 title
+    'Переписываю буквально' / 'Rewriting literally' -> 'От буквального к
+    образному' / 'From literal to idiomatic'. NATIVE FLAG:
+    lesson05.exercise04.write_rewrite_sneg -- decide whether 'Новость
+    появилась как снег на голову' (original verb kept) should be accepted.
+    DEFERRED (owner decision, backend/app/review/grading.py, Codex lane):
+    em-dash token handling in spoken grading and ё/е folding for Russian.
 
 course:
   realization_key: ru.c1
@@ -293,7 +318,7 @@ units:
               - {left: "засучили рукава", right: "idiom — 'got to work'"}
 
       - content_key: ru.c1.unit06.idiomy.lesson05.perepisyvayu_bukvalno
-        title: "Переписываю буквально"
+        title: "От буквального к образному"
         spine_outcome_id: universal.c1.idiom.use_idiomatic_and_figurative_language
         teaching:
           - content_key: ru.c1.unit06.idiomy.lesson05.teach.literal_novost
@@ -359,7 +384,7 @@ units:
           - content_key: ru.c1.unit06.idiomy.lesson06.exercise01.recognize_polnyj
             type: multiple_choice
             tested_text: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе."
-            prompt: {target_blocks: [{text: "Which sequence maps this description correctly: the surprise, then the hard work, then the successful outcome?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе.", language_code: ru, direction: ltr}, {text: "In what order does this description present its ideas?", language_code: en, direction: ltr}]}
           - content_key: ru.c1.unit06.idiomy.lesson06.exercise02.match_review
             type: matching_pairs
             tested_text: "в двух словах как снег на голову засучили рукава не покладая рук спустя рукава дело в шляпе золотые руки идиома"
@@ -376,7 +401,7 @@ units:
           - content_key: ru.c1.unit06.idiomy.lesson06.exercise03.speak_polnyj
             type: speak_response
             tested_text: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе."
-            prompt: {target_blocks: [{text: "Say aloud the complete idiomatic description of how the project went: use как снег на голову for the surprise, засучили рукава for getting down to work, and дело в шляпе for the successful outcome.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud the exact taught complete description of how the project went: start with Новость пришла как снег на голову for the surprise, continue with но мы засучили рукава for getting down to work, and close with В итоге дело в шляпе for the successful outcome.", language_code: en, direction: ltr}]}
           - content_key: ru.c1.unit06.idiomy.lesson06.exercise04.write_polnyj
             type: writing_prompt
             tested_text: "Новость пришла как снег на голову. Мы засучили рукава."

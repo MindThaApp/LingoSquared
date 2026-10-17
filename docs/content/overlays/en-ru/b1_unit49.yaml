@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): Checked token coverage against earlier en-ru units (course-scoped), character canon (Дима engineer, Настя teacher, friends on ты), every example_gloss against its example, teaching-card/overlay coverage, dialogue cards vs audio turn by turn with speakers, listen_select distractors vs audio, YAML boolean lookalikes, learner-visible internal notes, and ё/е spelling of free-text answers (grader has no ё/е fold). Fixes (en-ru overlay): ru.b1.unit49.lesson03.exercise02.dialogue_comprehension_hypothetical correct_option + accepted value 'Dima asks Nastya to explain what's needed for the report' -> 'Dima asks Nastya to help with the report' (the old key was false: Nastya asks Dima to explain); ru.b1.unit49.lesson02.exercise06.write_ty_by_mog accepted answers widened with Ты бы могла / Вы бы могли and the мог бы / могла бы / могли бы orders (prompt does not fix addressee), feedback names the variants; ru.b1.unit49.lesson03.exercise06.write_full_hypothetical widened with могла / Вы бы могли requests and the 'я бы больше путешествовал(а)' order; ru.b1.unit49.lesson01.exercise06.write_esli_by_vremeni widened with 'я бы больше путешествовал(а)' and 'я путешествовал(а) бы больше'; ru.b1.unit49.lesson02.exercise05.order_ja_by_khotela added the 'Я хотела бы чашку кофе, пожалуйста' order; ru.b1.unit49.lesson01.exercise05.order_esli_by_deneg added the '...я купил бы новую машину' order; ru.b1.unit49.lesson03.exercise01.choose_full_hypothetical two distractors made two-sentence (one bare-бы-only pair, one если-бы-only pair) so the answer no longer shows by form. NATIVE FLAG: lesson03 exercise04 tiles also allow less natural orders such as 'я не просил бы' (not accepted; native to judge). DEFERRED: grader-level ё/е equivalence (backend/app/review/grading.py, Codex lane, owner decision)."
 
 course:
   title: "Russian B1"
@@ -47,7 +50,7 @@ exercises:
           - {left: "новую машину", right: "a new car"}
         status: "correct"
     feedback: "These build the two hypothetical condition sentences."
-  ru.b1.unit49.lesson01.exercise05.order_esli_by_deneg: {instruction: "Put the words in order to say \"If I had more money, I would buy a new car.\"", accepted_answers: [{value: ["Если", "бы", "у", "меня", "было", "больше", "денег", "я", "бы", "купил", "новую", "машину"], status: "correct"}], feedback: "The correct order is *Если бы у меня было больше денег, я бы купил новую машину*."}
+  ru.b1.unit49.lesson01.exercise05.order_esli_by_deneg: {instruction: "Put the words in order to say \"If I had more money, I would buy a new car.\"", accepted_answers: [{value: ["Если", "бы", "у", "меня", "было", "больше", "денег", "я", "бы", "купил", "новую", "машину"], status: "correct"}, {value: ["Если", "бы", "у", "меня", "было", "больше", "денег", "я", "купил", "бы", "новую", "машину"], status: "correct"}], feedback: "The correct order is *Если бы у меня было больше денег, я бы купил новую машину*."}
   ru.b1.unit49.lesson01.exercise06.write_esli_by_vremeni:
     instruction: "Write exactly this hypothetical sentence using если бы + past tense for the condition and бы + past tense for the result: If I had more time, I would travel more."
     accepted_answers:
@@ -55,6 +58,10 @@ exercises:
       - {value: "Если бы у меня было больше времени, я бы путешествовал больше", status: "correct"}
       - {value: "Если бы у меня было больше времени, я бы путешествовала больше.", status: "correct"}
       - {value: "Если бы у меня было больше времени, я бы путешествовала больше", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовал.", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовала.", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я путешествовал бы больше.", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я путешествовала бы больше.", status: "correct"}
     feedback: "The model answer is *Если бы у меня было больше времени, я бы путешествовал(а) больше*."
   ru.b1.unit49.lesson02.exercise01.recognize_ty_by_mog: {instruction: "Which Russian sentence means \"could you help me with this?\" (a softened request, no если)?", correct_option: "ты бы мог помочь мне с этим", distractors: ["если бы у меня было больше времени я бы путешествовал больше", "я бы хотела чашку кофе пожалуйста", "если бы у меня было больше денег я бы купил новую машину"], accepted_answers: [{value: "ты бы мог помочь мне с этим", status: "correct"}], feedback: "бы alone, with no если, softens the request."}
   ru.b1.unit49.lesson02.exercise02.recognize_ja_by_khotela: {instruction: "Which Russian sentence means \"I would like a cup of coffee, please\" (a softened preference)?", correct_option: "я бы хотела чашку кофе пожалуйста", distractors: ["ты бы мог помочь мне с этим", "если бы у меня было больше времени я бы путешествовал больше", "если бы у меня было больше денег я бы купил новую машину"], accepted_answers: [{value: "я бы хотела чашку кофе пожалуйста", status: "correct"}], feedback: "бы alone also softens a preference."}
@@ -71,19 +78,24 @@ exercises:
           - {left: "смягчённая просьба", right: "a softened request"}
         status: "correct"
     feedback: "These build the softened request and preference."
-  ru.b1.unit49.lesson02.exercise05.order_ja_by_khotela: {instruction: "Put the words in order to say \"I would like a cup of coffee, please.\"", accepted_answers: [{value: ["Я", "бы", "хотела", "чашку", "кофе", "пожалуйста"], status: "correct"}], feedback: "The correct order is *Я бы хотела чашку кофе, пожалуйста*."}
+  ru.b1.unit49.lesson02.exercise05.order_ja_by_khotela: {instruction: "Put the words in order to say \"I would like a cup of coffee, please.\"", accepted_answers: [{value: ["Я", "бы", "хотела", "чашку", "кофе", "пожалуйста"], status: "correct"}, {value: ["Я", "хотела", "бы", "чашку", "кофе", "пожалуйста"], status: "correct"}], feedback: "The correct order is *Я бы хотела чашку кофе, пожалуйста*."}
   ru.b1.unit49.lesson02.exercise06.write_ty_by_mog:
     instruction: "Write exactly this softened request using бы alone (no если): Could you help me with this?"
     accepted_answers:
       - {value: "Ты бы мог помочь мне с этим?", status: "correct"}
       - {value: "Ты бы мог помочь мне с этим", status: "correct"}
-    feedback: "The model answer is *Ты бы мог помочь мне с этим?*"
-  ru.b1.unit49.lesson03.exercise01.choose_full_hypothetical: {instruction: "Which answer states a hypothetical condition-and-result with если бы AND uses бы alone to soften a request, all in one exchange?", correct_option: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог сначала объяснить, что нужно сделать?", distractors: ["Я бы хотела чашку кофе, пожалуйста.", "Если бы у меня было больше денег, я бы купил новую машину.", "Не могли бы вы отправить отчёт до пятницы?"], accepted_answers: [{value: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог сначала объяснить, что нужно сделать?", status: "correct"}], feedback: "The correct answer combines an если бы hypothetical with a bare-бы softened request."}
+      - {value: "Ты бы могла помочь мне с этим?", status: "correct"}
+      - {value: "Вы бы могли помочь мне с этим?", status: "correct"}
+      - {value: "Ты мог бы помочь мне с этим?", status: "correct"}
+      - {value: "Ты могла бы помочь мне с этим?", status: "correct"}
+      - {value: "Вы могли бы помочь мне с этим?", status: "correct"}
+    feedback: "The model answer is *Ты бы мог помочь мне с этим?* (to a woman: *Ты бы могла...*; polite: *Вы бы могли...*)."
+  ru.b1.unit49.lesson03.exercise01.choose_full_hypothetical: {instruction: "Which answer states a hypothetical condition-and-result with если бы AND uses бы alone to soften a request, all in one exchange?", correct_option: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог сначала объяснить, что нужно сделать?", distractors: ["Я бы хотела чашку кофе, пожалуйста. Ты бы мог помочь мне с этим?", "Если бы у меня было больше денег, я бы купил новую машину. Если бы это было просто, я бы не просил.", "Не могли бы вы отправить отчёт до пятницы?"], accepted_answers: [{value: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог сначала объяснить, что нужно сделать?", status: "correct"}], feedback: "The correct answer combines an если бы hypothetical with a bare-бы softened request."}
   ru.b1.unit49.lesson03.exercise02.dialogue_comprehension_hypothetical:
     instruction: "Listen to the dialogue. What does Nastya say she would do, what does Dima ask for, and what does Dima say about the request being simple?"
-    correct_option: "Nastya says she would travel more with more time; Dima asks Nastya to explain what's needed for the report; Dima says if it were simple he wouldn't be asking"
+    correct_option: "Nastya says she would travel more with more time; Dima asks Nastya to help with the report; Dima says if it were simple he wouldn't be asking"
     distractors: ["Nastya says she would buy a car with more money; Dima asks Nastya for a cup of coffee; Dima says he already explained everything", "Dima says he would travel more with more time; Nastya asks Dima to explain the report; Nastya says if it were simple she wouldn't be asking", "Nastya says she has no time to travel; Dima asks Nastya to finish the report alone; Dima says the report is already simple"]
-    accepted_answers: [{value: "Nastya says she would travel more with more time; Dima asks Nastya to explain what's needed for the report; Dima says if it were simple he wouldn't be asking", status: "correct"}]
+    accepted_answers: [{value: "Nastya says she would travel more with more time; Dima asks Nastya to help with the report; Dima says if it were simple he wouldn't be asking", status: "correct"}]
     feedback: "The dialogue moves from a hypothetical to a real, softened request."
   ru.b1.unit49.lesson03.exercise03.match_dialogue_hypothetical:
     instruction: "Match each Russian phrase to its meaning."
@@ -111,6 +123,16 @@ exercises:
       - {value: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог помочь мне с этим?", status: "correct"}
       - {value: "Если бы у меня было больше времени, я бы путешествовал больше. Ты бы мог помочь мне с этим", status: "correct"}
       - {value: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы мог помочь мне с этим", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы путешествовал больше. Ты бы могла помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы путешествовал больше. Вы бы могли помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы путешествовала больше. Ты бы могла помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы путешествовала больше. Вы бы могли помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовал. Ты бы мог помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовал. Ты бы могла помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовал. Вы бы могли помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовала. Ты бы мог помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовала. Ты бы могла помочь мне с этим?", status: "correct"}
+      - {value: "Если бы у меня было больше времени, я бы больше путешествовала. Вы бы могли помочь мне с этим?", status: "correct"}
     feedback: "A complete answer states the hypothetical result AND separately softens the request with bare бы."
   ru.b1.unit49.lesson01.esli_by_bolshe_vremeni.exercise07.dictation:
     instruction: "Type what you hear."

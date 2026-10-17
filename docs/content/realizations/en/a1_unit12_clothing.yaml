@@ -8,11 +8,35 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: "Initial four-lesson draft, authored directly (Codex usage-limited at time of authoring). Audio remains pending generation.
 
-    2026-07-07 §19 retrofit: added `example:` to all 12 kind:vocabulary cards (shirt/pants/shoes/jacket/dress/small/medium/large/blue/black/size/color). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays."
+    2026-07-07 §19 retrofit: added `example:` to all 12 kind:vocabulary cards (shirt/pants/shoes/jacket/dress/small/medium/large/blue/black/size/color). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    spine fit, pacing, token derivability against units 01-11, dialogue
+    cards vs audio transcript, label facts, boolean coercion, jargon leaks,
+    and all four X-en overlays' answers. Fixes:
+    en.a1.unit12.lesson03.exercise05.write_label_summary prompt 'Write the
+    shirt's size and color.' -> 'Write one sentence about the shirt: its
+    size and then its color.' plus accepted answers widened in all four
+    overlays ('The shirt is medium and blue.', 'The shirt is a medium and
+    blue.', 'It's a medium and it's blue.', 'The shirt is a medium. It's
+    blue.', 'The shirt is a medium and it is blue.'). Overlay accepted
+    answers widened in all four: lesson02.exercise05.write_size_request ('Do
+    you have it in a medium?', 'Do you have this shirt in a medium?'),
+    lesson04.exercise05.reply_as_leila and exercise06.speak_shopping
+    (variants without 'Excuse me' and/or 'Great', which the prompt does not
+    require). de-en lesson04.exercise02.listen_color_available distractor
+    'I'll take it, thanks.' (heard in the audio) -> 'We only have it in
+    black.'. No native flags. Deferred (owner/structural, needs fa-en/prs-en
+    non-English pair text): (1) lesson01.exercise04.match_clothing_words
+    tests small/medium/large/blue/black, first taught in lesson02 (forward
+    reference); (2) lesson03.exercise04.match_label_fields mixes
+    field->value pairs with word->definition pairs, so 'Color' can plausibly
+    match 'the color of night' and 'Size' 'the next size after medium'. Both
+    need matching_pairs restructuring mirrored in fa-en/prs-en."
 
 course:
   realization_key: "en.a1"
@@ -103,7 +127,7 @@ units:
             tested_text: "$20"
             prompt: {target_blocks: [{text: "How much does the shirt cost?", language_code: "en", direction: "ltr"}]}
           - {content_key: "en.a1.unit12.lesson03.exercise04.match_label_fields", type: "matching_pairs", tested_text: "Size Color Price", prompt: {target_blocks: []}, pairs: [{left: "Size", right: "Medium"}, {left: "Color", right: "Blue"}, {left: "Price", right: "$20"}, {left: "Item", right: "Shirt"}, {left: "Large", right: "the next size after medium"}, {left: "Black", right: "the color of night"}]}
-          - {content_key: "en.a1.unit12.lesson03.exercise05.write_label_summary", type: "writing_prompt", tested_text: "The shirt is a medium and it's blue", prompt: {target_blocks: [{text: "Write the shirt's size and color.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit12.lesson03.exercise05.write_label_summary", type: "writing_prompt", tested_text: "The shirt is a medium and it's blue", prompt: {target_blocks: [{text: "Write one sentence about the shirt: its size and then its color.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit12.lesson04.clothing_store_dialogue"
         title: "At the clothing store"

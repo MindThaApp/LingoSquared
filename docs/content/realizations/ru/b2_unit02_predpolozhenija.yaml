@@ -25,23 +25,8 @@ generation_provenance:
     third party, not the learner), so no exercise ever asks the learner to
     choose their OWN speaker-gendered form.
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Fresh-context review needed. This is a DRAFT. Priority checks for the
-    reviewer: (1) naturalness of the certainty scale (может быть <
-    возможно < наверное < должно быть < не может быть, что) and that
-    "должно быть" and "значит" are handled as the everyday deduction
-    markers intended; (2) that "судя по тому, что..." and "судя по
-    всему" read as natural evidence-citing frames, not overly bookish;
-    (3) the past-deduction forms "должно быть, она проспала", "наверное,
-    она забыла", "не могла забыть" -- confirm each is natural spoken
-    word order and that the aspect choice (perfective проспала/забыла)
-    is correct for a completed one-off past event; (4) the
-    deduction-vs-guess distinction taught in lesson03/lesson06 (deduction
-    = должно быть/значит + real evidence; guess = может быть/возможно, no
-    firm evidence) matches how a native would frame it; (5) confirm the
-    gender-neutrality design choice holds -- no exercise silently requires
-    the learner to pick a speaker-gendered form for themselves.
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Second Russian B2 unit; first speculation unit. Targets the CEFR B2
     speculation outcome
@@ -58,6 +43,41 @@ review:
     asserted fact from speculation; L06 the culminating dialogue where
     Настя and Дима speculate together and the puzzle resolves. No
     sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-safety of every free-text accepted answer against
+    the strict Cyrillic grader (no ё/е equivalence, em dash kept as a
+    token, 3-letter tokens get no spoken tolerance), prompt/key
+    determinacy, collocation naturalness, reading-question answerability
+    and learner-visible notes. Fixes:
+    lesson01.exercise06.speak_ne_mozhet_byt tested_text + key "Не может
+    быть, что она застряла" -> "... застряла в пробке" (prompt says
+    'stuck in traffic'; also accepts the normative "Не может быть, чтобы
+    она застряла в пробке"); е-spelling variants added for every
+    free-text accepted answer containing ё (lesson01.exercise07,
+    lesson05.exercise07, lesson06.exercise05/06);
+    lesson05.exercise07.write_slomalas_mashina also accepts the natural
+    order "у неё машина сломалась"; заняты -> загружены (busy roads
+    collocation) in lesson02 teach.potomu_chto example,
+    teach.grammar_dedukcija target + introduced_tokens, exercise05/06
+    tested_text + keys + feedback; lesson05.exercise02.read_weak_guess
+    instruction -> "Which of these sentences is only a guess, not a fact
+    or a deduction?" (the old 'weakest guess' wording contradicted the
+    unit's own scale) + feedback; lesson04.exercise06 prompt pinned to
+    "using не могла"; reading passage added to the target_blocks of all
+    four lesson05 reading_comprehension prompts; overlay notes for
+    teach.sudya_po_vsemu and teach.grammar_dedukcija no longer cite
+    internal lesson numbers. NATIVE FLAGS: "Не может быть, что +
+    indicative" vs normative "чтобы + past" (lesson01/04/06); lesson06
+    dialogue "Может быть, а может быть, что-то случилось" reads awkward
+    ("Может быть. А может, ..."?); the "судя по тому, что она всегда
+    пишет заранее" deduction lacks its premise ("а сегодня не
+    написала"), and lesson03.exercise04 drops должно быть;
+    adverb-after-subject orders ("Она, наверное, ...") are not accepted
+    (systemic). DEFERRED: dictation ё/е (lesson01.exercise08) and a
+    grader-level ё/е fold + dash stripping for ru in
+    backend/app/review/grading.py (Codex/owner decision); audio dialogue
+    text unchanged.
 
 course:
   realization_key: ru.b2
@@ -194,7 +214,7 @@ units:
             prompt: {target_blocks: [{text: "Possibly, she got stuck in traffic.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson01.exercise06.speak_ne_mozhet_byt
             type: speak_response
-            tested_text: "Не может быть, что она застряла"
+            tested_text: "Не может быть, что она застряла в пробке"
             prompt: {target_blocks: [{text: "Say aloud in Russian: It can't be that she's stuck in traffic.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson01.exercise07.write_claim
             type: writing_prompt
@@ -214,7 +234,7 @@ units:
             kind: vocabulary
             target: {text: "потому что", language_code: ru, direction: ltr}
             introduced_tokens: [потому]
-            example: {text: "Должно быть, она опаздывает, потому что дорога занята.", language_code: ru, direction: ltr}
+            example: {text: "Должно быть, она опаздывает, потому что дорога загружена.", language_code: ru, direction: ltr}
           - content_key: ru.b2.unit02.lesson02.teach.znachit
             kind: vocabulary
             target: {text: "значит", language_code: ru, direction: ltr}
@@ -245,8 +265,8 @@ units:
             introduced_tokens: []
           - content_key: ru.b2.unit02.lesson02.teach.grammar_dedukcija
             kind: grammar_note
-            target: {text: "Должно быть, она опаздывает из-за пробки. Судя по всему, дороги очень заняты.", language_code: ru, direction: ltr}
-            introduced_tokens: [очень, заняты]
+            target: {text: "Должно быть, она опаздывает из-за пробки. Судя по всему, дороги очень загружены.", language_code: ru, direction: ltr}
+            introduced_tokens: [очень, загружены]
         exercises:
           - content_key: ru.b2.unit02.lesson02.exercise01.recognize_znachit
             type: multiple_choice
@@ -275,11 +295,11 @@ units:
             word_bank: ["Должно", "быть", "она", "опаздывает", "из-за", "пробки"]
           - content_key: ru.b2.unit02.lesson02.exercise05.translate_znachit
             type: translation
-            tested_text: "Судя по всему, дороги очень заняты"
+            tested_text: "Судя по всему, дороги очень загружены"
             prompt: {target_blocks: [{text: "Apparently, the roads are very busy.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson02.exercise06.translate_potomu_chto
             type: translation
-            tested_text: "Она опаздывает, потому что дороги заняты"
+            tested_text: "Она опаздывает, потому что дороги загружены"
             prompt: {target_blocks: [{text: "She is running late because the roads are busy.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson02.exercise07.write_dolzhno_byt
             type: writing_prompt
@@ -438,7 +458,7 @@ units:
           - content_key: ru.b2.unit02.lesson04.exercise06.write_ne_mogla_zabyt
             type: writing_prompt
             tested_text: "Она не могла забыть"
-            prompt: {target_blocks: [{text: "Write in Russian: She couldn't have forgotten.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write in Russian, using не могла: She couldn't have forgotten.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson04.exercise07.write_dolzhno_byt_prospala
             type: writing_prompt
             tested_text: "Должно быть, она проспала"
@@ -467,19 +487,19 @@ units:
           - content_key: ru.b2.unit02.lesson05.exercise01.read_fact
             type: reading_comprehension
             tested_text: "Оля обычно приходит вовремя"
-            prompt: {target_blocks: [{text: "Which sentence in the text is stated as a plain fact, not a speculation?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Оля обычно приходит вовремя, но сегодня её ещё нет. Наверное, она застряла в пробке — дороги в центре часто загружены по утрам. Возможно, она просто проспала, хотя она редко это делает. Судя по тому, что она всегда пишет заранее, если опаздывает, а сегодня не написала ни слова, должно быть, случилось что-то более серьёзное. Может быть, у неё сломалась машина. Мы пока не знаем точно — это только предположения.", language_code: ru, direction: ltr}, {text: "Which sentence in the text is stated as a plain fact, not a speculation?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson05.exercise02.read_weak_guess
             type: reading_comprehension
             tested_text: "Возможно, она просто проспала"
-            prompt: {target_blocks: [{text: "Which sentence is the weakest, least certain guess in the text?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Оля обычно приходит вовремя, но сегодня её ещё нет. Наверное, она застряла в пробке — дороги в центре часто загружены по утрам. Возможно, она просто проспала, хотя она редко это делает. Судя по тому, что она всегда пишет заранее, если опаздывает, а сегодня не написала ни слова, должно быть, случилось что-то более серьёзное. Может быть, у неё сломалась машина. Мы пока не знаем точно — это только предположения.", language_code: ru, direction: ltr}, {text: "Which of these sentences is only a guess, not a fact or a deduction?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson05.exercise03.read_deduction
             type: reading_comprehension
             tested_text: "должно быть, случилось что-то более серьёзное"
-            prompt: {target_blocks: [{text: "Which sentence is a deduction based on real evidence (that Olya always texts ahead)?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Оля обычно приходит вовремя, но сегодня её ещё нет. Наверное, она застряла в пробке — дороги в центре часто загружены по утрам. Возможно, она просто проспала, хотя она редко это делает. Судя по тому, что она всегда пишет заранее, если опаздывает, а сегодня не написала ни слова, должно быть, случилось что-то более серьёзное. Может быть, у неё сломалась машина. Мы пока не знаем точно — это только предположения.", language_code: ru, direction: ltr}, {text: "Which sentence is a deduction based on real evidence (that Olya always texts ahead)?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson05.exercise04.read_admission
             type: reading_comprehension
             tested_text: "Мы пока не знаем точно"
-            prompt: {target_blocks: [{text: "How does the text admit that none of this is confirmed?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Оля обычно приходит вовремя, но сегодня её ещё нет. Наверное, она застряла в пробке — дороги в центре часто загружены по утрам. Возможно, она просто проспала, хотя она редко это делает. Судя по тому, что она всегда пишет заранее, если опаздывает, а сегодня не написала ни слова, должно быть, случилось что-то более серьёзное. Может быть, у неё сломалась машина. Мы пока не знаем точно — это только предположения.", language_code: ru, direction: ltr}, {text: "How does the text admit that none of this is confirmed?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit02.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "сегодня часто редко сломалась машина точно предположения"

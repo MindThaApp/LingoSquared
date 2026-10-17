@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for de's fifth B2 unit (first register unit), authored
     alongside the realization (no adaptable upper-intermediate
@@ -24,6 +24,30 @@ review:
     "Sie" (formal you) vs lowercase "sie" (she/they) is a real reading
     trap -- lesson01 exercise01 and lesson06 exercise01 note this
     explicitly. No sibling direction file (de-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-fit of every accepted answer against the taught
+    forms and word banks, matching_pairs left discrimination, distractor
+    ambiguity, prompt/answer agreement, teaching-card coverage of tested
+    tokens, character canon (Frau Vogel formal Sie colleague,
+    consistent), YAML boolean and jargon sweeps (clean). Fixes:
+    lesson01.exercise01.recognize_sie instruction now says 'in the
+    middle of a sentence, capitalized Sie is always the formal you' (old
+    text taught that capitalized Sie is never she/they, false at
+    sentence start) and its feedback says 'Capitalized Sie
+    (mid-sentence)'; lesson01.teach.sie_formal note rewritten to say
+    sentence-initial Sie/sie are both capitalized so context decides;
+    lesson01.teach.du title/gloss/note now include dich (accusative),
+    mirroring the realization target change;
+    lesson03.exercise03.match_directness accepted pairs machen -> das
+    ('this / that'), mirroring the realization;
+    lesson02.teach.mit_freundlichen_gruessen note no longer calls MfG a
+    'very informal' abbreviation (now: sometimes used in quick emails,
+    can read as curt); lesson06.exercise02.comprehend_mismatch
+    distractor 'That Felix knows the Praxis staff personally.' -> 'That
+    Felix wants a faster reply.' (the old one was arguably defensible).
+    NATIVE FLAG: see realization note (lesson05 text_formell register).
+    DEFERRED: none.
 
 course:
   title: German B2
@@ -58,14 +82,14 @@ teaching:
     gloss: "Felix writes a message."
     note: "*Schreiben* = 'to write'. This lesson contrasts the two ways Felix can address the person he's writing to."
   de.b2.unit05.lesson01.teach.du:
-    title: "you / to you / your (informal)"
-    gloss: "you (subject) / you (dative) / your -- informal"
-    note: "*Du*, *dir*, and *dein* are the informal 'you' family, used with close friends and family -- here, with Jonas."
+    title: "you / you / to you / your (informal)"
+    gloss: "you (subject) / you (accusative) / you (dative) / your -- informal"
+    note: "*Du*, *dich*, *dir*, and *dein* are the informal 'you' family, used with close friends and family -- here, with Jonas."
     example_gloss: "I am writing you a message."
   de.b2.unit05.lesson01.teach.sie_formal:
     title: "you / to you / your (formal)"
     gloss: "you (subject) / you (dative) / your -- formal"
-    note: "*Sie*, *Ihnen*, and *Ihr* are the formal 'you' family, always capitalized, used with institutions and people you don't know well. Capitalized *Sie* is never confusable with lowercase *sie* (she/they) once you know the convention."
+    note: "*Sie*, *Ihnen*, and *Ihr* are the formal 'you' family, always capitalized, used with institutions and people you don't know well. Mid-sentence, capitalized *Sie* is the formal 'you' and lowercase *sie* is 'she/they'; at the start of a sentence both are capitalized, so context decides."
     example_gloss: "I am writing you a message."
   de.b2.unit05.lesson01.teach.hast_du_zeit:
     title: "Do you have time? (informal)"
@@ -105,7 +129,7 @@ teaching:
   de.b2.unit05.lesson02.teach.mit_freundlichen_gruessen:
     title: "Kind regards (formal)"
     gloss: "Kind regards / Best regards (formal closing)"
-    note: "*Mit freundlichen Grüßen* is the standard formal closing for professional and institutional correspondence -- often abbreviated MfG in very informal contexts, but write it in full for a formal letter."
+    note: "*Mit freundlichen Grüßen* is the standard formal closing for professional and institutional correspondence -- sometimes abbreviated MfG in quick emails, which can read as curt, so write it in full for a formal letter."
   de.b2.unit05.lesson02.teach.hochachtungsvoll:
     title: "Yours faithfully"
     gloss: "Yours faithfully (most formal closing)"
@@ -232,11 +256,11 @@ teaching:
 
 exercises:
   de.b2.unit05.lesson01.exercise01.recognize_sie:
-    instruction: "What does this word mean? (Note: capitalized Sie is always the formal 'you', never 'she/they'.)"
+    instruction: "What does this word mean? (Note: in the middle of a sentence, capitalized Sie is always the formal 'you', never 'she/they'.)"
     correct_option: "you (formal)"
     distractors: [she, they, it]
     accepted_answers: [{value: "you (formal)", status: correct}]
-    feedback: "Capitalized Sie is the formal way to say 'you' -- always capitalized, distinct from lowercase sie (she/they)."
+    feedback: "Capitalized Sie (mid-sentence) is the formal way to say 'you' -- always capitalized, distinct from lowercase sie (she/they)."
   de.b2.unit05.lesson01.exercise02.listen_haben_sie_zeit:
     instruction: "Listen and select what you hear."
     correct_option: "Do you have time? (formal)"
@@ -334,7 +358,7 @@ exercises:
   de.b2.unit05.lesson03.exercise03.match_directness:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {"kannst du": "can you (informal, direct)", "wären Sie so freundlich": "would you be so kind (formal, polite)", bitte: please, möglich: possible, tun: "to do", machen: "to do / make"}
+      - value: {"kannst du": "can you (informal, direct)", "wären Sie so freundlich": "would you be so kind (formal, polite)", bitte: please, möglich: possible, tun: "to do", das: "this / that"}
         status: correct
     feedback: "These are this lesson's directness-scaling words."
   de.b2.unit05.lesson03.exercise04.order_waere_es_moeglich:
@@ -464,7 +488,7 @@ exercises:
   de.b2.unit05.lesson06.exercise02.comprehend_mismatch:
     instruction: "What would it signal if Felix wrote to the Praxis in the SAME informal way he talks to Jonas?"
     correct_option: "A lack of respect for a professional relationship."
-    distractors: ["Nothing -- both registers are equally acceptable everywhere.", "That Felix knows the Praxis staff personally.", "That the Praxis prefers informal messages."]
+    distractors: ["Nothing -- both registers are equally acceptable everywhere.", "That Felix wants a faster reply.", "That the Praxis prefers informal messages."]
     accepted_answers: [{value: "A lack of respect for a professional relationship.", status: correct}]
     feedback: "Jonas notes it directly: der Praxis schreibst du natürlich anders -- of course you write to the Praxis differently; using du there would read as inappropriately casual."
   de.b2.unit05.lesson06.exercise03.comprehend_request:

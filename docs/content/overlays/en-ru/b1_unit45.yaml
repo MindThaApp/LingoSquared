@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked teaching notes/glosses against their Russian, every exercise's accepted answers against what its prompt allows, ё/е spelling of free-text answers (grading has no ё/е folding and no Cyrillic typo tolerance), word_order tiles, matching pairs, dictation, gender pinning and register. Fixes (all in overlays/en-ru/b1_unit45.yaml): ru.b1.unit45.lesson01.exercise06.write_tebe_stoit added \"Тебе стоит пить меньше кофе вечером.\" and the вечером-first orders; ru.b1.unit45.lesson01.exercise05.order_tebe_stoit added the tile order \"Тебе стоит пить меньше кофе вечером\"; ru.b1.unit45.lesson03.exercise06.write_full_advice_exchange widened to every combination of меньше пить/пить меньше, \"Хорошо, (я) попробую\", \"(А) что ещё\" and е-spelt еще (14 added); ru.b1.unit45.lesson02.exercise06.write_esli_by added е-spelt твоем copies and the \"я бы меньше пил/пила кофе\" order (6 added); ru.b1.unit45.lesson02.exercise05.order_esli_by added the tile order \"...я бы меньше пил кофе\"; construction-commentary note on ru.b1.unit45.lesson03.teach.nastya_problem rewritten as a language point (Что мне делать? = dative + infinitive). NATIVE FLAGS: dictations are orthography_strict (no ё in this unit's dictation text, so no ё issue here). DEFERRED: none."
 
 course:
   title: "Russian B1"
@@ -26,7 +29,7 @@ teaching:
   ru.b1.unit45.lesson02.teach.esli_by_ya_byl: {title: "Если бы я был на твоём месте, я бы пил меньше кофе.", gloss: "If I were you, I would drink less coffee.", note: "*если бы...я бы* + past tense expresses conditional advice.", example_gloss: "If I were you, I would drink less coffee in the evening."}
   ru.b1.unit45.lesson02.teach.esli_by_grammar: {title: "если бы я был на твоём месте, я бы + прошедшее время = совет", gloss: "yesli by ya byl na tvoyom meste, ya by + past tense = advice", note: "This hypothetical construction softens advice by framing it as what the speaker would do.", example_gloss: null}
   ru.b1.unit45.lesson02.teach.chto_by_ty_sdelal: {title: "Что бы ты сделал на моём месте?", gloss: "What would you do in my place?", note: "A way to invite advice by asking a hypothetical question.", example_gloss: null}
-  ru.b1.unit45.lesson03.teach.nastya_problem: {title: "Nastya states her problem", gloss: "Nastya: I have a problem, I sleep badly at night. What should I do?", note: "Opens the advice dialogue."}
+  ru.b1.unit45.lesson03.teach.nastya_problem: {title: "Nastya states her problem", gloss: "Nastya: I have a problem, I sleep badly at night. What should I do?", note: "*Что мне делать?* = \"What should I do?\" — literally \"what (is there) for me to do\": dative *мне* + infinitive."}
   ru.b1.unit45.lesson03.teach.dima_advice: {title: "Dima gives advice", gloss: "Dima: You should drink less coffee in the evening.", note: "Direct advice with тебе стоит + infinitive."}
   ru.b1.unit45.lesson03.teach.nastya_accept: {title: "Nastya accepts and follows up", gloss: "Nastya: OK, I'll try. And what else can be done?", note: "Accepts the advice, then asks a follow-up question."}
 
@@ -46,12 +49,15 @@ exercises:
           - {left: "вечером", right: "in the evening"}
         status: "correct"
     feedback: "These build the problem statement and the advice."
-  ru.b1.unit45.lesson01.exercise05.order_tebe_stoit: {instruction: "Put the words in order to say \"You should drink less coffee in the evening.\"", accepted_answers: [{value: ["Тебе", "стоит", "меньше", "пить", "кофе", "вечером"], status: "correct"}], feedback: "The correct order is *Тебе стоит меньше пить кофе вечером*."}
+  ru.b1.unit45.lesson01.exercise05.order_tebe_stoit: {instruction: "Put the words in order to say \"You should drink less coffee in the evening.\"", accepted_answers: [{value: ["Тебе", "стоит", "меньше", "пить", "кофе", "вечером"], status: "correct"}, {value: ["Тебе", "стоит", "пить", "меньше", "кофе", "вечером"], status: "correct"}], feedback: "The correct order is *Тебе стоит меньше пить кофе вечером*."}
   ru.b1.unit45.lesson01.exercise06.write_tebe_stoit:
     instruction: "Write exactly this advice sentence with тебе стоит + infinitive: You should drink less coffee in the evening."
     accepted_answers:
       - {value: "Тебе стоит меньше пить кофе вечером.", status: "correct"}
       - {value: "Тебе стоит меньше пить кофе вечером", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером.", status: "correct"}
+      - {value: "Вечером тебе стоит меньше пить кофе.", status: "correct"}
+      - {value: "Вечером тебе стоит пить меньше кофе.", status: "correct"}
     feedback: "The model answer is *Тебе стоит меньше пить кофе вечером*."
   ru.b1.unit45.lesson02.exercise01.recognize_esli_by: {instruction: "Which Russian phrase means \"if I were you, I would drink less coffee\"?", correct_option: "если бы я был на твоём месте я бы пил меньше кофе", distractors: ["тебе стоит меньше пить кофе", "что бы ты сделал на моём месте", "у меня проблема я плохо сплю"], accepted_answers: [{value: "если бы я был на твоём месте я бы пил меньше кофе", status: "correct"}], feedback: "*если бы...я бы* + past tense gives conditional advice."}
   ru.b1.unit45.lesson02.exercise02.recognize_chto_by_ty_sdelal: {instruction: "Which Russian phrase means \"what would you do in my place\"?", correct_option: "что бы ты сделал на моём месте", distractors: ["если бы я был на твоём месте", "тебе стоит меньше пить кофе", "хорошо я попробую"], accepted_answers: [{value: "что бы ты сделал на моём месте", status: "correct"}], feedback: "*Что бы ты сделал* invites advice with a hypothetical question."}
@@ -68,7 +74,7 @@ exercises:
           - {left: "меньше кофе", right: "less coffee"}
         status: "correct"
     feedback: "These build the conditional advice construction."
-  ru.b1.unit45.lesson02.exercise05.order_esli_by: {instruction: "Put the words in order to say \"If I were you, I would drink less coffee.\"", accepted_answers: [{value: ["Если", "бы", "я", "был", "на", "твоём", "месте", "я", "бы", "пил", "меньше", "кофе"], status: "correct"}], feedback: "The correct order is *Если бы я был на твоём месте, я бы пил меньше кофе*."}
+  ru.b1.unit45.lesson02.exercise05.order_esli_by: {instruction: "Put the words in order to say \"If I were you, I would drink less coffee.\"", accepted_answers: [{value: ["Если", "бы", "я", "был", "на", "твоём", "месте", "я", "бы", "пил", "меньше", "кофе"], status: "correct"}, {value: ["Если", "бы", "я", "был", "на", "твоём", "месте", "я", "бы", "меньше", "пил", "кофе"], status: "correct"}], feedback: "The correct order is *Если бы я был на твоём месте, я бы пил меньше кофе*."}
   ru.b1.unit45.lesson02.exercise06.write_esli_by:
     instruction: "Write exactly this conditional advice sentence: If I were you, I would drink less coffee."
     accepted_answers:
@@ -80,6 +86,12 @@ exercises:
       - {value: "Если бы я была на твоём месте я бы пила меньше кофе.", status: "correct"}
       - {value: "Если бы я была на твоём месте, я бы пила меньше кофе", status: "correct"}
       - {value: "Если бы я была на твоём месте я бы пила меньше кофе", status: "correct"}
+      - {value: "Если бы я был на твоем месте, я бы пил меньше кофе.", status: "correct"}
+      - {value: "Если бы я был на твоём месте, я бы меньше пил кофе.", status: "correct"}
+      - {value: "Если бы я был на твоем месте, я бы меньше пил кофе.", status: "correct"}
+      - {value: "Если бы я была на твоем месте, я бы пила меньше кофе.", status: "correct"}
+      - {value: "Если бы я была на твоём месте, я бы меньше пила кофе.", status: "correct"}
+      - {value: "Если бы я была на твоем месте, я бы меньше пила кофе.", status: "correct"}
     feedback: "The model answer is *Если бы я был на твоём месте, я бы пил меньше кофе*."
   ru.b1.unit45.lesson03.exercise01.choose_complete_advice_exchange: {instruction: "Which answer gives advice with тебе стоит + infinitive AND then accepts the advice with a follow-up question?", correct_option: "Тебе стоит меньше пить кофе вечером. Хорошо, я попробую. А что ещё можно сделать?", distractors: ["Если бы шёл дождь, мы бы остались дома.", "Дима сказал, что он придёт в офис.", "Мне надо было взять зонт."], accepted_answers: [{value: "Тебе стоит меньше пить кофе вечером. Хорошо, я попробую. А что ещё можно сделать?", status: "correct"}], feedback: "The correct answer gives advice with тебе стоит and then accepts it with a follow-up question."}
   ru.b1.unit45.lesson03.exercise02.dialogue_comprehension_advice:
@@ -114,6 +126,20 @@ exercises:
       - {value: "Тебе стоит меньше пить кофе вечером. Хорошо я попробую. А что ещё можно сделать?", status: "correct"}
       - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, я попробую. Что ещё можно сделать?", status: "correct"}
       - {value: "Тебе стоит меньше пить кофе вечером. Хорошо я попробую. Что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, я попробую. А что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, я попробую. Что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, попробую. А что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, попробую. А что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, попробую. Что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит меньше пить кофе вечером. Хорошо, попробую. Что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, я попробую. А что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, я попробую. А что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, я попробую. Что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, я попробую. Что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, попробую. А что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, попробую. А что еще можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, попробую. Что ещё можно сделать?", status: "correct"}
+      - {value: "Тебе стоит пить меньше кофе вечером. Хорошо, попробую. Что еще можно сделать?", status: "correct"}
     feedback: "A complete answer gives advice with тебе стоит and then accepts it with a follow-up question."
   ru.b1.unit45.lesson01.tebe_stoit.exercise07.dictation:
     instruction: "Type what you hear."

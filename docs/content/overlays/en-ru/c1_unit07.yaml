@@ -6,8 +6,8 @@ target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "fresh_context_reviewer"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's C1 unit07 on mediation. English-speaker interference
     risks: (1) the mediation verbs are fixed attribution/reporting forms
@@ -19,6 +19,25 @@ review:
     require the WHOLE act, and their accepted answers are the exact taught
     model (with and without the final period). No sibling-direction file was
     consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    grading against backend/app/review/grading.py (no ё/е folding, equal-token
+    spoken grading), prompt visibility, accepted-answer coverage and
+    learner-visible notes. Fixes: lesson03.exercise05.translate_otbor:
+    accepted 'но' for English 'but' (Лишние детали можно опустить, но
+    разногласие нужно сохранить, ±period); lesson06.exercise03.speak_mediaciya
+    and lesson06.exercise04.write_mediaciya: added е-spelling variants
+    (остается нерешенным, ±period); lesson06.teach.modello_mediaciya: note no
+    longer describes course construction ('Learn this exact model: ...');
+    lesson05.exercise02.read_opusit: correct option 'Specialist
+    terminology...' contradicted lesson04 (terms are replaced, not omitted) ->
+    'Unnecessary details the audience does not need.', feedback says terms are
+    replaced with plain words; lesson04.exercise01.recognize_dostupno: stem
+    now matches the answer ('with a plain word' -- what you replace a
+    difficult term with). NATIVE FLAG: lesson01.exercise04.order_istochnik_a
+    -- tiles also allow the marked OVS order 'материал закрепляют домашние
+    задания'; left as is unless a native disagrees. DEFERRED (owner decision,
+    backend/app/review/grading.py, Codex lane): Russian ё/е folding.
 
 course:
   title: "Russian C1"
@@ -141,7 +160,7 @@ teaching:
   ru.c1.unit07.mediaciya.lesson06.teach.modello_mediaciya:
     title: "the model to reproduce"
     gloss: "The first source claims that homework reinforces the material and teaches children independence. The second source believes that excessive homework causes stress and increases inequality. Both sources agree that practice is useful. However, they disagree about the amount of homework for younger grades. According to the second source, the benefit for younger grades is not proven, so this question remains unresolved."
-    note: "This is the exact model for the final speaking and writing tasks: the first claim, the counterclaim, the agreement, the disagreement, and the preserved uncertainty — in that order."
+    note: "Learn this exact model: the first claim, the counterclaim, the agreement, the disagreement, and the preserved uncertainty — in that order."
   ru.c1.unit07.mediaciya.lesson06.teach.mediaciya:
     title: "mediation"
     gloss: "mediation"
@@ -237,10 +256,12 @@ exercises:
     accepted_answers:
       - {value: "Лишние детали можно опустить, а разногласие нужно сохранить.", status: correct}
       - {value: "Лишние детали можно опустить, а разногласие нужно сохранить", status: correct}
+      - {value: "Лишние детали можно опустить, но разногласие нужно сохранить.", status: correct}
+      - {value: "Лишние детали можно опустить, но разногласие нужно сохранить", status: correct}
     feedback: "Лишние детали можно опустить, а разногласие нужно сохранить."
 
   ru.c1.unit07.mediaciya.lesson04.exercise01.recognize_dostupno:
-    instruction: "Which Russian phrase means to replace a difficult term with an everyday word?"
+    instruction: "Which Russian phrase means 'with a plain word' — what you replace a difficult term with?"
     correct_option: "простым словом"
     distractors: ["доступным языком", "сложным словом", "точным термином"]
     accepted_answers: [{value: "простым словом", status: correct}]
@@ -277,10 +298,10 @@ exercises:
     feedback: "A mediator retains the essential claim and the disagreement, and drops details the audience does not need."
   ru.c1.unit07.mediaciya.lesson05.exercise02.read_opusit:
     instruction: "Read the passage. Which kind of detail can be OMITTED for a parent audience?"
-    correct_option: "Specialist terminology that can be said in plain words."
+    correct_option: "Unnecessary details the audience does not need."
     distractors: ["The unresolved uncertainty.", "The fact that the sources disagree.", "Which source made which claim."]
-    accepted_answers: [{value: "Specialist terminology that can be said in plain words.", status: correct}]
-    feedback: "You omit unnecessary details and specialist terminology, but keep attribution, disagreement, and uncertainty."
+    accepted_answers: [{value: "Unnecessary details the audience does not need.", status: correct}]
+    feedback: "You omit unnecessary details and replace specialist terms with plain words, but keep attribution, disagreement, and uncertainty."
   ru.c1.unit07.mediaciya.lesson05.exercise03.match_mediaciya:
     instruction: "Match each Russian sentence from the mediation to its function."
     accepted_answers:
@@ -311,12 +332,16 @@ exercises:
     accepted_answers:
       - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым.", status: correct}
       - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым", status: correct}
+      - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остается нерешенным.", status: correct}
+      - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остается нерешенным", status: correct}
     feedback: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым."
   ru.c1.unit07.mediaciya.lesson06.exercise04.write_mediaciya:
     instruction: "Write the exact complete mediation: the first source's claim, the second source's counterclaim, the point of agreement, the point of disagreement, and the preserved uncertainty."
     accepted_answers:
       - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым.", status: correct}
       - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым", status: correct}
+      - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остается нерешенным.", status: correct}
+      - {value: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остается нерешенным", status: correct}
     feedback: "Первый источник утверждает, что домашние задания закрепляют материал и учат детей самостоятельности. Второй источник считает, что чрезмерные задания вызывают стресс и усиливают неравенство. Оба источника сходятся в том, что практика полезна. Однако они расходятся во мнениях о количестве заданий для младших классов. По словам второго источника, польза для младших классов не доказана, поэтому этот вопрос остаётся нерешённым."
   ru.c1.unit07.mediaciya.lesson06.exercise05.dictation_nedokazano:
     instruction: "Type exactly what you hear."

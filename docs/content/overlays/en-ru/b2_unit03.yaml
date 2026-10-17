@@ -6,14 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    idiomatic Russian, that the hedge-vs-emphasis ordering reads
-    correctly, and that the culminating "same claim twice" exercise
-    (lesson06 exercise05/06) keeps identical propositional content between
-    the hedged and emphatic versions. See the realization file's review
-    block for the full priority list.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's third B2 unit, authored alongside the realization.
     English speakers' real interference risks for this outcome: (1)
@@ -26,6 +20,26 @@ review:
     construction in "делает фильм хорошим" (literally "makes the film
     good-INSTRUMENTAL") has no analogous case marking in English -- noted
     in lesson04. No sibling-direction file (ru-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-safety of free-text accepted answers against the
+    strict Cyrillic grader, prompt/key determinacy, reading-question
+    answerability and learner-visible notes. Fixes:
+    lesson05.exercise07.write_imenno_ona tested_text "Именно она делает
+    фильм особенным" -> "Именно музыка делает фильм особенным" (the
+    prompt names the music; the она form stays accepted) + feedback;
+    lesson01.exercise07.write_claim also accepts "Мне кажется, что фильм
+    довольно хороший"; lesson04.exercise05.translate_iz_za_kontsovki
+    also accepts the end-focus order "Фильм всем понравился именно из-за
+    концовки"; reading passage added to the target_blocks of all four
+    lesson05 reading_comprehension prompts; overlay notes for lesson02
+    teach.grammar_ostorozhnost, lesson03 teach.grammar_usilenie and
+    lesson06 teach.grammar_modulyacija no longer cite internal lesson
+    numbers or task structure. No free-text accepted answer in this unit
+    contains ё. NATIVE FLAG: sentence-initial "Совершенно точно, ..."
+    (lesson03 example + exercise07) may be less natural than "Музыка
+    совершенно точно потрясающая". DEFERRED: none beyond the systemic ru
+    grader items (ё/е fold, dash stripping) noted for unit02.
 
 course:
   title: Russian B2
@@ -130,7 +144,7 @@ teaching:
   ru.b2.unit03.lesson02.teach.grammar_ostorozhnost:
     title: "In a sense and as it seems to me phrase an opinion even more tentatively than kind of and quite."
     gloss: "In a sense and as it seems to me phrase an opinion even more tentatively than kind of and quite."
-    note: "These are more deliberate, considered hedges than lesson01's -- useful when you want to sound thoughtful rather than casually unsure."
+    note: "These are more deliberate, considered hedges than *вроде бы* or *довольно* -- useful when you want to sound thoughtful rather than casually unsure."
 
   ru.b2.unit03.lesson03.teach.deystvitelno:
     title: "really / indeed"
@@ -160,7 +174,7 @@ teaching:
   ru.b2.unit03.lesson03.teach.grammar_usilenie:
     title: "Really, absolutely, and undoubtedly strengthen an opinion. Kind of, quite, and a bit soften it."
     gloss: "Really, absolutely, and undoubtedly strengthen an opinion. Kind of, quite, and a bit soften it."
-    note: "The direct opposite pole from lesson01/02's hedges -- the same claim, delivered with confidence instead of tentativeness."
+    note: "The direct opposite pole from the hedges (*вроде бы*, *довольно*, *немного*) -- the same claim, delivered with confidence instead of tentativeness."
 
   ru.b2.unit03.lesson04.teach.imenno:
     title: "exactly / precisely"
@@ -234,7 +248,7 @@ teaching:
   ru.b2.unit03.lesson06.teach.grammar_modulyacija:
     title: "It seems to me that the music is quite good -- soft. The music is really amazing -- strong. One and the same opinion, different force."
     gloss: "It seems to me that the music is quite good -- soft. The music is really amazing -- strong. One and the same opinion, different force."
-    note: "The same underlying opinion about the music, delivered twice at two different strengths -- this is exactly what you produce in this lesson's speaking and writing tasks."
+    note: "The same underlying opinion about the music, delivered twice at two different strengths."
 
 exercises:
   ru.b2.unit03.lesson01.exercise01.recognize_dovolno:
@@ -283,6 +297,8 @@ exercises:
     accepted_answers:
       - {value: "Мне кажется, что фильм довольно неплохой", status: "correct"}
       - {value: "Мне кажется, что фильм довольно неплохой.", status: "correct"}
+      - {value: "Мне кажется, что фильм довольно хороший", status: "correct"}
+      - {value: "Мне кажется, что фильм довольно хороший.", status: "correct"}
     feedback: "Мне кажется, что фильм довольно неплохой means it seems to me that the film is quite good."
   ru.b2.unit03.lesson01.exercise08.dictation_claim:
     instruction: "Type what you hear."
@@ -428,6 +444,8 @@ exercises:
     accepted_answers:
       - {value: "Именно из-за концовки фильм всем понравился", status: "correct"}
       - {value: "Именно из-за концовки фильм всем понравился.", status: "correct"}
+      - {value: "Фильм всем понравился именно из-за концовки", status: "correct"}
+      - {value: "Фильм всем понравился именно из-за концовки.", status: "correct"}
     feedback: "Именно из-за концовки фильм всем понравился means it's because of the ending that everyone liked the film."
   ru.b2.unit03.lesson04.exercise06.write_claim:
     instruction: "Write in Russian: It's the music that makes the film good."
@@ -487,9 +505,11 @@ exercises:
   ru.b2.unit03.lesson05.exercise07.write_imenno_ona:
     instruction: "Write in Russian: It's the music that makes the film special."
     accepted_answers:
+      - {value: "Именно музыка делает фильм особенным", status: "correct"}
+      - {value: "Именно музыка делает фильм особенным.", status: "correct"}
       - {value: "Именно она делает фильм особенным", status: "correct"}
       - {value: "Именно она делает фильм особенным.", status: "correct"}
-    feedback: "Именно она делает фильм особенным means it's the music that makes the film special."
+    feedback: "Именно музыка делает фильм особенным means it's the music that makes the film special. In the review, она refers back to музыка: именно она делает фильм особенным."
 
   ru.b2.unit03.lesson06.exercise01.comprehend_hedge:
     instruction: "What is Nastya's first, hedged opinion of the film?"

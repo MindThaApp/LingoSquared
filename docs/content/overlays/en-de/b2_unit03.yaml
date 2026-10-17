@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for de's third B2 unit, authored alongside the realization.
     English speakers' real interference risks for this outcome: (1)
@@ -20,6 +20,33 @@ review:
     (4) stacked intensifiers (wirklich sehr) read as redundant to an
     English speaker but are natural, idiomatic German emphasis -- flagged
     in lesson03. No sibling direction file (de-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading shapes, boolean coercion, jargon/AI leaks, character
+    canon (Frau Vogel b1_unit52), cleft gender agreement, cumulative token
+    coverage and underdetermined production prompts. Fixes: overlay
+    lesson05.exercise01.read_hedge distractor "The team presumably likes
+    it." (also hedged in the text, so a second correct option) -> "What I
+    really like is the clarity."; overlay lesson05.exercise04.read_focus
+    distractor "What I really like is the clarity." (a pseudo-cleft focus
+    construction) -> "The proposal is actually fairly good."; overlay
+    lesson06.exercise07.respond_emphatic instruction -> "Felix asks: Was
+    denken Sie über den Vorschlag? Choose the EMPHATIC reply." (all
+    distractors were natural replies to the bare question);
+    lesson01.exercise03.match_hedges ziemlich right "fairly / rather" ->
+    "fairly / quite" (rather clashed with eher), also in the ziemlich
+    teach card title/gloss; accepted answers widened: lesson01.exercise04
+    (+Eigentlich ist der Vorschlag ziemlich gut), lesson02.exercise05
+    (+Vermutlich ist der Vorschlag nützlich/nuetzlich),
+    lesson05.exercise07 (+dass das Team vermutlich den Vorschlag mag),
+    lesson03.exercise07 (+Ich bin mir absolut sicher), lesson01.exercise07
+    (+Ich würde sagen, dass der Vorschlag okay ist). Validator note: the
+    added word_order variant produces an expected "scrambled permutation"
+    WARN, same as existing alternative-order answers in units 01/06-08.
+    NATIVE FLAGS: order_cleft_idee tiles also form "Die Idee ist es, die
+    überzeugt" (consider accepting); L05 reading "..., und einige Punkte
+    sind ein bisschen kompliziert" -- "aber" would be the natural
+    contrastive connector. DEFERRED: none.
 
 course:
   title: German B2
@@ -61,8 +88,8 @@ teaching:
     note: "*Eigentlich* softens a claim toward 'if you look closely' -- a genuine B2 hedge. It is a false friend for English 'eventually', which it never means."
     example_gloss: "The proposal is actually good."
   de.b2.unit03.lesson01.teach.ziemlich:
-    title: "fairly / rather"
-    gloss: "fairly / rather"
+    title: "fairly / quite"
+    gloss: "fairly / quite"
     example_gloss: "The proposal is fairly good."
   de.b2.unit03.lesson01.teach.ein_bisschen:
     title: "a little"
@@ -222,13 +249,14 @@ exercises:
   de.b2.unit03.lesson01.exercise03.match_hedges:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {eigentlich: "actually / technically", ziemlich: "fairly / rather", "ein bisschen": "a little", eher: "rather / more like", "ich würde sagen": "I would say", kompliziert: complicated}
+      - value: {eigentlich: "actually / technically", ziemlich: "fairly / quite", "ein bisschen": "a little", eher: "rather / more like", "ich würde sagen": "I would say", kompliziert: complicated}
         status: correct
     feedback: "These are this lesson's softening words."
   de.b2.unit03.lesson01.exercise04.order_eigentlich_ziemlich:
     instruction: "Put the words in order: The proposal is actually fairly good."
     accepted_answers:
       - {value: "Der Vorschlag ist eigentlich ziemlich gut", status: correct}
+      - {value: "Eigentlich ist der Vorschlag ziemlich gut", status: correct}
     feedback: "Der Vorschlag ist eigentlich ziemlich gut means the proposal is actually fairly good."
   de.b2.unit03.lesson01.exercise05.translate_eher:
     instruction: "Translate into German, using eher: The proposal is rather average."
@@ -245,6 +273,7 @@ exercises:
     accepted_answers:
       - {value: "Ich würde sagen, der Vorschlag ist okay", status: correct}
       - {value: "Ich würde sagen der Vorschlag ist okay", status: correct}
+      - {value: "Ich würde sagen, dass der Vorschlag okay ist", status: correct}
     feedback: "Ich würde sagen, der Vorschlag ist okay means I would say the proposal is okay."
   de.b2.unit03.lesson01.exercise08.dictation_eigentlich_ziemlich:
     instruction: "Type what you hear."
@@ -280,6 +309,8 @@ exercises:
     accepted_answers:
       - {value: "Der Vorschlag ist vermutlich nützlich", status: correct}
       - {value: "Der Vorschlag ist vermutlich nuetzlich", status: correct}
+      - {value: "Vermutlich ist der Vorschlag nützlich", status: correct}
+      - {value: "Vermutlich ist der Vorschlag nuetzlich", status: correct}
     feedback: "Der Vorschlag ist vermutlich nützlich means the proposal is presumably useful."
   de.b2.unit03.lesson02.exercise06.speak_in_gewisser_weise:
     instruction: "Say aloud in German, using in gewisser Weise: In a certain way, he's right."
@@ -332,6 +363,7 @@ exercises:
     instruction: "Say aloud in German, using absolut: I am absolutely sure."
     accepted_answers:
       - {value: "Ich bin absolut sicher", status: correct}
+      - {value: "Ich bin mir absolut sicher", status: correct}
     feedback: "Ich bin absolut sicher means I am absolutely sure."
   de.b2.unit03.lesson03.exercise08.dictation_wirklich_sehr:
     instruction: "Type what you hear."
@@ -383,7 +415,7 @@ exercises:
   de.b2.unit03.lesson05.exercise01.read_hedge:
     instruction: "Which claim in the text is HEDGED, not stated with full confidence?"
     correct_option: "Some points are a little complicated."
-    distractors: ["The clarity is extremely useful.", "The structure absolutely convinces.", "The team presumably likes it."]
+    distractors: ["The clarity is extremely useful.", "The structure absolutely convinces.", "What I really like is the clarity."]
     accepted_answers: [{value: "Some points are a little complicated.", status: correct}]
     feedback: "Einige Punkte sind ein bisschen kompliziert (some points are a little complicated) is softened with ein bisschen."
   de.b2.unit03.lesson05.exercise02.read_hedge_words:
@@ -401,7 +433,7 @@ exercises:
   de.b2.unit03.lesson05.exercise04.read_focus:
     instruction: "Which sentence uses a focus construction to single out what convinces?"
     correct_option: "It is the structure that absolutely convinces."
-    distractors: ["Some points are a little complicated.", "It seems that the team likes it.", "What I really like is the clarity."]
+    distractors: ["Some points are a little complicated.", "It seems that the team likes it.", "The proposal is actually fairly good."]
     accepted_answers: [{value: "It is the structure that absolutely convinces.", status: correct}]
     feedback: "Es ist die Struktur, die absolut überzeugt is an it-cleft, singling out the structure specifically."
   de.b2.unit03.lesson05.exercise05.match_reading_words:
@@ -419,6 +451,7 @@ exercises:
     instruction: "Write in German: It seems that the team presumably likes the proposal."
     accepted_answers:
       - {value: "Es scheint, dass das Team den Vorschlag vermutlich mag", status: correct}
+      - {value: "Es scheint, dass das Team vermutlich den Vorschlag mag", status: correct}
     feedback: "Es scheint, dass das Team den Vorschlag vermutlich mag means it seems that the team presumably likes the proposal."
 
   de.b2.unit03.lesson06.exercise01.classify_hedge:
@@ -456,7 +489,7 @@ exercises:
       - {value: "Der Vorschlag ist eigentlich ziemlich gut. Der Vorschlag ist wirklich sehr gut", status: correct}
     feedback: "The same claim, twice: hedged (Der Vorschlag ist eigentlich ziemlich gut) and emphasized (Der Vorschlag ist wirklich sehr gut)."
   de.b2.unit03.lesson06.exercise07.respond_emphatic:
-    instruction: "Was denken Sie über den Vorschlag?"
+    instruction: "Felix asks: Was denken Sie über den Vorschlag? Choose the EMPHATIC reply."
     correct_option: "Ich finde ihn wirklich sehr gut."
     distractors: ["Ich weiß es nicht genau.", "Er könnte kompliziert sein.", "Vielleicht ist er gut."]
     accepted_answers: [{value: "Ich finde ihn wirklich sehr gut.", status: correct}]

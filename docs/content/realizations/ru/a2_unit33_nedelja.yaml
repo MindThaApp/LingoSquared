@@ -11,9 +11,11 @@ generation_provenance:
     for describing a typical Russian weekly schedule.
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: fresh_context_reviewer
-  notes: "New Codex-authored draft. Needs fresh-context review."
+  status: "reviewed"
+  required_next_reviewer: native_speaker_pass
+  notes: "New Codex-authored draft. Needs fresh-context review.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked grading against grading.py (punctuation ignored, no optional ru subject pronoun, no ё/е equivalence), YAML boolean walk, example_gloss vs example, learner-visible internals notes, gendered first-person answers (none), character canon (Дима engineer, Настя teacher), ё in free-text answers (none). Fixes: habitual motion-verb error corrected across the unit (approved): \"Во вторник после работы я иду на курс.\" -> \"По вторникам после работы я хожу на курсы.\" and \"После работы я иду на курс.\" -> \"После работы я хожу на курсы.\" in media asset texts ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01 and ru.a2.audio.dialogue.tipichnaya_nedelya.01 (both pending_generation; keys kept), teach.posle_raboty (introduced_tokens иду/курс -> хожу/курсы), teach.vtornik example (now \"Во вторник я работаю.\"), new card ru.a2.unit33.lesson02.teach.po_vtornikam (introduces по/По/вторникам), lesson03.teach.nastya_tuesday, lesson02.exercise03/04/05/06, lesson03.exercise01/02/03/06/08 (tested_text, word_bank, pairs, prompts) and the matching overlay accepted_answers, options, instructions and glosses (\"On Tuesdays after work I go to classes\"). Overlay notes: lesson03.teach.dima_week note corrected (*твоя*, not *у тебя*); lesson03.teach.nastya_weekdays note rewritten from a canon remark to a language note; lesson03.exercise06.write_weekly_schedule_message accepted_answers widened with pronoun-less \"Потом ужинаю дома\" / \"В выходные отдыхаю\" variants. NATIVE FLAGS: native check of the new habitual sentences and of teach.nedelya (*обычная* only appears in the note); lesson03.exercise05 dialogue_response prints the exact answer. DEFERRED: none."
 
 course:
   realization_key: ru.a2
@@ -25,12 +27,12 @@ course:
 
 media_assets:
   - {content_key: ru.a2.audio.v_budni_ya_rabotayu.neutral.01, language: ru, text: "В будни я работаю, а в выходные отдыхаю.", voice_hint: neutral_adult_female, status: pending_generation}
-  - {content_key: ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01, language: ru, text: "После работы я иду на курс.", voice_hint: neutral_adult, status: pending_generation}
+  - {content_key: ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01, language: ru, text: "После работы я хожу на курсы.", voice_hint: neutral_adult, status: pending_generation}
   - content_key: ru.a2.audio.dialogue.tipichnaya_nedelya.01
     language: ru
     text: >-
       Дима: Настя, как обычно проходит твоя неделя? Настя: В будни я работаю в
-      школе. Во вторник после работы я иду на курс. Потом я ужинаю дома.
+      школе. По вторникам после работы я хожу на курсы. Потом я ужинаю дома.
       В выходные я отдыхаю и встречаюсь с друзьями.
     voice_hint: two_adults_neutral
     status: pending_generation
@@ -89,8 +91,9 @@ units:
         title: "После работы"
         spine_outcome_id: universal.a2.routines.describe_weekly_schedule
         teaching:
-          - {content_key: ru.a2.unit33.lesson02.teach.vtornik, kind: vocabulary, target: {text: "во вторник", language_code: ru, direction: ltr}, introduced_tokens: [во, вторник, Вторник], example: {text: "Во вторник я иду на курс.", language_code: ru, direction: ltr}}
-          - {content_key: ru.a2.unit33.lesson02.teach.posle_raboty, kind: phrase, target: {text: "после работы", language_code: ru, direction: ltr}, introduced_tokens: [после, После, работы, иду, курс], example: {text: "После работы я иду на курс.", language_code: ru, direction: ltr}}
+          - {content_key: ru.a2.unit33.lesson02.teach.vtornik, kind: vocabulary, target: {text: "во вторник", language_code: ru, direction: ltr}, introduced_tokens: [во, вторник, Вторник], example: {text: "Во вторник я работаю.", language_code: ru, direction: ltr}}
+          - {content_key: ru.a2.unit33.lesson02.teach.po_vtornikam, kind: phrase, target: {text: "по вторникам", language_code: ru, direction: ltr}, introduced_tokens: [по, По, вторникам], example: {text: "По вторникам я работаю.", language_code: ru, direction: ltr}}
+          - {content_key: ru.a2.unit33.lesson02.teach.posle_raboty, kind: phrase, target: {text: "после работы", language_code: ru, direction: ltr}, introduced_tokens: [после, После, работы, хожу, курсы], example: {text: "После работы я хожу на курсы.", language_code: ru, direction: ltr}}
           - {content_key: ru.a2.unit33.lesson02.teach.potom, kind: vocabulary, target: {text: "потом", language_code: ru, direction: ltr}, introduced_tokens: [потом, Потом, ужинаю, дома], example: {text: "Потом я ужинаю дома.", language_code: ru, direction: ltr}}
         exercises:
           - content_key: ru.a2.unit33.lesson02.exercise01.recognize_vtornik
@@ -103,29 +106,29 @@ units:
             prompt: {target_blocks: [{text: "after work", language_code: en, direction: ltr}]}
           - content_key: ru.a2.unit33.lesson02.exercise03.listen_select_course
             type: listen_select
-            tested_text: "После работы я иду на курс"
+            tested_text: "После работы я хожу на курсы"
             media_asset_key: ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01
             prompt: {target_blocks: [{text: "What happens after work?", language_code: en, direction: ltr}]}
           - content_key: ru.a2.unit33.lesson02.exercise04.match_sequence
             type: matching_pairs
-            tested_text: "во вторник после работы иду на курс потом ужинаю дома"
+            tested_text: "по вторникам после работы хожу на курсы потом ужинаю дома"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "во вторник", right: "on Tuesday"}
+              - {left: "по вторникам", right: "on Tuesdays"}
               - {left: "после работы", right: "after work"}
-              - {left: "иду на курс", right: "I go to a course"}
+              - {left: "хожу на курсы", right: "I go to classes"}
               - {left: "потом", right: "then / after that"}
               - {left: "ужинаю", right: "I have dinner"}
               - {left: "дома", right: "at home"}
           - content_key: ru.a2.unit33.lesson02.exercise05.order_after_work
             type: word_order
-            tested_text: "После работы я иду на курс"
+            tested_text: "После работы я хожу на курсы"
             prompt: {target_blocks: []}
-            word_bank: ["я", "иду", "После", "курс", "на", "работы"]
+            word_bank: ["я", "хожу", "После", "курсы", "на", "работы"]
           - content_key: ru.a2.unit33.lesson02.exercise06.write_sequence
             type: writing_prompt
-            tested_text: "Во вторник после работы я иду на курс Потом я ужинаю дома"
-            prompt: {target_blocks: [{text: "Write two sentences: On Tuesday after work I go to a course. Then I have dinner at home.", language_code: en, direction: ltr}]}
+            tested_text: "По вторникам после работы я хожу на курсы Потом я ужинаю дома"
+            prompt: {target_blocks: [{text: "Write two sentences: On Tuesdays after work I go to classes. Then I have dinner at home.", language_code: en, direction: ltr}]}
 
       - content_key: ru.a2.unit33.lesson03.tipichnaya
         title: "Диалог: обычная неделя"
@@ -133,27 +136,27 @@ units:
         teaching:
           - {content_key: ru.a2.unit33.lesson03.teach.dima_week, kind: dialogue, target: {text: "Настя, как обычно проходит твоя неделя?", language_code: ru, direction: ltr, speaker: "Дима"}, introduced_tokens: [Настя]}
           - {content_key: ru.a2.unit33.lesson03.teach.nastya_weekdays, kind: dialogue, target: {text: "В будни я работаю в школе.", language_code: ru, direction: ltr, speaker: "Настя"}, introduced_tokens: [я]}
-          - {content_key: ru.a2.unit33.lesson03.teach.nastya_tuesday, kind: dialogue, target: {text: "Во вторник после работы я иду на курс.", language_code: ru, direction: ltr, speaker: "Настя"}, introduced_tokens: []}
+          - {content_key: ru.a2.unit33.lesson03.teach.nastya_tuesday, kind: dialogue, target: {text: "По вторникам после работы я хожу на курсы.", language_code: ru, direction: ltr, speaker: "Настя"}, introduced_tokens: []}
           - {content_key: ru.a2.unit33.lesson03.teach.nastya_then, kind: dialogue, target: {text: "Потом я ужинаю дома.", language_code: ru, direction: ltr, speaker: "Настя"}, introduced_tokens: []}
           - {content_key: ru.a2.unit33.lesson03.teach.nastya_weekend, kind: dialogue, target: {text: "В выходные я отдыхаю и встречаюсь с друзьями.", language_code: ru, direction: ltr, speaker: "Настя"}, introduced_tokens: [встречаюсь, друзьями, с, и]}
         exercises:
           - content_key: ru.a2.unit33.lesson03.exercise01.choose_week_sequence
             type: multiple_choice
-            tested_text: "В будни я работаю Во вторник после работы я иду на курс Потом я ужинаю дома"
+            tested_text: "В будни я работаю По вторникам после работы я хожу на курсы Потом я ужинаю дома"
             prompt: {target_blocks: [{text: "Which answer describes a weekly sequence?", language_code: en, direction: ltr}]}
           - content_key: ru.a2.unit33.lesson03.exercise02.dialogue_comprehension_week
             type: dialogue_comprehension
-            tested_text: "будни работаю школе вторник после работы курс потом ужинаю дома выходные отдыхаю встречаюсь друзьями"
+            tested_text: "будни работаю школе вторникам после работы курсы потом ужинаю дома выходные отдыхаю встречаюсь друзьями"
             media_asset_key: ru.a2.audio.dialogue.tipichnaya_nedelya.01
             prompt: {target_blocks: []}
           - content_key: ru.a2.unit33.lesson03.exercise03.match_dialogue_week
             type: matching_pairs
-            tested_text: "обычная неделя в будни работаю в школе во вторник после работы потом в выходные встречаюсь с друзьями"
+            tested_text: "обычная неделя в будни работаю в школе по вторникам после работы потом в выходные встречаюсь с друзьями"
             prompt: {target_blocks: []}
             pairs:
               - {left: "обычная неделя", right: "typical week"}
               - {left: "В будни я работаю.", right: "On weekdays I work."}
-              - {left: "во вторник", right: "on Tuesday"}
+              - {left: "по вторникам", right: "on Tuesdays"}
               - {left: "после работы", right: "after work"}
               - {left: "Потом я ужинаю.", right: "Then I have dinner."}
               - {left: "встречаюсь с друзьями", right: "I meet friends"}
@@ -168,7 +171,7 @@ units:
             prompt: {target_blocks: [{text: "Дима: Настя, как обычно проходит твоя неделя?", language_code: ru, direction: ltr}]}
           - content_key: ru.a2.unit33.lesson03.exercise06.write_weekly_schedule_message
             type: writing_prompt
-            tested_text: "В будни я работаю в школе Во вторник после работы я иду на курс Потом я ужинаю дома В выходные я отдыхаю"
-            prompt: {target_blocks: [{text: "Write four short sentences describing a typical week: say that on weekdays you work at school, on Tuesday after work you go to a course, then you have dinner at home, and on the weekend you rest.", language_code: en, direction: ltr}]}
+            tested_text: "В будни я работаю в школе По вторникам после работы я хожу на курсы Потом я ужинаю дома В выходные я отдыхаю"
+            prompt: {target_blocks: [{text: "Write four short sentences describing a typical week: say that on weekdays you work at school, on Tuesdays after work you go to classes, then you have dinner at home, and on the weekend you rest.", language_code: en, direction: ltr}]}
           - {content_key: ru.a2.unit33.lesson03.exercise07.dictation_budni_vyhodnye, type: dictation, tested_text: "В будни я работаю, а в выходные отдыхаю.", media_asset_key: ru.a2.audio.v_budni_ya_rabotayu.neutral.01, prompt: {target_blocks: []}}
-          - {content_key: ru.a2.unit33.lesson03.exercise08.dictation_posle_raboty_kurs, type: dictation, tested_text: "После работы я иду на курс.", media_asset_key: ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01, prompt: {target_blocks: []}}
+          - {content_key: ru.a2.unit33.lesson03.exercise08.dictation_posle_raboty_kurs, type: dictation, tested_text: "После работы я хожу на курсы.", media_asset_key: ru.a2.audio.posle_raboty_ya_idu.na_kurs.neutral.01, prompt: {target_blocks: []}}

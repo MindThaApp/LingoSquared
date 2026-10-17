@@ -72,6 +72,31 @@ review:
     the answer). Both reuse existing presets; pools differ from the
     existing lesson04.translate.001 (taste_preference nouns), so no
     duplicate templates.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every template against the unit13 realization/overlay, real
+    lexeme pools at unit and course scope (lekker_food 1 at unit scope /
+    3 at course scope, activity_leuk 3, preference_item_pure 4 / 6),
+    word_order frame grammaticality for every pool member at course
+    scope (no capitalized Koffie/Thee leaks), MC/listen distractor
+    correctness, frame vocabulary (vind/lekker/leuk all taught),
+    feedback truthfulness, YAML booleans and jargon. Fixes:
+    lesson01.choose.003 and lesson03.choose.001 feedback "{item} is a
+    word from this unit." -> "{item} is a word you have learned." (false
+    for koffie/thee from unit06 at course scope); lesson05.listen.001
+    feedback "... heard in this reading." and lesson06.listen.002
+    feedback "... heard in this dialogue." -> "{item} is the word you
+    heard." (audio is one isolated word, and pool words are not all in
+    that text). No NATIVE flags. DEFERRED
+    (scripts/backfill_lexemes_en_nl.py, owned by another session):
+    wandelen gloss "to walk" collides with lopen (unit33), so
+    lesson02.translate.004 / lesson06.translate.003 reject lopen in
+    Endless Practice -- suggested gloss "to walk (for pleasure); to go
+    for a walk"; fietsen/wandelen/winkelen glossed as infinitives ("to
+    cycle") though the unit teaches them as activity nouns (word_order
+    hint reads "Ik vind to cycle leuk"), low priority; lekker_food has
+    only 1 candidate (tomatensoep) at unit scope, so its templates serve
+    one word at the checkpoint (capacity note for the pack owner).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -115,7 +140,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *preference_item_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word you have learned.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit13.lesson02.order.001
     lesson_content_key: nl.a1.unit13.lesson02.activiteiten
     type: word_order
@@ -154,7 +179,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *preference_item_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word you have learned.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit13.lesson04.translate.001
     lesson_content_key: nl.a1.unit13.lesson04.kiezen
     type: translation
@@ -174,7 +199,7 @@ templates:
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *preference_item_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the word you heard in this reading.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit13.lesson06.order.001
     lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
     type: word_order
@@ -188,7 +213,7 @@ templates:
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *preference_item_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is the word you heard in this dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit13.lesson06.translate.003
     lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
     type: translation

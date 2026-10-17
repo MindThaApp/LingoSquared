@@ -6,8 +6,8 @@ target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "fresh_context_reviewer"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's C1 unit06 on idiomatic, collocational, and figurative
     language. English-speaker interference risks: (1) these idioms are fixed
@@ -20,6 +20,31 @@ review:
     (4) the culminating speaking and writing exercises each require the WHOLE
     act, and their accepted answers are the exact taught model. No
     sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    grading against backend/app/review/grading.py (casefold, internal
+    punctuation, no ё/е folding, equal-token spoken grading, byte-strict
+    dictation), prompt visibility (instruction + target_blocks only),
+    accepted-answer coverage, glosses, titles and learner-visible notes.
+    Fixes: lesson06.exercise01.recognize_polnyj: the Russian description was
+    only in tested_text -> added it as a ru target_block and re-asked as 'In
+    what order does this description present its ideas?' (old stem spelled out
+    the answer); lesson06.exercise03.speak_polnyj: open prompt pinned to the
+    exact taught model (Новость пришла как снег на голову, но мы засучили
+    рукава. В итоге дело в шляпе.) and the equally correct three-sentence
+    variant without но accepted; lesson06.exercise04.write_polnyj: accepted
+    the ', но мы засучили рукава' joined rewrite (±period);
+    lesson05.exercise03.match_rewrite: instruction -> 'Match each Russian
+    sentence or word to its English meaning.'; lesson03.teach.modello_itog +
+    lesson03.exercise02.listen_itog: дело glossed as 'deal' -> 'In the end,
+    it's in the bag.' / 'In the end, it's all settled.' (distractor 'we lost
+    the deal' -> 'we lost everything', feedback aligned); lesson05 title
+    'Переписываю буквально' / 'Rewriting literally' -> 'От буквального к
+    образному' / 'From literal to idiomatic'. NATIVE FLAG:
+    lesson05.exercise04.write_rewrite_sneg -- decide whether 'Новость
+    появилась как снег на голову' (original verb kept) should be accepted.
+    DEFERRED (owner decision, backend/app/review/grading.py, Codex lane):
+    em-dash token handling in spoken grading and ё/е folding for Russian.
 
 course:
   title: "Russian C1"
@@ -40,7 +65,7 @@ lessons:
   ru.c1.unit06.idiomy.lesson04.chitayu_obraznyj_tekst:
     title: "Reading a figurative text"
   ru.c1.unit06.idiomy.lesson05.perepisyvayu_bukvalno:
-    title: "Rewriting literally"
+    title: "From literal to idiomatic"
   ru.c1.unit06.idiomy.lesson06.polnyj_obraznyj_otvet:
     title: "The complete idiomatic response"
 
@@ -89,7 +114,7 @@ teaching:
     note: "*С горем пополам* (lit. 'with grief in half') means 'barely, with great difficulty'."
   ru.c1.unit06.idiomy.lesson03.teach.modello_itog:
     title: "The settled outcome"
-    gloss: "In the end, the deal is in the bag."
+    gloss: "In the end, it's in the bag."
     note: "*В итоге* ('in the end') introduces the closing idiom *дело в шляпе*."
 
   ru.c1.unit06.idiomy.lesson04.teach.u_tebya_zolotye_ruki:
@@ -201,10 +226,10 @@ exercises:
     feedback: "*Дело в шляпе* means 'it's settled, in the bag' — the outcome is guaranteed."
   ru.c1.unit06.idiomy.lesson03.exercise02.listen_itog:
     instruction: "Listen and select what the speaker means."
-    correct_option: "In the end, the deal is settled."
-    distractors: ["In the end, everything fell apart.", "In the end, the plan is still undecided.", "In the end, we lost the deal."]
-    accepted_answers: [{value: "In the end, the deal is settled.", status: correct}]
-    feedback: "В итоге дело в шляпе means in the end, the deal is settled — it's in the bag."
+    correct_option: "In the end, it's all settled."
+    distractors: ["In the end, everything fell apart.", "In the end, the plan is still undecided.", "In the end, we lost everything."]
+    accepted_answers: [{value: "In the end, it's all settled.", status: correct}]
+    feedback: "В итоге дело в шляпе means in the end, it's all settled — it's in the bag."
   ru.c1.unit06.idiomy.lesson03.exercise03.match_itog:
     instruction: "Match each Russian outcome idiom to its English meaning."
     accepted_answers:
@@ -261,7 +286,7 @@ exercises:
     accepted_answers: [{value: "We rolled up our sleeves and got to work.", status: correct}]
     feedback: "Мы засучили рукава means we rolled up our sleeves — we got down to serious work."
   ru.c1.unit06.idiomy.lesson05.exercise03.match_rewrite:
-    instruction: "Match each literal sentence to its idiomatic rewrite."
+    instruction: "Match each Russian sentence or word to its English meaning."
     accepted_answers:
       - value: {"Новость появилась неожиданно": "the news appeared unexpectedly (literal)", "Новость пришла как снег на голову": "the news came out of the blue (idiomatic)", "Мы начали работать очень усердно": "we started working very diligently (literal)", "Мы засучили рукава": "we rolled up our sleeves (idiomatic)", "появилась": "appeared", "усердно": "diligently"}
         status: correct
@@ -280,7 +305,7 @@ exercises:
     feedback: "Мы засучили рукава."
 
   ru.c1.unit06.idiomy.lesson06.exercise01.recognize_polnyj:
-    instruction: "Which sequence maps this description correctly: the surprise, then the hard work, then the successful outcome?"
+    instruction: "In what order does this description present its ideas?"
     correct_option: "surprise → hard work → success"
     distractors: ["success → hard work → surprise", "surprise → success → hard work", "hard work → surprise → success"]
     accepted_answers: [{value: "surprise → hard work → success", status: correct}]
@@ -292,16 +317,19 @@ exercises:
         status: correct
     feedback: "These are the idioms and collocations of the unit — each a fixed, non-literal expression."
   ru.c1.unit06.idiomy.lesson06.exercise03.speak_polnyj:
-    instruction: "Say aloud the complete idiomatic description of how the project went: use как снег на голову for the surprise, засучили рукава for getting down to work, and дело в шляпе for the successful outcome."
+    instruction: "Say aloud the exact taught complete description of how the project went: start with Новость пришла как снег на голову for the surprise, continue with но мы засучили рукава for getting down to work, and close with В итоге дело в шляпе for the successful outcome."
     accepted_answers:
       - {value: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе.", status: correct}
       - {value: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе", status: correct}
+      - {value: "Новость пришла как снег на голову. Мы засучили рукава. В итоге дело в шляпе.", status: correct}
     feedback: "Новость пришла как снег на голову, но мы засучили рукава. В итоге дело в шляпе."
   ru.c1.unit06.idiomy.lesson06.exercise04.write_polnyj:
     instruction: "Rewrite these two literal sentences into natural idiomatic Russian, using как снег на голову and засучили рукава: «Новость появилась неожиданно. Мы начали работать очень усердно.»"
     accepted_answers:
       - {value: "Новость пришла как снег на голову. Мы засучили рукава.", status: correct}
       - {value: "Новость пришла как снег на голову. Мы засучили рукава", status: correct}
+      - {value: "Новость пришла как снег на голову, но мы засучили рукава.", status: correct}
+      - {value: "Новость пришла как снег на голову, но мы засучили рукава", status: correct}
     feedback: "Новость пришла как снег на голову. Мы засучили рукава."
   ru.c1.unit06.idiomy.lesson06.exercise05.dictation_sneg:
     instruction: "Type exactly what you hear."

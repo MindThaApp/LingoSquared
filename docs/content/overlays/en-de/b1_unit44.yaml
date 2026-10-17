@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "de"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "Tenth de B1 unit. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "Tenth de B1 unit. Needs fresh-context review. Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-de overlay for grading coverage, prompt determinacy, distractors, glosses. Fixes: de.b1.unit44.lesson03.exercise06.write_full_purpose_contrast now accepts answers without the unprompted 'Und' (previously graded wrong) and 'in einem Buero' variants, 16 punctuation-only variants pruned (grading normalizes punctuation); its instruction/prompt now pins 'addressing Felix as Sie (... so that he understands you well)' so only the 'damit Sie mich gut verstehen' form is expected; de.b1.unit44.lesson01.exercise06.write_anna_lernt_um_zu accepts 'um in einem Buero/Büro zu arbeiten'. NATIVE FLAG / DEFERRED (owner canon): Anna 'kommt aus Deutschland' (a1_unit02) yet learns German (a1_unit11, built on here) -- pre-existing storyline oddity in a1_unit02_introductions.yaml / a1_unit11_alltag.yaml, outside this batch."
 
 course:
   title: "German B1"
@@ -57,6 +60,8 @@ exercises:
       - {value: "Anna lernt Deutsch um im Buero zu arbeiten.", status: "correct"}
       - {value: "Anna lernt Deutsch um im Büro zu arbeiten", status: "correct"}
       - {value: "Anna lernt Deutsch um im Buero zu arbeiten", status: "correct"}
+      - {value: "Anna lernt Deutsch, um in einem Büro zu arbeiten.", status: "correct"}
+      - {value: "Anna lernt Deutsch, um in einem Buero zu arbeiten.", status: "correct"}
     feedback: "The model answer is *Anna lernt Deutsch, um im Büro zu arbeiten*."
   de.b1.unit44.lesson02.exercise01.recognize_felix_spricht_damit: {instruction: "Which German sentence means \"Felix speaks slowly so that Anna understands him.\"?", correct_option: "Felix spricht langsam, damit Anna ihn versteht.", distractors: ["Felix spricht langsam, um Anna zu verstehen.", "Anna spricht langsam, damit Felix sie versteht.", "Felix spricht langsam, damit er Anna versteht."], accepted_answers: [{value: "Felix spricht langsam, damit Anna ihn versteht.", status: "correct"}], feedback: "*damit* is required because the purpose clause's subject (Anna understanding) differs from the main clause's subject (Felix speaking)."}
   de.b1.unit44.lesson02.exercise02.recognize_felix_schreibt_damit: {instruction: "Which German sentence means \"Felix writes it down so that Anna doesn't forget it.\"?", correct_option: "Felix schreibt es auf, damit Anna es nicht vergisst.", distractors: ["Felix schreibt es auf, um es nicht zu vergessen.", "Anna schreibt es auf, damit Felix es nicht vergisst.", "Felix vergisst es, damit Anna es aufschreibt."], accepted_answers: [{value: "Felix schreibt es auf, damit Anna es nicht vergisst.", status: "correct"}], feedback: "Felix writes it down, but Anna is the one who benefits — a different-subject purpose clause needs damit."}
@@ -99,24 +104,16 @@ exercises:
     feedback: "These pieces support the surrounding purpose-clause dialogue."
   de.b1.unit44.lesson03.exercise05.order_felix_ask_warum: {instruction: "Put the words in order to say \"Why are you learning German?\"", accepted_answers: [{value: ["Warum", "lernen", "Sie", "Deutsch?"], status: "correct"}], feedback: "The correct order is *Warum lernen Sie Deutsch?*"}
   de.b1.unit44.lesson03.exercise06.write_full_purpose_contrast:
-    instruction: "As Anna, answer Felix's question \"Warum lernen Sie Deutsch?\" in two sentences: (1) a same-subject purpose with um...zu (you are learning German in order to work in an office); (2) a different-subject purpose with damit (you speak slowly so that Felix understands you well)."
+    instruction: "As Anna, answer Felix's question \"Warum lernen Sie Deutsch?\" in two sentences: (1) a same-subject purpose with um...zu (you are learning German in order to work in an office); (2) a different-subject purpose with damit, addressing Felix as Sie (you speak slowly so that he understands you well)."
     accepted_answers:
       - {value: "Ich lerne Deutsch, um im Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
       - {value: "Ich lerne Deutsch, um im Buero zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Buero zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Büro zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Buero zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Büro zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Buero zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Buero zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch um im Buero zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Büro zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Buero zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen.", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Büro zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen", status: "correct"}
-      - {value: "Ich lerne Deutsch, um im Buero zu arbeiten. Und ich spreche langsam damit Sie mich gut verstehen", status: "correct"}
+      - {value: "Ich lerne Deutsch, um im Büro zu arbeiten. Ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
+      - {value: "Ich lerne Deutsch, um im Buero zu arbeiten. Ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
+      - {value: "Ich lerne Deutsch, um in einem Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
+      - {value: "Ich lerne Deutsch, um in einem Buero zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
+      - {value: "Ich lerne Deutsch, um in einem Büro zu arbeiten. Ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
+      - {value: "Ich lerne Deutsch, um in einem Buero zu arbeiten. Ich spreche langsam, damit Sie mich gut verstehen.", status: "correct"}
     feedback: "A complete answer contrasts the same-subject um...zu purpose with the different-subject damit purpose: *Ich lerne Deutsch, um im Büro zu arbeiten. Und ich spreche langsam, damit Sie mich gut verstehen.*"
   de.b1.unit44.lesson03.exercise07.dictation_purpose_um_zu: {correct_response: "Anna lernt Deutsch, um im Büro zu arbeiten.", orthography_strict: true, feedback: "Your response must reproduce the sentence exactly."}
   de.b1.unit44.lesson03.exercise08.dictation_purpose_damit: {correct_response: "Felix spricht langsam, damit Anna ihn versteht.", orthography_strict: true, feedback: "Your response must reproduce the sentence exactly."}
