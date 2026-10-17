@@ -9,11 +9,36 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     New overlay, 2026-07-10, paired with the new fr.a1.unit07.places
     realization. Not yet fresh-context reviewed.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    accepted-answer completeness, MC answer leaks, instruction accuracy,
+    learner-visible notes. Fixes: lesson01.exercise06.speak_nearby_place
+    added bare place answers (La gare./La banque./L'école./La poste.) and
+    "... est près d'ici." forms; lesson02.exercise06.reply_cest_loin added
+    "Non, ce n'est pas loin d'ici.", "Non, c'est près d'ici.", "Non, c'est
+    tout près."; lesson02.teach.cest_loin gloss -> "Is it far from here? —
+    No, it's not far." + note on ne... pas (mirrors realization target
+    change); lesson03.exercise05.reply_as_passante instruction -> "Say no,
+    it's very close -- five minutes on foot." and added "Non, ce n'est pas
+    loin. Cinq minutes à pied." (+ comma variant);
+    lesson03.exercise06.speak_ask_directions added "Où est la gare, s'il
+    vous plaît ?" (+ no-? variant);
+    lesson03.exercise04.order_elle_est_en_face instruction corrected (was
+    backwards) -> "It (the pharmacy) is across from the bank."; MC answer
+    leaks (prompt showed the correct French option) fixed by switching to
+    English meaning options: lesson01.exercise01.select_pharmacie,
+    lesson02.exercise01.select_ou_est_la_gare,
+    lesson03.exercise03.select_who_mathieu_asks; internal course references
+    removed from notes of lesson01.teach.cafe (unit05),
+    lesson03.teach.line02 (lesson02), lesson03.teach.line03 (lesson02);
+    lesson03.teach.line06 note: De rien described as "a less formal,
+    everyday alternative" instead of "the informal equivalent". No NATIVE
+    flags open. DEFERRED: none.
 
 answer_policy:
   accent_marks: >-
@@ -72,7 +97,7 @@ teaching:
   fr.a1.unit07.lesson01.teach.cafe:
     title: "The café"
     gloss: "the café"
-    note: "*Café* is masculine; also means \"coffee\" in other contexts, as seen in unit05."
+    note: "*Café* is masculine; it also means \"coffee\" in other contexts."
     example_gloss: "The café is open all day."
   fr.a1.unit07.lesson01.teach.poste:
     title: "The post office"
@@ -106,8 +131,8 @@ teaching:
     note: "*Loin de* (far from) is the direct opposite of *près de*."
   fr.a1.unit07.lesson02.teach.cest_loin:
     title: "Ask if something is far"
-    gloss: "Is it far from here?"
-    note: "*C'est loin d'ici ?* is the natural follow-up question after being told a direction."
+    gloss: "Is it far from here? — No, it's not far."
+    note: "*C'est loin d'ici ?* is the natural follow-up question after being told a direction. To say no, put *ne... pas* around the verb: *ce n'est pas loin* (it's not far)."
 
   fr.a1.unit07.lesson03.teach.line01:
     title: "Ask a stranger for directions"
@@ -116,11 +141,11 @@ teaching:
   fr.a1.unit07.lesson03.teach.line02:
     title: "Give the location"
     gloss: "She says it's across from the bank, next to the café."
-    note: "Combines both prepositions from lesson02 in one direction-giving sentence, a realistic level of detail."
+    note: "Combines *en face de* and *à côté de* in one sentence to give a precise location. *De* + *le café* contracts to *du café*."
   fr.a1.unit07.lesson03.teach.line03:
     title: "Ask if it's far"
     gloss: "Mathieu asks if it's far from here."
-    note: "Reuses lesson02's *C'est loin d'ici ?* directly."
+    note: "The same *C'est loin d'ici ?* you learned for asking about distance."
   fr.a1.unit07.lesson03.teach.line04:
     title: "Reassure it's close"
     gloss: "She says no, it's very close -- five minutes on foot."
@@ -132,14 +157,14 @@ teaching:
   fr.a1.unit07.lesson03.teach.line06:
     title: "Respond to thanks"
     gloss: "She replies, you're welcome."
-    note: "*Je vous en prie* is a more formal \"you're welcome,\" matching the *vous* register used with a stranger; *De rien* would be the informal equivalent."
+    note: "*Je vous en prie* is a more formal \"you're welcome,\" matching the *vous* register used with a stranger; *De rien* is a less formal, everyday alternative."
 
 exercises:
   fr.a1.unit07.lesson01.exercise01.select_pharmacie:
-    instruction: "Which word means the pharmacy?"
-    correct_option: "la pharmacie"
-    distractors: ["la banque", "la gare"]
-    accepted_answers: ["la pharmacie"]
+    instruction: "What does this mean?"
+    correct_option: "the pharmacy"
+    distractors: ["the bank", "the train station"]
+    accepted_answers: ["the pharmacy"]
 
   fr.a1.unit07.lesson01.exercise02.listen_gare:
     instruction: "Listen and select the word you hear."
@@ -172,12 +197,20 @@ exercises:
       - "La banque est près de chez moi."
       - "L'école est près de chez moi."
       - "La poste est près de chez moi."
+      - "La gare."
+      - "La banque."
+      - "L'école."
+      - "La poste."
+      - "La gare est près d'ici."
+      - "La banque est près d'ici."
+      - "L'école est près d'ici."
+      - "La poste est près d'ici."
 
   fr.a1.unit07.lesson02.exercise01.select_ou_est_la_gare:
-    instruction: "Which question asks where the train station is?"
-    correct_option: "Où est la gare, s'il vous plaît ?"
-    distractors: ["C'est loin d'ici ?", "Quelle heure est-il ?"]
-    accepted_answers: ["Où est la gare, s'il vous plaît ?", "Où est la gare, s'il vous plaît"]
+    instruction: "What does this question mean?"
+    correct_option: "Where is the train station, please?"
+    distractors: ["Is it far from here?", "What time is it?"]
+    accepted_answers: ["Where is the train station, please?"]
 
   fr.a1.unit07.lesson02.exercise02.listen_ou_est_la_gare:
     instruction: "Listen and select the question you hear."
@@ -208,6 +241,9 @@ exercises:
     accepted_answers:
       - "Non, ce n'est pas loin."
       - "Non, ce n'est pas loin"
+      - "Non, ce n'est pas loin d'ici."
+      - "Non, c'est près d'ici."
+      - "Non, c'est tout près."
 
   fr.a1.unit07.lesson03.exercise01.comprehend_pharmacie_location:
     instruction: "Listen to the dialogue. Where is the pharmacy?"
@@ -222,26 +258,30 @@ exercises:
     accepted_answers: ["Five minutes on foot"]
 
   fr.a1.unit07.lesson03.exercise03.select_who_mathieu_asks:
-    instruction: "What does Mathieu say to politely get a stranger's attention?"
-    correct_option: "Excusez-moi, où est la pharmacie, s'il vous plaît ?"
-    distractors: ["C'est loin d'ici ?", "Merci beaucoup !"]
-    accepted_answers: ["Excusez-moi, où est la pharmacie, s'il vous plaît ?", "Excusez-moi, où est la pharmacie, s'il vous plaît"]
+    instruction: "What does Mathieu's question mean?"
+    correct_option: "Excuse me, where is the pharmacy, please?"
+    distractors: ["Is it far from here?", "Thank you very much!"]
+    accepted_answers: ["Excuse me, where is the pharmacy, please?"]
 
   fr.a1.unit07.lesson03.exercise04.order_elle_est_en_face:
-    instruction: "Build the passerby's answer about the bank's location relative to the pharmacy."
+    instruction: "Build the passerby's answer: It (the pharmacy) is across from the bank."
     correct_response: ["Elle", "est", "en", "face", "de", "la", "banque"]
 
   fr.a1.unit07.lesson03.exercise05.reply_as_passante:
-    instruction: "Take the passerby's role. Say it's not far, five minutes on foot."
+    instruction: "Take the passerby's role. Say no, it's very close -- five minutes on foot."
     accepted_answers:
       - "Non, c'est tout près. Cinq minutes à pied."
       - "Non, c'est tout près, cinq minutes à pied."
+      - "Non, ce n'est pas loin. Cinq minutes à pied."
+      - "Non, ce n'est pas loin, cinq minutes à pied."
 
   fr.a1.unit07.lesson03.exercise06.speak_ask_directions:
     instruction: "Politely ask where the train station is."
     accepted_answers:
       - "Excusez-moi, où est la gare, s'il vous plaît ?"
       - "Excusez-moi, où est la gare, s'il vous plaît"
+      - "Où est la gare, s'il vous plaît ?"
+      - "Où est la gare, s'il vous plaît"
 
   fr.a1.unit07.lesson02.exercise07.dictation_ou_est_la_gare:
     instruction: "Type what you hear."
