@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-ru overlay for dialogue/audio speaker match, character canon, distractors, accepted-answer completeness (incl. ё/е spelling and first-person gender), YAML boolean/jargon leaks, overlay coverage of every teaching card, and example_gloss accuracy. Fixes: ru.b1.unit46.lesson01.exercise06.write_master_prihodil — added е-spelling answer (все еще течет); ru.b1.unit46.lesson03.exercise06.write_full_complaint — prompt/instruction re-pinned to two sentences with optional greeting, added е-spelling answers and Здравствуйте-prefixed answers (ё and е) for both the хочу, чтобы and Пришлите forms; ru.b1.unit46.lesson01.teach.no_vsyo_eshcho_grammar and ru.b1.unit46.lesson02.teach.hochu_chtoby_grammar — example_gloss now translates the example sentence. NATIVE FLAG: ru.b1.unit46.lesson02.teach.hochu_chtoby_grammar / ru.b1.unit46.lesson02.teach.hochu_chtoby_vy_prislali present Я хочу, чтобы вы... as a polite request (вежливая просьба); natively it is a firm, direct demand — consider просьба/требование and a note saying it states firmly what you want. DEFERRED: ru.b1.unit46.lesson01.master_prihodil.exercise07.dictation is orthography_strict with ё in its single correct_response, so an е-typist fails; needs ё/е equivalence in canonical_text() (backend/app/review/grading.py, Codex lane, owner decision), which would also cover mixed spellings like всё еще."
 
 course:
   title: "Russian B1"
@@ -22,9 +25,9 @@ lessons:
 teaching:
   ru.b1.unit46.lesson01.teach.zdravstvuite_pozhalovatsya: {title: "Здравствуйте, я хочу пожаловаться.", gloss: "Hello, I want to complain.", note: "Opens a formal complaint politely, using вы register.", example_gloss: null}
   ru.b1.unit46.lesson01.teach.master_prihodil_vchera: {title: "Мастер приходил вчера, но кран всё ещё течёт.", gloss: "The repairman came yesterday, but the faucet is still leaking.", note: "States what already happened (the repairman's visit) and what is still wrong.", example_gloss: null}
-  ru.b1.unit46.lesson01.teach.no_vsyo_eshcho_grammar: {title: "но + всё ещё = проблема не решена", gloss: "no + vsyo yeshcho = the problem is not solved", note: "Use но (but) with всё ещё (still) to show an action happened yet the problem remains.", example_gloss: "no plus vsyo yeshcho shows the problem is not solved: the repairman came, but the faucet is still leaking."}
+  ru.b1.unit46.lesson01.teach.no_vsyo_eshcho_grammar: {title: "но + всё ещё = проблема не решена", gloss: "no + vsyo yeshcho = the problem is not solved", note: "Use но (but) with всё ещё (still) to show an action happened yet the problem remains.", example_gloss: "The repairman came, but the faucet is still leaking — the problem isn't solved."}
   ru.b1.unit46.lesson02.teach.hochu_chtoby_vy_prislali: {title: "Я хочу, чтобы вы прислали другого мастера сегодня.", gloss: "I want you to send a different repairman today.", note: "*хочу, чтобы вы* + past-tense verb form is the polite way to state what you want the other person to do.", example_gloss: null}
-  ru.b1.unit46.lesson02.teach.hochu_chtoby_grammar: {title: "хочу, чтобы вы + прошедшее время = вежливая просьба", gloss: "khochu, chtoby vy + past tense = a polite request", note: "Russian uses a past-tense verb form after чтобы even though the request is about the future.", example_gloss: "khochu chtoby vy plus past tense makes a polite request: I want you to send a different repairman."}
+  ru.b1.unit46.lesson02.teach.hochu_chtoby_grammar: {title: "хочу, чтобы вы + прошедшее время = вежливая просьба", gloss: "khochu, chtoby vy + past tense = a polite request", note: "Russian uses a past-tense verb form after чтобы even though the request is about the future.", example_gloss: "I want you to send a different repairman — this is a polite request."}
   ru.b1.unit46.lesson02.teach.prishlite_pozhaluista: {title: "Пришлите, пожалуйста, другого мастера сегодня.", gloss: "Please send a different repairman today.", note: "A direct polite imperative alternative to хочу, чтобы вы.", example_gloss: null}
   ru.b1.unit46.lesson03.teach.nastya_complaint: {title: "Nastya states the complaint", gloss: "Nastya: Hello. The repairman came yesterday, but the faucet is still leaking.", note: "Opens the complaint dialogue with вы register."}
   ru.b1.unit46.lesson03.teach.upravlyayushchii_sorry: {title: "The manager apologizes and asks", gloss: "Manager: I'm very sorry. What do you want us to do?", note: "Acknowledges the complaint and invites a concrete resolution."}
@@ -55,6 +58,7 @@ exercises:
       - {value: "Мастер приходил вчера но кран всё ещё течёт.", status: "correct"}
       - {value: "Мастер приходил вчера, но кран всё ещё течёт", status: "correct"}
       - {value: "Мастер приходил вчера но кран всё ещё течёт", status: "correct"}
+      - {value: "Мастер приходил вчера, но кран все еще течет.", status: "correct"}
     feedback: "The model answer is *Мастер приходил вчера, но кран всё ещё течёт*."
   ru.b1.unit46.lesson02.exercise01.recognize_hochu_chtoby: {instruction: "Which Russian phrase means \"I want you to send a different repairman today\"?", correct_option: "я хочу чтобы вы прислали другого мастера сегодня", distractors: ["мастер приходил вчера но кран течёт", "здравствуйте я хочу пожаловаться", "хорошо мастер придёт сегодня днём"], accepted_answers: [{value: "я хочу чтобы вы прислали другого мастера сегодня", status: "correct"}], feedback: "*хочу, чтобы вы прислали* politely states the requested resolution."}
   ru.b1.unit46.lesson02.exercise02.recognize_prishlite: {instruction: "Which Russian phrase means \"please send a different repairman today\"?", correct_option: "пришлите пожалуйста другого мастера сегодня", distractors: ["я хочу пожаловаться", "мастер приходил вчера", "мне очень жаль"], accepted_answers: [{value: "пришлите пожалуйста другого мастера сегодня", status: "correct"}], feedback: "*Пришлите, пожалуйста* is a direct polite imperative request."}
@@ -107,7 +111,7 @@ exercises:
       - {value: "Я хочу чтобы вы прислали другого мастера сегодня.", status: "correct"}
     feedback: "The model answer states the concrete resolution requested."
   ru.b1.unit46.lesson03.exercise06.write_full_complaint:
-    instruction: "Write a full complaint as Настя to the Управляющий, using вы: say the repairman came yesterday but the faucet is still leaking, then ask for a different repairman today using either хочу, чтобы вы + past tense, or the polite imperative Пришлите, пожалуйста, другого мастера сегодня."
+    instruction: "Write Настя's complaint to the Управляющий in two sentences, using вы (a greeting first is optional): say the repairman came yesterday but the faucet is still leaking, then ask for a different repairman today using either хочу, чтобы вы + past tense, or the polite imperative Пришлите, пожалуйста, другого мастера сегодня."
     accepted_answers:
       - {value: "Мастер приходил вчера, но кран всё ещё течёт. Я хочу, чтобы вы прислали другого мастера сегодня.", status: "correct"}
       - {value: "Мастер приходил вчера но кран всё ещё течёт. Я хочу чтобы вы прислали другого мастера сегодня.", status: "correct"}
@@ -115,6 +119,12 @@ exercises:
       - {value: "Мастер приходил вчера но кран всё ещё течёт. Пришлите пожалуйста другого мастера сегодня.", status: "correct"}
       - {value: "Мастер приходил вчера, но кран всё ещё течёт. Пришлите, пожалуйста, другого мастера сегодня", status: "correct"}
       - {value: "Мастер приходил вчера но кран всё ещё течёт. Пришлите пожалуйста другого мастера сегодня", status: "correct"}
+      - {value: "Мастер приходил вчера, но кран все еще течет. Я хочу, чтобы вы прислали другого мастера сегодня.", status: "correct"}
+      - {value: "Мастер приходил вчера, но кран все еще течет. Пришлите, пожалуйста, другого мастера сегодня.", status: "correct"}
+      - {value: "Здравствуйте. Мастер приходил вчера, но кран всё ещё течёт. Я хочу, чтобы вы прислали другого мастера сегодня.", status: "correct"}
+      - {value: "Здравствуйте. Мастер приходил вчера, но кран всё ещё течёт. Пришлите, пожалуйста, другого мастера сегодня.", status: "correct"}
+      - {value: "Здравствуйте. Мастер приходил вчера, но кран все еще течет. Я хочу, чтобы вы прислали другого мастера сегодня.", status: "correct"}
+      - {value: "Здравствуйте. Мастер приходил вчера, но кран все еще течет. Пришлите, пожалуйста, другого мастера сегодня.", status: "correct"}
     feedback: "A complete complaint states what happened, what is still wrong, and requests a concrete resolution — either with хочу, чтобы вы + past tense or the polite imperative Пришлите, пожалуйста."
   ru.b1.unit46.lesson01.master_prihodil.exercise07.dictation:
     instruction: "Type what you hear."

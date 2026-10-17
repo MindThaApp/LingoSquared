@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization + en-ru overlay for dialogue/audio speaker match, character canon, distractors, accepted-answer completeness (incl. ё/е spelling and first-person gender), YAML boolean/jargon leaks, overlay coverage of every teaching card, and example_gloss accuracy. Fixes: ru.b1.unit48.lesson01.exercise06.write_v_subbotu — added е-spelling answer (идем); ru.b1.unit48.lesson03.exercise06.write_full_plans — prompt/instruction pinned to exactly three given sentences (we-plan), added идем variants and the equally correct Завтра, наверное, будет дождь order; ru.b1.unit48.lesson03.exercise02.dialogue_comprehension_plans — correct_option/accepted answer now say Nastya (not both) is going to the cinema and already has tickets, matching the audio; ru.b1.unit48.lesson01.teach.present_fixed_plan_grammar and ru.b1.unit48.lesson02.teach.sobirayus_grammar — example_gloss now translates the example sentence. NATIVE FLAG: ru.b1.unit48.lesson03.teach.dima_agree 'Побегаю в субботу вместо этого.' may sound stilted ('Тогда побегаю в субботу.' more natural; Saturday is also Nastya's cinema day). DEFERRED: ru.b1.unit48.lesson01.v_subbotu_idyom.exercise07.dictation is orthography_strict with ё (идём) in its single correct_response; needs grader ё/е equivalence (backend/app/review/grading.py, Codex lane, owner decision)."
 
 course:
   title: "Russian B1"
@@ -22,9 +25,9 @@ lessons:
 teaching:
   ru.b1.unit48.lesson01.teach.v_subbotu_idyom_v_kino: {title: "В субботу мы идём в кино.", gloss: "On Saturday we're going to the cinema.", note: "Present tense used for a fixed, scheduled future arrangement.", example_gloss: null}
   ru.b1.unit48.lesson01.teach.u_nas_uzhe_est_bilety: {title: "У нас уже есть билеты.", gloss: "We already have tickets.", note: "Confirms the plan is fixed, not just an idea.", example_gloss: null}
-  ru.b1.unit48.lesson01.teach.present_fixed_plan_grammar: {title: "настоящее время = точный план", gloss: "present tense = a fixed plan", note: "Russian uses the present tense of a motion verb (like идём) to describe a fixed, scheduled future arrangement.", example_gloss: "Present tense marks a fixed plan: on Saturday we're going to the cinema."}
+  ru.b1.unit48.lesson01.teach.present_fixed_plan_grammar: {title: "настоящее время = точный план", gloss: "present tense = a fixed plan", note: "Russian uses the present tense of a motion verb (like идём) to describe a fixed, scheduled future arrangement.", example_gloss: "On Saturday we're going to the cinema — this is the present tense for a fixed plan."}
   ru.b1.unit48.lesson02.teach.sobirayus_nachat_begat: {title: "Я собираюсь начать бегать по утрам.", gloss: "I'm planning to start running in the mornings.", note: "*собираюсь* + infinitive expresses an intention, less fixed than a scheduled arrangement.", example_gloss: null}
-  ru.b1.unit48.lesson02.teach.sobirayus_grammar: {title: "собираюсь + инфинитив = намерение", gloss: "sobirayus + infinitive = an intention", note: "Use собираюсь plus an infinitive to state a personal intention or plan you have decided on.", example_gloss: "sobirayus plus infinitive expresses an intention: I'm planning to start running in the mornings."}
+  ru.b1.unit48.lesson02.teach.sobirayus_grammar: {title: "собираюсь + инфинитив = намерение", gloss: "sobirayus + infinitive = an intention", note: "Use собираюсь plus an infinitive to state a personal intention or plan you have decided on.", example_gloss: "I'm planning to start running in the mornings — this is an intention."}
   ru.b1.unit48.lesson02.teach.mozhet_byt_ty_tozhe: {title: "Может быть, ты тоже начнёшь бегать?", gloss: "Maybe you'll start running too?", note: "Invites the listener to share the intention.", example_gloss: null}
   ru.b1.unit48.lesson03.teach.nastya_plan: {title: "Nastya states the fixed plan", gloss: "Nastya: On Saturday we're going to the cinema. We already have tickets.", note: "Opens with a fixed, scheduled arrangement."}
   ru.b1.unit48.lesson03.teach.dima_intention: {title: "Dima states his intention", gloss: "Dima: Great! And I'm planning to start running in the mornings.", note: "Contrasts a personal intention with Nastya's fixed plan."}
@@ -53,6 +56,7 @@ exercises:
     accepted_answers:
       - {value: "В субботу мы идём в кино.", status: "correct"}
       - {value: "В субботу мы идём в кино", status: "correct"}
+      - {value: "В субботу мы идем в кино.", status: "correct"}
     feedback: "The model answer is *В субботу мы идём в кино*."
   ru.b1.unit48.lesson02.exercise01.recognize_sobirayus: {instruction: "Which Russian phrase means \"I'm planning to start running in the mornings\"?", correct_option: "я собираюсь начать бегать по утрам", distractors: ["в субботу мы идём в кино", "наверное завтра будет дождь", "может быть ты тоже начнёшь"], accepted_answers: [{value: "я собираюсь начать бегать по утрам", status: "correct"}], feedback: "*собираюсь* + infinitive states an intention."}
   ru.b1.unit48.lesson02.exercise02.recognize_mozhet_byt: {instruction: "Which Russian phrase means \"maybe you'll start running too?\"", correct_option: "может быть ты тоже начнёшь бегать", distractors: ["я собираюсь начать бегать", "у нас уже есть билеты", "наверное завтра будет дождь"], accepted_answers: [{value: "может быть ты тоже начнёшь бегать", status: "correct"}], feedback: "*Может быть* invites the listener to share the intention."}
@@ -79,9 +83,9 @@ exercises:
   ru.b1.unit48.lesson03.exercise01.choose_complete_plans: {instruction: "Which answer states a fixed plan, an intention, AND an uncertain prediction with a certainty marker, all in one?", correct_option: "В субботу мы идём в кино. Я собираюсь начать бегать по утрам. Наверное, завтра будет дождь.", distractors: ["Мне надо было взять зонт.", "Я хочу, чтобы вы прислали другого мастера.", "Тебе стоит меньше пить кофе вечером."], accepted_answers: [{value: "В субботу мы идём в кино. Я собираюсь начать бегать по утрам. Наверное, завтра будет дождь.", status: "correct"}], feedback: "The correct answer combines a fixed plan, an intention, and an uncertain prediction."}
   ru.b1.unit48.lesson03.exercise02.dialogue_comprehension_plans:
     instruction: "Listen to the dialogue. What is Nastya's fixed plan, what is Dima's intention, and what does Nastya predict about the weather?"
-    correct_option: "Nastya and Dima are going to the cinema on Saturday; Dima intends to start running in the mornings; Nastya predicts it'll probably rain tomorrow"
+    correct_option: "Nastya is going to the cinema on Saturday and already has tickets; Dima intends to start running in the mornings; Nastya predicts it'll probably rain tomorrow"
     distractors: ["Nastya intends to start running; Dima has a fixed plan to go to the cinema; Dima predicts sunshine tomorrow", "They are going running on Saturday; Nastya intends to buy tickets; Dima predicts rain today", "Dima has a fixed plan to fix the faucet; Nastya intends to complain; they predict it will be sunny"]
-    accepted_answers: [{value: "Nastya and Dima are going to the cinema on Saturday; Dima intends to start running in the mornings; Nastya predicts it'll probably rain tomorrow", status: "correct"}]
+    accepted_answers: [{value: "Nastya is going to the cinema on Saturday and already has tickets; Dima intends to start running in the mornings; Nastya predicts it'll probably rain tomorrow", status: "correct"}]
     feedback: "The dialogue distinguishes a fixed plan, a personal intention, and an uncertain prediction."
   ru.b1.unit48.lesson03.exercise03.match_dialogue_plans:
     instruction: "Match each Russian phrase to its meaning."
@@ -103,10 +107,13 @@ exercises:
       - {value: "А я собираюсь начать бегать по утрам", status: "correct"}
     feedback: "The model answer states an intention with собираюсь + infinitive."
   ru.b1.unit48.lesson03.exercise06.write_full_plans:
-    instruction: "Write three sentences: a fixed plan using the present tense that you're going to the cinema on Saturday; an intention using собираюсь + infinitive that you're planning to start running in the mornings; and an uncertain prediction using наверное + future tense that it'll probably rain tomorrow."
+    instruction: "Write exactly these three sentences: On Saturday we're going to the cinema (fixed plan, present tense). I'm planning to start running in the mornings (собираюсь + infinitive). It'll probably rain tomorrow (наверное + future tense)."
     accepted_answers:
       - {value: "В субботу мы идём в кино. Я собираюсь начать бегать по утрам. Наверное, завтра будет дождь.", status: "correct"}
       - {value: "В субботу мы идём в кино. Я собираюсь начать бегать по утрам. Наверное завтра будет дождь.", status: "correct"}
+      - {value: "В субботу мы идем в кино. Я собираюсь начать бегать по утрам. Наверное, завтра будет дождь.", status: "correct"}
+      - {value: "В субботу мы идём в кино. Я собираюсь начать бегать по утрам. Завтра, наверное, будет дождь.", status: "correct"}
+      - {value: "В субботу мы идем в кино. Я собираюсь начать бегать по утрам. Завтра, наверное, будет дождь.", status: "correct"}
     feedback: "A complete answer distinguishes the fixed plan, the intention, and the uncertain prediction."
   ru.b1.unit48.lesson01.v_subbotu_idyom.exercise07.dictation:
     instruction: "Type what you hear."
