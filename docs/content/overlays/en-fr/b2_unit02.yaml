@@ -6,7 +6,7 @@ target_language: fr
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed (DRAFT). Confirm the English glosses
     correctly rank certainty (devoir > pouvoir affirmative > sans doute /
@@ -26,6 +26,40 @@ review:
     an irregular past participle, easily confused with "du" the
     partitive) has no direct English structural equivalent -- flagged in
     lesson04. No sibling-direction file (fr-en b2) was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked realization + en-fr overlay for unit02 (answer keys,
+    gender/synonym variants, matching-pair discriminability,
+    listen/dialogue distractors vs audio, dialogue cards vs audio
+    script, Mathieu canon (pâtisserie peer, Lyon -- no conflict),
+    course-scoped token coverage, YAML booleans, learner-visible
+    notes). Fixes: lesson01.exercise03.match_certainty_words: 'sans
+    doute'/'almost certainly' pair dropped (contradicted the teaching
+    gloss 'no doubt / probably' and was interchangeable with
+    probablement) -> 'en retard'/late in pairs, tested_text and
+    overlay value; lesson01.teach.sans_doute note corrected (everyday
+    sans doute = 'probably', not 'undoubtedly'; sans aucun doute for
+    certainty) and grammar_certitude note scale now 'probablement /
+    sans doute (about equally strong)'; lesson01.exercise05 accepts
+    'Mathieu est sans doute en retard'; lesson01.exercise06 accepts
+    'Peut-être qu'il est en retard'; lesson05.exercise01 'What is one
+    thing Inès speculates...' -> 'What is one speculation the text
+    makes...' and lesson05.exercise04 'How do Inès and her colleague
+    finally learn...' -> 'How is the real reason finally learned?' /
+    'Mathieu calls.' (Inès never appears in the reading);
+    lesson05.exercise01-04 reading_comprehension prompts now carry the
+    French passage as the first target_block; lesson05.exercise06
+    accepts 'Son collègue pense...' (English 'his colleague' does not
+    pin gender); lesson04.exercise05/07 accept 'manqué le bus';
+    lesson03.exercise06 pinned 'using pouvoir' and
+    lesson06.exercise05/06 pinned 'using devoir, pouvoir and avoir dû'
+    (Il est peut-être dans les embouteillages was an ungraded valid
+    'simple possibility'). NATIVE FLAGS: 'Il peut être dans les
+    embouteillages' for a specific present possibility ('Il est
+    peut-être...' / 'Il se peut qu'il soit...' are more idiomatic);
+    grammar_certitude French target still lists sans doute above
+    probablement; example 'Sans doute, il arrive bientôt.' ('Il arrive
+    sans doute bientôt' more natural). DEFERRED: none.
 
 course:
   title: French B2
@@ -75,7 +109,7 @@ teaching:
   fr.b2.unit02.lesson01.teach.sans_doute:
     title: "no doubt / probably"
     gloss: "no doubt / probably"
-    note: "*Sans doute* (literally 'without doubt') is a bit stronger than *probablement* in everyday use, despite the literal wording sounding more certain than it is."
+    note: "Despite its literal meaning ('without doubt'), everyday *sans doute* means 'probably' -- about as strong as *probablement*, not 'undoubtedly'. To say 'undoubtedly', French uses *sans aucun doute*."
     example_gloss: "No doubt, he'll arrive soon."
   fr.b2.unit02.lesson01.teach.certainement:
     title: certainly
@@ -96,7 +130,7 @@ teaching:
   fr.b2.unit02.lesson01.teach.grammar_certitude:
     title: "Peut-être, probablement, sans doute, certainement: from least to most certain."
     gloss: "Peut-être, probablement, sans doute, certainement: from least to most certain."
-    note: "This unit's certainty scale, weakest to strongest: *peut-être* (bare guess) < *probablement* < *sans doute* < *certainement* (near total certainty). The grammar constructions in later lessons (devoir, pouvoir) layer onto this same scale."
+    note: "This unit's certainty scale, weakest to strongest: *peut-être* (bare guess) < *probablement* / *sans doute* (about equally strong) < *certainement* (near total certainty). The grammar constructions in later lessons (devoir, pouvoir) layer onto this same scale."
 
   fr.b2.unit02.lesson02.teach.devoir:
     title: "he must be"
@@ -247,7 +281,7 @@ exercises:
   fr.b2.unit02.lesson01.exercise03.match_certainty_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {il: he, "Il n'est pas encore là.": "He is not here yet.", "peut-être": "maybe / perhaps", probablement: probably, "sans doute": "almost certainly (more assertive than 'probably')", certainement: certainly, deviner: "to guess"}
+      - value: {il: he, "Il n'est pas encore là.": "He is not here yet.", "peut-être": "maybe / perhaps", probablement: probably, "en retard": late, certainement: certainly, deviner: "to guess"}
         status: correct
     feedback: "These are this lesson's certainty-marking words."
   fr.b2.unit02.lesson01.exercise04.order_claim:
@@ -259,11 +293,13 @@ exercises:
     instruction: "Translate into French: Mathieu is probably late."
     accepted_answers:
       - {value: "Mathieu est probablement en retard", status: correct}
+      - {value: "Mathieu est sans doute en retard", status: correct}
     feedback: "Mathieu est probablement en retard means Mathieu is probably late."
   fr.b2.unit02.lesson01.exercise06.speak_peut_etre:
     instruction: "Say aloud in French: He is maybe late."
     accepted_answers:
       - {value: "Il est peut-être en retard", status: correct}
+      - {value: "Peut-être qu'il est en retard", status: correct}
     feedback: "Il est peut-être en retard means he is maybe late."
   fr.b2.unit02.lesson01.exercise07.write_pas_encore_la:
     instruction: "Write in French: Mathieu is not here yet."
@@ -350,7 +386,7 @@ exercises:
       - {value: "Il ne peut pas être malade", status: correct}
     feedback: "Il ne peut pas être malade means he cannot be sick."
   fr.b2.unit02.lesson03.exercise06.speak_embouteillages:
-    instruction: "Say aloud in French: He might be in traffic."
+    instruction: "Say aloud in French, using pouvoir: He might be in traffic."
     accepted_answers:
       - {value: "Il peut être dans les embouteillages", status: correct}
     feedback: "Il peut être dans les embouteillages means he might be in traffic."
@@ -388,6 +424,7 @@ exercises:
     instruction: "Translate into French: He may have missed the bus."
     accepted_answers:
       - {value: "Il a peut-être raté le bus", status: correct}
+      - {value: "Il a peut-être manqué le bus", status: correct}
     feedback: "Il a peut-être raté le bus means he may have missed the bus."
   fr.b2.unit02.lesson04.exercise06.write_a_du_oublier:
     instruction: "Write in French: He must have forgotten his phone."
@@ -398,10 +435,11 @@ exercises:
     instruction: "Write in French: He may have missed the bus because of the traffic."
     accepted_answers:
       - {value: "Il a peut-être raté le bus à cause de la circulation", status: correct}
+      - {value: "Il a peut-être manqué le bus à cause de la circulation", status: correct}
     feedback: "Il a peut-être raté le bus à cause de la circulation means he may have missed the bus because of the traffic."
 
   fr.b2.unit02.lesson05.exercise01.read_speculation_one:
-    instruction: "What is one thing Inès speculates about Mathieu's absence?"
+    instruction: "What is one speculation the text makes about Mathieu's absence?"
     correct_option: "That he is maybe late."
     distractors: ["That he quit his job.", "That he is on vacation.", "That he is angry with her."]
     accepted_answers: [{value: "That he is maybe late.", status: correct}]
@@ -419,10 +457,10 @@ exercises:
     accepted_answers: [{value: "His bike got a flat tire on the way.", status: correct}]
     feedback: "The confirmed fact: son vélo a crevé en chemin (his bike got a flat tire on the way)."
   fr.b2.unit02.lesson05.exercise04.read_resolution:
-    instruction: "How do Inès and her colleague finally learn the real reason?"
-    correct_option: "Mathieu calls them."
+    instruction: "How is the real reason finally learned?"
+    correct_option: "Mathieu calls."
     distractors: ["They see him arrive.", "A neighbor tells them.", "They never find out."]
-    accepted_answers: [{value: "Mathieu calls them.", status: correct}]
+    accepted_answers: [{value: "Mathieu calls.", status: correct}]
     feedback: "Mathieu appelle (Mathieu calls) -- that's how they learn the real reason."
   fr.b2.unit02.lesson05.exercise05.match_reading_words:
     instruction: "Match each word or phrase with its meaning."
@@ -434,6 +472,7 @@ exercises:
     instruction: "Translate into French: His colleague thinks he missed the bus."
     accepted_answers:
       - {value: "Sa collègue pense qu'il a raté le bus", status: correct}
+      - {value: "Son collègue pense qu'il a raté le bus", status: correct}
     feedback: "Sa collègue pense qu'il a raté le bus means his colleague thinks he missed the bus."
   fr.b2.unit02.lesson05.exercise07.write_ce_matin:
     instruction: "Write in French: Mathieu isn't here yet this morning."
@@ -465,13 +504,13 @@ exercises:
       - {value: "Il a peut-être raté le bus à cause de la circulation", status: correct}
     feedback: "Il a peut-être raté le bus à cause de la circulation means he may have missed the bus because of the traffic."
   fr.b2.unit02.lesson06.exercise05.speak_certainty_scale:
-    instruction: "Speculate aloud in French at three different certainty levels about why Mathieu is absent: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction)."
+    instruction: "Speculate aloud in French at three different certainty levels about why Mathieu is absent, using devoir, pouvoir and avoir dû: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction)."
     accepted_answers:
       - {value: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone", status: correct}
       - {value: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone.", status: correct}
     feedback: "Three levels of certainty: Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone."
   fr.b2.unit02.lesson06.exercise06.write_certainty_scale:
-    instruction: "Write in French three speculations about why Mathieu is absent, at three different certainty levels: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction)."
+    instruction: "Write in French three speculations about why Mathieu is absent, at three different certainty levels, using devoir, pouvoir and avoir dû: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction)."
     accepted_answers:
       - {value: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone.", status: correct}
       - {value: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone", status: correct}
