@@ -20,7 +20,7 @@ generation_provenance:
     an exercise's tested_text/prompt). No sibling-direction file
     (es-en) was consulted.
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-Spanish confirmation needed. This is a DRAFT. Priority
     checks: (1) lesson01's register note that quizás/tal vez pair with
@@ -57,6 +57,42 @@ review:
     precedent. All vocabulary is introduced self-contained within this
     file, continuing the token pool established in unit01 (same course,
     cumulative per docs/content/CLAUDE.md).
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked realization + en-es overlay for unit02. Fixes:
+    gender-neutral prompts now accept feminine answers:
+    lesson01.exercise07 '¿Donde esta tu amiga?', lesson01.exercise05
+    'A lo mejor tu amiga no contesta el telefono', lesson02.exercise05
+    'Mi amiga debe de estar ocupada', lesson03.exercise06 'No puede
+    ser que este ocupada', lesson03.exercise07 'Quizas esta ocupada,
+    ...' (tokens amiga/ocupada introduced on lesson01.teach.amigo /
+    lesson02.teach.ocupado);
+    lesson01.exercise03.match_certainty_words: 'a lo mejor' pair
+    dropped (synonym of quizas, register-only distinction), quizas
+    right side now 'maybe / perhaps';
+    lesson03.exercise03.match_possibility_words: puede que = 'it may
+    be that', es posible que = 'it is possible that' (was
+    register-only), with lesson03.exercise07 (now pinned 'using quizas
+    and puede que') and lesson04.exercise05 English aligned to 'it may
+    be that'; lesson04.exercise07.speak_past_contrast instruction
+    pinned to debe de haber + puede que haya ('or may have left
+    late'); lesson02.exercise03 verdad = 'truth (ser verdad = to be
+    true)'; lesson01.teach.amigo note replaced (was describing course
+    construction); notes citing internal lesson ids / 'this file's
+    register' rewritten in plain wording (quizas, claim_model x2,
+    grammar_deduccion, puede_que, lesson03 claim_model,
+    grammar_suposicion, puede_que_haya, atrapada);
+    lesson05.exercise01-04 reading_comprehension prompts now carry the
+    Spanish passage as the first target_block. NATIVE FLAGS:
+    deber_de_estar note says deber without de is never deduction (RAE
+    accepts deber + inf. for supposition); lesson title '¿Que tan
+    seguro estas?' is Latin-American (Spain: '¿Como de seguro
+    estas?'). DEFERRED: lesson06 dialogue_elena_explanation + audio
+    es.b2.audio.especulacion.dialogo.donde_esta.01 -- Elena hedges
+    about her own lateness ('Es posible que haya perdido el autobus')
+    and Mateo's 'Lo sabia' does not match his guesses; needs a text
+    rewrite with audio, plus exercise03 prompt/feedback and exercise04
+    word_order follow-up.
 
 course:
   realization_key: es.b2
@@ -143,7 +179,7 @@ units:
           - content_key: es.b2.unit02.lesson01.teach.amigo
             kind: vocabulary
             target: {text: "tu amigo", language_code: es, direction: ltr}
-            introduced_tokens: [amigo, tu]
+            introduced_tokens: [amigo, amiga, tu]
             example: {text: "Tu amigo no contesta el teléfono.", language_code: es, direction: ltr}
           - content_key: es.b2.unit02.lesson01.teach.reunion
             kind: vocabulary
@@ -174,11 +210,10 @@ units:
             prompt: {target_blocks: []}
           - content_key: es.b2.unit02.lesson01.exercise03.match_certainty_words
             type: matching_pairs
-            tested_text: "quizás a lo mejor seguramente seguro que tu amigo una reunión no contesta el teléfono"
+            tested_text: "quizás seguramente seguro que tu amigo una reunión no contesta el teléfono"
             prompt: {target_blocks: []}
             pairs:
-              - {left: quizás, right: "maybe (neutral)"}
-              - {left: "a lo mejor", right: "maybe (colloquial)"}
+              - {left: quizás, right: "maybe / perhaps"}
               - {left: seguramente, right: "most likely / probably"}
               - {left: "seguro que", right: "for sure (near-certain)"}
               - {left: "tu amigo", right: "your friend"}
@@ -223,7 +258,7 @@ units:
           - content_key: es.b2.unit02.lesson02.teach.ocupado
             kind: vocabulary
             target: {text: "ocupado", language_code: es, direction: ltr}
-            introduced_tokens: [ocupado]
+            introduced_tokens: [ocupado, ocupada]
             example: {text: "Mi amigo debe de estar ocupado.", language_code: es, direction: ltr}
           - content_key: es.b2.unit02.lesson02.teach.trafico
             kind: vocabulary
@@ -273,7 +308,7 @@ units:
               - {left: "el tráfico", right: traffic}
               - {left: haber, right: "there to be (existential)"}
               - {left: "el médico", right: "the doctor"}
-              - {left: verdad, right: "true"}
+              - {left: verdad, right: "truth (ser verdad = to be true)"}
           - content_key: es.b2.unit02.lesson02.exercise04.order_trafico
             type: word_order
             tested_text: "Debe de haber mucho tráfico"
@@ -351,8 +386,8 @@ units:
             tested_text: "puede que es posible que no puede ser que esté tenga una excusa"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "puede que", right: "maybe, in casual everyday talk"}
-              - {left: "es posible que", right: "it is possible that, in a more formal or measured tone"}
+              - {left: "puede que", right: "it may be that"}
+              - {left: "es posible que", right: "it is possible that"}
               - {left: "no puede ser que", right: "it can't be that"}
               - {left: esté, right: "is (subjunctive of estar)"}
               - {left: tenga, right: "has (subjunctive of tener)"}
@@ -373,7 +408,7 @@ units:
           - content_key: es.b2.unit02.lesson03.exercise07.speak_contrast
             type: speak_response
             tested_text: "Quizás está ocupado, pero puede que esté en una reunión"
-            prompt: {target_blocks: [{text: "Say aloud in Spanish: Maybe he or she is busy, but it's possible that he or she is in a meeting.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in Spanish, using quizás and puede que: Maybe he or she is busy, but it may be that he or she is in a meeting.", language_code: en, direction: ltr}]}
 
       - content_key: es.b2.unit02.lesson04.especular_pasado
         title: "Especular sobre el pasado"
@@ -443,7 +478,7 @@ units:
           - content_key: es.b2.unit02.lesson04.exercise05.translate_haya_salido
             type: translation
             tested_text: "Puede que haya salido tarde"
-            prompt: {target_blocks: [{text: "It's possible that he or she left late.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "It may be that he or she left late.", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit02.lesson04.exercise06.write_haber_perdido
             type: writing_prompt
             tested_text: "Debe de haber perdido el tren"
@@ -451,7 +486,7 @@ units:
           - content_key: es.b2.unit02.lesson04.exercise07.speak_past_contrast
             type: speak_response
             tested_text: "Debe de haber perdido el tren, o puede que haya salido tarde"
-            prompt: {target_blocks: [{text: "Say aloud in Spanish: He or she must have missed the train, or maybe left late.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in Spanish, using debe de haber and puede que haya: He or she must have missed the train, or may have left late.", language_code: en, direction: ltr}]}
 
       - content_key: es.b2.unit02.lesson05.hecho_o_especulacion
         title: "¿Hecho o especulación?"
@@ -474,19 +509,19 @@ units:
           - content_key: es.b2.unit02.lesson05.exercise01.read_guess
             type: reading_comprehension
             tested_text: "atrapado en el tráfico"
-            prompt: {target_blocks: [{text: "What is one guess about why the friend hasn't answered?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Tu amigo no contesta el teléfono. No sabes por qué. Quizás está atrapado en el tráfico. Tal vez tiene una reunión. Debe de haber salido tarde, porque normalmente es puntual. Puede que haya perdido el tren. Es posible que esté ocupado. Nadie sabe la verdad, pero seguramente llega pronto.", language_code: es, direction: ltr}, {text: "What is one guess about why the friend hasn't answered?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit02.lesson05.exercise02.read_deduction
             type: reading_comprehension
             tested_text: "debe de haber salido tarde"
-            prompt: {target_blocks: [{text: "Which sentence expresses a deduction rather than just a guess?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Tu amigo no contesta el teléfono. No sabes por qué. Quizás está atrapado en el tráfico. Tal vez tiene una reunión. Debe de haber salido tarde, porque normalmente es puntual. Puede que haya perdido el tren. Es posible que esté ocupado. Nadie sabe la verdad, pero seguramente llega pronto.", language_code: es, direction: ltr}, {text: "Which sentence expresses a deduction rather than just a guess?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit02.lesson05.exercise03.read_possibility
             type: reading_comprehension
             tested_text: "puede que haya perdido el tren"
-            prompt: {target_blocks: [{text: "Which sentence expresses a possibility about a past cause?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Tu amigo no contesta el teléfono. No sabes por qué. Quizás está atrapado en el tráfico. Tal vez tiene una reunión. Debe de haber salido tarde, porque normalmente es puntual. Puede que haya perdido el tren. Es posible que esté ocupado. Nadie sabe la verdad, pero seguramente llega pronto.", language_code: es, direction: ltr}, {text: "Which sentence expresses a possibility about a past cause?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit02.lesson05.exercise04.read_uncertain_conclusion
             type: reading_comprehension
             tested_text: "nadie sabe la verdad"
-            prompt: {target_blocks: [{text: "What does the text say about how certain we can be?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Tu amigo no contesta el teléfono. No sabes por qué. Quizás está atrapado en el tráfico. Tal vez tiene una reunión. Debe de haber salido tarde, porque normalmente es puntual. Puede que haya perdido el tren. Es posible que esté ocupado. Nadie sabe la verdad, pero seguramente llega pronto.", language_code: es, direction: ltr}, {text: "What does the text say about how certain we can be?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit02.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "atrapado normalmente puntual nadie llega pronto"
