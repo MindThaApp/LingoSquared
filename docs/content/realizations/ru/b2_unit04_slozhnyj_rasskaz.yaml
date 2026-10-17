@@ -28,26 +28,8 @@ generation_provenance:
     open self-expression, so the learner is reproducing a fixed
     third-party account rather than choosing their own speaker gender.
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Fresh-context review needed. This is a DRAFT. Priority checks for the
-    reviewer: (1) naturalness of the aspect choice for background
-    (imperfective: "я ждал", "шёл дождь") versus the single interrupting
-    foreground event (perfective: "пришёл", "оказался"); (2) the
-    пока/когда/как только distinction taught across lesson01/lesson03 --
-    confirm пока (ongoing background) vs когда (a single point) vs как
-    только (immediate sequence) each read naturally in their model
-    sentences and that a native would not accept когда for the ongoing
-    "пока я ждал" context; (3) that накануне вечером correctly reads as
-    the pre-past time marker (the evening BEFORE the morning being
-    narrated), and that Russian's lack of a grammatical pluperfect is
-    handled naturally by this adverbial + perfective aspect rather than
-    reading as ambiguous about relative time; (4) confirm the explicit
-    "this is Dima's account" framing on every first-person exercise
-    (lesson01-06) actually reads as clearly third-party in the compiled
-    instruction text, not just in this authoring note; (5) confirm
-    "переполнен", "разряжен", "оказался переполнен", and "не успел сесть"
-    read as natural everyday spoken register.
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fourth Russian B2 unit; first narrative / shifting-time-reference
     unit. Targets the CEFR B2 narrative outcome
@@ -68,6 +50,42 @@ review:
     passage (Dima's message to Nastya) that requires identifying the
     earliest event; L06 the culminating dialogue where Dima recounts the
     full story to Nastya. No sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-safety of free-text accepted answers against the
+    strict Cyrillic grader (no ё/е equivalence, em dash kept as a token,
+    3-letter шёл gets no spoken tolerance), prompt/key determinacy,
+    timeline coherence, reading-question answerability and
+    learner-visible notes. Fixes: lesson03.exercise07.speak_full_lesson
+    tested_text + keys: the em dash removed from the spoken answer ("не
+    успел — автобус" -> "не успел, автобус"), since a speech transcript
+    can never contain it; lesson06.exercise05.speak_full_narrative
+    dash-variant keys dropped (comma variants remain); е-spelling
+    variants added for every free-text accepted answer containing ё
+    (lesson01.exercise05/06/07, lesson03.exercise07,
+    lesson04.exercise07, lesson06.exercise05/06);
+    lesson05.exercise06.translate_prishlos_zhdat also accepts "Мне
+    пришлось ждать следующий" and the genitive "(Мне) пришлось ждать
+    следующего"; lesson04.exercise05.translate_snachala also accepts
+    "... зарядить свой телефон"; reading passage added to the
+    target_blocks of all four lesson05 reading_comprehension prompts;
+    overlay notes for lesson02 teach.claim_model, lesson03
+    teach.grammar_tri_svyazki and lesson04 teach.grammar_polnyj_rasskaz
+    no longer cite internal lesson numbers or task structure. NATIVE
+    FLAGS: "Накануне вечером" in a same-day conversation ("Вчера
+    вечером" more natural); dialogue "Когда он наконец пришёл" --
+    nearest masculine antecedent is дождь ("Когда автобус наконец
+    пришёл" safer, needs audio change); reading "не успел сесть" vs "не
+    смог сесть / не влез"; genitive/word-order variants ("ждал
+    автобуса", "не увидел сообщения", "Автобус уже был переполнен") not
+    accepted (systemic). DEFERRED: lesson03
+    teach.claim_model/claim_model_2 timeline contradiction ("Как только
+    автобус пришёл, я вошёл внутрь" followed by "Но сегодня я не успел")
+    -- a rewrite needs the kak_tolko_voshel audio asset and listen ex02
+    / word_order ex04 / matching ex03 / speak ex07 changed, owner/native
+    decision; dictation ё/е (lesson01.exercise08) and the grader-level
+    ё/е fold + dash stripping (backend/app/review/grading.py,
+    Codex/owner decision).
 
 course:
   realization_key: ru.b2
@@ -378,7 +396,7 @@ units:
             prompt: {target_blocks: [{text: "This is Dima's account. Write in Russian: The bus was already overcrowded.", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit04.lesson03.exercise07.speak_full_lesson
             type: speak_response
-            tested_text: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел — автобус был уже переполнен"
+            tested_text: "Как только автобус пришёл, я вошёл внутрь. Но сегодня я не успел, автобус был уже переполнен"
             prompt: {target_blocks: [{text: "This is Dima's account. Say aloud in Russian: As soon as the bus came, I got on. But today I didn't make it in time — the bus was already overcrowded.", language_code: en, direction: ltr}]}
 
       - content_key: ru.b2.unit04.lesson04.vsya_istoriya_po_poryadku
@@ -471,19 +489,19 @@ units:
           - content_key: ru.b2.unit04.lesson05.exercise01.read_earliest_event
             type: reading_comprehension
             tested_text: "накануне вечером я забыл зарядить телефон"
-            prompt: {target_blocks: [{text: "Which event happened earliest, even before the morning being described?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Настя, извини за опоздание! Накануне вечером я забыл зарядить телефон, поэтому утром он был разряжен. Пока я ждал автобус, шёл дождь. Когда автобус наконец пришёл, он оказался переполнен, и я не успел сесть. Пришлось ждать следующий. В итоге я опоздал на работу почти на час.", language_code: ru, direction: ltr}, {text: "Which event happened earliest, even before the morning being described?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit04.lesson05.exercise02.read_background
             type: reading_comprehension
             tested_text: "пока я ждал автобус шёл дождь"
-            prompt: {target_blocks: [{text: "Which sentence describes the ongoing background scene, not a single event?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Настя, извини за опоздание! Накануне вечером я забыл зарядить телефон, поэтому утром он был разряжен. Пока я ждал автобус, шёл дождь. Когда автобус наконец пришёл, он оказался переполнен, и я не успел сесть. Пришлось ждать следующий. В итоге я опоздал на работу почти на час.", language_code: ru, direction: ltr}, {text: "Which sentence describes the ongoing background scene, not a single event?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit04.lesson05.exercise03.read_foreground_interrupt
             type: reading_comprehension
             tested_text: "когда автобус наконец пришёл он оказался переполнен"
-            prompt: {target_blocks: [{text: "Which single event interrupts the background and moves the story forward?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Настя, извини за опоздание! Накануне вечером я забыл зарядить телефон, поэтому утром он был разряжен. Пока я ждал автобус, шёл дождь. Когда автобус наконец пришёл, он оказался переполнен, и я не успел сесть. Пришлось ждать следующий. В итоге я опоздал на работу почти на час.", language_code: ru, direction: ltr}, {text: "Which single event interrupts the background and moves the story forward?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit04.lesson05.exercise04.read_outcome
             type: reading_comprehension
             tested_text: "в итоге я опоздал на работу почти на час"
-            prompt: {target_blocks: [{text: "What was the final outcome of the whole chain of events?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Настя, извини за опоздание! Накануне вечером я забыл зарядить телефон, поэтому утром он был разряжен. Пока я ждал автобус, шёл дождь. Когда автобус наконец пришёл, он оказался переполнен, и я не успел сесть. Пришлось ждать следующий. В итоге я опоздал на работу почти на час.", language_code: ru, direction: ltr}, {text: "What was the final outcome of the whole chain of events?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit04.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "извини опоздание оказался следующий почти час"
