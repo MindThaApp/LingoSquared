@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Ninth en-pl B1 overlay, written for pl/b1_unit09_plany.yaml (schema_
     version 1.1, §19 format from the start). No sibling-direction overlay
@@ -22,6 +22,31 @@ review:
     token against the realization's own pairs/word_bank. No stray YAML
     boolean coercion. Pending fresh-context review per AUTHORING_GUIDE
     §9; not self-certified.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    (1) missing-accepted-answer -- lesson01.exercise08 add "Zamierzam się
+    nauczyć pływać." / "Ja zamierzam nauczyć się pływać."; lesson01.
+    exercise09 + lesson04.exercise09 add "Zamierzam się nauczyć pływać w
+    tym roku." / "W tym roku zamierzam nauczyć się pływać."; lesson02.
+    exercise08 add "Chyba nie pójdziemy na spacer." (chyba is taught as
+    "probably" too); lesson02.exercise09 add "Prawdopodobnie będzie padać
+    w weekend." / "W weekend chyba będzie padać."; lesson03.exercise10
+    add the chyba/prawdopodobnie slot-swap variants (the instruction says
+    "probably" twice, either taught marker fits each slot); lesson03.
+    exercise11 add "Mam wizytę u dentysty w poniedziałek."; lesson04.
+    exercise08 add "Jadę do rodziców w przyszłym tygodniu." (the unit's
+    own teaching example uses this order). (2) underdetermined-prompt --
+    lesson04.exercise07 "write about your future plans" open prompt
+    graded against fixed strings -> instruction now names the three exact
+    sentences (+ the teaching-example word order variants accepted);
+    lesson04.exercise08 "answer with your fixed arrangement" (the dentist
+    appointment is an equally valid fixed arrangement) -> now names
+    "going to your parents'". (3) second-correct-distractor --
+    lesson03.exercise03 distractor "he wants to watch a movie" -> "he
+    intends to learn to drive" (Marek agrees to watch a movie later in
+    the same dialogue, so the distractor was arguably true of him).
+    NATIVE CHECK: "w weekend" is glossed "this weekend" throughout --
+    confirm it reads as the coming weekend here (vs. "w ten weekend").
 
 answer_policy:
   diacritics: >-
@@ -233,12 +258,16 @@ exercises:
     accepted_answers:
       - "Zamierzam nauczyć się pływać."
       - "Zamierzam nauczyć się pływać"
+      - "Zamierzam się nauczyć pływać."
+      - "Ja zamierzam nauczyć się pływać."
 
   pl.b1.unit09.lesson01.exercise09.speak_zamierzam:
     instruction: "Say: 'I intend to learn to swim this year.'"
     accepted_answers:
       - "Zamierzam nauczyć się pływać w tym roku."
       - "Zamierzam nauczyć się pływać w tym roku"
+      - "Zamierzam się nauczyć pływać w tym roku."
+      - "W tym roku zamierzam nauczyć się pływać."
 
   pl.b1.unit09.lesson02.exercise01.select_chyba_bedzie_padac:
     instruction: "Which sentence means 'It'll probably rain this weekend'?"
@@ -291,12 +320,15 @@ exercises:
     accepted_answers:
       - "Prawdopodobnie nie pójdziemy na spacer."
       - "Prawdopodobnie nie pójdziemy na spacer"
+      - "Chyba nie pójdziemy na spacer."
 
   pl.b1.unit09.lesson02.exercise09.speak_chyba_bedzie_padac:
     instruction: "Say: 'It'll probably rain this weekend.'"
     accepted_answers:
       - "Chyba będzie padać w weekend."
       - "Chyba będzie padać w weekend"
+      - "Prawdopodobnie będzie padać w weekend."
+      - "W weekend chyba będzie padać."
 
   pl.b1.unit09.lesson03.exercise01.select_wizyta_dentysty:
     instruction: "Which sentence means 'On Monday I have a dentist appointment'?"
@@ -319,7 +351,7 @@ exercises:
     correct_option: "he intends to learn to swim"
     distractors:
       - "he has a dentist appointment"
-      - "he wants to watch a movie"
+      - "he intends to learn to drive"
     accepted_answers:
       - "zamierzam nauczyć się pływać"
       - "he intends to learn to swim"
@@ -376,12 +408,16 @@ exercises:
     accepted_answers:
       - "Chyba będzie padać, więc prawdopodobnie nie pójdziemy na spacer."
       - "Chyba będzie padać, więc prawdopodobnie nie pójdziemy na spacer"
+      - "Chyba będzie padać, więc chyba nie pójdziemy na spacer."
+      - "Prawdopodobnie będzie padać, więc chyba nie pójdziemy na spacer."
+      - "Prawdopodobnie będzie padać, więc prawdopodobnie nie pójdziemy na spacer."
 
   pl.b1.unit09.lesson03.exercise11.speak_wizyta_dentysty:
     instruction: "Say: 'On Monday I have a dentist appointment.'"
     accepted_answers:
       - "W poniedziałek mam wizytę u dentysty."
       - "W poniedziałek mam wizytę u dentysty"
+      - "Mam wizytę u dentysty w poniedziałek."
 
   pl.b1.unit09.lesson04.exercise01.select_w_przyszlym_tygodniu:
     instruction: "Which sentence means 'Next week I'm going to my parents''?"
@@ -422,24 +458,29 @@ exercises:
     feedback: "*W przyszłym tygodniu jadę do rodziców* -- rodziców is the genitive plural required after \"do\"."
 
   pl.b1.unit09.lesson04.exercise07.write_moj_plan:
-    instruction: "Write about your future plans: say ONE fixed arrangement (present tense, e.g. jadę/mam), ONE intention (zamierzam + infinitive), AND ONE uncertain prediction (chyba/prawdopodobnie + future tense) -- all three in one response."
+    instruction: "Write these three sentences in Polish, in this order -- a fixed arrangement (present tense), an intention (zamierzam + infinitive), and an uncertain prediction (chyba or prawdopodobnie + future tense): 'Next week I'm going to my parents'. I intend to learn to swim. It'll probably rain at the weekend.'"
     accepted_answers:
       - "W przyszłym tygodniu jadę do rodziców. Zamierzam nauczyć się pływać. Chyba będzie padać w weekend."
       - "W przyszłym tygodniu jadę do rodziców, zamierzam nauczyć się pływać, chyba będzie padać w weekend"
       - "W przyszłym tygodniu jadę do rodziców. Zamierzam nauczyć się pływać. Prawdopodobnie będzie padać w weekend."
       - "W przyszłym tygodniu jadę do rodziców, zamierzam nauczyć się pływać, prawdopodobnie będzie padać w weekend"
+      - "Jadę do rodziców w przyszłym tygodniu. Zamierzam nauczyć się pływać. Chyba będzie padać w weekend."
+      - "Jadę do rodziców w przyszłym tygodniu. Zamierzam nauczyć się pływać. Prawdopodobnie będzie padać w weekend."
 
   pl.b1.unit09.lesson04.exercise08.reply_jakie_masz_plany:
-    instruction: "Someone asks: 'What are we doing next week?' Answer with your fixed arrangement."
+    instruction: "Someone asks: 'What are we doing next week?' Answer with your fixed arrangement: say that next week you're going to your parents'."
     accepted_answers:
       - "W przyszłym tygodniu jadę do rodziców."
       - "W przyszłym tygodniu jadę do rodziców"
+      - "Jadę do rodziców w przyszłym tygodniu."
 
   pl.b1.unit09.lesson04.exercise09.speak_zamierzam_review:
     instruction: "Say: 'I intend to learn to swim this year.'"
     accepted_answers:
       - "Zamierzam nauczyć się pływać w tym roku."
       - "Zamierzam nauczyć się pływać w tym roku"
+      - "Zamierzam się nauczyć pływać w tym roku."
+      - "W tym roku zamierzam nauczyć się pływać."
 
   pl.b1.unit09.lesson04.exercise10.write_chyba_review:
     instruction: "Write the Polish word for 'probably' (the colloquial, uncertain-prediction marker)."
