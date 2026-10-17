@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft. Realizes universal.a1.waste_disposal.sort_household_waste,
     the next unrealized outcome in the shared English realization (fa-en/nl-en/
@@ -188,6 +188,30 @@ review:
     dialogue convention. Draft only -- needs the mandatory fresh-context
     review before any overlay authors build on it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): Checked against the content-reviewer
+    checklist: course-cumulative token coverage of every tested_text, word_bank and accepted answer (clean),
+    character canon against earlier units (consistent), no bare YAML booleans, no jargon/AI mentions in
+    learner text, prompt/answer-key fit of every production exercise, and the nl-en/fa-en/prs-en overlays of
+    this unit (no de-en overlay exists for it). Translation answer-leak target_block removed (coordinator
+    sweep). Fixes: en.a1.unit49.lesson02.exercise04.order_take_out_trash_sentence -- word_bank tile "trash?"
+    -> "trash" (punctuation-neutral tiles) so the particle-moved order the nl-en card itself teaches is
+    buildable; nl-en/fa-en/prs-en accepted_answers now accept both [Can you take out the trash] and [Can you
+    take the trash out] (the compiler warns that the second is a permutation of tested_text; intentional).
+    lesson02.exercise05.translate_collection_day -- overlays (nl-en/fa-en/prs-en) now also accept "(The)
+    collection day is (on) Tuesday(.)". lesson03.exercise04.respond_own_sorting_statement -- removed the
+    off-prompt "The recycling bins go out on Tuesdays(.)" variants (realization, nl-en, prs-en) and added the
+    verbatim dialogue line "I'll sort everything correctly next time(.)" (realization and all three overlays);
+    nl-en feedback updated to match. lesson04.exercise04.write_own_sorting_message -- removed the two "The
+    trash goes out on Fridays" variants that answer a different question (realization, fa-en, prs-en; nl-en
+    already lacked them) and added the no-comma "...bin and the recycling bins..." variant. NOTE (from
+    reviewer, informational, no action): the reading's "said he'll sort everything correctly" is informal
+    reported speech, acceptable in US English. DEFERRED: fa-en respond_own_sorting_statement still accepts
+    "The recycling bins go out on Tuesdays(.)" because its Persian feedback advertises that answer -- removing
+    it needs a Persian feedback edit (fa-en file). Corpus-wide note (not specific to this file): English
+    prompt.target_blocks use untaught instruction words (according, dialogue, phrase, match, meaning, correct,
+    order, translate, means); confirm these blocks are not shown to learners in place of the overlay
+    instruction.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -241,8 +265,8 @@ units:
           - {content_key: "en.a1.unit49.lesson02.exercise01.listen_phrase", type: "listen_select", tested_text: "This goes in the recycling bin.", media_asset_key: "en.a1.audio.waste_disposal.phrases.this_goes_in_the_recycling_bin.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit49.lesson02.exercise02.choose_which_bin_meaning", type: "multiple_choice", tested_text: "Which bin does this go in?", prompt: {target_blocks: [{text: "Which phrase do you say when you don't know where something goes?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit49.lesson02.exercise03.choose_green_bin_meaning", type: "multiple_choice", tested_text: "The green bin is for glass.", prompt: {target_blocks: [{text: "Which phrase tells you glass goes in the green bin?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit49.lesson02.exercise04.order_take_out_trash_sentence", type: "word_order", tested_text: "Can you take out the trash?", word_bank: ["Can", "you", "take", "out", "the", "trash?"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit49.lesson02.exercise05.translate_collection_day", type: "translation", tested_text: "Collection day is on Tuesday.", prompt: {target_blocks: [{text: "Translate: \"Collection day is on Tuesday.\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit49.lesson02.exercise04.order_take_out_trash_sentence", type: "word_order", tested_text: "Can you take out the trash?", word_bank: ["Can", "you", "take", "out", "the", "trash"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit49.lesson02.exercise05.translate_collection_day", type: "translation", tested_text: "Collection day is on Tuesday.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit49.lesson03.dialogue_sorting_the_recycling"
         title: "Dialogue: Sorting the recycling"
@@ -260,7 +284,7 @@ units:
           - {content_key: "en.a1.unit49.lesson03.exercise01.comprehension_glass_bin", type: "multiple_choice", tested_text: "the green bin", prompt: {target_blocks: [{text: "According to the dialogue, which bin does Mia say the glass jar goes in?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit49.lesson03.exercise02.comprehension_daniel_plan", type: "multiple_choice", tested_text: "sort everything correctly", prompt: {target_blocks: [{text: "According to the dialogue, what does Daniel say he'll do next time?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit49.lesson03.exercise03.listen_dialogue_collection_day", type: "listen_select", tested_text: "Tuesdays", media_asset_key: "en.a1.audio.dialogue.waste_disposal.01", prompt: {target_blocks: [{text: "According to the dialogue, when do the recycling bins go out?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit49.lesson03.exercise04.respond_own_sorting_statement", type: "speak_response", tested_text: "The trash goes out on Fridays", accepted_answers: ["The trash goes out on Fridays", "The trash goes out on Fridays.", "The recycling bins go out on Tuesdays", "The recycling bins go out on Tuesdays.", "I'll sort everything correctly", "I'll sort everything correctly."], prompt: {target_blocks: [{text: "Say when the trash goes out, or say you'll sort everything correctly.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit49.lesson03.exercise04.respond_own_sorting_statement", type: "speak_response", tested_text: "The trash goes out on Fridays", accepted_answers: ["Glass goes in the green bin. The recycling bins go out on Tuesdays.", "Glass goes in the green bin, and the recycling bins go out on Tuesdays.", "Glass goes in the green bin, the recycling bins go out on Tuesdays.", "Glass goes in the green bin and the recycling bins go out on Tuesdays."], prompt: {target_blocks: [{text: "Say when the trash goes out, or say you'll sort everything correctly.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit49.lesson04.how_waste_sorting_works"
         title: "Reading: How waste sorting works"

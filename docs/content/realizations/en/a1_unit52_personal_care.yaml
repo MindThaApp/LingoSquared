@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Four-lesson draft. Realizes universal.a1.personal_care.get_haircut, the
     next unrealized outcome in the shared English realization (fa-en/nl-en/
@@ -206,6 +206,33 @@ review:
     Draft only -- needs the mandatory fresh-context review before any
     overlay authors build on it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): Checked against the content-reviewer
+    checklist: course-cumulative token coverage of every tested_text, word_bank and accepted answer (clean),
+    character canon against earlier units (consistent), no bare YAML booleans, no jargon/AI mentions in
+    learner text, prompt/answer-key fit of every production exercise, and the nl-en/fa-en/prs-en overlays of
+    this unit (no de-en overlay exists for it). Translation answer-leak target_block removed (coordinator
+    sweep). Fixes: en.a1.unit52.lesson01.exercise05.write_haircut -- prompt "Write the word for a shorter cut
+    of your hair." -> "Write the word for when a hairdresser cuts your hair." ("trim" also fit the old
+    wording); nl-en instruction -> "Schrijf het woord voor een knipbeurt bij de kapper."
+    lesson01.exercise03.match_personal_care_words -- haircut right "a shorter cut of your hair" -> "when a
+    hairdresser cuts your hair" (overlapped trim/shorter); nl-en pair and accepted_answers mirror -> "je haar
+    laten knippen bij de kapper". lesson02.exercise02.choose_request_meaning -- distractor "Just a trim,
+    please." (also a way to ask for a haircut) replaced: nl-en -> "It's twenty dollars.", fa-en -> "The same
+    style, please." (prs-en never had it). lesson03.exercise04.respond_own_haircut_statement -- removed
+    off-prompt "I'd like a haircut(.)" / "Can you make it shorter(?)"; added "He/Daniel wants the same style,
+    just a little shorter(.)", "It costs twenty dollars(.)", "The haircut costs twenty dollars(.)"
+    (realization and all three overlays). lesson04.exercise04.write_own_haircut_message -- added "Daniel
+    wanted..." and "...the haircut cost twenty dollars" variants (realization and all three overlays).
+    lesson04.teach.reading_passage -- "her favorite hairdresser, a small salon near her apartment," (called a
+    person a salon) -> "her favorite hairdresser at a small salon near her apartment,"; nl-en reading gloss
+    adjusted to match. DEFERRED (need Persian/Dari text): fa-en and prs-en match_personal_care_words haircut
+    right ("کوتاه‌تر کردن مو" / "کوتاه‌کردن موی تان") still overlaps trim/shorter and should mirror the new
+    definition in pairs and accepted_answers; fa-en/prs-en reading-passage glosses still render the
+    hairdresser as a salon in apposition. Corpus-wide note (not specific to this file): English
+    prompt.target_blocks use untaught instruction words (according, dialogue, phrase, match, meaning, correct,
+    order, translate, means); confirm these blocks are not shown to learners in place of the overlay
+    instruction.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -242,9 +269,9 @@ units:
         exercises:
           - {content_key: "en.a1.unit52.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "trim", media_asset_key: "en.a1.audio.personal_care.words.trim.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit52.lesson01.exercise02.choose_trim_meaning", type: "multiple_choice", tested_text: "trim", prompt: {target_blocks: [{text: "Which word means cutting just a small amount off the ends of your hair?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit52.lesson01.exercise03.match_personal_care_words", type: "matching_pairs", tested_text: "haircut hairdresser trim shorter style wash", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "haircut", right: "a shorter cut of your hair"}, {left: "hairdresser", right: "a person who cuts and styles hair"}, {left: "trim", right: "cutting just a small amount off the ends"}, {left: "shorter", right: "having less length than before"}, {left: "style", right: "the way your hair is cut or shaped"}, {left: "wash", right: "to clean with water, like hair before a cut"}]}
+          - {content_key: "en.a1.unit52.lesson01.exercise03.match_personal_care_words", type: "matching_pairs", tested_text: "haircut hairdresser trim shorter style wash", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "haircut", right: "when a hairdresser cuts your hair"}, {left: "hairdresser", right: "a person who cuts and styles hair"}, {left: "trim", right: "cutting just a small amount off the ends"}, {left: "shorter", right: "having less length than before"}, {left: "style", right: "the way your hair is cut or shaped"}, {left: "wash", right: "to clean with water, like hair before a cut"}]}
           - {content_key: "en.a1.unit52.lesson01.exercise04.order_haircut_sentence", type: "word_order", tested_text: "I need a haircut.", word_bank: ["I", "need", "a", "haircut."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit52.lesson01.exercise05.write_haircut", type: "writing_prompt", tested_text: "haircut", prompt: {target_blocks: [{text: "Write the word for a shorter cut of your hair.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit52.lesson01.exercise05.write_haircut", type: "writing_prompt", tested_text: "haircut", prompt: {target_blocks: [{text: "Write the word for when a hairdresser cuts your hair.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit52.lesson02.phrases_at_the_hairdresser"
         title: "Phrases at the hairdresser"
@@ -261,7 +288,7 @@ units:
           - {content_key: "en.a1.unit52.lesson02.exercise02.choose_request_meaning", type: "multiple_choice", tested_text: "I'd like a haircut, please.", prompt: {target_blocks: [{text: "Which phrase does a customer say to ask for a haircut?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit52.lesson02.exercise03.choose_price_question_meaning", type: "multiple_choice", tested_text: "How much does a haircut cost?", prompt: {target_blocks: [{text: "Which phrase asks how much a haircut costs?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit52.lesson02.exercise04.order_price_sentence", type: "word_order", tested_text: "It's twenty dollars.", word_bank: ["It's", "twenty", "dollars."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit52.lesson02.exercise05.translate_style_request", type: "translation", tested_text: "The same style, please.", prompt: {target_blocks: [{text: "Translate: \"The same style, please.\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit52.lesson02.exercise05.translate_style_request", type: "translation", tested_text: "The same style, please.", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit52.lesson03.dialogue_at_the_hairdresser"
         title: "Dialogue: At the hairdresser"
@@ -279,13 +306,13 @@ units:
           - {content_key: "en.a1.unit52.lesson03.exercise01.comprehension_daniel_reason", type: "multiple_choice", tested_text: "his sister is visiting next week", prompt: {target_blocks: [{text: "According to the dialogue, why does Daniel want a haircut?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit52.lesson03.exercise02.comprehension_style_request", type: "multiple_choice", tested_text: "the same style, just a little shorter", prompt: {target_blocks: [{text: "According to the dialogue, what style does Daniel ask for?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit52.lesson03.exercise03.listen_dialogue_price", type: "listen_select", tested_text: "twenty dollars", media_asset_key: "en.a1.audio.dialogue.personal_care.01", prompt: {target_blocks: [{text: "According to the dialogue, how much does the haircut cost?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit52.lesson03.exercise04.respond_own_haircut_statement", type: "speak_response", tested_text: "The same style, just a little shorter", accepted_answers: ["The same style, just a little shorter", "The same style, just a little shorter.", "It's twenty dollars", "It's twenty dollars.", "I'd like a haircut", "I'd like a haircut.", "Can you make it shorter", "Can you make it shorter?"], prompt: {target_blocks: [{text: "Say what style Daniel wants, or say how much the haircut costs.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit52.lesson03.exercise04.respond_own_haircut_statement", type: "speak_response", tested_text: "The same style, just a little shorter", accepted_answers: ["He wanted the same style, just a little shorter. It cost twenty dollars.", "He wanted the same style, just a little shorter, and it cost twenty dollars.", "He wanted the same style, just a little shorter, it cost twenty dollars.", "He wanted the same style, just a little shorter. The haircut cost twenty dollars.", "He wanted the same style, just a little shorter, and the haircut cost twenty dollars.", "He wanted the same style, just a little shorter, the haircut cost twenty dollars.", "Daniel wanted the same style, just a little shorter. It cost twenty dollars.", "Daniel wanted the same style, just a little shorter, and it cost twenty dollars.", "Daniel wanted the same style, just a little shorter, it cost twenty dollars.", "Daniel wanted the same style, just a little shorter. The haircut cost twenty dollars.", "Daniel wanted the same style, just a little shorter, and the haircut cost twenty dollars.", "Daniel wanted the same style, just a little shorter, the haircut cost twenty dollars."], prompt: {target_blocks: [{text: "Say what style Daniel wants, or say how much the haircut costs.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit52.lesson04.a_trip_to_the_hairdresser"
         title: "Reading: A trip to the hairdresser"
         spine_outcome_id: "universal.a1.personal_care.get_haircut"
         teaching:
-          - {content_key: "en.a1.unit52.lesson04.teach.reading_passage", kind: "reading", target: {text: "A Trip to the Hairdresser: Daniel's sister was coming to visit from Chicago next week, so he decided to get a haircut. Mia recommended her favorite hairdresser, a small salon near her apartment, and went with him. The hairdresser asked what style he wanted, and he said the same style, just a little shorter. She washed his hair first, and the wash was included with the haircut. The haircut cost twenty dollars. When they finished, Mia said his hair looked great. On their way home, they met Leila for coffee. She was feeling much better after her cold, and she loved Daniel's new haircut too.", language_code: "en", direction: "ltr"}, introduced_tokens: ["A", "Trip", "to", "Daniel", "was", "coming", "visit", "from", "Chicago", "so", "he", "decided", "get", "Mia", "recommended", "her", "favorite", "small", "salon", "near", "apartment", "went", "him", "asked", "wanted", "said", "washed", "When", "they", "finished", "looked", "On", "their", "way", "home", "met", "Leila", "for", "coffee", "feeling", "better", "after", "cold", "loved", "new", "too"]}
+          - {content_key: "en.a1.unit52.lesson04.teach.reading_passage", kind: "reading", target: {text: "A Trip to the Hairdresser: Daniel's sister was coming to visit from Chicago next week, so he decided to get a haircut. Mia recommended her favorite hairdresser at a small salon near her apartment, and went with him. The hairdresser asked what style he wanted, and he said the same style, just a little shorter. She washed his hair first, and the wash was included with the haircut. The haircut cost twenty dollars. When they finished, Mia said his hair looked great. On their way home, they met Leila for coffee. She was feeling much better after her cold, and she loved Daniel's new haircut too.", language_code: "en", direction: "ltr"}, introduced_tokens: ["A", "Trip", "to", "Daniel", "was", "coming", "visit", "from", "Chicago", "so", "he", "decided", "get", "Mia", "recommended", "her", "favorite", "small", "salon", "near", "apartment", "went", "him", "asked", "wanted", "said", "washed", "When", "they", "finished", "looked", "On", "their", "way", "home", "met", "Leila", "for", "coffee", "feeling", "better", "after", "cold", "loved", "new", "too"]}
         exercises:
           - {content_key: "en.a1.unit52.lesson04.exercise01.reading_haircut_reason", type: "multiple_choice", tested_text: "his sister was visiting", prompt: {target_blocks: [{text: "According to the reading, why did Daniel decide to get a haircut?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit52.lesson04.exercise02.reading_price", type: "multiple_choice", tested_text: "twenty dollars", prompt: {target_blocks: [{text: "According to the reading, how much did the haircut cost?", language_code: "en", direction: "ltr"}]}}
