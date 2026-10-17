@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Sixth en-hi overlay, written for hi/a1_unit06_food.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start;
@@ -28,6 +28,23 @@ review:
     (AUTHORING_GUIDE §8) doesn't apply here -- noted for whoever
     authors hi-en next: do not open this file for structure/phrasing
     reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked with hi/a1_unit06_food.yaml. Fixes: added no-nukta variants
+    कॉफी/सब्जी to every typed/spoken answer containing कॉफ़ी/सब्ज़ी
+    (both spellings widespread; STT often drops the nukta);
+    lesson02.teach.kripya note said कृपया goes at the end of a request
+    -> now says it most often comes first, also heard at the end;
+    lesson02.exercise11 accept 'कृपया मुझे एक प्लेट दाल चाहिए';
+    lesson03.exercise11 open writing prompt graded against 3 sentences
+    -> instruction names the four foods and every 'मुझे (एक प्लेट) X
+    चाहिए' form is accepted; lesson03.exercise12 instruction pinned to
+    tea/coffee/water and the dialogue's ', कृपया' pattern accepted;
+    lesson03.exercise06 word_order also accepts 'तुम्हें चाय या कॉफ़ी
+    चाहिए' (compiler scrambled-permutation warning intentional). Native-
+    speaker check needed: the grammar point that चाहिए 'never takes है'
+    (colloquial 'चाहिए है' is common; the two fix-the-sentence items
+    treat it as wrong); sentence-final कृपया in dialogue line05.
 
 answer_policy:
   nasalization_marks: >-
@@ -151,7 +168,7 @@ teaching:
   hi.a1.unit06.lesson02.teach.kripya:
     title: "Please"
     gloss: "please"
-    note: "A simple politeness word, added to the end of a request."
+    note: "A simple politeness word for a request. It most often comes at the start (*kripya mujhe ...*), but you'll also hear it added at the end."
     example_gloss: "I would like a cup of tea, please."
 
   hi.a1.unit06.lesson02.teach.kuch_aur_chahiye:
@@ -303,6 +320,8 @@ exercises:
       - "मुझे कॉफ़ी चाहिए"
       - "मुझे कॉफ़ी चाहिए, शुक्रिया।"
       - "मुझे कॉफ़ी चाहिए शुक्रिया"
+      - "मुझे कॉफी चाहिए।"
+      - "मुझे कॉफी चाहिए, शुक्रिया।"
 
   hi.a1.unit06.lesson01.exercise11.speak_what_you_want:
     instruction: "Say what you would like to drink."
@@ -315,6 +334,7 @@ exercises:
       - "मुझे कॉफ़ी चाहिए"
       - "मुझे जूस चाहिए।"
       - "मुझे जूस चाहिए"
+      - "मुझे कॉफी चाहिए।"
 
   hi.a1.unit06.lesson02.exercise01.select_roti:
     instruction: "Which word means bread/flatbread?"
@@ -369,6 +389,7 @@ exercises:
     accepted_answers:
       - "मुझे एक प्लेट सब्ज़ी चाहिए।"
       - "मुझे एक प्लेट सब्ज़ी चाहिए"
+      - "मुझे एक प्लेट सब्जी चाहिए।"
     feedback: "Mujhe ek plate sabzi chahiye -- chahiye never takes hai/hain afterward."
 
   hi.a1.unit06.lesson02.exercise10.reply_kuch_aur_chahiye:
@@ -385,6 +406,7 @@ exercises:
       - "मुझे एक प्लेट दाल चाहिए"
       - "मुझे एक प्लेट दाल चाहिए, कृपया।"
       - "मुझे एक प्लेट दाल चाहिए कृपया"
+      - "कृपया मुझे एक प्लेट दाल चाहिए।"
 
   hi.a1.unit06.lesson03.exercise01.select_chalo_kuch_khate_hain_meaning:
     instruction: "What does this phrase mean?"
@@ -420,7 +442,9 @@ exercises:
 
   hi.a1.unit06.lesson03.exercise06.order_tumhein_chai_chahiye_ya_coffee:
     instruction: "Put the question in order: Would you like tea or coffee?"
-    correct_response: ["तुम्हें", "चाय", "चाहिए", "या", "कॉफ़ी"]
+    accepted_answers:
+      - {value: ["तुम्हें", "चाय", "चाहिए", "या", "कॉफ़ी"], status: correct}
+      - {value: ["तुम्हें", "चाय", "या", "कॉफ़ी", "चाहिए"], status: correct}
 
   hi.a1.unit06.lesson03.exercise07.match_food_review:
     instruction: "Match each Hindi word to its English meaning."
@@ -453,19 +477,28 @@ exercises:
     accepted_answers:
       - "मुझे एक प्लेट रोटी और सब्ज़ी चाहिए।"
       - "मुझे एक प्लेट रोटी और सब्ज़ी चाहिए"
+      - "मुझे एक प्लेट रोटी और सब्जी चाहिए।"
 
   hi.a1.unit06.lesson03.exercise11.write_about_food_order:
-    instruction: "Write one sentence about what you would like to eat."
+    instruction: "Write one sentence saying which food you would like: roti, rice, the vegetable dish, or dal."
     accepted_answers:
-      - "मुझे रोटी और सब्ज़ी चाहिए"
-      - "मुझे रोटी और सब्ज़ी चाहिए।"
-      - "मुझे एक प्लेट चावल चाहिए"
+      - "मुझे रोटी चाहिए।"
+      - "मुझे एक प्लेट रोटी चाहिए।"
+      - "मुझे चावल चाहिए।"
       - "मुझे एक प्लेट चावल चाहिए।"
-      - "मुझे एक प्लेट दाल चाहिए"
+      - "मुझे सब्ज़ी चाहिए।"
+      - "मुझे एक प्लेट सब्ज़ी चाहिए।"
+      - "मुझे सब्जी चाहिए।"
+      - "मुझे एक प्लेट सब्जी चाहिए।"
+      - "मुझे दाल चाहिए।"
       - "मुझे एक प्लेट दाल चाहिए।"
+      - "मुझे रोटी और सब्ज़ी चाहिए।"
+      - "मुझे एक प्लेट रोटी और सब्ज़ी चाहिए।"
+      - "मुझे रोटी और सब्जी चाहिए।"
+      - "मुझे एक प्लेट रोटी और सब्जी चाहिए।"
 
   hi.a1.unit06.lesson03.exercise12.speak_order_review:
-    instruction: "Say what you would like to drink, following the pattern from the dialogue."
+    instruction: "Say what you would like to drink (tea, coffee, or water), following the pattern from the dialogue."
     accepted_answers:
       - "मुझे चाय चाहिए।"
       - "मुझे चाय चाहिए"
@@ -473,3 +506,8 @@ exercises:
       - "मुझे कॉफ़ी चाहिए"
       - "मुझे पानी चाहिए।"
       - "मुझे पानी चाहिए"
+      - "मुझे कॉफी चाहिए।"
+      - "मुझे चाय चाहिए, कृपया।"
+      - "मुझे कॉफ़ी चाहिए, कृपया।"
+      - "मुझे कॉफी चाहिए, कृपया।"
+      - "मुझे पानी चाहिए, कृपया।"

@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Eighteenth en-hi overlay, written for hi/a1_unit18_housing.yaml (schema_
     version 1.1, §19 vocabulary-example format from the start; see that
@@ -51,6 +51,19 @@ review:
     corrected precedent, every inline romanized-Hindi word inside a
     `note`/`gloss` field below is wrapped in single asterisks (e.g.
     *kamra*, *kamre*, *mein*).
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked
+    with hi/a1_unit18_housing.yaml. Fixes: lesson03.exercise04 asked 'What
+    two rooms does Priya's house have?' but 'घर में दो कमरे हैं, एक रसोई और
+    एक बाथरूम' most naturally lists two rooms PLUS a kitchen and bathroom ->
+    'Besides the rooms, what does Priya's house have?'; lesson01.exercise11
+    open 'How many rooms?' graded only 1/2/3 -> instruction pins 'three
+    rooms', extra numbers removed; lesson02.exercise11 open 'What's in the
+    kitchen?' -> pinned to mention the table; lesson03.exercise13 'Write:
+    What's Arjun's house like?' -> 'Answer the question in Hindi: ...';
+    added no-nukta मेज and anusvara कुर्सियां/खिड़कियां variants to free-
+    text answers (lesson02 ex09-ex13, lesson03 ex10). Native-speaker check
+    needed: none.
 
 answer_policy:
   existential_quantity: >-
@@ -378,14 +391,10 @@ exercises:
     feedback: "Ghar mein teen kamre hain -- 'kamre' is the plural of 'kamra' (room), matching the number 'teen' (three)."
 
   hi.a1.unit18.lesson01.exercise11.reply_ghar_mein_kitne_kamre_hain:
-    instruction: "Answer: How many rooms are in the house?"
+    instruction: "Answer that the house has three rooms: How many rooms are in the house?"
     accepted_answers:
       - "घर में तीन कमरे हैं।"
       - "घर में तीन कमरे हैं"
-      - "घर में दो कमरे हैं।"
-      - "घर में दो कमरे हैं"
-      - "घर में एक कमरा है।"
-      - "घर में एक कमरा है"
 
   hi.a1.unit18.lesson01.exercise12.fix_ghar_mein_teen_kamre_hain:
     instruction: "Correct the sentence -- the number 'teen' (three) needs the plural noun and verb."
@@ -454,27 +463,32 @@ exercises:
 
   hi.a1.unit18.lesson02.exercise09.fill_rasoi_mein_mez:
     instruction: "Complete: There is a table in the kitchen."
-    accepted_answers: ["मेज़"]
+    accepted_answers: ["मेज़", "मेज"]
     feedback: "Rasoi mein mez hai -- 'mez' is 'table'."
 
   hi.a1.unit18.lesson02.exercise10.fill_bedroom_mein_do_khidkiyan:
     instruction: "Complete: There are two windows in the bedroom."
-    accepted_answers: ["खिड़कियाँ"]
+    accepted_answers: ["खिड़कियाँ", "खिड़कियां"]
     feedback: "Bedroom mein do khidkiyan hain -- 'khidkiyan' is the plural of 'khidki' (window)."
 
   hi.a1.unit18.lesson02.exercise11.reply_rasoi_mein_kya_hai:
-    instruction: "Answer: What's in the kitchen?"
+    instruction: "Answer, mentioning the table: What's in the kitchen?"
     accepted_answers:
       - "रसोई में एक मेज़ है।"
       - "रसोई में एक मेज़ है"
       - "रसोई में एक मेज़ और चार कुर्सियाँ हैं।"
       - "रसोई में एक मेज़ और चार कुर्सियाँ हैं"
+      - "रसोई में एक मेज है"
+      - "रसोई में एक मेज और चार कुर्सियाँ हैं"
+      - "रसोई में एक मेज़ और चार कुर्सियां हैं"
+      - "रसोई में एक मेज और चार कुर्सियां हैं"
 
   hi.a1.unit18.lesson02.exercise12.fix_bedroom_mein_do_khidkiyan_hain:
     instruction: "Correct the sentence -- the number 'do' (two) needs the plural noun and verb."
     accepted_answers:
       - "बेडरूम में दो खिड़कियाँ हैं।"
       - "बेडरूम में दो खिड़कियाँ हैं"
+      - "बेडरूम में दो खिड़कियां हैं"
     feedback: "Bedroom mein do khidkiyan hain -- 'do' (two) needs the plural 'khidkiyan' and 'hain', not the singular 'khidki' and 'hai'."
 
   hi.a1.unit18.lesson02.exercise13.speak_rasoi_mein_mez_aur_kursiyan:
@@ -482,6 +496,9 @@ exercises:
     accepted_answers:
       - "रसोई में एक मेज़ और चार कुर्सियाँ हैं।"
       - "रसोई में एक मेज़ और चार कुर्सियाँ हैं"
+      - "रसोई में एक मेज और चार कुर्सियाँ हैं"
+      - "रसोई में एक मेज़ और चार कुर्सियां हैं"
+      - "रसोई में एक मेज और चार कुर्सियां हैं"
 
   hi.a1.unit18.lesson03.exercise01.comprehend_priya_home_size:
     instruction: "Read the line. Is Priya's house big or small?"
@@ -506,7 +523,7 @@ exercises:
     accepted_answers: ["Is your house big or small?"]
 
   hi.a1.unit18.lesson03.exercise04.read_profile_priya_rooms:
-    instruction: "Read the profile. What two rooms does Priya's house have?"
+    instruction: "Read the profile. Besides the rooms, what does Priya's house have?"
     correct_option: "A kitchen and a bathroom"
     distractors:
       - "A kitchen and a bedroom"
@@ -551,7 +568,7 @@ exercises:
 
   hi.a1.unit18.lesson03.exercise10.fill_bedroom_mein_bistar_aur_khidkiyan:
     instruction: "Complete: There's a bed and two windows in the bedroom."
-    accepted_answers: ["खिड़कियाँ"]
+    accepted_answers: ["खिड़कियाँ", "खिड़कियां"]
     feedback: "Bedroom mein ek bistar aur do khidkiyan hain -- 'khidkiyan' is the plural of 'khidki' (window)."
 
   hi.a1.unit18.lesson03.exercise11.fix_priya_ka_ghar_chota_hai:
@@ -570,7 +587,7 @@ exercises:
       - "मेरा घर छोटा है"
 
   hi.a1.unit18.lesson03.exercise13.write_arjun_ka_ghar_kaisa_hai:
-    instruction: "Write: What's Arjun's house like?"
+    instruction: "Answer the question in Hindi: What's Arjun's house like?"
     accepted_answers:
       - "अर्जुन का घर बड़ा है।"
       - "अर्जुन का घर बड़ा है"
