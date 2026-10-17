@@ -34,7 +34,7 @@ generation_provenance:
     SAME request in both. Any register mixing across characters (Inès
     formal-to-la-mairie vs informal-to-Mathieu) is intentional, not a bug.
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed. This is a DRAFT. Priority checks for
     the reviewer: (1) the vous-conjugation forms -- confirm "Avez-vous le
@@ -99,6 +99,22 @@ review:
     units01-04 within the same fr.b2 course (a B2 learner never sees
     A1/A2/B1 lexemes at runtime; confirmed by compiling units01-05
     together). No sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked register teaching, audio script vs dialogue cards (4 turns
+    correctly attributed), comprehension distractors vs audio, Mathieu
+    canon (friend, tu), course-scoped vocabulary, YAML booleans,
+    jargon/leaks. Fixes: lesson05.exercise01-04 reading_comprehension
+    prompts never showed the two messages -> target_blocks now carry both
+    French messages (informal first, formal second, matching 'the second
+    message' wording); lesson02.exercise06 prompt gave the answer away
+    ('...: Bises, Inès.') -> asks for the closing that literally means
+    'kisses'; lesson06.exercise04/exercise07 prompts 'reschedule the
+    appointment' vs keyed 'notre rendez-vous' -> 'our appointment'. NATIVE
+    FLAGS: 'notre rendez-vous' in the letter to la mairie (mon rendez-vous
+    may be more natural); lesson04 grammar note's libre (tu) / disponible
+    (vous) split is a tendency, not a rule; Cordialement neutral vs formal
+    (already flagged). DEFERRED: none.
 
 course:
   realization_key: fr.b2
@@ -314,7 +330,7 @@ units:
           - content_key: fr.b2.unit05.lesson02.exercise06.write_bises
             type: writing_prompt
             tested_text: "Bises, Inès"
-            prompt: {target_blocks: [{text: "Write an informal French sign-off to a friend, from Inès: Bises, Inès.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write an informal French sign-off to a friend, from Inès, using the closing that literally means 'kisses'.", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit05.lesson02.exercise07.recognize_most_formal
             type: multiple_choice
             tested_text: "Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées."
@@ -517,19 +533,31 @@ units:
           - content_key: fr.b2.unit05.lesson05.exercise01.read_friend
             type: reading_comprehension
             tested_text: "Coucou Mathieu"
-            prompt: {target_blocks: [{text: "Which message is written to a close friend?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Coucou Mathieu ! Tu peux déplacer notre rendez-vous ? Je ne suis pas libre mardi. La semaine prochaine, ça te va ? Bises, Inès", language_code: fr, direction: ltr}
+              - {text: "Madame, Monsieur, Serait-il possible de déplacer notre rendez-vous ? Je ne suis pas disponible mardi. La semaine prochaine vous conviendrait-elle ? Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées. Inès", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit05.lesson05.exercise02.read_institution
             type: reading_comprehension
             tested_text: "Madame, Monsieur"
-            prompt: {target_blocks: [{text: "Which message is written to la mairie?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Coucou Mathieu ! Tu peux déplacer notre rendez-vous ? Je ne suis pas libre mardi. La semaine prochaine, ça te va ? Bises, Inès", language_code: fr, direction: ltr}
+              - {text: "Madame, Monsieur, Serait-il possible de déplacer notre rendez-vous ? Je ne suis pas disponible mardi. La semaine prochaine vous conviendrait-elle ? Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées. Inès", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit05.lesson05.exercise03.read_same_request
             type: reading_comprehension
             tested_text: "déplacer notre rendez-vous"
-            prompt: {target_blocks: [{text: "Both messages make the SAME request. What is it?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Coucou Mathieu ! Tu peux déplacer notre rendez-vous ? Je ne suis pas libre mardi. La semaine prochaine, ça te va ? Bises, Inès", language_code: fr, direction: ltr}
+              - {text: "Madame, Monsieur, Serait-il possible de déplacer notre rendez-vous ? Je ne suis pas disponible mardi. La semaine prochaine vous conviendrait-elle ? Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées. Inès", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit05.lesson05.exercise04.read_signal
             type: reading_comprehension
             tested_text: vous
-            prompt: {target_blocks: [{text: "Which feature marks the second message as the one for la mairie?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Coucou Mathieu ! Tu peux déplacer notre rendez-vous ? Je ne suis pas libre mardi. La semaine prochaine, ça te va ? Bises, Inès", language_code: fr, direction: ltr}
+              - {text: "Madame, Monsieur, Serait-il possible de déplacer notre rendez-vous ? Je ne suis pas disponible mardi. La semaine prochaine vous conviendrait-elle ? Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées. Inès", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit05.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "Coucou Mathieu Madame Monsieur Bises Veuillez agréer convenir mardi"
@@ -622,7 +650,7 @@ units:
           - content_key: fr.b2.unit05.lesson06.exercise04.speak_informal
             type: speak_response
             tested_text: "Tu peux déplacer notre rendez-vous"
-            prompt: {target_blocks: [{text: "Say aloud in French the SAME request, first to Mathieu -- informal, using tu peux: Can you reschedule the appointment?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in French the SAME request, first to Mathieu -- informal, using tu peux: Can you reschedule our appointment?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit05.lesson06.exercise05.speak_formal
             type: speak_response
             tested_text: "Serait-il possible de déplacer notre rendez-vous"
@@ -634,4 +662,4 @@ units:
           - content_key: fr.b2.unit05.lesson06.exercise07.write_both_registers
             type: writing_prompt
             tested_text: "Tu peux déplacer notre rendez-vous ? Serait-il possible de déplacer notre rendez-vous ?"
-            prompt: {target_blocks: [{text: "Write the SAME request TWICE. (1) informally to Mathieu, using tu peux: Can you reschedule the appointment? (2) formally to la mairie, using Serait-il possible de: Would it be possible to reschedule our appointment?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write the SAME request TWICE. (1) informally to Mathieu, using tu peux: Can you reschedule our appointment? (2) formally to la mairie, using Serait-il possible de: Would it be possible to reschedule our appointment?", language_code: en, direction: ltr}]}
