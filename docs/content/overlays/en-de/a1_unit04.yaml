@@ -6,8 +6,8 @@ target_language: "de"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     English-source overlay for de/a1_unit04_daten.yaml. Every instruction
     field carries the English-language cue text; the realization's own
@@ -33,12 +33,41 @@ review:
     each with a matching example_gloss for the realization's new
     example: sentences. schema_version bumped to 1.1.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every
+    instruction/correct_option/distractor/accepted_answers/feedback
+    against the de realization and every teaching card for an English
+    gloss. Fixes: (1) added teaching entries (title/gloss, note where
+    useful) for the 14 cards that rendered as bare German --
+    lesson01.teach.welcher_tag, lesson02.teach.welcher_monat,
+    lesson03.teach.wievielte/siebte_juli/dienstag_siebte_juli/numerische_form/geburtstag_frage/geburtstag_antwort,
+    lesson04.teach.line01-line05/notiz; (2) added a lessons: block with
+    English titles for all 4 lessons; (3)
+    lesson03.exercise05.write_heutiges_datum: accepted the full sentence
+    'Heute ist der siebte Juli' (+ period); (4)
+    lesson04.exercise06.reply_als_anna: accepted the weekday-less date
+    form 'Heute ist der siebte Juli. Sie öffnet wieder am Donnerstag, den
+    neunten Juli' (+ period/oe variants); (5)
+    lesson03.exercise04.reply_geburtstag: accepted the am-construction
+    answers 'Mein Geburtstag ist am dritten März' and 'Ich habe am dritten
+    März Geburtstag' (+ period/ae variants). NATIVE FLAG: confirm the
+    am-construction variants and whether the canonical birthday answer
+    should switch to it. DEFERRED: course-wide 'in words' writing_prompt
+    convention (owner decision); compiler warning for teaching cards
+    lacking an overlay gloss (Codex lane, scripts/compile_content.py).
+
 course:
   title: "German A1"
   description: "Learn A1-level German for everyday greetings and short social exchanges, with detailed English explanations."
 
 units:
   de.a1.unit04.daten: {title: "Days, months, and the date"}
+
+lessons:
+  de.a1.unit04.lesson01.wochentage: {title: "Days of the week"}
+  de.a1.unit04.lesson02.monate: {title: "Months"}
+  de.a1.unit04.lesson03.das_datum: {title: "Saying the date"}
+  de.a1.unit04.lesson04.im_gespraech_ueber_das_datum: {title: "Talking about dates"}
 
 teaching:
   de.a1.unit04.lesson01.teach.montag: {title: "Montag", gloss: "Monday", note: "*Montag* is the first day of the week in German-speaking countries, unlike the US convention where the week starts on Sunday.", example_gloss: "I have time on Monday."}
@@ -48,6 +77,7 @@ teaching:
   de.a1.unit04.lesson01.teach.freitag: {title: "Freitag", gloss: "Friday", note: "*Freitag* is named after the Germanic goddess Frigg.", example_gloss: "I have time on Friday."}
   de.a1.unit04.lesson01.teach.samstag: {title: "Samstag", gloss: "Saturday", note: "*Samstag* is the standard word for Saturday in most of Germany; *Sonnabend* is a regional alternative (northern/eastern Germany).", example_gloss: "I have time on Saturday."}
   de.a1.unit04.lesson01.teach.sonntag: {title: "Sonntag", gloss: "Sunday", note: "*Sonntag* literally means 'sun day,' the same root as English 'Sunday.'", example_gloss: "I have time on Sunday."}
+  de.a1.unit04.lesson01.teach.welcher_tag: {title: "Welcher Tag ist heute?", gloss: "What day is it today?", note: "*heute* means 'today'; *Welcher Tag* = 'which day.'"}
 
   de.a1.unit04.lesson02.teach.januar: {title: "Januar", gloss: "January", note: "*Januar* is the first month of the year.", example_gloss: "My birthday is in January."}
   de.a1.unit04.lesson02.teach.maerz: {title: "März", gloss: "March", note: "*März* is the third month of the year.", example_gloss: "My birthday is in March."}
@@ -55,6 +85,14 @@ teaching:
   de.a1.unit04.lesson02.teach.juli: {title: "Juli", gloss: "July", note: "*Juli* is the seventh month of the year.", example_gloss: "My birthday is in July."}
   de.a1.unit04.lesson02.teach.september: {title: "September", gloss: "September", note: "*September* is spelled identically in English and German.", example_gloss: "My birthday is in September."}
   de.a1.unit04.lesson02.teach.dezember: {title: "Dezember", gloss: "December", note: "*Dezember* is the last month of the year.", example_gloss: "My birthday is in December."}
+  de.a1.unit04.lesson02.teach.welcher_monat: {title: "Welcher Monat ist es?", gloss: "Which month is it?", note: "*Monat* means 'month'; *es* = 'it.'"}
+
+  de.a1.unit04.lesson03.teach.wievielte: {title: "Der Wievielte ist heute?", gloss: "What's today's date?", note: "Literally 'the how-manyth is today?' -- the standard way to ask the date in German."}
+  de.a1.unit04.lesson03.teach.siebte_juli: {title: "Heute ist der siebte Juli.", gloss: "Today is July 7th.", note: "German says the day first, then the month: *der siebte Juli* = 'the seventh (of) July.' Learn *der siebte Juli* as a whole phrase."}
+  de.a1.unit04.lesson03.teach.dienstag_siebte_juli: {title: "Heute ist Dienstag, der siebte Juli.", gloss: "Today is Tuesday, July 7th.", note: "Add the weekday before the date, separated by a comma."}
+  de.a1.unit04.lesson03.teach.numerische_form: {title: "Man kann es auch als 7.7. schreiben.", gloss: "You can also write it as 7.7.", note: "German numeric dates put the day first, then the month, each followed by a period: 7.7. = July 7th. This is the reverse of the US month/day order."}
+  de.a1.unit04.lesson03.teach.geburtstag_frage: {title: "Wann haben Sie Geburtstag?", gloss: "When is your birthday? (formal)", note: "Literally 'When do you have birthday?' -- German says you *have* a birthday."}
+  de.a1.unit04.lesson03.teach.geburtstag_antwort: {title: "Mein Geburtstag ist der dritte März.", gloss: "My birthday is March 3rd.", note: "*Mein Geburtstag* = 'my birthday'; *der dritte März* = 'March 3rd' (day first, then month)."}
 
   de.a1.unit04.lesson04.teach.oeffnet: {title: "öffnet", gloss: "opens", note: "*öffnet* is the third-person singular form of *öffnen* (to open) -- used for 'it opens,' e.g. a store or library.", example_gloss: "The store opens on Monday."}
   de.a1.unit04.lesson04.teach.wieder: {title: "wieder", gloss: "again", note: "*wieder* means 'again' -- used here to ask when something reopens.", example_gloss: "The library opens again on Monday."}
@@ -63,6 +101,12 @@ teaching:
   de.a1.unit04.lesson04.teach.am: {title: "am", gloss: "on the / at the", note: "*am* is a contraction of *an dem*, used before days of the week and dates (*am Montag* = 'on Monday').", example_gloss: "On Monday, I work."}
   de.a1.unit04.lesson04.teach.den: {title: "den", gloss: "the (accusative/dative)", note: "*den* appears in full written dates after a weekday, as in *am Donnerstag, den neunten Juli* -- a fixed idiom worth learning as a whole rather than analyzing case-by-case at this level.", example_gloss: "We're meeting on Thursday, the ninth of July."}
   de.a1.unit04.lesson04.teach.neunten: {title: "neunten", gloss: "ninth", note: "*neunten* is the declined ordinal form of *neun* (nine), used in dates: *der neunte Juli* (nominative) becomes *den neunten Juli* in this full-date construction.", example_gloss: "My birthday is on the ninth of July."}
+  de.a1.unit04.lesson04.teach.line01: {title: "Felix asks the date", gloss: "Felix says: What's today's date?"}
+  de.a1.unit04.lesson04.teach.line02: {title: "Anna gives the date", gloss: "Anna says: Today is Tuesday, July 7th."}
+  de.a1.unit04.lesson04.teach.line03: {title: "Felix asks about the library", gloss: "Felix says: When does the library open again?"}
+  de.a1.unit04.lesson04.teach.line04: {title: "Anna answers", gloss: "Anna says: It opens again on Thursday, July 9th.", note: "*Sie* here means 'it' -- it refers back to *die Bibliothek* (a feminine noun)."}
+  de.a1.unit04.lesson04.teach.line05: {title: "Felix says goodbye", gloss: "Felix says: Good, see you Thursday.", note: "*bis Donnerstag* = 'until Thursday' -- a common way to say 'see you on Thursday.'"}
+  de.a1.unit04.lesson04.teach.notiz: {title: "A note on the door", gloss: "Closed until Thursday, July 9th.", note: "*Geschlossen* means 'closed.'"}
 
 exercises:
   de.a1.unit04.lesson01.exercise01.listen_mittwoch:
@@ -159,12 +203,22 @@ exercises:
       - {value: "Mein Geburtstag ist der dritte März", status: "correct"}
       - {value: "Mein Geburtstag ist der dritte Maerz.", status: "correct"}
       - {value: "Mein Geburtstag ist der dritte Maerz", status: "correct"}
+      - {value: "Mein Geburtstag ist am dritten März.", status: "correct"}
+      - {value: "Mein Geburtstag ist am dritten März", status: "correct"}
+      - {value: "Mein Geburtstag ist am dritten Maerz.", status: "correct"}
+      - {value: "Mein Geburtstag ist am dritten Maerz", status: "correct"}
+      - {value: "Ich habe am dritten März Geburtstag.", status: "correct"}
+      - {value: "Ich habe am dritten März Geburtstag", status: "correct"}
+      - {value: "Ich habe am dritten Maerz Geburtstag.", status: "correct"}
+      - {value: "Ich habe am dritten Maerz Geburtstag", status: "correct"}
     feedback: "*Mein Geburtstag ist der dritte März* = 'My birthday is March 3rd.'"
   de.a1.unit04.lesson03.exercise05.write_heutiges_datum:
     instruction: "Write today's date in words: July 7th."
     accepted_answers:
       - {value: "der siebte Juli", status: "correct"}
       - {value: "der siebte Juli.", status: "correct"}
+      - {value: "Heute ist der siebte Juli", status: "correct"}
+      - {value: "Heute ist der siebte Juli.", status: "correct"}
     feedback: "*der siebte Juli* means 'July 7th.'"
 
   de.a1.unit04.lesson04.exercise01.listen_heutiges_datum:
@@ -204,6 +258,10 @@ exercises:
       - {value: "Heute ist Dienstag, der siebte Juli. Sie oeffnet wieder am Donnerstag, den neunten Juli.", status: "correct"}
       - {value: "Heute ist Dienstag, der siebte Juli, und sie oeffnet wieder am Donnerstag, den neunten Juli.", status: "correct"}
       - {value: "Heute ist Dienstag, der siebte Juli Sie oeffnet wieder am Donnerstag den neunten Juli", status: "correct"}
+      - {value: "Heute ist der siebte Juli. Sie öffnet wieder am Donnerstag, den neunten Juli.", status: "correct"}
+      - {value: "Heute ist der siebte Juli. Sie öffnet wieder am Donnerstag, den neunten Juli", status: "correct"}
+      - {value: "Heute ist der siebte Juli. Sie oeffnet wieder am Donnerstag, den neunten Juli.", status: "correct"}
+      - {value: "Heute ist der siebte Juli. Sie oeffnet wieder am Donnerstag, den neunten Juli", status: "correct"}
     feedback: "Anna's full reply gives today's date and the library's reopening date."
   de.a1.unit04.lesson04.exercise07.speak_termine:
     instruction: "Answer out loud in Anna's role: give today's date, then say when the library reopens."
