@@ -6,7 +6,7 @@ target_language: it
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-Italian confirmation needed (DRAFT). Confirm every English gloss
     matches idiomatic Italian, that every matching_pairs right-hand gloss
@@ -26,6 +26,33 @@ review:
     a un certo punto, in generale, in molti casi, non necessariamente,
     dipende) has no single-word English mapping, so each is glossed with
     its function. No sibling-direction file (it-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    grading shapes (casefold, punctuation kept, distance-1 tolerance), YAML
+    boolean coercion, option/word_bank jargon, learner-visible provenance
+    text, every example_gloss against its example, and every comprehension
+    answer against the audio/reading text. Fixes:
+    it.b2.unit06.lesson04.exercise06.write_societa -- instruction
+    (realization prompt + overlay) 'It's good for society.' -> 'It's
+    positive for society.' so the one accepted answer (È positivo per la
+    società) is determined; feedback adjusted.
+    it.b2.unit06.lesson06.exercise06.write_qualified_response --
+    prompt/instruction 'it's not good for culture' -> 'it's not positive for
+    culture'; accepted variant with 'Secondo me,' comma added.
+    it.b2.unit06.lesson06.exercise05.speak_qualified_opinion and
+    it.b2.unit06.lesson06.exercise07.respond_qualified -- accepted 'È vero
+    fino a un certo punto, ma ...' (with and without comma) added, the form
+    the unit itself teaches. it.b2.unit06.lesson01.teach.grammar_opinione --
+    overlay gloss now includes the fourth sentence 'It's a good idea.'.
+    it.b2.unit06.lesson03.teach.capisco_il_tuo_punto -- introduced token
+    'diversamente2' -> 'diversamente'. NATIVE FLAGS: predicative 'meglio'
+    after a noun subject ('la città è meglio', 'una città con meno turisti è
+    meglio per la cultura') -- confirm it is acceptable or accept 'migliore'
+    too; lesson04.teach.vantaggio example 'Una città senza auto ha un grande
+    vantaggio.' is off-topic (car-free city) and uses senza/auto, which are
+    not introduced. DEFERRED: course.description in the overlay describes
+    only this unit (course-wide decision across all en-it B2 overlays, owner
+    call).
 
 course:
   title: Italian B2
@@ -88,7 +115,7 @@ teaching:
     example_gloss: "I'm convinced it works."
   it.b2.unit06.lesson01.teach.grammar_opinione:
     title: "Opinion frames"
-    gloss: "I think cities should change. In my opinion, culture is important. I'm convinced that mass tourism is a problem."
+    gloss: "I think cities should change. In my opinion, culture is important. I'm convinced that mass tourism is a problem. It's a good idea."
     note: "*Penso che* and *sono convinto/a che* both take the congiuntivo (debbano, sia); *secondo me* does not change the verb mood."
 
   it.b2.unit06.lesson02.teach.fino_a_un_certo_punto:
@@ -367,10 +394,10 @@ exercises:
       - {value: "Da un lato è positivo dall'altro è costoso", status: correct}
     feedback: "*Da un lato è positivo, dall'altro è costoso* means on one hand it's positive, on the other hand it's expensive."
   it.b2.unit06.lesson04.exercise06.write_societa:
-    instruction: "Write in Italian: It's good for society."
+    instruction: "Write in Italian: It's positive for society."
     accepted_answers:
       - {value: "È positivo per la società", status: correct}
-    feedback: "*È positivo per la società* means it's good for society."
+    feedback: "*È positivo per la società* means it's positive (good) for society."
   it.b2.unit06.lesson04.exercise07.translate_svantaggio:
     instruction: "Translate into Italian: It's a big disadvantage for the city."
     accepted_answers:
@@ -446,17 +473,22 @@ exercises:
     accepted_answers:
       - {value: "Fino a un certo punto è vero, ma una città con meno turisti è meglio per la cultura", status: correct}
       - {value: "Fino a un certo punto è vero ma una città con meno turisti è meglio per la cultura", status: correct}
+      - {value: "È vero fino a un certo punto, ma una città con meno turisti è meglio per la cultura", status: correct}
+      - {value: "È vero fino a un certo punto ma una città con meno turisti è meglio per la cultura", status: correct}
     feedback: "*Fino a un certo punto è vero, ma una città con meno turisti è meglio per la cultura.*"
   it.b2.unit06.lesson06.exercise06.write_qualified_response:
-    instruction: "Someone argues that cities should welcome unlimited tourism. Write TWO Italian sentences responding with a QUALIFIED opinion that answers them directly. (1) Concede partly, using è vero, ma...: That's true, but it's not good for culture. (2) Give your own qualified opinion, using secondo me: In my opinion, a city with fewer tourists is better."
+    instruction: "Someone argues that cities should welcome unlimited tourism. Write TWO Italian sentences responding with a QUALIFIED opinion that answers them directly. (1) Concede partly, using è vero, ma...: That's true, but it's not positive for culture. (2) Give your own qualified opinion, using secondo me: In my opinion, a city with fewer tourists is better."
     accepted_answers:
       - {value: "È vero, ma non è positivo per la cultura. Secondo me una città con meno turisti è meglio.", status: correct}
       - {value: "È vero, ma non è positivo per la cultura, secondo me una città con meno turisti è meglio.", status: correct}
       - {value: "È vero, ma non è positivo per la cultura. Secondo me una città con meno turisti è meglio", status: correct}
+      - {value: "È vero, ma non è positivo per la cultura. Secondo me, una città con meno turisti è meglio.", status: correct}
     feedback: "*È vero, ma non è positivo per la cultura. Secondo me una città con meno turisti è meglio.*"
   it.b2.unit06.lesson06.exercise07.respond_qualified:
     instruction: "Reply to 'Le città non dovrebbero limitare il turismo.' (Cities shouldn't limit tourism.) with a qualified opinion, using fino a un certo punto and secondo me: That is true to a certain extent, but in my opinion a city with fewer tourists is better for culture."
     accepted_answers:
       - {value: "Fino a un certo punto è vero, ma secondo me una città con meno turisti è meglio per la cultura", status: correct}
       - {value: "Fino a un certo punto è vero ma secondo me una città con meno turisti è meglio per la cultura", status: correct}
+      - {value: "È vero fino a un certo punto, ma secondo me una città con meno turisti è meglio per la cultura", status: correct}
+      - {value: "È vero fino a un certo punto ma secondo me una città con meno turisti è meglio per la cultura", status: correct}
     feedback: "*Fino a un certo punto è vero, ma secondo me una città con meno turisti è meglio per la cultura.*"
