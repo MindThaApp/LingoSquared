@@ -26,8 +26,8 @@ generation_provenance:
     diplomatic-training framing). The specific workshop-schedule/
     birthday dates and all exercise content are original to this unit.
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fourth Spanish A1 unit, continuing the Elena/Mateo cooking-workshop
     storyline from units 01-03 (register: tú throughout, matching
@@ -84,6 +84,29 @@ review:
 
     Pending fresh-context review and Ramin's native-speaker pass. Audio
     assets declared for generation, not yet recorded.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked pacing, token coverage, prompt determinacy, matching_pairs
+    discrimination, reading visibility, character canon (units 01-03) and
+    learner-facing notes, together with the en-es overlay. Fixes:
+    lesson05.exercise01-04 read_* -- schedule passage added as the first
+    es prompt.target_block (it was never visible during the questions);
+    lesson05.exercise05.match_horario -- confusable pair 'La próxima
+    clase'/'The next class' (same meaning as 'next class') replaced by
+    'termina'/'ends'; lesson03.exercise05.fill_dia_del_taller -- '(from
+    lesson01: Tuesdays)' -> '(Tuesdays)';
+    lesson03.exercise07.write_hoy_es_la_fecha -- prompt pinned to 'Write
+    in Spanish: Today is the twenty-second of July.';
+    lesson04.exercise07.speak_own_birthday -- open 'real o inventado'
+    prompt pinned to 'Di que tu cumpleaños es el diez de marzo.';
+    lesson05.exercise07.write_horario_summary -- prompt pinned to the two
+    exact sentences; lesson05.teach.despues_note -- removed false/internal
+    'pero in unit03' cross-reference. NATIVE FLAGS: formato_fecha_note
+    calls *el primero* the only common exception (el uno is also common in
+    Spain); untaught imperatives in Spanish speak/dialogue instructions
+    (Di, Toma, dile, pregúntale). DEFERRED (owner decision): showing the
+    lesson's reading card in the ReadingComprehension renderer / compiler
+    instead of duplicating passages into target_blocks.
 
 course:
   realization_key: es.a1
@@ -209,9 +232,9 @@ units:
           - {content_key: es.a1.unit04.lesson03.exercise02.listen_que_fecha_es_hoy, type: listen_select, tested_text: "Qué fecha es hoy", media_asset_key: es.a1.audio.fecha.que_fecha_es_hoy.01, prompt: {target_blocks: []}}
           - {content_key: es.a1.unit04.lesson03.exercise03.listen_hoy_es_veintidos, type: listen_select, tested_text: "Hoy es el veintidós de julio", media_asset_key: es.a1.audio.fecha.hoy_es_veintidos_julio.01, prompt: {target_blocks: []}}
           - {content_key: es.a1.unit04.lesson03.exercise04.order_cuando_es_el_taller, type: word_order, tested_text: "Cuándo es el taller", prompt: {target_blocks: []}, word_bank: [Cuándo, es, el, taller]}
-          - {content_key: es.a1.unit04.lesson03.exercise05.fill_dia_del_taller, type: fill_in_blank, tested_text: "El taller de cocina es los martes", prompt: {target_blocks: [{text: "El taller de cocina es los ___. (from lesson01: Tuesdays)", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson03.exercise05.fill_dia_del_taller, type: fill_in_blank, tested_text: "El taller de cocina es los martes", prompt: {target_blocks: [{text: "El taller de cocina es los ___. (Tuesdays)", language_code: es, direction: ltr}]}}
           - {content_key: es.a1.unit04.lesson03.exercise06.reply_cuando_es_el_taller, type: dialogue_response, tested_text: "Cuándo es el taller El taller es el veintidós de julio", prompt: {target_blocks: [{text: "¿Cuándo es el taller?", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson03.exercise07.write_hoy_es_la_fecha, type: writing_prompt, tested_text: "Hoy es el veintidós de julio", prompt: {target_blocks: [{text: "Write today's date in Spanish: the twenty-second of July.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson03.exercise07.write_hoy_es_la_fecha, type: writing_prompt, tested_text: "Hoy es el veintidós de julio", prompt: {target_blocks: [{text: "Write in Spanish: Today is the twenty-second of July.", language_code: en, direction: ltr}]}}
 
       - content_key: es.a1.unit04.lesson04.el_cumpleanos
         title: "El cumpleaños de Elena y Mateo"
@@ -232,7 +255,7 @@ units:
             prompt: {target_blocks: []}
             pairs: [{left: cumpleaños, right: birthday}, {left: "¡Felicidades!", right: "Congratulations!"}, {left: "Mi cumpleaños es el diez de marzo.", right: "Elena's birthday"}, {left: "El cumpleaños de Mateo es el veintidós de agosto.", right: "Mateo's birthday"}]
           - {content_key: es.a1.unit04.lesson04.exercise06.reply_own_birthday, type: dialogue_response, tested_text: "Cuándo es tu cumpleaños Mi cumpleaños es el diez de marzo", prompt: {target_blocks: [{text: "¿Cuándo es tu cumpleaños?", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson04.exercise07.speak_own_birthday, type: speak_response, tested_text: "Mi cumpleaños es el diez de marzo", prompt: {target_blocks: [{text: "Di cuándo es tu cumpleaños (real o inventado).", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson04.exercise07.speak_own_birthday, type: speak_response, tested_text: "Mi cumpleaños es el diez de marzo", prompt: {target_blocks: [{text: "Di que tu cumpleaños es el diez de marzo.", language_code: es, direction: ltr}]}}
 
       - content_key: es.a1.unit04.lesson05.leer_el_horario_del_taller
         title: "Leer el horario del taller"
@@ -248,20 +271,20 @@ units:
           - {content_key: es.a1.unit04.lesson05.teach.la_proxima_clase, kind: phrase, target: {text: "La próxima clase", language_code: es, direction: ltr}, introduced_tokens: [La, próxima, clase]}
           - content_key: es.a1.unit04.lesson05.teach.despues_note
             kind: grammar_note
-            target: {text: "*Después* (after, afterward) links two events in sequence, the same way *pero* (but) links a contrast in unit03's dialogue.", language_code: en, direction: ltr}
+            target: {text: "*Después* (after, afterward) links two events in sequence: first one thing, then the next.", language_code: en, direction: ltr}
             introduced_tokens: []
         exercises:
-          - {content_key: es.a1.unit04.lesson05.exercise01.read_dia_del_taller, type: reading_comprehension, tested_text: "El taller de cocina es los martes", prompt: {target_blocks: [{text: "According to the schedule, which day is the workshop?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson05.exercise02.read_proxima_clase, type: reading_comprehension, tested_text: "La próxima clase es el veintidós de julio", prompt: {target_blocks: [{text: "What date is the next class?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson05.exercise03.read_clase_despues, type: reading_comprehension, tested_text: "hay una clase el veintinueve de julio", prompt: {target_blocks: [{text: "What date is the class after that?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson05.exercise04.read_termina, type: reading_comprehension, tested_text: "El taller termina el doce de agosto", prompt: {target_blocks: [{text: "What date does the workshop end?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson05.exercise01.read_dia_del_taller, type: reading_comprehension, tested_text: "El taller de cocina es los martes", prompt: {target_blocks: [{text: "El taller de cocina es los martes. La próxima clase es el veintidós de julio. Después, hay una clase el veintinueve de julio. El taller termina el doce de agosto.", language_code: es, direction: ltr}, {text: "According to the schedule, which day is the workshop?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson05.exercise02.read_proxima_clase, type: reading_comprehension, tested_text: "La próxima clase es el veintidós de julio", prompt: {target_blocks: [{text: "El taller de cocina es los martes. La próxima clase es el veintidós de julio. Después, hay una clase el veintinueve de julio. El taller termina el doce de agosto.", language_code: es, direction: ltr}, {text: "What date is the next class?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson05.exercise03.read_clase_despues, type: reading_comprehension, tested_text: "hay una clase el veintinueve de julio", prompt: {target_blocks: [{text: "El taller de cocina es los martes. La próxima clase es el veintidós de julio. Después, hay una clase el veintinueve de julio. El taller termina el doce de agosto.", language_code: es, direction: ltr}, {text: "What date is the class after that?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson05.exercise04.read_termina, type: reading_comprehension, tested_text: "El taller termina el doce de agosto", prompt: {target_blocks: [{text: "El taller de cocina es los martes. La próxima clase es el veintidós de julio. Después, hay una clase el veintinueve de julio. El taller termina el doce de agosto.", language_code: es, direction: ltr}, {text: "What date does the workshop end?", language_code: en, direction: ltr}]}}
           - content_key: es.a1.unit04.lesson05.exercise05.match_horario
             type: matching_pairs
             tested_text: "próxima clase después termina"
             prompt: {target_blocks: []}
-            pairs: [{left: "el veintidós de julio", right: "next class"}, {left: "el veintinueve de julio", right: "class after that"}, {left: "el doce de agosto", right: "workshop ends"}, {left: "La próxima clase", right: "The next class"}]
+            pairs: [{left: "el veintidós de julio", right: "next class"}, {left: "el veintinueve de julio", right: "class after that"}, {left: "el doce de agosto", right: "workshop ends"}, {left: "termina", right: "ends"}]
           - {content_key: es.a1.unit04.lesson05.exercise06.fill_termina, type: fill_in_blank, tested_text: "El taller termina el doce de agosto", prompt: {target_blocks: [{text: "El taller ___ el doce de agosto. (ends)", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit04.lesson05.exercise07.write_horario_summary, type: writing_prompt, tested_text: "La próxima clase es el veintidós de julio El taller termina el doce de agosto", prompt: {target_blocks: [{text: "Write two Spanish sentences from the schedule: the next class date, and the workshop's end date.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit04.lesson05.exercise07.write_horario_summary, type: writing_prompt, tested_text: "La próxima clase es el veintidós de julio El taller termina el doce de agosto", prompt: {target_blocks: [{text: "Write in Spanish: The next class is the twenty-second of July. The workshop ends on the twelfth of August.", language_code: en, direction: ltr}]}}
 
       - content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
         title: "Elena y Mateo planean la próxima clase"
