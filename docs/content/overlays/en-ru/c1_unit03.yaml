@@ -6,8 +6,8 @@ target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "fresh_context_reviewer"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's C1 unit03 on fine-grained control of tone and register.
     English-speaker interference risks: (1) the four tone markers
@@ -22,6 +22,33 @@ review:
     style, then in an emphatic style — and their accepted answers are the exact
     taught model (with and without the final period). No sibling-direction file
     was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    accepted answers against grading (no ё/е folding), distractors,
+    instructions, notes. Fixes: lesson01.exercise01.recognize_oficialny
+    distractor 'Здравствуйте, Иван Петрович' (a valid formal salutation) ->
+    'Привет, Ваня'; е-spelled variants added to accepted_answers of
+    write_oficialny, translate_diplomatichny, write_ironichny,
+    speak_emfatichesky, speak_ves_akt, write_ves_akt;
+    recognize_diplomatichny and recognize_emfatichesky instructions no
+    longer name the answer's opening words; match_sravnenie accepted value
+    'Ну конечно' -> 'pretended agreement (irony)' (mirrors realization);
+    lesson06.teach.modello_polnyj note de-meta'd ('This is the model to
+    reproduce: ...'); lesson01.teach.pryamoe_soobshchenie note's
+    course-construction sentence rewritten. NATIVE FLAGS: (a) the ironic
+    model 'Ну конечно, отчёт будет готов ещё вчера, как всегда' blends
+    future будет готов with ещё вчера -- the natural sarcastic idiom is
+    'отчёт нужен был ещё вчера' / 'должен был быть готов ещё вчера';
+    changing it means every copy, the audio asset and the glosses; (b)
+    formal-letter convention: '!' after the salutation and capitalized 'Вам'
+    for a single addressee -- not graded (case-insensitive), but the unit
+    teaches formal register. DEFERRED: dictation_ves_akt
+    (orthography_strict, single correct_response with отчёт) marks a learner
+    typing отчет wrong -- needs an owner decision on ru ё/е folding in
+    backend/app/review/grading.py (Codex lane), which would also make the
+    е-variant additions redundant and cover mixed ё/е spellings; English
+    target_blocks that duplicate the overlay instruction (compiler prints
+    both) are a structural ru-C1 authoring pattern -- owner decision.
 
 course:
   title: "Russian C1"
@@ -50,7 +77,7 @@ teaching:
   ru.c1.unit03.ton_i_registr.lesson01.teach.pryamoe_soobshchenie:
     title: "The direct message"
     gloss: "The report is delayed. I need two more days."
-    note: "*Отчёт задерживается* ('the report is delayed') states the plain fact; *мне нужно ещё два дня* ('I need two more days') is the blunt request. This is the direct message you will later rewrite in different tones."
+    note: "*Отчёт задерживается* ('the report is delayed') states the plain fact; *мне нужно ещё два дня* ('I need two more days') is the blunt request. This blunt version is the neutral baseline that each tone below reshapes."
   ru.c1.unit03.ton_i_registr.lesson01.teach.uvazhaemyj:
     title: "the formal salutation"
     gloss: "Dear Ivan Petrovich"
@@ -124,7 +151,7 @@ teaching:
   ru.c1.unit03.ton_i_registr.lesson06.teach.modello_polnyj:
     title: "The model to reproduce"
     gloss: "Dear Ivan Petrovich, I inform you that the report will be ready a bit later. Honestly, the report is almost ready, but I simply need two more days."
-    note: "This is the exact model for the final speaking and writing tasks: the same core message delivered first in a formal diplomatic style, then in an emphatic style."
+    note: "This is the model to reproduce: the same core message delivered first in a formal diplomatic style, then in an emphatic style."
   ru.c1.unit03.ton_i_registr.lesson06.teach.registr:
     title: "register"
     gloss: "register"
@@ -135,7 +162,7 @@ exercises:
   ru.c1.unit03.ton_i_registr.lesson01.exercise01.recognize_oficialny:
     instruction: "Which Russian phrase is the formal salutation for a message to a superior?"
     correct_option: "Уважаемый Иван Петрович"
-    distractors: ["Привет, Иван Петрович", "Дорогой Иван Петрович", "Здравствуйте, Иван Петрович"]
+    distractors: ["Привет, Иван Петрович", "Дорогой Иван Петрович", "Привет, Ваня"]
     accepted_answers: [{value: "Уважаемый Иван Петрович", status: correct}]
     feedback: "*Уважаемый Иван Петрович* is the formal written salutation — 'Dear Ivan Petrovich' — used for a superior."
   ru.c1.unit03.ton_i_registr.lesson01.exercise02.listen_oficialny:
@@ -160,10 +187,11 @@ exercises:
     accepted_answers:
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже.", status: correct}
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже", status: correct}
+      - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчет будет готов немного позже.", status: correct}
     feedback: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже."
 
   ru.c1.unit03.ton_i_registr.lesson02.exercise01.recognize_diplomatichny:
-    instruction: "Which Russian phrase begins a diplomatic softening of bad news with the word «unfortunately» (К сожалению)?"
+    instruction: "Which Russian sentence states the bad news diplomatically, softening it with an expression of regret?"
     correct_option: "К сожалению, отчёт будет готов немного позже."
     distractors: ["Сообщаю вам, что отчёт будет готов немного позже.", "Надеюсь на ваше понимание.", "Отчёт задерживается."]
     accepted_answers: [{value: "К сожалению, отчёт будет готов немного позже.", status: correct}]
@@ -190,6 +218,7 @@ exercises:
     accepted_answers:
       - {value: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание.", status: correct}
       - {value: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание", status: correct}
+      - {value: "К сожалению, отчет будет готов немного позже. Надеюсь на ваше понимание.", status: correct}
     feedback: "К сожалению, отчёт будет готов немного позже. Надеюсь на ваше понимание."
 
   ru.c1.unit03.ton_i_registr.lesson03.exercise01.recognize_ironichny:
@@ -220,10 +249,11 @@ exercises:
     accepted_answers:
       - {value: "Ну конечно, отчёт будет готов ещё вчера, как всегда.", status: correct}
       - {value: "Ну конечно, отчёт будет готов ещё вчера, как всегда", status: correct}
+      - {value: "Ну конечно, отчет будет готов еще вчера, как всегда.", status: correct}
     feedback: "Ну конечно, отчёт будет готов ещё вчера, как всегда."
 
   ru.c1.unit03.ton_i_registr.lesson04.exercise01.recognize_emfatichesky:
-    instruction: "Which Russian phrase is emphatic — stressing the truth with Честно говоря?"
+    instruction: "Which Russian phrase is emphatic — stressing the truth of what follows?"
     correct_option: "Честно говоря, отчёт почти готов."
     distractors: ["Сообщаю вам, что отчёт будет готов немного позже.", "К сожалению, отчёт будет готов немного позже.", "Ну конечно, отчёт будет готов ещё вчера."]
     accepted_answers: [{value: "Честно говоря, отчёт почти готов.", status: correct}]
@@ -250,6 +280,7 @@ exercises:
     accepted_answers:
       - {value: "Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня.", status: correct}
       - {value: "Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня", status: correct}
+      - {value: "Честно говоря, отчет почти готов, но мне просто необходимо еще два дня.", status: correct}
     feedback: "Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня."
 
   ru.c1.unit03.ton_i_registr.lesson05.exercise01.listen_sravnenie:
@@ -273,7 +304,7 @@ exercises:
   ru.c1.unit03.ton_i_registr.lesson05.exercise04.match_sravnenie:
     instruction: "Match each Russian tone marker to its function."
     accepted_answers:
-      - value: {"Уважаемый Иван Петрович": "formal salutation", "сообщаю вам": "formal reporting verb", "К сожалению": "diplomatic softening", "Ну конечно": "irony", "Честно говоря": "emphasis", "как всегда": "ironic aside"}
+      - value: {"Уважаемый Иван Петрович": "formal salutation", "сообщаю вам": "formal reporting verb", "К сожалению": "diplomatic softening", "Ну конечно": "pretended agreement (irony)", "Честно говоря": "emphasis", "как всегда": "ironic aside"}
         status: correct
     feedback: "Each marker is the linguistic cue that signals a tone — formal, diplomatic, ironic, or emphatic."
 
@@ -294,12 +325,14 @@ exercises:
     accepted_answers:
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня.", status: correct}
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня", status: correct}
+      - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчет будет готов немного позже. Честно говоря, отчет почти готов, но мне просто необходимо еще два дня.", status: correct}
     feedback: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня."
   ru.c1.unit03.ton_i_registr.lesson06.exercise04.write_ves_akt:
     instruction: "Write the exact taught two-version message: first the formal diplomatic version (Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже), then the emphatic version (Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня)."
     accepted_answers:
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня.", status: correct}
       - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня", status: correct}
+      - {value: "Уважаемый Иван Петрович, сообщаю вам, что отчет будет готов немного позже. Честно говоря, отчет почти готов, но мне просто необходимо еще два дня.", status: correct}
     feedback: "Уважаемый Иван Петрович, сообщаю вам, что отчёт будет готов немного позже. Честно говоря, отчёт почти готов, но мне просто необходимо ещё два дня."
   ru.c1.unit03.ton_i_registr.lesson06.exercise05.dictation_ves_akt:
     instruction: "Type exactly what you hear."
