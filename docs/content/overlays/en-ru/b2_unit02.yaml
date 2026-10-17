@@ -6,14 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    idiomatic Russian, that the certainty-scale ordering (может быть <
-    возможно < наверное < должно быть < не может быть, что) reads
-    correctly, and that the past-deduction accepted answers cover the
-    punctuation forms a correct learner would actually produce. See the
-    realization file's review block for the full priority list.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's second B2 unit, authored alongside the realization.
     English speakers' real interference risks for this outcome: (1)
@@ -28,6 +22,41 @@ review:
     ("it cannot be the case that...") and is stronger than English
     "probably not" -- glossed precisely. No sibling-direction file
     (ru-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-safety of every free-text accepted answer against
+    the strict Cyrillic grader (no ё/е equivalence, em dash kept as a
+    token, 3-letter tokens get no spoken tolerance), prompt/key
+    determinacy, collocation naturalness, reading-question answerability
+    and learner-visible notes. Fixes:
+    lesson01.exercise06.speak_ne_mozhet_byt tested_text + key "Не может
+    быть, что она застряла" -> "... застряла в пробке" (prompt says
+    'stuck in traffic'; also accepts the normative "Не может быть, чтобы
+    она застряла в пробке"); е-spelling variants added for every
+    free-text accepted answer containing ё (lesson01.exercise07,
+    lesson05.exercise07, lesson06.exercise05/06);
+    lesson05.exercise07.write_slomalas_mashina also accepts the natural
+    order "у неё машина сломалась"; заняты -> загружены (busy roads
+    collocation) in lesson02 teach.potomu_chto example,
+    teach.grammar_dedukcija target + introduced_tokens, exercise05/06
+    tested_text + keys + feedback; lesson05.exercise02.read_weak_guess
+    instruction -> "Which of these sentences is only a guess, not a fact
+    or a deduction?" (the old 'weakest guess' wording contradicted the
+    unit's own scale) + feedback; lesson04.exercise06 prompt pinned to
+    "using не могла"; reading passage added to the target_blocks of all
+    four lesson05 reading_comprehension prompts; overlay notes for
+    teach.sudya_po_vsemu and teach.grammar_dedukcija no longer cite
+    internal lesson numbers. NATIVE FLAGS: "Не может быть, что +
+    indicative" vs normative "чтобы + past" (lesson01/04/06); lesson06
+    dialogue "Может быть, а может быть, что-то случилось" reads awkward
+    ("Может быть. А может, ..."?); the "судя по тому, что она всегда
+    пишет заранее" deduction lacks its premise ("а сегодня не
+    написала"), and lesson03.exercise04 drops должно быть;
+    adverb-after-subject orders ("Она, наверное, ...") are not accepted
+    (systemic). DEFERRED: dictation ё/е (lesson01.exercise08) and a
+    grader-level ё/е fold + dash stripping for ru in
+    backend/app/review/grading.py (Codex/owner decision); audio dialogue
+    text unchanged.
 
 course:
   title: Russian B2
@@ -114,7 +143,7 @@ teaching:
   ru.b2.unit02.lesson02.teach.sudya_po_vsemu:
     title: apparently
     gloss: "apparently / by all appearances"
-    note: "*Судя по всему* signals a deduction from the general situation, not a specific piece of evidence (compare *судя по тому, что...*, lesson03, which cites one specific fact)."
+    note: "*Судя по всему* signals a deduction from the general situation, not a specific piece of evidence (compare *судя по тому, что...*, which cites one specific fact)."
   ru.b2.unit02.lesson02.teach.opazdyvaet:
     title: "is running late"
     gloss: "is running late"
@@ -133,7 +162,7 @@ teaching:
   ru.b2.unit02.lesson02.teach.grammar_dedukcija:
     title: "She must be running late because of a traffic jam. Apparently, the roads are very busy."
     gloss: "She must be running late because of a traffic jam. Apparently, the roads are very busy."
-    note: "A deduction reasons from evidence to a confident conclusion. *Должно быть*, *значит*, and *судя по всему* all mark this move, unlike the bare guesses of lesson01."
+    note: "A deduction reasons from evidence to a confident conclusion. *Должно быть*, *значит*, and *судя по всему* all mark this move, unlike bare guesses with *может быть* or *возможно*."
 
   ru.b2.unit02.lesson03.teach.dogadka:
     title: "a guess"
@@ -297,13 +326,16 @@ exercises:
   ru.b2.unit02.lesson01.exercise06.speak_ne_mozhet_byt:
     instruction: "Say aloud in Russian: It can't be that she's stuck in traffic."
     accepted_answers:
-      - {value: "Не может быть, что она застряла", status: "correct"}
-    feedback: "Не может быть, что она застряла means it can't be that she's stuck in traffic."
+      - {value: "Не может быть, что она застряла в пробке", status: "correct"}
+      - {value: "Не может быть, чтобы она застряла в пробке", status: "correct"}
+    feedback: "Не может быть, что она застряла в пробке means it can't be that she's stuck in traffic."
   ru.b2.unit02.lesson01.exercise07.write_claim:
     instruction: "Write in Russian: Olya isn't here yet. She's probably stuck in traffic."
     accepted_answers:
       - {value: "Оли ещё нет. Наверное, она застряла в пробке", status: "correct"}
       - {value: "Оли ещё нет. Наверное, она застряла в пробке.", status: "correct"}
+      - {value: "Оли еще нет. Наверное, она застряла в пробке", status: "correct"}
+      - {value: "Оли еще нет. Наверное, она застряла в пробке.", status: "correct"}
     feedback: "Оли ещё нет. Наверное, она застряла в пробке means Olya isn't here yet. She's probably stuck in traffic."
   ru.b2.unit02.lesson01.exercise08.dictation_navernoe_probka:
     instruction: "Type what you hear."
@@ -343,15 +375,15 @@ exercises:
   ru.b2.unit02.lesson02.exercise05.translate_znachit:
     instruction: "Translate into Russian: Apparently, the roads are very busy."
     accepted_answers:
-      - {value: "Судя по всему, дороги очень заняты", status: "correct"}
-      - {value: "Судя по всему, дороги очень заняты.", status: "correct"}
-    feedback: "Судя по всему, дороги очень заняты means apparently, the roads are very busy."
+      - {value: "Судя по всему, дороги очень загружены", status: "correct"}
+      - {value: "Судя по всему, дороги очень загружены.", status: "correct"}
+    feedback: "Судя по всему, дороги очень загружены means apparently, the roads are very busy."
   ru.b2.unit02.lesson02.exercise06.translate_potomu_chto:
     instruction: "Translate into Russian, using потому что: She is running late because the roads are busy."
     accepted_answers:
-      - {value: "Она опаздывает, потому что дороги заняты", status: "correct"}
-      - {value: "Она опаздывает потому что дороги заняты", status: "correct"}
-    feedback: "Она опаздывает, потому что дороги заняты means she is running late because the roads are busy."
+      - {value: "Она опаздывает, потому что дороги загружены", status: "correct"}
+      - {value: "Она опаздывает потому что дороги загружены", status: "correct"}
+    feedback: "Она опаздывает, потому что дороги загружены means she is running late because the roads are busy."
   ru.b2.unit02.lesson02.exercise07.write_dolzhno_byt:
     instruction: "Write in Russian, using должно быть: She must be running late because of a traffic jam."
     accepted_answers:
@@ -450,7 +482,7 @@ exercises:
       - {value: "Наверное, она забыла о встрече.", status: "correct"}
     feedback: "Наверное, она забыла о встрече means she probably forgot about the meeting."
   ru.b2.unit02.lesson04.exercise06.write_ne_mogla_zabyt:
-    instruction: "Write in Russian: She couldn't have forgotten."
+    instruction: "Write in Russian, using не могла: She couldn't have forgotten."
     accepted_answers:
       - {value: "Она не могла забыть", status: "correct"}
       - {value: "Она не могла забыть.", status: "correct"}
@@ -469,11 +501,11 @@ exercises:
     accepted_answers: [{value: "Olya usually arrives on time.", status: "correct"}]
     feedback: "Оля обычно приходит вовремя is stated as a plain fact, with no hedge."
   ru.b2.unit02.lesson05.exercise02.read_weak_guess:
-    instruction: "Which sentence is the weakest, least certain guess in the text?"
+    instruction: "Which of these sentences is only a guess, not a fact or a deduction?"
     correct_option: "Possibly she just overslept."
     distractors: ["Olya usually arrives on time.", "Something more serious must have happened.", "We don't know for sure yet."]
     accepted_answers: [{value: "Possibly she just overslept.", status: "correct"}]
-    feedback: "Возможно, она просто проспала is hedged with возможно, a weaker guess than the deduction that follows."
+    feedback: "Возможно, она просто проспала is hedged with возможно -- a guess, not a fact or an evidence-based deduction."
   ru.b2.unit02.lesson05.exercise03.read_deduction:
     instruction: "Which sentence is a deduction based on real evidence (that Olya always texts ahead)?"
     correct_option: "Something more serious must have happened."
@@ -509,6 +541,12 @@ exercises:
     accepted_answers:
       - {value: "Может быть, у неё сломалась машина", status: "correct"}
       - {value: "Может быть, у неё сломалась машина.", status: "correct"}
+      - {value: "Может быть, у неё машина сломалась", status: "correct"}
+      - {value: "Может быть, у неё машина сломалась.", status: "correct"}
+      - {value: "Может быть, у нее сломалась машина", status: "correct"}
+      - {value: "Может быть, у нее сломалась машина.", status: "correct"}
+      - {value: "Может быть, у нее машина сломалась", status: "correct"}
+      - {value: "Может быть, у нее машина сломалась.", status: "correct"}
     feedback: "Может быть, у неё сломалась машина means maybe her car broke down."
 
   ru.b2.unit02.lesson06.exercise01.comprehend_guess:
@@ -539,6 +577,8 @@ exercises:
     accepted_answers:
       - {value: "Оли ещё нет. Наверное, она застряла в пробке. Судя по тому, что она всегда пишет заранее, должно быть, у неё что-то случилось", status: "correct"}
       - {value: "Оли ещё нет. Наверное, она застряла в пробке. Судя по тому, что она всегда пишет заранее, должно быть, у неё что-то случилось.", status: "correct"}
+      - {value: "Оли еще нет. Наверное, она застряла в пробке. Судя по тому, что она всегда пишет заранее, должно быть, у нее что-то случилось", status: "correct"}
+      - {value: "Оли еще нет. Наверное, она застряла в пробке. Судя по тому, что она всегда пишет заранее, должно быть, у нее что-то случилось.", status: "correct"}
     feedback: "A full spoken speculation: Оли ещё нет. Наверное, она застряла в пробке. Судя по тому, что она всегда пишет заранее, должно быть, у неё что-то случилось."
   ru.b2.unit02.lesson06.exercise06.write_full_speculation:
     instruction: "Write a full speculation in Russian with graded certainty. Write these two sentences, using наверное and должно быть as signposts: (1) Olya isn't here yet. She's probably stuck in traffic. (2) Judging by the fact that she always texts ahead of time, something must have happened to her."
