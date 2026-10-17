@@ -2079,3 +2079,104 @@ without a count; mixed-level commits shown under both levels joined):
 
 Remaining: en-fr A2 u16 onward through C1 (~47 units), not reviewed — run
 cut off.
+
+### 2026-10-17 — en-pl / pl review backlog: 104 files, 52 units (fresh-context review, 15 parallel reviewers; branch content/review-backlog-polish, PR #34)
+Scope: every `review.status: unreviewed` file in `docs/content/overlays/en-pl/`
+and `docs/content/realizations/pl/`. That is A1 u01-19, A2 u21-26, B1 u09-19,
+B2 u01-08 and C1 u01-08, each unit's realization and overlay reviewed
+together (52 units, 104 files). Note: 44 realizations used the quoted form
+`status: "unreviewed"`, so a grep for the unquoted form undercounts this
+backlog as 44 + 8. All 122 en-pl/pl files are now `reviewed` with
+`required_next_reviewer: native_speaker_pass`.
+Checklist: `.claude/agents/content-reviewer.md` + OVERLAY_REVIEW_INSTRUCTIONS.
+Every batch was validated course-scoped (validate + compile, 0 errors).
+Two coordinator follow-ups also touched 9 already-reviewed files (A1 u20,
+B1 u01-08), for the same defect classes.
+Bug classes found:
+- Multiple-choice prompts that printed their own answer (largest class, new
+  to en-pl). In every A1/A2/B1 `select_*` multiple_choice, `prompt.target_blocks`
+  was the correct option. The compiler renders target_blocks as visible
+  `text_blocks` above the options (confirmed in compiled output and
+  MultipleChoice.tsx). 329 items in 45 files: 22 fixed by a reviewer, 307
+  by a scripted sweep (A1 133, A2 42, B1 132; 64 of the 307 in the 9
+  previously-reviewed files).
+- 1.21 missing valid accepted answers: Polish word-order variants,
+  feminine/masculine speaker forms, Pan/Pani, pronoun-dropped forms,
+  kiedy/gdy, aspect and short-reply variants.
+- Underdetermined production prompts: "write about your own…" or "write the
+  exact model sentence" graded against one string; unpinned speaker gender.
+  The English task text sat in pl target_blocks in B1 u07-11 and u16-19.
+- Comprehension without its text: B2 u01-08 lesson05 reading items showed
+  only the English question; A2 reading items showed only a question; C1
+  `recognize_calosc` said "Listen" with no audio or text.
+- C1 teaching-card glosses that repeated the Polish verbatim (all 8 units,
+  ~90 cards). Learners were never told what the phrases mean.
+- False grammar notes. Examples: dom→domu "ends in a consonant"; może
+  "unrelated to" mogę; gender past "by person"; "Gardło boli" and other
+  grammatical sentences presented as errors in A1/A2 grammar_checks; mógłby
+  "used by a man"; kiedy=moment vs gdy=habit; "no ordinal platform numbers";
+  comma rules for chociaż/więc/poza tym.
+- Character canon:
+  - Ewa = coffee and Marek = tea, swapped in A1 u13-14.
+  - Marek's house vs Ewa's flat in A2 u25.
+  - A friend addressed with "Proszę iść" in A1 u09.
+  - Marek's age mis-paired in an A1 u02 matching item.
+- Wrong key: B1 u16 accepted only the mixed-gender error it asked the
+  learner to fix.
+- Second-correct distractors and interchangeable matching LEFTs/RIGHTs (A1
+  u01-03, B2 u01-02, u07-08).
+- Unnatural Polish ("To jest tanio", "jak najbardziej dobry", "na tym
+  punkcie" for agreement).
+- Content-origin remarks in learner-visible notes (A1 u02-03, removed).
+New bug class discovered: none strictly. The answer-printing MC prompt is
+the "target_blocks that printed the answer" class from the 2026-10-17
+shared-English entry, but here it is systemic in a generator recipe (every
+A1-B1 select_* item).
+
+Fixes per level (from reviewer reports and commit subjects):
+- A1: u01-03 31 · u04-06 50 · u07-09 15 · u10-12 18 · u13-15 6 fix groups ·
+  u16-19 16. Total 130 + 6 groups + 133 MC sweep.
+- A2: u21-23 25 · u24-26 31. Total 56 + 42 MC sweep.
+- B1: u09-11 28 · u12-15 31 · u16-19 22 · u07-08 follow-up 2. Total 83 + 132
+  MC sweep.
+- B2: u01-04 33 · u05-08 62 · u01-04 reading follow-up 16. Total 111.
+- C1: u01-04 84 · u05-08 59. Total 143.
+- Grand total: ~830 fixes in 17 commits.
+- 83 `NATIVE CHECK:` items are recorded in the files' review.notes for a
+  native pass. Examples:
+  - skręcić na/w prawo;
+  - plain nominative instead of the vocative (Ewa/Marek vs Ewo/Marku);
+  - Proszę o kawę vs Poproszę kawę;
+  - są vs jest before lists of singular nouns;
+  - "w weekend" glossed "this weekend";
+  - C1 idiom adaptations (nazwać ryzyko po imieniu);
+  - B2 u08 people-agreement phrasings.
+
+Verification:
+- `scripts/verify.sh --content-only`: content pass (148 "0 error" lines).
+- Full backend suite against a local Postgres 16 with LINGO_REPO_ROOT set
+  to the whole repo: 33305 passed, 0 failed, 0 skipped. This includes 1993
+  en-pl cases in test_content_answer_shapes.
+
+Deferred / remaining:
+1. C1 u01-08 `speak_calosc` / `write_calosc` ask the learner to reproduce
+   the whole 4-6-sentence unit model from memory, graded by exact match.
+   The instruction ("Give the complete Polish structuring discourse model
+   aloud exactly") is also jargon-heavy. This is a recipe design problem
+   across 16 exercises, left for a decision: show the model text and turn
+   these into read-aloud and copy items, or drop them.
+2. Overlay word-order alternatives in `accepted_answers` each raise a
+   compiler "scrambled permutation of tested_text" WARN. There is no
+   suppression flag, so en-pl warnings rose (A1 ~75).
+3. A heuristic scan of other languages' realizations (multiple_choice
+   `target_blocks` text equal to `tested_text`) found candidates: prs 1056,
+   fa 805, hi 423, ro 203, ar 201, nl 136, es 117, fr 84, de 77, it 40,
+   ru 35. These are UNVERIFIED. Many are probably legitimate "What does X
+   mean?" items with English options; only items whose block equals the
+   overlay `correct_option` give the answer away. A per-language check is
+   worth one scripted pass (cf. the scratch checker described in PR #34).
+4. A validator for "MC prompt block == correct_option" would make the
+   biggest class here structurally impossible (Codex lane).
+5. B1 u10 and other units contain the content key
+   `comprehend_ewa_powiedzialam_ze_pociąg`, which has a non-ASCII ą. Left
+   as is to keep content keys stable.
