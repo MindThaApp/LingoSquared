@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: native_speaker_pass
+  notes: "New Codex-authored B1 draft. Needs fresh-context review. Fresh-context review 2026-10-11 (content-reviewer.md checklist): Checked teaching cards vs overlay entries, example_gloss accuracy, audio vs dialogue cards, distractors, production-prompt determinacy, gendered first-person answers, ё/е accepted-answer variants (grading has no ё folding), and the matching realization/overlay pair; en-ru-b1 course validate 0 errors. Fixes: overlay teach.reported_speech entry added (realization card had no title/gloss/note/example_gloss); teach.aspect_chital example_gloss \"I was reading an email.\" -> \"Chital shows a process in the past.\"; teach.aspect_pozvonil example_gloss \"A colleague called.\" -> \"Pozvonil shows one completed event.\"; teach.kogda_background_event and teach.sequence_markers example_glosses now translate \"вчера\" (yesterday); lesson01.exercise06.write_background_event accepted_answers widened with feminine/female-colleague variants (читала / позвонила); lesson03.exercise06.write_full_past_narrative instruction (realization prompt + overlay) pinned from an open composition to the exact four English sentences the key expects. NATIVE FLAG: dialogue \"Сначала я читал письмо. Когда я читал письмо, коллега позвонил.\" is repetitive but grammatical. DEFERRED: compiler gap (scripts/compile_content.py, Codex lane) - a realization teaching card with no overlay entry validates with 0 errors; should be a hard error."
 
 course:
   title: "Russian B1"
@@ -22,10 +25,11 @@ lessons:
 teaching:
   ru.b1.unit40.lesson01.teach.chital_background: {title: "Я читал письмо.", gloss: "I was reading an email.", note: "*читал* presents an ongoing background action in the past.", example_gloss: "Dima was reading an email."}
   ru.b1.unit40.lesson01.teach.pozvonil_event: {title: "Коллега позвонил.", gloss: "A colleague called.", note: "*позвонил* presents one completed event.", example_gloss: "A colleague called yesterday."}
-  ru.b1.unit40.lesson01.teach.kogda_background_event: {title: "Когда я читал письмо, коллега позвонил.", gloss: "When I was reading an email, a colleague called.", note: "*Когда* links the background action to the main event.", example_gloss: "When I was reading an email, a colleague called."}
-  ru.b1.unit40.lesson02.teach.aspect_chital: {title: "читал = процесс в прошлом", gloss: "chital = a process in the past", note: "Use imperfective *читал* for background action that was in progress.", example_gloss: "I was reading an email."}
-  ru.b1.unit40.lesson02.teach.aspect_pozvonil: {title: "позвонил = одно законченное событие", gloss: "pozvonil = one completed event", note: "Use perfective *позвонил* for the completed event in the story line.", example_gloss: "A colleague called."}
-  ru.b1.unit40.lesson02.teach.sequence_markers: {title: "Сначала я читал письмо. Потом коллега позвонил.", gloss: "First I was reading an email. Then a colleague called.", note: "*Сначала* and *Потом* order the events.", example_gloss: "First I was reading an email. Then a colleague called."}
+  ru.b1.unit40.lesson01.teach.kogda_background_event: {title: "Когда я читал письмо, коллега позвонил.", gloss: "When I was reading an email, a colleague called.", note: "*Когда* links the background action to the main event.", example_gloss: "When I was reading an email yesterday, a colleague called."}
+  ru.b1.unit40.lesson02.teach.aspect_chital: {title: "читал = процесс в прошлом", gloss: "chital = a process in the past", note: "Use imperfective *читал* for background action that was in progress.", example_gloss: "Chital shows a process in the past."}
+  ru.b1.unit40.lesson02.teach.aspect_pozvonil: {title: "позвонил = одно законченное событие", gloss: "pozvonil = one completed event", note: "Use perfective *позвонил* for the completed event in the story line.", example_gloss: "Pozvonil shows one completed event."}
+  ru.b1.unit40.lesson02.teach.sequence_markers: {title: "Сначала я читал письмо. Потом коллега позвонил.", gloss: "First I was reading an email. Then a colleague called.", note: "*Сначала* and *Потом* order the events.", example_gloss: "First I was reading an email. Then a colleague called yesterday."}
+  ru.b1.unit40.lesson02.teach.reported_speech: {title: "Потом он сказал, что встреча уже началась.", gloss: "Then he said that the meeting had already started.", note: "*сказал, что...* reports what someone said.", example_gloss: "Then he said that the meeting had already started today."}
   ru.b1.unit40.lesson03.teach.nastya_question: {title: "Nastya asks what happened", gloss: "Nastya: Dima, what happened yesterday?", note: "This prompts a past narrative."}
   ru.b1.unit40.lesson03.teach.dima_first: {title: "Dima starts the story", gloss: "Dima: First I was reading an email.", note: "*Сначала* starts the sequence."}
   ru.b1.unit40.lesson03.teach.dima_when: {title: "Dima gives background and event", gloss: "Dima: When I was reading an email, a colleague called.", note: "This contrasts imperfective background and perfective event."}
@@ -56,6 +60,9 @@ exercises:
       - {value: "Когда я читал письмо коллега позвонил.", status: "correct"}
       - {value: "Когда я читал письмо, коллега позвонил", status: "correct"}
       - {value: "Когда я читал письмо коллега позвонил", status: "correct"}
+      - {value: "Когда я читала письмо, коллега позвонил.", status: "correct"}
+      - {value: "Когда я читал письмо, коллега позвонила.", status: "correct"}
+      - {value: "Когда я читала письмо, коллега позвонила.", status: "correct"}
     feedback: "The model answer is *Когда я читал письмо, коллега позвонил*."
   ru.b1.unit40.lesson02.exercise01.recognize_chital_aspect: {instruction: "Which Russian form means \"was reading\" or \"read for a while\"?", correct_option: "читал", distractors: ["позвонил", "открыл", "сказал"], accepted_answers: [{value: "читал", status: "correct"}], feedback: "*читал* is used for the background process."}
   ru.b1.unit40.lesson02.exercise02.recognize_pozvonil_aspect: {instruction: "Which Russian form means a completed call event?", correct_option: "позвонил", distractors: ["читал", "работал", "ждал"], accepted_answers: [{value: "позвонил", status: "correct"}], feedback: "*позвонил* is the completed event form."}
@@ -108,7 +115,7 @@ exercises:
       - {value: "Сначала я читал письмо. Когда я читал письмо коллега позвонил. Потом он сказал что встреча уже началась.", status: "correct"}
     feedback: "The model answer gives the first event, the interrupted background action, and reported speech."
   ru.b1.unit40.lesson03.exercise06.write_full_past_narrative:
-    instruction: "As Дима, write a four-sentence past narrative. Include sequence markers Сначала, Потом, После этого; use imperfective читал for the background action; use perfective позвонил and открыл for completed events; and report what the colleague said with сказал, что встреча уже началась."
+    instruction: "As Дима, write these four sentences in Russian: First I was reading an email. When I was reading the email, a colleague called. Then he said that the meeting had already started. After that I quickly opened the link."
     accepted_answers:
       - {value: "Сначала я читал письмо. Когда я читал письмо, коллега позвонил. Потом он сказал, что встреча уже началась. После этого я быстро открыл ссылку.", status: "correct"}
       - {value: "Сначала я читал письмо. Когда я читал письмо коллега позвонил. Потом он сказал что встреча уже началась. После этого я быстро открыл ссылку.", status: "correct"}
