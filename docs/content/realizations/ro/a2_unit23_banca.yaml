@@ -39,8 +39,8 @@ generation_provenance:
     Ana/Mihai cast.
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Third Romanian A2 unit. Targets universal.a2.banking.
     open_bank_account (confirmed by grepping universal_spine.yaml
@@ -96,6 +96,48 @@ review:
     validate_untaught_vocabulary compiler checks. Needs a fresh-context
     content review before import, same as every other language's
     content.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked answer shapes, grading of every accepted_answers set,
+    distractors vs audio, open writing prompts, learner-visible notes
+    for internal ids/construction meta, example_gloss accuracy (all 6
+    correct), character canon. Fixes:
+    lesson02.exercise08.translate_documents_necessary instruction
+    'Translate into English.' -> 'Translate into Romanian.' and
+    accepted_answers English -> ['Ce acte sunt necesare pentru a
+    deschide un cont?'] (prompt is English, answer must be Romanian);
+    lesson03.exercise01/02 read_* realization prompt.target_blocks now
+    carry the leaflet passage (ro) before the question;
+    lesson03.exercise03.listen_pliant distractor 'E nevoie de buletin și
+    de o dovadă a adresei.' (near-verbatim in the audio) -> 'Ce acte
+    sunt necesare'; listen_select distractors in all three listen
+    exercises had final punctuation stripped so they match the
+    unpunctuated correct option (form give-away);
+    lesson03.exercise06.write_account_information_request open
+    composition prompt pinned to 'Write the question: What documents are
+    necessary to open a checking account?', accepted ['Ce acte sunt
+    necesare pentru a deschide un cont curent?'] (dropped untaught
+    'informații' answer), realization tested_text updated;
+    lesson04.exercise06.respond_as_ana instruction made explicit ('say
+    here you are, then ask when you will receive the card'), added
+    'Poftim. Când va sosi cardul?' + comma variant;
+    lesson04.exercise07.write_bank_visit_summary pinned to 'Write: Ana
+    opened a checking account at the bank.', accepted ['Ana a deschis un
+    cont curent la bancă.']; teach.deschid_grammar gloss 'has/had opened
+    -- compound-past participle' -> compound past with a avea +
+    participle deschis; teach.pliant_reading note 'spine outcome'
+    removed; teach.reminder_suficient_semnatura title 'Reminder:' ->
+    'New words:'; teach.line02 meta note -> language note on Aveți...?;
+    unit-number/lesson-id references rewritten in plain wording in notes
+    of teach.reminder_buna_multumesc_la_revedere_as_dori,
+    deschid_grammar, e_nevoie_grammar (also dropped the debatable 'more
+    formal' register claim), e_nevoie_de_phrase, cardul_soseste_phrase,
+    line01, line03, line06, line08. NATIVE FLAG: course.description
+    'bancherul Radu' -- a counter clerk is more naturally 'funcționarul
+    băncii'. DEFERRED: course.description is a unit-specific blurb on
+    the shared 'Romanian A2' course (course-wide structural decision
+    across all en-ro A2 overlays); writing_prompt exact-match grading
+    model (owner decision, units 21/22/26 likely affected).
 
 course:
   realization_key: ro.a2
@@ -359,12 +401,14 @@ units:
             tested_text: "buletin și de o dovadă a adresei"
             prompt:
               target_blocks:
+                - {text: "Pentru a deschide un cont curent, aveți nevoie de buletin și de o dovadă a adresei, precum actul de proprietate sau contractul de închiriere. Cardul dumneavoastră va sosi prin poștă în cinci zile lucrătoare.", language_code: ro, direction: ltr}
                 - {text: "According to the leaflet, what documents do you need to open an account?", language_code: en, direction: ltr}
           - content_key: ro.a2.unit23.lesson03.exercise02.read_card_timing
             type: reading_comprehension
             tested_text: "prin poștă în cinci zile lucrătoare"
             prompt:
               target_blocks:
+                - {text: "Pentru a deschide un cont curent, aveți nevoie de buletin și de o dovadă a adresei, precum actul de proprietate sau contractul de închiriere. Cardul dumneavoastră va sosi prin poștă în cinci zile lucrătoare.", language_code: ro, direction: ltr}
                 - {text: "How and when will the card arrive?", language_code: en, direction: ltr}
           - content_key: ro.a2.unit23.lesson03.exercise03.listen_pliant
             type: listen_select
@@ -390,7 +434,7 @@ units:
                 - {text: "Complete the sentence, five business days: Cardul va sosi prin poștă în ___ zile lucrătoare.", language_code: ro, direction: ltr}
           - content_key: ro.a2.unit23.lesson03.exercise06.write_account_information_request
             type: writing_prompt
-            tested_text: "aș dori informații despre cont curent acte necesare"
+            tested_text: "ce acte sunt necesare pentru a deschide un cont curent"
             prompt: {target_blocks: []}
 
       - content_key: ro.a2.unit23.lesson04.la_banca
