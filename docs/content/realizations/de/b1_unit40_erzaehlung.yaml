@@ -4,7 +4,10 @@ target_language: "de"
 cefr_level: "B1"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "Sixth de B1 unit. Uses Anna (Kellnerin, established a1_unit18) recounting a workday at the cafe, and Felix Weber (Ingenieur, established a1_unit18/b1_unit35-39), matching established roles. Formal Sie throughout in dialogue, matching the de-en lane register pin. Teaches waehrend + Praeteritum for background-vs-mainline sequencing, contrasted with the Perfekt already used for simple past narration, plus reported speech with the person-deixis shift (Sie->ich) when a quote addressed to the narrator is reported. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "Sixth de B1 unit. Uses Anna (Kellnerin, established a1_unit18) recounting a workday at the cafe, and Felix Weber (Ingenieur, established a1_unit18/b1_unit35-39), matching established roles. Formal Sie throughout in dialogue, matching the de-en lane register pin. Teaches waehrend + Praeteritum for background-vs-mainline sequencing, contrasted with the Perfekt already used for simple past narration, plus reported speech with the person-deixis shift (Sie->ich) when a quote addressed to the narrator is reported. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked realization/overlay pairing, deixis, prompt determinacy (bug class 1), distractor validity, grammar claims and character canon. Fixes: de.b1.unit40.lesson03.teach.anna_report (+ audio de.b1.audio.dialogue.erzaehlung_cafe.01, lesson03 exercise02/04/06 tested_text, overlay gloss/feedback/accepted_answers) 'Er sagte, dass ich heute sehr beschäftigt bin' -> 'Er sagte, dass ich sehr beschäftigt bin' (Anna recounts yesterday, so Felix's heute no longer means today; overlay note now explains the deixis drop); lesson03.exercise02 correct_option 'That she was very busy today.' -> 'That she was very busy.' (distractor 'That he was very busy today.' -> 'That he was very busy.'); lesson02.exercise06 instruction now pins 'Use sagte and keep the present tense (bin)' (Perfekt/sei/war were valid but graded wrong); lesson03.exercise06 instruction now pins the Präteritum forms (arbeitete, klingelte, kam, sagte) and present-tense bin, dropping 'today'; lesson01.exercise06 instruction now says 'in the Präteritum'; lesson03.exercise03 'just before the phone rang' -> 'going on when the phone rang' (während = simultaneous); lesson01.exercise01 distractor 'arbeitete ich im Cafe nicht' -> 'arbeitete ich nicht im Cafe' (unmarked negation order). Realization prompt target_blocks updated to match the overlay instructions. NATIVE FLAGS: 'Das stimmt bestimmt!' is grammatical but slightly stilted ('Das glaube ich!' / 'Bestimmt!' more idiomatic); course spelling 'Cafe' vs Duden 'Café' (typed 'Café' likely grades only as almost). DEFERRED: none."
 
 course:
   realization_key: "de.b1"
@@ -28,7 +31,7 @@ media_assets:
     text: >-
       Anna: Während ich gestern im Cafe arbeitete, klingelte plötzlich das
       Telefon. Dann kam Felix ins Cafe. Freundin: Und was hat er gesagt?
-      Anna: Er sagte, dass ich heute sehr beschäftigt bin. Freundin: Das
+      Anna: Er sagte, dass ich sehr beschäftigt bin. Freundin: Das
       stimmt bestimmt!
     voice_hint: "two_adults_neutral_friendly"
     status: "pending_generation"
@@ -63,7 +66,7 @@ units:
               - {left: "während", right: "while"}
               - {left: "dann", right: "then"}
           - {content_key: "de.b1.unit40.lesson01.exercise05.order_waehrend", type: "word_order", tested_text: "Während ich im Cafe arbeitete klingelte das Telefon", prompt: {target_blocks: []}, word_bank: ["Während", "ich", "im", "Cafe", "arbeitete,", "klingelte", "das", "Telefon"]}
-          - {content_key: "de.b1.unit40.lesson01.exercise06.write_waehrend", type: "writing_prompt", tested_text: "Während ich im Cafe arbeitete klingelte das Telefon", prompt: {target_blocks: [{text: "Write exactly this narrative sentence, marking a background action against a main-line event with während: While I was working in the cafe, the phone rang.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit40.lesson01.exercise06.write_waehrend", type: "writing_prompt", tested_text: "Während ich im Cafe arbeitete klingelte das Telefon", prompt: {target_blocks: [{text: "Write exactly this narrative sentence in the Präteritum, marking a background action against a main-line event with während: While I was working in the cafe, the phone rang.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "de.b1.unit40.lesson02.reported_speech"
         title: "Er sagte, dass ich ..."
@@ -87,7 +90,7 @@ units:
               - {left: "sagen", right: "to say"}
               - {left: "sagte", right: "said"}
           - {content_key: "de.b1.unit40.lesson02.exercise05.order_reported_speech", type: "word_order", tested_text: "Felix sagte dass ich heute sehr beschäftigt bin", prompt: {target_blocks: []}, word_bank: ["Felix", "sagte,", "dass", "ich", "heute", "sehr", "beschäftigt", "bin"]}
-          - {content_key: "de.b1.unit40.lesson02.exercise06.write_reported_speech", type: "writing_prompt", tested_text: "Felix sagte dass ich heute sehr beschäftigt bin", prompt: {target_blocks: [{text: "Felix said to you: \"Sie sind heute sehr beschäftigt.\" Report this as Anna telling a friend what Felix said, shifting Sie to ich: Felix said that I was very busy today.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit40.lesson02.exercise06.write_reported_speech", type: "writing_prompt", tested_text: "Felix sagte dass ich heute sehr beschäftigt bin", prompt: {target_blocks: [{text: "Felix said to you: \"Sie sind heute sehr beschäftigt.\" Report this as Anna telling a friend what Felix said, shifting Sie to ich. Use sagte and keep the present tense (bin): Felix said that I was very busy today.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "de.b1.unit40.lesson03.cafe_dialogue"
         title: "Dialog: Ein Erlebnis im Cafe"
@@ -95,15 +98,15 @@ units:
         teaching:
           - {content_key: "de.b1.unit40.lesson03.teach.anna_narrative", kind: "dialogue", target: {text: "Während ich gestern im Cafe arbeitete, klingelte plötzlich das Telefon. Dann kam Felix ins Cafe.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["gestern", "plötzlich"]}
           - {content_key: "de.b1.unit40.lesson03.teach.friend_ask", kind: "dialogue", target: {text: "Und was hat er gesagt?", language_code: "de", direction: "ltr", speaker: "Freundin"}, introduced_tokens: ["was", "hat", "er", "gesagt"]}
-          - {content_key: "de.b1.unit40.lesson03.teach.anna_report", kind: "dialogue", target: {text: "Er sagte, dass ich heute sehr beschäftigt bin.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["er"]}
+          - {content_key: "de.b1.unit40.lesson03.teach.anna_report", kind: "dialogue", target: {text: "Er sagte, dass ich sehr beschäftigt bin.", language_code: "de", direction: "ltr", speaker: "Anna"}, introduced_tokens: ["er"]}
           - {content_key: "de.b1.unit40.lesson03.teach.friend_react", kind: "dialogue", target: {text: "Das stimmt bestimmt!", language_code: "de", direction: "ltr", speaker: "Freundin"}, introduced_tokens: ["stimmt", "bestimmt"]}
         exercises:
           - {content_key: "de.b1.unit40.lesson03.exercise01.choose_anna_narrative", type: "multiple_choice", tested_text: "während ich gestern im Cafe arbeitete klingelte plötzlich das Telefon dann kam Felix ins Cafe", prompt: {target_blocks: [{text: "What was Anna doing when the phone suddenly rang, and what happened next?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "de.b1.unit40.lesson03.exercise02.choose_anna_report", type: "multiple_choice", tested_text: "er sagte dass ich heute sehr beschäftigt bin", prompt: {target_blocks: [{text: "What does Anna report that Felix said about her?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "de.b1.unit40.lesson03.exercise03.listen_dialogue_cafe", type: "listen_select", tested_text: "während ich gestern im Cafe arbeitete klingelte plötzlich das Telefon", media_asset_key: "de.b1.audio.dialogue.erzaehlung_cafe.01", prompt: {target_blocks: [{text: "Listen to the dialogue. What was the background action just before the phone rang?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit40.lesson03.exercise02.choose_anna_report", type: "multiple_choice", tested_text: "er sagte dass ich sehr beschäftigt bin", prompt: {target_blocks: [{text: "What does Anna report that Felix said about her?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit40.lesson03.exercise03.listen_dialogue_cafe", type: "listen_select", tested_text: "während ich gestern im Cafe arbeitete klingelte plötzlich das Telefon", media_asset_key: "de.b1.audio.dialogue.erzaehlung_cafe.01", prompt: {target_blocks: [{text: "Listen to the dialogue. What was the background action going on when the phone rang?", language_code: "en", direction: "ltr"}]}}
           - content_key: "de.b1.unit40.lesson03.exercise04.match_dialogue_cafe"
             type: "matching_pairs"
-            tested_text: "während ich gestern im cafe arbeitete klingelte plötzlich das telefon und was hat er gesagt er sagte dass ich heute sehr beschäftigt bin das stimmt bestimmt"
+            tested_text: "während ich gestern im cafe arbeitete klingelte plötzlich das telefon und was hat er gesagt er sagte dass ich sehr beschäftigt bin das stimmt bestimmt"
             prompt: {target_blocks: []}
             pairs:
               - {left: "gestern", right: "yesterday"}
@@ -113,6 +116,6 @@ units:
               - {left: "die Freundin", right: "the (female) friend"}
               - {left: "bestimmt", right: "surely"}
           - {content_key: "de.b1.unit40.lesson03.exercise05.order_friend_ask", type: "word_order", tested_text: "Und was hat er gesagt", prompt: {target_blocks: []}, word_bank: ["Und", "was", "hat", "er", "gesagt?"]}
-          - {content_key: "de.b1.unit40.lesson03.exercise06.write_full_narrative", type: "writing_prompt", tested_text: "Während ich gestern im Cafe arbeitete klingelte plötzlich das Telefon Dann kam Felix ins Cafe Er sagte dass ich heute sehr beschäftigt bin", prompt: {target_blocks: [{text: "As Anna, recount your experience to a friend in three sentences: (1) the background action (you were working in the cafe yesterday) against the main event (the phone suddenly rang), using während; (2) the next event with dann (Felix came into the cafe); (3) report what Felix said to you, shifting Sie to ich (he said that you were very busy today).", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "de.b1.unit40.lesson03.exercise06.write_full_narrative", type: "writing_prompt", tested_text: "Während ich gestern im Cafe arbeitete klingelte plötzlich das Telefon Dann kam Felix ins Cafe Er sagte dass ich sehr beschäftigt bin", prompt: {target_blocks: [{text: "As Anna, recount your experience to a friend in three sentences, using the Präteritum (arbeitete, klingelte, kam, sagte): (1) the background action (you were working in the cafe yesterday) against the main event (the phone suddenly rang), using während; (2) the next event with dann (Felix came into the cafe); (3) report what Felix said to you, shifting Sie to ich and keeping the present tense bin (he said that I was very busy).", language_code: "en", direction: "ltr"}]}}
           - {content_key: de.b1.unit40.lesson03.exercise07.dictation_waehrend_praeteritum, type: dictation, tested_text: "Während ich im Cafe arbeitete, klingelte das Telefon.", media_asset_key: de.b1.audio.waehrend_praeteritum.neutral.01, prompt: {target_blocks: []}}
           - {content_key: de.b1.unit40.lesson03.exercise08.dictation_reported_speech, type: dictation, tested_text: "Felix sagte, dass ich heute sehr beschäftigt bin.", media_asset_key: de.b1.audio.reported_speech.neutral.01, prompt: {target_blocks: []}}
