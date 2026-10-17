@@ -27,8 +27,8 @@ generation_provenance:
     source's 1961 domestic-servant/telephone framing with two peers
     shopping together.
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Seventh Spanish A1 unit, continuing the Elena/Mateo storyline: after
     unit06's lunch, they go to the market together to buy ingredients
@@ -72,13 +72,37 @@ review:
     Pending fresh-context review and Ramin's native-speaker pass. Audio
     assets declared for generation, not yet recorded.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every exercise's visible prompt, accepted answers against
+    what the prompt allows, teaching/dialogue coverage, reading
+    passages, and internal consistency with the overlay. Fixes:
+    es.a1.unit07.lesson05.exercise01-04 (read_precio_tomates,
+    read_precio_huevos, read_precio_pan, read_fruta_fresca) -- reading
+    questions had no visible passage; the Spanish price label is now the
+    first prompt.target_block (es) before the question. lesson06
+    teaching -- added dialogue cards line09 (Mateo: Perfecto, gracias.),
+    line10 (Elena: ¿Necesitas algo más?), line11 (Mateo: No, creo que ya
+    tenemos todo.) so the full recorded dialogue is shown and the tú
+    form ¿Necesitas? is taught. lesson05.exercise07.write_cheapest_item
+    -- open-choice prompt graded against two exact strings; pinned to
+    'Write in Spanish: you want bread, and it costs six.' (overlay key
+    widened to match). course.register_policy corrected (it claimed tú
+    with the vendor; the vendor uses usted). NATIVE FLAGS: 'Medio kilo
+    de pan' (bread by weight is regional); verdura note in the overlay
+    may need refining. DEFERRED: Mateo/Elena location canon (unit01
+    Londres vs unit03 España vs shared neighborhood here) lives in
+    unit01/unit03 -- owner decision; a compiler validator requiring a
+    target-language passage block on reading_comprehension (Codex lane,
+    scripts/compile_content.py).
+
 course:
   realization_key: es.a1
   target_language_first: true
   dialect: es_neutral_pan_hispanic
   register_policy: >-
-    Continues unit01-06's tú register with Mateo, extended to the
-    market vendor as well (an informal, everyday market stall).
+    Continues unit01-06's tú register between Elena and Mateo; the
+    market vendor uses the polite usted form with customers
+    (¿Necesita algo más?, ¿Cuánto quiere, señorita?).
 
 media_assets:
   - {content_key: es.a1.audio.mercado.lista.01, language: es, text: "el mercado, la fruta, la verdura, los huevos, el pan", voice_hint: neutral_adult, status: pending_generation}
@@ -226,17 +250,17 @@ units:
             target: {text: "*El kilo* after a price (\"tomates, dos el kilo\") means \"per kilo\" -- the price applies to each kilo you buy.", language_code: en, direction: ltr}
             introduced_tokens: []
         exercises:
-          - {content_key: es.a1.unit07.lesson05.exercise01.read_precio_tomates, type: reading_comprehension, tested_text: "tomates dos el kilo", prompt: {target_blocks: [{text: "According to the label, how much are tomatoes per kilo?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit07.lesson05.exercise02.read_precio_huevos, type: reading_comprehension, tested_text: "Huevos cuatro la docena", prompt: {target_blocks: [{text: "How much is a dozen eggs?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit07.lesson05.exercise03.read_precio_pan, type: reading_comprehension, tested_text: "Pan seis", prompt: {target_blocks: [{text: "How much is the bread?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit07.lesson05.exercise04.read_fruta_fresca, type: reading_comprehension, tested_text: "Fruta fresca todos los días", prompt: {target_blocks: [{text: "According to the label, how often is the fruit fresh?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit07.lesson05.exercise01.read_precio_tomates, type: reading_comprehension, tested_text: "tomates dos el kilo", prompt: {target_blocks: [{text: "Puesto de Rosa: tomates, dos el kilo. Huevos, cuatro la docena. Pan, seis. Fruta fresca todos los días.", language_code: es, direction: ltr}, {text: "According to the label, how much are tomatoes per kilo?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit07.lesson05.exercise02.read_precio_huevos, type: reading_comprehension, tested_text: "Huevos cuatro la docena", prompt: {target_blocks: [{text: "Puesto de Rosa: tomates, dos el kilo. Huevos, cuatro la docena. Pan, seis. Fruta fresca todos los días.", language_code: es, direction: ltr}, {text: "How much is a dozen eggs?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit07.lesson05.exercise03.read_precio_pan, type: reading_comprehension, tested_text: "Pan seis", prompt: {target_blocks: [{text: "Puesto de Rosa: tomates, dos el kilo. Huevos, cuatro la docena. Pan, seis. Fruta fresca todos los días.", language_code: es, direction: ltr}, {text: "How much is the bread?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit07.lesson05.exercise04.read_fruta_fresca, type: reading_comprehension, tested_text: "Fruta fresca todos los días", prompt: {target_blocks: [{text: "Puesto de Rosa: tomates, dos el kilo. Huevos, cuatro la docena. Pan, seis. Fruta fresca todos los días.", language_code: es, direction: ltr}, {text: "According to the label, how often is the fruit fresh?", language_code: en, direction: ltr}]}}
           - content_key: es.a1.unit07.lesson05.exercise05.match_etiquetas
             type: matching_pairs
             tested_text: "tomates Huevos Pan"
             prompt: {target_blocks: []}
             pairs: [{left: tomates, right: "2 el kilo"}, {left: Huevos, right: "4 la docena"}, {left: Pan, right: "6"}]
           - {content_key: es.a1.unit07.lesson05.exercise06.fill_todos_los_dias, type: fill_in_blank, tested_text: "Fruta fresca todos los días", prompt: {target_blocks: [{text: "Fruta fresca todos los ___. (days)", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit07.lesson05.exercise07.write_cheapest_item, type: writing_prompt, tested_text: "Pan seis", prompt: {target_blocks: [{text: "Write in Spanish which item on Rosa's stand you would buy and its price.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit07.lesson05.exercise07.write_cheapest_item, type: writing_prompt, tested_text: "Pan seis", prompt: {target_blocks: [{text: "Write in Spanish: you want bread, and it costs six.", language_code: en, direction: ltr}]}}
 
       - content_key: es.a1.unit07.lesson06.de_compras_en_el_mercado_dialogue
         title: "Elena y Mateo van al mercado"
@@ -250,6 +274,9 @@ units:
           - {content_key: es.a1.unit07.lesson06.teach.line06, kind: dialogue, target: {text: "Cuesta dos.", language_code: es, direction: ltr, speaker: Vendedor}, introduced_tokens: [Cuesta, dos]}
           - {content_key: es.a1.unit07.lesson06.teach.line07, kind: dialogue, target: {text: "Yo necesito una docena de huevos y pan.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Yo, necesito, una, docena, de, huevos, y, pan]}
           - {content_key: es.a1.unit07.lesson06.teach.line08, kind: dialogue, target: {text: "Los huevos cuestan cuatro, y el pan, seis.", language_code: es, direction: ltr, speaker: Vendedor}, introduced_tokens: [Los, huevos, cuestan, cuatro, y, el, pan, seis]}
+          - {content_key: es.a1.unit07.lesson06.teach.line09, kind: dialogue, target: {text: "Perfecto, gracias.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: [Perfecto, gracias]}
+          - {content_key: es.a1.unit07.lesson06.teach.line10, kind: dialogue, target: {text: "¿Necesitas algo más?", language_code: es, direction: ltr, speaker: Elena}, introduced_tokens: [Necesitas, algo, más]}
+          - {content_key: es.a1.unit07.lesson06.teach.line11, kind: dialogue, target: {text: "No, creo que ya tenemos todo.", language_code: es, direction: ltr, speaker: Mateo}, introduced_tokens: ["No", creo, que, ya, tenemos, todo]}
         exercises:
           - {content_key: es.a1.unit07.lesson06.exercise01.listen_activity, type: dialogue_comprehension, tested_text: "mercado verduras huevos pan", media_asset_key: es.a1.audio.dialogue.mercado_elena_mateo.01, prompt: {target_blocks: []}}
           - {content_key: es.a1.unit07.lesson06.exercise02.comprehend_por_que_van, type: dialogue_comprehension, tested_text: "Necesitamos ingredientes para la próxima clase", media_asset_key: es.a1.audio.dialogue.mercado_elena_mateo.01, prompt: {target_blocks: [{text: "Why are Elena and Mateo going to the market?", language_code: en, direction: ltr}]}}
