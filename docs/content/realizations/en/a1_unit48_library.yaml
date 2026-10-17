@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Four-lesson draft. Realizes universal.a1.library.borrow_return_item,
     the next unrealized outcome in the shared English realization (fa-en/
@@ -196,6 +196,45 @@ review:
     for whoever records it. Draft only -- needs the mandatory
     fresh-context review before any overlay authors build on it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    against the nl-en overlay of this unit (and the fa-en/prs-en overlays
+    where accepted answers are copied), listen distractors against the full
+    dialogue audio, speaker attribution, matching lefts, and course-wide
+    untaught tokens (only the usual English meta-instruction words flagged,
+    by convention). translation answer-leak target_block removed
+    (coordinator sweep): en.a1.unit48.lesson02.exercise05.translate_when_due
+    now has target_blocks: []. Fixes:
+    en.a1.unit48.lesson03.exercise04.respond_own_library_request -- added
+    'Do I need a library card(?)', 'I would like to borrow this book.', 'I
+    would like to borrow a book.'; removed 'Do you have a library card?'
+    (asks someone else), 'Can I return this book?' and 'When is this book
+    due?' (neither does what the prompt asks) here and in nl-en (nl-en
+    feedback now models 'Do I need a library card?'); in fa-en/prs-en the
+    same additions were made and 'Can I return this book?'/'When is this
+    book due?' removed.
+    en.a1.unit48.lesson04.exercise04.write_own_library_message -- removed
+    "I'd like to borrow this book, and do I need a library card?"
+    everywhere; added 'I would like to borrow this/a book. Do I need a
+    library card?' everywhere. en.a1.unit48.lesson03.teach.dialogue_line1
+    and en.a1.audio.dialogue.library_visit.01 (pending_generation) --
+    'return this book at the library' -> 'return this book to the library'
+    (unused 'at' dropped from the card's introduced_tokens; nl-en
+    lesson03.exercise01 feedback updated to match).
+    en.a1.unit48.lesson01.exercise03.match_library_words pair 'due' right --
+    'the day something needs to be given back' -> 'needing to be given back
+    by a certain day' (defines the adjective, not 'due date'); nl-en right
+    text -> 'op een bepaalde dag terug moeten zijn'. Overlay-only:
+    lesson02.exercise05 now also accepts 'When is this book due back(?)' in
+    nl-en, fa-en, prs-en and 'When does this book have to be back?' in nl-
+    en. NATIVE FLAG / OWNER DECISION: Daniel character canon -- unit02
+    presents him as library staff, unit23 as an engineer, and here he has
+    never borrowed a library book; needs an owner decision (likely a unit02
+    change). DEFERRED: fa-en/prs-en lesson03.exercise04 still accept 'Do you
+    have a library card?' because their Persian/Dari feedback models that
+    phrase (feedback rewrite needs fa/prs text); fa-en/prs-en
+    lesson01.exercise03 'due' right text still defines the due date (needs
+    fa/prs text).
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -207,7 +246,7 @@ media_assets:
   - {content_key: "en.a1.audio.library_visit.phrases.do_you_have_a_library_card.01", language: "en", text: "Do you have a library card?", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a1.audio.dialogue.library_visit.01"
     language: "en"
-    text: "Leila: I need to return this book at the library. Do you want to come with me? Daniel: Sure! I don't think I've ever borrowed a book from a library before. Leila: Hi, I'd like to return this book, and I'd like to borrow a new one too. Librarian: Great, thank you. Do you have your library card? Leila: Yes, here it is. Librarian: Perfect. This new book is due back in three weeks. Daniel: Can I get a library card too? I'd like to borrow a cookbook. Librarian: Of course! Just fill out this form."
+    text: "Leila: I need to return this book to the library. Do you want to come with me? Daniel: Sure! I don't think I've ever borrowed a book from a library before. Leila: Hi, I'd like to return this book, and I'd like to borrow a new one too. Librarian: Great, thank you. Do you have your library card? Leila: Yes, here it is. Librarian: Perfect. This new book is due back in three weeks. Daniel: Can I get a library card too? I'd like to borrow a cookbook. Librarian: Of course! Just fill out this form."
     voice_hint: "three_adults_neutral_friendly"
     status: "pending_generation"
 
@@ -231,7 +270,7 @@ units:
         exercises:
           - {content_key: "en.a1.unit48.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "borrow", media_asset_key: "en.a1.audio.library_visit.words.borrow.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit48.lesson01.exercise02.choose_return_meaning", type: "multiple_choice", tested_text: "return", prompt: {target_blocks: [{text: "Which word means to give something back?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit48.lesson01.exercise03.match_library_words", type: "matching_pairs", tested_text: "library borrow return due card", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "library", right: "a place where you can borrow books"}, {left: "borrow", right: "to take something and bring it back later"}, {left: "return", right: "to give something back"}, {left: "due", right: "the day something needs to be given back"}, {left: "card", right: "a card that lets you borrow library items"}]}
+          - {content_key: "en.a1.unit48.lesson01.exercise03.match_library_words", type: "matching_pairs", tested_text: "library borrow return due card", prompt: {target_blocks: [{text: "Match each word to its meaning.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "library", right: "a place where you can borrow books"}, {left: "borrow", right: "to take something and bring it back later"}, {left: "return", right: "to give something back"}, {left: "due", right: "needing to be given back by a certain day"}, {left: "card", right: "a card that lets you borrow library items"}]}
           - {content_key: "en.a1.unit48.lesson01.exercise04.order_borrow_sentence", type: "word_order", tested_text: "I'd like to borrow this book.", word_bank: ["I'd", "like", "to", "borrow", "this", "book."], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson01.exercise05.write_return_word", type: "writing_prompt", tested_text: "return", prompt: {target_blocks: [{text: "Write the word that means to give something back.", language_code: "en", direction: "ltr"}]}}
 
@@ -250,13 +289,13 @@ units:
           - {content_key: "en.a1.unit48.lesson02.exercise02.choose_borrow_meaning", type: "multiple_choice", tested_text: "I'd like to borrow this book.", prompt: {target_blocks: [{text: "Which phrase do you say to ask to take a book home?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson02.exercise03.choose_due_friday_meaning", type: "multiple_choice", tested_text: "Your book is due on Friday.", prompt: {target_blocks: [{text: "Which phrase tells you when you need to return your book?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson02.exercise04.order_return_sentence", type: "word_order", tested_text: "Can I return this book?", word_bank: ["Can", "I", "return", "this", "book?"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit48.lesson02.exercise05.translate_when_due", type: "translation", tested_text: "When is this book due?", prompt: {target_blocks: [{text: "Translate: \"When is this book due?\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit48.lesson02.exercise05.translate_when_due", type: "translation", tested_text: "When is this book due?", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit48.lesson03.dialogue_at_the_library"
         title: "Dialogue: At the library"
         spine_outcome_id: "universal.a1.library.borrow_return_item"
         teaching:
-          - {content_key: "en.a1.unit48.lesson03.teach.dialogue_line1", kind: "dialogue", target: {text: "I need to return this book at the library. Do you want to come with me?", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["need", "at", "want", "come", "with", "me"], media_asset_key: "en.a1.audio.dialogue.library_visit.01"}
+          - {content_key: "en.a1.unit48.lesson03.teach.dialogue_line1", kind: "dialogue", target: {text: "I need to return this book to the library. Do you want to come with me?", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["need", "want", "come", "with", "me"], media_asset_key: "en.a1.audio.dialogue.library_visit.01"}
           - {content_key: "en.a1.unit48.lesson03.teach.dialogue_line2", kind: "dialogue", target: {text: "Sure! I don't think I've ever borrowed a book from a library before.", language_code: "en", direction: "ltr", speaker: "Daniel"}, introduced_tokens: ["Sure", "don't", "think", "I've", "ever", "borrowed", "from", "before"]}
           - {content_key: "en.a1.unit48.lesson03.teach.dialogue_line3", kind: "dialogue", target: {text: "Hi, I'd like to return this book, and I'd like to borrow a new one too.", language_code: "en", direction: "ltr", speaker: "Leila"}, introduced_tokens: ["Hi", "and", "new", "one", "too"]}
           - {content_key: "en.a1.unit48.lesson03.teach.dialogue_line4", kind: "dialogue", target: {text: "Great, thank you. Do you have your library card?", language_code: "en", direction: "ltr", speaker: "Librarian"}, introduced_tokens: ["Great", "thank"]}
@@ -268,7 +307,7 @@ units:
           - {content_key: "en.a1.unit48.lesson03.exercise01.comprehension_why_leila_goes", type: "multiple_choice", tested_text: "to return a book", prompt: {target_blocks: [{text: "According to the dialogue, why does Leila go to the library?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson03.exercise02.comprehension_what_daniel_wants", type: "multiple_choice", tested_text: "a cookbook", prompt: {target_blocks: [{text: "According to the dialogue, what does Daniel want to borrow?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson03.exercise03.listen_dialogue_due_time", type: "listen_select", tested_text: "in three weeks", media_asset_key: "en.a1.audio.dialogue.library_visit.01", prompt: {target_blocks: [{text: "According to the dialogue, when is Leila's new book due?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit48.lesson03.exercise04.respond_own_library_request", type: "speak_response", tested_text: "I'd like to borrow this book", accepted_answers: ["I'd like to borrow this book", "I'd like to borrow this book.", "I'd like to borrow a book", "I'd like to borrow a book.", "Do you have a library card?", "Can I return this book?", "When is this book due?"], prompt: {target_blocks: [{text: "Say that you'd like to borrow a book, or ask whether you need a library card.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit48.lesson03.exercise04.respond_own_library_request", type: "speak_response", tested_text: "I'd like to borrow this book", accepted_answers: ["I'd like to borrow this book", "I'd like to borrow this book.", "I'd like to borrow a book", "I'd like to borrow a book.", "Do I need a library card?", "Do I need a library card", "I would like to borrow this book.", "I would like to borrow a book."], prompt: {target_blocks: [{text: "Say that you'd like to borrow a book, or ask whether you need a library card.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit48.lesson04.how_libraries_work"
         title: "Reading: How libraries work"
@@ -279,4 +318,4 @@ units:
           - {content_key: "en.a1.unit48.lesson04.exercise01.reading_why_leila_borrows", type: "multiple_choice", tested_text: "she doesn't own as many books as she used to", prompt: {target_blocks: [{text: "According to the reading, why does Leila borrow books from the library now?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson04.exercise02.reading_what_daniel_checked_out", type: "multiple_choice", tested_text: "a cookbook", prompt: {target_blocks: [{text: "According to the reading, what did Daniel check out?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit48.lesson04.exercise03.reading_what_to_do_if_late", type: "multiple_choice", tested_text: "ask the librarian for more time", prompt: {target_blocks: [{text: "According to the reading, what should you do if you're not finished with a book by the due date?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit48.lesson04.exercise04.write_own_library_message", type: "writing_prompt", tested_text: "I'd like to borrow this book. Do I need a library card?", prompt: {target_blocks: [{text: "Write a short message: say you'd like to borrow a book and ask whether you need a library card.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I'd like to borrow this book. Do I need a library card?", "I'd like to borrow this book. Do I need a library card.", "I'd like to borrow this book, do I need a library card?", "I'd like to borrow this book, and do I need a library card?", "I'd like to borrow a book. Do I need a library card?", "I'd like to borrow a book. Do I need a library card."]}
+          - {content_key: "en.a1.unit48.lesson04.exercise04.write_own_library_message", type: "writing_prompt", tested_text: "I'd like to borrow this book. Do I need a library card?", prompt: {target_blocks: [{text: "Write a short message: say you'd like to borrow a book and ask whether you need a library card.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I'd like to borrow this book. Do I need a library card?", "I'd like to borrow this book. Do I need a library card.", "I'd like to borrow this book, do I need a library card?", "I'd like to borrow a book. Do I need a library card?", "I'd like to borrow a book. Do I need a library card.", "I would like to borrow this book. Do I need a library card?", "I would like to borrow a book. Do I need a library card?"]}

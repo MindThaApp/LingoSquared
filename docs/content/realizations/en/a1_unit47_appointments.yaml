@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Four-lesson draft. Realizes universal.a1.appointments.make_simple_appointment,
     the next unrealized outcome in the shared English realization (fa-en/nl-en/
@@ -166,6 +166,32 @@ review:
     the mandatory fresh-context review before any overlay authors build on
     it.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    against the nl-en overlay of this unit (and the fa-en/prs-en overlays
+    where accepted answers are copied), listen distractors against the full
+    dialogue audio, speaker attribution, matching lefts, and course-wide
+    untaught tokens (only the usual English meta-instruction words flagged,
+    by convention). translation answer-leak target_block removed
+    (coordinator sweep):
+    en.a1.unit47.lesson02.exercise05.translate_reschedule_monday now has
+    target_blocks: []. Fixes:
+    en.a1.unit47.lesson03.exercise04.respond_own_appointment_request --
+    added 'Are you available on Friday?', 'Are you available on Monday?',
+    'Is Friday available?', 'Does that time work for you?', 'Does Thursday
+    work for you?', 'I would like to make an appointment(.)', 'I'd like to
+    make an appointment for Friday.', 'I'd like to make an appointment for
+    Monday.' here and in nl-en, fa-en and prs-en (the prompt leaves the day
+    open). en.a1.unit47.lesson04.exercise04.write_own_appointment_message --
+    removed "I'd like to make an appointment, and are you available on
+    Thursday?" everywhere; added 'Are you available on Friday/Monday?',
+    'Does Thursday/Friday work for you?' and 'I would like to make an
+    appointment. ...' variants everywhere. Overlay-only: lesson02.exercise05
+    now also accepts 'Can we reschedule it for Monday(?)' in nl-en, fa-en
+    and prs-en. NATIVE FLAG: dialogue_line7 ('Thursday at 3pm -- thank you!
+    Max's appointment is confirmed.') switches from addressing the vet to
+    telling Mia within one line; plausible on the phone, left for a native
+    ear. DEFERRED: none.
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -220,7 +246,7 @@ units:
           - {content_key: "en.a1.unit47.lesson02.exercise02.choose_id_like_meaning", type: "multiple_choice", tested_text: "I'd like to make an appointment.", prompt: {target_blocks: [{text: "Which phrase do you say to start booking an appointment?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson02.exercise03.choose_confirmed_meaning", type: "multiple_choice", tested_text: "Your appointment is confirmed.", prompt: {target_blocks: [{text: "Which phrase tells you the appointment has definitely been arranged?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson02.exercise04.order_what_time_sentence", type: "word_order", tested_text: "What time works for you?", word_bank: ["What", "time", "works", "for", "you?"], prompt: {target_blocks: [{text: "Put the words in the correct order.", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit47.lesson02.exercise05.translate_reschedule_monday", type: "translation", tested_text: "Can we reschedule for Monday?", prompt: {target_blocks: [{text: "Translate: \"Can we reschedule for Monday?\"", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit47.lesson02.exercise05.translate_reschedule_monday", type: "translation", tested_text: "Can we reschedule for Monday?", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit47.lesson03.dialogue_booking_a_vet_appointment"
         title: "Dialogue: Booking a vet appointment"
@@ -237,7 +263,7 @@ units:
           - {content_key: "en.a1.unit47.lesson03.exercise01.comprehension_why_appointment", type: "multiple_choice", tested_text: "for his yearly checkup", prompt: {target_blocks: [{text: "According to the dialogue, why does Max need an appointment?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson03.exercise02.comprehension_what_day", type: "multiple_choice", tested_text: "Thursday", prompt: {target_blocks: [{text: "According to the dialogue, what day is Max's appointment?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson03.exercise03.listen_dialogue_time", type: "listen_select", tested_text: "3pm", media_asset_key: "en.a1.audio.dialogue.appointments.01", prompt: {target_blocks: [{text: "According to the dialogue, what time is Max's appointment?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit47.lesson03.exercise04.respond_own_appointment_request", type: "speak_response", tested_text: "I'd like to make an appointment", accepted_answers: ["I'd like to make an appointment", "I'd like to make an appointment.", "I'd like to make an appointment for Thursday", "I'd like to make an appointment for Thursday.", "Are you available on Thursday?", "Can we reschedule for Monday?", "What time works for you?"], prompt: {target_blocks: [{text: "Say that you'd like to make an appointment, or ask about a day or time.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit47.lesson03.exercise04.respond_own_appointment_request", type: "speak_response", tested_text: "I'd like to make an appointment", accepted_answers: ["I'd like to make an appointment", "I'd like to make an appointment.", "I'd like to make an appointment for Thursday", "I'd like to make an appointment for Thursday.", "Are you available on Thursday?", "Can we reschedule for Monday?", "What time works for you?", "Are you available on Friday?", "Are you available on Monday?", "Is Friday available?", "Does that time work for you?", "Does Thursday work for you?", "I would like to make an appointment", "I would like to make an appointment.", "I'd like to make an appointment for Friday.", "I'd like to make an appointment for Monday."], prompt: {target_blocks: [{text: "Say that you'd like to make an appointment, or ask about a day or time.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit47.lesson04.how_to_make_an_appointment"
         title: "Reading: How to make an appointment"
@@ -248,4 +274,4 @@ units:
           - {content_key: "en.a1.unit47.lesson04.exercise01.reading_reschedule_action", type: "multiple_choice", tested_text: "call again and ask to reschedule", prompt: {target_blocks: [{text: "According to the notice, what should you do if you need to change your appointment?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson04.exercise02.reading_why_leila_called", type: "multiple_choice", tested_text: "for Max's yearly checkup", prompt: {target_blocks: [{text: "According to the reading, why did Leila call the vet?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit47.lesson04.exercise03.reading_daniels_appointment", type: "multiple_choice", tested_text: "a dentist appointment", prompt: {target_blocks: [{text: "According to the reading, what appointment does Daniel have on Monday?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a1.unit47.lesson04.exercise04.write_own_appointment_message", type: "writing_prompt", tested_text: "I'd like to make an appointment. Are you available on Thursday?", prompt: {target_blocks: [{text: "Write a short message: say you'd like to make an appointment and ask whether a day or time works.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I'd like to make an appointment. Are you available on Thursday?", "I'd like to make an appointment. Are you available on Thursday.", "I'd like to make an appointment, are you available on Thursday?", "I'd like to make an appointment, and are you available on Thursday?", "I'd like to make an appointment. Is Friday available?", "I'd like to make an appointment. Is Friday available."]}
+          - {content_key: "en.a1.unit47.lesson04.exercise04.write_own_appointment_message", type: "writing_prompt", tested_text: "I'd like to make an appointment. Are you available on Thursday?", prompt: {target_blocks: [{text: "Write a short message: say you'd like to make an appointment and ask whether a day or time works.", language_code: "en", direction: "ltr"}]}, accepted_answers: ["I'd like to make an appointment. Are you available on Thursday?", "I'd like to make an appointment. Are you available on Thursday.", "I'd like to make an appointment, are you available on Thursday?", "I'd like to make an appointment. Is Friday available?", "I'd like to make an appointment. Is Friday available.", "I'd like to make an appointment. Are you available on Friday?", "I'd like to make an appointment. Are you available on Monday?", "I'd like to make an appointment. Does Thursday work for you?", "I'd like to make an appointment. Does Friday work for you?", "I would like to make an appointment. Are you available on Thursday?", "I would like to make an appointment. Are you available on Friday?", "I would like to make an appointment. Is Friday available?"]}
