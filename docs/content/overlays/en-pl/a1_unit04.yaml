@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fourth en-pl overlay, written for pl/a1_unit04_time.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start). No
@@ -18,6 +18,32 @@ review:
     authored), so the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't
     apply here -- noted for whoever authors pl-en next: do not open this
     file for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): 7
+    multiple_choice select_* exercises -- prompt.target_blocks displayed
+    the correct Polish option itself above the options (rendered as
+    text_blocks), giving the answer away -> target_blocks emptied (the
+    English instruction carries the cue), comprehension-without-
+    text/duplicate class. Overlay: lesson01.exercise07.fill_current_time
+    -- 'a time of your choice' graded only against piąta -> instruction
+    pinned to 'It's five o'clock' (underdetermined prompt).
+    lesson02.exercise06.fill_train_time -- instruction pinned to 4 in the
+    afternoon. locative_hour_note -- 'Add -ej' was false (czwarta+ej) ->
+    'final -a becomes -ej'. spotkanie note -- claimed Ewa and Marek used
+    spotkanie in unit 3 (they did not; it was taught in Kiedy jest
+    spotkanie?) -> corrected. Missing accepted answers added:
+    lesson02.exercise08 (Odjeżdża o czwartej po południu / O czwartej po
+    południu / Pociąg odjeżdża o czwartej), lesson02.exercise09 (Ewa
+    wstaje o siódmej / Ewa wstaje rano o siódmej / O siódmej rano),
+    lesson03.exercise10 (Tak, ... / Czwarta mi odpowiada),
+    lesson03.exercise11 (Może o czwartej?). Word-order alternatives added
+    via accepted_answers (validator WARNs on these are intentional):
+    lesson02.exercise05 (Ewa wstaje rano o siódmej; Rano Ewa wstaje o
+    siódmej), lesson03.exercise06 (... w piątek możemy się spotkać; W
+    piątek o której ...), lesson03.exercise07 (... po południu o czwartej;
+    O czwartej po południu pociąg odjeżdża). NATIVE CHECK: naturalness of
+    the alternative word orders added; whether Która godzina? should also
+    be taught alongside Która jest godzina?.
 
 answer_policy:
   diacritics: >-
@@ -139,7 +165,7 @@ teaching:
     title: "Saying 'at' an hour"
     gloss: "Four, seven, ten o'clock -- but at four, at seven, at ten o'clock."
     note: >-
-      Add *-ej* to the feminine hour word after *o* ("at"): *czwarta* →
+      After *o* ("at"), the hour word's final *-a* becomes *-ej*: *czwarta* →
       *o czwartej*, *siódma* → *o siódmej*, *dziesiąta* → *o dziesiątej*.
       Every hour follows this same pattern.
 
@@ -156,7 +182,7 @@ teaching:
   pl.a1.unit04.lesson03.teach.spotkanie:
     title: "Meeting"
     gloss: "meeting"
-    note: "The same word Ewa and Marek used in unit 3 when they agreed on a day and date to meet again."
+    note: "The same word you met in unit 3 (*Kiedy jest spotkanie?*), when Ewa and Marek agreed on a day and date to meet again."
     example_gloss: "The meeting is on Friday."
 
   pl.a1.unit04.lesson03.teach.o_ktorej_mozemy_sie_spotkac:
@@ -251,7 +277,7 @@ exercises:
     correct_response: ["Jest", "trzecia"]
 
   pl.a1.unit04.lesson01.exercise07.fill_current_time:
-    instruction: "Complete the sentence with a time of your choice."
+    instruction: "Complete the sentence to say 'It's five o'clock.'"
     accepted_answers: ["piąta"]
     feedback: "Jest piąta -- it's five o'clock."
 
@@ -297,10 +323,13 @@ exercises:
 
   pl.a1.unit04.lesson02.exercise05.order_ewa_wakes:
     instruction: "Put the sentence 'Ewa gets up at 7 in the morning' in order."
-    correct_response: ["Ewa", "wstaje", "o", "siódmej", "rano"]
+    accepted_answers:
+      - ["Ewa", "wstaje", "o", "siódmej", "rano"]
+      - ["Ewa", "wstaje", "rano", "o", "siódmej"]
+      - ["Rano", "Ewa", "wstaje", "o", "siódmej"]
 
   pl.a1.unit04.lesson02.exercise06.fill_train_time:
-    instruction: "Complete the sentence with the train's departure hour."
+    instruction: "Complete the sentence to say the train departs at 4 in the afternoon."
     accepted_answers: ["czwartej"]
     feedback: "Pociąg odjeżdża o czwartej po południu -- the train departs at 4 in the afternoon."
 
@@ -316,12 +345,18 @@ exercises:
     accepted_answers:
       - "Pociąg odjeżdża o czwartej po południu."
       - "Pociąg odjeżdża o czwartej po południu"
+      - "Odjeżdża o czwartej po południu."
+      - "O czwartej po południu."
+      - "Pociąg odjeżdża o czwartej."
 
   pl.a1.unit04.lesson02.exercise09.speak_ewa_wakes:
     instruction: "Say what time Ewa gets up."
     accepted_answers:
       - "Ewa wstaje o siódmej rano."
       - "Ewa wstaje o siódmej rano"
+      - "Ewa wstaje o siódmej."
+      - "Ewa wstaje rano o siódmej."
+      - "O siódmej rano."
 
   pl.a1.unit04.lesson03.exercise01.select_time_question:
     instruction: "Which question asks what time Ewa and Marek can meet on Friday, May 15th?"
@@ -368,11 +403,17 @@ exercises:
 
   pl.a1.unit04.lesson03.exercise06.order_meeting_time_question:
     instruction: "Put the question 'At what time can we meet on Friday?' in order."
-    correct_response: ["O", "której", "godzinie", "możemy", "się", "spotkać", "w", "piątek"]
+    accepted_answers:
+      - ["O", "której", "godzinie", "możemy", "się", "spotkać", "w", "piątek"]
+      - ["O", "której", "godzinie", "w", "piątek", "możemy", "się", "spotkać"]
+      - ["W", "piątek", "o", "której", "godzinie", "możemy", "się", "spotkać"]
 
   pl.a1.unit04.lesson03.exercise07.order_train_departure:
     instruction: "Put the sentence 'The train departs at 4 in the afternoon' in order."
-    correct_response: ["Pociąg", "odjeżdża", "o", "czwartej", "po", "południu"]
+    accepted_answers:
+      - ["Pociąg", "odjeżdża", "o", "czwartej", "po", "południu"]
+      - ["Pociąg", "odjeżdża", "po", "południu", "o", "czwartej"]
+      - ["O", "czwartej", "po", "południu", "pociąg", "odjeżdża"]
 
   pl.a1.unit04.lesson03.exercise08.fill_suits_me:
     instruction: "Complete the sentence -- say that the time works for you."
@@ -391,9 +432,13 @@ exercises:
     accepted_answers:
       - "Czwarta po południu mi odpowiada."
       - "Czwarta po południu mi odpowiada"
+      - "Tak, czwarta po południu mi odpowiada."
+      - "Czwarta mi odpowiada."
+      - "Tak, czwarta mi odpowiada."
 
   pl.a1.unit04.lesson03.exercise11.speak_marek_proposal:
     instruction: "Take Marek's role and suggest 4 in the afternoon."
     accepted_answers:
       - "Może o czwartej po południu?"
       - "Może o czwartej po południu"
+      - "Może o czwartej?"

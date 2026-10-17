@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fifth en-pl overlay, written for pl/a1_unit05_family.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start). No
@@ -18,6 +18,31 @@ review:
     authored), so the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't
     apply here -- noted for whoever authors pl-en next: do not open this
     file for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): 7
+    multiple_choice select_* exercises -- prompt.target_blocks displayed
+    the correct Polish option itself above the options (rendered as
+    text_blocks), giving the answer away -> target_blocks emptied (the
+    English instruction carries the cue), comprehension-without-
+    text/duplicate class. Overlay: dziadek_babcia note falsely called
+    dziadek/babcia informal/childish -> standard everyday words. syn_corka
+    note claimed the card shows the accusative (target is nominative;
+    examples show it) -> corrected. accusative_note 'Masculine nouns add
+    -a' over-generalized (false for inanimates, contradicted by unit 6's
+    chleb/ser) -> 'masculine nouns for people (and animals)'.
+    Canon/register: units 01-03 have Ewa and Marek on formal pan/pani;
+    this dialogue switches to ty unannounced -> dialogue.line01 note now
+    explains the switch to ty. lesson03.exercise11.speak_moj_brat_gdansk
+    instruction asked for two sentences while tested_text is only 'Mój
+    brat mieszka w Gdańsku' -> instruction narrowed, short answer added
+    (long kept). Missing accepted answers added: lesson01.exercise09 (To
+    moja siostra), lesson02.exercise08 (Mam syna / Tak, mam),
+    lesson02.exercise09 (Mam córkę i syna), lesson03.exercise10 (Mam brata
+    i siostrę). Word-order alternatives added: lesson02.exercise04 (Mam
+    siostrę i brata), lesson03.exercise06 (Czy masz siostrę lub brata),
+    lesson03.exercise07 (W Gdańsku mieszka mój brat). NATIVE CHECK: lub vs
+    albo in casual spoken question; ciotka vs ciocia as the taught
+    everyday form.
 
 answer_policy:
   diacritics: >-
@@ -99,7 +124,7 @@ teaching:
   pl.a1.unit05.lesson02.teach.dziadek_babcia:
     title: "Grandfather, grandmother"
     gloss: "grandfather; grandmother"
-    note: "Everyday, informal terms -- the ones a child (or an adult speaking casually) would actually use."
+    note: "The standard everyday words for grandfather and grandmother, used by children and adults alike."
     example_gloss:
       - "This is my grandfather."
       - "This is my grandmother."
@@ -116,9 +141,9 @@ teaching:
     title: "Son, daughter"
     gloss: "son; daughter"
     note: >-
-      Shown here in the accusative form you need after *mieć* (to have):
-      *syn* becomes *syna*, *córka* becomes *córkę*. The next card's
-      grammar note explains why the ending changes.
+      The examples show the accusative form you need after *mieć* (to
+      have): *syn* becomes *syna*, *córka* becomes *córkę*. The grammar
+      notes that follow explain why the ending changes.
     example_gloss:
       - "I have a son."
       - "I have a daughter."
@@ -136,9 +161,9 @@ teaching:
     gloss: "After 'to have,' the noun changes ending: brat -> brata, siostra -> siostrę, syn -> syna, córka -> córkę."
     note: >-
       This is the accusative case -- the form a noun takes as the direct
-      object of a verb like *mieć*. Masculine nouns like *brat* and *syn*
-      add *-a*; feminine nouns like *siostra* and *córka* swap their
-      final *-a* for *-ę*.
+      object of a verb like *mieć*. Masculine nouns for people (and
+      animals), like *brat* and *syn*, add *-a*; feminine nouns like
+      *siostra* and *córka* swap their final *-a* for *-ę*.
 
   pl.a1.unit05.lesson02.teach.mam_brata_siostre:
     title: "I have a brother and a sister"
@@ -178,7 +203,7 @@ teaching:
   pl.a1.unit05.lesson03.teach.dialogue.line01:
     title: "Marek asks about siblings"
     gloss: "Marek asks Ewa if she has a brother or a sister."
-    note: "A yes/no question using *Czy*, the same question-marker from unit 1."
+    note: "A yes/no question using *Czy*, the same question-marker from unit 1. Ewa and Marek now know each other well, so they have switched from the formal *pan*/*pani* to the informal *ty* (*masz*, *A ty?*, *twój*)."
   pl.a1.unit05.lesson03.teach.dialogue.line02:
     title: "Ewa answers and asks back"
     gloss: "Ewa says she has a brother and a sister, then asks Marek the same question back."
@@ -250,6 +275,7 @@ exercises:
     accepted_answers:
       - "To jest moja siostra."
       - "To jest moja siostra"
+      - "To moja siostra."
 
   pl.a1.unit05.lesson02.exercise01.select_dziadek:
     instruction: "Which word means 'grandfather'?"
@@ -279,7 +305,9 @@ exercises:
 
   pl.a1.unit05.lesson02.exercise04.order_mam_brata_siostre:
     instruction: "Put the sentence 'I have a brother and a sister' in order."
-    correct_response: ["Mam", "brata", "i", "siostrę"]
+    accepted_answers:
+      - ["Mam", "brata", "i", "siostrę"]
+      - ["Mam", "siostrę", "i", "brata"]
 
   pl.a1.unit05.lesson02.exercise05.order_to_jest_babcia:
     instruction: "Put the sentence 'This is my grandmother' in order."
@@ -302,12 +330,15 @@ exercises:
     accepted_answers:
       - "Tak, mam syna."
       - "Tak, mam syna"
+      - "Mam syna."
+      - "Tak, mam."
 
   pl.a1.unit05.lesson02.exercise09.speak_mam_syna_corke:
     instruction: "Say that you have a son and a daughter."
     accepted_answers:
       - "Mam syna i córkę."
       - "Mam syna i córkę"
+      - "Mam córkę i syna."
 
   pl.a1.unit05.lesson03.exercise01.select_opening_question:
     instruction: "Which question asks whether someone has a brother or a sister?"
@@ -360,11 +391,15 @@ exercises:
 
   pl.a1.unit05.lesson03.exercise06.order_opening_question:
     instruction: "Put the question 'Do you have a brother or a sister?' in order."
-    correct_response: ["Czy", "masz", "brata", "lub", "siostrę"]
+    accepted_answers:
+      - ["Czy", "masz", "brata", "lub", "siostrę"]
+      - ["Czy", "masz", "siostrę", "lub", "brata"]
 
   pl.a1.unit05.lesson03.exercise07.order_moj_brat_gdansk:
     instruction: "Put the sentence 'My brother lives in Gdańsk' in order."
-    correct_response: ["Mój", "brat", "mieszka", "w", "Gdańsku"]
+    accepted_answers:
+      - ["Mój", "brat", "mieszka", "w", "Gdańsku"]
+      - ["W", "Gdańsku", "mieszka", "mój", "brat"]
 
   pl.a1.unit05.lesson03.exercise08.fill_tylko:
     instruction: "Complete the sentence to say 'I only have a sister.'"
@@ -385,9 +420,12 @@ exercises:
       - "Tak, mam brata i siostrę"
       - "Tak, mam brata i siostrę. A ty?"
       - "Tak, mam brata i siostrę. A ty"
+      - "Mam brata i siostrę."
 
   pl.a1.unit05.lesson03.exercise11.speak_moj_brat_gdansk:
-    instruction: "Say that your brother lives in Gdańsk and has a son and a daughter."
+    instruction: "Say that your brother lives in Gdańsk."
     accepted_answers:
+      - "Mój brat mieszka w Gdańsku."
+      - "Mój brat mieszka w Gdańsku"
       - "Mój brat mieszka w Gdańsku. Ma syna i córkę."
       - "Mój brat mieszka w Gdańsku. Ma syna i córkę"
