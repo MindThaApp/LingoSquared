@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Fresh-context review: verified spine_outcome_id (family) matches
     every lesson, including the his/her/my/your possessives explicitly
@@ -29,6 +29,28 @@ review:
     example_gloss so far. schema_version bumped to 1.1. Reverted
     review.status from "reviewed" to "unreviewed" since this is a real
     content addition needing its own fresh-context check.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    spine fit, pacing, token derivability against units 01-05, dialogue
+    cards vs audio transcript, boolean coercion, jargon leaks, and every nl-
+    en/de-en/fa-en/prs-en accepted answer for this unit. Fixes:
+    en.a1.unit06.lesson02.exercise05.order_your_father prompt 'Ask about
+    someone else's father, using the family photo.' -> 'Name the father of
+    the person you are talking to, using the family photo.' (the answer is a
+    noun phrase, not a question; de-en instruction aligned). Overlay
+    accepted answers widened in all four X-en overlays:
+    lesson03.exercise03.reply_siblings (de-en: 'Yes, I have two brothers.'),
+    lesson03.exercise05.write_sister_age (She is ... / digit forms 'She's 20
+    years old.'), lesson04.exercise05.reply_as_daniel and
+    exercise06.speak_family (variants opening with 'Yes.' / 'Yes,' as in the
+    taught dialogue card). No native flags. Deferred (owner/structural,
+    needs fa-en/prs-en non-English pair text):
+    en.a1.unit06.lesson01.exercise04.match_family_words tests
+    aunt/grandmother/grandfather/uncle/cousin, which are first taught in
+    lesson02 (forward reference); moving those 5 pairs to a lesson02
+    matching exercise needs the same restructure mirrored in fa-en/prs-en
+    with Persian/Dari descriptions. Note: the de-en overlay's old review
+    note about this exercise having only 4 pairs is stale (it has 11).
 
 course:
   realization_key: "en.a1"
@@ -104,7 +126,7 @@ units:
             type: "multiple_choice"
             tested_text: "her brother"
             prompt: {target_blocks: [{text: "Leila is a woman. This is _ brother.", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit06.lesson02.exercise05.order_your_father", type: "word_order", tested_text: "your father", prompt: {target_blocks: [{text: "Ask about someone else's father, using the family photo.", language_code: "en", direction: "ltr"}]}, word_bank: ["father", "your"]}
+          - {content_key: "en.a1.unit06.lesson02.exercise05.order_your_father", type: "word_order", tested_text: "your father", prompt: {target_blocks: [{text: "Name the father of the person you are talking to, using the family photo.", language_code: "en", direction: "ltr"}]}, word_bank: ["father", "your"]}
           - {content_key: "en.a1.unit06.lesson02.exercise06.write_cousin", type: "writing_prompt", tested_text: "cousin", prompt: {target_blocks: [{text: "Write the word for your aunt or uncle's child.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit06.lesson03.describing_family"
