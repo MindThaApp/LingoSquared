@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: null
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fourth Polish A2 unit, continuing from pl/a2_unit23_w_banku.yaml.
     Realizes universal.a2.health.attend_doctor_appointment -- confirmed
@@ -90,6 +90,28 @@ review:
     check -- including gardło/boli/mnie/gorączka, which pl/a1_unit16 taught
     but this new file must still redeclare. Pending fresh-context review
     per AUTHORING_GUIDE §9; not self-certified.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    false-grammar -- the three grammar_check prompts presented CORRECT
+    Polish as errors ("Gardło boli mnie.", "Od trzech dni gardło mnie
+    boli.", "Za tydzień proszę wrócić." are all grammatical; Polish order
+    is free here): replaced with genuine errors -- lesson01.exercise08 ->
+    "Boli ja gardło." (pronoun case), lesson02.exercise07 -> "Boli mnie
+    gardło od trzy dni." (od + genitive), lesson03.exercise09 -> "Proszę
+    wrócić od tydzień." (za vs od); overlay instructions/feedback
+    rewritten to match and natural alternative orders (Gardło mnie
+    boli..., Od trzech dni..., Za tydzień proszę wrócić) accepted. (2)
+    comprehension-without-text -- lesson03.exercise04.comprehend_fever
+    showed only the doctor's question, not Ewa's answer: added "Tak, mam.
+    Bardzo mnie boli." block; lesson03.exercise05.read_follow_up showed
+    only the question: added Ewa's question + "Proszę wrócić za tydzień."
+    blocks. (3) missing-accepted-answer -- lesson02.exercise08 + Boli mnie
+    bardzo; lesson02.exercise10/lesson03.exercise10 + Gardło mnie boli od
+    trzech dni / Od trzech dni boli mnie gardło / Od trzech dni gardło
+    mnie boli; lesson02.exercise09 + Pani powinna brać... (4)
+    underdetermined-prompt -- lesson02.exercise09 pinned to
+    formal-to-a-woman (powinna pani), lesson03.exercise11 pinned "as Ewa"
+    (powinnam vs powinienem). NATIVE CHECK: none.
 
 course:
   realization_key: pl.a2
@@ -193,7 +215,7 @@ units:
             tested_text: "Boli mnie gardło"
             prompt:
               target_blocks:
-                - {text: "Gardło boli mnie.", language_code: pl, direction: ltr}
+                - {text: "Boli ja gardło.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit24.lesson01.exercise09.write_goraczka
             type: writing_prompt
             tested_text: "gorączka"
@@ -287,7 +309,7 @@ units:
             tested_text: "Boli mnie gardło od trzech dni"
             prompt:
               target_blocks:
-                - {text: "Od trzech dni gardło mnie boli.", language_code: pl, direction: ltr}
+                - {text: "Boli mnie gardło od trzy dni.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit24.lesson02.exercise08.reply_jak_bardzo_boli
             type: dialogue_response
             tested_text: "Bardzo mnie boli"
@@ -400,11 +422,14 @@ units:
             prompt:
               target_blocks:
                 - {text: "Czy ma pani gorączkę?", language_code: pl, direction: ltr}
+                - {text: "Tak, mam. Bardzo mnie boli.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit24.lesson03.exercise05.read_follow_up
             type: reading_comprehension
             tested_text: "za tydzień"
             prompt:
               target_blocks:
+                - {text: "Dziękuję. Kiedy powinnam wrócić?", language_code: pl, direction: ltr}
+                - {text: "Proszę wrócić za tydzień.", language_code: pl, direction: ltr}
                 - {text: "Kiedy Ewa powinna wrócić do lekarza?", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit24.lesson03.exercise06.match_lesson3_vocabulary
             type: matching_pairs
@@ -435,7 +460,7 @@ units:
             tested_text: "Proszę wrócić za tydzień"
             prompt:
               target_blocks:
-                - {text: "Za tydzień proszę wrócić.", language_code: pl, direction: ltr}
+                - {text: "Proszę wrócić od tydzień.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit24.lesson03.exercise10.reply_co_pania_boli
             type: dialogue_response
             tested_text: "Boli mnie gardło od trzech dni"
