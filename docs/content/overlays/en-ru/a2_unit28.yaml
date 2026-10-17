@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: reviewed
+  required_next_reviewer: null
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked answer keys vs grading (casefold, punctuation-insensitive, no Russian optional-pronoun drop, no ё/е equivalence), course-cumulative token coverage across en-ru-a1/a2, character canon (Дима engineer, Настя teacher), example_gloss vs example, dialogue cards vs audio, gendered first-person answers, learner-visible notes, YAML booleans. Overlay fixes: ru.a2.unit28.lesson03.exercise06.write_appointment_request - instruction (overlay + realization prompt) now asks to greet and to say the throat has been hurting badly for three days, matching the key; added answers without the greeting and with the order \"У меня уже три дня сильно болит горло\". ru.a2.unit28.lesson03.exercise05.reply_doctor_question and ru.a2.unit28.lesson01.exercise06.write_symptom_detail - added \"У меня уже три дня сильно болит горло.\" and \"У меня горло сильно болит уже три дня.\". ru.a2.unit28.lesson01.exercise05.order_gorlo_tri_dnya - added tile orders \"У меня уже три дня болит горло\" and \"У меня горло болит уже три дня\". ru.a2.unit28.lesson03.exercise02.dialogue_comprehension_doctor - English option \"His throat hurts badly for three days\" -> \"His throat has hurt badly for three days\". Realization file: 0 defects. NATIVE FLAG: none for this unit. DEFERRED: ё/е equivalence in grading (backend, course-wide owner decision)."
 
 course:
   title: "Russian A2"
@@ -57,12 +60,14 @@ exercises:
           - {left: "уже", right: "already / for"}
         status: "correct"
     feedback: "These phrases describe a symptom in more detail."
-  ru.a2.unit28.lesson01.exercise05.order_gorlo_tri_dnya: {instruction: "Put the words in order: My throat has hurt for three days.", accepted_answers: [{value: ["У", "меня", "болит", "горло", "уже", "три", "дня"], status: "correct"}], feedback: "The correct order is *У меня болит горло уже три дня*."}
+  ru.a2.unit28.lesson01.exercise05.order_gorlo_tri_dnya: {instruction: "Put the words in order: My throat has hurt for three days.", accepted_answers: [{value: ["У", "меня", "болит", "горло", "уже", "три", "дня"], status: "correct"}, {value: ["У", "меня", "уже", "три", "дня", "болит", "горло"], status: "correct"}, {value: ["У", "меня", "горло", "болит", "уже", "три", "дня"], status: "correct"}], feedback: "The correct order is *У меня болит горло уже три дня*."}
   ru.a2.unit28.lesson01.exercise06.write_symptom_detail:
     instruction: "Write: My throat has been hurting badly for three days."
     accepted_answers:
       - {value: "У меня сильно болит горло уже три дня.", status: "correct"}
       - {value: "У меня сильно болит горло уже три дня", status: "correct"}
+      - {value: "У меня уже три дня сильно болит горло.", status: "correct"}
+      - {value: "У меня горло сильно болит уже три дня.", status: "correct"}
       - {value: "У меня болит горло уже три дня.", status: "acceptable_with_note", note: "This gives the duration but leaves out \"badly.\""}
     feedback: "The full model answer is *У меня сильно болит горло уже три дня*."
   ru.a2.unit28.lesson02.exercise01.recognize_lekarstvo: {instruction: "Which word means \"medicine\"?", correct_option: "лекарство", distractors: ["температура", "работа", "горло"], accepted_answers: [{value: "лекарство", status: "correct"}], feedback: "*лекарство* means \"medicine.\""}
@@ -90,9 +95,9 @@ exercises:
   ru.a2.unit28.lesson03.exercise01.choose_symptom_detail: {instruction: "Which sentence gives symptom, severity, and duration?", correct_option: "У меня сильно болит горло уже три дня.", distractors: ["Принимайте лекарство.", "Можно идти на работу?", "Температура есть?"], accepted_answers: [{value: "У меня сильно болит горло уже три дня.", status: "correct"}], feedback: "It says what hurts, how badly, and for how long."}
   ru.a2.unit28.lesson03.exercise02.dialogue_comprehension_doctor:
     instruction: "Listen to the appointment. What symptom does Dima describe, and what does the doctor tell him to do?"
-    correct_option: "His throat hurts badly for three days; take medicine twice a day, come again Friday, and rest at home"
+    correct_option: "His throat has hurt badly for three days; take medicine twice a day, come again Friday, and rest at home"
     distractors: ["His head hurts today; bring a photo next month", "He has back pain; open an account at the bank", "He needs a registration appointment; bring a passport tomorrow"]
-    accepted_answers: [{value: "His throat hurts badly for three days; take medicine twice a day, come again Friday, and rest at home", status: "correct"}]
+    accepted_answers: [{value: "His throat has hurt badly for three days; take medicine twice a day, come again Friday, and rest at home", status: "correct"}]
     feedback: "Dima gives the throat symptom and duration; the doctor gives medicine, follow-up, and rest instructions."
   ru.a2.unit28.lesson03.exercise03.match_doctor_dialogue:
     instruction: "Match each Russian line to its meaning."
@@ -112,11 +117,16 @@ exercises:
     accepted_answers:
       - {value: "У меня сильно болит горло уже три дня.", status: "correct"}
       - {value: "У меня сильно болит горло уже три дня", status: "correct"}
+      - {value: "У меня уже три дня сильно болит горло.", status: "correct"}
+      - {value: "У меня горло сильно болит уже три дня.", status: "correct"}
     feedback: "The answer gives symptom, severity, and duration."
   ru.a2.unit28.lesson03.exercise06.write_appointment_request:
-    instruction: "Write a short formal message requesting a doctor appointment: say you want to make an appointment, describe the throat symptom with duration, and ask if you can come today."
+    instruction: "Write a short formal message requesting a doctor appointment: greet them, say you want to make an appointment, say your throat has been hurting badly for three days, and ask if you can come today."
     accepted_answers:
       - {value: "Здравствуйте. Я хочу записаться к врачу. У меня сильно болит горло уже три дня. Можно прийти сегодня?", status: "correct"}
       - {value: "Здравствуйте, я хочу записаться к врачу. У меня сильно болит горло уже три дня. Можно прийти сегодня?", status: "correct"}
       - {value: "Здравствуйте. Я хочу записаться к врачу. У меня сильно болит горло уже три дня. Можно прийти сегодня", status: "correct"}
+      - {value: "Здравствуйте. Я хочу записаться к врачу. У меня уже три дня сильно болит горло. Можно прийти сегодня?", status: "correct"}
+      - {value: "Я хочу записаться к врачу. У меня сильно болит горло уже три дня. Можно прийти сегодня?", status: "correct"}
+      - {value: "Я хочу записаться к врачу. У меня уже три дня сильно болит горло. Можно прийти сегодня?", status: "correct"}
     feedback: "A complete message requests the appointment, describes the symptom, and asks about coming today."
