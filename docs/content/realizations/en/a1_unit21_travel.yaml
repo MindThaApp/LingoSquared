@@ -8,11 +8,13 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: "Initial four-lesson draft, authored directly (Codex usage-limited at time of authoring). Audio remains pending generation.
 
-    2026-07-07 §19 retrofit: added `example:` to all 6 kind:vocabulary cards (ticket/platform/train/departure/arrival/leaves from). Matching example_gloss added to all 3 existing overlays (fa-en, nl-en, prs-en; no de-en overlay exists for this unit). All 3 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 3 overlays."
+    2026-07-07 §19 retrofit: added `example:` to all 6 kind:vocabulary cards (ticket/platform/train/departure/arrival/leaves from). Matching example_gloss added to all 3 existing overlays (fa-en, nl-en, prs-en; no de-en overlay exists for this unit). All 3 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 3 overlays.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked this realization against the nl-en, fa-en and prs-en overlays (no de-en overlay exists for this unit) for grading of correct answers, distractor validity, prompt coherence, pacing, character canon, YAML boolean coercion and jargon leaks. Fixes: en.a1.unit21.lesson04.exercise05.reply_as_daniel and exercise06.speak_ticket_dialogue target_block rewritten so the order matches the expected answer: '(You ask for one ticket to Boston.) Clerk: One way or round trip? (You want a round trip.) Clerk: That's forty dollars. Your train leaves from platform 4 at 9:15. (You ask what time it arrives in Boston.)', nl-en exercise05 instruction updated to match; en.a1.unit21.lesson04.exercise03.choose_platform_and_time target_block corrected to 'Which platform does Daniel's train leave from, and at what time?'; en.a1.unit21.lesson02.exercise05.write_ticket_request accepted_answers widened (nl-en/fa-en/prs-en) with 'One ticket to Boston.', 'A ticket to Boston, please.', 'I want one/a ticket to Boston(, please).', 'I need a/one ticket to Boston.', 'I'd like one/a ticket to Boston, please.'; en.a1.unit21.lesson02.exercise04.reply_one_way_or_round_trip accepts 'A round trip, please.', 'Round trip.', 'A round trip.' (nl-en/fa-en/prs-en). DEFERRED: lesson01.exercise04.match_travel_words tests 'one way' and 'leaves from' before lesson02/lesson03 teach them (matching_pairs change mirrored in fa-en/prs-en with Persian/Dari text); fa-en/prs-en instructions for lesson04.exercise05 still show the old out-of-order clerk lines (needs Persian/Dari text); untaught English meta-prompt words corpus-wide (owner decision)."
 
 course:
   realization_key: "en.a1"
@@ -95,13 +97,13 @@ units:
         exercises:
           - {content_key: "en.a1.unit21.lesson04.exercise01.listen_ticket_type", type: "dialogue_comprehension", tested_text: "round trip", media_asset_key: "en.a1.audio.dialogue.buying_a_ticket.01", prompt: {target_blocks: []}}
           - {content_key: "en.a1.unit21.lesson04.exercise02.listen_price", type: "listen_select", tested_text: "forty dollars", media_asset_key: "en.a1.audio.dialogue.buying_a_ticket.01", prompt: {target_blocks: []}}
-          - {content_key: "en.a1.unit21.lesson04.exercise03.choose_platform_and_time", type: "multiple_choice", tested_text: "platform 4 at 9:15", prompt: {target_blocks: [{text: "Which platform and time does Daniel's train leave?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit21.lesson04.exercise03.choose_platform_and_time", type: "multiple_choice", tested_text: "platform 4 at 9:15", prompt: {target_blocks: [{text: "Which platform does Daniel's train leave from, and at what time?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a1.unit21.lesson04.exercise04.order_what_time_arrive", type: "word_order", tested_text: "What time does it arrive in Boston", prompt: {target_blocks: []}, word_bank: ["time", "does", "it", "arrive", "in", "Boston", "What"]}
           - content_key: "en.a1.unit21.lesson04.exercise05.reply_as_daniel"
             type: "dialogue_response"
             tested_text: "One ticket to Boston please Round trip please What time does it arrive in Boston"
-            prompt: {target_blocks: [{text: "The clerk asks: One way or round trip? That's forty dollars. Your train leaves from platform 4 at 9:15.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "(You ask for one ticket to Boston.) Clerk: One way or round trip? (You want a round trip.) Clerk: That's forty dollars. Your train leaves from platform 4 at 9:15. (You ask what time it arrives in Boston.)", language_code: "en", direction: "ltr"}]}
           - content_key: "en.a1.unit21.lesson04.exercise06.speak_ticket_dialogue"
             type: "speak_response"
             tested_text: "One ticket to Boston please Round trip please What time does it arrive in Boston"
-            prompt: {target_blocks: [{text: "The clerk asks: One way or round trip? That's forty dollars. Your train leaves from platform 4 at 9:15.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "(You ask for one ticket to Boston.) Clerk: One way or round trip? (You want a round trip.) Clerk: That's forty dollars. Your train leaves from platform 4 at 9:15. (You ask what time it arrives in Boston.)", language_code: "en", direction: "ltr"}]}

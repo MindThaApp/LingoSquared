@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for German's third C1 unit, authored alongside the realization
     (no adaptable public-domain German C1 register source exists; see the
@@ -27,6 +27,43 @@ review:
     prompts name the EXACT two sentences to produce (diplomatic then
     emphatic) so a correct answer is well-determined. No sibling-direction
     file (de-en) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    course-scoped compile, YAML booleans, jargon/AI leaks, character canon,
+    note accuracy, matching discriminability, prompt determinacy and accepted-
+    answer completeness for unit03 realization + en-de overlay. Fixes:
+    de.c1.unit03.lesson05.exercise06 and lesson06.exercise05
+    speak_ton_wechseln prompt + instruction were underdetermined -> now name
+    the forms (Ich fuerchte ... spaeter als vereinbart / schon wieder zu
+    spaet) and give the English of both messages;
+    de.c1.unit03.lesson04.exercise01.read_diplomatische_nachricht now shows
+    the German message as a de target_block (it was never displayed) and the
+    question no longer gives away the recipient ('Who is this message for, and
+    what is its effect?', instruction mirrored);
+    de.c1.unit03.lesson04.exercise05/06 (translate_ironisch, speak_ironisch)
+    'wonderfully yet again' -> 'wonderfully again' and 'Na, das hat ja schon
+    wieder wunderbar geklappt' (+period) accepted;
+    de.c1.unit03.lesson06.exercise04.match_austausch confusable
+    diplomatisch/nachdruecklich pairs replaced by der Entwurf=the draft,
+    scharf=harsh (tested_text + accepted_answers updated);
+    de.c1.unit03.lesson04.exercise03.match_toene confusable diplomatisch pair
+    replaced by die Bestellung=the order (taught lesson01; reviewer's
+    hoeflich=polite rejected as still confusable with the diplomatic register
+    sentence); de.c1.unit03.lesson01.teach.sehr_geehrte_damen_und_herren note
+    removed the false capital-S and never-spoken claims;
+    de.c1.unit03.lesson03.teach.das_kann_so_nicht_weitergehen note corrected
+    (after a modal weitergehen stays together; it separates only as finite
+    verb); de.c1.unit03.lesson04.exercise07.write_diplomatisch was a duplicate
+    of lesson02.exercise07 -> now an emphatic production 'Die Lieferung ist
+    schon wieder zu spaet. Das kann so nicht weitergehen' (+period, ascii)
+    with new instruction/feedback; content_key kept unchanged for progress
+    stability. NATIVE FLAGS: lesson06 'Das ist deutlich, aber fuer eine
+    Nachricht zu direkt' sounds unidiomatic and Felix's closing irony follows
+    Frau Vogel's approval (would need the austausch.01 audio text changed
+    too); 'Bezug nehmend auf ... ist die Lieferung ... eingegangen' dangling
+    participle (authentic officialese); lesson01 exercise05/06 pluperfect 'war
+    ... eingegangen' graded wrong; lesson03 exercise05/06 'verspaetet' graded
+    wrong. DEFERRED: none.
 
 course:
   title: German C1
@@ -58,7 +95,7 @@ teaching:
   de.c1.unit03.lesson01.teach.sehr_geehrte_damen_und_herren:
     title: "Dear Sir or Madam"
     gloss: "Dear Sir or Madam (formal letter salutation)"
-    note: "*Sehr geehrte Damen und Herren* is the standard formal salutation of a German business letter or formal email when the recipient's name is unknown. *Sehr geehrte* (from *geehrte*, 'honoured') appears with its capital *S* only in this fixed greeting; it is never used when speaking to someone face to face."
+    note: "*Sehr geehrte Damen und Herren* is the standard formal salutation of a German business letter or formal email when the recipient's name is unknown (*geehrte* = 'honoured'). Spoken, it opens formal speeches and announcements, but never an ordinary face-to-face conversation."
   de.c1.unit03.lesson01.teach.bezug_nehmend_auf:
     title: "with reference to"
     gloss: "with reference to (bureaucratic opening)"
@@ -133,7 +170,7 @@ teaching:
   de.c1.unit03.lesson03.teach.das_kann_so_nicht_weitergehen:
     title: "This cannot go on like this."
     gloss: "this cannot go on like this"
-    note: "*Das kann so nicht weitergehen* = 'This cannot go on like this' -- the emphatic conclusion after naming a repeated problem. *Weitergehen* (to go on) is separable; in the finite clause its prefix *weiter-* moves to the end: *... kann ... weitergehen*."
+    note: "*Das kann so nicht weitergehen* = 'This cannot go on like this' -- the emphatic conclusion after naming a repeated problem. *Weitergehen* (to go on) is separable (*Es geht so nicht weiter*), but after the modal *kann* it stays together as an infinitive at the end: *Das kann so nicht weitergehen*."
   de.c1.unit03.lesson03.teach.das_kann_doch_nicht_ihr_ernst_sein:
     title: "You cannot be serious!"
     gloss: "you cannot be serious (emphatic protest)"
@@ -384,7 +421,7 @@ exercises:
     feedback: "*Das kann so nicht weitergehen* is the emphatic verdict that closes the complaint."
 
   de.c1.unit03.lesson04.exercise01.read_diplomatische_nachricht:
-    instruction: "This message is written to the supplier. Who is it for and what is its effect?"
+    instruction: "Who is this message for, and what is its effect?"
     correct_option: "It is a polite request to a business partner (the supplier) to say when the delivery will arrive."
     distractors: ["It is a firm demand for a penalty payment.", "It is a casual note to a friend.", "It is a threat to end the business relationship."]
     accepted_answers: [{value: "It is a polite request to a business partner (the supplier) to say when the delivery will arrive.", status: correct}]
@@ -398,7 +435,7 @@ exercises:
   de.c1.unit03.lesson04.exercise03.match_toene:
     instruction: "Match each German message to the tone it uses."
     accepted_answers:
-      - value: {"Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen": "formal / bureaucratic register", "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft": "diplomatic / hedged register", "Die Lieferung ist schon wieder zu spät": "emphatic / direct register", "Na, das hat ja wieder wunderbar geklappt": "ironic register", "der Empfänger": "the recipient", "der Ton": "the tone", "diplomatisch": "diplomatic"}
+      - value: {"Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen": "formal / bureaucratic register", "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft": "diplomatic / hedged register", "Die Lieferung ist schon wieder zu spät": "emphatic / direct register", "Na, das hat ja wieder wunderbar geklappt": "ironic register", "der Empfänger": "the recipient", "der Ton": "the tone", "die Bestellung": "the order"}
         status: correct
     feedback: "The same situation, four registers: bureaucratic formulas, diplomatic hedges, emphatic verdicts, and ironic praise."
   de.c1.unit03.lesson04.exercise04.order_ironisch:
@@ -407,25 +444,29 @@ exercises:
       - {value: "Na das hat ja wieder wunderbar geklappt", status: correct}
     feedback: "*Na, das hat ja wieder wunderbar geklappt* -- the praising words plus *Na* and *ja* reverse the meaning."
   de.c1.unit03.lesson04.exercise05.translate_ironisch:
-    instruction: "Translate into German, ironically, using wunderbar geklappt: Oh, that worked wonderfully yet again."
+    instruction: "Translate into German, ironically, using wunderbar geklappt: Oh, that worked wonderfully again."
     accepted_answers:
       - {value: "Na, das hat ja wieder wunderbar geklappt", status: correct}
       - {value: "Na, das hat ja wieder wunderbar geklappt.", status: correct}
+      - {value: "Na, das hat ja schon wieder wunderbar geklappt", status: correct}
+      - {value: "Na, das hat ja schon wieder wunderbar geklappt.", status: correct}
     feedback: "*Na, das hat ja wieder wunderbar geklappt* is irony: the praise means the opposite."
   de.c1.unit03.lesson04.exercise06.speak_ironisch:
-    instruction: "Say aloud in German, ironically, using wunderbar geklappt: Oh, that worked wonderfully yet again."
+    instruction: "Say aloud in German, ironically, using wunderbar geklappt: Oh, that worked wonderfully again."
     accepted_answers:
       - {value: "Na, das hat ja wieder wunderbar geklappt", status: correct}
       - {value: "Na, das hat ja wieder wunderbar geklappt.", status: correct}
+      - {value: "Na, das hat ja schon wieder wunderbar geklappt", status: correct}
+      - {value: "Na, das hat ja schon wieder wunderbar geklappt.", status: correct}
     feedback: "Spoken with the ironic twist, *Na, das hat ja wieder wunderbar geklappt* means the delivery failed again."
   de.c1.unit03.lesson04.exercise07.write_diplomatisch:
-    instruction: "Write in German, using Wir wären Ihnen dankbar, wenn...: We would be grateful if you could tell us when the delivery will arrive."
+    instruction: "Write in German, using schon wieder and Das kann so nicht weitergehen: The delivery is late yet again. This cannot go on like this."
     accepted_answers:
-      - {value: "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft", status: correct}
-      - {value: "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft.", status: correct}
-      - {value: "Wir waeren Ihnen dankbar, wenn Sie uns mitteilen koennten, wann die Lieferung eintrifft", status: correct}
-      - {value: "Wir waeren Ihnen dankbar, wenn Sie uns mitteilen koennten, wann die Lieferung eintrifft.", status: correct}
-    feedback: "The same sentence as in the reading -- producing it here shows you can write the diplomatic register yourself."
+      - {value: "Die Lieferung ist schon wieder zu spät. Das kann so nicht weitergehen", status: correct}
+      - {value: "Die Lieferung ist schon wieder zu spät. Das kann so nicht weitergehen.", status: correct}
+      - {value: "Die Lieferung ist schon wieder zu spaet. Das kann so nicht weitergehen", status: correct}
+      - {value: "Die Lieferung ist schon wieder zu spaet. Das kann so nicht weitergehen.", status: correct}
+    feedback: "*Die Lieferung ist schon wieder zu spät. Das kann so nicht weitergehen* -- the emphatic register: the repeated problem named flatly, then the firm conclusion."
 
   de.c1.unit03.lesson05.exercise01.recognize_derselbe_inhalt:
     instruction: "What does derselbe Inhalt mean?"
@@ -459,7 +500,7 @@ exercises:
       - {value: "Ich wuerde es diplomatischer formulieren.", status: correct}
     feedback: "*Ich würde es diplomatischer formulieren* names the exact action the outcome asks for: shifting the tone of a message."
   de.c1.unit03.lesson05.exercise06.speak_ton_wechseln:
-    instruction: "Say aloud in German the SAME message twice: first diplomatically, then emphatically."
+    instruction: "Say aloud in German the SAME message twice, first diplomatically with Ich fürchte ... später als vereinbart, then emphatically with schon wieder zu spät: I am afraid the delivery is again coming later than agreed. The delivery is late yet again."
     accepted_answers:
       - {value: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät", status: correct}
       - {value: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät.", status: correct}
@@ -496,11 +537,11 @@ exercises:
   de.c1.unit03.lesson06.exercise04.match_austausch:
     instruction: "Match each message from the exchange to its tone."
     accepted_answers:
-      - value: {"Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen": "formal / bureaucratic", "Ich fürchte, die Lieferung kommt wieder später als vereinbart": "diplomatic / hedged", "Die Lieferung ist schon wieder zu spät": "emphatic / direct", "Na, das hat ja wieder wunderbar geklappt": "ironic", "diplomatisch": "diplomatic", "nachdrücklich": "emphatic", "der Lieferant": "the supplier"}
+      - value: {"Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen": "formal / bureaucratic", "Ich fürchte, die Lieferung kommt wieder später als vereinbart": "diplomatic / hedged", "Die Lieferung ist schon wieder zu spät": "emphatic / direct", "Na, das hat ja wieder wunderbar geklappt": "ironic", "der Entwurf": "the draft", "scharf": "harsh", "der Lieferant": "the supplier"}
         status: correct
     feedback: "The exchange plays all four registers off each other: formal, diplomatic, emphatic, and ironic."
   de.c1.unit03.lesson06.exercise05.speak_ton_wechseln:
-    instruction: "Say aloud in German the SAME message twice: first diplomatically, then emphatically."
+    instruction: "Say aloud in German the SAME message twice, first diplomatically with Ich fürchte ... später als vereinbart, then emphatically with schon wieder zu spät: I am afraid the delivery is again coming later than agreed. The delivery is late yet again."
     accepted_answers:
       - {value: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät", status: correct}
       - {value: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät.", status: correct}

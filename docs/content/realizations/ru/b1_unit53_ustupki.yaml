@@ -16,9 +16,41 @@ generation_provenance:
     B1 lane.
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: fresh_context_reviewer
-  notes: "New Claude-authored B1 draft. Needs fresh-context review."
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: >-
+    New Claude-authored B1 draft. Needs fresh-context review.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked naturalness, register, answer-key completeness, ё/е,
+    gendered forms (согласен/согласна both accepted), prompt determinacy
+    and gloss accuracy. Fixes:
+    ru.b1.unit53.lesson03.exercise06.write_full_debate open paraphrase
+    prompt (graded by exact match) pinned to "Write exactly this
+    two-part argument (use согласен or согласна): ..." in overlay
+    instruction and realization prompt; no-period variants added;
+    feedback now shows the model answer.
+    ru.b1.unit53.lesson03.exercise05.reply_concede_and_restate
+    self-contradictory prompt fixed: realization prompt now "Настя:
+    Понимаю." (the turn Dima actually answers) and instruction "Dima has
+    just conceded that he misses his colleagues, and Nastya says
+    "Понимаю." Reply as Dima with exactly: ..."; feedback shows the
+    model answer. ru.b1.unit53.lesson03.teach.dima_restate false note
+    ("restates Dima's own position") rewritten: Dima uses тем не менее
+    to grant Nastya a further point anyway; title "Dima grants a point
+    with тем не менее"; same false description removed from exercise01
+    instruction/prompt/feedback, exercise02
+    instruction/correct_option/accepted_answer/feedback ("Dima
+    nevertheless agrees that ...") and exercise03 feedback.
+    ru.b1.unit53.lesson02.teach.tem_ne_menee_grammar note: Cyrillic "а"
+    in "not а simple но" replaced with Latin "a". NATIVE FLAGS:
+    sentence-initial "Тем не менее, ..." comma; "более сильная связка
+    контраста, чем но" is a simplification (difference is more
+    register/bookishness than strength). DEFERRED (structural/owner
+    decision): the lesson03 dialogue logic -- Dima's 4th turn does not
+    restate his own position; a clean fix rewrites that turn (e.g. "Тем
+    не менее, мне кажется, что в офисе работать веселее"), which changes
+    audio ru.b1.audio.dialogue.debaty_rabota_doma.01 and four exercises.
 
 course:
   realization_key: ru.b1
@@ -145,7 +177,7 @@ units:
           - content_key: ru.b1.unit53.lesson03.exercise01.choose_full_debate
             type: multiple_choice
             tested_text: "хотя работа из дома действительно удобна мне не хватает общения с коллегами тем не менее я согласен что дома легче сосредоточиться"
-            prompt: {target_blocks: [{text: "Which answer concedes a valid point with хотя AND then uses тем не менее (a stronger connector than но) to restate the speaker's own position?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Which answer concedes a valid point with хотя AND then uses тем не менее (a stronger connector than но) to grant a further point anyway?", language_code: en, direction: ltr}]}
           - content_key: ru.b1.unit53.lesson03.exercise02.dialogue_comprehension_debaty
             type: dialogue_comprehension
             tested_text: "я думаю что работа из дома это лучше потому что экономишь время хотя работа из дома действительно удобна мне не хватает общения с коллегами понимаю тем не менее я согласен что дома легче сосредоточиться"
@@ -170,8 +202,8 @@ units:
           - content_key: ru.b1.unit53.lesson03.exercise05.reply_concede_and_restate
             type: dialogue_response
             tested_text: "Тем не менее я согласен что дома легче сосредоточиться"
-            prompt: {target_blocks: [{text: "Настя: Я думаю, что работа из дома — это лучше, потому что экономишь время.", language_code: ru, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Настя: Понимаю.", language_code: ru, direction: ltr}]}
           - content_key: ru.b1.unit53.lesson03.exercise06.write_full_debate
             type: writing_prompt
             tested_text: "Хотя работа из дома действительно удобна мне не хватает общения с коллегами Тем не менее я согласен что дома легче сосредоточиться"
-            prompt: {target_blocks: [{text: "Write a short two-part argument about working from home: (1) concede one valid point using Хотя (working from home really is convenient), before stating your complaint (you miss talking with colleagues); (2) then use Тем не менее, a stronger connector than но, to restate your own position (you agree it's easier to concentrate at home).", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write exactly this two-part argument (use согласен or согласна): Although working from home really is convenient, I miss talking with colleagues. Nevertheless, I agree that it's easier to concentrate at home.", language_code: en, direction: ltr}]}

@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "codex"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Identity lessons reworked around names, roles, and membership.
     Audio remains pending generation.
@@ -22,6 +22,28 @@ review:
     review.status from "reviewed" to "unreviewed" since this is a real
     content addition needing its own fresh-context check.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked spine fit, pacing, taught-token coverage of prompts,
+    answer derivability, character canon and the X-en overlays'
+    English answer sets. Fixes:
+    lesson02.exercise02.choose_role_question and
+    lesson03.exercise03.choose_name_question target_blocks emptied
+    (they showed untaught English that only repeated the overlay
+    instruction); lesson01.exercise01.listen_name_question tested_text
+    What is your name -> What's your name (matches the audio; de-en
+    option aligned); unused audio en.a1.audio.identity_profiles.01
+    script made self-consistent (teacher? No, I'm a student / new
+    member? Yes, I am). Overlay answer widening: reply_name,
+    write_intro, reply_teacher (No, I'm not. I'm a student. etc.),
+    write_identity (de-en I'm a student.). NATIVE FLAG:
+    choose_he/choose_she use untaught man/woman as context (minor).
+    DEFERRED: lesson02.exercise04.choose_she names Leila as an
+    engineer although she is a student in this unit (rename to another
+    name needs the fa-en/prs-en instructions, which quote Leila in
+    Persian/Dari, plus nl-en/de-en instructions changed together);
+    fa-en/prs-en write_intro still lack I am Leila. (their I'm Leila.
+    carries a Persian/Dari note).
+
 course:
   realization_key: "en.a1"
   target_language_first: true
@@ -30,7 +52,7 @@ course:
 
 media_assets:
   - {content_key: "en.a1.audio.whats_your_name.01", language: "en", text: "What's your name?", voice_hint: "neutral_adult", status: "pending_generation"}
-  - {content_key: "en.a1.audio.identity_profiles.01", language: "en", text: "I am a student. Are you a teacher? Yes, I am. Are you a new member? No, I'm a student.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "en.a1.audio.identity_profiles.01", language: "en", text: "I am a student. Are you a teacher? No, I'm a student. Are you a new member? Yes, I am.", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a1.audio.dialogue.library.01"
     language: "en"
     text: "Daniel: Good afternoon. I'm Daniel. I work at the library. What's your name? Leila: Hi. I'm Leila. I'm a student. Nice to meet you. Daniel: Nice to meet you too. Are you a new member? Leila: Yes, I am. Daniel: Welcome to the library. Leila: Thank you."
@@ -54,7 +76,7 @@ units:
           - {content_key: "en.a1.unit02.lesson01.teach.im_leila", kind: "phrase", target: {text: "I'm Leila.", language_code: "en", direction: "ltr"}, introduced_tokens: ["I'm", "Leila"]}
           - {content_key: "en.a1.unit02.lesson01.teach.nice_to_meet_you", kind: "phrase", target: {text: "Nice to meet you.", language_code: "en", direction: "ltr"}, introduced_tokens: ["Nice", "to", "meet", "you"]}
         exercises:
-          - {content_key: "en.a1.unit02.lesson01.exercise01.listen_name_question", type: "listen_select", tested_text: "What is your name", media_asset_key: "en.a1.audio.whats_your_name.01", prompt: {target_blocks: []}}
+          - {content_key: "en.a1.unit02.lesson01.exercise01.listen_name_question", type: "listen_select", tested_text: "What's your name", media_asset_key: "en.a1.audio.whats_your_name.01", prompt: {target_blocks: []}}
           - content_key: "en.a1.unit02.lesson01.exercise02.choose_name_answer"
             type: "multiple_choice"
             tested_text: "My name is Leila"
@@ -85,7 +107,7 @@ units:
           - content_key: "en.a1.unit02.lesson02.exercise02.choose_role_question"
             type: "multiple_choice"
             tested_text: "Are you a teacher"
-            prompt: {target_blocks: [{text: "Ask the other person about their role.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: []}
           - content_key: "en.a1.unit02.lesson02.exercise03.choose_he"
             type: "multiple_choice"
             tested_text: "He is a teacher"
@@ -119,7 +141,7 @@ units:
           - content_key: "en.a1.unit02.lesson03.exercise03.choose_name_question"
             type: "multiple_choice"
             tested_text: "What's your name"
-            prompt: {target_blocks: [{text: "Ask Leila for her name.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: []}
           - {content_key: "en.a1.unit02.lesson03.exercise04.order_member_question", type: "word_order", tested_text: "Are you a new member", prompt: {target_blocks: []}, word_bank: ["member", "new", "a", "you", "Are"]}
           - content_key: "en.a1.unit02.lesson03.exercise05.reply_as_leila"
             type: "dialogue_response"

@@ -8,11 +8,40 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: "Initial four-lesson draft, authored directly (Codex usage-limited at time of authoring). Audio remains pending generation.
 
-    2026-07-07 §19 retrofit: added `example:` to all 5 kind:vocabulary cards (happy/sad/tired/excited/worried). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en) -- unit13 is the last unit with a de-en overlay (de-en stops at unit13; units 14+ have no de-en overlay to retrofit). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays."
+    2026-07-07 §19 retrofit: added `example:` to all 5 kind:vocabulary cards (happy/sad/tired/excited/worried). Matching example_gloss added to all 4 existing overlays (fa-en, nl-en, prs-en, de-en) -- unit13 is the last unit with a de-en overlay (de-en stops at unit13; units 14+ have no de-en overlay to retrofit). All 4 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 4 overlays.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    spine fit, pacing, token derivability against units 01-12, dialogue
+    cards vs audio transcript, message facts, boolean coercion, jargon
+    leaks, and all four X-en overlays' answers. Fixes:
+    en.a1.unit13.lesson04.exercise04.order_q_feeling tested_text/word_bank
+    'how' -> 'How' (standalone sentence-initial question; accepted answers
+    capitalized in all four overlays, nl-en/de-en feedback updated). Overlay
+    accepted answers widened in all four:
+    lesson03.exercise05.write_message_summary ('The writer is excited and
+    worried.', 'The writer feels worried and excited.', 'The writer feels
+    excited and worried.'; the instruction does not fix the order). de-en
+    heard-in-audio distractors replaced:
+    lesson04.exercise02.listen_happy_reason ['a big test tomorrow', 'I
+    understand.', 'Are you excited too?'] -> ['the test is easy', 'a new
+    class starts', 'I'm very tired.'];
+    lesson04.exercise01.listen_daniels_feeling 'the class is almost over' ->
+    'I'm very tired today'. NATIVE FLAG: teach.a_yes_happy_class 'Yes, a
+    little. I'm happy the class is almost over.' answers 'Are you excited
+    too?' with a happiness reason that does not follow cleanly from
+    'excited'. Owner flag (all units 02-13): character roles drift (Daniel
+    works at the library in unit02 but serves coffee in unit07, sells
+    clothes in unit12; Leila is the student in unit02 but Daniel has the
+    test/class here). Deferred (owner/structural, needs fa-en/prs-en non-
+    English pair text): lesson01.exercise04.match_feeling_words includes
+    'understand', first taught in lesson04 (forward reference); replacing or
+    dropping that pair must be mirrored in fa-en/prs-en. fa-en/prs-en
+    order_q_feeling feedback lines still show lowercase 'how are you feeling
+    today' (cosmetic, inside Persian/Dari lines)."
 
 course:
   realization_key: "en.a1"
@@ -118,7 +147,7 @@ units:
             type: "multiple_choice"
             tested_text: "Oh, I understand. Are you excited too?"
             prompt: {target_blocks: [{text: "After hearing Daniel is worried, what does Leila say?", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit13.lesson04.exercise04.order_q_feeling", type: "word_order", tested_text: "how are you feeling today", prompt: {target_blocks: []}, word_bank: ["are", "you", "feeling", "today", "how"]}
+          - {content_key: "en.a1.unit13.lesson04.exercise04.order_q_feeling", type: "word_order", tested_text: "How are you feeling today", prompt: {target_blocks: []}, word_bank: ["are", "you", "feeling", "today", "How"]}
           - content_key: "en.a1.unit13.lesson04.exercise05.reply_as_daniel"
             type: "dialogue_response"
             tested_text: "I'm a little worried because I have a big test tomorrow Yes a little I'm happy the class is almost over"

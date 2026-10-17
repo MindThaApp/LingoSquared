@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for German's eighth and final C1 unit, authored alongside the
     realization (no adaptable public-domain German C1 persuasion source exists;
@@ -22,6 +22,41 @@ review:
     the culminating speaking/writing prompts name the exact four devices the
     answer must deliver so the multi-sentence speech has one well-determined
     answer. No sibling-direction file (de-en) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    character canon (Felix Weber / Frau Vogel, formal Sie, six-month testing
+    phase), dialogue cards vs austausch.01 audio, dictation tested_text/audio/
+    correct_response byte-identity, every example_gloss, learner-visible text
+    for internals leaks, YAML booleans, accepted-answer completeness. Fixes:
+    de.c1.unit08.lesson05.exercise03.read_betonung and
+    lesson05.exercise04.read_appell -- target_blocks held only an English
+    question, so the sentence to classify was never shown; now the German
+    sentence ("Gerade jetzt kommt es auf Qualität an." / "Deshalb appelliere
+    ich an Ihre Verantwortung."). lesson05.exercise01.read_frage -- same, now
+    shows "Wollen wir wirklich riskieren, dass unsere Kunden die Daten
+    ungeschützt erhalten?". Overlay: lesson04.exercise05.translate_appellieren
+    and lesson04.exercise07.write_verantwortung accept deine/eure Verantwortung
+    (English "your" is underdetermined); lesson04.exercise06.speak_qualitaet
+    accepts "auf die Qualität an" (as taught by teach.kommt_es_an);
+    lesson04.teach.qualitaet note rewritten (malformed "kommt an auf");
+    lesson02.teach.wirklich note softened (wirklich does not by itself make a
+    question rhetorical); lesson04.teach.appellieren note -- dubious
+    "intransitive false friend" claim replaced by the legal-sense contrast
+    (Berufung einlegen); lesson03.teach.in_kauf_nehmen note now quotes the
+    speech's own wording instead of an unused Sie-imperative. NATIVE FLAGS:
+    appellieren note wording; lesson03.exercise04.order_vertrauen alternative
+    tile order "Wir können Vertrauen gewinnen und gründlich testen" not
+    accepted; lesson02.exercise05/06 "bekommen" for "erhalten" not accepted;
+    lesson06.exercise02.listen_schluss instruction ("say Felix should end")
+    vs Frau Vogel's confirming question. DEFERRED (structural): duplicate
+    exercises -- lesson05.exercise05.match_rede == lesson06.exercise04.
+    match_mittel_review (both repeat lesson01.exercise02 pairs);
+    lesson02.exercise04.order_wahl == lesson05.exercise06.order_wahl_lesen;
+    lesson03.exercise05/07 same sentence and answer. Out of batch: same
+    unseen-sentence multiple_choice defect in c1_unit04 lesson04.exercise01.
+    read_zugestaendnis and c1_unit05 (~line 379) Also fixed (standing class): lesson02.exercise02.listen_riskieren
+    distractors rewritten as questions so the correct option is no longer the
+    only question.
 
 course:
   title: German C1
@@ -84,7 +119,7 @@ teaching:
   de.c1.unit08.lesson02.teach.wirklich:
     title: "really"
     gloss: "really"
-    note: "*Wirklich* = really. Inside a question it is the emphasis particle that turns a real question into a rhetorical one: *Wollen wir wirklich ...?* invites agreement, not an answer."
+    note: "*Wirklich* = really. Inside a question it adds emphasis and helps signal a rhetorical question: *Wollen wir wirklich ...?* invites agreement, not an answer."
     example_gloss: "That is really important."
   de.c1.unit08.lesson02.teach.riskieren:
     title: "to risk"
@@ -149,7 +184,7 @@ teaching:
   de.c1.unit08.lesson03.teach.in_kauf_nehmen:
     title: "to accept / to put up with (errors)"
     gloss: "to put up with, to accept (errors)"
-    note: "*Fehler in Kauf nehmen* = to accept errors as the price of something, to put up with them. The phrase paints the fast path as careless: launch quickly and *nehmen Sie Fehler in Kauf*."
+    note: "*Fehler in Kauf nehmen* = to accept errors as the price of something, to put up with them. The phrase paints the fast path as careless: *Wir können schnell starten und Fehler in Kauf nehmen*."
 
   de.c1.unit08.lesson04.teach.gerade_jetzt:
     title: "right now / especially now"
@@ -158,7 +193,7 @@ teaching:
   de.c1.unit08.lesson04.teach.qualitaet:
     title: "quality"
     gloss: "quality"
-    note: "*Die Qualität* = quality. What the speech says everything *kommt an auf* (depends on) *gerade jetzt*."
+    note: "*Die Qualität* = quality. According to the speech, *gerade jetzt* everything comes down to it: *es kommt auf Qualität an*."
     example_gloss: "Quality is important."
   de.c1.unit08.lesson04.teach.kommt_es_an:
     title: "it comes down to"
@@ -167,7 +202,7 @@ teaching:
   de.c1.unit08.lesson04.teach.appellieren:
     title: "to appeal to"
     gloss: "to appeal to"
-    note: "*Appellieren an* + accusative = to appeal to. *Ich appelliere an Ihre Verantwortung* -- a direct appeal to the audience's responsibility. Note the English false friend: you do not use *appellieren* intransitively the way English appeal can stand alone."
+    note: "*Appellieren an* + accusative = to appeal to. *Ich appelliere an Ihre Verantwortung* -- a direct appeal to the audience's responsibility. Note: the legal sense of English *to appeal* (against a verdict) is not *appellieren* but *Berufung einlegen*."
     example_gloss: "I appeal to your responsibility."
   de.c1.unit08.lesson04.teach.verantwortung:
     title: "responsibility"
@@ -275,7 +310,7 @@ exercises:
   de.c1.unit08.lesson02.exercise02.listen_riskieren:
     instruction: "Listen and select the meaning of the sentence."
     correct_option: "Do we really want to risk the customers receiving the data unsecured?"
-    distractors: ["The data is already protected.", "The customers reject the data.", "We have already tested the data."]
+    distractors: ["Have the customers already received the protected data?", "Do the customers really reject the data?", "Have we really tested the data thoroughly?"]
     accepted_answers: [{value: "Do we really want to risk the customers receiving the data unsecured?", status: correct}]
     feedback: "*Wollen wir wirklich riskieren, dass unsere Kunden die Daten ungeschützt erhalten?* -- a rhetorical question, asked for effect, not for an answer."
 
@@ -403,6 +438,10 @@ exercises:
     accepted_answers:
       - {value: "Ich appelliere an Ihre Verantwortung", status: correct}
       - {value: "Ich appelliere an Ihre Verantwortung.", status: correct}
+      - {value: "Ich appelliere an deine Verantwortung", status: correct}
+      - {value: "Ich appelliere an deine Verantwortung.", status: correct}
+      - {value: "Ich appelliere an eure Verantwortung", status: correct}
+      - {value: "Ich appelliere an eure Verantwortung.", status: correct}
     feedback: "*Ich appelliere an Ihre Verantwortung* -- *appellieren an* + accusative names the value appealed to."
 
   de.c1.unit08.lesson04.exercise06.speak_qualitaet:
@@ -412,6 +451,10 @@ exercises:
       - {value: "Gerade jetzt kommt es auf Qualität an.", status: correct}
       - {value: "Gerade jetzt kommt es auf Qualitaet an", status: correct}
       - {value: "Gerade jetzt kommt es auf Qualitaet an.", status: correct}
+      - {value: "Gerade jetzt kommt es auf die Qualität an", status: correct}
+      - {value: "Gerade jetzt kommt es auf die Qualität an.", status: correct}
+      - {value: "Gerade jetzt kommt es auf die Qualitaet an", status: correct}
+      - {value: "Gerade jetzt kommt es auf die Qualitaet an.", status: correct}
     feedback: "Spoken, *Gerade jetzt kommt es auf Qualität an*."
 
   de.c1.unit08.lesson04.exercise07.write_verantwortung:
@@ -419,6 +462,10 @@ exercises:
     accepted_answers:
       - {value: "Ich appelliere an Ihre Verantwortung", status: correct}
       - {value: "Ich appelliere an Ihre Verantwortung.", status: correct}
+      - {value: "Ich appelliere an deine Verantwortung", status: correct}
+      - {value: "Ich appelliere an deine Verantwortung.", status: correct}
+      - {value: "Ich appelliere an eure Verantwortung", status: correct}
+      - {value: "Ich appelliere an eure Verantwortung.", status: correct}
     feedback: "*Ich appelliere an Ihre Verantwortung* -- the appeal, with *die Verantwortung* as its object."
 
   de.c1.unit08.lesson05.exercise01.read_frage:

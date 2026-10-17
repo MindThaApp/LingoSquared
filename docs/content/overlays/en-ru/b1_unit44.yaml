@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked teaching notes/glosses against their Russian, every exercise's accepted answers against what its prompt allows, word_order tiles, matching pairs, dictation, gender pinning and register (no ё in any free-text answer). Fixes (all in overlays/en-ru/b1_unit44.yaml): ru.b1.unit44.lesson03.exercise06.write_full_purpose_exchange accepted answers widened with \"Я учусь по вечерам, ...\" and \"чтобы Дима мог купить машину\" combinations (3 added); ru.b1.unit44.lesson01.exercise05.order_purpose_infinitive added the tile orders \"Дима по вечерам учится, ...\" and \"по вечерам Дима учится, ...\"; construction-commentary notes rewritten as language points on ru.b1.unit44.lesson03.teach.nastya_question (Зачем asks about the goal) and ru.b1.unit44.lesson03.teach.dima_question (а turns the question back). NATIVE FLAGS: English glosses/options \"saves money so that Dima could buy a car\" mix present + could (\"can\" is more natural English; mirrored across options and matching pairs, left as is); lesson02 exercise02 distractor \"настя мог купить машину\" is deliberately ungrammatical. DEFERRED: none."
 
 course:
   title: "Russian B1"
@@ -26,9 +29,9 @@ teaching:
   ru.b1.unit44.lesson02.teach.otkladyvaet_dengi: {title: "Настя откладывает деньги, чтобы Дима мог купить машину.", gloss: "Nastya saves money so that Dima could buy a car.", note: "*чтобы Дима мог купить* uses a past-tense form because the subjects differ (Nastya saves, Dima buys).", example_gloss: "Every month Nastya saves money so that Dima could buy a car."}
   ru.b1.unit44.lesson02.teach.chtoby_past_different_subject: {title: "чтобы + прошедшее время = разные субъекты", gloss: "chtoby + past tense = different subjects", note: "When the two clauses have different subjects, чтобы takes a past-tense verb form regardless of the actual time meant.", example_gloss: "If the subjects are different, use chtoby plus past tense: saves so that Dima could buy."}
   ru.b1.unit44.lesson02.teach.zachem_otkladyvaesh: {title: "Зачем ты откладываешь деньги?", gloss: "Why do you save money?", note: "*откладываешь* = \"you save/set aside\" (habitual present).", example_gloss: "Nastya, why do you save money?"}
-  ru.b1.unit44.lesson03.teach.nastya_question: {title: "Nastya asks why Dima studies", gloss: "Nastya: Dima, why do you study in the evenings?", note: "Opens the goals dialogue."}
+  ru.b1.unit44.lesson03.teach.nastya_question: {title: "Nastya asks why Dima studies", gloss: "Nastya: Dima, why do you study in the evenings?", note: "*Зачем...?* = \"Why / what for...?\" — it asks about the goal, so the natural answer starts with *чтобы*."}
   ru.b1.unit44.lesson03.teach.dima_answer: {title: "Dima gives his purpose", gloss: "Dima: I study in order to get a promotion.", note: "Same-subject purpose with чтобы + infinitive."}
-  ru.b1.unit44.lesson03.teach.dima_question: {title: "Dima asks about saving money", gloss: "Dima: And why do you save money?", note: "Turns the question back to Nastya."}
+  ru.b1.unit44.lesson03.teach.dima_question: {title: "Dima asks about saving money", gloss: "Dima: And why do you save money?", note: "*А зачем ты...?* = \"And why do you...?\" — *а* turns the same question back to the other person."}
   ru.b1.unit44.lesson03.teach.nastya_answer: {title: "Nastya gives her purpose", gloss: "Nastya: I save money so that you could buy a car.", note: "Different-subject purpose with чтобы + past-tense form."}
 
 exercises:
@@ -47,7 +50,7 @@ exercises:
           - {left: "Зачем", right: "why / for what purpose"}
         status: "correct"
     feedback: "These build a same-subject purpose sentence."
-  ru.b1.unit44.lesson01.exercise05.order_purpose_infinitive: {instruction: "Put the words in order to say \"Dima studies in the evenings in order to get a promotion.\"", accepted_answers: [{value: ["Дима", "учится", "по", "вечерам", "чтобы", "получить", "повышение"], status: "correct"}], feedback: "The correct order is *Дима учится по вечерам, чтобы получить повышение*."}
+  ru.b1.unit44.lesson01.exercise05.order_purpose_infinitive: {instruction: "Put the words in order to say \"Dima studies in the evenings in order to get a promotion.\"", accepted_answers: [{value: ["Дима", "учится", "по", "вечерам", "чтобы", "получить", "повышение"], status: "correct"}, {value: ["Дима", "по", "вечерам", "учится", "чтобы", "получить", "повышение"], status: "correct"}, {value: ["по", "вечерам", "Дима", "учится", "чтобы", "получить", "повышение"], status: "correct"}], feedback: "The correct order is *Дима учится по вечерам, чтобы получить повышение*."}
   ru.b1.unit44.lesson01.exercise06.write_purpose_infinitive:
     instruction: "Write exactly this purpose sentence with чтобы + infinitive (same subject): Dima studies in the evenings in order to get a promotion."
     accepted_answers:
@@ -111,6 +114,9 @@ exercises:
     accepted_answers:
       - {value: "Я учусь, чтобы получить повышение. Я откладываю деньги, чтобы ты мог купить машину.", status: "correct"}
       - {value: "Я учусь чтобы получить повышение. Я откладываю деньги чтобы ты мог купить машину.", status: "correct"}
+      - {value: "Я учусь по вечерам, чтобы получить повышение. Я откладываю деньги, чтобы ты мог купить машину.", status: "correct"}
+      - {value: "Я учусь, чтобы получить повышение. Я откладываю деньги, чтобы Дима мог купить машину.", status: "correct"}
+      - {value: "Я учусь по вечерам, чтобы получить повышение. Я откладываю деньги, чтобы Дима мог купить машину.", status: "correct"}
     feedback: "A complete answer contrasts чтобы + infinitive with чтобы + past tense across the two topics."
   ru.b1.unit44.lesson01.uchitsya_chtoby.exercise07.dictation:
     instruction: "Type what you hear."

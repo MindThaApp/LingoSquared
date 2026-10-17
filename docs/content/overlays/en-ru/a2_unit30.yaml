@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked answer keys vs grading (casefold, punctuation-insensitive, no Russian optional-pronoun drop, no ё/е equivalence), course-cumulative token coverage across en-ru-a1/a2, character canon (Дима engineer, Настя teacher), example_gloss vs example, dialogue cards vs audio, gendered first-person answers, learner-visible notes, YAML booleans. Overlay fixes: ru.a2.unit30.lesson03.exercise06.write_interview_followup - instruction (overlay + realization prompt) now asks to greet and to ask politely; added answers without the greeting and/or without \"Скажите, пожалуйста\". ru.a2.unit30.lesson03.teach.nastya_experience - internal canon note -> \"*Я работала* is the feminine past tense: Настя is a woman.\". ru.a2.unit30.lesson03.teach.nastya_schedule - spine-outcome jargon -> \"Asking about the schedule is a good clarifying question at an interview.\". ru.a2.unit30.lesson03.exercise05.reply_availability - added \"Могу начать в понедельник.\" and \"В понедельник я могу начать.\". ru.a2.unit30.lesson02.exercise05.order_mogu_nachat - added tile order \"В понедельник я могу начать\". ru.a2.unit30.lesson01.exercise06.write_experience - added \"У меня опыт работы в школе.\". ru.a2.unit30.lesson03.exercise04.order_rabotala_detmi - instruction now says it is Nastya's line, so the feminine-only tiles are fixed by the speaker. Realization file: 0 defects. NATIVE FLAG: ru.a2.unit30.lesson01.teach.sobesedovanie example \"У меня собеседование сегодня.\" - \"У меня сегодня собеседование.\" is the more neutral order. DEFERRED: realization metadata ru.a2.unit30.lesson03.teach.manager_schedule lists introduced_tokens [за] though the card has no за (not learner-facing, already taught in A1)."
 
 course:
   title: "Russian A2"
@@ -28,10 +31,10 @@ teaching:
   ru.a2.unit30.lesson02.teach.grafik: {title: "график", gloss: "schedule", note: "*график* is the work schedule in this context.", example_gloss: "The schedule is nine to five."}
   ru.a2.unit30.lesson02.teach.dolzhnost: {title: "должность", gloss: "position / role", note: "*на этой должности* means in this position.", example_gloss: "What position is this?"}
   ru.a2.unit30.lesson03.teach.manager_experience: {title: "The interviewer asks about experience", gloss: "Manager: Please tell us about your experience.", note: "Formal *вашем* matches the interview setting."}
-  ru.a2.unit30.lesson03.teach.nastya_experience: {title: "Nastya describes experience", gloss: "Nastya: I have work experience at a school. I worked with children.", note: "This stays consistent with Настя being a teacher."}
+  ru.a2.unit30.lesson03.teach.nastya_experience: {title: "Nastya describes experience", gloss: "Nastya: I have work experience at a school. I worked with children.", note: "*Я работала* is the feminine past tense: Настя is a woman."}
   ru.a2.unit30.lesson03.teach.manager_start: {title: "The interviewer asks availability", gloss: "Manager: When can you start?", note: "The question is about availability."}
   ru.a2.unit30.lesson03.teach.nastya_monday: {title: "Nastya gives availability", gloss: "Nastya: I can start on Monday.", note: "This answers the availability question."}
-  ru.a2.unit30.lesson03.teach.nastya_schedule: {title: "Nastya asks a role question", gloss: "Nastya: Please tell me, what is the schedule for this position?", note: "This delivers the clarifying-question part of the outcome."}
+  ru.a2.unit30.lesson03.teach.nastya_schedule: {title: "Nastya asks a role question", gloss: "Nastya: Please tell me, what is the schedule for this position?", note: "Asking about the schedule is a good clarifying question at an interview."}
   ru.a2.unit30.lesson03.teach.manager_schedule: {title: "The interviewer answers", gloss: "Manager: The schedule is from nine to five.", note: "The interviewer gives the schedule."}
 
 exercises:
@@ -62,6 +65,7 @@ exercises:
     accepted_answers:
       - {value: "У меня есть опыт работы в школе.", status: "correct"}
       - {value: "У меня есть опыт работы в школе", status: "correct"}
+      - {value: "У меня опыт работы в школе.", status: "correct"}
     feedback: "The model answer is *У меня есть опыт работы в школе*."
   ru.a2.unit30.lesson02.exercise01.recognize_grafik: {instruction: "Which word means \"schedule\"?", correct_option: "график", distractors: ["должность", "опыт", "дети"], accepted_answers: [{value: "график", status: "correct"}], feedback: "*график* means \"schedule.\""}
   ru.a2.unit30.lesson02.exercise02.recognize_dolzhnost: {instruction: "Which word means \"position\" or \"role\"?", correct_option: "должность", distractors: ["график", "работа", "понедельник"], accepted_answers: [{value: "должность", status: "correct"}], feedback: "*должность* means the position or role."}
@@ -78,7 +82,7 @@ exercises:
           - {left: "с девяти до пяти", right: "from nine to five"}
         status: "correct"
     feedback: "These phrases cover availability and role details."
-  ru.a2.unit30.lesson02.exercise05.order_mogu_nachat: {instruction: "Put the words in order to say \"I can start on Monday.\"", accepted_answers: [{value: ["Я", "могу", "начать", "в", "понедельник"], status: "correct"}], feedback: "The correct order is *Я могу начать в понедельник*."}
+  ru.a2.unit30.lesson02.exercise05.order_mogu_nachat: {instruction: "Put the words in order to say \"I can start on Monday.\"", accepted_answers: [{value: ["Я", "могу", "начать", "в", "понедельник"], status: "correct"}, {value: ["в", "понедельник", "Я", "могу", "начать"], status: "correct"}], feedback: "The correct order is *Я могу начать в понедельник*."}
   ru.a2.unit30.lesson02.exercise06.write_schedule_question:
     instruction: "Write a formal question asking what the schedule is for this position."
     accepted_answers:
@@ -105,17 +109,22 @@ exercises:
           - {left: "График с девяти до пяти.", right: "The schedule is nine to five."}
         status: "correct"
     feedback: "These lines cover experience, availability, and a role question."
-  ru.a2.unit30.lesson03.exercise04.order_rabotala_detmi: {instruction: "Put the words in order to say \"I worked with children.\"", accepted_answers: [{value: ["Я", "работала", "с", "детьми"], status: "correct"}], feedback: "The correct order is *Я работала с детьми*."}
+  ru.a2.unit30.lesson03.exercise04.order_rabotala_detmi: {instruction: "Put the words in order to say Nastya's line \"I worked with children.\"", accepted_answers: [{value: ["Я", "работала", "с", "детьми"], status: "correct"}], feedback: "The correct order is *Я работала с детьми*."}
   ru.a2.unit30.lesson03.exercise05.reply_availability:
     instruction: "The interviewer asks \"Когда вы можете начать?\" Answer that you can start on Monday."
     accepted_answers:
       - {value: "Я могу начать в понедельник.", status: "correct"}
       - {value: "Я могу начать в понедельник", status: "correct"}
+      - {value: "Могу начать в понедельник.", status: "correct"}
+      - {value: "В понедельник я могу начать.", status: "correct"}
     feedback: "The model answer is *Я могу начать в понедельник*."
   ru.a2.unit30.lesson03.exercise06.write_interview_followup:
-    instruction: "Write a short formal follow-up after an interview: thank them for the interview, confirm you can start Monday, and ask what the schedule is for this position."
+    instruction: "Write a short formal follow-up after an interview: greet them, thank them for the interview, confirm you can start Monday, and politely ask what the schedule is for this position."
     accepted_answers:
       - {value: "Здравствуйте. Спасибо за собеседование. Я могу начать в понедельник. Скажите, пожалуйста, какой график работы на этой должности?", status: "correct"}
       - {value: "Здравствуйте, спасибо за собеседование. Я могу начать в понедельник. Скажите, пожалуйста, какой график работы на этой должности?", status: "correct"}
       - {value: "Здравствуйте. Спасибо за собеседование. Я могу начать в понедельник. Скажите пожалуйста какой график работы на этой должности?", status: "correct"}
+      - {value: "Здравствуйте. Спасибо за собеседование. Я могу начать в понедельник. Какой график работы на этой должности?", status: "correct"}
+      - {value: "Спасибо за собеседование. Я могу начать в понедельник. Скажите, пожалуйста, какой график работы на этой должности?", status: "correct"}
+      - {value: "Спасибо за собеседование. Я могу начать в понедельник. Какой график работы на этой должности?", status: "correct"}
     feedback: "A complete follow-up thanks them, confirms availability, and asks the clarifying schedule question."

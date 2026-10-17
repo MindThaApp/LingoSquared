@@ -9,11 +9,38 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     New overlay, paired with the new fr.a1.unit10.routines realization. Not
     yet fresh-context reviewed.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    Checked unit10 realization + en-fr overlay together: grading keys vs
+    prompts, taught-token coverage, gendered first-person answers,
+    option parallelism, learner-visible notes. Fixes (overlay unless
+    noted): speak_morning_routine - open 'describe your routine' prompt
+    pinned to 'Say these three steps in order: you wake up, you get up,
+    you get dressed'; realization French prompt re-pinned to 'Dis dans
+    l'ordre : tu te réveilles, tu te lèves, tu t'habilles.'; accepted
+    answers widened with the taught d'abord/ensuite, ensuite, puis and
+    'et' variants. reply_saturday_routine - instruction pinned to the
+    taught Saturday routine; 'ensuite' variants accepted.
+    speak_describe_saturday - answer key was untaught 3rd-person (il se
+    réveille / il va) and mismatched the 1st-person tested_text; now
+    'Take Mathieu's role' with 1st-person accepted answers (plain, puis,
+    d'abord/ensuite, ensuite, 'et'); realization French prompt changed
+    to 'Tu es Mathieu : raconte ton samedi.' fill_dhabitude -
+    instruction now 'Complete the word for "usually": D'___' so the
+    learner types only the missing part.
+    select_what_mathieu_does_after_breakfast - distractor 'He rests'
+    (also true after breakfast) replaced with 'He goes to bed'. Notes
+    rewritten to remove course-construction wording:
+    teach.quest_ce_que_tu_fais, teach.line06,
+    teach.ma_routine_du_samedi. NATIVE FLAG (owner/canon, shared with
+    units 08-12): unit08 calls 22 March the workshop's last session
+    while units10-12 treat it as ongoing; narrative tension only.
+    DEFERRED: none.
 
 answer_policy:
   accent_marks: >-
@@ -113,11 +140,11 @@ teaching:
   fr.a1.unit10.lesson02.teach.ma_routine_du_samedi:
     title: "Describe a Saturday"
     gloss: "On Saturdays, I get up late, then I go to the market before the workshop."
-    note: "Combines *d'abord/ensuite*-style sequencing (here with *puis*, \"then\") with the workshop's own established Saturday schedule."
+    note: "Combines *d'abord/ensuite*-style sequencing (here with *puis*, \"then\") to describe a Saturday."
   fr.a1.unit10.lesson02.teach.quest_ce_que_tu_fais:
     title: "What do you do?"
     gloss: "What do you do on Saturdays?"
-    note: "*Qu'est-ce que tu fais... ?* is the standard informal way to ask what someone does -- introduced here so the next exercise can ask it directly."
+    note: "*Qu'est-ce que tu fais... ?* is the standard informal way to ask what someone does."
 
   fr.a1.unit10.lesson03.teach.line01:
     title: "Ask about Saturday"
@@ -142,7 +169,7 @@ teaching:
   fr.a1.unit10.lesson03.teach.line06:
     title: "Describe the afternoon"
     gloss: "Mathieu says he gets back around noon, and in the afternoon, he rests before the evening workshop."
-    note: "*Se reposer* (to rest) is a new reflexive verb, introduced here in context -- comprehensible from the gloss alone."
+    note: "*Se reposer* (to rest) is another reflexive verb: *je me repose*."
 
 exercises:
   fr.a1.unit10.lesson01.exercise01.select_se_lever:
@@ -176,10 +203,15 @@ exercises:
     accepted_answers: ["douche"]
 
   fr.a1.unit10.lesson01.exercise06.speak_morning_routine:
-    instruction: "Describe your morning routine in three steps."
+    instruction: "Say these three steps in order: you wake up, you get up, you get dressed."
     accepted_answers:
       - "Je me réveille, je me lève, je m'habille."
       - "Je me réveille, puis je me lève, puis je m'habille."
+      - "Je me réveille, je me lève et je m'habille."
+      - "Je me réveille, ensuite je me lève, ensuite je m'habille."
+      - "D'abord je me réveille, ensuite je me lève, ensuite je m'habille."
+      - "D'abord, je me réveille, ensuite, je me lève, ensuite, je m'habille."
+      - "D'abord je me réveille, puis je me lève, puis je m'habille."
 
   fr.a1.unit10.lesson02.exercise01.select_se_coucher:
     instruction: "Which phrase means \"to go to bed\"?"
@@ -207,14 +239,16 @@ exercises:
     correct_response: ["Je", "me", "couche", "vers", "vingt-trois", "heures"]
 
   fr.a1.unit10.lesson02.exercise05.fill_dhabitude:
-    instruction: "Complete the sentence with the word for \"usually.\""
+    instruction: "Complete the word for \"usually\": D'___"
     accepted_answers: ["habitude"]
 
   fr.a1.unit10.lesson02.exercise06.reply_saturday_routine:
-    instruction: "Answer: describe your Saturday routine before the workshop."
+    instruction: "Answer with the Saturday routine you just learned: you get up late, then you go to the market before the workshop."
     accepted_answers:
       - "Le samedi, je me lève tard, puis je vais au marché avant l'atelier."
       - "Le samedi je me lève tard, puis je vais au marché avant l'atelier."
+      - "Le samedi, je me lève tard, ensuite je vais au marché avant l'atelier."
+      - "Le samedi, je me lève tard, et ensuite je vais au marché avant l'atelier."
 
   fr.a1.unit10.lesson03.exercise01.comprehend_wakeup_time:
     instruction: "Listen to the dialogue. What time does Mathieu wake up?"
@@ -231,7 +265,7 @@ exercises:
   fr.a1.unit10.lesson03.exercise03.select_what_mathieu_does_after_breakfast:
     instruction: "What does Mathieu do after breakfast?"
     correct_option: "He goes to the market"
-    distractors: ["He rests", "He calls Inès"]
+    distractors: ["He goes to bed", "He calls Inès"]
     accepted_answers: ["He goes to the market"]
 
   fr.a1.unit10.lesson03.exercise04.order_ensuite_je_prends:
@@ -245,10 +279,13 @@ exercises:
       - "Je rentre vers midi et l'après-midi je me repose avant l'atelier du soir."
 
   fr.a1.unit10.lesson03.exercise06.speak_describe_saturday:
-    instruction: "Describe Mathieu's Saturday routine out loud."
+    instruction: "Take Mathieu's role. Say out loud, in order: you wake up, you go to the market, you rest."
     accepted_answers:
-      - "Il se réveille, il va au marché, il se repose."
-      - "Il se réveille, puis il va au marché, puis il se repose."
+      - "Je me réveille, je vais au marché, je me repose."
+      - "Je me réveille, puis je vais au marché, puis je me repose."
+      - "D'abord je me réveille, ensuite je vais au marché, ensuite je me repose."
+      - "Je me réveille, ensuite je vais au marché, ensuite je me repose."
+      - "Je me réveille, je vais au marché et je me repose."
 
   fr.a1.unit10.lesson01.exercise07.dictation_je_me_leve:
     instruction: "Type what you hear."

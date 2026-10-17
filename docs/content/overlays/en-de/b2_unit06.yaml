@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for de's sixth B2 unit (first abstraction unit), authored
     alongside the realization (no adaptable upper-intermediate
@@ -23,6 +23,38 @@ review:
     capitalized "Sie" (formal you, from unit05) is flagged again in
     lesson05's glosses since this is exactly the kind of text where both
     could appear. No sibling direction file (de-en b2) was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked grading-fit of every accepted answer against the taught
+    forms and word banks, matching_pairs left discrimination, distractor
+    ambiguity, prompt/answer agreement, teaching-card coverage of tested
+    tokens, character canon (Frau Vogel formal Sie colleague,
+    consistent), YAML boolean and jargon sweeps (clean). Fixes (accepted
+    answers added, all equally correct and built from taught words):
+    lesson02.exercise05.translate_gewissen_grad + 'Bis zu einem gewissen
+    Grad ist Status wichtig' (the lesson's grammar-note order);
+    lesson02.exercise07.write_unter_umstaenden + 'Status ist unter
+    Umständen wichtig' (+ ae spelling; the teach.status example order);
+    lesson03.exercise05.translate_verstehe_aber + '..., aber das sehe
+    ich anders'; lesson06.exercise05/06 + '..., aber das sehe ich
+    anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld';
+    lesson04.exercise04.order_werte_kultur + 'Von Kultur zu Kultur sind
+    Werte unterschiedlich'; lesson01.exercise04.order_claim_erfolg +
+    'Ich glaube im Allgemeinen dass Erfolg Zufriedenheit bedeutet';
+    lesson01.exercise05.translate_fuer_mich + 'Erfolg bedeutet für mich
+    Zufriedenheit'; lesson01.exercise06.translate_geld_wichtig + 'Mir
+    ist Geld nicht so wichtig', 'Geld ist für mich nicht so wichtig';
+    lesson04.exercise06.translate_in_gewisser_weise + 'Jede Kultur hat
+    in gewisser Weise andere Werte' and the unterschiedliche variants;
+    lesson04.exercise07.write_kultur_werte + 'Jede Kultur hat
+    unterschiedliche Werte'. Other fixes: lesson01.teach.bedeuten note
+    no longer implies bedeuten never takes a dative (it now explains the
+    dative-person use, matching the teach.erfolg example 'Erfolg
+    bedeutet vielen Menschen viel');
+    lesson03.exercise02.listen_anderer_meinung distractor 'I disagree
+    with you.' (near-synonym of the answer) -> 'I have no opinion on
+    that.'. NATIVE FLAG: Sie-default register on 'you' prompts (see
+    realization note). DEFERRED: none.
 
 course:
   title: German B2
@@ -60,7 +92,7 @@ teaching:
   de.b2.unit06.lesson01.teach.bedeuten:
     title: "to mean"
     gloss: "to mean"
-    note: "*Bedeuten* = to mean. Used here without a dative object: *Erfolg bedeutet Zufriedenheit* ('success means contentment'), not *Erfolg bedeutet mir Zufriedenheit*."
+    note: "*Bedeuten* = to mean. *Erfolg bedeutet Zufriedenheit* = 'success means contentment'. With a dative person it means 'to matter to someone': *Erfolg bedeutet vielen Menschen viel* ('success means a lot to many people')."
     example_gloss: "What does success mean to you?"
   de.b2.unit06.lesson01.teach.zufriedenheit:
     title: "contentment / satisfaction"
@@ -230,17 +262,21 @@ exercises:
     instruction: "Put the words in order: Generally, I believe that success means contentment."
     accepted_answers:
       - {value: "Im Allgemeinen glaube ich dass Erfolg Zufriedenheit bedeutet", status: correct}
+      - {value: "Ich glaube im Allgemeinen dass Erfolg Zufriedenheit bedeutet", status: correct}
     feedback: "Im Allgemeinen glaube ich, dass Erfolg Zufriedenheit bedeutet means generally, I believe that success means contentment."
   de.b2.unit06.lesson01.exercise05.translate_fuer_mich:
     instruction: "Translate into German: For me, success means contentment."
     accepted_answers:
       - {value: "Für mich bedeutet Erfolg Zufriedenheit", status: correct}
       - {value: "Fuer mich bedeutet Erfolg Zufriedenheit", status: correct}
+      - {value: "Erfolg bedeutet für mich Zufriedenheit", status: correct}
     feedback: "Für mich bedeutet Erfolg Zufriedenheit means for me, success means contentment."
   de.b2.unit06.lesson01.exercise06.translate_geld_wichtig:
     instruction: "Translate into German: Money is not so important to me."
     accepted_answers:
       - {value: "Geld ist mir nicht so wichtig", status: correct}
+      - {value: "Mir ist Geld nicht so wichtig", status: correct}
+      - {value: "Geld ist für mich nicht so wichtig", status: correct}
     feedback: "Geld ist mir nicht so wichtig means money is not so important to me."
   de.b2.unit06.lesson01.exercise07.speak_claim_erfolg:
     instruction: "Say aloud in German: Generally, I believe that success means contentment."
@@ -280,6 +316,7 @@ exercises:
     instruction: "Translate into German, using bis zu einem gewissen Grad: Status is important to a certain degree."
     accepted_answers:
       - {value: "Status ist bis zu einem gewissen Grad wichtig", status: correct}
+      - {value: "Bis zu einem gewissen Grad ist Status wichtig", status: correct}
     feedback: "Status ist bis zu einem gewissen Grad wichtig means status is important to a certain degree."
   de.b2.unit06.lesson02.exercise06.translate_nicht_unbedingt:
     instruction: "Translate into German, using nicht unbedingt: Money does not necessarily mean success."
@@ -291,6 +328,8 @@ exercises:
     accepted_answers:
       - {value: "Unter Umständen ist Status wichtig", status: correct}
       - {value: "Unter Umstaenden ist Status wichtig", status: correct}
+      - {value: "Status ist unter Umständen wichtig", status: correct}
+      - {value: "Status ist unter Umstaenden wichtig", status: correct}
     feedback: "Unter Umständen ist Status wichtig means under certain circumstances, status is important."
 
   de.b2.unit06.lesson03.exercise01.recognize_anderer_meinung:
@@ -302,7 +341,7 @@ exercises:
   de.b2.unit06.lesson03.exercise02.listen_anderer_meinung:
     instruction: "Listen and select what you hear."
     correct_option: "I disagree with that."
-    distractors: ["I agree with that.", "I don't understand that.", "I disagree with you."]
+    distractors: ["I agree with that.", "I don't understand that.", "I have no opinion on that."]
     accepted_answers: [{value: "I disagree with that.", status: correct}]
     feedback: "Da bin ich anderer Meinung means I disagree with that."
   de.b2.unit06.lesson03.exercise03.match_response_words:
@@ -321,6 +360,7 @@ exercises:
     accepted_answers:
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders", status: correct}
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders.", status: correct}
+      - {value: "Ich verstehe, was Sie meinen, aber das sehe ich anders", status: correct}
     feedback: "Ich verstehe, was Sie meinen, aber ich sehe das anders means I understand what you mean, but I see it differently."
   de.b2.unit06.lesson03.exercise06.translate_stimme_nicht_ganz_zu:
     instruction: "Translate into German: I don't quite agree."
@@ -355,6 +395,7 @@ exercises:
     instruction: "Put the words in order: Values differ from culture to culture."
     accepted_answers:
       - {value: "Werte sind von Kultur zu Kultur unterschiedlich", status: correct}
+      - {value: "Von Kultur zu Kultur sind Werte unterschiedlich", status: correct}
     feedback: "Werte sind von Kultur zu Kultur unterschiedlich means values differ from culture to culture."
   de.b2.unit06.lesson04.exercise05.translate_im_grunde_genommen:
     instruction: "Translate into German, using im Grunde genommen: Basically, society shapes our values."
@@ -366,11 +407,15 @@ exercises:
     instruction: "Translate into German, using in gewisser Weise: In a certain way, every culture has different values."
     accepted_answers:
       - {value: "In gewisser Weise hat jede Kultur andere Werte", status: correct}
+      - {value: "Jede Kultur hat in gewisser Weise andere Werte", status: correct}
+      - {value: "In gewisser Weise hat jede Kultur unterschiedliche Werte", status: correct}
+      - {value: "Jede Kultur hat in gewisser Weise unterschiedliche Werte", status: correct}
     feedback: "In gewisser Weise hat jede Kultur andere Werte means in a certain way, every culture has different values."
   de.b2.unit06.lesson04.exercise07.write_kultur_werte:
     instruction: "Write in German: Every culture has different values."
     accepted_answers:
       - {value: "Jede Kultur hat andere Werte", status: correct}
+      - {value: "Jede Kultur hat unterschiedliche Werte", status: correct}
     feedback: "Jede Kultur hat andere Werte means every culture has different values."
   de.b2.unit06.lesson04.exercise08.dictation_werte_kultur:
     instruction: "Type what you hear."
@@ -449,11 +494,13 @@ exercises:
     accepted_answers:
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld", status: correct}
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld.", status: correct}
+      - {value: "Ich verstehe, was Sie meinen, aber das sehe ich anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld", status: correct}
     feedback: "A qualified opinion engaging an opposing view: Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld."
   de.b2.unit06.lesson06.exercise06.write_qualified_opinion:
     instruction: "Write a qualified opinion in German, responding directly to an opposing view. Write these two sentences: (1) I understand what you mean, but I see it differently: (2) For me, success means contentment, not just money."
     accepted_answers:
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld.", status: correct}
+      - {value: "Ich verstehe, was Sie meinen, aber das sehe ich anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld", status: correct}
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld", status: correct}
       - {value: "Ich verstehe, was Sie meinen, aber ich sehe das anders. Fuer mich bedeutet Erfolg Zufriedenheit, nicht nur Geld.", status: correct}
     feedback: "A complete written qualified opinion engaging an opposing view: Ich verstehe, was Sie meinen, aber ich sehe das anders. Für mich bedeutet Erfolg Zufriedenheit, nicht nur Geld."

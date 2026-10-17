@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Codex-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked YAML boolean coercion, learner-facing jargon, character canon (Дима engineer, Настя teacher), course-cumulative vocab, prompt determinacy, gendered answers, word_order alternatives, example_gloss fidelity, ё/е (none present). Fixes: ru.b1.unit36.lesson03.exercise06.write_obligation_prohibition_regret instruction pinned to the exact three English sentences (was open content with one exact key) and accepted answers widened (no final period, Я сегодня должен, Вчера мне нужно было); ru.b1.unit36.lesson02.exercise06.write_regret instruction pins 'As Дима (male speaker)' and accepts comma/period and adverb-order variants; example_glosses for teach.dolzhen, nelzya, nuzhno_bylo now translate the 'Дима,' vocative; order_dolzhen accepts я-first order; order_nuzhno_bylo accepts вчера-first, Мне вчера and нужно было вчера orders; write_obligation accepts 'Я сегодня должен отправить форму'. NATIVE FLAG: teaching examples prefix 'Дима, ...' to first-person sentences the notes attribute to Дима (sentence becomes addressed to him); consider dropping the vocative in the realization. DEFERRED: course.description is unit-specific in every en-ru overlay (corpus-wide owner decision)."
 
 course:
   title: "Russian B1"
@@ -20,11 +23,11 @@ lessons:
   ru.b1.unit36.lesson03.objazannosti_dialogue: {title: "Dialogue: what needs to be done"}
 
 teaching:
-  ru.b1.unit36.lesson01.teach.dolzhen: {title: "Сегодня я должен отправить форму.", gloss: "Today I must send the form.", note: "*должен* is the male-speaker form for a personal obligation.", example_gloss: "Today I must send the form."}
+  ru.b1.unit36.lesson01.teach.dolzhen: {title: "Сегодня я должен отправить форму.", gloss: "Today I must send the form.", note: "*должен* is the male-speaker form for a personal obligation.", example_gloss: "Dima, today I must send the form."}
   ru.b1.unit36.lesson01.teach.nuzhno: {title: "Мне нужно проверить адрес.", gloss: "I need to check the address.", note: "*Мне нужно* is a common Russian way to say that something is necessary.", example_gloss: "I need to check the address today."}
   ru.b1.unit36.lesson01.teach.chto_dolzhen: {title: "Что ты должен сделать сегодня?", gloss: "What must you do today?", note: "Настя uses informal *ты* with Дима.", example_gloss: "Dima, what must you do today?"}
-  ru.b1.unit36.lesson02.teach.nelzya: {title: "В офисе нельзя опаздывать.", gloss: "In the office, you must not be late.", note: "*нельзя* gives a prohibition: something is not allowed.", example_gloss: "In the office, you must not be late."}
-  ru.b1.unit36.lesson02.teach.nuzhno_bylo: {title: "Мне нужно было проверить адрес вчера, но я не успел.", gloss: "I should have checked the address yesterday, but I did not manage to.", note: "*нужно было* plus the added clause makes the unfulfilled obligation explicit.", example_gloss: "I should have checked the address yesterday, but I did not manage to."}
+  ru.b1.unit36.lesson02.teach.nelzya: {title: "В офисе нельзя опаздывать.", gloss: "In the office, you must not be late.", note: "*нельзя* gives a prohibition: something is not allowed.", example_gloss: "Dima, in the office you must not be late."}
+  ru.b1.unit36.lesson02.teach.nuzhno_bylo: {title: "Мне нужно было проверить адрес вчера, но я не успел.", gloss: "I should have checked the address yesterday, but I did not manage to.", note: "*нужно было* plus the added clause makes the unfulfilled obligation explicit.", example_gloss: "Dima, I should have checked the address yesterday, but I did not manage to."}
   ru.b1.unit36.lesson02.teach.ne_uspel: {title: "Я не успел.", gloss: "I did not manage to.", note: "For Дима, use masculine *успел*.", example_gloss: "I should have checked the address yesterday, but I did not manage to."}
   ru.b1.unit36.lesson03.teach.nastya_question: {title: "Nastya asks about an obligation", gloss: "Nastya: Dima, what must you do today?", note: "The friends use informal *ты*."}
   ru.b1.unit36.lesson03.teach.dima_obligation: {title: "Dima states the obligation", gloss: "Dima: Today I must send the form.", note: "This gives the present obligation."}
@@ -47,12 +50,14 @@ exercises:
           - {left: "форма", right: "form"}
         status: "correct"
     feedback: "These phrases state present obligations."
-  ru.b1.unit36.lesson01.exercise05.order_dolzhen: {instruction: "Put the words in order to say \"Today I must send the form.\" Use должен.", accepted_answers: [{value: ["Сегодня", "я", "должен", "отправить", "форму"], status: "correct"}], feedback: "The correct order is *Сегодня я должен отправить форму*."}
+  ru.b1.unit36.lesson01.exercise05.order_dolzhen: {instruction: "Put the words in order to say \"Today I must send the form.\" Use должен.", accepted_answers: [{value: ["Сегодня", "я", "должен", "отправить", "форму"], status: "correct"}, {value: ["я", "Сегодня", "должен", "отправить", "форму"], status: "correct"}], feedback: "The correct order is *Сегодня я должен отправить форму*."}
   ru.b1.unit36.lesson01.exercise06.write_obligation:
     instruction: "Write exactly this present-obligation sentence with должен: Today I must send the form."
     accepted_answers:
       - {value: "Сегодня я должен отправить форму.", status: "correct"}
       - {value: "Сегодня я должен отправить форму", status: "correct"}
+      - {value: "Я сегодня должен отправить форму.", status: "correct"}
+      - {value: "Я сегодня должен отправить форму", status: "correct"}
     feedback: "The model answer is *Сегодня я должен отправить форму*."
   ru.b1.unit36.lesson02.exercise01.recognize_nelzya: {instruction: "Which Russian word means \"must not\" or \"it is not allowed\"?", correct_option: "нельзя", distractors: ["нужно", "должен", "успел"], accepted_answers: [{value: "нельзя", status: "correct"}], feedback: "*нельзя* marks a prohibition."}
   ru.b1.unit36.lesson02.exercise02.recognize_nuzhno_bylo: {instruction: "Which Russian phrase means \"should have\" or \"needed to\"?", correct_option: "нужно было", distractors: ["нужно проверить", "нельзя было", "должен отправить"], accepted_answers: [{value: "нужно было", status: "correct"}], feedback: "*нужно было* looks back at a needed action."}
@@ -69,12 +74,16 @@ exercises:
           - {left: "вчера", right: "yesterday"}
         status: "correct"
     feedback: "These phrases cover prohibition and past regret."
-  ru.b1.unit36.lesson02.exercise05.order_nuzhno_bylo: {instruction: "Put the words in order to say \"I should have checked the address yesterday, but I did not manage to.\"", accepted_answers: [{value: ["Мне", "нужно", "было", "проверить", "адрес", "вчера", "но", "я", "не", "успел"], status: "correct"}], feedback: "The correct order is *Мне нужно было проверить адрес вчера, но я не успел*."}
+  ru.b1.unit36.lesson02.exercise05.order_nuzhno_bylo: {instruction: "Put the words in order to say \"I should have checked the address yesterday, but I did not manage to.\"", accepted_answers: [{value: ["Мне", "нужно", "было", "проверить", "адрес", "вчера", "но", "я", "не", "успел"], status: "correct"}, {value: ["вчера", "Мне", "нужно", "было", "проверить", "адрес", "но", "я", "не", "успел"], status: "correct"}, {value: ["Мне", "вчера", "нужно", "было", "проверить", "адрес", "но", "я", "не", "успел"], status: "correct"}, {value: ["Мне", "нужно", "было", "вчера", "проверить", "адрес", "но", "я", "не", "успел"], status: "correct"}], feedback: "The correct order is *Мне нужно было проверить адрес вчера, но я не успел*."}
   ru.b1.unit36.lesson02.exercise06.write_regret:
-    instruction: "Write exactly this past-regret sentence with нужно было and the unfulfilled part: I should have checked the address yesterday, but I did not manage to."
+    instruction: "As Дима (male speaker), write exactly this past-regret sentence with нужно было and the unfulfilled part: I should have checked the address yesterday, but I did not manage to."
     accepted_answers:
       - {value: "Мне нужно было проверить адрес вчера, но я не успел.", status: "correct"}
       - {value: "Мне нужно было проверить адрес вчера но я не успел", status: "correct"}
+      - {value: "Мне нужно было проверить адрес вчера, но я не успел", status: "correct"}
+      - {value: "Мне нужно было проверить адрес вчера но я не успел.", status: "correct"}
+      - {value: "Вчера мне нужно было проверить адрес, но я не успел.", status: "correct"}
+      - {value: "Мне вчера нужно было проверить адрес, но я не успел.", status: "correct"}
     feedback: "The model answer is *Мне нужно было проверить адрес вчера, но я не успел*."
   ru.b1.unit36.lesson03.exercise01.choose_full_obligation: {instruction: "Which answer includes present obligation, prohibition, and past regret?", correct_option: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера, но я не успел.", distractors: ["Сегодня я могу сказать, что документ готов.", "В офисе нельзя опаздывать.", "Мне нужно проверить адрес сегодня."], accepted_answers: [{value: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера, но я не успел.", status: "correct"}], feedback: "The correct answer has должен, нельзя, and нужно было plus the unfulfilled part."}
   ru.b1.unit36.lesson03.exercise02.dialogue_comprehension_obligation:
@@ -103,10 +112,13 @@ exercises:
       - {value: "Сегодня я должен отправить форму", status: "correct"}
     feedback: "The model answer is *Сегодня я должен отправить форму*."
   ru.b1.unit36.lesson03.exercise06.write_obligation_prohibition_regret:
-    instruction: "As Дима, write three sentences. Include a present obligation with должен, a prohibition with нельзя, and a past-regret sentence with нужно было plus what you did not manage to do."
+    instruction: "As Дима, write these three sentences: Today I must send the form. In the office, you must not be late. I should have checked the address yesterday, but I did not manage to."
     accepted_answers:
       - {value: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера, но я не успел.", status: "correct"}
       - {value: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера но я не успел.", status: "correct"}
+      - {value: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера, но я не успел", status: "correct"}
+      - {value: "Я сегодня должен отправить форму. В офисе нельзя опаздывать. Мне нужно было проверить адрес вчера, но я не успел.", status: "correct"}
+      - {value: "Сегодня я должен отправить форму. В офисе нельзя опаздывать. Вчера мне нужно было проверить адрес, но я не успел.", status: "correct"}
     feedback: "A complete answer has present obligation, prohibition, and past regret."
   ru.b1.unit36.lesson01.dolzhen_otpravit.exercise07.dictation:
     instruction: "Type what you hear."

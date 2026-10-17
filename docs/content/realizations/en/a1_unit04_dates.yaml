@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Fresh-context review: confirmed the US month-day-year date
     convention is explicitly flagged as non-universal (both in
@@ -32,6 +32,30 @@ review:
     schema_version bumped to 1.1. Reverted review.status from
     "reviewed" to "unreviewed" since this is a real content addition
     needing its own fresh-context check.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked spine fit, pacing, taught-token coverage of prompts,
+    answer derivability, character canon and the X-en overlays'
+    English answer sets. Fixes: lesson03.exercise05.write_date (HIGH)
+    target_block Write today's date in words: July 7. -> July 7, and
+    every overlay now accepts It's July seventh., It is July
+    7th/seventh., It's July 7. and It is July 7. (a learner following
+    the in-words instruction was marked wrong);
+    lesson04.exercise03.choose_reopen_date target_block When does the
+    library open again? -> When's the library open again? (does/When
+    untaught until unit05); lesson01.exercise02.choose_weekend,
+    lesson01.exercise05.write_friday,
+    lesson02.exercise02.choose_summer_month,
+    lesson02.exercise05.write_december target_blocks emptied (untaught
+    English repeating the overlay instruction). Overlay answer
+    widening: reply_birthday (It's March 3rd., My birthday is March
+    third./March 3. etc.). No native flags. DEFERRED (owner decision,
+    structural): the lesson04 dialogue has Daniel, who works at the
+    library (unit02), asking Leila when the library reopens; swapping
+    roles changes the dialogue cards, audio
+    en.a1.audio.dialogue.appointment.01 and the
+    reply_as_leila/speak_dates instructions and feedback in nl-en,
+    de-en, fa-en and prs-en.
 
 course:
   realization_key: "en.a1"
@@ -74,10 +98,10 @@ units:
           - content_key: "en.a1.unit04.lesson01.exercise02.choose_weekend"
             type: "multiple_choice"
             tested_text: "Saturday"
-            prompt: {target_blocks: [{text: "Which day is a weekend day?", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: []}
           - {content_key: "en.a1.unit04.lesson01.exercise03.match_days", type: "matching_pairs", tested_text: "Monday Tuesday Wednesday Thursday", prompt: {target_blocks: []}, pairs: [{left: "Monday", right: "1st weekday"}, {left: "Tuesday", right: "2nd weekday"}, {left: "Wednesday", right: "3rd weekday"}, {left: "Thursday", right: "4th weekday"}, {left: "Friday", right: "5th weekday"}, {left: "Saturday", right: "1st weekend day"}, {left: "Sunday", right: "2nd weekend day"}]}
           - {content_key: "en.a1.unit04.lesson01.exercise04.order_question", type: "word_order", tested_text: "What day is it today", prompt: {target_blocks: []}, word_bank: ["day", "is", "it", "today", "What"]}
-          - {content_key: "en.a1.unit04.lesson01.exercise05.write_friday", type: "writing_prompt", tested_text: "Friday", prompt: {target_blocks: [{text: "Write the day that comes after Thursday.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit04.lesson01.exercise05.write_friday", type: "writing_prompt", tested_text: "Friday", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit04.lesson02.months"
         title: "Months of the year"
@@ -94,10 +118,10 @@ units:
           - content_key: "en.a1.unit04.lesson02.exercise02.choose_summer_month"
             type: "multiple_choice"
             tested_text: "July"
-            prompt: {target_blocks: [{text: "Which month is a summer month in the US?", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: []}
           - {content_key: "en.a1.unit04.lesson02.exercise03.match_months", type: "matching_pairs", tested_text: "January March July December", prompt: {target_blocks: []}, pairs: [{left: "January", right: "1st month"}, {left: "March", right: "3rd month"}, {left: "July", right: "7th month"}, {left: "December", right: "12th month"}, {left: "September", right: "9th month"}, {left: "Monday", right: "1st weekday"}, {left: "Tuesday", right: "2nd weekday"}, {left: "Wednesday", right: "3rd weekday"}, {left: "Thursday", right: "4th weekday"}, {left: "Friday", right: "5th weekday"}, {left: "Saturday", right: "1st weekend day"}, {left: "Sunday", right: "2nd weekend day"}]}
           - {content_key: "en.a1.unit04.lesson02.exercise04.order_month_question", type: "word_order", tested_text: "Which month is it", prompt: {target_blocks: []}, word_bank: ["month", "is", "it", "Which"]}
-          - {content_key: "en.a1.unit04.lesson02.exercise05.write_december", type: "writing_prompt", tested_text: "December", prompt: {target_blocks: [{text: "Write the last month of the year.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit04.lesson02.exercise05.write_december", type: "writing_prompt", tested_text: "December", prompt: {target_blocks: []}}
 
       - content_key: "en.a1.unit04.lesson03.calendar_dates"
         title: "Asking for and stating the date"
@@ -120,7 +144,7 @@ units:
             type: "dialogue_response"
             tested_text: "When's your birthday My birthday is March 3rd"
             prompt: {target_blocks: [{text: "When's your birthday?", language_code: "en", direction: "ltr"}]}
-          - {content_key: "en.a1.unit04.lesson03.exercise05.write_date", type: "writing_prompt", tested_text: "It's July 7th", prompt: {target_blocks: [{text: "Write today's date in words: July 7.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit04.lesson03.exercise05.write_date", type: "writing_prompt", tested_text: "It's July 7th", prompt: {target_blocks: [{text: "July 7", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit04.lesson04.appointment_dialogue"
         title: "Making an appointment: dates in context"
@@ -139,7 +163,7 @@ units:
           - content_key: "en.a1.unit04.lesson04.exercise03.choose_reopen_date"
             type: "multiple_choice"
             tested_text: "Thursday, July 9th"
-            prompt: {target_blocks: [{text: "When does the library open again?", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "When's the library open again?", language_code: "en", direction: "ltr"}]}
           - {content_key: "en.a1.unit04.lesson04.exercise04.order_reopen_question", type: "word_order", tested_text: "When's the library open again", prompt: {target_blocks: []}, word_bank: ["the", "library", "open", "again", "When's"]}
           - content_key: "en.a1.unit04.lesson04.exercise05.reply_as_leila"
             type: "dialogue_response"
