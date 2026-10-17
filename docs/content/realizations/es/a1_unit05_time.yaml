@@ -24,8 +24,8 @@ generation_provenance:
     storyline. The scheduling scenario (agreeing on a meeting time
     that leads into a lunch) is original to this unit.
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fifth Spanish A1 unit, continuing the Elena/Mateo cooking-workshop
     storyline from units 01-04 (tú register throughout). Realizes
@@ -79,6 +79,30 @@ review:
 
     Pending fresh-context review and Ramin's native-speaker pass. Audio
     assets declared for generation, not yet recorded.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked pacing, token coverage, prompt determinacy, matching_pairs
+    discrimination, reading visibility, story consistency with the
+    lesson06 dialogue, and learner-facing notes, together with the en-es
+    overlay. Fixes: lesson05.teach.horario_dia_reading -- 'Después del
+    taller, a las seis, comen juntos.' contradicted the dialogue (they
+    postpone eating to the next day) and made the 'Right after the
+    workshop' distractor true; replaced by 'El taller termina a las seis.'
+    (introduced_tokens updated: termina in, Después/del/comen/juntos out);
+    lesson05.exercise03.read_comen_juntos -- now asks what time the
+    workshop ends (tested_text 'El taller termina a las seis');
+    lesson05.exercise05.match_horario_dia -- 'las seis' right 'dinner
+    together' -> 'workshop ends'; lesson05.exercise01-04 read_* -- passage
+    added as first es prompt.target_block;
+    lesson03.exercise07.write_own_schedule and
+    lesson05.exercise07.write_horario_summary -- prompts pinned to exact
+    sentences; lesson04.exercise07.speak_proponer_hora -- open 'Propón una
+    hora' prompt pinned to 'Propón verse a las tres y media, antes del
+    taller.'. NATIVE FLAGS: fill_antes_del_taller frame 'Las tres y media
+    es ___ del taller.' (agreement; 'Eso es antes del taller' may read
+    better); untaught imperatives in Spanish instructions (Propón, Toma).
+    DEFERRED (owner decision): renderer/compiler showing the reading card
+    instead of duplicated passages.
 
 course:
   realization_key: es.a1
@@ -200,7 +224,7 @@ units:
           - {content_key: es.a1.unit05.lesson03.exercise04.order_a_que_hora_empieza, type: word_order, tested_text: "A qué hora empieza el taller", prompt: {target_blocks: []}, word_bank: [A, qué, hora, empieza, el, taller]}
           - {content_key: es.a1.unit05.lesson03.exercise05.fill_taller_empieza, type: fill_in_blank, tested_text: "El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "El taller empieza a las cuatro de la ___. (afternoon, not morning or night)", language_code: es, direction: ltr}]}}
           - {content_key: es.a1.unit05.lesson03.exercise06.reply_a_que_hora_empieza, type: dialogue_response, tested_text: "A qué hora empieza el taller El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "¿A qué hora empieza el taller?", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson03.exercise07.write_own_schedule, type: writing_prompt, tested_text: "El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "Write in Spanish what time the workshop starts.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson03.exercise07.write_own_schedule, type: writing_prompt, tested_text: "El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "Write in Spanish: The workshop starts at four in the afternoon.", language_code: en, direction: ltr}]}}
 
       - content_key: es.a1.unit05.lesson04.proponer_una_hora_para_verse
         title: "Proponer una hora para verse"
@@ -221,7 +245,7 @@ units:
             pairs: [{left: "¿Nos vemos a las tres y media?", right: "Shall we meet at 3:30?"}, {left: "Eso es antes del taller.", right: "That's before the workshop."}, {left: "De acuerdo", right: "Agreed / Okay"}]
           - {content_key: es.a1.unit05.lesson04.exercise05.fill_antes_del_taller, type: fill_in_blank, tested_text: "Eso es antes del taller", prompt: {target_blocks: [{text: "Las tres y media es ___ del taller. (before, since the workshop starts at four)", language_code: es, direction: ltr}]}}
           - {content_key: es.a1.unit05.lesson04.exercise06.reply_proponer_hora, type: dialogue_response, tested_text: "A qué hora nos vemos Nos vemos a las tres y media", prompt: {target_blocks: [{text: "¿A qué hora nos vemos antes del taller?", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson04.exercise07.speak_proponer_hora, type: speak_response, tested_text: "Nos vemos a las tres y media", prompt: {target_blocks: [{text: "Propón una hora para verse antes del taller.", language_code: es, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson04.exercise07.speak_proponer_hora, type: speak_response, tested_text: "Nos vemos a las tres y media", prompt: {target_blocks: [{text: "Propón verse a las tres y media, antes del taller.", language_code: es, direction: ltr}]}}
 
       - content_key: es.a1.unit05.lesson05.leer_el_horario_del_dia
         title: "Leer el horario del día"
@@ -230,23 +254,23 @@ units:
           - content_key: es.a1.unit05.lesson05.teach.horario_dia_reading
             kind: reading
             target:
-              text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. Después del taller, a las seis, comen juntos. Al día siguiente, se ven a la una para almorzar."
+              text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. El taller termina a las seis. Al día siguiente, se ven a la una para almorzar."
               language_code: es
               direction: ltr
-            introduced_tokens: [El, taller, empieza, a, las, cuatro, de, la, tarde, Antes, Elena, Mateo, se, ven, tres, y, media, Después, del, seis, comen, juntos, Al, día, siguiente, una, para, almorzar]
+            introduced_tokens: [El, taller, empieza, a, las, cuatro, de, la, tarde, Antes, Elena, Mateo, se, ven, tres, y, media, termina, seis, Al, día, siguiente, una, para, almorzar]
           - {content_key: es.a1.unit05.lesson05.teach.al_dia_siguiente, kind: phrase, target: {text: "Al día siguiente", language_code: es, direction: ltr}, introduced_tokens: [Al, día, siguiente]}
         exercises:
-          - {content_key: es.a1.unit05.lesson05.exercise01.read_taller_empieza, type: reading_comprehension, tested_text: "El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "According to the schedule, what time does the workshop start?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson05.exercise02.read_se_ven_antes, type: reading_comprehension, tested_text: "Elena y Mateo se ven a las tres y media", prompt: {target_blocks: [{text: "What time do Elena and Mateo meet before the workshop?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson05.exercise03.read_comen_juntos, type: reading_comprehension, tested_text: "a las seis comen juntos", prompt: {target_blocks: [{text: "What time do they eat together after the workshop?", language_code: en, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson05.exercise04.read_almuerzo_siguiente, type: reading_comprehension, tested_text: "Al día siguiente se ven a la una para almorzar", prompt: {target_blocks: [{text: "What time do they meet the next day for lunch?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson05.exercise01.read_taller_empieza, type: reading_comprehension, tested_text: "El taller empieza a las cuatro de la tarde", prompt: {target_blocks: [{text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. El taller termina a las seis. Al día siguiente, se ven a la una para almorzar.", language_code: es, direction: ltr}, {text: "According to the schedule, what time does the workshop start?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson05.exercise02.read_se_ven_antes, type: reading_comprehension, tested_text: "Elena y Mateo se ven a las tres y media", prompt: {target_blocks: [{text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. El taller termina a las seis. Al día siguiente, se ven a la una para almorzar.", language_code: es, direction: ltr}, {text: "What time do Elena and Mateo meet before the workshop?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson05.exercise03.read_comen_juntos, type: reading_comprehension, tested_text: "El taller termina a las seis", prompt: {target_blocks: [{text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. El taller termina a las seis. Al día siguiente, se ven a la una para almorzar.", language_code: es, direction: ltr}, {text: "According to the schedule, what time does the workshop end?", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson05.exercise04.read_almuerzo_siguiente, type: reading_comprehension, tested_text: "Al día siguiente se ven a la una para almorzar", prompt: {target_blocks: [{text: "El taller empieza a las cuatro de la tarde. Antes, Elena y Mateo se ven a las tres y media. El taller termina a las seis. Al día siguiente, se ven a la una para almorzar.", language_code: es, direction: ltr}, {text: "What time do they meet the next day for lunch?", language_code: en, direction: ltr}]}}
           - content_key: es.a1.unit05.lesson05.exercise05.match_horario_dia
             type: matching_pairs
             tested_text: "tres y media cuatro seis una"
             prompt: {target_blocks: []}
-            pairs: [{left: "las tres y media", right: "before the workshop"}, {left: "las cuatro de la tarde", right: "workshop starts"}, {left: "las seis", right: "dinner together"}, {left: "la una", right: "lunch the next day"}]
+            pairs: [{left: "las tres y media", right: "before the workshop"}, {left: "las cuatro de la tarde", right: "workshop starts"}, {left: "las seis", right: "workshop ends"}, {left: "la una", right: "lunch the next day"}]
           - {content_key: es.a1.unit05.lesson05.exercise06.fill_al_dia_siguiente, type: fill_in_blank, tested_text: "Al día siguiente se ven a la una", prompt: {target_blocks: [{text: "Al día ___ se ven a la una. (following/next)", language_code: es, direction: ltr}]}}
-          - {content_key: es.a1.unit05.lesson05.exercise07.write_horario_summary, type: writing_prompt, tested_text: "El taller empieza a las cuatro de la tarde Se ven a la una para almorzar", prompt: {target_blocks: [{text: "Write two Spanish sentences from the schedule: when the workshop starts, and when they meet for lunch the next day.", language_code: en, direction: ltr}]}}
+          - {content_key: es.a1.unit05.lesson05.exercise07.write_horario_summary, type: writing_prompt, tested_text: "El taller empieza a las cuatro de la tarde Se ven a la una para almorzar", prompt: {target_blocks: [{text: "Write in Spanish: The workshop starts at four in the afternoon. They meet at one to have lunch.", language_code: en, direction: ltr}]}}
 
       - content_key: es.a1.unit05.lesson06.planear_el_almuerzo_dialogue
         title: "Elena y Mateo planean el almuerzo"
