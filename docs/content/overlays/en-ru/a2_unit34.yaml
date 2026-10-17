@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Codex-authored draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: null
+  notes: "New Codex-authored draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): checked YAML boolean coercion, learner-facing jargon, character canon (Настя teacher), course-cumulative vocab, prompt determinacy, gendered first-person answers, word_order alternatives, ё/е (none present). Fixes: ru.a2.unit34.lesson03.exercise06.write_complaint_message instruction pinned to the exact English text as Настя (was an open 'greet/say/ask' prompt with a female-only key) and accepted answers widened (Здравствуйте!, no final ?, Я вчера купила / Вчера я купила orders); ru.a2.unit34.lesson01.exercise05.order_bought_shirt accepts Я вчера купила эту рубашку and Вчера я купила эту рубашку; ru.a2.unit34.lesson01.exercise06.write_purchase accepts the same two adverb orders (with/without period); ru.a2.unit34.lesson03.teach.nastya_receipt_exchange note rewritten from course-construction wording to a language note. No native flags. DEFERRED: course.description is unit-specific in every en-ru overlay (corpus-wide owner decision); dictation uses correct_option+accepted_answers like siblings a2_unit30-32 (compiler accepts)."
 
 course:
   title: "Russian A2"
@@ -28,7 +31,7 @@ teaching:
   ru.a2.unit34.lesson02.teach.razmer: {title: "размер", gloss: "size", note: "*на другой размер* means for another size.", example_gloss: "For another size."}
   ru.a2.unit34.lesson03.teach.nastya_purchase_problem: {title: "Nastya states the purchase and problem", gloss: "Nastya: Hello. I bought this shirt yesterday, but it is too small.", note: "This line gives the problem clearly and politely."}
   ru.a2.unit34.lesson03.teach.seller_receipt: {title: "The seller asks for the receipt", gloss: "Seller: Do you have the receipt?", note: "Shop employees use polite *вас* with customers."}
-  ru.a2.unit34.lesson03.teach.nastya_receipt_exchange: {title: "Nastya asks for an exchange", gloss: "Nastya: Yes, here is the receipt. Can I exchange it for another size?", note: "This delivers the exchange-request part of the outcome."}
+  ru.a2.unit34.lesson03.teach.nastya_receipt_exchange: {title: "Nastya asks for an exchange", gloss: "Nastya: Yes, here is the receipt. Can I exchange it for another size?", note: "*Можно обменять на другой размер?* politely asks to exchange something for a different size."}
   ru.a2.unit34.lesson03.teach.seller_exchange_today: {title: "The seller offers the exchange", gloss: "Seller: Yes, of course. You can exchange it today.", note: "The seller offers a specific resolution."}
 
 exercises:
@@ -53,12 +56,16 @@ exercises:
           - {left: "магазин", right: "shop"}
         status: "correct"
     feedback: "These phrases identify the purchase and receipt."
-  ru.a2.unit34.lesson01.exercise05.order_bought_shirt: {instruction: "Put the words in order to say \"I bought this shirt yesterday.\" Use the female-speaker form.", accepted_answers: [{value: ["Я", "купила", "эту", "рубашку", "вчера"], status: "correct"}], feedback: "The correct order is *Я купила эту рубашку вчера*."}
+  ru.a2.unit34.lesson01.exercise05.order_bought_shirt: {instruction: "Put the words in order to say \"I bought this shirt yesterday.\" Use the female-speaker form.", accepted_answers: [{value: ["Я", "купила", "эту", "рубашку", "вчера"], status: "correct"}, {value: ["Я", "вчера", "купила", "эту", "рубашку"], status: "correct"}, {value: ["вчера", "Я", "купила", "эту", "рубашку"], status: "correct"}], feedback: "The correct order is *Я купила эту рубашку вчера*."}
   ru.a2.unit34.lesson01.exercise06.write_purchase:
     instruction: "Write exactly this sentence: I bought this shirt yesterday. Use the female-speaker form купила."
     accepted_answers:
       - {value: "Я купила эту рубашку вчера.", status: "correct"}
       - {value: "Я купила эту рубашку вчера", status: "correct"}
+      - {value: "Я вчера купила эту рубашку.", status: "correct"}
+      - {value: "Я вчера купила эту рубашку", status: "correct"}
+      - {value: "Вчера я купила эту рубашку.", status: "correct"}
+      - {value: "Вчера я купила эту рубашку", status: "correct"}
     feedback: "The model answer is *Я купила эту рубашку вчера*."
   ru.a2.unit34.lesson02.exercise01.recognize_mala: {instruction: "Which word means \"too small\" for рубашка?", correct_option: "мала", distractors: ["другой", "сегодня", "купила"], accepted_answers: [{value: "мала", status: "correct"}], feedback: "*мала* means too small for a feminine noun like *рубашка*."}
   ru.a2.unit34.lesson02.exercise02.recognize_obmenyat: {instruction: "Which word means \"exchange\"?", correct_option: "обменять", distractors: ["купила", "пользуюсь", "отдыхаю"], accepted_answers: [{value: "обменять", status: "correct"}], feedback: "*обменять* means \"exchange.\""}
@@ -110,9 +117,13 @@ exercises:
       - {value: "Да, вот чек. Можно обменять на другой размер", status: "correct"}
     feedback: "The model response is *Да, вот чек. Можно обменять на другой размер?*"
   ru.a2.unit34.lesson03.exercise06.write_complaint_message:
-    instruction: "Write a short formal complaint: greet the employee, say you bought this shirt yesterday, say it is too small, say here is the receipt, and ask to exchange it for another size."
+    instruction: "As Настя, write this short formal complaint: Hello. I bought this shirt yesterday, but it is too small for me. Here is the receipt. Can I exchange it for another size?"
     accepted_answers:
       - {value: "Здравствуйте. Я купила эту рубашку вчера, но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
       - {value: "Здравствуйте, я купила эту рубашку вчера, но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
       - {value: "Здравствуйте. Я купила эту рубашку вчера но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
+      - {value: "Здравствуйте! Я купила эту рубашку вчера, но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
+      - {value: "Здравствуйте. Я купила эту рубашку вчера, но она мне мала. Вот чек. Можно обменять на другой размер", status: "correct"}
+      - {value: "Здравствуйте. Я вчера купила эту рубашку, но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
+      - {value: "Здравствуйте. Вчера я купила эту рубашку, но она мне мала. Вот чек. Можно обменять на другой размер?", status: "correct"}
     feedback: "A complete complaint gives the purchase, problem, receipt, and exchange request."
