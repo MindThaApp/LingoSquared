@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: null
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Twelfth Polish B1 unit, continuing from pl/b1_unit11_cele.yaml. Realizes
     universal.b1.necessity.express_obligation_with_subjunctive (docs/content/
@@ -78,6 +78,33 @@ review:
 
     Pending fresh-context review per AUTHORING_GUIDE #9; not self-certified.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    (overlay) missing-accepted-answer: lesson01.exercise07/exercise09,
+    lesson02.exercise07/exercise09, lesson03.exercise11,
+    lesson04.exercise09 -- added feminine addressee forms (wyniosła /
+    zapłaciła / zadzwoniła ... wyjaśniła; the English 'you' does not pin
+    gender) and the natural 'żebyś dzisiaj wyniósł śmieci' / 'żebyś
+    wcześniej zapłacił czynsz' orders; lesson02.exercise08 -- added
+    'żebym wcześniej podpisała/podpisał regulamin' order;
+    lesson03.exercise10 -- added 'w poniedziałki i w środy'.
+    underdetermined-prompt: lesson04.exercise08 -- 'What obligation do
+    you have today?' accepted only signing the rules -> instruction now
+    says to answer that you need to sign the building rules.
+    comprehension-without-text: lesson03.exercise03 -- Ewa's line alone
+    never mentions smoking/the balcony, yet the key is 'smoking on the
+    balcony was allowed there' -> realization prompt now also shows
+    Marek's preceding line, overlay instruction 'Read the exchange'.
+    Metadata note: earlier notes claim lesson04's writing_prompt is
+    about Ewa and Marek by name; it is actually first-person (both
+    gender variants accepted). NATIVE CHECK: none.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.b1
   target_language_first: true
@@ -132,15 +159,11 @@ units:
           - content_key: pl.b1.unit12.lesson01.exercise01.select_trzeba_zebys_wyniosl
             type: multiple_choice
             tested_text: "Trzeba żebyś wyniósł śmieci dzisiaj"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba, żebyś wyniósł śmieci dzisiaj.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson01.exercise02.select_trzeba_zebym_podpisala
             type: multiple_choice
             tested_text: "Trzeba żebym podpisała regulamin"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba, żebym podpisała regulamin.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson01.exercise03.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "trzeba wynosić śmieci w poniedziałki żebyś wyniósł dzisiaj żebym podpisała regulamin"
@@ -222,15 +245,11 @@ units:
           - content_key: pl.b1.unit12.lesson02.exercise01.select_trzeba_bylo_zaplacic
             type: multiple_choice
             tested_text: "Trzeba było zapłacić czynsz wcześniej"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba było zapłacić czynsz wcześniej.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson02.exercise02.select_trzeba_bylo_zebys_zaplacil
             type: multiple_choice
             tested_text: "Trzeba było żebyś zapłacił czynsz wcześniej"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba było, żebyś zapłacił czynsz wcześniej.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson02.exercise03.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "trzeba było zapłacić czynsz wcześniej żebyś zapłacił żebym podpisała regulamin przed piątym"
@@ -330,20 +349,17 @@ units:
           - content_key: pl.b1.unit12.lesson03.exercise01.select_nie_wolno_palic
             type: multiple_choice
             tested_text: "Nie wolno palić na balkonie"
-            prompt:
-              target_blocks:
-                - {text: "Nie wolno palić na balkonie.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson03.exercise02.select_trzeba_bylo_zaplacic_do_piatego
             type: multiple_choice
             tested_text: "Trzeba było zapłacić czynsz do piątego dnia miesiąca"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba było zapłacić czynsz do piątego dnia miesiąca.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson03.exercise03.comprehend_bylo_wolno
             type: dialogue_comprehension
             tested_text: "U mnie w starym mieszkaniu było wolno"
             prompt:
               target_blocks:
+                - {text: "A wiesz, że nie wolno palić na balkonie?", language_code: pl, direction: ltr}
                 - {text: "Serio? U mnie w starym mieszkaniu było wolno.", language_code: pl, direction: ltr}
           - content_key: pl.b1.unit12.lesson03.exercise04.comprehend_marek_zapomnial
             type: dialogue_comprehension
@@ -416,9 +432,7 @@ units:
           - content_key: pl.b1.unit12.lesson04.exercise01.select_trzeba_zebys_wyniosl_review
             type: multiple_choice
             tested_text: "Trzeba żebyś wyniósł śmieci dzisiaj"
-            prompt:
-              target_blocks:
-                - {text: "Trzeba, żebyś wyniósł śmieci dzisiaj.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.b1.unit12.lesson04.exercise02.match_unit_review
             type: matching_pairs
             tested_text: "trzeba żebyś wyniósł nie wolno palić na balkonie trzeba było zapłacić czynsz wcześniej obowiązek regulamin"

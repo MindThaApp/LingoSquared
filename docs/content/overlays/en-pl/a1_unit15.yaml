@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fifteenth en-pl overlay, written for pl/a1_unit15_travel.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start). No
@@ -18,6 +18,21 @@ review:
     authored), so the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't
     apply here -- noted for whoever authors pl-en next: do not open this file
     for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    false-grammar -- lesson01.teach.peron_numer_note claimed Polish does not
+    say 'pierwszy peron, drugi peron'; ordinal platform numbers (peron
+    pierwszy) are in fact standard in station announcements. Removed the false
+    claim (pl + en gloss) and noted ordinals in the overlay note. (2) missing-
+    accepted-answer -- natural word-order variants added: lesson01.exercise06
+    + exercise09 and lesson02.exercise06 ('... jedzie jutro do ...', 'Jutro X
+    jedzie do ...'), lesson02.exercise05 'Kiedy autobus odjeżdża',
+    lesson03.exercise06 'Jadę jutro do Krakowa' / 'Jadę do Krakowa jutro',
+    lesson03.exercise07 '... odjeżdża rano o dziesiątej', lesson02.exercise09
+    'Dokąd autobus jedzie?'. (These alternate orders raise the compiler's non-
+    blocking 'scrambled permutation' warning by design.) NATIVE CHECK: 'Marek
+    jedzie do Krakowa jutro' as the primary model sentence -- 'Marek jedzie
+    jutro do Krakowa' may be the more neutral order.
 
 answer_policy:
   diacritics: >-
@@ -71,10 +86,12 @@ teaching:
 
   pl.a1.unit15.lesson01.teach.peron_numer_note:
     title: "Platform number one, two..."
-    gloss: "To say a platform number, we say Peron numer + number: Peron numer jeden, Peron numer dwa (we don't say 'the first platform,' 'the second platform')."
+    gloss: "To say a platform number, you can say Peron numer + number: Peron numer jeden, Peron numer dwa."
     note: >-
       Simpler than it looks: just *peron* + *numer* + an ordinary number you
-      already know, no special "first/second" word needed.
+      already know. (Station announcements often use ordinal words instead,
+      like *peron pierwszy* -- "platform one" -- but *peron numer jeden* is
+      always understood.)
 
   pl.a1.unit15.lesson01.teach.pociag_recap:
     title: "The train, again"
@@ -238,7 +255,10 @@ exercises:
 
   pl.a1.unit15.lesson01.exercise06.order_marek_jedzie:
     instruction: "Put the sentence 'Marek is going to Krakow tomorrow' in order."
-    correct_response: ["Marek", "jedzie", "do", "Krakowa", "jutro"]
+    accepted_answers:
+      - {value: ["Marek", "jedzie", "do", "Krakowa", "jutro"], status: correct}
+      - {value: ["Marek", "jedzie", "jutro", "do", "Krakowa"], status: correct}
+      - {value: ["Jutro", "Marek", "jedzie", "do", "Krakowa"], status: correct}
 
   pl.a1.unit15.lesson01.exercise07.fill_bilet:
     instruction: "Complete the sentence: 'The ticket costs twenty zloty.'"
@@ -258,6 +278,10 @@ exercises:
     accepted_answers:
       - "Marek jedzie do Krakowa jutro."
       - "Marek jedzie do Krakowa jutro"
+      - "Marek jedzie jutro do Krakowa."
+      - "Marek jedzie jutro do Krakowa"
+      - "Jutro Marek jedzie do Krakowa."
+      - "Jutro Marek jedzie do Krakowa"
 
   pl.a1.unit15.lesson02.exercise01.select_autobus:
     instruction: "Which word means 'bus'?"
@@ -291,11 +315,16 @@ exercises:
 
   pl.a1.unit15.lesson02.exercise05.order_kiedy_odjezdza:
     instruction: "Put the question 'When does the bus leave?' in order."
-    correct_response: ["Kiedy", "odjeżdża", "autobus"]
+    accepted_answers:
+      - {value: ["Kiedy", "odjeżdża", "autobus"], status: correct}
+      - {value: ["Kiedy", "autobus", "odjeżdża"], status: correct}
 
   pl.a1.unit15.lesson02.exercise06.order_ewa_jedzie:
     instruction: "Put the sentence 'Ewa is going to Warsaw tomorrow' in order."
-    correct_response: ["Ewa", "jedzie", "do", "Warszawy", "jutro"]
+    accepted_answers:
+      - {value: ["Ewa", "jedzie", "do", "Warszawy", "jutro"], status: correct}
+      - {value: ["Ewa", "jedzie", "jutro", "do", "Warszawy"], status: correct}
+      - {value: ["Jutro", "Ewa", "jedzie", "do", "Warszawy"], status: correct}
 
   pl.a1.unit15.lesson02.exercise07.fill_warszawy:
     instruction: "Complete the sentence: 'The bus to Warsaw leaves at seven.'"
@@ -314,6 +343,8 @@ exercises:
     accepted_answers:
       - "Dokąd jedzie autobus?"
       - "Dokąd jedzie autobus"
+      - "Dokąd autobus jedzie?"
+      - "Dokąd autobus jedzie"
 
   pl.a1.unit15.lesson03.exercise01.select_marek_krakow_line:
     instruction: "Which line says Marek is going to Krakow?"
@@ -370,11 +401,16 @@ exercises:
 
   pl.a1.unit15.lesson03.exercise06.order_jutro_jade:
     instruction: "Put the sentence 'Tomorrow I'm going to Krakow' in order."
-    correct_response: ["Jutro", "jadę", "do", "Krakowa"]
+    accepted_answers:
+      - {value: ["Jutro", "jadę", "do", "Krakowa"], status: correct}
+      - {value: ["Jadę", "jutro", "do", "Krakowa"], status: correct}
+      - {value: ["Jadę", "do", "Krakowa", "jutro"], status: correct}
 
   pl.a1.unit15.lesson03.exercise07.order_moj_autobus:
     instruction: "Put the sentence 'My bus leaves at ten in the morning' in order."
-    correct_response: ["Mój", "autobus", "odjeżdża", "o", "dziesiątej", "rano"]
+    accepted_answers:
+      - {value: ["Mój", "autobus", "odjeżdża", "o", "dziesiątej", "rano"], status: correct}
+      - {value: ["Mój", "autobus", "odjeżdża", "rano", "o", "dziesiątej"], status: correct}
 
   pl.a1.unit15.lesson03.exercise08.fill_dziesiatej:
     instruction: "Complete the sentence: 'My bus leaves at ten in the morning.'"

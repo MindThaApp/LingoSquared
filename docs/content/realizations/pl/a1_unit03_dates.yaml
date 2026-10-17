@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Third Polish unit, continuing directly from pl/a1_unit02_numbers.yaml
     (same Ewa/Marek characters, same formal pan/pani register). Realizes
@@ -104,6 +104,20 @@ review:
     matching unit01/02's own precedent of teaching both registers for key
     phrases even when the dialogue itself stays formal).
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    date_pattern_note corrected for the lutego exception; the
+    lesson03.exercise05 matching pair 'Jaka to będzie data?' ->
+    'Piętnastego maja.' was replaced because it was interchangeable with
+    the 'Kiedy jest spotkanie?' pair. Both are mirrored in the en-pl
+    overlay; see its notes.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -183,21 +197,15 @@ units:
           - content_key: pl.a1.unit03.lesson01.exercise01.select_sroda
             type: multiple_choice
             tested_text: "środa"
-            prompt:
-              target_blocks:
-                - {text: "środa", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson01.exercise02.select_piatek
             type: multiple_choice
             tested_text: "piątek"
-            prompt:
-              target_blocks:
-                - {text: "piątek", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson01.exercise03.select_niedziela
             type: multiple_choice
             tested_text: "niedziela"
-            prompt:
-              target_blocks:
-                - {text: "niedziela", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson01.exercise04.match_weekdays
             type: matching_pairs
             tested_text: "poniedziałek wtorek środa czwartek piątek sobota niedziela"
@@ -303,21 +311,17 @@ units:
             introduced_tokens: ["Spotkanie", "piętnastego"]
           - content_key: pl.a1.unit03.lesson02.teach.date_pattern_note
             kind: grammar_note
-            target: {text: "Data: dzień na -ego + miesiąc na -a, bez przyimka -- dziesiątego maja, piętnastego maja.", language_code: pl, direction: ltr}
-            introduced_tokens: []
+            target: {text: "Data: dzień na -ego + miesiąc na -a (ale: lutego), bez przyimka -- dziesiątego maja, piętnastego maja.", language_code: pl, direction: ltr}
+            introduced_tokens: ["lutego"]
         exercises:
           - content_key: pl.a1.unit03.lesson02.exercise01.select_maj
             type: multiple_choice
             tested_text: "maj"
-            prompt:
-              target_blocks:
-                - {text: "maj", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson02.exercise02.select_pazdziernik
             type: multiple_choice
             tested_text: "październik"
-            prompt:
-              target_blocks:
-                - {text: "październik", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson02.exercise03.match_months
             type: matching_pairs
             tested_text: "styczeń luty marzec kwiecień maj czerwiec lipiec sierpień wrzesień październik listopad grudzień"
@@ -455,15 +459,11 @@ units:
           - content_key: pl.a1.unit03.lesson03.exercise01.select_formal_friday_question_man
             type: multiple_choice
             tested_text: "Czy piątek panu odpowiada"
-            prompt:
-              target_blocks:
-                - {text: "Czy piątek panu odpowiada?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson03.exercise02.select_informal_friday_question
             type: multiple_choice
             tested_text: "Czy piątek ci odpowiada"
-            prompt:
-              target_blocks:
-                - {text: "Czy piątek ci odpowiada?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit03.lesson03.exercise03.comprehend_agreed_day
             type: dialogue_comprehension
             tested_text: "piątek"
@@ -478,14 +478,14 @@ units:
                 - {text: "Piętnastego maja.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit03.lesson03.exercise05.match_questions_and_answers
             type: matching_pairs
-            tested_text: "dzień tygodnia piątek urodziny maja spotkanie data"
+            tested_text: "dzień tygodnia piątek urodziny maja spotkanie Jak się masz Dobrze dziękuję"
             prompt: {target_blocks: []}
             pairs:
               - {left: "Jaki dziś jest dzień tygodnia?", right: "Dziś jest piątek."}
               - {left: "Kiedy są twoje urodziny?", right: "Moje urodziny są dziesiątego maja."}
               - {left: "Kiedy jest spotkanie?", right: "Spotkanie jest piętnastego maja."}
               - {left: "Czy piątek pani odpowiada?", right: "Piątek mi odpowiada."}
-              - {left: "Jaka to będzie data?", right: "Piętnastego maja."}
+              - {left: "Jak się masz?", right: "Dobrze, dziękuję."}
               - {left: "Kiedy możemy się znowu spotkać?", right: "Czy piątek ci odpowiada?"}
           - content_key: pl.a1.unit03.lesson03.exercise06.order_friday_suits_me
             type: word_order

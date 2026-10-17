@@ -6,14 +6,8 @@ target_language: pl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Polish confirmation needed (DRAFT). Confirm the English glosses
-    match idiomatic Polish, that every matching_pairs right-hand gloss
-    discriminates its left on real meaning, and that the culminating
-    speaking/writing answers (lesson06) accept the punctuation forms a
-    correct learner would actually produce. See the realization file's
-    review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for pl's eighth and FINAL B2 unit (synthesis), authored
     alongside the realization. English speakers' real interference risks
@@ -28,6 +22,35 @@ review:
     a dual-gender accepted-answer split -- confirmed explicitly in the
     realization's provenance note. No sibling-direction file (pl-en) was
     consulted.
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    Realization: lesson05 exercise01-04 (reading_comprehension) -- prompt
+    never showed the two reviews -> added both (labelled Zosia's review /
+    Bartek's review) as target_blocks before the question (comprehension-
+    without-text); three matching_pairs had interchangeable glosses
+    (duplicate/ambiguous): lesson01 exercise03 twierdzi 'claims / states'
+    vs utrzymuje 'maintains / asserts' -> utrzymuje pair replaced by
+    smaczne: tasty; lesson02 exercise03 podczas gdy 'whereas' / natomiast
+    'by contrast' / w przeciwieństwie do 'in contrast to' -> natomiast
+    pair replaced by tanio; lesson04 exercise03 'różnią się w opinii co
+    do' vs 'są sprzeczni co do' (differ in opinion on / contradict each
+    other on) -> sprzeczni pair replaced by drogo; tested_text updated
+    each time; teach.punkt example 'Na tym punkcie się zgadzają' (na tym
+    punkcie = idiom 'obsessed about') -> 'W tym punkcie się zgadzają'
+    (unnatural-polish). Overlay: matching keys mirrored; lesson02
+    exercise01 distractors 'by contrast' / 'in contrast to' were second
+    correct glosses of podczas gdy -> 'because' / 'according to' (second-
+    correct-distractor); missing accepted answers added: lesson01
+    exercise05 + że to za drogie / że jest za drogo; exercise06 + Według
+    Zosi nie jest drogo; lesson03 exercise06 + że to jest smaczne;
+    lesson04 exercise07 + Różnicą jest cena; lesson05 exercise06 +
+    Oczekuję więcej za tę cenę / Za taką cenę oczekuję więcej; exercise07
+    + 18 złotych / 18 zł. NATIVE CHECK: (a) 'Są sprzeczni co do ceny' --
+    'sprzeczni' of PEOPLE reads unnatural (opinions 'są sprzeczne'; people
+    'nie są zgodni'); (b) 'różnią się w opinii co do' vs more usual 'mają
+    różne zdanie co do'; (c) 'Bartek uważa, że to drogo' (vs 'to drogie' /
+    'jest drogo'); (d) 'Zosia jest pozytywna / Bartek jest negatywny' of
+    people's reviews (vs 'pozytywnie nastawiona'); (e) 'Pod Lipą jest
+    świetna' feminine agreement with an implied restauracja.
 
 course:
   title: Polish B2
@@ -247,7 +270,7 @@ exercises:
   pl.b2.unit08.lesson01.exercise03.match_attribution_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {według: "according to", twierdzi: "claims / states", utrzymuje: "maintains / asserts", "wynika, że...": "it follows that...", recenzja: review, źródło: source, jedzenie: food, cena: price}
+      - value: {według: "according to", twierdzi: "claims / states", smaczne: tasty, "wynika, że...": "it follows that...", recenzja: review, źródło: source, jedzenie: food, cena: price}
         status: correct
     feedback: "These are this lesson's attribution words."
   pl.b2.unit08.lesson01.exercise04.order_wedlug_zosi:
@@ -260,12 +283,15 @@ exercises:
     accepted_answers:
       - {value: "Bartek utrzymuje, że to jest za drogie", status: correct}
       - {value: "Bartek utrzymuje, że to jest za drogo", status: correct}
+      - {value: "Bartek utrzymuje, że to za drogie", status: correct}
+      - {value: "Bartek utrzymuje, że jest za drogo", status: correct}
     feedback: "Bartek utrzymuje, że to jest za drogie means Bartek maintains that it is too expensive."
   pl.b2.unit08.lesson01.exercise06.speak_wedlug_zosi:
     instruction: "Say aloud in Polish, using według: According to Zosia, it isn't expensive."
     accepted_answers:
       - {value: "Według Zosi to nie jest drogie", status: correct}
       - {value: "Według Zosi to nie jest drogo", status: correct}
+      - {value: "Według Zosi nie jest drogo", status: correct}
     feedback: "Według Zosi to nie jest drogie means according to Zosia, it isn't expensive."
   pl.b2.unit08.lesson01.exercise07.write_wynika:
     instruction: "Write in Polish, using wynika, że: The review shows that the food is tasty."
@@ -282,7 +308,7 @@ exercises:
   pl.b2.unit08.lesson02.exercise01.recognize_podczas_gdy:
     instruction: "What does this phrase mean?"
     correct_option: whereas
-    distractors: ["by contrast", "in contrast to", "both"]
+    distractors: [because, "according to", "both"]
     accepted_answers: [{value: whereas, status: correct}]
     feedback: "Podczas gdy means whereas."
   pl.b2.unit08.lesson02.exercise02.listen_oba_zrodla:
@@ -294,7 +320,7 @@ exercises:
   pl.b2.unit08.lesson02.exercise03.match_comparison_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {oba: "both (neuter/masc.)", obie: "both (feminine)", "podczas gdy": whereas, natomiast: "by contrast", "w przeciwieństwie do": "in contrast to", pozytywna: positive, negatywny: negative}
+      - value: {oba: "both (neuter/masc.)", obie: "both (feminine)", "podczas gdy": whereas, tanio: "cheap (it's cheap)", "w przeciwieństwie do": "in contrast to", pozytywna: positive, negatywny: negative}
         status: correct
     feedback: "These are this lesson's comparison words."
   pl.b2.unit08.lesson02.exercise04.order_oba_zrodla:
@@ -360,6 +386,7 @@ exercises:
     instruction: "Say aloud in Polish, using oboje: They both say that it is tasty."
     accepted_answers:
       - {value: "Oboje mówią, że jest smaczne", status: correct}
+      - {value: "Oboje mówią, że to jest smaczne", status: correct}
     feedback: "Oboje mówią, że jest smaczne means they both say that it is tasty."
   pl.b2.unit08.lesson03.exercise07.write_zgadzaja_sie:
     instruction: "Write in Polish, using zgadzają się co do: They agree on the food."
@@ -383,7 +410,7 @@ exercises:
   pl.b2.unit08.lesson04.exercise03.match_conflict_words:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {"różnią się w opinii co do": "they differ in opinion on", różnica: difference, "są sprzeczni co do": "they contradict each other on", cena: price, zgadza: "agrees (3rd sg)", "mimo to": "nevertheless / still"}
+      - value: {"różnią się w opinii co do": "they differ in opinion on", różnica: difference, drogo: "expensive (it's expensive)", cena: price, zgadza: "agrees (3rd sg)", "mimo to": "nevertheless / still"}
         status: correct
     feedback: "These are this lesson's conflict words."
   pl.b2.unit08.lesson04.exercise04.order_sa_sprzeczni:
@@ -406,6 +433,7 @@ exercises:
     accepted_answers:
       - {value: "Różnica to cena", status: correct}
       - {value: "Różnica to cena.", status: correct}
+      - {value: "Różnicą jest cena", status: correct}
     feedback: "Różnica to cena means the difference is the price."
 
   pl.b2.unit08.lesson05.exercise01.read_agreement:
@@ -442,12 +470,16 @@ exercises:
     instruction: "Translate into Polish, using oczekiwać: For that price I expect more."
     accepted_answers:
       - {value: "Za tę cenę oczekuję więcej", status: correct}
+      - {value: "Oczekuję więcej za tę cenę", status: correct}
+      - {value: "Za taką cenę oczekuję więcej", status: correct}
     feedback: "Za tę cenę oczekuję więcej means for that price I expect more."
   pl.b2.unit08.lesson05.exercise07.write_kosztuje:
     instruction: "Write in Polish: The pizza costs eighteen złoty."
     accepted_answers:
       - {value: "Pizza kosztuje osiemnaście złotych", status: correct}
       - {value: "Pizza kosztuje osiemnaście złotych.", status: correct}
+      - {value: "Pizza kosztuje 18 złotych", status: correct}
+      - {value: "Pizza kosztuje 18 zł", status: correct}
     feedback: "Pizza kosztuje osiemnaście złotych means the pizza costs eighteen złoty."
 
   pl.b2.unit08.lesson06.exercise01.comprehend_agreement:

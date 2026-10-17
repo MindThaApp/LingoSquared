@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Eleventh Polish unit, continuing directly from pl/a1_unit10_routines.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-10).
@@ -192,6 +192,20 @@ review:
     przyjść w sobotę?" building blocks lesson03's dialogue assembles into
     a full exchange, consistent throughout.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): 1 fix.
+    lesson03.teach.moze_vs_moge_note -- 'to różne słowa: może (przysłówek,
+    ...)' -> 'znaczą co innego: może ('być może') ...' and 'co potrafisz
+    zrobić' -> 'co mogę zrobić' (false-grammar: może 'maybe' is a particle
+    derived from móc, not an unrelated adverb; mogę is 1st person).
+    Otherwise found clean.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -259,21 +273,15 @@ units:
           - content_key: pl.a1.unit11.lesson01.exercise01.select_chce
             type: multiple_choice
             tested_text: "chcę"
-            prompt:
-              target_blocks:
-                - {text: "chcę", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson01.exercise02.select_chcesz
             type: multiple_choice
             tested_text: "chcesz"
-            prompt:
-              target_blocks:
-                - {text: "chcesz", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson01.exercise03.select_kino
             type: multiple_choice
             tested_text: "kino"
-            prompt:
-              target_blocks:
-                - {text: "kino", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson01.exercise04.match_proposal_vocabulary
             type: matching_pairs
             tested_text: "chcę chcesz kino razem iść piątek"
@@ -362,21 +370,15 @@ units:
           - content_key: pl.a1.unit11.lesson02.exercise01.select_moge
             type: multiple_choice
             tested_text: "mogę"
-            prompt:
-              target_blocks:
-                - {text: "mogę", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson02.exercise02.select_mozesz
             type: multiple_choice
             tested_text: "możesz"
-            prompt:
-              target_blocks:
-                - {text: "możesz", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson02.exercise03.select_chetnie
             type: multiple_choice
             tested_text: "chętnie"
-            prompt:
-              target_blocks:
-                - {text: "chętnie", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson02.exercise04.match_response_vocabulary
             type: matching_pairs
             tested_text: "mogę możesz przyjść chętnie niestety sobotę"
@@ -427,7 +429,7 @@ units:
               {text: "Może w sobotę?", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit11.lesson03.teach.moze_vs_moge_note
             kind: grammar_note
-            target: {text: "Może i mogę wyglądają podobnie, ale to różne słowa: może (przysłówek, 'być może') proponuje coś nowego, mogę (czasownik, ja) mówi, co potrafisz zrobić.", language_code: pl, direction: ltr}
+            target: {text: "Może i mogę wyglądają podobnie, ale znaczą co innego: może ('być może') proponuje coś nowego, a mogę (czasownik, forma 'ja') mówi, co mogę zrobić.", language_code: pl, direction: ltr}
             introduced_tokens: []
           - content_key: pl.a1.unit11.lesson03.teach.o_ktorej_godzinie
             kind: phrase
@@ -485,15 +487,11 @@ units:
           - content_key: pl.a1.unit11.lesson03.exercise01.select_propose_line
             type: multiple_choice
             tested_text: "Czy chcesz iść do kina w piątek"
-            prompt:
-              target_blocks:
-                - {text: "Czy chcesz iść do kina w piątek?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson03.exercise02.select_decline_line
             type: multiple_choice
             tested_text: "Niestety nie mogę w piątek"
-            prompt:
-              target_blocks:
-                - {text: "Niestety, nie mogę w piątek.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit11.lesson03.exercise03.comprehend_marek_unavailable_day
             type: dialogue_comprehension
             tested_text: "piątek"

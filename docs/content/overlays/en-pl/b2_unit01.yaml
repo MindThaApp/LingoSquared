@@ -6,14 +6,8 @@ target_language: pl
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Polish confirmation needed (DRAFT). Confirm the English glosses
-    match idiomatic Polish, that every matching_pairs right-hand gloss
-    discriminates its left on real meaning, and that the culminating
-    writing/speaking answers (lesson06) accept the punctuation forms a
-    correct learner would actually produce. See the realization file's
-    review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for pl's first B2 unit, authored alongside the realization (no
     adaptable upper-intermediate public-domain Polish source exists; see
@@ -32,6 +26,38 @@ review:
     appear -- the culminating lesson06 prompts name the required signposts
     so a correct answer is well-determined. No sibling-direction file
     (pl-en) was consulted.
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    teach.chociaz example -- 'Chociaz to wygodne, zostaje elastyczny' ->
+    'Chociaz to wygodne, czasami tesknie za kolegami.' (+
+    example_gloss), the original was semantically incoherent and
+    'zostaje elastyczny' unnatural; (2) teach.chociaz note -- 'a comma
+    always precedes the clause it introduces' -> 'a comma always
+    separates the chociaz clause from the main clause', false for the
+    sentence-initial example shown; (3) teach.poza_tym note -- claimed
+    poza tym 'is followed by a comma' while every taught model omits it
+    -> corrected to 'normally not followed by a comma'; (4)
+    lesson02.exercise06 -- English 'people work more efficiently' ->
+    'one works more efficiently' (pins the taught impersonal pracuje
+    sie) and added word-order variant 'Z badan wynika, ze pracuje sie
+    wydajniej w domu'; (5) lesson02.exercise07 -- added variant '...
+    Poza tym pracuje sie wydajniej w domu'; (6) lesson04.exercise06 --
+    unnatural English 'the freedom outweighs it' -> 'freedom outweighs
+    it'; (7) lesson05.exercise06 -- added missing 'Jestem
+    przekonany/przekonana, ze to jest dobry kierunek' (English 'it is'
+    invites jest); (8) lesson04.exercise02 -- distractor 'So the
+    advantages outweigh the disadvantages.' was a second correct
+    rendering of 'Podsumowujac' -> 'In short, there are no
+    disadvantages.' NATIVE CHECK: matching lesson04 lefts jednak
+    (however) / mimo to (nevertheless) / ale (but) are near-synonyms in
+    English -- confirm the glosses discriminate enough; podsumowujac
+    glossed 'in short' (arguably 'to sum up'). Prior native-check
+    priorities (moved here from required_next_reviewer): Native-Polish
+    confirmation needed (DRAFT). Confirm the English glosses match
+    idiomatic Polish, that every matching_pairs right-hand gloss
+    discriminates its left on real meaning, and that the culminating
+    writing/speaking answers (lesson06) accept the punctuation forms a
+    correct learner would actually produce. See the realization file's
+    review block for the full priority list.
 
 course:
   title: Polish B2
@@ -125,7 +151,7 @@ teaching:
   pl.b2.unit01.lesson02.teach.poza_tym:
     title: "in addition"
     gloss: "in addition / besides"
-    note: "*Poza tym* adds a further reason. It opens the sentence and is followed by a comma."
+    note: "*Poza tym* adds a further reason. It usually opens the sentence and, unlike *po pierwsze*, is normally not followed by a comma: *Poza tym w domu pracuje się wydajniej*."
     example_gloss: "In addition, you save money."
   pl.b2.unit01.lesson02.teach.na_przyklad:
     title: "for example"
@@ -175,8 +201,8 @@ teaching:
   pl.b2.unit01.lesson03.teach.chociaz:
     title: although
     gloss: although
-    note: "*Chociaż* concedes a point. A comma always precedes the clause it introduces: *Chociaż to wygodne, ...*. It sets up a contrast the main clause will answer."
-    example_gloss: "Although it is convenient, I stay flexible."
+    note: "*Chociaż* concedes a point. A comma always separates the *chociaż* clause from the main clause: *Chociaż to wygodne, czasami tęsknię...*. It sets up a contrast the main clause will answer."
+    example_gloss: "Although it is convenient, I sometimes miss my colleagues."
   pl.b2.unit01.lesson03.teach.oczywiscie:
     title: "of course"
     gloss: "of course / naturally"
@@ -403,16 +429,18 @@ exercises:
       - {value: "Praca zdalna jest lepsza, ponieważ oszczędzasz dużo czasu.", status: correct}
     feedback: "Praca zdalna jest lepsza, ponieważ oszczędzasz dużo czasu means remote work is better, because you save a lot of time."
   pl.b2.unit01.lesson02.exercise06.translate_badan:
-    instruction: "Translate into Polish, using z badań wynika, że: Research shows that people work more efficiently at home."
+    instruction: "Translate into Polish, using z badań wynika, że: Research shows that one works more efficiently at home."
     accepted_answers:
       - {value: "Z badań wynika, że w domu pracuje się wydajniej", status: correct}
       - {value: "Z badań wynika, że w domu pracuje się wydajniej.", status: correct}
+      - {value: "Z badań wynika, że pracuje się wydajniej w domu", status: correct}
     feedback: "Z badań wynika, że w domu pracuje się wydajniej means research shows that one works more efficiently at home."
   pl.b2.unit01.lesson02.exercise07.write_two_reasons:
     instruction: "Write these two sentences in Polish, using po pierwsze and poza tym: Firstly, you save commute time. In addition, one works more efficiently at home."
     accepted_answers:
       - {value: "Po pierwsze, oszczędzasz czas dojazdu. Poza tym w domu pracuje się wydajniej", status: correct}
       - {value: "Po pierwsze, oszczędzasz czas dojazdu. Poza tym w domu pracuje się wydajniej.", status: correct}
+      - {value: "Po pierwsze, oszczędzasz czas dojazdu. Poza tym pracuje się wydajniej w domu", status: correct}
     feedback: "Two signposted reasons: Po pierwsze, oszczędzasz czas dojazdu. Poza tym w domu pracuje się wydajniej."
   pl.b2.unit01.lesson02.exercise08.dictation_oszczedzasz_czasu:
     instruction: "Type what you hear."
@@ -470,7 +498,7 @@ exercises:
   pl.b2.unit01.lesson04.exercise02.listen_podsumowujac:
     instruction: "Listen and select what you hear."
     correct_option: "In short, the advantages outweigh the disadvantages."
-    distractors: ["In short, the disadvantages outweigh the advantages.", "So the advantages outweigh the disadvantages.", "In short, the advantages weigh less than the disadvantages."]
+    distractors: ["In short, the disadvantages outweigh the advantages.", "In short, there are no disadvantages.", "In short, the advantages weigh less than the disadvantages."]
     accepted_answers: [{value: "In short, the advantages outweigh the disadvantages.", status: correct}]
     feedback: "Podsumowując, zalety przeważają nad wadami means in short, the advantages outweigh the disadvantages."
   pl.b2.unit01.lesson04.exercise03.match_rebuttal_words:
@@ -491,11 +519,11 @@ exercises:
       - {value: "Praca w biurze ma zalety, ale praca zdalna jest lepsza.", status: correct}
     feedback: "Praca w biurze ma zalety, ale praca zdalna jest lepsza means office work has advantages, but remote work is better."
   pl.b2.unit01.lesson04.exercise06.write_nie_zmienia:
-    instruction: "Write in Polish, using to nie zmienia faktu, że: That does not change the fact that the freedom outweighs it."
+    instruction: "Write in Polish, using to nie zmienia faktu, że: That does not change the fact that freedom outweighs it."
     accepted_answers:
       - {value: "To nie zmienia faktu, że wolność przeważa", status: correct}
       - {value: "To nie zmienia faktu, że wolność przeważa.", status: correct}
-    feedback: "To nie zmienia faktu, że wolność przeważa means that does not change the fact that the freedom outweighs it."
+    feedback: "To nie zmienia faktu, że wolność przeważa means that does not change the fact that freedom outweighs it."
   pl.b2.unit01.lesson04.exercise07.write_podsumowujac:
     instruction: "Write in Polish, using podsumowując: In short, the advantages outweigh the disadvantages."
     accepted_answers:
@@ -540,6 +568,8 @@ exercises:
       - {value: "Jestem przekonany, że to dobry kierunek.", status: correct}
       - {value: "Jestem przekonana, że to dobry kierunek", status: correct}
       - {value: "Jestem przekonana, że to dobry kierunek.", status: correct}
+      - {value: "Jestem przekonany, że to jest dobry kierunek", status: correct}
+      - {value: "Jestem przekonana, że to jest dobry kierunek", status: correct}
     feedback: "Jestem przekonany, że to dobry kierunek means I am convinced that it is a good direction."
   pl.b2.unit01.lesson05.exercise07.write_coraz_wiecej:
     instruction: "Write in Polish: More and more people work remotely."

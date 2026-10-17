@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Seventh Polish unit, continuing directly from pl/a1_unit06_food.yaml
     (same Ewa protagonist, same formal pan/pani register in service
@@ -142,6 +142,22 @@ review:
     from lesson01 is used identically (same distinction, same reasoning)
     everywhere it reappears in lesson03's dialogue and exercises.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    lesson01.teach.tanio_drogo -- examples "To jest tanio." / "To jest
+    drogo." -> "Bardzo tanio!" / "Bardzo drogo!" (unnatural-polish: adverb
+    after "to jest"; the adjective form tanie/drogie would be needed).
+    NATIVE CHECK: naturalness of "Banan kosztuje tanio" / "Banany kosztują
+    tanio" (kosztować + tanio) in the kosztuje/kosztują grammar note and
+    lesson01 exercise08 -- left as-is. Overlay fixes recorded in the en-pl
+    overlay notes.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -195,8 +211,8 @@ units:
             target: {text: "tanio, drogo", language_code: pl, direction: ltr}
             introduced_tokens: ["tanio", "drogo"]
             example:
-              - {text: "To jest tanio.", language_code: pl, direction: ltr}
-              - {text: "To jest drogo.", language_code: pl, direction: ltr}
+              - {text: "Bardzo tanio!", language_code: pl, direction: ltr}
+              - {text: "Bardzo drogo!", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit07.lesson01.teach.kosztuje_kosztuja_note
             kind: grammar_note
             target: {text: "Kosztować: kosztuje (liczba pojedyncza), kosztują (liczba mnoga) -- Banan kosztuje tanio. Banany kosztują tanio.", language_code: pl, direction: ltr}
@@ -209,21 +225,15 @@ units:
           - content_key: pl.a1.unit07.lesson01.exercise01.select_banan
             type: multiple_choice
             tested_text: "banan"
-            prompt:
-              target_blocks:
-                - {text: "banan", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson01.exercise02.select_pomidor
             type: multiple_choice
             tested_text: "pomidor"
-            prompt:
-              target_blocks:
-                - {text: "pomidor", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson01.exercise03.select_ziemniak
             type: multiple_choice
             tested_text: "ziemniak"
-            prompt:
-              target_blocks:
-                - {text: "ziemniak", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson01.exercise04.match_produce_words
             type: matching_pairs
             tested_text: "banan pomidor ogórek ziemniak cebula tanio drogo"
@@ -305,21 +315,15 @@ units:
           - content_key: pl.a1.unit07.lesson02.exercise01.select_grejpfrut
             type: multiple_choice
             tested_text: "grejpfrut"
-            prompt:
-              target_blocks:
-                - {text: "grejpfrut", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson02.exercise02.select_mandarynka
             type: multiple_choice
             tested_text: "mandarynka"
-            prompt:
-              target_blocks:
-                - {text: "mandarynka", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson02.exercise03.select_pomarancza
             type: multiple_choice
             tested_text: "pomarańcza"
-            prompt:
-              target_blocks:
-                - {text: "pomarańcza", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson02.exercise04.match_more_produce_words
             type: matching_pairs
             tested_text: "grejpfrut mandarynka pomarańcza kilo pół poproszę banan pomidor"
@@ -453,15 +457,11 @@ units:
           - content_key: pl.a1.unit07.lesson03.exercise01.select_what_would_you_like
             type: multiple_choice
             tested_text: "Co dla pani"
-            prompt:
-              target_blocks:
-                - {text: "Co dla pani?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson03.exercise02.select_banana_price
             type: multiple_choice
             tested_text: "Pięć złotych kilo bardzo świeże"
-            prompt:
-              target_blocks:
-                - {text: "Pięć złotych kilo, bardzo świeże.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit07.lesson03.exercise03.comprehend_tomato_price
             type: dialogue_comprehension
             tested_text: "osiem złotych"

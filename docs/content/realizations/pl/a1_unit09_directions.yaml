@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Ninth Polish unit, continuing directly from pl/a1_unit08_places.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-08).
@@ -145,13 +145,34 @@ review:
     tests either route (lesson03 exercises 02-04, 06-07, 09-10). No place
     is ever given two different locations or routes across the file.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    lesson01.teach.prosze_bezokolicznik -- claim that Proszę + infinitive
+    "works the same whether you're speaking to a stranger or a friend" ->
+    polite/stranger-appropriate, friends use the imperative
+    (false-grammar); lesson03 dialogue line02/04/06 speaker Marek ->
+    Przechodzień (canon/register: Ewa and Marek are on ty terms since
+    unit01, and a friend would not say "Proszę iść prosto"; a passer-by
+    fits both the Przepraszam opener and the Proszę + infinitive register;
+    no later unit references this scene). NATIVE CHECK: "skręcić na
+    prawo/na lewo" vs the more standard "skręcić w prawo/w lewo" for
+    direction of motion -- taught text left as-is; w-variants added to
+    free-text accepted answers in the overlay.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
   dialect: pl_standard
   register_policy: >-
     Continue unit01-08's register split: Ewa and Marek use the informal
-    ty-register with each other. This unit's core new construction, Proszę
+    ty-register with each other (Marek does not appear in this unit's
+    scene -- see the 2026-10-17 review note). This unit's core new construction, Proszę
     + bezokolicznik (please + infinitive), is deliberately register-neutral
     -- it gives directions the same way regardless of who's being
     addressed, so no new formal/informal distinction is introduced by this
@@ -197,7 +218,7 @@ units:
               - {text: "Potem proszę iść prosto.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit09.lesson01.teach.prosze_bezokolicznik
             kind: grammar_note
-            target: {text: "Proszę + bezokolicznik -- Proszę (please) plus a verb in the infinitive (bezokolicznik) is the everyday polite way to give a direction, without needing a separate command (imperative) form. It works the same whether you're speaking to a stranger or a friend: Proszę iść prosto.", language_code: pl, direction: ltr}
+            target: {text: "Proszę + bezokolicznik -- Proszę (please) plus a verb in the infinitive (bezokolicznik) is the everyday polite way to give a direction, without needing a separate command (imperative) form. It is polite and formal-neutral, ideal for a stranger; between friends Polish usually switches to the imperative instead: Proszę iść prosto.", language_code: pl, direction: ltr}
             introduced_tokens: ["Proszę"]
           - content_key: pl.a1.unit09.lesson01.teach.jak_dojsc_note
             kind: grammar_note
@@ -211,21 +232,15 @@ units:
           - content_key: pl.a1.unit09.lesson01.exercise01.select_prosto
             type: multiple_choice
             tested_text: "prosto"
-            prompt:
-              target_blocks:
-                - {text: "prosto", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson01.exercise02.select_dojsc
             type: multiple_choice
             tested_text: "dojść"
-            prompt:
-              target_blocks:
-                - {text: "dojść", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson01.exercise03.select_tam
             type: multiple_choice
             tested_text: "tam"
-            prompt:
-              target_blocks:
-                - {text: "tam", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson01.exercise04.match_direction_vocabulary
             type: matching_pairs
             tested_text: "iść dojść prosto tam potem"
@@ -298,21 +313,15 @@ units:
           - content_key: pl.a1.unit09.lesson02.exercise01.select_prawo
             type: multiple_choice
             tested_text: "prawo"
-            prompt:
-              target_blocks:
-                - {text: "prawo", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson02.exercise02.select_lewo
             type: multiple_choice
             tested_text: "lewo"
-            prompt:
-              target_blocks:
-                - {text: "lewo", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson02.exercise03.select_skrecic
             type: multiple_choice
             tested_text: "skręcić"
-            prompt:
-              target_blocks:
-                - {text: "skręcić", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson02.exercise04.match_direction_words
             type: matching_pairs
             tested_text: "prawo lewo skręcić ulica potem tam"
@@ -375,7 +384,7 @@ units:
               text: "Proszę iść prosto, potem skręcić na lewo. Park jest tam."
               language_code: pl
               direction: ltr
-              speaker: Marek
+              speaker: Przechodzień
             introduced_tokens: []
           - content_key: pl.a1.unit09.lesson03.teach.dialogue.line03
             kind: dialogue
@@ -391,7 +400,7 @@ units:
               text: "Proszę skręcić na prawo, potem iść prosto. Bank jest na prawo."
               language_code: pl
               direction: ltr
-              speaker: Marek
+              speaker: Przechodzień
             introduced_tokens: []
           - content_key: pl.a1.unit09.lesson03.teach.dialogue.line05
             kind: dialogue
@@ -407,21 +416,17 @@ units:
               text: "Proszę bardzo!"
               language_code: pl
               direction: ltr
-              speaker: Marek
+              speaker: Przechodzień
             introduced_tokens: []
         exercises:
           - content_key: pl.a1.unit09.lesson03.exercise01.select_przepraszam_jak_dojsc
             type: multiple_choice
             tested_text: "Przepraszam jak dojść do parku"
-            prompt:
-              target_blocks:
-                - {text: "Przepraszam, jak dojść do parku?", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson03.exercise02.select_park_directions
             type: multiple_choice
             tested_text: "Proszę iść prosto potem skręcić na lewo Park jest tam"
-            prompt:
-              target_blocks:
-                - {text: "Proszę iść prosto, potem skręcić na lewo. Park jest tam.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit09.lesson03.exercise03.comprehend_park_directions
             type: dialogue_comprehension
             tested_text: "prosto potem na lewo"

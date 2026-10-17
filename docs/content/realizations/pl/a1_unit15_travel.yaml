@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fifteenth Polish unit, continuing directly from pl/a1_unit14_comparisons.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-14). Realizes
@@ -228,6 +228,28 @@ review:
     cached line numbers backing jechać's paradigm, the do+genitive
     destination construction, dworzec, autobus, and Dokąd.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1)
+    false-grammar -- lesson01.teach.peron_numer_note claimed Polish does not
+    say 'pierwszy peron, drugi peron'; ordinal platform numbers (peron
+    pierwszy) are in fact standard in station announcements. Removed the false
+    claim (pl + en gloss) and noted ordinals in the overlay note. (2) missing-
+    accepted-answer -- natural word-order variants added: lesson01.exercise06
+    + exercise09 and lesson02.exercise06 ('... jedzie jutro do ...', 'Jutro X
+    jedzie do ...'), lesson02.exercise05 'Kiedy autobus odjeżdża',
+    lesson03.exercise06 'Jadę jutro do Krakowa' / 'Jadę do Krakowa jutro',
+    lesson03.exercise07 '... odjeżdża rano o dziesiątej', lesson02.exercise09
+    'Dokąd autobus jedzie?'. (These alternate orders raise the compiler's non-
+    blocking 'scrambled permutation' warning by design.) NATIVE CHECK: 'Marek
+    jedzie do Krakowa jutro' as the primary model sentence -- 'Marek jedzie
+    jutro do Krakowa' may be the more neutral order.
+
+    Coordinator sweep 2026-10-17 (same review): 8 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a1
   target_language_first: true
@@ -272,7 +294,7 @@ units:
               {text: "Peron numer jeden jest tam.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit15.lesson01.teach.peron_numer_note
             kind: grammar_note
-            target: {text: "Żeby powiedzieć numer peronu, mówimy Peron numer + liczba: Peron numer jeden, Peron numer dwa (nie mówimy pierwszy peron, drugi peron).", language_code: pl, direction: ltr}
+            target: {text: "Żeby powiedzieć numer peronu, możesz powiedzieć Peron numer + liczba: Peron numer jeden, Peron numer dwa.", language_code: pl, direction: ltr}
             introduced_tokens: ["numer", "jeden", "dwa"]
           - content_key: pl.a1.unit15.lesson01.teach.pociag_recap
             kind: grammar_note
@@ -304,21 +326,15 @@ units:
           - content_key: pl.a1.unit15.lesson01.exercise01.select_dworzec
             type: multiple_choice
             tested_text: "dworzec"
-            prompt:
-              target_blocks:
-                - {text: "dworzec", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson01.exercise02.select_bilet
             type: multiple_choice
             tested_text: "bilet"
-            prompt:
-              target_blocks:
-                - {text: "bilet", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson01.exercise03.select_peron
             type: multiple_choice
             tested_text: "peron"
-            prompt:
-              target_blocks:
-                - {text: "peron", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson01.exercise04.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "dworzec bilet peron numer Kraków jedzie jutro do proszę"
@@ -405,21 +421,15 @@ units:
           - content_key: pl.a1.unit15.lesson02.exercise01.select_autobus
             type: multiple_choice
             tested_text: "autobus"
-            prompt:
-              target_blocks:
-                - {text: "autobus", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson02.exercise02.select_dokad
             type: multiple_choice
             tested_text: "Dokąd"
-            prompt:
-              target_blocks:
-                - {text: "Dokąd", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson02.exercise03.select_warszawa
             type: multiple_choice
             tested_text: "Warszawa"
-            prompt:
-              target_blocks:
-                - {text: "Warszawa", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson02.exercise04.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "autobus Dokąd Warszawa siódmej odjeżdża jedzie jutro Kiedy"
@@ -520,15 +530,11 @@ units:
           - content_key: pl.a1.unit15.lesson03.exercise01.select_marek_krakow_line
             type: multiple_choice
             tested_text: "Jutro jadę do Krakowa Mój pociąg odjeżdża o czwartej po południu"
-            prompt:
-              target_blocks:
-                - {text: "Jutro jadę do Krakowa. Mój pociąg odjeżdża o czwartej po południu.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson03.exercise02.select_ewa_ten_line
             type: multiple_choice
             tested_text: "Ja jadę do Warszawy Mój autobus odjeżdża o dziesiątej rano"
-            prompt:
-              target_blocks:
-                - {text: "Ja jadę do Warszawy. Mój autobus odjeżdża o dziesiątej rano.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a1.unit15.lesson03.exercise03.comprehend_marek_krakow
             type: dialogue_comprehension
             tested_text: "Kraków"

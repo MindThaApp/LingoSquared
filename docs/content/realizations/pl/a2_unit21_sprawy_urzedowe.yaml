@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: null
+  status: "reviewed"
+  required_next_reviewer: native_speaker_pass
   notes: >-
     First Polish A2 unit, continuing directly from pl/a1_unit20_clothing.yaml
     (same Ewa/Marek pair, same course). Realizes
@@ -102,6 +102,23 @@ review:
     negative-result search that led to this honest disclosure. Pending
     fresh-context review per AUTHORING_GUIDE §9; not self-certified.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    lesson03.exercise05.read_required_documents -- prompt showed only the
+    question "Jakie dokumenty prosi urzędniczka?" (no text to read, and
+    ungrammatical: prosić needs o + acc) -> now shows the clerk's line "Proszę
+    dowód osobisty i umowę najmu." (comprehension-without-text). Overlay-side
+    fixes listed in en-pl/a2_unit21.yaml. NATIVE CHECK: lesson01.exercise08
+    scrambled prompt "Nowy mam adres." is marked but arguably grammatical
+    (contrastive topicalization) -- confirm it reads as wrong enough for a
+    fix-the-order item.
+
+    Coordinator sweep 2026-10-17 (same review): 7 multiple_choice select_*
+    exercises had prompt.target_blocks equal to the correct option; the
+    compiler renders target_blocks as visible prompt text_blocks above the
+    options, so the answer was printed in the prompt -> target_blocks
+    emptied (the English instruction carries the cue). Same fix the u04-06
+    reviewer made; comprehension/answer-giveaway class.
+
 course:
   realization_key: pl.a2
   target_language_first: true
@@ -174,21 +191,15 @@ units:
           - content_key: pl.a2.unit21.lesson01.exercise01.select_urzad
             type: multiple_choice
             tested_text: "urząd"
-            prompt:
-              target_blocks:
-                - {text: "urząd", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson01.exercise02.select_adres
             type: multiple_choice
             tested_text: "adres"
-            prompt:
-              target_blocks:
-                - {text: "adres", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson01.exercise03.select_zameldowac_sie
             type: multiple_choice
             tested_text: "zameldować się"
-            prompt:
-              target_blocks:
-                - {text: "zameldować się", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson01.exercise04.match_lesson1_vocabulary
             type: matching_pairs
             tested_text: "urząd adres dokumenty dowód osobisty zameldować się mieszkanie"
@@ -261,15 +272,11 @@ units:
           - content_key: pl.a2.unit21.lesson02.exercise01.select_chcialabym_sie_zameldowac
             type: multiple_choice
             tested_text: "Chciałabym się zameldować"
-            prompt:
-              target_blocks:
-                - {text: "Chciałabym się zameldować.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson02.exercise02.select_reason_clause
             type: multiple_choice
             tested_text: "Chciałabym się zameldować ponieważ się przeprowadziłam"
-            prompt:
-              target_blocks:
-                - {text: "Chciałabym się zameldować, ponieważ się przeprowadziłam.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson02.exercise03.match_lesson2_vocabulary
             type: matching_pairs
             tested_text: "urząd adres dokumenty zameldować się Chciałabym ponieważ przeprowadziłam muszę"
@@ -404,15 +411,11 @@ units:
           - content_key: pl.a2.unit21.lesson03.exercise01.select_ewa_gives_address
             type: multiple_choice
             tested_text: "Ulica Kwiatowa dziesięć"
-            prompt:
-              target_blocks:
-                - {text: "Ulica Kwiatowa dziesięć.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson03.exercise02.select_documents_line
             type: multiple_choice
             tested_text: "Proszę dowód osobisty i umowę najmu"
-            prompt:
-              target_blocks:
-                - {text: "Proszę dowód osobisty i umowę najmu.", language_code: pl, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: pl.a2.unit21.lesson03.exercise03.comprehend_deadline
             type: dialogue_comprehension
             tested_text: "trzydzieści dni"
@@ -430,7 +433,7 @@ units:
             tested_text: "dowód osobisty umowę najmu"
             prompt:
               target_blocks:
-                - {text: "Jakie dokumenty prosi urzędniczka?", language_code: pl, direction: ltr}
+                - {text: "Proszę dowód osobisty i umowę najmu.", language_code: pl, direction: ltr}
           - content_key: pl.a2.unit21.lesson03.exercise06.match_lesson3_vocabulary
             type: matching_pairs
             tested_text: "urząd adres dokumenty dowód osobisty zameldować się umowa najmu trzydzieści dni przeprowadziłam"
