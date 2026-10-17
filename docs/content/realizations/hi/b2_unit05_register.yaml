@@ -8,7 +8,16 @@ generation_provenance:
   authoring_system: codex
   human_reviewed: false
   notes: "From-scratch Hindi authoring; Dutch unit05 supplied only the universal spine structure."
-review: {status: unreviewed, required_next_reviewer: "Fresh-context Hindi review required."}
+review:
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: >-
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked with overlays/en-hi/b2_unit05.yaml.
+    Fixes: lesson02.teach.requests ended in the ungrammatical, unglossed fragment "बताइए और देख।" -> "क्या आप देख सकते हैं? कृपया बताइए।" (gloss updated);
+    lesson06.teach.dialogue was one unattributed card that paraphrased the audio ("मैं लिखूँ" instead of the tested "मैनेजर को क्या लिखूँ?") -> split into five speaker-attributed turns matching hi.b2.audio.register.dialogue.01;
+    lesson06.exercise05 prompt said "the same request" without naming it -> names 'Send the report'.
+    Overlay: missing accepted variants added (सकती हैं for a female addressee, बैठें/देखें subjunctive-polite forms, बैठ जाओ, रिपोर्ट भेजो, जब समय मिले, optional ही/इसे), a dialogue distractor that Arjun actually says in the audio replaced, write_formal instruction pinned to the realization's exact parts.
+    Native-speaker check needed: naturalness of "बस लिखो, रिपोर्ट देख लेना" as advice for a friend message; whether "आपके साथ ... रूप आते हैं" in the grammar note reads naturally.
 course:
   realization_key: hi.b2
   target_language_first: true
@@ -52,7 +61,7 @@ units:
         title: "विनम्र अनुरोध"
         spine_outcome_id: universal.b2.register.adapt_formality_to_audience
         teaching:
-          - {content_key: hi.b2.unit05.lesson02.teach.requests, kind: phrase, target: {text: "क्या आप रिपोर्ट भेज सकते हैं? कृपया आज ही भेज दीजिए। बताइए और देख।", language_code: hi, direction: ltr}, introduced_tokens: [क्या, आप, रिपोर्ट, भेज, सकते, आज, ही, दीजिए, बताइए, देख]}
+          - {content_key: hi.b2.unit05.lesson02.teach.requests, kind: phrase, target: {text: "क्या आप रिपोर्ट भेज सकते हैं? कृपया आज ही भेज दीजिए। क्या आप देख सकते हैं? कृपया बताइए।", language_code: hi, direction: ltr}, introduced_tokens: [क्या, आप, रिपोर्ट, भेज, सकते, आज, ही, दीजिए, बताइए, देख]}
           - {content_key: hi.b2.unit05.lesson02.teach.softener, kind: grammar_note, target: {text: "क्या आप...सकते हैं प्रश्न अनुरोध को नरम बनाता है; दीजिए सम्मान जोड़ता है।", language_code: hi, direction: ltr}, introduced_tokens: [प्रश्न, अनुरोध, को, नरम, बनाता, दीजिए, सम्मान, जोड़ता]}
         exercises:
           - {content_key: hi.b2.unit05.lesson02.exercise01.choose_polite, type: multiple_choice, tested_text: "क्या आप रिपोर्ट भेज सकते हैं", prompt: {target_blocks: [{text: "क्या आप रिपोर्ट भेज सकते हैं?", language_code: hi, direction: ltr}]}}
@@ -123,7 +132,11 @@ units:
         title: "श्रोता के अनुसार रूप बदलो"
         spine_outcome_id: universal.b2.register.adapt_formality_to_audience
         teaching:
-          - {content_key: hi.b2.unit05.lesson06.teach.dialogue, kind: dialogue, target: {text: "प्रिया, रिपोर्ट भेज दो। ठीक है। मैं लिखूँ। मैनेजर को लिखो: कृपया संलग्न रिपोर्ट देखिए। दोस्त को लिखो: रिपोर्ट देख लेना।", language_code: hi, direction: ltr}, introduced_tokens: [ठीक, लिखूँ, देख]}
+          - {content_key: hi.b2.unit05.lesson06.teach.dialogue, kind: dialogue, target: {text: "प्रिया, रिपोर्ट भेज दो।", language_code: hi, direction: ltr, speaker: Arjun}, introduced_tokens: []}
+          - {content_key: hi.b2.unit05.lesson06.teach.dialogue_priya_ask, kind: dialogue, target: {text: "ठीक है। मैनेजर को क्या लिखूँ?", language_code: hi, direction: ltr, speaker: Priya}, introduced_tokens: [ठीक, लिखूँ]}
+          - {content_key: hi.b2.unit05.lesson06.teach.dialogue_arjun_formal, kind: dialogue, target: {text: "लिखो, कृपया संलग्न रिपोर्ट देखिए।", language_code: hi, direction: ltr, speaker: Arjun}, introduced_tokens: [लिखो]}
+          - {content_key: hi.b2.unit05.lesson06.teach.dialogue_priya_friend, kind: dialogue, target: {text: "और दोस्त को?", language_code: hi, direction: ltr, speaker: Priya}, introduced_tokens: []}
+          - {content_key: hi.b2.unit05.lesson06.teach.dialogue_arjun_informal, kind: dialogue, target: {text: "बस लिखो, रिपोर्ट देख लेना।", language_code: hi, direction: ltr, speaker: Arjun}, introduced_tokens: [बस, देख]}
         exercises:
           - {content_key: hi.b2.unit05.lesson06.exercise01.dialogue_audience, type: dialogue_comprehension, tested_text: "मैनेजर को क्या लिखूँ", media_asset_key: hi.b2.audio.register.dialogue.01, prompt: {target_blocks: []}}
           - {content_key: hi.b2.unit05.lesson06.exercise02.dialogue_formal, type: dialogue_comprehension, tested_text: "कृपया संलग्न रिपोर्ट देखिए", media_asset_key: hi.b2.audio.register.dialogue.01, prompt: {target_blocks: []}}
@@ -133,6 +146,6 @@ units:
             tested_text: "कृपया बैठिए बैठो भेज दीजिए भेज दो सादर"
             prompt: {target_blocks: []}
             pairs: [{left: "कृपया", right: "polite softener"}, {left: "बैठिए", right: "respectful sit form"}, {left: "बैठो", right: "informal sit form"}, {left: "भेज दीजिए", right: "respectful completed request"}, {left: "भेज दो", right: "friendly direct request"}, {left: "सादर", right: "formal sign-off"}]
-          - {content_key: hi.b2.unit05.lesson06.exercise05.speak_two_audiences, type: speak_response, tested_text: "कृपया रिपोर्ट भेज दीजिए रिपोर्ट भेज दो", prompt: {target_blocks: [{text: "Say the same request two ways: first to a manager with कृपया...दीजिए, then to Priya with ...दो.", language_code: en, direction: ltr}]}}
+          - {content_key: hi.b2.unit05.lesson06.exercise05.speak_two_audiences, type: speak_response, tested_text: "कृपया रिपोर्ट भेज दीजिए रिपोर्ट भेज दो", prompt: {target_blocks: [{text: "Say 'Send the report' two ways: first to a manager with कृपया...दीजिए, then to Priya with ...दो.", language_code: en, direction: ltr}]}}
           - {content_key: hi.b2.unit05.lesson06.exercise06.write_formal, type: writing_prompt, tested_text: "आदरणीय महोदय कृपया संलग्न रिपोर्ट देखिए सादर प्रिया", prompt: {target_blocks: [{text: "Write a formal message in Hindi with these exact parts, in order: the opening 'Respected sir', the request 'Please see the attached report', and the closing 'Respectfully, Priya'.", language_code: en, direction: ltr}]}}
           - {content_key: hi.b2.unit05.lesson06.exercise07.write_informal, type: writing_prompt, tested_text: "अर्जुन रिपोर्ट देख लेना धन्यवाद", prompt: {target_blocks: [{text: "Write a casual message in Hindi to Arjun: 'Arjun, have a look at the report. Thanks.'", language_code: en, direction: ltr}]}}
