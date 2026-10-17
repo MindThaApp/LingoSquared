@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Thirteenth Polish unit, continuing directly from pl/a1_unit12_past_events.yaml
     (same Ewa/Marek pair, same 3-lesson bootstrap pace as units01-12). Realizes
@@ -195,6 +195,21 @@ review:
     Ewa prefers tea, Marek prefers coffee -- each stated once, never
     contradicted, and the earlier lessons' generic examples were deliberately
     kept unattributed or corrected to match once the contradiction was caught).
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): (1) canon
+    -- unit10 (routines) and unit06 establish Ewa drinks coffee and Marek
+    drinks tea ('Ale piję herbatę, nie kawę'); this unit had them reversed.
+    Swapped: dialogue line04 Ewa 'Wolę herbatę.' -> 'Wolę kawę.', line05 Marek
+    'Ja wolę kawę.' -> 'Ja wolę herbatę.'; lesson02.exercise07/08 'Mówi Marek'
+    -> 'Mówi Ewa' (coffee lines); lesson03.exercise02 distractor, exercise03
+    (Marek -> tea), exercise04 (Ewa -> coffee), exercise07 word_order -> 'Ja
+    wolę herbatę', exercise10 reply -> 'Wolę kawę' with overlay
+    keys/glosses/instructions updated to match. (2) missing-accepted-answer --
+    lesson01.exercise09 add 'Ja lubię muzykę'; lesson03.exercise10 add 'Ja
+    wolę kawę' (subject-pronoun variant taught in this unit);
+    lesson01.exercise06 word_order add 'Lubię bardzo muzykę'. NATIVE CHECK:
+    whether 'Lubię bardzo muzykę' should stay accepted (grammatical, slightly
+    less neutral than 'Bardzo lubię muzykę').
 
 course:
   realization_key: pl.a1
@@ -397,13 +412,13 @@ units:
             tested_text: "Wolę"
             prompt:
               target_blocks:
-                - {text: "Mówi Marek: ___ kawę.", language_code: pl, direction: ltr}
+                - {text: "Mówi Ewa: ___ kawę.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit13.lesson02.exercise08.fix_wole_kawe_case
             type: grammar_check
             tested_text: "Wolę kawę"
             prompt:
               target_blocks:
-                - {text: "Mówi Marek: Wolę kawa.", language_code: pl, direction: ltr}
+                - {text: "Mówi Ewa: Wolę kawa.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit13.lesson02.exercise09.speak_kawa_czy_herbata
             type: speak_response
             tested_text: "Kawa czy herbata"
@@ -452,7 +467,7 @@ units:
           - content_key: pl.a1.unit13.lesson03.teach.dialogue.line04
             kind: dialogue
             target:
-              text: "Wolę herbatę."
+              text: "Wolę kawę."
               language_code: pl
               direction: ltr
               speaker: Ewa
@@ -460,7 +475,7 @@ units:
           - content_key: pl.a1.unit13.lesson03.teach.dialogue.line05
             kind: dialogue
             target:
-              text: "Ja wolę kawę."
+              text: "Ja wolę herbatę."
               language_code: pl
               direction: ltr
               speaker: Marek
@@ -480,16 +495,16 @@ units:
                 - {text: "Tak, bardzo lubię! A ty?", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit13.lesson03.exercise03.comprehend_marek_preference
             type: dialogue_comprehension
-            tested_text: "kawę"
-            prompt:
-              target_blocks:
-                - {text: "Ja wolę kawę.", language_code: pl, direction: ltr}
-          - content_key: pl.a1.unit13.lesson03.exercise04.comprehend_ewa_preference
-            type: dialogue_comprehension
             tested_text: "herbatę"
             prompt:
               target_blocks:
-                - {text: "Wolę herbatę.", language_code: pl, direction: ltr}
+                - {text: "Ja wolę herbatę.", language_code: pl, direction: ltr}
+          - content_key: pl.a1.unit13.lesson03.exercise04.comprehend_ewa_preference
+            type: dialogue_comprehension
+            tested_text: "kawę"
+            prompt:
+              target_blocks:
+                - {text: "Wolę kawę.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit13.lesson03.exercise05.match_lesson3_vocabulary
             type: matching_pairs
             tested_text: "Ja też bardzo A ty wolę Kawa czy herbata lubisz muzyka"
@@ -509,9 +524,9 @@ units:
             word_bank: ["lubię", "Ja", "też"]
           - content_key: pl.a1.unit13.lesson03.exercise07.order_ja_wole_kawe
             type: word_order
-            tested_text: "Ja wolę kawę"
+            tested_text: "Ja wolę herbatę"
             prompt: {target_blocks: []}
-            word_bank: ["kawę", "Ja", "wolę"]
+            word_bank: ["herbatę", "Ja", "wolę"]
           - content_key: pl.a1.unit13.lesson03.exercise08.fill_a_ty
             type: fill_in_blank
             tested_text: "A"
@@ -526,7 +541,7 @@ units:
                 - {text: "Wolę herbata.", language_code: pl, direction: ltr}
           - content_key: pl.a1.unit13.lesson03.exercise10.reply_kawa_czy_herbata
             type: dialogue_response
-            tested_text: "Wolę herbatę"
+            tested_text: "Wolę kawę"
             prompt:
               target_blocks:
                 - {text: "Kawa czy herbata?", language_code: pl, direction: ltr}
