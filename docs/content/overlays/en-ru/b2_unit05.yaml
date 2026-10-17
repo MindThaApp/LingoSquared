@@ -6,16 +6,8 @@ target_language: "ru"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: >-
-    Fresh-context review needed (DRAFT). Confirm the English glosses match
-    the intended register split (informal ты vs formal Вы; Привет/Пока vs
-    Здравствуйте vs Уважаемая администрация/С уважением; ты-imperative vs
-    Не могли бы Вы/Будьте добры), that every matching_pairs right-hand
-    gloss discriminates its left on real meaning, and that the culminating
-    writing answers (lesson06 exercise06/07) accept the punctuation forms a
-    correct learner would actually produce. See the realization file's
-    review block for the full priority list.
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Overlay for ru's fifth B2 unit (register -- adapting formality to the
     audience), authored alongside the realization (no adaptable
@@ -45,6 +37,45 @@ review:
     request in BOTH registers; its accepted answers cover the natural
     punctuation variants. No sibling-direction file (ru-en b2) was
     consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage course-wide, character canon (Дима engineer,
+    Настя teacher, ты), dialogue cards vs audio, listen/dialogue
+    distractors, example_glosses, overlay coverage, YAML booleans,
+    internal-jargon notes, ё/е and subject-pronoun grading gaps. Fixes
+    (realization + en-ru overlay): lesson01.exercise06.translate_mozhesh
+    +"Ты можешь помочь"; lesson01.exercise07.speak_mozhete +"Вы можете
+    помочь"; lesson01.exercise03.match_pronouns вы pair right "you
+    (formal)" -> "you (formal, subject)" (realization + overlay);
+    lesson03.teach.ne_mogli_by_vy note no longer claims formal Russian
+    avoids the imperative altogether (now "often prefers an indirect
+    question"); lesson04.teach.vstrecha title/gloss/note re-taught as
+    register-neutral "meeting / get-together" (was "informal meetup"),
+    priyom and perenesti notes aligned;
+    lesson04.exercise03.match_appointment_words pair rights встреча ->
+    "meeting / get-together", приём -> "appointment (at a clinic or
+    office)" (realization + overlay);
+    lesson04.exercise05.translate_informal_request +"Мы можем перенести
+    встречу"; lesson04.exercise06.translate_formal_request and
+    lesson06.exercise05.speak_formal +прием (е) variant;
+    lesson05.exercise01-04 read_* now show both messages as ru
+    target_blocks before the question;
+    lesson05.exercise03.read_same_request correct option "To reschedule
+    the appointment." -> "To reschedule a planned meeting." (distractor
+    paralleled); lesson06.exercise01.comprehend_register_fit options no
+    longer claim Настя uses ты (she never does in the audio) -- now
+    "Informally -- and it fits, because Дима is a close friend." with
+    parallel distractors and feedback;
+    lesson06.exercise04.speak_informal +"Ты можешь перенести встречу";
+    lesson06.exercise06.write_rewrite_formal prompt (realization +
+    overlay) pinned to "Не могли бы Вы and мой приём (my appointment)",
+    +прием variant; lesson06.exercise07.write_both_registers +прием and
+    "Ты можешь..." variants. NATIVE FLAGS: the Будьте добры note
+    ("reserved for a formal request to an institution") vs its common
+    spoken service use; "Удобно ли на следующей неделе?" vs "Будет ли
+    Вам удобно...". DEFERRED: grader-level ё/е fold and ru optional
+    subject pronouns (grading.py, Codex lane, owner decision);
+    reading-passage-not-shown renderer decision (fixed locally here).
 
 course:
   title: "Russian B2"
@@ -151,7 +182,7 @@ teaching:
   ru.b2.unit05.lesson03.teach.ne_mogli_by_vy:
     title: "Would you be able to do this? (formal)"
     gloss: "Would you be able to do this?"
-    note: "Formal and indirect. Where English can stay direct and still sound polite ('Can you...?'), formal Russian avoids the imperative altogether: *Не могли бы Вы это сделать?* ('would you be able to do this?'). *Могли бы* is a conditional form of *мочь*."
+    note: "Formal and indirect. Where English can stay direct and still sound polite ('Can you...?'), formal Russian often prefers an indirect question: *Не могли бы Вы это сделать?* ('would you be able to do this?'). *Могли бы* is a conditional form of *мочь*."
   ru.b2.unit05.lesson03.teach.bud_te_dobry:
     title: "Be so kind as to help."
     gloss: "Be so kind as to help."
@@ -162,14 +193,14 @@ teaching:
     note: "Directness is a register signal. Informal: a direct ты-imperative (*Сделай...*) softened with *пожалуйста*. Formal: an indirect *Не могли бы Вы...?* or the polite opener *Будьте добры*. The more indirect, the more formal."
 
   ru.b2.unit05.lesson04.teach.vstrecha:
-    title: "the meetup"
-    gloss: "the meetup / get-together"
-    note: "*Встреча* = 'meetup / get-together' -- the informal, everyday word for getting together with a friend. This is what Настя wants to change with Дима."
+    title: "the meeting"
+    gloss: "the meeting / get-together"
+    note: "*Встреча* = 'meeting / get-together' -- the general word for meeting someone, used both with friends and at work (*деловая встреча* = 'a business meeting'). This is what Настя wants to change with Дима."
     example_gloss: "I have a meetup today."
   ru.b2.unit05.lesson04.teach.priyom:
     title: "the appointment"
     gloss: "the appointment (e.g. at a clinic)"
-    note: "*Приём* = 'appointment' -- the more formal, institutional word, used for a scheduled slot at a clinic or office. This is what Настя wants to change with the clinic."
+    note: "*Приём* = 'appointment' -- a scheduled slot with a doctor or at an office (not a meeting between friends). This is what Настя wants to change with the clinic."
     example_gloss: "I want to reschedule the appointment."
   ru.b2.unit05.lesson04.teach.poliklinika:
     title: "the clinic"
@@ -179,7 +210,7 @@ teaching:
   ru.b2.unit05.lesson04.teach.perenesti:
     title: "to reschedule"
     gloss: "to reschedule / move"
-    note: "*Перенести* = 'to move' something to another time, i.e. 'to reschedule'. Works with both *встречу* (informal) and *приём* (formal) -- the verb itself is register-neutral."
+    note: "*Перенести* = 'to move' something to another time, i.e. 'to reschedule'. Works with both *встречу* (the meetup with Дима) and *приём* (the clinic appointment) -- the verb itself is register-neutral."
     example_gloss: "I want to reschedule the meetup."
   ru.b2.unit05.lesson04.teach.ponedelnik:
     title: "Monday"
@@ -295,7 +326,7 @@ exercises:
           - {left: "ты", right: "you (informal, subject)"}
           - {left: "тебя", right: "you (informal, object)"}
           - {left: "твой", right: "your (informal)"}
-          - {left: "вы", right: "you (formal)"}
+          - {left: "вы", right: "you (formal, subject)"}
           - {left: "вас", right: "you (formal, object)"}
           - {left: "ваш", right: "your (formal)"}
           - {left: "можешь", right: "can you (informal)"}
@@ -318,11 +349,13 @@ exercises:
     instruction: "Translate into Russian, informal (addressing the person as ты): Can you help?"
     accepted_answers:
       - {value: "Можешь помочь", status: "correct"}
+      - {value: "Ты можешь помочь", status: "correct"}
     feedback: "Можешь помочь? -- the informal ты form of мочь."
   ru.b2.unit05.lesson01.exercise07.speak_mozhete:
     instruction: "Say aloud in Russian, formal (addressing the person as Вы): Can you help?"
     accepted_answers:
       - {value: "Можете помочь", status: "correct"}
+      - {value: "Вы можете помочь", status: "correct"}
     feedback: "Можете помочь? -- with Вы the verb is можете, not можешь."
   ru.b2.unit05.lesson01.exercise08.dictation_u_tebya:
     instruction: "Type what you hear."
@@ -441,8 +474,8 @@ exercises:
     instruction: "Match each Russian word or phrase with its meaning."
     accepted_answers:
       - value:
-          - {left: "встреча", right: "meetup / get-together (informal)"}
-          - {left: "приём", right: "appointment (formal, e.g. at a clinic)"}
+          - {left: "встреча", right: "meeting / get-together"}
+          - {left: "приём", right: "appointment (at a clinic or office)"}
           - {left: "поликлиника", right: "clinic"}
           - {left: "перенести", right: "to reschedule / move"}
           - {left: "понедельник", right: "Monday"}
@@ -458,11 +491,13 @@ exercises:
     instruction: "Translate into Russian, informal (to your friend Дима): Can we reschedule the meetup?"
     accepted_answers:
       - {value: "Можем перенести встречу", status: "correct"}
+      - {value: "Мы можем перенести встречу", status: "correct"}
     feedback: "Можем перенести встречу? -- direct and informal, for a friend."
   ru.b2.unit05.lesson04.exercise06.translate_formal_request:
     instruction: "Translate into Russian, formal (to the clinic, using Не могли бы Вы): Would you be able to reschedule my appointment?"
     accepted_answers:
       - {value: "Не могли бы Вы перенести мой приём", status: "correct"}
+      - {value: "Не могли бы Вы перенести мой прием", status: "correct"}
     feedback: "Не могли бы Вы перенести мой приём? -- the SAME request, wrapped for an institution."
   ru.b2.unit05.lesson04.exercise07.write_k_sozhaleniyu:
     instruction: "Write in Russian, keeping the word order К сожалению я не могу в понедельник: Unfortunately I can't on Monday."
@@ -490,9 +525,9 @@ exercises:
     feedback: "Уважаемая администрация and С уважением are formal -- markers of a message to an institution."
   ru.b2.unit05.lesson05.exercise03.read_same_request:
     instruction: "Both messages make the SAME request. What is it?"
-    correct_option: "To reschedule the appointment."
-    distractors: ["To cancel the appointment.", "To confirm Monday.", "To ask for directions."]
-    accepted_answers: [{value: "To reschedule the appointment.", status: "correct"}]
+    correct_option: "To reschedule a planned meeting."
+    distractors: ["To cancel a planned meeting.", "To confirm Monday.", "To ask for directions."]
+    accepted_answers: [{value: "To reschedule a planned meeting.", status: "correct"}]
     feedback: "Both ask to reschedule (перенести) -- same content, different register."
   ru.b2.unit05.lesson05.exercise04.read_signal:
     instruction: "Which feature marks the second message as the one for an institution?"
@@ -528,10 +563,10 @@ exercises:
 
   ru.b2.unit05.lesson06.exercise01.comprehend_register_fit:
     instruction: "How does Настя address Дима, and does that register fit the situation?"
-    correct_option: "Informally, with 'ты' -- and it fits, because Дима is a close friend."
-    distractors: ["Formally, with 'Вы' -- and it fits, because he is a stranger.", "Informally, with 'ты' -- but it does not fit; she should use 'Вы'.", "Formally, with 'Вы' -- but it does not fit; she should use 'ты'."]
-    accepted_answers: [{value: "Informally, with 'ты' -- and it fits, because Дима is a close friend.", status: "correct"}]
-    feedback: "Настя uses the informal ты with Дима, which is exactly right for a friend -- the register fits the audience."
+    correct_option: "Informally -- and it fits, because Дима is a close friend."
+    distractors: ["Formally -- and it fits, because he is a stranger.", "Informally -- but it does not fit; she should be formal.", "Formally -- but it does not fit; she should be informal."]
+    accepted_answers: [{value: "Informally -- and it fits, because Дима is a close friend.", status: "correct"}]
+    feedback: "Настя speaks informally to Дима (Привет, his first name, no Вы), which is exactly right for a friend -- the register fits the audience."
   ru.b2.unit05.lesson06.exercise02.comprehend_mismatch:
     instruction: "What would it signal if Настя wrote to the clinic in the SAME informal way she talks to Дима?"
     correct_option: "It would come across as too casual and disrespectful for an institution."
@@ -548,19 +583,22 @@ exercises:
     instruction: "Say aloud in Russian the SAME request, first to your friend Дима -- informal, using Можешь: Can you reschedule the meetup?"
     accepted_answers:
       - {value: "Можешь перенести встречу", status: "correct"}
+      - {value: "Ты можешь перенести встречу", status: "correct"}
     feedback: "Можешь перенести встречу? -- direct and informal, the right register for Дима."
   ru.b2.unit05.lesson06.exercise05.speak_formal:
     instruction: "Now say aloud in Russian the SAME request to the clinic -- formal, using Не могли бы Вы: Would you be able to reschedule my appointment?"
     accepted_answers:
       - {value: "Не могли бы Вы перенести мой приём", status: "correct"}
+      - {value: "Не могли бы Вы перенести мой прием", status: "correct"}
     feedback: "Не могли бы Вы перенести мой приём? -- indirect and formal, the right register for the clinic."
   ru.b2.unit05.lesson06.exercise06.write_rewrite_formal:
-    instruction: "Rewrite this informal message to Дима as a FORMAL one to the clinic. Informal: 'Привет, Дима, можем перенести встречу?' Write the formal version as two parts: the salutation Уважаемая администрация, then the request using Не могли бы Вы."
+    instruction: "Rewrite this informal message to Дима as a FORMAL one to the clinic. Informal: 'Привет, Дима, можем перенести встречу?' Write the formal version as two parts: the salutation Уважаемая администрация, then the request using Не могли бы Вы and мой приём (my appointment)."
     accepted_answers:
       - {value: "Уважаемая администрация, не могли бы Вы перенести мой приём?", status: "correct"}
       - {value: "Уважаемая администрация, не могли бы Вы перенести мой приём", status: "correct"}
       - {value: "Уважаемая администрация не могли бы Вы перенести мой приём?", status: "correct"}
       - {value: "Уважаемая администрация не могли бы Вы перенести мой приём", status: "correct"}
+      - {value: "Уважаемая администрация, не могли бы Вы перенести мой прием?", status: "correct"}
     feedback: "The formal rewrite swaps 'Привет, Дима' for 'Уважаемая администрация' and the direct question for the indirect 'Не могли бы Вы перенести мой приём?'."
   ru.b2.unit05.lesson06.exercise07.write_both_registers:
     instruction: "Write the SAME request TWICE. (1) informally to your friend Дима, using Можешь: Can you reschedule the meetup? (2) formally to the clinic, using Не могли бы Вы: Would you be able to reschedule my appointment?"
@@ -569,4 +607,7 @@ exercises:
       - {value: "Можешь перенести встречу? Не могли бы Вы перенести мой приём", status: "correct"}
       - {value: "Можешь перенести встречу Не могли бы Вы перенести мой приём?", status: "correct"}
       - {value: "Можешь перенести встречу Не могли бы Вы перенести мой приём", status: "correct"}
+      - {value: "Можешь перенести встречу? Не могли бы Вы перенести мой прием?", status: "correct"}
+      - {value: "Ты можешь перенести встречу? Не могли бы Вы перенести мой приём?", status: "correct"}
+      - {value: "Ты можешь перенести встречу? Не могли бы Вы перенести мой прием?", status: "correct"}
     feedback: "Same request, two registers: informal 'Можешь перенести встречу?' for Дима, formal 'Не могли бы Вы перенести мой приём?' for the clinic."

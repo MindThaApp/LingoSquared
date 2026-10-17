@@ -41,32 +41,8 @@ generation_provenance:
     formally with her full given name "Анастасия" -- taught explicitly as
     its own register marker.
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Fresh-context review needed. This is a DRAFT. Priority checks for the
-    reviewer: (1) confirm "не могли бы Вы" (conditional plural-form
-    politeness) and "будьте добры" both read as natural, currently-used
-    formal Russian request openers, and that "будьте добры" is not
-    over-formal/archaic for an everyday institutional email; (2) confirm
-    the ты-imperative "Сделай это, пожалуйста" reads as a normal, friendly
-    (not curt) informal request between friends, and that Russian really
-    does prefer the periphrastic не могли бы Вы over any formal imperative
-    in writing to an institution (this unit's core claimed grammar point);
-    (3) confirm "Уважаемая администрация," is a natural, currently-used
-    salutation for a message to an unnamed institutional office (vs.
-    alternatives like "Здравствуйте," alone), and that "С уважением," is
-    the standard formal closing; (4) confirm the ты/вы capitalization note
-    in lesson01's grammar card is accurate (capital Вы/Ваш when addressing
-    one specific person formally in writing) -- flagged as a note only,
-    since the app's grading casefolds and cannot actually test this
-    distinction; (5) confirm "приём" (appointment, e.g. at a clinic) vs
-    "встреча" (informal meetup/get-together) is the natural register split
-    an actual Russian speaker would make, and that "поликлиника" is the
-    natural everyday word for a public/district clinic; (6) confirm every
-    matching_pairs left is distinct enough to discriminate on real meaning,
-    especially тебя/вас vs ты/вы; (7) the culminating writing exercises
-    (lesson06 exercise06/07) are graded against fixed strings -- confirm no
-    natural correct answer falls outside the supplied punctuation variants.
+  status: reviewed
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fifth Russian B2 unit; first register unit; opens the second-half wave
     (units 05-08), building on units 01-04 (already committed) within the
@@ -95,6 +71,45 @@ review:
     exercises is introduced within units 01-05 of this course (B2 is a
     separate Course row, so a B2 learner never sees A1/A2/B1 lexemes at
     runtime). No sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage course-wide, character canon (Дима engineer,
+    Настя teacher, ты), dialogue cards vs audio, listen/dialogue
+    distractors, example_glosses, overlay coverage, YAML booleans,
+    internal-jargon notes, ё/е and subject-pronoun grading gaps. Fixes
+    (realization + en-ru overlay): lesson01.exercise06.translate_mozhesh
+    +"Ты можешь помочь"; lesson01.exercise07.speak_mozhete +"Вы можете
+    помочь"; lesson01.exercise03.match_pronouns вы pair right "you
+    (formal)" -> "you (formal, subject)" (realization + overlay);
+    lesson03.teach.ne_mogli_by_vy note no longer claims formal Russian
+    avoids the imperative altogether (now "often prefers an indirect
+    question"); lesson04.teach.vstrecha title/gloss/note re-taught as
+    register-neutral "meeting / get-together" (was "informal meetup"),
+    priyom and perenesti notes aligned;
+    lesson04.exercise03.match_appointment_words pair rights встреча ->
+    "meeting / get-together", приём -> "appointment (at a clinic or
+    office)" (realization + overlay);
+    lesson04.exercise05.translate_informal_request +"Мы можем перенести
+    встречу"; lesson04.exercise06.translate_formal_request and
+    lesson06.exercise05.speak_formal +прием (е) variant;
+    lesson05.exercise01-04 read_* now show both messages as ru
+    target_blocks before the question;
+    lesson05.exercise03.read_same_request correct option "To reschedule
+    the appointment." -> "To reschedule a planned meeting." (distractor
+    paralleled); lesson06.exercise01.comprehend_register_fit options no
+    longer claim Настя uses ты (she never does in the audio) -- now
+    "Informally -- and it fits, because Дима is a close friend." with
+    parallel distractors and feedback;
+    lesson06.exercise04.speak_informal +"Ты можешь перенести встречу";
+    lesson06.exercise06.write_rewrite_formal prompt (realization +
+    overlay) pinned to "Не могли бы Вы and мой приём (my appointment)",
+    +прием variant; lesson06.exercise07.write_both_registers +прием and
+    "Ты можешь..." variants. NATIVE FLAGS: the Будьте добры note
+    ("reserved for a formal request to an institution") vs its common
+    spoken service use; "Удобно ли на следующей неделе?" vs "Будет ли
+    Вам удобно...". DEFERRED: grader-level ё/е fold and ru optional
+    subject pronouns (grading.py, Codex lane, owner decision);
+    reading-passage-not-shown renderer decision (fixed locally here).
 
 course:
   realization_key: ru.b2
@@ -208,7 +223,7 @@ units:
               - {left: "ты", right: "you (informal, subject)"}
               - {left: "тебя", right: "you (informal, object)"}
               - {left: "твой", right: "your (informal)"}
-              - {left: "вы", right: "you (formal)"}
+              - {left: "вы", right: "you (formal, subject)"}
               - {left: "вас", right: "you (formal, object)"}
               - {left: "ваш", right: "your (formal)"}
               - {left: "можешь", right: "can you (informal)"}
@@ -432,8 +447,8 @@ units:
             tested_text: "встреча приём поликлиника перенести понедельник к сожалению"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "встреча", right: "meetup / get-together (informal)"}
-              - {left: "приём", right: "appointment (formal, e.g. at a clinic)"}
+              - {left: "встреча", right: "meeting / get-together"}
+              - {left: "приём", right: "appointment (at a clinic or office)"}
               - {left: "поликлиника", right: "clinic"}
               - {left: "перенести", right: "to reschedule / move"}
               - {left: "понедельник", right: "Monday"}
@@ -494,19 +509,19 @@ units:
           - content_key: ru.b2.unit05.lesson05.exercise01.read_friend
             type: reading_comprehension
             tested_text: "Привет Дима"
-            prompt: {target_blocks: [{text: "Which message is written to a close friend?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Привет, Дима! Можем перенести встречу? К сожалению, я не могу в понедельник. Может, на следующей неделе? Пока, Настя", language_code: ru, direction: ltr}, {text: "Уважаемая администрация, не могли бы Вы перенести мой приём? К сожалению, я не могу в понедельник. Удобно ли на следующей неделе? С уважением, Анастасия", language_code: ru, direction: ltr}, {text: "Which message is written to a close friend?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit05.lesson05.exercise02.read_institution
             type: reading_comprehension
             tested_text: "Уважаемая администрация"
-            prompt: {target_blocks: [{text: "Which message is written to an institution?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Привет, Дима! Можем перенести встречу? К сожалению, я не могу в понедельник. Может, на следующей неделе? Пока, Настя", language_code: ru, direction: ltr}, {text: "Уважаемая администрация, не могли бы Вы перенести мой приём? К сожалению, я не могу в понедельник. Удобно ли на следующей неделе? С уважением, Анастасия", language_code: ru, direction: ltr}, {text: "Which message is written to an institution?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit05.lesson05.exercise03.read_same_request
             type: reading_comprehension
             tested_text: "перенести"
-            prompt: {target_blocks: [{text: "Both messages make the SAME request. What is it?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Привет, Дима! Можем перенести встречу? К сожалению, я не могу в понедельник. Может, на следующей неделе? Пока, Настя", language_code: ru, direction: ltr}, {text: "Уважаемая администрация, не могли бы Вы перенести мой приём? К сожалению, я не могу в понедельник. Удобно ли на следующей неделе? С уважением, Анастасия", language_code: ru, direction: ltr}, {text: "Both messages make the SAME request. What is it?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit05.lesson05.exercise04.read_signal
             type: reading_comprehension
             tested_text: "Вы"
-            prompt: {target_blocks: [{text: "Which feature marks the second message as the one for an institution?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Привет, Дима! Можем перенести встречу? К сожалению, я не могу в понедельник. Может, на следующей неделе? Пока, Настя", language_code: ru, direction: ltr}, {text: "Уважаемая администрация, не могли бы Вы перенести мой приём? К сожалению, я не могу в понедельник. Удобно ли на следующей неделе? С уважением, Анастасия", language_code: ru, direction: ltr}, {text: "Which feature marks the second message as the one for an institution?", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit05.lesson05.exercise05.match_register_features
             type: matching_pairs
             tested_text: "Привет Дима Уважаемая администрация Пока С уважением удобно следующей неделе"
@@ -595,7 +610,7 @@ units:
           - content_key: ru.b2.unit05.lesson06.exercise06.write_rewrite_formal
             type: writing_prompt
             tested_text: "Уважаемая администрация Не могли бы Вы перенести мой приём"
-            prompt: {target_blocks: [{text: "Rewrite this informal message to Дима as a FORMAL one to the clinic. Informal: 'Привет, Дима, можем перенести встречу?' Write the formal version as two parts: the salutation Уважаемая администрация, then the request using Не могли бы Вы.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Rewrite this informal message to Дима as a FORMAL one to the clinic. Informal: 'Привет, Дима, можем перенести встречу?' Write the formal version as two parts: the salutation Уважаемая администрация, then the request using Не могли бы Вы and мой приём (my appointment).", language_code: en, direction: ltr}]}
           - content_key: ru.b2.unit05.lesson06.exercise07.write_both_registers
             type: writing_prompt
             tested_text: "Можешь перенести встречу Не могли бы Вы перенести мой приём"
