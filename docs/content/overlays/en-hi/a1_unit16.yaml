@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Sixteenth en-hi overlay, written for hi/a1_unit16_health.yaml (schema_
     version 1.1, §19 vocabulary-example format from the start; see that
@@ -43,9 +43,27 @@ review:
     word inside a `note`/`gloss` field below is wrapped in single
     asterisks (e.g. *mujhe*, *chahiye*, *ke paas*).
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked
+    with hi/a1_unit16_health.yaml. Fixes: lesson02.exercise12 instruction
+    claimed 'chahiye is never followed by hai' and rejected the valid
+    correction 'मुझे डॉक्टर के पास जाना चाहिए' -> instruction pinned to the
+    meaning ('I need to go to the doctor') and जाना चाहिए accepted;
+    lesson01.exercise12 instruction did not pin the meaning (dropping है
+    gives 'I want a headache') -> pinned to 'I have a headache';
+    lesson03.exercise13 instruction 'Write: I need medicine' while also
+    accepting 'मुझे आराम चाहिए' -> instruction now asks to answer 'what do
+    you need?' with medicine or rest; added the standard closed compound
+    spelling सिरदर्द to lesson01 ex11/ex12/ex14 and lesson03 ex12/ex14 (also
+    important for speech transcripts), plus the बुखार-first order in
+    lesson03 ex12; teach.mujhe_hai_review example_gloss 'I have water'
+    follows the realization example change to 'मुझे काम है' / 'I have work';
+    answer_policy 'दात' typo -> 'dative'. Native-speaker check needed:
+    whether 'मुझे सिर दर्द है' vs 'मेरे सिर में दर्द है' should both be
+    taught/accepted; whether दवाई should be accepted alongside दवा.
+
 answer_policy:
   mujhe_noun_hai_symptom: >-
-    This unit's central grammar point extends the दात + noun + है
+    This unit's central grammar point extends the dative + noun + है
     construction (मुझे/तुम्हें + noun + है) to symptom statements, e.g.
     "मुझे सिर दर्द है" (I have a headache). A typed answer that drops है
     entirely, or that appends हैं instead of है (है is invariant here --
@@ -108,7 +126,7 @@ teaching:
     title: "Review: to me, is"
     gloss: "to me / for me, is"
     note: "The copula needed to build this lesson's symptom construction."
-    example_gloss: "I have water."
+    example_gloss: "I have work."
 
   hi.a1.unit16.lesson01.teach.tum_theek_ho_phrase:
     title: "Are you OK?"
@@ -341,18 +359,20 @@ exercises:
     accepted_answers:
       - "मुझे सिर दर्द है।"
       - "मुझे सिर दर्द है"
+      - "मुझे सिरदर्द है"
   hi.a1.unit16.lesson01.exercise14.dictation_mujhe_sir_dard_hai:
     instruction: "Type what you hear."
     correct_option: "मुझे सिर दर्द है"
-    accepted_answers: [{value: "मुझे सिर दर्द है", status: correct}]
+    accepted_answers: [{value: "मुझे सिर दर्द है", status: correct}, {value: "मुझे सिरदर्द है", status: correct}]
     orthography_strict: true
 
 
   hi.a1.unit16.lesson01.exercise12.fix_mujhe_sir_dard_hai:
-    instruction: "Correct the sentence -- 'chahiye' is never followed by 'hai'."
+    instruction: "Correct the sentence so that it means: I have a headache."
     accepted_answers:
       - "मुझे सिर दर्द है।"
       - "मुझे सिर दर्द है"
+      - "मुझे सिरदर्द है"
     feedback: "Mujhe sir dard hai -- the symptom construction only needs 'hai', not 'chahiye hai' together."
 
   hi.a1.unit16.lesson01.exercise13.speak_mujhe_bukhar_hai:
@@ -430,11 +450,12 @@ exercises:
       - "मुझे दवा चाहिए"
 
   hi.a1.unit16.lesson02.exercise12.fix_mujhe_doctor_ke_paas_jana_hai:
-    instruction: "Correct the sentence -- 'chahiye' is never followed by 'hai'."
+    instruction: "Correct the sentence so that it means: I need to go to the doctor."
     accepted_answers:
       - "मुझे डॉक्टर के पास जाना है।"
       - "मुझे डॉक्टर के पास जाना है"
-    feedback: "Mujhe doctor ke paas jana hai -- the obligation construction only needs 'hai', not 'chahiye hai' together."
+      - "मुझे डॉक्टर के पास जाना चाहिए"
+    feedback: "Mujhe doctor ke paas jana hai -- use either 'jana hai' or 'jana chahiye', not 'chahiye hai' together."
 
   hi.a1.unit16.lesson02.exercise13.speak_tumhein_aaraam_chahiye:
     instruction: "Say: You need rest."
@@ -524,9 +545,11 @@ exercises:
     accepted_answers:
       - "नहीं, मुझे सिर दर्द और बुखार है।"
       - "नहीं मुझे सिर दर्द और बुखार है"
+      - "नहीं मुझे सिरदर्द और बुखार है"
+      - "नहीं मुझे बुखार और सिर दर्द है"
 
   hi.a1.unit16.lesson03.exercise13.write_tumhein_kya_chahiye:
-    instruction: "Write: I need medicine."
+    instruction: "Answer the question in Hindi, saying you need medicine or rest."
     accepted_answers:
       - "मुझे दवा चाहिए।"
       - "मुझे दवा चाहिए"
@@ -538,3 +561,4 @@ exercises:
     accepted_answers:
       - "मुझे सिर दर्द है।"
       - "मुझे सिर दर्द है"
+      - "मुझे सिरदर्द है"

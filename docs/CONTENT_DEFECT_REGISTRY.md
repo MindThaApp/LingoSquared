@@ -2321,3 +2321,118 @@ Deferred / remaining:
 5. B1 u19 contains the content key
    `comprehend_ewa_powiedzialam_ze_pociąg`, with a non-ASCII ą. Left
    as is to keep content keys stable.
+
+### 2026-10-17 — en-hi review backlog: all levels A1–C1 (117 files, fresh-context review; branch content/review-backlog-hindi, PR #35)
+Scope: every `review.status: unreviewed` file in `docs/content/overlays/en-hi/`
+(58: A1 u01-18, A2 u20-25, B1 u01-05 + u07-19, B2 u01-08, C1 u01-08) and
+`docs/content/realizations/hi/` (59: every unit except A1 u19, including the
+B1 u06 realization whose overlay was already reviewed). Many realizations store
+the value quoted (`status: "unreviewed"`), so a bare `status: unreviewed` grep
+finds only 74 of the 117. Reviewed in course order, one fresh-context reviewer per
+2-3 unit batch (realization + overlay together), 22 batches, 20 commits plus 2
+status-normalization commits. Checklist: `.claude/agents/content-reviewer.md`
++ OVERLAY_REVIEW_INSTRUCTIONS + §1.24/§1.39. All 117 files are now
+`reviewed` / `required_next_reviewer: native_speaker_pass`, with a dated note.
+The 16 C1 files' top-level `status: unreviewed` was set to `complete_draft`
+to match the rest of the lane.
+
+Fixes per level (counted in commit subjects; spelling-variant additions are
+counted separately and are not included):
+- A1 (u01-18, 6 commits): ~157 fixes, plus ~200 variants
+- A2 (u20-25, 2 commits): ~59 fixes, plus ~45 variants
+- B1 (u01-19, 6 commits): ~154 fixes, plus ~250 variants
+- B2 (u01-08, 4 commits): ~121 fixes, plus ~100 variants
+- C1 (u01-08, 4 commits): ~161 fixes, plus ~300 variants (mostly
+  full-passage answers without the mid-answer danda)
+- Total: ~650 fixes.
+
+Bug classes found (no new class; all fit existing ones):
+- **False grammar taught** (the most serious):
+  - A2 u20/u22 taught लाना with ने (`क्या आपने ... लाया`); standard
+    Hindi is `क्या आप ... लाए` / `मैं ... लाया`. Unit 20 was rewritten. Unit
+    22's singular/plural contrast was rebuilt on भरना, and two audio asset
+    keys were renamed with their text.
+  - B1 u09 said होता agrees with शुरू as a masculine object.
+  - A1/B1 "चाहिए never takes है" and "कि is required", with grammar_check
+    items that marked valid Hindi (कि-less clauses, हालांकि without फिर भी)
+    as wrong.
+  - A1 u12 said कैसे is the form for आप.
+  - A1 u16/u15 glossed `मुझे पानी है` as "I have water".
+  - C1 u05 called माँगी जा सकती थी gender-invariant.
+- **1.21-family missing valid answers**:
+  - open "Write/Answer/Say" prompts graded against one sentence (~60 items,
+    now pinned to the sentence they grade);
+  - masculine-only (or feminine-only) answers where the learner's gender is
+    unknown (~40 items);
+  - valid word orders;
+  - taught synonyms and short answers.
+- **Grading-shape gap (systemic, not content)**: `grading.py` does only NFC
+  + casefold + edge punctuation. It does NOT fold nukta (ज़/ज, फ़/फ, क़/क, ख़/ख,
+  ग़/ग), chandrabindu vs anusvara (हूँ/हूं, हाँ/हां) or a mid-answer । , and
+  reviewers found no effective distance-1 tolerance for Devanagari (not
+  re-verified in code). Several overlays'
+  `answer_policy` text promised tolerance that grading does not apply.
+  Reviewers therefore listed the standard variants explicitly (typed/spoken
+  only; dictation left strict, and ड़/ढ़ never stripped). This makes some lists
+  long (up to ~88 entries). An answer that mixes spellings within one
+  sentence is still rejected.
+- **Reading questions that never showed the passage**: B2 u01-04 lesson05, 16
+  items.
+- **Teaching cards with no English**: the C1 template repeated the Hindi in
+  every gloss (C1 u01-08, ~64 cards). The same template had **listen items
+  answerable without listening** ("The audio gives the taught Hindi model"
+  vs "a weather report", 32 items) and production prompts that never said
+  which sentence to write.
+- **1.17-family**:
+  - interchangeable matching pairs (थोड़ा/ज़रा, ही/सिर्फ़, अर्थ/मतलब,
+    ठोस/प्रमाणित, "better" twice, male/female "I get up");
+  - second-correct distractors;
+  - answers given away by an option's form or by the prompt.
+- **1.22**: listen distractors the speaker actually says (B1 u11, B2 u05);
+  dialogue cards merged, paraphrased or credited to the wrong speaker (B1 u15,
+  B2 u05/u06).
+- **Wrong keys**: B2 u08 "two reports" (2); C1 u08 recognize_dohrav keyed to a
+  fragment that repeats nothing; A1 u08 accepted a sentence saying where the
+  school is for "say where the bank is".
+- **Unsolvable word_order**: tiles dropped a repeated word (B1 u06/u11/u12,
+  4 items).
+- **Character canon**: A1 u14 made Arjun (20 in A1 u02) older than Priya (30).
+  Every person comparison was swapped.
+- **Internal jargon in learner text**: snake_case exercise types, "tokenizer",
+  "this corpus", "unit19.lesson02", "Taught phrase for this C1 move".
+- 13 matching-tested words never taught in B2 u07/u08 (lesson notes now teach
+  them).
+
+Deferred, left for a native speaker (recorded per file in `review.notes`):
+- **Gender**: टिकट (A1 u15 grades की as wrong); प्रेज़ेंटेशन; whether the
+  B1 u18 manager's `भेज सकेंगे` to Priya should be सकेंगी (audio, dictation and
+  word_order left as authored).
+- **Spelling to standardize**: महंगा/महँगा, फंसना/फँसना, समय-सारणी/सारिणी,
+  and whether no-nukta forms should be the taught spelling.
+- **Colloquial forms the course drills as errors**: `चाहिए है`, `पीना चाहिए`
+  (for पीनी), `सोमवार शुरू` without को.
+- **Naturalness of authored lines**: about 40 items. Examples: A1 u14's
+  rewritten dialogue line, B1 u03's past counterfactual in a planning
+  dialogue, C1 u01 `शांत कार्य-लय`, C1 u06 `जड़ साफ़ होगी`, B2 u07 `अगर तुम
+  खरीदारी करो तो ... बनाएगा`.
+- **Story points**: B1 u12 "we" (Priya/Arjun buying a house together?);
+  A1 u05 Priya "from America" while her whole family lives in India; B1 u03
+  reading says next week, the dialogue says tomorrow.
+- C1 u06 teaches no traditional मुहावरे, which is questionable for an idiom
+  unit.
+
+Remaining:
+- **A grading-side fix, so explicit variants stop being needed** (Codex lane):
+  fold nukta and chandrabindu/anusvara for `hi`, and drop mid-answer । in
+  non-dictation free text. Without it every new Hindi item needs hand-listed
+  variants.
+- **Native-speaker pass** on all 117 files (the flags above).
+- **Validator noise**: 7 en-hi A1 word_order items now carry a second valid
+  order, which raises intended "scrambled permutation" warnings (en-hi 39 → 46
+  warnings).
+- §1.27 (comprehension `correct_response` = Hindi source) was not seen in
+  this pass.
+Verification: `scripts/verify.sh --content-only` passes (en-hi 0 errors / 46
+warnings, a2 0/15, b1 0/21, b2 0/0, c1 0/0). The full backend suite was run
+against local Postgres with the whole repo (`LINGO_REPO_ROOT` set): 33305
+passed, 0 skipped. `test_content_answer_shapes.py` alone: 32845 passed.

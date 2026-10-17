@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Fourth en-hi overlay, written for hi/a1_unit04_time.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start;
@@ -23,6 +23,28 @@ review:
     been authored), so the sibling-isolation rule (AUTHORING_GUIDE §8)
     doesn't apply here -- noted for whoever authors hi-en next: do not
     open this file for structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked with hi/a1_unit04_time.yaml. Fixes: lesson02.teach.dopahar
+    note falsely said English 'afternoon' covers midday -> reworded;
+    lesson01.exercise09 accept 'दस बजे हैं' (valid answer without अभी);
+    lesson02.exercise09 accept 'सुबह सात बजे क्लास है' and 'सुबह सात बजे
+    है'; lesson02.exercise08 accept 'रात में क्लास नहीं है' (में taught
+    in unit01); lesson02.exercise05/06 and lesson03.exercise05/06
+    word_order now also accept the equally valid fronted-time order
+    (e.g. 'सुबह सात बजे क्लास है', 'कितने बजे क्लास है') -- the
+    compiler's scrambled-permutation warning on these is intentional;
+    lesson03.exercise07 matching had three mutually interchangeable
+    pairs ('ठीक है, शुक्रिया!'/'रात को क्लास नहीं है।'/'दोपहर को क्लास
+    नहीं है।' vs 'ठीक है, कल मिलते हैं!'/'ठीक है।'/'कल क्लास है।') ->
+    dropped the two ambiguous pairs and pooled two unambiguous earlier-
+    unit Q/A pairs (birthday, name), realization synced;
+    lesson03.exercise08/10/11/12 added anusvara पांच variants per this
+    file's own answer_policy (grading is strict for Devanagari) plus
+    'शाम पाँच बजे है' short answer and 'अगली क्लास कल शाम पाँच बजे है'
+    for the writing item. Native-speaker check needed: naturalness of
+    the added fronted-time word orders; whether 'रात में' should stay
+    accepted in the add-the-missing-word item.
 
 answer_policy:
   nasalization_marks: >-
@@ -142,7 +164,7 @@ teaching:
   hi.a1.unit04.lesson02.teach.dopahar:
     title: "Afternoon / noon"
     gloss: "afternoon, noon"
-    note: "Covers both midday and the early afternoon, the same way English \"afternoon\" does."
+    note: "Covers both midday (noon) and the early afternoon."
     example_gloss: "There's no class in the afternoon."
 
   hi.a1.unit04.lesson02.teach.shaam:
@@ -298,6 +320,7 @@ exercises:
     accepted_answers:
       - "अभी दस बजे हैं।"
       - "अभी दस बजे हैं"
+      - "दस बजे हैं।"
 
   hi.a1.unit04.lesson01.exercise10.speak_current_time:
     instruction: "Say that it's seven o'clock now."
@@ -337,11 +360,15 @@ exercises:
 
   hi.a1.unit04.lesson02.exercise05.order_class_subah_saat_baje:
     instruction: "Put the sentence in order: Class is at seven in the morning."
-    correct_response: ["क्लास", "सुबह", "सात", "बजे", "है"]
+    accepted_answers:
+      - {value: ["क्लास", "सुबह", "सात", "बजे", "है"], status: correct}
+      - {value: ["सुबह", "सात", "बजे", "क्लास", "है"], status: correct}
 
   hi.a1.unit04.lesson02.exercise06.order_class_kitne_baje_hai:
     instruction: "Put the question in order: What time is class?"
-    correct_response: ["क्लास", "कितने", "बजे", "है"]
+    accepted_answers:
+      - {value: ["क्लास", "कितने", "बजे", "है"], status: correct}
+      - {value: ["कितने", "बजे", "क्लास", "है"], status: correct}
 
   hi.a1.unit04.lesson02.exercise07.fill_class_subah_hour:
     instruction: "Complete the sentence: class is at seven in the morning."
@@ -353,6 +380,7 @@ exercises:
     accepted_answers:
       - "रात को क्लास नहीं है।"
       - "रात को क्लास नहीं है"
+      - "रात में क्लास नहीं है।"
     feedback: "Raat ko class nahin hai -- ko is needed to mark night as a general time period."
 
   hi.a1.unit04.lesson02.exercise09.reply_class_time:
@@ -360,6 +388,8 @@ exercises:
     accepted_answers:
       - "क्लास सुबह सात बजे है।"
       - "क्लास सुबह सात बजे है"
+      - "सुबह सात बजे क्लास है।"
+      - "सुबह सात बजे है।"
 
   hi.a1.unit04.lesson02.exercise10.speak_class_time:
     instruction: "Say that class is at seven in the morning."
@@ -397,11 +427,15 @@ exercises:
 
   hi.a1.unit04.lesson03.exercise05.order_agli_class_kitne_baje_hai:
     instruction: "Put the question in order: What time is the next class?"
-    correct_response: ["अगली", "क्लास", "कितने", "बजे", "है"]
+    accepted_answers:
+      - {value: ["अगली", "क्लास", "कितने", "बजे", "है"], status: correct}
+      - {value: ["कितने", "बजे", "अगली", "क्लास", "है"], status: correct}
 
   hi.a1.unit04.lesson03.exercise06.order_agli_class_shaam_paanch_baje_hai:
     instruction: "Put the sentence in order: The next class is at five in the evening."
-    correct_response: ["अगली", "क्लास", "शाम", "पाँच", "बजे", "है"]
+    accepted_answers:
+      - {value: ["अगली", "क्लास", "शाम", "पाँच", "बजे", "है"], status: correct}
+      - {value: ["शाम", "पाँच", "बजे", "अगली", "क्लास", "है"], status: correct}
 
   hi.a1.unit04.lesson03.exercise07.match_questions_and_answers:
     instruction: "Match each line with its natural response."
@@ -410,12 +444,12 @@ exercises:
       "ठीक है, शुक्रिया!": "ठीक है, कल मिलते हैं!"
       "कितने बजे हैं?": "अभी दस बजे हैं।"
       "क्लास कितने बजे है?": "क्लास सुबह सात बजे है।"
-      "रात को क्लास नहीं है।": "ठीक है।"
-      "दोपहर को क्लास नहीं है।": "कल क्लास है।"
+      "तुम्हारा जन्मदिन कब है?": "मेरा जन्मदिन जनवरी में है।"
+      "तुम्हारा नाम क्या है?": "मेरा नाम अर्जुन है।"
 
   hi.a1.unit04.lesson03.exercise08.fill_agli_class_hour:
     instruction: "Complete the next class's time, based on the dialogue."
-    accepted_answers: ["पाँच"]
+    accepted_answers: ["पाँच", "पांच"]
     feedback: "Agli class shaam paanch baje hai -- the next class is at five in the evening."
 
   hi.a1.unit04.lesson03.exercise09.fix_agla_vs_agli:
@@ -430,6 +464,9 @@ exercises:
     accepted_answers:
       - "अगली क्लास शाम पाँच बजे है।"
       - "अगली क्लास शाम पाँच बजे है"
+      - "अगली क्लास शाम पांच बजे है।"
+      - "शाम पाँच बजे है।"
+      - "शाम पांच बजे है।"
 
   hi.a1.unit04.lesson03.exercise11.write_next_class_time:
     instruction: "Write the time of the next class, based on the dialogue."
@@ -437,9 +474,15 @@ exercises:
       - "शाम पाँच बजे"
       - "कल शाम पाँच बजे"
       - "अगली क्लास शाम पाँच बजे है।"
+      - "अगली क्लास कल शाम पाँच बजे है।"
+      - "शाम पांच बजे"
+      - "कल शाम पांच बजे"
+      - "अगली क्लास शाम पांच बजे है।"
+      - "अगली क्लास कल शाम पांच बजे है।"
 
   hi.a1.unit04.lesson03.exercise12.speak_agli_class_time:
     instruction: "Say what time the next class is, following the pattern from the dialogue."
     accepted_answers:
       - "अगली क्लास शाम पाँच बजे है।"
       - "अगली क्लास शाम पाँच बजे है"
+      - "अगली क्लास शाम पांच बजे है।"

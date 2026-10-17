@@ -2,7 +2,7 @@ schema_version: '1.1'
 realization_version: 2026.1-draft.1
 target_language: hi
 cefr_level: C1
-status: unreviewed
+status: complete_draft
 generation_provenance:
   method: ai_generated
   authoring_system: codex
@@ -11,10 +11,20 @@ generation_provenance:
     using तुम with each other. Learner-production models use gender-invariant or impersonal constructions where first person
     appears.'
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
-  notes: Targets universal.c1.inference.infer_implicit_meaning. Check Hindi naturalness, punctuation variants, gender-invariant
-    production, and final synthesis coverage.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: >-
+    Targets universal.c1.inference.infer_implicit_meaning. Check Hindi naturalness, punctuation variants, gender-
+    invariant production, and final synthesis coverage.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked with overlays/en-hi/c1_unit02.yaml.
+    Fixes: 'अकहा अर्थ' (non-word) -> 'अनकहा अर्थ' in lesson02 title, support card, introduced_tokens and match
+    pair; match gloss 'is not agreeing' -> 'does not agree'; recognize_sanket/recognize_arth/recognize_sandarbh
+    prompts had second-correct distractors (every option is a hint or inference) -> prompts now name the specific
+    phrase meaning; 5 production prompts pinned to the model they grade. Native-speaker check needed: 'समय कठिन
+    है' for 'the timing is difficult' (may read as 'times are hard'; consider 'अभी समय ठीक नहीं है'); 'वह विचार
+    खुला रखती है' (वह can read as 'that idea'; consider 'वह इस विचार को खुला रखती है'); naturalness of 'सावधान
+    निष्कर्ष'.
 course:
   realization_key: hi.c1
   target_language_first: true
@@ -84,7 +94,7 @@ units:
       tested_text: लेकिन समय कठिन है
       prompt:
         target_blocks:
-        - text: Which sentence hints at hesitation rather than direct refusal?
+        - text: "Which phrase comes from Priya's own words, her indirect hint?"
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit02.sanketarth.lesson01.sanket.exercise02.listen_sanket
@@ -116,11 +126,11 @@ units:
       tested_text: प्रिया कहती है कि प्रस्ताव दिलचस्प है, लेकिन समय कठिन है।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'Priya says that the proposal is interesting, but the timing is difficult.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit02.sanketarth.lesson02.arth
-    title: अकहा अर्थ
+    title: अनकहा अर्थ
     spine_outcome_id: universal.c1.inference.infer_implicit_meaning
     teaching:
     - content_key: hi.c1.unit02.sanketarth.lesson02.arth.teach.model_part
@@ -141,7 +151,7 @@ units:
     - content_key: hi.c1.unit02.sanketarth.lesson02.arth.teach.support_tokens
       kind: phrase
       target:
-        text: इसका मतलब है ; तुरंत ; सहमत नहीं है ; अकहा अर्थ ; वह ; कि
+        text: इसका मतलब है ; तुरंत ; सहमत नहीं है ; अनकहा अर्थ ; वह ; कि
         language_code: hi
         direction: ltr
       introduced_tokens:
@@ -151,7 +161,7 @@ units:
       - तुरंत
       - सहमत
       - नहीं
-      - अकहा
+      - अनकहा
       - अर्थ
       - वह
       - कि
@@ -161,7 +171,7 @@ units:
       tested_text: वह तुरंत सहमत नहीं है
       prompt:
         target_blocks:
-        - text: Which phrase states the implied meaning?
+        - text: "Which phrase says that she does not agree right away?"
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit02.sanketarth.lesson02.arth.exercise02.listen_arth
@@ -172,7 +182,7 @@ units:
       media_asset_key: hi.c1.audio.unit02.calosc.01
     - content_key: hi.c1.unit02.sanketarth.lesson02.arth.exercise03.match_arth
       type: matching_pairs
-      tested_text: इसका मतलब है तुरंत सहमत नहीं है अकहा अर्थ वह कि
+      tested_text: इसका मतलब है तुरंत सहमत नहीं है अनकहा अर्थ वह कि
       prompt:
         target_blocks: []
       pairs:
@@ -181,8 +191,8 @@ units:
       - left: तुरंत
         right: immediately
       - left: सहमत नहीं है
-        right: is not agreeing
-      - left: अकहा अर्थ
+        right: does not agree
+      - left: अनकहा अर्थ
         right: unstated meaning
       - left: वह
         right: she
@@ -193,7 +203,7 @@ units:
       tested_text: इसका मतलब है कि वह तुरंत सहमत नहीं है।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'This means that she does not agree right away.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit02.sanketarth.lesson03.sandarbh
@@ -238,7 +248,7 @@ units:
       tested_text: उसे और प्रमाण चाहिए
       prompt:
         target_blocks:
-        - text: Which phrase gives the contextual inference?
+        - text: "Which phrase says that she needs more evidence?"
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit02.sanketarth.lesson03.sandarbh.exercise02.listen_sandarbh
@@ -270,7 +280,7 @@ units:
       tested_text: संदर्भ से लगता है कि उसे और प्रमाण चाहिए।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'From the context it seems that she needs more evidence.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit02.sanketarth.lesson04.nishkarsh
@@ -349,7 +359,7 @@ units:
         से लगता है कि उसे और प्रमाण चाहिए। इसलिए सावधान निष्कर्ष यह है कि वह विचार खुला रखती है।
       prompt:
         target_blocks:
-        - text: Give the complete Hindi inferring implicit meaning model aloud exactly.
+        - text: "Say the unit's complete four-sentence model passage in Hindi exactly: Priya's hint, its implied meaning, the inference from context, and the cautious conclusion."
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit02.sanketarth.lesson04.nishkarsh.exercise05.write_calosc
@@ -358,6 +368,6 @@ units:
         से लगता है कि उसे और प्रमाण चाहिए। इसलिए सावधान निष्कर्ष यह है कि वह विचार खुला रखती है।
       prompt:
         target_blocks:
-        - text: Write the complete Hindi inferring implicit meaning model exactly.
+        - text: "Write the unit's complete four-sentence model passage in Hindi exactly: Priya's hint, its implied meaning, the inference from context, and the cautious conclusion."
           language_code: en
           direction: ltr

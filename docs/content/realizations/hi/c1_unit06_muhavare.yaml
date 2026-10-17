@@ -2,7 +2,7 @@ schema_version: '1.1'
 realization_version: 2026.1-draft.1
 target_language: hi
 cefr_level: C1
-status: unreviewed
+status: complete_draft
 generation_provenance:
   method: ai_generated
   authoring_system: codex
@@ -11,10 +11,24 @@ generation_provenance:
     using तुम with each other. Learner-production models use gender-invariant or impersonal constructions where first person
     appears.'
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
-  notes: Targets universal.c1.idiom.use_idiomatic_and_figurative_language. Check Hindi idiom naturalness, punctuation variants,
-    gender-invariant production, and final synthesis coverage.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: >-
+    Targets universal.c1.idiom.use_idiomatic_and_figurative_language. Check Hindi idiom naturalness, punctuation
+    variants, gender-invariant production, and final synthesis coverage.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked with overlays/en-hi/c1_unit06.yaml.
+    Priority checks: idiom meanings verified - सिर पर बोझ (a burden/heavy responsibility), समस्या की जड़ तक पहुँचना
+    (get to the root cause), समझ का पुल (bridge of understanding) are glossed correctly; production is
+    gender-invariant; final synthesis covers all four models. Fixes: unit title 'मुहावरे और आलंकारिक' and lesson
+    titles 'आलंकारिक पहचानना' / 'पूरा आलंकारिक' were ungrammatical fragments -> '... आलंकारिक भाषा', 'आलंकारिक भाषा
+    पहचानना', 'पूरा आलंकारिक पाठ' (support card + match pair updated, पाठ added to introduced_tokens); match pairs
+    आलंकारिक 'metaphor' -> 'figurative', बनाना होगा 'will have to be built' -> 'will have to build', जड़ साफ़ होगी ->
+    'the root will become clear'; 5 production prompts pinned to the English meaning (overlay in sync). Native-speaker
+    check needed: 'जड़ साफ़ होगी' in the closing sentence (does not read as an established image; 'जड़ साफ़' can
+    suggest 'root cleaned/wiped out' - consider e.g. 'जड़ समझ में आएगी'); 'समझ का पुल बनाना' (calque-like but probably
+    acceptable); the unit contains no traditional मुहावरे (e.g. नाक में दम करना, हाथ बँटाना) - consider whether a C1
+    idiom unit should teach some.
 course:
   realization_key: hi.c1
   target_language_first: true
@@ -36,14 +50,14 @@ media_assets:
   status: pending_generation
 units:
 - content_key: hi.c1.unit06.muhavare
-  title: मुहावरे और आलंकारिक
+  title: मुहावरे और आलंकारिक भाषा
   section: reading_writing
   spine_outcome_ids:
   - universal.c1.idiom.use_idiomatic_and_figurative_language
   planned_lesson_count: 4
   lessons:
   - content_key: hi.c1.unit06.muhavare.lesson01.bojh
-    title: आलंकारिक पहचानना
+    title: आलंकारिक भाषा पहचानना
     spine_outcome_id: universal.c1.idiom.use_idiomatic_and_figurative_language
     teaching:
     - content_key: hi.c1.unit06.muhavare.lesson01.bojh.teach.model_part
@@ -110,7 +124,7 @@ units:
       - left: बन गया है
         right: has become
       - left: आलंकारिक
-        right: metaphor
+        right: figurative
       - left: पहचानना
         right: recognizing
     - content_key: hi.c1.unit06.muhavare.lesson01.bojh.exercise04.write_bojh
@@ -118,7 +132,7 @@ units:
       tested_text: यह मुद्दा टीम के सिर पर बोझ बन गया है।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'This issue has become a burden on the team.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit06.muhavare.lesson02.jad
@@ -195,7 +209,7 @@ units:
       tested_text: सिर्फ़ लक्षण नहीं, समस्या की जड़ तक पहुँचना होगा।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'Not just the symptoms: we will have to get to the root of the problem.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit06.muhavare.lesson03.pul
@@ -266,7 +280,7 @@ units:
       - left: समझ का पुल
         right: bridge of understanding
       - left: बनाना होगा
-        right: will have to be built
+        right: will have to build
       - left: आलंकारिक भाषा
         right: figurative language
     - content_key: hi.c1.unit06.muhavare.lesson03.pul.exercise04.write_pul
@@ -274,11 +288,11 @@ units:
       tested_text: प्रिया और अर्जुन के बीच समझ का पुल बनाना होगा।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: "Write this lesson's model sentence in Hindi: 'We will have to build a bridge of understanding between Priya and Arjun.'"
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit06.muhavare.lesson04.santulit
-    title: पूरा आलंकारिक
+    title: पूरा आलंकारिक पाठ
     spine_outcome_id: universal.c1.idiom.use_idiomatic_and_figurative_language
     teaching:
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.teach.model_part
@@ -302,7 +316,7 @@ units:
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.teach.support_tokens
       kind: phrase
       target:
-        text: इस तरह ; बोझ कम होगा ; जड़ साफ़ होगी ; पुल मज़बूत होगा ; और ; पूरा आलंकारिक
+        text: इस तरह ; बोझ कम होगा ; जड़ साफ़ होगी ; पुल मज़बूत होगा ; और ; पूरा आलंकारिक पाठ
         language_code: hi
         direction: ltr
       introduced_tokens:
@@ -319,6 +333,7 @@ units:
       - और
       - पूरा
       - आलंकारिक
+      - पाठ
     exercises:
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.exercise01.recognize_santulit
       type: multiple_choice
@@ -336,7 +351,7 @@ units:
       media_asset_key: hi.c1.audio.unit06.calosc.01
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.exercise03.match_santulit
       type: matching_pairs
-      tested_text: इस तरह बोझ कम होगा जड़ साफ़ होगी पुल मज़बूत होगा और पूरा आलंकारिक
+      tested_text: इस तरह बोझ कम होगा जड़ साफ़ होगी पुल मज़बूत होगा और पूरा आलंकारिक पाठ
       prompt:
         target_blocks: []
       pairs:
@@ -345,20 +360,20 @@ units:
       - left: बोझ कम होगा
         right: the burden will lessen
       - left: जड़ साफ़ होगी
-        right: the root will be clear
+        right: the root will become clear
       - left: पुल मज़बूत होगा
         right: the bridge will be strong
       - left: और
         right: and
-      - left: पूरा आलंकारिक
-        right: complete metaphor
+      - left: पूरा आलंकारिक पाठ
+        right: complete figurative passage
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.exercise04.speak_calosc
       type: speak_response
       tested_text: यह मुद्दा टीम के सिर पर बोझ बन गया है। सिर्फ़ लक्षण नहीं, समस्या की जड़ तक पहुँचना होगा। प्रिया और अर्जुन के
         बीच समझ का पुल बनाना होगा। इस तरह बोझ कम होगा, जड़ साफ़ होगी और पुल मज़बूत होगा।
       prompt:
         target_blocks:
-        - text: Give the complete Hindi idiomatic and figurative language model aloud exactly.
+        - text: "Say the unit's complete four-sentence model passage in Hindi exactly: the burden on the team, reaching the root of the problem, the bridge of understanding between Priya and Arjun, and the closing sentence that brings the three images together."
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit06.muhavare.lesson04.santulit.exercise05.write_calosc
@@ -367,6 +382,6 @@ units:
         बीच समझ का पुल बनाना होगा। इस तरह बोझ कम होगा, जड़ साफ़ होगी और पुल मज़बूत होगा।
       prompt:
         target_blocks:
-        - text: Write the complete Hindi idiomatic and figurative language model exactly.
+        - text: "Write the unit's complete four-sentence model passage in Hindi exactly: the burden on the team, reaching the root of the problem, the bridge of understanding between Priya and Arjun, and the closing sentence that brings the three images together."
           language_code: en
           direction: ltr

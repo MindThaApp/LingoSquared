@@ -2,7 +2,7 @@ schema_version: '1.1'
 realization_version: 2026.1-draft.1
 target_language: hi
 cefr_level: C1
-status: unreviewed
+status: complete_draft
 generation_provenance:
   method: ai_generated
   authoring_system: codex
@@ -11,10 +11,22 @@ generation_provenance:
     using तुम with each other. Learner-production models use gender-invariant or impersonal constructions where first person
     appears.'
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
-  notes: Targets universal.c1.register.control_tone_and_register_precisely. Check Hindi naturalness, punctuation variants,
-    honest reproduction framing, gender-invariant production, and final synthesis coverage.
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: >-
+    Targets universal.c1.register.control_tone_and_register_precisely. Check Hindi naturalness, punctuation
+    variants, honest reproduction framing, gender-invariant production, and final synthesis coverage.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist): checked with
+    overlays/en-hi/c1_unit03.yaml. Priority checks verified: production is reproduction-framed and now pinned
+    with an English rendering of the model; all models are gender-invariant (मुझे ... समझ में आती है, मेरा
+    सुझाव है); the speak/write synthesis covers all four model sentences; punctuation is handled by grading
+    plus added variants. Fixes: recognize_naram prompt ('polite disagreement', answer only acknowledges a
+    point) -> asks for the acknowledging phrase; recognize_santulan prompt ('completes the model', every
+    option is part of the model) -> asks for 'clear options in respectful language'; 3 write prompts and
+    speak/write_calosc prompts ('exact model sentence for this move') -> pinned with the English meaning of
+    the model. Native-speaker check needed: the isolated chunk 'मुझे समझ में आती है' (agreement with an
+    unstated बात) on the support card and in matching.
 course:
   realization_key: hi.c1
   target_language_first: true
@@ -92,7 +104,7 @@ units:
       tested_text: मुझे आपकी बात समझ में आती है
       prompt:
         target_blocks:
-        - text: Which sentence gives polite disagreement without sounding harsh?
+        - text: Which phrase acknowledges the other person's point before raising a concern?
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit03.lehja_register.lesson01.naram.exercise02.listen_naram
@@ -124,7 +136,7 @@ units:
       tested_text: मुझे आपकी बात समझ में आती है, फिर भी चिंता बनी रहती है।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: 'Write this lesson''s model sentence in Hindi: ''I understand your point; even so, a concern remains.'''
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit03.lehja_register.lesson02.aupcharik
@@ -204,7 +216,7 @@ units:
       tested_text: शायद हमें निर्णय से पहले आँकड़ों को फिर देखना चाहिए।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: 'Write this lesson''s model sentence in Hindi: ''Perhaps we should look at the data again before the decision.'''
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit03.lehja_register.lesson03.seema
@@ -281,7 +293,7 @@ units:
       tested_text: यह आपत्ति व्यक्तिगत नहीं है, बल्कि प्रक्रिया से जुड़ी है।
       prompt:
         target_blocks:
-        - text: Write the exact Hindi model sentence for this move.
+        - text: 'Write this lesson''s model sentence in Hindi: ''This objection is not personal; rather, it is connected with the process.'''
           language_code: en
           direction: ltr
   - content_key: hi.c1.unit03.lehja_register.lesson04.santulan
@@ -331,7 +343,7 @@ units:
       tested_text: सम्मानजनक भाषा में स्पष्ट विकल्प
       prompt:
         target_blocks:
-        - text: Which phrase completes the precise tone-control model?
+        - text: Which phrase means 'clear options in respectful language'?
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit03.lehja_register.lesson04.santulan.exercise02.listen_santulan
@@ -365,7 +377,7 @@ units:
         रखें।
       prompt:
         target_blocks:
-        - text: Give the complete Hindi tone and register model aloud exactly.
+        - text: 'Say the unit''s complete four-sentence model passage in Hindi exactly: the acknowledgement with a concern, the cautious suggestion, the objection that is not personal, and the final proposal.'
           language_code: en
           direction: ltr
     - content_key: hi.c1.unit03.lehja_register.lesson04.santulan.exercise05.write_calosc
@@ -375,6 +387,6 @@ units:
         रखें।
       prompt:
         target_blocks:
-        - text: Write the complete Hindi tone and register model exactly.
+        - text: 'Write the unit''s complete four-sentence model passage in Hindi exactly: the acknowledgement with a concern, the cautious suggestion, the objection that is not personal, and the final proposal.'
           language_code: en
           direction: ltr
