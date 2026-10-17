@@ -6,8 +6,8 @@ target_language: de
 status: unreviewed
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Overlay for German's fourth C1 unit, authored alongside the realization
     (no adaptable public-domain German C1 argumentation source exists; see the
@@ -24,6 +24,31 @@ review:
     three-move argument to produce (concession, then counter, then weighing)
     so a correct answer is well-determined. No sibling-direction file (de-en)
     was consulted.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    course-scoped compile, YAML booleans, jargon/AI leaks, character canon,
+    gloss accuracy, matching discriminability, prompt determinacy and
+    accepted-answer completeness for unit04 realization + en-de overlay.
+    Fixes: de.c1.unit04.lesson06.exercise05.speak_argument and
+    exercise06.write_argument English (prompt + instruction) now reads 'the
+    disadvantages therefore outweigh for me' to match deshalb, and the
+    variants without deshalb (+period, ascii) are also accepted;
+    de.c1.unit04.lesson04.teach.leseargument gloss adds 'therefore' for
+    deshalb; de.c1.unit04.lesson02.exercise03.match_einschraenkung confusable
+    trotzdem='in spite of that' (interchangeable with dennoch=nevertheless)
+    replaced by die Ruhe='quiet / calm' (tested_text + accepted_answers);
+    de.c1.unit04.lesson02.exercise04/05/06
+    (order/translate/speak_einschraenkung) accept 'Allerdings leidet die
+    Konzentration darunter' (+period where applicable);
+    de.c1.unit04.lesson04.exercise01.read_zugestaendnis now shows the German
+    sentence as a de target_block before the question;
+    de.c1.unit04.lesson04.exercise05.translate_weighing prompt + instruction
+    pin 'using in der Gesamtabwaegung' and accept 'Fuer mich ueberwiegen in
+    der Gesamtabwaegung die Nachteile' (+period, ascii). NATIVE FLAGS:
+    lesson05 antwort_muster logic unclear ('Allerdings greift er nur
+    teilweise, denn die Nachteile ueberwiegen'); 'Der Gegeneinwand ist
+    verhaeltnismaessig' slightly unusual (most common sense 'relatively').
+    DEFERRED: none.
 
 course:
   title: German C1
@@ -173,7 +198,7 @@ teaching:
     example_gloss: "Your objection is understandable."
   de.c1.unit04.lesson04.teach.leseargument:
     title: "A complete three-move argument"
-    gloss: "Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages outweigh for me."
+    gloss: "Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages therefore outweigh for me."
     note: "A complete three-move argument: concession (*Zugegeben, ...*), counter (*Allerdings leidet darunter ...*), and weighing (*In der Gesamtabwägung überwiegen ...*). Map each sentence to its move."
   de.c1.unit04.lesson04.teach.gang_muster:
     title: "The three moves in order"
@@ -302,25 +327,30 @@ exercises:
   de.c1.unit04.lesson02.exercise03.match_einschraenkung:
     instruction: "Match each German counter phrase to its meaning."
     accepted_answers:
-      - value: {"allerdings": "however / though", "dennoch": "nevertheless", "trotzdem": "in spite of that", "Dagegen spricht, dass": "what speaks against it is that", "die Konzentration": "the concentration", "entkräften": "to refute / to weaken"}
+      - value: {"allerdings": "however / though", "dennoch": "nevertheless", "die Ruhe": "quiet / calm", "Dagegen spricht, dass": "what speaks against it is that", "die Konzentration": "the concentration", "entkräften": "to refute / to weaken"}
         status: correct
     feedback: "Each form limits or rebuts the conceded point -- the counter move that keeps the argument honest."
   de.c1.unit04.lesson02.exercise04.order_einschraenkung:
     instruction: "Put the German words in order to form the counter sentence."
     accepted_answers:
       - {value: "Allerdings leidet darunter die Konzentration", status: correct}
+      - {value: "Allerdings leidet die Konzentration darunter", status: correct}
     feedback: "*Allerdings leidet darunter die Konzentration* -- the counter states the cost of the open-plan office."
   de.c1.unit04.lesson02.exercise05.translate_einschraenkung:
     instruction: "Translate into German, starting with Allerdings: However, concentration suffers because of it."
     accepted_answers:
       - {value: "Allerdings leidet darunter die Konzentration", status: correct}
       - {value: "Allerdings leidet darunter die Konzentration.", status: correct}
+      - {value: "Allerdings leidet die Konzentration darunter", status: correct}
+      - {value: "Allerdings leidet die Konzentration darunter.", status: correct}
     feedback: "*Allerdings leidet darunter die Konzentration* -- the counter names the cost that limits the benefit."
   de.c1.unit04.lesson02.exercise06.speak_einschraenkung:
     instruction: "Say aloud in German, starting with Allerdings: However, concentration suffers because of it."
     accepted_answers:
       - {value: "Allerdings leidet darunter die Konzentration", status: correct}
       - {value: "Allerdings leidet darunter die Konzentration.", status: correct}
+      - {value: "Allerdings leidet die Konzentration darunter", status: correct}
+      - {value: "Allerdings leidet die Konzentration darunter.", status: correct}
     feedback: "Spoken, *Allerdings* still leads the counter -- a natural, unemphatic qualification."
   de.c1.unit04.lesson02.exercise07.write_einschraenkung:
     instruction: "Write in German, using allerdings: However, many colleagues need quiet."
@@ -399,12 +429,15 @@ exercises:
       - {value: "In der Gesamtabwägung überwiegen die Nachteile", status: correct}
     feedback: "*In der Gesamtabwägung überwiegen die Nachteile* -- the weighing names the result."
   de.c1.unit04.lesson04.exercise05.translate_weighing:
-    instruction: "Translate into German: On balance, the disadvantages outweigh for me."
+    instruction: "Translate into German, using in der Gesamtabwägung: On balance, the disadvantages outweigh for me."
     accepted_answers:
       - {value: "In der Gesamtabwägung überwiegen für mich die Nachteile", status: correct}
       - {value: "In der Gesamtabwägung überwiegen für mich die Nachteile.", status: correct}
       - {value: "In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile", status: correct}
       - {value: "In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile.", status: correct}
+      - {value: "Für mich überwiegen in der Gesamtabwägung die Nachteile", status: correct}
+      - {value: "Für mich überwiegen in der Gesamtabwägung die Nachteile.", status: correct}
+      - {value: "Fuer mich ueberwiegen in der Gesamtabwaegung die Nachteile", status: correct}
     feedback: "*In der Gesamtabwägung überwiegen für mich die Nachteile* -- the weighing move, produced from memory."
   de.c1.unit04.lesson04.exercise06.speak_weighing:
     instruction: "Say aloud in German, using in der Gesamtabwägung: On balance, the disadvantages outweigh for me."
@@ -492,20 +525,28 @@ exercises:
         status: correct
     feedback: "The full argumentation toolkit, reviewed: concession, counter, and weighing forms."
   de.c1.unit04.lesson06.exercise05.speak_argument:
-    instruction: "Say aloud in German the complete three-move argument: first a genuine concession, then a proportionate counter, then the weighing: Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages outweigh for me."
+    instruction: "Say aloud in German the complete three-move argument: first a genuine concession, then a proportionate counter, then the weighing: Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages therefore outweigh for me."
     accepted_answers:
       - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich deshalb die Nachteile", status: correct}
       - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich deshalb die Nachteile.", status: correct}
       - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich deshalb die Nachteile", status: correct}
       - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich deshalb die Nachteile.", status: correct}
+      - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich die Nachteile", status: correct}
+      - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich die Nachteile.", status: correct}
+      - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile", status: correct}
+      - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile.", status: correct}
     feedback: "The culminating speaking task: a genuine concession, then a proportionate counter, then the weighing -- all three moves, in order."
   de.c1.unit04.lesson06.exercise06.write_argument:
-    instruction: "Write in German the complete three-move argument: first a genuine concession, then a proportionate counter, then the weighing: Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages outweigh for me."
+    instruction: "Write in German the complete three-move argument: first a genuine concession, then a proportionate counter, then the weighing: Admittedly, an open-plan office saves costs and fosters exchange. However, concentration suffers because of it, since many colleagues need quiet for their work. On balance, the disadvantages therefore outweigh for me."
     accepted_answers:
       - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich deshalb die Nachteile", status: correct}
       - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich deshalb die Nachteile.", status: correct}
       - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich deshalb die Nachteile", status: correct}
       - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich deshalb die Nachteile.", status: correct}
+      - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich die Nachteile", status: correct}
+      - {value: "Zugegeben, ein Großraumbüro spart Kosten und fördert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe für ihre Arbeit. In der Gesamtabwägung überwiegen für mich die Nachteile.", status: correct}
+      - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile", status: correct}
+      - {value: "Zugegeben, ein Grossraumbuero spart Kosten und foerdert den Austausch. Allerdings leidet darunter die Konzentration, denn viele Kollegen brauchen Ruhe fuer ihre Arbeit. In der Gesamtabwaegung ueberwiegen fuer mich die Nachteile.", status: correct}
     feedback: "The culminating writing task: the same three moves in order -- *Zugegeben, ...* (concession), *Allerdings ...* (counter), *In der Gesamtabwägung überwiegen ...* (weighing)."
   de.c1.unit04.lesson06.exercise07.diktat:
     instruction: "Type exactly what you hear."

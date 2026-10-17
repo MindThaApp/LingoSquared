@@ -24,8 +24,8 @@ generation_provenance:
     introduced b1_unit52), continuing their formal-Sie workplace register.
     No sibling-direction file (de-en) was consulted.
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context_reviewer
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     Third German C1 unit. Targets
     universal.c1.register.control_tone_and_register_precisely (fine-grained
@@ -64,6 +64,43 @@ review:
     match their bound audio asset sentence-for-sentence; (5) the two
     dialogue-comprehension exercises in lesson06 agree with each other and
     with the bound audio on what each speaker actually says.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked
+    course-scoped compile, YAML booleans, jargon/AI leaks, character canon,
+    note accuracy, matching discriminability, prompt determinacy and accepted-
+    answer completeness for unit03 realization + en-de overlay. Fixes:
+    de.c1.unit03.lesson05.exercise06 and lesson06.exercise05
+    speak_ton_wechseln prompt + instruction were underdetermined -> now name
+    the forms (Ich fuerchte ... spaeter als vereinbart / schon wieder zu
+    spaet) and give the English of both messages;
+    de.c1.unit03.lesson04.exercise01.read_diplomatische_nachricht now shows
+    the German message as a de target_block (it was never displayed) and the
+    question no longer gives away the recipient ('Who is this message for, and
+    what is its effect?', instruction mirrored);
+    de.c1.unit03.lesson04.exercise05/06 (translate_ironisch, speak_ironisch)
+    'wonderfully yet again' -> 'wonderfully again' and 'Na, das hat ja schon
+    wieder wunderbar geklappt' (+period) accepted;
+    de.c1.unit03.lesson06.exercise04.match_austausch confusable
+    diplomatisch/nachdruecklich pairs replaced by der Entwurf=the draft,
+    scharf=harsh (tested_text + accepted_answers updated);
+    de.c1.unit03.lesson04.exercise03.match_toene confusable diplomatisch pair
+    replaced by die Bestellung=the order (taught lesson01; reviewer's
+    hoeflich=polite rejected as still confusable with the diplomatic register
+    sentence); de.c1.unit03.lesson01.teach.sehr_geehrte_damen_und_herren note
+    removed the false capital-S and never-spoken claims;
+    de.c1.unit03.lesson03.teach.das_kann_so_nicht_weitergehen note corrected
+    (after a modal weitergehen stays together; it separates only as finite
+    verb); de.c1.unit03.lesson04.exercise07.write_diplomatisch was a duplicate
+    of lesson02.exercise07 -> now an emphatic production 'Die Lieferung ist
+    schon wieder zu spaet. Das kann so nicht weitergehen' (+period, ascii)
+    with new instruction/feedback; content_key kept unchanged for progress
+    stability. NATIVE FLAGS: lesson06 'Das ist deutlich, aber fuer eine
+    Nachricht zu direkt' sounds unidiomatic and Felix's closing irony follows
+    Frau Vogel's approval (would need the austausch.01 audio text changed
+    too); 'Bezug nehmend auf ... ist die Lieferung ... eingegangen' dangling
+    participle (authentic officialese); lesson01 exercise05/06 pluperfect 'war
+    ... eingegangen' graded wrong; lesson03 exercise05/06 'verspaetet' graded
+    wrong. DEFERRED: none.
 
 course:
   realization_key: de.c1
@@ -407,7 +444,7 @@ units:
           - content_key: de.c1.unit03.lesson04.exercise01.read_diplomatische_nachricht
             type: multiple_choice
             tested_text: "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft"
-            prompt: {target_blocks: [{text: "This message is written to the supplier. Who is it for and what is its effect?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft.", language_code: de, direction: ltr}, {text: "Who is this message for, and what is its effect?", language_code: en, direction: ltr}]}
           - content_key: de.c1.unit03.lesson04.exercise02.listen_ironisch
             type: listen_select
             tested_text: "Na, das hat ja wieder wunderbar geklappt"
@@ -415,7 +452,7 @@ units:
             prompt: {target_blocks: []}
           - content_key: de.c1.unit03.lesson04.exercise03.match_toene
             type: matching_pairs
-            tested_text: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen Wir wären Ihnen dankbar wenn Sie uns mitteilen könnten wann die Lieferung eintrifft Die Lieferung ist schon wieder zu spät Na das hat ja wieder wunderbar geklappt der Empfänger der Ton diplomatisch"
+            tested_text: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen Wir wären Ihnen dankbar wenn Sie uns mitteilen könnten wann die Lieferung eintrifft Die Lieferung ist schon wieder zu spät Na das hat ja wieder wunderbar geklappt der Empfänger der Ton die Bestellung"
             prompt: {target_blocks: []}
             pairs:
               - {left: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen", right: "formal / bureaucratic register"}
@@ -424,7 +461,7 @@ units:
               - {left: "Na, das hat ja wieder wunderbar geklappt", right: "ironic register"}
               - {left: "der Empfänger", right: "the recipient"}
               - {left: "der Ton", right: "the tone"}
-              - {left: diplomatisch, right: "diplomatic"}
+              - {left: "die Bestellung", right: "the order"}
           - content_key: de.c1.unit03.lesson04.exercise04.order_ironisch
             type: word_order
             tested_text: "Na das hat ja wieder wunderbar geklappt"
@@ -433,15 +470,15 @@ units:
           - content_key: de.c1.unit03.lesson04.exercise05.translate_ironisch
             type: translation
             tested_text: "Na, das hat ja wieder wunderbar geklappt"
-            prompt: {target_blocks: [{text: "Translate into German, ironically, using wunderbar geklappt: Oh, that worked wonderfully yet again.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Translate into German, ironically, using wunderbar geklappt: Oh, that worked wonderfully again.", language_code: en, direction: ltr}]}
           - content_key: de.c1.unit03.lesson04.exercise06.speak_ironisch
             type: speak_response
             tested_text: "Na, das hat ja wieder wunderbar geklappt"
-            prompt: {target_blocks: [{text: "Say aloud in German, ironically, using wunderbar geklappt: Oh, that worked wonderfully yet again.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in German, ironically, using wunderbar geklappt: Oh, that worked wonderfully again.", language_code: en, direction: ltr}]}
           - content_key: de.c1.unit03.lesson04.exercise07.write_diplomatisch
             type: writing_prompt
-            tested_text: "Wir wären Ihnen dankbar, wenn Sie uns mitteilen könnten, wann die Lieferung eintrifft"
-            prompt: {target_blocks: [{text: "Write in German, using Wir wären Ihnen dankbar, wenn...: We would be grateful if you could tell us when the delivery will arrive.", language_code: en, direction: ltr}]}
+            tested_text: "Die Lieferung ist schon wieder zu spät. Das kann so nicht weitergehen"
+            prompt: {target_blocks: [{text: "Write in German, using schon wieder and Das kann so nicht weitergehen: The delivery is late yet again. This cannot go on like this.", language_code: en, direction: ltr}]}
 
       - content_key: de.c1.unit03.lesson05.den_ton_wechseln
         title: "Den Ton wechseln"
@@ -496,7 +533,7 @@ units:
           - content_key: de.c1.unit03.lesson05.exercise06.speak_ton_wechseln
             type: speak_response
             tested_text: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät"
-            prompt: {target_blocks: [{text: "Say aloud in German the SAME message twice: first diplomatically, then emphatically.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in German the SAME message twice, first diplomatically with Ich fürchte ... später als vereinbart, then emphatically with schon wieder zu spät: I am afraid the delivery is again coming later than agreed. The delivery is late yet again.", language_code: en, direction: ltr}]}
           - content_key: de.c1.unit03.lesson05.exercise07.write_ton_wechseln
             type: writing_prompt
             tested_text: "Ich fürchte, die Lieferung kommt wieder später als vereinbart"
@@ -552,20 +589,20 @@ units:
             prompt: {target_blocks: []}
           - content_key: de.c1.unit03.lesson06.exercise04.match_austausch
             type: matching_pairs
-            tested_text: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen Ich fürchte die Lieferung kommt wieder später als vereinbart Die Lieferung ist schon wieder zu spät Na das hat ja wieder wunderbar geklappt diplomatisch nachdrücklich der Lieferant"
+            tested_text: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen Ich fürchte die Lieferung kommt wieder später als vereinbart Die Lieferung ist schon wieder zu spät Na das hat ja wieder wunderbar geklappt der Entwurf scharf der Lieferant"
             prompt: {target_blocks: []}
             pairs:
               - {left: "Bezug nehmend auf die Bestellung ist die Lieferung erneut nicht fristgerecht eingegangen", right: "formal / bureaucratic"}
               - {left: "Ich fürchte, die Lieferung kommt wieder später als vereinbart", right: "diplomatic / hedged"}
               - {left: "Die Lieferung ist schon wieder zu spät", right: "emphatic / direct"}
               - {left: "Na, das hat ja wieder wunderbar geklappt", right: "ironic"}
-              - {left: diplomatisch, right: "diplomatic"}
-              - {left: nachdrücklich, right: "emphatic"}
+              - {left: "der Entwurf", right: "the draft"}
+              - {left: scharf, right: "harsh"}
               - {left: "der Lieferant", right: "the supplier"}
           - content_key: de.c1.unit03.lesson06.exercise05.speak_ton_wechseln
             type: speak_response
             tested_text: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät"
-            prompt: {target_blocks: [{text: "Say aloud in German the SAME message twice: first diplomatically, then emphatically.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in German the SAME message twice, first diplomatically with Ich fürchte ... später als vereinbart, then emphatically with schon wieder zu spät: I am afraid the delivery is again coming later than agreed. The delivery is late yet again.", language_code: en, direction: ltr}]}
           - content_key: de.c1.unit03.lesson06.exercise06.write_beide_toene
             type: writing_prompt
             tested_text: "Ich fürchte, die Lieferung kommt wieder später als vereinbart. Die Lieferung ist schon wieder zu spät"
