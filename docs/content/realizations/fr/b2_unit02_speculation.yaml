@@ -17,7 +17,7 @@ generation_provenance:
     B2 file was opened; only fr's own established B1 character canon
     (Inès/Mathieu, tu register) and this file's own unit01 were consulted.
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed. This is a DRAFT. Priority checks
     for the reviewer: (1) that devoir (present deduction, "il doit être")
@@ -53,6 +53,40 @@ review:
     across this course's own units, per the compiler's multi-file
     validation order -- confirmed by compiling unit01+unit02 together).
     No sibling-direction file was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked realization + en-fr overlay for unit02 (answer keys,
+    gender/synonym variants, matching-pair discriminability,
+    listen/dialogue distractors vs audio, dialogue cards vs audio
+    script, Mathieu canon (pâtisserie peer, Lyon -- no conflict),
+    course-scoped token coverage, YAML booleans, learner-visible
+    notes). Fixes: lesson01.exercise03.match_certainty_words: 'sans
+    doute'/'almost certainly' pair dropped (contradicted the teaching
+    gloss 'no doubt / probably' and was interchangeable with
+    probablement) -> 'en retard'/late in pairs, tested_text and
+    overlay value; lesson01.teach.sans_doute note corrected (everyday
+    sans doute = 'probably', not 'undoubtedly'; sans aucun doute for
+    certainty) and grammar_certitude note scale now 'probablement /
+    sans doute (about equally strong)'; lesson01.exercise05 accepts
+    'Mathieu est sans doute en retard'; lesson01.exercise06 accepts
+    'Peut-être qu'il est en retard'; lesson05.exercise01 'What is one
+    thing Inès speculates...' -> 'What is one speculation the text
+    makes...' and lesson05.exercise04 'How do Inès and her colleague
+    finally learn...' -> 'How is the real reason finally learned?' /
+    'Mathieu calls.' (Inès never appears in the reading);
+    lesson05.exercise01-04 reading_comprehension prompts now carry the
+    French passage as the first target_block; lesson05.exercise06
+    accepts 'Son collègue pense...' (English 'his colleague' does not
+    pin gender); lesson04.exercise05/07 accept 'manqué le bus';
+    lesson03.exercise06 pinned 'using pouvoir' and
+    lesson06.exercise05/06 pinned 'using devoir, pouvoir and avoir dû'
+    (Il est peut-être dans les embouteillages was an ungraded valid
+    'simple possibility'). NATIVE FLAGS: 'Il peut être dans les
+    embouteillages' for a specific present possibility ('Il est
+    peut-être...' / 'Il se peut qu'il soit...' are more idiomatic);
+    grammar_certitude French target still lists sans doute above
+    probablement; example 'Sans doute, il arrive bientôt.' ('Il arrive
+    sans doute bientôt' more natural). DEFERRED: none.
 
 course:
   realization_key: fr.b2
@@ -168,14 +202,14 @@ units:
             prompt: {target_blocks: []}
           - content_key: fr.b2.unit02.lesson01.exercise03.match_certainty_words
             type: matching_pairs
-            tested_text: "il n'est pas encore là peut-être probablement sans doute certainement deviner"
+            tested_text: "il n'est pas encore là peut-être probablement en retard certainement deviner"
             prompt: {target_blocks: []}
             pairs:
               - {left: il, right: he}
               - {left: "Il n'est pas encore là.", right: "He is not here yet."}
               - {left: "peut-être", right: "maybe / perhaps"}
               - {left: probablement, right: probably}
-              - {left: "sans doute", right: "almost certainly (more assertive than 'probably')"}
+              - {left: "en retard", right: late}
               - {left: certainement, right: certainly}
               - {left: deviner, right: "to guess"}
           - content_key: fr.b2.unit02.lesson01.exercise04.order_claim
@@ -351,7 +385,7 @@ units:
           - content_key: fr.b2.unit02.lesson03.exercise06.speak_embouteillages
             type: speak_response
             tested_text: "Il peut être dans les embouteillages"
-            prompt: {target_blocks: [{text: "Say aloud in French: He might be in traffic.", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Say aloud in French, using pouvoir: He might be in traffic.", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson03.exercise07.write_va_tres_bien
             type: writing_prompt
             tested_text: "Il ne peut pas être malade, il va très bien"
@@ -450,19 +484,19 @@ units:
           - content_key: fr.b2.unit02.lesson05.exercise01.read_speculation_one
             type: reading_comprehension
             tested_text: "il est peut-être en retard"
-            prompt: {target_blocks: [{text: "What is one thing Inès speculates about Mathieu's absence?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Mathieu n'est pas encore là ce matin. Il est peut-être en retard, ou il a dû oublier son téléphone. Sa collègue pense qu'il a raté le bus à cause de la circulation. En fait, Mathieu appelle : son vélo a crevé en chemin !", language_code: fr, direction: ltr}, {text: "What is one speculation the text makes about Mathieu's absence?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson05.exercise02.read_speculation_two
             type: reading_comprehension
             tested_text: "raté le bus à cause de la circulation"
-            prompt: {target_blocks: [{text: "What does the colleague think happened?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Mathieu n'est pas encore là ce matin. Il est peut-être en retard, ou il a dû oublier son téléphone. Sa collègue pense qu'il a raté le bus à cause de la circulation. En fait, Mathieu appelle : son vélo a crevé en chemin !", language_code: fr, direction: ltr}, {text: "What does the colleague think happened?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson05.exercise03.read_fact
             type: reading_comprehension
             tested_text: "son vélo a crevé en chemin"
-            prompt: {target_blocks: [{text: "What is the actual, confirmed reason for Mathieu's absence?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Mathieu n'est pas encore là ce matin. Il est peut-être en retard, ou il a dû oublier son téléphone. Sa collègue pense qu'il a raté le bus à cause de la circulation. En fait, Mathieu appelle : son vélo a crevé en chemin !", language_code: fr, direction: ltr}, {text: "What is the actual, confirmed reason for Mathieu's absence?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson05.exercise04.read_resolution
             type: reading_comprehension
             tested_text: "Mathieu appelle"
-            prompt: {target_blocks: [{text: "How do Inès and her colleague finally learn the real reason?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Mathieu n'est pas encore là ce matin. Il est peut-être en retard, ou il a dû oublier son téléphone. Sa collègue pense qu'il a raté le bus à cause de la circulation. En fait, Mathieu appelle : son vélo a crevé en chemin !", language_code: fr, direction: ltr}, {text: "How is the real reason finally learned?", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "ce matin sa collègue en fait vélo crevé"
@@ -547,11 +581,11 @@ units:
           - content_key: fr.b2.unit02.lesson06.exercise05.speak_certainty_scale
             type: speak_response
             tested_text: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone"
-            prompt: {target_blocks: [{text: "Speculate aloud in French at three different certainty levels about why Mathieu is absent: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction).", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Speculate aloud in French at three different certainty levels about why Mathieu is absent, using devoir, pouvoir and avoir dû: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction).", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson06.exercise06.write_certainty_scale
             type: writing_prompt
             tested_text: "Il doit être malade. Il peut être dans les embouteillages. Il a dû oublier son téléphone."
-            prompt: {target_blocks: [{text: "Write in French three speculations about why Mathieu is absent, at three different certainty levels: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction).", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write in French three speculations about why Mathieu is absent, at three different certainty levels, using devoir, pouvoir and avoir dû: (1) He must be sick (near-certain deduction). (2) He might be in traffic (simple possibility). (3) He must have forgotten his phone (past deduction).", language_code: en, direction: ltr}]}
           - content_key: fr.b2.unit02.lesson06.exercise07.respond_speculate
             type: multiple_choice
             tested_text: "Ou il a peut-être raté le bus à cause de la circulation"

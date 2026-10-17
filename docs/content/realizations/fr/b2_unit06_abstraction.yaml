@@ -21,7 +21,7 @@ generation_provenance:
     Monsieur Lefebvre) was confirmed by grepping fr b2 units01-04 before
     writing any new dialogue; no established fact is contradicted.
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed. This is a DRAFT. Priority checks for
     the reviewer: (1) naturalness of every qualifying connector in everyday
@@ -81,6 +81,25 @@ review:
     this unit's own lesson sequence -- no forward references. No
     sibling-direction file was consulted.
 
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked opinion/concession teaching, audio scripts vs dialogue cards
+    (6 turns correctly attributed), comprehension distractors vs audio,
+    Inès/Mathieu canon, course-scoped vocabulary, YAML booleans,
+    jargon/leaks. Fixes: lesson05.exercise01-04 reading_comprehension
+    prompts never showed the text -> target_blocks now carry the French
+    opinion piece; audio certes_mais + lesson03.exercise02 tested_text
+    'Certes, ça coûte de l'argent, mais je comprends ton point'
+    (concession followed by a 'but' that does not push back -- incoherent
+    model of the move being taught) -> '..., mais c'est un problème
+    important'; lesson03.teach.claim_model 'Mais je comprends ton point,
+    cependant...' (double adversative) -> 'Je comprends ton point,
+    cependant...'. NATIVE FLAGS: 'je comprends ton point' is a widely
+    criticised calque (ton point de vue / je vois ce que tu veux dire are
+    more standard in France) -- used throughout, not changed;
+    lesson04.teach.grammar_peser says d'une part ... d'autre part
+    structures an advantage vs a drawback, but the unit's model sentence
+    lists two pro-donation points. DEFERRED: none.
+
 course:
   realization_key: fr.b2
   target_language_first: true
@@ -104,7 +123,7 @@ media_assets:
     status: pending_generation
   - content_key: fr.b2.unit06.audio.abstraction.certes_mais.01
     language: fr
-    text: "Certes, ça coûte de l'argent, mais je comprends ton point."
+    text: "Certes, ça coûte de l'argent, mais c'est un problème important."
     voice_hint: neutral_adult_clear
     status: pending_generation
   - content_key: fr.b2.unit06.audio.abstraction.avantage_inconvenient.01
@@ -338,7 +357,7 @@ units:
             example: {text: "Les employés manquent de temps.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit06.lesson03.teach.claim_model
             kind: phrase
-            target: {text: "Certes, ça coûte de l'argent et il y a des règles d'hygiène. Mais je comprends ton point, cependant c'est un problème important.", language_code: fr, direction: ltr}
+            target: {text: "Certes, ça coûte de l'argent et il y a des règles d'hygiène. Je comprends ton point, cependant c'est un problème important.", language_code: fr, direction: ltr}
             introduced_tokens: []
           - content_key: fr.b2.unit06.lesson03.teach.grammar_repondre
             kind: grammar_note
@@ -351,7 +370,7 @@ units:
             prompt: {target_blocks: [{text: certes, language_code: fr, direction: ltr}]}
           - content_key: fr.b2.unit06.lesson03.exercise02.listen_certes_mais
             type: listen_select
-            tested_text: "Certes, ça coûte de l'argent, mais je comprends ton point"
+            tested_text: "Certes, ça coûte de l'argent, mais c'est un problème important"
             media_asset_key: fr.b2.unit06.audio.abstraction.certes_mais.01
             prompt: {target_blocks: []}
           - content_key: fr.b2.unit06.lesson03.exercise03.match_respond_words
@@ -487,19 +506,27 @@ units:
           - content_key: fr.b2.unit06.lesson05.exercise01.read_stance
             type: reading_comprehension
             tested_text: "le gaspillage alimentaire est un problème important"
-            prompt: {target_blocks: [{text: "What is the author's overall stance on food waste?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Le gaspillage alimentaire est un problème important dans une boutique. Certes, ça coûte de l'argent et il y a des règles d'hygiène. Les employés manquent parfois de temps. Cependant, il faut reconnaître que jeter la nourriture n'est pas une bonne solution. D'une part, donner les invendus est important. D'autre part, c'est aussi bon pour l'image de la boutique. Ce n'est pas toujours facile, mais c'est important.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit06.lesson05.exercise02.read_concession
             type: reading_comprehension
             tested_text: "ça coûte de l'argent et il y a des règles d'hygiène"
-            prompt: {target_blocks: [{text: "What does the author CONCEDE to the practical objection?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Le gaspillage alimentaire est un problème important dans une boutique. Certes, ça coûte de l'argent et il y a des règles d'hygiène. Les employés manquent parfois de temps. Cependant, il faut reconnaître que jeter la nourriture n'est pas une bonne solution. D'une part, donner les invendus est important. D'autre part, c'est aussi bon pour l'image de la boutique. Ce n'est pas toujours facile, mais c'est important.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit06.lesson05.exercise03.read_final_position
             type: reading_comprehension
             tested_text: "il faut reconnaître que jeter la nourriture n'est pas une bonne solution"
-            prompt: {target_blocks: [{text: "Despite conceding the practical cost, what does the author still conclude?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Le gaspillage alimentaire est un problème important dans une boutique. Certes, ça coûte de l'argent et il y a des règles d'hygiène. Les employés manquent parfois de temps. Cependant, il faut reconnaître que jeter la nourriture n'est pas une bonne solution. D'une part, donner les invendus est important. D'autre part, c'est aussi bon pour l'image de la boutique. Ce n'est pas toujours facile, mais c'est important.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit06.lesson05.exercise04.read_hedge
             type: reading_comprehension
             tested_text: "ce n'est pas toujours facile mais c'est important"
-            prompt: {target_blocks: [{text: "Does the author claim the solution is always easy?", language_code: en, direction: ltr}]}
+            prompt:
+              target_blocks:
+              - {text: "Le gaspillage alimentaire est un problème important dans une boutique. Certes, ça coûte de l'argent et il y a des règles d'hygiène. Les employés manquent parfois de temps. Cependant, il faut reconnaître que jeter la nourriture n'est pas une bonne solution. D'une part, donner les invendus est important. D'autre part, c'est aussi bon pour l'image de la boutique. Ce n'est pas toujours facile, mais c'est important.", language_code: fr, direction: ltr}
           - content_key: fr.b2.unit06.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "solution aussi l'image toujours facile une bonne solution"
