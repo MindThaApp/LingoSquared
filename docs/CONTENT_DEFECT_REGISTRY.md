@@ -2079,3 +2079,45 @@ without a count; mixed-level commits shown under both levels joined):
 
 Remaining: en-fr A2 u16 onward through C1 (~47 units), not reviewed — run
 cut off.
+
+### 2026-10-17 — it + ru review backlog, round 2: en-it/it and en-ru/ru A1 u19 → C1 u08 (fresh-context review; branch content/review-backlog-it-ru, PR #33)
+Scope: every file whose top-level `status` was still `unreviewed` — 43
+realizations + 43 overlays per language (86 Italian, 86 Russian): A1 u19-24,
+A2 u25-34, B1 u35-53, C1 u01-08. Earlier rounds had already filled
+`review.notes` and set `review.status: reviewed` but never flipped the
+top-level `status`; this round re-reviewed each unit in a fresh context (one
+worker per batch of 3-4 units, realization + overlay together) and set
+`status: reviewed`. Checklist: `.claude/agents/content-reviewer.md`.
+Bug classes found: 1.21 missing valid accepted answers (by far the most
+common: alternate word orders, "Здравствуйте"-vs-"Добрый день" greetings,
+article-less / comma / ё-е spelling variants, pronoun-less ru forms);
+confusable matching_pairs (it B1 u38, C1 u04, u05); distractor that is also a
+correct answer (it A1 u23 "chi parla?"); untaught words in teaching-card
+examples (it B1 u41-42; ru A1 u19-21); orthography ("dì che" for "di' che",
+it A2 u25/27/31/32/34); prompts that gave the answer away or described it
+underdeterminately (ru C1 u03, u04); instruction/answer-key person mismatch
+(it A2 u33); misleading gloss (ru B1 u50 "Could you (not)"); content_key typo
+(it A2 u33 `exercise01_choose_weekend`). New bug class discovered: no.
+Instance count (fixes per level; commit subjects carry the per-batch counts):
+- en-it/it: A1 1 · A2 11 · B1 6 · C1 5 — total 23
+- en-ru/ru: A1 17 · A2 12 · B1 7 · C1 16 — total 52
+Deferred / owner decisions (not fixed here):
+- ё/е equivalence is absent from grading (`backend/app/review/grading.py`);
+  strict dictations containing ё (ru A2 u25/27/29, B1 u43/46, C1 u03/u05/u06)
+  mark an е-typist wrong. Backend lane decision.
+- Unused dialogue-audio assets with incoherent text or wrong voice_hint
+  (it A1 u19 `viaggio_roma`, A1 u24 `pagare_carta`); ru B1 u50 card names Дима
+  with a female voice; ru B1 u53 lesson03 needs audio + 4 exercises changed.
+- it C1 u02 / ru C1 u02 need a re-author (structure, CEFR fit, key naming);
+  ru C1 u02 Дима/Настя canon slip needs regenerated audio.
+- Dictation overlays using `correct_option` instead of `correct_response`
+  (it A2 u29-30, u34) — matches earlier units; shape normalization pending.
+- Italian writing_prompt target_blocks use untaught meta-words; it C1 u08
+  four copy-task writing prompts; ru B1 grammar-card metalanguage tokens.
+Native-speaker flags (recorded in each file's review.notes): it B1 u35
+"avrei potuto fare in modo che … ricevesse", u46 "se ero in te", u53 "capisco
+il tuo punto"; it C1 u01 "fa bene", u04 "pesa meglio"/"il remoto"; ru B1 u46
+"Я хочу, чтобы вы…" register, u51 вы/ты scene logic; ru C1 u05 narrative
+coherence, u06 "avere le mani in pasta"-type idiom nuance (it) / snow idiom
+(ru), u08 "Здесь дышит весь район".
+Remaining: nothing unreviewed in en-it/it or en-ru/ru.
