@@ -28,8 +28,8 @@ generation_provenance:
         conventions-only authoring, since the real source was reachable by
         another honest means.
 review:
-  status: unreviewed
-  required_next_reviewer: fresh_context
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     New unit, 2026-07-10, continuing the Inès/Mathieu cooking-workshop
     narrative from units01-03 into a market-shopping scenario. Scoped to 3
@@ -38,6 +38,27 @@ review:
     pass -- each lesson still follows the full recognition-drag-production
     exercise pacing and every kind:vocabulary card carries a real example
     sentence per schema_version 1.1. Not yet fresh-context reviewed.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked token coverage against units01-03, Inès/Mathieu canon,
+    grading behaviour of speak/dialogue/fill answers, MC prompt display,
+    and en-fr overlay fit. Fixes: lesson01.exercise01.select_marche and
+    lesson02.exercise01.select_combien_ca_coute prompt target_blocks
+    removed (they showed the correct option's exact string);
+    lesson01.exercise05.fill_boulangerie prompt 'Le pain à la ___ est
+    délicieux.' -> 'Il y a une bonne ___ près d'ici.' (pain/délicieux
+    not yet taught). Overlay fixes listed in the en-fr overlay change
+    set (accepted answers widened for speak_legumes_price with
+    aujourd'hui variants; listen_je_voudrais_kilo option now matches the
+    audio incl. s'il vous plaît; unnatural reply_kilos_wanted answer
+    removed; internal unit references dropped from notes). NATIVE FLAGS:
+    teach.pas_cher card uses ne-dropped 'sont pas chers' as the model
+    sentence (consider 'ne sont pas chers'); lesson03.teach.line07 has
+    the vendor say 'Ça fait combien en tout ?' (normally the customer's
+    question; 'Ça fait treize euros cinquante en tout.' would be more
+    natural, but the line is in the dialogue audio text). DEFERRED:
+    corpus-wide check for MC prompt target_blocks equal to
+    correct_option (coordinator/compiler decision).
 
 course:
   realization_key: fr.a1
@@ -120,9 +141,7 @@ units:
           - content_key: fr.a1.unit04.lesson01.exercise01.select_marche
             type: multiple_choice
             tested_text: "le marché"
-            prompt:
-              target_blocks:
-                - {text: "le marché", language_code: fr, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fr.a1.unit04.lesson01.exercise02.listen_boulangerie
             type: listen_select
             tested_text: "la boulangerie"
@@ -149,7 +168,7 @@ units:
             tested_text: "boulangerie"
             prompt:
               target_blocks:
-                - {text: "Le pain à la ___ est délicieux. (bakery)", language_code: fr, direction: ltr}
+                - {text: "Il y a une bonne ___ près d'ici. (bakery)", language_code: fr, direction: ltr}
           - content_key: fr.a1.unit04.lesson01.exercise06.speak_legumes_price
             type: speak_response
             tested_text: "légumes chers"
@@ -196,9 +215,7 @@ units:
           - content_key: fr.a1.unit04.lesson02.exercise01.select_combien_ca_coute
             type: multiple_choice
             tested_text: "Combien ça coûte"
-            prompt:
-              target_blocks:
-                - {text: "Combien ça coûte ?", language_code: fr, direction: ltr}
+            prompt: {target_blocks: []}
           - content_key: fr.a1.unit04.lesson02.exercise02.listen_je_voudrais_kilo
             type: listen_select
             tested_text: "Je voudrais un kilo de tomates"
