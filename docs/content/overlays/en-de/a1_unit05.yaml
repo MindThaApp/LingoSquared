@@ -6,8 +6,8 @@ target_language: "de"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     English-source overlay for de/a1_unit05_uhrzeit.yaml. Every
     instruction field carries the English-language cue text; the
@@ -39,6 +39,33 @@ review:
     (title/gloss/note/example_gloss each), matching the realization's
     new example: sentences. schema_version bumped to 1.1.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every exercise field against the de realization and every
+    teaching card for an English gloss. Fixes: (1) added teaching entries
+    for the 16 non-vocabulary cards --
+    lesson01.teach.wie_spaet/drei_uhr/halb_vier (with the 'halb vier =
+    3:30' rule as its note)/fuenf_uhr,
+    lesson02.teach.viertel_nach/viertel_vor/zehn_nach/zehn_vor,
+    lesson03.teach.laden_oeffnet/laden_schliesst,
+    lesson04.teach.line01-line05/schild; (2) added a lessons: block with
+    English titles; (3) lesson03.exercise02.choose_laden_oeffnet
+    instruction 'When does the store open?' -> 'The store opens at 9 AM.
+    Which sentence says that?' (distractors with other times were
+    otherwise equally valid); (4)
+    lesson03.exercise03.choose_laden_schliesst instruction 'When does the
+    store close?' -> 'The store closes at 6 PM (18:00). Which sentence
+    says that?'; (5) lesson01.exercise05.write_drei_uhr: accepted 'drei
+    Uhr' (+ period); (6) lesson02.exercise05.write_zehn_vor: accepted
+    'zehn vor fünf' (+ period/ue variants); (7)
+    lesson03.exercise05.write_laden_oeffnet: accepted 'Der Laden öffnet um
+    neun Uhr' (+ period/oe variants); (8)
+    lesson04.exercise06.reply_als_anna: accepted 'Sie öffnet um neun Uhr.
+    Sie schließt um achtzehn Uhr' and 'Die Bibliothek öffnet um neun Uhr
+    morgens. Sie schließt um achtzehn Uhr' (+ period/oe/ss variants).
+    NATIVE FLAG: match_tageszeiten hour ranges (Morgen 6-12 vs Vormittag;
+    Nacht 22-24 pair vs 22-6 note). DEFERRED: course-wide 'in words'
+    writing_prompt convention (owner decision).
+
 course:
   title: "German A1"
   description: "Learn A1-level German for everyday greetings and short social exchanges, with detailed English explanations."
@@ -46,7 +73,23 @@ course:
 units:
   de.a1.unit05.uhrzeit: {title: "Telling the time"}
 
+lessons:
+  de.a1.unit05.lesson01.volle_und_halbe_stunden: {title: "Full and half hours"}
+  de.a1.unit05.lesson02.viertel_nach_und_vor: {title: "Quarter past and quarter to"}
+  de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten: {title: "Times of day and opening hours"}
+  de.a1.unit05.lesson04.im_gespraech_ueber_die_bibliothekszeiten: {title: "Talking about library hours"}
+
 teaching:
+  de.a1.unit05.lesson01.teach.wie_spaet: {title: "Wie spät ist es?", gloss: "What time is it?", note: "Literally 'How late is it?' -- the standard way to ask the time."}
+  de.a1.unit05.lesson01.teach.drei_uhr: {title: "Es ist drei Uhr.", gloss: "It's three o'clock.", note: "*Uhr* = 'o'clock.' Full hours are the number + *Uhr*."}
+  de.a1.unit05.lesson01.teach.halb_vier: {title: "halb vier = 3:30", gloss: "It's half past three (3:30).", note: "German names the half hour by the hour it's heading TOWARD: *halb vier* = 'half (way to) four' = 3:30, not 4:30."}
+  de.a1.unit05.lesson01.teach.fuenf_uhr: {title: "Es ist fünf Uhr.", gloss: "It's five o'clock."}
+
+  de.a1.unit05.lesson02.teach.viertel_nach: {title: "Es ist Viertel nach drei.", gloss: "It's a quarter past three (3:15).", note: "*Viertel* = 'quarter'; *nach* = 'after/past.'"}
+  de.a1.unit05.lesson02.teach.viertel_vor: {title: "Es ist Viertel vor vier.", gloss: "It's a quarter to four (3:45).", note: "*vor* = 'before/to.'"}
+  de.a1.unit05.lesson02.teach.zehn_nach: {title: "Es ist zehn nach vier.", gloss: "It's ten past four (4:10).", note: "Minutes + *nach* + hour, just like English 'ten past four.'"}
+  de.a1.unit05.lesson02.teach.zehn_vor: {title: "Es ist zehn vor fünf.", gloss: "It's ten to five (4:50).", note: "Minutes + *vor* + the coming hour, just like English 'ten to five.'"}
+
   de.a1.unit05.lesson03.teach.morgen: {title: "Morgen", gloss: "morning", note: "*Morgen* is the noun for morning, roughly 6 AM-12 PM.", example_gloss: "Good morning, Felix!"}
   de.a1.unit05.lesson03.teach.mittag: {title: "Mittag", gloss: "noon", note: "*Mittag* is noon itself, the midpoint between Morgen and Nachmittag.", example_gloss: "It's noon."}
   de.a1.unit05.lesson03.teach.nachmittag: {title: "Nachmittag", gloss: "afternoon", note: "*Nachmittag* covers roughly 12 PM-6 PM.", example_gloss: "I work in the afternoon."}
@@ -54,11 +97,19 @@ teaching:
   de.a1.unit05.lesson03.teach.nacht: {title: "Nacht", gloss: "night", note: "*Nacht* covers roughly 10 PM-6 AM.", example_gloss: "Good night, Felix!"}
   de.a1.unit05.lesson03.teach.mitternacht: {title: "Mitternacht", gloss: "midnight", note: "*Mitternacht* is exactly 12 AM / 0 Uhr.", example_gloss: "The party ends at midnight."}
   de.a1.unit05.lesson03.teach.achtzehn: {title: "achtzehn", gloss: "eighteen", note: "*achtzehn* = 18, used here on the 24-hour clock for official hours (achtzehn Uhr = 6 PM).", example_gloss: "The store closes at eighteen o'clock (6 PM)."}
+  de.a1.unit05.lesson03.teach.laden_oeffnet: {title: "Der Laden öffnet um neun Uhr morgens.", gloss: "The store opens at nine in the morning.", note: "*um* + time = 'at' a time; *morgens* = 'in the morning.'"}
+  de.a1.unit05.lesson03.teach.laden_schliesst: {title: "Der Laden schließt um achtzehn Uhr.", gloss: "The store closes at 18:00 (6 PM).", note: "*schließt* = 'closes.' Official opening hours use the 24-hour clock."}
   de.a1.unit05.lesson04.teach.wann: {title: "Wann", gloss: "when", note: "*Wann* opens a question about time.", example_gloss: "When are you coming?"}
   de.a1.unit05.lesson04.teach.oeffnet_die: {title: "öffnet die", gloss: "opens the", note: "*öffnet* is the third-person singular of *öffnen* (to open); *die* is the feminine/plural definite article, matching *die Bibliothek*.", example_gloss: "When does the library open?"}
   de.a1.unit05.lesson04.teach.bibliothek: {title: "Bibliothek", gloss: "library", note: "*Bibliothek* is a feminine noun (*die Bibliothek*), the same location established in unit04.", example_gloss: "I'm going to the library."}
   de.a1.unit05.lesson04.teach.sie_pronomen: {title: "sie", gloss: "it / she / they (lowercase)", note: "Here *sie* is the third-person pronoun standing in for the feminine noun *die Bibliothek* -- 'it,' not to be confused with capitalized *Sie* (formal 'you'), which Anna and Felix use with each other.", example_gloss: "I like the library. I visit it often."}
   de.a1.unit05.lesson04.teach.dann: {title: "dann", gloss: "then", note: "*dann* is used here in the closing *Bis dann!* ('see you then!').", example_gloss: "See you then!"}
+  de.a1.unit05.lesson04.teach.line01: {title: "Felix asks about the library", gloss: "Felix says: When does the library open?"}
+  de.a1.unit05.lesson04.teach.line02: {title: "Anna answers", gloss: "Anna says: It opens at nine in the morning.", note: "*Sie* here means 'it' -- it refers to *die Bibliothek*; it is capitalized only because it starts the sentence."}
+  de.a1.unit05.lesson04.teach.line03: {title: "Felix asks a follow-up", gloss: "Felix says: And when does it close?"}
+  de.a1.unit05.lesson04.teach.line04: {title: "Anna answers again", gloss: "Anna says: It closes at 18:00 (6 PM)."}
+  de.a1.unit05.lesson04.teach.line05: {title: "Felix says goodbye", gloss: "Felix says: Good, see you then!"}
+  de.a1.unit05.lesson04.teach.schild: {title: "A sign on the door", gloss: "Opening hours: 9:00 to 18:00.", note: "*Öffnungszeiten* = 'opening hours'; *bis* = 'until/to.'"}
 
 exercises:
   de.a1.unit05.lesson01.exercise01.listen_wie_spaet:
@@ -88,6 +139,8 @@ exercises:
     accepted_answers:
       - {value: "Es ist drei Uhr", status: "correct"}
       - {value: "Es ist drei Uhr.", status: "correct"}
+      - {value: "drei Uhr", status: "correct"}
+      - {value: "drei Uhr.", status: "correct"}
     feedback: "*Es ist drei Uhr* means 'It's three o'clock.'"
 
   de.a1.unit05.lesson02.exercise01.listen_viertel_vor:
@@ -119,6 +172,10 @@ exercises:
       - {value: "Es ist zehn vor fünf.", status: "correct"}
       - {value: "Es ist zehn vor fuenf", status: "correct"}
       - {value: "Es ist zehn vor fuenf.", status: "correct"}
+      - {value: "zehn vor fünf", status: "correct"}
+      - {value: "zehn vor fünf.", status: "correct"}
+      - {value: "zehn vor fuenf", status: "correct"}
+      - {value: "zehn vor fuenf.", status: "correct"}
     feedback: "*Es ist zehn vor fünf* means 'It's ten to five.'"
 
   de.a1.unit05.lesson03.exercise01.listen_abend:
@@ -128,13 +185,13 @@ exercises:
     accepted_answers: [{value: "Abend", status: "correct"}]
     feedback: "*Abend* means evening."
   de.a1.unit05.lesson03.exercise02.choose_laden_oeffnet:
-    instruction: "When does the store open?"
+    instruction: "The store opens at 9 AM. Which sentence says that?"
     correct_option: "Der Laden öffnet um neun Uhr morgens."
     distractors: ["Der Laden öffnet um sechs Uhr abends.", "Der Laden schließt um neun Uhr morgens.", "Der Laden öffnet um achtzehn Uhr."]
     accepted_answers: [{value: "Der Laden öffnet um neun Uhr morgens.", status: "correct"}]
     feedback: "*Der Laden öffnet um neun Uhr morgens* means 'The store opens at nine in the morning.'"
   de.a1.unit05.lesson03.exercise03.choose_laden_schliesst:
-    instruction: "When does the store close?"
+    instruction: "The store closes at 6 PM (18:00). Which sentence says that?"
     correct_option: "Der Laden schließt um achtzehn Uhr."
     distractors: ["Der Laden öffnet um achtzehn Uhr.", "Der Laden schließt um neun Uhr morgens.", "Der Laden schließt um sechs Uhr morgens."]
     accepted_answers: [{value: "Der Laden schließt um achtzehn Uhr.", status: "correct"}]
@@ -158,6 +215,10 @@ exercises:
       - {value: "Der Laden öffnet um neun Uhr morgens.", status: "correct"}
       - {value: "Der Laden oeffnet um neun Uhr morgens", status: "correct"}
       - {value: "Der Laden oeffnet um neun Uhr morgens.", status: "correct"}
+      - {value: "Der Laden öffnet um neun Uhr", status: "correct"}
+      - {value: "Der Laden öffnet um neun Uhr.", status: "correct"}
+      - {value: "Der Laden oeffnet um neun Uhr", status: "correct"}
+      - {value: "Der Laden oeffnet um neun Uhr.", status: "correct"}
     feedback: "*Der Laden öffnet um neun Uhr morgens* means 'The store opens at nine in the morning.'"
 
   de.a1.unit05.lesson04.exercise01.listen_oeffnungszeit:
@@ -197,6 +258,14 @@ exercises:
       - {value: "Sie oeffnet um neun Uhr morgens. Sie schliesst um achtzehn Uhr.", status: "correct"}
       - {value: "Sie oeffnet um neun Uhr morgens, und sie schliesst um achtzehn Uhr.", status: "correct"}
       - {value: "Sie oeffnet um neun Uhr morgens Sie schliesst um achtzehn Uhr", status: "correct"}
+      - {value: "Sie öffnet um neun Uhr. Sie schließt um achtzehn Uhr.", status: "correct"}
+      - {value: "Sie öffnet um neun Uhr. Sie schließt um achtzehn Uhr", status: "correct"}
+      - {value: "Sie oeffnet um neun Uhr. Sie schliesst um achtzehn Uhr.", status: "correct"}
+      - {value: "Sie oeffnet um neun Uhr. Sie schliesst um achtzehn Uhr", status: "correct"}
+      - {value: "Die Bibliothek öffnet um neun Uhr morgens. Sie schließt um achtzehn Uhr.", status: "correct"}
+      - {value: "Die Bibliothek öffnet um neun Uhr morgens. Sie schließt um achtzehn Uhr", status: "correct"}
+      - {value: "Die Bibliothek oeffnet um neun Uhr morgens. Sie schliesst um achtzehn Uhr.", status: "correct"}
+      - {value: "Die Bibliothek oeffnet um neun Uhr morgens. Sie schliesst um achtzehn Uhr", status: "correct"}
     feedback: "Anna's full reply gives both the opening time and the closing time."
   de.a1.unit05.lesson04.exercise07.speak_oeffnungszeiten:
     instruction: "Answer out loud in Anna's role: give both the opening and the closing time."
