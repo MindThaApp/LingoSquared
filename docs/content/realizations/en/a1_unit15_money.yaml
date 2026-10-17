@@ -8,11 +8,13 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: "Initial four-lesson draft, authored directly (Codex usage-limited at time of authoring). Audio remains pending generation.
 
-    2026-07-07 §19 retrofit: added `example:` to all 4 kind:vocabulary cards (cash/card/total/tax). Matching example_gloss added to all 3 existing overlays (fa-en, nl-en, prs-en; no de-en overlay exists for this unit). All 3 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 3 overlays."
+    2026-07-07 §19 retrofit: added `example:` to all 4 kind:vocabulary cards (cash/card/total/tax). Matching example_gloss added to all 3 existing overlays (fa-en, nl-en, prs-en; no de-en overlay exists for this unit). All 3 direction pairs validate 0 errors/0 warnings. schema_version bumped to 1.1 on this file and all 3 overlays.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked the English realization against the nl-en overlay (plus answer-key mirrors in fa-en/prs-en; no de-en overlay for this unit), grader normalization, audio-vs-options answerability, receipt arithmetic, and production-prompt determinacy. No translation exercises in this unit. Fixes: en.a1.audio.money.payment_methods.01 text 'cash, card, credit card, debit card' -> 'credit card' (distractors cash/debit card were also spoken, so the listen_select was unanswerable; asset pending_generation, used only by lesson01.exercise01.listen_payment_method); lesson02.exercise04.reply_pay_by_card accepted_answers + 'Do you take credit cards? I'll pay by card.', 'Do you take credit cards? I will pay by card.' (nl-en, fa-en, prs-en); lesson03.exercise05.write_total_amount prompt target_block 'Write the total amount on the receipt.' -> 'Write a full sentence that gives the total on the receipt.' and accepted_answers + 'The total is ten dollars.', 'The total is 10 dollars.' (nl-en, fa-en, prs-en). NATIVE FLAGS: lesson01 matching_pairs uses 'tax' (taught lesson03) and 'pay' (taught lesson02) before teaching (guessable by elimination; fixing would reshape matching_pairs mirrored in fa-en/prs-en); nl-en gloss for lesson04.teach.a_yes_we_do 'Ja, dat doen we.' may be a calque ('Ja, hoor.'?). Owner-decision flag (systemic, not applied): several visible English target_block prompts use words never taught at A1 (e.g. 'the full amount you owe'); bilingual-surface product decision for Ramin. DEFERRED: the matching_pairs reorder (needs fa/prs mirrors)."
 
 course:
   realization_key: "en.a1"
@@ -21,7 +23,7 @@ course:
   register_policy: "Teach clear, neutral American English. Payment vocabulary reflects everyday US retail conventions (cash/card, tax often added at register) without going into banking-register vocabulary."
 
 media_assets:
-  - {content_key: "en.a1.audio.money.payment_methods.01", language: "en", text: "cash, card, credit card, debit card", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "en.a1.audio.money.payment_methods.01", language: "en", text: "credit card", voice_hint: "neutral_adult", status: "pending_generation"}
   - {content_key: "en.a1.audio.money.payment_question.01", language: "en", text: "Do you take credit cards?", voice_hint: "neutral_adult", status: "pending_generation"}
   - {content_key: "en.a1.audio.money.total_question.01", language: "en", text: "How much is the total?", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a1.audio.dialogue.paying.01"
@@ -101,7 +103,7 @@ units:
             tested_text: "Sandwich"
             prompt: {target_blocks: [{text: "Which single item costs the most on the receipt?", language_code: "en", direction: "ltr"}]}
           - {content_key: "en.a1.unit15.lesson03.exercise04.match_receipt_fields", type: "matching_pairs", tested_text: "Coffee Sandwich Tax Total", prompt: {target_blocks: []}, pairs: [{left: "Coffee", right: "$3"}, {left: "Sandwich", right: "$6"}, {left: "Tax", right: "$1"}, {left: "Total", right: "$10"}]}
-          - {content_key: "en.a1.unit15.lesson03.exercise05.write_total_amount", type: "writing_prompt", tested_text: "The total is $10", prompt: {target_blocks: [{text: "Write the total amount on the receipt.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a1.unit15.lesson03.exercise05.write_total_amount", type: "writing_prompt", tested_text: "The total is $10", prompt: {target_blocks: [{text: "Write a full sentence that gives the total on the receipt.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a1.unit15.lesson04.paying_dialogue"
         title: "Paying at the register"
