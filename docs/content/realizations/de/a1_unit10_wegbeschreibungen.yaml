@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Tenth German unit, continuing the Anna/Felix storyline (still on
     the formal Sie register from units 01-09). Authored from the start
@@ -44,6 +44,23 @@ review:
     validated against the real compiler to confirm every exercise's
     tested_text is fully covered by this file's own cumulative
     introduced_tokens. Pending fresh-context review.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every exercise against the en-de overlay for determinacy,
+    accepted-answer completeness, passage availability, token coverage
+    and learner-visible jargon. Fixes:
+    de.a1.unit10.lesson03.exercise01.read_erster_schritt,
+    exercise02.read_abzweigung and exercise03.choose_apotheke_seite --
+    prompt.target_blocks [] -> the Wegbeschreibung zur Apotheke passage
+    (the compiler does not inject the lesson's reading card, so these
+    questions had no passage). Overlay-side fixes are recorded in the
+    en-de overlay. NATIVE FLAG: 'Es ist nur zwei Minuten von hier.' may
+    read as a calque (natives often add 'entfernt' or say 'Das sind nur
+    zwei Minuten von hier'); it recurs in audio, teaching and several
+    exercises, so a native speaker should decide. DEFERRED: lesson01
+    matching_pairs has 5 pairs (below the 6-12 aim), and the earlier
+    note above saying it was widened to 10 pairs is inaccurate;
+    reshaping it is a structural change left for the owner.
 
 course:
   realization_key: "de.a1"
@@ -120,9 +137,9 @@ units:
           - {content_key: "de.a1.unit10.lesson03.teach.zweite_strasse", kind: "phrase", target: {text: "Nehmen Sie die zweite Straße rechts.", language_code: "de", direction: "ltr"}, introduced_tokens: ["zweite"]}
           - {content_key: "de.a1.unit10.lesson03.teach.route_text", kind: "reading", target: {text: "Wegbeschreibung zur Apotheke: Gehen Sie geradeaus. Nehmen Sie die erste Straße links. Die Apotheke ist rechts.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Wegbeschreibung", "ist"]}
         exercises:
-          - {content_key: "de.a1.unit10.lesson03.exercise01.read_erster_schritt", type: "reading_comprehension", tested_text: "Gehen Sie geradeaus", prompt: {target_blocks: []}}
-          - {content_key: "de.a1.unit10.lesson03.exercise02.read_abzweigung", type: "reading_comprehension", tested_text: "Nehmen Sie die erste Straße links", prompt: {target_blocks: []}}
-          - {content_key: "de.a1.unit10.lesson03.exercise03.choose_apotheke_seite", type: "multiple_choice", tested_text: "rechts", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit10.lesson03.exercise01.read_erster_schritt", type: "reading_comprehension", tested_text: "Gehen Sie geradeaus", prompt: {target_blocks: [{text: "Wegbeschreibung zur Apotheke: Gehen Sie geradeaus. Nehmen Sie die erste Straße links. Die Apotheke ist rechts.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit10.lesson03.exercise02.read_abzweigung", type: "reading_comprehension", tested_text: "Nehmen Sie die erste Straße links", prompt: {target_blocks: [{text: "Wegbeschreibung zur Apotheke: Gehen Sie geradeaus. Nehmen Sie die erste Straße links. Die Apotheke ist rechts.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit10.lesson03.exercise03.choose_apotheke_seite", type: "multiple_choice", tested_text: "rechts", prompt: {target_blocks: [{text: "Wegbeschreibung zur Apotheke: Gehen Sie geradeaus. Nehmen Sie die erste Straße links. Die Apotheke ist rechts.", language_code: "de", direction: "ltr"}]}}
           - {content_key: "de.a1.unit10.lesson03.exercise04.order_zweite_strasse", type: "word_order", tested_text: "Nehmen Sie die zweite Straße rechts", prompt: {target_blocks: []}, word_bank: ["die", "zweite", "Straße", "rechts", "Nehmen", "Sie"]}
           - {content_key: "de.a1.unit10.lesson03.exercise05.write_route_schritt", type: "writing_prompt", tested_text: "Nehmen Sie die erste Straße links", prompt: {target_blocks: []}}
 
