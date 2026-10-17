@@ -8,8 +8,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     First German (de) unit for this project -- opens the en<->de path.
     Follows the established Latin-script unit01 pattern (no script-ramp
@@ -82,6 +82,27 @@ review:
     Reused already-established vocabulary where natural (Felix as a
     transparent proper noun; "bis bald" from the same lesson).
     schema_version bumped to 1.1, locking the rule in for this file.
+
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    Checked pacing, token coverage, accepted-answer completeness against
+    taught forms, cue/dialogue consistency, register, and
+    learner-visible wording, together with the en-de overlay. Fixes:
+    de.a1.unit01.lesson05.exercise06.reply_as_anna and
+    lesson05.exercise07.speak_neighbor_dialogue prompt.target_blocks
+    "Guten Tag! Wie geht es Ihnen? ... Sehr gut, danke." -> "Guten Tag!
+    Wie geht es Ihnen?" (the cue showed Felix answering before Anna's
+    "Und Ihnen?", which the learner is asked to produce); overlay side:
+    "Gut, danke. Und Ihnen? Auf Wiedersehen!" (+ unpunctuated) accepted
+    for both, instruction of exercise06 de-sequenced to match;
+    lesson01.exercise06.write_tag instruction pinned to Guten Tag (Hallo
+    was also 'any time of day'); lesson04.teach.danke note no longer
+    shows the internal token "lesson03". No NATIVE flags remain (the
+    Guten Tag range wording mismatch is resolved by the write_tag fix).
+    DEFERRED (pipeline, Codex/frontend lane): listen_select
+    lesson05.exercise02 gets prompt.audio_text = tested_text in
+    scripts/compile_content.py even though its media asset is the full
+    dialogue -- TTS fallback before recordings exist could speak only
+    the answer.
 
 course:
   realization_key: "de.a1"
@@ -218,8 +239,8 @@ units:
           - content_key: "de.a1.unit01.lesson05.exercise06.reply_as_anna"
             type: "dialogue_response"
             tested_text: "Danke gut Und Ihnen Auf Wiedersehen"
-            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen? ... Sehr gut, danke.", language_code: "de", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen?", language_code: "de", direction: "ltr"}]}
           - content_key: "de.a1.unit01.lesson05.exercise07.speak_neighbor_dialogue"
             type: "speak_response"
             tested_text: "Danke gut Und Ihnen Auf Wiedersehen"
-            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen? ... Sehr gut, danke.", language_code: "de", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "Guten Tag! Wie geht es Ihnen?", language_code: "de", direction: "ltr"}]}
