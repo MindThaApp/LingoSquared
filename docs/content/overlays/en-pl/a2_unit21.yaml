@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: "claude"
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: null
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     First en-pl A2 overlay, written for pl/a2_unit21_sprawy_urzedowe.yaml
     (schema_version 1.1, §19 vocabulary-example format from the start). No
@@ -31,6 +31,24 @@ review:
     realization file's own pairs/word_bank. No stray YAML boolean coercion
     (grepped for unquoted yes/no/true/false). Pending fresh-context review
     per AUTHORING_GUIDE §9; not self-certified.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    teach.urzad example_gloss -- "I'm going to the office." -> "This is an
+    office." (gloss did not match *To jest urząd.*); lesson01.exercise06 /
+    lesson02.exercise04 / lesson02.exercise05 word_order -- correct_response
+    -> accepted_answers adding the valid clitic placements of *się* (e.g.
+    *Chcę się zameldować w urzędzie*, *...ponieważ przeprowadziłam się*, *Do
+    kiedy muszę zameldować się*), which were graded wrong
+    (missing-accepted-answer; compiler emits intentional permutation WARNs);
+    lesson02.exercise06 -- added *bo* (taught in A1 unit13/19, fits the
+    blank); lesson02.exercise08 + exercise10 -- added *się*-placement and *bo*
+    variants; exercise10 instruction pinned to Ewa ("As Ewa, say") since
+    chciałabym/przeprowadziłam are feminine (underdetermined-prompt);
+    lesson02.exercise07/09 + lesson03.exercise11 -- added *Do kiedy muszę
+    zameldować się?*; lesson03.exercise05 -- instruction rewritten to match
+    the now-shown clerk line; lesson03.exercise10 -- added *Ulica Kwiatowa
+    10.*, *Kwiatowa dziesięć.*, *Kwiatowa 10.* (digit/street-word-dropped
+    answers were graded wrong).
 
 answer_policy:
   diacritics: >-
@@ -73,7 +91,7 @@ teaching:
     title: "Office"
     gloss: "office (government/administrative)"
     note: "The general word for a government office."
-    example_gloss: "I'm going to the office."
+    example_gloss: "This is an office."
 
   pl.a2.unit21.lesson01.teach.adres:
     title: "Address"
@@ -222,7 +240,9 @@ exercises:
 
   pl.a2.unit21.lesson01.exercise06.order_chce_zameldowac_sie:
     instruction: "Put the sentence 'I want to register at the office' in order."
-    correct_response: ["Chcę", "zameldować", "się", "w", "urzędzie"]
+    accepted_answers:
+      - "Chcę zameldować się w urzędzie"
+      - "Chcę się zameldować w urzędzie"
 
   pl.a2.unit21.lesson01.exercise07.fill_prosze_dokumenty:
     instruction: "Complete the sentence: 'The clerk says: ___, please.' (documents)"
@@ -271,15 +291,21 @@ exercises:
 
   pl.a2.unit21.lesson02.exercise04.order_chcialabym_sie_zameldowac:
     instruction: "Put the sentence 'I would like to register, because I moved' in order (no punctuation needed)."
-    correct_response: ["Chciałabym", "się", "zameldować", "ponieważ", "się", "przeprowadziłam"]
+    accepted_answers:
+      - "Chciałabym się zameldować ponieważ się przeprowadziłam"
+      - "Chciałabym się zameldować ponieważ przeprowadziłam się"
+      - "Chciałabym zameldować się ponieważ się przeprowadziłam"
+      - "Chciałabym zameldować się ponieważ przeprowadziłam się"
 
   pl.a2.unit21.lesson02.exercise05.order_do_kiedy_musze:
     instruction: "Put the question 'By when do I have to register?' in order."
-    correct_response: ["Do", "kiedy", "muszę", "się", "zameldować"]
+    accepted_answers:
+      - "Do kiedy muszę się zameldować"
+      - "Do kiedy muszę zameldować się"
 
   pl.a2.unit21.lesson02.exercise06.fill_poniewaz_reason:
     instruction: "Complete the sentence: 'I would like to register, ___ I moved.' (because)"
-    accepted_answers: ["ponieważ"]
+    accepted_answers: ["ponieważ", "bo"]
     feedback: "Chciałabym się zameldować, ponieważ się przeprowadziłam -- ponieważ introduces the reason."
 
   pl.a2.unit21.lesson02.exercise07.fix_do_kiedy_musze:
@@ -287,6 +313,7 @@ exercises:
     accepted_answers:
       - "Do kiedy muszę się zameldować?"
       - "Do kiedy muszę się zameldować"
+      - "Do kiedy muszę zameldować się?"
     feedback: "Do kiedy muszę się zameldować?, not Muszę się do kiedy zameldować? -- Do kiedy comes first in this question."
 
   pl.a2.unit21.lesson02.exercise08.reply_dlaczego_chce_sie_zameldowac:
@@ -294,18 +321,29 @@ exercises:
     accepted_answers:
       - "Chciałabym się zameldować, ponieważ się przeprowadziłam."
       - "Chciałabym się zameldować. Ponieważ się przeprowadziłam."
+      - "Chciałabym się zameldować, ponieważ przeprowadziłam się."
+      - "Chciałabym zameldować się, ponieważ się przeprowadziłam."
+      - "Chciałabym zameldować się, ponieważ przeprowadziłam się."
+      - "Chciałabym się zameldować, bo się przeprowadziłam."
+      - "Chciałabym się zameldować, bo przeprowadziłam się."
 
   pl.a2.unit21.lesson02.exercise09.write_do_kiedy_musze:
     instruction: "Write the question: 'By when do I have to register?'"
     accepted_answers:
       - "Do kiedy muszę się zameldować?"
       - "Do kiedy muszę się zameldować"
+      - "Do kiedy muszę zameldować się?"
 
   pl.a2.unit21.lesson02.exercise10.speak_chcialabym_sie_zameldowac:
-    instruction: "Say: 'I would like to register, because I moved.'"
+    instruction: "As Ewa, say: 'I would like to register, because I moved.'"
     accepted_answers:
       - "Chciałabym się zameldować, ponieważ się przeprowadziłam."
       - "Chciałabym się zameldować, ponieważ się przeprowadziłam"
+      - "Chciałabym się zameldować, ponieważ przeprowadziłam się."
+      - "Chciałabym zameldować się, ponieważ się przeprowadziłam."
+      - "Chciałabym zameldować się, ponieważ przeprowadziłam się."
+      - "Chciałabym się zameldować, bo się przeprowadziłam."
+      - "Chciałabym się zameldować, bo przeprowadziłam się."
 
   pl.a2.unit21.lesson03.exercise01.select_ewa_gives_address:
     instruction: "Which line gives Ewa's new address?"
@@ -348,7 +386,7 @@ exercises:
       - "she moved"
 
   pl.a2.unit21.lesson03.exercise05.read_required_documents:
-    instruction: "According to the dialogue, what documents does the clerk ask for?"
+    instruction: "Read the clerk's line. What documents does she ask for?"
     correct_option: "ID card and lease agreement"
     distractors:
       - "a passport and a photo"
@@ -390,9 +428,13 @@ exercises:
     accepted_answers:
       - "Ulica Kwiatowa dziesięć."
       - "Ulica Kwiatowa dziesięć"
+      - "Ulica Kwiatowa 10."
+      - "Kwiatowa dziesięć."
+      - "Kwiatowa 10."
 
   pl.a2.unit21.lesson03.exercise11.speak_do_kiedy_musze:
     instruction: "Say: 'By when do I have to register?'"
     accepted_answers:
       - "Do kiedy muszę się zameldować?"
       - "Do kiedy muszę się zameldować"
+      - "Do kiedy muszę zameldować się?"
