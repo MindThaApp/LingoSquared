@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "it"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context", notes: "Needs fresh-context content review before import."}
+review:
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
+  notes: "Needs fresh-context content review before import. Fresh-context review 2026-10-11 (content-reviewer.md checklist): Checked boolean coercion, learner-facing jargon, matching_pairs left/right discrimination, Elena/Sam canon against earlier units, token coverage of production prompts against units 1-21 in manifest order, word_order alternate orders, and production-prompt determinacy. Fixes (overlay en-it/a1_unit19.yaml): it.a1.unit19.lesson02.exercise05.order_vorrei_biglietto accepted_answers widened from the single taught order to also accept 'Vorrei un biglietto alle otto per Roma per favore', 'Per favore Vorrei un biglietto per Roma alle otto' and 'Per favore Vorrei un biglietto alle otto per Roma' (the instruction does not fix the order); it.a1.unit19.lesson01.exercise07.write_travel_words now also accepts the article-less 'treno, stazione, binario, biglietto' / 'treno stazione binario biglietto' (instruction never asks for articles); it.a1.unit19.lesson01.teach.binario_biglietto note 'platform or track number' -> 'the platform (track)' (binario is not the number). NATIVE FLAGS: media it.a1.audio.dialogue.viaggio_roma is incoherent ('Hai il biglietto?' / 'Si, vorrei un biglietto...') - currently unreferenced by any exercise, rewrite before use (e.g. 'No. (alla biglietteria) Vorrei un biglietto...'); 'per Roma alle otto' vs more native 'per il treno delle otto' (style, acceptable at A1). DEFERRED (owner decision / out of batch): article-less 'write these N words' gap also in en-it a1_unit16 write_health_words and a1_unit18 write_room_words; Italian writing_prompt target_blocks ('Scrivi ...', 'Biglietteria:') use untaught tokens course-wide (English instruction gives the full task); dictation overlays use correct_option rather than correct_response (matches all earlier en-it units, compiler accepts). Compiler now emits an intentional 'scrambled permutation' WARN for the added alternate word orders."
 
 course:
   title: "Italian A1"
@@ -18,7 +21,7 @@ lessons:
   it.a1.unit19.lesson02.un_biglietto_per_roma: {title: "A ticket to Rome"}
 teaching:
   it.a1.unit19.lesson01.teach.treno_stazione: {title: "il treno, la stazione", gloss: "train, station", note: "*il treno* is masculine; *la stazione* is feminine.", example_gloss: ["The train is at the station."]}
-  it.a1.unit19.lesson01.teach.binario_biglietto: {title: "il binario, il biglietto", gloss: "platform, ticket", note: "*binario* is the platform or track number; *biglietto* is the ticket.", example_gloss: ["The ticket is for Rome."]}
+  it.a1.unit19.lesson01.teach.binario_biglietto: {title: "il binario, il biglietto", gloss: "platform, ticket", note: "*binario* is the platform (track); *biglietto* is the ticket.", example_gloss: ["The ticket is for Rome."]}
   it.a1.unit19.lesson01.teach.parte_alle_otto: {title: "Parte alle otto.", gloss: "It leaves at eight.", note: "*parte* means 'leaves/departs' for transport.", example_gloss: ["It leaves at eight."]}
   it.a1.unit19.lesson01.teach.dal_binario_tre: {title: "dal binario tre", gloss: "from platform three", note: "*dal* combines *da* + *il*: from the.", example_gloss: ["It leaves from platform three."]}
   it.a1.unit19.lesson02.teach.a_che_ora_parte: {title: "A che ora parte il treno?", gloss: "What time does the train leave?", note: "Use *A che ora...?* for scheduled departure times.", example_gloss: ["What time does the train leave?"]}
@@ -69,6 +72,8 @@ exercises:
     accepted_answers:
       - {value: "il treno, la stazione, il binario, il biglietto", status: "correct"}
       - {value: "il treno la stazione il binario il biglietto", status: "correct"}
+      - {value: "treno, stazione, binario, biglietto", status: "correct"}
+      - {value: "treno stazione binario biglietto", status: "correct"}
     feedback: "The four words are: il treno, la stazione, il binario, il biglietto."
   it.a1.unit19.lesson02.exercise01.choose_biglietto_roma:
     instruction: "Which sentence politely asks for a ticket to Rome?"
@@ -102,7 +107,11 @@ exercises:
     feedback: "These cover departure time, destination, platform, and ticket language."
   it.a1.unit19.lesson02.exercise05.order_vorrei_biglietto:
     instruction: "Put the words in order to politely ask for a ticket to Rome at eight."
-    accepted_answers: [{value: ["Vorrei", "un", "biglietto", "per", "Roma", "alle", "otto", "per", "favore"], status: "correct"}]
+    accepted_answers:
+      - {value: ["Vorrei", "un", "biglietto", "per", "Roma", "alle", "otto", "per", "favore"], status: "correct"}
+      - {value: ["Vorrei", "un", "biglietto", "alle", "otto", "per", "Roma", "per", "favore"], status: "correct"}
+      - {value: ["Per", "favore", "Vorrei", "un", "biglietto", "per", "Roma", "alle", "otto"], status: "correct"}
+      - {value: ["Per", "favore", "Vorrei", "un", "biglietto", "alle", "otto", "per", "Roma"], status: "correct"}
     feedback: "The correct order is *Vorrei un biglietto per Roma alle otto, per favore.*"
   it.a1.unit19.lesson02.exercise06.reply_biglietto_roma:
     instruction: "The ticket clerk says 'Buongiorno, desidera?' Reply with the taught polite request for one ticket to Rome at eight."
