@@ -2079,3 +2079,102 @@ without a count; mixed-level commits shown under both levels joined):
 
 Remaining: en-fr A2 u16 onward through C1 (~47 units), not reviewed — run
 cut off.
+
+### 2026-10-17 — en-fr review backlog completed: A2 u16-20 + B2 u01-08 (fresh-context review; branch content/review-backlog-en-fr, PR #32)
+Scope: continues the 2026-10-17 section above, which ended "en-fr A2 u16
+onward through C1 (~47 units)". On disk, the actual `review.status:
+unreviewed` en-fr set was 26 files (13 units: A2 u16-20 and B2 u01-08,
+realization + overlay each). en-fr B1 u25-43 and C1 u01-08 were already
+`reviewed`, and en-fr has no practice packs, so "~47" overcounted. All 26
+files are now `reviewed` (`required_next_reviewer: native_speaker_pass`
+kept where present), and each has a dated paragraph in `review.notes` with per-fix detail,
+native flags and deferred items.
+Checklist: `.claude/agents/content-reviewer.md` +
+OVERLAY_REVIEW_INSTRUCTIONS. Five fresh (non-fork) reviewers, one per batch
+of 2-3 units, run in parallel on disjoint files. Each reviewed and fixed its
+own files and ran the course-scoped validator. The coordinator committed
+each batch with explicit pathspecs.
+Instance count: 135 fixes.
+- A2 u16-18: 27 (u16 11, u17 9, u18 7)
+- A2 u19-20: 19 (u19 10, u20 9)
+- B2 u01-03: 34 (u01 10, u02 13, u03 11)
+- B2 u04-06: 28 (u04 9, u05 12, u06 7)
+- B2 u07-08: 27 (u07 18, u08 9)
+Categories (approximate, from the reviewer reports):
+- 1.21 missing valid accepted answers: ~47. Covers gender agreement
+  (convaincue, productive, impressionnée), on/nous, ça/cela, tu/vous where
+  the prompt left register open, clause/word order, taught synonyms (ensuite,
+  alors que, je voudrais, Ça fait...que), and with/without Bonjour.
+- Underdetermined open prompts pinned to the form they grade: ~22.
+- False or incomplete grammar/usage notes and glosses: ~26. Examples:
+  - "vous forces inversion"
+  - je crains que ne...pas called an expletive
+  - si + present -> conditional as "the standard si-clause"
+  - sans doute = "almost certainly"
+  - the passé composé for "il était huit heures"
+  - je trouve que "never" subjunctive
+  - enroué agreement
+  - "ça fait trois jours que" glossed backwards
+  - depuis hinted as "(since)"
+  - il faudrait que = "someone would need to"
+  - avant que with the same subject in both clauses
+- Reading questions that never showed their passage: every B2 unit's
+  lesson05 read_* set (8 units, ~32 exercises) plus A2 u20's job posting.
+  This is the same top class as the earlier section.
+- Confusable matching_pairs lefts / second-correct distractors /
+  give-aways: ~14. Includes cependant vs pourtant, assez vs plutôt,
+  par contre vs en revanche, A2 u19-20 options where only the key appeared
+  in the prompt sentence, and "Bises, Inès" printed in its own prompt.
+- Listen/audio mismatches: A2 u19 listen_eau_chaude heard "d'eau chaude";
+  in B2 u07 a distractor was something Lefebvre actually says.
+- Unnatural French: amener -> apporter for documents (the u15 carry-over in
+  u17), "Bonjour Mademoiselle", "Pourriez-vous m'expliquer si", a double
+  "Mais...cependant", and a certes...mais line that did not push back.
+- Canon: the A2 u17 bank advisor was "Camille", who is Inès's sister in A1
+  u03. Renamed to Mme Garnier; the reviewer's first pick, "Lefèvre", is a
+  homophone of her boss Lefebvre. Also fixed: "Inès's shop" (she works for
+  Lefebvre), "early twenties" (canon: 31), and B2 u02 reading questions
+  about Inès, who is not in that text.
+- Learner-visible leaks: "flagged for native review" in a B2 u05 note,
+  internal "unit01-14" references in A2 u20 notes, and false "first A2 unit"
+  / "first vous" claims.
+New bug class discovered: no. All instances fit existing classes.
+
+**Deferred (not fixed):**
+1. *B2 u07 Sunday logic/canon.* Lefebvre proposes making up hours "le
+   dimanche", but the unit's own card says "Le dimanche, la boutique est
+   fermée", and A2 u20 settled Sundays off. The authoring notes say Sunday
+   was meant to be considered and declined. Inès's refusal ("pas possible
+   pour moi") sidesteps the closed-shop fact, so this is a native/owner call.
+   Rewording spans dialogue, audio and several tested_text/accepted
+   answers.
+2. *B2 u01 "cela n'empêche pas que" + indicative* ("tu peux") runs through
+   the reading, dialogue, audio and word_order tiles. Careful French wants
+   "tu puisses"; the note now says so, but the switch needs a native call.
+3. *A2 u20 story order.* The job interview comes after u17-19, where Inès
+   already holds the apprenticeship. The description was reframed as a
+   look back; a reorder or reframe is structural.
+4. *Engine limitation.* Alternative word_order answers raise compiler
+   warnings, so valid alternative orders were not added there (B2 u01).
+5. *Course-wide pattern.* Context-sentence MC items (A2 u16 l01/l02 ex01)
+   show the keyed phrase inside the prompt sentence. Kept, as in the u15
+   review.
+6. Only the first overlay's course.description is used by the compiler.
+   The u16-20 descriptions were fixed anyway, but are not learner-visible.
+7. A2 u20 `answer_policy.formal_register` still says "unit01-14" (grading
+   metadata, not learner-visible).
+Native flags for Ramin are recorded per file in `review.notes`. The main
+ones:
+- calques: "désolé d'entendre ça", "je comprends ton point"
+- "De l'autre côté" with no "d'un côté"
+- "Il peut être dans les embouteillages"
+- the French grammar_certitude text still ranking sans doute above
+  probablement
+- expletive ne at A2 ("avant que vous ne receviez")
+- "vous vous reposiez la voix"
+- libre = tu / disponible = vous presented as a rule
+- B2 u04 pendant que / alors que pair (both "while")
+
+Remaining: the en-fr unreviewed backlog is now empty (A1-C1). No en-fr
+file has had a native-speaker pass. Many carry a `required_next_reviewer`
+value naming that pass or a native-French priority list.

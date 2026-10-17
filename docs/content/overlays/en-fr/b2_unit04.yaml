@@ -6,7 +6,7 @@ target_language: fr
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
+  status: reviewed
   required_next_reviewer: >-
     Native-French confirmation needed (DRAFT). Confirm the imparfait vs
     passé composé glosses correctly convey the background/foreground
@@ -30,6 +30,28 @@ review:
     no dedicated English form learners reliably reach for (English often
     just uses simple past for both) -- flagged in lesson04. No
     sibling-direction file (fr-en b2) was consulted.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    checked with the fr b2 unit04 realization: answer keys, distractors,
+    glosses, notes, feedback, canon, YAML booleans, jargon. Fixes:
+    lesson01.teach.grammar_arriere_plan note falsely implied 'it was eight
+    o'clock' could be passé composé -> example now elle était surprise /
+    elle a été surprise, scene-setting stays imparfait;
+    lesson03.teach.pendant_que note 'names an ongoing action that another
+    event interrupts' (contradicted by its own present-tense example) ->
+    simultaneity, imparfait in a past story; lesson01.exercise05
+    instruction pinned to the imparfait (Il a fait beau ce matin is also
+    correct French) + added 'Ce matin, il faisait beau';
+    lesson02.exercise07 added taught synonym 'Ensuite, il a cassé une
+    tasse'; lesson03.exercise05 added 'Alors que...' (taught) and
+    main-clause-first orders; lesson03.exercise07 added main-clause-first
+    order; lesson04.exercise05 added 'Quand le client est arrivé,
+    j'avais...' order; lesson04.exercise07 added 'J'avais... quand le
+    client est arrivé' order. NATIVE FLAGS: lesson03.exercise03 matching
+    lefts 'pendant que' (while, simultaneous) vs 'alors que...' (while /
+    whereas) are close -- discriminated only by 'whereas';
+    lesson06.teach.dialogue_mathieu_et_alors gloss 'And so?' could read
+    'So what happened?'. DEFERRED: none.
 
 course:
   title: French B2
@@ -91,7 +113,7 @@ teaching:
   fr.b2.unit04.lesson01.teach.grammar_arriere_plan:
     title: "The imparfait (était, faisait, y avait) describes the scene: the time, the weather, the mood. This is the background of a story."
     gloss: "The imparfait (était, faisait, y avait) describes the scene: the time, the weather, the mood. This is the background of a story."
-    note: "English 'was' does not distinguish this from a completed event ('it was eight o'clock' vs 'she was surprised' can both be imparfait OR passé composé in French depending on whether it's ongoing description or a discrete reaction) -- the choice depends on function, not on the English verb form."
+    note: "English 'was' does not distinguish description from a completed event: 'she was surprised' can be *elle était surprise* (a state, imparfait) or *elle a été surprise* (a reaction at one moment, passé composé). The choice depends on function, not on the English verb form. Scene-setting time and weather (*il était huit heures*, *il faisait beau*) are description, so they take the imparfait."
 
   fr.b2.unit04.lesson02.teach.soudain:
     title: suddenly
@@ -129,7 +151,7 @@ teaching:
   fr.b2.unit04.lesson03.teach.pendant_que:
     title: "while"
     gloss: "while (simultaneous action)"
-    note: "*Pendant que* + imparfait names an ongoing action that another event interrupts."
+    note: "*Pendant que* introduces an action in progress at the same time as another one. In a past story it takes the imparfait, and a passé composé in the other clause marks the event that happened during it."
     example_gloss: "While I work, I listen to music."
   fr.b2.unit04.lesson03.teach.je_preparais:
     title: "I was preparing"
@@ -254,9 +276,10 @@ exercises:
       - {value: "La boutique était calme", status: correct}
     feedback: "La boutique était calme means the shop was calm."
   fr.b2.unit04.lesson01.exercise05.translate_faisait_beau:
-    instruction: "Translate into French: The weather was nice this morning."
+    instruction: "Translate into French, using the imparfait to set the scene: The weather was nice this morning."
     accepted_answers:
       - {value: "Il faisait beau ce matin", status: correct}
+      - {value: "Ce matin, il faisait beau", status: correct}
     feedback: "Il faisait beau ce matin means the weather was nice this morning."
   fr.b2.unit04.lesson01.exercise06.speak_boutique_calme:
     instruction: "Say aloud in French: The shop was calm."
@@ -314,6 +337,7 @@ exercises:
     accepted_answers:
       - {value: "Puis, il a cassé une tasse", status: correct}
       - {value: "Puis il a cassé une tasse", status: correct}
+      - {value: "Ensuite, il a cassé une tasse", status: correct}
     feedback: "Puis, il a cassé une tasse means then, he broke a cup."
   fr.b2.unit04.lesson02.exercise08.dictation_client_entre:
     instruction: "Type what you hear."
@@ -349,6 +373,9 @@ exercises:
     accepted_answers:
       - {value: "Pendant que je préparais les croissants, le téléphone a sonné", status: correct}
       - {value: "Pendant que je préparais les croissants le téléphone a sonné", status: correct}
+      - {value: "Alors que je préparais les croissants, le téléphone a sonné", status: correct}
+      - {value: "Le téléphone a sonné pendant que je préparais les croissants", status: correct}
+      - {value: "Le téléphone a sonné alors que je préparais les croissants", status: correct}
     feedback: "Pendant que je préparais les croissants, le téléphone a sonné means while I was preparing the croissants, the phone rang."
   fr.b2.unit04.lesson03.exercise06.speak_telephone_sonne:
     instruction: "Say aloud in French: The phone rang."
@@ -360,6 +387,7 @@ exercises:
     accepted_answers:
       - {value: "Pendant que je préparais les croissants, le téléphone a sonné", status: correct}
       - {value: "Pendant que je préparais les croissants le téléphone a sonné", status: correct}
+      - {value: "Le téléphone a sonné pendant que je préparais les croissants", status: correct}
     feedback: "Pendant que je préparais les croissants, le téléphone a sonné means while I was preparing the croissants, the phone rang."
 
   fr.b2.unit04.lesson04.exercise01.recognize_deja:
@@ -389,6 +417,7 @@ exercises:
     instruction: "Translate into French: I had already prepared the dough when the customer arrived."
     accepted_answers:
       - {value: "J'avais déjà préparé la pâte quand le client est arrivé", status: correct}
+      - {value: "Quand le client est arrivé, j'avais déjà préparé la pâte", status: correct}
     feedback: "J'avais déjà préparé la pâte quand le client est arrivé means I had already prepared the dough when the customer arrived."
   fr.b2.unit04.lesson04.exercise06.write_pate_deja_preparee:
     instruction: "Write in French: I had already prepared the dough."
@@ -400,6 +429,7 @@ exercises:
     accepted_answers:
       - {value: "Quand le client est arrivé, j'avais déjà préparé la pâte", status: correct}
       - {value: "Quand le client est arrivé j'avais déjà préparé la pâte", status: correct}
+      - {value: "J'avais déjà préparé la pâte quand le client est arrivé", status: correct}
     feedback: "Quand le client est arrivé, j'avais déjà préparé la pâte means when the customer arrived, I had already prepared the dough."
 
   fr.b2.unit04.lesson05.exercise01.read_background:
