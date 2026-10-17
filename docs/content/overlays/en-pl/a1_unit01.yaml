@@ -9,8 +9,8 @@ generation_provenance:
   authoring_system: claude
   human_reviewed: false
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  required_next_reviewer: native_speaker_pass
   notes: >-
     First-ever en-pl overlay. Written for the freshly-authored
     pl/a1_unit01_greetings.yaml realization (schema_version 1.1, §19
@@ -19,6 +19,25 @@ review:
     the sibling-isolation rule (AUTHORING_GUIDE §8) doesn't apply here
     -- noted for whoever authors pl-en next: do not open this file for
     structure/phrasing reference when doing so.
+
+    Fresh-context review 2026-10-17 (content-reviewer.md checklist):
+    lesson01.exercise04 -- correct_response -> accepted_answers adding the
+    equally natural order 'Jak pan się ma' (missing-accepted-answer);
+    lesson01.exercise08 -- added 'Jak ty się masz?' and the minimal-fix
+    'Jak się ty masz?' (missing-accepted-answer); lesson01.exercise09 --
+    added 'Dziękuję, dobrze.' and the variants that also return the
+    question with 'A pan?' (missing-accepted-answer); lesson01.exercise10
+    -- added 'Dziękuję, dobrze. A ty?' (missing-accepted-answer);
+    lesson03.exercise09 -- distractor 'Ania' -> 'Marek', since 'Ania' is
+    Anna's diminutive and arguably a second correct fill (second-correct-
+    distractor); lesson03.exercise10 -- added the natural short reply 'Z
+    Kanady.' (missing-accepted-answer); lesson03.exercise11 -- added the
+    reply without 'Tak' ('Trochę. Jeszcze się uczę.') because the
+    instruction doesn't ask for 'yes' (missing-accepted-answer);
+    lesson03.exercise12 -- instruction pinned to Anna Kowalska / Warsaw,
+    because it asked for the learner's own name but accepted only Anna's
+    (underdetermined-prompt). NATIVE CHECK: whether 'Jak się ty masz?'
+    (emphatic ty after the clitic) should stay accepted.
 
 answer_policy:
   diacritics: >-
@@ -323,7 +342,9 @@ exercises:
 
   pl.a1.unit01.lesson01.exercise04.order_formal_wellbeing:
     instruction: "Put the formal wellbeing question (to a man) in order."
-    correct_response: ["Jak", "się", "pan", "ma"]
+    accepted_answers:
+      - ["Jak", "się", "pan", "ma"]
+      - ["Jak", "pan", "się", "ma"]
 
   pl.a1.unit01.lesson01.exercise05.order_informal_wellbeing:
     instruction: "Put the informal wellbeing question in order."
@@ -348,6 +369,8 @@ exercises:
     accepted_answers:
       - "Jak się masz?"
       - "Jak się masz"
+      - "Jak ty się masz?"
+      - "Jak się ty masz?"
     feedback: "Ty takes the ending masz, not ma -- ma is only used with pan/pani (or on/ona)."
 
   pl.a1.unit01.lesson01.exercise09.reply_formally:
@@ -355,6 +378,9 @@ exercises:
     accepted_answers:
       - "Dobrze, dziękuję."
       - "Dobrze, dziękuję"
+      - "Dziękuję, dobrze."
+      - "Dobrze, dziękuję. A pan?"
+      - "Dziękuję, dobrze. A pan?"
 
   pl.a1.unit01.lesson01.exercise10.speak_informally:
     instruction: "Answer informally, thank the speaker, and return the question."
@@ -362,6 +388,7 @@ exercises:
       - "Dobrze, dziękuję. A ty?"
       - "Dobrze, dziękuję, a ty?"
       - "Dobrze, dziękuję. A ty"
+      - "Dziękuję, dobrze. A ty?"
 
   pl.a1.unit01.lesson02.exercise01.select_hi:
     instruction: "Which word can informally mean both hi and bye?"
@@ -464,7 +491,7 @@ exercises:
   pl.a1.unit01.lesson03.exercise09.fill_in_first_name:
     instruction: "Complete Anna's full-name introduction."
     correct_option: "Anna"
-    distractors: ["Ania", "Kowalska"]
+    distractors: ["Marek", "Kowalska"]
     accepted_answers: ["Anna"]
     feedback: "Nazywam się is naturally followed by first name and surname together: Anna Kowalska."
 
@@ -473,15 +500,17 @@ exercises:
     accepted_answers:
       - "Jestem z Kanady."
       - "Jestem z Kanady"
+      - "Z Kanady."
 
   pl.a1.unit01.lesson03.exercise11.reply_still_learning:
     instruction: "Say you speak a little Polish and are still learning."
     accepted_answers:
       - "Tak, trochę. Jeszcze się uczę."
       - "Tak, trochę, jeszcze się uczę."
+      - "Trochę. Jeszcze się uczę."
 
   pl.a1.unit01.lesson03.exercise12.speak_self_introduction:
-    instruction: "Introduce yourself: give your full name and say where you live."
+    instruction: "Introduce yourself as Anna Kowalska, giving your full name, and say you live in Warsaw."
     accepted_answers:
       - "Nazywam się Anna Kowalska. Mieszkam w Warszawie."
       - "Nazywam się Anna Kowalska, mieszkam w Warszawie."
