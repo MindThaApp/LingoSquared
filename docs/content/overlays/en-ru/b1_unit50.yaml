@@ -5,7 +5,10 @@ source_language: "en"
 target_language: "ru"
 status: "unreviewed"
 generation_provenance: {method: "ai_generated", authoring_system: "claude", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "fresh_context_reviewer", notes: "New Claude-authored B1 draft. Needs fresh-context review."}
+review:
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
+  notes: "New Claude-authored B1 draft. Needs fresh-context review.\n\nFresh-context review 2026-10-11 (content-reviewer.md checklist): Checked token coverage against earlier en-ru units (course-scoped), character canon (Дима engineer, Настя teacher, friends on ты), every example_gloss against its example, teaching-card/overlay coverage, dialogue cards vs audio turn by turn with speakers, listen_select distractors vs audio, YAML boolean lookalikes, learner-visible internal notes, and ё/е spelling of free-text answers (grader has no ё/е fold). Fixes (en-ru overlay): ru.b1.unit50.lesson02.exercise06.write_ne_mogli_by_vy added the е-spelling 'отчет' answer; ru.b1.unit50.lesson03.exercise05.reply_ask_why added the three е/ё spelling combinations of еще/отчета; ru.b1.unit50.lesson03.exercise01.choose_full_meeting two distractors made two-sentence (request-only pair; suggestion + informal ты request) so the answer no longer shows by form. NATIVE FLAGS: teach.ne_mogli_by_vy_otchyot has speaker Дима but its audio asset is voice_hint neutral_adult_female (listen_select only, not attributed on screen); lesson02 exercise05 / lesson03 exercise04 tiles also allow less natural orders (e.g. 'Не могли бы вы до среды отправить мне таблицу') that are not accepted; the formal_request_grammar gloss 'Could you (not) + infinitive' is literal. DEFERRED: grader-level ё/е equivalence (backend/app/review/grading.py, Codex lane, owner decision)."
 
 course:
   title: "Russian B1"
@@ -77,8 +80,9 @@ exercises:
     accepted_answers:
       - {value: "Не могли бы вы отправить отчёт до пятницы?", status: "correct"}
       - {value: "Не могли бы вы отправить отчёт до пятницы", status: "correct"}
+      - {value: "Не могли бы вы отправить отчет до пятницы?", status: "correct"}
     feedback: "The model answer is *Не могли бы вы отправить отчёт до пятницы?*"
-  ru.b1.unit50.lesson03.exercise01.choose_full_meeting: {instruction: "Which answer makes a formal-register softened suggestion AND a formal-register softened request, both directed at a colleague?", correct_option: "Я бы предложил перенести встречу на пятницу. Не могли бы вы отправить мне таблицу до среды?", distractors: ["У меня ещё нет всех данных для отчёта.", "Ты бы мог помочь мне с этим?", "Если бы у меня было больше времени, я бы путешествовал больше."], accepted_answers: [{value: "Я бы предложил перенести встречу на пятницу. Не могли бы вы отправить мне таблицу до среды?", status: "correct"}], feedback: "The correct answer combines a formal suggestion with a formal request, both in вы register."}
+  ru.b1.unit50.lesson03.exercise01.choose_full_meeting: {instruction: "Which answer makes a formal-register softened suggestion AND a formal-register softened request, both directed at a colleague?", correct_option: "Я бы предложил перенести встречу на пятницу. Не могли бы вы отправить мне таблицу до среды?", distractors: ["У меня ещё нет всех данных для отчёта. Не могли бы вы отправить отчёт до пятницы?", "Я бы предложил перенести встречу на пятницу. Ты бы мог помочь мне с этим?", "Если бы у меня было больше времени, я бы путешествовал больше."], accepted_answers: [{value: "Я бы предложил перенести встречу на пятницу. Не могли бы вы отправить мне таблицу до среды?", status: "correct"}], feedback: "The correct answer combines a formal suggestion with a formal request, both in вы register."}
   ru.b1.unit50.lesson03.exercise02.dialogue_comprehension_meeting:
     instruction: "Listen to the dialogue. What does Dima suggest, why, and what does he request?"
     correct_option: "Dima suggests moving the meeting to Friday because he doesn't have all the data yet, and asks the colleague to send him the table by Wednesday"
@@ -103,6 +107,9 @@ exercises:
     accepted_answers:
       - {value: "У меня ещё нет всех данных для отчёта.", status: "correct"}
       - {value: "У меня ещё нет всех данных для отчёта", status: "correct"}
+      - {value: "У меня еще нет всех данных для отчета.", status: "correct"}
+      - {value: "У меня еще нет всех данных для отчёта.", status: "correct"}
+      - {value: "У меня ещё нет всех данных для отчета.", status: "correct"}
     feedback: "The model answer states the reason for the suggested reschedule."
   ru.b1.unit50.lesson03.exercise06.write_professional_message:
     instruction: "Write a brief professional message to a colleague, in formal вы register: (1) suggest moving the meeting to Friday, using Я бы предложил; (2) ask, using Не могли бы вы, whether they could send you the table by Wednesday."
