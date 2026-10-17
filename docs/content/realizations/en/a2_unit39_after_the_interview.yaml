@@ -20,8 +20,8 @@ generation_provenance:
     are all reused unchanged.
 status: "complete_draft"
 review:
-  status: "unreviewed"
-  required_next_reviewer: "fresh_context"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Fifth of 6 new A2 units (unit35-unit40) authored 2026-07-22 to close
     the publish-gate teaching-hours gap on the shared English
@@ -41,6 +41,23 @@ review:
     by this file's own or the A2 chain's earlier introduced_tokens.
     PENDING a fresh-context review per AUTHORING_GUIDE §9.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked against the nl-en overlay: answer keys,
+    listen_select/dialogue_response distractors absent from audio, speaker
+    attribution vs audio, character canon (Daniel weekdays, unit29 repair
+    6180/kitchen sink/2pm-4pm, Mia at Bright Path Marketing, Leila units
+    33-34), course-wide vocabulary coverage of matching_pairs tested_text,
+    YAML boolean quoting, no internal jargon. Fixes:
+    en.a2.unit39.lesson02.exercise06.reply_accept_the_offer prompt
+    target_block "The company can offer you the position." -> "The company
+    would like to offer you the position." (natural interviewer line; "We"
+    is only introduced in lesson 3, so the token validator rejects "We
+    would like..."); en.a2.unit39.lesson04.teach.q_calling_about_interview
+    and media asset en.a2.audio.dialogue.after_the_interview.01 "Hello
+    Mia, ..." -> "Hello, Mia, ..." (vocative comma; asset is
+    pending_generation). Overlay glosses left as-is (nl "hallo Mia" is
+    acceptable Dutch; fa/prs untouched). No native flags.
+
 course:
   realization_key: "en.a2"
   target_language_first: true
@@ -53,7 +70,7 @@ media_assets:
   - {content_key: "en.a2.audio.after_the_interview.description.01", language: "en", text: "Dear Mia, thank you for coming in on Tuesday. We would like to offer you the position of marketing coordinator. The contract is full time, and the start date is Monday. Please reply by Friday. Bright Path Marketing.", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a2.audio.dialogue.after_the_interview.01"
     language: "en"
-    text: "Interviewer: Hello Mia, I am calling about the interview on Tuesday. Mia: Thank you for calling. I am still very interested in the position. Interviewer: Good, because we would like to offer you the job. Mia: That is great news. Could you tell me the start date? Interviewer: The start date is Monday, and the contract is full time. Mia: Could you tell me about the working hours? Interviewer: From nine to five, with one hour for lunch. Mia: Thank you. I would like to accept the offer. Interviewer: Wonderful. We will send you the contract today."
+    text: "Interviewer: Hello, Mia, I am calling about the interview on Tuesday. Mia: Thank you for calling. I am still very interested in the position. Interviewer: Good, because we would like to offer you the job. Mia: That is great news. Could you tell me the start date? Interviewer: The start date is Monday, and the contract is full time. Mia: Could you tell me about the working hours? Interviewer: From nine to five, with one hour for lunch. Mia: Thank you. I would like to accept the offer. Interviewer: Wonderful. We will send you the contract today."
     voice_hint: "two_adults_neutral_friendly"
     status: "pending_generation"
 
@@ -110,7 +127,7 @@ units:
           - {content_key: "en.a2.unit39.lesson02.exercise03.choose_ask_start_date", type: "multiple_choice", tested_text: "Could you tell me the start date?", prompt: {target_blocks: [{text: "You want to know which day the job begins. How do you ask, formally?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit39.lesson02.exercise04.order_still_interested", type: "word_order", tested_text: "I am still very interested in the position", prompt: {target_blocks: []}, word_bank: ["am", "still", "very", "interested", "in", "the", "position", "I"]}
           - {content_key: "en.a2.unit39.lesson02.exercise05.order_accept_the_offer", type: "word_order", tested_text: "I would like to accept the offer", prompt: {target_blocks: []}, word_bank: ["would", "like", "to", "accept", "the", "offer", "I"]}
-          - {content_key: "en.a2.unit39.lesson02.exercise06.reply_accept_the_offer", type: "dialogue_response", tested_text: "I would like to accept the offer", prompt: {target_blocks: [{text: "The company can offer you the position.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a2.unit39.lesson02.exercise06.reply_accept_the_offer", type: "dialogue_response", tested_text: "I would like to accept the offer", prompt: {target_blocks: [{text: "The company would like to offer you the position.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit39.lesson02.exercise07.write_follow_up_message", type: "writing_prompt", tested_text: "Thank you for the interview yesterday. I am still very interested in the position.", prompt: {target_blocks: [{text: "Write a short follow-up message: thank them for yesterday's interview, then say you are still very interested in the position.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a2.unit39.lesson03.reading_an_offer_message"
@@ -132,7 +149,7 @@ units:
         title: "The call with the offer"
         spine_outcome_id: "universal.a2.employment.attend_job_interview"
         teaching:
-          - {content_key: "en.a2.unit39.lesson04.teach.q_calling_about_interview", kind: "dialogue", target: {text: "Hello Mia, I am calling about the interview on Tuesday.", language_code: "en", direction: "ltr", speaker: "Interviewer"}, introduced_tokens: ["Hello", "calling"]}
+          - {content_key: "en.a2.unit39.lesson04.teach.q_calling_about_interview", kind: "dialogue", target: {text: "Hello, Mia, I am calling about the interview on Tuesday.", language_code: "en", direction: "ltr", speaker: "Interviewer"}, introduced_tokens: ["Hello", "calling"]}
           - {content_key: "en.a2.unit39.lesson04.teach.a_still_interested", kind: "dialogue", target: {text: "Thank you for calling. I am still very interested in the position.", language_code: "en", direction: "ltr", speaker: "Mia"}, introduced_tokens: []}
           - {content_key: "en.a2.unit39.lesson04.teach.q_offer_you_the_job", kind: "dialogue", target: {text: "Good, because we would like to offer you the job.", language_code: "en", direction: "ltr", speaker: "Interviewer"}, introduced_tokens: ["Good", "because", "we", "job"]}
           - {content_key: "en.a2.unit39.lesson04.teach.a_great_news_ask_start_date", kind: "dialogue", target: {text: "That is great news. Could you tell me the start date?", language_code: "en", direction: "ltr", speaker: "Mia"}, introduced_tokens: ["That", "great", "news"]}
