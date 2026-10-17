@@ -21,8 +21,8 @@ generation_provenance:
     authored, not translated or lightly edited from the source.
 status: "complete_draft"
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: "native_speaker_pass"
   notes: >-
     Fourth A2 unit for the shared English realization (spine outcome:
     universal.a2.health.attend_doctor_appointment, the second health
@@ -104,6 +104,34 @@ review:
     doesn't get better, you'll need a follow-up appointment," matching
     the conditional framing; nl-en's example_gloss updated to match.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every exercise against the position-matched
+    nl-en/fa-en/prs-en overlays for accepted-answer completeness,
+    distractor validity, prompt/answer coherence, dialogue speaker
+    attribution against the audio, listen distractors against the full
+    audio, boolean coercion, and Leila/Daniel character canon against
+    units 22/25/28. Fixed:
+    en.a2.unit28.lesson04.exercise05.reply_as_daniel and
+    exercise06.speak_doctor_dialogue -- the prompt already contained the
+    doctor's medicine instruction before the expected answer asked
+    'Should I take any medicine?'; the prompt is now a speaker-labelled
+    transcript (Doctor 'What's wrong?' / Daniel gap / Doctor 'I see. You
+    have a bad cold.' / Daniel gap / Doctor medicine instruction /
+    Daniel gap), matching the audio order (answers and instructions
+    unchanged). en.a2.unit28.lesson01.exercise04.match_doctor_words --
+    realization rights 'headache or fever' -> 'something you take to
+    feel better' (medicine) and 'document + medicine' -> 'the doctor's
+    written order for medicine' (prescription); lefts unchanged, all
+    overlays override the rights. NATIVE FLAG:
+    lesson01.exercise02.choose_medicine_word prompt 'something a doctor
+    gives you to help you get better' could arguably also describe the
+    distractor 'prescription'. DEFERRED (owner decision): the lesson04
+    dialogue_response/speak_response items still expect the learner's
+    whole multi-turn part as one answer (the shared units 26-29
+    pattern); splitting them into single-turn items like unit25/unit35
+    would change tested_text and the accepted_answers and instructions
+    in all overlay sets, including the Persian/Dari instructions.
+
 course:
   realization_key: "en.a2"
   target_language_first: true
@@ -142,7 +170,7 @@ units:
           - {content_key: "en.a2.unit28.lesson01.exercise01.listen_word", type: "listen_select", tested_text: "prescription", media_asset_key: "en.a2.audio.doctor.words.prescription.01", prompt: {target_blocks: []}}
           - {content_key: "en.a2.unit28.lesson01.exercise02.choose_medicine_word", type: "multiple_choice", tested_text: "medicine", prompt: {target_blocks: [{text: "Which word means something a doctor gives you to help you get better?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit28.lesson01.exercise03.choose_insurance_card_phrase", type: "multiple_choice", tested_text: "insurance card", prompt: {target_blocks: [{text: "Which phrase means the card that helps pay for your doctor visit?", language_code: "en", direction: "ltr"}]}}
-          - {content_key: "en.a2.unit28.lesson01.exercise04.match_doctor_words", type: "matching_pairs", tested_text: "medicine prescription follow-up appointment getting worse insurance card headache sore throat fever", prompt: {target_blocks: [{text: "Match each meaning to the correct English word or phrase.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "medicine", right: "headache or fever"}, {left: "prescription", right: "document + medicine"}, {left: "follow-up appointment", right: "another appointment to check how you're doing"}, {left: "getting worse", right: "a symptom that is becoming more serious"}, {left: "insurance card", right: "the card that helps pay for your doctor visit"}, {left: "headache", right: "pain in your head"}, {left: "sore throat", right: "pain in your throat when you swallow"}, {left: "fever", right: "when your body is too hot"}]}
+          - {content_key: "en.a2.unit28.lesson01.exercise04.match_doctor_words", type: "matching_pairs", tested_text: "medicine prescription follow-up appointment getting worse insurance card headache sore throat fever", prompt: {target_blocks: [{text: "Match each meaning to the correct English word or phrase.", language_code: "en", direction: "ltr"}]}, pairs: [{left: "medicine", right: "something you take to feel better"}, {left: "prescription", right: "the doctor's written order for medicine"}, {left: "follow-up appointment", right: "another appointment to check how you're doing"}, {left: "getting worse", right: "a symptom that is becoming more serious"}, {left: "insurance card", right: "the card that helps pay for your doctor visit"}, {left: "headache", right: "pain in your head"}, {left: "sore throat", right: "pain in your throat when you swallow"}, {left: "fever", right: "when your body is too hot"}]}
           - {content_key: "en.a2.unit28.lesson01.exercise05.write_prescription", type: "writing_prompt", tested_text: "prescription", prompt: {target_blocks: [{text: "Write the word for a doctor's written order for medicine.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a2.unit28.lesson02.calling_to_make_an_appointment"
@@ -191,8 +219,8 @@ units:
           - content_key: "en.a2.unit28.lesson04.exercise05.reply_as_daniel"
             type: "dialogue_response"
             tested_text: "I've had a headache and a sore throat for three days and it's getting worse Should I take any medicine Should I come back if it doesn't get better"
-            prompt: {target_blocks: [{text: "What's wrong? I see. You have a bad cold. Yes, take this medicine twice a day for five days, and drink plenty of water.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's wrong?", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "I see. You have a bad cold.", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "Yes, take this medicine twice a day for five days, and drink plenty of water.", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}]}
           - content_key: "en.a2.unit28.lesson04.exercise06.speak_doctor_dialogue"
             type: "speak_response"
             tested_text: "I've had a headache and a sore throat for three days and it's getting worse Should I take any medicine Should I come back if it doesn't get better"
-            prompt: {target_blocks: [{text: "What's wrong? I see. You have a bad cold. Yes, take this medicine twice a day for five days, and drink plenty of water.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's wrong?", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "I see. You have a bad cold.", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "Yes, take this medicine twice a day for five days, and drink plenty of water.", language_code: "en", direction: "ltr", speaker: "Doctor"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}]}

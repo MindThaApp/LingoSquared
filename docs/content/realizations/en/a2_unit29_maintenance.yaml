@@ -20,8 +20,8 @@ generation_provenance:
     freshly authored, not translated or lightly edited from the source.
 status: "complete_draft"
 review:
-  status: "unreviewed"
-  required_next_reviewer: "codex"
+  status: "reviewed"
+  required_next_reviewer: null
   notes: >-
     Fifth A2 unit for the shared English realization (spine outcome:
     universal.a2.housing.report_maintenance_problem, the second housing
@@ -111,6 +111,46 @@ review:
     unestablished second problem; nl-en's example_gloss updated to
     match.
 
+    Fresh-context review 2026-10-11 (content-reviewer.md checklist):
+    checked every exercise against the position-matched
+    nl-en/fa-en/prs-en overlays for accepted-answer completeness,
+    distractor validity, prompt/answer coherence, dialogue speaker
+    attribution against the audio, listen distractors against the full
+    audio, boolean coercion, and Leila/Daniel character canon against
+    units 22/25/28. Fixed:
+    en.a2.unit29.lesson04.exercise05.reply_as_daniel and
+    exercise06.speak_maintenance_dialogue -- the prompt already gave the
+    plumber window and the be-home instruction before the expected
+    answer asked about both; the prompt is now a speaker-labelled
+    transcript (Manager / Daniel gap / Manager plumber line / Daniel gap
+    / Manager be-home + repair number / Daniel gap), matching the audio
+    order (answers and instructions unchanged).
+    en.a2.unit29.lesson04.exercise03.choose_home_instruction --
+    tested_text 'Yes please be home between 2pm and 4pm' -> 'Please be
+    home between 2pm and 4pm' (correct_option/accepted_answers mirrored
+    in nl-en/fa-en/prs-en).
+    en.a2.unit29.lesson02.exercise06.reply_leaking_since_morning_and_ask_timing
+    -- tested_text no longer joins statement and question with 'and'; in
+    all three overlays the period-separated form is now listed first,
+    and fa-en/prs-en gained the 'It has been...' variant nl-en already
+    had ('...and when...' forms kept as harmless accepted variants).
+    en.a2.audio.maintenance.description.01 (unused, pending_generation)
+    -- text aligned with the lesson03 reading card ('Your report of a
+    leaking kitchen sink has been received...'). Overlay-side:
+    lesson02.exercise01.listen_request distractor 'It's leaking since
+    this morning.' -> 'It's been leaking since this morning.'
+    (nl-en/fa-en/prs-en; not said in that audio); nl-en
+    lesson03.teach.confirmation_text gloss now translates the reading
+    card ('Uw melding van een lekkende keukengootsteen is
+    ontvangen...'). DEFERRED: the fa-en/prs-en confirmation_text glosses
+    still translate 'repair request' rather than the reading card
+    (Persian/Dari text). DEFERRED (owner decision): the lesson04
+    dialogue_response/speak_response items still expect the learner's
+    whole multi-turn part as one answer (the shared units 26-29
+    pattern); splitting them into single-turn items like unit25/unit35
+    would change tested_text and the accepted_answers and instructions
+    in all overlay sets, including the Persian/Dari instructions.
+
 course:
   realization_key: "en.a2"
   target_language_first: true
@@ -120,7 +160,7 @@ course:
 media_assets:
   - {content_key: "en.a2.audio.maintenance.words.plumber.01", language: "en", text: "plumber", voice_hint: "neutral_adult", status: "pending_generation"}
   - {content_key: "en.a2.audio.maintenance.question.01", language: "en", text: "I'd like to report a problem with my kitchen sink.", voice_hint: "neutral_adult", status: "pending_generation"}
-  - {content_key: "en.a2.audio.maintenance.description.01", language: "en", text: "Your repair request has been received. A plumber will come tomorrow between 2pm and 4pm. The repair number is 6180.", voice_hint: "neutral_adult", status: "pending_generation"}
+  - {content_key: "en.a2.audio.maintenance.description.01", language: "en", text: "Your report of a leaking kitchen sink has been received. A plumber will come tomorrow between 2pm and 4pm. The repair number is 6180.", voice_hint: "neutral_adult", status: "pending_generation"}
   - content_key: "en.a2.audio.dialogue.maintenance_report.01"
     language: "en"
     text: "Daniel: I'd like to report a problem with my kitchen sink. Manager: What's wrong with the sink? Daniel: It's been leaking since this morning. When can someone come to fix it? Manager: I see. I'll send a plumber tomorrow between 2pm and 4pm. Daniel: Do I need to be home? Manager: Yes, please be home between 2pm and 4pm. Here's your repair number: 6180. Daniel: Thank you very much."
@@ -165,7 +205,7 @@ units:
           - {content_key: "en.a2.unit29.lesson02.exercise03.choose_ask_repair_timing", type: "multiple_choice", tested_text: "When can someone come to fix it?", prompt: {target_blocks: [{text: "You've described the problem. Now you want to know when it will be fixed. What do you ask?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit29.lesson02.exercise04.order_leaking_since_morning", type: "word_order", tested_text: "It's been leaking since this morning", prompt: {target_blocks: []}, word_bank: ["been", "leaking", "since", "this", "morning", "It's"]}
           - {content_key: "en.a2.unit29.lesson02.exercise05.order_ask_repair_timing", type: "word_order", tested_text: "When can someone come to fix it", prompt: {target_blocks: []}, word_bank: ["can", "someone", "come", "to", "fix", "it", "When"]}
-          - {content_key: "en.a2.unit29.lesson02.exercise06.reply_leaking_since_morning_and_ask_timing", type: "dialogue_response", tested_text: "It's been leaking since this morning and when can someone come to fix it", prompt: {target_blocks: [{text: "The building manager asks what's wrong. Describe the problem and ask when someone can come fix it.", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a2.unit29.lesson02.exercise06.reply_leaking_since_morning_and_ask_timing", type: "dialogue_response", tested_text: "It's been leaking since this morning When can someone come to fix it", prompt: {target_blocks: [{text: "The building manager asks what's wrong. Describe the problem and ask when someone can come fix it.", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit29.lesson02.exercise07.write_report_request", type: "writing_prompt", tested_text: "I'd like to report a problem with my kitchen sink.", prompt: {target_blocks: [{text: "Write that you'd like to report a problem with your kitchen sink.", language_code: "en", direction: "ltr"}]}}
 
       - content_key: "en.a2.unit29.lesson03.reading_a_repair_notice"
@@ -196,13 +236,13 @@ units:
         exercises:
           - {content_key: "en.a2.unit29.lesson04.exercise01.listen_problem_description", type: "dialogue_comprehension", tested_text: "leaking since this morning", media_asset_key: "en.a2.audio.dialogue.maintenance_report.01", prompt: {target_blocks: [{text: "What problem does Daniel describe, and since when?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit29.lesson04.exercise02.listen_plumber_schedule", type: "listen_select", tested_text: "I'll send a plumber tomorrow between 2pm and 4pm", media_asset_key: "en.a2.audio.dialogue.maintenance_report.01", prompt: {target_blocks: []}}
-          - {content_key: "en.a2.unit29.lesson04.exercise03.choose_home_instruction", type: "multiple_choice", tested_text: "Yes please be home between 2pm and 4pm", prompt: {target_blocks: [{text: "What does the manager ask Daniel to do?", language_code: "en", direction: "ltr"}]}}
+          - {content_key: "en.a2.unit29.lesson04.exercise03.choose_home_instruction", type: "multiple_choice", tested_text: "Please be home between 2pm and 4pm", prompt: {target_blocks: [{text: "What does the manager ask Daniel to do?", language_code: "en", direction: "ltr"}]}}
           - {content_key: "en.a2.unit29.lesson04.exercise04.order_whats_wrong_sink", type: "word_order", tested_text: "What's wrong with the sink", prompt: {target_blocks: []}, word_bank: ["wrong", "with", "the", "sink", "What's"]}
           - content_key: "en.a2.unit29.lesson04.exercise05.reply_as_daniel"
             type: "dialogue_response"
             tested_text: "It's been leaking since this morning When can someone come to fix it Do I need to be home Thank you very much"
-            prompt: {target_blocks: [{text: "What's wrong with the sink? I see. I'll send a plumber tomorrow between 2pm and 4pm. Yes, please be home between 2pm and 4pm. Here's your repair number: 6180.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's wrong with the sink?", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "I see. I'll send a plumber tomorrow between 2pm and 4pm.", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "Yes, please be home between 2pm and 4pm. Here's your repair number: 6180.", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}]}
           - content_key: "en.a2.unit29.lesson04.exercise06.speak_maintenance_dialogue"
             type: "speak_response"
             tested_text: "It's been leaking since this morning When can someone come to fix it Do I need to be home Thank you very much"
-            prompt: {target_blocks: [{text: "What's wrong with the sink? I see. I'll send a plumber tomorrow between 2pm and 4pm. Yes, please be home between 2pm and 4pm. Here's your repair number: 6180.", language_code: "en", direction: "ltr"}]}
+            prompt: {target_blocks: [{text: "What's wrong with the sink?", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "I see. I'll send a plumber tomorrow between 2pm and 4pm.", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}, {text: "Yes, please be home between 2pm and 4pm. Here's your repair number: 6180.", language_code: "en", direction: "ltr", speaker: "Manager"}, {text: "…", language_code: "en", direction: "ltr", speaker: "Daniel"}]}
