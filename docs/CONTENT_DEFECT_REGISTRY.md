@@ -2436,3 +2436,67 @@ Verification: `scripts/verify.sh --content-only` passes (en-hi 0 errors / 46
 warnings, a2 0/15, b1 0/21, b2 0/0, c1 0/0). The full backend suite was run
 against local Postgres with the whole repo (`LINGO_REPO_ROOT` set): 33305
 passed, 0 skipped. `test_content_answer_shapes.py` alone: 32845 passed.
+
+### 2026-10-18 — answer-leakage fixes: en-it/ru/fr/de/hi/es/ro/pl (branch content/answer-leak-fixes-eu, PR #38)
+
+Scope: hits from `scripts/_answer_leakage_check.py` for the eight courses above,
+plus copy tasks from the same template that the lint misses (B1 lesson02
+multi-sentence "Scrivi esattamente…" tasks where the answer is split up by
+cue text). Other courses were handled in a separate run.
+
+| course | lint hits before | after | items rewritten |
+|---|---|---|---|
+| en-it | 104 | 4 | 93 |
+| en-ru | 51 | 12 | 33 |
+| en-fr | 139 | 2 | 77 |
+| en-de | 39 | 0 | 22 |
+| en-hi | 40 | 0 | 40 |
+| en-es | 21 | 0 | 16 |
+| en-ro | 6 | 1 | 4 |
+| en-pl | 5 | 1 | 1 |
+| total | 405 | 20 | 286 |
+
+Classes fixed:
+- **Answer printed in the prompt (A2+)**:
+  - "Write exactly: X" / "Answer with the exact sentence: X" writing,
+    speaking and dialogue items: the instruction now gives the English
+    meaning plus a structure cue (e.g. "with 'il faut que' + subjunctive",
+    "using the taught 'fair objection' phrase").
+  - Answer-bearing `target_blocks` were dropped (set to `[]`).
+  - Fill-in-blank instructions that named the missing word now give its
+    meaning or grammatical form instead.
+- **Multiple choice where the prompt is the correct option** (any level):
+  - fr/es/hi A1 vocab and question MCQs, fr A2 sentence MCQs: the
+    answer-bearing `target_blocks` were dropped, since the English
+    instruction already gives the meaning.
+  - ru A1 u01 letter recognition showed the glyph it asked for. It now asks
+    for the letter by its sound.
+- **Either/or questions that named the answer** (fr B1 u25/u26, de B1 u42,
+  hi B2 u02, fr A1 u06): reworded to "What does this sentence express?" and
+  similar.
+- **Inconsistent Italian imperative**: `dì` → `di'` in it A2 u28–30, matching
+  the u31–34 fixes.
+- **Extra accepted answers** where the new prompt allows them: it B1 u41,
+  u42, u45, u48; it B2 u05.
+
+What remains (20 lint hits, all deliberate):
+- **A1 copy-task scaffolding, owner decision**:
+  - en-it u15 `reply_le_mele_sono_buone_come` (the answer echoes the
+    question), u22 `write_feeling_cause`, u24 `write_payment_note`;
+  - en-ru u04 `complete_day` (the question itself contains сегодня), u06
+    `complete_children_question` (hint `(есть)`), u17 `write_ask_job`, u20
+    `write_weather_plan`, u22 `write_happy`;
+  - en-pl u01 `fill_in_first_name` (the instruction names Anna).
+- **Cognate recognition MCQs, owner decision**: fr B2 u03
+  `recognize_excellent`, fr B2 u04 `recognize_croissants`, ro B1 u02
+  `recognize_client`. The target word and its English meaning are the same
+  string, so the item cannot be fixed by rewording. Replace the item or
+  accept it as a free point. (ro A1 u16 `choose_doctor` was reworded to
+  "the person who treats patients".)
+- Not done: a full checklist re-review of every unit. Only the items above
+  were touched; the units had already had two fresh-context review passes
+  (PRs #31–#35).
+- The lint still misses copy tasks where cue text splits up the answer.
+  Widening it to match sentence by sentence is suggested.
+
+Verification: `scripts/verify.sh --content-only` passes after every batch.
