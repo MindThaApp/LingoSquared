@@ -2500,3 +2500,74 @@ What remains (20 lint hits, all deliberate):
   Widening it to match sentence by sentence is suggested.
 
 Verification: `scripts/verify.sh --content-only` passes after every batch.
+
+### 2026-10-18 — answer-leakage fixes: en-ar, nl-en, en-nl, fa-en, prs-en, de-en, en-prs (branch content/answer-leak-fixes-2, PR #37)
+Scope: hits from `scripts/_answer_leakage_check.py` (prompt or instruction
+showing the answer the learner has to produce) in seven courses. Other
+courses were left to a separate run. Every hit was looked at by hand. No
+fresh-context reviewer was run on the rewrites; the native fa/prs/nl audit
+the owner plans should cover them.
+
+Leak-check counts (before → after):
+
+| course | before | after | what remains |
+|---|---|---|---|
+| en-ar | 99 | 3 | A1 u01/u02/u03 `speak_repeat`: repeating the shown text is the task |
+| nl-en | 107 | 1 | A1 u21 cue "One way or round trip?": a choice question, not a leak |
+| fa-en | 113 | 1 | same shared A1 u21 cue |
+| prs-en | 100 | 1 | same shared A1 u21 cue |
+| de-en | 14 | 0 | — |
+| en-nl | 96 | 3 | A1 u06 `water` (cognate); A2 u78 heb/ben and niet/geen binary fill-ins |
+| en-prs | 3 | 3 | A1 u01 farewell echo (به امید دیدار answered with itself, which is natural); B2 u03 grammar_check (fixing the sentence is the task) |
+| total | 532 | 12 | all 12 are by design |
+
+What was fixed:
+- **Shared en realization (nl/fa/prs/de-en)**: 24 A1-B1 writing_prompts showed
+  an English block "Write that <answer>". Every overlay already gives the task
+  in the learner's language, so these blocks are now empty. B2 u01-08: 45
+  "Write exactly: <answer>" / "Reply with Mia's exact ..." items. The block is
+  now empty, or the other speaker's line for `reply_as_*`. Each nl/fa/prs
+  instruction now gives the meaning or the situation, and variants were added
+  where the freer prompt allows them.
+- **de-en A1**: goodbye_meaning / choose_later were reversed (they showed the
+  answer). be_question_order (also fa/prs) showed the question it asked for.
+  7 word_order instructions quoted the English sentence.
+- **en-ar C1 u01-08**: 47 write items printed the Arabic answer in both the
+  overlay and the realization. They now give the English meaning of the taught
+  sentence. A1 u01 letter MCs showed the answer letter.
+- **en-nl**: 53 A1 "choose the meaning" MCs (u06, u29-45) showed the English answer
+  as the prompt block; it now shows the Dutch sentence. 25 C1 word_order
+  instructions listed the chunks in order, and C1/B2 translations named the
+  Dutch answer.
+
+Clear defects fixed on the way:
+- en-ar C1 lesson06 model glosses dropped or merged sentences of the Arabic
+  model (u01, u04, u05, u08), mirrored in the matching pairs.
+- prs-en A2 u27 glossed "monthly fee" as معاش (salary); now فیس.
+- fa-en B1 u17 said "so late" for "so long".
+- fa-en/nl-en B1 u19 said "you are under budget" for "we".
+- prs-en B1 u19 used the wrong tense.
+- prs-en B2 instructions used English jargon ("interrupted action", "prior
+  event", "refusal", "synthesis"); now in Dari.
+
+New bug-class note (fits §1.17 "answer given away by the prompt"): **X→en
+overlays inherit the shared en realization's English prompt block**. An
+English instruction block there is a leak for every X→en course at once,
+even when each overlay's localized instruction is clean. For X→en
+writing_prompts, prefer an empty block (the overlay carries the task) or the
+interlocutor's line.
+
+Left for the owner:
+- A1 copy tasks: none were flagged in these seven courses. (The de-en A1
+  word_order quotes were rewritten, since nl/fa/prs-en already gave the
+  meaning there.)
+- en-nl A1 u34 "stuurt een bericht naar de app" was already flagged in the
+  file's review notes as unidiomatic. It is not changed here because audio
+  exists.
+- The rewritten fa/prs/nl instructions should get the planned native audit.
+  Wording follows each course's existing terms (e.g. prs چوکی, سروی, پالیسی,
+  "گزارش operator"; fa تجهیزات, نظرسنجی).
+
+Verification: `scripts/verify.sh --content-only` passes. Per-course
+validate warning counts are identical to the base branch for all seven
+courses.
