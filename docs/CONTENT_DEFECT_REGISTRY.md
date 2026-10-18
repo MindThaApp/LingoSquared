@@ -2457,7 +2457,7 @@ cue text). Other courses were handled in a separate run.
 | total | 405 | 20 | 286 |
 
 Classes fixed:
-- **1.28 answer printed in the prompt (A2+)**:
+- **Answer printed in the prompt (A2+)**:
   - "Write exactly: X" / "Answer with the exact sentence: X" writing,
     speaking and dialogue items: the instruction now gives the English
     meaning plus a structure cue (e.g. "with 'il faut que' + subjunctive",
