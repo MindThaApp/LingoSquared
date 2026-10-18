@@ -2571,3 +2571,99 @@ Left for the owner:
 Verification: `scripts/verify.sh --content-only` passes. Per-course
 validate warning counts are identical to the base branch for all seven
 courses.
+
+### 2026-10-18 — en-ru + en-it second pass, A1 → C1 (fresh-context review; branch content/second-pass-it-ru, PR #39)
+Scope: every en-ru and en-it unit, realization + overlay (68 units per
+language, 272 files). Why: the earlier passes (PRs #31, #33, #38) were run by
+a weaker reviewer. A spot-check of 4 units it had marked clean found 7
+serious defects, so all earlier "reviewed" status was treated as
+unverified. One fresh-context worker per batch of 3-4 units fixed what it
+found, then `verify.sh --content-only` ran and the batch was committed.
+Checklist: grammar notes, glosses, idiom/accents/case/ё, dialogue
+coherence and canon, answer leakage at A2+, distractors, sequencing,
+course-wide consistency of each fix. Accepted answers were only added,
+never removed.
+
+Fix counts (commit subjects carry the per-batch counts):
+- en-ru/ru: A1 104 · A2 22 · B1 41 · B2 30 · C1 22 — total 219, plus one
+  course-wide consistency commit ("Тем не менее," comma in 65 places,
+  2 forward-referenced distractors).
+- en-it/it: A1 115 · A2 24 · B1 49 · B2 30 · C1 16 — total 234.
+- Yield: about 3.3 fixes per unit on units marked clean twice before. A1
+  had the most (4-5 per unit). The first passes missed whole classes, not
+  stray items.
+
+Defect classes found (all passed a green compile; most were missed by
+both earlier passes):
+- **False grammar/usage notes** (§1 grammar-note class): it "può = formal
+  can" (it is 3rd person), "vorrei (che) = formal request" (A2 u25/27, B1
+  u46), spiego called a "you" form, noi "informal", subjunctive never
+  named while fill exercises asked for it (B1 u35-38), "A me no" vs "Io
+  no", bare "vale la pena" with a noun subject; ru conditional described
+  as past/present, если бы = "if only", instrumental "required" after не
+  будет, сесть for садиться, д "loop", day names "lowercase even at the
+  start of a sentence", Будьте добры "only for institutions", разве что
+  "negative conditional", доказана "short adjective".
+- **Wrong-sense glosses**: уже "already / for", нам "they", вроде бы
+  "kind of", però "still", "Ne vorrei tre, grazie" with grazie glossed
+  "please", per decidere "in order to decide", Prima "First".
+- **Collocation/grammar errors in target text**: ru "пересказ в порядке"
+  (→ по порядку), "болит горло и температура", «Зёрна» нравится,
+  dangling verbal adverb (Взвесив всё, Дима…), "Тем не менее," comma; it
+  "il biglietto è già comprato, il volo è fisso", "Che ora arrivi?",
+  "Quale giorno è di weekend?".
+- **Answer leakage at A2+**: C1 ru prompts printing the full Russian
+  answer (u02-06, 12 items); B1 ru u37-39/u46 instructions; it A2 Italian
+  task cards on the final writing prompts of u25-u34 (10 items, the
+  learner only had to change tu to io), B1 u36, C1 u08 "using proprio".
+- **Sequencing**: words tested or used as distractors before they are
+  taught (ru A1 u08 Двести, A2 u29 кран, A2 u30 "Спасибо за", B1 u45-49
+  distractors from later units; it A1 u16-17, u23, B1 u39-40); audio turns
+  with no teaching card (ru A1 u07-10, u14, u08 lesson03 had none).
+- **Underdetermined production prompts**: "your own name", "two or three
+  sentences", "four family members", item counts in the prompt that did
+  not match the answer key ("due o tre" for four sentences, "tre" for four
+  items).
+- **Dialogue/canon**: incoherent turns (it A1 u19 "Hai il biglietto?" →
+  "Sì, vorrei un biglietto"; it A2 u31; it B2 u06 reading); ru C1 u02
+  "Наш коллега" between Дима and Настя; voice_hint gender not matching the
+  speaker (ru B1 u50, u53); questions contradicting the audio.
+- **Distractor is also correct**: it "se sapevo" (colloquial "if I had
+  known"); ru "Да, конечно" as ironic; ru вас as a formal pronoun;
+  indistinguishable matching pairs (it A1 u01 "formale", B2 u08
+  afferma/sostiene).
+- **Missing valid accepted answers**: by count the most common class
+  (word order, pronoun drop, feminine forms, ё/е, formal/informal).
+New bug class: no. The new finding is the miss rate: classes the earlier
+passes logged as checked (notes, glosses, sequencing) were checked
+shallowly.
+
+Owner decisions / native-speaker flags (details in each file's
+review.notes, "Second-pass review 2026-10-18"):
+- **it character canon**: A1 u01/u02, B1 u39/u43 and C1 u03/u04 make Elena
+  Sam's office colleague ("workplace peers" in register_policy). A1 u17,
+  B2 u05 and the later units make her a teacher. Pick one.
+- it "capisco il tuo punto" (anglicism; "punto di vista") is taught in B1
+  u53 and B2 u06. If it changes, change it course-wide.
+- ru "Тем не менее" now has no comma in B1 u53, B2 u01 and C1 u04. Other
+  connectors ("Вместе с тем,", "В итоге,") still have one and need a native
+  check.
+- ru: Нужен + list of nouns (A2 u25/u27); рейс for a train (A2 u31);
+  "как снег на голову" with пришла (C1 u06); Дима's "conditional
+  concession" in B2 u07 is really conditional agreement (needs a
+  dialogue rewrite; audio still pending_generation).
+- it: nervoso vs agitato (A1 u22); visitare un ristorante (B1 u51);
+  delizioso intensified (B2 u03); avere le mani in pasta (C1 u06).
+- Word-order alternates: several workers left valid alternate orders
+  unaccepted, because `validate` warns on any order that differs from
+  tested_text. Suggest the validator stop warning when an accepted order is
+  a known valid permutation, or let authors mark one as intentional.
+- Unchanged from earlier: ё/е equivalence in strict dictations (backend);
+  it A2 dictations using correct_option.
+
+Remaining: nothing unreviewed in en-ru/ru or en-it/it. The ru/it A1
+untaught-distractor pattern (A1 u02/04/06, one lesson ahead) was left
+where the word is taught in the same unit.
+
+Verification: `scripts/verify.sh --content-only` passes (all courses);
+course-scoped validate + compile was run before every commit.
