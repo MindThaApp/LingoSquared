@@ -1307,6 +1307,53 @@ def validate_option_accepted_answers_are_displayed(
                 )
 
 
+def validate_single_answer_key_source(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """Reject exercises that carry both correct_response and accepted_answers.
+
+    canonical_response() (and every validator that reads the answer key)
+    lets an explicit correct_response win outright, so any accepted_answers
+    authored next to it are silently dropped and never reach the grader.
+    Authors must pick one key: a lone correct_response, or accepted_answers
+    whose first `correct` entry is the canonical answer.
+    """
+    sources: list[tuple[str, Any]] = []
+    exercise_overlays = overlay.get("exercises", {})
+    if isinstance(exercise_overlays, dict):
+        sources.extend(
+            (f"overlay.exercises.{key}", value)
+            for key, value in exercise_overlays.items()
+        )
+    for unit in realization.get("units", []) or []:
+        if not isinstance(unit, dict):
+            continue
+        for lesson in unit.get("lessons", []) or []:
+            if not isinstance(lesson, dict):
+                continue
+            for exercise in lesson.get("exercises", []) or []:
+                if isinstance(exercise, dict):
+                    key = exercise.get("content_key", "<unknown>")
+                    sources.append((f"realization.exercises.{key}", exercise))
+
+    for path, exercise in sources:
+        if (
+            isinstance(exercise, dict)
+            and "correct_response" in exercise
+            and "accepted_answers" in exercise
+        ):
+            report.error(
+                path,
+                "exercise has both correct_response and accepted_answers; "
+                "correct_response silently overrides accepted_answers, so the "
+                "accepted variants are never graded. Keep only "
+                "accepted_answers (canonical answer first) or only "
+                "correct_response",
+            )
+
+
 def validate_same_speaker_dialogue_distractors(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -4603,6 +4650,7 @@ def validate_documents(
         report,
     )
     validate_option_accepted_answers_are_displayed(realization, overlay, report)
+    validate_single_answer_key_source(realization, overlay, report)
     validate_same_speaker_dialogue_distractors(realization, overlay, report)
     validate_order_word_bank_answers(realization, overlay, report)
     validate_matching_pairs_minimum_scale(realization, report)

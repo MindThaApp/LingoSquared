@@ -993,6 +993,31 @@ def test_option_correct_option_must_be_in_accepted_answers():
     )
 
 
+def test_correct_response_with_accepted_answers_is_an_error():
+    compiler = load_content_compiler()
+    report = compiler.Report()
+    compiler.validate_single_answer_key_source(
+        {"units": [{"lessons": [{"exercises": [
+            {"content_key": "ar.test.inline", "correct_response": "a", "accepted_answers": ["a", "b"]},
+        ]}]}]},
+        {
+            "exercises": {
+                "ar.test.both": {
+                    "correct_response": "أرى أن",
+                    "accepted_answers": [{"value": "أرى أن"}, {"value": "أرى ان"}],
+                },
+                "ar.test.only_accepted": {"accepted_answers": ["x", "y"]},
+                "ar.test.only_correct": {"correct_response": "x"},
+            }
+        },
+        report,
+    )
+    assert len(report.errors) == 2
+    assert any("overlay.exercises.ar.test.both" in error for error in report.errors)
+    assert any("realization.exercises.ar.test.inline" in error for error in report.errors)
+    assert all("silently overrides" in error for error in report.errors)
+
+
 # ---------------------------------------------------------------------------
 # Backend-constraint mirrors: teaching `kind`, exercise `type`, VARCHAR widths.
 #
