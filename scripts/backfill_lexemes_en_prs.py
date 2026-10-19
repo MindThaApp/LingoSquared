@@ -1110,7 +1110,7 @@ PRS_GLOSSES: dict[str, str] = {
     # (unit03 above) and می‌آیند (unit02 above) are REUSED existing B1
     # lexemes, not re-added.
     "گفتم": "I said", "گفتی": "you said", "گفت": "he/she said",
-    "گفتیم": "we said", "گفتید": "you (plural/polite) said",
+    "گفتیم": "we said", "گفتین": "you (plural/polite) said",
     "گفتند": "they said", "پرسید": "he/she asked",
     "پرسیدم": "I asked", "مدیر": "manager", "مهم": "important",
     "پرسیدی": "you asked", "شنید": "heard",
@@ -1393,11 +1393,10 @@ PRS_GLOSSES: dict[str, str] = {
     "خانه‌ای": "a house (that…) [خانه + indefinite -ای]",
     # B1 unit 11 (reported communication), added 2026-07-22. Almost every
     # token is REUSED from units 05/07-10 (گفت/پرسید/که/آیا/وقت/
-    # دارم/مدیر/زرمینه). پرسیدید keeps -ید, NOT -ین: the unit's own
-    # fresh-context review (2026-07-11) adjudicated this explicitly --
-    # SIMPLE-PAST 2pl keeps -ید in this corpus (cf. the existing گفتید),
-    # while present/subjunctive/imperative 2pl correctly use -ین.
-    "پرسیدید": "you (plural/polite) asked",
+    # دارم/مدیر/زرمینه). Simple-past 2pl uses the Afghan -ین ending like
+    # every other 2pl form (2026-10-19 consistency fix: پرسیدید -> پرسیدین,
+    # گفتید -> گفتین; precedent a2_unit19 رفتین/نرفتین).
+    "پرسیدین": "you (plural/polite) asked",
 }
 
 PRS_POS: dict[str, str] = {
@@ -1714,7 +1713,7 @@ PRS_POS: dict[str, str] = {
     "آمد": "verb",
     # B1 unit 05 (reported speech), added 2026-07-11.
     "گفتم": "verb", "گفتی": "verb", "گفت": "verb", "گفتیم": "verb",
-    "گفتید": "verb", "گفتند": "verb", "پرسید": "verb",
+    "گفتین": "verb", "گفتند": "verb", "پرسید": "verb",
     "پرسیدم": "verb", "مدیر": "noun", "مهم": "adjective",
     "پرسیدی": "verb", "شنید": "verb",
     # B1 unit 06 (purpose), added 2026-07-11.
@@ -1847,7 +1846,7 @@ PRS_POS: dict[str, str] = {
     "دفتری": "noun", "خوشحالم": "verb", "استیم": "verb", "خریدی": "verb",
     "خانه‌ای": "noun",
     # B1 unit 11 (reported communication), added 2026-07-22.
-    "پرسیدید": "verb",
+    "پرسیدین": "verb",
 }
 
 
@@ -2935,7 +2934,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # B1 unit 05 (reported speech) semantic tags, added 2026-07-11.
     # "report_verb_present"/"report_verb_past" are the گفت/پرسید paradigms
     # (both completed across lessons 01-03).
-    if token in {"گفتم", "گفتی", "گفت", "گفتیم", "گفتید", "گفتند"}:
+    if token in {"گفتم", "گفتی", "گفت", "گفتیم", "گفتین", "گفتند"}:
         semantics.append("report_verb_say")
     if token in {"پرسید", "پرسیدم", "پرسیدی"}:
         semantics.append("report_verb_ask")
@@ -3169,7 +3168,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("glad_predicate")
     if token == "خریدی":
         semantics.append("past_verb_second_b1")
-    if token == "پرسیدید":
+    if token == "پرسیدین":
         semantics.append("report_verb_ask")
     # dialogue_word for every new unit's dialogue lesson, listed as exact
     # lesson keys rather than a suffix match: units 59/60/61 all reuse the

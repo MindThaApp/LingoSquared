@@ -2667,3 +2667,409 @@ where the word is taught in the same unit.
 
 Verification: `scripts/verify.sh --content-only` passes (all courses);
 course-scoped validate + compile was run before every commit.
+
+### 2026-10-19 — en-ar A1→C1 full pass, de-en A1+B1, en-fa/en-prs leftovers (fresh-context review; branch content/review-ar-leftovers, PR #40)
+Scope: 97 units. en-ar every unit A1–C1 (69 units, realization + overlay).
+B2 u01-08 and C1 u01-08 had never been reviewed. The rest had had one pass,
+which was treated as unverified. de-en: all 17 overlays (A1 u01-14, B1
+u01-03; none had been reviewed). Leftovers: en-fa A1 u20 + A2 u19, en-prs A2
+u15-19 + B1 u02-05. en-it A1 u07-09 needed nothing: PR #39 had already
+second-passed them. Method as in PR #39: one fresh-context worker per batch
+of 3-5 units fixed what it found. Each batch was validated course-scoped and
+committed separately; commit subjects carry the per-batch counts. Accepted
+answers were only added, with one exception: two result-first word_order
+answers in ar B1 u41 could no longer be built from the corrected فـ tiles.
+
+Fix counts: en-ar 490 (A1 208 · A2 46 · B1 116 · B2 63 · C1 57) · de-en
+189 (A1 164 · B1 25) · en-prs 46 (A2 23 · B1 23) · en-fa 8. Total 733,
+about 7.6 per unit, more than double PR #39's 3.3. de-en (never reviewed)
+had about 11 per unit. The ar units with one earlier pass still had 6-9 per
+unit, so that earlier pass caught little.
+
+Defect classes (all passed a green compile):
+- **listen_select / MC distractors** (the dominant de-en class, about 40% of
+  de-en fixes). Distractors were untaught at that point, were heard in the
+  same audio (often the tested speaker's own line), were statements under a
+  "which question" prompt, or were the only option without a "?". Some items
+  had several valid options, and some instructions said "noch einmal" for a
+  different audio. The validator's heard-in-audio check matches substrings,
+  so it caught one attempted fix ("How are you?" inside "How are you feeling
+  today?").
+- **Character canon**: en-ar cast Yusuf (an engineer and Layla's colleague)
+  as waiter, fruit seller, ticket clerk, shirt seller and cashier (A1 u07,
+  u08, u16, u21, u24). These roles are now an unnamed النادل / البائع /
+  الموظف. Yusuf's own sister Nour asked where his house is (A1 u19). In
+  de-en, Daniel and Leila were treated as strangers after meeting in u02.
+  English name spellings were split (Layla/Laila/Leila, Nour/Noor) and are
+  now standardised to Layla and Nour.
+- **False grammar notes**: ar لم said to take the subjunctive (it takes the
+  jussive); أحضر called past; سيكون described as "+ present verb"; غير أن
+  "stronger than" لكن; لو + past with no result taught as a "softened
+  suggestion" (it is a wish); يمكنني as a concession marker; "Arabic has no
+  compound past". prs: باید "never changes form"; subjunctive glossed as
+  future; "always two clauses" contradicted by the unit's own dialogue. fa:
+  ان→ون compared with the "is" contraction. de-en: thirteen = "base +
+  -teen"; "one" required before hundred.
+- **Target-language grammar/idiom errors**: ar result clauses after إذا
+  lacking فـ before سـ (B1 u37, u41; now canonical فسنبقى); accusative after
+  أنّ (كريم → كريما); لكان with no لو clause; لكن + bare adjective; calqued
+  idioms (يسير على خيط رفيع → معلق بخيط رفيع); hamza-less الى/ان across the
+  C1 template; collocation errors. prs: مسافران ... صبر کنین (2pl ending on a
+  3pl subject). German in de-en: the non-word "Besitzten", Könnte for "can",
+  "Zum Hier-Essen", aufgeregt for "excited", "Lass uns im Café treffen",
+  lowercase after colons, a comma before "und".
+- **Glosses**: C1 discourse-move label cards were glossed with their example
+  sentence instead of the label's meaning (36 cards per unit, all 8 C1
+  units). Card glosses carried words not on the card ("about", "but",
+  "please"). example_gloss dropped the "Layla said:" frame present in the
+  Arabic (systemic in ar A1). A stray quoted "Yes," artifact appeared across
+  ar A2/A1. Wrong senses: أرى أن "I see that", لكل مقام مقال, تذاكر "study a
+  lot".
+- **Gender**: Arabic second-person and first-person forms were given in one
+  gender only (تفضلي, امش, تفعل, مهندس, سعيد, متاحة). Both are now taught and
+  accepted. voice_hint "female+male" was set on same-gender dialogues, and a
+  female voice on Yusuf's lines (about 10 instances).
+- **Audio vs teaching**: a listen item whose answer did not match its audio
+  (ar B2 u05); tested audio lines with no teaching card; cards in reverse
+  turn order; dialogue_response prompts that were the learner's own line (ar
+  B1 u49, prs A2 u16).
+- **Underdetermined prompts / missing accepted answers**: by count the most
+  common class again (word order, verb-first, لدي/عندي, في-less times,
+  pronoun drop, I'm/I am).
+- **Internal jargon** in learner notes: "culminating location pattern", "The
+  spine outcome requires…", "unit model", an internal file name.
+- **Manifest gaps**: fa/prs A2 u19 and de-en A1 u14 were on disk but missing
+  from content_manifest.txt, so verify.sh never validated them. de-en B1
+  u01-03 were missing too, and failed validation because their pairs were
+  oriented the old way (before the 2026-08-04 transpose). All are now in the
+  manifest (new group de-en-b1).
+- **prs dialect**: simple-past 2pl had been kept at Iranian -ید (گفتید,
+  پرسیدید) on the claim that "no -ین counterpart exists in the corpus".
+  a2_unit19 teaches رفتین, so the claim was false. It is now -ین
+  course-wide (b1_unit05, b1_unit11, the backfill glosses), and a1_unit01's
+  "چطور استید" is now استین. The backfill script's gloss table must follow
+  any introduced_token rename. CI pytest caught this once.
+New bug class: no new class. Two systemic template defects are new:
+C1 label cards glossed by their example sentence, and ar service roles given
+to main characters.
+
+Owner decisions / native-speaker flags (details in each file's review.notes,
+"Review 2026-10-19 … NATIVE FLAGS"):
+- **prs**: confirm Afghan -ین for simple-past 2pl. prs B2 (b2_unit01/03/05/07/08)
+  still has 2pl -ید (بیندازید، بنویسید، بگویید، بدهید، بیایید), possibly
+  deliberate formal register. Many Dari-vs-Iranian lexical calls are listed
+  per file (کی/چه وقت, ایستگاه/اډه, اطلاعیه/اعلان, کاربر, بازپرداخت,
+  گارانتی/گرنتی, صبحانه vs ناشتا, شاید + indicative).
+- **fa**: u19 Thursday/Friday weekend; پنجشنبه vs STT "پنج شنبه" spacing in
+  speak_thursday_summary; u20 price unrealistic.
+- **ar**: A2 u27 gives Yusuf the same address as Layla's new address (u25);
+  A2 u34 الحجم غير صحيح وممزق قليلا makes "size" the subject of "torn" (an
+  audio rewrite is needed); B1 u53 Yusuf's reply has an unrelated
+  sentence; B2 u04 story incoherence; several MSA-purism calls (المواضيع,
+  في نفس الوقت, سأل + إذا, ذاكرت).
+- **de-en**: day-part boundaries (evening from 5 PM) vs German Abend; Handy vs
+  Telefon.
+- **Shared English realization (affects nl-en/fa-en/prs-en/de-en, not fixed
+  here)**: matching exercises testing lesson02 words in lesson01 (A1 u06,
+  u08, u09, u10, u12, u13); Daniel (librarian) asking the library's hours (u04,
+  u05); u11 forecast contradicting the dialogue; B1 u03 write_if_rains "you"
+  vs tested "we"; B1 writing target_blocks that print the whole English
+  answer. The nl-en/fa-en/prs-en overlays very likely share the de-en
+  distractor defects in A1 u03-u14 and should get the same pass.
+- **Tooling (Codex lane)**: grading does not forgive a detached و (وقهوة vs و
+  قهوة); check_dari_register.py lacks a past-2pl -ید rule; `validate` warns
+  on every valid alternative word order, so workers drop valid orders.
+
+Verification: `scripts/verify.sh --content-only` passes (all courses) and
+`pytest scripts/tests` passes (73). Course-scoped validate + compile was run
+before every commit.
+
+### 2026-10-19 — en-fr + en-es + en-de second pass, A1 → C1 (fresh-context review; branch content/second-pass-fr-es-de, PR #41)
+Scope: every en-fr, en-es and en-de unit, realization + overlay: fr 59 units,
+es 60, de 69, plus the orphan pilot `de/b2_unit54_argumentation` (not in the
+manifest). That is 377 files in 50 batches of 3-4 units. The earlier
+"reviewed" status was treated as unverified. This pass also covered the
+files still marked `unreviewed`: en-es B2 u04-08 and C1 u01/u05-07, en-de B1
+u35 → C1 u08, and u54. Their `status` fields were left unchanged, so the
+owner can now flip them. Method is the same as the 2026-10-18 it/ru pass: one
+fresh-context worker per batch fixed what it found, and the coordinator ran
+course-scoped validate + compile for all 15 fr/es/de groups before every
+commit. The full `scripts/verify.sh --content-only` ran at intervals. The
+checklist and the "only add accepted answers" rule were unchanged (removals
+listed below).
+
+Fix counts (commit subjects carry the per-batch counts):
+- en-fr/fr: A1 66 · A2 34 · B1 86 · B2 22 · C1 33. Total 241, 4.1 per unit.
+- en-es/es: A1 86 · A2 69 · B1 108 · B2 57 · C1 58. Total 378, 6.3 per unit.
+- en-de/de: A1 187 · A2 35 · B1 94 · B2 57 (incl. 10 in u54) · C1 38. Total
+  411, 6.0 per unit.
+- Overall: 1030 fixes, about 5.5 per unit. That is well above the it/ru
+  second pass (3.3). en-de A1 (7.8 per unit) and the en-es B2/C1 files that
+  were never reviewed had the most. en-fr B2 had the fewest (2.75 per unit;
+  fr B2 u03 and u08 had 0 defects).
+
+Defect classes (all passed a green compile; most were missed by the earlier
+passes):
+- **Reading questions that never showed their text** (new to this registry):
+  reading_comprehension / multiple_choice items with `prompt.target_blocks`
+  empty, or holding only the English question. The compiler renders only
+  instruction + target_blocks, so the learner never saw the menu, sign, email
+  or passage. Affected about 100 items: de A1 u02/07-09/12-16/21/24, B2
+  u01-08 (all four per unit), C1 u01-02/06-08; es A1 u13-15, A2 u16-18 and
+  u22-25, B1 u40, B2 u04-08, C1 u01/u05-08; fr B1 u38-43. **Validator
+  candidate**: warn when a reading_comprehension item has no target-language
+  block.
+- **Answer leakage at A2+** (the largest class in fr): prompts printing the
+  French answer ("Réponds avec cette phrase exacte : …", "Dis : …",
+  "Écris : …") in every fr A2 u19-24 and B1 u25-43 speak / dialogue_response
+  item. Also es B1 u36-44 and B2/C1 culminating writing prompts ("using
+  '<answer>'"), de B1 u39 and C1 u01-02, and fr B2/C1 instructions quoting
+  the French. Fixed by giving an in-character cue (or nothing) and an English
+  instruction that names content and form.
+- **Sequencing**: distractors and match pairs used before they were taught.
+  This is the most common recognition-item defect in every course, often a
+  lesson02 sentence used as a lesson01 distractor. Examples: de wir/tausend/
+  Onkel/abends/damit/sollten; es paraguas/caro/necesitamos/opinas; fr
+  se coucher/quiche/fermer/payée. Some match-pair infinitives were tested but
+  never taught (de Kollegin, klingen, passen, bestellen, funktionieren,
+  vorbeikommen). One question was never taught: de "Was nehmen Sie?".
+- **en-de A1 structural** (new): the dialogue cards in u11-24 had German
+  titles and German "glosses", so learners got no translation (~60 cards).
+  matching_pairs clues were built from untaught German (Körperteil,
+  Übelkeit, Etikett…); A1 was converted to English clues. "Im Dialog:"
+  example sentences often were not in the dialogue, or their gloss
+  translated a different sentence.
+- **False grammar/usage notes**: fr douze–quinze "unrelated" to deux–cinq,
+  enchanté "silent consonant", aimer mieux "used the same way" as préférer,
+  pour/pour que "person acting vs goal", reported-tense rule, probablement =
+  certainty, une expérience / embauche / manquer bans, pendant que +
+  passé composé, plus-que-parfait ignoring être verbs. es once–catorce,
+  el primero "only exception", recomendar + infinitive "only with one
+  person", para "always" + infinitive, que "for things", si + indicative =
+  "real, decided" condition, a Dutch verb-second rule copied from the source
+  unit, Querido "neutral", backshift. de ich "always lowercase", war "past of
+  ist", vom "colloquial", Sie/sie "identical in every form", hätte + participle
+  + sollen, jedoch word order, Perfekt as a "foreground tense", einen Termin
+  machen "a calque", capitalised Sie.
+- **Wrong-sense glosses**: es proceso "progress", puede "could", ayuda "for
+  help", Le "to him/her"; fr en "increasingly", je vous propose de "I suggest
+  that you", ligne "online"; de deutlich "direct", Pfund.
+- **Target-text errors**: es "treinta y uno años", "costar de + inf.", "dicha
+  zona" after a plural, a mixed-mood propongo que; fr "Après la liste, je
+  l'envoie"; de comma after "Mit freundlichen Grüßen" / "Liebe Grüße",
+  "Ein Plan beim Wetter".
+- **Dialogue coherence / canon**: lines in the wrong speaker's mouth (es A1
+  u03/u06; fr A1 u03/u05); turns that do not answer the previous one (fr B1
+  u40, de A1 u23-24, B1 u37, C1 u02-03, es B2 u02, A2 u20); Inès addressing
+  Mathieu in the third person (fr B1 u28); a counterfactual contradicting how
+  Inès met Mathieu (fr C1 u05); audio missing a claim its question relies on
+  (fr C1 u07). All edited audio scripts are still `pending_generation`; no
+  fr/es/de audio has been generated, so nothing needs re-recording.
+- **Underdetermined prompts / distractors also correct**: "your own name",
+  "three numbers between 70 and 100", "the positive reply", "agree"; es tu
+  accepted while also an on-screen distractor; de "Ich bin ein Ingenieur" as a
+  distractor; fr toi.
+- **Missing valid accepted answers**: by count the most common class again
+  (word order, especially de main-clause-first wenn/als; es pronoun use and
+  -se subjunctive; feminine forms; article forms; Café; taught synonyms).
+New bug class: yes. Reading items without their text and the en-de A1
+German-gloss cards had not been logged before. The miss rate on classes
+logged as checked (notes, sequencing, leakage) matches the it/ru finding.
+
+Accepted answers removed (each because it was wrong for the prompt as shown):
+es A1 u01 `tu` (also an on-screen distractor; the grader is accent-sensitive);
+es A1 u08 "No está cerca" (the grader turns internal commas into spaces, so
+it also accepted the wrong "No, está cerca"; instruction reworded); half-answers
+missing a required part (es A1 u14-15); answers that no longer fit a
+rewritten open prompt (fr A1 u03, es A1 u02-03, de A2 u26, de A1 u24 where
+Felix answered his own question).
+
+Validator warnings rose by design: en-de 6/0/9/13/7 → 6/3/12/14/14 and
+en-es C1 0 → 1. Every new one is "order-answer tokens are a scrambled
+permutation", caused by a valid alternate word order added on purpose (same
+request as the it/ru section: let the validator skip known-valid
+permutations, or let authors mark them).
+
+Owner decisions / native-speaker flags (details in each file's review.notes,
+"Second-pass review 2026-10-19"; full list in the PR #41 body):
+- **Priority native calls**: fr B2 u01 "cela n'empêche pas que tu peux"
+  (indicative; standard is *puisses*), flagged by three reviews; es C1 u06
+  "Me costó un ojo de la cara" used for effort (the idiom is about price).
+- **Canon**: es — where the story is set (Mateo/Elena London vs "aquí en
+  España"), Elena's London trip "a Londres" (A2 u22), Elena's old
+  neighbourhood (A2 u17). fr — Mathieu in Paris (A1/A2) vs Lyon (B2+), a
+  workshop "dernière séance" (A1 u08). de — Anna "learning German" (B1 u44);
+  Anna waitress vs café owner and Felix the engineer co-running it (A1 u24,
+  B1 u48-53, B2 u54); Frau Vogel colleague vs manager (B2 u07); B2 u04 train
+  timeline.
+- **Course-wide decisions**: de Cafe vs Café (typed answers now accept
+  both where touched); de "Im Dialog:" prefix read aloud as part of example
+  sentences; de A2+ matching clues as untaught German definitions (A1 was
+  switched to English); es Spanish instruction copies with untaught words in
+  A1 speak prompts; fr 8-digit phone numbers (A1 u02).
+- **Orphan `de/b2_unit54`**: reviewed and fixed, but it should not be wired
+  in. It duplicates b2_unit01's outcome and conflicts with Felix's canon.
+  Delete it or leave it out of the manifest.
+- **Backend (not content)**: non-dictation grading ignores internal commas,
+  so answers that differ only by a comma ("No está cerca" / "No, está
+  cerca") are indistinguishable. Worth a corpus-wide check.
+
+Verification: course-scoped validate + compile for all 15 fr/es/de groups
+(0 errors) before every commit; full `scripts/verify.sh --content-only`
+passed at eea26820, ccc03781 and 6d61655c, and again on the final head.
+
+### 2026-10-19 — en-hi + en-pl + en-ro second pass, A1 → C1 (fresh-context review; branch content/second-pass-hi-pl-ro, PR #42)
+Scope: every en-hi, en-pl and en-ro unit, realization + overlay (en-hi 60 units,
+en-pl 61, en-ro 61; 364 files). Why: the same second pass on en-it/en-ru (PR #39)
+found ~3.3 real defects per unit in units already marked reviewed, so all
+earlier "reviewed" status here was treated as unverified. 48 batches of 3-4 units,
+each given to a fresh-context worker that fixed what it found. Each batch was then
+validated course-scoped (validate + compile, 0 errors) and committed. The
+checklist was the 10-point one from the run prompt: grammar notes, glosses, target
+text, dialogue/canon, A2+ leakage, distractors, sequencing, underdetermined
+prompts, missing answers, and course-wide consistency. Accepted answers were added,
+not removed; the exceptions are listed below.
+
+Fix counts (per-batch counts are in the commit subjects):
+- en-hi/hi: A1 51 · A2 33 · B1 126 · B2 32 · C1 17 — 259, plus consistency commits:
+  - 18 A2/B1 instructions that printed the answer;
+  - 24 C1 u01-04 forward-referenced distractors;
+  - 71 speak prompts that printed the Hindi answer (21 of them gained variants or a pinned instruction).
+- en-pl/pl: A1 56 · A2 20 · B1 158 · B2 33 · C1 19 — 286, plus consistency commits:
+  - 11 B1 fix-the-mistake instructions that printed the corrected form;
+  - 7 B1 "spine outcome" notes;
+  - 19 C1 u01-04 distractors;
+  - 10 A1/A2 internal-reference notes.
+- en-ro/ro: A1 128 · A2 50 · B1 116 · B2 42 · C1 22 — 358, plus 4 B1 Romanian
+  prompts that contradicted their pinned English instruction, and 1 restored answer.
+- Yield: about 5 fixes per unit (903 over 182 units), higher than it/ru's 3.3. B1
+  was densest in en-pl (8.3 per unit) and A1 in en-ro (6.4 per unit).
+
+Defect classes found (all passed a green compile):
+- **Grammatical sentences drilled as errors (largest new class in en-pl).**
+  - Nearly every pl B1 grammar_check (about 40 items across u01-19) presented a
+    grammatical, merely stressed word order as "the error". Their feedback taught
+    invented rules ("X opens this sentence", "the verb comes right after the
+    subject"). All were rebuilt around a real error the unit teaches.
+  - Same class, smaller numbers: pl A1/A2 ("Marek dom ma.", "Konto mam.", a
+    topic-first sentence, "Nie trzeba palić", "będziemy padać", "w czas"); hi
+    ("बैंक सीधे जाओ", "टिकट … की है", "Mogę powiedzieć, czy…"-type items).
+  - A validator cannot catch this; it is a review-only class.
+- **Answer leakage at A2+:**
+  - "Correct the sentence — needs 'X', not 'Y'" instructions (hi ~45, pl ~25);
+  - hi writing prompts that printed the romanized answer;
+  - 71 hi A2/B1 speak items showing "बोलो: <answer>" under an English
+    "Say: …" (the PR #38 lint missed the prefix);
+  - a pl dialogue_response that showed its own answer; a ro role prompt printing
+    the line it asked about.
+- **False grammar/usage notes:**
+  - ro: neuter nouns called masculine (tren, bilet, cap, birou, număr…); "un is
+    masculine-only"; doi with neuter nouns; the conditional as "aș + past
+    participle"; "a spus că era keeps her tense" (Romanian has no obligatory
+    backshift); completați called an imperative; "only the 3rd person changes in
+    the subjunctive" (a fi); "conditionalul".
+  - pl: "-szy is the general comparative"; boleć "only two forms"; było "no
+    person"; padać "never with będziemy"; spróbujesz called present; chciałbym "to
+    a man"; gdyby mixing if- and result-clause forms; których called genitive.
+  - hi: ज़्यादा = "even more"; था/थी "agree exactly like है"; ने "on the verb";
+    बल्कि "always" after negation; मुझे+infinitive+है "always"; the apna example
+    using emphatic मेरी अपनी; आप agreement "though the manager is one person".
+- **False grading promise (ro):** every A1/A2 overlay's `answer_policy` said
+  diacritic-less and cedilla ş/ţ answers were accepted. The grader does neither,
+  so the text was rewritten. No cedilla occurs in learner-facing ro text; the 112
+  cedilla characters are all in provenance notes.
+- **Target-text errors:**
+  - ro: "Cine ajută Ana" → "Cine o ajută pe Ana"; "despre echipa" → "despre
+    echipă"; "coletul lui Ana" → "coletul Anei"; clock-hour "doisprezece" →
+    "douăsprezece" (old form kept as accepted); "Cartofi costă"; "totuși cumpăr".
+  - pl: "Mógł zaspać, ale to musiał przegapić pociąg".
+  - hi: "मुझे भी!" answering a मैं-sentence; the non-word "कार्य-लय"; the non-terms
+    "दातिव-कर्ता"/"दात-रूप".
+- **Dialogue coherence:**
+  - hi B2 u02: "didn't come at all" answered with "I was late".
+  - hi B1 u10: a question about this weekend answered with next week's plans.
+  - ro B2 u08: the summariser speaking as "we".
+  - ro B2 u07: one speaker both refusing and accepting a task.
+  - hi B2 u07/u08: audio turns with no teaching cards (8 cards added).
+- **Sequencing:**
+  - About 30 untaught distractors in ro A2 alone.
+  - The C1 template (all three languages) put later-lesson phrases into lesson
+    1-3 recognize distractors (about 80 items fixed).
+  - pl Polish task text on A1 prompts; ro crede tested before it was taught.
+- **Underdetermined prompts:** "Respond as Diana." / "write about your home /
+  job / plans / colleague" graded against one sentence; fill-ins that fit several
+  taught words.
+- **Wrong-sense glosses:** पसंद "favorite", पसंद करता "prefers", कैसी "what kind",
+  "(that) I can" for pot/poți, atunci "by then", puțin "less", "Trebuie = we
+  must", nevoie "needs".
+- **False "first taught in unit N" / "genuinely new" notes:** dozens in hi B1
+  and ro B1. hi B1 cited A1/A2 or later-B1 unit numbers.
+- **Internal jargon in learner notes:** "spine outcome", "lesson02's",
+  "unit07's", an authoring note shown as feedback (pl C1 u03), Dutch
+  comparisons in an English-speaker course (pl B2 u05).
+- **Missing valid answers** (by count the largest class): word order, speaker
+  gender, kiedy/gdy, să-forms, pronoun drop, nukta/anusvara spellings.
+- **Canon fixes made:**
+  - pl Marek's surname Kowalski → Wójcik (B2 u05).
+  - hi Priya moved from the office to school (B1 u13), plus several "colleague"
+    notes.
+  - ro Ana not going to the mountains (B1 u13).
+  - pl Ewa's flat vs "dom" (B1 u04).
+  - Voice hints matched to the speaker (pl C1 u05, ro C1 u08).
+
+New bug class: **compiler fact.** `canonical_response()` returns `correct_response`
+whenever it is present and silently ignores `accepted_answers` on the same exercise.
+Variants added next to a `correct_response` never reach the grader. Workers moved
+the value into `accepted_answers` wherever they added variants. Remaining both-key
+cases: en-hi B2 dictations (harmless, strict anyway) and 8 en-ar exercises (out of
+scope, not checked). **Validator suggestion (Codex lane):** error on an exercise
+that has both keys.
+
+Removed accepted answers (exceptions to add-only, all misspellings or now
+unbuildable):
+- hi B2 u08: 29 variants that dropped the ड़/ढ़ dot (misspellings graded correct).
+- hi B2 u03: 2 "थोडा" variants.
+- hi B2 u06: 1 no-nukta variant in a strict dictation (the compiler ignored it).
+- ro B1 u04: the word_order answer "…despre echipa" (ungrammatical; the corrected
+  tile can't build it; still accepted on the speak item).
+- ro B2 u08: synthesis answers moved to third person with the corrected prompt.
+- One reviewer-removed diacritic-less ro A2 u21 answer was restored.
+
+Owner decisions (details in each file's review.notes, "Second-pass review 2026-10-19"):
+- **Character canon (biggest open item):**
+  - **hi:** Priya is a school teacher (A1 u17), but the B2 storyline (u02-u05)
+    and B1 u18 make her Arjun's office colleague with a manager. Options: recast
+    the addressee as a प्रधानाचार्य, or move her lines to Arjun.
+  - **ro:** Ana is a school teacher (A1 u17, A2 u26) but works in Mihai's office
+    in B1 u02/05/06/14/19. Mihai is an engineer but plays a shop clerk and market
+    seller (A1 u07, u20). A1 u12's dialogue contradicts u11.
+  - **pl:** Marek is from Canada but shows a dowód osobisty (A2 u23). He has a
+    house (A1 u18) but lives in a block of flats (B1 u12). Ewa is a teacher but
+    argues office vs remote work (B1 u02).
+- **Colloquial forms drilled as errors** (prescriptively right, common in
+  speech): hi "चाहिए है", "पीना चाहिए", "किताबें पसंद है", "सोमवार शुरू"; pl "Pan
+  czy mógłby…"; several pl marked word orders still graded wrong in word_order
+  items.
+- **Audio-bound wording left as authored:**
+  - pl B2 u08 "Są sprzeczni co do ceny" (said of people);
+  - ro B1 u19 "Și eu, a cărei carte preferată…";
+  - ro B1 u04 "Nu sunt de acord complet";
+  - hi B1 u18 manager "भेज सकेंगे" to Priya;
+  - pl C1 lesson 2/3 listening plays the whole-unit audio, so later-lesson
+    sentences are heard first (needs per-lesson audio).
+- **Spelling standardisation:**
+  - hi: महंगा/महँगा, खराब/ख़राब, तेज/तेज़, फंसना/फँसना, आमतौर पर/आम तौर पर;
+  - pl: Ewa/Ewo vocative across the course;
+  - ro: "Stimate domn" vs "domnule".
+- About 120 naturalness flags; see each file's NATIVE FLAGS.
+
+Remaining:
+- Native-speaker pass on all three lanes.
+- Grading-side: hi nukta/chandrabindu folding (from the 2026-10-17 entry, still
+  open); ro has no cedilla→comma-below fold, which only matters for learners on
+  legacy keyboards.
+- The validator still warns on every intended alternative word order (en-hi
+  A1 46, B1 60; en-pl A1 94).
+
+Verification: `scripts/verify.sh --content-only` passes (all courses). A
+course-scoped validate + compile ran before every commit.

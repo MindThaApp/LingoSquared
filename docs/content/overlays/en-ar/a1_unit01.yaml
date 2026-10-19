@@ -26,6 +26,7 @@ review:
     (macron for long vowels, ḥ/ʿ for the pharyngeal/glottal consonants) --
     the same informal-transliteration convention already used in the fa
     overlays. Fresh-context reviewed 2026-07-12: MSA (fusha) verified correct and natural; compiler clean (0 errors). NOTE: a frontend blocker is flagged separately -- "ar" is missing from packages/shared LANGUAGE_SCRIPT and the shared "arabic" virtual keyboard is Perso-Arabic (Persian keheh/yeh, not Arabic kaf U+0643 / yeh U+064A), so Arabic-typing exercises cannot yet be typed/graded until the frontend/infra lane adds a true-Arabic keyboard layout.
+    Review 2026-10-19: 6 fixes - tusbih note now gives the feminine تصبحين على خير and translate_night accepts it; wa_anta note gives wa anti; romanize_goodbye now accepts its own displayed course form maʿa as-salāma plus common variants; welcome_response instruction names the wanted reply (welcome to you) and accepts أهلا وسهلا بك; reply_how_are_you instruction names the form (Fine, thank God, And you?) and adds valid word-order/أنا/شكرا variants. NATIVE FLAGS: none.
 
 course:
   title: Arabic A1
@@ -105,7 +106,7 @@ teaching:
   ar.a1.unit01.lesson03.teach.tusbih_ala_khayr:
     title: "Good night"
     gloss: "good night"
-    note: "تصبح على خير (tuṣbiḥ ʿalā khayr) is said when parting for the night or going to bed, not an opening greeting."
+    note: "تصبح على خير (tuṣbiḥ ʿalā khayr) is said when parting for the night or going to bed, not an opening greeting. تصبح is the form said to a man; to a woman it is تصبحين على خير (tuṣbiḥīna ʿalā khayr)."
   ar.a1.unit01.lesson03.teach.ahlan_wa_sahlan:
     title: "Welcome"
     gloss: "welcome"
@@ -149,7 +150,7 @@ teaching:
   ar.a1.unit01.lesson04.teach.wa_anta:
     title: "And you?"
     gloss: "And you?"
-    note: "وأنت؟ (wa anta) returns the question."
+    note: "وأنت؟ (wa anta to a man, wa anti to a woman) returns the question; the unvocalized spelling is the same for both."
   ar.a1.unit01.lesson04.teach.mumtaz:
     title: "Excellent"
     gloss: "excellent / great"
@@ -264,6 +265,16 @@ exercises:
       - {value: "ma'a as-salama", status: correct}
       - {value: "maa as-salama", status: correct}
       - {value: "ma salama", status: acceptable_with_note, note: "A common casual English-oriented spelling."}
+      - {value: "maʿa as-salāma", status: correct}
+      - {value: "maʿa as-salama", status: correct}
+      - {value: "ma'a as-salāma", status: correct}
+      - {value: "ma'a al-salama", status: correct}
+      - {value: "maa al-salama", status: correct}
+      - {value: "ma'a alsalama", status: correct}
+      - {value: "ma'a as salama", status: correct}
+      - {value: "maa as salama", status: correct}
+      - {value: "ma'a salama", status: correct}
+      - {value: "maa salama", status: correct}
     feedback: "The course form is maʿa as-salāma."
 
   ar.a1.unit01.lesson03.exercise01.night_meaning:
@@ -296,11 +307,13 @@ exercises:
     instruction: "Translate into Arabic: Good night."
     accepted_answers:
       - {value: "تصبح على خير", status: correct}
-    feedback: "تصبح على خير means good night."
+      - {value: "تصبحين على خير", status: correct}
+    feedback: "تصبح على خير means good night (تصبحين على خير when speaking to a woman)."
   ar.a1.unit01.lesson03.exercise07.welcome_response:
-    instruction: "Choose a natural reply to أهلا وسهلا."
+    instruction: "Reply to أهلا وسهلا with welcome to you."
     accepted_answers:
       - {value: "أهلا بك", status: correct}
+      - {value: "أهلا وسهلا بك", status: correct}
       - {value: "أهلا بك.", status: correct}
       - {value: شكرا, status: correct}
       - {value: "أهلا فيك", status: acceptable_with_note, note: "A colloquial (spoken-dialect) reply; the Modern Standard Arabic form taught here is أهلا بك."}
@@ -341,12 +354,16 @@ exercises:
     accepted_answers: [{value: [بخير, الحمد, لله], status: correct}]
     feedback: "بخير، الحمد لله means fine, thank God."
   ar.a1.unit01.lesson04.exercise06.reply_how_are_you:
-    instruction: "Reply to كيف حالك؟ and ask the question back."
+    instruction: "Reply to كيف حالك؟: say Fine, thank God, then ask And you?"
     accepted_answers:
       - {value: "بخير، الحمد لله. وأنت؟", status: correct}
       - {value: "بخير الحمد لله وأنت", status: correct}
       - {value: "بخير، وأنت؟", status: correct}
       - {value: "أنا بخير، الحمد لله. وأنت؟", status: correct}
+      - {value: "الحمد لله، بخير. وأنت؟", status: correct}
+      - {value: "أنا بخير، وأنت؟", status: correct}
+      - {value: "بخير، شكرا. وأنت؟", status: correct}
+      - {value: "بخير، الحمد لله، شكرا. وأنت؟", status: correct}
       - {value: بخير, status: acceptable_with_note, note: "Correct but omits the polite thanks and return question."}
     feedback: "بخير، الحمد لله. وأنت؟ means I'm fine, thank God. And you?"
   ar.a1.unit01.lesson04.exercise07.translate_not_bad:
