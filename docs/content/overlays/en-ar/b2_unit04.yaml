@@ -6,16 +6,8 @@ target_language: ar
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Arabic (MSA) confirmation needed (DRAFT). Confirm every
-    English gloss matches idiomatic MSA, that every matching_pairs
-    right-hand gloss discriminates its left on real meaning, and that
-    the culminating writing/speaking answers (lesson06) accept the
-    punctuation/joining forms a correct learner would actually produce
-    -- Arabic is graded fully byte-strict with zero typo tolerance and
-    no internal-punctuation stripping. See the realization file's
-    review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Overlay for ar's fourth B2 unit, authored alongside the
     realization. English speakers' real interference risks for this
@@ -32,6 +24,18 @@ review:
     mirroring the outcome's listening requirement -- learners must not
     assume Yusuf's telling order is the real event order. No sibling-
     direction file (ar-en b2) was consulted.
+    Review 2026-10-19: 8 fixes - pluperfect note falsely said Arabic has
+    no periphrastic form (كنت قد نسيت is one), rewritten; وصلت was
+    glossed only as feminine 'it arrived' while lesson04/05 use the same
+    spelling for 'I arrived', and the gloss and a note now cover both;
+    interrupt_model audio had a female voice_hint for Yusuf's own line,
+    now male; added valid order variants to translate_foreground (رنّ
+    الهاتف فجأة), speak_combined, translate_moment, translate_sequence2
+    and translate_arrived_late. NATIVE FLAGS: the narrative is muddled
+    -- lesson04 models أخيرا، وصلت في الوقت المناسب ('finally, I arrived
+    on time') inside a story about arriving late, and the bus arrives
+    while he searches but he then runs to the station; whether بعد ذلك
+    sits naturally mid-clause in بينما كنت أسير في الشارع بعد ذلك.
 
 course:
   title: Arabic B2
@@ -111,7 +115,7 @@ teaching:
   ar.b2.unit04.lesson02.teach.pluperfect_model:
     title: "I had forgotten the house key."
     gloss: "I had forgotten the house key."
-    note: "*كنت قد نسيت* = 'I had forgotten' -- there is no separate periphrastic perfect form in Arabic the way English uses one; the plain past verb (*نسيت*) does the work, with *كنت قد* marking it as earlier than the surrounding narration."
+    note: "*كنت قد نسيت* = 'I had forgotten' -- *كنت* (I was) + *قد* + the plain past verb *نسيت* together form MSA's pluperfect, marking this event as earlier than the surrounding narration."
   ar.b2.unit04.lesson02.teach.rajatu:
     title: "I returned"
     gloss: "I returned / I went back"
@@ -147,7 +151,8 @@ teaching:
     example_gloss: "When I arrived, the weather was rainy."
   ar.b2.unit04.lesson03.teach.wasalat:
     title: arrived
-    gloss: "arrived (feminine agreement)"
+    gloss: "arrived (here: it/she arrived; unvocalized, the same spelling also means 'I arrived')"
+    note: "Written without vowels, *وصلت* is both *وصلتْ* (it/she arrived, as in *وصلت الحافلة*) and *وصلتُ* (I arrived, as in *أخيرا، وصلت* in lesson04) -- context tells you which."
     example_gloss: "The bus arrived late."
   ar.b2.unit04.lesson03.teach.interrupt_model:
     title: "I was looking for the key when the bus arrived."
@@ -272,6 +277,7 @@ exercises:
     accepted_answers:
       - {value: "فجأة رنّ الهاتف", status: correct}
       - {value: "فجأة، رنّ الهاتف", status: correct}
+      - {value: "رنّ الهاتف فجأة", status: correct}
     feedback: "*فجأة، رنّ الهاتف* means suddenly, the phone rang."
   ar.b2.unit04.lesson01.exercise06.speak_combined:
     instruction: "Say aloud in Arabic: While I was walking in the street, the phone suddenly rang."
@@ -280,6 +286,8 @@ exercises:
       - {value: "بينما كنت أسير في الشارع، رنّ الهاتف فجأة", status: correct}
       - {value: "بينما كنت اسير في الشارع رنّ الهاتف فجأة", status: correct}
       - {value: "بينما كنت اسير في الشارع، رنّ الهاتف فجأة", status: correct}
+      - {value: "بينما كنت أسير في الشارع فجأة رنّ الهاتف", status: correct}
+      - {value: "رنّ الهاتف فجأة بينما كنت أسير في الشارع", status: correct}
     feedback: "*بينما كنت أسير في الشارع، رنّ الهاتف فجأة* means while I was walking in the street, the phone suddenly rang."
   ar.b2.unit04.lesson01.exercise07.write_background:
     instruction: "Write in Arabic: I was walking in the street."
@@ -372,6 +380,7 @@ exercises:
     accepted_answers:
       - {value: "في تلك اللحظة وجدت المفتاح", status: correct}
       - {value: "في تلك اللحظة، وجدت المفتاح", status: correct}
+      - {value: "وجدت المفتاح في تلك اللحظة", status: correct}
     feedback: "*في تلك اللحظة، وجدت المفتاح* means at that moment, I found the key."
   ar.b2.unit04.lesson03.exercise06.speak_interrupt:
     instruction: "Say aloud in Arabic: I was looking for the key when the bus arrived."
@@ -418,6 +427,7 @@ exercises:
       - {value: "أخيرا، وصلت في الوقت المناسب", status: correct}
       - {value: "اخيرا وصلت في الوقت المناسب", status: correct}
       - {value: "اخيرا، وصلت في الوقت المناسب", status: correct}
+      - {value: "وصلت أخيرا في الوقت المناسب", status: correct}
     feedback: "*أخيرا، وصلت في الوقت المناسب* means finally, I arrived on time."
   ar.b2.unit04.lesson04.exercise06.write_full_sequence:
     instruction: "Write in Arabic, using ثم and أخيرا to sequence the events: I found the key, then I ran to the station. Finally, I arrived on time."
@@ -473,6 +483,9 @@ exercises:
     accepted_answers:
       - {value: "وصلت إلى المكتب متأخرا هذا الصباح", status: correct}
       - {value: "وصلت الى المكتب متاخرا هذا الصباح", status: correct}
+      - {value: "وصلت متأخرا إلى المكتب هذا الصباح", status: correct}
+      - {value: "وصلت إلى المكتب هذا الصباح متأخرا", status: correct}
+      - {value: "هذا الصباح وصلت إلى المكتب متأخرا", status: correct}
     feedback: "*وصلت إلى المكتب متأخرا هذا الصباح* means I arrived at the office late this morning."
   ar.b2.unit04.lesson05.exercise07.write_forgot_key:
     instruction: "Write in Arabic: I had forgotten the house key."

@@ -55,6 +55,23 @@ review:
     vocabulary continues the token pool established in units 01-03 (same
     course, cumulative per docs/content/CLAUDE.md).
 
+    Second-pass review 2026-10-19: 5 fixes (realization side) --
+    lesson05.exercise01-04 reading_comprehension: the Spanish
+    passage was not in target_blocks (learner never saw the text),
+    now the first block; lesson02.exercise03.match_sequence_words:
+    luego 'then' vs entonces 'then / so' indistinguishable, entonces
+    pair dropped (still taught and tested in exercise06);
+    lesson04.exercise03.match_pluperfect_words: three 'had left'
+    lefts (habia salido / se habia ido / ya se habia ido)
+    distinguished only by grammar labels, se habia ido pair dropped
+    and ya se habia ido right now 'had already gone';
+    lesson04.teach.grammar_pluscuamperfecto: text said the
+    pluperfect is what had happened 'cuando empieza la historia'
+    (false -- the bus leaves mid-story), now 'antes de otro momento
+    del pasado'; lesson06.exercise05/06: prompt said 'it was cold'
+    but the key requires 'Hacia mucho frio', prompt now 'it was very
+    cold'.
+
 course:
   realization_key: es.b2
   target_language_first: true
@@ -242,7 +259,7 @@ units:
             prompt: {target_blocks: []}
           - content_key: es.b2.unit04.lesson02.exercise03.match_sequence_words
             type: matching_pairs
-            tested_text: "me desperté salí de casa corriendo primero luego después entonces la parada"
+            tested_text: "me desperté salí de casa corriendo primero luego después la parada"
             prompt: {target_blocks: []}
             pairs:
               - {left: "me desperté", right: "I woke up"}
@@ -251,7 +268,6 @@ units:
               - {left: primero, right: first}
               - {left: luego, right: then}
               - {left: después, right: afterward}
-              - {left: entonces, right: "then / so"}
               - {left: "la parada", right: "the (bus) stop"}
           - content_key: es.b2.unit04.lesson02.exercise04.order_desperte
             type: word_order
@@ -383,7 +399,7 @@ units:
             introduced_tokens: []
           - content_key: es.b2.unit04.lesson04.teach.grammar_pluscuamperfecto
             kind: grammar_note
-            target: {text: "El autobús ya se había ido. El pluscuamperfecto (había + participio) cuenta el pasado antes del pasado -- lo que ya había pasado cuando empieza la historia.", language_code: es, direction: ltr}
+            target: {text: "El autobús ya se había ido. El pluscuamperfecto (había + participio) cuenta el pasado antes del pasado -- lo que ya había pasado antes de otro momento del pasado.", language_code: es, direction: ltr}
             introduced_tokens: []
         exercises:
           - content_key: es.b2.unit04.lesson04.exercise01.recognize_habia
@@ -397,14 +413,13 @@ units:
             prompt: {target_blocks: []}
           - content_key: es.b2.unit04.lesson04.exercise03.match_pluperfect_words
             type: matching_pairs
-            tested_text: "había salido se había ido antes mi llegada ya se había ido cuando mientras"
+            tested_text: "había salido antes mi llegada ya se había ido cuando mientras"
             prompt: {target_blocks: []}
             pairs:
               - {left: "había salido", right: "had left (departed a place, pluperfect)"}
-              - {left: "se había ido", right: "had left / was gone (reflexive, focus on being away)"}
               - {left: antes, right: before}
               - {left: "mi llegada", right: "my arrival"}
-              - {left: "ya se había ido", right: "was already gone by then (emphasis on 'already')"}
+              - {left: "ya se había ido", right: "had already gone"}
               - {left: cuando, right: when}
               - {left: mientras, right: while}
           - content_key: es.b2.unit04.lesson04.exercise04.order_ido
@@ -446,19 +461,19 @@ units:
           - content_key: es.b2.unit04.lesson05.exercise01.read_background
             type: reading_comprehension
             tested_text: "hacía mucho frío"
-            prompt: {target_blocks: [{text: "What was the weather like that morning?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Hacía mucho frío esta mañana. Eran las siete y yo todavía estaba en la cama. Me desperté tarde y salí de casa corriendo. Cuando llegué a la parada, el autobús ya se había ido. Mientras esperaba un taxi, sonó el teléfono: era mi jefe. Por fin llegué a la reunión, pero ya habían empezado.", language_code: es, direction: ltr}, {text: "What was the weather like that morning?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson05.exercise02.read_sequence
             type: reading_comprehension
             tested_text: "me desperté tarde y salí de casa corriendo"
-            prompt: {target_blocks: [{text: "What did the narrator do first, in order?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Hacía mucho frío esta mañana. Eran las siete y yo todavía estaba en la cama. Me desperté tarde y salí de casa corriendo. Cuando llegué a la parada, el autobús ya se había ido. Mientras esperaba un taxi, sonó el teléfono: era mi jefe. Por fin llegué a la reunión, pero ya habían empezado.", language_code: es, direction: ltr}, {text: "What did the narrator do first, in order?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson05.exercise03.read_interruption
             type: reading_comprehension
             tested_text: "mientras esperaba un taxi, sonó el teléfono"
-            prompt: {target_blocks: [{text: "What interrupted the narrator while waiting for a taxi?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Hacía mucho frío esta mañana. Eran las siete y yo todavía estaba en la cama. Me desperté tarde y salí de casa corriendo. Cuando llegué a la parada, el autobús ya se había ido. Mientras esperaba un taxi, sonó el teléfono: era mi jefe. Por fin llegué a la reunión, pero ya habían empezado.", language_code: es, direction: ltr}, {text: "What interrupted the narrator while waiting for a taxi?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson05.exercise04.read_prepast
             type: reading_comprehension
             tested_text: "el autobús ya se había ido"
-            prompt: {target_blocks: [{text: "What had already happened before the narrator reached the bus stop?", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Hacía mucho frío esta mañana. Eran las siete y yo todavía estaba en la cama. Me desperté tarde y salí de casa corriendo. Cuando llegué a la parada, el autobús ya se había ido. Mientras esperaba un taxi, sonó el teléfono: era mi jefe. Por fin llegué a la reunión, pero ya habían empezado.", language_code: es, direction: ltr}, {text: "What had already happened before the narrator reached the bus stop?", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson05.exercise05.match_reading_words
             type: matching_pairs
             tested_text: "jefe fin habían empezado la parada un taxi"
@@ -553,11 +568,11 @@ units:
           - content_key: es.b2.unit04.lesson06.exercise05.speak_full_story
             type: speak_response
             tested_text: "Hacía mucho frío y todavía estaba en la cama cuando sonó la alarma. Me desperté tarde y salí de casa corriendo. Mientras esperaba un taxi, sonó el teléfono. El autobús ya se había ido"
-            prompt: {target_blocks: [{text: "Recount the full story aloud in Spanish, in one account: (1) the background -- it was cold and you were still in bed when the alarm rang; (2) the sequence of events -- you woke up late and ran out of the house; (3) an interruption -- while waiting for a taxi, the phone rang; (4) something that had already happened before -- the bus had already left (use either había salido or se había ido, both taught for this).", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Recount the full story aloud in Spanish, in one account: (1) the background -- it was very cold and you were still in bed when the alarm rang; (2) the sequence of events -- you woke up late and ran out of the house; (3) an interruption -- while waiting for a taxi, the phone rang; (4) something that had already happened before -- the bus had already left (use either había salido or se había ido, both taught for this).", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson06.exercise06.write_full_story
             type: writing_prompt
             tested_text: "Hacía mucho frío y todavía estaba en la cama cuando sonó la alarma. Me desperté tarde y salí de casa corriendo. Mientras esperaba un taxi, sonó el teléfono. El autobús ya se había ido."
-            prompt: {target_blocks: [{text: "Write the full story in Spanish, in one account: (1) the background -- it was cold and you were still in bed when the alarm rang; (2) the sequence of events -- you woke up late and ran out of the house; (3) an interruption -- while waiting for a taxi, the phone rang; (4) something that had already happened before -- the bus had already left (use either había salido or se había ido, both taught for this).", language_code: en, direction: ltr}]}
+            prompt: {target_blocks: [{text: "Write the full story in Spanish, in one account: (1) the background -- it was very cold and you were still in bed when the alarm rang; (2) the sequence of events -- you woke up late and ran out of the house; (3) an interruption -- while waiting for a taxi, the phone rang; (4) something that had already happened before -- the bus had already left (use either había salido or se había ido, both taught for this).", language_code: en, direction: ltr}]}
           - content_key: es.b2.unit04.lesson06.exercise07.respond_recount
             type: multiple_choice
             tested_text: "El autobús ya se había ido"

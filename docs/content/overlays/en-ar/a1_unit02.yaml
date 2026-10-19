@@ -21,6 +21,7 @@ review:
     Paired with a1_unit02_introductions.yaml. Same transliteration
     convention as a1_unit01 (macron for long vowels, ḥ/ʿ for the
     pharyngeal/glottal consonants). Fresh-context reviewed 2026-07-12: MSA (fusha) verified correct and natural; compiler clean (0 errors). NOTE: a frontend blocker is flagged separately -- "ar" is missing from packages/shared LANGUAGE_SCRIPT and the shared "arabic" virtual keyboard is Perso-Arabic (Persian keheh/yeh, not Arabic kaf U+0643 / yeh U+064A), so Arabic-typing exercises cannot yet be typed/graded until the frontend/infra lane adds a true-Arabic keyboard layout.
+    Review 2026-10-19: 10 fixes - false notes corrected (urdun: most Arabic country names do NOT take الـ; marhaban_bik: ـك attaches to بـ, not to مرحبا); min_ayna note gives the feminine anti; recognize_pleased_reading distractor nice to meet you was also correct, replaced; translate_pleased_meeting accepts سعدت بلقائك; سورية spelling accepted; reply_where_from accepts من + country short answers; answer_yes_no accepts لا with every taught country; role_response instruction no longer says Choose for a typed answer; speak_first_meeting accepts أنا يوسف / أهلا variants. NATIVE FLAGS: none.
 
 course:
   title: Arabic A1
@@ -61,7 +62,7 @@ teaching:
   ar.a1.unit02.lesson02.teach.min_ayna:
     title: "Where are you from?"
     gloss: "Where are you from?"
-    note: "من أين أنت؟ (min ayna anta) asks for someone's origin."
+    note: "من أين أنت؟ (min ayna anta to a man, min ayna anti to a woman) asks for someone's origin; the unvocalized spelling is the same for both."
   ar.a1.unit02.lesson02.teach.ana_min:
     title: "I'm from"
     gloss: "I'm from"
@@ -79,7 +80,7 @@ teaching:
   ar.a1.unit02.lesson02.teach.urdun:
     title: "Jordan"
     gloss: "Jordan"
-    note: "الأردن (al-ʾurdun) always carries the definite article الـ, as most Arabic country names do."
+    note: "الأردن (al-ʾurdun) always carries the definite article الـ as part of its name, like المغرب and العراق in this lesson."
     example_gloss: "I'm from Jordan."
   ar.a1.unit02.lesson02.teach.maghrib:
     title: "Morocco"
@@ -118,7 +119,7 @@ teaching:
   ar.a1.unit02.lesson03.teach.marhaban_bik:
     title: "Welcome to you"
     gloss: "welcome to you / you're welcome here"
-    note: "مرحبا بك (marḥaban bik) attaches the pronoun suffix ـك (you) directly onto مرحبا."
+    note: "مرحبا بك (marḥaban bik) adds بك, 'to you': the preposition بـ with the pronoun suffix ـك (you) attached -- the same بك as in أهلا بك."
 
   ar.a1.unit02.lesson04.teach.line01:
     title: "Opening greeting"
@@ -258,6 +259,7 @@ exercises:
     accepted_answers:
       - {value: "أنا من سوريا", status: correct}
       - {value: "أنا من سوريا.", status: correct}
+      - {value: "أنا من سورية", status: correct}
     feedback: "أنا من سوريا means I'm from Syria."
   ar.a1.unit02.lesson02.exercise08.reply_where_from:
     instruction: "Answer with any country you learned in this lesson."
@@ -268,6 +270,13 @@ exercises:
       - {value: "أنا من المغرب", status: correct}
       - {value: "أنا من سوريا", status: correct}
       - {value: "أنا من العراق", status: correct}
+      - {value: "أنا من سورية", status: correct}
+      - {value: "من لبنان", status: correct}
+      - {value: "من مصر", status: correct}
+      - {value: "من الأردن", status: correct}
+      - {value: "من المغرب", status: correct}
+      - {value: "من سوريا", status: correct}
+      - {value: "من العراق", status: correct}
     feedback: "Any of the six countries taught in this lesson is a natural answer."
 
   ar.a1.unit02.lesson03.exercise01.recognize_are_you_from:
@@ -291,7 +300,7 @@ exercises:
   ar.a1.unit02.lesson03.exercise04.recognize_pleased_reading:
     instruction: "What does this phrase mean?"
     correct_option: "I was pleased to meet you"
-    distractors: ["nice to meet you", "where are you from", "welcome to you"]
+    distractors: ["what is your name", "where are you from", "welcome to you"]
     accepted_answers: [{value: "I was pleased to meet you", status: correct}]
     feedback: "سعدت بلقائك means I was pleased to meet you."
   ar.a1.unit02.lesson03.exercise05.order_welcome_to_you:
@@ -305,6 +314,10 @@ exercises:
       - {value: "نعم أنا من لبنان", status: correct}
       - {value: "لا، أنا من مصر", status: correct}
       - {value: "لا أنا من مصر", status: correct}
+      - {value: "لا، أنا من الأردن", status: correct}
+      - {value: "لا، أنا من المغرب", status: correct}
+      - {value: "لا، أنا من سوريا", status: correct}
+      - {value: "لا، أنا من العراق", status: correct}
       - {value: نعم, status: acceptable_with_note, note: "Correct but a fuller answer is more natural."}
       - {value: لا, status: acceptable_with_note, note: "Correct but a fuller answer is more natural."}
     feedback: "Either نعم or لا with a short follow-up is a natural answer."
@@ -350,7 +363,7 @@ exercises:
     accepted_answers: [{value: [اسمي, يوسف], status: correct}]
     feedback: "اسمي يوسف means my name is Yusuf."
   ar.a1.unit02.lesson04.exercise06.role_response:
-    instruction: "Choose Layla's natural reply."
+    instruction: "Type Layla's reply: say the same phrase back."
     accepted_answers:
       - {value: تشرفنا, status: correct}
       - {value: "تشرفنا.", status: correct}
@@ -360,11 +373,14 @@ exercises:
     accepted_answers:
       - {value: تشرفنا, status: correct}
       - {value: "تشرفنا.", status: correct}
-    feedback: "تشرفنا means nice to meet you."
+      - {value: "سعدت بلقائك", status: correct}
+    feedback: "تشرفنا means nice to meet you; سعدت بلقائك is also correct."
   ar.a1.unit02.lesson04.exercise08.speak_first_meeting:
     instruction: "Reply as Yusuf by greeting and introducing yourself."
     accepted_answers:
       - {value: "مرحبا، اسمي يوسف", status: correct}
       - {value: "مرحبا اسمي يوسف", status: correct}
+      - {value: "مرحبا، أنا يوسف", status: correct}
+      - {value: "أهلا، اسمي يوسف", status: correct}
       - {value: "مرحبا، اسمي يوسف. تشرفنا.", status: acceptable_with_note, note: "A natural expanded response."}
     feedback: "A suitable response begins with a greeting and Yusuf's self-introduction."
