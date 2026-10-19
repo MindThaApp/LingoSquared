@@ -2339,7 +2339,7 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b2_unit05_register", "scheduling"): ("adjective", "مربوط به زمان‌بندی"),
     ("b2_unit05_register", "colleague"): ("noun", "همکار"),
     ("b2_unit05_register", "grateful"): ("adjective", "سپاسگزار"),
-    ("b2_unit05_register", "could"): ("verb", "می‌تونید (درخواست مؤدبانه)"),
+    ("b2_unit05_register", "could"): ("verb", "می‌توانید (درخواست مؤدبانه)"),
     # b2 unit06: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
     ("b2_unit06_abstraction", "carry"): ("verb", "اهمیت داشتن"),
     ("b2_unit06_abstraction", "qualification"): ("noun", "قیدوشرط"),
