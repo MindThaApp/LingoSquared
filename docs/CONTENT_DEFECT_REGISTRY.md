@@ -3805,3 +3805,45 @@ manifest entry (0 errors, warning counts unchanged).
 `scripts/verify.sh --content-only` passes. Self-reference check: 0 hits.
 Integrity check: 5 class-B, 0 class-A (unchanged). Fill-in-blank ambiguity:
 0.
+
+### 2026-10-19 — checkpoint gaps
+Scope: unit-checkpoint coverage for en-fa B2 u01-08 and en-prs B2 u01-08
+(branch content/checkpoint-gaps). en-nl C1 u01-08 was already closed
+(104/104 before this pass). Baseline from `app.scripts.checkpoint_coverage
+--all`: en-fa 83/91, en-prs 82/90, every missing unit at 0 items.
+
+Root cause: no lexemes and no practice packs for either B2 course.
+`scripts/backfill_lexemes.py` and `scripts/backfill_lexemes_en_prs.py` only
+wired A1-B1, so the "Farsi B2" / "Dari B2" courses had nothing for
+`generate_checkpoint()` to draw on. Same shape as the en-nl C1 fix (13725f06,
+09bbac62).
+
+Fix:
+- Backfill extended to B2 in both scripts (UNIT_FILES_B2, B2 course loop, no
+  phrase derivation). New glosses + POS for 364 fa and 332 prs tokens; B2-only
+  gloss/POS overrides where an earlier-level gloss is the wrong sense (e.g. fa
+  شیر lion -> tap, خواننده singer -> reader, نه nine -> negation; prs باشیم,
+  نه, بست, خواننده). A1-B1 dry-run output byte-identical.
+- B2-prefixed practice tags: curated per-unit pools, per-lesson translation
+  pools and single-member anchors (48 fa, 54 prs).
+- 16 new packs, docs/content/practice/en-{fa,prs}/b2_unit01-08.yaml, 14-16
+  templates each, all three tiers over every lesson, no listen_select, no
+  fill_in_blank. Sentence frames are the unit's own sentences with one
+  single-candidate slot; no candidate appears in its own frame. prs frames
+  contain no 2pl verb forms. Review: unreviewed, required_next_reviewer:
+  native_speaker_review.
+
+Result: en-fa 91/91, en-prs 90/90, en-nl 104/104. Offline port of
+generate_checkpoint gives 15/15 for every new unit on 5 seeds.
+
+Open (not fixed here; details in .local/logs/session9-checkpoints*.md):
+- All new glosses are drafts for native review.
+- prs B2 realizations: Iranian -ید in examples (u01, u03, u05, u07, u08),
+  ungrammatical "هستند" exercise targets (u03, u06, u07), three
+  mismatched example glosses in en-prs b2_unit05 lesson02, and an open
+  decision on -ید vs -ین in the formal-register lesson (u05).
+- Earlier-level mis-glosses seen but left alone (overridden for B2 only):
+  prs باشیم "(if) we have", several A1-B1 glosses that quote Dari script.
+- One sense per token within B2: fa قطعی / تازه lose their u08 sense.
+- fa B2 checkpoints lean on matching_pairs (5-8 of 15 items); typed answers
+  grade strictly, so colloquial variants (بارون for باران) are marked wrong.

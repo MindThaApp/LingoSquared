@@ -1,0 +1,500 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit05
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit05.register
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 15 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x5, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u05_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u05_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (کتاب, کتابخانه, مناسب, فشار, سند) and the fixed-sentence translations (رسمی, می‌رسم) to exactly one
+    token at course scope. Every frame is a sentence from this unit''s own realization with one token
+    slotted; the fixed-sentence English prompts are the overlay''s example_gloss for that sentence. Register
+    unit. Every frame is a sentence the unit itself teaches: informal (می‌توانی این کتاب را بیاوری؟, یک
+    ساعت بعد می‌رسم.), collegial (این ساعت برای همکار ما مناسب است.) and formal (در صورت امکان، سند را
+    فردا می‌آورم., نامه رسمی باید دقیق باشد.). No frame contains a 2pl verb: the formal lesson''s own
+    2pl forms (بیندازید, بنویسید, کنید) are Iranian/formal -ید and are held out of all pools; a native
+    reviewer should decide the formal-letter 2pl policy for this lesson. B2 overrides used: همکاری cooperation
+    (was the B1 ''a colleague (that...)''), دیدار appointment, هستم formal ''I am''. Overlay flags: lesson02
+    card01 example_gloss mentions lunch, card06 example_gloss says ''send the form today'', card07 says
+    ''suits the teacher'' -- none matches its Dari sentence. MEASURED (recipe section 9 step 4, filter
+    .b2.unit05.): ALL 35/50 (70%), recognition 35/50 (70%), structured 35/50 (70%), production 29/50 (58%);
+    3/3 lessons in every tier, no dead template, every MC slot >=3 distinct glosses, every matching pool
+    >=6 tokens. Course scope: every word_order / fixed-sentence slot resolves to exactly 1 token, none
+    is a literal word of its own frame. Offline port of generate_checkpoint() pass 1: 15/15 items on 5
+    seeds, all three tiers and all lessons represented. No gloss in any pool contains Dari script. Needs
+    native-Dari review of the B2 glosses and a fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u05_core
+    - b2u05_vert
+    - b2u05_book_single
+    - b2u05_library_single
+    - b2u05_suitable_single
+    - b2u05_pressure_single
+    - b2u05_document_single
+    - b2u05_formal_single
+    - b2u05_arrive_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.choose.001
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on informal, collegial and formal register (moving a meeting).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.match.002
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on informal, collegial and formal register (moving a meeting).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.order.003
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: word_order
+  frame:
+    text: 'می‌توانی این {item} را بیاوری؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_book_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'می‌توانی این {item} را بیاوری؟'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'می‌توانی این کتاب را بیاوری؟ = Can you bring this book?'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.order.004
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: word_order
+  frame:
+    text: '{item} پوهنتون آرام است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_library_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} پوهنتون آرام است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'کتابخانه پوهنتون آرام است. = The university library is quiet.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.translate.005
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson01.translate.006
+  lesson_content_key: prs.b2.unit05.register.lesson01.informal
+  type: translation
+  frame:
+    text: 'I will arrive one hour later.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: b2u05_arrive_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'یک ساعت بعد {item}.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: یک ساعت بعد می‌رسم.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson02.choose.001
+  lesson_content_key: prs.b2.unit05.register.lesson02.colleague
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on informal, collegial and formal register (moving a meeting).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson02.order.002
+  lesson_content_key: prs.b2.unit05.register.lesson02.colleague
+  type: word_order
+  frame:
+    text: 'این ساعت برای همکار ما {item} است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u05_suitable_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'این ساعت برای همکار ما {item} است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'این ساعت برای همکار ما مناسب است. = This hour suits our colleague.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson02.order.003
+  lesson_content_key: prs.b2.unit05.register.lesson02.colleague
+  type: word_order
+  frame:
+    text: 'لحن همکارانه {item} را کم می‌کند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_pressure_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'لحن همکارانه {item} را کم می‌کند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'لحن همکارانه فشار را کم می‌کند. = A collegial tone reduces pressure.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson02.translate.004
+  lesson_content_key: prs.b2.unit05.register.lesson02.colleague
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson03.choose.001
+  lesson_content_key: prs.b2.unit05.register.lesson03.formal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on informal, collegial and formal register (moving a meeting).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson03.match.002
+  lesson_content_key: prs.b2.unit05.register.lesson03.formal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on informal, collegial and formal register (moving a meeting).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson03.order.003
+  lesson_content_key: prs.b2.unit05.register.lesson03.formal
+  type: word_order
+  frame:
+    text: 'در صورت امکان، {item} را فردا می‌آورم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u05_document_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'در صورت امکان، {item} را فردا می‌آورم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'در صورت امکان، سند را فردا می‌آورم. = If possible, I will bring the document tomorrow.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson03.translate.004
+  lesson_content_key: prs.b2.unit05.register.lesson03.formal
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u05_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit05.lesson03.translate.005
+  lesson_content_key: prs.b2.unit05.register.lesson03.formal
+  type: translation
+  frame:
+    text: 'A formal letter must be precise.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u05_formal_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'نامه {item} باید دقیق باشد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: نامه رسمی باید دقیق باشد.'
+    language_code: en
+    direction: ltr
