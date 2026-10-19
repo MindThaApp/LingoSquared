@@ -4,14 +4,19 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit39.neighborhood
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-38. Single tag: 3-member ''neighborhood_adj''
-    (quiet/noisy/ friendly -- "friendly" already classified since unit32, reused additively), verified all three fit "My neighbors
-    are very {item}." Kept at 3 members (the mc/listen_select floor), so matching_pairs is deliberately NOT used here. EN_POS/
-    en_agreement_tags added to scripts/_en_target_lexeme_common.py as part of this pass. Anchoring check: lesson01 introduces
-    new lexemes, safe as an anchor. Every slot''s real candidate count verified with scripts/_practice_slot_check.py. Needs
-    the standard fresh-context review before import.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- adjective MC/listen pools were 2 distinct glosses at unit scope
+    (below 3 floor) and lesson02 MC pool drew 147 course adjectives with calm/quiet same-gloss collision -> now tagged to
+    taught adjectives. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: along=خوب رفتار کدن (preposition, only sensible in get along);
+    waters=آب می‌ته (سوم‌شخص مفرد water), knows, away=دور (در move away) contain English; hallway=دهلیز fine; neighbors vs
+    neighborhoods fine. Prior note: Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-38. Single
+    tag: 3-member ''neighborhood_adj'' (quiet/noisy/ friendly -- "friendly" already classified since unit32, reused additively),
+    verified all three fit "My neighbors are very {item}." Kept at 3 members (the mc/listen_select floor), so matching_pairs
+    is deliberately NOT used here. EN_POS/ en_agreement_tags added to scripts/_en_target_lexeme_common.py as part of this
+    pass. Anchoring check: lesson01 introduces new lexemes, safe as an anchor. Every slot''s real candidate count verified
+    with scripts/_practice_slot_check.py. Needs the standard fresh-context review before import.
 
     Fresh-context review, 2026-07-11 (separate worker, zero access to the authoring reasoning above): compile_content.py practice-validate
     (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot >=1 candidate; every multiple_choice/listen_select/matching_pairs
@@ -29,13 +34,12 @@ review:
     POLISH 2026-07-24 (tier-thinness wave 2, reverting to unreviewed): recognition was 2 live, structured 2, production 1.
     Added lesson02.choose.001 -- a bare part_of_speech-adjective pool (recipe 3.1c, same lever as the unit33 reauth) because
     neighborhood_adj holds only 2 unit-scope members: unit39 owns 5 adjectives with 5 distinct glosses (helpful/quiet/noisy/
-    five-minute/several), clearing the MC floor; bare-word frame so no course-scope grammaticality exposure. Added
-    lesson03.order.001 word_order "This neighborhood is very {item}" over neighborhood_adj -- course pool is quiet/noisy/friendly,
-    all grammatical, none is a frame word. Added lesson04.translate.001 (Dari sentence prompt renders the gloss, answer
-    render_frame "My neighbors are very {item}" over neighborhood_adj -- deterministic per item since the prompt shows the
-    gloss) and lesson02.translate.001 (bare-word Dari-metalanguage variant). Tiers now 3/3/3 live at unit scope. The
-    pre-existing FLOOR lines on choose.001/listen.002 (2 unit-scope glosses) are untouched: not addressable without new
-    lexeme tags, which packs cannot add.'
+    five-minute/several), clearing the MC floor; bare-word frame so no course-scope grammaticality exposure. Added lesson03.order.001
+    word_order "This neighborhood is very {item}" over neighborhood_adj -- course pool is quiet/noisy/friendly, all grammatical,
+    none is a frame word. Added lesson04.translate.001 (Dari sentence prompt renders the gloss, answer render_frame "My neighbors
+    are very {item}" over neighborhood_adj -- deterministic per item since the prompt shows the gloss) and lesson02.translate.001
+    (bare-word Dari-metalanguage variant). Tiers now 3/3/3 live at unit scope. The pre-existing FLOOR lines on choose.001/listen.002
+    (2 unit-scope glosses) are untouched: not addressable without new lexeme tags, which packs cannot add.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -52,6 +56,8 @@ tag_schema:
     semantic:
     - neighborhood_adj
     - volume_prs_en_a1_unit39_item_07_single
+    - prs_en_a1_unit39_lesson01_words
+    - prs_en_a1_unit39_lesson02_words
 slot_presets:
   neighborhood_adj: &id001
     language_code: en
@@ -67,7 +73,13 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit39_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -83,7 +95,13 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id001
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit39_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -158,7 +176,12 @@ templates:
   slots:
     item:
       language_code: en
-      part_of_speech: adjective
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit39_lesson01_words
+        - prs_en_a1_unit39_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
