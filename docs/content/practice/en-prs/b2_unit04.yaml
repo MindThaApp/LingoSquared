@@ -1,0 +1,496 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit04
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit04.narrative
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 15 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x5, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u04_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u04_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (باران, آغاز, چای, زنگ, ناگهان) and the fixed-sentence translations (مهمانان, جنراتور) to exactly
+    one token at course scope. Every frame is a sentence from this unit''s own realization with one token
+    slotted; the fixed-sentence English prompts are the overlay''s example_gloss for that sentence. B2
+    sense overrides used: زنگ bell, خورد rang (was ''ate''), داشتیم past-progressive helper (was the B1
+    irrealis ''we had''). شروع held out because it paraphrases آغاز. The past-progressive frame ''داشتیم
+    عکس‌ها را می‌زدیم'' was not used as a frame (its hint would gloss می‌زدیم literally as ''hitting'').
+    MEASURED (recipe section 9 step 4, filter .b2.unit04.): ALL 41/65 (63%), recognition 41/65 (63%),
+    structured 41/65 (63%), production 36/65 (55%); 3/3 lessons in every tier, no dead template, every
+    MC slot >=3 distinct glosses, every matching pool >=6 tokens. Course scope: every word_order / fixed-sentence
+    slot resolves to exactly 1 token, none is a literal word of its own frame. Offline port of generate_checkpoint()
+    pass 1: 15/15 items on 5 seeds, all three tiers and all lessons represented. No gloss in any pool
+    contains Dari script. Needs native-Dari review of the B2 glosses and a fresh-context review before
+    import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u04_core
+    - b2u04_vert
+    - b2u04_rain_single
+    - b2u04_beginning_single
+    - b2u04_tea_single
+    - b2u04_bell_single
+    - b2u04_suddenly_single
+    - b2u04_guests_single
+    - b2u04_generator_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit04.lesson01.choose.001
+  lesson_content_key: prs.b2.unit04.narrative.lesson01.background
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on narrating past events (a school exhibition).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson01.match.002
+  lesson_content_key: prs.b2.unit04.narrative.lesson01.background
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on narrating past events (a school exhibition).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson01.order.003
+  lesson_content_key: prs.b2.unit04.narrative.lesson01.background
+  type: word_order
+  frame:
+    text: 'وقتی {item} می‌بارید، حویلی خالی بود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_rain_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'وقتی {item} می‌بارید، حویلی خالی بود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'وقتی باران می‌بارید، حویلی خالی بود. = When it was raining, the courtyard was empty.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson01.order.004
+  lesson_content_key: prs.b2.unit04.narrative.lesson01.background
+  type: word_order
+  frame:
+    text: 'جلسه تازه {item} شده بود که برق رفت.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_beginning_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'جلسه تازه {item} شده بود که برق رفت.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'جلسه تازه آغاز شده بود که برق رفت. = The meeting had just begun when the power went out.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson01.translate.005
+  lesson_content_key: prs.b2.unit04.narrative.lesson01.background
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson02.choose.001
+  lesson_content_key: prs.b2.unit04.narrative.lesson02.earlier
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on narrating past events (a school exhibition).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson02.order.002
+  lesson_content_key: prs.b2.unit04.narrative.lesson02.earlier
+  type: word_order
+  frame:
+    text: 'پیش از رسیدن مهمانان، {item} آماده بود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_tea_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'پیش از رسیدن مهمانان، {item} آماده بود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'پیش از رسیدن مهمانان، چای آماده بود. = Before the guests arrived, tea was ready.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson02.order.003
+  lesson_content_key: prs.b2.unit04.narrative.lesson02.earlier
+  type: word_order
+  frame:
+    text: 'معلمان هنوز نرسیده بودند که {item} خورد.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_bell_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'معلمان هنوز نرسیده بودند که {item} خورد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'معلمان هنوز نرسیده بودند که زنگ خورد. = The teachers had not arrived yet when the bell rang.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson02.translate.004
+  lesson_content_key: prs.b2.unit04.narrative.lesson02.earlier
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson02.translate.005
+  lesson_content_key: prs.b2.unit04.narrative.lesson02.earlier
+  type: translation
+  frame:
+    text: 'The guests had come from Balkh Province.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_guests_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} از ولایت بلخ آمده بودند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: مهمانان از ولایت بلخ آمده بودند.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson03.choose.001
+  lesson_content_key: prs.b2.unit04.narrative.lesson03.interruption
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on narrating past events (a school exhibition).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson03.match.002
+  lesson_content_key: prs.b2.unit04.narrative.lesson03.interruption
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on narrating past events (a school exhibition).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson03.order.003
+  lesson_content_key: prs.b2.unit04.narrative.lesson03.interruption
+  type: word_order
+  frame:
+    text: '{item} برق رفت و صنف تاریک شد.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: b2u04_suddenly_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} برق رفت و صنف تاریک شد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'ناگهان برق رفت و صنف تاریک شد. = Suddenly the power went out and the classroom became dark.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson03.translate.004
+  lesson_content_key: prs.b2.unit04.narrative.lesson03.interruption
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit04.lesson03.translate.005
+  lesson_content_key: prs.b2.unit04.narrative.lesson03.interruption
+  type: translation
+  frame:
+    text: 'Later we realized that the generator had no fuel.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_generator_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'بعد فهمیدیم که {item} تیل نداشت.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: بعد فهمیدیم که جنراتور تیل نداشت.'
+    language_code: en
+    direction: ltr
