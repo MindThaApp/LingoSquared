@@ -3073,3 +3073,88 @@ Remaining:
 
 Verification: `scripts/verify.sh --content-only` passes (all courses). A
 course-scoped validate + compile ran before every commit.
+
+### 2026-10-19 — prs-en A1/A2 review
+Scope: every prs-en overlay at A1/A2 without `review.status: reviewed` (76
+units: A1 u01-24, u30-58, u62-68; A2 u25-40). All the shared en A1/A2
+realizations were already marked reviewed, so only overlays were in scope.
+Method: as in PRs #39/#40. Eight fresh-context workers took 9-10 units each
+in separate worktrees, then merged into content/review-prs-en-a (PR #45).
+Each batch was validated and compiled course-scoped before it was committed.
+Accepted answers were only added. No shared `realizations/en` file was
+edited, by coordination rule (fa-en, nl-en and prs-en reviews ran in
+parallel). Every unit is now `reviewed`, next reviewer `native_speaker_pass`.
+
+Fix count: about 645. A1 about 550 (5-14 per unit), A2 about 96 (2-8 per
+unit). On top of that, two course-wide consistency commits: Daniel spelled
+دنیل everywhere in A1/A2 (152 spots in 15 files, including reviewed u60/61),
+and two `check_dari_register.py` findings.
+
+Defect classes:
+- **Missing accepted answers** (most common by count, nearly every unit):
+  contractions, "a/one kilo", Can/Could, polite variants, and Dari او being
+  genderless ("What's she/he like?").
+- **Underdetermined reply/speak prompts**: reply_as_* and speak_response
+  instructions did not say what to answer. A2 u25-30 now give a labelled
+  transcript with the move for each turn, and an unguessable "next Monday"
+  is now in the prompt.
+- **Distractors**: untaught at that point, heard in the same audio
+  (listen_select total bill or price), or also correct. This is the same
+  class as de-en in PR #40.
+- **Non-Afghan or wrong Dari**: Iranian می‌خواهد/بدهد/چیست/توی/ماشین/لباس,
+  formal written endings inside colloquial glosses, informal تو/-ت in a
+  polite course, and "کدام مشکل نیست" for "No problem". There were also
+  garbled words (آواز‌دار, توضیف ×10, بطری for باتری), ZWNJ and spacing errors,
+  and Arabic ؟ after Latin text. No Arabic ي/ك was found in any learner text.
+- **Wrong-sense glosses**: sink = نل (tap) ×12 (A2 u29); load = نوبت;
+  coffee = چای; house number = street number; "behind" given as "across
+  from"; "ریزش" for a cold; هراسان for nervous; ملاقات for meeting.
+- **False notes**: "goes" called an auxiliary (u30); "loves to play" called
+  love + -ing (u32); a false past/"to" rule (u05); weekday clues wrong for an
+  Afghan Saturday-start week (u04); the claim that Dari lacks compound verbs
+  (u43, u45).
+- **Dialogue glosses as narration**: u58 glossed all 9 dialogue lines as
+  third-person narration instead of translating them. In u62 the
+  reading gloss reversed who asked whom.
+- **Character canon**: Daniel was spelled three ways (دنیل/دانیل/دانیال).
+  It is now دنیل in all of A1/A2. B1/B2 still use دانیال (other agent's
+  scope).
+
+Not fixed: shared en realization ("shared-en realization fixes", for the
+agent that applies them; details in .local/logs/session9-prs-en-a.md):
+- lesson01 matching tests later-lesson words: A1 u06, u08 (fresh), u09,
+  u10, u12, u13, u15 (tax, pay), u16, u18, u19 (think/strong/calmer), u20
+  (nicer), u21 (one way, leaves from), A2 u26 (What about you?), u30
+  (resume, deadline), u32, u33.
+- Canon: Daniel the librarian asks the library's hours (u04, u05), is a café
+  server (u07) and an engineer (u23). The u02 "woman ... engineer" and the
+  u23 "Leila is a teacher" contradict Leila the student.
+- English: u65 dialogue_line4, where the clerk says "Can I exchange it for a
+  larger size?" (should be an offer); u63 "Yes. Put the bag on the shelf?";
+  u41 "This soup needs you to add some salt"; u64 "Your photo is nice" has no
+  set-up; u11 forecast says sunny while the dialogue says rain; u08 l03
+  label is missing Water/Tomatoes/total; u12 match_label_fields mixes kinds.
+- Leak-check: A1 u08 write_kilo, u09 write_in_front_of and u11
+  write_weather now hit, because new valid accepted answers match the
+  realization's English prompt block ("Write how you ask for one kilo of
+  tomatoes."). These are A1, so the owner decision applies. Under the
+  PR #37 rule these blocks should be emptied in the shared realization.
+
+Native flags (about 55, listed per file in review.notes as "NATIVE FLAGS"):
+- دادن forms are mixed course-wide (می‌ته 146 / می‌ده 63; بتین 66 / بدین 61;
+  می‌تم / می‌دم). وقت and وخت are also mixed (395 / 177). Pick one register.
+- تشناب for "bathroom" (u24, u29, u38): it may mean only the toilet.
+- Lexical calls: پتلون/تنبان, بکس (wallet/backpack/takeaway), سلمانی vs
+  آرایشگر, اطفائیه, پایپ‌کار, فرمایش vs سفارش, بادنجان رومی, بوجی, درجن,
+  بی‌بی/بابه, مقبول (lovely), سلاته/سلاد, وظیفه (job), دلخواه (favorite).
+- Idioms: quarter-to/ten-to times (u05), به دیدن رفتن for visit (u67), خوش
+  for happy and شوق‌مند for excited (u13), "خیلی خوش می‌شم" for I'd love to
+  (u17), زیادتر تیز vs تیزتر (u33).
+New bug class: no. A process note: workers disagreed on the Daniel spelling
+and on دادن/وقت forms. A course-wide register glossary for prs (one
+spelling per name, one form per verb) would stop this. The 2pl -ین check
+was clean: no simple-past -ید in prs-en A1/A2.
+
+Verification: `scripts/verify.sh --content-only` passes. Course-scoped
+validate + compile (prs-en, and fa-en/nl-en/de-en on merges) was run before
+every commit.
