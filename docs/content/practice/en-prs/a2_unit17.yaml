@@ -4,9 +4,22 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a2.unit17.weekly_schedule
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 3 fixes).
+    (1) lesson02.translate.002 bare-noun pool held the construct form برنامهٔ (typed
+    answer needs the unforgiven combining hamza; gloss "schedule of" near-duplicates
+    برنامه "schedule"): pool now unions the lesson01/03/04 tags. (2) lesson02.order.003
+    "این {item} است." rendered این هفته است (reads as "this week is"), این استراحت است,
+    این آشپزی است: slot narrowed to places (دفتر, بازار; course-scope بانک), feedback
+    updated. (3) lesson03.order.003 feedback hard-coded دفتر although the pool also
+    renders بازار/بانک: feedback now describes the order.
+    NATIVE FLAGS: phrase glosses carry Persian names and narration ("زرمینه asks what he
+    does on the weekend", "همایون says she has a good schedule") -- backfill gloss lane;
+    می‌شوم glossed "I become / I wake up" (only with بیدار).
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint. en-prs A2 unit17 had a full realization + overlay and 38
     backfilled lexemes across all 4 lessons but no practice pack at all, so
@@ -61,6 +74,9 @@ tag_schema:
     semantic:
     - city_place
     - early_word
+    - en_prs_a2_unit17_lesson01_words
+    - en_prs_a2_unit17_lesson03_words
+    - en_prs_a2_unit17_lesson04_words
     - go_verb_present
     - health_advice_word
     - hobby_activity_word
@@ -203,6 +219,13 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      # Review 2026-10-19: excludes lesson02's construct form برنامهٔ (typed
+      # answer needs the combining hamza; gloss near-duplicates برنامه).
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit17_lesson01_words
+        - en_prs_a2_unit17_lesson03_words
+        - en_prs_a2_unit17_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -364,11 +387,10 @@ templates:
       part_of_speech:
       - noun
       agreement_tags:
+        # Review 2026-10-19: places only. The old pool rendered این هفته است
+        # ("this week is"), این استراحت است, این آشپزی است.
         semantic:
-        - schedule_word
         - city_place
-        - hobby_activity_word
-        - health_advice_word
   answer_derivation:
     kind: render_frame
     frame:
@@ -376,7 +398,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "Word order: این [word] است (this is a ___)."
+    text: "Word order: این [place] است (this is the ___)."
     language_code: en
     direction: ltr
 
@@ -402,7 +424,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "در روزهای هفته، اول به دفتر می‌روم. (On weekdays I go to the office first)."
+    text: "Word order: در روزهای هفته، then اول به + the place, with the verb می‌روم at the end."
     language_code: en
     direction: ltr
 
