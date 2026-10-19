@@ -2667,3 +2667,119 @@ where the word is taught in the same unit.
 
 Verification: `scripts/verify.sh --content-only` passes (all courses);
 course-scoped validate + compile was run before every commit.
+
+### 2026-10-19 — en-ar A1→C1 full pass, de-en A1+B1, en-fa/en-prs leftovers (fresh-context review; branch content/review-ar-leftovers, PR #40)
+Scope: 97 units. en-ar every unit A1–C1 (69 units, realization + overlay).
+B2 u01-08 and C1 u01-08 had never been reviewed. The rest had had one pass,
+which was treated as unverified. de-en: all 17 overlays (A1 u01-14, B1
+u01-03; none had been reviewed). Leftovers: en-fa A1 u20 + A2 u19, en-prs A2
+u15-19 + B1 u02-05. en-it A1 u07-09 needed nothing: PR #39 had already
+second-passed them. Method as in PR #39: one fresh-context worker per batch
+of 3-5 units fixed what it found. Each batch was validated course-scoped and
+committed separately; commit subjects carry the per-batch counts. Accepted
+answers were only added, with one exception: two result-first word_order
+answers in ar B1 u41 could no longer be built from the corrected فـ tiles.
+
+Fix counts: en-ar 490 (A1 208 · A2 46 · B1 116 · B2 63 · C1 57) · de-en
+189 (A1 164 · B1 25) · en-prs 46 (A2 23 · B1 23) · en-fa 8. Total 733,
+about 7.6 per unit, more than double PR #39's 3.3. de-en (never reviewed)
+had about 11 per unit. The ar units with one earlier pass still had 6-9 per
+unit, so that earlier pass caught little.
+
+Defect classes (all passed a green compile):
+- **listen_select / MC distractors** (the dominant de-en class, about 40% of
+  de-en fixes). Distractors were untaught at that point, were heard in the
+  same audio (often the tested speaker's own line), were statements under a
+  "which question" prompt, or were the only option without a "?". Some items
+  had several valid options, and some instructions said "noch einmal" for a
+  different audio. The validator's heard-in-audio check matches substrings,
+  so it caught one attempted fix ("How are you?" inside "How are you feeling
+  today?").
+- **Character canon**: en-ar cast Yusuf (an engineer and Layla's colleague)
+  as waiter, fruit seller, ticket clerk, shirt seller and cashier (A1 u07,
+  u08, u16, u21, u24). These roles are now an unnamed النادل / البائع /
+  الموظف. Yusuf's own sister Nour asked where his house is (A1 u19). In
+  de-en, Daniel and Leila were treated as strangers after meeting in u02.
+  English name spellings were split (Layla/Laila/Leila, Nour/Noor) and are
+  now standardised to Layla and Nour.
+- **False grammar notes**: ar لم said to take the subjunctive (it takes the
+  jussive); أحضر called past; سيكون described as "+ present verb"; غير أن
+  "stronger than" لكن; لو + past with no result taught as a "softened
+  suggestion" (it is a wish); يمكنني as a concession marker; "Arabic has no
+  compound past". prs: باید "never changes form"; subjunctive glossed as
+  future; "always two clauses" contradicted by the unit's own dialogue. fa:
+  ان→ون compared with the "is" contraction. de-en: thirteen = "base +
+  -teen"; "one" required before hundred.
+- **Target-language grammar/idiom errors**: ar result clauses after إذا
+  lacking فـ before سـ (B1 u37, u41; now canonical فسنبقى); accusative after
+  أنّ (كريم → كريما); لكان with no لو clause; لكن + bare adjective; calqued
+  idioms (يسير على خيط رفيع → معلق بخيط رفيع); hamza-less الى/ان across the
+  C1 template; collocation errors. prs: مسافران ... صبر کنین (2pl ending on a
+  3pl subject). German in de-en: the non-word "Besitzten", Könnte for "can",
+  "Zum Hier-Essen", aufgeregt for "excited", "Lass uns im Café treffen",
+  lowercase after colons, a comma before "und".
+- **Glosses**: C1 discourse-move label cards were glossed with their example
+  sentence instead of the label's meaning (36 cards per unit, all 8 C1
+  units). Card glosses carried words not on the card ("about", "but",
+  "please"). example_gloss dropped the "Layla said:" frame present in the
+  Arabic (systemic in ar A1). A stray quoted "Yes," artifact appeared across
+  ar A2/A1. Wrong senses: أرى أن "I see that", لكل مقام مقال, تذاكر "study a
+  lot".
+- **Gender**: Arabic second-person and first-person forms were given in one
+  gender only (تفضلي, امش, تفعل, مهندس, سعيد, متاحة). Both are now taught and
+  accepted. voice_hint "female+male" was set on same-gender dialogues, and a
+  female voice on Yusuf's lines (about 10 instances).
+- **Audio vs teaching**: a listen item whose answer did not match its audio
+  (ar B2 u05); tested audio lines with no teaching card; cards in reverse
+  turn order; dialogue_response prompts that were the learner's own line (ar
+  B1 u49, prs A2 u16).
+- **Underdetermined prompts / missing accepted answers**: by count the most
+  common class again (word order, verb-first, لدي/عندي, في-less times,
+  pronoun drop, I'm/I am).
+- **Internal jargon** in learner notes: "culminating location pattern", "The
+  spine outcome requires…", "unit model", an internal file name.
+- **Manifest gaps**: fa/prs A2 u19 and de-en A1 u14 were on disk but missing
+  from content_manifest.txt, so verify.sh never validated them. de-en B1
+  u01-03 were missing too, and failed validation because their pairs were
+  oriented the old way (before the 2026-08-04 transpose). All are now in the
+  manifest (new group de-en-b1).
+- **prs dialect**: simple-past 2pl had been kept at Iranian -ید (گفتید,
+  پرسیدید) on the claim that "no -ین counterpart exists in the corpus".
+  a2_unit19 teaches رفتین, so the claim was false. It is now -ین
+  course-wide (b1_unit05, b1_unit11, the backfill glosses), and a1_unit01's
+  "چطور استید" is now استین. The backfill script's gloss table must follow
+  any introduced_token rename. CI pytest caught this once.
+New bug class: no new class. Two systemic template defects are new:
+C1 label cards glossed by their example sentence, and ar service roles given
+to main characters.
+
+Owner decisions / native-speaker flags (details in each file's review.notes,
+"Review 2026-10-19 … NATIVE FLAGS"):
+- **prs**: confirm Afghan -ین for simple-past 2pl. prs B2 (b2_unit01/03/05/07/08)
+  still has 2pl -ید (بیندازید، بنویسید، بگویید، بدهید، بیایید), possibly
+  deliberate formal register. Many Dari-vs-Iranian lexical calls are listed
+  per file (کی/چه وقت, ایستگاه/اډه, اطلاعیه/اعلان, کاربر, بازپرداخت,
+  گارانتی/گرنتی, صبحانه vs ناشتا, شاید + indicative).
+- **fa**: u19 Thursday/Friday weekend; پنجشنبه vs STT "پنج شنبه" spacing in
+  speak_thursday_summary; u20 price unrealistic.
+- **ar**: A2 u27 gives Yusuf the same address as Layla's new address (u25);
+  A2 u34 الحجم غير صحيح وممزق قليلا makes "size" the subject of "torn" (an
+  audio rewrite is needed); B1 u53 Yusuf's reply has an unrelated
+  sentence; B2 u04 story incoherence; several MSA-purism calls (المواضيع,
+  في نفس الوقت, سأل + إذا, ذاكرت).
+- **de-en**: day-part boundaries (evening from 5 PM) vs German Abend; Handy vs
+  Telefon.
+- **Shared English realization (affects nl-en/fa-en/prs-en/de-en, not fixed
+  here)**: matching exercises testing lesson02 words in lesson01 (A1 u06,
+  u08, u09, u10, u12, u13); Daniel (librarian) asking the library's hours (u04,
+  u05); u11 forecast contradicting the dialogue; B1 u03 write_if_rains "you"
+  vs tested "we"; B1 writing target_blocks that print the whole English
+  answer. The nl-en/fa-en/prs-en overlays very likely share the de-en
+  distractor defects in A1 u03-u14 and should get the same pass.
+- **Tooling (Codex lane)**: grading does not forgive a detached و (وقهوة vs و
+  قهوة); check_dari_register.py lacks a past-2pl -ید rule; `validate` warns
+  on every valid alternative word order, so workers drop valid orders.
+
+Verification: `scripts/verify.sh --content-only` passes (all courses) and
+`pytest scripts/tests` passes (73). Course-scoped validate + compile was run
+before every commit.
