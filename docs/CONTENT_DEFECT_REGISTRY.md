@@ -2783,3 +2783,137 @@ Owner decisions / native-speaker flags (details in each file's review.notes,
 Verification: `scripts/verify.sh --content-only` passes (all courses) and
 `pytest scripts/tests` passes (73). Course-scoped validate + compile was run
 before every commit.
+
+### 2026-10-19 — en-fr + en-es + en-de second pass, A1 → C1 (fresh-context review; branch content/second-pass-fr-es-de, PR #41)
+Scope: every en-fr, en-es and en-de unit, realization + overlay: fr 59 units,
+es 60, de 69, plus the orphan pilot `de/b2_unit54_argumentation` (not in the
+manifest). That is 377 files in 50 batches of 3-4 units. The earlier
+"reviewed" status was treated as unverified. This pass also covered the
+files still marked `unreviewed`: en-es B2 u04-08 and C1 u01/u05-07, en-de B1
+u35 → C1 u08, and u54. Their `status` fields were left unchanged, so the
+owner can now flip them. Method is the same as the 2026-10-18 it/ru pass: one
+fresh-context worker per batch fixed what it found, and the coordinator ran
+course-scoped validate + compile for all 15 fr/es/de groups before every
+commit. The full `scripts/verify.sh --content-only` ran at intervals. The
+checklist and the "only add accepted answers" rule were unchanged (removals
+listed below).
+
+Fix counts (commit subjects carry the per-batch counts):
+- en-fr/fr: A1 66 · A2 34 · B1 86 · B2 22 · C1 33. Total 241, 4.1 per unit.
+- en-es/es: A1 86 · A2 69 · B1 108 · B2 57 · C1 58. Total 378, 6.3 per unit.
+- en-de/de: A1 187 · A2 35 · B1 94 · B2 57 (incl. 10 in u54) · C1 38. Total
+  411, 6.0 per unit.
+- Overall: 1030 fixes, about 5.5 per unit. That is well above the it/ru
+  second pass (3.3). en-de A1 (7.8 per unit) and the en-es B2/C1 files that
+  were never reviewed had the most. en-fr B2 had the fewest (2.75 per unit;
+  fr B2 u03 and u08 had 0 defects).
+
+Defect classes (all passed a green compile; most were missed by the earlier
+passes):
+- **Reading questions that never showed their text** (new to this registry):
+  reading_comprehension / multiple_choice items with `prompt.target_blocks`
+  empty, or holding only the English question. The compiler renders only
+  instruction + target_blocks, so the learner never saw the menu, sign, email
+  or passage. Affected about 100 items: de A1 u02/07-09/12-16/21/24, B2
+  u01-08 (all four per unit), C1 u01-02/06-08; es A1 u13-15, A2 u16-18 and
+  u22-25, B1 u40, B2 u04-08, C1 u01/u05-08; fr B1 u38-43. **Validator
+  candidate**: warn when a reading_comprehension item has no target-language
+  block.
+- **Answer leakage at A2+** (the largest class in fr): prompts printing the
+  French answer ("Réponds avec cette phrase exacte : …", "Dis : …",
+  "Écris : …") in every fr A2 u19-24 and B1 u25-43 speak / dialogue_response
+  item. Also es B1 u36-44 and B2/C1 culminating writing prompts ("using
+  '<answer>'"), de B1 u39 and C1 u01-02, and fr B2/C1 instructions quoting
+  the French. Fixed by giving an in-character cue (or nothing) and an English
+  instruction that names content and form.
+- **Sequencing**: distractors and match pairs used before they were taught.
+  This is the most common recognition-item defect in every course, often a
+  lesson02 sentence used as a lesson01 distractor. Examples: de wir/tausend/
+  Onkel/abends/damit/sollten; es paraguas/caro/necesitamos/opinas; fr
+  se coucher/quiche/fermer/payée. Some match-pair infinitives were tested but
+  never taught (de Kollegin, klingen, passen, bestellen, funktionieren,
+  vorbeikommen). One question was never taught: de "Was nehmen Sie?".
+- **en-de A1 structural** (new): the dialogue cards in u11-24 had German
+  titles and German "glosses", so learners got no translation (~60 cards).
+  matching_pairs clues were built from untaught German (Körperteil,
+  Übelkeit, Etikett…); A1 was converted to English clues. "Im Dialog:"
+  example sentences often were not in the dialogue, or their gloss
+  translated a different sentence.
+- **False grammar/usage notes**: fr douze–quinze "unrelated" to deux–cinq,
+  enchanté "silent consonant", aimer mieux "used the same way" as préférer,
+  pour/pour que "person acting vs goal", reported-tense rule, probablement =
+  certainty, une expérience / embauche / manquer bans, pendant que +
+  passé composé, plus-que-parfait ignoring être verbs. es once–catorce,
+  el primero "only exception", recomendar + infinitive "only with one
+  person", para "always" + infinitive, que "for things", si + indicative =
+  "real, decided" condition, a Dutch verb-second rule copied from the source
+  unit, Querido "neutral", backshift. de ich "always lowercase", war "past of
+  ist", vom "colloquial", Sie/sie "identical in every form", hätte + participle
+  + sollen, jedoch word order, Perfekt as a "foreground tense", einen Termin
+  machen "a calque", capitalised Sie.
+- **Wrong-sense glosses**: es proceso "progress", puede "could", ayuda "for
+  help", Le "to him/her"; fr en "increasingly", je vous propose de "I suggest
+  that you", ligne "online"; de deutlich "direct", Pfund.
+- **Target-text errors**: es "treinta y uno años", "costar de + inf.", "dicha
+  zona" after a plural, a mixed-mood propongo que; fr "Après la liste, je
+  l'envoie"; de comma after "Mit freundlichen Grüßen" / "Liebe Grüße",
+  "Ein Plan beim Wetter".
+- **Dialogue coherence / canon**: lines in the wrong speaker's mouth (es A1
+  u03/u06; fr A1 u03/u05); turns that do not answer the previous one (fr B1
+  u40, de A1 u23-24, B1 u37, C1 u02-03, es B2 u02, A2 u20); Inès addressing
+  Mathieu in the third person (fr B1 u28); a counterfactual contradicting how
+  Inès met Mathieu (fr C1 u05); audio missing a claim its question relies on
+  (fr C1 u07). All edited audio scripts are still `pending_generation`; no
+  fr/es/de audio has been generated, so nothing needs re-recording.
+- **Underdetermined prompts / distractors also correct**: "your own name",
+  "three numbers between 70 and 100", "the positive reply", "agree"; es tu
+  accepted while also an on-screen distractor; de "Ich bin ein Ingenieur" as a
+  distractor; fr toi.
+- **Missing valid accepted answers**: by count the most common class again
+  (word order, especially de main-clause-first wenn/als; es pronoun use and
+  -se subjunctive; feminine forms; article forms; Café; taught synonyms).
+New bug class: yes. Reading items without their text and the en-de A1
+German-gloss cards had not been logged before. The miss rate on classes
+logged as checked (notes, sequencing, leakage) matches the it/ru finding.
+
+Accepted answers removed (each because it was wrong for the prompt as shown):
+es A1 u01 `tu` (also an on-screen distractor; the grader is accent-sensitive);
+es A1 u08 "No está cerca" (the grader turns internal commas into spaces, so
+it also accepted the wrong "No, está cerca"; instruction reworded); half-answers
+missing a required part (es A1 u14-15); answers that no longer fit a
+rewritten open prompt (fr A1 u03, es A1 u02-03, de A2 u26, de A1 u24 where
+Felix answered his own question).
+
+Validator warnings rose by design: en-de 6/0/9/13/7 → 6/3/12/14/14 and
+en-es C1 0 → 1. Every new one is "order-answer tokens are a scrambled
+permutation", caused by a valid alternate word order added on purpose (same
+request as the it/ru section: let the validator skip known-valid
+permutations, or let authors mark them).
+
+Owner decisions / native-speaker flags (details in each file's review.notes,
+"Second-pass review 2026-10-19"; full list in the PR #41 body):
+- **Priority native calls**: fr B2 u01 "cela n'empêche pas que tu peux"
+  (indicative; standard is *puisses*), flagged by three reviews; es C1 u06
+  "Me costó un ojo de la cara" used for effort (the idiom is about price).
+- **Canon**: es — where the story is set (Mateo/Elena London vs "aquí en
+  España"), Elena's London trip "a Londres" (A2 u22), Elena's old
+  neighbourhood (A2 u17). fr — Mathieu in Paris (A1/A2) vs Lyon (B2+), a
+  workshop "dernière séance" (A1 u08). de — Anna "learning German" (B1 u44);
+  Anna waitress vs café owner and Felix the engineer co-running it (A1 u24,
+  B1 u48-53, B2 u54); Frau Vogel colleague vs manager (B2 u07); B2 u04 train
+  timeline.
+- **Course-wide decisions**: de Cafe vs Café (typed answers now accept
+  both where touched); de "Im Dialog:" prefix read aloud as part of example
+  sentences; de A2+ matching clues as untaught German definitions (A1 was
+  switched to English); es Spanish instruction copies with untaught words in
+  A1 speak prompts; fr 8-digit phone numbers (A1 u02).
+- **Orphan `de/b2_unit54`**: reviewed and fixed, but it should not be wired
+  in. It duplicates b2_unit01's outcome and conflicts with Felix's canon.
+  Delete it or leave it out of the manifest.
+- **Backend (not content)**: non-dictation grading ignores internal commas,
+  so answers that differ only by a comma ("No está cerca" / "No, está
+  cerca") are indistinguishable. Worth a corpus-wide check.
+
+Verification: course-scoped validate + compile for all 15 fr/es/de groups
+(0 errors) before every commit; full `scripts/verify.sh --content-only`
+passed at eea26820, ccc03781 and 6d61655c, and again on the final head.

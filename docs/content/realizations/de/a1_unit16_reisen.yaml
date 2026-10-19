@@ -11,6 +11,16 @@ review:
     Sixteenth German unit, continuing Anna and Felix. Scoped to
     universal.a1.travel.handle_basic_journey and culminating in a basic ticket/journey
     request with destination and departure detail.
+
+    Second-pass review 2026-10-19: 8 fixes -- lesson01.exercise03.match_station and
+    lesson02.exercise03.match_ticket: German clues with untaught words (Plattformnummer,
+    Schienen, losfährt, Reiseziel, Ticketart, Wegschritt ...) -> English clues;
+    lesson02.exercise02.choose_platform: prompt.target_blocks [] -> the dialogue text
+    (question about the dialogue, never shown); lesson01.teach.gleis example 'Im Dialog: Der
+    Zug fährt von Gleis drei.' -> 'Im Dialog: Wo ist Gleis drei?' (not a dialogue line);
+    lesson01.teach.bahnhof, teach.zug, teach.abfahrt and lesson02.teach.plan_text examples:
+    dropped the 'Im Dialog:' prefix (none of them is in the dialogue). Overlay-side fixes are
+    recorded in the en-de overlay.
 course:
   realization_key: "de.a1"
   target_language_first: true
@@ -30,11 +40,11 @@ units:
         title: "Am Bahnhof"
         spine_outcome_id: "universal.a1.travel.handle_basic_journey"
         teaching:
-          - {content_key: "de.a1.unit16.lesson01.teach.bahnhof", kind: "vocabulary", target: {text: "Bahnhof", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bahnhof"], example: {text: "Im Dialog: Ich bin am Bahnhof.", language_code: "de", direction: "ltr"}}
-          - {content_key: "de.a1.unit16.lesson01.teach.gleis", kind: "vocabulary", target: {text: "Gleis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gleis"], example: {text: "Im Dialog: Der Zug fährt von Gleis drei.", language_code: "de", direction: "ltr"}}
-          - {content_key: "de.a1.unit16.lesson01.teach.zug", kind: "vocabulary", target: {text: "Zug", language_code: "de", direction: "ltr"}, introduced_tokens: ["Zug"], example: {text: "Im Dialog: Der Zug fährt nach Berlin.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit16.lesson01.teach.bahnhof", kind: "vocabulary", target: {text: "Bahnhof", language_code: "de", direction: "ltr"}, introduced_tokens: ["Bahnhof"], example: {text: "Ich bin am Bahnhof.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit16.lesson01.teach.gleis", kind: "vocabulary", target: {text: "Gleis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Gleis"], example: {text: "Im Dialog: Wo ist Gleis drei?", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit16.lesson01.teach.zug", kind: "vocabulary", target: {text: "Zug", language_code: "de", direction: "ltr"}, introduced_tokens: ["Zug"], example: {text: "Der Zug fährt nach Berlin.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson01.teach.fahrkarte", kind: "vocabulary", target: {text: "Fahrkarte", language_code: "de", direction: "ltr"}, introduced_tokens: ["Fahrkarte", "Berlin"], example: {text: "Im Dialog: Eine Fahrkarte nach Berlin, bitte.", language_code: "de", direction: "ltr"}}
-          - {content_key: "de.a1.unit16.lesson01.teach.abfahrt", kind: "vocabulary", target: {text: "Abfahrt", language_code: "de", direction: "ltr"}, introduced_tokens: ["Abfahrt"], example: {text: "Im Dialog: Abfahrt um neun Uhr.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit16.lesson01.teach.abfahrt", kind: "vocabulary", target: {text: "Abfahrt", language_code: "de", direction: "ltr"}, introduced_tokens: ["Abfahrt"], example: {text: "Abfahrt um neun Uhr.", language_code: "de", direction: "ltr"}}
         exercises:
           - {content_key: "de.a1.unit16.lesson01.exercise01.listen_gleis", type: "listen_select", tested_text: "Gleis drei", media_asset_key: "de.a1.audio.reisen.bahnhof.01", prompt: {target_blocks: []}}
           - {content_key: "de.a1.unit16.lesson01.exercise02.choose_ticket", type: "multiple_choice", tested_text: "Fahrkarte", prompt: {target_blocks: []}}
@@ -43,12 +53,12 @@ units:
             tested_text: "Bahnhof Gleis Zug Fahrkarte Abfahrt Berlin"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "Ort für Züge", right: "Bahnhof"}
-              - {left: "Plattformnummer", right: "Gleis"}
-              - {left: "Transport auf Schienen", right: "Zug"}
-              - {left: "Ticket", right: "Fahrkarte"}
-              - {left: "Zeit, wenn der Zug losfährt", right: "Abfahrt"}
-              - {left: "Reiseziel in Deutschland", right: "Berlin"}
+              - {left: "train station", right: "Bahnhof"}
+              - {left: "platform", right: "Gleis"}
+              - {left: "train", right: "Zug"}
+              - {left: "ticket", right: "Fahrkarte"}
+              - {left: "departure", right: "Abfahrt"}
+              - {left: "the destination city", right: "Berlin"}
           - {content_key: "de.a1.unit16.lesson01.exercise04.order_ticket", type: "word_order", tested_text: "Eine Fahrkarte nach Berlin bitte", prompt: {target_blocks: []}, word_bank: ["Fahrkarte", "nach", "Berlin", "bitte", "Eine"]}
           - {content_key: "de.a1.unit16.lesson01.exercise05.write_departure", type: "writing_prompt", tested_text: "Abfahrt um neun Uhr", prompt: {target_blocks: []}}
       - content_key: "de.a1.unit16.lesson02.eine_fahrkarte_kaufen"
@@ -58,7 +68,7 @@ units:
           - {content_key: "de.a1.unit16.lesson02.teach.einfach", kind: "vocabulary", target: {text: "einfach", language_code: "de", direction: "ltr"}, introduced_tokens: ["einfach"], example: {text: "Im Dialog: Einfach, bitte.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson02.teach.hin_zurueck", kind: "phrase", target: {text: "hin und zurück", language_code: "de", direction: "ltr"}, introduced_tokens: ["hin", "zurück"], example: {text: "Im Dialog: Einfach oder hin und zurück?", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson02.teach.faerht", kind: "phrase", target: {text: "Der Zug fährt um neun Uhr von Gleis drei.", language_code: "de", direction: "ltr"}, introduced_tokens: ["fährt", "drei"], example: {text: "Im Dialog: Der Zug fährt um neun Uhr von Gleis drei.", language_code: "de", direction: "ltr"}}
-          - {content_key: "de.a1.unit16.lesson02.teach.plan_text", kind: "reading", target: {text: "Fahrkarte: Berlin. Abfahrt: neun Uhr. Gleis: drei. Art: einfach.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Art"], example: {text: "Im Dialog: Art: einfach.", language_code: "de", direction: "ltr"}}
+          - {content_key: "de.a1.unit16.lesson02.teach.plan_text", kind: "reading", target: {text: "Fahrkarte: Berlin. Abfahrt: neun Uhr. Gleis: drei. Art: einfach.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Art"], example: {text: "Art: einfach.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson02.teach.line01", kind: "dialogue", target: {text: "Guten Tag, eine Fahrkarte nach Berlin, bitte.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: [], example: {text: "Im Dialog: Eine Fahrkarte nach Berlin, bitte.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson02.teach.line02", kind: "dialogue", target: {text: "Einfach oder hin und zurück?", language_code: "de", direction: "ltr", speaker: "Mitarbeiterin"}, introduced_tokens: [], example: {text: "Im Dialog: Einfach oder hin und zurück?", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit16.lesson02.teach.line03", kind: "dialogue", target: {text: "Einfach, bitte.", language_code: "de", direction: "ltr", speaker: "Felix"}, introduced_tokens: [], example: {text: "Im Dialog: Einfach, bitte.", language_code: "de", direction: "ltr"}}
@@ -67,18 +77,18 @@ units:
           - {content_key: "de.a1.unit16.lesson02.teach.line06", kind: "dialogue", target: {text: "Gehen Sie geradeaus und dann rechts.", language_code: "de", direction: "ltr", speaker: "Mitarbeiterin"}, introduced_tokens: [], example: {text: "Im Dialog: Gehen Sie geradeaus und dann rechts.", language_code: "de", direction: "ltr"}}
         exercises:
           - {content_key: "de.a1.unit16.lesson02.exercise01.listen_destination", type: "dialogue_comprehension", tested_text: "eine Fahrkarte nach Berlin", media_asset_key: "de.a1.audio.reisen.dialog.01", prompt: {target_blocks: []}}
-          - {content_key: "de.a1.unit16.lesson02.exercise02.choose_platform", type: "multiple_choice", tested_text: "Gleis drei", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit16.lesson02.exercise02.choose_platform", type: "multiple_choice", tested_text: "Gleis drei", prompt: {target_blocks: [{text: "Felix: Guten Tag, eine Fahrkarte nach Berlin, bitte. Mitarbeiterin: Einfach oder hin und zurück? Felix: Einfach, bitte. Mitarbeiterin: Der Zug fährt um neun Uhr von Gleis drei. Felix: Danke. Wo ist Gleis drei? Mitarbeiterin: Gehen Sie geradeaus und dann rechts.", language_code: "de", direction: "ltr"}]}}
           - content_key: "de.a1.unit16.lesson02.exercise03.match_ticket"
             type: "matching_pairs"
             tested_text: "Berlin einfach neun Uhr Gleis drei geradeaus rechts"
             prompt: {target_blocks: []}
             pairs:
-              - {left: "Reiseziel", right: "Berlin"}
-              - {left: "Ticketart", right: "einfach"}
-              - {left: "Abfahrtszeit", right: "neun Uhr"}
-              - {left: "Abfahrtsort", right: "Gleis drei"}
-              - {left: "erster Wegschritt", right: "geradeaus"}
-              - {left: "zweiter Wegschritt", right: "rechts"}
+              - {left: "destination", right: "Berlin"}
+              - {left: "ticket type", right: "einfach"}
+              - {left: "departure time", right: "neun Uhr"}
+              - {left: "where the train leaves from", right: "Gleis drei"}
+              - {left: "first step of the directions", right: "geradeaus"}
+              - {left: "second step of the directions", right: "rechts"}
           - {content_key: "de.a1.unit16.lesson02.exercise04.order_train_info", type: "word_order", tested_text: "Der Zug fährt um neun Uhr von Gleis drei", prompt: {target_blocks: []}, word_bank: ["Zug", "fährt", "um", "neun", "Uhr", "von", "Gleis", "drei", "Der"]}
           - {content_key: "de.a1.unit16.lesson02.exercise05.reply_ticket", type: "dialogue_response", tested_text: "Eine Fahrkarte nach Berlin, bitte. Einfach, bitte. Wo ist Gleis drei?", prompt: {target_blocks: [{text: "Guten Tag. Einfach oder hin und zurück? Der Zug fährt um neun Uhr von Gleis drei.", language_code: "de", direction: "ltr"}]}}
           - {content_key: "de.a1.unit16.lesson02.exercise06.write_travel_request", type: "writing_prompt", tested_text: "Eine Fahrkarte nach Berlin, bitte. Abfahrt um neun Uhr?", prompt: {target_blocks: []}}
