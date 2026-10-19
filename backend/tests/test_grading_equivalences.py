@@ -134,3 +134,46 @@ def test_new_equivalences_respect_strictness_metadata():
         language_code="es",
         case_sensitive=True,
     ) == "incorrect"
+
+
+def test_comma_after_leading_no_changes_meaning_in_es_pl_ro():
+    cases = [
+        ("es", "No, está cerca.", "No está cerca"),
+        ("pl", "Nie, zgadzam się.", "Nie zgadzam się"),
+        ("ro", "Nu, mi-e frică.", "Nu mi-e frică"),
+    ]
+    for language, with_pause, without_pause in cases:
+        for correct, learner in ((with_pause, without_pause), (without_pause, with_pause)):
+            assert grade(
+                learner, correct, "translation", script="latin", language_code=language
+            ) == "incorrect", (language, correct, learner)
+    # Other pause marks count as the same pause; accents still fold as before.
+    assert grade(
+        "¡No! Está cerca", "No, está cerca.", "translation", script="latin", language_code="es"
+    ) == "correct"
+    assert grade(
+        "No esta cerca", "No está cerca", "translation", script="latin", language_code="es"
+    ) == "almost"
+
+
+def test_leading_no_comma_rule_is_narrow():
+    # A doubled "no" keeps the negation either way.
+    assert grade(
+        "Nie nie, kawa jest lepsza", "Nie, nie, kawa jest lepsza", "translation",
+        script="latin", language_code="pl",
+    ) == "correct"
+    # Languages with a distinct negator keep ignoring the comma.
+    assert grade("Nee dank je", "Nee, dank je.", "translation", script="latin", language_code="nl") == "correct"
+    assert grade("No thanks", "No, thanks.", "translation", script="latin", language_code="en") == "correct"
+    # Other commas stay ignored in es.
+    assert grade(
+        "Sí está lejos", "Sí, está lejos.", "translation", script="latin", language_code="es"
+    ) == "correct"
+    # Spoken transcripts keep ignoring punctuation.
+    assert grade(
+        "No está cerca", "No, está cerca.", "dialogue_response", script="latin",
+        language_code="es", input_mode="spoken",
+    ) == "correct"
+    # Multi-answer content still accepts any listed variant.
+    accepted = {"canonical": "No, gracias.", "accepted": ["No, gracias.", "No gracias."]}
+    assert grade("No gracias", accepted, "translation", script="latin", language_code="es") == "correct"

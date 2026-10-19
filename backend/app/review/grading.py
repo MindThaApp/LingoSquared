@@ -440,6 +440,65 @@ def optional_subject_pronoun_only_difference(
     return True
 
 
+# ---------------------------------------------------------------------------
+# Meaning-bearing comma after a sentence-initial "no" (2026-10-19)
+#
+# canonical_text() turns internal commas into spaces, which is right for the
+# overwhelming majority of answers (learners omit commas freely, and making
+# every comma count would fail huge numbers of correct answers). But in
+# languages whose answer-word "no" is the SAME word as the verbal negator,
+# that one comma flips the meaning: Spanish "No, está cerca" (no - it's
+# close) vs "No está cerca" (it isn't close); Polish "Nie, jest blisko" vs
+# "Nie jest blisko"; Romanian "Nu, e aproape" vs "Nu e aproape". Languages
+# with a distinct negator (nl nee/niet, de nein/nicht, fr non/ne, it no/non,
+# en no/not) have no such ambiguity and are deliberately not listed.
+#
+# The rule is deliberately narrow: it fires only when BOTH answers open with
+# the listed word followed by more text, and the two disagree on whether a
+# pause mark (, ; : . ! … dash) follows it. "No, no está cerca" vs "No no
+# está cerca" is exempt (the second "no" carries the negation either way).
+# Typed answers only: STT punctuation is unreliable, so spoken grading keeps
+# ignoring it.
+# ---------------------------------------------------------------------------
+NEGATION_INTERJECTION_WORDS: dict[str, frozenset[str]] = {
+    "es": frozenset({"no"}),
+    "pl": frozenset({"nie"}),
+    "ro": frozenset({"nu"}),
+}
+_LEADING_WORD_RE = re.compile(
+    r"^[\W_]*?(?P<word>\w+)(?P<sep>[\s,;:.!…—–-]+)(?P<rest>\w+)", re.UNICODE
+)
+
+
+def _leading_negation_pause(value: str, language_code: str | None) -> bool | None:
+    """None when value does not open with a listed "no" word plus more text;
+    otherwise whether a pause mark separates it from the next word."""
+    words = NEGATION_INTERJECTION_WORDS.get(language_code or "")
+    if not words:
+        return None
+    text = unicodedata.normalize("NFC", value).translate(QUOTE_FOLD).strip().casefold()
+    match = _LEADING_WORD_RE.match(text)
+    if not match or match.group("word") not in words:
+        return None
+    if match.group("rest") in words:
+        return None
+    return bool(match.group("sep").strip())
+
+
+def is_negation_comma_mismatch(
+    response: str, correct: str, language_code: str | None
+) -> bool:
+    """True when the answers disagree on the meaning-bearing pause after a
+    sentence-initial "no" (see NEGATION_INTERJECTION_WORDS)."""
+    response_pause = _leading_negation_pause(response, language_code)
+    correct_pause = _leading_negation_pause(correct, language_code)
+    return (
+        response_pause is not None
+        and correct_pause is not None
+        and response_pause != correct_pause
+    )
+
+
 def _is_arabic_letter(char: str) -> bool:
     code = ord(char)
     return unicodedata.category(char).startswith("L") and (
@@ -864,6 +923,11 @@ def grade_answer(
         return (
             "correct" if dictation_answers_equal(response, correct) else "incorrect"
         )
+
+    # A comma after a sentence-initial "no" can flip the meaning (es "No,
+    # está cerca" vs "No está cerca"); see NEGATION_INTERJECTION_WORDS.
+    if is_negation_comma_mismatch(response, correct, language_code):
+        return "incorrect"
 
     normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
     normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
