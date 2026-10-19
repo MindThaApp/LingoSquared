@@ -4,9 +4,25 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a1.unit42.library
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 5 fixes). (1-3) The three
+    bare-word translation templates (lesson01/02/03) pooled امانت and پس, whose backfill
+    glosses "loan (in امانت گرفتن, 'to borrow')" / "back (in پس دادن, 'to give back')" print
+    the Persian answer in the English prompt: all translation slots now pool the lesson01 +
+    lesson04 items (کتابخونه, "باشه. کارت کتابخونه دارید؟"); lesson04.translate.002
+    (کتابخونه + امانت) leaked the same way and gets the same pool. (4) order.004 "{item} رو می‌خوام." rendered "امانت رو می‌خوام" / "کتابخونه
+    رو می‌خوام" (I want the loan / the library), not what the unit teaches: now the taught
+    sentence "کتاب امانت می‌خوام." pinned to the lesson02 tag. (5) Feedback rewrites:
+    fill.003 said "پس is the only adverb in this unit's vocabulary set" (internal pool
+    talk), lesson03 translation feedback said "return-related" for items that no longer are.
+    Remaining: the MC pools still show امانت/پس with glosses that contain the token itself
+    (a near-giveaway, fixable only in backfill_lexemes.py's gloss table); the unit is still
+    too thin for matching_pairs. NATIVE FLAGS: none on the Persian frames (کتاب امانت
+    می‌خوام / کتاب رو پس می‌دم / فردا کتاب رو پس می‌دم are the unit's own sentences).
+
     Authored against docs/content/PRACTICE_PACK_RECIPE.md for the en-fa a1
     library unit. §0 capacity is the THINNEST unit in this batch: only 9
     lexemes total, and only 4 of 6 lessons have any new fa lexeme
@@ -59,6 +75,9 @@ tag_schema:
     - return_word
     - person_name
     - reviewed_phrase
+    - en_fa_a1_unit42_lesson01_words
+    - en_fa_a1_unit42_lesson02_words
+    - en_fa_a1_unit42_lesson04_words
 
 templates:
 - content_key: practice.en-fa.fa.a1.unit42.lesson01.choose.001
@@ -87,8 +106,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adverb, phrase]
-      agreement_tags: {semantic: [library_word, return_word]}
+      part_of_speech: [noun, phrase]
+      agreement_tags: {semantic: [en_fa_a1_unit42_lesson01_words, en_fa_a1_unit42_lesson04_words]}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: '{item} is a library-related word from this unit.'
@@ -121,8 +140,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adverb, phrase]
-      agreement_tags: {semantic: [library_word, return_word]}
+      part_of_speech: [noun, phrase]
+      agreement_tags: {semantic: [en_fa_a1_unit42_lesson01_words, en_fa_a1_unit42_lesson04_words]}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: '{item} is a library-related word from this unit.'
@@ -155,11 +174,11 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adverb]
-      agreement_tags: {semantic: [library_word, return_word]}
+      part_of_speech: [noun, phrase]
+      agreement_tags: {semantic: [en_fa_a1_unit42_lesson01_words, en_fa_a1_unit42_lesson04_words]}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: '{item} is a library or return-related word from this unit.'
+    text: '{item} is a word or phrase from this unit''s library lessons.'
     language_code: en
     direction: ltr
 
@@ -174,24 +193,24 @@ templates:
       agreement_tags: {semantic: return_word}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: 'کتاب رو پس می‌دم means "I''ll give the book back" -- پس is the only adverb in this unit''s vocabulary set.'
+    text: 'کتاب رو پس می‌دم means "I''ll give the book back" -- پس دادن means "to give back".'
     language_code: en
     direction: ltr
 
 - content_key: practice.en-fa.fa.a1.unit42.lesson03.order.004
   lesson_content_key: fa.a1.unit42.lesson03.when_giving_back
   type: word_order
-  frame: {text: '{item} رو می‌خوام.', language_code: fa, direction: rtl}
+  frame: {text: 'کتاب {item} می‌خوام.', language_code: fa, direction: rtl}
   slots:
     item:
       language_code: fa
       part_of_speech: noun
-      agreement_tags: {semantic: library_word}
+      agreement_tags: {semantic: en_fa_a1_unit42_lesson02_words}
   answer_derivation:
     kind: render_frame
-    frame: {text: '{item} رو می‌خوام.', language_code: fa, direction: rtl}
+    frame: {text: 'کتاب {item} می‌خوام.', language_code: fa, direction: rtl}
   feedback_frame:
-    text: 'X رو می‌خوام means "I want X" -- grammatical for both کتابخونه and امانت.'
+    text: 'کتاب امانت می‌خوام means "I''d like to borrow a book" -- the verb می‌خوام comes last.'
     language_code: en
     direction: ltr
 
@@ -239,7 +258,7 @@ templates:
     item:
       language_code: fa
       part_of_speech: [noun, phrase]
-      agreement_tags: {semantic: [library_word]}
+      agreement_tags: {semantic: [en_fa_a1_unit42_lesson01_words, en_fa_a1_unit42_lesson04_words]}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: '{item} appears in this unit''s library-desk dialogue.'
