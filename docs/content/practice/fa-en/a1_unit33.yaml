@@ -4,88 +4,21 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit33.transportation
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: >-
-    Authored 2026-07-11, fa-en depth-audit lane (unit 4 of the 30-42
-    batch, see unit30's pack notes for the full batch rationale).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (fa-en practice pass, fresh context; 0 fixes). All nine templates checked: every transport_noun filling is grammatical in 'The {item} is fast' / 'Where is the {item}?' / 'That {item} is fast'; Persian feedback and the colloquial prompt 'اون {item} سریعه' are fine; no leaks (A1). Known accepted limitation: drive/drives (رانندگی کردن / رانندگی می‌کند) are near-synonym glosses in MC/matching pools. NATIVE FLAGS: takes=طول می‌کشد (written verb form next to colloquial words).
 
-    One semantic tag: 'transport_noun' (bus/train/car/bike from lesson01,
-    four transportation-mode nouns). Deliberately NOT used in any shared
-    generative frame -- the real content pairs each mode with its OWN
-    verb (take the bus/train, drive my car, ride my bike; the overlay's
-    own notes explicitly flag this as a thing to memorize per-mode), so
-    a single "{verb} the/my {item}" frame would be ungrammatical for at
-    least one member no matter which verb is chosen. Kept
-    recognition-only, same discipline as unit25's bureaucracy_noun.
-
-    Anchoring check: lesson01 introduces all four transport nouns as
-    real new lexemes, verified via iter_specs(). Slot candidate count
-    verified with scripts/_practice_slot_check.py and
-    compile_content.py practice-validate. Needs the standard
-    fresh-context review before import.
-
+    Authored 2026-07-11, fa-en depth-audit lane (unit 4 of the 30-42 batch, see unit30's pack notes for the full batch rationale).
+    One semantic tag: 'transport_noun' (bus/train/car/bike from lesson01, four transportation-mode nouns). Deliberately NOT used in any shared generative frame -- the real content pairs each mode with its OWN verb (take the bus/train, drive my car, ride my bike; the overlay's own notes explicitly flag this as a thing to memorize per-mode), so a single "{verb} the/my {item}" frame would be ungrammatical for at least one member no matter which verb is chosen. Kept recognition-only, same discipline as unit25's bureaucracy_noun.
+    Anchoring check: lesson01 introduces all four transport nouns as real new lexemes, verified via iter_specs(). Slot candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context review before import.
     Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT #2): BOTH the 2026-07-11 authoring note and the same-day fresh-context review's "verified every slot member is taught in this unit's realization" claim were wrong at CHECKPOINT (unit) scope -- they verified at COURSE scope. scripts/_practice_unit_scope_check.py confirmed: "train" and "car" (2 of transport_noun's 4 course-wide members) were already classified in EARLIER units (unit21/unit20 respectively); this unit's own lesson01 only introduces "bus" and "bike" as real new lexemes. That left choose.001/listen.002 at 2 distinct unit-scoped answers (below the 3-option floor -- build_prompt() silently rejects every instance) and match.003 needing 4 distinct fills against a 2-token unit-scoped pool (DEAD, never generates). translate.004 was unaffected (translation has no candidate floor) and is UNCHANGED. Re-anchored choose.001/listen.002/match.003 from transport_noun to a plain `part_of_speech: verb` constraint (no semantic tag): verified via iter_specs() filtered to `.a1.unit33.` that this unit natively introduces 5 distinct, cleanly-tokenized verbs unit-wide -- drive/ride (lesson01), takes (lesson02), drives/worry (lesson04) -- all distinct Farsi glosses, no confusable pairs. match.003 now declares 5 slots (matches the real 5-verb pool); this is still 1 below the recipe's 6-pair matching_pairs floor and I could not cleanly close that last gap -- see the LOG note below.
+    LOG for the coordinator (backfill/realization data-quality defect, NOT fixed here -- pack-only): lessons 02-04's own realization file (docs/content/realizations/en/ a1_unit33_transportation.yaml) bakes trailing sentence punctuation directly into several introduced_tokens entries -- "work?", "Daniel?", "it?", "okay,", "difficult.", "office." -- which backfill_lexemes_fa_en.py then carries through verbatim as the Lexeme.token/gloss values. These are real, unit-native, otherwise-usable nouns/adjectives (e.g. "parking" is clean, but "office." is not) that I deliberately excluded from every widened pool above because a slot constrained only by `part_of_speech` has no lever to admit "parking" while excluding "office."/"work?" (no semantic tag distinguishes them, and inventing one is a backfill change out of this pass's scope). Stripping the stray punctuation from those six introduced_tokens entries would let a future pass reach the full 6-pair matching_pairs floor and add real lesson02-04 template coverage (currently 0/4 non-lesson01 lessons have a template).
 
-    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md
-    §1.1/DO-NOT #2): BOTH the 2026-07-11 authoring note and the same-day fresh-context review's
-    "verified every slot member is taught in this unit's realization" claim were wrong at
-    CHECKPOINT (unit) scope -- they verified at COURSE scope. scripts/_practice_unit_scope_check.py
-    confirmed: "train" and "car" (2 of transport_noun's 4 course-wide members) were already
-    classified in EARLIER units (unit21/unit20 respectively); this unit's own lesson01 only
-    introduces "bus" and "bike" as real new lexemes. That left choose.001/listen.002 at 2 distinct
-    unit-scoped answers (below the 3-option floor -- build_prompt() silently rejects every
-    instance) and match.003 needing 4 distinct fills against a 2-token unit-scoped pool (DEAD,
-    never generates). translate.004 was unaffected (translation has no candidate floor) and is
-    UNCHANGED. Re-anchored choose.001/listen.002/match.003 from transport_noun to a plain
-    `part_of_speech: verb` constraint (no semantic tag): verified via iter_specs() filtered to
-    `.a1.unit33.` that this unit natively introduces 5 distinct, cleanly-tokenized verbs unit-wide
-    -- drive/ride (lesson01), takes (lesson02), drives/worry (lesson04) -- all distinct Farsi
-    glosses, no confusable pairs. match.003 now declares 5 slots (matches the real 5-verb pool);
-    this is still 1 below the recipe's 6-pair matching_pairs floor and I could not cleanly close
-    that last gap -- see the LOG note below.
-
-    LOG for the coordinator (backfill/realization data-quality defect, NOT fixed here --
-    pack-only): lessons 02-04's own realization file (docs/content/realizations/en/
-    a1_unit33_transportation.yaml) bakes trailing sentence punctuation directly into several
-    introduced_tokens entries -- "work?", "Daniel?", "it?", "okay,", "difficult.", "office." --
-    which backfill_lexemes_fa_en.py then carries through verbatim as the Lexeme.token/gloss
-    values. These are real, unit-native, otherwise-usable nouns/adjectives (e.g. "parking" is
-    clean, but "office." is not) that I deliberately excluded from every widened pool above because
-    a slot constrained only by `part_of_speech` has no lever to admit "parking" while excluding
-    "office."/"work?" (no semantic tag distinguishes them, and inventing one is a backfill change
-    out of this pass's scope). Stripping the stray punctuation from those six introduced_tokens
-    entries would let a future pass reach the full 6-pair matching_pairs floor and add real
-    lesson02-04 template coverage (currently 0/4 non-lesson01 lessons have a template).
-
-
-    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): tiers were 2/1/1 live.
-    Added choose_noun.005 (MC over a plain part_of_speech:noun constraint, anchored lesson03 -- the 2026-07-17
-    backfill punctuation-strip fix landed, so the unit now has 4 clean unit-native nouns bus/bike/parking/office
-    with distinct glosses, clearing the 3-option floor; same POS-only-MC pattern this pack's choose.001 already
-    uses), order.006 ("The {item} is fast", lesson02) and order.007 ("Where is the {item}?", lesson01) -- both
-    over transport_noun, whose full course-wide pool is exactly bus/bike/car/train, every member grammatical in
-    both frames and no frame literal collides with any candidate (defect 1.14) -- plus translate_verb.008
-    (bare-word production over the same POS-only verb pool as choose.001; POS-only is sanctioned for bare
-    translation) and translate_sentence.009 ("اون {item} سریعه." -> "That {item} is fast", deterministic
-    demonstrative subject, all four course-wide fillings grammatical). Tiers now 3/3/3 live; lessons 02/03/04 get
-    their first templates. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY: the unit's
-    only semantic tag is transport_noun with just 2 unit-native members (bus/bike -- train/car belong to
-    unit21/unit20), so no semantic union of unit tags can reach the 6 distinct unit tokens a matching_pairs
-    needs; a wrong union is worse than the status quo. It also stays at 5 pairs (pre-existing below-floor line,
-    not dispatched).
-
-    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md §3.1, generated-tag re-anchor): the wave-2 blocker above
-    is RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit33_words` tag, first-introduction-only
-    across all 4 lessons (11 unit-native tokens: bike/bus/difficult/drive/drives/late/office/parking/ride/
-    takes/worry, all distinct Farsi glosses -- drive/drives is the same acceptable infinitive/conjugated
-    discrimination the recipe allows for singular/plural pairs). Re-anchored match.003 from the bare
-    `part_of_speech: verb` (*unit33_verb, shared with choose.001/listen.002/translate_verb.008 -- left
-    untouched, not dispatched) to a new `unit33_match_pool` preset (`part_of_speech: [noun, verb, adjective,
-    adverb]` + `semantic: fa_en_a1_unit33_words`) and widened from 5 to 6 slots (the pool now supports it --
-    recipe's own point 2). Feedback text changed from "هر فعل" (each verb) to "هر واژه" (each word) since the
-    pool is no longer verb-only. Course-scope EXTRA drops from 472 off-theme words (verified via pool_check.py)
-    to 0.
+    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): tiers were 2/1/1 live. Added choose_noun.005 (MC over a plain part_of_speech:noun constraint, anchored lesson03 -- the 2026-07-17 backfill punctuation-strip fix landed, so the unit now has 4 clean unit-native nouns bus/bike/parking/office with distinct glosses, clearing the 3-option floor; same POS-only-MC pattern this pack's choose.001 already uses), order.006 ("The {item} is fast", lesson02) and order.007 ("Where is the {item}?", lesson01) -- both over transport_noun, whose full course-wide pool is exactly bus/bike/car/train, every member grammatical in both frames and no frame literal collides with any candidate (defect 1.14) -- plus translate_verb.008 (bare-word production over the same POS-only verb pool as choose.001; POS-only is sanctioned for bare translation) and translate_sentence.009 ("اون {item} سریعه." -> "That {item} is fast", deterministic demonstrative subject, all four course-wide fillings grammatical). Tiers now 3/3/3 live; lessons 02/03/04 get their first templates. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY: the unit's only semantic tag is transport_noun with just 2 unit-native members (bus/bike -- train/car belong to unit21/unit20), so no semantic union of unit tags can reach the 6 distinct unit tokens a matching_pairs needs; a wrong union is worse than the status quo. It also stays at 5 pairs (pre-existing below-floor line, not dispatched).
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md §3.1, generated-tag re-anchor): the wave-2 blocker above is RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit33_words` tag, first-introduction-only across all 4 lessons (11 unit-native tokens: bike/bus/difficult/drive/drives/late/office/parking/ride/ takes/worry, all distinct Farsi glosses -- drive/drives is the same acceptable infinitive/conjugated discrimination the recipe allows for singular/plural pairs). Re-anchored match.003 from the bare `part_of_speech: verb` (*unit33_verb, shared with choose.001/listen.002/translate_verb.008 -- left untouched, not dispatched) to a new `unit33_match_pool` preset (`part_of_speech: [noun, verb, adjective, adverb]` + `semantic: fa_en_a1_unit33_words`) and widened from 5 to 6 slots (the pool now supports it -- recipe's own point 2). Feedback text changed from "هر فعل" (each verb) to "هر واژه" (each word) since the pool is no longer verb-only. Course-scope EXTRA drops from 472 off-theme words (verified via pool_check.py) to 0.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
