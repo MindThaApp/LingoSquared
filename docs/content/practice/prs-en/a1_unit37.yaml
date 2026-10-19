@@ -4,16 +4,21 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit37.celebrations
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: 'Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-36. Two tags: 4-member ''celebration_noun''
-    (birthday/ party/gift/congratulations -- "birthday" already classified since unit04, reused additively), bare-word recognition
-    only (these four don''t collocate uniformly, e.g. "having a birthday"/"having a gift" both read oddly next to "having
-    a party"), same recognition-only discipline as unit25''s bureaucracy_noun. Single-member ''party_word'' (party only) for
-    the generative "We are having a {item} on Saturday." frame, same precedent as the shared module''s existing single-member
-    "superlative_adj" tag. EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py as part of this pass. Anchoring
-    check: lesson01 introduces new lexemes, safe as an anchor. Every slot''s real candidate count verified with scripts/_practice_slot_check.py.
-    Needs the standard fresh-context review before import.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- noun MC/translation pools restricted to taught nouns excluding
+    surprise (gloss غافلگیرکننده is adjective sense), verb translation pool restricted to lesson02 verbs (past-tense glosses
+    contain English). NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: party=میلاد؛ محفل -> میلاد means birthday/Christmas, prefer
+    جشن؛ محفل; surprise=غافلگیرکننده is the adjective sense for a noun (use غافلگیری); having/bought/didn''t/were/arrived/found/said/gave/took
+    and we''ll glosses contain English words. Prior note: Authored 2026-07-11 by the prs-en depth-extension worker, same pass
+    as unit30-36. Two tags: 4-member ''celebration_noun'' (birthday/ party/gift/congratulations -- "birthday" already classified
+    since unit04, reused additively), bare-word recognition only (these four don''t collocate uniformly, e.g. "having a birthday"/"having
+    a gift" both read oddly next to "having a party"), same recognition-only discipline as unit25''s bureaucracy_noun. Single-member
+    ''party_word'' (party only) for the generative "We are having a {item} on Saturday." frame, same precedent as the shared
+    module''s existing single-member "superlative_adj" tag. EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py
+    as part of this pass. Anchoring check: lesson01 introduces new lexemes, safe as an anchor. Every slot''s real candidate
+    count verified with scripts/_practice_slot_check.py. Needs the standard fresh-context review before import.
 
     Fresh-context review, 2026-07-11 (separate worker, zero access to the authoring reasoning above): compile_content.py practice-validate
     (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot >=1 candidate; every multiple_choice/listen_select/matching_pairs
@@ -28,12 +33,12 @@ review:
     genuinely clean.
 
 
-    TIER-DEPTH POLISH (2026-07-24, polish wave 2, reverting to unreviewed): recognition and production tiers were <3 live. Added
-    choose.006 (lesson03, bare unit-noun pool: 10 distinct unit tokens/glosses), translate.007 (lesson02, bare-word noun translation
-    over the same unit noun pool -- differs from translate.004''s celebration_noun pool) and translate.008 (lesson04, bare-word
-    verb translation: 19 unit verbs, all glosses distinct; "didn''t" apostrophe covered by en distance-1 typo tolerance). Pre-existing
-    4-pair match.003 floor gap left as-is (out of scope for this pass). Verified with practice-validate, pool_check, self-reference,
-    unit-scope and Dari-register checks.'
+    TIER-DEPTH POLISH (2026-07-24, polish wave 2, reverting to unreviewed): recognition and production tiers were <3 live.
+    Added choose.006 (lesson03, bare unit-noun pool: 10 distinct unit tokens/glosses), translate.007 (lesson02, bare-word
+    noun translation over the same unit noun pool -- differs from translate.004''s celebration_noun pool) and translate.008
+    (lesson04, bare-word verb translation: 19 unit verbs, all glosses distinct; "didn''t" apostrophe covered by en distance-1
+    typo tolerance). Pre-existing 4-pair match.003 floor gap left as-is (out of scope for this pass). Verified with practice-validate,
+    pool_check, self-reference, unit-scope and Dari-register checks.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -51,6 +56,10 @@ tag_schema:
     - celebration_noun
     - party_word
     - volume_prs_en_a1_unit37_item_11_single
+    - prs_en_a1_unit37_lesson01_words
+    - prs_en_a1_unit37_lesson02_words
+    - prs_en_a1_unit37_lesson03_words
+    - prs_en_a1_unit37_lesson04_words
 slot_presets:
   celebration_noun: &id001
     language_code: en
@@ -172,7 +181,13 @@ templates:
   slots:
     item:
       language_code: en
-      part_of_speech: noun
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit37_lesson01_words
+        - prs_en_a1_unit37_lesson03_words
+        - prs_en_a1_unit37_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -192,7 +207,13 @@ templates:
   slots:
     item:
       language_code: en
-      part_of_speech: noun
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit37_lesson01_words
+        - prs_en_a1_unit37_lesson03_words
+        - prs_en_a1_unit37_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -212,7 +233,11 @@ templates:
   slots:
     item:
       language_code: en
-      part_of_speech: verb
+      part_of_speech:
+      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit37_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
