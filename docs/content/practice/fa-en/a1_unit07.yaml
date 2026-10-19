@@ -4,9 +4,11 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit07.food
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (fa-en practice pass, fresh context; 5 fixes). (1) id_like_order.003, can_i_have_order.004, order_non_sandwich.005: english-target -- article 'a' produced 'a bread' (uncountable); dropped the article ('I'd like bread, please.') and narrowed 003/004 to the non-sandwich pool since sandwich needs the article. (2) Feedback 'غذا' (food) was wrong for water/tea; replaced with neutral 'چیزی'/'واژه' in 7 feedback strings. NATIVE FLAGS: none. Unfixed: unit teaches 'a water' but no tag lever exists to exclude only bread.
     Authored 2026-07-06 by a fork of the practice-pool-sync lane
     (en-fa/fa-en/en-prs gap). The food_item tag (coffee/tea/water/bread/
     soup/salad/sandwich, 7 members) already exists in scripts/
@@ -91,14 +93,14 @@ templates:
     slots: {food_one: *food_item, food_two: *food_item, food_three: *food_item, food_four: *food_item, food_five: *food_item, food_six: *food_item, food_seven: *food_item}
     slot_relations: [{kind: distinct, slots: [food_one, food_two, food_three, food_four, food_five, food_six, food_seven]}]
     answer_derivation: {kind: matching_pairs, slots: [food_one, food_two, food_three, food_four, food_five, food_six, food_seven]}
-    feedback_frame: {text: "هر واژهٔ غذا را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson01.food_translate.004
     lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
     type: translation
     frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_text, slot: food_item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson02.order_listen.002
     lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
     type: listen_select
@@ -109,17 +111,17 @@ templates:
   - content_key: practice.fa-en.en.a1.unit07.lesson02.id_like_order.003
     lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
     type: word_order
-    frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}
-    slots: {food_item: *food_item}
-    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {food_item}, please.", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{food_item} غذایی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
+    frame: {text: "I'd like {food_item}, please.", language_code: en, direction: ltr}
+    slots: {food_item: *food_item_non_sandwich}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like {food_item}, please.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} چیزی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson02.can_i_have_order.004
     lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
     type: word_order
-    frame: {text: "Can I have a {food_item}, please?", language_code: en, direction: ltr}
-    slots: {food_item: *food_item}
-    answer_derivation: {kind: render_frame, frame: {text: "Can I have a {food_item}, please?", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{food_item} غذایی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
+    frame: {text: "Can I have {food_item}, please?", language_code: en, direction: ltr}
+    slots: {food_item: *food_item_non_sandwich}
+    answer_derivation: {kind: render_frame, frame: {text: "Can I have {food_item}, please?", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} چیزی است که سفارش داده می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson03.food_gloss.001
     lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
     type: multiple_choice
@@ -140,14 +142,14 @@ templates:
     frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_text, slot: food_item}
-    feedback_frame: {text: "{food_item} معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "{food_item} معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson04.food_translate.002
     lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
     type: translation
     frame: {text: "{food_item}", language_code: fa, direction: rtl, slot_rendering: {food_item: english_gloss}}
     slots: {food_item: *food_item}
     answer_derivation: {kind: slot_text, slot: food_item}
-    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این غذای فارسی است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژهٔ فارسی است.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit07.lesson04.food_gloss.003
     lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
     type: multiple_choice
@@ -165,7 +167,7 @@ templates:
   - content_key: practice.fa-en.en.a1.unit07.lesson04.order_non_sandwich.005
     lesson_content_key: en.a1.unit07.lesson04.cafe_dialogue
     type: word_order
-    frame: {text: "I'd like a {food_item} and a sandwich, please.", language_code: en, direction: ltr}
+    frame: {text: "I'd like {food_item} and a sandwich, please.", language_code: en, direction: ltr}
     slots: {food_item: *food_item_non_sandwich}
-    answer_derivation: {kind: render_frame, frame: {text: "I'd like a {food_item} and a sandwich, please.", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{food_item} غذایی است که همراه با ساندویچ سفارش داده می‌شود.", language_code: fa, direction: rtl}
+    answer_derivation: {kind: render_frame, frame: {text: "I'd like {food_item} and a sandwich, please.", language_code: en, direction: ltr}}
+    feedback_frame: {text: "{food_item} چیزی است که همراه با ساندویچ سفارش داده می‌شود.", language_code: fa, direction: rtl}

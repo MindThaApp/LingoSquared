@@ -2213,14 +2213,273 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     # a2_unit38 (repair visit): "leave the key with my neighbor" = entrust,
     # not spend-time (وقت گذاشتن).
     ("a2_unit38_repair_visit", "leave"): ("verb", "گذاشتن؛ سپردن"),
-    ("b1_unit01_necessity", "must"): ("verb", "باید"),
     ("b1_unit01_necessity", "next"): ("adjective", "بعدی"),
     ("b1_unit01_necessity", "right"): ("adjective", "درست"),
     ("b1_unit02_abilities", "would"): ("verb", "می‌شد/می‌بود"),
-    ("b1_unit13_relative_clauses", "used"): ("verb", "عادت داشت (used to)"),
+    ("b1_unit13_relative_clauses", "used"): ("verb", "عادت داشت"),
+    # b1_unit12 (concession): strip the English "followed by" from the gloss
+    # (answer leak in translation); "change your mind" = mind is the noun
+    # sense, not "care about"; "enjoy talking" = plain gerund.
+    ("b1_unit12_concession", "followed"): ("verb", "دنبال می‌شود"),
+    ("b1_unit12_concession", "mind"): ("verb", "ذهن؛ نظر"),
+    ("b1_unit12_concession", "talking"): ("verb", "صحبت کردن"),
+    # b1_unit13 (relative clauses): "whose desk" = work desk, "just joined" =
+    # recently, "meets deadlines" = keeps to them; coworker vs colleague must
+    # not share one gloss (ambiguous translation/matching).
+    ("b1_unit13_relative_clauses", "desk"): ("noun", "میز کار"),
+    ("b1_unit13_relative_clauses", "just"): ("adverb", "تازه"),
+    ("b1_unit13_relative_clauses", "meets"): ("verb", "رعایت می‌کند"),
+    ("b1_unit13_relative_clauses", "coworker"): ("noun", "همکار (غیررسمی)"),
+    # b1_unit14 (professional communication): remove English phrases from
+    # glosses (answer leaks); "follow up" = pursue; "start ten minutes early".
+    ("b1_unit14_professional_communication", "possibly"): ("adverb", "احتمالاً؛ شاید"),
+    ("b1_unit14_professional_communication", "best"): ("adjective", "بهترین"),
+    ("b1_unit14_professional_communication", "advance"): ("noun", "پیشاپیش"),
+    ("b1_unit14_professional_communication", "follow"): ("verb", "پیگیری کردن"),
+    ("b1_unit14_professional_communication", "early"): ("adverb", "زود"),
+    # b1_unit15 (complaints): "I can't use it" -> plain first person, no English.
+    ("b1_unit15_complaints", "can't"): ("verb", "نمی‌توانم"),
+    # b1_unit17 (regret): "Looking back" = reflect on the past; "you fixed it
+    # in the end"; fixed must differ from true (درست).
+    ("b1_unit17_regret", "looking"): ("verb", "نگاه کردن"),
+    ("b1_unit17_regret", "back"): ("adverb", "به گذشته"),
+    ("b1_unit17_regret", "end"): ("noun", "پایان؛ آخر"),
+    ("b1_unit17_regret", "fixed"): ("verb", "رفع کرد"),
+    # b1_unit18 (future plans): "made a decision", "agreed with someone",
+    # "feels confident", "design experience".
+    ("b1_unit18_future_plans", "made"): ("verb", "ساخت؛ گرفت"),
+    ("b1_unit18_future_plans", "agreed"): ("verb", "توافق‌شده"),
+    ("b1_unit18_future_plans", "feels"): ("verb", "احساس می‌کند"),
+    ("b1_unit18_future_plans", "experience"): ("noun", "تجربه"),
+    # b1_unit19 (summarizing): strip English phrases; "meeting was moved" =
+    # rescheduled, not "I moved house".
+    ("b1_unit19_summarizing", "many"): ("adjective", "بسیار؛ زیاد"),
+    ("b1_unit19_summarizing", "left"): ("verb", "حذف کرد"),
+    ("b1_unit19_summarizing", "moved"): ("verb", "جابه‌جا شد"),
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+    # a1_unit49 (waste disposal): drop the English cue from the collection gloss (answer leak
+    # in translation); jar = glass container, not the material "glass".
+    ("a1_unit49_waste_disposal", "collection"): ("noun", "جمع‌آوری"),
+    ("a1_unit49_waste_disposal", "jar"): ("noun", "ظرف شیشه‌ای"),
+    # a1_unit51 (pharmacy): drop the English cue from the runny gloss (answer leak).
+    ("a1_unit51_pharmacy", "runny"): ("adjective", "آبریزش‌دار"),
+    # a1_unit52 (personal care): trim must differ clearly from haircut in multiple-choice pools.
+    ("a1_unit52_personal_care", "trim"): ("noun", "مرتب کردن نوک مو"),
+    # a1_unit53 (bike rental): deposit = refundable security deposit (not a bank deposit);
+    # costs = the price verb, not the formal question; owned = was the owner of.
+    ("a1_unit53_bike_rental", "deposit"): ("noun", "سپرده"),
+    ("a1_unit53_bike_rental", "costs"): ("verb", "قیمت دارد"),
+    ("a1_unit53_bike_rental", "owned"): ("verb", "صاحبش بود"),
+    # a1_unit54 (laundromat): remove English cues (answer leak); broke = broke down, kept
+    # distinct from the adjective broken.
+    ("a1_unit54_laundry", "pick"): ("verb", "برداشتن؛ تحویل گرفتن"),
+    ("a1_unit54_laundry", "broke"): ("verb", "از کار افتاد"),
+    # a1_unit55 (swimming pool): remove English cues (answer leak).
+    ("a1_unit55_swimming_pool", "diving"): ("noun", "شیرجه"),
+    ("a1_unit55_swimming_pool", "board"): ("noun", "تخته"),
+    # a1_unit56 (restaurant): restaurant bill = check, not a utility bill (قبض).
+    ("a1_unit56_restaurant", "bill"): ("noun", "صورت‌حساب"),
+    # a1_unit64 (compliments): remove English cue from the "being" gloss (answer leak in hint).
+    ("a1_unit64_compliments", "being"): ("verb", "بودن"),
+    # b2 unit01: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit01_argumentation", "moving"): ("verb", "پیش رفتن"),
+    ("b2_unit01_argumentation", "other"): ("adjective", "دیگر"),
+    ("b2_unit01_argumentation", "worked"): ("verb", "کار کرد"),
+    ("b2_unit01_argumentation", "conceding"): ("verb", "امتیاز دادن"),
+    ("b2_unit01_argumentation", "quarter"): ("noun", "سه‌ماهه"),
+    ("b2_unit01_argumentation", "fair"): ("adjective", "بجا؛ معقول"),
+    ("b2_unit01_argumentation", "meeting"): ("noun", "جلسه"),
+    ("b2_unit01_argumentation", "like"): ("verb", "دوست داشتن"),
+    ("b2_unit01_argumentation", "are"): ("verb", "هستند"),
+    ("b2_unit01_argumentation", "slightly"): ("adverb", "اندکی"),
+    ("b2_unit01_argumentation", "when"): ("adverb", "وقتی که"),
+    ("b2_unit01_argumentation", "support"): ("verb", "پشتیبانی کردن"),
+    # b2 unit02: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit02_speculation", "sounds"): ("verb", "به‌نظر می‌آید"),
+    ("b2_unit02_speculation", "more"): ("adverb", "بیشتر"),
+    ("b2_unit02_speculation", "gone"): ("verb", "رفته"),
+    ("b2_unit02_speculation", "rules"): ("verb", "رد می‌کند"),
+    ("b2_unit02_speculation", "might"): ("verb", "ممکن است (احتمال کم‌تر)"),
+    ("b2_unit02_speculation", "cannot"): ("verb", "امکان ندارد"),
+    ("b2_unit02_speculation", "tentative"): ("adjective", "موقتی؛ غیرقطعی"),
+    ("b2_unit02_speculation", "generated"): ("verb", "تولید شد"),
+    ("b2_unit02_speculation", "failed"): ("verb", "شکست خورد"),
+    ("b2_unit02_speculation", "permission"): ("noun", "مجوز"),
+    ("b2_unit02_speculation", "only"): ("adjective", "تنها"),
+    ("b2_unit02_speculation", "strong"): ("adjective", "قوی"),
+    ("b2_unit02_speculation", "old"): ("adjective", "قدیمی"),
+    ("b2_unit02_speculation", "pure"): ("adjective", "محض"),
+    # b2 unit03: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit03_hedging_emphasis", "extent"): ("noun", "حد؛ اندازه"),
+    ("b2_unit03_hedging_emphasis", "little"): ("adjective", "کمی"),
+    ("b2_unit03_hedging_emphasis", "isn't"): ("verb", "نیست"),
+    ("b2_unit03_hedging_emphasis", "saying"): ("verb", "در حال گفتن"),
+    ("b2_unit03_hedging_emphasis", "fully"): ("adverb", "به‌طور کامل"),
+    ("b2_unit03_hedging_emphasis", "sounding"): ("verb", "به‌نظر آمدن"),
+    ("b2_unit03_hedging_emphasis", "accepting"): ("verb", "قبول کردن"),
+    ("b2_unit03_hedging_emphasis", "avoids"): ("verb", "پرهیز می‌کند"),
+    ("b2_unit03_hedging_emphasis", "qualified"): ("adjective", "مشروط؛ با قید و شرط"),
+    ("b2_unit03_hedging_emphasis", "broadly"): ("adverb", "به‌طور کلی"),
+    ("b2_unit03_hedging_emphasis", "timeline"): ("noun", "جدول زمانی"),
+    # b2 unit04: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit04_narrative_time", "had"): ("verb", "داشت؛ بود (فعل کمکی)"),
+    ("b2_unit04_narrative_time", "moved"): ("verb", "جابه‌جا کرد"),
+    ("b2_unit04_narrative_time", "went"): ("verb", "رفت"),
+    ("b2_unit04_narrative_time", "setting"): ("verb", "در حال چیدن"),
+    ("b2_unit04_narrative_time", "checking"): ("adjective", "در حال بررسی"),
+    ("b2_unit04_narrative_time", "tell"): ("verb", "تعریف کردن؛ گفتن"),
+    ("b2_unit04_narrative_time", "working"): ("verb", "در حال کار"),
+    ("b2_unit04_narrative_time", "walk"): ("noun", "توضیح گام‌به‌گام"),
+    ("b2_unit04_narrative_time", "got"): ("verb", "به آنجا رسید"),
+    ("b2_unit04_narrative_time", "back"): ("adverb", "به حالت قبل"),
+    ("b2_unit04_narrative_time", "guests"): ("noun", "مهمان‌ها"),
+    # b2 unit05: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit05_register", "scheduling"): ("adjective", "مربوط به زمان‌بندی"),
+    ("b2_unit05_register", "colleague"): ("noun", "همکار"),
+    ("b2_unit05_register", "grateful"): ("adjective", "سپاسگزار"),
+    ("b2_unit05_register", "could"): ("verb", "می‌توانید (درخواست مؤدبانه)"),
+    # b2 unit06: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit06_abstraction", "carry"): ("verb", "اهمیت داشتن"),
+    ("b2_unit06_abstraction", "qualification"): ("noun", "قیدوشرط"),
+    ("b2_unit06_abstraction", "stance"): ("noun", "موضع‌گیری"),
+    ("b2_unit06_abstraction", "convenience"): ("noun", "سهولت"),
+    ("b2_unit06_abstraction", "names"): ("noun", "نام می‌برد"),
+    ("b2_unit06_abstraction", "directly"): ("adverb", "مستقیماً"),
+    # b2 unit07: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit07_negotiation", "refusal"): ("noun", "امتناع"),
+    ("b2_unit07_negotiation", "agreed"): ("verb", "موافقت شد"),
+    ("b2_unit07_negotiation", "clearly"): ("adverb", "به‌وضوح"),
+    # b2 unit08: wrong-sense / answer-leaking / colliding fa glosses (fa-en practice review 2026-10-19).
+    ("b2_unit08_synthesis", "passenger"): ("adjective", "مسافر"),
+    ("b2_unit08_synthesis", "many"): ("adjective", "زیاد؛ بسیار"),
+    ("b2_unit08_synthesis", "identifies"): ("verb", "شناسایی می‌کند"),
+    ("b2_unit08_synthesis", "experience"): ("noun", "تجربه"),
+    ("b2_unit08_synthesis", "showing"): ("verb", "در حال نشان دادن"),
+    ("b2_unit08_synthesis", "name"): ("noun", "نام بردن"),
+    ("b2_unit08_synthesis", "shortages"): ("noun", "کمبودها"),
+    # a1_unit14: bare `more` carried a Latin example in its gloss ("more expensive");
+    # the Persian option should be the plain word.
+    ("a1_unit14_communication", "more"): ("adverb", "بیشتر"),
+    # a1_unit16: "get dressed" -- plain پوشیده alone means "covered/modest".
+    ("a1_unit16_routines", "dressed"): ("adjective", "لباس‌پوشیده"),
+    # a1_unit21: "round trip" -- round = رفت‌وبرگشت (not "periodic").
+    ("a1_unit21_travel", "round"): ("adjective", "رفت‌وبرگشت"),
+    # a1_unit22: "What's wrong?" -- wrong = having a problem (not "broken").
+    ("a1_unit22_health", "wrong"): ("adjective", "اشتباه؛ مشکل‌دار"),
+    # a1_unit23: answer emails -- drop the leaking Latin example from the gloss.
+    ("a1_unit23_work", "answer"): ("verb", "جواب دادن"),
+    # b1 units 01-06, 09 practice review (2026-10-19): wrong-sense glosses and Latin leaks
+    ("b1_unit01_necessity", "should"): ("verb", "بهتر است (توصیه)"),
+    ("b1_unit01_necessity", "have"): ("verb", "مجبور بودن؛ داشتن"),
+    ("b1_unit01_necessity", "make"): ("verb", "ترتیب دادن"),
+    ("b1_unit01_necessity", "go"): ("verb", "رفتن"),
+    ("b1_unit01_necessity", "fee"): ("noun", "هزینه"),
+    ("b1_unit01_necessity", "done"): ("verb", "انجام‌شده"),
+    ("b1_unit01_necessity", "don't"): ("verb", "(فعل کمکی منفی)"),
+    ("b1_unit01_necessity", "more"): ("adverb", "بیشتر"),
+    ("b1_unit02_abilities", "able"): ("adjective", "توانا"),
+    ("b1_unit02_abilities", "person"): ("noun", "شخص"),
+    ("b1_unit02_abilities", "like"): ("verb", "دوست داشتن"),
+    ("b1_unit02_abilities", "had"): ("verb", "داشت/داشتند"),
+    ("b1_unit02_abilities", "wasn't"): ("verb", "نبود"),
+    ("b1_unit03_hypotheticals", "free"): ("adjective", "آزاد"),
+    ("b1_unit03_hypotheticals", "much"): ("adverb", "زیاد"),
+    ("b1_unit03_hypotheticals", "take"): ("verb", "شرکت کردن در؛ گذراندن"),
+    ("b1_unit03_hypotheticals", "checks"): ("verb", "بررسی می‌کند"),
+    ("b1_unit03_hypotheticals", "signed"): ("verb", "ثبت‌نام کرد"),
+    ("b1_unit03_hypotheticals", "sign"): ("verb", "ثبت‌نام کردن"),
+    ("b1_unit03_hypotheticals", "sounds"): ("verb", "به‌نظر می‌رسد"),
+    ("b1_unit03_hypotheticals", "known"): ("verb", "دانسته"),
+    ("b1_unit03_hypotheticals", "rain"): ("verb", "باریدن"),
+    ("b1_unit03_hypotheticals", "doesn't"): ("verb", "(فعل کمکی منفی، سوم‌شخص)"),
+    ("b1_unit03_hypotheticals", "didn't"): ("verb", "(فعل کمکی منفی، گذشته)"),
+    ("b1_unit03_hypotheticals", "walk"): ("noun", "پیاده‌روی"),
+    ("b1_unit03_hypotheticals", "join"): ("verb", "پیوستن"),
+    ("b1_unit04_debate", "miss"): ("verb", "دلتنگ شدن؛ از دست دادن"),
+    ("b1_unit04_debate", "going"): ("verb", "در حال رفتن"),
+    ("b1_unit04_debate", "each"): ("adjective", "هر یک"),
+    ("b1_unit05_workplace", "correct"): ("adjective", "صحیح"),
+    ("b1_unit04_debate", "lot"): ("noun", "مقدار زیاد"),
+    ("b1_unit04_debate", "makes"): ("verb", "می‌سازد؛ باعث می‌شود"),
+    ("b1_unit04_debate", "sense"): ("noun", "معنا؛ منطق"),
+    ("b1_unit05_workplace", "course"): ("noun", "البته"),
+    ("b1_unit05_workplace", "sure"): ("adjective", "مطمئن"),
+    ("b1_unit05_workplace", "welcome"): ("verb", "خواهش می‌کنم"),
+    ("b1_unit05_workplace", "little"): ("adjective", "کمی"),
+    ("b1_unit05_workplace", "report"): ("verb", "گزارش"),
+    ("b1_unit05_workplace", "update"): ("verb", "به‌روزرسانی"),
+    ("b1_unit06_narrative", "pull"): ("verb", "کنار کشیدن"),
+    ("b1_unit06_narrative", "pulled"): ("verb", "کنار کشید"),
+    ("b1_unit06_narrative", "over"): ("adjective", "کنار (کنار زدن ماشین)"),
+    ("b1_unit06_narrative", "when"): ("adverb", "وقتی که"),
+    ("b1_unit06_narrative", "word"): ("noun", "قول"),
+    ("b1_unit06_narrative", "stopped"): ("verb", "ایستاد"),
+    ("b1_unit06_narrative", "went"): ("verb", "رفت"),
+    ("b1_unit06_narrative", "work"): ("verb", "کار؛ محل کار"),
+    ("b1_unit09_reported_speech", "direct"): ("adjective", "مستقیم"),
+    ("b1_unit09_reported_speech", "speech"): ("noun", "گفتار"),
+    ("b1_unit09_reported_speech", "long"): ("adjective", "طولانی"),
+    ("b1_unit09_reported_speech", "told"): ("verb", "به کسی گفت"),
+    ("b1_unit09_reported_speech", "tell"): ("verb", "به کسی گفتن"),
+    # a1_unit35 (technology): "make a call" -- bare گرفتن collides with taking and call=تماس گرفتن.
+    ("a1_unit35_technology", "make"): ("verb", "برقرار کردن (تماس)"),
+    # a1_unit43 (colors): light green / too bright / a fun color -- split the overlapping روشن glosses.
+    ("a1_unit43_colors", "light"): ("adjective", "کم‌رنگ؛ روشن"),
+    ("a1_unit43_colors", "bright"): ("adjective", "پررنگ؛ درخشان"),
+    ("a1_unit43_colors", "fun"): ("adjective", "شاد؛ سرگرم‌کننده"),
+    # a1_unit44 (seasons): playing (noun, "loves playing soccer") collided with play; outdoors collided with out.
+    ("a1_unit44_seasons", "playing"): ("noun", "بازی (فعالیت)"),
+    ("a1_unit44_seasons", "outdoors"): ("adverb", "در فضای باز"),
+    # a1_unit45 (emergencies): "caught fire" -- the gloss embedded English and shared گرفت with got/took.
+    ("a1_unit45_emergencies", "caught"): ("verb", "آتش گرفت"),
+    # a1_unit48 (library): borrow/borrowing shared one gloss; "checked out a cookbook" is not "examined";
+    # other carried English ("on the other hand") in its gloss.
+    ("a1_unit48_library", "borrow"): ("verb", "قرض گرفتن؛ امانت گرفتن"),
+    ("a1_unit48_library", "borrowing"): ("noun", "امانت‌گیری"),
+    ("a1_unit48_library", "checked"): ("verb", "امانت گرفت"),
+    ("a1_unit48_library", "other"): ("adjective", "دیگر؛ سایر"),
+    # a2_unit27: drop the English words "direct deposit" from the gloss (answer leak in translation prompt).
+    ("a2_unit27_banking", "direct"): ("adjective", "مستقیم"),
+    # a2_unit30 (job interview): remove English words from glosses (answer leak in translation),
+    # and fix senses: "start next Monday" = begin work, "next Monday" = upcoming (not "next to").
+    ("a2_unit30_job_interview", "social"): ("adjective", "اجتماعی"),
+    ("a2_unit30_job_interview", "media"): ("noun", "رسانه"),
+    ("a2_unit30_job_interview", "being"): ("verb", "بودن"),
+    ("a2_unit30_job_interview", "start"): ("verb", "شروع کردن"),
+    ("a2_unit30_job_interview", "next"): ("adjective", "بعدی"),
+    ("a2_unit30_job_interview", "strong"): ("adjective", "قوی"),
+    ("a2_unit30_job_interview", "coming"): ("verb", "آمدن"),
+    # a2_unit31: "another way to get home" = راه (not طرف=side); drop English "leave" from the gloss of leaves.
+    ("a2_unit31_travel_disruption", "way"): ("noun", "راه"),
+    ("a2_unit31_travel_disruption", "leaves"): ("verb", "حرکت می‌کنه"),
+    # a2_unit32: remove English phrases (staying in touch / in touch / a lot / how many) from glosses (answer leak).
+    ("a2_unit32_online_habits", "staying"): ("verb", "در ارتباط ماندن"),
+    ("a2_unit32_online_habits", "touch"): ("noun", "تماس"),
+    ("a2_unit32_online_habits", "lot"): ("noun", "خیلی"),
+    ("a2_unit32_online_habits", "many"): ("adjective", "چند تا"),
+    # a2_unit35 (prescription; existing tablet/hours/stop entries above): leak + sense fixes.
+    ("a2_unit35_prescription", "side"): ("noun", "جانبی"),
+    ("a2_unit35_prescription", "shouldn't"): ("verb", "نباید"),
+    ("a2_unit35_prescription", "pick"): ("verb", "تحویل گرفتن"),
+    ("a2_unit35_prescription", "refills"): ("noun", "تکرارهای نسخه"),
+    ("a2_unit35_prescription", "taking"): ("verb", "مصرف کردن"),
+    ("a2_unit35_prescription", "once"): ("particle", "یک بار"),
+    ("a2_unit35_prescription", "course"): ("noun", "البته"),
+    # a2_unit36: "How long will the correction take?" = duration, not physical length (بلند).
+    ("a2_unit36_document_correction", "long"): ("adjective", "طولانی (مدت)"),
+    # a2_unit37: remove English from glosses (face to face / speak); meeting = a (video) meeting, not a "قرار ملاقات" appointment.
+    ("a2_unit37_video_calls", "face"): ("noun", "چهره"),
+    ("a2_unit37_video_calls", "speaking"): ("verb", "صحبت کردن"),
+    ("a2_unit37_video_calls", "meeting"): ("noun", "جلسه؛ دیدار"),
+    # a2_unit38: under = "under my kitchen sink" (زیر), not "under the name"; by = "by message"; drop English from can't/won't/by/under glosses.
+    ("a2_unit38_repair_visit", "under"): ("preposition", "زیر"),
+    ("a2_unit38_repair_visit", "by"): ("preposition", "با (از طریق)"),
+    ("a2_unit38_repair_visit", "can't"): ("verb", "نمی‌توانم/نمی‌تواند"),
+    ("a2_unit38_repair_visit", "won't"): ("verb", "نخواهد"),
+    # a2_unit39: "the contract is full time" -- full = full-time here (کامل alone is a wrong/vague sense).
+    ("a2_unit39_after_the_interview", "full"): ("adjective", "پر؛ تمام‌وقت"),
 }
 
 
