@@ -2917,3 +2917,159 @@ Owner decisions / native-speaker flags (details in each file's review.notes,
 Verification: course-scoped validate + compile for all 15 fr/es/de groups
 (0 errors) before every commit; full `scripts/verify.sh --content-only`
 passed at eea26820, ccc03781 and 6d61655c, and again on the final head.
+
+### 2026-10-19 — en-hi + en-pl + en-ro second pass, A1 → C1 (fresh-context review; branch content/second-pass-hi-pl-ro, PR #42)
+Scope: every en-hi, en-pl and en-ro unit, realization + overlay (en-hi 60 units,
+en-pl 61, en-ro 61; 364 files). Why: the same second pass on en-it/en-ru (PR #39)
+found ~3.3 real defects per unit in units already marked reviewed, so all
+earlier "reviewed" status here was treated as unverified. 48 batches of 3-4 units,
+each given to a fresh-context worker that fixed what it found. Each batch was then
+validated course-scoped (validate + compile, 0 errors) and committed. The
+checklist was the 10-point one from the run prompt: grammar notes, glosses, target
+text, dialogue/canon, A2+ leakage, distractors, sequencing, underdetermined
+prompts, missing answers, and course-wide consistency. Accepted answers were added,
+not removed; the exceptions are listed below.
+
+Fix counts (per-batch counts are in the commit subjects):
+- en-hi/hi: A1 51 · A2 33 · B1 126 · B2 32 · C1 17 — 259, plus consistency commits:
+  - 18 A2/B1 instructions that printed the answer;
+  - 24 C1 u01-04 forward-referenced distractors;
+  - 71 speak prompts that printed the Hindi answer (21 of them gained variants or a pinned instruction).
+- en-pl/pl: A1 56 · A2 20 · B1 158 · B2 33 · C1 19 — 286, plus consistency commits:
+  - 11 B1 fix-the-mistake instructions that printed the corrected form;
+  - 7 B1 "spine outcome" notes;
+  - 19 C1 u01-04 distractors;
+  - 10 A1/A2 internal-reference notes.
+- en-ro/ro: A1 128 · A2 50 · B1 116 · B2 42 · C1 22 — 358, plus 4 B1 Romanian
+  prompts that contradicted their pinned English instruction, and 1 restored answer.
+- Yield: about 5 fixes per unit (903 over 182 units), higher than it/ru's 3.3. B1
+  was densest in en-pl (8.3 per unit) and A1 in en-ro (6.4 per unit).
+
+Defect classes found (all passed a green compile):
+- **Grammatical sentences drilled as errors (largest new class in en-pl).**
+  - Nearly every pl B1 grammar_check (about 40 items across u01-19) presented a
+    grammatical, merely stressed word order as "the error". Their feedback taught
+    invented rules ("X opens this sentence", "the verb comes right after the
+    subject"). All were rebuilt around a real error the unit teaches.
+  - Same class, smaller numbers: pl A1/A2 ("Marek dom ma.", "Konto mam.", a
+    topic-first sentence, "Nie trzeba palić", "będziemy padać", "w czas"); hi
+    ("बैंक सीधे जाओ", "टिकट … की है", "Mogę powiedzieć, czy…"-type items).
+  - A validator cannot catch this; it is a review-only class.
+- **Answer leakage at A2+:**
+  - "Correct the sentence — needs 'X', not 'Y'" instructions (hi ~45, pl ~25);
+  - hi writing prompts that printed the romanized answer;
+  - 71 hi A2/B1 speak items showing "बोलो: <answer>" under an English
+    "Say: …" (the PR #38 lint missed the prefix);
+  - a pl dialogue_response that showed its own answer; a ro role prompt printing
+    the line it asked about.
+- **False grammar/usage notes:**
+  - ro: neuter nouns called masculine (tren, bilet, cap, birou, număr…); "un is
+    masculine-only"; doi with neuter nouns; the conditional as "aș + past
+    participle"; "a spus că era keeps her tense" (Romanian has no obligatory
+    backshift); completați called an imperative; "only the 3rd person changes in
+    the subjunctive" (a fi); "conditionalul".
+  - pl: "-szy is the general comparative"; boleć "only two forms"; było "no
+    person"; padać "never with będziemy"; spróbujesz called present; chciałbym "to
+    a man"; gdyby mixing if- and result-clause forms; których called genitive.
+  - hi: ज़्यादा = "even more"; था/थी "agree exactly like है"; ने "on the verb";
+    बल्कि "always" after negation; मुझे+infinitive+है "always"; the apna example
+    using emphatic मेरी अपनी; आप agreement "though the manager is one person".
+- **False grading promise (ro):** every A1/A2 overlay's `answer_policy` said
+  diacritic-less and cedilla ş/ţ answers were accepted. The grader does neither,
+  so the text was rewritten. No cedilla occurs in learner-facing ro text; the 112
+  cedilla characters are all in provenance notes.
+- **Target-text errors:**
+  - ro: "Cine ajută Ana" → "Cine o ajută pe Ana"; "despre echipa" → "despre
+    echipă"; "coletul lui Ana" → "coletul Anei"; clock-hour "doisprezece" →
+    "douăsprezece" (old form kept as accepted); "Cartofi costă"; "totuși cumpăr".
+  - pl: "Mógł zaspać, ale to musiał przegapić pociąg".
+  - hi: "मुझे भी!" answering a मैं-sentence; the non-word "कार्य-लय"; the non-terms
+    "दातिव-कर्ता"/"दात-रूप".
+- **Dialogue coherence:**
+  - hi B2 u02: "didn't come at all" answered with "I was late".
+  - hi B1 u10: a question about this weekend answered with next week's plans.
+  - ro B2 u08: the summariser speaking as "we".
+  - ro B2 u07: one speaker both refusing and accepting a task.
+  - hi B2 u07/u08: audio turns with no teaching cards (8 cards added).
+- **Sequencing:**
+  - About 30 untaught distractors in ro A2 alone.
+  - The C1 template (all three languages) put later-lesson phrases into lesson
+    1-3 recognize distractors (about 80 items fixed).
+  - pl Polish task text on A1 prompts; ro crede tested before it was taught.
+- **Underdetermined prompts:** "Respond as Diana." / "write about your home /
+  job / plans / colleague" graded against one sentence; fill-ins that fit several
+  taught words.
+- **Wrong-sense glosses:** पसंद "favorite", पसंद करता "prefers", कैसी "what kind",
+  "(that) I can" for pot/poți, atunci "by then", puțin "less", "Trebuie = we
+  must", nevoie "needs".
+- **False "first taught in unit N" / "genuinely new" notes:** dozens in hi B1
+  and ro B1. hi B1 cited A1/A2 or later-B1 unit numbers.
+- **Internal jargon in learner notes:** "spine outcome", "lesson02's",
+  "unit07's", an authoring note shown as feedback (pl C1 u03), Dutch
+  comparisons in an English-speaker course (pl B2 u05).
+- **Missing valid answers** (by count the largest class): word order, speaker
+  gender, kiedy/gdy, să-forms, pronoun drop, nukta/anusvara spellings.
+- **Canon fixes made:**
+  - pl Marek's surname Kowalski → Wójcik (B2 u05).
+  - hi Priya moved from the office to school (B1 u13), plus several "colleague"
+    notes.
+  - ro Ana not going to the mountains (B1 u13).
+  - pl Ewa's flat vs "dom" (B1 u04).
+  - Voice hints matched to the speaker (pl C1 u05, ro C1 u08).
+
+New bug class: **compiler fact.** `canonical_response()` returns `correct_response`
+whenever it is present and silently ignores `accepted_answers` on the same exercise.
+Variants added next to a `correct_response` never reach the grader. Workers moved
+the value into `accepted_answers` wherever they added variants. Remaining both-key
+cases: en-hi B2 dictations (harmless, strict anyway) and 8 en-ar exercises (out of
+scope, not checked). **Validator suggestion (Codex lane):** error on an exercise
+that has both keys.
+
+Removed accepted answers (exceptions to add-only, all misspellings or now
+unbuildable):
+- hi B2 u08: 29 variants that dropped the ड़/ढ़ dot (misspellings graded correct).
+- hi B2 u03: 2 "थोडा" variants.
+- hi B2 u06: 1 no-nukta variant in a strict dictation (the compiler ignored it).
+- ro B1 u04: the word_order answer "…despre echipa" (ungrammatical; the corrected
+  tile can't build it; still accepted on the speak item).
+- ro B2 u08: synthesis answers moved to third person with the corrected prompt.
+- One reviewer-removed diacritic-less ro A2 u21 answer was restored.
+
+Owner decisions (details in each file's review.notes, "Second-pass review 2026-10-19"):
+- **Character canon (biggest open item):**
+  - **hi:** Priya is a school teacher (A1 u17), but the B2 storyline (u02-u05)
+    and B1 u18 make her Arjun's office colleague with a manager. Options: recast
+    the addressee as a प्रधानाचार्य, or move her lines to Arjun.
+  - **ro:** Ana is a school teacher (A1 u17, A2 u26) but works in Mihai's office
+    in B1 u02/05/06/14/19. Mihai is an engineer but plays a shop clerk and market
+    seller (A1 u07, u20). A1 u12's dialogue contradicts u11.
+  - **pl:** Marek is from Canada but shows a dowód osobisty (A2 u23). He has a
+    house (A1 u18) but lives in a block of flats (B1 u12). Ewa is a teacher but
+    argues office vs remote work (B1 u02).
+- **Colloquial forms drilled as errors** (prescriptively right, common in
+  speech): hi "चाहिए है", "पीना चाहिए", "किताबें पसंद है", "सोमवार शुरू"; pl "Pan
+  czy mógłby…"; several pl marked word orders still graded wrong in word_order
+  items.
+- **Audio-bound wording left as authored:**
+  - pl B2 u08 "Są sprzeczni co do ceny" (said of people);
+  - ro B1 u19 "Și eu, a cărei carte preferată…";
+  - ro B1 u04 "Nu sunt de acord complet";
+  - hi B1 u18 manager "भेज सकेंगे" to Priya;
+  - pl C1 lesson 2/3 listening plays the whole-unit audio, so later-lesson
+    sentences are heard first (needs per-lesson audio).
+- **Spelling standardisation:**
+  - hi: महंगा/महँगा, खराब/ख़राब, तेज/तेज़, फंसना/फँसना, आमतौर पर/आम तौर पर;
+  - pl: Ewa/Ewo vocative across the course;
+  - ro: "Stimate domn" vs "domnule".
+- About 120 naturalness flags; see each file's NATIVE FLAGS.
+
+Remaining:
+- Native-speaker pass on all three lanes.
+- Grading-side: hi nukta/chandrabindu folding (from the 2026-10-17 entry, still
+  open); ro has no cedilla→comma-below fold, which only matters for learners on
+  legacy keyboards.
+- The validator still warns on every intended alternative word order (en-hi
+  A1 46, B1 60; en-pl A1 94).
+
+Verification: `scripts/verify.sh --content-only` passes (all courses). A
+course-scoped validate + compile ran before every commit.
