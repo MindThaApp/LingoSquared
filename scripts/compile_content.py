@@ -1319,6 +1319,11 @@ def validate_single_answer_key_source(
     authored next to it are silently dropped and never reach the grader.
     Authors must pick one key: a lone correct_response, or accepted_answers
     whose first `correct` entry is the canonical answer.
+
+    Recorded decision (review 2026-10-20): fixing the 15 en-ar/en-hi B2
+    dictations this flagged meant dropping correct_response, so those
+    dictations now also accept their other authored variants (e.g.
+    hamza-less ان, nukta-less दफ्तर). That was the authors' intent.
     """
     sources: list[tuple[str, Any]] = []
     exercise_overlays = overlay.get("exercises", {})

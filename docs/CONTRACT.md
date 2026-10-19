@@ -98,17 +98,24 @@ vs e), not the invisible-formatting marks forgiven by that function. See
 none apply to `dictation`).** Internal punctuation is still ignored, with one
 exception: in es/pl/ro, whose "no" is also the verbal negator, a pause mark
 after a sentence-initial No/Nie/Nu must match (`No, está cerca` ≠ `No está
-cerca`); spoken transcripts keep ignoring it.
+cerca`); spoken transcripts keep ignoring it. A hyphen is not a pause
+(ro `Nu-mi`), and a following thank-you is exempt (`No gracias` = `No,
+gracias`).
 English answers (`answer_language_code: en`) treat contractions as their
 full forms, typed and spoken (`I'm` = `I am`, `don't` = `do not`, `can't` =
-`cannot` = `can not`; `'s` after a pronoun/wh-word = is/has, `'d` =
-would/had; a possessive `'s` is never expanded). Practice `translation`
+`cannot` = `can not`). `'s` (after a pronoun/wh-word only) and `'d` take
+their reading from the next word: `'s been`/`'s eaten` = has, `'s done` =
+is or has, otherwise is; `'d` + participle/`better` = had, otherwise would.
+A possessive `'s` is never expanded. Not applied when `orthography_strict`
+is true (incl. checkpoints), so such an exercise can require the
+contracted form. Practice `translation`
 items store the `{canonical, accepted}` shape when other in-scope lexemes
 for the answer slot share the filled lexeme's exact English gloss
 (برادرم/داداشم "my brother"), since the prompt cannot tell them apart.
 Orthographic folding, on strict paths too: Romanian s/t-cedilla = s/t-comma
 (ş ţ = ș ț); Hindi optional nukta on क ख ग ज फ (not ड़/ढ़) and chandrabindu
-= anusvara; Arabic standalone و may be typed detached from the next word.
+= anusvara (deliberately merges minimal pairs such as खाना/ख़ाना, so no hi
+exercise can test nukta outside dictation); Arabic standalone و may be typed detached from the next word.
 
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
 + `audio_language_code` (a target-language phrase to synthesize/play for

@@ -248,3 +248,97 @@ def test_arabic_detached_waw_is_forgiven_even_when_strict():
     ) == "incorrect"
     # Dictation is unchanged.
     assert grade("ماء و قهوة", "ماء وقهوة", "dictation", language_code="ar") == "incorrect"
+
+
+# --- session 9 grader review fixes (2026-10-20) ---------------------------
+
+
+def _en(learner, correct, **kwargs):
+    return grade(learner, correct, "translation", script="latin", language_code="en", **kwargs)
+
+
+def test_ambiguous_contractions_reject_wrong_expansions():
+    assert _en("He is eaten", "He's eaten") == "incorrect"
+    assert _en("It is been a while", "It's been a while") == "incorrect"
+    assert _en("If I would known", "If I'd known") == "incorrect"
+    assert _en("I had like a coffee", "I'd like a coffee") == "incorrect"
+    assert _en("Everyone is book", "Everyone's book") == "incorrect"
+    # The right expansions still pass, both directions.
+    for learner, correct in [
+        ("He has eaten", "He's eaten"),
+        ("It has been a while", "It's been a while"),
+        ("If I had known", "If I'd known"),
+        ("You had better go", "You'd better go"),
+        ("It is done", "It's done"),
+        ("It has done", "It's done"),
+        ("She is tired", "She's tired"),
+    ]:
+        assert _en(learner, correct) == "correct", learner
+        assert _en(correct, learner) == "correct", learner
+
+
+def test_its_and_it_s_are_not_contraction_equivalents():
+    assert _en("its cold", "it is cold") == "incorrect"
+    assert _en("it is cold", "its cold") == "incorrect"
+    assert _en("Its color", "It is color") == "incorrect"
+    # A missing apostrophe is at most a typo, never a full match.
+    assert _en("its cold", "it's cold") != "correct"
+    assert _en("it's color", "its color") != "correct"
+
+
+def test_strict_exercise_can_require_the_contracted_form():
+    assert _en("I am ready", "I'm ready", orthography_strict=True) == "incorrect"
+    assert _en("He is eaten", "He's eaten", orthography_strict=True) == "incorrect"
+    assert _en("I can not", "I can't", orthography_strict=True) == "incorrect"
+    assert grade(
+        "I am ready", "I'm ready", "speak_response", script="latin",
+        language_code="en", input_mode="spoken", orthography_strict=True,
+    ) != "correct"
+    # The contracted form itself still grades correct under strict.
+    assert _en("I'm ready", "I'm ready", orthography_strict=True) == "correct"
+
+
+def test_romanian_hyphenated_clitics_are_not_a_pause():
+    for learner, correct in [("Nu mi place", "Nu-mi place"), ("Nu i așa", "Nu-i așa?")]:
+        assert grade(
+            learner, correct, "translation", script="latin", language_code="ro"
+        ) in {"correct", "almost"}, learner
+    assert grade(
+        "Nu-mi place", "Nu-mi place", "translation", script="latin", language_code="ro"
+    ) == "correct"
+    # A real pause after Nu still has to match.
+    assert grade(
+        "Nu e aproape", "Nu, e aproape", "translation", script="latin", language_code="ro"
+    ) == "incorrect"
+
+
+def test_politeness_follow_up_does_not_need_its_comma():
+    assert grade(
+        "No gracias", "No, gracias", "translation", script="latin", language_code="es"
+    ) == "correct"
+    assert grade(
+        "Nie dziękuję", "Nie, dziękuję", "translation", script="latin", language_code="pl"
+    ) == "correct"
+    assert grade(
+        "Nu mulțumesc", "Nu, mulțumesc", "translation", script="latin", language_code="ro"
+    ) == "correct"
+    # The negator case is unchanged.
+    assert grade(
+        "No está cerca", "No, está cerca", "translation", script="latin", language_code="es"
+    ) == "incorrect"
+
+
+def test_hindi_nukta_folding_is_a_documented_decision():
+    # Deliberate: minimal pairs differing only by nukta/chandrabindu merge,
+    # strict paths included; dictation stays byte-strict.
+    for learner, correct in [("खाना", "ख़ाना"), ("सजा", "सज़ा"), ("हंस", "हँस")]:
+        assert grade(
+            learner, correct, "translation", script="devanagari", language_code="hi",
+            orthography_strict=True,
+        ) == "correct", learner
+    # Precomposed क़ (U+0958) input folds like the decomposed form.
+    assert grade(
+        "क़ाली", "काली", "translation",
+        script="devanagari", language_code="hi",
+    ) == "correct"
+    assert grade("सजा", "सज़ा", "dictation", script="devanagari", language_code="hi") == "incorrect"
