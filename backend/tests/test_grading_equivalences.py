@@ -177,3 +177,74 @@ def test_leading_no_comma_rule_is_narrow():
     # Multi-answer content still accepts any listed variant.
     accepted = {"canonical": "No, gracias.", "accepted": ["No, gracias.", "No gracias."]}
     assert grade("No gracias", accepted, "translation", script="latin", language_code="es") == "correct"
+
+
+def test_romanian_cedilla_folds_to_comma_below():
+    for strict in (None, True):
+        assert grade(
+            "Şi ţara e frumoasă", "Și țara e frumoasă", "translation",
+            script="latin", language_code="ro", orthography_strict=strict,
+        ) == "correct"
+        assert grade(
+            "ŞI ŢARA", "și țara", "translation", script="latin", language_code="ro",
+            orthography_strict=strict,
+        ) == "correct"
+    # A genuinely missing diacritic is still a spelling difference.
+    assert grade(
+        "Si tara e frumoasa", "Și țara e frumoasă", "translation",
+        script="latin", language_code="ro",
+    ) == "incorrect"
+    # Dictation stays byte-strict on visible diacritics.
+    assert grade("Şi ţara", "Și țara", "dictation", language_code="ro") == "incorrect"
+
+
+def test_hindi_nukta_and_chandrabindu_fold():
+    pairs = [
+        ("निश्चित रूप से वजह ट्रैफिक है", "निश्चित रूप से वजह ट्रैफ़िक है"),
+        ("मुझे जरूर आना है", "मुझे ज़रूर आना है"),
+        ("खराब", "ख़राब"),
+        ("यह महंगा है", "यह महँगा है"),
+        # precomposed क़ (U+0958) vs क + nukta
+        ("क़लम", "क़लम"),
+        ("कलम", "क़लम"),
+    ]
+    for learner, correct in pairs:
+        for strict in (None, True):
+            assert grade(
+                learner, correct, "translation", script="devanagari",
+                language_code="hi", orthography_strict=strict,
+            ) == "correct", (learner, correct)
+            assert grade(
+                correct, learner, "translation", script="devanagari",
+                language_code="hi", orthography_strict=strict,
+            ) == "correct", (learner, correct)
+    # ड़/ढ़ are distinct letters and keep their nukta.
+    assert grade("पडना", "पढ़ना", "translation", script="devanagari", language_code="hi") == "incorrect"
+    assert grade("लडका", "लड़का", "translation", script="devanagari", language_code="hi") == "incorrect"
+    # Dictation is unchanged (variants there must be authored).
+    assert grade("ट्रैफिक है", "ट्रैफ़िक है", "dictation", language_code="hi") == "incorrect"
+
+
+def test_arabic_detached_waw_is_forgiven_even_when_strict():
+    for strict in (None, True):
+        for learner, correct in (
+            ("أريد ماء و قهوة", "أريد ماء وقهوة"),
+            ("أريد ماء وقهوة", "أريد ماء و قهوة"),
+            ("و أنا أيضا", "وأنا أيضا"),
+        ):
+            assert grade(
+                learner, correct, "translation", script="arabic",
+                language_code="ar", orthography_strict=strict,
+            ) == "correct"
+    # Only a standalone و: a word ending in و keeps its space.
+    assert grade(
+        "هوذهب", "هو ذهب", "translation", script="arabic", language_code="ar",
+        orthography_strict=True,
+    ) == "incorrect"
+    # fa/prs write و detached; no new rule there on strict paths.
+    assert grade(
+        "من وتو", "من و تو", "translation", script="arabic", language_code="fa",
+        orthography_strict=True,
+    ) == "incorrect"
+    # Dictation is unchanged.
+    assert grade("ماء و قهوة", "ماء وقهوة", "dictation", language_code="ar") == "incorrect"
