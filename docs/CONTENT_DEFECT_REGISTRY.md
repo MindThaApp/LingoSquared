@@ -3158,3 +3158,101 @@ was clean: no simple-past -ید in prs-en A1/A2.
 Verification: `scripts/verify.sh --content-only` passes. Course-scoped
 validate + compile (prs-en, and fa-en/nl-en/de-en on merges) was run before
 every commit.
+
+### 2026-10-19 — fa-en review: the 53 unreviewed overlays, A1 → B1 (fresh-context review; branch content/review-fa-en, PR #43)
+Scope: every fa-en overlay without `review.status: reviewed`: A1 u01-02,
+u22-24, u30-58; A2 u25-29, u35-40; B1 u12-19 (53 overlays). The shared en
+realizations for these units were already marked reviewed; they were read
+with each overlay. Ten workers (Opus) took 4-6 units each in separate
+worktrees, and the coordinator merged them. Checklist as in PRs #39/#40:
+grammar notes, glosses, target text, natural Iranian Persian (ZWNJ, no
+Arabic ي/ك), leakage at A2+, untaught and also-correct distractors,
+missing accepted answers, underdetermined prompts, canon, sequencing.
+A1 "Write exactly: X" copy tasks were left as they are (owner decision).
+Accepted answers were only added, never removed.
+
+Fix counts: 574 in total, about 11 per unit. A1 u01-58 (34 units) 386 ·
+A2 (11 units) 110 · B1 (8 units) 78.
+
+Defect classes found:
+- **Untaught distractors** (about 140, the largest class, mostly A1):
+  options built from words no unit had taught yet ("both/neither of them",
+  gray, "no hair", key card, token, "teach students", "drive a taxi",
+  savings account, passport). Replaced with taught words.
+- **Missing accepted answers** (about 120): contractions (I'm/I'd/That's),
+  word-order and punctuation variants, he/she for the gender-neutral
+  Persian اون, short answers to "which/what" questions, coworker/colleague.
+- **Wrong-sense glosses** (about 75): office as اتاق کار (home study) in a
+  home-vs-office debate (B1 u12/u13); refund as بازپرداخت (loan
+  repayment); nervous as عصبی (angry); "I was wondering if" as داشتم فکر
+  می‌کردم; confident as مطمئن, so the B1 u18 reading said "he is sure but
+  not completely sure"; "fair regret" as پشیمانی منصفانه; whose/where as
+  «که ... اونه / که ... اونجاست»; delivery ارسال → تحویل; showtime, evening.
+- **False grammar notes** (about 70): "the question starts with do/does",
+  "take/drive/ride are auxiliaries", "take is never used with a car",
+  seasons always take "the", "on" always required before a weekday,
+  "instead of" only before a noun, Persian has no present-perfect
+  equivalent (it has ماضی نقلی), Persian has no make + adjective pattern,
+  past formed by changing the whole root, wish/if + participle with no
+  "had" (B1 u17), "always in this order" where English says "usually".
+- **Persian style, ZWNJ** (about 90): formal را/کدام/است mixed into the
+  colloquial register; calques (دارم می‌نویسم که...، جلسه رو از دست دادم،
+  این رو دوست دارم); میره/میرن → می‌ره/می‌رن (35+ places), بلیط → بلیت,
+  حیوان → حیوون, آشپزخانه → آشپزخونه, آواز‌دار for "aloud".
+- **Underdetermined prompts** (about 40): almost every B1 and A2
+  `reply_as_*` / `speak_*` item quoted only the other speaker's line, so
+  any sensible reply was "wrong". Each now gives a short Persian cue for
+  what to say. B1 u15 "refund or replacement?" accepted only one.
+- **Distractor also correct** (about 8): u45 "a firefighter", u49
+  "Daniel", u39 "start of the contract", B1 u17 "talked to his manager in
+  week one".
+- **Answer leakage at A2+** (17 shared-en prompt blocks): English blocks
+  of the "Write a polite request ..., starting with 'X'" or "Write that you
+  ..." kind printed the whole answer (A2 u25, u26, u28, u29; B1 u14-18).
+  They are now empty. The nl-en and prs-en overlays already carry the task
+  in their own instruction; de-en has no overlays for these units.
+
+New bug class: no. Two patterns stand out. Untaught distractors are this
+course's most common A1 defect. In X→en dialogue items, a quoted
+interlocutor line with no cue is underdetermined.
+
+Shared en realization edits (made before the coordinator's
+no-shared-edit rule, kept): the 17 emptied prompt blocks above, plus the
+A1 u50/u51/u52 lesson03.exercise04 speak_response keys, which held the
+lesson04 writing key. nl-en/prs-en/de-en validate with unchanged warning
+counts.
+
+Shared-en defects proposed, not edited (details in .local/logs/session9-fa-en.md):
+- Canon: Leila is an engineer in A1 u02 lesson02, a student in lesson03 and
+  a teacher in the u23 example. In u58 the reading says Mia asked about the
+  guide, but in the dialogue it is Daniel. In u51 "their trip" has no
+  antecedent, and the reading has Leila paying where the dialogue has Daniel.
+  In u30 Leila "rarely" plays video games, but the reading says "they both
+  like video games".
+- Target text: u41 "This soup needs you to add some salt."; u50 "borrowed at
+  the library"; u58 "They saw ... That's twelve dollars." (tense); u39
+  "waters my plants" against "her" in the question.
+- Sequencing: u38 asks for "I have to" (not taught at A1); u32 "gray";
+  u37 "nobody"/"cannot"; "hungry" never introduced.
+- Answer keys: u49 lesson03.exercise04 and lesson04.exercise04 keys do not
+  match their prompts; the u49 word_bank lacks "?".
+- Leakage left in place: B1 u16 lesson02.exercise04 ("Give Daniel advice to
+  talk to his manager ..."), because the prs-en instruction relies on it.
+- A2 u28 "something a doctor gives you" also fits the "prescription"
+  distractor.
+
+Native-speaker flags: 52, listed in .local/logs/session9-fa-en.md. Main
+ones: دفتر vs محل کار for office; می‌خواستم ببینم for "I was wondering
+if"; خوش‌بین for confident; حساب جاری for checking account; یوگا کار
+کردن vs یوگا کردن; کلاس رفتن/برداشتن for "take a class"; evening as شب;
+showtime as سانس.
+
+Validator note (again): a valid alternate word order (A2 u35 "Take one
+tablet with food twice a day") is still not accepted, because adding it
+raises a `validate` warning.
+
+Verification: course-scoped validate + compile was run before every
+commit. Warning counts: fa-en 18, fa-en-b1 2 and fa-en-b2 5 are
+unchanged; fa-en-a2 fell from 26 to 5, because the missing example_gloss
+entries were added in A2 u25-29. nl/prs/de-en counts are unchanged.
+`scripts/verify.sh --content-only` passes.
