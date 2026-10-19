@@ -4,9 +4,26 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a2.unit13.maintenance
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 8 fixes).
+    (1) Answer leakage: lesson02.choose/translate pooled خوابم, whose gloss "my sleep
+    (in 'اتاق خوابم', my bedroom)" prints the Dari answer inside the translation prompt
+    and the MC option. Both now pool the lesson01+03 nouns + اتاق (home_room_word).
+    (2) lesson04.match.002 drew from maintenance_phrase, whose five lesson04 dialogue
+    lines carry third-person narrative glosses with a Dari name inside the English
+    ("He greets, says he's کریم..."); now 3 lesson01-03 sentences/phrases + 3 core
+    repair words, two distinct groups. (3) lesson04.translate.003: "but" -> اما rejects
+    ولی (taught A2 u10, same Course); the unit tag drops the untagged particles.
+    (4)-(8) lesson02/03/04 choose + translate (remaining) were POS-only pools that pull
+    every A2 word in Endless Practice while the feedback says "this unit teaches"; now
+    tagged (en_prs_a2_unit13_words or the lesson union above).
+    NATIVE FLAGS / backfill: re-gloss the lesson04 dialogue lines in the speaker's own
+    person; خوابم needs a gloss without the embedded Dari ("my bed(room)"); confirm
+    "این چکه است" / "این هزینه است" in lesson02.order.003 read naturally.
+
     POLISH WAVE 2 2026-07-24 (POS-only matching_pairs): lesson04.match.002's
     bare-POS pool replaced with the unit-native maintenance_phrase semantic
     tag (11 unit-scoped candidates, 0 course-scope extras) -- see the
@@ -68,6 +85,11 @@ tag_schema:
     - maintenance_word
     - repair_cost_word
     - tomorrow_word
+    - home_room_word
+    - en_prs_a2_unit13_words
+    - en_prs_a2_unit13_lesson01_words
+    - en_prs_a2_unit13_lesson02_words
+    - en_prs_a2_unit13_lesson03_words
 templates:
 - content_key: practice.en-prs.prs.a2.unit13.lesson01.choose.001
   lesson_content_key: prs.a2.unit13.lesson01.maintenance_vocabulary
@@ -178,6 +200,11 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_lesson01_words
+        - en_prs_a2_unit13_lesson03_words
+        - home_room_word
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -200,6 +227,11 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_lesson01_words
+        - en_prs_a2_unit13_lesson03_words
+        - home_room_word
   answer_derivation:
     kind: slot_text
     slot: item
@@ -221,6 +253,9 @@ templates:
       part_of_speech:
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -244,6 +279,9 @@ templates:
       part_of_speech:
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -267,6 +305,9 @@ templates:
       - pronoun
       - particle
       - preposition
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -296,7 +337,7 @@ templates:
   # backfill_lexemes_en_prs.py token fix -- LOGGED for the coordinator.
   type: matching_pairs
   frame:
-    text: Match each sentence or phrase with its meaning.
+    text: Match each Dari sentence or word with its meaning.
     language_code: en
     direction: ltr
   slots:
@@ -306,18 +347,22 @@ templates:
       - phrase
       agreement_tags:
         semantic:
-        - maintenance_phrase
+        - en_prs_a2_unit13_lesson01_words
+        - en_prs_a2_unit13_lesson02_words
+        - en_prs_a2_unit13_lesson03_words
     second: *pool_forms
     third: *pool_forms
-    fourth: *pool_forms
-    fifth: *pool_forms
-    sixth: *pool_forms
+    fourth: *pool_core
+    fifth: *pool_core
+    sixth: *pool_core
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+  - kind: distinct
+    slots:
     - fourth
     - fifth
     - sixth
@@ -331,7 +376,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: "Match each Dari sentence or phrase from this unit's home-repair scenario with its English meaning."
+    text: "Match each Dari sentence or word from this unit's home-repair scenario with its English meaning."
     language_code: en
     direction: ltr
 
@@ -352,6 +397,9 @@ templates:
       - pronoun
       - particle
       - preposition
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit13_words
   answer_derivation:
     kind: slot_text
     slot: item

@@ -4,9 +4,27 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a2.unit12.doctor
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 8 fixes).
+    (1) lesson04.match.002 drew from doctor_phrase, whose four lesson04 dialogue lines
+    carry third-person narrative glosses ("The doctor also asks if he has a fever",
+    "Yes, he has a slight fever") for first/second-person Dari lines (wrong-sense; the
+    pack's own authoring notes already excluded these glosses elsewhere). Now 3
+    lesson01-03 sentences/phrases + 3 core doctor words, two distinct groups.
+    (2) lesson02.order.003 "این {item} است." rendered "این مدت است" ("this is
+    duration") and "این علامت است": symptom_report_word dropped from that pool.
+    (3)-(8) lesson02/03/04 choose + translate were POS-only pools that pull every A2
+    noun/adjective/verb in Endless Practice while the feedback says "this unit teaches";
+    each is now tagged en_prs_a2_unit12_words (unit-scope pool unchanged except the
+    untagged pronouns/particles).
+    NATIVE FLAGS / backfill: re-gloss the lesson04 dialogue lines in the speaker's own
+    person; تاییدی as a bare noun "confirmation" (Dari usually تأییدی/تأییدیه as a
+    noun) needs a native check; تجویز is glossed "to prescribe" but tagged noun
+    ("prescribing"); "این تاییدی است" in lesson02.order.003 may read oddly.
+
     POLISH WAVE 2 2026-07-24 (POS-only matching_pairs): lesson04.match.002's
     bare-POS pool replaced with the unit-native doctor_phrase semantic tag
     (9 unit-scoped candidates, 0 course-scope extras) -- see the template's
@@ -70,6 +88,10 @@ tag_schema:
     - symptom_report_word
     - symptom_word
     - weekday_name
+    - en_prs_a2_unit12_words
+    - en_prs_a2_unit12_lesson01_words
+    - en_prs_a2_unit12_lesson02_words
+    - en_prs_a2_unit12_lesson03_words
 templates:
 - content_key: practice.en-prs.prs.a2.unit12.lesson01.choose.001
   lesson_content_key: prs.a2.unit12.lesson01.doctor_vocabulary
@@ -186,6 +208,9 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -208,6 +233,9 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -229,6 +257,9 @@ templates:
       part_of_speech:
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -252,6 +283,9 @@ templates:
       part_of_speech:
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -275,6 +309,9 @@ templates:
       - pronoun
       - particle
       - preposition
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -303,7 +340,7 @@ templates:
   # backfill_lexemes_en_prs.py token fix -- LOGGED for the coordinator.
   type: matching_pairs
   frame:
-    text: Match each sentence or phrase with its meaning.
+    text: Match each Dari sentence or word with its meaning.
     language_code: en
     direction: ltr
   slots:
@@ -313,18 +350,22 @@ templates:
       - phrase
       agreement_tags:
         semantic:
-        - doctor_phrase
+        - en_prs_a2_unit12_lesson01_words
+        - en_prs_a2_unit12_lesson02_words
+        - en_prs_a2_unit12_lesson03_words
     second: *pool_forms
     third: *pool_forms
-    fourth: *pool_forms
-    fifth: *pool_forms
-    sixth: *pool_forms
+    fourth: *pool_core
+    fifth: *pool_core
+    sixth: *pool_core
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+  - kind: distinct
+    slots:
     - fourth
     - fifth
     - sixth
@@ -338,7 +379,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: "Match each Dari sentence or phrase from this unit's doctor's-visit scenario with its English meaning."
+    text: "Match each Dari sentence or word from this unit's doctor's-visit scenario with its English meaning."
     language_code: en
     direction: ltr
 
@@ -359,6 +400,9 @@ templates:
       - pronoun
       - particle
       - preposition
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit12_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -381,7 +425,6 @@ templates:
       - noun
       agreement_tags:
         semantic:
-        - symptom_report_word
         - appointment_word
         - seek_help_noun
         - symptom_word
