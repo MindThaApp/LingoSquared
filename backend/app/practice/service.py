@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import random
 import re
 import time
@@ -296,6 +297,98 @@ def derive_answer(
     raise ValueError(f"unsupported answer derivation {kind!r}")
 
 
+#: Upper bound on rendered alternatives for one translation answer, so a
+#: multi-slot frame whose slots all have synonyms cannot explode.
+MAX_TRANSLATION_ALTERNATIVES = 24
+
+
+def _gloss_key(value: Any) -> str:
+    return " ".join(str(value or "").casefold().split())
+
+
+def _same_gloss_tokens(
+    template: PracticeTemplate,
+    slot: str,
+    filled: dict[str, Lexeme],
+    lexemes: list[Lexeme],
+) -> list[str]:
+    """The filled token plus every other in-scope token for this slot whose
+    English gloss is identical (e.g. برادرم / داداشم, both "my brother").
+
+    A translation prompt shows the slot's gloss, so lexemes sharing a gloss
+    produce the very same prompt and the learner cannot tell which one the
+    sampler picked: all of them must grade correct. Different glosses (even
+    "brother (informal)") stay distinct, so authors keep full control.
+    """
+    chosen = filled[slot]
+    tokens = [chosen.token]
+    gloss = _gloss_key(chosen.english_gloss)
+    constraints = template.slots.get(slot)
+    if not gloss or not isinstance(constraints, dict):
+        return tokens
+    for lexeme in lexemes:
+        if (
+            lexeme.token not in tokens
+            and _gloss_key(lexeme.english_gloss) == gloss
+            and lexeme_matches(lexeme, constraints)
+        ):
+            tokens.append(lexeme.token)
+    return tokens
+
+
+def translation_accepted_answers(
+    template: PracticeTemplate,
+    filled: dict[str, Lexeme],
+    lexemes: list[Lexeme],
+    answer: Any,
+) -> Any:
+    """Widen a practice translation answer to every same-gloss synonym.
+
+    Returns `answer` unchanged when there is nothing to add, otherwise the
+    {"canonical", "accepted"} multi-answer shape grade() already handles.
+    """
+    if not isinstance(answer, str):
+        return answer
+    derivation = template.answer_derivation
+    kind = derivation.get("kind")
+    accepted: list[str] = [answer]
+    if kind == "slot_text":
+        for token in _same_gloss_tokens(template, derivation["slot"], filled, lexemes):
+            if token not in accepted:
+                accepted.append(token)
+    elif kind == "render_frame":
+        frame = derivation["frame"]
+        rendering = frame.get("slot_rendering", {})
+        names = [
+            name
+            for name in dict.fromkeys(SLOT_RE.findall(frame["text"]))
+            if name in filled and rendering.get(name, "token") == "token"
+        ]
+        options = {
+            name: _same_gloss_tokens(template, name, filled, lexemes)
+            for name in names
+        }
+        if any(len(tokens) > 1 for tokens in options.values()):
+            for combo in itertools.product(*(options[name] for name in names)):
+                chosen = dict(zip(names, combo))
+
+                def replacement(match: re.Match) -> str:
+                    name = match.group(1)
+                    if name in chosen:
+                        return chosen[name]
+                    field = rendering.get(name, "token")
+                    return str(getattr(filled[name], field))
+
+                rendered = SLOT_RE.sub(replacement, frame["text"])
+                if rendered not in accepted:
+                    accepted.append(rendered)
+                if len(accepted) >= MAX_TRANSLATION_ALTERNATIVES:
+                    break
+    if len(accepted) == 1:
+        return answer
+    return {"canonical": answer, "accepted": accepted}
+
+
 def _block(frame: dict[str, Any], text_value: str) -> dict[str, str]:
     return {
         "text": text_value,
@@ -475,6 +568,7 @@ def build_prompt(
             "answer_language_code": answer_language,
         }
     elif template.type == "translation":
+        answer = translation_accepted_answers(template, filled, lexemes, answer)
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Translate this."),
