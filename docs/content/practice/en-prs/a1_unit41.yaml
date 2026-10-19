@@ -4,9 +4,18 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit41.lost_items
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 2 fixes). (1)
+    lesson03.translate.001 had one candidate, اینجا, whose backfill gloss 'here (spelling variant of
+    این‌جا, no ZWNJ)' prints the answer in the prompt (ZWNJ is forgiven, so typing این‌جا is graded
+    correct): the slot now draws this unit's possessive nouns (خریطه‌ام, کیف پولم, کلیدم, خریطه‌اش).
+    (2) order.001 feedback glossed خریطه دارم as 'I have the bag': now 'I have a bag'. {item} گم شده
+    است and {item} دارم read as natural Dari for every pool member at unit and course scope. NATIVE
+    FLAGS: the اینجا backfill gloss should be plain 'here'.
+
     Pilot en-prs A1 practice pack (unit41 lost_items), authored 2026-07-22 against
     docs/content/PRACTICE_PACK_RECIPE.md. 14 unit lexemes across 5 lessons (lesson06
     has zero lexemes and is therefore unrepresentable). Tags used, all real
@@ -110,7 +119,7 @@ templates:
     kind: render_frame
     frame: {text: '{item} دارم', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: [item] دارم (I have the [item]).'
+    text: 'Word order: [item] دارم (I have a [item]).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit41.lesson05.order.001
@@ -214,11 +223,7 @@ templates:
     direction: ltr
     slot_rendering: {loc: english_gloss}
   slots:
-    loc:
-      language_code: prs
-      part_of_speech: adverb
-      agreement_tags:
-        semantic: location_word
+    loc: *poss
   answer_derivation: {kind: slot_text, slot: loc}
   feedback_frame:
     text: '{loc} is the Dari word for this.'
