@@ -591,7 +591,7 @@ PRS_GLOSSES: dict[str, str] = {
     "همایون": "Homayoun (name)", "تشکر": "thanks", "تو": "you (informal)",
     "بشیر": "Bashir (name)", "تلفنت": "your telephone (informal)",
     "همین": "this very; right (now)", "حالا": "now",
-    "سیف": "save (loanword, in سیف می‌کنم)", "می‌کنم": "I do",
+    "سیف": "save (loanword)", "می‌کنم": "I do",
     # Unit 5 (important places in the city), added 2026-07-06.
     "بازار": "market", "بانک": "bank", "مسجد": "mosque",
     "شفاخانه": "hospital", "مکتب": "school", "دواخانه": "pharmacy",
@@ -761,7 +761,7 @@ PRS_GLOSSES: dict[str, str] = {
     # homograph here -- this unit's own sense ("when") is special-cased
     # in _classify() below rather than overwriting the existing entry.
     "بلیط": "ticket", "قطار": "train", "بس": "bus", "سکو": "platform",
-    "سکوی": "platform (ezafe form of سکو, used before a following noun)",
+    "سکوی": "platform (ezafe form, used before a following noun)",
     "حرکت": "departure; movement",
     "مسافر": "traveler; passenger", "فروشنده": "seller; vendor",
     # Unit 17 (health), added 2026-07-07. Confirmed by reading
@@ -772,7 +772,7 @@ PRS_GLOSSES: dict[str, str] = {
     # person_name tag extended below -- a real pre-existing gap, same
     # class as زرمینه/کریم.
     "سردرد": "headache", "تب": "fever", "دل‌درد": "stomachache",
-    "مریض": "sick; ill", "حالم": "my condition / how I feel (حال + م)",
+    "مریض": "sick; ill", "حالم": "my condition / how I feel",
     "دوا": "medicine", "استراحت": "rest",
     "بنوشین": "drink (polite imperative)",
     "صاحب": "sir (respectful honorific, appended after a title)",
@@ -784,7 +784,7 @@ PRS_GLOSSES: dict[str, str] = {
     # (name)" from unit02) and می‌کند (already "does / is doing" from
     # unit07) are also reused as-is -- genuinely the same lexemes, not
     # collisions. درس/می‌دهد are the only genuinely new tokens.
-    "درس": "lesson", "می‌دهد": "he/she gives (درس می‌دهد, 'teaches')",
+    "درس": "lesson", "می‌دهد": "he/she gives (as in 'teaches')",
     # Unit 19 (housing), added 2026-07-07, same pass as unit18 above.
     # Confirmed by reading
     # docs/content/realizations/prs/a1_unit19_housing.yaml directly --
@@ -921,7 +921,7 @@ PRS_GLOSSES: dict[str, str] = {
     "چکه": "leak", "تعمیر": "repair", "کارگر": "worker; repairman",
     "زودتر": "sooner; more quickly", "آشپزخانه‌ام": "my kitchen",
     "شود": "becomes / gets done (bare subjunctive)",
-    "بفرستین": "send (polite imperative)", "خوابم": "my sleep (in 'اتاق خوابم', my bedroom)",
+    "بفرستین": "send (polite imperative)", "خوابم": "my sleep (as in 'my bedroom')",
     "نمی‌کند": "does not work / is not working", "هزینه": "cost",
     "رایگان": "free (no cost)", "تعمیرات": "repairs (plural)",
     "پنج‌شنبه": "Thursday", "می‌آید": "comes / is coming",
@@ -968,7 +968,7 @@ PRS_GLOSSES: dict[str, str] = {
     "بازی": "game", "کمپیوتری": "computer (adjective)",
     "آزاد": "free (available time)", "معمولاً": "usually",
     "شبکه‌های": "networks (plural, construct form)", "بعضی": "some",
-    "اوقات": "times (plural of وقت)", "می‌گیرد": "takes (third person)",
+    "اوقات": "times (plural)", "می‌گیرد": "takes (third person)",
     "می‌گذرانی": "you spend (time) (informal)", "انترنت": "internet",
     "مفید": "useful", "محدود": "limited", "کنیم": "let's do / we do (subjunctive)",
     "کاربر": "user", "بسیاری": "many (of)", "مردم": "people",
@@ -1082,7 +1082,7 @@ PRS_GLOSSES: dict[str, str] = {
     # rather than being silently treated as the same token. Flagged in
     # this pass's report as a genuinely uncertain spelling inconsistency,
     # not something this script should "fix" by rewriting content.
-    "آنجا": "there (spelling variant of آن‌جا, no ZWNJ)",
+    "آنجا": "there (spelling variant, no ZWNJ)",
     "می‌روند": "they go",
     # B1 unit 04 (sequencing: وقتی paradigm, present + past time clauses,
     # after-work dialogue, Homayoun's-day reading), added 2026-07-11.
@@ -1125,8 +1125,8 @@ PRS_GLOSSES: dict[str, str] = {
     # (A1 unit08 food) -- this unit's sense is the purpose conjunction
     # "in order to / so that", special-cased by content_key in
     # _classify() below, same collision class as می‌شود/رسید above.
-    "یاد": "memory (used with گرفتن: to learn)",
-    "جمع": "total; gathering (used with کردن: to save/collect)",
+    "یاد": "memory (as in 'to learn')",
+    "جمع": "total; gathering (as in 'to save/collect')",
     "کنی": "(that) you do", "بگیرد": "(that) he/she takes/gets",
     "کند": "(that) he/she does", "بگیری": "(that) you take/get",
     "بگیریم": "(that) we take/get",
@@ -1136,9 +1136,9 @@ PRS_GLOSSES: dict[str, str] = {
     "نشوم": "(so that) I don't become",
     "نشوی": "(so that) you don't become", "می‌خوابی": "you sleep",
     "این‌قدر": "this much / so much",
-    "پیدا": "found (used with کردن: to find)",
+    "پیدا": "found (as in 'to find')",
     "هدف": "goal; purpose", "می‌خواهد": "he/she wants",
-    "تلاش": "effort (used with کردن: to try hard)",
+    "تلاش": "effort (as in 'to try hard')",
     "بخرد": "(that) he/she buy",
     # Unit 31 (education), added 2026-07-11 (units 31-40 practice-pool
     # depth-extension pass). مکتب/محصل/کجا/دوست/دارم/را/وقت/ندارم/اما/
@@ -1189,18 +1189,18 @@ PRS_GLOSSES: dict[str, str] = {
     # می‌خواهم/یک/کجا/به/هرات/شما/چند/روز/دو/سه/امروز/فردا/سلام/برای/یا/
     # خوب/او/در/بسیار/دوست/دارم/را/اما/وقت/ندارم/لطفاً are all REUSED
     # existing lexemes.
-    "پُسته": "post (as in پُسته خانه, post office)",
-    "پُستی": "postal (as in تکت پُستی, postage stamp)",
-    "پارسل": "parcel", "روان": "sent; dispatched (as in روان کردن, to send)",
-    "می‌رسد": "it arrives", "روزه": "-day (duration marker, e.g. دو روزه, two-day)",
+    "پُسته": "post (as in 'post office')",
+    "پُستی": "postal (as in 'postage stamp')",
+    "پارسل": "parcel", "روان": "sent; dispatched (as in 'to send')",
+    "می‌رسد": "it arrives", "روزه": "-day (duration marker, as in 'two-day')",
     "نادیا": "Nadia (name)", "رحیم": "Rahim (name)",
     # Unit 36 (cooking), added 2026-07-11. آشپزخانه/غذا/گوشت/یک/می‌خواهم/
     # در/اول/بعد/آب/گرم/سلام/بلی/لطفاً/چشم/تشکر/او/می‌کند/بسیار/خوشحال/
     # است/دوست/دارم/را/اما/وقت/ندارم/نادیا/فرید are all REUSED existing
     # lexemes.
-    "پیاز": "onion", "هستم": "I am (spelling/register variant of استم)",
+    "پیاز": "onion", "هستم": "I am (spelling/register variant)",
     "می‌پزم": "I cook", "نمک": "salt", "برنج": "rice",
-    "خرد": "chopped (as in خرد کردن, to chop)",
+    "خرد": "chopped (as in 'to chop')",
     "می‌اندازم": "I add / I throw in",
     "می‌ریزم": "I pour", "می‌پزین": "you cook (polite)",
     "می‌پزد": "he/she cooks", "بپزین": "(please) cook",
@@ -1217,7 +1217,7 @@ PRS_GLOSSES: dict[str, str] = {
     # (unit27 appearance) gaining an additive color_word tag here.
     "زرد": "yellow", "سبز": "green", "نارنجی": "orange",
     "خاکستری": "gray", "بنفش": "purple",
-    "قهوه‌یی": "brown (spelling variant of قهوه‌ای, no dialect-meaning difference)",
+    "قهوه‌یی": "brown (spelling variant, no dialect-meaning difference)",
     "دوست دارین": "you like (polite)", "دوست دارم": "I like",
     "دوست دارد": "he/she likes", "دوست ندارم": "I don't like",
     # Unit 39 (seasons), added 2026-07-11. چهار/است/سال/هوا/گرم/سرد/
@@ -1243,7 +1243,7 @@ PRS_GLOSSES: dict[str, str] = {
     "خریطه": "bag", "کیف پول": "wallet", "کلید": "key", "گم شده": "is lost",
     "خریطه‌ام": "my bag", "کیف پولم": "my wallet", "دیدین": "you saw (polite)",
     "پیدا شده": "is found; has been found", "کلیدم": "my key",
-    "اینجا": "here (spelling variant of این‌جا, no ZWNJ)",
+    "اینجا": "here (spelling variant, no ZWNJ)",
     "خواهش می‌کنم": "you're welcome", "دیدم": "I saw",
     "خریطه‌اش": "his/her bag", "می‌بیند": "he/she sees",
     # Unit 42 (appointments), added 2026-07-22. قرار/داکتر/وقت/ساعت/
@@ -1253,7 +1253,7 @@ PRS_GLOSSES: dict[str, str] = {
     # Unit 43 (library), added 2026-07-22. کتاب/پس/روز/می‌تانم/می‌خواهم
     # are REUSED. دادن is taught inside the phrase پس دادن (give back).
     "کتابخانه": "library", "کتابدار": "librarian",
-    "دادن": "to give; to give back (پس دادن)", "قرض": "loan",
+    "دادن": "to give; to give back", "قرض": "loan",
     # Unit 44 (waste disposal), added 2026-07-22. در/را/می‌اندازم/این/
     # است/کدام are REUSED; the انداختن paradigm's other persons and
     # the negative are new here.
@@ -1284,7 +1284,7 @@ PRS_GLOSSES: dict[str, str] = {
     # Unit 49 (laundry), added 2026-07-22. لباس/کیلو/چند/افغانی/
     # می‌خواهم/را/فردا are REUSED.
     "لباس شویی": "laundry; laundry shop", "بشویم": "(so that) I wash",
-    "لباس‌ها": "the clothes (plural of لباس)", "اتو": "iron; ironing",
+    "لباس‌ها": "the clothes (plural)", "اتو": "iron; ironing",
     "تیار": "ready", "لباس شویی‌تان": "your laundry",
     # Unit 50 (swimming pool), added 2026-07-22. بلیط/نمبر/سه/ساعت/
     # باز/بسته/افغانی/او are REUSED.
@@ -1330,7 +1330,7 @@ PRS_GLOSSES: dict[str, str] = {
     # halves of باغ وحش (zoo). شیر is the lion sense; the unit's own
     # overlay note records that it is a genuine lion/milk homograph and
     # that this course only ever uses it in zoo/animal contexts.
-    "باغ": "garden (in باغ وحش: zoo)", "وحش": "wild animals (in باغ وحش: zoo)",
+    "باغ": "garden (as in 'zoo')", "وحش": "wild animals (as in 'zoo')",
     "شیر": "lion", "فیل": "elephant", "میمون": "monkey",
     "محبوب‌تان": "your favourite",
     # Unit 59 (boat tour), added 2026-07-22. بلیط/دقیقه/چند/است are
@@ -1362,35 +1362,35 @@ PRS_GLOSSES: dict[str, str] = {
     # fixed concessive با این حال; the gloss records that.
     "هرچند": "although", "تیل": "petrol; fuel", "می‌خری": "you buy (informal)",
     "می‌خرد": "he/she buys",
-    "حال": "state; case (in با این حال: nevertheless)",
-    "موافق": "in agreement (موافق استم: I agree)",
-    "مخالف": "opposed (مخالف استم: I disagree)", "می‌فهمم": "I understand",
-    "اگرچه": "although; even though", "ضرورت": "need (ضرورت دارم: I need it)",
+    "حال": "state; case (as in 'nevertheless')",
+    "موافق": "in agreement (as in 'I agree')",
+    "مخالف": "opposed (as in 'I disagree')", "می‌فهمم": "I understand",
+    "اگرچه": "although; even though", "ضرورت": "need (as in 'I need it')",
     "عجله": "haste; hurry", "نکنیم": "(let us) not do",
     "بحث": "discussion; debate", "کردند": "they did",
-    "موافقت": "agreement (موافقت کردند: they agreed)",
+    "موافقت": "agreement (as in 'they agreed')",
     "دربارهٔ": "about; concerning", "بخرند": "(that) they buy",
     # B1 unit 09 (workplace suggestions), added 2026-07-22. جلسه/مدیر/
     # دفتر/بهتر/می‌تانین are REUSED. خبر is taught only inside
     # خبر کنین (notify, polite).
     "می‌بود": "it would be (irrealis)", "پیشنهاد": "suggestion; proposal",
     "هفته‌وار": "weekly", "جلسه‌های": "meetings (of)", "ایمیل": "email",
-    "امتحان": "trial; try (امتحان کنیم: let us try)",
+    "امتحان": "trial; try (as in 'let us try')",
     "پذیرفت": "he/she accepted", "نیستند": "they are not",
-    "کارمندان": "employees", "خبر": "word; notice (خبر کنین: notify, polite)",
+    "کارمندان": "employees", "خبر": "word; notice (as in 'notify', polite)",
     # B1 unit 10 (relative-clause descriptions), added 2026-07-22. که/
     # موتر/کار/مدیر/دفتر/خانه/خوشحال are REUSED. The new tokens
     # here are the INDEFINITE -ی forms that head a که-relative clause --
     # genuinely distinct surface forms from their bare head nouns, which is
     # exactly what this unit teaches.
-    "همکاری": "a colleague (that…) [همکار + indefinite -ی]",
-    "موتری": "a car (that…) [موتر + indefinite -ی]",
-    "کاری": "a job (that…) [کار + indefinite -ی]",
-    "مدیری": "a manager (that…) [مدیر + indefinite -ی]",
-    "دفتری": "an office (that…) [دفتر + indefinite -ی]",
+    "همکاری": "a colleague (that…) [indefinite form]",
+    "موتری": "a car (that…) [indefinite form]",
+    "کاری": "a job (that…) [indefinite form]",
+    "مدیری": "a manager (that…) [indefinite form]",
+    "دفتری": "an office (that…) [indefinite form]",
     "خوشحالم": "I am glad (that…)", "استیم": "we are",
     "خریدی": "you bought (informal)",
-    "خانه‌ای": "a house (that…) [خانه + indefinite -ای]",
+    "خانه‌ای": "a house (that…) [indefinite form]",
     # B1 unit 11 (reported communication), added 2026-07-22. Almost every
     # token is REUSED from units 05/07-10 (گفت/پرسید/که/آیا/وقت/
     # دارم/مدیر/زرمینه). Simple-past 2pl uses the Afghan -ین ending like
@@ -2918,7 +2918,9 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # courses' tag pools for no real benefit).
     if token in {"می‌شویم", "می‌شین", "می‌شوند"}:
         semantics.append("become_verb_plural")
-    if token in {"پختم", "رسیدم"}:
+    # رسیدم is also A2 unit18's NOUN "my receipt" (homograph); only the B1
+    # verb "I arrived" belongs in the past-verb pool (2026-10-19).
+    if token == "پختم" or (token == "رسیدم" and ".b1." in lesson_key):
         semantics.append("past_verb_first_b1")
     if token in {"رسیدی"}:
         semantics.append("past_verb_second_b1")
@@ -3326,6 +3328,61 @@ def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
     ]
 
 
+# Direct-speech glosses for A2 lesson04 dialogue lines (and one reading
+# passage), keyed by teaching content_key. The teaching overlays gloss these
+# cards as third-person stage narration ("<name> says ..."), sometimes with
+# the Persian-script character name inside the English. That reads wrongly
+# as a translation in practice (MC options / translate prompts) and leaks
+# target-script words. Only the derived PHRASE lexeme's english_gloss uses
+# these; the overlay card text and the English source-token extraction are
+# unchanged. Added 2026-10-19 (session9 backfill-gloss leakage pass).
+PHRASE_GLOSS_OVERRIDES: dict[str, str] = {
+    'prs.a2.unit09.lesson04.teach.turn01': 'Please come in, how can I be of service to you?',
+    'prs.a2.unit09.lesson04.teach.turn03': 'Since when have you lived in the new house?',
+    'prs.a2.unit09.lesson04.teach.turn04': 'Since last month. Could you tell me what I should bring?',
+    'prs.a2.unit09.lesson04.teach.turn06': 'Can I come on Tuesday?',
+    'prs.a2.unit09.lesson04.teach.turn07': 'Yes, Tuesday at ten is fine. Your tracking number is three thousand fifty.',
+    'prs.a2.unit10.lesson04.teach.turn04': 'Because I want to stay near my family, and I think I can help my homeland more.',
+    'prs.a2.unit10.lesson04.teach.turn05': "That's true, but in my opinion there are more job opportunities abroad.",
+    'prs.a2.unit10.lesson04.teach.turn06': "Maybe, but I'm staying right here.",
+    'prs.a2.unit11.lesson04.teach.turn04': 'Yes, here are my national ID booklet and my rent receipt.',
+    'prs.a2.unit11.lesson04.teach.turn06': 'When do I get its PIN?',
+    'prs.a2.unit11.lesson04.teach.turn07': 'The same day you pick up the card.',
+    'prs.a2.unit11.lesson04.teach.turn08': 'Thank you for your time.',
+    'prs.a2.unit12.lesson04.teach.turn01': "Hello Bashir, how are you? What's the problem?",
+    'prs.a2.unit12.lesson04.teach.turn05': 'Do you also have a fever?',
+    'prs.a2.unit12.lesson04.teach.turn06': 'Yes, I have a slight fever.',
+    'prs.a2.unit12.lesson04.teach.turn07': "You need to take this medicine twice a day. If you don't get better, come back.",
+    'prs.a2.unit13.lesson04.teach.turn01': 'Hello, go ahead.',
+    'prs.a2.unit13.lesson04.teach.turn02': "Hello, I'm Karim. My kitchen pipe is leaking.",
+    'prs.a2.unit13.lesson04.teach.turn03': 'Since when did it start?',
+    'prs.a2.unit13.lesson04.teach.turn05': "Okay, I'll send a repairman tomorrow at nine.",
+    'prs.a2.unit13.lesson04.teach.turn06': "Thanks. The electricity in my bedroom isn't working either.",
+    'prs.a2.unit13.lesson04.teach.turn07': "I'll tell the repairman about that too.",
+    'prs.a2.unit14.lesson04.teach.turn01': 'Welcome. Please tell us about your experience.',
+    'prs.a2.unit14.lesson04.teach.turn03': 'What are your skills?',
+    'prs.a2.unit14.lesson04.teach.turn05': 'When can you start?',
+    'prs.a2.unit15.lesson04.teach.turn01': 'Please, how can I help you?',
+    'prs.a2.unit15.lesson04.teach.turn03': "I'm sorry, that bus has been cancelled because of snowfall.",
+    'prs.a2.unit15.lesson04.teach.turn08': 'Thank you for the information.',
+    'prs.a2.unit16.lesson04.teach.turn01': 'Zarmina, how much time do you spend on social media?',
+    'prs.a2.unit16.lesson04.teach.turn02': 'Usually an hour a day. What about you?',
+    'prs.a2.unit16.lesson04.teach.turn03': 'I mostly watch videos. Maybe two hours a day.',
+    'prs.a2.unit16.lesson04.teach.turn05': 'Maybe, but I enjoy it.',
+    'prs.a2.unit16.lesson04.teach.turn07': "That's right. From tomorrow I'll use it less.",
+    'prs.a2.unit17.lesson04.teach.turn03': 'What do you do on the weekend?',
+    'prs.a2.unit17.lesson04.teach.turn05': 'On weekdays I work first, then I come home and cook.',
+    'prs.a2.unit17.lesson04.teach.turn06': 'On the weekend I go to the market with my friends.',
+    'prs.a2.unit17.lesson04.teach.turn07': 'You have a good schedule!',
+    'prs.a2.unit18.lesson04.teach.turn01': 'Please, how can I help?',
+    'prs.a2.unit18.lesson04.teach.turn03': "What's wrong with it?",
+    'prs.a2.unit18.lesson04.teach.turn06': 'Yes, here is my receipt.',
+    'prs.a2.unit18.lesson04.teach.turn07': 'I can exchange it or refund your money. Which do you prefer?',
+    'prs.a2.unit18.lesson04.teach.turn08': 'An exchange is better, thanks.',
+    'prs.a2.unit17.lesson03.teach.comparison_text': 'On weekdays, Homayoun wakes up early and goes to the office. But on the weekend, he wakes up late and rests.',
+}
+
+
 def _classify(files, level, specs, derive_phrases=False):
     # derive_phrases=True is only ever passed for UNIT_FILES_A2 (see
     # iter_specs() below) -- added 2026-07-07 (A2 tagging-depth pass) to
@@ -3481,6 +3538,15 @@ def _classify(files, level, specs, derive_phrases=False):
                     # possessive) -- b1_unit04.lesson03 teaches the SAME
                     # bare string as the 1st-person simple past VERB of
                     # رسیدن ("I arrived"). Same collision class.
+                    # پس first appears in A2 at unit18 lesson02, where it
+                    # only means "back" (پس بگیرم / پس بدهم), not the A1
+                    # "so / then" sense (session9 review, 2026-10-19).
+                    if (
+                        level == "a2"
+                        and token == "پس"
+                        and lesson_key.startswith("prs.a2.unit18.")
+                    ):
+                        english_gloss = "back (as in 'to give back')"
                     if token == "رسیدم" and content_key.endswith("teach.residam"):
                         key = (level, token, "arrived_first_person")
                         part_of_speech = "verb"
@@ -3564,8 +3630,7 @@ def _classify(files, level, specs, derive_phrases=False):
                         key = (level, token, "polite_request_b1")
                         part_of_speech = "phrase"
                         english_gloss = (
-                            "would it be possible...? (polite request, "
-                            "می‌شود که + subjunctive)"
+                            "would it be possible...? (polite request + subjunctive)"
                         )
                     existing = specs.get(key)
                     if existing is None:
@@ -3645,7 +3710,10 @@ def _classify(files, level, specs, derive_phrases=False):
                             semantic.extend(
                                 t for t in phrase_unit_tags if t not in semantic
                             )
-                        phrase_gloss = teaching_overlays.get(content_key, {}).get("gloss", "")
+                        phrase_gloss = PHRASE_GLOSS_OVERRIDES.get(
+                            content_key,
+                            teaching_overlays.get(content_key, {}).get("gloss", ""),
+                        )
                         specs.setdefault(
                             (level, target_text),
                             {
