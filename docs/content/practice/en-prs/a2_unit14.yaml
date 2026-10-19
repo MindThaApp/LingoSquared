@@ -4,9 +4,23 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a2.unit14.job_interview
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 2 fixes).
+    (1) lesson02.translate.002 bare-noun pool held lesson02's only noun هفتهٔ "week of
+    (construct form)" as a typed answer -- the combining hamza is never forgiven by
+    grading, so a learner typing هفته was marked wrong; pool now unions the lesson01/03/04
+    tags. (2) lesson03.order.003 feedback hard-coded "مهارت کمپیوتر ..." although the
+    slot's course-scope pool also holds انترنت; feedback now describes the order.
+    Checked and left: lesson02.order.003 "این {item} است." is grammatical for every pool
+    member but semantically thin (این تجربه است); no taught frame isolates a better pool.
+    NATIVE FLAGS: lesson04 phrase glosses are narration, not translation ("The interviewer
+    asks what her skills are") and show up as matching_pairs rights (backfill gloss
+    lane); confirm وظیفه vs بست as Afghan "position" (both are taught and both glossed
+    "position").
+
     POLISH WAVE 2 2026-07-24 (POS-only matching_pairs): lesson04.match.002's
     bare-POS pool replaced with the unit-native interview_phrase semantic tag
     (9 unit-scoped candidates, 0 course-scope extras) -- see the template's
@@ -67,6 +81,9 @@ tag_schema:
     - interview_phrase
     - interview_word
     - tech_topic_word
+    - en_prs_a2_unit14_lesson01_words
+    - en_prs_a2_unit14_lesson03_words
+    - en_prs_a2_unit14_lesson04_words
 templates:
 - content_key: practice.en-prs.prs.a2.unit14.lesson01.choose.001
   lesson_content_key: prs.a2.unit14.lesson01.interview_vocabulary
@@ -196,6 +213,14 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      # Review 2026-10-19: lesson02's only nouns are the construct form هفتهٔ
+      # (typed answer needs the combining hamza, which grading never forgives)
+      # -- so this bare-word production pool unions the other lessons' tags.
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit14_lesson01_words
+        - en_prs_a2_unit14_lesson03_words
+        - en_prs_a2_unit14_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -402,6 +427,6 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "مهارت کمپیوتر و زبان انگلیسی لازم است. (Computer skill and English are required)."
+    text: "Word order: مهارت + the skill noun, then و زبان انگلیسی, with لازم است at the end."
     language_code: en
     direction: ltr
