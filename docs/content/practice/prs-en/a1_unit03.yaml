@@ -4,9 +4,12 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit03.numbers
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (prs-en practice pass): 2 fixes -- translation pools narrowed to drop pronoun lexemes it's/they're (Latin in gloss leaked answer). NATIVE FLAGS: none.
+    BACKFILL GLOSS FLAGS: it's=این ... استه (مخفف it is) and they're=دوی ... استند -> suggest این استه / آن‌ها استند without Latin; old=سال قدمت‌داشتن -> ساله; ok=خیر استه؛ باشه (check). Prior note:
     Authored 2026-07-06 by a fork of the practice-pool-sync lane
     (en-fa/fa-en/en-prs gap). All English-side POS/agreement tags
     (number/age_phrase/price_phrase/phone_phrase/market_dialogue/
@@ -103,6 +106,9 @@ slot_presets:
   age_word: &age_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: age_phrase}}
   age_adjective: &age_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: age_phrase}}
   price_word: &price_word {language_code: en, part_of_speech: [noun, adverb, pronoun], agreement_tags: {semantic: price_phrase}}
+  # Practice review 2026-10-19: translation-only presets without pronouns (it's/they're glosses contain Latin 'it is'/'they are' and leak/underdetermine the answer).
+  price_word_tr: &price_word_tr {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: price_phrase}}
+  market_word_tr: &market_word_tr {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: market_dialogue}}
   price_noun: &price_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: price_phrase}}
   phone_word: &phone_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: phone_phrase}}
   market_word: &market_word {language_code: en, part_of_speech: [pronoun, noun, adjective], agreement_tags: {semantic: market_dialogue}}
@@ -192,7 +198,7 @@ templates:
     lesson_content_key: en.a1.unit03.lesson03.ages_prices_phones
     type: translation
     frame: {text: "{price_word}", language_code: prs, direction: rtl, slot_rendering: {price_word: english_gloss}}
-    slots: {price_word: *price_word}
+    slots: {price_word: *price_word_tr}
     answer_derivation: {kind: slot_text, slot: price_word}
     feedback_frame: {text: "{price_word} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit03.lesson04.market_gloss.001
@@ -214,6 +220,6 @@ templates:
     lesson_content_key: en.a1.unit03.lesson04.market_dialogue
     type: translation
     frame: {text: "{market_word}", language_code: prs, direction: rtl, slot_rendering: {market_word: english_gloss}}
-    slots: {market_word: *market_word}
+    slots: {market_word: *market_word_tr}
     answer_derivation: {kind: slot_text, slot: market_word}
     feedback_frame: {text: "{market_word} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}

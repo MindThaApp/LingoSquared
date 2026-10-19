@@ -4,170 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.a2.unit27.banking
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: >-
-    Authored 2026-07-07 by the Claude session extending prs-en's practice
-    pool to unit27 (opening a bank account), the third A2 unit for this
-    direction. Uses fa-en's a2_unit27.yaml as the structural reference,
-    same as unit25/unit26 -- most of this unit's real content is
-    multi-word banking compounds ("checking account", "monthly fee",
-    "minimum balance", "direct deposit") that don't reduce to a single
-    fillable slot, so two new bare-word-recognition-only semantic tags
-    were added to scripts/_en_target_lexeme_common.py -- "banking_noun"
-    (account, fee, balance, deposit, business, days, documents, teller --
-    all POS noun) and "banking_adjective" (checking, monthly, minimum,
-    direct -- all POS adjective) -- deliberately not used in any shared
-    generative frame, same reasoning as unit25's bureaucracy_noun/unit26's
-    dogpark_noun. Only scripts/backfill_lexemes_prs_en.py's Dari gloss
-    dict and UNIT_FILES_A2 tuple needed extending beyond that (18 new
-    tokens, cross-checked against
-    docs/content/overlays/prs-en/a2_unit27.yaml's own real text, e.g.
-    fee=معاش not fa-en's کارمزد, DMV=ادارهٔ ترافیک not fa-en's ادارهٔ
-    راهنمایی و رانندگی, 500=پنجصد not fa-en's پانصد -- genuinely distinct
-    Afghan Dari vocabulary, not a find-replace of the fa-en script).
-
-    ZERO fill_in_blank templates in this pack, same reasoning as fa-en's
-    sibling pack: this unit's real single-token vocabulary doesn't
-    support a safe single-slot fill_in_blank (every noun/adjective
-    candidate pool here is bare-recognition-only by design, and the one
-    genuinely generative frame this unit supports -- the possessive slot
-    below -- is authored as word_order instead, which doesn't share
-    fill_in_blank's ambiguity risk). Ran
-    scripts/_fill_in_blank_ambiguity_check.py after writing this pack to
-    confirm zero AMBIGUOUS flags (there are no fill_in_blank templates to
-    flag in the first place).
-
-    One genuine generative frame identified: lesson03's real reading text
-    is "Your debit card will arrive in five to seven business days." --
-    the already-established 4-member 'possessive' tag (my/your/his/her,
-    defined for unit06's family lessons, reused identically here)
-    generalizes this exact real sentence with zero grammar loss ("My/
-    His/Her debit card will arrive in five to seven business days." all
-    hold) -- a word_order template anchored to lesson03, plus a bare
-    listen_select recognition item for the same tag.
-
-    Also reused: the already-established 'identity' tag (i/i'm/am/is/
-    are/what/what's/my/your, defined for unit01/02), anchored to
-    lesson04 (real dialogue line "I have both with me. Is there a
-    monthly fee?"), bare-word recognition only, same pattern as fa-en's
-    own unit27/unit26's "I think"-style reuse. No new EN_POS/
-    agreement_tags entries needed for either reused tag; no new Dari
-    glosses needed for their members (all already present).
-
-    Anchoring check (same discipline as every other pack in this batch):
-    verified via iter_specs() that every one of this unit's four lessons
-    introduces at least one new lexeme (lesson01: checking/account/
-    monthly/fee/minimum/balance/direct/deposit; lesson02: documents/
-    you'll/dmv; lesson03: business/days/keep/500; lesson04: teller/
-    both/sounds), so all four are safe lesson_content_key anchors.
-    banking_noun/banking_adjective are used across all four lessons as
-    course-wide recognition tags, same established discipline as
-    fa-en's sibling pack and this direction's own unit25/unit26 packs.
-
-    16 templates: 5 lesson01 (banking_noun x3 + banking_adjective x2),
-    3 lesson02 (banking_noun x2 + banking_adjective x1), 4 lesson03
-    (possessive word_order + possessive listen_select + banking_noun +
-    banking_adjective), 4 lesson04 (banking_noun matching_pairs [8 pairs,
-    the full course-wide pool, per AUTHORING_GUIDE.md #16] + identity x2 +
-    banking_adjective). An honest, real-vocabulary-supported count for a
-    newer, smaller A2 unit -- no padding with untaught words.
-
-    Verified with scripts/_practice_slot_check.py (glob-discovered
-    automatically for prs-en; banking_noun has 8 distinct course-wide
-    candidates, banking_adjective 4, possessive 4, identity well above
-    the >=3 multiple_choice/listen_select floor and >=2 matching_pairs
-    floor) and compile_content.py practice-validate, 0 errors/0
-    warnings. Still needs the standard fresh-context review before
-    import.
-
-    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
-    pools ALL specs from iter_specs() (both A1 and A2) together when
-    counting a tag's real distinct-candidate count, but
-    backend/app/practice/service.py's _material() actually scopes both
-    PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are
-    separate Course rows -- a real A2 enrollee only ever sees A2-scoped
-    lexemes. A standalone A2-only-scoped check (filtering iter_specs() to
-    level=='a2') found lesson03.possessive_listen.002 -- 'possessive'
-    (my/your/his/her, 4 members pooled with A1) has only 2 REAL
-    A2-scoped candidates (my/your -- his/her never reintroduced in any A2
-    unit 25-28), invalidating the pooled "possessive 4" note above. Fixed
-    by converting to type: translation (bare single-word production,
-    slot_text derivation instead of slot_gloss -- no minimum-candidate
-    floor), renamed possessive_translate_bare.002 -- a genuinely new
-    exercise, not a duplicate of the existing possessive_order.001
-    (full-sentence word_order). No candidates invented, no A1 vocabulary
-    pooled in as if A2-scoped.
-
-    UNIT-SCOPE DEAD FIX (2026-07-24, reauth batch): the previous
-    "A2-scoping correctness fix" above checked A2-COURSE scope (all A2
-    units pooled), which is still broader than the actual checkpoint
-    scope. scripts/_practice_unit_scope_check.py -- which scopes
-    strictly to this UNIT's own lexemes, matching
-    generate_checkpoint() exactly -- flagged 4 DEAD: lesson03.
-    possessive_order.001, lesson03.possessive_translate_bare.002,
-    lesson04.identity_choose.002, lesson04.identity_listen.003. Confirmed
-    via iter_specs() filtered to '.a2.unit27.': neither `possessive`
-    (my/your/his/her, defined for unit06) nor `identity` (defined for
-    unit01/02) has ANY member actually introduced by unit27 itself --
-    both are pure course-wide reuse, same defect class as unit26's
-    sibling pack (DO-NOT #2).
-    Fix: possessive_order.001 ("{item} debit card will arrive in five to
-    seven business days") and possessive_translate_bare.002 were DROPPED,
-    not re-anchored -- this frame's whole point is a possessive-pronoun
-    slot and unit27 introduces no possessive pronoun, so there is no
-    unit-native substitute that keeps the frame grammatical (inventing
-    one needs a new backfill tag, out of PACK-ONLY scope). LOGGED for the
-    coordinator. This leaves the structured tier thin (only lesson04.
-    match.001, matching_pairs, survives) -- deliberately NOT patched with
-    a forced word_order over banking_noun/banking_adjective: this pack's
-    own original authoring note already established that this unit's
-    vocabulary is bare-recognition-only by design (no safe single-slot
-    fill_in_blank, no safe generative frame beyond the now-dropped
-    possessive one), and banking_noun's 8 members are semantically
-    heterogeneous (account/fee/balance/deposit/business/days/documents/
-    teller) with no single natural sentence frame that holds for all of
-    them -- forcing one risks the exact "afspraak voor een {any noun}"
-    ungrammaticality trap SS6.4 warns about. Honestly thin, not fixable
-    from this file alone.
-    identity_choose.002 / identity_listen.003 (both MC/listen_select,
-    bare `{item}` frame -- no course-scope grammaticality risk): these ARE
-    cleanly re-anchorable, since banking_noun is genuinely native to this
-    unit and ample (8 distinct course-wide == unit-wide members, confirmed
-    unique to unit27). RE-ANCHORED (renamed vocab_choose.002 /
-    vocab_listen.003) from `identity` to `banking_noun`, still anchored to
-    lesson04 -- adds a plain banking_noun MC/listen_select on lesson04
-    that didn't exist before (lesson04 previously only had matching_pairs
-    + adj_choose), not a duplicate of any existing template.
-    tag_schema trimmed to [banking_noun, banking_adjective] (possessive/
-    identity no longer referenced) and the now-unused possessive/identity
-    slot_presets removed.
-    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for
-    this pack) and compile_content.py practice-validate. Status stays
-    unreviewed -- needs a fresh review pass given the substantive change.
-
-    POLISH WAVE 2 (2026-07-24): structured tier raised 1->3 and
-    production tier 2->3 live, superseding the "honestly thin, not
-    fixable" verdict above WITHOUT the forced heterogeneous-noun frame
-    it rightly warned against: (1) lesson01.match.006 -- a second
-    matching_pairs over the NEW banking_word union preset
-    (banking_noun+banking_adjective, 12 distinct unit tokens, one
-    coherent banking theme, all 12 Dari glosses distinct/
-    non-confusable; differs from lesson04.match.001 in pool and slot
-    count). Both tags re-verified at A2 course scope: no other A2
-    lesson carries any member (the extra carriers are a1/b1/b2, out of
-    course scope), so Endless-Practice pairs stay on-theme. (2)
-    lesson02.order.004 -- word_order "What does {item} mean?" on
-    banking_adjective: unlike the collocation-bound frames the old
-    note rejected, this frame is grammatical for ANY single word, so
-    it is robust at course scope by construction (and the A2
-    course-scope pool is exactly checking/monthly/minimum/direct
-    anyway); no literal frame word is a pool candidate. (3)
-    lesson03.translate.005 -- bare-word translation over the same
-    banking_word union (safe with a broad pool per SS6.6(a)); differs
-    from lesson01.translate.003 (noun-only) and lesson02.
-    adj_translate.003 (adjective-only) by pool, and every union member
-    is already served by those two, so no new gloss-giveaway exposure.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 2 fixes -- removed lesson02.adj_translate.003 (adjective translation could not exclude direct, whose gloss spells out ''direct deposit'' and gives away the answer); lesson03.translate.005 narrowed from noun+adjective to banking_noun for the same leak. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: direct=مستقیم (در direct deposit) -> مستقیم (Latin leak); fee=معاش (کارمزد بانک) -> کارمزد (معاش means salary); you''ll/there''s/like/get glosses carry Latin/parenthetical notes (outside this pack''s pools). Prior note: Authored 2026-07-07 by the Claude session extending prs-en''s practice pool to unit27 (opening a bank account), the third A2 unit for this direction. Uses fa-en''s a2_unit27.yaml as the structural reference, same as unit25/unit26 -- most of this unit''s real content is multi-word banking compounds ("checking account", "monthly fee", "minimum balance", "direct deposit") that don''t reduce to a single fillable slot, so two new bare-word-recognition-only semantic tags were added to scripts/_en_target_lexeme_common.py -- "banking_noun" (account, fee, balance, deposit, business, days, documents, teller -- all POS noun) and "banking_adjective" (checking, monthly, minimum, direct -- all POS adjective) -- deliberately not used in any shared generative frame, same reasoning as unit25''s bureaucracy_noun/unit26''s dogpark_noun. Only scripts/backfill_lexemes_prs_en.py''s Dari gloss dict and UNIT_FILES_A2 tuple needed extending beyond that (18 new tokens, cross-checked against docs/content/overlays/prs-en/a2_unit27.yaml''s own real text, e.g. fee=معاش not fa-en''s کارمزد, DMV=ادارهٔ ترافیک not fa-en''s ادارهٔ راهنمایی و رانندگی, 500=پنجصد not fa-en''s پانصد -- genuinely distinct Afghan Dari vocabulary, not a find-replace of the fa-en script). ZERO fill_in_blank templates in this pack, same reasoning as fa-en''s sibling pack: this unit''s real single-token vocabulary doesn''t support a safe single-slot fill_in_blank (every noun/adjective candidate pool here is bare-recognition-only by design, and the one genuinely generative frame this unit supports -- the possessive slot below -- is authored as word_order instead, which doesn''t share fill_in_blank''s ambiguity risk). Ran scripts/_fill_in_blank_ambiguity_check.py after writing this pack to confirm zero AMBIGUOUS flags (there are no fill_in_blank templates to flag in the first place). One genuine generative frame identified: lesson03''s real reading text is "Your debit card will arrive in five to seven business days." -- the already-established 4-member ''possessive'' tag (my/your/his/her, defined for unit06''s family lessons, reused identically here) generalizes this exact real sentence with zero grammar loss ("My/ His/Her debit card will arrive in five to seven business days." all hold) -- a word_order template anchored to lesson03, plus a bare listen_select recognition item for the same tag. Also reused: the already-established ''identity'' tag (i/i''m/am/is/ are/what/what''s/my/your, defined for unit01/02), anchored to lesson04 (real dialogue line "I have both with me. Is there a monthly fee?"), bare-word recognition only, same pattern as fa-en''s own unit27/unit26''s "I think"-style reuse. No new EN_POS/ agreement_tags entries needed for either reused tag; no new Dari glosses needed for their members (all already present). Anchoring check (same discipline as every other pack in this batch): verified via iter_specs() that every one of this unit''s four lessons introduces at least one new lexeme (lesson01: checking/account/ monthly/fee/minimum/balance/direct/deposit; lesson02: documents/ you''ll/dmv; lesson03: business/days/keep/500; lesson04: teller/ both/sounds), so all four are safe lesson_content_key anchors. banking_noun/banking_adjective are used across all four lessons as course-wide recognition tags, same established discipline as fa-en''s sibling pack and this direction''s own unit25/unit26 packs. 16 templates: 5 lesson01 (banking_noun x3 + banking_adjective x2), 3 lesson02 (banking_noun x2 + banking_adjective x1), 4 lesson03 (possessive word_order + possessive listen_select + banking_noun + banking_adjective), 4 lesson04 (banking_noun matching_pairs [8 pairs, the full course-wide pool, per AUTHORING_GUIDE.md #16] + identity x2 + banking_adjective). An honest, real-vocabulary-supported count for a newer, smaller A2 unit -- no padding with untaught words. Verified with scripts/_practice_slot_check.py (glob-discovered automatically for prs-en; banking_noun has 8 distinct course-wide candidates, banking_adjective 4, possessive 4, identity well above the >=3 multiple_choice/listen_select floor and >=2 matching_pairs floor) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import. A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py pools ALL specs from iter_specs() (both A1 and A2) together when counting a tag''s real distinct-candidate count, but backend/app/practice/service.py''s _material() actually scopes both PracticeTemplate and Lexeme queries by course_id, and ''A1''/''A2'' are separate Course rows -- a real A2 enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped check (filtering iter_specs() to level==''a2'') found lesson03.possessive_listen.002 -- ''possessive'' (my/your/his/her, 4 members pooled with A1) has only 2 REAL A2-scoped candidates (my/your -- his/her never reintroduced in any A2 unit 25-28), invalidating the pooled "possessive 4" note above. Fixed by converting to type: translation (bare single-word production, slot_text derivation instead of slot_gloss -- no minimum-candidate floor), renamed possessive_translate_bare.002 -- a genuinely new exercise, not a duplicate of the existing possessive_order.001 (full-sentence word_order). No candidates invented, no A1 vocabulary pooled in as if A2-scoped. UNIT-SCOPE DEAD FIX (2026-07-24, reauth batch): the previous "A2-scoping correctness fix" above checked A2-COURSE scope (all A2 units pooled), which is still broader than the actual checkpoint scope. scripts/_practice_unit_scope_check.py -- which scopes strictly to this UNIT''s own lexemes, matching generate_checkpoint() exactly -- flagged 4 DEAD: lesson03. possessive_order.001, lesson03.possessive_translate_bare.002, lesson04.identity_choose.002, lesson04.identity_listen.003. Confirmed via iter_specs() filtered to ''.a2.unit27.'': neither `possessive` (my/your/his/her, defined for unit06) nor `identity` (defined for unit01/02) has ANY member actually introduced by unit27 itself -- both are pure course-wide reuse, same defect class as unit26''s sibling pack (DO-NOT #2). Fix: possessive_order.001 ("{item} debit card will arrive in five to seven business days") and possessive_translate_bare.002 were DROPPED, not re-anchored -- this frame''s whole point is a possessive-pronoun slot and unit27 introduces no possessive pronoun, so there is no unit-native substitute that keeps the frame grammatical (inventing one needs a new backfill tag, out of PACK-ONLY scope). LOGGED for the coordinator. This leaves the structured tier thin (only lesson04. match.001, matching_pairs, survives) -- deliberately NOT patched with a forced word_order over banking_noun/banking_adjective: this pack''s own original authoring note already established that this unit''s vocabulary is bare-recognition-only by design (no safe single-slot fill_in_blank, no safe generative frame beyond the now-dropped possessive one), and banking_noun''s 8 members are semantically heterogeneous (account/fee/balance/deposit/business/days/documents/ teller) with no single natural sentence frame that holds for all of them -- forcing one risks the exact "afspraak voor een {any noun}" ungrammaticality trap SS6.4 warns about. Honestly thin, not fixable from this file alone. identity_choose.002 / identity_listen.003 (both MC/listen_select, bare `{item}` frame -- no course-scope grammaticality risk): these ARE cleanly re-anchorable, since banking_noun is genuinely native to this unit and ample (8 distinct course-wide == unit-wide members, confirmed unique to unit27). RE-ANCHORED (renamed vocab_choose.002 / vocab_listen.003) from `identity` to `banking_noun`, still anchored to lesson04 -- adds a plain banking_noun MC/listen_select on lesson04 that didn''t exist before (lesson04 previously only had matching_pairs + adj_choose), not a duplicate of any existing template. tag_schema trimmed to [banking_noun, banking_adjective] (possessive/ identity no longer referenced) and the now-unused possessive/identity slot_presets removed. Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD for this pack) and compile_content.py practice-validate. Status stays unreviewed -- needs a fresh review pass given the substantive change. POLISH WAVE 2 (2026-07-24): structured tier raised 1->3 and production tier 2->3 live, superseding the "honestly thin, not fixable" verdict above WITHOUT the forced heterogeneous-noun frame it rightly warned against: (1) lesson01.match.006 -- a second matching_pairs over the NEW banking_word union preset (banking_noun+banking_adjective, 12 distinct unit tokens, one coherent banking theme, all 12 Dari glosses distinct/ non-confusable; differs from lesson04.match.001 in pool and slot count). Both tags re-verified at A2 course scope: no other A2 lesson carries any member (the extra carriers are a1/b1/b2, out of course scope), so Endless-Practice pairs stay on-theme. (2) lesson02.order.004 -- word_order "What does {item} mean?" on banking_adjective: unlike the collocation-bound frames the old note rejected, this frame is grammatical for ANY single word, so it is robust at course scope by construction (and the A2 course-scope pool is exactly checking/monthly/minimum/direct anyway); no literal frame word is a pool candidate. (3) lesson03.translate.005 -- bare-word translation over the same banking_word union (safe with a broad pool per SS6.6(a)); differs from lesson01.translate.003 (noun-only) and lesson02. adj_translate.003 (adjective-only) by pool, and every union member is already served by those two, so no new gloss-giveaway exposure.'
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -226,13 +66,6 @@ templates:
     slots: {item: *banking_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
-  - content_key: practice.prs-en.en.a2.unit27.lesson02.adj_translate.003
-    lesson_content_key: en.a2.unit27.lesson02.asking_about_opening_an_account
-    type: translation
-    frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *banking_adjective}
-    answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit27.lesson03.choose.003
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: multiple_choice
@@ -295,6 +128,6 @@ templates:
     lesson_content_key: en.a2.unit27.lesson03.reading_about_account_features
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *banking_word}
+    slots: {item: *banking_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
