@@ -3073,3 +3073,103 @@ Remaining:
 
 Verification: `scripts/verify.sh --content-only` passes (all courses). A
 course-scoped validate + compile ran before every commit.
+
+### 2026-10-19 — prs-en B1/B2 review (fresh-context review; branch content/review-prs-en-b, PR #44)
+Scope: all prs-en (Dari → English) overlays at B1 (u01-19) and B2 (u01-08),
+27 units. None had `review.status: reviewed`: every B1/B2 overlay carried
+the "SUPERSEDED 2026-07-22 by the Dari register repair" note, so the
+earlier pass was treated as void. The shared English realizations were
+read for alignment but not edited (they are shared with fa-en and nl-en;
+see "Shared English realization" below). Checklist as in PRs #39/#40. One
+reviewer, unit by unit; course-scoped validate + compile before every
+commit. Accepted answers were only added, never removed.
+
+Fix counts (commit subjects carry per-batch counts): B1 324 (about 17 per
+unit) · B2 191 (about 24 per unit, much of it register normalisation) ·
+total about 515. A1/A2, fa-en, en-fa and en-prs were out of scope.
+
+Defect classes (all passed a green compile):
+- **Tense collapsed in Dari glosses, erasing the unit's own contrast**
+  (new pattern for this lane). B1 u03, u11 and u17 teach present unreal
+  vs past counterfactual, but both were glossed with the same Dari
+  (اگه … می‌داشتم، … می‌کدم). Past counterfactuals and wish + past perfect
+  now use the Dari past perfect (خبر شده بودم … کده بودم), about 30
+  places. The opposite error in B1 u09: every reported-speech gloss was
+  back-shifted (میا گفت که وقت داشت = "she had time [then]"). Dari does not
+  backshift. 26 glosses fixed, and the grammar note now says so.
+- **Wrong-sense glosses**: in order to = به‌خاطر این‌که ("because"); unless =
+  اگه نه ("otherwise"); already = حالی ("now"); also = همرایش ("with him");
+  manage to glossed exactly like be able to; Perfect = کامل استه ("it is
+  complete"); 'That sounds nice' = خوب شد; 'I'm writing to complain' =
+  می‌خواهم شکایت کنم; respect = "accept the opinion"; if I were = "if I
+  had"; expects = امید داره; 'let you know' garbled.
+- **Calques and non-Dari forms**: وقت نجات دادن (save time), آواز دادن
+  (seem/sound), صنف/کورس گرفتن (take a class), کمتر از بودجه استیم (under
+  budget), چانس گرفتن, بی‌از این‌که, نام گرفتن for نام بردن, همینه used as
+  "this", sentence-initial مگر این‌که, where-clauses with no resumptive
+  در آن, ungrammatical با لیلا می‌بینم, X را دلتنگ می‌شین.
+- **Iranian Persian / register** (the prs-en lane is colloquial Dari):
+  بروزرسانی (→ اپدیت, 13x), مبل (→ فرنیچر), ناهار (→ نان چاشت), معلم (→
+  استاد), دیر کدی (→ ناوقت, the corpus norm), اسپنیایی (→ هسپانوی),
+  Tehrani بخوام, کرد/کرده/کردن in a کد/کدن file, اگر/چیست/شود/دیگر
+  forms, formal 3pl endings (استند، می‌کنند، بودند …, about 90 in B2),
+  2sg بته in learner-facing instructions (B1 u01-u11 speak items), mixed
+  گزارش/ریپورت and توانست/تانست within one unit, ZWNJ وظیفهٔ‌تان, typos
+  (بشگاه x6, می‌خانه).
+- **Underdetermined prompts** (by count the largest class). Almost every
+  B1 reply/speak item showed only the other speaker's line, or a bare
+  question ("What will you do if…?"), and keyed one exact dialogue turn.
+  All now carry a Dari content cue. Writing prompts asking for "you (pl)"
+  while keying "we" (B1 u03 write_if_rains, the PR #40 flag; u07 ×2), or
+  keying I/he with genderless Dari او. B2 speak items (u01, u04-u08)
+  accepted only an exact multi-sentence paragraph while the prompt gave
+  only role names. B2 order instructions were English jargon only ("make
+  the prior event sentence"); they now carry the Dari sentence.
+- **Answer given away by option shape**: listen/MC items whose correct
+  option was the only question, the only first-person sentence, or the
+  only full sentence among noun phrases, or whose distractors were the
+  other speaker's questions (B1 u15-u19, B2 u02/u08). Rewritten to the
+  same shape.
+- **Distractors that are also correct**: B1 u04 (two things Leila also
+  disagrees with), u08 (two actions that also happen after checking the
+  mail). Untaught or idiomatic distractors: 'ran out of gas', 'family
+  emergency'. Ungrammatical distractor: 'help me finish the deadline'.
+- **English left untranslated inside Dari glosses**: looking back, in
+  hindsight, procrastinate (B1 u17); scope, deadline, appendix, operator,
+  demand, account (B2 u07/u08 dialogue and reading glosses).
+- **Missing accepted answers**: Yes-prefixed replies, result-first clause
+  orders, contractions, that-less reported speech, he/she for او, I am vs
+  I'm.
+New bug class: no new class. The new pattern is that Dari glosses
+collapse or shift tense distinctions that the English unit teaches.
+Nothing in the toolchain checks gloss tense against the English.
+Character canon: Daniel is now spelled دنیل in all B1/B2 overlays (290
+occurrences of دانیال), matching the prs-en A1/A2 pass (PR #45).
+
+Native-speaker flags (`required_next_reviewer: native_speaker_pass` on
+those files; details in each file's review.notes):
+- وعده for "appointment" (vs نوبت / وقت ملاقات), used course-wide.
+- ناوقت vs دیر for "late" (changed to ناوقت, the corpus norm).
+- صنف شام vs صنف شبانه / کورس شبانه for "evening class".
+- هسپانوی vs اسپانیایی for "Spanish".
+- مدیر vs آمر for "manager"; ممنون می‌شم اگه as "I would appreciate it if".
+- تعویض vs تبدیل / عوض کدن for "replacement"; پول برگشت (بازپرداخت) for
+  "refund" (also flagged in PR #40).
+
+Shared English realization (affects fa-en/nl-en/prs-en; not edited here,
+listed for the shared-en pass):
+- B1 "Write that …" writing prompts print the English answer in
+  target_blocks (u09 write_short_summary flagged by
+  `_answer_leakage_check.py`; same pattern in u01, u03, u11).
+- B1 u03 write_if_rains still says "you" while tested_text is "we".
+- B1 u06 "before he arrived" is ambiguous (stranger or mechanic); B1 u13
+  "Daniel, who joined the team in March" conflicts with his A1 engineer
+  backstory; B1 u08 Leila asks Daniel to call when he gets home, then
+  both prepare dinner at the same home.
+- B2 u01 mini-argument says "That is a fair concern" without stating the
+  concern; B2 u03 Leila answers "Exactly." to a statement.
+
+Verification: `scripts/verify.sh --content-only` passes (all courses).
+Course-scoped validate + compile ran before every commit. Note:
+`check_dari_register.py` reports 8 2pl -ید findings, all in
+realizations/prs B2 (the en-prs lane, out of scope here).
