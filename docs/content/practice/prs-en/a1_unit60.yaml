@@ -4,32 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit60.invitations
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit60 (invitations). backfill_lexemes_prs_en.py
-    carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union
-    semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the
-    full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml).
-    word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member
-    anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged
-    word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c),
-    which is unsafe for any frame with literal text. matching_pairs is pooled across the WHOLE unit''s
-    lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key to
-    one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
-    Capacity measured with §0/§9''s f".{level}.{unit}." filter: 5 distinct tokens across 2 lesson(s) with
-    lexemes at original authoring time. 2026-07-24 polish (tier-thinness wave 2): the backfill now carries
-    17 unit lexemes across all 4 lessons (lesson02/03 phrase lexemes were added after original authoring),
-    so the previously-empty structured tier was filled with 3 templates: lesson02 word_order (bare {item}
-    over part_of_speech [phrase] -- no literal frame text, so every course-scope candidate is trivially
-    grammatical and self-reference is impossible; all 106 course-scope A1 [phrase] tokens are multi-word,
-    so no degenerate one-tile bank), lesson03 matching_pairs (6 pairs over [phrase], unit pool 12) and
-    lesson01 matching_pairs (6 pairs over [noun, verb, phrase], unit pool 15, admitting lesson01''s
-    invitation/picnic and lesson04''s wrote). The unit''s lexemes still carry NO agreement_tags.semantic,
-    so the matching slots remain POS-constrained (same class as every prs-en matching template): at
-    Endless-Practice course scope the pool widens to the level''s phrases/content words (off-theme but
-    structurally valid pairs). Known wart: lesson04''s long notice phrase is in the [phrase] pool and can
-    appear as a long card / 14-tile bank; it cannot be excluded without semantic tags. Register: colloquial
-    Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید).'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 0 fixes + 25 coordinator fixes (untagged slots that pooled the whole level, ~1290 A1 / ~480 A2 words, narrowed to prs_en_a1_unit60_words; removes same-gloss ambiguity) -- none (phrase pools are POS-limited; word_order over multi-sentence phrases like ''dinner invitation: ...'' is punctuation-heavy, left). Frames/feedback Dari checked (Afghan 2pl -ین, no Iranian forms found). NATIVE FLAGS: phrase glosses: hi daniel! ... استی؟ uses informal 2sg (course is polite: استین) in lesson03; sorry, i can''t come=معذرت، آمده نمی‌تانم (unnatural word order, suggest نمی‌تانم بیایم); ساعت شش می‌بینمتان (می‌بینیمتان). BACKFILL GLOSS FLAGS: hi daniel! are you free on saturday=...آزاد استی؟ -> آزاد استین؟; sorry, i can''t come -> نمی‌تانم بیایم; 6:00 and 18=هجده (نمبر خانه) symbol glosses. Prior note: Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit60 (invitations). backfill_lexemes_prs_en.py carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml). word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c), which is unsafe for any frame with literal text. matching_pairs is pooled across the WHOLE unit''s lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key to one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes. Capacity measured with §0/§9''s f".{level}.{unit}." filter: 5 distinct tokens across 2 lesson(s) with lexemes at original authoring time. 2026-07-24 polish (tier-thinness wave 2): the backfill now carries 17 unit lexemes across all 4 lessons (lesson02/03 phrase lexemes were added after original authoring), so the previously-empty structured tier was filled with 3 templates: lesson02 word_order (bare {item} over part_of_speech [phrase] -- no literal frame text, so every course-scope candidate is trivially grammatical and self-reference is impossible; all 106 course-scope A1 [phrase] tokens are multi-word, so no degenerate one-tile bank), lesson03 matching_pairs (6 pairs over [phrase], unit pool 12) and lesson01 matching_pairs (6 pairs over [noun, verb, phrase], unit pool 15, admitting lesson01''s invitation/picnic and lesson04''s wrote). The unit''s lexemes still carry NO agreement_tags.semantic, so the matching slots remain POS-constrained (same class as every prs-en matching template): at Endless-Practice course scope the pool widens to the level''s phrases/content words (off-theme but structurally valid pairs). Known wart: lesson04''s long notice phrase is in the [phrase] pool and can appear as a long card / 14-tile bank; it cannot be excluded without semantic tags. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -42,6 +20,9 @@ tag_schema:
   - preposition
   - particle
   - phrase
+  agreement_tags:
+    semantic:
+    - prs_en_a1_unit60_words
 templates:
 - content_key: practice.prs-en.en.a1.unit60.lesson01.choose.001
   lesson_content_key: en.a1.unit60.lesson01.invitation_words
@@ -63,6 +44,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -90,6 +73,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -121,6 +106,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -148,6 +135,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -175,6 +164,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -206,6 +197,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -235,6 +228,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -262,6 +257,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -291,6 +288,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -320,6 +319,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -347,6 +348,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -376,6 +379,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -395,6 +400,8 @@ templates:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   answer_derivation:
     kind: render_frame
     frame:
@@ -417,26 +424,38 @@ templates:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     second:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     third:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     fourth:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     fifth:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     sixth:
       language_code: en
       part_of_speech:
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   slot_relations:
   - kind: distinct
     slots: &id001
@@ -467,36 +486,48 @@ templates:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     second:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     third:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     fourth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     fifth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
     sixth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit60_words
   slot_relations:
   - kind: distinct
     slots: &id002
