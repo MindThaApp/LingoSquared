@@ -4,9 +4,12 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit14.communication
 review:
-  status: unreviewed
-  fresh_context: false
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (prs-en practice pass): 1 fixes -- desc_translate pool restricted to adjectives (adverb well=خوب (در hear well) leaked answer). NATIVE FLAGS: that=آن؛ دا -- 'دا' looks non-Dari.
+    BACKFILL GLOSS FLAGS: UNFIXABLE: lesson04 misc_translate (that/about) has no lever (lexemes untagged; course scope = ~90 pronouns/prepositions with same-gloss در/مالِ او and Latin glosses). well=خوب (در hear well) remains an MC/matching option with Latin. that=آن؛ دا -> آن. Prior note:
     Authored 2026-07-06 extending prs-en's Endless Practice pool from
     units 01-08 to also cover units 09-14. Deliberate scope decision,
     same as the reference fa-en/a1_unit14.yaml pack (itself following
@@ -169,6 +172,8 @@ slot_presets:
   desc_pool: &desc_pool {language_code: en, part_of_speech: [adjective, adverb], agreement_tags: {semantic: prs_en_a1_unit14_words}}
   unit_content: &unit_content {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: prs_en_a1_unit14_words}}
   misc_pool: &misc_pool {language_code: en, part_of_speech: [pronoun, preposition]}
+  # Practice review 2026-10-19: adjective-only pool for translation (adverb well has gloss 'خوب (در hear well)' which leaks the answer).
+  adj_pool: &adj_pool {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: prs_en_a1_unit14_words}}
   mixed_pool: &mixed_pool {language_code: en, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: prs_en_a1_unit14_words}}
   action_pool: &action_pool {language_code: en, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: prs_en_a1_unit14_words}}
 templates:
@@ -256,7 +261,7 @@ templates:
     lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *desc_pool}
+    slots: {item: *adj_pool}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit14.lesson04.misc_translate.001
