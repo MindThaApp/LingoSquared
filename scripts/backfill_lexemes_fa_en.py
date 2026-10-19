@@ -2221,6 +2221,17 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+    # a1_unit14: bare `more` carried a Latin example in its gloss ("more expensive");
+    # the Persian option should be the plain word.
+    ("a1_unit14_communication", "more"): ("adverb", "بیشتر"),
+    # a1_unit16: "get dressed" -- plain پوشیده alone means "covered/modest".
+    ("a1_unit16_routines", "dressed"): ("adjective", "لباس‌پوشیده"),
+    # a1_unit21: "round trip" -- round = رفت‌وبرگشت (not "periodic").
+    ("a1_unit21_travel", "round"): ("adjective", "رفت‌وبرگشت"),
+    # a1_unit22: "What's wrong?" -- wrong = having a problem (not "broken").
+    ("a1_unit22_health", "wrong"): ("adjective", "اشتباه؛ مشکل‌دار"),
+    # a1_unit23: answer emails -- drop the leaking Latin example from the gloss.
+    ("a1_unit23_work", "answer"): ("verb", "جواب دادن"),
 }
 
 
