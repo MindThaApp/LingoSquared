@@ -3607,3 +3607,45 @@ are unchanged: fa-en 18, fa-en-a2 5, fa-en-b1 2, fa-en-b2 5; practice
 fa-en 0/0. The unit-scope check is unchanged (0 DEAD, 3 tier-short, 110
 below-floor); the self-reference check finds 0 hits. `scripts/verify.sh
 --content-only` passes.
+
+### 2026-10-19 — backfill gloss leakage
+
+Lane: lexeme backfill data (`scripts/backfill_lexemes.py` for en-fa,
+`backfill_lexemes_en_prs.py`, `backfill_lexemes_prs_en.py`). Source: the
+session9 practice reviews of en-fa/en-prs and prs-en. Branch
+content/fix-backfill-glosses. No practice packs, overlays or fa-en data were
+edited; no `required_next_reviewer` was touched.
+
+New bug class: **answer leakage through lexeme glosses.** Practice pools
+show `english_gloss` as the prompt or option, and no validator reads gloss
+text. A gloss that embeds the target word ("loan (in امانت گرفتن…)",
+"went = رفت (زمان گذشتهٔ go)") gives the answer away.
+
+Fixes:
+- en-fa: 190 unique glosses (about 250 lexemes) had Persian script removed,
+  e.g. "(possessive form of کار)" became "(possessive form)" and "(in X,
+  'to borrow')" became "(as in 'to borrow')". 38 A2 lesson04 dialogue lines
+  were re-glossed as direct speech through `PHRASE_GLOSS_OVERRIDES`. Wrong
+  B1 senses fixed: می‌دید → "would see / would have seen" (u07), شرکت →
+  "participation" (u09).
+- en-prs: 37 glosses had Persian script removed. 42 A2 lesson04 dialogue
+  lines and one reading passage were re-glossed. پس in A2 u18 is now "back".
+  The noun رسیدم ("my receipt") no longer carries the B1 past-verb tag.
+- prs-en: 127 glosses had English text removed, e.g. "(زمان گذشتهٔ go)" →
+  "(زمان گذشته)" and "(شکل ing فعل stay)" → "(شکل استمراری)". 19 sense,
+  typo and register fixes (fee, sink, wants, chance, expensive, party,
+  sound, managed, offered, fix, focus, saved, prioritize, joined, moved,
+  had, found, you're, you'd). 11 per-unit sense overrides (next, strong,
+  much, all, and "course" in "of course"). A new
+  `prs_en_<unit>_lessonNN_function_words` tag gives the three lessons with
+  no tag (a1 u14 l04, a2 u38 l04, b1 u01 l01) something to pool on.
+
+Left open: 4 en-fa grammar-note pseudo-lexemes (A1 u06/u08/u09) whose
+"gloss" is an explanatory note. About 60 en-nl glosses embed Dutch words
+("past tense of zijn", "in 'de moeite waard'"); these need manual
+rewrites. No other en-X course has backfill gloss data. Not mechanical in
+prs-en: informal phrase glosses that come from overlays, and the
+native-judgement flags (job=وظیفه, evening=شام, bathroom=تشناب). The
+fa-en flags were not touched because PR #49 owns that file.
+Verification: `scripts/verify.sh --content-only` passes. Self-reference,
+integrity and fill-in-blank ambiguity results match the base branch.
