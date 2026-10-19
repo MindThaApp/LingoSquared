@@ -4,60 +4,42 @@ source_language: en
 target_language: fa
 unit_content_key: fa.b1.unit07.wishes_and_regret
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Five lessons with lexemes, 52 fa lexemes. Drills kaash + past copula wishes and agar + past-perfect
-    counterfactuals.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 12 fixes).
+    (1-7) Answer leakage at B1: the broad untagged pools (all 7 MC/translation templates and 2 matching) held lexemes whose backfill gloss embeds the Persian token (تولد "in جشن تولد", رفته "used in رفته بودم", اشکالی, جات, سر, خوشحال می‌شم, دست, گذاشتن, نشد, شده), so the MC answer / translation prompt / matching card printed the answer. Pools rebuilt from unit/lesson tag unions that exclude them: verbs = lesson01+02+04 verbs + رفت; modifiers = the unit's adverbs/adjectives. Also drops the wrong-sense lexeme می‌دید "you give (polite)" (in the reading it is "he would have seen"), the particle "if" (اگر vs اگه elsewhere in B1 = underdetermined translation) and untagged course-wide pools (in Endless they spanned all 382 B1 lexemes). (8) lesson05.match.002 now drills the wish/counterfactual verbs (lesson01-03); the رفته card's gloss still contains رفته بودم (backfill gloss, flagged). (9) lesson02.match.002 / lesson04.match.001 were fixed 6-member pools that always dealt the same six cards incl. the self-revealing خوشحال می‌شم. (10) order.003 "رضا کمی ناراحت بود" contradicted the reading (Nima is the one who is sad, حالا نیما ناراحته) -> نیما. (11) order.002 is a question: ending "." -> "؟", and restored "این آخر هفته" from the dialogue line. (12) fill.004 feedback said گذاشتن means "to make plans" (it is "they set"; قرار گذاشتن = make plans).
+    NATIVE FLAGS: backfill gloss می‌دید = "you give (polite)" is wrong for this unit (he/she would see); glosses with embedded Persian need a backfill clean-up; "I couldn't / wasn't able to" is shared by نتونستم and نمی‌تونستم in B1 (gloss should separate them); confirm "می‌خوام بپرسم می‌تونیم این آخر هفته همدیگه رو ببینیم؟" (course-scope pool member) reads naturally.
 
+    Five lessons with lexemes, 52 fa lexemes. Drills kaash + past copula wishes and agar + past-perfect counterfactuals.
 
-    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit''s
-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit's
     checkpoint: the unit had lexemes but no practice pack, so generate_checkpoint() returned
-
     checkpoint_unavailable. ZERO listen_select is authored - AZURE_SPEECH_KEY is unset, so
-
-    tts_actually_configured(''fa'') is false and _material() would delete those templates.
-
-    Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
-
-    calls _material() with only this unit''s lesson ids.
-
+    tts_actually_configured('fa') is false and _material() would delete those templates.
+    Every slot is satisfiable from THIS unit's own lexemes, because generate_checkpoint()
+    calls _material() with only this unit's lesson ids.
 
     The en-fa B1 lexeme classification carries almost no usable semantic tags (290 of 382 fa
-
     B1 lexemes are untagged), so the broad recognition / production / matching slots are
-
     constrained by language_code + part_of_speech only; the few semantic tags that do exist
-
     are used for the narrow, grammatically safe word_order / fill_in_blank / fixed-sentence
-
     slots. Every such tag was checked against the real backfill_lexemes.py data: each
-
     fill_in_blank anchor has exactly ONE distinct COURSE-WIDE candidate (AUTHORING_GUIDE #17
-
     hard-fail), and for every word_order frame each candidate in the whole B1 course pool is
-
     grammatical in that frame.
 
-
     proper_noun is deliberately excluded from multiple_choice and matching_pairs (the gloss is
-
     a transliteration, so those items are near-trivial) and is reachable only through a
-
     dedicated bare-word translation, which is a genuine script-production drill.
 
-
     Reviewer must double-check: (a) the Persian in every word_order / fill_in_blank frame reads
-
     as natural colloquial Iranian Persian and uses only vocabulary already taught in this course;
-
     (b) glosses that embed the Persian token in a parenthetical example (a backfill gloss-style
-
     artifact) partly give away the answer in multiple_choice - flagged, not fixable in a pack.
 
-
-    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order
-    x2 (13 total) anchored across the 5 lessons that introduce tokens.'
+    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order x2 (13 total) anchored across the 5 lessons that introduce tokens.
 tag_schema:
   part_of_speech:
   - symbol
@@ -80,6 +62,11 @@ tag_schema:
     - possession_verb
     - reviewed_phrase
     - routine_connector
+    - en_fa_b1_unit07_lesson01_words
+    - en_fa_b1_unit07_lesson02_words
+    - en_fa_b1_unit07_lesson03_words
+    - en_fa_b1_unit07_lesson04_words
+    - en_fa_b1_unit07_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit07.lesson01.choose.001
   lesson_content_key: fa.b1.unit07.lesson01.wish_present_1st2nd
@@ -91,19 +78,18 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - particle
-      - verb
-      - adverb
-      - noun
-      - pronoun
-      - adjective
-      - preposition
+      part_of_speech: verb
+      agreement_tags: &id001
+        semantic:
+        - en_fa_b1_unit07_lesson01_words
+        - en_fa_b1_unit07_lesson02_words
+        - en_fa_b1_unit07_lesson04_words
+        - past_verb_third_person
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a verb form from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson01.translate.002
@@ -118,14 +104,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - particle
-      - verb
-      - adverb
-      - noun
-      - pronoun
-      - adjective
-      - preposition
+      part_of_speech: verb
+      agreement_tags: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -143,13 +123,16 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: &id002
+      - adverb
+      - adjective
+      agreement_tags: &id003
+        semantic: en_fa_b1_unit07_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a verb form from this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson02.match.002
@@ -162,76 +145,28 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
     second:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
     third:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
     fourth:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
     fifth:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
     sixth:
       language_code: fa
-      part_of_speech:
-      - verb
-      - noun
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - ordering_register
-        - possession_verb
-        - past_verb_third_person
-        - reviewed_phrase
+      part_of_speech: verb
+      agreement_tags: *id001
   slot_relations:
   - kind: distinct
     slots:
@@ -251,7 +186,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian word or phrase from this unit with its English meaning.
+    text: Match each Persian verb form from this unit with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson02.translate.003
@@ -266,14 +201,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - particle
-      - verb
-      - adverb
-      - noun
-      - pronoun
-      - adjective
-      - preposition
+      part_of_speech: *id002
+      agreement_tags: *id003
   answer_derivation:
     kind: slot_text
     slot: item
@@ -293,8 +222,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: verb
+      agreement_tags: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -312,76 +241,28 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - number
-        - routine_connector
+      part_of_speech: *id002
+      agreement_tags: *id003
   slot_relations:
   - kind: distinct
     slots:
@@ -401,14 +282,14 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian word or phrase from this unit with its English meaning.
+    text: Match each Persian word from this unit with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson04.order.002
   lesson_content_key: fa.b1.unit07.lesson04.dialogue_missed_party
   type: word_order
   frame:
-    text: '{item} بپرسم می‌تونیم همدیگه رو ببینیم.'
+    text: '{item} بپرسم می‌تونیم این آخر هفته همدیگه رو ببینیم؟'
     language_code: fa
     direction: rtl
   slots:
@@ -421,7 +302,7 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{item} بپرسم می‌تونیم همدیگه رو ببینیم.'
+      text: '{item} بپرسم می‌تونیم این آخر هفته همدیگه رو ببینیم؟'
       language_code: fa
       direction: rtl
   feedback_frame:
@@ -438,10 +319,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - adverb
+      part_of_speech: *id002
+      agreement_tags: *id003
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -459,82 +338,32 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
+      part_of_speech: verb
+      agreement_tags: &id004
         semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+        - en_fa_b1_unit07_lesson01_words
+        - en_fa_b1_unit07_lesson02_words
+        - en_fa_b1_unit07_lesson03_words
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id004
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id004
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id004
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id004
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - verb
-      agreement_tags:
-        semantic:
-        - appointment_word
-        - basic_feeling_word
-        - reviewed_phrase
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id004
   slot_relations:
   - kind: distinct
     slots:
@@ -554,14 +383,14 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian content word with its English meaning.
+    text: Match each verb form (wishes and if-clauses) with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson05.order.003
   lesson_content_key: fa.b1.unit07.lesson05.reading_the_missed_party
   type: word_order
   frame:
-    text: رضا کمی {item} بود.
+    text: نیما کمی {item} بود.
     language_code: fa
     direction: rtl
   slots:
@@ -574,7 +403,7 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: رضا کمی {item} بود.
+      text: نیما کمی {item} بود.
       language_code: fa
       direction: rtl
   feedback_frame:
@@ -599,7 +428,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: The missing noun combines with gozashtan to mean 'to make plans'.
+    text: 'The missing noun goes with گذاشتن: قرار گذاشتن means ''to make plans'', here ''they made plans''.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit07.lesson05.translate.005
@@ -614,10 +443,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - adverb
+      part_of_speech: *id002
+      agreement_tags: *id003
   answer_derivation:
     kind: slot_text
     slot: item
