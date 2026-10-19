@@ -4,60 +4,42 @@ source_language: en
 target_language: fa
 unit_content_key: fa.b1.unit09.professional_meetings
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Five lessons with lexemes, 31 fa lexemes. Drills mishe age / emkaanesh hast / pishnahaad mikonam
-    professional requests.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 10 fixes).
+    (1-7) Answer leakage at B1: the broad untagged pools of all 4 MC and 4 translation templates held lexemes whose backfill gloss embeds the Persian token (موکول "in موکول کنیم", امکانش "in امکانش هست", بگیریم "in تصمیم بگیریم", جلسه‌ی "form of جلسه", مشکلی "in مشکلی نیست", برگزار, تشکر "in با تشکر", روزیه, گرفتیم, سوالی "form of سوال"), so the shown token gave away the MC answer and the translation prompt printed the answer. Untagged pools also spanned every B1 lexeme in Endless Practice. Pools rebuilt from tag unions that exclude every self-revealing gloss: verbs = lesson01/02/04 verbs + کرد + دارید; nouns = lesson03 nouns + شرکت/ممنون/سه‌شنبه/سلام; lesson04 translation = lesson04 adjectives+verbs. Prepositions تو/تا dropped from recognition/production. (8-10) The three matching_pairs used one fixed 6-member pool (always the same six cards in every exercise): now 3 nouns + 3 verbs (lesson03/04) and 6 of 7 nouns (lesson05).
+    NATIVE FLAGS: in this unit شرکت occurs only as "شرکت کردید" (took part) but its lexeme gloss is "company" (the order.002 frame "جلسه‌ی بعدی تو شرکت برگزار می‌شه" uses the company sense, taught in an earlier B1 unit); the self-revealing glosses above need a backfill clean-up; همچنین/لطفاً/آماده/بعدی coverage is limited because their lesson tags also carry leaky lexemes.
 
+    Five lessons with lexemes, 31 fa lexemes. Drills mishe age / emkaanesh hast / pishnahaad mikonam professional requests.
 
-    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit''s
-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit's
     checkpoint: the unit had lexemes but no practice pack, so generate_checkpoint() returned
-
     checkpoint_unavailable. ZERO listen_select is authored - AZURE_SPEECH_KEY is unset, so
-
-    tts_actually_configured(''fa'') is false and _material() would delete those templates.
-
-    Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
-
-    calls _material() with only this unit''s lesson ids.
-
+    tts_actually_configured('fa') is false and _material() would delete those templates.
+    Every slot is satisfiable from THIS unit's own lexemes, because generate_checkpoint()
+    calls _material() with only this unit's lesson ids.
 
     The en-fa B1 lexeme classification carries almost no usable semantic tags (290 of 382 fa
-
     B1 lexemes are untagged), so the broad recognition / production / matching slots are
-
     constrained by language_code + part_of_speech only; the few semantic tags that do exist
-
     are used for the narrow, grammatically safe word_order / fill_in_blank / fixed-sentence
-
     slots. Every such tag was checked against the real backfill_lexemes.py data: each
-
     fill_in_blank anchor has exactly ONE distinct COURSE-WIDE candidate (AUTHORING_GUIDE #17
-
     hard-fail), and for every word_order frame each candidate in the whole B1 course pool is
-
     grammatical in that frame.
 
-
     proper_noun is deliberately excluded from multiple_choice and matching_pairs (the gloss is
-
     a transliteration, so those items are near-trivial) and is reachable only through a
-
     dedicated bare-word translation, which is a genuine script-production drill.
 
-
     Reviewer must double-check: (a) the Persian in every word_order / fill_in_blank frame reads
-
     as natural colloquial Iranian Persian and uses only vocabulary already taught in this course;
-
     (b) glosses that embed the Persian token in a parenthetical example (a backfill gloss-style
-
     artifact) partly give away the answer in multiple_choice - flagged, not fixable in a pack.
 
-
-    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order
-    x2 (13 total) anchored across the 5 lessons that introduce tokens.'
+    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order x2 (13 total) anchored across the 5 lessons that introduce tokens.
 tag_schema:
   part_of_speech:
   - symbol
@@ -78,6 +60,10 @@ tag_schema:
     - possession_verb
     - weekday
     - workplace_word
+    - en_fa_b1_unit09_lesson01_words
+    - en_fa_b1_unit09_lesson02_words
+    - en_fa_b1_unit09_lesson03_words
+    - en_fa_b1_unit09_lesson04_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit09.lesson01.choose.001
   lesson_content_key: fa.b1.unit09.lesson01.mishe_age_request
@@ -89,18 +75,19 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
-      - adjective
-      - noun
-      - preposition
-      - particle
-      - adverb
+      part_of_speech: noun
+      agreement_tags: &id002
+        semantic:
+        - en_fa_b1_unit09_lesson03_words
+        - workplace_word
+        - politeness
+        - weekday
+        - greeting
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit09.lesson01.translate.002
@@ -115,13 +102,14 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
-      - adjective
-      - noun
-      - preposition
-      - particle
-      - adverb
+      part_of_speech: verb
+      agreement_tags: &id001
+        semantic:
+        - en_fa_b1_unit09_lesson01_words
+        - en_fa_b1_unit09_lesson02_words
+        - en_fa_b1_unit09_lesson04_words
+        - past_verb_third_person
+        - possession_verb
   answer_derivation:
     kind: slot_text
     slot: item
@@ -139,8 +127,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: verb
+      agreement_tags: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -160,8 +148,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: verb
+      agreement_tags: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -179,10 +167,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - adverb
+      part_of_speech: noun
+      agreement_tags: *id002
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -200,88 +186,36 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+  - kind: distinct
+    slots:
     - fourth
     - fifth
     - sixth
@@ -310,10 +244,8 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adjective
-      - adverb
+      part_of_speech: noun
+      agreement_tags: *id002
   answer_derivation:
     kind: slot_text
     slot: item
@@ -331,88 +263,36 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: verb
+      agreement_tags: *id001
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+  - kind: distinct
+    slots:
     - fourth
     - fifth
     - sixth
@@ -466,12 +346,10 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - verb
       - adjective
-      - noun
-      - preposition
-      - particle
-      - adverb
+      - verb
+      agreement_tags:
+        semantic: en_fa_b1_unit09_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -489,82 +367,28 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - verb
-      agreement_tags:
-        semantic:
-        - greeting
-        - weekday
-        - workplace_word
-        - politeness
-        - possession_verb
-        - past_verb_third_person
+      part_of_speech: noun
+      agreement_tags: *id002
   slot_relations:
   - kind: distinct
     slots:
