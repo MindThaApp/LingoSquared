@@ -4,10 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.b2.unit05.register
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: >-
-    Generated for the prs-en X->en direction (Dari L1, tested content is English). Follows the established prs-en Endless-Practice pattern (a1_unit45.yaml): bare-{item} frames with untagged slots (language_code: en + part_of_speech in [noun, verb, adjective, adverb, preposition, phrase], no semantic tag) so every slot draws on the WHOLE unit lexeme pool at both unit and course scope, which is safe per PRACTICE_PACK_RECIPE.md SS3.1(c) because none of these frames carry literal English content text besides the {item} placeholder (or plain separators/dashes for matching_pairs). 4 templates per lesson x 4 lessons = 16 templates: multiple_choice + listen_select (recognition), matching_pairs x6 (structured), translation bare-word (production). listen_select is safe here because target_language=en has TTS configured. Measured capacity: 43 unit lexemes, 37 after excluding proper_noun/pronoun/particle/symbol, 37 distinct glosses -- comfortably clears the >=12 floor in every tier and the >=3 MC / >=6 matching_pairs floors. Excluded proper_noun (self-gloss risk, SS6.1), pronoun/particle (function words with no standalone meaning) from all slots. No word_order/fill_in_blank authored: no unit lexeme carries a semantic tag narrow enough to safely anchor a literal-text frame at COURSE scope (SS1.1), and matching_pairs alone clears the structured-tier floor. Feedback strings reused verbatim from the Dari-register exemplar a1_unit45.yaml. Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_b2_unit05_words (unit-wide tag for all 4 lessons); declared the tag in tag_schema.agreement_tags.semantic. pool_check.py confirms 35 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction); manual gloss scan found no exact-duplicate or interchangeable-paraphrase glosses. Slot counts unchanged (all were already 6).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- tagged 12 item slots to the unit tag; translation limited to nouns+adjectives (removes verb writes leak and verb-gloss ambiguity); matching limited to lessons 2-4 (removes register/formal/formality overlap). NATIVE FLAGS: none beyond gloss flags. BACKFILL GLOSS FLAGS: writes gloss contains English; same=همرنگ wrong nuance; scheduling=وقت‌بندی (adj); formal/formality/stiff overlapping glosses; register/institution definition-style glosses. Prior note: Generated for the prs-en X->en direction (Dari L1, tested content is English). Follows the established prs-en Endless-Practice pattern (a1_unit45.yaml): bare-{item} frames with untagged slots (language_code: en + part_of_speech in [noun, verb, adjective, adverb, preposition, phrase], no semantic tag) so every slot draws on the WHOLE unit lexeme pool at both unit and course scope, which is safe per PRACTICE_PACK_RECIPE.md SS3.1(c) because none of these frames carry literal English content text besides the {item} placeholder (or plain separators/dashes for matching_pairs). 4 templates per lesson x 4 lessons = 16 templates: multiple_choice + listen_select (recognition), matching_pairs x6 (structured), translation bare-word (production). listen_select is safe here because target_language=en has TTS configured. Measured capacity: 43 unit lexemes, 37 after excluding proper_noun/pronoun/particle/symbol, 37 distinct glosses -- comfortably clears the >=12 floor in every tier and the >=3 MC / >=6 matching_pairs floors. Excluded proper_noun (self-gloss risk, SS6.1), pronoun/particle (function words with no standalone meaning) from all slots. No word_order/fill_in_blank authored: no unit lexeme carries a semantic tag narrow enough to safely anchor a literal-text frame at COURSE scope (SS1.1), and matching_pairs alone clears the structured-tier floor. Feedback strings reused verbatim from the Dari-register exemplar a1_unit45.yaml. Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_b2_unit05_words (unit-wide tag for all 4 lessons); declared the tag in tag_schema.agreement_tags.semantic. pool_check.py confirms 35 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction); manual gloss scan found no exact-duplicate or interchangeable-paraphrase glosses. Slot counts unchanged (all were already 6).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -23,6 +23,9 @@ tag_schema:
   agreement_tags:
     semantic:
     - prs_en_b2_unit05_words
+    - prs_en_b2_unit05_lesson02_words
+    - prs_en_b2_unit05_lesson03_words
+    - prs_en_b2_unit05_lesson04_words
 templates:
 - content_key: practice.prs-en.en.b2.unit05.lesson01.choose.001
   lesson_content_key: en.b2.unit05.lesson01.audience_and_formality
@@ -41,6 +44,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -65,6 +70,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -90,7 +97,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     second:
       language_code: en
       part_of_speech:
@@ -99,7 +109,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     third:
       language_code: en
       part_of_speech:
@@ -108,7 +121,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
@@ -117,7 +133,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
@@ -126,7 +145,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
@@ -135,7 +157,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -172,11 +197,9 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
         - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -201,6 +224,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -225,6 +250,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -250,7 +277,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     second:
       language_code: en
       part_of_speech:
@@ -259,7 +289,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     third:
       language_code: en
       part_of_speech:
@@ -268,7 +301,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
@@ -277,7 +313,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
@@ -286,7 +325,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
@@ -295,7 +337,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -332,11 +377,9 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
         - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -361,6 +404,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -385,6 +430,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -410,7 +457,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     second:
       language_code: en
       part_of_speech:
@@ -419,7 +469,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     third:
       language_code: en
       part_of_speech:
@@ -428,7 +481,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
@@ -437,7 +493,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
@@ -446,7 +505,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
@@ -455,7 +517,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -492,11 +557,9 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
         - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -521,6 +584,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -545,6 +610,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -570,7 +637,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     second:
       language_code: en
       part_of_speech:
@@ -579,7 +649,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     third:
       language_code: en
       part_of_speech:
@@ -588,7 +661,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
@@ -597,7 +673,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
@@ -606,7 +685,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
@@ -615,7 +697,10 @@ templates:
         - adjective
         - adverb
       agreement_tags:
-        semantic: prs_en_b2_unit05_words
+        semantic:
+          - prs_en_b2_unit05_lesson02_words
+          - prs_en_b2_unit05_lesson03_words
+          - prs_en_b2_unit05_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -652,11 +737,9 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
         - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic: prs_en_b2_unit05_words
   answer_derivation:
     kind: slot_text
     slot: item
