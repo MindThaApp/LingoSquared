@@ -45,6 +45,11 @@ tags added below therefore tag each unit's OWN new tokens; additively
 tagging a reused earlier-unit token would do nothing for that unit's
 checkpoint.
 
+Extended 2026-10-19 to cover the "Dari B2" course (units 01-08,
+UNIT_FILES_B2): 332 new glosses, per-B2 sense overrides
+(PRS_B2_GLOSS_OVERRIDES / PRS_B2_POS_OVERRIDES) and B2 practice tags
+(PRS_B2_EXTRA_TAGS), all gated on level == "b2" so A1-B1 are unchanged.
+
 Run via docker compose from backend/, mounting the full repo:
     cd backend
     docker compose run --rm \
@@ -496,6 +501,48 @@ UNIT_FILES_B1 = (
     (
         REPO_ROOT / "docs/content/realizations/prs/b1_unit11_communication.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/b1_unit11.yaml",
+    ),
+)
+
+# B2 units 01-08 (argumentation, speculation, nuance, narrative, register,
+# abstraction, negotiation, synthesis), added 2026-10-19 for the B2
+# unit-checkpoint gap. B2 is its own FOURTH course row ("Dari B2", every
+# b2_unitNN.yaml overlay's `course.title`), looked up separately in main()
+# and never mixed with the A1/A2/B1 tuples' local unit indices -- same
+# defensive pattern as UNIT_FILES_A2/UNIT_FILES_B1. Listed explicitly (not a
+# glob) like B1, so local positions 1-8 equal the real unit.order.
+UNIT_FILES_B2 = (
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit01_argumentation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit01.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit02_speculation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit02.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit03_nuance.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit03.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit04_narrative.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit04.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit05_register.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit05.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit06_abstraction.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit06.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit07_negotiation.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit07.yaml",
+    ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/b2_unit08_synthesis.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/b2_unit08.yaml",
     ),
 )
 
@@ -1848,6 +1895,471 @@ PRS_POS: dict[str, str] = {
     # B1 unit 11 (reported communication), added 2026-07-22.
     "پرسیدین": "verb",
 }
+
+
+# --- 2026-10-19: Dari B2 tier (units 01-08) ----------------------------------
+# B2 is a FOURTH separate course row ("Dari B2", confirmed via every
+# overlays/en-prs/b2_unitNN.yaml `course.title`). Every token any B2 card
+# introduces must carry an explicit gloss; the 332 below were absent from
+# PRS_GLOSSES. Each gloss is the atomic English meaning of the sense the B2
+# card teaches (read against the card, its example sentence and the en-prs
+# overlay's teaching gloss), with an ENGLISH-only cue in parentheses where the
+# token only occurs inside a light-verb or fixed phrase ("unseen (with 'to
+# take': to ignore)"). No B2 gloss contains Dari script: a gloss that quotes
+# its own token answers itself in a bare-word translation or MC prompt.
+# 2pl -ید forms (بگویید/بدهید/بیندازید/بنویسید/بیایید) are the realization's
+# formal written forms; they are glossed honestly and flagged
+# "formal written form" so practice packs keep them out of their pools (the
+# course pins Afghan -ین for 2pl). DRAFT pending native-Dari review.
+# Purely additive: these keys did not exist, so no A1-B1 lexeme changes.
+PRS_B2_NEW: dict[str, tuple[str, str]] = {
+    # B2 unit01 argumentation
+    "جوانان": ("young people; youth", "noun"),
+    "ادامه": ("continuation", "noun"),
+    "قابل": ("worthy of; -able (as in 'defensible')", "adjective"),
+    "دفاع": ("defence", "noun"),
+    "شنونده‌ها": ("listeners", "noun"),
+    "باور": ("belief", "noun"),
+    "تصمیم": ("decision", "noun"),
+    "دیدگاه": ("viewpoint", "noun"),
+    "محترمانه": ("respectful", "adjective"),
+    "ادعا": ("claim", "noun"),
+    "شواهد": ("evidence", "noun"),
+    "رادیویی": ("radio (as an adjective)", "adjective"),
+    "پخش": ("broadcast; airing", "noun"),
+    "سوال‌های": ("questions (of)", "noun"),
+    "دارند": ("they have", "verb"),
+    "نیاز": ("need", "noun"),
+    "صدای": ("voice (of); sound (of)", "noun"),
+    "آرام": ("calm; quiet", "adjective"),
+    "نمونه": ("example; sample", "noun"),
+    "تماس‌های": ("calls (of)", "noun"),
+    "بر": ("on; upon (in 'according to')", "preposition"),
+    "اساس": ("basis (in 'according to')", "noun"),
+    "آمار": ("statistics", "noun"),
+    "قوی‌تر": ("stronger", "adjective"),
+    "می‌سازد": ("makes; builds (he/she/it)", "verb"),
+    "شاگردان": ("students; pupils", "noun"),
+    "می‌دهند": ("they give (with 'ear': they listen)", "verb"),
+    "دقیق‌تر": ("more accurate; more accurately", "adjective"),
+    "رد": ("rejection", "noun"),
+    "نشان": ("sign; mark (with 'to give': to show)", "noun"),
+    "گزارش": ("report", "noun"),
+    "شنونده": ("listener", "noun"),
+    "تماس": ("call; contact", "noun"),
+    "پرسش": ("question", "noun"),
+    "ولایت": ("province", "noun"),
+    "بامیان": ("Bamiyan", "proper_noun"),
+    "فرستاد": ("he/she sent", "verb"),
+    "رادیو": ("radio", "noun"),
+    "کم": ("little; short; low (in amount)", "adjective"),
+    "ارزش": ("value; worth", "noun"),
+    "نادیده": ("unseen (with 'to take': to ignore)", "adjective"),
+    "نتیجه": ("result; conclusion", "noun"),
+    "نشر": ("broadcasting; publication", "noun"),
+    "اعتراض": ("objection", "noun"),
+    "درباره": ("about; concerning", "preposition"),
+    "جدی": ("serious", "adjective"),
+    "رفته": ("gone (past participle)", "verb"),
+    "آموزش": ("education; teaching", "noun"),
+    "تنها": ("only; alone", "adverb"),
+    "سنجیده": ("measured; weighed (past participle)", "verb"),
+    "پاسخگو": ("accountable; responsive", "adjective"),
+    "نقطه": ("point", "noun"),
+    "منصفانه": ("fair; fairly", "adjective"),
+    "بگویید": ("say (polite/plural; formal written form)", "verb"),
+    # B2 unit02 speculation
+    "شام": ("evening; dinner", "noun"),
+    "احتمال": ("likelihood; probability", "noun"),
+    "بند": ("blocked; stuck", "adjective"),
+    "مانده": ("remained; stayed (past participle)", "verb"),
+    "راننده": ("driver", "noun"),
+    "برسد": ("(that) he/she/it arrives", "verb"),
+    "گمانم": ("my guess (in 'I suppose')", "noun"),
+    "چاشت": ("midday; lunchtime", "noun"),
+    "حتما": ("surely; definitely", "adverb"),
+    "آمده": ("come (past participle)", "verb"),
+    "کوهستان": ("mountain area", "noun"),
+    "عجیب": ("strange; surprising", "adjective"),
+    "ولسوالی": ("district", "noun"),
+    "باریک": ("narrow", "adjective"),
+    "گرفته": ("taken (past participle)", "verb"),
+    "امن‌تر": ("safer", "adjective"),
+    "طولانی‌تر": ("longer", "adjective"),
+    "دروازه": ("door; gate", "noun"),
+    "قفل": ("lock; locked", "noun"),
+    "دکان": ("shop", "noun"),
+    "نماز": ("prayer", "noun"),
+    "نشانه‌ها": ("signs", "noun"),
+    "معلوم": ("clear; evident; known", "adjective"),
+    "سنگین": ("heavy", "adjective"),
+    "بوده": ("been (past participle of 'to be')", "verb"),
+    "خطرناک": ("dangerous", "adjective"),
+    "نمی‌تواند": ("he/she/it cannot", "verb"),
+    "تصادفی": ("accidental; by chance", "adjective"),
+    "ممکن": ("possible", "adjective"),
+    "دیرتر": ("later (than expected)", "adverb"),
+    "نشود": ("(that/if) it does not get; (that) it is not", "verb"),
+    "بمانند": ("(that) they stay", "verb"),
+    "پیامد": ("consequence", "noun"),
+    "شدن": ("becoming; getting (verbal noun)", "verb"),
+    "منتظرند": ("they are waiting", "verb"),
+    "بگیر": ("take; get (imperative, informal)", "verb"),
+    "جای": ("place (of)", "noun"),
+    "طولانی": ("long", "adjective"),
+    # B2 unit03 nuance
+    "مشوره": ("consultation; advice", "noun"),
+    "کلینیک": ("clinic", "noun"),
+    "محتاطانه‌تر": ("more cautiously", "adverb"),
+    "بنویسیم": ("(that) we write", "verb"),
+    "روی": ("on (top of)", "preposition"),
+    "نصب": ("posting; putting up", "noun"),
+    "جواب": ("answer", "noun"),
+    "سوءتفاهم": ("misunderstanding", "noun"),
+    "متن": ("text", "noun"),
+    "تند": ("harsh; sharp", "adjective"),
+    "لحن": ("tone", "noun"),
+    "اعتماد": ("trust", "noun"),
+    "جمله": ("sentence", "noun"),
+    "دقت": ("care; attention to detail", "noun"),
+    "شرطی": ("condition (in 'provided that')", "noun"),
+    "می‌دهیم": ("we give", "verb"),
+    "معلومات": ("information", "noun"),
+    "دقیق": ("accurate; exact", "adjective"),
+    "اعلان": ("notice; announcement", "noun"),
+    "عدد": ("number", "noun"),
+    "دیوار": ("wall", "noun"),
+    "بدون": ("without", "preposition"),
+    "منبع": ("source", "noun"),
+    "البته": ("of course", "adverb"),
+    "موارد": ("cases", "noun"),
+    "توصیه": ("recommendation", "noun"),
+    "نشانه": ("sign; symptom", "noun"),
+    "بیماری": ("illness; disease", "noun"),
+    "دقیقا": ("exactly", "adverb"),
+    "واژه": ("word", "noun"),
+    "بدهید": ("give (polite/plural; formal written form)", "verb"),
+    "نکته": ("point; detail", "noun"),
+    "باعث": ("cause (in 'to cause')", "noun"),
+    "نگرانی": ("worry; concern", "noun"),
+    "داکتران": ("doctors", "noun"),
+    "تکرار": ("repetition", "noun"),
+    "ابهام": ("vagueness; ambiguity", "noun"),
+    "خانواده‌ها": ("families", "noun"),
+    "تاکید": ("emphasis", "noun"),
+    "چیز": ("thing", "noun"),
+    "زمان": ("time; timing", "noun"),
+    "مشخص": ("clear; specific", "adjective"),
+    "بگوییم": ("(that) we say", "verb"),
+    "کسی": ("someone; a person", "pronoun"),
+    "واقع": ("reality (in 'in fact')", "noun"),
+    "قبلی": ("previous", "adjective"),
+    "مبهم": ("vague", "adjective"),
+    # B2 unit04 narrative
+    "می‌بارید": ("was falling (of rain or snow)", "verb"),
+    "حویلی": ("courtyard", "noun"),
+    "خالی": ("empty", "adjective"),
+    "آغاز": ("beginning; start", "noun"),
+    "پر": ("full", "adjective"),
+    "زمینه": ("background; setting", "noun"),
+    "قصه": ("story", "noun"),
+    "توضیح": ("explanation", "noun"),
+    "داد": ("he/she gave", "verb"),
+    "گل‌کاری": ("flower planting", "noun"),
+    "خاک": ("dust; soil", "noun"),
+    "نرم": ("soft", "adjective"),
+    "وارد": ("entering", "adjective"),
+    "صنف": ("class; classroom", "noun"),
+    "کاردستی‌های": ("handicrafts (of)", "noun"),
+    "آوردند": ("they brought", "verb"),
+    "رسیدن": ("arrival; arriving", "noun"),
+    "مهمانان": ("guests", "noun"),
+    "میزها": ("tables", "noun"),
+    "کرده": ("done (past participle)", "verb"),
+    "بودند": ("they were; they had (past perfect helper)", "verb"),
+    "بلخ": ("Balkh", "proper_noun"),
+    "گذاشته": ("put; placed (past participle)", "verb"),
+    "پنجم": ("fifth", "adjective"),
+    "نقاشی": ("painting; drawing", "noun"),
+    "کشیده": ("drawn (past participle)", "verb"),
+    "نقشه": ("map", "noun"),
+    "نرسیده": ("not arrived (past participle)", "verb"),
+    "معلمان": ("teachers", "noun"),
+    "عکس‌ها": ("photos; pictures", "noun"),
+    "می‌زدیم": ("we were putting up (lit. hitting)", "verb"),
+    "صدا": ("sound; voice", "noun"),
+    "ناگهان": ("suddenly", "adverb"),
+    "می‌زدند": ("they were putting up (lit. hitting)", "verb"),
+    "فهمیدیم": ("we realized; we understood", "verb"),
+    "جنراتور": ("generator", "noun"),
+    "نداشت": ("he/she/it did not have", "verb"),
+    "قریه": ("village", "noun"),
+    "تاریک": ("dark", "adjective"),
+    "قطع": ("cut; interruption", "noun"),
+    "ساخت": ("made (he/she/it, past)", "verb"),
+    "ترتیب": ("order; sequence", "noun"),
+    "رویدادها": ("events", "noun"),
+    "بگو": ("say; tell (imperative, informal)", "verb"),
+    "کهنه": ("old; worn (of things)", "adjective"),
+    # B2 unit05 register
+    "فرهاد": ("Farhad", "proper_noun"),
+    "عقب": ("back; behind", "adverb"),
+    "بیندازی": ("(that) you put back; you postpone (informal you)", "verb"),
+    "بیاوری": ("(that) you bring (informal)", "verb"),
+    "دوستانه": ("friendly", "adjective"),
+    "برایت": ("for you (informal)", "pronoun"),
+    "بده": ("give (imperative, informal)", "verb"),
+    "می‌رسم": ("I arrive; I will arrive", "verb"),
+    "لطفا": ("please", "adverb"),
+    "مناسب": ("suitable; convenient", "adjective"),
+    "بیندازیم": ("(that) we put back; let us postpone", "verb"),
+    "همکارانه": ("collegial; cooperative", "adjective"),
+    "فشار": ("pressure", "noun"),
+    "امکان": ("possibility", "noun"),
+    "پس‌تر": ("later (informal, of a meeting time)", "adverb"),
+    "سپاسگزار": ("grateful", "adjective"),
+    "خواهشمندم": ("I respectfully request", "verb"),
+    "پاسخ": ("response; reply", "noun"),
+    "رسمی": ("official; formal", "adjective"),
+    "صورت": ("case (in 'if possible')", "noun"),
+    "تعویق": ("postponement", "noun"),
+    "بیندازید": ("put off (polite/plural; formal written form)", "verb"),
+    "نوشته": ("written (past participle)", "verb"),
+    "لطف": ("kindness (in 'kindly')", "noun"),
+    "نموده": ("having done (formal participle)", "verb"),
+    "درخواست": ("request; application", "noun"),
+    "بنویسید": ("write (polite/plural; formal written form)", "verb"),
+    "فورم": ("form (document)", "noun"),
+    "اداره": ("office; administration", "noun"),
+    # B2 unit06 abstraction
+    "آزادی": ("freedom", "noun"),
+    "قانون": ("law", "noun"),
+    "آسیب": ("harm; damage", "noun"),
+    "مسئولیت": ("responsibility", "noun"),
+    "پایدار": ("stable; lasting", "adjective"),
+    "نمی‌ماند": ("does not remain", "verb"),
+    "صداقت": ("honesty", "noun"),
+    "جامعه": ("society", "noun"),
+    "مشترک": ("shared; common", "adjective"),
+    "عمل": ("action; deeds", "noun"),
+    "ساخته": ("built; made (past participle)", "verb"),
+    "گفت‌وگو": ("dialogue; conversation", "noun"),
+    "سو": ("side; direction", "noun"),
+    "سوی": ("side (of)", "noun"),
+    "نظم": ("order; discipline", "noun"),
+    "ضعیف": ("weak", "adjective"),
+    "حرف": ("point; what someone says", "noun"),
+    "دیگری": ("another; a different (one)", "adjective"),
+    "مسئله": ("issue; matter", "noun"),
+    "حریم": ("protected space (in 'privacy')", "noun"),
+    "خصوصی": ("private", "adjective"),
+    "ساده": ("simple; lightly", "adjective"),
+    "دست": ("hand", "noun"),
+    "نمی‌آید": ("does not come", "verb"),
+    "شخصی": ("personal", "adjective"),
+    "بخش": ("part; section", "noun"),
+    "موافقم": ("I agree", "verb"),
+    "اطلاعات": ("data; personal information", "noun"),
+    "محفوظ": ("protected; safe", "adjective"),
+    "بماند": ("(that) it remains", "verb"),
+    "بگذریم": ("(that) we pass over", "verb"),
+    "سکوت": ("silence", "noun"),
+    "احترام": ("respect", "noun"),
+    "مهم‌تر": ("more important", "adjective"),
+    "سرعت": ("speed", "noun"),
+    "معنی": ("meaning", "noun"),
+    "دشمنی": ("enmity; hostility", "noun"),
+    "فرهنگی": ("cultural", "adjective"),
+    "رفتار": ("behaviour", "noun"),
+    "تعمیم": ("generalization", "noun"),
+    "بدهیم": ("(that) we give", "verb"),
+    "رسم": ("custom; tradition", "noun"),
+    "جداگانه": ("separate", "adjective"),
+    "همزمان": ("at the same time", "adverb"),
+    "برداشت": ("interpretation; reading", "noun"),
+    # B2 unit07 negotiation
+    "مرحله‌وار": ("in stages; step by step", "adverb"),
+    "دهیم": ("(that) we do; (that) we give", "verb"),
+    "گدام": ("storeroom; warehouse", "noun"),
+    "برابر": ("equal; equally", "adjective"),
+    "تقسیم": ("division; splitting", "noun"),
+    "پرداخت": ("payment", "noun"),
+    "مصرف": ("consumption; usage", "noun"),
+    "کارهای": ("tasks (of)", "noun"),
+    "پاک‌کاری": ("cleaning", "noun"),
+    "معامله": ("deal; transaction", "noun"),
+    "سهم": ("share; portion", "noun"),
+    "جدا": ("separately", "adverb"),
+    "طرف": ("side; party", "noun"),
+    "مبلغ": ("amount (of money)", "noun"),
+    "پیش‌پرداخت": ("deposit; advance payment", "noun"),
+    "مواد": ("materials", "noun"),
+    "شرط": ("condition", "noun"),
+    "دوم": ("second", "adjective"),
+    "اختلاف": ("disagreement", "noun"),
+    'بیایید': ("come; let's (polite/plural; formal written form)", 'verb'),
+    "رابطه": ("relationship", "noun"),
+    "نسازیم": ("(let us) not make", "verb"),
+    "قرارداد": ("contract", "noun"),
+    "خطر": ("risk; danger", "noun"),
+    "بالاتر": ("higher", "adjective"),
+    "پایان": ("end", "noun"),
+    "مالک": ("owner; landlord", "noun"),
+    "امتیاز": ("concession", "noun"),
+    "ضمانت": ("guarantee", "noun"),
+    "ساعت‌ها": ("hours", "noun"),
+    "توافق": ("agreement; accord", "noun"),
+    "فعلا": ("for now", "adverb"),
+    "بررسی": ("review; examination", "noun"),
+    "کلان": ("major; big", "adjective"),
+    "دهد": ("(that) he/she does; (that) he/she gives", "verb"),
+    # B2 unit08 synthesis
+    "کانال": ("canal", "noun"),
+    "اشاره": ("reference; pointing", "noun"),
+    "محلی": ("local", "adjective"),
+    "ترمیم": ("restoration; repair (of works)", "noun"),
+    "قطعی": ("final; definite", "adjective"),
+    "منابع": ("sources", "noun"),
+    "اجرا": ("implementation", "noun"),
+    "خشک": ("dry", "adjective"),
+    "حالی": ("state (in 'while')", "noun"),
+    "خوش‌بین": ("optimistic", "adjective"),
+    "دومی": ("the second one", "noun"),
+    "محتاط": ("cautious", "adjective"),
+    "بزرگان": ("elders", "noun"),
+    "می‌گویند": ("they say", "verb"),
+    "سخن": ("words; statement", "noun"),
+    "دهقانان": ("farmers", "noun"),
+    "جمع‌بندی": ("synthesis; summing up", "noun"),
+    "قانع‌کننده‌تر": ("more convincing", "adjective"),
+    "نقل": ("quotation; quoting", "noun"),
+    "مثال": ("example (illustration)", "noun"),
+    "نویسنده": ("writer; author", "noun"),
+    "داوری": ("judgement", "noun"),
+    "پشتیبانی": ("support", "noun"),
+    "ادعای": ("claim (of)", "noun"),
+    "کمبود": ("shortage", "noun"),
+    "خلاصه": ("summary; in short", "noun"),
+    "اینکه": ("that (the fact that)", "particle"),
+    "بخشی": ("a part", "noun"),
+    "واقعیت": ("reality; truth", "noun"),
+    "ضروری": ("essential; necessary", "adjective"),
+    "می‌دانند": ("they know; they consider", "verb"),
+    "بی‌طرف": ("impartial; neutral", "adjective"),
+    "تضاد": ("conflict; contradiction", "noun"),
+    "زمان‌بندی": ("scheduling; timetable", "noun"),
+    "مفیدند": ("they are useful", "verb"),
+    "بیاید": ("(that) it comes", "verb"),
+    "کامل": ("complete", "adjective"),
+    "تصویر": ("picture; image", "noun"),
+    "کامل‌تری": ("a fuller; a more complete", "adjective"),
+}
+PRS_GLOSSES.update({token: gloss for token, (gloss, _pos) in PRS_B2_NEW.items()})
+PRS_POS.update({token: pos for token, (_gloss, pos) in PRS_B2_NEW.items()})
+
+# B2 per-course sense overrides: tokens an earlier level already glossed in a
+# sense the B2 card does NOT teach. B2 is its own course, so these apply only
+# to the "Dari B2" lexeme row (see _classify) and leave A1-B1 untouched.
+PRS_B2_GLOSS_OVERRIDES: dict[str, str] = {
+    # global 'schedule; program'; B2 cards: radio/youth program
+    'برنامه': 'program (broadcast or organized)',
+    # global 'turned on; lit'; B2 card03/u03 card07: 'clear'
+    'روشن': 'clear',
+    # global A2 polite-request idiom; B2: پخش می‌شود 'is broadcast', ضعیف می‌شود 'becomes weak'
+    'می‌شود': 'becomes; gets (also forms the passive)',
+    # global 'fresh'; B2: سوال‌های تازه 'new questions', تازه آغاز شده بود 'had just begun'
+    'تازه': 'new; fresh; just (recently)',
+    # global 'appointment / time'; B2: وقت برنامه / وقت دیدار = time
+    'وقت': 'time',
+    # global 'listening'; B2 only in گوش دادن
+    'گوش': "ear (in 'to listen')",
+    # global 'registration'; B2: آمار ... ثبت شده است 'were recorded'
+    'ثبت': 'recording; registration',
+    # global cue 'درس می‌دهد'; B2: نشان می‌دهد / مثال می‌دهد
+    'می‌دهد': 'he/she/it gives',
+    # global 'original'; B2 cards: دلیل اصلی 'main reason', سرک اصلی 'main road'
+    'اصلی': 'main; original',
+    # global adverb 'up; upstairs'; B2: هزینه بالا است 'the cost is high'
+    'بالا': 'high; up',
+    # global 'at (preposition)'; B2 mostly 'in' (در نتیجه, در راه, در واقع)
+    'در': 'in; at',
+    # global 'does not become'; B2: سنجیده نمی‌شود 'is not measured'
+    'نمی‌شود': 'is not; does not become (also the negative passive)',
+    # global cue 'مخالف استم'; B2: نقطه مخالف 'opposing point'
+    'مخالف': 'opposing; opposed',
+    # global A1 counter word; B2: تا شام 'by evening'
+    'تا': 'until; by (a time)',
+    # global 'notice (خبر کنین)'; B2: خبر تازه 'new information/news'
+    'خبر': 'news; word',
+    # global noun 'job vacancy'; B2: برف راه را بست 'snow closed the road'
+    'بست': 'closed; blocked (he/she/it, past)',
+    # global '(if) we have' is wrong; باشیم = '(that) we be'
+    'باشیم': '(that) we be',
+    # global 'sad'; B2: مردم را ناراحت می‌کند 'upsets people'
+    'ناراحت': 'upset',
+    # global noun 'receipt'; B2: معلومات ... رسید 'arrived'
+    'رسید': 'arrived (he/she/it)',
+    # global numeral 'nine'; B2: نه همیشه 'not always', نه چیز دیگر
+    'نه': 'not; no',
+    # global 'call; ring'; B2: زنگ خورد 'the bell rang'
+    'زنگ': 'bell',
+    # global 'ate'; B2: زنگ خورد 'the bell rang'
+    'خورد': 'rang (of a bell); ate',
+    # global B1 irrealis 'we had'; B2: داشتیم ... می‌زدیم progressive
+    'داشتیم': 'we were (in the middle of; past progressive helper)',
+    # global B1 'a colleague (that...)'; B2: از همکاری شما سپاسگزار 'your cooperation'
+    'همکاری': 'cooperation; help',
+    # global 'sees'; B2 only in آسیب می‌بیند 'is harmed'
+    'می‌بیند': 'sees; suffers (harm)',
+    # global 'how many'; B2: چند ارزش مشترک 'several shared values'
+    'چند': 'several; a few',
+    # global 'account'; B2: برابر حساب کنیم 'calculate equally'
+    'حساب': 'calculation; account',
+    # global 'requirements'; B2: شرایط معامله 'the deal terms'
+    'شرایط': 'terms; conditions',
+    # global B1 'a job (that...)'; B2: رابطه کاری 'working relationship'
+    'کاری': 'working; work-related',
+    # global 'broken'; B2: رابطه کاری را خراب نسازیم 'let us not damage'
+    'خراب': 'damaged; ruined',
+    # global 'wants'; B2: هر امتیاز شرط مشخص می‌خواهد 'needs'
+    'می‌خواهد': 'needs; wants (he/she/it)',
+    # global 'singer'; B2: عدد دقیق به خواننده کمک می‌کند 'the reader'
+    'خواننده': 'reader',
+    # global 'manager'; B2 also uses it for a school principal (unit04)
+    'مدیر': 'manager; principal (of a school)',
+    # global 'departure; movement'; B2: بس ... حرکت کرد 'the bus set off'
+    'حرکت': 'departure; setting off',
+    # global 'did / worked'; B2: خسته کرد, کم کرد, حرکت کرد
+    'کرد': 'did; made (he/she, past)',
+    # global 'meeting' collides with u03 جلسه; B2 u05 teaches وقت دیدار
+    'دیدار': 'appointment; visit',
+    # earlier gloss quotes Dari script (self-answering in a translation/MC prompt)
+    'پیدا': "found (part of 'to find')",
+    # earlier gloss quotes Dari script (self-answering in a translation/MC prompt)
+    'روان': 'sent; dispatched',
+    # earlier gloss quotes Dari script (self-answering in a translation/MC prompt)
+    'موافقت': 'agreement; consent',
+    # earlier gloss quotes Dari script (self-answering in a translation/MC prompt)
+    'موافق': 'in agreement; agreeing',
+    # earlier gloss quotes استم; B2 u05 uses it in the formal سپاسگزار هستم
+    'هستم': 'I am (formal)',
+}
+PRS_B2_POS_OVERRIDES: dict[str, str] = {
+    'بالا': 'adjective',
+    'تا': 'preposition',
+    'بست': 'verb',
+    'رسید': 'verb',
+    'نه': 'particle',
+    'چند': 'adjective',
+    'کاری': 'adjective',
+}
+
+# Extra B2-only semantic tags, keyed by token: single-member anchors
+# (`b2uNN_<name>_single`) for word_order / fill_in_blank / fixed-sentence
+# frames, and curated per-unit content pools (`b2uNN_core`, `b2uNN_vert`) for
+# multiple_choice / matching_pairs / typed translation. Applied only to a
+# token's B2 lexeme (see _classify).
+PRS_B2_EXTRA_TAGS: dict[str, list[str]] = {}
 
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
@@ -3567,6 +4079,18 @@ def _classify(files, level, specs, derive_phrases=False):
                             "would it be possible...? (polite request, "
                             "می‌شود که + subjunctive)"
                         )
+                    # B2 course only (2026-10-19): sense overrides for
+                    # tokens an earlier level glossed in a different sense,
+                    # plus the B2 practice tags (anchors / curated pools).
+                    # Gated on level so no A1-B1 lexeme can change.
+                    if level == "b2":
+                        english_gloss = PRS_B2_GLOSS_OVERRIDES.get(token, english_gloss)
+                        part_of_speech = PRS_B2_POS_OVERRIDES.get(token, part_of_speech)
+                        if token in PRS_B2_EXTRA_TAGS:
+                            semantic = tags.setdefault("semantic", [])
+                            semantic.extend(
+                                t for t in PRS_B2_EXTRA_TAGS[token] if t not in semantic
+                            )
                     existing = specs.get(key)
                     if existing is None:
                         # ONLY on first introduction -- see
@@ -3677,6 +4201,10 @@ def iter_specs():
     # like A1) is a closer match to A1's own convention, which also never
     # uses derive_phrases.
     _classify(UNIT_FILES_B1, "b1", specs)
+    # B2, like B1, without derive_phrases: its cards' introduced_tokens span
+    # whole example sentences and grammar-note paragraphs, so a derived
+    # "phrase" lexeme would be keyed on an explanatory sentence.
+    _classify(UNIT_FILES_B2, "b2", specs)
     yield from specs.values()
 
 
@@ -3688,7 +4216,14 @@ def main() -> int:
     args = parser.parse_args()
     specs = list(iter_specs())
     if args.dry_run:
-        print(f"Lexeme backfill dry run: {len(specs)} prs.")
+        counts = {
+            level: sum(spec["level"] == level for spec in specs)
+            for level in ("a1", "a2", "b1", "b2")
+        }
+        print(
+            f"Lexeme backfill dry run: {len(specs)} prs ({counts['a1']} a1, "
+            f"{counts['a2']} a2, {counts['b1']} b1, {counts['b2']} b2)."
+        )
         return 0
 
     from sqlalchemy import select
@@ -3698,7 +4233,7 @@ def main() -> int:
 
     with SessionLocal() as db:
         courses_by_level = {}
-        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2"), ("b1", "Dari B1")):
+        for level, title in (("a1", "Dari A1"), ("a2", "Dari A2"), ("b1", "Dari B1"), ("b2", "Dari B2")):
             needed = any(spec["level"] == level for spec in specs)
             course = db.scalar(
                 select(Course).where(
