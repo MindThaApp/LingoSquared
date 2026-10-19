@@ -4,9 +4,22 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit23.money
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: 'Authored 2026-07-09, same practice-pool depth-extension pass as this bundle''s a1_unit20.yaml/a1_unit21.yaml/a1_unit22.yaml
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (en-prs practice pass, fresh context; 3 fixes). Target text checked against the unit
+    (Afghan Dari: دالر, افغانی, صرافی, uncontracted است; the only 2pl form, دارین, is Afghan -ین; no Arabic Yeh/Kaf).
+    (1) lesson02 pay_cash_order.002 "نقد {payment_verb}" also rendered the fragment "نقد بپردازم" (the
+    subjunctive only occurs after می‌توانم in this unit): rebuilt as "{نقدی/کارتی} می‌پردازم", the unit''s
+    own "نقدی می‌پردازین یا کارتی؟" pattern. (2) lesson06 money_review_pool held exactly 6 tokens, so the
+    6-pair review matching dealt the same six cards every time: now also unions تبدیل and رسید (8). (3) the
+    receipt volume_order feedback was the Dari answer sentence itself with no explanation (and tagged prs/rtl):
+    now an English word-order explanation.
+    NATIVE FLAGS: "نقد دارم" (money_have_order with نقد) vs "پول نقد دارم"; backfill gloss صرافی = "money
+    exchanger" while the unit also uses it for the exchange shop (به صرافی می‌روم).
+
+
+    Authored 2026-07-09, same practice-pool depth-extension pass as this bundle''s a1_unit20.yaml/a1_unit21.yaml/a1_unit22.yaml
     siblings (see a1_unit20.yaml''s notes for the shared pass context).
 
     New groups, all real vocabulary from this unit''s own realization: "money_word" (پول/نقد/کارت/دالر, 4 members, anchored
@@ -132,6 +145,8 @@ slot_presets:
       semantic:
       - money_word
       - exchange_word
+      - exchange_noun
+      - receipt_word
   # Re-anchor fix (2026-07-24): unions money_word (lesson01, 4) + payment_verb
   # (lesson02, 3) = 7 unit-scoped distinct tokens, so lesson01's review
   # matching_pairs clears the 6-pair floor from this unit's OWN vocabulary
@@ -241,19 +256,19 @@ templates:
   lesson_content_key: prs.a1.unit23.lesson02.payment_method
   type: word_order
   frame:
-    text: نقد {payment_verb}
+    text: '{cash_or_card_adj} می‌پردازم'
     language_code: prs
     direction: rtl
   slots:
-    payment_verb: *id002
+    cash_or_card_adj: *id003
   answer_derivation:
     kind: render_frame
     frame:
-      text: نقد {payment_verb}
+      text: '{cash_or_card_adj} می‌پردازم'
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: نقد [pay-verb] (cash I-pay/you-pay/let-me-pay, depending on the verb form).'
+    text: 'Word order: how you pay (نقدی / کارتی) comes before the verb می‌پردازم (I pay).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit23.lesson02.cash_or_card_translate.003
@@ -480,6 +495,6 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: '{receipt_word} می‌گیرم'
-    language_code: prs
-    direction: rtl
+    text: 'Word order: the object comes first, then the verb: {receipt_word} می‌گیرم (I take a receipt).'
+    language_code: en
+    direction: ltr
