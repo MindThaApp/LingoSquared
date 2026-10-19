@@ -1,0 +1,476 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.b2.unit01
+source_language: en
+target_language: fa
+unit_content_key: fa.b2.unit01.argumentation
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit01 checkpoint
+    can generate (before this, en-fa B2 had no lexemes and no packs). Lexemes come from the B2 extension
+    of scripts/backfill_lexemes.py (same branch). Grammar/discourse unit, so the 8.1 pattern is used:
+    unit-wide curated pools, every template anchored to one lesson. 14 templates over all 3 lessons: multiple_choice
+    x3 (nouns / adjectives / verbs+adverbs over b2u01_core), matching_pairs x2 (nouns; adjectives+adverbs+verbs),
+    word_order x6 (two per lesson, each the unit''s own example sentence with one single-member anchor
+    b2u01_<word>_single, exactly 1 course-wide candidate, not a literal of its own frame), translation
+    x3 (bare-word, one per lesson over b2u01_vert_l<N>: nouns/adjectives/adverbs, no verbs, minus tokens
+    with a second common Persian answer). No listen_select (no fa TTS), no fill_in_blank (the runtime
+    shows no English cue for the blank), no fixed-sentence translation. All tags are unit-specific, so
+    course scope == unit scope for every slot. Glosses are English-only, so no MC option or translation
+    prompt contains Persian script. MEASURED (recipe 9 step 4, filter .b2.unit01.): 93/122 fa lexemes
+    hostable; recognition and structured host 93, production 61; 3/3 lessons in every tier; no dead template,
+    every MC pool >=3 distinct glosses, every matching pool >=6. Offline port of generate_checkpoint():
+    15/15 items on 5 seeds. practice-validate: 0 errors. Native review: word_order frames reuse the realization''s
+    own example sentences verbatim; nadideh (gloss ''unseen (part of to ignore)'') is a compound-verb
+    fragment kept only as a word_order anchor and MC/matching item. Glosses are draft (backfill), pending
+    native-Persian review together with this pack.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u01_core
+    - b2u01_vert_l1
+    - b2u01_vert_l2
+    - b2u01_vert_l3
+    - b2u01_shavahed_single
+    - b2u01_amniyat_single
+    - b2u01_zarar_single
+    - b2u01_vorudi_single
+    - b2u01_rahhal_single
+    - b2u01_nadideh_single
+templates:
+- content_key: practice.en-fa.fa.b2.unit01.lesson01.choose.001
+  lesson_content_key: fa.b2.unit01.argumentation.lesson01.claim
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this noun from the argumentation unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson01.match.002
+  lesson_content_key: fa.b2.unit01.argumentation.lesson01.claim
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u01_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each noun with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson01.order.003
+  lesson_content_key: fa.b2.unit01.argumentation.lesson01.claim
+  type: word_order
+  frame:
+    text: به نظر من، چون {item} روشنی داریم، باید طرح را ادامه بدهیم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_shavahed_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: به نظر من، چون {item} روشنی داریم، باید طرح را ادامه بدهیم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: In my opinion, because we have clear evidence, we should continue the plan. Note the
+      verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson01.order.004
+  lesson_content_key: fa.b2.unit01.argumentation.lesson01.claim
+  type: word_order
+  frame:
+    text: دلیل اصلی من {item} شبانه است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_amniyat_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: دلیل اصلی من {item} شبانه است.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: My main reason is nighttime safety. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson01.translate.005
+  lesson_content_key: fa.b2.unit01.argumentation.lesson01.claim
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u01_vert_l1
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson02.choose.001
+  lesson_content_key: fa.b2.unit01.argumentation.lesson02.support
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this adjective from the argumentation unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson02.order.002
+  lesson_content_key: fa.b2.unit01.argumentation.lesson02.support
+  type: word_order
+  frame:
+    text: هزینه نگهبان کمتر از {item} تعطیلی است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_zarar_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: هزینه نگهبان کمتر از {item} تعطیلی است.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: The guard cost is less than the harm of closing. Note the verb-final order of the
+      Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson02.order.003
+  lesson_content_key: fa.b2.unit01.argumentation.lesson02.support
+  type: word_order
+  frame:
+    text: نگهبان شب در {item} می‌ماند.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_vorudi_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نگهبان شب در {item} می‌ماند.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: The night guard stays at the entrance. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson02.translate.004
+  lesson_content_key: fa.b2.unit01.argumentation.lesson02.support
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u01_vert_l2
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.choose.001
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this verb or adverb from the argumentation unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.match.002
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each adjective, adverb or verb with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.order.003
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: word_order
+  frame:
+    text: درست است که هزینه بالاست، اما هنوز می‌شود {item} پیدا کرد.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_rahhal_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: درست است که هزینه بالاست، اما هنوز می‌شود {item} پیدا کرد.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: It is true that the cost is high, but it is still possible to find a solution. Note
+      the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.order.004
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: word_order
+  frame:
+    text: نمی‌توانیم نیاز دانشجوها را {item} بگیریم.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u01_nadideh_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: نمی‌توانیم نیاز دانشجوها را {item} بگیریم.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: We cannot ignore the students’ need. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit01.lesson03.translate.005
+  lesson_content_key: fa.b2.unit01.argumentation.lesson03.concede_rebut
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u01_vert_l3
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr

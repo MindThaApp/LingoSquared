@@ -1,0 +1,477 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.b2.unit06
+source_language: en
+target_language: fa
+unit_content_key: fa.b2.unit06.abstraction
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit06 checkpoint
+    can generate (before this, en-fa B2 had no lexemes and no packs). Lexemes come from the B2 extension
+    of scripts/backfill_lexemes.py (same branch). Grammar/discourse unit, so the 8.1 pattern is used:
+    unit-wide curated pools, every template anchored to one lesson. 14 templates over all 3 lessons: multiple_choice
+    x3 (nouns / adjectives / verbs+adverbs over b2u06_core), matching_pairs x2 (nouns; adjectives+adverbs+verbs),
+    word_order x6 (two per lesson, each the unit''s own example sentence with one single-member anchor
+    b2u06_<word>_single, exactly 1 course-wide candidate, not a literal of its own frame), translation
+    x3 (bare-word, one per lesson over b2u06_vert_l<N>: nouns/adjectives/adverbs, no verbs, minus tokens
+    with a second common Persian answer). No listen_select (no fa TTS), no fill_in_blank (the runtime
+    shows no English cue for the blank), no fixed-sentence translation. All tags are unit-specific, so
+    course scope == unit scope for every slot. Glosses are English-only, so no MC option or translation
+    prompt contains Persian script. MEASURED (recipe 9 step 4, filter .b2.unit06.): 51/58 fa lexemes hostable;
+    recognition and structured host 51, production 35; 3/3 lessons in every tier; no dead template, every
+    MC pool >=3 distinct glosses, every matching pool >=6. Offline port of generate_checkpoint(): 15/15
+    items on 5 seeds. practice-validate: 0 errors. Native review: azadi is re-glossed ''freedom'' (A1
+    registered it as the proper noun Azadi); masaleh is glossed ''issue; matter'' so it is not a second
+    answer for ''problem'' (moshkel, unit02). Glosses are draft (backfill), pending native-Persian review
+    together with this pack.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u06_core
+    - b2u06_vert_l1
+    - b2u06_vert_l2
+    - b2u06_vert_l3
+    - b2u06_shafafiyat_single
+    - b2u06_asibpazir_single
+    - b2u06_masaleh_single
+    - b2u06_didgah_single
+    - b2u06_sorat_single
+    - b2u06_hoviyat_single
+templates:
+- content_key: practice.en-fa.fa.b2.unit06.lesson01.choose.001
+  lesson_content_key: fa.b2.unit06.abstraction.lesson01.qualified_value
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this noun from the abstraction unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson01.match.002
+  lesson_content_key: fa.b2.unit06.abstraction.lesson01.qualified_value
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u06_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each noun with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson01.order.003
+  lesson_content_key: fa.b2.unit06.abstraction.lesson01.qualified_value
+  type: word_order
+  frame:
+    text: اعتماد بدون {item} پایدار نمی‌ماند.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_shafafiyat_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: اعتماد بدون {item} پایدار نمی‌ماند.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Trust does not remain stable without transparency. Note the verb-final order of the
+      Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson01.order.004
+  lesson_content_key: fa.b2.unit06.abstraction.lesson01.qualified_value
+  type: word_order
+  frame:
+    text: آزادی بدون قانون {item} است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u06_asibpazir_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: آزادی بدون قانون {item} است.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Freedom without law is vulnerable. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson01.translate.005
+  lesson_content_key: fa.b2.unit06.abstraction.lesson01.qualified_value
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u06_vert_l1
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson02.choose.001
+  lesson_content_key: fa.b2.unit06.abstraction.lesson02.opposing_view
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this adjective from the abstraction unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson02.order.002
+  lesson_content_key: fa.b2.unit06.abstraction.lesson02.opposing_view
+  type: word_order
+  frame:
+    text: '{item} اعتماد را نمی‌شود ساده گرفت.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_masaleh_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} اعتماد را نمی‌شود ساده گرفت.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: The issue of trust cannot be taken lightly. Note the verb-final order of the Persian
+      clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson02.order.003
+  lesson_content_key: fa.b2.unit06.abstraction.lesson02.opposing_view
+  type: word_order
+  frame:
+    text: '{item} شما تجربه شخصی را نشان می‌دهد.'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_didgah_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} شما تجربه شخصی را نشان می‌دهد.'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Your viewpoint shows personal experience. Note the verb-final order of the Persian
+      clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson02.translate.004
+  lesson_content_key: fa.b2.unit06.abstraction.lesson02.opposing_view
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u06_vert_l2
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson03.choose.001
+  lesson_content_key: fa.b2.unit06.abstraction.lesson03.cultural_difference
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this verb or adverb from the abstraction unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson03.match.002
+  lesson_content_key: fa.b2.unit06.abstraction.lesson03.cultural_difference
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each adjective, adverb or verb with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson03.order.003
+  lesson_content_key: fa.b2.unit06.abstraction.lesson03.cultural_difference
+  type: word_order
+  frame:
+    text: برای بعضی افراد، {item} پاسخ مهم‌تر از توضیح طولانی است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_sorat_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: برای بعضی افراد، {item} پاسخ مهم‌تر از توضیح طولانی است.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: For some people, speed of response is more important than a long explanation. Note
+      the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson03.order.004
+  lesson_content_key: fa.b2.unit06.abstraction.lesson03.cultural_difference
+  type: word_order
+  frame:
+    text: زبان بخشی از {item} است.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_hoviyat_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: زبان بخشی از {item} است.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Language is part of identity. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit06.lesson03.translate.005
+  lesson_content_key: fa.b2.unit06.abstraction.lesson03.cultural_difference
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u06_vert_l3
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr

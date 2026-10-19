@@ -1,0 +1,477 @@
+schema_version: '1.0'
+pack_key: practice.en-fa.b2.unit04
+source_language: en
+target_language: fa
+unit_content_key: fa.b2.unit04.narrative
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md so the en-fa B2 unit04 checkpoint
+    can generate (before this, en-fa B2 had no lexemes and no packs). Lexemes come from the B2 extension
+    of scripts/backfill_lexemes.py (same branch). Grammar/discourse unit, so the 8.1 pattern is used:
+    unit-wide curated pools, every template anchored to one lesson. 14 templates over all 3 lessons: multiple_choice
+    x3 (nouns / adjectives / verbs+adverbs over b2u04_core), matching_pairs x2 (nouns; adjectives+adverbs+verbs),
+    word_order x6 (two per lesson, each the unit''s own example sentence with one single-member anchor
+    b2u04_<word>_single, exactly 1 course-wide candidate, not a literal of its own frame), translation
+    x3 (bare-word, one per lesson over b2u04_vert_l<N>: nouns/adjectives/adverbs, no verbs, minus tokens
+    with a second common Persian answer). No listen_select (no fa TTS), no fill_in_blank (the runtime
+    shows no English cue for the blank), no fixed-sentence translation. All tags are unit-specific, so
+    course scope == unit scope for every slot. Glosses are English-only, so no MC option or translation
+    prompt contains Persian script. MEASURED (recipe 9 step 4, filter .b2.unit04.): 57/68 fa lexemes hostable;
+    recognition and structured host 57, production 34; 3/3 lessons in every tier; no dead template, every
+    MC pool >=3 distinct glosses, every matching pool >=6. Offline port of generate_checkpoint(): 15/15
+    items on 5 seeds. practice-validate: 0 errors. Native review: dashtim (progressive helper) is excluded
+    from the pools so ''we were'' (budim) and ''we were (in the middle of)'' never appear as two matching
+    answers. Glosses are draft (backfill), pending native-Persian review together with this pack.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u04_core
+    - b2u04_vert_l1
+    - b2u04_vert_l2
+    - b2u04_vert_l3
+    - b2u04_tazeh_single
+    - b2u04_lahzeh_single
+    - b2u04_salon_single
+    - b2u04_khis_single
+    - b2u04_nasb_single
+    - b2u04_panjereh_single
+templates:
+- content_key: practice.en-fa.fa.b2.unit04.lesson01.choose.001
+  lesson_content_key: fa.b2.unit04.narrative.lesson01.background
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this noun from the narrative unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson01.match.002
+  lesson_content_key: fa.b2.unit04.narrative.lesson01.background
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      agreement_tags:
+        semantic: b2u04_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each noun with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson01.order.003
+  lesson_content_key: fa.b2.unit04.narrative.lesson01.background
+  type: word_order
+  frame:
+    text: کافه {item} باز شده بود و هنوز شلوغ نبود.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: b2u04_tazeh_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: کافه {item} باز شده بود و هنوز شلوغ نبود.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: The cafe had just opened and was not crowded yet. Note the verb-final order of the
+      Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson01.order.004
+  lesson_content_key: fa.b2.unit04.narrative.lesson01.background
+  type: word_order
+  frame:
+    text: در همان {item}، چراغ‌ها خاموش شد.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_lahzeh_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: در همان {item}، چراغ‌ها خاموش شد.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: At that same moment, the lights went out. Note the verb-final order of the Persian
+      clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson01.translate.005
+  lesson_content_key: fa.b2.unit04.narrative.lesson01.background
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u04_vert_l1
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson02.choose.001
+  lesson_content_key: fa.b2.unit04.narrative.lesson02.prepast
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this adjective from the narrative unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson02.order.002
+  lesson_content_key: fa.b2.unit04.narrative.lesson02.prepast
+  type: word_order
+  frame:
+    text: قبل از رسیدن ما، {item} را تمیز کرده بودند.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_salon_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: قبل از رسیدن ما، {item} را تمیز کرده بودند.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Before we arrived, they had cleaned the hall. Note the verb-final order of the Persian
+      clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson02.order.003
+  lesson_content_key: fa.b2.unit04.narrative.lesson02.prepast
+  type: word_order
+  frame:
+    text: کف سالن {item} شده بود.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u04_khis_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: کف سالن {item} شده بود.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: The hall floor had become wet. Note the verb-final order of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson02.translate.004
+  lesson_content_key: fa.b2.unit04.narrative.lesson02.prepast
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u04_vert_l2
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson03.choose.001
+  lesson_content_key: fa.b2.unit04.narrative.lesson03.interruption
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: b2u04_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Choose the English meaning of this verb or adverb from the narrative unit.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson03.match.002
+  lesson_content_key: fa.b2.unit04.narrative.lesson03.interruption
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fa
+    direction: rtl
+  slots:
+    first:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    second:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    third:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u04_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Match each adjective, adverb or verb with its English meaning.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson03.order.003
+  lesson_content_key: fa.b2.unit04.narrative.lesson03.interruption
+  type: word_order
+  frame:
+    text: داشتیم عکس‌ها را {item} می‌کردیم که باران شدید شد.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_nasb_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: داشتیم عکس‌ها را {item} می‌کردیم که باران شدید شد.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: We were installing the photos when the rain became heavy. Note the verb-final order
+      of the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson03.order.004
+  lesson_content_key: fa.b2.unit04.narrative.lesson03.interruption
+  type: word_order
+  frame:
+    text: بعد فهمیدیم که {item} باز مانده بود.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u04_panjereh_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: بعد فهمیدیم که {item} باز مانده بود.
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Meaning: Later we realized that the window had been left open. Note the verb-final order of
+      the Persian clause.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.b2.unit04.lesson03.translate.005
+  lesson_content_key: fa.b2.unit04.narrative.lesson03.interruption
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: b2u04_vert_l3
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Type the Persian word taught in this lesson for this meaning.
+    language_code: en
+    direction: ltr
