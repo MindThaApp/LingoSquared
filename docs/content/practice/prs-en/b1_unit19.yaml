@@ -4,10 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.b1.unit19.summarizing
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: >-
-    Generated for the prs-en X->en direction (Dari L1, tested content is English). Follows the established prs-en Endless-Practice pattern (a1_unit45.yaml): bare-{item} frames with untagged slots (language_code: en + part_of_speech in [noun, verb, adjective, adverb, preposition, phrase], no semantic tag) so every slot draws on the WHOLE unit lexeme pool at both unit and course scope, which is safe per PRACTICE_PACK_RECIPE.md SS3.1(c) because none of these frames carry literal English content text besides the {item} placeholder (or plain separators/dashes for matching_pairs). 4 templates per lesson x 4 lessons = 16 templates: multiple_choice + listen_select (recognition), matching_pairs x6 (structured), translation bare-word (production). listen_select is safe here because target_language=en has TTS configured. Measured capacity: 29 unit lexemes, 28 after excluding proper_noun/pronoun/particle/symbol, 26 distinct glosses -- comfortably clears the >=12 floor in every tier and the >=3 MC / >=6 matching_pairs floors. Excluded proper_noun (self-gloss risk, SS6.1), pronoun/particle (function words with no standalone meaning) from all slots. No word_order/fill_in_blank authored: no unit lexeme carries a semantic tag narrow enough to safely anchor a literal-text frame at COURSE scope (SS1.1), and matching_pairs alone clears the structured-tier floor. Feedback strings reused verbatim from the Dari-register exemplar a1_unit45.yaml. Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: union of prs_en_b1_unit19_lesson02_words + lesson03_words + lesson04_words (all 4 lessons). Lesson01 deliberately excluded from the union: the unit-wide tag pool has 'detail' (lesson01) and 'details' (lesson02) sharing the identical gloss text 'جزئیات', which would put two visually-identical right-side cards in one matching exercise; dropping lesson01's tag removes 'detail' and leaves 'details' plus 23 other distinct tokens/glosses, comfortably over the floor with no remaining duplicate or confusable gloss. Declared all 3 tags in tag_schema.agreement_tags.semantic. pool_check.py confirms the union pool is unit-scoped by construction (zero course-scope extras). Slot counts unchanged (all were already 6).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- tagged 12 item slots to the unit tag; translation limited to nouns from lessons 1,3,4 (removes keeping/many/guessing/moved leaks and the detail/details same-gloss pair). NATIVE FLAGS: کوچ کدم (moved) is first-person; خودِ for own. BACKFILL GLOSS FLAGS: keeping/guessing/many/moved glosses contain English -> remove; moved=کوچ کدم -> کوچ کرد; detail=details=جزئیات (same gloss); own=خودِ not standalone. Prior note: Generated for the prs-en X->en direction (Dari L1, tested content is English). Follows the established prs-en Endless-Practice pattern (a1_unit45.yaml): bare-{item} frames with untagged slots (language_code: en + part_of_speech in [noun, verb, adjective, adverb, preposition, phrase], no semantic tag) so every slot draws on the WHOLE unit lexeme pool at both unit and course scope, which is safe per PRACTICE_PACK_RECIPE.md SS3.1(c) because none of these frames carry literal English content text besides the {item} placeholder (or plain separators/dashes for matching_pairs). 4 templates per lesson x 4 lessons = 16 templates: multiple_choice + listen_select (recognition), matching_pairs x6 (structured), translation bare-word (production). listen_select is safe here because target_language=en has TTS configured. Measured capacity: 29 unit lexemes, 28 after excluding proper_noun/pronoun/particle/symbol, 26 distinct glosses -- comfortably clears the >=12 floor in every tier and the >=3 MC / >=6 matching_pairs floors. Excluded proper_noun (self-gloss risk, SS6.1), pronoun/particle (function words with no standalone meaning) from all slots. No word_order/fill_in_blank authored: no unit lexeme carries a semantic tag narrow enough to safely anchor a literal-text frame at COURSE scope (SS1.1), and matching_pairs alone clears the structured-tier floor. Feedback strings reused verbatim from the Dari-register exemplar a1_unit45.yaml. Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: union of prs_en_b1_unit19_lesson02_words + lesson03_words + lesson04_words (all 4 lessons). Lesson01 deliberately excluded from the union: the unit-wide tag pool has ''detail'' (lesson01) and ''details'' (lesson02) sharing the identical gloss text ''جزئیات'', which would put two visually-identical right-side cards in one matching exercise; dropping lesson01''s tag removes ''detail'' and leaves ''details'' plus 23 other distinct tokens/glosses, comfortably over the floor with no remaining duplicate or confusable gloss. Declared all 3 tags in tag_schema.agreement_tags.semantic. pool_check.py confirms the union pool is unit-scoped by construction (zero course-scope extras). Slot counts unchanged (all were already 6).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -25,6 +25,8 @@ tag_schema:
     - prs_en_b1_unit19_lesson02_words
     - prs_en_b1_unit19_lesson03_words
     - prs_en_b1_unit19_lesson04_words
+    - prs_en_b1_unit19_words
+    - prs_en_b1_unit19_lesson01_words
 templates:
 - content_key: practice.prs-en.en.b1.unit19.lesson01.choose.001
   lesson_content_key: en.b1.unit19.lesson01.summarizing_vocabulary
@@ -43,6 +45,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -67,6 +71,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -192,11 +198,11 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
-        - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic:
+          - prs_en_b1_unit19_lesson01_words
+          - prs_en_b1_unit19_lesson03_words
+          - prs_en_b1_unit19_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -221,6 +227,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -245,6 +253,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -370,11 +380,11 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
-        - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic:
+          - prs_en_b1_unit19_lesson01_words
+          - prs_en_b1_unit19_lesson03_words
+          - prs_en_b1_unit19_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -399,6 +409,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -423,6 +435,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -548,11 +562,11 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
-        - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic:
+          - prs_en_b1_unit19_lesson01_words
+          - prs_en_b1_unit19_lesson03_words
+          - prs_en_b1_unit19_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -577,6 +591,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -601,6 +617,8 @@ templates:
         - adverb
         - preposition
         - phrase
+      agreement_tags:
+        semantic: prs_en_b1_unit19_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -726,11 +744,11 @@ templates:
       language_code: en
       part_of_speech:
         - noun
-        - verb
-        - adjective
-        - adverb
-        - preposition
-        - phrase
+      agreement_tags:
+        semantic:
+          - prs_en_b1_unit19_lesson01_words
+          - prs_en_b1_unit19_lesson03_words
+          - prs_en_b1_unit19_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
