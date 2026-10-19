@@ -4,9 +4,26 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a2.unit18.shopping_complaint
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 4 fixes).
+    (1) lesson02.translate.002 bare-noun pool held lesson04's clitic/indefinite forms
+    (روشنش "turning it on / its being turned on", مشکلی, رسیدم, پول‌تان) as typed answers
+    no learner can derive from the gloss: pool now lessons 01-03. (2)+(3) lesson04.choose.001
+    and lesson04.translate.003 taught پس as "so / then", but in this unit پس only occurs as
+    "back" (پس بگیرم / پس بدهم) -- wrong-sense gloss; both pools now the unit's tagged
+    verbs + choice_word (نمی‌شود, خریدم, می‌دهین, باشد, یا, کدام), which also drops the
+    untagged وقتی/ظرف. (4) lesson02.order.003 rendered این تعویض است / این بازپرداخت است
+    ("this is exchange"): narrowed to travel_role_word (فروشنده), feedback updated.
+    NATIVE FLAGS: course-wide gloss clash "exchange" = تعویض (this unit) and تبدیل (A2
+    banking) in bare-word translation -- gloss should read "exchange (an item)" (backfill
+    lane); backfill gloss "پس = so / then" is wrong for this unit; رسیدم "my receipt" is a
+    homograph of "I arrived" and is tagged past_verb_first_b1; dialogue "بلی، اینه رسیدم"
+    mixes colloquial اینه into a written-register dialogue and its gloss says "his receipt";
+    phrase glosses carry Persian names/narration ("کریم says exchange is better").
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint. en-prs A2 unit18 had a full realization + overlay and 43
     backfilled lexemes across all 4 lessons but no practice pack at all, so
@@ -66,6 +83,10 @@ tag_schema:
     - time_reference
     - travel_role_word
     - warm_word
+    - en_prs_a2_unit18_lesson01_words
+    - en_prs_a2_unit18_lesson02_words
+    - en_prs_a2_unit18_lesson03_words
+    - en_prs_a2_unit18_lesson04_words
 templates:
 - content_key: practice.en-prs.prs.a2.unit18.lesson01.choose.001
   lesson_content_key: prs.a2.unit18.lesson01.complaint_vocabulary
@@ -204,6 +225,14 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      # Review 2026-10-19: lessons 01-03 only. lesson04's clitic/indefinite
+      # forms (روشنش "turning it on", مشکلی, رسیدم, پول‌تان) cannot be
+      # produced from their glosses as bare typed words.
+      agreement_tags:
+        semantic:
+        - en_prs_a2_unit18_lesson01_words
+        - en_prs_a2_unit18_lesson02_words
+        - en_prs_a2_unit18_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -266,11 +295,20 @@ templates:
   slots:
     item:
       language_code: prs
+      # Review 2026-10-19: was bare POS, which taught پس as "so / then" -- in
+      # this unit it only occurs as "back" (پس بگیرم / پس بدهم). Now the
+      # unit's tagged verbs plus یا / کدام: نمی‌شود, خریدم, می‌دهین, باشد.
       part_of_speech:
       - verb
       - pronoun
       - particle
-      - preposition
+      agreement_tags:
+        semantic:
+        - choice_word
+        - en_prs_a2_unit18_lesson01_words
+        - en_prs_a2_unit18_lesson02_words
+        - en_prs_a2_unit18_lesson03_words
+        - en_prs_a2_unit18_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -342,11 +380,20 @@ templates:
   slots:
     item:
       language_code: prs
+      # Review 2026-10-19: was bare POS, which taught پس as "so / then" -- in
+      # this unit it only occurs as "back" (پس بگیرم / پس بدهم). Now the
+      # unit's tagged verbs plus یا / کدام: نمی‌شود, خریدم, می‌دهین, باشد.
       part_of_speech:
       - verb
       - pronoun
       - particle
-      - preposition
+      agreement_tags:
+        semantic:
+        - choice_word
+        - en_prs_a2_unit18_lesson01_words
+        - en_prs_a2_unit18_lesson02_words
+        - en_prs_a2_unit18_lesson03_words
+        - en_prs_a2_unit18_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -368,8 +415,9 @@ templates:
       part_of_speech:
       - noun
       agreement_tags:
+        # Review 2026-10-19: was complaint_word too, rendering این تعویض است /
+        # این بازپرداخت است ("this is exchange"). Now the person noun only.
         semantic:
-        - complaint_word
         - travel_role_word
   answer_derivation:
     kind: render_frame
@@ -378,7 +426,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "Word order: این [word] است (this is a ___)."
+    text: "Word order: این [person] است (this is the ___)."
     language_code: en
     direction: ltr
 

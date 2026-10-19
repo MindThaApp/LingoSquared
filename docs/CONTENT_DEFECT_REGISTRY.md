@@ -3356,3 +3356,105 @@ Verification: `scripts/verify.sh --content-only` passes (all courses).
 Course-scoped validate + compile ran before every commit. Note:
 `check_dari_register.py` reports 8 2pl -ید findings, all in
 realizations/prs B2 (the en-prs lane, out of scope here).
+
+### 2026-10-19 — en-fa/en-prs practice packs
+Scope: the 34 practice packs still marked `unreviewed`. That is 15 en-fa
+packs (A1 u04, u30, u37-43, u49, u50, u53; A2 u11; B1 u07, u09) and 19 en-prs
+packs (A1 u21, u23, u30-33, u35, u38, u41, u42, u58; A2 u10-15, u17, u18).
+Branch content/review-practice-en-fa-prs, PR #47. The packs are
+template-generated, so every template was reviewed against its real slot
+pools. A dump script listed each slot's unit-scoped candidates (token and
+gloss), its course-scope extras for word_order/render_frame frames, gloss
+collisions, and every rendered frame/answer. One fresh-context worker per
+batch of 2-9 packs fixed what it found and committed. Only pack files were
+touched; gloss and realization problems are flagged, not fixed. All 34 packs
+are now `reviewed` with `required_next_reviewer: native_speaker_review`, and
+each pack's review.notes has a "Review 2026-10-19 … NATIVE FLAGS" paragraph.
+
+Fix counts: en-fa 59 (A1 33 · A2 4 · B1 22) and en-prs 70 (A1 31 · A2 39).
+Total 129, about 3.8 per pack. a1_unit49 (en-fa) and
+a1_unit31 (en-prs) needed nothing. Commit subjects carry per-batch counts.
+
+Defect classes (all passed a green practice-validate):
+- **Answer leakage through backfill glosses.** Glosses that embed the target
+  token ("loan (in امانت گرفتن…)", "(ezafe form of خونه)", "(in باغ وحش: zoo)",
+  "my sleep (in 'اتاق خوابم')") put the answer inside translation prompts
+  and MC options. This was systemic at fa B1 u07/u09 and A2 u11, and present
+  in fa A1 u42/u43/u50 and prs A1 u35/u41/u58 and A2 u13. The fix is to
+  re-pool onto lesson tags or tag unions that leave those lexemes out.
+- **Slot pools with no semantic tag, or with `reviewed_phrase`.** These
+  pools were safe at checkpoint scope but in Endless Practice pulled every
+  word or sentence in the level, so the feedback ("introduced in this unit")
+  became false. Found in fa A1 u39-41 and u53 and fa B1. 17 such templates
+  in prs A2 u10-13. They are now `en_{fa,prs}_<unit>_lessonNN_words` tags or
+  unions of them.
+- **word_order / render_frame pools that render wrong Persian/Dari**:
+  - من یک مادر داری, چند تا مامانم دارم (fa u04)
+  - موز صورتی, and "summer is cold and snowy" contradicting the reading
+    (fa u37/u38)
+  - این آتش هست (fa u39)
+  - لطفاً یک سفارش می‌خوام (fa u50)
+  - bound forms such as خونه‌ی / ملیم as list items (fa A2 u11)
+  - این خارج است, این مدت است, این تعویض است, این هفته است (prs A2)
+  - the fragment نقد بپردازم (prs u23)
+  - a wrong character, رضا for نیما (fa B1 u07)
+- **Underdetermined typed answers.** A pool holds two tokens with one gloss
+  (برادرم/داداشم "my brother"), or a gloss also covers a word taught
+  elsewhere: "but" اما/ولی, "family" فامیل/خانواده, "ready" آماده/تیار, "if"
+  اگر/اگه. Construct forms (هفتهٔ, برنامهٔ) and clitic forms are not typeable
+  from their gloss. A fill_in_blank with two correct fills (نامه/پارسل) now
+  has `interchangeable`.
+- **Wrong-sense glosses in pools**: می‌دید "you give" (here "would see"),
+  پس "so / then" (u18 means "back"), روی in a colour pool. Lesson04 dialogue
+  lines glossed as third-person narration with Dari names in the English
+  are now kept out of MC/matching/translation pools (prs A2 u10-18, fa A2
+  u11).
+- **matching_pairs with a pool equal to the slot count** (every exercise
+  the same six cards: fa B1 u09, prs A1 u21/u23), and pools under the
+  6-pair floor (prs u30/u32/u33). These were widened with the unit's own
+  tags.
+- **Feedback text**: it named one word of a multi-word pool, called
+  mother/father "extended family", leaked internal tag names, or gave a
+  wrong grammar label (لازمه/اورژانسه called imperatives; the double copula
+  "اورژانسه هست").
+New bug class: no. Systemic finding: practice packs inherit backfill gloss
+defects directly, and no validator looks at gloss text.
+
+Native-speaker flags (40; details in each pack's review.notes):
+- **Backfill gloss data (backfill_lexemes*.py; owner: Codex lane)**:
+  - Strip embedded target tokens from glosses (fa A1/A2/B1, prs A1/A2).
+  - Re-gloss lesson04 dialogue phrases in the speaker's own person.
+  - Fix the senses of می‌دید, پس (u18), شرکت (u09 = "took part"),
+    می‌خونم ("I study", u30), کمکی, می‌شوم, and وظیفه/بست, which are both
+    "position".
+  - رسیدم ("my receipt") is a homograph of "I arrived".
+  - طب/دوا are both "medicine".
+  - "exchange" maps to both تعویض and تبدیل.
+- **fa**:
+  - a1_unit04 L6 "این باباهم" looks like a typo for بابامه.
+  - من عمو دارم without یک.
+  - رنگش چیه؟ قرمزه.
+  - اورژانس vs اورژانسه in the cry for help.
+  - u40 کیف رو ___؟ also takes دیدی.
+  - یه چلوکباب لطفاً is more natural than لطفاً یک چلوکباب می‌خوام.
+  - B1 نتونستم/نمی‌تونستم share one gloss.
+- **prs**:
+  - u42 قرار vs وقت/نوبت for a dentist appointment.
+  - The spelling قهوه‌یی.
+  - The spelling متأسفم/متاسفم (grading).
+  - u18 اینه in a written-register line.
+  - "یک کفش" vs یک جوره بوت.
+  - تاییدی as "confirmation".
+  - Several "این … است" frames (این تجربه/موجودی/هزینه است) are grammatical
+    but stiff.
+- **Engine/tooling**: slot_text translation has no accepted-answers list,
+  so true synonyms (برادرم/داداشم) cannot both be accepted. The integrity
+  scripts still skip b1_ packs (self-reference was checked by hand).
+
+Remaining: no en-fa or en-prs practice pack is `unreviewed`. prs A1 u42 has
+2 live recognition templates (floor 3); the unit has only 3 words. fa
+a1_unit04 side_pair stays at 4 pairs (the side-relative set has 4 words).
+
+Verification: `scripts/verify.sh --content-only` passes. Per-direction
+practice-validate + practice-compile and `_practice_unit_scope_check.py`
+were run before every commit.

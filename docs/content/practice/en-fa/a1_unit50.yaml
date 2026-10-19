@@ -5,9 +5,22 @@ target_language: fa
 unit_content_key: fa.a1.unit50.restaurant
 
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 3 fixes). (1) Answer
+    printed in the prompt: the four bare-word translation templates pooled سفارش, whose
+    backfill gloss "order (in سفارش دادن, 'to order')" shows the Persian answer; they now
+    pool the lesson02-04 items (چلوکباب, دوغ, خانم رحیمی). (2) lesson01 order.003 rendered
+    "یک سفارش دیگه هم می‌خوام" and (3) lesson02 order.003 "لطفاً یک سفارش می‌خوام" ("I want
+    another order too" / "please, I want an order"), not natural requests: both now pool
+    only the dishes (lesson02 + lesson03 tags: چلوکباب, دوغ). lesson03 order.003 keeps
+    سفارش, since "می‌شه سفارش رو بیارید؟" (could you bring the order?) is natural.
+    Remaining, backfill-side: سفارش's gloss is a near-giveaway as a multiple_choice option.
+    NATIVE FLAGS: "لطفاً یک چلوکباب می‌خوام." is correct but stiff; colloquial ordering is
+    closer to "یه چلوکباب لطفاً".
+
     THIN UNIT -- flagging per recipe §3 "capacity, don't pad". Restaurant has
     only 5 distinct fa lexemes/phrases total per backfill_lexemes_en_fa
     across all 4 lessons: restaurant_order_word 3 (سفارش "order" noun,
@@ -52,6 +65,9 @@ tag_schema:
     - restaurant_order_word
     - person_name
     - reviewed_phrase
+    - en_fa_a1_unit50_lesson02_words
+    - en_fa_a1_unit50_lesson03_words
+    - en_fa_a1_unit50_lesson04_words
 
 templates:
 # --- lesson01 (new_restaurant_one) ---
@@ -84,7 +100,7 @@ templates:
       language_code: fa
       part_of_speech: [noun, phrase]
       agreement_tags:
-        semantic: [restaurant_order_word, person_name]
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words, en_fa_a1_unit50_lesson04_words]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -103,7 +119,7 @@ templates:
       language_code: fa
       part_of_speech: noun
       agreement_tags:
-        semantic: restaurant_order_word
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words]
   answer_derivation:
     kind: render_frame
     frame:
@@ -145,7 +161,7 @@ templates:
       language_code: fa
       part_of_speech: [noun, phrase]
       agreement_tags:
-        semantic: [restaurant_order_word, person_name]
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words, en_fa_a1_unit50_lesson04_words]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -164,7 +180,7 @@ templates:
       language_code: fa
       part_of_speech: noun
       agreement_tags:
-        semantic: restaurant_order_word
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words]
   answer_derivation:
     kind: render_frame
     frame:
@@ -206,7 +222,7 @@ templates:
       language_code: fa
       part_of_speech: [noun, phrase]
       agreement_tags:
-        semantic: [restaurant_order_word, person_name]
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words, en_fa_a1_unit50_lesson04_words]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
@@ -267,7 +283,7 @@ templates:
       language_code: fa
       part_of_speech: [noun, phrase]
       agreement_tags:
-        semantic: [restaurant_order_word, person_name]
+        semantic: [en_fa_a1_unit50_lesson02_words, en_fa_a1_unit50_lesson03_words, en_fa_a1_unit50_lesson04_words]
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.

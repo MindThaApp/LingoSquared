@@ -4,9 +4,29 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a1.unit39.emergencies
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 5 fixes).
+    (1) lesson02 order.003 "این {item} هست." (این آتش هست / این خطر هست) is not
+    natural Persian and not what the unit teaches: now the unit's own pattern
+    "{item}! کمک کنید!" (تصادف! کمک کنید!). (2) lesson03 order.003 had the same
+    unnatural frame (این اورژانس هست): now "اورژانس! کمک کنید!". (3) Its feedback
+    gave the ungrammatical "این اورژانسه هست" (double copula) and leaked the
+    internal tag name emergency_call_word: rewritten. (4) lesson04 choose.001 /
+    translate.002 feedback called لازمه and اورژانسه "imperatives": reworded.
+    (5) lesson04 match.003 unioned reviewed_phrase, which pools ~519 phrases
+    course-wide, so in Endless Practice the "emergency-call phrases" matching
+    could deal any A1 sentence: replaced by the unit's lesson04 tag (same unit
+    pool: زود بیایید! / زنگ بزنید! / الو! کمک کنید! پلیس لازمه!).
+    Left: backfill glosses that embed Persian (لازمه "... of لازم است", بزنید "... in
+    زنگ بزنید") -- A1, not graded as leakage; gloss lane. "come (polite imperative)"
+    maps to بیایید here and to بیاید in another unit (backfill gloss collision; the
+    latter spelling is the 3sg subjunctive) -- gloss lane.
+    NATIVE FLAGS: confirm "اورژانس! کمک کنید!" as a shout (the unit teaches
+    "اورژانسه! کمک کنید!").
+
     Authored against docs/content/PRACTICE_PACK_RECIPE.md for the en-fa a1
     emergencies unit. §0 capacity: 27 lexemes; lesson05
     (reading_emergency_notice) has ZERO new fa lexemes (its four spec rows
@@ -46,6 +66,7 @@ tag_schema:
     - emergency_service_word
     - danger_word
     - reviewed_phrase
+    - en_fa_a1_unit39_lesson04_words
 
 templates:
 - content_key: practice.en-fa.fa.a1.unit39.lesson01.choose.001
@@ -166,7 +187,7 @@ templates:
 - content_key: practice.en-fa.fa.a1.unit39.lesson02.order.003
   lesson_content_key: fa.a1.unit39.lesson02.new_emergencies_two
   type: word_order
-  frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  frame: {text: '{item}! کمک کنید!', language_code: fa, direction: rtl}
   slots:
     item:
       language_code: fa
@@ -174,9 +195,9 @@ templates:
       agreement_tags: {semantic: danger_word}
   answer_derivation:
     kind: render_frame
-    frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+    frame: {text: '{item}! کمک کنید!', language_code: fa, direction: rtl}
   feedback_frame:
-    text: 'این X هست means "This is X" -- grammatical for fire, danger, or accident.'
+    text: 'X! کمک کنید! means "X! Help!" -- the unit''s pattern for shouting what happened (تصادف! کمک کنید!).'
     language_code: en
     direction: ltr
 
@@ -245,7 +266,7 @@ templates:
 - content_key: practice.en-fa.fa.a1.unit39.lesson03.order.003
   lesson_content_key: fa.a1.unit39.lesson03.asking_for_help
   type: word_order
-  frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+  frame: {text: '{item}! کمک کنید!', language_code: fa, direction: rtl}
   slots:
     item:
       language_code: fa
@@ -253,9 +274,9 @@ templates:
       agreement_tags: {semantic: emergency_call_word}
   answer_derivation:
     kind: render_frame
-    frame: {text: 'این {item} هست.', language_code: fa, direction: rtl}
+    frame: {text: '{item}! کمک کنید!', language_code: fa, direction: rtl}
   feedback_frame:
-    text: 'این اورژانسه هست means "This is an emergency" -- اورژانس is the only noun in this unit''s emergency_call_word set.'
+    text: 'اورژانس! کمک کنید! means "Emergency! Help!"'
     language_code: en
     direction: ltr
 
@@ -270,7 +291,7 @@ templates:
       agreement_tags: {semantic: emergency_call_word}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is an emergency-call imperative from this unit.'
+    text: '{item} is used when calling for emergency help.'
     language_code: en
     direction: ltr
 
@@ -289,7 +310,7 @@ templates:
       agreement_tags: {semantic: emergency_call_word}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: '{item} is an emergency-call imperative from this unit.'
+    text: '{item} is used when calling for emergency help.'
     language_code: en
     direction: ltr
 
@@ -304,7 +325,7 @@ templates:
     first: &unit39_l4_match
       language_code: fa
       part_of_speech: [noun, verb, phrase]
-      agreement_tags: {semantic: [emergency_call_word, emergency_service_word, reviewed_phrase]}
+      agreement_tags: {semantic: [emergency_call_word, emergency_service_word, en_fa_a1_unit39_lesson04_words]}
     second: *unit39_l4_match
     third: *unit39_l4_match
     fourth: *unit39_l4_match

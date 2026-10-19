@@ -4,9 +4,22 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit58.zoo
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 7 fixes). The backfill glosses of
+    باغ and وحش ('garden (in باغ وحش: zoo)', 'wild animals (in باغ وحش: zoo)') print the Dari token.
+    (1)-(2) lesson01/lesson03 translate.001 used them as typed-answer prompts (the answer was in the
+    prompt): pools now animal_word + formal_possessive_word (شیر, فیل, میمون, محبوب‌تان). (3)-(5)
+    the three choose.001 multiple_choice items offered those glosses as options under the same
+    token: same clean pool (4 distinct glosses). (6)-(7) both order.001 feedbacks were hard-coded to
+    one animal (شیر / فیل) although the slot renders any animal (course scope adds سگ, پشک, پرنده,
+    ماهی, all grammatical in {animal} در باغ وحش است.): now generic. LEFT: match.001 needs all 6
+    unit lexemes, so its باغ/وحش cards still show the leaky glosses; fix is the backfill gloss.
+    NATIVE FLAGS: backfill glosses of باغ / وحش; حیوان محبوب‌تان کدام است؟ vs the more everyday
+    حیوان دلخواه شما (confirm).
+
     en-prs A1 practice pack (unit58 zoo), authored 2026-07-23. VERY THIN UNIT:
     only 6 lexemes across 3 lessons with any lexemes at all (lesson01: باغ
     "garden(in zoo)", وحش "wild(in zoo)", شیر "lion"; lesson03: فیل "elephant",
@@ -48,6 +61,11 @@ slot_presets:
     part_of_speech: [noun, adjective]
     agreement_tags:
       semantic: [zoo_word, animal_word, formal_possessive_word]
+  clean_word: &clean
+    language_code: prs
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: [animal_word, formal_possessive_word]
   animal: &an
     language_code: prs
     part_of_speech: noun
@@ -65,7 +83,7 @@ templates:
   type: multiple_choice
   frame: {text: '{item}', language_code: prs, direction: rtl}
   slots:
-    item: *uw
+    item: *clean
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is from this unit''s zoo vocabulary.'
@@ -76,7 +94,7 @@ templates:
   type: multiple_choice
   frame: {text: '{item}', language_code: prs, direction: rtl}
   slots:
-    item: *uw
+    item: *clean
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is from this unit''s zoo vocabulary.'
@@ -87,7 +105,7 @@ templates:
   type: multiple_choice
   frame: {text: '{item}', language_code: prs, direction: rtl}
   slots:
-    item: *uw
+    item: *clean
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} is from this unit''s zoo vocabulary.'
@@ -104,7 +122,7 @@ templates:
     kind: render_frame
     frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: شیر در باغ وحش است. (The lion is at the zoo.)'
+    text: 'Word order: [animal] در باغ وحش است. (The [animal] is at the zoo.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit58.lesson03.order.001
@@ -117,7 +135,7 @@ templates:
     kind: render_frame
     frame: {text: '{item} در باغ وحش است.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: فیل در باغ وحش است. (The elephant is at the zoo.)'
+    text: 'Word order: [animal] در باغ وحش است. (The [animal] is at the zoo.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit58.lesson01.match.001
@@ -152,7 +170,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *clean
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
@@ -163,7 +181,7 @@ templates:
   type: translation
   frame: {text: '{item}', language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
   slots:
-    item: *uw
+    item: *clean
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Dari word.'
