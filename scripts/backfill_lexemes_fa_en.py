@@ -2221,6 +2221,46 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+    # a2_unit27: drop the English words "direct deposit" from the gloss (answer leak in translation prompt).
+    ("a2_unit27_banking", "direct"): ("adjective", "مستقیم"),
+    # a2_unit30 (job interview): remove English words from glosses (answer leak in translation),
+    # and fix senses: "start next Monday" = begin work, "next Monday" = upcoming (not "next to").
+    ("a2_unit30_job_interview", "social"): ("adjective", "اجتماعی"),
+    ("a2_unit30_job_interview", "media"): ("noun", "رسانه"),
+    ("a2_unit30_job_interview", "being"): ("verb", "بودن"),
+    ("a2_unit30_job_interview", "start"): ("verb", "شروع کردن"),
+    ("a2_unit30_job_interview", "next"): ("adjective", "بعدی"),
+    ("a2_unit30_job_interview", "strong"): ("adjective", "قوی"),
+    ("a2_unit30_job_interview", "coming"): ("verb", "آمدن"),
+    # a2_unit31: "another way to get home" = راه (not طرف=side); drop English "leave" from the gloss of leaves.
+    ("a2_unit31_travel_disruption", "way"): ("noun", "راه"),
+    ("a2_unit31_travel_disruption", "leaves"): ("verb", "حرکت می‌کنه"),
+    # a2_unit32: remove English phrases (staying in touch / in touch / a lot / how many) from glosses (answer leak).
+    ("a2_unit32_online_habits", "staying"): ("verb", "در ارتباط ماندن"),
+    ("a2_unit32_online_habits", "touch"): ("noun", "تماس"),
+    ("a2_unit32_online_habits", "lot"): ("noun", "خیلی"),
+    ("a2_unit32_online_habits", "many"): ("adjective", "چند تا"),
+    # a2_unit35 (prescription; existing tablet/hours/stop entries above): leak + sense fixes.
+    ("a2_unit35_prescription", "side"): ("noun", "جانبی"),
+    ("a2_unit35_prescription", "shouldn't"): ("verb", "نباید"),
+    ("a2_unit35_prescription", "pick"): ("verb", "تحویل گرفتن"),
+    ("a2_unit35_prescription", "refills"): ("noun", "تکرارهای نسخه"),
+    ("a2_unit35_prescription", "taking"): ("verb", "مصرف کردن"),
+    ("a2_unit35_prescription", "once"): ("particle", "یک بار"),
+    ("a2_unit35_prescription", "course"): ("noun", "البته"),
+    # a2_unit36: "How long will the correction take?" = duration, not physical length (بلند).
+    ("a2_unit36_document_correction", "long"): ("adjective", "طولانی (مدت)"),
+    # a2_unit37: remove English from glosses (face to face / speak); meeting = a (video) meeting, not a "قرار ملاقات" appointment.
+    ("a2_unit37_video_calls", "face"): ("noun", "چهره"),
+    ("a2_unit37_video_calls", "speaking"): ("verb", "صحبت کردن"),
+    ("a2_unit37_video_calls", "meeting"): ("noun", "جلسه؛ دیدار"),
+    # a2_unit38: under = "under my kitchen sink" (زیر), not "under the name"; by = "by message"; drop English from can't/won't/by/under glosses.
+    ("a2_unit38_repair_visit", "under"): ("preposition", "زیر"),
+    ("a2_unit38_repair_visit", "by"): ("preposition", "با (از طریق)"),
+    ("a2_unit38_repair_visit", "can't"): ("verb", "نمی‌توانم/نمی‌تواند"),
+    ("a2_unit38_repair_visit", "won't"): ("verb", "نخواهد"),
+    # a2_unit39: "the contract is full time" -- full = full-time here (کامل alone is a wrong/vague sense).
+    ("a2_unit39_after_the_interview", "full"): ("adjective", "پر؛ تمام‌وقت"),
 }
 
 
