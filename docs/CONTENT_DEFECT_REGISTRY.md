@@ -3761,3 +3761,47 @@ pound" and "library" (u08/u09); fa مهندس / prs انجنیر glosses (u02); 
 long" (A2 u25).
 
 Verification: `scripts/verify.sh --content-only` passes.
+
+### 2026-10-19 — fa-en/en-nl gloss cleanup
+
+Scope: the backfill gloss tables (lexeme `english_gloss`, used by generated
+practice items) for fa-en and en-nl, plus four prs-en B1 review fields.
+Branch content/gloss-cleanup-fa-en-nl. Lists come from
+.local/logs/session9-backfill.md and .local/logs/session9-practice-fa-en.md.
+
+- **fa-en answer leakage** (scripts/backfill_lexemes_fa_en.py): 101 Persian
+  glosses carried Latin text, which shows the English answer inside the
+  prompt: "(مخفف it is)", "(زمان گذشتهٔ go)", "(در social media)",
+  "(منفیِ فعل کمکی do)". Rewritten in Persian, e.g. "(شکل کوتاه‌شده)",
+  "(گذشتهٔ «رفتن»)", "(مثلاً «شبکه‌های اجتماعی»)". The fixes cover
+  EN_TARGET_TO_FA_GLOSS, FA_EN_EXTRA_LEXEMES and LEVEL_SENSE_OVERRIDES. The
+  PR #49 UNIT_SENSE_OVERRIDES had no Latin and were not changed. Resolved
+  glosses with Latin: 88 before, 0 after.
+- **fa-en near-duplicates** (practice-review proposals): looks, seems and
+  sounds were all به‌نظر می‌رسد; third and 3rd were both سوم; got, took and
+  caught were all گرفت; seeing equalled see. Each now has a distinct gloss.
+  you'd lost the informal تو. said and appreciate were made clearer.
+- **en-nl target-word leakage** (scripts/backfill_lexemes_en_nl.py): 92
+  distinct English glosses (96 occurrences in NL_GLOSSES, the C1 table and
+  NL_UNIT_GLOSS_OVERRIDES) contained Dutch. Examples: "past participle of
+  zijn", "part of voorstellen", "separable: komt ... aan", "in 'de moeite
+  waard'", "(van toepassing, applicable)", "idiomatic 'zit vol'". Fixes
+  either strip the Dutch ("past participle", "separable verb") or re-gloss
+  in English ("as in 'worth the effort'"). Left in place: subject-agreement
+  notes such as "(with hij/zij)", proper-noun self-glosses, and English
+  homographs (help, pet, ten, mail).
+- **prs-en review routing**: b1_unit06, b1_unit16, b1_unit17 and b1_unit19
+  had `required_next_reviewer: null` after PR #44, even though their notes
+  raise Dari-register questions (ناوقت, آواز دادن, the would/if past
+  counterfactual, under budget). All four are now `native_speaker_pass`. No
+  `native_speaker_review` value was changed.
+
+New bug class: no. This is the gloss-leak class already logged for
+prs-en and fa-en practice. The en-nl leak is the same class in English
+glosses.
+
+Verification: validate and compile for every fa-en, en-nl and prs-en
+manifest entry (0 errors, warning counts unchanged).
+`scripts/verify.sh --content-only` passes. Self-reference check: 0 hits.
+Integrity check: 5 class-B, 0 class-A (unchanged). Fill-in-blank ambiguity:
+0.
