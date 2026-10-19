@@ -4,44 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.b1.unit01.necessity
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured
-    with the f".b1.unit01." filter (backfill_lexemes_prs_en.py): 76 unit lexemes across 4 lesson(s) with
-    lexemes; 43 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'',
-    ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss
-    is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'',
-    ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'',
-    ''the'', ''this'', ''to''] where present) with 42 distinct english_gloss values. No agreement_tags.semantic
-    exist on this direction''s lexemes for this unit (all None at classification time), so every slot
-    is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech
-    -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material()
-    to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint
-    time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A1 course
-    at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a
-    semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step
-    5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence
-    frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality
-    requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to
-    the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank
-    can be added safely. RE-CHECKED 2026-07-24 (POS-only matching polish): the lexeme backfill now carries
-    sparse semantic tags on this unit, but the tag-covered clean content tokens are only fee (banking_noun),
-    appointment (bureaucracy_noun), phone (device_noun/phone_phrase), right (turn_direction), friday
-    (weekday) = 5 distinct (the only other tagged content word, don''t via preference_verb, has a parenthetical
-    grammar-note gloss and would make a junk card), so no semantic union can reach the 6-distinct-token
-    matching_pairs floor at unit scope; the three match.001 templates deliberately stay POS-only. Revisit
-    once a fuller semantic-tag backfill lands for b1.unit01. UPDATE 2026-07-26 (wave-3 union re-pass):
-    commit 05af7ace landed generated per-lesson tags. lesson02.match.001 -> prs_en_b1_unit01_lesson02_words
-    (9 distinct tok/gloss: finish, today, pay, friday, has, make, call, confirm, go -- all clean, no
-    exclusions needed). lesson03.match.001 -> prs_en_b1_unit01_lesson03_words (20 distinct tok/gloss).
-    lesson04.match.001 -> prs_en_b1_unit01_lesson04_words (13 distinct tok/gloss). Every lesson tag alone
-    clears the 6-token floor, so no unit-wide fallback was needed. Read every gloss in all three pools:
-    lesson03/lesson04 each carry one negative-auxiliary contraction (don''t / did, do) whose gloss is a
-    parenthetical grammar note rather than a lexical translation -- this is the same systematic authoring
-    convention used for negative-auxiliary tokens throughout the corpus (seen again in b1.unit03''s
-    doesn''t/didn''t/will), not a pack-local defect, and no tag/POS lever isolates it from the many
-    legitimate verbs sharing the same tag; flagged honestly rather than mis-narrowing the pool. The
-    prior blocker is resolved.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-19 (prs-en practice pass): 9 fixes -- lesson02/03/04 choose/listen/translate slots were untagged (course scope 558 lexemes, heavy same-gloss ambiguity) -> restricted to their lesson tags; lesson03 translate pos noun+adverb (drops Latin-gloss verbs and next=پهلوی); lesson04 translate pos noun+adjective (drops did/done/also/too). NATIVE FLAGS: you're=تو/شما استی (informal تو + mixed), you'll gloss mixes Latin. BACKFILL GLOSS FLAGS: must=باید (در must be: حتماً) Latin leak; make=گرفتن (در make an appointment) Latin leak (lesson02 translate, no lever); don't/set/did/done Latin; fee=معاش (کارمزد بانک) -> کارمزد (معاش=salary wrong); next=پهلوی -> بعدی (wrong sense); must/should both باید ambiguous in lesson01 translate; lesson01 words carry no semantic tag so lesson01 templates draw the whole B1 level (558) at course scope -> add lesson01 tag in backfill. Prior note: Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured with the f\".b1.unit01.\" filter (backfill_lexemes_prs_en.py): 76 unit lexemes across 4 lesson(s) with lexemes; 43 of them survive the content-word filter (part_of_speech not in ['particle', 'preposition', 'pronoun', 'proper_noun', 'symbol'], and excluding function/auxiliary tokens whose english_gloss is a parenthetical grammar note rather than a clean translation: ['a', 'an', 'and', 'by', 'did', 'do', 'does', \"don't\", 'has', 'have', 'if', 'not', 'on', 'or', 'that', 'the', 'this', 'to'] where present) with 42 distinct english_gloss values. No agreement_tags.semantic exist on this direction's lexemes for this unit (all None at classification time), so every slot is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material() to this unit's own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint time (equivalent to unioning every lesson's tokens) even though it widens to the whole A1 course at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step 5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence frame, and getting that wrong is the recipe's #1 flagged defect class. matching_pairs (no framing-grammaticality requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank can be added safely. RE-CHECKED 2026-07-24 (POS-only matching polish): the lexeme backfill now carries sparse semantic tags on this unit, but the tag-covered clean content tokens are only fee (banking_noun), appointment (bureaucracy_noun), phone (device_noun/phone_phrase), right (turn_direction), friday (weekday) = 5 distinct (the only other tagged content word, don't via preference_verb, has a parenthetical grammar-note gloss and would make a junk card), so no semantic union can reach the 6-distinct-token matching_pairs floor at unit scope; the three match.001 templates deliberately stay POS-only. Revisit once a fuller semantic-tag backfill lands for b1.unit01. UPDATE 2026-07-26 (wave-3 union re-pass): commit 05af7ace landed generated per-lesson tags. lesson02.match.001 -> prs_en_b1_unit01_lesson02_words (9 distinct tok/gloss: finish, today, pay, friday, has, make, call, confirm, go -- all clean, no exclusions needed). lesson03.match.001 -> prs_en_b1_unit01_lesson03_words (20 distinct tok/gloss). lesson04.match.001 -> prs_en_b1_unit01_lesson04_words (13 distinct tok/gloss). Every lesson tag alone clears the 6-token floor, so no unit-wide fallback was needed. Read every gloss in all three pools: lesson03/lesson04 each carry one negative-auxiliary contraction (don't / did, do) whose gloss is a parenthetical grammar note rather than a lexical translation -- this is the same systematic authoring convention used for negative-auxiliary tokens throughout the corpus (seen again in b1.unit03's doesn't/didn't/will), not a pack-local defect, and no tag/POS lever isolates it from the many legitimate verbs sharing the same tag; flagged honestly rather than mis-narrowing the pool. The prior blocker is resolved."
 tag_schema:
   part_of_speech:
   - symbol
@@ -143,6 +109,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -165,6 +134,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -189,6 +161,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -211,6 +186,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -233,6 +211,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -253,10 +234,11 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - adjective
-      - adverb
       - noun
-      - verb
+      - adverb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -279,6 +261,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -301,6 +286,9 @@ templates:
       - adverb
       - noun
       - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -321,10 +309,11 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - adjective
-      - adverb
       - noun
-      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit01_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
