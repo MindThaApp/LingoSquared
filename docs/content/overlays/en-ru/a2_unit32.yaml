@@ -12,7 +12,9 @@ review:
 
     Fresh-context review 2026-10-11 (content-reviewer.md checklist): checked grading against grading.py (punctuation ignored, no optional ru subject pronoun, no ё/е equivalence), YAML boolean walk, example_gloss vs example, learner-visible internals notes, gendered first-person answers (none), character canon (Дима engineer, Настя teacher), ё in free-text answers (none). Fixes (overlay): ru.a2.unit32.lesson03.exercise06.write_online_habit_message accepted_answers widened with the word orders the unit itself teaches (\"Я пользуюсь интернетом с телефона каждый день.\", \"Я каждый день пользуюсь интернетом с телефона.\", \"Я пользуюсь интернетом каждый день с телефона.\"); ru.a2.unit32.lesson01.teach.chasto note now teaches *редко* (rarely), which was in introduced_tokens and tested in lesson01.exercise04 / lesson03.exercise01 but never shown. Realization unchanged. NATIVE FLAGS: teach.chasto example \"Я часто онлайн.\" is colloquial (\"Я часто бываю онлайн.\" is the safer model); lesson03.exercise05 dialogue_response prints the exact answer in the instruction. DEFERRED: none.
 
-    Fresh-context review 2026-10-17 (round 2, backlog it/ru): 2 fixes - lesson01.exercise05.order_use_internet accepts Каждый день я пользуюсь интернетом and Я каждый день пользуюсь интернетом (orders the unit teaches). NATIVE FLAGS: none new. DEFERRED: none."
+    Fresh-context review 2026-10-17 (round 2, backlog it/ru): 2 fixes - lesson01.exercise05.order_use_internet accepts Каждый день я пользуюсь интернетом and Я каждый день пользуюсь интернетом (orders the unit teaches). NATIVE FLAGS: none new. DEFERRED: none.
+
+    Second-pass review 2026-10-18: 5 fixes — teach.nastya_opinion: gloss \"but sometimes takes\" -> \"but sometimes it takes\"; lesson01.exercise06.write_daily_use: + Я каждый день пользуюсь интернетом / Я пользуюсь интернетом каждый день; lesson03.exercise06.write_online_habit_message: instruction no longer prints the Russian opinion sentence (answer leakage) — English opinion given instead (mirrored in realization prompt); + variant with \"но иногда это занимает\"; feedback now shows the model answer. NATIVE FLAGS: \"не сидеть онлайн\" (\"не сидеть в интернете\" is the more common collocation); lesson01.exercise02 distractor долго is never taught in the course."
 
 course:
   title: "Russian A2"
@@ -35,7 +37,7 @@ teaching:
   ru.a2.unit32.lesson02.teach.video: {title: "видео", gloss: "video", note: "*смотрю видео* means I watch videos.", example_gloss: "In the evening I watch videos."}
   ru.a2.unit32.lesson03.teach.nastya_frequency: {title: "Nastya asks about frequency", gloss: "Nastya: Dima, how often do you use the internet?", note: "Friends use informal *ты*."}
   ru.a2.unit32.lesson03.teach.dima_habit: {title: "Dima describes online habits", gloss: "Dima: Every day. I read the news online and watch videos.", note: "This gives the activity and frequency."}
-  ru.a2.unit32.lesson03.teach.nastya_opinion: {title: "Nastya gives an opinion", gloss: "Nastya: In my opinion, it is useful, but sometimes takes a lot of time.", note: "*но* adds a simple contrast."}
+  ru.a2.unit32.lesson03.teach.nastya_opinion: {title: "Nastya gives an opinion", gloss: "Nastya: In my opinion, it is useful, but sometimes it takes a lot of time.", note: "*но* adds a simple contrast."}
   ru.a2.unit32.lesson03.teach.dima_limit: {title: "Dima describes a limit", gloss: "Dima: I agree. In the evening I try not to stay online.", note: "*стараюсь* means I try."}
 
 exercises:
@@ -66,6 +68,8 @@ exercises:
     accepted_answers:
       - {value: "Каждый день я пользуюсь интернетом.", status: "correct"}
       - {value: "Каждый день я пользуюсь интернетом", status: "correct"}
+      - {value: "Я каждый день пользуюсь интернетом.", status: "correct"}
+      - {value: "Я пользуюсь интернетом каждый день.", status: "correct"}
     feedback: "The model answer is *Каждый день я пользуюсь интернетом*."
   ru.a2.unit32.lesson02.exercise01.recognize_telefon: {instruction: "Which word means \"phone\"?", correct_option: "телефон", distractors: ["интернет", "новости", "видео"], accepted_answers: [{value: "телефон", status: "correct"}], feedback: "*телефон* means \"phone.\""}
   ru.a2.unit32.lesson02.exercise02.recognize_novosti: {instruction: "Which word means \"news\"?", correct_option: "новости", distractors: ["телефон", "видео", "онлайн"], accepted_answers: [{value: "новости", status: "correct"}], feedback: "*новости* means \"news.\""}
@@ -116,11 +120,12 @@ exercises:
       - {value: "Каждый день я читаю новости онлайн", status: "correct"}
     feedback: "The model answer is *Каждый день я читаю новости онлайн*."
   ru.a2.unit32.lesson03.exercise06.write_online_habit_message:
-    instruction: "Write three short sentences: say you use the internet on your phone every day, say you often read news online, and give the opinion \"По-моему, это полезно, но иногда занимает много времени.\""
+    instruction: "Write three short sentences: say you use the internet on your phone every day, say you often read news online, and give the opinion \"In my opinion, it is useful, but sometimes it takes a lot of time.\""
     accepted_answers:
       - {value: "Каждый день я пользуюсь интернетом с телефона. Я часто читаю новости онлайн. По-моему, это полезно, но иногда занимает много времени.", status: "correct"}
       - {value: "Каждый день я пользуюсь интернетом с телефона. Я часто читаю новости онлайн. По-моему это полезно но иногда занимает много времени.", status: "correct"}
       - {value: "Я пользуюсь интернетом с телефона каждый день. Я часто читаю новости онлайн. По-моему, это полезно, но иногда занимает много времени.", status: "correct"}
       - {value: "Я каждый день пользуюсь интернетом с телефона. Я часто читаю новости онлайн. По-моему, это полезно, но иногда занимает много времени.", status: "correct"}
       - {value: "Я пользуюсь интернетом каждый день с телефона. Я часто читаю новости онлайн. По-моему, это полезно, но иногда занимает много времени.", status: "correct"}
-    feedback: "A complete message gives daily use, an online activity, and one opinion."
+      - {value: "Каждый день я пользуюсь интернетом с телефона. Я часто читаю новости онлайн. По-моему, это полезно, но иногда это занимает много времени.", status: "correct"}
+    feedback: "The model answer is *Каждый день я пользуюсь интернетом с телефона. Я часто читаю новости онлайн. По-моему, это полезно, но иногда занимает много времени.*"
