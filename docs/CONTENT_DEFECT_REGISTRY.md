@@ -3649,3 +3649,115 @@ native-judgement flags (job=وظیفه, evening=شام, bathroom=تشناب). Th
 fa-en flags were not touched because PR #49 owns that file.
 Verification: `scripts/verify.sh --content-only` passes. Self-reference,
 integrity and fill-in-blank ambiguity results match the base branch.
+
+### 2026-10-19 — shared en realization fixes
+Scope: the "shared-en" lists that the fa-en (PR #43), prs-en A1/A2 (#45)
+and prs-en B1/B2 (#44) reviews logged without applying, plus the PR #40
+note that the de-en distractor and sequencing defects probably also affect
+the other X-en courses. `docs/content/realizations/en/*` feeds fa-en,
+prs-en, nl-en and de-en, so every change was mirrored in the overlays that
+override the same field (pairs, answers, glosses, instructions, feedback).
+Branch content/shared-en-fixes, draft PR #51 into
+fix/wsl-handover-followups, 6 commits. Validate + compile for all 14 X-en
+groups (fa/prs/nl/de-en, every level) ran after each batch: 0 errors.
+
+**Character canon (decision).** Daniel is an engineer at a small company
+downtown. That is his own A1 u23 self-description and what every A2/B1/B2
+unit assumes (team, manager, projects, reports, the evening class "for
+work"). Changes: A1 u02 l03 "I work at the library." -> "I'm an engineer."
+(he is now a library member who greets the new member Leila, so u04/u05,
+where he asks about library hours, are no longer contradictory); A1 u07
+the cafe server is "Server", not Daniel; A1 u23 example "Leila is a
+teacher." -> "My sister is a teacher." (Daniel's sister is the teacher of
+u06); A1 u02 l02 "Leila is a woman. _ is an engineer." -> Sara (Leila is a
+student). B1 u13 "Daniel, who joined the team in March" stays: it is Mia's
+team, a move inside his engineering job. Leila: a student in A1 who works
+in an office later; no other change needed.
+
+Fixes (about 160 items in the realization, plus the mirrored overlay
+fields):
+- **Matching tests later-lesson words** (17 exercises, 16 units): A1 u06,
+  u08 (fresh; l03 "the total price = eight dollars" -> "per pound"), u09,
+  u10, u12, u13, u15, u16, u18, u19, u20, u21; A2 u26, u30, u32, u33. The
+  forward pairs are removed from the realization and the four overlays'
+  pairs, accepted answers and feedback. u09/u10/u12 got one review pair
+  from an earlier unit (library, bank, cold) to stay at 6. u19 prefer clue
+  "a stronger preference" -> "liking one thing more than another".
+- **Answer leakage**: 29 English "Write that ..." / "Give Daniel advice
+  ..., starting with 'If I were you'" blocks are now empty: B1 u01-u11
+  (16), B1 u16 reply_advise_daniel (the prs-en instruction now carries the
+  task), A2 u30-u40 (10), and the A1 lint hits u08 write_kilo, u09
+  write_in_front_of, u11 write_weather. Every overlay already gave the task.
+- **B1 u03 you/we**: the "you" prompt is gone; nl/fa instructions now say
+  we/(ما) like the key (prs/de already did). The same mismatch was fixed in
+  B1 u07 write_if_not_ready/write_backup_plan. B1 u08 write_before_upstairs:
+  nl/fa asked "someone should check", but the key is a request.
+- **Dialogue logic**: A1 u65 clerk "Can I exchange it for a larger size?"
+  -> "We can exchange it for a larger size."; B1 u06 "before he arrived" ->
+  "before the stranger arrived"; B1 u08 "when she gets here" (Daniel is not
+  home yet) -> "when she arrives"; B2 u01 the mini-argument now states the
+  concern before "That is a fair concern" ("Some managers say collaboration
+  is weaker."); B2 u03 Leila's second "Exactly." (to a statement) -> "That's
+  fair."
+- **Answer keys**: A1 u49 respond_own_sorting_statement held the lesson04
+  writing key (now trash/sort answers); write_own_sorting_message dropped
+  the two "trash goes out on Fridays" variants; fa-en dropped its
+  off-prompt "recycling bins" answer and feedback mention. A1 u58 "They saw
+  ... That's twelve dollars." -> "The tickets were twelve dollars."
+- **Other English/canon/sequencing**: A1 u11 dialogue rain "tomorrow" (the
+  forecast says tomorrow is sunny) -> "on Saturday"; u30 "only play
+  together sometimes" -> "rarely play together"; u32 gray -> black; u38 the
+  prompt no longer asks for untaught "I have to", and need_to is no longer
+  matched by the chore distractors; u39 fa/prs "her" distractors gave the
+  "my" answer away; u41 "This soup needs you to add some salt." -> "Please
+  add some salt to the soup."; u49/u50 "borrowed at" -> "from"; u51 "their
+  trip" -> "her trip ... with Mia", and Leila (not Daniel) pays, as the
+  reading and key say; u58 the reading's guide question is Daniel's, as in
+  the dialogue; u63 "Put the bag on the shelf?" -> "Can I put ..."; u64 Mia
+  now shows her photo before Leila praises it; A2 u25 "Since when have you
+  lived ...?" -> "How long have you lived ...?"; A2 u28 medicine prompt no
+  longer fits "prescription"; A2 u37 untaught nobody/cannot -> the
+  others/can't.
+- **PR #40 carry-over (overlays)**: every de-en distractor that PR #40
+  removed was checked against nl/fa/prs-en, then English distractors in A1
+  u03-u14 got a token-sequencing scan and all listen_select items a
+  heard-in-audio scan. Fixed: untaught (u04 opens, also de-en; u05 quarter
+  in lesson01; u06 cousin(s)/grandparents; u09 very; u11 closed/busy, also
+  de-en), the tested speaker's own line (u10, u12, u14), also-correct (B1 u03
+  weekend), "choose the sentence you hear" with heard distractors (u21
+  nl/fa instruction now targets Daniel's request), and u30 fa "reading".
+  Most other heard-in-audio hits are content questions ("how much is the
+  popcorn?") where the heard option is a fair listening distractor. Those
+  were left.
+
+Left as is, with reasons:
+- A1 u12 l03 match_label_fields mixes field/value pairs with definitions
+  (Large, Black). That is a format choice, not a wrong key. Dropping them
+  gives 3 pairs.
+- A1 u08 l03 match_labels Water/Tomatoes are not on the label, but they are
+  lesson01 review pairs ("sold by the bottle/kilo"), so they are kept.
+- A1 u49 word_bank "trash" without "?": deliberately punctuation-neutral
+  (10-11 review). Not changed.
+- A2 u25 notice_text ("You have lived at your new address since last month,
+  so ...") is still odd for a generic notice. Fixing it means rewriting
+  lesson03.exercise03 in three courses.
+- A1 "Write that you ..." pronoun-swap prompts (u09-u23, about 15): not
+  flagged by the lint. A1 scaffolding was left for the owner, as in PR #37.
+- A1 u21 "One way or round trip?": a choice question, not a leak (PR #37).
+- Forward-reference script: still lists u20 right "big" (the base form of
+  "bigger") and u44 rights "flowers bloom"/"the leaves change color". All
+  four overlays override those rights in the learner's language.
+
+Warnings: A1/A2 groups +4 each (fa-en 18->22, prs-en 19->23, nl-en 57->61,
+fa-en-a2 5->9, nl-en-a2 25->29, prs-en-a2 33->37). The cause is matching
+exercises now at 5 pairs (below the 6 aim; u18-u21, A2 u26/u30/u32/u33),
+the same warning that u22-u24/u30-u33/u44-u49 already carry. B1/B2/de-en
+counts are unchanged. Leak lint: 43 -> 36 hits; X-en 10 -> 3 (the u21
+choice question). `required_next_reviewer` was not changed anywhere.
+Native flags (new learner-language text): nl/de/fa/prs clues for "per
+pound" and "library" (u08/u09); fa مهندس / prs انجنیر glosses (u02); fa
+گارسون / prs پیشخدمت for the cafe server (u07); prs "درست می‌گین" for
+"That's fair" (B2 u03); fa "چند وقته" / prs "چند وقت استه که" for "How
+long" (A2 u25).
+
+Verification: `scripts/verify.sh --content-only` passes.
