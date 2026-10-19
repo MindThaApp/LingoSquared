@@ -1,0 +1,499 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit01
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit01.argumentation
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 15 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x5, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u01_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u01_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (ادامه, آمار, رد, ارزش, نتیجه) and the fixed-sentence translations (نادیده, ادعا) to exactly one token
+    at course scope. Every frame is a sentence from this unit''s own realization with one token slotted;
+    the fixed-sentence English prompts are the overlay''s example_gloss for that sentence. B2 sense overrides
+    used by this unit''s pools: برنامه program, روشن clear, تازه new, اصلی main, بالا high (adjective),
+    مخالف opposing, مدیر manager/principal, می‌شود/نمی‌شود passive helper. Held out of every pool: نظر
+    (paraphrases دیدگاه), پخش (paraphrases نشر), سوال‌های/تماس‌های (doublets of پرسش/تماس), the formal
+    2pl بگویید, proper noun بامیان, helper participles. Realization flag (not used here): ''نقطه مخالف
+    را اول منصفانه بگویید'' uses Iranian/formal -ید. MEASURED (recipe section 9 step 4, filter .b2.unit01.):
+    ALL 73/119 (61%), recognition 72/119 (61%), structured 72/119 (61%), production 63/119 (53%); 119
+    lexemes because unit01 is the first B2 unit and absorbs every common function word; 3/3 lessons in
+    every tier, no dead template, every MC slot >=3 distinct glosses, every matching pool >=6 tokens.
+    Course scope: every word_order / fixed-sentence slot resolves to exactly 1 token, none is a literal
+    word of its own frame. Offline port of generate_checkpoint() pass 1: 15/15 items on 5 seeds, all three
+    tiers and all lessons represented. No gloss in any pool contains Dari script. Needs native-Dari review
+    of the B2 glosses and a fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u01_core
+    - b2u01_vert
+    - b2u01_continuation_single
+    - b2u01_statistics_single
+    - b2u01_rejection_single
+    - b2u01_value_single
+    - b2u01_result_single
+    - b2u01_ignore_single
+    - b2u01_claim_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit01.lesson01.choose.001
+  lesson_content_key: prs.b2.unit01.argumentation.lesson01.claim
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on argumentation (claims, evidence, rebuttal).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson01.match.002
+  lesson_content_key: prs.b2.unit01.argumentation.lesson01.claim
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on argumentation (claims, evidence, rebuttal).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson01.order.003
+  lesson_content_key: prs.b2.unit01.argumentation.lesson01.claim
+  type: word_order
+  frame:
+    text: 'به نظر من، برنامه جوانان باید {item} پیدا کند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_continuation_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'به نظر من، برنامه جوانان باید {item} پیدا کند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'به نظر من، برنامه جوانان باید ادامه پیدا کند. = In my opinion, the youth program should continue.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson01.translate.004
+  lesson_content_key: prs.b2.unit01.argumentation.lesson01.claim
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson01.translate.005
+  lesson_content_key: prs.b2.unit01.argumentation.lesson01.claim
+  type: translation
+  frame:
+    text: 'Every claim must have a reason.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_claim_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'هر {item} باید دلیل داشته باشد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: هر ادعا باید دلیل داشته باشد.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson02.choose.001
+  lesson_content_key: prs.b2.unit01.argumentation.lesson02.evidence
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on argumentation (claims, evidence, rebuttal).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson02.order.002
+  lesson_content_key: prs.b2.unit01.argumentation.lesson02.evidence
+  type: word_order
+  frame:
+    text: 'بر اساس {item}، بیشتر شاگردان به برنامه گوش می‌دهند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_statistics_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'بر اساس {item}، بیشتر شاگردان به برنامه گوش می‌دهند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'بر اساس آمار، بیشتر شاگردان به برنامه گوش می‌دهند. = According to statistics, more students
+      listen to the program.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson02.order.003
+  lesson_content_key: prs.b2.unit01.argumentation.lesson02.evidence
+  type: word_order
+  frame:
+    text: 'شواهد کافی برای {item} پیشنهاد نداریم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_rejection_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'شواهد کافی برای {item} پیشنهاد نداریم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'شواهد کافی برای رد پیشنهاد نداریم. = We do not have enough evidence to reject the proposal.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson02.translate.004
+  lesson_content_key: prs.b2.unit01.argumentation.lesson02.evidence
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.choose.001
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on argumentation (claims, evidence, rebuttal).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.match.002
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on argumentation (claims, evidence, rebuttal).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.order.003
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: word_order
+  frame:
+    text: 'با آن هم، برنامه {item} اجتماعی دارد.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_value_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'با آن هم، برنامه {item} اجتماعی دارد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'با آن هم، برنامه ارزش اجتماعی دارد. = Even so, the program has social value.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.order.004
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: word_order
+  frame:
+    text: 'در {item}، من از ادامه نشر دفاع می‌کنم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u01_result_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'در {item}، من از ادامه نشر دفاع می‌کنم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'در نتیجه، من از ادامه نشر دفاع می‌کنم. = Therefore, I defend continuing the broadcast.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.translate.005
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u01_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit01.lesson03.translate.006
+  lesson_content_key: prs.b2.unit01.argumentation.lesson03.rebuttal
+  type: translation
+  frame:
+    text: 'We cannot ignore young people’s voices.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u01_ignore_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'نمی‌توانیم صدای جوانان را {item} بگیریم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: نمی‌توانیم صدای جوانان را نادیده بگیریم.'
+    language_code: en
+    direction: ltr
