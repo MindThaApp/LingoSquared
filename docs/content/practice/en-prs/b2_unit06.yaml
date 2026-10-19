@@ -1,0 +1,471 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit06
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit06.abstraction
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 14 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x4, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u06_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u06_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (آزادی, پایدار, مسئله, سکوت) and the fixed-sentence translations (بخش, تفاوت) to exactly one token
+    at course scope. Every frame is a sentence from this unit''s own realization with one token slotted;
+    the fixed-sentence English prompts are the overlay''s example_gloss for that sentence. B2 overrides
+    used: می‌بیند (in ''is harmed''), چند several (was ''how many''), موافقت agreement (English-only gloss).
+    شخصی held out because ''personal'' paraphrases خصوصی ''private''. Realization flag: lesson02/03 exercise-8
+    targets end in ''مهم هستند'' (ungrammatical, Iranian copula). MEASURED (recipe section 9 step 4, filter
+    .b2.unit06.): ALL 41/61 (67%), recognition 41/61 (67%), structured 41/61 (67%), production 36/61 (59%);
+    3/3 lessons in every tier, no dead template, every MC slot >=3 distinct glosses, every matching pool
+    >=6 tokens. Course scope: every word_order / fixed-sentence slot resolves to exactly 1 token, none
+    is a literal word of its own frame. Offline port of generate_checkpoint() pass 1: 15/15 items on 5
+    seeds, all three tiers and all lessons represented. No gloss in any pool contains Dari script. Needs
+    native-Dari review of the B2 glosses and a fresh-context review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u06_core
+    - b2u06_vert
+    - b2u06_freedom_single
+    - b2u06_stable_single
+    - b2u06_issue_single
+    - b2u06_silence_single
+    - b2u06_part_single
+    - b2u06_difference_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit06.lesson01.choose.001
+  lesson_content_key: prs.b2.unit06.abstraction.lesson01.values
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on abstract values and responding to views.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson01.match.002
+  lesson_content_key: prs.b2.unit06.abstraction.lesson01.values
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on abstract values and responding to views.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson01.order.003
+  lesson_content_key: prs.b2.unit06.abstraction.lesson01.values
+  type: word_order
+  frame:
+    text: '{item} بدون قانون آسیب می‌بیند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_freedom_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} بدون قانون آسیب می‌بیند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'آزادی بدون قانون آسیب می‌بیند. = Freedom is harmed without law.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson01.order.004
+  lesson_content_key: prs.b2.unit06.abstraction.lesson01.values
+  type: word_order
+  frame:
+    text: 'اعتماد بدون صداقت {item} نمی‌ماند.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u06_stable_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'اعتماد بدون صداقت {item} نمی‌ماند.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'اعتماد بدون صداقت پایدار نمی‌ماند. = Trust does not remain stable without honesty.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson01.translate.005
+  lesson_content_key: prs.b2.unit06.abstraction.lesson01.values
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson02.choose.001
+  lesson_content_key: prs.b2.unit06.abstraction.lesson02.respond
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on abstract values and responding to views.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson02.order.002
+  lesson_content_key: prs.b2.unit06.abstraction.lesson02.respond
+  type: word_order
+  frame:
+    text: '{item} اصلی حریم خصوصی است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_issue_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} اصلی حریم خصوصی است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'مسئله اصلی حریم خصوصی است. = The main issue is privacy.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson02.translate.003
+  lesson_content_key: prs.b2.unit06.abstraction.lesson02.respond
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson02.translate.004
+  lesson_content_key: prs.b2.unit06.abstraction.lesson02.respond
+  type: translation
+  frame:
+    text: 'I agree with this part, but I have another question.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_part_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'با این {item} موافقم، ولی پرسش دیگری دارم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: با این بخش موافقم، ولی پرسش دیگری دارم.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson03.choose.001
+  lesson_content_key: prs.b2.unit06.abstraction.lesson03.culture
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on abstract values and responding to views.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson03.match.002
+  lesson_content_key: prs.b2.unit06.abstraction.lesson03.culture
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on abstract values and responding to views.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson03.order.003
+  lesson_content_key: prs.b2.unit06.abstraction.lesson03.culture
+  type: word_order
+  frame:
+    text: 'برای بعضی مردم، {item} نشانه احترام است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_silence_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'برای بعضی مردم، {item} نشانه احترام است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'برای بعضی مردم، سکوت نشانه احترام است. = For some people, silence is a sign of respect.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson03.translate.004
+  lesson_content_key: prs.b2.unit06.abstraction.lesson03.culture
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u06_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit06.lesson03.translate.005
+  lesson_content_key: prs.b2.unit06.abstraction.lesson03.culture
+  type: translation
+  frame:
+    text: 'A difference of opinion is not enmity.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u06_difference_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} نظر دشمنی نیست.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: تفاوت نظر دشمنی نیست.'
+    language_code: en
+    direction: ltr

@@ -1,0 +1,521 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit02
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit02.speculation
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 16 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x6, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u02_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u02_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (شام, برف, بسته, تصادفی, منتظرند, آماده) and the fixed-sentence translations (طولانی‌تر, راننده) to
+    exactly one token at course scope. Every frame is a sentence from this unit''s own realization with
+    one token slotted; the fixed-sentence English prompts are the overlay''s example_gloss for that sentence.
+    B2 sense overrides used: تا until/by (was the A1 counter word), خبر news, بست closed (was ''job vacancy'',
+    held out of pools anyway because it paraphrases بسته), باشیم ''(that) we be'' (was ''(if) we have'').
+    راه held out because ''road; way'' paraphrases سرک ''street; road''. The lesson03 consequence lesson''s
+    hero clause ''ممکن است در بازار بمانند'' has no deterministic single-token frame; it is covered by
+    the broad pools. MEASURED (recipe section 9 step 4, filter .b2.unit02.): ALL 53/81 (65%), recognition
+    53/81 (65%), structured 53/81 (65%), production 48/81 (59%); 3/3 lessons in every tier, no dead template,
+    every MC slot >=3 distinct glosses, every matching pool >=6 tokens. Course scope: every word_order
+    / fixed-sentence slot resolves to exactly 1 token, none is a literal word of its own frame. Offline
+    port of generate_checkpoint() pass 1: 15/15 items on 5 seeds, all three tiers and all lessons represented.
+    No gloss in any pool contains Dari script. Needs native-Dari review of the B2 glosses and a fresh-context
+    review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u02_core
+    - b2u02_vert
+    - b2u02_evening_single
+    - b2u02_snow_single
+    - b2u02_closed_single
+    - b2u02_accidental_single
+    - b2u02_waiting_single
+    - b2u02_ready_single
+    - b2u02_longer_single
+    - b2u02_driver_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.choose.001
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on speculation and deduction (a delayed bus).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.match.002
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on speculation and deduction (a delayed bus).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.order.003
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: word_order
+  frame:
+    text: 'شاید راه تا {item} باز شود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_evening_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'شاید راه تا {item} باز شود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'شاید راه تا شام باز شود. = Perhaps the road will open by evening.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.order.004
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: word_order
+  frame:
+    text: '{item} راه کوهستان را بست.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_snow_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} راه کوهستان را بست.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'برف راه کوهستان را بست. = Snow closed the mountain road.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.translate.005
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson01.translate.006
+  lesson_content_key: prs.b2.unit02.speculation.lesson01.certainty
+  type: translation
+  frame:
+    text: 'The driver may arrive late.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u02_driver_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'احتمال دارد {item} دیر برسد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: احتمال دارد راننده دیر برسد.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson02.choose.001
+  lesson_content_key: prs.b2.unit02.speculation.lesson02.deduction
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on speculation and deduction (a delayed bus).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson02.order.002
+  lesson_content_key: prs.b2.unit02.speculation.lesson02.deduction
+  type: word_order
+  frame:
+    text: 'سرک اصلی امروز {item} است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u02_closed_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'سرک اصلی امروز {item} است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'سرک اصلی امروز بسته است. = The main road is closed today.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson02.order.003
+  lesson_content_key: prs.b2.unit02.speculation.lesson02.deduction
+  type: word_order
+  frame:
+    text: 'این تاخیر نمی‌تواند {item} باشد.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u02_accidental_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'این تاخیر نمی‌تواند {item} باشد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'این تاخیر نمی‌تواند تصادفی باشد. = This delay cannot be accidental.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson02.translate.004
+  lesson_content_key: prs.b2.unit02.speculation.lesson02.deduction
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson02.translate.005
+  lesson_content_key: prs.b2.unit02.speculation.lesson02.deduction
+  type: translation
+  frame:
+    text: 'The other route is longer.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u02_longer_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'مسیر دیگر {item} است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: مسیر دیگر طولانی‌تر است.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson03.choose.001
+  lesson_content_key: prs.b2.unit02.speculation.lesson03.consequence
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on speculation and deduction (a delayed bus).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson03.match.002
+  lesson_content_key: prs.b2.unit02.speculation.lesson03.consequence
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on speculation and deduction (a delayed bus).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson03.order.003
+  lesson_content_key: prs.b2.unit02.speculation.lesson03.consequence
+  type: word_order
+  frame:
+    text: 'مسافران در چایخانه {item}.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: b2u02_waiting_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'مسافران در چایخانه {item}.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'مسافران در چایخانه منتظرند. = The passengers are waiting in the teahouse.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson03.order.004
+  lesson_content_key: prs.b2.unit02.speculation.lesson03.consequence
+  type: word_order
+  frame:
+    text: 'بهتر است برای تاخیر {item} باشیم.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u02_ready_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'بهتر است برای تاخیر {item} باشیم.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'بهتر است برای تاخیر آماده باشیم. = It is better to be prepared for delay.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit02.lesson03.translate.005
+  lesson_content_key: prs.b2.unit02.speculation.lesson03.consequence
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u02_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
