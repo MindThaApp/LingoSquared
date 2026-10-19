@@ -2234,7 +2234,7 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     # glosses (answer leaks); "follow up" = pursue; "start ten minutes early".
     ("b1_unit14_professional_communication", "possibly"): ("adverb", "احتمالاً؛ شاید"),
     ("b1_unit14_professional_communication", "best"): ("adjective", "بهترین"),
-    ("b1_unit14_professional_communication", "advance"): ("noun", "پیش‌اپیش"),
+    ("b1_unit14_professional_communication", "advance"): ("noun", "پیشاپیش"),
     ("b1_unit14_professional_communication", "follow"): ("verb", "پیگیری کردن"),
     ("b1_unit14_professional_communication", "early"): ("adverb", "زود"),
     # b1_unit15 (complaints): "I can't use it" -> plain first person, no English.
@@ -2412,7 +2412,7 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b1_unit05_workplace", "update"): ("verb", "به‌روزرسانی"),
     ("b1_unit06_narrative", "pull"): ("verb", "کنار کشیدن"),
     ("b1_unit06_narrative", "pulled"): ("verb", "کنار کشید"),
-    ("b1_unit06_narrative", "over"): ("adjective", "تمام‌شده"),
+    ("b1_unit06_narrative", "over"): ("adjective", "کنار (کنار زدن ماشین)"),
     ("b1_unit06_narrative", "when"): ("adverb", "وقتی که"),
     ("b1_unit06_narrative", "word"): ("noun", "قول"),
     ("b1_unit06_narrative", "stopped"): ("verb", "ایستاد"),
