@@ -4,87 +4,93 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit16.routines
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: 'Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the sibling
-    fa-en/a1_unit16.yaml pack''s structure (11 templates). Same deliberate scope decision as that pack: lesson01 (wake up/get
-    dressed/go to work/have dinner/go to bed) gets ZERO generated templates -- every one of its core routine actions is a
-    multi-word phrase tokenized word-by-word with no same-lesson single-token synonym set to build a genuine multi- candidate
-    slot from. The other three lessons reuse the already- established 12-member hour_number tag (narrower than the broad 22-member
-    number tag specifically to keep clock-hour slots in 1-12) for every hour mentioned, the broad number tag for bare-word
-    listen_select recognition, and a 2-member meal tag (dinner/ breakfast) for "I have {item}." -- deliberately NOT used in
-    lesson01 even though "dinner" is introduced there, since "breakfast" is only introduced in lesson03 (a lesson''s own practice
-    pool must be ready as soon as that lesson alone is completed). All POS/semantic-tag classification was already present
-    in scripts/ _en_target_lexeme_common.py before this pass -- only scripts/ backfill_lexemes_prs_en.py''s own Dari gloss
-    dict needed extending (wake/up/dressed/dinner/bed/every/usually/breakfast/after), cross- checked against docs/content/overlays/prs-en/a1_unit16.yaml''s
-    own real Dari phrasing (e.g. wake up="بیدار شدن", get dressed="کالا پوشیدن", go to bed="به بستر رفتن/خوابیدن"). Verified
-    with scripts/_practice_slot_check.py that every slot has >=1 real candidate lexeme and every multiple_choice/listen_select
-    slot has >=4 distinct candidate values. The underlying en realization unit16 is UNREVIEWED (Codex was usage-limited at
-    authoring time); the prs-en overlay is already reviewed -- the realization needs the standard fresh-context review before
-    import.
-
-    Deepened 2026-07-07 (templates-per-unit audit found this unit tied-shallowest in prs-en at 8). Added 5 new templates,
-    all reusing already-verified tags/vocabulary with exercise TYPES this unit hadn''t used yet: hour_number gained multiple_choice
-    (lesson02) and listen_select (lesson03) -- it previously only had word_order/ translation; number (already used for listen_select
-    twice) gained multiple_choice (lesson02); meal (dinner/breakfast, only ever used for translation) gained a word_order
-    template anchored to lesson04 ("I have {item} every day" -- both "I have breakfast every day." and "I have dinner every
-    day." are real, grammatical sentences; anchored to lesson04 like the file''s own existing meal_translate, since breakfast
-    isn''t introduced until lesson03, same "ready as soon as that lesson alone is completed" discipline this file already
-    documents above); and hour_number gained a matching_pairs (lesson04, 8 of its 12 real members, per AUTHORING_GUIDE.md
-    #16). No new EN_POS/semantic-tag or Dari-gloss additions needed -- every tag used here was already fully classified/glossed.
-    Considered fill_in_blank for hour_number/number/meal but rejected all three: hour_number/number have 12/22 genuinely interchangeable-in-frame
-    candidates (e.g. "I wake up at {item} every day" is grammatical for any hour), and meal''s 2 members, while not literal
-    synonyms, have no frame in this unit''s real taught sentences that visibly disambiguates breakfast from dinner without
-    also being gameable by a second independently-sampled slot -- scripts/ _fill_in_blank_ambiguity_check.py (and compile_content.py''s
-    hard-fail per AUTHORING_GUIDE.md #17) would flag any single-slot attempt at any of the three, so zero new fill_in_blank
-    templates, matching this direction''s own established "zero is fine" precedent. Re-verified scripts/_practice_slot_check.py
-    (all three tags still safely above the >=3/>=2 floors for their new exercise types) and scripts/_fill_in_blank_ambiguity_check.py
-    (zero new AMBIGUOUS flags) before import. New count: 13 templates (8 -> 13).
-
-    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found 13 of the 15 templates
-    DEAD at checkpoint scope (20 DEAD lines, since the 8-slot hour_match counted once per slot): every template built on
-    `hour_number` or `number` was dead, because BOTH tags are established entirely by earlier units -- unit16 itself introduces
-    zero hour_number- or number-tagged lexemes (confirmed via the iter_specs unit filter: unit16''s own tokens are wake/up/dressed/dinner/bed/every/usually/breakfast/after,
-    and only dinner/breakfast carry any semantic tag at all, both `meal`). generate_checkpoint() only loads unit16''s own
-    lexemes, so these 13 had 0 unit-scoped candidates -- recipe DO-NOT #2 again, and the reason `meal`''s 2 templates (meal_translate.003,
-    meal_order.005) were never flagged: meal is 100% unit-native AND course-wide-identical (no other unit reuses it), so
-    it was always safe and is unchanged here.
-
-    PACK-ONLY fix: every dead template was rebuilt on unit16''s own vocabulary. Where the frame has literal sentence text
-    (word_order, fixed-sentence translation) the slot is now `meal` (the only tag that is both unit-native and course-safe
-    per SS1.1 -- "Every day, I have {item}." / "Every day, I eat {item}." / "I usually have {item}." / "I always have {item}."
-    / "I have {item} at home." are all grammatical for both breakfast and dinner, at COURSE scope too since meal has no other
-    course-wide members). Where the frame is bare (`{item}` only -- multiple_choice/listen_select/matching_pairs/bare-word
-    translation) course-scope breadth is a non-issue, so those now use two new untagged POS-only pools: noun_pool = bed/dinner/breakfast
-    (3, POS=noun with no semantic filter, so it legitimately also catches the two meal-tagged nouns) and content_pool = wake/dressed/every/usually
-    (4, verb+adjective+adverb). A third pool, full_pool = the union of both (7 distinct: bed/dinner/breakfast/wake/dressed/every/usually),
-    anchors the one matching_pairs. Excluded "up" (particle) and "after" (preposition) from every pool per recipe SS8.1#5
-    (function-word noise). Read every gloss in all three pools (SS0.1); all distinct, no collisions.
-
-    13 replacement templates (like-for-like on type/tier/lesson-anchor): lesson02 keeps 5 templates (word_order on meal,
-    fixed-sentence translation on meal, listen_select on noun_pool, multiple_choice on noun_pool, multiple_choice on content_pool),
-    lesson03 keeps 2 (word_order on meal, listen_select on full_pool -- meal_translate.003 unchanged), lesson04 keeps 6 (word_order
-    on meal x2 variants, fixed-sentence translation on meal, listen_select on content_pool, matching_pairs on full_pool x7
-    -- meal_order.005 unchanged). Tiers: recognition 5 (2 MC + 3 listen_select), structured 7 (5 word_order + 1 matching_pairs
-    + the pre-existing meal_order.005), production 3 (2 new fixed-sentence translations + the pre-existing meal_translate.003).
-    Verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.
-
-    Polish wave 2 (2026-07-24): dispatched for POS-only matching_pairs (hour_match.006). Left POS-only DELIBERATELY per
-    the polish rubric''s honest-thin rule: unit16 has exactly ONE unit-native semantic tag, meal (dinner/breakfast, 2
-    tokens -- re-confirmed against backfill_lexemes_prs_en.iter_specs()), so no union of unit-native semantic tags can
-    reach the 6-distinct-token matching floor; adding tags is out of pack-only scope, and a wrong union is worse than
-    the status quo. The untagged full_pool (7 unit-scoped tokens, this file''s own REAUTH redesign above) stays.
-
-    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a unit-scoped semantic
-    tag, prs_en_a1_unit16_words, in backfill_lexemes_prs_en. Re-anchored the dispatched lesson04.hour_match.006 from the
-    untagged full_pool to a new unit_tag_pool preset (semantic prs_en_a1_unit16_words + part_of_speech [noun, verb,
-    adjective, adverb]). Unit-scope pool is the identical 7 tokens (bed/breakfast/dinner/dressed/every/usually/wake --
-    the tag-plus-POS filter naturally excludes "up" (particle) and "after" (preposition), the same two tokens full_pool''s
-    own POS filter already excluded; glosses re-read, all distinct, no token baked into another member''s gloss), but
-    course scope now equals unit scope, so Endless Practice no longer pulls off-theme course-wide nouns/verbs/
-    adjectives/adverbs into this pair. Slot count stays at 7 (already above the 6-pair floor). Every other POS-only
-    template in this file (word_order over `meal`, bare MC/listen/translate over noun_pool/content_pool) is out of this
-    dispatch and left as-is.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Review 2026-10-19 (prs-en practice pass): 5 fixes -- noun_pool/content_pool/full_pool untagged (509/523/1032 course candidates) pinned to prs_en_a1_unit16_words (5 templates); volume_order.007/.008 feedback_frame English -> Dari. NATIVE FLAGS: dinner=شب چاشت, breakfast=صبح‌چاشت, dressed=کالا پوشیدن are doubtful Afghan Dari (ناشتا / شام or غذای شب / لباس پوشیدن).
+    BACKFILL GLOSS FLAGS: dinner=شب چاشت; breakfast=صبح‌چاشت; dressed=کالا پوشیدن -> verify/replace; wake=بیدار شدن (در wake up) and up=... Latin in MC/listen/matching options. Prior note:
+    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the
+    sibling fa-en/a1_unit16.yaml pack's structure (11 templates). Same deliberate scope decision as that pack:
+    lesson01 (wake up/get dressed/go to work/have dinner/go to bed) gets ZERO generated templates -- every one of
+    its core routine actions is a multi-word phrase tokenized word-by-word with no same-lesson single-token
+    synonym set to build a genuine multi- candidate slot from. The other three lessons reuse the already-
+    established 12-member hour_number tag (narrower than the broad 22-member number tag specifically to keep
+    clock-hour slots in 1-12) for every hour mentioned, the broad number tag for bare-word listen_select
+    recognition, and a 2-member meal tag (dinner/ breakfast) for "I have {item}." -- deliberately NOT used in
+    lesson01 even though "dinner" is introduced there, since "breakfast" is only introduced in lesson03 (a
+    lesson's own practice pool must be ready as soon as that lesson alone is completed). All POS/semantic-tag
+    classification was already present in scripts/ _en_target_lexeme_common.py before this pass -- only scripts/
+    backfill_lexemes_prs_en.py's own Dari gloss dict needed extending
+    (wake/up/dressed/dinner/bed/every/usually/breakfast/after), cross- checked against docs/content/overlays/prs-
+    en/a1_unit16.yaml's own real Dari phrasing (e.g. wake up="بیدار شدن", get dressed="کالا پوشیدن", go to bed="به
+    بستر رفتن/خوابیدن"). Verified with scripts/_practice_slot_check.py that every slot has >=1 real candidate
+    lexeme and every multiple_choice/listen_select slot has >=4 distinct candidate values. The underlying en
+    realization unit16 is UNREVIEWED (Codex was usage-limited at authoring time); the prs-en overlay is already
+    reviewed -- the realization needs the standard fresh-context review before import. Deepened 2026-07-07
+    (templates-per-unit audit found this unit tied-shallowest in prs-en at 8). Added 5 new templates, all reusing
+    already-verified tags/vocabulary with exercise TYPES this unit hadn't used yet: hour_number gained
+    multiple_choice (lesson02) and listen_select (lesson03) -- it previously only had word_order/ translation;
+    number (already used for listen_select twice) gained multiple_choice (lesson02); meal (dinner/breakfast, only
+    ever used for translation) gained a word_order template anchored to lesson04 ("I have {item} every day" --
+    both "I have breakfast every day." and "I have dinner every day." are real, grammatical sentences; anchored to
+    lesson04 like the file's own existing meal_translate, since breakfast isn't introduced until lesson03, same
+    "ready as soon as that lesson alone is completed" discipline this file already documents above); and
+    hour_number gained a matching_pairs (lesson04, 8 of its 12 real members, per AUTHORING_GUIDE.md #16). No new
+    EN_POS/semantic-tag or Dari-gloss additions needed -- every tag used here was already fully
+    classified/glossed. Considered fill_in_blank for hour_number/number/meal but rejected all three:
+    hour_number/number have 12/22 genuinely interchangeable-in-frame candidates (e.g. "I wake up at {item} every
+    day" is grammatical for any hour), and meal's 2 members, while not literal synonyms, have no frame in this
+    unit's real taught sentences that visibly disambiguates breakfast from dinner without also being gameable by a
+    second independently-sampled slot -- scripts/ _fill_in_blank_ambiguity_check.py (and compile_content.py's
+    hard-fail per AUTHORING_GUIDE.md #17) would flag any single-slot attempt at any of the three, so zero new
+    fill_in_blank templates, matching this direction's own established "zero is fine" precedent. Re-verified
+    scripts/_practice_slot_check.py (all three tags still safely above the >=3/>=2 floors for their new exercise
+    types) and scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS flags) before import. New count: 13
+    templates (8 -> 13). REAUTH 2026-07-24 (unit-scope dead-template repair).
+    scripts/_practice_unit_scope_check.py found 13 of the 15 templates DEAD at checkpoint scope (20 DEAD lines,
+    since the 8-slot hour_match counted once per slot): every template built on `hour_number` or `number` was
+    dead, because BOTH tags are established entirely by earlier units -- unit16 itself introduces zero
+    hour_number- or number-tagged lexemes (confirmed via the iter_specs unit filter: unit16's own tokens are
+    wake/up/dressed/dinner/bed/every/usually/breakfast/after, and only dinner/breakfast carry any semantic tag at
+    all, both `meal`). generate_checkpoint() only loads unit16's own lexemes, so these 13 had 0 unit-scoped
+    candidates -- recipe DO-NOT #2 again, and the reason `meal`'s 2 templates (meal_translate.003, meal_order.005)
+    were never flagged: meal is 100% unit-native AND course-wide-identical (no other unit reuses it), so it was
+    always safe and is unchanged here. PACK-ONLY fix: every dead template was rebuilt on unit16's own vocabulary.
+    Where the frame has literal sentence text (word_order, fixed-sentence translation) the slot is now `meal` (the
+    only tag that is both unit-native and course-safe per SS1.1 -- "Every day, I have {item}." / "Every day, I eat
+    {item}." / "I usually have {item}." / "I always have {item}." / "I have {item} at home." are all grammatical
+    for both breakfast and dinner, at COURSE scope too since meal has no other course-wide members). Where the
+    frame is bare (`{item}` only -- multiple_choice/listen_select/matching_pairs/bare-word translation) course-
+    scope breadth is a non-issue, so those now use two new untagged POS-only pools: noun_pool =
+    bed/dinner/breakfast (3, POS=noun with no semantic filter, so it legitimately also catches the two meal-tagged
+    nouns) and content_pool = wake/dressed/every/usually (4, verb+adjective+adverb). A third pool, full_pool = the
+    union of both (7 distinct: bed/dinner/breakfast/wake/dressed/every/usually), anchors the one matching_pairs.
+    Excluded "up" (particle) and "after" (preposition) from every pool per recipe SS8.1#5 (function-word noise).
+    Read every gloss in all three pools (SS0.1); all distinct, no collisions. 13 replacement templates (like-for-
+    like on type/tier/lesson-anchor): lesson02 keeps 5 templates (word_order on meal, fixed-sentence translation
+    on meal, listen_select on noun_pool, multiple_choice on noun_pool, multiple_choice on content_pool), lesson03
+    keeps 2 (word_order on meal, listen_select on full_pool -- meal_translate.003 unchanged), lesson04 keeps 6
+    (word_order on meal x2 variants, fixed-sentence translation on meal, listen_select on content_pool,
+    matching_pairs on full_pool x7 -- meal_order.005 unchanged). Tiers: recognition 5 (2 MC + 3 listen_select),
+    structured 7 (5 word_order + 1 matching_pairs + the pre-existing meal_order.005), production 3 (2 new fixed-
+    sentence translations + the pre-existing meal_translate.003). Verified 0 DEAD via
+    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate. Polish wave 2
+    (2026-07-24): dispatched for POS-only matching_pairs (hour_match.006). Left POS-only DELIBERATELY per the
+    polish rubric's honest-thin rule: unit16 has exactly ONE unit-native semantic tag, meal (dinner/breakfast, 2
+    tokens -- re-confirmed against backfill_lexemes_prs_en.iter_specs()), so no union of unit-native semantic tags
+    can reach the 6-distinct-token matching floor; adding tags is out of pack-only scope, and a wrong union is
+    worse than the status quo. The untagged full_pool (7 unit-scoped tokens, this file's own REAUTH redesign
+    above) stays. Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a
+    unit-scoped semantic tag, prs_en_a1_unit16_words, in backfill_lexemes_prs_en. Re-anchored the dispatched
+    lesson04.hour_match.006 from the untagged full_pool to a new unit_tag_pool preset (semantic
+    prs_en_a1_unit16_words + part_of_speech [noun, verb, adjective, adverb]). Unit-scope pool is the identical 7
+    tokens (bed/breakfast/dinner/dressed/every/usually/wake -- the tag-plus-POS filter naturally excludes "up"
+    (particle) and "after" (preposition), the same two tokens full_pool's own POS filter already excluded; glosses
+    re-read, all distinct, no token baked into another member's gloss), but course scope now equals unit scope, so
+    Endless Practice no longer pulls off-theme course-wide nouns/verbs/ adjectives/adverbs into this pair. Slot
+    count stays at 7 (already above the 6-pair floor). Every other POS-only template in this file (word_order over
+    `meal`, bare MC/listen/translate over noun_pool/content_pool) is out of this dispatch and left as-is.
 tag_schema:
   part_of_speech:
   - noun
@@ -104,12 +110,18 @@ slot_presets:
   noun_pool: &noun_pool
     language_code: en
     part_of_speech: noun
+    agreement_tags:
+      semantic: prs_en_a1_unit16_words
   content_pool: &content_pool
     language_code: en
     part_of_speech: [verb, adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit16_words
   full_pool: &full_pool
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit16_words
   unit_tag_pool: &unit_tag_pool
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
@@ -387,9 +399,9 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I always have {item}
-    language_code: en
-    direction: ltr
+    text: '{item} وعدهٔ غذایی است که همیشه می‌خورین.'
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit16.lesson04.bed_translate.004.volume_order.008
   lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
   type: word_order
@@ -406,6 +418,6 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I have {item} at home
-    language_code: en
-    direction: ltr
+    text: '{item} وعدهٔ غذایی است که در خانه می‌خورین.'
+    language_code: prs
+    direction: rtl
