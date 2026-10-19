@@ -4,27 +4,30 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit49.waste_disposal
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit49 (waste_disposal). backfill_lexemes_prs_en.py
-    carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union
-    semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the
-    full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml).
-    word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member
-    anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged
-    word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c),
-    which is unsafe for any frame with literal text. matching_pairs is pooled across the WHOLE unit''s
-    lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key to
-    one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
-    Capacity measured with §0/§9''s f".{level}.{unit}." filter: 22 distinct tokens across 4 lesson(s)
-    with lexemes. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md
-    (2pl -ین, no Iranian -ید). Polish wave 3, 2026-07-26 (commit 05af7ace generated tags): the untagged-pool
-    honest-leave above is resolved -- backfill_lexemes_prs_en.py now emits prs_en_a1_unit49_words (22 tok)
-    and per-lesson prs_en_a1_unit49_lessonNN_words. Re-anchored all four lesson.match.004 templates off
-    bare POS: lesson01 (7 tok) and lesson04 (8 tok) use their own lesson tags, which clear the 6-pair floor
-    alone; lesson02 (2 tok) and lesson03 (5 tok) do not clear alone, so they use the unit-wide tag (22 tok).
-    All four filtered to content POS [noun, verb, adjective, adverb]; no duplicate-gloss collisions found
-    in any of the four resulting pools. Verified with pool_check.py.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 16 fixes -- bare-word pools re-tagged to cumulative lesson words (removes
+    trash/waste, food/meal course collisions and pronoun/function-word options), translation excludes practicing (gloss contains
+    English), matching feedback converted to Dari. NATIVE FLAGS: buildings=تعمیرها (prefer ساختمان‌ها?). BACKFILL GLOSS FLAGS: practicing=تمرین کرده (شکل ing
+    فعل practice) contains English and is a participle gloss; stopped=جلوش را گرفت is an odd gloss; buildings=تعمیرها -> native
+    check (ساختمان‌ها); tuesdays/fridays fine. Prior note: Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en
+    unit49 (waste_disposal). backfill_lexemes_prs_en.py carries no agreement_tags.semantic for this direction (every lexeme
+    has agreement_tags: {}), so per-lesson/union semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained
+    by language_code + the full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml).
+    word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member anchor, fill_in_blank
+    would course-wide hard-fail the compiler''s single-candidate check, and an untagged word_order slot pools every A1 content
+    word at course/Endless-Practice scope (recipe §1.1/§3.1c), which is unsafe for any frame with literal text. matching_pairs
+    is pooled across the WHOLE unit''s lexemes (untagged) to clear the 6-pair floor; every template is anchored via lesson_content_key
+    to one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes. Capacity measured
+    with §0/§9''s f".{level}.{unit}." filter: 22 distinct tokens across 4 lesson(s) with lexemes. Register: colloquial Dari
+    per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید). Polish wave 3, 2026-07-26
+    (commit 05af7ace generated tags): the untagged-pool honest-leave above is resolved -- backfill_lexemes_prs_en.py now emits
+    prs_en_a1_unit49_words (22 tok) and per-lesson prs_en_a1_unit49_lessonNN_words. Re-anchored all four lesson.match.004
+    templates off bare POS: lesson01 (7 tok) and lesson04 (8 tok) use their own lesson tags, which clear the 6-pair floor
+    alone; lesson02 (2 tok) and lesson03 (5 tok) do not clear alone, so they use the unit-wide tag (22 tok). All four filtered
+    to content POS [noun, verb, adjective, adverb]; no duplicate-gloss collisions found in any of the four resulting pools.
+    Verified with pool_check.py.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -42,6 +45,8 @@ tag_schema:
     - prs_en_a1_unit49_lesson01_words
     - prs_en_a1_unit49_lesson04_words
     - prs_en_a1_unit49_words
+    - prs_en_a1_unit49_lesson02_words
+    - prs_en_a1_unit49_lesson03_words
 templates:
 - content_key: practice.prs-en.en.a1.unit49.lesson01.choose.001
   lesson_content_key: en.a1.unit49.lesson01.waste_disposal_vocabulary
@@ -54,15 +59,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -81,15 +84,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -112,15 +113,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -144,7 +143,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
     second:
       language_code: en
       part_of_speech:
@@ -153,7 +153,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
     third:
       language_code: en
       part_of_speech:
@@ -162,7 +163,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
     fourth:
       language_code: en
       part_of_speech:
@@ -171,7 +173,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
     fifth:
       language_code: en
       part_of_speech:
@@ -180,7 +183,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
     sixth:
       language_code: en
       part_of_speech:
@@ -189,7 +193,8 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson01_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
   slot_relations:
   - kind: distinct
     slots: &id001
@@ -203,9 +208,9 @@ templates:
     kind: matching_pairs
     slots: *id001
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit49.lesson02.choose.001
   lesson_content_key: en.a1.unit49.lesson02.sorting_your_waste
   type: multiple_choice
@@ -217,15 +222,14 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -244,15 +248,14 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -275,15 +278,14 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -307,7 +309,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
     second:
       language_code: en
       part_of_speech:
@@ -316,7 +320,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
     third:
       language_code: en
       part_of_speech:
@@ -325,7 +331,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
     fourth:
       language_code: en
       part_of_speech:
@@ -334,7 +342,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
     fifth:
       language_code: en
       part_of_speech:
@@ -343,7 +353,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
     sixth:
       language_code: en
       part_of_speech:
@@ -352,7 +364,9 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
   slot_relations:
   - kind: distinct
     slots: &id002
@@ -366,9 +380,9 @@ templates:
     kind: matching_pairs
     slots: *id002
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit49.lesson03.choose.001
   lesson_content_key: en.a1.unit49.lesson03.dialogue_sorting_the_recycling
   type: multiple_choice
@@ -380,15 +394,15 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -407,15 +421,15 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -438,15 +452,15 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -470,7 +484,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
     second:
       language_code: en
       part_of_speech:
@@ -479,7 +496,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
     third:
       language_code: en
       part_of_speech:
@@ -488,7 +508,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
     fourth:
       language_code: en
       part_of_speech:
@@ -497,7 +520,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
     fifth:
       language_code: en
       part_of_speech:
@@ -506,7 +532,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
     sixth:
       language_code: en
       part_of_speech:
@@ -515,7 +544,10 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_words
+        semantic:
+        - prs_en_a1_unit49_lesson01_words
+        - prs_en_a1_unit49_lesson02_words
+        - prs_en_a1_unit49_lesson03_words
   slot_relations:
   - kind: distinct
     slots: &id003
@@ -529,9 +561,9 @@ templates:
     kind: matching_pairs
     slots: *id003
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit49.lesson04.choose.001
   lesson_content_key: en.a1.unit49.lesson04.how_waste_sorting_works
   type: multiple_choice
@@ -543,15 +575,12 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
-      - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -570,15 +599,12 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
-      - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -601,15 +627,11 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
-      - verb
-      - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -630,55 +652,55 @@ templates:
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
     second:
       language_code: en
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
     third:
       language_code: en
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit49_lesson04_words
+        semantic:
+        - prs_en_a1_unit49_lesson04_words
   slot_relations:
   - kind: distinct
     slots: &id004
@@ -692,6 +714,7 @@ templates:
     kind: matching_pairs
     slots: *id004
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
+slot_presets: null
