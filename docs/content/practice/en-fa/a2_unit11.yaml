@@ -4,9 +4,37 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a2.unit11.banking
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 4 fixes across 15
+    templates). (1) Answer leakage at A2 in production: the five bare-word translation
+    templates used part_of_speech-only pools, which at unit scope include حساب "account;
+    bill (in حساب کردن ...)", بانکی "(adjective, from بانک)", لازمه "(contraction of لازم
+    است)", ملیم "(short for کارت ملیم)", خونه‌ی "(ezafe form of خونه)", روزی "(indefinite
+    form of روز)", تحویل "(in تحویل گرفتن/می‌گیرید ...)", جدیدم "(possessive form of جدید)",
+    and at course scope every other A2 gloss of that shape: the English prompt printed the
+    Persian answer. Slots now use the unit's own lesson tags plus clean course-wide
+    singletons: nouns = money_word/time_period/lesson02/lesson03 (بانک, مدارکتون, صبح,
+    بعدازظهر, روز); noun/adj/adv = money_word/time_period/weather_time_word/lesson03 (+
+    امروز, لازم); verbs = lesson01/02/04 + accept_word (کردن, می‌تونید, کنید, بکنم, آوردم,
+    عالیه, می‌گیرم, می‌گیرید). (2) The five multiple_choice templates had the same untagged
+    pools (gloss options containing the token = near-giveaway; off-unit words in Endless
+    Practice) and feedback that was false for most of the pool ("appears in the bank
+    notice", "is said in the bank counter conversation", "used ... when asking to open an
+    account"): same clean pools, feedback now "a word / verb form from this unit's banking
+    lessons". (3) The two list word_order frames ("{a} و {b}", "{a}، {b} و {c}") pooled
+    every noun, rendering ungrammatical or meaningless lists with the bound forms خونه‌ی /
+    روزی / ملیم / رمزش and bare numerals ۸ / ۲ (and 150+ A2 nouns at course scope): now the
+    lesson01 + lesson03 nouns (بانک, حساب, رمز, موجودی, صبح, بعدازظهر). (4) The three
+    matching_pairs dropped payment_word, which only added حساب with its self-revealing
+    gloss. Coverage cost, accepted: رمز, موجودی, آماده, سه, دیگه no longer appear in
+    production/MC (their lesson tags also carry leaky tokens). Remaining, backfill-side: the
+    lesson04 phrase lexemes are glossed as narration ("سارا says yes, she brought ...", "The
+    employee says great -- ...") rather than as translations; بکنم's gloss shows کنم. NATIVE
+    FLAGS: none on frames (list frames only use و and ،).
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint (the unit had lexemes in scripts/backfill_lexemes.py but no
     practice pack at all, so generate_checkpoint() returned checkpoint_unavailable).
@@ -113,8 +141,11 @@ tag_schema:
     - time_period
     - weather_time_word
     - accept_word
+    - en_fa_a2_unit11_lesson01_words
+    - en_fa_a2_unit11_lesson02_words
+    - en_fa_a2_unit11_lesson03_words
+    - en_fa_a2_unit11_lesson04_words
 templates:
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson01.choose.001
   lesson_content_key: fa.a2.unit11.lesson01.banking_vocabulary
   type: multiple_choice
@@ -127,14 +158,19 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - en_fa_a2_unit11_lesson02_words
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is one of the nouns taught in the banking word list.'
+    text: '{item} is a word from this unit''s banking lessons.'
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson01.match.002
   lesson_content_key: fa.a2.unit11.lesson01.banking_vocabulary
   type: matching_pairs
@@ -143,7 +179,7 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &u11_match_l01_pool
+    first: &id001
       language_code: fa
       part_of_speech:
       - noun
@@ -152,14 +188,13 @@ templates:
         semantic:
         - reviewed_phrase
         - money_word
-        - payment_word
         - time_period
         - weather_time_word
-    second: *u11_match_l01_pool
-    third: *u11_match_l01_pool
-    fourth: *u11_match_l01_pool
-    fifth: *u11_match_l01_pool
-    sixth: *u11_match_l01_pool
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
     slots:
@@ -179,10 +214,9 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: 'Match each Farsi word from this unit''s banking vocabulary with its English meaning.'
+    text: Match each Farsi word from this unit's banking vocabulary with its English meaning.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson01.order.003
   lesson_content_key: fa.a2.unit11.lesson01.banking_vocabulary
   type: word_order
@@ -195,10 +229,18 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson03_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -211,10 +253,9 @@ templates:
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: 'The word و ("and") joins two items in a list.'
+    text: The word و ("and") joins two items in a list.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson01.translate.004
   lesson_content_key: fa.a2.unit11.lesson01.banking_vocabulary
   type: translation
@@ -229,14 +270,19 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - en_fa_a2_unit11_lesson02_words
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'The Farsi word is {item}.'
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson02.choose.001
   lesson_content_key: fa.a2.unit11.lesson02.requesting_an_account
   type: multiple_choice
@@ -249,17 +295,21 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
-      - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - weather_time_word
+        - accept_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is used in this unit when asking to open an account.'
+    text: '{item} is a word from this unit''s banking lessons.'
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson02.order.002
   lesson_content_key: fa.a2.unit11.lesson02.requesting_an_account
   type: word_order
@@ -272,14 +322,26 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson03_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson03_words
     third:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -293,10 +355,9 @@ templates:
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: 'In a Farsi list the last item is joined with و; the earlier items are separated by the comma ،.'
+    text: In a Farsi list the last item is joined with و; the earlier items are separated by the comma ،.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson02.translate.003
   lesson_content_key: fa.a2.unit11.lesson02.requesting_an_account
   type: translation
@@ -313,14 +374,19 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - weather_time_word
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'The Farsi word is {item}.'
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson03.choose.001
   lesson_content_key: fa.a2.unit11.lesson03.reading_a_bank_notice
   type: multiple_choice
@@ -335,14 +401,19 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - weather_time_word
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} appears in the bank notice.'
+    text: '{item} is a word from this unit''s banking lessons.'
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson03.match.002
   lesson_content_key: fa.a2.unit11.lesson03.reading_a_bank_notice
   type: matching_pairs
@@ -351,7 +422,7 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &u11_match_l03_pool
+    first: &id002
       language_code: fa
       part_of_speech:
       - noun
@@ -360,14 +431,13 @@ templates:
         semantic:
         - reviewed_phrase
         - money_word
-        - payment_word
         - time_period
         - weather_time_word
-    second: *u11_match_l03_pool
-    third: *u11_match_l03_pool
-    fourth: *u11_match_l03_pool
-    fifth: *u11_match_l03_pool
-    sixth: *u11_match_l03_pool
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
   slot_relations:
   - kind: distinct
     slots:
@@ -387,10 +457,9 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: 'Match each Farsi word from this unit''s banking vocabulary with its English meaning.'
+    text: Match each Farsi word from this unit's banking vocabulary with its English meaning.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson03.translate.003
   lesson_content_key: fa.a2.unit11.lesson03.reading_a_bank_notice
   type: translation
@@ -407,14 +476,19 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - weather_time_word
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'The Farsi word is {item}.'
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson04.choose.001
   lesson_content_key: fa.a2.unit11.lesson04.bank_counter_dialogue
   type: multiple_choice
@@ -427,17 +501,21 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
-      - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - weather_time_word
+        - accept_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is said in the bank counter conversation.'
+    text: '{item} is a word from this unit''s banking lessons.'
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson04.choose.002
   lesson_content_key: fa.a2.unit11.lesson04.bank_counter_dialogue
   type: multiple_choice
@@ -450,14 +528,19 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson02_words
+        - en_fa_a2_unit11_lesson04_words
+        - accept_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a verb form this unit teaches.'
+    text: '{item} is a verb form from this unit''s banking lessons.'
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson04.match.003
   lesson_content_key: fa.a2.unit11.lesson04.bank_counter_dialogue
   type: matching_pairs
@@ -466,7 +549,7 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &u11_match_l04_pool
+    first: &id003
       language_code: fa
       part_of_speech:
       - noun
@@ -476,17 +559,16 @@ templates:
         semantic:
         - reviewed_phrase
         - money_word
-        - payment_word
         - time_period
         - weather_time_word
         - accept_word
-    second: *u11_match_l04_pool
-    third: *u11_match_l04_pool
-    fourth: *u11_match_l04_pool
-    fifth: *u11_match_l04_pool
-    sixth: *u11_match_l04_pool
-    seventh: *u11_match_l04_pool
-    eighth: *u11_match_l04_pool
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+    seventh: *id003
+    eighth: *id003
   slot_relations:
   - kind: distinct
     slots:
@@ -510,10 +592,9 @@ templates:
     - seventh
     - eighth
   feedback_frame:
-    text: 'Match each Farsi word or verb form from this unit''s banking material with its English meaning.'
+    text: Match each Farsi word or verb form from this unit's banking material with its English meaning.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson04.translate.004
   lesson_content_key: fa.a2.unit11.lesson04.bank_counter_dialogue
   type: translation
@@ -528,14 +609,19 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit11_lesson01_words
+        - en_fa_a2_unit11_lesson02_words
+        - en_fa_a2_unit11_lesson04_words
+        - accept_word
   answer_derivation:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'The Farsi verb form is {item}.'
+    text: The Farsi verb form is {item}.
     language_code: en
     direction: ltr
-
 - content_key: practice.en-fa.fa.a2.unit11.lesson04.translate.005
   lesson_content_key: fa.a2.unit11.lesson04.bank_counter_dialogue
   type: translation
@@ -550,10 +636,16 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - money_word
+        - time_period
+        - en_fa_a2_unit11_lesson02_words
+        - en_fa_a2_unit11_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'The Farsi word is {item}.'
+    text: The Farsi word is {item}.
     language_code: en
     direction: ltr
