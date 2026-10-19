@@ -1,0 +1,472 @@
+schema_version: '1.0'
+pack_key: practice.en-prs.b2.unit07
+source_language: en
+target_language: prs
+unit_content_key: prs.b2.unit07.negotiation
+review:
+  status: unreviewed
+  fresh_context: 'false'
+  required_next_reviewer: native_speaker_review
+  notes: 'Authored 2026-10-19 against docs/content/PRACTICE_PACK_RECIPE.md to close the en-prs B2 unit-checkpoint
+    gap (lexemes from the B2 extension of scripts/backfill_lexemes_en_prs.py, same commit series). Grammar/discourse
+    unit, so the section 8.1 pattern is used: broad slots pool the whole unit and are shaped by part_of_speech,
+    every template''s lesson_content_key stays on one lesson. 14 templates over all 3 lessons: multiple_choice
+    x3, matching_pairs x2, word_order x4, translation x5 (3 bare-word + 2 fixed-sentence). No listen_select
+    (no Dari TTS) and no fill_in_blank (the runtime shows no English cue, so a blank in a unit sentence
+    is guessable only by recall; every such sentence is a word_order with the slot gloss as hint). TAGS
+    (PRS_B2_EXTRA_TAGS): b2u07_core is the curated content-word pool for every multiple_choice and matching
+    slot (no function words, proper nouns, -ید formal 2pl forms or helper participles; one side of each
+    near-synonym gloss pair held out); b2u07_vert is core minus tokens whose English gloss another common
+    Dari word also answers, for bare-word translation; single-member anchors pin the word_order frames
+    (کرایه, سهم, قبول, خطر) and the fixed-sentence translations (دوم, قرارداد) to exactly one token at
+    course scope. Every frame is a sentence from this unit''s own realization with one token slotted;
+    the fixed-sentence English prompts are the overlay''s example_gloss for that sentence. B2 overrides
+    used: حساب, شرایط terms, کاری working (adjective, was the B1 ''a job (that...)''), خراب damaged, می‌خواهد
+    needs, موافق (English-only gloss). Held out of pools: شرایط (paraphrases شرط), موافق and قبول (paraphrase
+    توافق), the formal 2pl بیایید. Realization flag: lesson02 exercise-8 target ends in ''بلند هستند''
+    (ungrammatical). MEASURED (recipe section 9 step 4, filter .b2.unit07.): ALL 45/56 (80%), recognition
+    44/56 (79%), structured 45/56 (80%), production 37/56 (66%); 3/3 lessons in every tier, no dead template,
+    every MC slot >=3 distinct glosses, every matching pool >=6 tokens. Course scope: every word_order
+    / fixed-sentence slot resolves to exactly 1 token, none is a literal word of its own frame. Offline
+    port of generate_checkpoint() pass 1: 15/15 items on 5 seeds, all three tiers and all lessons represented.
+    No gloss in any pool contains Dari script. Needs native-Dari review of the B2 glosses and a fresh-context
+    review before import.'
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - b2u07_core
+    - b2u07_vert
+    - b2u07_rent_single
+    - b2u07_share_single
+    - b2u07_accepted_single
+    - b2u07_risk_single
+    - b2u07_second_single
+    - b2u07_contract_single
+templates:
+- content_key: practice.en-prs.prs.b2.unit07.lesson01.choose.001
+  lesson_content_key: prs.b2.unit07.negotiation.lesson01.proposal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on negotiating terms (renting a shop).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson01.match.002
+  lesson_content_key: prs.b2.unit07.negotiation.lesson01.proposal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+    second:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+    third:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+    fourth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+    fifth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+    sixth:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on negotiating terms (renting a shop).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson01.order.003
+  lesson_content_key: prs.b2.unit07.negotiation.lesson01.proposal
+  type: word_order
+  frame:
+    text: '{item} دکان هر ماه پرداخت می‌شود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_rent_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} دکان هر ماه پرداخت می‌شود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'کرایه دکان هر ماه پرداخت می‌شود. = The shop rent is paid every month.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson01.order.004
+  lesson_content_key: prs.b2.unit07.negotiation.lesson01.proposal
+  type: word_order
+  frame:
+    text: '{item} هر نفر جدا نوشته شود.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_share_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} هر نفر جدا نوشته شود.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'سهم هر نفر جدا نوشته شود. = Each person’s share should be written separately.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson01.translate.005
+  lesson_content_key: prs.b2.unit07.negotiation.lesson01.proposal
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson02.choose.001
+  lesson_content_key: prs.b2.unit07.negotiation.lesson02.pushback
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on negotiating terms (renting a shop).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson02.order.002
+  lesson_content_key: prs.b2.unit07.negotiation.lesson02.pushback
+  type: word_order
+  frame:
+    text: 'این شرط برای من قابل {item} نیست.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u07_accepted_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'این شرط برای من قابل {item} نیست.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'این شرط برای من قابل قبول نیست. = This condition is not acceptable for me.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson02.translate.003
+  lesson_content_key: prs.b2.unit07.negotiation.lesson02.pushback
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson02.translate.004
+  lesson_content_key: prs.b2.unit07.negotiation.lesson02.pushback
+  type: translation
+  frame:
+    text: 'The second condition is vague.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: b2u07_second_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'شرط {item} مبهم است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: شرط دوم مبهم است.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson03.choose.001
+  lesson_content_key: prs.b2.unit07.negotiation.lesson03.concession
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} is a word from this unit on negotiating terms (renting a shop).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson03.match.002
+  lesson_content_key: prs.b2.unit07.negotiation.lesson03.concession
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: prs
+    direction: rtl
+  slots:
+    first:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+    second:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+    third:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+    fourth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+    fifth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+    sixth:
+      language_code: prs
+      part_of_speech:
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_core
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'All six words come from this unit on negotiating terms (renting a shop).'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson03.order.003
+  lesson_content_key: prs.b2.unit07.negotiation.lesson03.concession
+  type: word_order
+  frame:
+    text: 'اگر قرارداد کوتاه‌تر باشد، {item} کمتر است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_risk_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'اگر قرارداد کوتاه‌تر باشد، {item} کمتر است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'اگر قرارداد کوتاه‌تر باشد، خطر کمتر است. = If the contract is shorter, the risk is lower.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson03.translate.004
+  lesson_content_key: prs.b2.unit07.negotiation.lesson03.concession
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item:
+      language_code: prs
+      part_of_speech:
+      - noun
+      - adjective
+      - adverb
+      - verb
+      agreement_tags:
+        semantic: b2u07_vert
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'The Dari word is {item}.'
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.b2.unit07.lesson03.translate.005
+  lesson_content_key: prs.b2.unit07.negotiation.lesson03.concession
+  type: translation
+  frame:
+    text: 'The contract must have an end date.'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: b2u07_contract_single
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} باید تاریخ پایان داشته باشد.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: 'Dari: قرارداد باید تاریخ پایان داشته باشد.'
+    language_code: en
+    direction: ltr
