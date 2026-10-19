@@ -5,7 +5,7 @@ source_language: "de"
 target_language: "en"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "codex", notes: "Third de-en B1 overlay, authored against docs/content/realizations/en/b1_unit03_hypotheticals.yaml. Existing de-en lane register followed: formal Sie in learner-facing instructions, informal du in character/example glosses where appropriate. nl-en B1 was consulted for structure only; all German text authored independently from the English realization. Dialogue/audio distractors checked against the tested speaker's unit audio lines; Leila's painting hobby kept consistent with established canon."}
+review: {status: "reviewed", required_next_reviewer: null, notes: "Third de-en B1 overlay, authored against docs/content/realizations/en/b1_unit03_hypotheticals.yaml. Existing de-en lane register followed: formal Sie in learner-facing instructions, informal du in character/example glosses where appropriate. nl-en B1 was consulted for structure only; all German text authored independently from the English realization. Dialogue/audio distractors checked against the tested speaker's unit audio lines; Leila's painting hobby kept consistent with established canon. Review 2026-10-19: 10 fixes - lesson01 matching_pairs re-oriented to the 2026-08-04 word->definition shape with a German pairs override (validator error); lesson01 listen distractors class/walk/plans were untaught until lessons 03/04, replaced with lesson01 words; free-time MC distractor weekend was arguably also correct (time when you are not working), replaced with rain; if note now warns that German wenn also means when; lesson02 reply gained Yes and main-clause-first variants; lesson02 write_if_rains gained main-clause-first variants and I-variants (the displayed English prompt says you will stay home while the instruction says wir); lesson03 write_if_had_known and lesson04 speak_hypotheticals_dialogue gained If I'd / main-clause-first variants; lesson04 reply_as_leila gained does-not variants; lesson04 rain-plan feedback was ungrammatical mixed German (dass sie ... stay home and paint wird). NATIVE FLAGS: none."}
 
 course:
   title: "Englisch B1"
@@ -21,7 +21,7 @@ lessons:
   en.b1.unit03.lesson04.the_weekend_plans_dialogue: {title: "If there's another one, you should join"}
 
 teaching:
-  en.b1.unit03.lesson01.teach.if: {title: "if", gloss: "wenn / falls", note: "*if* leitet eine Bedingung ein.", example_gloss: "Wenn es regnet, bleiben wir zu Hause."}
+  en.b1.unit03.lesson01.teach.if: {title: "if", gloss: "wenn / falls", note: "*if* leitet eine Bedingung ein. Achtung: Das deutsche *wenn* kann auch *when* (zeitlich: sobald, immer wenn) bedeuten; *if* steht nur für eine Bedingung.", example_gloss: "Wenn es regnet, bleiben wir zu Hause."}
   en.b1.unit03.lesson01.teach.rain: {title: "rain", gloss: "Regen / regnen", note: "*rain* bedeutet Wasser, das vom Himmel fällt, oder 'regnen'.", example_gloss: "Es könnte dieses Wochenende regnen."}
   en.b1.unit03.lesson01.teach.stay_home: {title: "stay home", gloss: "zu Hause bleiben", note: "*stay home* bedeutet, nicht hinauszugehen und zu Hause zu bleiben.", example_gloss: "Wenn es regnet, bleiben wir zu Hause."}
   en.b1.unit03.lesson01.teach.weekend: {title: "weekend", gloss: "Wochenende", note: "*weekend* bedeutet Samstag und Sonntag.", example_gloss: "Was sind deine Pläne fürs Wochenende?"}
@@ -47,7 +47,7 @@ exercises:
   en.b1.unit03.lesson01.exercise01.listen_word:
     instruction: "Hören Sie zu und wählen Sie das genannte Wort."
     correct_option: "weekend"
-    distractors: ["class", "walk", "plans"]
+    distractors: ["rain", "paint", "free time"]
     accepted_answers: [{value: "weekend", status: "correct"}]
     feedback: "*weekend* bedeutet Wochenende."
   en.b1.unit03.lesson01.exercise02.choose_water_from_sky_word:
@@ -59,19 +59,26 @@ exercises:
   en.b1.unit03.lesson01.exercise03.choose_hours_not_working_phrase:
     instruction: "Welche Wendung bedeutet Zeit, in der man nicht arbeitet und nicht beschäftigt ist?"
     correct_option: "free time"
-    distractors: ["weekend", "stay home", "if"]
+    distractors: ["rain", "stay home", "if"]
     accepted_answers: [{value: "free time", status: "correct"}]
     feedback: "*free time* bedeutet Freizeit."
   en.b1.unit03.lesson01.exercise04.match_conditional_words:
-    instruction: "Verbinden Sie jede Bedeutung mit dem richtigen englischen Wort oder Ausdruck."
+    instruction: "Verbinden Sie jedes englische Wort bzw. jeden Ausdruck mit der passenden deutschen Bedeutung."
+    pairs:
+      - {left: "if", right: "wenn, falls (Bedingung)"}
+      - {left: "rain", right: "Regen, regnen"}
+      - {left: "stay home", right: "zu Hause bleiben"}
+      - {left: "weekend", right: "Wochenende"}
+      - {left: "free time", right: "Freizeit"}
+      - {left: "paint", right: "malen"}
     accepted_answers:
       - value:
-          - {left: "introduces a condition", right: "if"}
-          - {left: "water falling from the sky", right: "rain"}
-          - {left: "to not go out, to remain in your house", right: "stay home"}
-          - {left: "Saturday and Sunday", right: "weekend"}
-          - {left: "hours when you are not working or busy", right: "free time"}
-          - {left: "to make a picture with color", right: "paint"}
+          - {left: "if", right: "wenn, falls (Bedingung)"}
+          - {left: "rain", right: "Regen, regnen"}
+          - {left: "stay home", right: "zu Hause bleiben"}
+          - {left: "weekend", right: "Wochenende"}
+          - {left: "free time", right: "Freizeit"}
+          - {left: "paint", right: "malen"}
         status: "correct"
     feedback: "*if*=wenn/falls, *rain*=Regen/regnen, *stay home*=zu Hause bleiben, *weekend*=Wochenende, *free time*=Freizeit, *paint*=malen."
   en.b1.unit03.lesson01.exercise05.write_weekend:
@@ -104,6 +111,12 @@ exercises:
       - {value: "If I have free time this weekend, I will paint", status: "correct"}
       - {value: "If I have free time this weekend, I'll paint.", status: "correct"}
       - {value: "If I have free time this weekend, I'll paint", status: "correct"}
+      - {value: "Yes, if I have free time this weekend, I will paint.", status: "correct"}
+      - {value: "Yes, if I have free time this weekend, I'll paint.", status: "correct"}
+      - {value: "I will paint if I have free time this weekend.", status: "correct"}
+      - {value: "I'll paint if I have free time this weekend.", status: "correct"}
+      - {value: "Yes, I will paint if I have free time this weekend.", status: "correct"}
+      - {value: "Yes, I'll paint if I have free time this weekend.", status: "correct"}
     feedback: "*If I have free time this weekend, I will paint.* ist die akzeptierte Antwort; *I'll* ist die Kurzform von *I will*."
   en.b1.unit03.lesson02.exercise05.write_if_rains:
     instruction: "Schreiben Sie mit der Form *if + present, will*, dass wir zu Hause bleiben, wenn es morgen regnet."
@@ -112,6 +125,12 @@ exercises:
       - {value: "If it rains tomorrow, we will stay home", status: "correct"}
       - {value: "If it rains tomorrow, we'll stay home.", status: "correct"}
       - {value: "If it rains tomorrow, we'll stay home", status: "correct"}
+      - {value: "We will stay home if it rains tomorrow.", status: "correct"}
+      - {value: "We'll stay home if it rains tomorrow.", status: "correct"}
+      - {value: "If it rains tomorrow, I will stay home.", status: "correct"}
+      - {value: "If it rains tomorrow, I'll stay home.", status: "correct"}
+      - {value: "I will stay home if it rains tomorrow.", status: "correct"}
+      - {value: "I'll stay home if it rains tomorrow.", status: "correct"}
     feedback: "*If it rains tomorrow, we will stay home.* ist die akzeptierte Antwort; *we'll* ist die Kurzform von *we will*."
 
   en.b1.unit03.lesson03.exercise01.comprehend_if_more_time:
@@ -143,6 +162,12 @@ exercises:
       - {value: "If I had known about it earlier, I would have signed up", status: "correct"}
       - {value: "If I had known about it earlier, I would've signed up.", status: "correct"}
       - {value: "If I had known about it earlier, I would've signed up", status: "correct"}
+      - {value: "If I'd known about it earlier, I would have signed up.", status: "correct"}
+      - {value: "If I'd known about it earlier, I would've signed up.", status: "correct"}
+      - {value: "I would have signed up if I had known about it earlier.", status: "correct"}
+      - {value: "I would've signed up if I had known about it earlier.", status: "correct"}
+      - {value: "I would have signed up if I'd known about it earlier.", status: "correct"}
+      - {value: "I would've signed up if I'd known about it earlier.", status: "correct"}
     feedback: "*If I had known about it earlier, I would have signed up.* ist die akzeptierte Antwort; *would've* ist die Kurzform von *would have*."
 
   en.b1.unit03.lesson04.exercise01.listen_leilas_rain_plan:
@@ -150,7 +175,7 @@ exercises:
     correct_option: "stay home and paint"
     distractors: ["visit a museum", "call Daniel", "take the bus"]
     accepted_answers: [{value: "stay home and paint", status: "correct"}]
-    feedback: "Leila sagt, dass sie bei Regen *stay home and paint* wird."
+    feedback: "Leila sagt: *If it rains, I will stay home and paint.* Bei Regen bleibt sie also zu Hause und malt."
   en.b1.unit03.lesson04.exercise02.listen_when_class_was:
     instruction: "Hören Sie zu und wählen Sie, wann der Malkurs war."
     correct_option: "last month"
@@ -173,6 +198,8 @@ exercises:
       - {value: "If it doesn't rain, I will go for a walk. If it rains, I will stay home and paint.", status: "correct"}
       - {value: "If it doesn't rain, I'll go for a walk. If it rains, I'll stay home and paint.", status: "correct"}
       - {value: "If it doesn't rain I will go for a walk If it rains I will stay home and paint", status: "correct"}
+      - {value: "If it does not rain, I will go for a walk. If it rains, I will stay home and paint.", status: "correct"}
+      - {value: "If it does not rain, I'll go for a walk. If it rains, I'll stay home and paint.", status: "correct"}
     feedback: "*If it doesn't rain, I will go for a walk. If it rains, I will stay home and paint.* ist die akzeptierte Antwort; *I'll* ist die Kurzform von *I will*."
   en.b1.unit03.lesson04.exercise06.speak_hypotheticals_dialogue:
     instruction: "Daniel sagt: Das klingt schön. Hast du letzten Monat diesen Malkurs gemacht? Antworten Sie laut als Leila mit *would have*: Sagen Sie, dass Sie ihn nicht gemacht haben und dass Sie sich angemeldet hätten, wenn Sie früher davon gewusst hätten."
@@ -180,4 +207,6 @@ exercises:
       - {value: "No, I didn't. If I had known about it earlier, I would have signed up.", status: "correct"}
       - {value: "No, I didn't. If I had known about it earlier, I would've signed up.", status: "correct"}
       - {value: "No I didn't If I had known about it earlier I would have signed up", status: "correct"}
+      - {value: "No, I didn't. If I'd known about it earlier, I would have signed up.", status: "correct"}
+      - {value: "No, I didn't. If I'd known about it earlier, I would've signed up.", status: "correct"}
     feedback: "*No, I didn't. If I had known about it earlier, I would have signed up.* ist die akzeptierte Antwort; *would've* ist die Kurzform von *would have*."
