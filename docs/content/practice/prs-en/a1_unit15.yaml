@@ -4,50 +4,55 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit15.money
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: 'Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the sibling
-    fa-en/a1_unit15.yaml pack''s structure (16 templates) -- same English realization, same tag choices (payment_method 4
-    members: cash/card/credit/debit; a narrower card_type 2-member tag for credit/debit specifically, since "Do you take {item}
-    cards?" is only grammatical with credit/debit, not cash/card; and the already-established 21-member number_no_hundred
-    tag from unit03, reused here for the receipt/ dialogue total-amount frames). All POS/semantic-tag classification for this
-    unit''s vocabulary was already present in scripts/_en_target_lexeme_common.py before this pass (added earlier this session
-    alongside the fa-en/nl-en work) -- only scripts/backfill_lexemes_prs_en.py''s own Dari gloss dict needed extending (cash/card/credit/debit/total/cards/pay/tax/1/10/by),
-    cross- checked against docs/content/overlays/prs-en/a1_unit15.yaml''s own real Dari phrasing (e.g. cash="پیسهٔ نقد", credit
-    card="کارت اعتباری", debit card="کارت بانکی") rather than copied from the fa-en script''s Farsi. Verified with scripts/_practice_slot_check.py
-    that every slot has >=1 real candidate lexeme and every multiple_choice/ listen_select slot has >=4 distinct candidate
-    values. The underlying en realization unit15 and the prs-en overlay: overlay status is "reviewed"; the realization itself
-    is UNREVIEWED (Codex was usage- limited at authoring time) -- needs the standard fresh-context review before import.
-
-    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 4
-    slots (the full course-wide payment_method noun pool: cash/card/credit/debit), per the pre-computed retrofit table.
-
-    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found 6 of the 15 templates
-    DEAD at checkpoint scope: total_order.002, total_translate.004, its_order.002, its_translate.004, and their two
-    volume_order duplicates all relied on `number_no_hundred`, a tag whose entire 21-member course-wide pool is established
-    by unit03 -- unit15 introduces zero number_no_hundred-tagged lexemes of its own (confirmed via the iter_specs unit
-    filter: unit15''s own tokens are cash/card/credit/debit/total/cards/pay/by/tax/1/10, and only 1/10 carry any numeric
-    role, tagged bare `symbol`, never `number_no_hundred`). generate_checkpoint() only loads unit15''s own lexemes, so these
-    6 had 0 unit-scoped candidates and could never generate -- textbook recipe DO-NOT #2. `payment_method` (cash/card/
-    credit/debit) and `card_type` (credit/debit) are, by contrast, both FULLY unit-native AND course-wide-identical (no
-    other unit anywhere in the a1 course reuses either tag), so the pack''s other 9 templates (all payment_method/card_type
-    -based) were never at risk and are unchanged.
-
-    PACK-ONLY fix, re-anchoring every dead template to unit15''s own vocabulary, same type/tier each time: the two
-    word_order templates (total_order.002, its_order.002) and their two volume_order duplicates now use `payment_method`
-    (course-safe: "I''ll pay by {item}" / "Can I pay by {item}" / "I paid by {item} today" are all grammatical for every
-    one of cash/card/credit/debit, so this holds at COURSE scope too, not just unit scope -- SS1.1). The two translation
-    templates (total_translate.004, its_translate.004) were fixed-sentence render_frame translations keyed to the same
-    dead tag; rather than re-anchor a fixed-sentence prompt to a 4-member slot (which would recreate the underdetermined-
-    production-prompt defect, DO-NOT #11), they were converted to BARE-WORD translations instead -- safe with any pool
-    width since the prompt varies with the answer (SS6.6a). total_translate.004 now bare-translates the unit''s own
-    untagged noun pool (POS=noun with no semantic filter legitimately also matches the payment_method nouns, giving 7
-    distinct candidates: cash/card/credit/debit/total/cards/tax); its_translate.004.volume_order.010 bare-translates the
-    unit''s only native verb, "pay" (1 candidate -- fine, bare translation has no floor). Read every gloss in both new
-    pools (SS0.1); none collide or duplicate. Structured tier is unchanged in template type (word_order using payment_method,
-    plus the existing card_type word_order and the existing payment_method matching_pairs); production tier gains genuine
-    coverage at lesson03/lesson04 instead of dead weight. Verified 0 DEAD via scripts/_practice_unit_scope_check.py and 0
-    errors via compile_content.py practice-validate.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Review 2026-10-19 (prs-en practice pass): 5 fixes -- total_translate and volume_order.010 translation pools untagged (509 nouns / 315 verbs course scope) pinned to prs_en_a1_unit15_words; volume_order.009 feedback_frame was English -> Dari; matching feedback 'two words' for 4 slots. NATIVE FLAGS: none.
+    BACKFILL GLOSS FLAGS: credit=اعتباری / debit=بانکی؛ مستقیم are adjective-like glosses for nouns (fine in 'credit cards'); by=با (در pay by card) Latin, not in pools. Prior note:
+    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the
+    sibling fa-en/a1_unit15.yaml pack's structure (16 templates) -- same English realization, same tag choices
+    (payment_method 4 members: cash/card/credit/debit; a narrower card_type 2-member tag for credit/debit
+    specifically, since "Do you take {item} cards?" is only grammatical with credit/debit, not cash/card; and the
+    already-established 21-member number_no_hundred tag from unit03, reused here for the receipt/ dialogue total-
+    amount frames). All POS/semantic-tag classification for this unit's vocabulary was already present in
+    scripts/_en_target_lexeme_common.py before this pass (added earlier this session alongside the fa-en/nl-en
+    work) -- only scripts/backfill_lexemes_prs_en.py's own Dari gloss dict needed extending
+    (cash/card/credit/debit/total/cards/pay/tax/1/10/by), cross- checked against docs/content/overlays/prs-
+    en/a1_unit15.yaml's own real Dari phrasing (e.g. cash="پیسهٔ نقد", credit card="کارت اعتباری", debit
+    card="کارت بانکی") rather than copied from the fa-en script's Farsi. Verified with
+    scripts/_practice_slot_check.py that every slot has >=1 real candidate lexeme and every multiple_choice/
+    listen_select slot has >=4 distinct candidate values. The underlying en realization unit15 and the prs-en
+    overlay: overlay status is "reviewed"; the realization itself is UNREVIEWED (Codex was usage- limited at
+    authoring time) -- needs the standard fresh-context review before import. matching_pairs widening retrofit
+    (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 4 slots (the full course-
+    wide payment_method noun pool: cash/card/credit/debit), per the pre-computed retrofit table. REAUTH 2026-07-24
+    (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found 6 of the 15 templates DEAD at
+    checkpoint scope: total_order.002, total_translate.004, its_order.002, its_translate.004, and their two
+    volume_order duplicates all relied on `number_no_hundred`, a tag whose entire 21-member course-wide pool is
+    established by unit03 -- unit15 introduces zero number_no_hundred-tagged lexemes of its own (confirmed via the
+    iter_specs unit filter: unit15's own tokens are cash/card/credit/debit/total/cards/pay/by/tax/1/10, and only
+    1/10 carry any numeric role, tagged bare `symbol`, never `number_no_hundred`). generate_checkpoint() only
+    loads unit15's own lexemes, so these 6 had 0 unit-scoped candidates and could never generate -- textbook
+    recipe DO-NOT #2. `payment_method` (cash/card/ credit/debit) and `card_type` (credit/debit) are, by contrast,
+    both FULLY unit-native AND course-wide-identical (no other unit anywhere in the a1 course reuses either tag),
+    so the pack's other 9 templates (all payment_method/card_type -based) were never at risk and are unchanged.
+    PACK-ONLY fix, re-anchoring every dead template to unit15's own vocabulary, same type/tier each time: the two
+    word_order templates (total_order.002, its_order.002) and their two volume_order duplicates now use
+    `payment_method` (course-safe: "I'll pay by {item}" / "Can I pay by {item}" / "I paid by {item} today" are all
+    grammatical for every one of cash/card/credit/debit, so this holds at COURSE scope too, not just unit scope --
+    SS1.1). The two translation templates (total_translate.004, its_translate.004) were fixed-sentence
+    render_frame translations keyed to the same dead tag; rather than re-anchor a fixed-sentence prompt to a
+    4-member slot (which would recreate the underdetermined- production-prompt defect, DO-NOT #11), they were
+    converted to BARE-WORD translations instead -- safe with any pool width since the prompt varies with the
+    answer (SS6.6a). total_translate.004 now bare-translates the unit's own untagged noun pool (POS=noun with no
+    semantic filter legitimately also matches the payment_method nouns, giving 7 distinct candidates:
+    cash/card/credit/debit/total/cards/tax); its_translate.004.volume_order.010 bare-translates the unit's only
+    native verb, "pay" (1 candidate -- fine, bare translation has no floor). Read every gloss in both new pools
+    (SS0.1); none collide or duplicate. Structured tier is unchanged in template type (word_order using
+    payment_method, plus the existing card_type word_order and the existing payment_method matching_pairs);
+    production tier gains genuine coverage at lesson03/lesson04 instead of dead weight. Verified 0 DEAD via
+    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate.
 tag_schema:
   part_of_speech:
   - noun
@@ -56,6 +61,7 @@ tag_schema:
     semantic:
     - payment_method
     - card_type
+    - prs_en_a1_unit15_words
 slot_presets:
   payment_method: &id001
     language_code: en
@@ -127,7 +133,7 @@ templates:
     - third_word
     - fourth_word
   feedback_frame:
-    text: دو واژهٔ پرداخت را به معنای دری آن‌ها وصل کنین.
+    text: واژه‌های پرداخت را به معنای دری آن‌ها وصل کنین.
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson01.payment_translate.004
@@ -249,6 +255,8 @@ templates:
     item:
       language_code: en
       part_of_speech: noun
+      agreement_tags:
+        semantic: prs_en_a1_unit15_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -325,9 +333,9 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I paid by {item} today
-    language_code: en
-    direction: ltr
+    text: '{item} روشی است که امروز با آن پرداخت کردم.'
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit15.lesson04.its_translate.004.volume_order.010
   lesson_content_key: en.a1.unit15.lesson04.paying_dialogue
   type: translation
@@ -341,6 +349,8 @@ templates:
     item:
       language_code: en
       part_of_speech: verb
+      agreement_tags:
+        semantic: prs_en_a1_unit15_words
   answer_derivation:
     kind: slot_text
     slot: item
