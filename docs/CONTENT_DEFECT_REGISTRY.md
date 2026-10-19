@@ -3171,3 +3171,83 @@ commit. Warning counts: fa-en 18, fa-en-b1 2 and fa-en-b2 5 are
 unchanged; fa-en-a2 fell from 26 to 5, because the missing example_gloss
 entries were added in A2 u25-29. nl/prs/de-en counts are unchanged.
 `scripts/verify.sh --content-only` passes.
+
+### 2026-10-19 — fa-en practice packs
+Scope: the 71 fa-en Endless Practice packs under docs/content/practice/fa-en
+that were not reviewed: A1 u04-16, u18-23, u33, u35-36, u39, u42-45, u47-56,
+u64-65; A2 u27, u30-32, u35-40; B1 u01-06, u09, u12-15, u17-19; B2 u01-08.
+Branch content/review-practice-fa-en (stacked on PR #43). Eight workers took
+7-10 packs each in separate worktrees, and the coordinator merged them. Each
+template was checked against its real lexeme pool (unit and course scope,
+from scripts/backfill_lexemes_fa_en.py iter_specs) and sample renders,
+plus the shared en realization and the fa-en overlay of the unit. Checklist
+as in the fa-en overlay review above. All 71 packs are now `reviewed` with
+`required_next_reviewer: native_speaker_review`.
+
+Edits: pack templates, plus `UNIT_SENSE_OVERRIDES` entries in
+scripts/backfill_lexemes_fa_en.py (about 215 entries, all keyed by unit stem
+with the part of speech unchanged, so they do not affect other units or slot
+matching). The global gloss tables were not edited.
+
+Fix counts: 304. A1 u04-23 45 · A1 u33-48 36 · A1 u49-65 14 · A2 35 ·
+B1 u01-09 54 · B1 u12-19 37 · B2 68 · coordinator 15 (12 B2 blanks, 3 glosses).
+
+Defect classes found:
+- **Wrong-sense glosses** (about 95): the gloss table keys a token once, so
+  the unit's sense was often lost: bill as قبض (utility) in the restaurant
+  unit, deposit as a bank deposit in bike rental, over in "pull over" as
+  تمام‌شده, course as دوره for "Of course", miss/take/make/fee/long/next/
+  full/way in the wrong sense, checking as جاری, had/moved in the wrong
+  person.
+- **Answer leakage through Latin text in Persian glosses** (about 60): glosses
+  like «(در moving forward)», «(زمان گذشتهٔ go)», "social media",
+  "pick up", "should not" printed the English answer in translation prompts,
+  word_order hints and options. The leak lint skips practice packs, so these
+  were found by hand.
+- **Underdetermined prompts and also-correct distractors** (about 45):
+  translation pools where one Persian gloss maps to several taught tokens
+  (shop/store, hour/o'clock, must/should = باید, like/want, seems/sounds,
+  tentative/cautious, calm/relaxed = آرام); translation slots drawing on the
+  whole level (A1 u23 had 169 extra words, A2 u38 about 90 function words);
+  multiple-choice pools that included also/too.
+- **Unanswerable fill_in_blank** (24 templates, B1 u15/u17-19 and B2 u01-07):
+  the frame "Please remember this word: ___" showed only a blank over a
+  one-candidate pool. A `hint` slot now renders the Persian gloss.
+- **False feedback** (about 20): "two words" for 5- and 6-pair matching,
+  "food" for water and tea, a feedback naming every pool item a preference
+  verb, a ticket that does not show the item.
+- **English-only or mixed Persian-facing text** (about 20): English feedback
+  on volume_* templates, English tokens inside Persian sentences («هوا sunny
+  است»), English text_blocks.
+- **English target errors** (about 10): missing "?" on question frames,
+  "a bread", "I'd don't to open", "I'll pay with my cash".
+- **Over-wide slots** (about 25): all-POS slots in A1 u43-48 reached numbers,
+  proper nouns, pronouns and particles; auxiliaries in a verb MC (A1 u10).
+- **Consistency** (1): A1 u65 frame used Leila, who is not in that unit.
+
+New bug class: yes, two for this course. Latin inside a Persian gloss works
+as answer leakage in generated items. Cue-less single-candidate
+fill_in_blank frames are unanswerable.
+
+Left in place (proposals in .local/logs/session9-practice-fa-en.md):
+- Global gloss table: Latin remains in by, i'd, you'll, it's, that's, up,
+  out, down, through, can't (A1 u10). looks/seems/sounds all به‌نظر می‌رسد;
+  third/3rd both سوم; got/took/caught all گرفت; past verbs are glossed in the
+  third person (رفت) in "I ..." frames.
+- Generator: render_frame translations (I'm, It's) accept only the
+  contracted form; there is no accepted-answers list for generated items.
+- b1_unit16 (already reviewed) still has three cue-less "Please remember
+  this word" blanks.
+- Matching frames list only 2 slots in their text for 5-6 pairs (cosmetic).
+
+Native-speaker flags: 55, listed in .local/logs/session9-practice-fa-en.md.
+Main ones: light/bright/fun as کم‌رنگ؛ روشن / پررنگ؛ درخشان / شاد؛
+سرگرم‌کننده; hardworking as زحمت‌کش; course as البته; take a class as
+شرکت کردن در؛ گذراندن; refund as بازپرداخت; refills as تکرارهای نسخه; the
+unit64 phrase glosses (that is nice = اون خوبه).
+
+Verification: fa-en validate and compile before every commit. Warning counts
+are unchanged: fa-en 18, fa-en-a2 5, fa-en-b1 2, fa-en-b2 5; practice
+fa-en 0/0. The unit-scope check is unchanged (0 DEAD, 3 tier-short, 110
+below-floor); the self-reference check finds 0 hits. `scripts/verify.sh
+--content-only` passes.
