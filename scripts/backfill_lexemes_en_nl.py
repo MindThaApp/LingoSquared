@@ -371,12 +371,12 @@ NL_GLOSSES.update({
     "Zie": "see (imperative/question form)", "hem": "him", "vaak": "often",
     "koffie": "coffee", "thee": "tea", "water": "water", "melk": "milk", "sap": "juice",
     "brood": "bread", "broodje": "sandwich roll", "kaas": "cheese", "appel": "apple",
-    "wil": "want", "graag": "gladly; please (with wil)", "alstublieft": "please (formal)",
+    "wil": "want", "graag": "gladly; please (with a verb of wanting)", "alstublieft": "please (formal)",
     "alsjeblieft": "please (informal)", "wilt": "want (with u, formal)",
     "drinken": "to drink; drink", "eten": "to eat; eat", "appelsap": "apple juice",
     "Mag": "may; can (polite)", "Menukaart": "menu", "Koffie": "coffee",
     "Thee": "tea", "Broodje": "sandwich roll", "Appelsap": "apple juice",
-    "iets": "something", "Komt": "comes", "eraan": "on its way (part of komt eraan)",
+    "iets": "something", "Komt": "comes", "eraan": "on its way (as in 'is coming')",
 })
 
 # Unit 7 (shopping at the market), added 2026-07-05.
@@ -421,14 +421,14 @@ NL_GLOSSES.update({
 NL_GLOSSES.update({
     "samen": "together", "film": "the film", "gaan": "to go", "Zullen": "Shall",
     "we": "we", "activiteit": "activity", "manier": "way; manner",
-    "stellen": "to propose (part of voorstellen)", "zin": "desire; mood",
+    "stellen": "to propose (part of a separable verb)", "zin": "desire; mood",
     "idee": "idea", "goed": "good", "plan": "the plan", "Sorry": "Sorry",
     "want": "because", "korte": "short", "reden": "reason", "maakt": "makes",
     "afwijzing": "decline; refusal", "vriendelijk": "friendly",
     "afspreken": "to arrange to meet", "geeft": "gives", "afspraak": "appointment",
     "17": "17", "bericht": "the message", "uitnodiging": "the invitation",
     "Groet": "Regards", "zullen": "shall", "Vrijdag": "Friday", "kort": "short",
-    "staan": "to stand; to be placed", "spreken": "to speak (part of afspreken)",
+    "staan": "to stand; to be placed", "spreken": "to speak (part of a separable verb: to arrange)",
 })
 
 # Unit 12 (talking about recent events, perfect tense), added 2026-07-06.
@@ -509,7 +509,7 @@ NL_GLOSSES.update({
     "Waarmee": "With what", "helpen": "to help", "Heeft": "Has", "tegen": "for; against",
     "tablet": "a tablet", "Neem": "Take", "Advies": "Advice", "Rust": "Rest",
     "drink": "drink", "veel": "much; a lot", "Voel": "Feel", "dagen": "days",
-    "steeds": "still (part of nog steeds)", "huisarts": "the family doctor",
+    "steeds": "still (part of a two-word expression)", "huisarts": "the family doctor",
     "Nog": "Still; not yet", "moe": "tired", "genomen": "taken", "nu": "now",
     "rusten": "to rest", "Beterschap": "Get well soon", "Dank": "Thanks",
     "morgen": "tomorrow",
@@ -540,7 +540,7 @@ NL_GLOSSES.update({
     "Appartement": "Apartment", "altijd": "always", "appartement": "the apartment",
     "badkamer": "the bathroom", "balkon": "the balcony", "fijn": "nice",
     "gezellig": "cozy", "kamers": "rooms", "keuken": "the kitchen",
-    "klinkt": "sounds", "langs": "by (part of 'komen langs', to come by/visit)",
+    "klinkt": "sounds", "langs": "by (as in 'to come by/visit')",
     "nieuwe": "new (inflected)", "slaapkamer": "the bedroom", "slaapkamers": "bedrooms",
     "snel": "soon; quickly", "tuin": "the garden", "welkom": "welcome",
     "woonkamer": "the living room", "zeggen": "to say",
@@ -614,7 +614,7 @@ NL_GLOSSES.update({
 # added 2026-07-07.
 NL_GLOSSES.update({
     "schrijven": "write (part of 'inschrijven', to register)",
-    "Zou": "Would (conditional of zullen)", "schikken": "to suit; to be convenient",
+    "Zou": "Would (conditional)", "schikken": "to suit; to be convenient",
     "paspoort": "the passport", "huurcontract": "the rental contract",
     "geboorteakte": "the birth certificate", "geldig": "valid",
     "Moet": "Must; do (need to)", "meenemen": "to bring along",
@@ -624,28 +624,28 @@ NL_GLOSSES.update({
     "DigiD": "DigiD (Dutch digital identity system)", "online": "online",
     "zaken": "matters; affairs", "regelen": "to arrange",
     "gemeente": "the municipality", "documenten": "documents",
-    "indien": "if", "toepassing": "application (van toepassing, applicable)",
+    "indien": "if", "toepassing": "application (as in 'applicable')",
     "vooraf": "in advance", "inschrijving": "the registration",
     "ontvangt": "receives", "post": "the mail; post",
     "Ambtenaar": "Official (civil servant)", "waarmee": "with what; how",
     "Alstublieft": "Here you go; please (formal)",
-    "Alles": "Everything", "orde": "order (in orde, in order)",
-    "paar": "a couple; a few (in 'een paar')", "Geweldig": "Great; wonderful",
-    "hulp": "the help", "ingeschreven": "registered (past participle of inschrijven)",
+    "Alles": "Everything", "orde": "order (as in 'in order')",
+    "paar": "a couple; a few", "Geweldig": "Great; wonderful",
+    "hulp": "the help", "ingeschreven": "registered (past participle)",
 })
 
 # A2 unit 25 (meningen/opinions: giving opinions with reasons), added 2026-07-07.
 NL_GLOSSES.update({
     "fietspad": "the bike path", "mening": "the opinion",
     "Volgens": "According to", "gevaarlijk": "dangerous", "smal": "narrow",
-    "eens": "agreed; in agreement (het eens zijn, to agree)",
-    "gedeeltelijk": "partially", "Aan": "On (aan de andere kant, on the other hand)",
+    "eens": "agreed; in agreement (as in 'to agree')",
+    "gedeeltelijk": "partially", "Aan": "On (as in 'on the other hand')",
     "kant": "the side", "veiliger": "safer", "bespaart": "saves",
     "voetgangers": "the pedestrians", "weinig": "little; not much",
     "snap": "understand (with ik)", "fietsers": "cyclists",
     "ze": "they; she (unstressed)", "pad": "the path", "breder": "wider",
-    "helemaal": "completely; entirely", "mee": "along; with (mee eens, in agreement)",
-    "auto": "the car", "s": "'s (possessive/plural marker, as in auto's)",
+    "helemaal": "completely; entirely", "mee": "along; with (as in 'in agreement')",
+    "auto": "the car", "s": "possessive/plural marker (as in 'cars')",
     "straat": "the street", "Misschien": "Maybe", "wordt": "becomes",
     "vindt": "thinks; finds (with hij/zij)",
 })
@@ -747,7 +747,7 @@ NL_GLOSSES.update({
     "honden": "dogs", "dieren": "animals", "klinker": "the vowel",
     "verdubbelt": "doubles", "medeklinker": "the consonant",
     "katten": "cats", "vissen": "fish (plural)", "vogels": "birds",
-    "Laat": "Walk (imperative, part of uitlaten)",
+    "Laat": "Walk (imperative, as in 'walk the dog')",
     "houden": "to love; to be fond of; to hold", "beiden": "both (of them)",
     "Pico": "Pico (a pet bird's name)", "alle": "all",
 })
@@ -820,9 +820,9 @@ NL_GLOSSES.update({
 # "over", not a distinct homograph/different-POS collision like the "zijn"/
 # "werk" cases documented in this file's module docstring, so widening the
 # one gloss (rather than adding a conflicting second entry) is safe.
-NL_GLOSSES["over"] = "past; after; in (a duration, as in 'over tien minuten')"
+NL_GLOSSES["over"] = "past; after; in (a duration, as in 'in ten minutes')"
 NL_GLOSSES.update({
-    "seinstoring": "the signal failure", "valt": "falls; is cancelled (with hij/zij, part of uitvallen)",
+    "seinstoring": "the signal failure", "valt": "falls; is cancelled (with hij/zij, part of a separable verb)",
     "door": "through; because of; during (as in 'door de week')",
     "aansluiting": "the connection", "mis": "miss (with ik)",
     "servicebalie": "the service desk", "Kunt": "can (with u/je, formal or informal)",
@@ -836,7 +836,7 @@ NL_GLOSSES.update({
     "reizigers": "travelers", "reisplanner": "the journey planner",
     "raadplegen": "to consult", "NS": "NS (Dutch national railway company)",
     "uitgevallen": "cancelled; failed (past participle of uitvallen)",
-    "weten": "to know", "inderdaad": "indeed", "Over": "past; after; in (a duration, as in 'over tien minuten')",
+    "weten": "to know", "inderdaad": "indeed", "Over": "past; after; in (a duration, as in 'in ten minutes')",
     "spoor": "the platform; track", "even": "just; briefly",
 })
 
@@ -847,7 +847,7 @@ NL_GLOSSES.update({
     "schermtijd": "screen time", "gewoonte": "the habit",
     "doorbrengen": "to spend (time)", "hun": "their",
     "Sociale": "Social (inflected)", "gezond": "healthy",
-    "Probeer": "Try (imperative)", "brengen": "to bring; to spend (time) (part of doorbrengen)",
+    "Probeer": "Try (imperative)", "brengen": "to bring; to spend (time) (part of a separable verb)",
     "Eigenlijk": "actually", "kijk": "look (with ik)",
     "Jawel": "yes indeed (contradicting a negative assumption)",
     "wegleggen": "to put away", "probeer": "try (with ik)",
@@ -856,16 +856,16 @@ NL_GLOSSES.update({
 # A2 unit 76 (drukke week/describing a weekly schedule), added 2026-07-11.
 NL_GLOSSES.update({
     "cursus": "the course", "volgorde": "the order; sequence",
-    "Ten": "finally (part of 'ten slotte')", "slotte": "finally (part of 'ten slotte')",
+    "Ten": "finally (part of a two-word expression)", "slotte": "finally (part of a two-word expression)",
     "avondeten": "the dinner; evening meal",
-    "doordeweekse": "weekday (adjective, as in 'doordeweekse dag')",
+    "doordeweekse": "weekday (adjective)",
     "Door": "through; because of; during (as in 'door de week')",
     "verschil": "the difference", "agenda": "the schedule; planner",
-    "zit": "sits; is (with hij/zij, idiomatic 'zit vol' = is full)",
+    "zit": "sits; is (with hij/zij, idiomatic: 'is full')",
     "vol": "full", "Volgende": "next", "druk": "busy",
     "woensdagavond": "Wednesday evening", "taalcursus": "the language course",
-    "leest": "reads (with hij/zij)", "Best": "pretty; quite (degree adverb, as in 'best druk')",
-    "vrij": "free; off (a day)", "lekkers": "something tasty (as in 'iets lekkers')",
+    "leest": "reads (with hij/zij)", "Best": "pretty; quite (degree adverb, as in 'pretty busy')",
+    "vrij": "free; off (a day)", "lekkers": "something tasty",
     "gewoon": "just; simply",
 })
 
@@ -877,10 +877,10 @@ NL_GLOSSES.update({
     "ruilen": "to exchange", "terugkrijgen": "to get back",
     "bonnetje": "the receipt", "geleden": "ago",
     "retourbeleid": "the return policy", "artikel": "the item; article",
-    "terugbrengen": "to return (an item)", "regel": "arrange (with ik, part of regelen)",
+    "terugbrengen": "to return (an item)", "regel": "arrange (with ik)",
     "Retourbeleid": "the return policy", "aankoop": "the purchase",
     "defect": "defective", "exemplaar": "the copy; item (replacement)",
-    "teruggekregen": "got back (past participle of terugkrijgen)",
+    "teruggekregen": "got back (past participle)",
 })
 
 # B1 unit 01 (hypothetische situaties/hypothetical situations), added
@@ -892,7 +892,7 @@ NL_GLOSSES.update({
 NL_GLOSSES.update({
     "Spanje": "Spain", "zou": "would", "zouden": "would (plural)",
     "jullie": "you (plural)", "rijk": "rich", "vaker": "more often",
-    "Stel": "imagine (imperative, in 'stel je voor')",
+    "Stel": "imagine (imperative)",
     "loterij": "the lottery", "winnen": "to win", "stoppen": "to stop",
     "wereld": "the world", "rondreizen": "to travel around",
     "misschien": "maybe", "meteen": "immediately",
@@ -917,7 +917,7 @@ NL_GLOSSES.update({
     "sommige": "some", "makkelijk": "easy", "kleine": "little (inflected)",
     "stap": "the step", "daarmee": "with that; with it",
     "groente": "vegetables", "gezondheid": "health",
-    "Steeds": "more and more (with a comparative, e.g. 'steeds meer')",
+    "Steeds": "more and more (with a comparative)",
     "Sommigen": "some (people)", "Anderen": "others",
     "vooral": "mainly; especially", "veranderen": "to change",
     "enerzijds": "on one hand", "anderzijds": "on the other hand",
@@ -939,7 +939,7 @@ NL_GLOSSES.update({
     "bespreken": "to discuss", "afronden": "to finish; to complete",
     "cijfers": "the figures; the numbers",
     "lukken": "to work out; to succeed",
-    "gang": "way (in 'ga uw gang,' go ahead)",
+    "gang": "way (as in 'go ahead')",
     "jaarverslag": "the annual report", "Beste": "Dear (letter/email salutation)",
     "collega's": "colleagues", "ontvang": "receive (with ik)",
     "opmerkingen": "comments", "hoop": "hope (with ik)",
@@ -963,7 +963,7 @@ NL_GLOSSES.update({
     "waarover": "about which", "interessant": "interesting",
     "Ken": "know (with je, inverted)", "vrouw": "the woman",
     "Bedoel": "mean (question form, with je)", "geboren": "born",
-    "wereldje": "small world (diminutive of wereld)", "drinkt": "drinks",
+    "wereldje": "small world (diminutive)", "drinkt": "drinks",
     "toevallig": "coincidental; what a coincidence",
     "vriendin": "girlfriend; female friend",
     "universiteit": "the university", "bedrijf": "a company",
@@ -999,7 +999,7 @@ NL_GLOSSES.update({
 # last") gloss -- same meaning, safe direct reuse. ophalen/kon/eerder/zou/
 # gelukkig were already classified by earlier B1 units above.
 NL_GLOSSES.update({
-    "moest": "had to (past of moeten)", "Vorige": "previous; last",
+    "moest": "had to (past tense)", "Vorige": "previous; last",
     "mogelijkheid": "the possibility",
 })
 
@@ -1012,7 +1012,7 @@ NL_GLOSSES.update({
 # zou/studeren/eerder/Sara/willen were already classified by earlier B1
 # units above.
 NL_GLOSSES.update({
-    "geweten": "known (past participle of weten)", "feest": "the party",
+    "geweten": "known (past participle)", "feest": "the party",
     "Vorig": "last (uninflected, with a het-word like 'jaar')",
     "hoorde": "heard (simple past)", "Nu": "now",
     "voorwaarde": "the condition",
@@ -1021,7 +1021,7 @@ NL_GLOSSES.update({
 # B1 unit 09 (eens en oneens/agreement and disagreement), added 2026-07-11.
 # worden/Toch/denkt were already classified by earlier B1 units above.
 NL_GLOSSES.update({
-    "ermee": "with it (in 'het ermee eens zijn')",
+    "ermee": "with it (as in 'to agree with it')",
     "vierdaagse": "four-day (inflected)", "werkweek": "the work week",
     "bedrijven": "companies", "zegt": "says",
     "gelukkiger": "happier", "blijf": "remain; stay (with ik)",
@@ -1044,11 +1044,11 @@ NL_GLOSSES.update({
 # above.
 NL_GLOSSES.update({
     "Terwijl": "while",
-    "nam": "took (simple past of nemen, in 'nam niet op,' didn't answer)",
+    "nam": "took (simple past, as in 'didn't answer')",
     "Toen": "when; then",
     "opnam": "picked up (the phone; simple past of opnemen)",
-    "deed": "did (simple past of doen)", "jammer": "a shame; a pity",
-    "gebeurde": "happened (simple past of gebeuren)",
+    "deed": "did (simple past)", "jammer": "a shame; a pity",
+    "gebeurde": "happened (simple past)",
     "grappigs": "funny (indeclinable form after 'iets')",
     "Uiteindelijk": "in the end; eventually",
     "lachten": "laughed (plural simple past of lachen)",
@@ -1474,7 +1474,7 @@ NOUNS.update({"verhaal"})
 # Unit 34 (technologie/technology and devices).
 NL_GLOSSES.update({
     "boodschap": "the message", "computer": "the computer",
-    "internet": "the internet", "opzoeken": "to look up (separable: zoekt ... op)",
+    "internet": "the internet", "opzoeken": "to look up (separable verb)",
     "stuurt": "sends (with hij/zij/u)", "zwem": "swim (with ik)",
 })
 NOUNS.update({"boodschap", "computer", "internet"})
@@ -1485,7 +1485,7 @@ NL_GLOSSES.update({
     "algemeen": "general", "gezondheidszorg": "healthcare",
     "hogeschool": "the college; university of applied sciences",
     "leert": "learns (with hij/zij)", "leren": "to learn",
-    "nieuws": "new (in 'iets nieuws' = something new)", "oefenen": "to practise",
+    "nieuws": "new (as in 'something new')", "oefenen": "to practise",
     "opleiding": "the study programme", "school": "the school",
     "Spaans": "Spanish", "specifiek": "specific",
     "studeer": "study (with ik)", "studeert": "studies (with hij/zij)",
@@ -1501,9 +1501,9 @@ ADJECTIVES.update({"algemeen", "nieuws", "Spaans", "specifiek"})
 
 # Unit 36 (verjaardag/birthdays and parties).
 NL_GLOSSES.update({
-    "gefeliciteerd": "congratulations", "laten": "let (in 'laten we' = let's)",
-    "nodigt": "invites (with hij/zij, part of uitnodigen)",
-    "uitnodigen": "to invite (separable: nodigt ... uit)",
+    "gefeliciteerd": "congratulations", "laten": "let (as in 'let's')",
+    "nodigt": "invites (with hij/zij, part of a separable verb)",
+    "uitnodigen": "to invite (separable verb)",
     "verjaardag": "the birthday", "vieren": "to celebrate",
     "viert": "celebrates (with hij/zij)",
 })
@@ -1514,9 +1514,9 @@ PHRASES.update({"gefeliciteerd"})
 # Unit 37 (huishouden/household chores).
 NL_GLOSSES.update({
     "huishouden": "the household chores", "rommel": "the mess",
-    "ruim": "tidy up (with ik, part of opruimen)",
-    "ruimen": "tidy up (with wij, part of opruimen)",
-    "ruimt": "tidies up (with hij/zij, part of opruimen)",
+    "ruim": "tidy up (with ik, part of a separable verb)",
+    "ruimen": "tidy up (with wij, part of a separable verb)",
+    "ruimt": "tidies up (with hij/zij, part of a separable verb)",
     "stofzuig": "vacuum (with ik)", "stofzuigen": "to vacuum",
     "stofzuigt": "vacuums (with hij/zij)",
 })
@@ -1536,7 +1536,7 @@ ADJECTIVES.update({"leuke"})
 
 # Unit 39 (post/sending letters and packages).
 NL_GLOSSES.update({
-    "aankomen": "to arrive (separable: komt ... aan)", "brief": "the letter",
+    "aankomen": "to arrive (separable verb)", "brief": "the letter",
     "duren": "to take (time); to last", "pakket": "the package",
     "postzegel": "the stamp", "schrijft": "writes (with hij/zij)",
 })
@@ -1545,10 +1545,10 @@ VERBS.update({"aankomen", "duren", "schrijft"})
 
 # Unit 40 (koken/cooking together).
 NL_GLOSSES.update({
-    "bakt": "fries (with hij/zij)", "klaarmaken": "to prepare (separable: maakt ... klaar)",
+    "bakt": "fries (with hij/zij)", "klaarmaken": "to prepare (separable verb)",
     "pan": "the pan", "proef": "taste (with ik; also the imperative)",
     "proeft": "tastes (with hij/zij)", "proeven": "to taste",
-    "smakelijk": "tasty (in 'eet smakelijk' = enjoy your meal)",
+    "smakelijk": "tasty (as in 'enjoy your meal')",
     "snijd": "cut (with ik)", "snijden": "to cut",
     "snijdt": "cuts (with hij/zij)", "tomaat": "the tomato", "ui": "the onion",
 })
@@ -1580,7 +1580,7 @@ ADJECTIVES.update({"geel", "oranje", "paars", "rood", "roze", "wit"})
 NL_GLOSSES.update({
     "bevestiging": "the confirmation",
     "gereserveerd": "reserved (past participle of reserveren)",
-    "hadden": "had (with wij/zij, past of hebben)", "heerlijk": "delicious",
+    "hadden": "had (with wij/zij, past tense)", "heerlijk": "delicious",
     "inbegrepen": "included", "inchecken": "to check in", "Maastricht": "Maastricht",
     "mooie": "beautiful (inflected)", "nachten": "nights",
     "receptionist": "the receptionist", "reservering": "the reservation",
@@ -1597,11 +1597,11 @@ ADVERBS.update({"vanmiddag"})
 # Unit 50 (apotheek/at the pharmacy).
 NL_GLOSSES.update({
     "apotheker": "the pharmacist",
-    "daartegen": "for that (in 'iets daartegen' = something for it)",
+    "daartegen": "for that (as in 'something for it')",
     "doos": "the box", "dosering": "the dosage", "etiket": "the label",
     "medicijn": "the medicine", "paracetamol": "paracetamol",
     "pijnstiller": "the painkiller", "pijnstillers": "painkillers",
-    "tabletten": "tablets", "uitrusten": "to rest (separable: rust ... uit)",
+    "tabletten": "tablets", "uitrusten": "to rest (separable verb)",
 })
 NOUNS.update({"apotheker", "doos", "dosering", "etiket", "medicijn",
               "paracetamol", "pijnstiller", "pijnstillers", "tabletten"})
@@ -1610,7 +1610,7 @@ ADVERBS.update({"daartegen"})
 
 # Unit 51 (kapper/at the hairdresser).
 NL_GLOSSES.update({
-    "betaal": "pay (with ik)", "geweest": "been (past participle of zijn)",
+    "betaal": "pay (with ik)", "geweest": "been (past participle of 'to be')",
     "hetzelfde": "the same", "hé": "hey", "kapper": "the hairdresser",
     "kapsel": "the hairstyle", "knipbeurt": "the haircut (service)",
     "knippen": "to cut (hair)", "korter": "shorter", "prijslijst": "the price list",
@@ -1623,7 +1623,7 @@ PHRASES.update({"hé"})
 
 # Unit 52 (fiets_huren/renting a bike).
 NL_GLOSSES.update({
-    "borg": "the deposit", "breng": "bring (with ik, part of terugbrengen)",
+    "borg": "the deposit", "breng": "bring (with ik, as in 'bring back')",
     "Daan": "Daan", "elektrische": "electric (inflected)",
     "fietsenwinkel": "the bike shop", "huren": "to rent", "huur": "rent (with ik)",
     "huurprijs": "the rental price", "huurprijzen": "rental prices",
@@ -1638,7 +1638,7 @@ NL_GLOSSES["60"] = "60"
 SYMBOLS.add("60")
 NL_GLOSSES.update({
     "draag": "carry (with ik)", "droger": "the dryer", "graden": "degrees",
-    "haal": "pick up (with ik, part of ophalen)", "kies": "choose (with ik)",
+    "haal": "pick up (with ik, part of a separable verb)", "kies": "choose (with ik)",
     "kleren": "clothes", "munten": "coins", "Sanne": "Sanne",
     "wasbeurt": "the wash (service)", "wasmand": "the laundry basket",
     "wasprogramma": "the wash programme", "wassen": "to wash",
@@ -1665,7 +1665,7 @@ VERBS.update({"douche", "douchen", "sluit"})
 NL_GLOSSES.update({
     "bestellen": "to order", "bioscoop": "the cinema", "Bram": "Bram",
     "dagmenu": "the day menu", "dranken": "the drinks",
-    "gekozen": "chosen (past participle of kiezen)", "menukaart": "the menu",
+    "gekozen": "chosen (past participle)", "menukaart": "the menu",
     "soep": "the soup",
 })
 PROPER_NOUNS.update({"Bram"})
@@ -1740,7 +1740,7 @@ NL_GLOSSES.update({
     "leeuw": "the lion", "leeuwen": "lions",
     "leeuwenverblijf": "the lion enclosure", "olifant": "the elephant",
     "rondvaart": "the boat tour", "voederen": "the feeding",
-    "waren": "were (with wij/zij, past of zijn)", "Wildpark": "Wildpark (zoo name)",
+    "waren": "were (with wij/zij, past of 'to be')", "Wildpark": "Wildpark (zoo name)",
 })
 PROPER_NOUNS.update({"Wildpark"})
 NOUNS.update({"aap", "giraffe", "kaartjes", "leeuw", "leeuwen",
@@ -1803,7 +1803,7 @@ ADJECTIVES.update({"vers"})
 NL_GLOSSES.update({
     "bakkerij": "the bakery (shop)", "croissant": "the croissant",
     "croissants": "croissants", "gebak": "the pastry",
-    "gebakken": "baked (past participle of bakken)",
+    "gebakken": "baked (past participle)",
     "ijssalon": "the ice cream parlour", "Peters": "Peters (business name)",
     "toonbank": "the counter", "zak": "the bag", "zoet": "sweet",
 })
@@ -1884,7 +1884,7 @@ NL_GLOSSES.update({
     "beweren": "to claim",
     "bijvoorbeeld": "for example",
     "blijken": "to appear; to turn out",
-    "blijkt": "appears; shows (with uit ... dat)",
+    "blijkt": "appears; shows (as in 'it appears from ... that')",
     "boodschappen": "the groceries; the shopping",
     "bron": "the source",
     "bronnen": "sources",
@@ -1893,36 +1893,36 @@ NL_GLOSSES.update({
     "daarnaast": "in addition; besides",
     "Dat": "that",
     "De": "the",
-    "degelijk": "most certainly (in 'wel degelijk')",
+    "degelijk": "most certainly",
     "ding": "thing",
     "donker": "dark",
     "duurzaamheid": "sustainability",
     "enigszins": "somewhat; slightly",
-    "erop": "at it; on it (in 'het lijkt erop dat')",
-    "ervan": "of it; about it (in 'ervan overtuigd')",
-    "ervoor": "before that; beforehand (in 'de avond ervoor')",
+    "erop": "at it; on it (as in 'it looks like')",
+    "ervan": "of it; about it (as in 'convinced of it')",
+    "ervoor": "before that; beforehand (as in 'the evening before')",
     "etentje": "dinner party",
     "file": "the traffic jam",
     "Geachte": "dear (formal salutation)",
     "gebeurd": "happened",
     "gebeuren": "to happen",
     "gemist": "missed",
-    "gevallen": "cases (in 'in veel gevallen')",
+    "gevallen": "cases (as in 'in many cases')",
     "gezet": "set (put)",
     "gezonder": "healthier",
     "gok": "guess (with ik)",
     "gokken": "to guess",
     "groetjes": "cheers; take care (informal sign-off)",
     "haast": "hurry; haste",
-    "hangen": "to depend (in 'afhangen'); to hang",
-    "hangt": "depends (in 'hangt ervan af')",
+    "hangen": "to depend (as part of a separable verb); to hang",
+    "hangt": "depends (as in 'it depends')",
     "heer": "sir; gentleman",
     "helaas": "unfortunately",
     "Helemaal": "completely; totally",
     "helft": "half",
     "hoi": "hi",
     "Hoogachtend": "yours faithfully (most formal sign-off)",
-    "hoogte": "extent (in 'tot op zekere hoogte'); height",
+    "hoogte": "extent (as in 'to a certain extent'); height",
     "juist": "precisely; exactly",
     "kloppen": "to be right; to check out",
     "klopt": "is right; is correct",
@@ -1945,7 +1945,7 @@ NL_GLOSSES.update({
     "negatief": "negative",
     "netjes": "properly; neatly; politely",
     "nogal": "rather; fairly",
-    "nou": "well (in 'nou juist': exactly)",
+    "nou": "well (as in 'exactly')",
     "onderbouwd": "backed up; well-supported",
     "onderbouwen": "to back up; to support with evidence",
     "onderweg": "on the way; en route",
@@ -1971,20 +1971,20 @@ NL_GLOSSES.update({
     "reistijd": "commute; travel time",
     "samenleving": "society",
     "schikt": "suits; is convenient",
-    "se": "(in 'per se') necessarily; as such",
+    "se": "necessarily; as such (in a fixed expression)",
     "snappen": "to understand; to get",
     "sommigen": "some people",
     "spitsuur": "rush hour",
     "sprak": "spoke",
     "standpunt": "a position; point of view",
     "steden": "cities",
-    "stel": "propose (with ik, in 'stel voor')",
+    "stel": "propose (with ik, part of a separable verb)",
     "stelt": "states; asserts (with hij/zij)",
     "succes": "a success",
-    "tegenstelling": "contrast (in 'in tegenstelling tot')",
+    "tegenstelling": "contrast (as in 'in contrast to')",
     "tellen": "to count; to matter",
     "telt": "counts; matters",
-    "ten": "(in 'ten eerste/tweede') firstly/secondly; at the",
+    "ten": "firstly/secondly; at the (in fixed expressions)",
     "tenzij": "unless",
     "terwijl": "while; whereas",
     "Thomas": "Thomas",
@@ -2015,9 +2015,9 @@ NL_GLOSSES.update({
     "voordelen": "advantages",
     "voorspelbaar": "predictable",
     "voorstel": "proposal",
-    "Vries": "Vries (surname, 'Lotte de Vries')",
+    "Vries": "Vries (surname)",
     "vrijheid": "freedom",
-    "waard": "worth (in 'de moeite waard')",
+    "waard": "worth (as in 'worth the effort')",
     "waarom": "why",
     "wakker": "awake",
     "weegt": "weighs; carries weight",
@@ -2735,7 +2735,7 @@ NL_GLOSSES.update({
     'frisse': 'fresh (inflected; as in fresh air)',
     'gaten': 'holes (in an idiom for keeping an eye on something)',
     'gegrepen': 'seized (a chance) (past participle)',
-    'gehad': 'had (past participle of hebben)',
+    'gehad': 'had (past participle)',
     'geldt': 'applies; holds (with hij/zij/het)',
     'geleidelijke': 'gradual (inflected)',
     'geluid': 'the sound; noise',
@@ -2763,7 +2763,7 @@ NL_GLOSSES.update({
     'herhaald': 'repeated',
     'hinder': 'the hindrance; the bother',
     'hoofdgedachte': 'the main idea; the central point',
-    'hoort': 'belongs (with bij) (with hij/zij)',
+    'hoort': 'belongs (to) (with hij/zij)',
     'impliceren': 'to imply',
     'ingehouden': 'restrained; suppressed',
     'inhoud': 'content (of a message); substance',
@@ -2771,7 +2771,7 @@ NL_GLOSSES.update({
     'ironie': 'irony',
     'ironisch': 'ironic; ironically',
     'kans': 'chance',
-    'keert': 'turns (with hij/zij; with om = reverses)',
+    'keert': "turns (with hij/zij; also 'reverses')",
     'kernpunt': 'the key point; the crux',
     'keten': 'the chain (of events or reasoning)',
     'klonken': 'sounded (with plural subject)',
@@ -2797,9 +2797,9 @@ NL_GLOSSES.update({
     'letterlijke': 'literal (inflected)',
     'leven': 'the life',
     'levendig': 'lively; vivid',
-    'leveren': 'yield; produce (with zij, plural; separable, with op)',
+    'leveren': 'yield; produce (with zij, plural; separable verb)',
     'levering': 'the delivery',
-    'levert': 'yields; produces (with hij/zij; separable, with op)',
+    'levert': 'yields; produces (with hij/zij; separable verb)',
     'lezing': 'the reading (one way of reading a remark)',
     'lid': 'the member',
     'ligt': 'lies (is located; with hij/zij/het)',
@@ -2871,7 +2871,7 @@ NL_GLOSSES.update({
     'relatie': 'the relationship',
     'retorische': 'rhetorical (inflected)',
     'ring': 'the ring',
-    'roept': 'calls (with hij/zij/het; with op: calls on)',
+    'roept': "calls (with hij/zij/het; also 'calls on')",
     'ruimere': 'more extensive; wider (inflected)',
     'samenvatten': 'to summarize; to sum up',
     'schets': 'sketch; outline (with ik)',
@@ -2950,7 +2950,7 @@ NL_GLOSSES.update({
     'vertalingen': 'translations',
     'verzachten': 'to soften',
     'verzwijgen': 'to keep quiet about',
-    'viel': 'fell (with hij/zij; with uit: cut out)',
+    'viel': "fell (with hij/zij; also 'cut out')",
     'vlakke': 'flat (inflected; of a tone)',
     'vlekkeloos': 'flawless',
     'voorbehoud': 'the reservation; qualification',
@@ -2967,20 +2967,20 @@ NL_GLOSSES.update({
     'werkelijkheid': 'reality',
     'werkenden': 'working people; people in work',
     'wijst': 'points (with hij/zij)',
-    'wijzen': 'to point; to indicate (with op: to point to)',
+    'wijzen': "to point; to indicate (also 'to point to')",
     'wilde': 'wanted (past, with ik/hij/zij)',
     'windmolenpark': 'the wind farm',
     'winkeliers': 'shopkeepers',
     'woonde': 'lived, resided (past, with ik/hij/zij)',
     'woordkeus': 'the choice of words; wording',
     'zacht': "soft (in the idiom 'to put it mildly')",
-    'zat': 'sat; was (past of zitten, with ik/hij/zij)',
+    'zat': 'sat; was (past tense, with ik/hij/zij)',
     'zet': "put; set (with ik; also the first part of the separable verb for 'convert')",
     'zichtbaar': 'visible',
     'zinnen': 'sentences; clauses',
     "zo'n": 'such a',
     'zorg': 'concern; worry (noun)',
-    'zorgt': "takes care of; provides (with hij/zij, followed by 'voor')",
+    'zorgt': "takes care of; provides (with hij/zij, followed by 'for')",
 })
 ADJECTIVES.update({'aantrekkelijke', 'aantrekkelijker', 'autoluwe', 'begrijpelijke', 'belangrijkste', 'beperkte', 'betogende', 'centrale', 'chaotisch', 'diplomatieke', 'doeltreffend', 'doorslaggevend', 'duidelijk', 'echte', 'Engelse', 'enthousiast', 'figuurlijk', 'financiële', 'frisse', 'geleidelijke', 'gemeentelijk', 'gemengde', 'gemotiveerd', 'gewenste', 'helder', 'herhaald', 'ingehouden', 'ironisch', 'koude', 'krachtiger', 'kritische', 'laatste', 'letterlijke', 'levendig', 'maatschappelijk', 'maatschappelijke', 'mild', 'milde', 'minimaal', 'negatieve', 'noodzakelijk', 'onbetaalbaar', 'ongepast', 'ongezond', 'ongezonder', 'ontevreden', 'onwerkelijke', 'passende', 'positieve', 'rampzalig', 'retorische', 'ruimere', 'schone', 'schonere', 'serieus', 'soepel', 'streng', 'tegenfeitelijke', 'tegenstrijdig', 'teleurgesteld', 'uitstekend', 'vaste', 'vertaald', 'vlakke', 'vlekkeloos', 'voortreffelijk', 'zacht', 'zichtbaar'})
 ADVERBS.update({'aantoonbaar', 'achteraf', 'alweer', 'behoorlijk', 'bepaald', 'daarbij', 'daarom', 'daarvoor', 'desalniettemin', 'direct', 'eindelijk', 'letterlijk', 'namelijk', 'oprecht', 'rechtstreeks', 'terzijde', 'waarin', 'werkelijk'})
@@ -4707,7 +4707,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
 # is an English speaker); Dutch-side sense confirmation is not needed.
 NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # b1_unit06 teaches the noun "de regel" (nl.b1.unit06.lesson06.teach.de_regel);
-    # global `regel` = verb "arrange (with ik, part of regelen)". Without this,
+    # global `regel` = verb "arrange (with ik)". Without this,
     # translate.002 cued "the rule" and graded the correct answer "regel" wrong.
     ("b1_unit06_verplichtingen", "regel"): "the rule",
     # --- 2026-08-01 homograph sweep (each verified against the unit's own
@@ -4718,10 +4718,10 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("a1_unit54_zwembad", "regel"): "the rule",
     # b1_unit01 teaches the past/unreal copula ("Als ik rijk was, zou ik..."),
     # not the household "was" (afwassen); global says "do the dishes (with ik)".
-    ("b1_unit01_hypothetische_situaties", "was"): "was; were (past tense of zijn)",
+    ("b1_unit01_hypothetische_situaties", "was"): "was; were (past tense of 'to be')",
     # b1_unit05 (reported speech) teaches "asked" ("Hij vroeg of ik kon helpen");
     # global adjective gloss is "early".
-    ("b1_unit05_indirecte_rede", "vroeg"): "asked (past tense of vragen)",
+    ("b1_unit05_indirecte_rede", "vroeg"): "asked (past tense)",
     # b1_unit09 teaches the noun ("mensen meer rust nodig hebben" = need more
     # rest); global says verb "rest (imperative, with u)".
     ("b1_unit09_eens_en_oneens", "rust"): "rest; calm",
@@ -4752,7 +4752,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # Unit uses zijn only possessively: 'dat zijn stilte afwijzing betekent', 'Zijn woorden klonken beleefd'; global is the verb 'are'.
     ('c1_unit02_tussen_de_regels', 'zijn'): 'his',
     # Card 'Hij was behoorlijk ontevreden' = past of zijn; global 'do the dishes (with ik)' is the verb wassen, a different word.
-    ('c1_unit02_tussen_de_regels', 'was'): 'was (with hij/zij, past of zijn)',
+    ('c1_unit02_tussen_de_regels', 'was'): "was (with hij/zij, past of 'to be')",
     # Card 'Letterlijk ontkent ze alleen dat het rampzalig was' = only, not 'alone'.
     ('c1_unit02_tussen_de_regels', 'alleen'): 'only; alone',
     # Card 'ontkent ze alleen dat het rampzalig was' (overlay: 'only literally denies'); 'negates' is not the sense taught.
@@ -4760,9 +4760,9 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # Card overlay: 'his silence means rejection'; global 'decline' is ambiguous (could read as 'decrease').
     ('c1_unit02_tussen_de_regels', 'afwijzing'): 'rejection',
     # Card 'zonder die rechtstreeks uit te spreken' = uitspreken (voice openly); global cue 'part of afspreken' points to the wrong verb.
-    ('c1_unit02_tussen_de_regels', 'spreken'): 'to speak (with uit: to voice, say outright)',
+    ('c1_unit02_tussen_de_regels', 'spreken'): "to speak (also 'to voice, say outright')",
     # Card 'Op zich was het geen ramp' teaches the fixed expression op zich = in itself / as such.
-    ('c1_unit02_tussen_de_regels', 'zich'): 'oneself; itself (with op: in itself)',
+    ('c1_unit02_tussen_de_regels', 'zich'): "oneself; itself (also 'in itself')",
     # Card weer_voortreffelijk 'Nou, dat is weer voortreffelijk geregeld.' and cue card 'Weer en nou kunnen bij herhaald falen...' teach the adverb 'again' 
     ('c1_unit03_registerbeheersing', 'weer'): 'again',
     # Card ik_zou_het_waarderen 'Ik zou het op prijs stellen als u vandaag reageert.' uses stellen in the fixed expression 'op prijs stellen'; global 'to pr
@@ -4796,7 +4796,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # Card collocatie: 'Sommige woorden horen vast bij elkaar' = belong firmly together; global 'surely; definitely' is the modal sense, wrong here.
     ('c1_unit06_idioom_en_beeldspraak', 'vast'): 'firmly; fixed',
     # Card collocatie: 'woorden horen vast bij elkaar' = belong together; global 'to hear' alone misleads.
-    ('c1_unit06_idioom_en_beeldspraak', 'horen'): 'to belong (with bij); to hear',
+    ('c1_unit06_idioom_en_beeldspraak', 'horen'): 'to belong (to); to hear',
     # Leestekst: 'dat binnen een maand moet beslissen' = within a month; global 'inside' (adverb) is the spatial sense.
     ('c1_unit06_idioom_en_beeldspraak', 'binnen'): 'within (time)',
     # Card register: 'is idioom heel gewoon' = very common/normal; global 'just; simply' (adverb) is the particle sense.
@@ -4823,14 +4823,14 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ('c1_unit08_retorisch_overtuigen', 'beroep'): 'appeal (to call upon someone)',
     # Scenario card: 'Omar wil de buurt overtuigen om het groen te houden' = to keep; global leads with 'to love' (which is 'houden van').
     ('c1_unit08_retorisch_overtuigen', 'houden'): 'to keep; to hold',
-    # Reading text: 'De buurt heeft steeds minder ruimte'; global 'still (part of nog steeds)' is a different sense.
-    ('c1_unit08_retorisch_overtuigen', 'steeds'): 'increasingly; more and more (with minder: less and less)',
+    # Reading text: 'De buurt heeft steeds minder ruimte'; global 'still (part of a two-word expression)' is a different sense.
+    ('c1_unit08_retorisch_overtuigen', 'steeds'): "increasingly; more and more (also 'less and less')",
     # C1 practice-review gloss fixes (2026-10-10): pin typed answers / drop self-quoting Dutch.
     ('c1_unit01_betoogstructuur', 'maak'): 'make (with ik)',
     ('c1_unit01_betoogstructuur', 'maakt'): 'makes (with hij/zij/het)',
     ('c1_unit01_betoogstructuur', 'druk'): 'busy (of a place)',
     ('c1_unit02_tussen_de_regels', 'door'): "through; because of; during (as in 'during the week')",
-    ('c1_unit02_tussen_de_regels', 'nou'): 'well (with juist: exactly)',
+    ('c1_unit02_tussen_de_regels', 'nou'): "well (as in 'exactly')",
     ('c1_unit02_tussen_de_regels', 'ernstig'): 'grave; serious (of problems)',
     ('c1_unit02_tussen_de_regels', 'ging'): 'went (with hij/zij)',
     ('c1_unit02_tussen_de_regels', 'zei'): 'said (with hij/zij)',
@@ -4860,7 +4860,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ('c1_unit08_retorisch_overtuigen', 'kom'): 'come (imperative)',
     # 2026-10-11 second C1 review: senses narrowed so a gloss has one typed answer.
     ('c1_unit01_betoogstructuur', 'beginnen'): 'to begin',
-    ('c1_unit01_betoogstructuur', 'om'): '(in order) to (om ... te)',
+    ('c1_unit01_betoogstructuur', 'om'): '(in order) to',
     ('c1_unit02_tussen_de_regels', 'betekent'): 'means; signifies (with hij/zij/het)',
     ('c1_unit03_registerbeheersing', 'vriend'): 'friend (male, or in general)',
     ('c1_unit03_registerbeheersing', 'aan'): 'to (as in writing to someone); at; on',
@@ -4879,7 +4879,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ('c1_unit01_betoogstructuur', 'terug'): 'back (adverb: returning)',
     ('c1_unit02_tussen_de_regels', 'laat'): 'late',
     ('c1_unit03_registerbeheersing', 'blijft'): "remains; stays (as in 'stays the same'; with hij/zij/het)",
-    ('c1_unit04_toegeven_en_wegen', 'geef'): 'give (with ik; with toe: concede)',
+    ('c1_unit04_toegeven_en_wegen', 'geef'): "give (with ik; also 'concede')",
     ('c1_unit04_toegeven_en_wegen', 'daar'): "there (also in the set phrase for 'on the other hand')",
     ('c1_unit04_toegeven_en_wegen', 'wanneer'): 'when (conjunction)',
     ('c1_unit05_contrafeitelijk_redeneren', 'jou'): 'you (informal singular, object form)',
