@@ -4,9 +4,12 @@ source_language: en
 target_language: prs
 unit_content_key: prs.a1.unit35.post
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 7 fixes). The backfill glosses of پُسته (''post (as in پُسته خانه, post office)'') and پُستی (''postal (as in تکت پُستی, ...)'') print the Dari token inside the English gloss. (1)-(2) post_translate.001 and its volume_translate.006 twin showed that gloss as the translation prompt, i.e. the answer: both now use a clean pool (نامه, پارسل, می‌رسد). (3)-(4) post_gloss.001 / post_noun_gloss.001 offered that gloss as an MC option next to the same token: same clean pool. (5) post_where_gloss.001 rendered پُسته کجاست (''where is post?'') and its pool had only 2 nouns once cleaned: now bare-word over the clean pool, feedback reworded. (6) volume_fill.011 blanked ___ روان می‌کنم with only نامه accepted, though پارسل is equally correct (underdetermined): slot is now sendable_item_word with interchangeable: true. (7) its feedback was the bare Dari token: now an English explanation. LEFT: the two 4-pair matching_pairs (below the 6-pair floor) still show the leaky glosses; the unit has only 3 leak-free lexemes, so the real fix is the backfill gloss (write ''post'' / ''postal''). NATIVE FLAGS: send_item_translate ''I send a letter.'' accepts only نامه روان می‌کنم (not من نامه ... / یک نامه ...); backfill glosses of روان and روزه also embed Dari.
+
+    TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
     (1) lesson01.post_noun_gloss.001 (multiple_choice, post_word narrowed to part_of_speech noun -- نامه/پارسل/پُسته, 3
     distinct unit glosses at the floor; distinct POOL from post_gloss.001''s noun+adjective pool which also holds پُستی);
     (2) lesson04.post_where_gloss.001 (multiple_choice, frame "{post_word} کجاست" over the same noun pool -- کجاست is
@@ -50,12 +53,15 @@ tag_schema:
   part_of_speech:
   - noun
   - adjective
+  - verb
   agreement_tags:
     semantic:
     - post_word
     - sendable_item_word
+    - en_prs_a1_unit35_lesson03_words
     - volume_en_prs_a1_unit35_sendable_item_word_11_single
 slot_presets:
+  clean_post_word: &clean_post_word {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: [sendable_item_word, en_prs_a1_unit35_lesson03_words]}}
   post_noun_word: &post_noun
     language_code: prs
     part_of_speech: noun
@@ -82,7 +88,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    post_word: *id001
+    post_word: *clean_post_word
   answer_derivation:
     kind: slot_gloss
     slot: post_word
@@ -149,7 +155,7 @@ templates:
     slot_rendering:
       post_word: english_gloss
   slots:
-    post_word: *id001
+    post_word: *clean_post_word
   answer_derivation:
     kind: slot_text
     slot: post_word
@@ -165,7 +171,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    post_word: *post_noun
+    post_word: *clean_post_word
   answer_derivation:
     kind: slot_gloss
     slot: post_word
@@ -177,16 +183,16 @@ templates:
   lesson_content_key: prs.a1.unit35.lesson04.counter_dialogue
   type: multiple_choice
   frame:
-    text: '{post_word} کجاست'
+    text: '{post_word}'
     language_code: prs
     direction: rtl
   slots:
-    post_word: *post_noun
+    post_word: *clean_post_word
   answer_derivation:
     kind: slot_gloss
     slot: post_word
   feedback_frame:
-    text: '... کجاست asks "Where is ...?". Pick the English meaning of the mail word.'
+    text: '{post_word} is one of this unit''s post-office words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit35.lesson02.send_item_translate.001
@@ -222,14 +228,15 @@ templates:
       language_code: prs
       part_of_speech: noun
       agreement_tags:
-        semantic: volume_en_prs_a1_unit35_sendable_item_word_11_single
+        semantic: sendable_item_word
   answer_derivation:
     kind: slot_text
     slot: sendable_item_word
+    interchangeable: true
   feedback_frame:
-    text: '{sendable_item_word}'
-    language_code: prs
-    direction: rtl
+    text: 'Name the thing you send, then روان می‌کنم: نامه روان می‌کنم (I send a letter), پارسل روان می‌کنم (I send a parcel).'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit35.lesson01.post_pair.002.volume_match.006
   lesson_content_key: prs.a1.unit35.lesson01.post_words
   type: matching_pairs
@@ -280,13 +287,7 @@ templates:
     slot_rendering:
       post_word: english_gloss
   slots:
-    post_word:
-      language_code: prs
-      part_of_speech:
-      - noun
-      - adjective
-      agreement_tags:
-        semantic: post_word
+    post_word: *clean_post_word
   answer_derivation:
     kind: slot_text
     slot: post_word

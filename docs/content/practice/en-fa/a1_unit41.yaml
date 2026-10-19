@@ -4,9 +4,21 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a1.unit41.appointments
 review:
-  status: unreviewed
-  fresh_context: 'false'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 2 fixes).
+    (1) lesson01 match.003 unioned reviewed_phrase + person_name, which are
+    course-wide (~519 phrases): in Endless Practice the "places, availability
+    phrases and dialogue words" matching could deal any A1 sentence. Replaced by
+    the unit's lesson04 tag; the unit-scoped pool is unchanged (6). (2) lesson04
+    choose.001 had the same reviewed_phrase union: same fix.
+    Frames re-read: "{place} کجاست؟" and "پنجشنبه آزادم / آزادید" are fine for
+    every member; the آزادید render has no "؟" because the slot is shared with
+    the statement آزادم.
+    NATIVE FLAGS: none new (پنجشنبه vs "پنج شنبه" spacing already flagged in PR #40).
+
     Authored against docs/content/PRACTICE_PACK_RECIPE.md for the en-fa a1
     appointments unit. §0 capacity is GENUINELY THIN: only 3 of 6 lessons
     have any new fa lexeme at all (lesson01: 2, lesson02: 2, lesson04: 4);
@@ -62,6 +74,7 @@ tag_schema:
     - courtesy_title_word
     - person_name
     - reviewed_phrase
+    - en_fa_a1_unit41_lesson04_words
 
 templates:
 - content_key: practice.en-fa.fa.a1.unit41.lesson01.choose.001
@@ -109,7 +122,7 @@ templates:
     first: &unit41_l1_match
       language_code: fa
       part_of_speech: [noun, verb, phrase]
-      agreement_tags: {semantic: [appointment_place_word, availability_word, courtesy_title_word, person_name, reviewed_phrase]}
+      agreement_tags: {semantic: [appointment_place_word, availability_word, courtesy_title_word, en_fa_a1_unit41_lesson04_words]}
     second: *unit41_l1_match
     third: *unit41_l1_match
     fourth: *unit41_l1_match
@@ -202,7 +215,7 @@ templates:
     item:
       language_code: fa
       part_of_speech: [noun, verb, phrase]
-      agreement_tags: {semantic: [courtesy_title_word, reviewed_phrase, appointment_place_word, availability_word]}
+      agreement_tags: {semantic: [courtesy_title_word, en_fa_a1_unit41_lesson04_words, appointment_place_word, availability_word]}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: '{item} appears in this unit''s dentist-appointment dialogue.'
