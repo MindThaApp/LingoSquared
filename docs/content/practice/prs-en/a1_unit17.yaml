@@ -4,89 +4,95 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit17.plans
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: 'Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the sibling
-    fa-en/a1_unit17.yaml pack''s structure (11 templates). Same deliberate scope decision as that pack: lesson01 (proposing
-    an activity: "Do you want to see a movie...?"/"Would you like to go for a walk?") gets ZERO generated templates -- neither
-    invitation phrase mentions a specific day/time/ place that could vary, and none of this lesson''s other vocabulary (want/movie/weekend/would/walk)
-    has a same-lesson synonym group. The other three lessons all reuse the already-established 7-member weekday tag (from
-    unit04) -- genuinely apt here since this whole unit is about scheduling: "I''m busy on {item}." (lesson02), "Do you want
-    to have lunch on {item}?" (lesson03), "{item} works for me." (lesson04) are all grammatical with any weekday. All POS/semantic-tag
-    classification was already present in scripts/ _en_target_lexeme_common.py before this pass -- only scripts/ backfill_lexemes_prs_en.py''s
-    own Dari gloss dict needed extending (want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/ works), cross-checked
-    against docs/content/overlays/prs-en/ a1_unit17.yaml''s own real Dari phrasing (e.g. have lunch="چاشت خوردن", works for
-    me="برایم خوب استه"). Verified with scripts/_practice_slot_check.py that every slot has >=1 real candidate lexeme and
-    every multiple_choice/listen_select slot has >=4 distinct candidate values (weekday has 7). The underlying en realization
-    unit17 is UNREVIEWED (Codex was usage-limited at authoring time); the prs-en overlay is already reviewed -- the realization
-    needs the standard fresh-context review before import.
-
-    Deepened 2026-07-07 (templates-per-unit audit found this unit tied-shallowest in prs-en at 8, just authored the same night).
-    weekday (7 members) is the only genuinely generative tag this unit supports (confirmed above: none of this unit''s other
-    single-token vocabulary -- want/movie/weekend/would/walk/love/busy/maybe/ another/lunch/1pm/works -- has its own semantic
-    group). Added 3 new templates, all reusing weekday with exercise TYPES this unit hadn''t used yet (word_order/translation/listen_select
-    already existed at 2-3 lessons each; multiple_choice/matching_pairs did not): a lesson03 listen_select (parity fix --
-    lesson02/04 already had one, lesson03 didn''t), a lesson04 multiple_choice (bare-word Dari-gloss recognition), and a lesson04
-    matching_pairs using all 7 weekday members (AUTHORING_GUIDE.md #16 -- exactly the "6-12 real pairs" range, not padded).
-    No new EN_POS/semantic-tag or Dari-gloss additions needed -- weekday was already fully classified/glossed since unit04.
-    Considered fill_in_blank for weekday (e.g. blanking "I''m busy on {item}") but rejected it: all 7 weekdays are genuinely
-    grammatical in every one of this unit''s real frames with nothing else to disambiguate -- scripts/ _fill_in_blank_ambiguity_check.py
-    (and compile_content.py''s hard-fail per AUTHORING_GUIDE.md #17) would correctly flag it, so zero new fill_in_blank templates,
-    matching this direction''s own established "zero is fine when real vocabulary can''t safely support one" precedent. Re-verified
-    scripts/_practice_slot_check.py (weekday still safely >=3 for the new multiple_choice, >=2 for matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py
-    (zero new AMBIGUOUS flags) before import. New count: 11 templates (8 -> 11) -- an honest ceiling given weekday is the
-    unit''s only real generative tag.
-
-    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found ALL 11 templates DEAD
-    at checkpoint scope: `weekday`''s entire 7-member course-wide pool (friday/monday/saturday/sunday/thursday/tuesday/wednesday)
-    is established by unit04 -- unit17 itself introduces zero weekday-tagged lexemes (confirmed via the iter_specs unit filter:
-    unit17''s own 12 tokens are want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/works, and only "love" carries
-    any semantic tag at all -- preference_verb/preference_verb_full, shared with unit19). generate_checkpoint() only loads
-    unit17''s own lexemes, so every weekday-anchored slot had 0 unit-scoped candidates -- recipe DO-NOT #2, and this is one
-    of the two prs-en packs (with a1_unit14) the recipe flags as GUARANTEED to 409 today.
-
-    PACK-ONLY fix: weekday dropped entirely, rebuilt on unit17''s own vocabulary. Three untagged POS-only pools cover recognition/production
-    (bare frames, course-scope-breadth-safe per SS1.1): noun_pool = movie/weekend/walk/lunch/1pm (5); verb_pool = want/would/love/works
-    (4); desc_pool = busy/another/maybe (3, exactly the MC/listen floor). A fourth, content_pool, unions all three (12 distinct)
-    for the one matching_pairs. For the structured tier''s literal-sentence slot, weekday could not simply be swapped for
-    a broad POS pool (course-wide noun=512, verb=317 -- neither is remotely safe for a literal frame per SS1.1). But "love"''s
-    OWN tag, preference_verb_full, IS course-scope-safe: its full course-wide pool is hate/like/love/prefer (4, all from
-    the shared preference-verbs vocabulary also taught in unit19), and "I''d {item} to see a movie." is grammatical for every
-    one of the four ("I''d hate/like/love/prefer to see a movie.") -- so this is a genuine, verified-safe structured template,
-    not a broad-POS gamble. Read every gloss in every new pool (SS0.1); all distinct.
-
-    11 replacement templates (like-for-like on lesson anchor): lesson01 x3 (multiple_choice + bare translation on noun_pool,
-    a content_pool matching_pairs x12), lesson02 x6 (multiple_choice + listen_select on verb_pool, multiple_choice + listen_select
-    on desc_pool, the preference_verb_full word_order, bare translation on desc_pool), lesson03 x1 (listen_select on noun_pool),
-    lesson04 x1 (bare translation on verb_pool). Tiers: recognition 6 (3 MC + 3 listen_select), structured 2 (matching_pairs
-    + the one course-verified word_order -- an honest ceiling: no other native tag survives that is also course-scope-safe
-    for a second literal-sentence template, and fill_in_blank needs an exact single course-wide candidate that none of this
-    unit''s tags provide), production 3 (3 bare-word translations). LOG for the coordinator: a second structured template
-    would need either a genuinely single-member native semantic tag (fill_in_blank) or another course-safe multi-member one
-    (word_order) added in scripts/backfill_lexemes_prs_en.py -- out of scope here (PACK-ONLY). Verified 0 DEAD via scripts/_practice_unit_scope_check.py
-    and 0 errors via compile_content.py practice-validate.
-
-
-    POLISH WAVE 2 (2026-07-24, dispatched TIER-SHORT structured + POS-ONLY-MATCHING content_match.003): the reauth note above
-    stopped at 2 structured templates, but a THIRD frame on the same already-course-verified tag is legal -- templates must
-    differ in frame text, not tag. Structured 2 -> 3 via lesson01.walk_order.004, a second preference_verb_full word_order:
-    course-wide pool is exactly hate/like/love/prefer (the preposition-POS "like" homograph is excluded by part_of_speech:
-    verb) and all four are grammatical in "I''d {item} to go for a walk" ("I''d hate/like/love/prefer to go for a walk");
-    no frame word is a slot candidate (defect 1.14 clean), and the frame echoes lesson01''s own taught invitation ("Would
-    you like to go for a walk?"). content_match.003 deliberately STAYS POS-only per POLISH_TASK_V2''s escape clause: unit17''s
-    own 12 lexemes carry a semantic tag on exactly ONE token (love), so no semantic union can reach the 6-token floor and
-    a wrong union is worse than the status quo. Real fix remains a prs-en semantic-tag backfill (backfill scripts are off-limits
-    to this PACK-ONLY wave).
-
-    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a unit-scoped semantic
-    tag, prs_en_a1_unit17_words, in backfill_lexemes_prs_en. Re-anchored the dispatched lesson01.content_match.003 from
-    the untagged content_pool to a new unit_tag_content preset (semantic prs_en_a1_unit17_words + part_of_speech [noun,
-    verb, adjective, adverb]). Unit-scope pool is 11 distinct tokens (another/busy/love/lunch/maybe/movie/walk/want/
-    weekend/works/would -- "1pm" is correctly excluded, no semantic tag on a digit-bearing token; glosses re-read, all
-    distinct, no member''s Dari gloss bakes in another member''s English token). Slot count reduced from 12 to 11 to match
-    the real distinct-token ceiling (still within the AUTHORING_GUIDE #16 6-12 range). Course scope now equals unit scope,
-    so Endless Practice no longer pulls off-theme course-wide content words into this pair. The two preference_verb_full
-    word_order templates (lesson01/lesson02, already course-verified) are unaffected and out of this dispatch.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Review 2026-10-19 (prs-en practice pass): 1 fixes -- noun/verb/desc/content pools untagged (509 nouns, 315 verbs, 208 adj/adv at course scope; film/movie, another/other/else same-gloss) pinned to prs_en_a1_unit17_words (10 templates); also drops untagged 1pm from noun pools. NATIVE FLAGS: regional/odd glosses: چاشت (lunch), love=خیلی خوش شدن, works=مناسب/خوب بودن, another=دیگه.
+    BACKFILL GLOSS FLAGS: love=خیلی خوش شدن -> دوست داشتن؛ works=مناسب/خوب بودن (slash form); walk=قدم زدن (verb form for noun); another=دیگه -> یک ... دیگر; 1pm=ساعت یک بعد از چاشت. Prior note:
+    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the
+    sibling fa-en/a1_unit17.yaml pack's structure (11 templates). Same deliberate scope decision as that pack:
+    lesson01 (proposing an activity: "Do you want to see a movie...?"/"Would you like to go for a walk?") gets
+    ZERO generated templates -- neither invitation phrase mentions a specific day/time/ place that could vary, and
+    none of this lesson's other vocabulary (want/movie/weekend/would/walk) has a same-lesson synonym group. The
+    other three lessons all reuse the already-established 7-member weekday tag (from unit04) -- genuinely apt here
+    since this whole unit is about scheduling: "I'm busy on {item}." (lesson02), "Do you want to have lunch on
+    {item}?" (lesson03), "{item} works for me." (lesson04) are all grammatical with any weekday. All POS/semantic-
+    tag classification was already present in scripts/ _en_target_lexeme_common.py before this pass -- only
+    scripts/ backfill_lexemes_prs_en.py's own Dari gloss dict needed extending
+    (want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/ works), cross-checked against
+    docs/content/overlays/prs-en/ a1_unit17.yaml's own real Dari phrasing (e.g. have lunch="چاشت خوردن", works for
+    me="برایم خوب استه"). Verified with scripts/_practice_slot_check.py that every slot has >=1 real candidate
+    lexeme and every multiple_choice/listen_select slot has >=4 distinct candidate values (weekday has 7). The
+    underlying en realization unit17 is UNREVIEWED (Codex was usage-limited at authoring time); the prs-en overlay
+    is already reviewed -- the realization needs the standard fresh-context review before import. Deepened
+    2026-07-07 (templates-per-unit audit found this unit tied-shallowest in prs-en at 8, just authored the same
+    night). weekday (7 members) is the only genuinely generative tag this unit supports (confirmed above: none of
+    this unit's other single-token vocabulary -- want/movie/weekend/would/walk/love/busy/maybe/
+    another/lunch/1pm/works -- has its own semantic group). Added 3 new templates, all reusing weekday with
+    exercise TYPES this unit hadn't used yet (word_order/translation/listen_select already existed at 2-3 lessons
+    each; multiple_choice/matching_pairs did not): a lesson03 listen_select (parity fix -- lesson02/04 already had
+    one, lesson03 didn't), a lesson04 multiple_choice (bare-word Dari-gloss recognition), and a lesson04
+    matching_pairs using all 7 weekday members (AUTHORING_GUIDE.md #16 -- exactly the "6-12 real pairs" range, not
+    padded). No new EN_POS/semantic-tag or Dari-gloss additions needed -- weekday was already fully
+    classified/glossed since unit04. Considered fill_in_blank for weekday (e.g. blanking "I'm busy on {item}") but
+    rejected it: all 7 weekdays are genuinely grammatical in every one of this unit's real frames with nothing
+    else to disambiguate -- scripts/ _fill_in_blank_ambiguity_check.py (and compile_content.py's hard-fail per
+    AUTHORING_GUIDE.md #17) would correctly flag it, so zero new fill_in_blank templates, matching this
+    direction's own established "zero is fine when real vocabulary can't safely support one" precedent. Re-
+    verified scripts/_practice_slot_check.py (weekday still safely >=3 for the new multiple_choice, >=2 for
+    matching_pairs) and scripts/_fill_in_blank_ambiguity_check.py (zero new AMBIGUOUS flags) before import. New
+    count: 11 templates (8 -> 11) -- an honest ceiling given weekday is the unit's only real generative tag.
+    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/_practice_unit_scope_check.py found ALL 11
+    templates DEAD at checkpoint scope: `weekday`'s entire 7-member course-wide pool
+    (friday/monday/saturday/sunday/thursday/tuesday/wednesday) is established by unit04 -- unit17 itself
+    introduces zero weekday-tagged lexemes (confirmed via the iter_specs unit filter: unit17's own 12 tokens are
+    want/movie/weekend/would/walk/love/busy/maybe/another/lunch/1pm/works, and only "love" carries any semantic
+    tag at all -- preference_verb/preference_verb_full, shared with unit19). generate_checkpoint() only loads
+    unit17's own lexemes, so every weekday-anchored slot had 0 unit-scoped candidates -- recipe DO-NOT #2, and
+    this is one of the two prs-en packs (with a1_unit14) the recipe flags as GUARANTEED to 409 today. PACK-ONLY
+    fix: weekday dropped entirely, rebuilt on unit17's own vocabulary. Three untagged POS-only pools cover
+    recognition/production (bare frames, course-scope-breadth-safe per SS1.1): noun_pool =
+    movie/weekend/walk/lunch/1pm (5); verb_pool = want/would/love/works (4); desc_pool = busy/another/maybe (3,
+    exactly the MC/listen floor). A fourth, content_pool, unions all three (12 distinct) for the one
+    matching_pairs. For the structured tier's literal-sentence slot, weekday could not simply be swapped for a
+    broad POS pool (course-wide noun=512, verb=317 -- neither is remotely safe for a literal frame per SS1.1). But
+    "love"'s OWN tag, preference_verb_full, IS course-scope-safe: its full course-wide pool is
+    hate/like/love/prefer (4, all from the shared preference-verbs vocabulary also taught in unit19), and "I'd
+    {item} to see a movie." is grammatical for every one of the four ("I'd hate/like/love/prefer to see a movie.")
+    -- so this is a genuine, verified-safe structured template, not a broad-POS gamble. Read every gloss in every
+    new pool (SS0.1); all distinct. 11 replacement templates (like-for-like on lesson anchor): lesson01 x3
+    (multiple_choice + bare translation on noun_pool, a content_pool matching_pairs x12), lesson02 x6
+    (multiple_choice + listen_select on verb_pool, multiple_choice + listen_select on desc_pool, the
+    preference_verb_full word_order, bare translation on desc_pool), lesson03 x1 (listen_select on noun_pool),
+    lesson04 x1 (bare translation on verb_pool). Tiers: recognition 6 (3 MC + 3 listen_select), structured 2
+    (matching_pairs + the one course-verified word_order -- an honest ceiling: no other native tag survives that
+    is also course-scope-safe for a second literal-sentence template, and fill_in_blank needs an exact single
+    course-wide candidate that none of this unit's tags provide), production 3 (3 bare-word translations). LOG for
+    the coordinator: a second structured template would need either a genuinely single-member native semantic tag
+    (fill_in_blank) or another course-safe multi-member one (word_order) added in
+    scripts/backfill_lexemes_prs_en.py -- out of scope here (PACK-ONLY). Verified 0 DEAD via
+    scripts/_practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate. POLISH WAVE 2
+    (2026-07-24, dispatched TIER-SHORT structured + POS-ONLY-MATCHING content_match.003): the reauth note above
+    stopped at 2 structured templates, but a THIRD frame on the same already-course-verified tag is legal --
+    templates must differ in frame text, not tag. Structured 2 -> 3 via lesson01.walk_order.004, a second
+    preference_verb_full word_order: course-wide pool is exactly hate/like/love/prefer (the preposition-POS "like"
+    homograph is excluded by part_of_speech: verb) and all four are grammatical in "I'd {item} to go for a walk"
+    ("I'd hate/like/love/prefer to go for a walk"); no frame word is a slot candidate (defect 1.14 clean), and the
+    frame echoes lesson01's own taught invitation ("Would you like to go for a walk?"). content_match.003
+    deliberately STAYS POS-only per POLISH_TASK_V2's escape clause: unit17's own 12 lexemes carry a semantic tag
+    on exactly ONE token (love), so no semantic union can reach the 6-token floor and a wrong union is worse than
+    the status quo. Real fix remains a prs-en semantic-tag backfill (backfill scripts are off-limits to this PACK-
+    ONLY wave). Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a
+    unit-scoped semantic tag, prs_en_a1_unit17_words, in backfill_lexemes_prs_en. Re-anchored the dispatched
+    lesson01.content_match.003 from the untagged content_pool to a new unit_tag_content preset (semantic
+    prs_en_a1_unit17_words + part_of_speech [noun, verb, adjective, adverb]). Unit-scope pool is 11 distinct
+    tokens (another/busy/love/lunch/maybe/movie/walk/want/ weekend/works/would -- "1pm" is correctly excluded, no
+    semantic tag on a digit-bearing token; glosses re-read, all distinct, no member's Dari gloss bakes in another
+    member's English token). Slot count reduced from 12 to 11 to match the real distinct-token ceiling (still
+    within the AUTHORING_GUIDE #16 6-12 range). Course scope now equals unit scope, so Endless Practice no longer
+    pulls off-theme course-wide content words into this pair. The two preference_verb_full word_order templates
+    (lesson01/lesson02, already course-verified) are unaffected and out of this dispatch.
 tag_schema:
   part_of_speech:
   - noun
@@ -101,15 +107,23 @@ slot_presets:
   noun_pool: &noun_pool
     language_code: en
     part_of_speech: noun
+    agreement_tags:
+      semantic: prs_en_a1_unit17_words
   verb_pool: &verb_pool
     language_code: en
     part_of_speech: verb
+    agreement_tags:
+      semantic: prs_en_a1_unit17_words
   desc_pool: &desc_pool
     language_code: en
     part_of_speech: [adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit17_words
   content_pool: &content_pool
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: prs_en_a1_unit17_words
   unit_tag_content: &unit_tag_content
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]

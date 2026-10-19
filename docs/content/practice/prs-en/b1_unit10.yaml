@@ -4,10 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.b1.unit10.purpose
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: >-
-    Grammar-unit recipe (PRACTICE_PACK_RECIPE.md sec8.1) applied, mirroring the fa-en sibling pack's structure (docs/content/practice/fa-en/b1_unit10_*.yaml) since the target (en) and runtime mechanics are identical. UNLIKE fa-en, backfill_lexemes_prs_en.py carries NO semantic tags at all for this unit's lexemes (verified via the sec0 capacity dump) -- every content-word lexeme's agreement_tags is empty. So every slot here deliberately omits agreement_tags.semantic (sec3.1c untagged slot) and constrains only language_code=en + part_of_speech in [adjective, adverb, noun, phrase, verb] (excluding pronoun/particle/preposition/proper_noun/symbol). This pools the WHOLE unit's content words for every slot regardless of which lesson a template is anchored to -- exactly the sec8.1-sanctioned pattern ('Union the unit's lesson tags... it is only the SLOT that widens'); since no lesson-level tag exists to narrow further, the union is total. Safe at checkpoint scope because generate_checkpoint() only ever loads this unit's own lexemes regardless of which lesson introduced them, and the checkpoint never fires before all 4 lessons are complete. 15 templates: per lesson (x4) multiple_choice + listen_select + bare-word translation (12 total: 8 recognition, 4 production), plus 3 matching_pairs (6 pairs each, unit-wide pool) anchored to the reading lesson (full content POS), the dialogue lesson (full content POS), and the grammar lesson (verb/adjective/adverb/phrase only, mirroring fa-en's match_verbal). Deliberately skipped word_order and fill_in_blank: with no semantic tags at all there is no single-member anchor available to build a course-scope-safe hero-sentence frame, and crafting one per unit across this batch was judged too defect-prone for this pass; matching_pairs carries the structured tier instead (no frame-literal-text risk, so no course-scope grammaticality check needed). Flagging this gap (plus the missing prs-en semantic-tag backfill) to the coordinator. POLISH WAVE 2 AUDIT (2026-07-24, dispatched POS-ONLY-MATCHING for match_all/match_dialogue/match_verbal): re-measured against backfill_lexemes_prs_en.iter_specs() -- the unit's own thematic vocab is STILL untagged; the only semantic tags are incidental cross-course strays on 2 of 32 lexemes. Even the union of ALL of them yields just 2 unit-scope content tokens for the full-POS matching slots (night/thirty) and 0 for match_verbal -- below the 6-pair floor in every case, so no compliant semantic union exists. Per POLISH_TASK_V2's escape clause all three matching templates deliberately STAY POS-only. Real fix remains a prs-en B1 semantic-tag backfill. Read every gloss in this unit's pool per sec0.1: all distinct-token counts matched distinct-gloss counts (no accidental gloss collisions), and no sense-mismatched gloss was found against what this unit's lessons actually teach. Feedback strings written in colloquial Dari per DARI_REGISTER_REPAIR.md: کلمه not واژه، جواب not پاسخ، استه not است، -ین 2pl endings not -ید (کنین/شنیدین, never Iranian کنید/شنیدید). POLISH WAVE 3 (2026-07-26): commit 05af7ace backfilled generated prs_en_b1_unit10_* semantic tags -- the wave-2 blocker (zero semantic tags) is resolved. Re-anchored all three matching_pairs: match_all.001 -> lesson03 tag (12 tok/12 gloss, lesson-anchored, clears floor). match_dialogue.001 -> unit-wide tag (17 tok/17 gloss) with part_of_speech narrowed to [adjective, adverb, noun] (dropped verb): at the original full content-POS filter the unit-wide pool held both 'study' (lesson02, gloss 'درس خواندن') and 'studying' (lesson04, gloss 'درس‌خواندن') -- visually indistinguishable glosses differing only by a zero-width non-joiner, a learner-facing confusable pair per the gloss-quality guard, so verb was dropped rather than accepting the collision; lesson04's own tag alone is only 5 tok anyway. match_verbal.001 -> a 3-tag union of lesson01+lesson02+lesson03 words (13 tok/13 gloss) deliberately excluding lesson04 (which holds 'studying') under the existing verb/adjective/adverb/phrase POS filter, for the same reason -- the unit-wide tag under that filter still contains both 'study' and 'studying'; lesson02's own tag alone yields only 3 non-noun tokens. All three now unit-scoped with zero course-scope extras (pool_check.py verified) and no gloss collisions in any of the three final pools.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 4 fixes + 8 coordinator fixes (multiple_choice/listen_select/matching slots narrowed from the whole B1 pool to prs_en_b1_unit10_words) -- 4 translation templates narrowed (verbs dropped; pool limited to the unit''s own tagged lexemes unit tag) so no gloss containing English leaks the answer and inflected-form/near-synonym glosses cannot make the prompt underdetermined. Dari frames and feedback strings checked (Afghan Dari, polite -ین, no Iranian forms, no informal): no defects; templates are bare-word so there are no literal English frames. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: study=درس خواندن and studying=درس‌خواندن have near-identical glosses (also-correct distractor in multiple_choice/matching) -> studying = در حال درس خواندن; reads=می‌خانه -> می‌خوانه; vocabulary=ذخیرهٔ کلمه‌ها -> لغت‌ها. Prior note: Grammar-unit recipe (PRACTICE_PACK_RECIPE.md sec8.1) applied, mirroring the fa-en sibling pack''s structure (docs/content/practice/fa-en/b1_unit10_*.yaml) since the target (en) and runtime mechanics are identical. UNLIKE fa-en, backfill_lexemes_prs_en.py carries NO semantic tags at all for this unit''s lexemes (verified via the sec0 capacity dump) -- every content-word lexeme''s agreement_tags is empty. So every slot here deliberately omits agreement_tags.semantic (sec3.1c untagged slot) and constrains only language_code=en + part_of_speech in [adjective, adverb, noun, phrase, verb] (excluding pronoun/particle/preposition/proper_noun/symbol). This pools the WHOLE unit''s content words for every slot regardless of which lesson a template is anchored to -- exactly the sec8.1-sanctioned pattern (''Union the unit''s lesson tags... it is only the SLOT that widens''); since no lesson-level tag exists to narrow further, the union is total. Safe at checkpoint scope because generate_checkpoint() only ever loads this unit''s own lexemes regardless of which lesson introduced them, and the checkpoint never fires before all 4 lessons are complete. 15 templates: per lesson (x4) multiple_choice + listen_select + bare-word translation (12 total: 8 recognition, 4 production), plus 3 matching_pairs (6 pairs each, unit-wide pool) anchored to the reading lesson (full content POS), the dialogue lesson (full content POS), and the grammar lesson (verb/adjective/adverb/phrase only, mirroring fa-en''s match_verbal). Deliberately skipped word_order and fill_in_blank: with no semantic tags at all there is no single-member anchor available to build a course-scope-safe hero-sentence frame, and crafting one per unit across this batch was judged too defect-prone for this pass; matching_pairs carries the structured tier instead (no frame-literal-text risk, so no course-scope grammaticality check needed). Flagging this gap (plus the missing prs-en semantic-tag backfill) to the coordinator. POLISH WAVE 2 AUDIT (2026-07-24, dispatched POS-ONLY-MATCHING for match_all/match_dialogue/match_verbal): re-measured against backfill_lexemes_prs_en.iter_specs() -- the unit''s own thematic vocab is STILL untagged; the only semantic tags are incidental cross-course strays on 2 of 32 lexemes. Even the union of ALL of them yields just 2 unit-scope content tokens for the full-POS matching slots (night/thirty) and 0 for match_verbal -- below the 6-pair floor in every case, so no compliant semantic union exists. Per POLISH_TASK_V2''s escape clause all three matching templates deliberately STAY POS-only. Real fix remains a prs-en B1 semantic-tag backfill. Read every gloss in this unit''s pool per sec0.1: all distinct-token counts matched distinct-gloss counts (no accidental gloss collisions), and no sense-mismatched gloss was found against what this unit''s lessons actually teach. Feedback strings written in colloquial Dari per DARI_REGISTER_REPAIR.md: کلمه not واژه، جواب not پاسخ، استه not است، -ین 2pl endings not -ید (کنین/شنیدین, never Iranian کنید/شنیدید). POLISH WAVE 3 (2026-07-26): commit 05af7ace backfilled generated prs_en_b1_unit10_* semantic tags -- the wave-2 blocker (zero semantic tags) is resolved. Re-anchored all three matching_pairs: match_all.001 -> lesson03 tag (12 tok/12 gloss, lesson-anchored, clears floor). match_dialogue.001 -> unit-wide tag (17 tok/17 gloss) with part_of_speech narrowed to [adjective, adverb, noun] (dropped verb): at the original full content-POS filter the unit-wide pool held both ''study'' (lesson02, gloss ''درس خواندن'') and ''studying'' (lesson04, gloss ''درس‌خواندن'') -- visually indistinguishable glosses differing only by a zero-width non-joiner, a learner-facing confusable pair per the gloss-quality guard, so verb was dropped rather than accepting the collision; lesson04''s own tag alone is only 5 tok anyway. match_verbal.001 -> a 3-tag union of lesson01+lesson02+lesson03 words (13 tok/13 gloss) deliberately excluding lesson04 (which holds ''studying'') under the existing verb/adjective/adverb/phrase POS filter, for the same reason -- the unit-wide tag under that filter still contains both ''study'' and ''studying''; lesson02''s own tag alone yields only 3 non-noun tokens. All three now unit-scoped with zero course-scope extras (pool_check.py verified) and no gloss collisions in any of the three final pools.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -22,6 +22,7 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
+    - prs_en_b1_unit10_words
     - prs_en_b1_unit10_lesson01_words
     - prs_en_b1_unit10_lesson02_words
     - prs_en_b1_unit10_lesson03_words
@@ -43,6 +44,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: 'معنی دری {item} را انتخاب کنین.'
@@ -64,6 +67,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'کلمه‌ای که شنیدین {item} بود.'
@@ -86,7 +91,9 @@ templates:
       - adverb
       - noun
       - phrase
-      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'جواب درست، معادل انگلیسی کلمهٔ دری استه.'
@@ -108,6 +115,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: 'معنی دری {item} را انتخاب کنین.'
@@ -129,6 +138,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'کلمه‌ای که شنیدین {item} بود.'
@@ -151,7 +162,9 @@ templates:
       - adverb
       - noun
       - phrase
-      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'جواب درست، معادل انگلیسی کلمهٔ دری استه.'
@@ -173,6 +186,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: 'معنی دری {item} را انتخاب کنین.'
@@ -194,6 +209,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'کلمه‌ای که شنیدین {item} بود.'
@@ -216,7 +233,9 @@ templates:
       - adverb
       - noun
       - phrase
-      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'جواب درست، معادل انگلیسی کلمهٔ دری استه.'
@@ -238,6 +257,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
     text: 'معنی دری {item} را انتخاب کنین.'
@@ -259,6 +280,8 @@ templates:
       - noun
       - phrase
       - verb
+      agreement_tags:
+        semantic: prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'کلمه‌ای که شنیدین {item} بود.'
@@ -281,7 +304,9 @@ templates:
       - adverb
       - noun
       - phrase
-      - verb
+      agreement_tags:
+        semantic:
+        - prs_en_b1_unit10_words
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'جواب درست، معادل انگلیسی کلمهٔ دری استه.'

@@ -4,21 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit54.laundry
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit54 (laundry). backfill_lexemes_prs_en.py
-    carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union
-    semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the
-    full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml).
-    word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member
-    anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged
-    word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c),
-    which is unsafe for any frame with literal text. matching_pairs was originally pooled across the
-    WHOLE unit''s lexemes (untagged); every template remains anchored via lesson_content_key to one
-    lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
-    Capacity measured with §0/§9''s f".{level}.{unit}." filter: 18 distinct tokens across 3 lesson(s)
-    with lexemes. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md
-    (2pl -ین, no Iranian -ید). Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 3 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_a1_unit54_lesson01_words (lesson01), prs_en_a1_unit54_words (lesson02), prs_en_a1_unit54_lesson04_words (lesson03/anchored lesson04), preferring a lesson-scoped tag where that lesson alone clears the 6-pair floor and falling back to the unit-wide tag otherwise; declared the referenced tags in tag_schema.agreement_tags.semantic. pool_check.py confirms every re-anchored slot has >=6 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction). Templates and slot counts unchanged (all were already 6 slots).'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 9 fixes -- added unit tag to 9 MC/listen/translation pools (fixes the 4-way گرفتن and 3-way دور same-gloss ambiguity). Frames/feedback Dari checked (Afghan 2pl -ین, no Iranian forms found). NATIVE FLAGS: ماشین / ماشین‌ها in machine/machines glosses (Iranian-flagged; Afghan Dari also uses ماشین for machines, native to confirm; alt دستگاه); کالی‌ها for clothes (confirm vs لباس‌ها/کالا). BACKFILL GLOSS FLAGS: pick=گرفتن (در pick up: پس گرفتن) -> leaks pick up, suggest پس گرفتن; down=پایین‌تر (در امتداد سرک) is a particle with odd sense. Prior note: Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit54 (laundry). backfill_lexemes_prs_en.py carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml). word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c), which is unsafe for any frame with literal text. matching_pairs was originally pooled across the WHOLE unit''s lexemes (untagged); every template remains anchored via lesson_content_key to one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes. Capacity measured with §0/§9''s f".{level}.{unit}." filter: 18 distinct tokens across 3 lesson(s) with lexemes. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید). Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 3 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_a1_unit54_lesson01_words (lesson01), prs_en_a1_unit54_words (lesson02), prs_en_a1_unit54_lesson04_words (lesson03/anchored lesson04), preferring a lesson-scoped tag where that lesson alone clears the 6-pair floor and falling back to the unit-wide tag otherwise; declared the referenced tags in tag_schema.agreement_tags.semantic. pool_check.py confirms every re-anchored slot has >=6 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction). Templates and slot counts unchanged (all were already 6 slots).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -57,6 +46,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -84,6 +75,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -115,6 +108,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -220,6 +215,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -247,6 +244,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -278,6 +277,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -383,6 +384,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -410,6 +413,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -441,6 +446,8 @@ templates:
       - preposition
       - particle
       - phrase
+      agreement_tags:
+        semantic: prs_en_a1_unit54_words
   answer_derivation:
     kind: slot_text
     slot: item
