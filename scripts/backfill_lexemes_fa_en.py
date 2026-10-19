@@ -2221,6 +2221,30 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+    # a1_unit49 (waste disposal): drop the English cue from the collection gloss (answer leak
+    # in translation); jar = glass container, not the material "glass".
+    ("a1_unit49_waste_disposal", "collection"): ("noun", "جمع‌آوری"),
+    ("a1_unit49_waste_disposal", "jar"): ("noun", "ظرف شیشه‌ای"),
+    # a1_unit51 (pharmacy): drop the English cue from the runny gloss (answer leak).
+    ("a1_unit51_pharmacy", "runny"): ("adjective", "آبریزش‌دار"),
+    # a1_unit52 (personal care): trim must differ clearly from haircut in multiple-choice pools.
+    ("a1_unit52_personal_care", "trim"): ("noun", "مرتب کردن نوک مو"),
+    # a1_unit53 (bike rental): deposit = refundable security deposit (not a bank deposit);
+    # costs = the price verb, not the formal question; owned = was the owner of.
+    ("a1_unit53_bike_rental", "deposit"): ("noun", "سپرده"),
+    ("a1_unit53_bike_rental", "costs"): ("verb", "قیمت دارد"),
+    ("a1_unit53_bike_rental", "owned"): ("verb", "صاحبش بود"),
+    # a1_unit54 (laundromat): remove English cues (answer leak); broke = broke down, kept
+    # distinct from the adjective broken.
+    ("a1_unit54_laundry", "pick"): ("verb", "برداشتن؛ تحویل گرفتن"),
+    ("a1_unit54_laundry", "broke"): ("verb", "از کار افتاد"),
+    # a1_unit55 (swimming pool): remove English cues (answer leak).
+    ("a1_unit55_swimming_pool", "diving"): ("noun", "شیرجه"),
+    ("a1_unit55_swimming_pool", "board"): ("noun", "تخته"),
+    # a1_unit56 (restaurant): restaurant bill = check, not a utility bill (قبض).
+    ("a1_unit56_restaurant", "bill"): ("noun", "صورت‌حساب"),
+    # a1_unit64 (compliments): remove English cue from the "being" gloss (answer leak in hint).
+    ("a1_unit64_compliments", "being"): ("verb", "بودن"),
 }
 
 
