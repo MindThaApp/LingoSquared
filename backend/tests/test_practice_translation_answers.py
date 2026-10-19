@@ -95,3 +95,49 @@ def test_english_contraction_rule_is_conservative():
     assert grade("I'm reddy to go", "I am ready to go", "translation", script="latin", language_code="en") == "almost"
     # Dictation stays byte-strict.
     assert grade("I am ready", "I'm ready", "dictation", script="latin", language_code="en") == "incorrect"
+
+
+def test_translation_alternatives_are_capped():
+    from app.practice.service import MAX_TRANSLATION_ALTERNATIVES
+
+    pool_a = [lexeme(f"a{i}", "my brother") for i in range(10)]
+    pool_b = [lexeme(f"b{i}", "my sister") for i in range(10)]
+    template = SimpleNamespace(
+        type="translation",
+        slots={"x": SLOT, "y": SLOT},
+        slot_relations=[],
+        frame={"text": "{x} {y}", "language_code": "en", "direction": "ltr", "slot_rendering": {"x": "english_gloss", "y": "english_gloss"}},
+        answer_derivation={"kind": "render_frame", "frame": {"text": "{x} و {y}", "language_code": "prs", "direction": "rtl"}},
+    )
+    answer = translation_accepted_answers(
+        template, {"x": pool_a[0], "y": pool_b[0]}, pool_a + pool_b, "a0 و b0"
+    )
+    assert len(answer["accepted"]) == MAX_TRANSLATION_ALTERNATIVES
+    assert answer["accepted"][0] == "a0 و b0"
+
+
+def test_synonyms_respect_slot_relations_and_prompt_rendering():
+    masc = lexeme("پسرم", "my son", gender="m")
+    fem = lexeme("پسرمF", "my son", gender="f")
+    adj_m = lexeme("خوب", "good", pos="noun", gender="m")
+    template = SimpleNamespace(
+        type="translation",
+        slots={"noun": SLOT, "adj": SLOT},
+        slot_relations=[{"kind": "same_tag", "tag": "gender", "slots": ["noun", "adj"]}],
+        frame={"text": "{adj} {noun}", "language_code": "en", "direction": "ltr", "slot_rendering": {"noun": "english_gloss", "adj": "english_gloss"}},
+        answer_derivation={"kind": "render_frame", "frame": {"text": "{noun} {adj}", "language_code": "prs", "direction": "rtl"}},
+    )
+    answer = translation_accepted_answers(
+        template, {"noun": masc, "adj": adj_m}, [masc, fem, adj_m], "پسرم خوب"
+    )
+    # The feminine same-gloss noun would break gender agreement: not added.
+    assert answer == "پسرم خوب"
+
+    # A slot the prompt shows as its token (not its gloss) is never widened.
+    token_prompt = SimpleNamespace(
+        type="translation",
+        slots={"item": SLOT},
+        frame={"text": "{item}", "language_code": "prs", "direction": "rtl", "slot_rendering": {"item": "token"}},
+        answer_derivation={"kind": "slot_text", "slot": "item"},
+    )
+    assert translation_accepted_answers(token_prompt, {"item": BRADARAM}, POOL, "برادرم") == "برادرم"
