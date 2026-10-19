@@ -94,6 +94,12 @@ comparison, exactly as it does for every other strict grading path —
 vs e), not the invisible-formatting marks forgiven by that function. See
 `docs/DICTATION_EXERCISE_SPEC.md`.
 
+**Typed free-text equivalences (2026-10-19, `backend/app/review/grading.py`;
+none apply to `dictation`).** Internal punctuation is still ignored, with one
+exception: in es/pl/ro, whose "no" is also the verbal negator, a pause mark
+after a sentence-initial No/Nie/Nu must match (`No, está cerca` ≠ `No está
+cerca`); spoken transcripts keep ignoring it.
+
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
 + `audio_language_code` (a target-language phrase to synthesize/play for
 `listen_*` types — the learner hears this before answering, it is not
