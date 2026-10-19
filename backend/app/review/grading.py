@@ -353,6 +353,10 @@ def spoken_answer_result(
         return "correct"
     if normalized_response == normalized_correct:
         return "correct"
+    if english_contraction_equivalent(
+        normalized_response, normalized_correct, language_code
+    ):
+        return "correct"
     response_tokens = normalized_response.split()
     correct_tokens = normalized_correct.split()
     if _spoken_tokens_match(response_tokens, correct_tokens, language_code):
@@ -438,6 +442,92 @@ def optional_subject_pronoun_only_difference(
             continue
         return False
     return True
+
+
+# ---------------------------------------------------------------------------
+# English contractions (2026-10-19)
+#
+# "I'm" and "I am", "don't" and "do not", "can't"/"cannot"/"can not" are the
+# same answer. Content reviews kept hand-adding contracted variants to
+# individual exercises, and generated practice items have no variant list at
+# all, so the equivalence lives here. Both sides are expanded; ambiguous
+# forms expand to every reading ('s -> is/has after a pronoun or wh-word,
+# 'd -> would/had), and the answers match when any expansions coincide.
+# 's after any other word is left alone: it is usually a possessive.
+# English answers only (language_code == "en"), never dictation.
+# ---------------------------------------------------------------------------
+_EN_IRREGULAR_CONTRACTIONS: dict[str, tuple[str, ...]] = {
+    "can't": ("can not",),
+    "cannot": ("can not",),
+    "won't": ("will not",),
+    "shan't": ("shall not",),
+    "let's": ("let us",),
+}
+_EN_SUFFIX_CONTRACTIONS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("n't", ("not",)),
+    ("'m", ("am",)),
+    ("'re", ("are",)),
+    ("'ve", ("have",)),
+    ("'ll", ("will",)),
+    ("'d", ("would", "had")),
+)
+_EN_S_CONTRACTION_STEMS = frozenset(
+    {
+        "he", "she", "it", "that", "this", "there", "here", "what", "where",
+        "who", "how", "when", "why", "everything", "nothing", "something",
+        "everyone", "someone", "nobody", "everybody", "somebody",
+    }
+)
+_MAX_CONTRACTION_EXPANSIONS = 32
+
+
+def _english_token_expansions(token: str) -> tuple[str, ...]:
+    lower = token.lower()
+    if lower in _EN_IRREGULAR_CONTRACTIONS:
+        return _EN_IRREGULAR_CONTRACTIONS[lower]
+    for suffix, words in _EN_SUFFIX_CONTRACTIONS:
+        if lower.endswith(suffix) and len(lower) > len(suffix):
+            stem = token[: -len(suffix)]
+            return tuple(f"{stem} {word}" for word in words)
+    if lower.endswith("'s") and lower[:-2] in _EN_S_CONTRACTION_STEMS:
+        stem = token[:-2]
+        return (f"{stem} is", f"{stem} has")
+    return (token,)
+
+
+def english_contraction_forms(value: str) -> set[str]:
+    """Every expansion of the English contractions in an already-normalized
+    answer (capped; beyond the cap only the first reading of each is kept)."""
+    forms = [""]
+    for token in value.split():
+        options = _english_token_expansions(token)
+        if len(forms) * len(options) > _MAX_CONTRACTION_EXPANSIONS:
+            options = options[:1]
+        forms = [f"{form} {option}".strip() for form in forms for option in options]
+    return {" ".join(form.split()) for form in forms}
+
+
+def english_contraction_equivalent(
+    a: str, b: str, language_code: str | None
+) -> bool:
+    if language_code != "en" or a == b:
+        return False
+    if "'" not in a + b and "cannot" not in a + b:
+        return False
+    return bool(english_contraction_forms(a) & english_contraction_forms(b))
+
+
+def _english_primary_expansion(value: str) -> str:
+    return " ".join(_english_token_expansions(token)[0] for token in value.split())
+
+
+def _english_contraction_distance(a: str, b: str) -> int:
+    # Typo tolerance compares only the primary reading of each contraction
+    # ('s -> is, 'd -> would): letting the secondary readings in as well
+    # would make "it's" an "almost" for "it was" via "it has".
+    return damerau_levenshtein(
+        _english_primary_expansion(a), _english_primary_expansion(b)
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -980,6 +1070,11 @@ def grade_answer(
     if exercise_type not in FREE_TEXT_EXERCISE_TYPES:
         return "incorrect"
 
+    if english_contraction_equivalent(
+        normalized_response, normalized_correct, language_code
+    ):
+        return "correct"
+
     if is_script_confusion(normalized_response, normalized_correct):
         return "incorrect"
 
@@ -1004,6 +1099,14 @@ def grade_answer(
         return "incorrect"
 
     if damerau_levenshtein(normalized_response, normalized_correct) == 1:
+        return "almost"
+
+    if (
+        language_code == "en"
+        and ("'" in normalized_response + normalized_correct
+             or "cannot" in normalized_response + normalized_correct)
+        and _english_contraction_distance(normalized_response, normalized_correct) == 1
+    ):
         return "almost"
 
     return "incorrect"
