@@ -4,111 +4,25 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit39.neighborhood
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 10 of the 30-42 batch, see unit30''s pack notes for the full batch
-    rationale).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (fa-en practice pass, fresh context; 0 fixes). All nine templates checked: 'My neighbors are very {item}' is grammatical for quiet/noisy/friendly; 'Our building is a little noisy' matches the static prompt; fill.007 is a deliberate single-answer blank; no leaks at A1; Persian feedback is clean. NATIVE FLAGS: sounds=به‌نظر می‌رسد (در that sounds good) and the unit-wide tag name 'volume_prs_en_...' (internal only) -- gloss has English inside (backfill, only reachable via verb pools which this pack does not use); 'هستند' written register in translate.001 vs colloquial elsewhere. BACKFILL GLOSS FLAGS: sounds contains Latin 'that sounds good'; looks/seems/sounds share به‌نظر می‌رسد.
 
-    One semantic tag: ''neighborhood_noun'' (neighbor/park/store/street), mirroring unit24''s room_noun precedent -- all four
-    safe in "There''s a {item} nearby." "neighbor" is genuinely new to this unit (lesson01); "park"/"store"/"street" reuse
-    already-classified A1 tokens from earlier units (park: unit09; store: unit05; street: unit10) per AUTHORING_GUIDE.md #18''s
-    same-course-level reuse allowance (all four are A1, same course as this unit) -- verified all three reused tokens'' real
-    candidate counts (each already >=3 course-wide within A1) via scripts/_practice_slot_check.py, no new A1/A2 course-boundary
-    risk since nothing crosses into A2.
+    Authored 2026-07-11, fa-en depth-audit lane (unit 10 of the 30-42 batch, see unit30's pack notes for the full batch rationale).
+    One semantic tag: 'neighborhood_noun' (neighbor/park/store/street), mirroring unit24's room_noun precedent -- all four safe in "There's a {item} nearby." "neighbor" is genuinely new to this unit (lesson01); "park"/"store"/"street" reuse already-classified A1 tokens from earlier units (park: unit09; store: unit05; street: unit10) per AUTHORING_GUIDE.md #18's same-course-level reuse allowance (all four are A1, same course as this unit) -- verified all three reused tokens' real candidate counts (each already >=3 course-wide within A1) via scripts/_practice_slot_check.py, no new A1/A2 course-boundary risk since nothing crosses into A2.
+    Anchoring check: lesson01 introduces "neighbor" (and neighborhood/ nearby/quiet/noisy/friendly) as real new lexemes, verified via iter_specs() -- a real new lexeme for the anchor even though 3 of the 4 tag members are reused, matching the discipline every other pack in this batch follows. Slot candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context review before import.
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit's realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound, listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found; upgraded to reviewed.
 
-    Anchoring check: lesson01 introduces "neighbor" (and neighborhood/ nearby/quiet/noisy/friendly) as real new lexemes, verified
-    via iter_specs() -- a real new lexeme for the anchor even though 3 of the 4 tag members are reused, matching the discipline
-    every other pack in this batch follows. Slot candidate count verified with scripts/_practice_slot_check.py and compile_content.py
-    practice-validate. Needs the standard fresh-context review before import.
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT #2): this pack is the exact case the recipe's own DO-NOT #2 names as guaranteed-dead ("fa-en a1_unit39"). The 2026-07-11 authoring note's "AUTHORING_GUIDE.md #18's same-course-level reuse allowance" reasoning does not apply to MC/listen_select/matching_pairs -- DO-NOT #12 explicitly reserves same-course-level tag reuse for word_order/translation (floor-free types) only, and generate_checkpoint() scopes EVERY type, including MC/listen/matching_pairs, to the unit's own lessons regardless of what's legal course-wide. scripts/_practice_unit_scope_check.py confirmed all 4 tag members of neighborhood_noun (neighbor, park, store, street) belong to EARLIER units at CHECKPOINT scope: "neighbor" itself was already classified in unit34 (this unit's own "teach.neighbor" re-teaches the same token, so the dedup-by-token spec in backfill_lexemes_fa_en.py attributes it to unit34, not here -- exactly the same defect class the authoring note thought it had avoided by "verifying `neighbor` is genuinely new," but that verification was wrong), and park/store/street were already unit09/05/10 as the note itself says. Net: 0 unit-scoped candidates for all 4 members -- every one of the 6 original templates (choose.001, listen.002, match.003, translate.004, order.005, and order.005's volume_fill.006 fill_in_blank) was DEAD, and the checkpoint for this unit has never generated a single item.
+    Re-anchored choose.001/listen.002/match.003/translate.004 from neighborhood_noun to a plain `part_of_speech: noun` constraint (no semantic tag, recipe §3.1(c) -- these are all bare-word recognition/matching/translation frames with no literal text beyond the placeholder, so there is no frame-literal-text grammaticality concern to re-check). Verified via iter_specs() filtered to `.a1.unit39.`: this unit natively introduces 10 distinct nouns across its 4 lessons -- neighborhood, neighbors, grocery, building, mr, plants (lesson01/02/03) plus neighborhoods, restaurants, shops, hallway (lesson04) -- all distinct Farsi glosses, no confusable/case-duplicate pairs. ("mr" is a clean token here -- this unit's own realization already tokenizes "Mr. Lopez" as introduced_tokens ["neighbor", "Mr", "Lopez", ...], stripping the period upstream, unlike unit33's messier tokens -- see that pack's notes.) match.003 widened from the original 4 declared slots to the recipe's standard 6 (pool of 10 comfortably covers it).
+    order.005 could not be fixed the same way: its frame ("There's a {item} nearby") needs every noun candidate grammatical in that exact slot, and the unit-wide noun pool is mostly plurals (neighbors, plants, neighborhoods, restaurants, shops -- all ungrammatical after "a") or a title fragment ("mr") -- genuinely unsafe to drop the semantic tag here. Instead re-anchored order.005 to the OTHER existing, already-unit39-native tag `neighborhood_adj` ({quiet, noisy} at unit scope; "friendly" is unit32's, not native here, matching the tag's own code comment) and changed the frame to "My neighbors are very {item}." -- verified grammatical for both unit-scoped candidates AND for the full course-wide neighborhood_adj pool ({quiet, noisy, friendly}, all fit), and confirmed no self-reference (frame's literal words My/neighbors/are/very are not members of the slot's own pool). Added `neighborhood_adj` to tag_schema (it was already defined in scripts/_en_target_lexeme_common.py, just not previously declared in this pack).
+    Dropped order.005.volume_fill.006 (fill_in_blank, keyed to volume_fa_en_a1_unit39_item_06_single, which the shared VOLUME_PRACTICE_SINGLETON_TAGS table defines on "park" -- itself one of the 4 already-dead neighborhood_noun members, so 0 unit-scoped candidates independent of the main defect). No unit-native single-course-wide-candidate tag exists to re-anchor a fill_in_blank onto (recipe §6.5); the pack is clearly viable without it (5 live templates now span all 3 tiers: recognition 2, structured 2, production 1). LOG for the coordinator: a genuinely unit39-native single-member tag (e.g. on "building" or "hallway") would let a future pass re-add a working fill_in_blank here -- needs a backfill change, out of this pass's pack-only scope. Also LOG: the "neighbor"/unit34 token-dedup collision above is a real instance of the recipe's own §0.1 warning generalized to token PROVENANCE, not just gloss -- worth the coordinator flagging near unit34's pack too, since anything anchored there assuming "neighbor" is unit34-exclusive should already account for unit39 re-teaching the same word (checked: unit34's own pack does not currently reference a neighbor-based tag, so no live conflict, but future edits near unit34 should be aware unit39's lesson01 also teaches this token).
 
-    Fresh-context review 2026-07-11 (zero access to authoring reasoning): verified every slot member is taught in this unit''s
-    realization, every generative frame is grammatical for all fillings, Farsi feedback/instruction text reads as natural
-    Iranian Farsi with correct RTL/ZWNJ, answer shapes (word_order list-shaped, matching_pairs covers every pair) are sound,
-    listen_select distractors are distinct single vocabulary words, and no bare YAML booleans or snake_case jargon leak. compile_content.py
-    practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. No defects found;
-    upgraded to reviewed.
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3): added lesson01.choose.006 (3rd recognition, bare-POS adjective pool per SS3.1(c) -- 5 unit adjectives / 5 distinct Farsi glosses; the unit's only semantic adjective tag, neighborhood_adj, covers just 2 unit tokens, under the 3-gloss MC floor), lesson01.fill.007 (3rd structured, on the course-singleton volume_prs_en_a1_unit39_item_07_single = "noisy", deterministic), lesson02.translate.001 (2nd production: gloss-rendered sentence translation over neighborhood_adj -- prompt varies with the answer, and the full course pool {quiet, noisy, friendly} is grammatical in both the Farsi prompt and the English render) and lesson04.translate.001 (3rd production, fixed sentence on the noisy singleton per SS6.6(b)). POS-ONLY-MATCHING dispatch on match.003 resolved as HONESTLY-UNFIXABLE: this unit's specs carry NO semantic tag on any noun (neighborhood_adj is adjectives-only, 2 unit members), so no union of unit-native tags can reach the 6-distinct-token matching floor -- per the wave rubric the bare-POS constraint is left in place rather than replaced with a wrong union; a backfill tag on the unit's 10 nouns is the coordinator-level fix.
 
-
-    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT
-    #2): this pack is the exact case the recipe''s own DO-NOT #2 names as guaranteed-dead ("fa-en a1_unit39").
-    The 2026-07-11 authoring note''s "AUTHORING_GUIDE.md #18''s same-course-level reuse allowance" reasoning
-    does not apply to MC/listen_select/matching_pairs -- DO-NOT #12 explicitly reserves same-course-level tag
-    reuse for word_order/translation (floor-free types) only, and generate_checkpoint() scopes EVERY type,
-    including MC/listen/matching_pairs, to the unit''s own lessons regardless of what''s legal course-wide.
-    scripts/_practice_unit_scope_check.py confirmed all 4 tag members of neighborhood_noun (neighbor, park,
-    store, street) belong to EARLIER units at CHECKPOINT scope: "neighbor" itself was already classified in
-    unit34 (this unit''s own "teach.neighbor" re-teaches the same token, so the dedup-by-token spec in
-    backfill_lexemes_fa_en.py attributes it to unit34, not here -- exactly the same defect class the
-    authoring note thought it had avoided by "verifying `neighbor` is genuinely new," but that verification
-    was wrong), and park/store/street were already unit09/05/10 as the note itself says. Net: 0 unit-scoped
-    candidates for all 4 members -- every one of the 6 original templates (choose.001, listen.002, match.003,
-    translate.004, order.005, and order.005''s volume_fill.006 fill_in_blank) was DEAD, and the checkpoint for
-    this unit has never generated a single item.
-
-    Re-anchored choose.001/listen.002/match.003/translate.004 from neighborhood_noun to a plain
-    `part_of_speech: noun` constraint (no semantic tag, recipe §3.1(c) -- these are all bare-word
-    recognition/matching/translation frames with no literal text beyond the placeholder, so there is no
-    frame-literal-text grammaticality concern to re-check). Verified via iter_specs() filtered to
-    `.a1.unit39.`: this unit natively introduces 10 distinct nouns across its 4 lessons -- neighborhood,
-    neighbors, grocery, building, mr, plants (lesson01/02/03) plus neighborhoods, restaurants, shops, hallway
-    (lesson04) -- all distinct Farsi glosses, no confusable/case-duplicate pairs. ("mr" is a clean token here
-    -- this unit''s own realization already tokenizes "Mr. Lopez" as introduced_tokens ["neighbor", "Mr",
-    "Lopez", ...], stripping the period upstream, unlike unit33''s messier tokens -- see that pack''s notes.)
-    match.003 widened from the original 4 declared slots to the recipe''s standard 6 (pool of 10 comfortably
-    covers it).
-
-    order.005 could not be fixed the same way: its frame ("There''s a {item} nearby") needs every noun
-    candidate grammatical in that exact slot, and the unit-wide noun pool is mostly plurals (neighbors,
-    plants, neighborhoods, restaurants, shops -- all ungrammatical after "a") or a title fragment ("mr") --
-    genuinely unsafe to drop the semantic tag here. Instead re-anchored order.005 to the OTHER existing,
-    already-unit39-native tag `neighborhood_adj` ({quiet, noisy} at unit scope; "friendly" is unit32''s, not
-    native here, matching the tag''s own code comment) and changed the frame to "My neighbors are very
-    {item}." -- verified grammatical for both unit-scoped candidates AND for the full course-wide
-    neighborhood_adj pool ({quiet, noisy, friendly}, all fit), and confirmed no self-reference (frame''s
-    literal words My/neighbors/are/very are not members of the slot''s own pool). Added `neighborhood_adj` to
-    tag_schema (it was already defined in scripts/_en_target_lexeme_common.py, just not previously declared
-    in this pack).
-
-    Dropped order.005.volume_fill.006 (fill_in_blank, keyed to volume_fa_en_a1_unit39_item_06_single, which
-    the shared VOLUME_PRACTICE_SINGLETON_TAGS table defines on "park" -- itself one of the 4 already-dead
-    neighborhood_noun members, so 0 unit-scoped candidates independent of the main defect). No unit-native
-    single-course-wide-candidate tag exists to re-anchor a fill_in_blank onto (recipe §6.5); the pack is
-    clearly viable without it (5 live templates now span all 3 tiers: recognition 2, structured 2, production
-    1). LOG for the coordinator: a genuinely unit39-native single-member tag (e.g. on "building" or "hallway")
-    would let a future pass re-add a working fill_in_blank here -- needs a backfill change, out of this
-    pass''s pack-only scope. Also LOG: the "neighbor"/unit34 token-dedup collision above is a real instance of
-    the recipe''s own §0.1 warning generalized to token PROVENANCE, not just gloss -- worth the coordinator
-    flagging near unit34''s pack too, since anything anchored there assuming "neighbor" is unit34-exclusive
-    should already account for unit39 re-teaching the same word (checked: unit34''s own pack does not
-    currently reference a neighbor-based tag, so no live conflict, but future edits near unit34 should be
-    aware unit39''s lesson01 also teaches this token).
-
-
-    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3):
-    added lesson01.choose.006 (3rd recognition, bare-POS adjective pool per SS3.1(c) -- 5 unit adjectives /
-    5 distinct Farsi glosses; the unit''s only semantic adjective tag, neighborhood_adj, covers just 2 unit
-    tokens, under the 3-gloss MC floor), lesson01.fill.007 (3rd structured, on the course-singleton
-    volume_prs_en_a1_unit39_item_07_single = "noisy", deterministic), lesson02.translate.001 (2nd
-    production: gloss-rendered sentence translation over neighborhood_adj -- prompt varies with the answer,
-    and the full course pool {quiet, noisy, friendly} is grammatical in both the Farsi prompt and the
-    English render) and lesson04.translate.001 (3rd production, fixed sentence on the noisy singleton per
-    SS6.6(b)). POS-ONLY-MATCHING dispatch on match.003 resolved as HONESTLY-UNFIXABLE: this unit''s specs
-    carry NO semantic tag on any noun (neighborhood_adj is adjectives-only, 2 unit members), so no union of
-    unit-native tags can reach the 6-distinct-token matching floor -- per the wave rubric the bare-POS
-    constraint is left in place rather than replaced with a wrong union; a backfill tag on the unit''s 10
-    nouns is the coordinator-level fix.
-
-
-    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2
-    "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit39_lesson01_words`
-    (6 tokens: helpful/nearby/neighborhood/neighbors/noisy/quiet) and `fa_en_a1_unit39_lesson02_words` (4 tokens:
-    five-minute/grocery/live/say) tags. lesson01 alone exactly clears the 6-pair floor; unioned it with lesson02
-    (both lessons are "describing your neighborhood/area" content, all 10 glosses distinct, no confusables) for
-    variety instead of leaving the pool pinned at exactly 6. `unit39_noun` (bare `part_of_speech: noun`, no
-    semantic) is shared with choose.001/listen.002, not dispatched this wave, so left untouched; added a new
-    `unit39_match_pool` anchor for match.003 only, `part_of_speech: [noun, verb, adjective, adverb]` +
-    `semantic: [fa_en_a1_unit39_lesson01_words, fa_en_a1_unit39_lesson02_words]`. Course-scope EXTRA drops from
-    779 off-theme words (verified via pool_check.py) to 0.'
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit39_lesson01_words` (6 tokens: helpful/nearby/neighborhood/neighbors/noisy/quiet) and `fa_en_a1_unit39_lesson02_words` (4 tokens: five-minute/grocery/live/say) tags. lesson01 alone exactly clears the 6-pair floor; unioned it with lesson02 (both lessons are "describing your neighborhood/area" content, all 10 glosses distinct, no confusables) for variety instead of leaving the pool pinned at exactly 6. `unit39_noun` (bare `part_of_speech: noun`, no semantic) is shared with choose.001/listen.002, not dispatched this wave, so left untouched; added a new `unit39_match_pool` anchor for match.003 only, `part_of_speech: [noun, verb, adjective, adverb]` + `semantic: [fa_en_a1_unit39_lesson01_words, fa_en_a1_unit39_lesson02_words]`. Course-scope EXTRA drops from 779 off-theme words (verified via pool_check.py) to 0.
 tag_schema:
   part_of_speech:
   - symbol
