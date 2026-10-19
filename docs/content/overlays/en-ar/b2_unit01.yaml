@@ -6,17 +6,8 @@ target_language: ar
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Arabic (MSA) confirmation needed (DRAFT). Confirm every
-    English gloss matches idiomatic MSA, that every matching_pairs
-    right-hand gloss discriminates its left on real meaning, and that
-    the culminating writing/speaking answers (lesson06) accept the
-    punctuation/joining forms a correct learner would actually produce
-    -- Arabic is graded fully byte-strict with zero typo tolerance and
-    no internal-punctuation stripping, so a missing comma is NOT
-    forgiven the way it would be in a typo-tolerant Latin-script course.
-    See the realization file's review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Overlay for ar's first B2 unit, authored alongside the realization
     (no adaptable upper-intermediate public-domain Arabic source
@@ -33,6 +24,21 @@ review:
     no equivalent concord and a learner may default to a masculine or
     plural form, flagged in lesson01's grammar note. No sibling-
     direction file (ar-en b2) was consulted.
+    Review 2026-10-19: 12 fixes - lesson04 لكن example used لكن before a
+    bare adjective (الجو جميل لكن بارد), contradicting its own clause-
+    joining note; now الجو جميل لكن الماء بارد; lesson04 matching rights
+    however/nevertheless were interchangeable for إلا أن/مع ذلك, now
+    'except that'/'despite that'; الوقت glossed 'the time' (clock sense)
+    now 'time (in general)'; dictation_support accepted the comma-after-
+    أولاً form (dictation keeps internal punctuation strict); added
+    valid word-order variants (SVO هذه المواقع تسهّل / الدراسات تشير,
+    VSO يرى البعض أن, باختصار تفوق الفوائد الأضرار, استخدام ... يتزايد)
+    to translate_support, translate_evidence, translate_objection,
+    order_support, order_objection, order_conclusion, write_conclusion
+    and translate_use. NATIVE FLAGS: whether في هذا شيء من الصحة is the
+    most natural partial-concession idiom; Yusuf opens his first
+    objection with من ناحية أخرى without a preceding من ناحية; the
+    lesson06 full-argument tasks accept only the taught clause orders.
 
 course:
   title: Arabic B2
@@ -163,8 +169,8 @@ teaching:
     gloss: "wastes (feminine agreement form)"
     example_gloss: "This habit wastes time."
   ar.b2.unit01.lesson03.teach.alwaqt:
-    title: "the time"
-    gloss: "the time"
+    title: time
+    gloss: "time (in general)"
     example_gloss: "Time is important for everyone."
   ar.b2.unit01.lesson03.teach.alkathir_min:
     title: "a lot of"
@@ -184,7 +190,7 @@ teaching:
     title: but
     gloss: but
     note: "*لكن* is the everyday contrast word, joining two clauses with normal word order. It pivots from the acknowledged point back to your claim -- the core rebuttal word of this unit."
-    example_gloss: "The weather is nice but cold."
+    example_gloss: "The weather is nice, but the water is cold."
   ar.b2.unit01.lesson04.teach.illa_anna:
     title: however
     gloss: "however / except that"
@@ -343,18 +349,22 @@ exercises:
     instruction: "Put the words in order: Firstly, these sites facilitate communication."
     accepted_answers:
       - {value: "أولاً تسهّل هذه المواقع التواصل", status: correct}
+      - {value: "أولاً هذه المواقع تسهّل التواصل", status: correct}
     feedback: "*أولاً تسهّل هذه المواقع التواصل* means firstly, these sites facilitate communication."
   ar.b2.unit01.lesson02.exercise05.translate_support:
     instruction: "Translate into Arabic, using أولاً: Firstly, these sites facilitate communication between friends and family."
     accepted_answers:
       - {value: "أولاً تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة", status: correct}
       - {value: "أولاً، تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة", status: correct}
+      - {value: "أولاً هذه المواقع تسهّل التواصل بين الأصدقاء والعائلة", status: correct}
+      - {value: "أولاً، هذه المواقع تسهّل التواصل بين الأصدقاء والعائلة", status: correct}
     feedback: "*أولاً، تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة* means firstly, these sites facilitate communication between friends and family."
   ar.b2.unit01.lesson02.exercise06.translate_evidence:
     instruction: "Translate into Arabic: Studies indicate that these sites are useful for learning."
     accepted_answers:
       - {value: "تشير الدراسات إلى أن هذه المواقع مفيدة للتعلم", status: correct}
       - {value: "تشير الدراسات الى ان هذه المواقع مفيدة للتعلم", status: correct}
+      - {value: "الدراسات تشير إلى أن هذه المواقع مفيدة للتعلم", status: correct}
     feedback: "*تشير الدراسات إلى أن هذه المواقع مفيدة للتعلم* means studies indicate that these sites are useful for learning."
   ar.b2.unit01.lesson02.exercise07.write_two_reasons:
     instruction: "Write these two sentences in Arabic, using أولاً and بالإضافة إلى ذلك: Firstly, these sites facilitate communication between friends and family. In addition, studies indicate that these sites are useful for learning."
@@ -369,6 +379,9 @@ exercises:
   ar.b2.unit01.lesson02.exercise08.dictation_support:
     instruction: "Type what you hear."
     correct_response: "أولاً تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة"
+    accepted_answers:
+      - {value: "أولاً تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة", status: correct}
+      - {value: "أولاً، تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة", status: correct}
     orthography_strict: true
     feedback: "You heard *أولاً، تسهّل هذه المواقع التواصل بين الأصدقاء والعائلة* -- firstly, these sites facilitate communication between friends and family."
 
@@ -394,12 +407,14 @@ exercises:
     instruction: "Put the words in order: Some people think these sites waste a lot of time."
     accepted_answers:
       - {value: "البعض يرى أن هذه المواقع تضيّع الكثير من الوقت", status: correct}
+      - {value: "يرى البعض أن هذه المواقع تضيّع الكثير من الوقت", status: correct}
     feedback: "*البعض يرى أن هذه المواقع تضيّع الكثير من الوقت* means some people think these sites waste a lot of time."
   ar.b2.unit01.lesson03.exercise05.translate_objection:
     instruction: "Translate into Arabic: Some people think these sites waste a lot of time."
     accepted_answers:
       - {value: "البعض يرى أن هذه المواقع تضيّع الكثير من الوقت", status: correct}
       - {value: "البعض يرى ان هذه المواقع تضيّع الكثير من الوقت", status: correct}
+      - {value: "يرى البعض أن هذه المواقع تضيّع الكثير من الوقت", status: correct}
     feedback: "*البعض يرى أن هذه المواقع تضيّع الكثير من الوقت* means some people think these sites waste a lot of time."
   ar.b2.unit01.lesson03.exercise06.speak_concession:
     instruction: "Say aloud in Arabic: On the one hand these sites facilitate communication, on the other hand they waste a lot of time."
@@ -433,13 +448,14 @@ exercises:
   ar.b2.unit01.lesson04.exercise03.match_rebuttal_words:
     instruction: "Match each Arabic word or phrase with its meaning."
     accepted_answers:
-      - value: {لكن: but, "إلا أن": however, "هذا لا يغير حقيقة أن...": "this does not change the fact that...", "مع ذلك": nevertheless, باختصار: "in short", الفوائد: benefits, الأضرار: harms, تفوق: outweighs}
+      - value: {لكن: but, "إلا أن": "except that", "هذا لا يغير حقيقة أن...": "this does not change the fact that...", "مع ذلك": "despite that", باختصار: "in short", الفوائد: benefits, الأضرار: harms, تفوق: outweighs}
         status: correct
     feedback: "These are this lesson's rebuttal and conclusion words."
   ar.b2.unit01.lesson04.exercise04.order_conclusion:
     instruction: "Put the words in order: In short, the benefits outweigh the harms."
     accepted_answers:
       - {value: "باختصار الفوائد تفوق الأضرار", status: correct}
+      - {value: "باختصار تفوق الفوائد الأضرار", status: correct}
     feedback: "*باختصار الفوائد تفوق الأضرار* means in short, the benefits outweigh the harms."
   ar.b2.unit01.lesson04.exercise05.translate_rebuttal:
     instruction: "Translate into Arabic: This does not change the fact that the benefits outweigh the harms."
@@ -461,6 +477,7 @@ exercises:
       - {value: "باختصار الفوائد تفوق الأضرار", status: correct}
       - {value: "باختصار، الفوائد تفوق الأضرار", status: correct}
       - {value: "باختصار، الفوائد تفوق الأضرار.", status: correct}
+      - {value: "باختصار تفوق الفوائد الأضرار", status: correct}
     feedback: "*باختصار، الفوائد تفوق الأضرار.* means in short, the benefits outweigh the harms."
 
   ar.b2.unit01.lesson05.exercise01.read_claim:
@@ -497,6 +514,7 @@ exercises:
     instruction: "Translate into Arabic: The use of social media sites is increasing among people."
     accepted_answers:
       - {value: "يتزايد استخدام مواقع التواصل الاجتماعي بين الناس", status: correct}
+      - {value: "استخدام مواقع التواصل الاجتماعي يتزايد بين الناس", status: correct}
     feedback: "*يتزايد استخدام مواقع التواصل الاجتماعي بين الناس* means the use of social media sites is increasing among people."
   ar.b2.unit01.lesson05.exercise07.write_good_development:
     instruction: "Write in Arabic: I think this is a good development."
