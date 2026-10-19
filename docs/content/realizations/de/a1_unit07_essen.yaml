@@ -134,6 +134,13 @@ review:
     input policy (accept 'Euro'/'EUR' in every en-de writing prompt that
     requires the euro sign).
 
+    Second-pass review 2026-10-19: 1 fix --
+    lesson03.exercise01.read_kaffee_preis, exercise02.read_suppe_preis,
+    exercise03.choose_billigstes: target_blocks were empty, so the menu
+    the questions ask about was never shown on screen (the compiler only
+    renders instruction + target_blocks) -- added the menu text as the
+    prompt's target block (matching unit05's read_schild pattern).
+
 course:
   realization_key: "de.a1"
   target_language_first: true
@@ -212,9 +219,9 @@ units:
           - {content_key: "de.a1.unit07.lesson03.teach.preis", kind: "vocabulary", target: {text: "Preis", language_code: "de", direction: "ltr"}, introduced_tokens: ["Preis"], example: {text: "Der Preis ist gut.", language_code: "de", direction: "ltr"}}
           - {content_key: "de.a1.unit07.lesson03.teach.speisekarte_text", kind: "reading", target: {text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}, introduced_tokens: ["Café", "3", "2", "1", "4", "5", "6"]}
         exercises:
-          - {content_key: "de.a1.unit07.lesson03.exercise01.read_kaffee_preis", type: "reading_comprehension", tested_text: "Kaffee 3 €", prompt: {target_blocks: []}}
-          - {content_key: "de.a1.unit07.lesson03.exercise02.read_suppe_preis", type: "reading_comprehension", tested_text: "Suppe 5 €", prompt: {target_blocks: []}}
-          - {content_key: "de.a1.unit07.lesson03.exercise03.choose_billigstes", type: "multiple_choice", tested_text: "Brot", prompt: {target_blocks: []}}
+          - {content_key: "de.a1.unit07.lesson03.exercise01.read_kaffee_preis", type: "reading_comprehension", tested_text: "Kaffee 3 €", prompt: {target_blocks: [{text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit07.lesson03.exercise02.read_suppe_preis", type: "reading_comprehension", tested_text: "Suppe 5 €", prompt: {target_blocks: [{text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}]}}
+          - {content_key: "de.a1.unit07.lesson03.exercise03.choose_billigstes", type: "multiple_choice", tested_text: "Brot", prompt: {target_blocks: [{text: "Café-Speisekarte: Kaffee - 3 €. Tee - 2 €. Brot - 1 €. Salat - 4 €. Suppe - 5 €. Sandwich - 6 €.", language_code: "de", direction: "ltr"}]}}
           - content_key: "de.a1.unit07.lesson03.exercise04.match_speisekarte_preise"
             type: "matching_pairs"
             tested_text: "Kaffee Tee Brot Salat Suppe Sandwich"
