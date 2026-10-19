@@ -2221,6 +2221,23 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),
+    # a1_unit35 (technology): "make a call" -- bare گرفتن collides with taking and call=تماس گرفتن.
+    ("a1_unit35_technology", "make"): ("verb", "برقرار کردن (تماس)"),
+    # a1_unit43 (colors): light green / too bright / a fun color -- split the overlapping روشن glosses.
+    ("a1_unit43_colors", "light"): ("adjective", "کم‌رنگ؛ روشن"),
+    ("a1_unit43_colors", "bright"): ("adjective", "پررنگ؛ درخشان"),
+    ("a1_unit43_colors", "fun"): ("adjective", "شاد؛ سرگرم‌کننده"),
+    # a1_unit44 (seasons): playing (noun, "loves playing soccer") collided with play; outdoors collided with out.
+    ("a1_unit44_seasons", "playing"): ("noun", "بازی (فعالیت)"),
+    ("a1_unit44_seasons", "outdoors"): ("adverb", "در فضای باز"),
+    # a1_unit45 (emergencies): "caught fire" -- the gloss embedded English and shared گرفت with got/took.
+    ("a1_unit45_emergencies", "caught"): ("verb", "آتش گرفت"),
+    # a1_unit48 (library): borrow/borrowing shared one gloss; "checked out a cookbook" is not "examined";
+    # other carried English ("on the other hand") in its gloss.
+    ("a1_unit48_library", "borrow"): ("verb", "قرض گرفتن؛ امانت گرفتن"),
+    ("a1_unit48_library", "borrowing"): ("noun", "امانت‌گیری"),
+    ("a1_unit48_library", "checked"): ("verb", "امانت گرفت"),
+    ("a1_unit48_library", "other"): ("adjective", "دیگر؛ سایر"),
 }
 
 

@@ -4,79 +4,23 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit35.technology
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 6 of the 30-42 batch, see unit30''s pack notes for the full batch
-    rationale).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (fa-en practice pass, fresh context; 3 fixes). (1) translate_verb.008: wrong-gloss/underdetermined -- make=گرفتن (same gloss as taking, wrong sense for 'make a call') overridden via UNIT_SENSE_OVERRIDES to برقرار کردن (تماس). (2) translate.004 feedback said 'device' though pool includes app -> 'دستگاه یا برنامه'. (3) volume_order.003 feedback was English-only -> Persian sentence. NATIVE FLAGS: written-style verb glosses (می‌خواند, استفاده می‌کند, می‌فرستد) sit beside colloquial خونه/مامان in the same pool; برقرار کردن (تماس) for 'make' (a call).
 
-    Two semantic tags: ''device_noun'' (the 6 lesson01 device items -- phone/laptop/tablet/computer/camera plus ''app'', all
-    shared from _en_target_lexeme_common.py) for bare-word recognition/matching, and a narrower 5-member ''device_noun_a''
-    (excludes ''app'') for the generative frame "I have a {item}." -- ''app'' needs the article "an", not "a", so leaving
-    it in the frame pool would render an ungrammatical "I have a app." (fresh-context review fix, 2026-07-11, mirroring the
-    nl-en unit35 pack''s identical device_noun/device_noun_a split; both tags already present in _en_target_lexeme_common.py).
+    Authored 2026-07-11, fa-en depth-audit lane (unit 6 of the 30-42 batch, see unit30's pack notes for the full batch rationale).
+    Two semantic tags: 'device_noun' (the 6 lesson01 device items -- phone/laptop/tablet/computer/camera plus 'app', all shared from _en_target_lexeme_common.py) for bare-word recognition/matching, and a narrower 5-member 'device_noun_a' (excludes 'app') for the generative frame "I have a {item}." -- 'app' needs the article "an", not "a", so leaving it in the frame pool would render an ungrammatical "I have a app." (fresh-context review fix, 2026-07-11, mirroring the nl-en unit35 pack's identical device_noun/device_noun_a split; both tags already present in _en_target_lexeme_common.py).
+    Anchoring check: lesson01 introduces all device nouns as real new lexemes, verified via iter_specs(). Slot candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context review before import.
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed a real composition trap -- the two generative "I have a {item}" frames (order.005, translate_sentence.006) referenced the full 'device_noun' tag, whose shared _en_target_lexeme_common.py pool includes 'app', so the frame could render the ungrammatical "I have a app." Repointed both generative templates at the narrower 'device_noun_a' tag (excludes 'app'), mirroring the nl-en unit35 pack's identical split; recognition/matching templates keep the full 'device_noun'. All else verified sound. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
 
-    Anchoring check: lesson01 introduces all device nouns as real new lexemes, verified via iter_specs(). Slot candidate count
-    verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context
-    review before import.
+    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md §1.1/DO-NOT #2): scripts/_practice_unit_scope_check.py flagged translate_sentence.006.volume_fill.011 (fill_in_blank) DEAD -- its volume_fa_en_a1_unit35_item_11_single tag is defined (in scripts/_en_target_lexeme_common.py's VOLUME_PRACTICE_SINGLETON_TAGS table) on the token "phone", but "phone" was already classified in an EARLIER unit (unit03's phone_phrase), so it has 0 candidates in this unit's own checkpoint-scoped pool. No unit-native single-course-wide-candidate tag exists to re-anchor a fill_in_blank onto (fill_in_blank needs <=1 course-wide candidate per slot, recipe §6.5), so per the recipe's option 3 I DROPPED this template (device_noun/device_noun_a still give this pack a live fill-tier-adjacent structured slate via order.005/translate_sentence.006/volume_order.003 -- see below -- so the pack stays viable). LOG for the coordinator: a genuinely unit35-native single-member tag (e.g. on "mom" or "home") would let a future pass re-add a working fill_in_blank here -- needs a backfill change, out of this pass's pack-only scope.
+    Also widened match.003 (flagged below-floor: only 5 of the recipe's 6-pair standard, since device_noun's unit-scoped pool tops out at 5 -- "phone" is the 6th course-wide member and, per the same DEAD finding above, belongs to unit03, not this unit). Re-anchored match.003 (only -- choose.001/listen.002/ translate.004 keep the original narrow device_noun tag unchanged, since they already meet their floor and the recipe favors precision over unnecessary widening) to a plain `part_of_speech: noun` constraint (no semantic tag, recipe §3.1(c) -- matching_pairs has no frame-literal-text grammaticality concern) and widened to 6 slots. Verified via iter_specs() filtered to `.a1.unit35.`: this unit natively introduces 19 distinct nouns across its 4 lessons (device_noun's 5 plus mom/books/home/photos, friend/wifi/battery, apps/map/names, phones/people/maps/recipes/laptops), all distinct Farsi glosses, singular/plural pairs (app/apps, map/maps, laptop/laptops) kept per recipe's allowance, no confusable duplicates. order.005 and translate_sentence.006 (both frame-literal generative templates, correctly restricted to the single-vowel-safe device_noun_a tag) are UNCHANGED and were not flagged.
 
-    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed a real composition trap -- the two
-    generative "I have a {item}" frames (order.005, translate_sentence.006) referenced the full ''device_noun'' tag, whose
-    shared _en_target_lexeme_common.py pool includes ''app'', so the frame could render the ungrammatical "I have a app."
-    Repointed both generative templates at the narrower ''device_noun_a'' tag (excludes ''app''), mirroring the nl-en unit35
-    pack''s identical split; recognition/matching templates keep the full ''device_noun''. All else verified sound. compile_content.py
-    practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
+    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): recognition and production were 2 live each. Added listen_sentence.007 (listen_select "I have a {item}" over device_noun_a, anchored lesson03 which previously had no template; the tag's one course-scope extra is "phone", grammatical in the frame; options are Farsi glosses so no distractor can collide with the English audio, defect 1.22) and translate_verb.008 (bare-word production over a plain part_of_speech:verb constraint, anchored lesson02 which previously had no template -- the unit natively introduces 12 distinct verbs, all with distinct Farsi glosses (use/uses and download/downloads pairs carry distinct prompts); POS-only is sanctioned for bare-word translation). Tiers now 3/3/3 live. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY: the unit's only semantic tags are device_noun (5 unit-native members -- the 6th course member "phone" belongs to unit03) and its subset device_noun_a (4), so no semantic union of unit tags can reach the 6 distinct unit tokens the 6-slot template needs; a wrong union is worse than the status quo. This confirms the pack's own 2026-07-24 re-anchor rationale.
 
-
-    Re-anchor fix 2026-07-24 (unit-scope DEAD-template pass, docs/content/PRACTICE_PACK_RECIPE.md
-    §1.1/DO-NOT #2): scripts/_practice_unit_scope_check.py flagged translate_sentence.006.volume_fill.011
-    (fill_in_blank) DEAD -- its volume_fa_en_a1_unit35_item_11_single tag is defined (in
-    scripts/_en_target_lexeme_common.py''s VOLUME_PRACTICE_SINGLETON_TAGS table) on the token "phone", but
-    "phone" was already classified in an EARLIER unit (unit03''s phone_phrase), so it has 0 candidates in
-    this unit''s own checkpoint-scoped pool. No unit-native single-course-wide-candidate tag exists to
-    re-anchor a fill_in_blank onto (fill_in_blank needs <=1 course-wide candidate per slot, recipe §6.5), so
-    per the recipe''s option 3 I DROPPED this template (device_noun/device_noun_a still give this pack a live
-    fill-tier-adjacent structured slate via order.005/translate_sentence.006/volume_order.003 -- see below --
-    so the pack stays viable). LOG for the coordinator: a genuinely unit35-native single-member tag (e.g. on
-    "mom" or "home") would let a future pass re-add a working fill_in_blank here -- needs a backfill change,
-    out of this pass''s pack-only scope.
-
-    Also widened match.003 (flagged below-floor: only 5 of the recipe''s 6-pair standard, since device_noun''s
-    unit-scoped pool tops out at 5 -- "phone" is the 6th course-wide member and, per the same DEAD finding
-    above, belongs to unit03, not this unit). Re-anchored match.003 (only -- choose.001/listen.002/
-    translate.004 keep the original narrow device_noun tag unchanged, since they already meet their floor and
-    the recipe favors precision over unnecessary widening) to a plain `part_of_speech: noun` constraint (no
-    semantic tag, recipe §3.1(c) -- matching_pairs has no frame-literal-text grammaticality concern) and
-    widened to 6 slots. Verified via iter_specs() filtered to `.a1.unit35.`: this unit natively introduces 19
-    distinct nouns across its 4 lessons (device_noun''s 5 plus mom/books/home/photos, friend/wifi/battery,
-    apps/map/names, phones/people/maps/recipes/laptops), all distinct Farsi glosses, singular/plural pairs
-    (app/apps, map/maps, laptop/laptops) kept per recipe''s allowance, no confusable duplicates. order.005 and
-    translate_sentence.006 (both frame-literal generative templates, correctly restricted to the
-    single-vowel-safe device_noun_a tag) are UNCHANGED and were not flagged.
-
-
-    Polish wave-2 2026-07-25 (tier-thinness + POS-only-matching pass, recipe §8/§6.3): recognition and production
-    were 2 live each. Added listen_sentence.007 (listen_select "I have a {item}" over device_noun_a, anchored
-    lesson03 which previously had no template; the tag''s one course-scope extra is "phone", grammatical in the
-    frame; options are Farsi glosses so no distractor can collide with the English audio, defect 1.22) and
-    translate_verb.008 (bare-word production over a plain part_of_speech:verb constraint, anchored lesson02 which
-    previously had no template -- the unit natively introduces 12 distinct verbs, all with distinct Farsi glosses
-    (use/uses and download/downloads pairs carry distinct prompts); POS-only is sanctioned for bare-word
-    translation). Tiers now 3/3/3 live. match.003 (dispatched POS-ONLY-MATCHING) is left POS-only DELIBERATELY:
-    the unit''s only semantic tags are device_noun (5 unit-native members -- the 6th course member "phone" belongs
-    to unit03) and its subset device_noun_a (4), so no semantic union of unit tags can reach the 6 distinct unit
-    tokens the 6-slot template needs; a wrong union is worse than the status quo. This confirms the pack''s own
-    2026-07-24 re-anchor rationale.
-
-
-    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 blocker above is
-    RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit35_lesson01_words` tag (12 unit-native tokens
-    from lesson01 alone: app/books/call/camera/computer/home/laptop/mom/photos/reads/tablet/uses, all distinct
-    Farsi glosses), clearing the 6-pair floor on its own without needing a unit-wide union (the unit-wide tag is
-    40 tokens across 4 lessons and would dilute the device theme with unrelated lesson02-04 vocabulary, so the
-    lesson-anchored tag is preferred per the wave-3 rubric). Re-anchored match.003''s shared `unit35_noun` anchor
-    (used only by this template, nothing else references it) from bare `part_of_speech: noun` to `part_of_speech:
-    [noun, verb]` + `semantic: fa_en_a1_unit35_lesson01_words`. Course-scope EXTRA drops from 769 off-theme words
-    (verified via pool_check.py) to 0.'
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 blocker above is RESOLVED -- commit 05af7ace added the generated `fa_en_a1_unit35_lesson01_words` tag (12 unit-native tokens from lesson01 alone: app/books/call/camera/computer/home/laptop/mom/photos/reads/tablet/uses, all distinct Farsi glosses), clearing the 6-pair floor on its own without needing a unit-wide union (the unit-wide tag is 40 tokens across 4 lessons and would dilute the device theme with unrelated lesson02-04 vocabulary, so the lesson-anchored tag is preferred per the wave-3 rubric). Re-anchored match.003's shared `unit35_noun` anchor (used only by this template, nothing else references it) from bare `part_of_speech: noun` to `part_of_speech: [noun, verb]` + `semantic: fa_en_a1_unit35_lesson01_words`. Course-scope EXTRA drops from 769 off-theme words (verified via pool_check.py) to 0.
 tag_schema:
   part_of_speech:
   - symbol
@@ -189,7 +133,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: پاسخ درست، معادل انگلیسی این دستگاه است.
+    text: پاسخ درست، معادل انگلیسی این دستگاه یا برنامه است.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit35.lesson01.order.005
@@ -252,9 +196,9 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: I have a {item}
-    language_code: en
-    direction: ltr
+    text: I have a {item}. یعنی من یه {item} دارم.
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit35.lesson03.listen_sentence.007
   lesson_content_key: en.a1.unit35.lesson03.dialogue_new_phone
   type: listen_select
