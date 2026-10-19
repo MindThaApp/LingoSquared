@@ -7,7 +7,7 @@ review:
   status: reviewed
   fresh_context: true
   required_next_reviewer: native_speaker_review
-  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- 3 matching_pairs reduced from 6 to 5 slots and anchored to lesson01+lesson04 tags (lend/charger/share/lent/remember) so lending, whose gloss duplicates lend and leaks ''(ing form of lend)'', cannot form an ambiguous pair; 3 translation pools narrowed to the same tags; tag_schema extended with the two lesson tags. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: lending=امانت دادن (شکل ing فعل lend) -> امانت دادن بدون متن لاتین / distinct gloss from lend; phrase glosses use informal می‌تانی/تو/ضرورت داری (e.g. can you lend me a charger, of course. do you need a charger) -> می‌تانین/شما forms; lending still appears in MC/listen pools. Prior note: Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured with the f".a1.unit68." filter (backfill_lexemes_prs_en.py): 7 unit lexemes across 3 lesson(s) with lexemes; 6 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'', ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'', ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'', ''the'', ''this'', ''to''] where present) with 6 distinct english_gloss values. No agreement_tags.semantic exist on this direction''s lexemes for this unit (all None at classification time), so every slot is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material() to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A1 course at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step 5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank can be added safely. POLISH WAVE 2 (2026-07-24, POS-ONLY-MATCHING flag): re-audited all three match.001 templates for a semantic-union replacement (recipe SS6.3) against the current backfill_lexemes_prs_en.py iter_specs() -- the unit''s 22 lexemes still carry NO agreement_tags.semantic at all (every one None), so no union of unit tags can cover the 6-pair floor and the matching_pairs slots stay deliberately POS-only. Course-scope off-theme pairs in Endless Practice remain a known, accepted limitation until a backfill pass tags this unit''s borrowing/lending vocabulary. POLISH WAVE 3 (2026-07-26): the blocker above is resolved -- backfill_lexemes_prs_en.py now emits generated per-unit/per-lesson semantic tags (commit 05af7ace). Re-anchored all three match.001 templates (lesson01/02/04) from POS-only ([noun, verb]) to the unit-wide `semantic: prs_en_a1_unit68_words`, keeping the [noun, verb] POS filter unchanged: none of the three lessons'' own tags clears the 6-pair floor alone under [noun, verb] (2/1/3 tokens respectively -- lesson02 and lesson04 are dominated by `phrase`-POS dialogue lines, excluded here to keep the cards to single-word vocab as originally authored), so the unit-wide tag is required; it yields the same 6-token pool ([charger, lend, lending, lent, remember, share]) all three templates already drew at checkpoint (unit) scope pre-wave-3 -- CHECKPOINT behavior is unchanged, only the Endless-Practice course-scope pool shrinks from the whole A1 noun/verb vocabulary to these same 6 tokens (0 course-scope extras, pool_check.py verified). Recognition/production slots (choose/listen/translate) remain POS-only by design, per this task''s scope.'
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes + 6 coordinator fixes (untagged slots that pooled the whole level, ~1290 A1 / ~480 A2 words, narrowed to prs_en_a1_unit68_words; removes same-gloss ambiguity) -- 3 matching_pairs reduced from 6 to 5 slots and anchored to lesson01+lesson04 tags (lend/charger/share/lent/remember) so lending, whose gloss duplicates lend and leaks ''(ing form of lend)'', cannot form an ambiguous pair; 3 translation pools narrowed to the same tags; tag_schema extended with the two lesson tags. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: lending=امانت دادن (شکل ing فعل lend) -> امانت دادن بدون متن لاتین / distinct gloss from lend; phrase glosses use informal می‌تانی/تو/ضرورت داری (e.g. can you lend me a charger, of course. do you need a charger) -> می‌تانین/شما forms; lending still appears in MC/listen pools. Prior note: Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured with the f".a1.unit68." filter (backfill_lexemes_prs_en.py): 7 unit lexemes across 3 lesson(s) with lexemes; 6 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'', ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'', ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'', ''the'', ''this'', ''to''] where present) with 6 distinct english_gloss values. No agreement_tags.semantic exist on this direction''s lexemes for this unit (all None at classification time), so every slot is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material() to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A1 course at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step 5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank can be added safely. POLISH WAVE 2 (2026-07-24, POS-ONLY-MATCHING flag): re-audited all three match.001 templates for a semantic-union replacement (recipe SS6.3) against the current backfill_lexemes_prs_en.py iter_specs() -- the unit''s 22 lexemes still carry NO agreement_tags.semantic at all (every one None), so no union of unit tags can cover the 6-pair floor and the matching_pairs slots stay deliberately POS-only. Course-scope off-theme pairs in Endless Practice remain a known, accepted limitation until a backfill pass tags this unit''s borrowing/lending vocabulary. POLISH WAVE 3 (2026-07-26): the blocker above is resolved -- backfill_lexemes_prs_en.py now emits generated per-unit/per-lesson semantic tags (commit 05af7ace). Re-anchored all three match.001 templates (lesson01/02/04) from POS-only ([noun, verb]) to the unit-wide `semantic: prs_en_a1_unit68_words`, keeping the [noun, verb] POS filter unchanged: none of the three lessons'' own tags clears the 6-pair floor alone under [noun, verb] (2/1/3 tokens respectively -- lesson02 and lesson04 are dominated by `phrase`-POS dialogue lines, excluded here to keep the cards to single-word vocab as originally authored), so the unit-wide tag is required; it yields the same 6-token pool ([charger, lend, lending, lent, remember, share]) all three templates already drew at checkpoint (unit) scope pre-wave-3 -- CHECKPOINT behavior is unchanged, only the Endless-Practice course-scope pool shrinks from the whole A1 noun/verb vocabulary to these same 6 tokens (0 course-scope extras, pool_check.py verified). Recognition/production slots (choose/listen/translate) remain POS-only by design, per this task''s scope.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -39,6 +39,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -59,6 +61,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -105,6 +109,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -125,6 +131,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -171,6 +179,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -191,6 +201,8 @@ templates:
       part_of_speech:
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a1_unit68_words
   answer_derivation:
     kind: slot_gloss
     slot: item

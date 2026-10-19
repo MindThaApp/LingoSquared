@@ -7,7 +7,7 @@ review:
   status: reviewed
   fresh_context: true
   required_next_reviewer: native_speaker_review
-  notes: 'Review 2026-10-19 (prs-en practice pass): 1 fix (applied across 15 templates) -- dropped adverb from every slot POS list so well (gloss ''خوب (در hear well)'', leaks the answer in translation and is an also-correct option beside good) no longer appears; immediately dropped with it. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: well=خوب (در hear well) -> خوب (Latin leak); being=بودن (شکل ing فعل be) -> distinct plain gloss without Latin (still in pools, unfixable here, same gloss as be at course scope); next=پهلوی -> بعدی (پهلوی means beside, wrong for next Monday); strong=تُند -> قوی (تُند means spicy/fast; unit teaches strong writing skills). Course-scope same-gloss pairs remain (come/coming, work/working, good/great) and cannot be fixed pack-side because pools are POS-only. Prior note: Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured with the f".a2.unit30." filter (backfill_lexemes_prs_en.py): 43 unit lexemes across 4 lesson(s) with lexemes; 41 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'', ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'', ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'', ''the'', ''this'', ''to''] where present) with 41 distinct english_gloss values. No agreement_tags.semantic exist on this direction''s lexemes for this unit (all None at classification time), so every slot is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material() to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A2 course at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step 5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank can be added safely. POLISH WAVE 2 (2026-07-24, POS-ONLY-MATCHING flag): re-audited all three match.001 templates for a semantic-union replacement (recipe SS6.3) against the current backfill_lexemes_prs_en.py iter_specs() -- this unit''s only tagged lexemes are scattered single-member cross-course tags (number/hour_number "two", weekday "monday", identity "i''m", age_phrase "years", clothing_size "small", dialogue_word "work"); no coherent interview-themed tag exists, and unioning those 6 unrelated single-member tags would pull whole off-theme course-scope pools (all weekdays, all numbers...) into an interview unit -- worse than the status quo. matching_pairs slots stay deliberately POS-only until a backfill pass tags this unit''s 37 untagged interview lexemes. POLISH WAVE 3 (2026-07-26, blocker resolved): commit 05af7ace added generated per-unit/per-lesson semantic tags (prs_en_a2_unit30_words / prs_en_a2_unit30_lessonNN_words, unit-scoped by construction), exactly the backfill pass the wave-2 note above was waiting on. Re-anchored each of the three matching_pairs to its OWN lesson tag rather than the unit-wide tag -- each lesson clears the 6-pair floor alone, and this also makes the three pools genuinely distinct (previously all three were POS-only and drew the identical whole-unit content-word pool): lesson02.match.001 -> prs_en_a2_unit30_lesson02_words (12 tokens: two/years/social/media/marketing/strengths/being/ organized/available/start/next/monday, all distinct glosses); lesson03.match.001 -> prs_en_a2_unit30_lesson03_words (16 tokens: resume/deadline/bright/looking/coordinator/ requirements/strong/writing/skills/immediately/interview/meet/deadlines/work/well/team, all distinct glosses -- deadline/deadlines reads as an acceptable singular/plural discrimination, not a paraphrase); lesson04.match.001 -> prs_en_a2_unit30_lesson04_words (8 tokens: coming/managed/ small/great/questions/role/typical/looks, all distinct glosses). part_of_speech [adjective, adverb, noun, verb] kept unchanged on all three (redundant with the lesson tag now but harmless). The off-theme course-scope pull this pack''s original note flagged is resolved.'
+  notes: 'Review 2026-10-19 (prs-en practice pass): 1 fix + 12 coordinator fixes (untagged slots that pooled the whole A2 level narrowed to prs_en_a2_unit30_words) (applied across 15 templates) -- dropped adverb from every slot POS list so well (gloss ''خوب (در hear well)'', leaks the answer in translation and is an also-correct option beside good) no longer appears; immediately dropped with it. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: well=خوب (در hear well) -> خوب (Latin leak); being=بودن (شکل ing فعل be) -> distinct plain gloss without Latin (still in pools, unfixable here, same gloss as be at course scope); next=پهلوی -> بعدی (پهلوی means beside, wrong for next Monday); strong=تُند -> قوی (تُند means spicy/fast; unit teaches strong writing skills). Course-scope same-gloss pairs remain (come/coming, work/working, good/great) and cannot be fixed pack-side because pools are POS-only. Prior note: Authored 2026-07-23 against docs/content/PRACTICE_PACK_RECIPE.md. Unit lexeme pool measured with the f".a2.unit30." filter (backfill_lexemes_prs_en.py): 43 unit lexemes across 4 lesson(s) with lexemes; 41 of them survive the content-word filter (part_of_speech not in [''particle'', ''preposition'', ''pronoun'', ''proper_noun'', ''symbol''], and excluding function/auxiliary tokens whose english_gloss is a parenthetical grammar note rather than a clean translation: [''a'', ''an'', ''and'', ''by'', ''did'', ''do'', ''does'', "don''t", ''has'', ''have'', ''if'', ''not'', ''on'', ''or'', ''that'', ''the'', ''this'', ''to''] where present) with 41 distinct english_gloss values. No agreement_tags.semantic exist on this direction''s lexemes for this unit (all None at classification time), so every slot is intentionally UNTAGGED (agreement_tags omitted) and constrained only by language_code+part_of_speech -- per recipe SS3.1(c) this is a legal constraint, and because generate_checkpoint() restricts _material() to this unit''s own lesson ids before any slot filter runs, the untagged pool is unit-scoped at checkpoint time (equivalent to unioning every lesson''s tokens) even though it widens to the whole A2 course at Endless-Practice scope. word_order and fill_in_blank were deliberately NOT authored: without a semantic tag there is no way to pin a single-member anchor or to hand-verify (recipe SS1.1/SS9 step 5) that every course-wide candidate of an untagged slot stays grammatical inside a literal sentence frame, and getting that wrong is the recipe''s #1 flagged defect class. matching_pairs (no framing-grammaticality requirement, only a >=6-distinct-token floor) was used for the structured tier instead, anchored to the richest lesson(s). Recommend a follow-up backfill pass adding semantic tags to this unit so word_order/fill_in_blank can be added safely. POLISH WAVE 2 (2026-07-24, POS-ONLY-MATCHING flag): re-audited all three match.001 templates for a semantic-union replacement (recipe SS6.3) against the current backfill_lexemes_prs_en.py iter_specs() -- this unit''s only tagged lexemes are scattered single-member cross-course tags (number/hour_number "two", weekday "monday", identity "i''m", age_phrase "years", clothing_size "small", dialogue_word "work"); no coherent interview-themed tag exists, and unioning those 6 unrelated single-member tags would pull whole off-theme course-scope pools (all weekdays, all numbers...) into an interview unit -- worse than the status quo. matching_pairs slots stay deliberately POS-only until a backfill pass tags this unit''s 37 untagged interview lexemes. POLISH WAVE 3 (2026-07-26, blocker resolved): commit 05af7ace added generated per-unit/per-lesson semantic tags (prs_en_a2_unit30_words / prs_en_a2_unit30_lessonNN_words, unit-scoped by construction), exactly the backfill pass the wave-2 note above was waiting on. Re-anchored each of the three matching_pairs to its OWN lesson tag rather than the unit-wide tag -- each lesson clears the 6-pair floor alone, and this also makes the three pools genuinely distinct (previously all three were POS-only and drew the identical whole-unit content-word pool): lesson02.match.001 -> prs_en_a2_unit30_lesson02_words (12 tokens: two/years/social/media/marketing/strengths/being/ organized/available/start/next/monday, all distinct glosses); lesson03.match.001 -> prs_en_a2_unit30_lesson03_words (16 tokens: resume/deadline/bright/looking/coordinator/ requirements/strong/writing/skills/immediately/interview/meet/deadlines/work/well/team, all distinct glosses -- deadline/deadlines reads as an acceptable singular/plural discrimination, not a paraphrase); lesson04.match.001 -> prs_en_a2_unit30_lesson04_words (8 tokens: coming/managed/ small/great/questions/role/typical/looks, all distinct glosses). part_of_speech [adjective, adverb, noun, verb] kept unchanged on all three (redundant with the lesson tag now but harmless). The off-theme course-scope pull this pack''s original note flagged is resolved.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -22,6 +22,7 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
+    - prs_en_a2_unit30_words
     - prs_en_a2_unit30_lesson02_words
     - prs_en_a2_unit30_lesson03_words
     - prs_en_a2_unit30_lesson04_words
@@ -40,6 +41,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -61,6 +64,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -84,6 +89,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -105,6 +112,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -126,6 +135,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -149,6 +160,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -170,6 +183,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -191,6 +206,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -214,6 +231,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -235,6 +254,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -256,6 +277,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -279,6 +302,8 @@ templates:
       - adjective
       - noun
       - verb
+      agreement_tags:
+        semantic: prs_en_a2_unit30_words
   answer_derivation:
     kind: slot_text
     slot: item
