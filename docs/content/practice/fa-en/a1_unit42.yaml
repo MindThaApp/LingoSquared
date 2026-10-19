@@ -4,90 +4,23 @@ source_language: fa
 target_language: en
 unit_content_key: en.a1.unit42.personality
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 13, final unit of the 30-42 batch, see unit30''s pack notes for
-    the full batch rationale).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-19 (fa-en practice pass, fresh context; 5 fixes). (1) match.003/lesson04 choose.001/volume_match.007: also-correct-distractor -- calm=آرام and relaxed=آرام (احساس) both in the pool; the wide preset now unions lesson01+lesson04 word tags (drops relaxed/comfortable, 10 adjectives remain). (2) volume_fill.001 feedback was a bare English '{item}' -> Persian. (3) volume_order.001 feedback English-only -> Persian sentence. (4) volume_match.007 text_block English meta text -> Persian. Checked: 'Daniel is very {item}' / 'My neighbor is very {item}' grammatical for all fillings; Daniel=دنیل. NATIVE FLAGS: hardworking=زحمت‌کش (usually 'laborer'; سخت‌کوش/کاری more natural); mixed است (translate.001) and colloquial -ه (translate_sentence.006) prompts in one pack. BACKFILL GLOSS FLAGS: hardworking=زحمت‌کش -> سخت‌کوش.
 
-    One semantic tag: ''personality_adjective'' (friendly/funny/ hardworking/shy/calm/talkative from lesson01, six genuine
-    personality adjectives, all gradable with "very" and all safe in "My neighbor is very {item}.").
+    Authored 2026-07-11, fa-en depth-audit lane (unit 13, final unit of the 30-42 batch, see unit30's pack notes for the full batch rationale).
+    One semantic tag: 'personality_adjective' (friendly/funny/ hardworking/shy/calm/talkative from lesson01, six genuine personality adjectives, all gradable with "very" and all safe in "My neighbor is very {item}.").
+    Anchoring check: lesson01 introduces all six personality adjectives as real new lexemes, verified via iter_specs(). Slot candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard fresh-context review before import.
+    This closes out the 13-unit fa-en depth-audit batch (units 30-42) -- scripts/practice_manifest.txt's fa-en line extended with all 13 new pack paths, and only that line.
+    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed an inaccurate Farsi gloss in the shared backfill (scripts/backfill_lexemes_fa_en.py) -- 'friendly' was glossed "دوست‌داشتنی (حیوان اهلی)" ("lovable (pet animal)"), the wrong sense with an irrelevant pet parenthetical that leaked into this unit's personality_adjective exercises; corrected to "مهربان". All slot members taught, the generative "My neighbor is very {item}" frame grammatical for all six adjectives, answer shapes and feedback sound. compile_content.py practice-validate, scripts/_practice_slot_check.py, and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
 
-    Anchoring check: lesson01 introduces all six personality adjectives as real new lexemes, verified via iter_specs(). Slot
-    candidate count verified with scripts/_practice_slot_check.py and compile_content.py practice-validate. Needs the standard
-    fresh-context review before import.
+    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py found match.003 and match.003.volume_match.007 DEAD -- both matching_pairs declared 6 distinct-fill slots against the `personality_adjective` tag, but that tag's real UNIT-SCOPED pool (checkpoint scope, not the whole-direction pool the old slot check used) is only 5 (funny/hardworking/shy/calm/talkative from lesson01; "friendly" also carries this tag but is introduced by unit32, invisible to unit42's own checkpoint -- recipe DO-NOT #2). Fixed via recipe SS3.1(c)/SS8's preferred technique, but scoped NARROWLY to just the two dead matching_pairs templates: added a SEPARATE `personality_adjective_wide` preset (`&id_wide`, `language_code: en, part_of_speech: adjective`, no semantic constraint) used ONLY by match.003 and match.003.volume_match.007, leaving the shared `id001` anchor (still used by choose.001/listen.002/translate.004/order.005/translate_sentence.006 -- none of which were dead) untouched at its original `semantic: personality_adjective` constraint. This distinction matters: matching_pairs' frame (`{first} — {second}`) has no literal text, so widening its pool to every unit-scoped adjective is safe regardless of what Endless Practice draws course-wide (SS3.1(c)) -- but order.005/translate_sentence.006 render a FIXED sentence ("My neighbor is very {item}"), which SS1.1/SS6.4 require to stay grammatical for every COURSE-scoped (whole-A1) candidate, and bare `part_of_speech: adjective` at A1 course scope would pull in the entire A1 curriculum's adjectives (color/price/size words like "expensive" that are NOT grammatical as "My neighbor is very expensive") -- an early draft of this fix broadened `id001` itself and would have introduced exactly that defect; caught before finalizing and reverted to the two-preset design above. Verified via iter_specs() that this unit's own lesson02-04 additionally introduce 7 more untagged adjectives (comfortable/relaxed lesson03; creative/upset/ outgoing/organized/patient lesson04) that this backfill module never gave a semantic tag -- adding a tag would be a backfill edit, out of PACK-ONLY scope, so the wide, matching_pairs-only preset is the correct lever. Unit-scoped POS-only pool for `id_wide` is 12 distinct adjectives (well over the 6-pair floor), safe here specifically because this unit IS a personality-description unit (lesson02 "talking_about_someones_character", lesson03 "dialogue_what_is_daniel_like", lesson04 "three_friends_three_personalities") and matching_pairs never renders a sentence, only a token + its gloss. One near-duplicate-gloss pair flagged for the coordinator: "calm" (آرام) and "relaxed" (آرام (احساس)) are close but not identical Farsi glosses (the parenthetical "(احساس)" = "(feeling)" is the real backfill-authored disambiguator, not something this pack added) -- judged an acceptable discrimination (comparable to a singular/plural pair), not a true interchangeable duplicate, but worth a human second look. Also as a side benefit this repurposing gives lesson02-04's otherwise template-invisible vocabulary real target-lexeme coverage for the first time. Before: 2 DEAD (both matching_pairs). After: scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR for this pack. Re-validated with compile_content.py practice-validate (0 errors) after the change. review.status left at "reviewed" from the prior pass since this is a scoped slot-constraint fix on top of already-reviewed content, not a fresh unreviewed author -- the coordinator should still confirm the near-duplicate calm/relaxed gloss call above.
 
-    This closes out the 13-unit fa-en depth-audit batch (units 30-42) -- scripts/practice_manifest.txt''s fa-en line extended
-    with all 13 new pack paths, and only that line.
+    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3): added lesson04.choose.001 (3rd recognition, over the same id_wide bare-POS adjective pool the matching templates use -- 12 unit tokens / 12 distinct glosses, differs from choose.001's personality_adjective pool so not a duplicate) and lesson03.translate.001 (3rd production: gloss-rendered sentence translation over personality_adjective, prompt varies with the answer; the full course pool incl. "friendly"/unit32 is grammatical in both "دنیل خیلی {item} است." and "Daniel is very {item}"; "است" chosen over the colloquial clitic to avoid the "بامزهه" orthography jank in .006). POS-ONLY-MATCHING dispatch on match.003 + volume_match.007 resolved as HONESTLY-UNFIXABLE: the union of every unit-native semantic tag (personality_adjective + personality_adj + the shy singleton) covers only 5 unit-scoped tokens, under the 6-slot matching floor -- replacing id_wide with that union would kill both templates at checkpoint scope (worse than the off-theme course-scope pairs it would fix). Left POS-only per the wave rubric; the coordinator-level fix is a backfill tag on lesson02-04's 7 untagged personality adjectives (comfortable/relaxed/creative/upset/outgoing/organized/patient), which would let both matching templates and a future union constraint clear the floor on-theme.
 
-    Fresh-context review 2026-07-11 (zero access to authoring reasoning): found and fixed an inaccurate Farsi gloss in the
-    shared backfill (scripts/backfill_lexemes_fa_en.py) -- ''friendly'' was glossed "دوست‌داشتنی (حیوان اهلی)" ("lovable (pet
-    animal)"), the wrong sense with an irrelevant pet parenthetical that leaked into this unit''s personality_adjective exercises;
-    corrected to "مهربان". All slot members taught, the generative "My neighbor is very {item}" frame grammatical for all
-    six adjectives, answer shapes and feedback sound. compile_content.py practice-validate, scripts/_practice_slot_check.py,
-    and backfill_lexemes_fa_en.py --dry-run all clean. Upgraded to reviewed.
-
-
-    Unit-scope reauth (2026-07-24, PACK-ONLY, per docs/content/PRACTICE_PACK_RECIPE.md): scripts/_practice_unit_scope_check.py
-    found match.003 and match.003.volume_match.007 DEAD -- both matching_pairs declared 6 distinct-fill slots against the
-    `personality_adjective` tag, but that tag''s real UNIT-SCOPED pool (checkpoint scope, not the whole-direction pool the
-    old slot check used) is only 5 (funny/hardworking/shy/calm/talkative from lesson01; "friendly" also carries this tag
-    but is introduced by unit32, invisible to unit42''s own checkpoint -- recipe DO-NOT #2). Fixed via recipe SS3.1(c)/SS8''s
-    preferred technique, but scoped NARROWLY to just the two dead matching_pairs templates: added a SEPARATE
-    `personality_adjective_wide` preset (`&id_wide`, `language_code: en, part_of_speech: adjective`, no semantic
-    constraint) used ONLY by match.003 and match.003.volume_match.007, leaving the shared `id001` anchor (still used by
-    choose.001/listen.002/translate.004/order.005/translate_sentence.006 -- none of which were dead) untouched at its
-    original `semantic: personality_adjective` constraint. This distinction matters: matching_pairs'' frame
-    (`{first} — {second}`) has no literal text, so widening its pool to every unit-scoped adjective is safe regardless
-    of what Endless Practice draws course-wide (SS3.1(c)) -- but order.005/translate_sentence.006 render a FIXED
-    sentence ("My neighbor is very {item}"), which SS1.1/SS6.4 require to stay grammatical for every COURSE-scoped
-    (whole-A1) candidate, and bare `part_of_speech: adjective` at A1 course scope would pull in the entire A1
-    curriculum''s adjectives (color/price/size words like "expensive" that are NOT grammatical as "My neighbor is very
-    expensive") -- an early draft of this fix broadened `id001` itself and would have introduced exactly that defect;
-    caught before finalizing and reverted to the two-preset design above. Verified via iter_specs() that this unit''s
-    own lesson02-04 additionally introduce 7 more untagged adjectives (comfortable/relaxed lesson03; creative/upset/
-    outgoing/organized/patient lesson04) that this backfill module never gave a semantic tag -- adding a tag would be
-    a backfill edit, out of PACK-ONLY scope, so the wide, matching_pairs-only preset is the correct lever. Unit-scoped
-    POS-only pool for `id_wide` is 12 distinct adjectives (well over the 6-pair floor), safe here specifically because
-    this unit IS a personality-description unit (lesson02 "talking_about_someones_character", lesson03
-    "dialogue_what_is_daniel_like", lesson04 "three_friends_three_personalities") and matching_pairs never renders a
-    sentence, only a token + its gloss. One near-duplicate-gloss pair flagged for the coordinator:
-    "calm" (آرام) and "relaxed" (آرام (احساس)) are close but not identical Farsi glosses (the parenthetical "(احساس)"
-    = "(feeling)" is the real backfill-authored disambiguator, not something this pack added) -- judged an acceptable
-    discrimination (comparable to a singular/plural pair), not a true interchangeable duplicate, but worth a human
-    second look. Also as a side benefit this repurposing gives lesson02-04''s otherwise template-invisible vocabulary
-    real target-lexeme coverage for the first time. Before: 2 DEAD (both matching_pairs). After:
-    scripts/_practice_unit_scope_check.py reports 0 DEAD, 0 FLOOR for this pack. Re-validated with
-    compile_content.py practice-validate (0 errors) after the change. review.status left at "reviewed" from the prior
-    pass since this is a scoped slot-constraint fix on top of already-reviewed content, not a fresh unreviewed author --
-    the coordinator should still confirm the near-duplicate calm/relaxed gloss call above.
-
-
-    Polish wave 2 (2026-07-25, tier-thinness + POS-only matching audit, PRACTICE_PACK_RECIPE.md SS8/SS6.3): added
-    lesson04.choose.001 (3rd recognition, over the same id_wide bare-POS adjective pool the matching templates use --
-    12 unit tokens / 12 distinct glosses, differs from choose.001''s personality_adjective pool so not a duplicate)
-    and lesson03.translate.001 (3rd production: gloss-rendered sentence translation over personality_adjective,
-    prompt varies with the answer; the full course pool incl. "friendly"/unit32 is grammatical in both "دنیل خیلی
-    {item} است." and "Daniel is very {item}"; "است" chosen over the colloquial clitic to avoid the "بامزهه"
-    orthography jank in .006). POS-ONLY-MATCHING dispatch on match.003 + volume_match.007 resolved as
-    HONESTLY-UNFIXABLE: the union of every unit-native semantic tag (personality_adjective + personality_adj +
-    the shy singleton) covers only 5 unit-scoped tokens, under the 6-slot matching floor -- replacing id_wide
-    with that union would kill both templates at checkpoint scope (worse than the off-theme course-scope pairs
-    it would fix). Left POS-only per the wave rubric; the coordinator-level fix is a backfill tag on lesson02-04''s
-    7 untagged personality adjectives (comfortable/relaxed/creative/upset/outgoing/organized/patient), which would
-    let both matching templates and a future union constraint clear the floor on-theme.
-
-
-    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2
-    "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit42_words` tag,
-    which (being first-introduction-only, content-POS-only, all 4 lessons) carries exactly the same 12
-    adjectives `id_wide` already drew on (calm/comfortable/creative/funny/hardworking/organized/outgoing/
-    patient/relaxed/shy/talkative/upset, verified via pool_check.py -- identical set, all distinct Farsi
-    glosses). Added `semantic: fa_en_a1_unit42_words` to the existing `id_wide` preset alongside its
-    `part_of_speech: adjective` filter -- since the new tag''s adjective members are exactly id_wide''s old
-    unit-scoped pool, the UNIT-scope pool for match.003/match.003.volume_match.007 (and lesson04.choose.001,
-    which also reads *id_wide and gets the same fix for free with no pool change) is unchanged, while the
-    COURSE-scope EXTRA drops from 244 off-theme adjectives to 0. review.status flipped reviewed -> unreviewed
-    per the wave-3 rubric since this pack was touched.'
+    Polish wave-3 2026-07-26 (PRACTICE_PACK_RECIPE.md SS3.1, generated-tag re-anchor): the wave-2 "coordinator-level fix" above is DONE -- commit 05af7ace added the generated `fa_en_a1_unit42_words` tag, which (being first-introduction-only, content-POS-only, all 4 lessons) carries exactly the same 12 adjectives `id_wide` already drew on (calm/comfortable/creative/funny/hardworking/organized/outgoing/ patient/relaxed/shy/talkative/upset, verified via pool_check.py -- identical set, all distinct Farsi glosses). Added `semantic: fa_en_a1_unit42_words` to the existing `id_wide` preset alongside its `part_of_speech: adjective` filter -- since the new tag's adjective members are exactly id_wide's old unit-scoped pool, the UNIT-scope pool for match.003/match.003.volume_match.007 (and lesson04.choose.001, which also reads *id_wide and gets the same fix for free with no pool change) is unchanged, while the COURSE-scope EXTRA drops from 244 off-theme adjectives to 0. review.status flipped reviewed -> unreviewed per the wave-3 rubric since this pack was touched.
 tag_schema:
   part_of_speech:
   - symbol
@@ -105,6 +38,8 @@ tag_schema:
     - personality_adjective
     - volume_fa_en_a1_unit42_item_01_single
     - fa_en_a1_unit42_words
+    - fa_en_a1_unit42_lesson01_words
+    - fa_en_a1_unit42_lesson04_words
 slot_presets:
   personality_adjective: &id001
     language_code: en
@@ -115,7 +50,7 @@ slot_presets:
     language_code: en
     part_of_speech: adjective
     agreement_tags:
-      semantic: fa_en_a1_unit42_words
+      semantic: [fa_en_a1_unit42_lesson01_words, fa_en_a1_unit42_lesson04_words]
 templates:
 - content_key: practice.fa-en.en.a1.unit42.lesson01.choose.001
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
@@ -297,9 +232,9 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
+    text: '{item} یعنی خجالتی.'
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit42.lesson01.translate_sentence.006.volume_order.001
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
   type: word_order
@@ -320,9 +255,9 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: My neighbor is very {item}
-    language_code: en
-    direction: ltr
+    text: My neighbor is very {item}. یعنی همسایه‌م خیلی {item}ه.
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit42.lesson01.match.003.volume_match.007
   lesson_content_key: en.a1.unit42.lesson01.personality_vocabulary
   type: matching_pairs
@@ -331,9 +266,9 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
+    - text: مجموعهٔ دوم برای مرور این واحد.
+      language_code: fa
+      direction: rtl
   slots:
     first: *id_wide
     second: *id_wide
