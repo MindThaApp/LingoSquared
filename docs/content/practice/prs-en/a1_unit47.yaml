@@ -4,25 +4,28 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit47.appointments
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: Authored 2026-07-12 as an additive Endless Practice coverage backfill for prs-en A1 unit 47. Uses the established
-    broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
-    Polish 2026-07-24 (tier-thinness + POS-only matching wave) -- expanded both matching_pairs templates from 4 to
-    6 pairs (defect 1.19 floor) and added one lesson-anchored template per tier (choose/match/translate) with
-    content-word part_of_speech pools [noun, verb, adjective] so every tier has >=3 live templates and non-lesson01
-    lessons are represented in the checkpoint lesson round-robin. matching_pairs slots left WITHOUT an
-    agreement_tags.semantic union deliberately -- backfill_lexemes_prs_en.py carries 1 semantically tagged
-    lexeme(s) for this unit, so no unit-native semantic union can cover 6 distinct tokens; adding tags to the
-    backfill scripts is out of scope for pack-only edits (recipe SS6.3 honest-thin escape).
-    RE-ANCHOR (2026-07-26, polish wave 3) -- commit 05af7ace closed the blocker above -- prs-en now carries a generated
-    unit-wide tag (prs_en_a1_unit47_words, first-introduction-only) covering 16 distinct content tokens/glosses at
-    unit scope. Added an agreement_tags.semantic value of prs_en_a1_unit47_words to every slot of match.002, volume_match.002,
-    and lesson04.match.004 (POS lists left as-is; the tag only ever lands on noun/verb/adjective/adverb/phrase, so it
-    narrows to content words on its own). lesson04's own per-lesson tag was checked and rejected -- only 5 distinct
-    tokens, below the 6-pair floor -- so match.004 stays on the unit-wide union like its siblings (legitimate per
-    recipe SS8.1 -- same pool, three different lesson_content_key anchors). Course-scope extras now 0 for all three
-    (previously every content word in the level). No exact-duplicate glosses in the 16-token pool (pool_check.py).
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 9 fixes -- bare-word pools (incl. pronoun/symbol tokens dog''s, max''s,
+    you''d, 3pm) re-tagged to per-lesson content words, matching feedback converted to Dari. NATIVE FLAGS: you''d gloss uses informal تو. BACKFILL
+    GLOSS FLAGS: you''d=تو/شما ... می‌کردی (informal تو), dog''s=از سگ, max''s=از مکس, 3pm=ساعت سه بعد از چاشت; available=دسترس؛
+    موجود; nervous=وارخطا؛ مضطرب; seems/looks share معلوم می‌شه. Prior note: Authored 2026-07-12 as an additive Endless Practice
+    coverage backfill for prs-en A1 unit 47. Uses the established broad bare-word recognition, matching_pairs, and translation
+    shapes only; no new frame-specific grammar assumptions. Polish 2026-07-24 (tier-thinness + POS-only matching wave) --
+    expanded both matching_pairs templates from 4 to 6 pairs (defect 1.19 floor) and added one lesson-anchored template per
+    tier (choose/match/translate) with content-word part_of_speech pools [noun, verb, adjective] so every tier has >=3 live
+    templates and non-lesson01 lessons are represented in the checkpoint lesson round-robin. matching_pairs slots left WITHOUT
+    an agreement_tags.semantic union deliberately -- backfill_lexemes_prs_en.py carries 1 semantically tagged lexeme(s) for
+    this unit, so no unit-native semantic union can cover 6 distinct tokens; adding tags to the backfill scripts is out of
+    scope for pack-only edits (recipe SS6.3 honest-thin escape). RE-ANCHOR (2026-07-26, polish wave 3) -- commit 05af7ace
+    closed the blocker above -- prs-en now carries a generated unit-wide tag (prs_en_a1_unit47_words, first-introduction-only)
+    covering 16 distinct content tokens/glosses at unit scope. Added an agreement_tags.semantic value of prs_en_a1_unit47_words
+    to every slot of match.002, volume_match.002, and lesson04.match.004 (POS lists left as-is; the tag only ever lands on
+    noun/verb/adjective/adverb/phrase, so it narrows to content words on its own). lesson04''s own per-lesson tag was checked
+    and rejected -- only 5 distinct tokens, below the 6-pair floor -- so match.004 stays on the unit-wide union like its siblings
+    (legitimate per recipe SS8.1 -- same pool, three different lesson_content_key anchors). Course-scope extras now 0 for
+    all three (previously every content word in the level). No exact-duplicate glosses in the 16-token pool (pool_check.py).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -36,7 +39,12 @@ tag_schema:
   - particle
   - phrase
   agreement_tags:
-    semantic: [prs_en_a1_unit47_words]
+    semantic:
+    - prs_en_a1_unit47_words
+    - prs_en_a1_unit47_lesson01_words
+    - prs_en_a1_unit47_lesson02_words
+    - prs_en_a1_unit47_lesson03_words
+    - prs_en_a1_unit47_lesson04_words
 slot_presets:
   unit_word:
     language_code: en
@@ -63,15 +71,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -90,87 +96,75 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     fifth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     sixth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -190,9 +184,9 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit47.lesson01.translate.003
   lesson_content_key: en.a1.unit47.lesson01.appointments_vocabulary
   type: translation
@@ -206,15 +200,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -237,87 +229,75 @@ templates:
     first:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     second:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     third:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     fourth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     fifth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
     sixth:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -337,9 +317,9 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit47.lesson01.choose.001.volume_listen.002
   lesson_content_key: en.a1.unit47.lesson01.appointments_vocabulary
   type: listen_select
@@ -351,15 +331,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -382,15 +360,13 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - symbol
       - noun
-      - pronoun
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -412,6 +388,12 @@ templates:
       - noun
       - verb
       - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
+        - prs_en_a1_unit47_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -433,48 +415,66 @@ templates:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
     second:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
     third:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
     fourth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
     fifth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
     sixth:
       language_code: en
       part_of_speech:
       - noun
       - verb
       - adjective
+      - adverb
       agreement_tags:
-        semantic: prs_en_a1_unit47_words
+        semantic:
+        - prs_en_a1_unit47_lesson03_words
+        - prs_en_a1_unit47_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -494,9 +494,9 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit47.lesson02.translate.003
   lesson_content_key: en.a1.unit47.lesson02.making_an_appointment
   type: translation
@@ -513,6 +513,11 @@ templates:
       - noun
       - verb
       - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - prs_en_a1_unit47_lesson01_words
+        - prs_en_a1_unit47_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
