@@ -2217,7 +2217,46 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("b1_unit01_necessity", "next"): ("adjective", "بعدی"),
     ("b1_unit01_necessity", "right"): ("adjective", "درست"),
     ("b1_unit02_abilities", "would"): ("verb", "می‌شد/می‌بود"),
-    ("b1_unit13_relative_clauses", "used"): ("verb", "عادت داشت (used to)"),
+    ("b1_unit13_relative_clauses", "used"): ("verb", "عادت داشت"),
+    # b1_unit12 (concession): strip the English "followed by" from the gloss
+    # (answer leak in translation); "change your mind" = mind is the noun
+    # sense, not "care about"; "enjoy talking" = plain gerund.
+    ("b1_unit12_concession", "followed"): ("verb", "دنبال می‌شود"),
+    ("b1_unit12_concession", "mind"): ("verb", "ذهن؛ نظر"),
+    ("b1_unit12_concession", "talking"): ("verb", "صحبت کردن"),
+    # b1_unit13 (relative clauses): "whose desk" = work desk, "just joined" =
+    # recently, "meets deadlines" = keeps to them; coworker vs colleague must
+    # not share one gloss (ambiguous translation/matching).
+    ("b1_unit13_relative_clauses", "desk"): ("noun", "میز کار"),
+    ("b1_unit13_relative_clauses", "just"): ("adverb", "تازه"),
+    ("b1_unit13_relative_clauses", "meets"): ("verb", "رعایت می‌کند"),
+    ("b1_unit13_relative_clauses", "coworker"): ("noun", "همکار (غیررسمی)"),
+    # b1_unit14 (professional communication): remove English phrases from
+    # glosses (answer leaks); "follow up" = pursue; "start ten minutes early".
+    ("b1_unit14_professional_communication", "possibly"): ("adverb", "احتمالاً؛ شاید"),
+    ("b1_unit14_professional_communication", "best"): ("adjective", "بهترین"),
+    ("b1_unit14_professional_communication", "advance"): ("noun", "پیش‌اپیش"),
+    ("b1_unit14_professional_communication", "follow"): ("verb", "پیگیری کردن"),
+    ("b1_unit14_professional_communication", "early"): ("adverb", "زود"),
+    # b1_unit15 (complaints): "I can't use it" -> plain first person, no English.
+    ("b1_unit15_complaints", "can't"): ("verb", "نمی‌توانم"),
+    # b1_unit17 (regret): "Looking back" = reflect on the past; "you fixed it
+    # in the end"; fixed must differ from true (درست).
+    ("b1_unit17_regret", "looking"): ("verb", "نگاه کردن"),
+    ("b1_unit17_regret", "back"): ("adverb", "به گذشته"),
+    ("b1_unit17_regret", "end"): ("noun", "پایان؛ آخر"),
+    ("b1_unit17_regret", "fixed"): ("verb", "رفع کرد"),
+    # b1_unit18 (future plans): "made a decision", "agreed with someone",
+    # "feels confident", "design experience".
+    ("b1_unit18_future_plans", "made"): ("verb", "ساخت؛ گرفت"),
+    ("b1_unit18_future_plans", "agreed"): ("verb", "توافق‌شده"),
+    ("b1_unit18_future_plans", "feels"): ("verb", "احساس می‌کند"),
+    ("b1_unit18_future_plans", "experience"): ("noun", "تجربه"),
+    # b1_unit19 (summarizing): strip English phrases; "meeting was moved" =
+    # rescheduled, not "I moved house".
+    ("b1_unit19_summarizing", "many"): ("adjective", "بسیار؛ زیاد"),
+    ("b1_unit19_summarizing", "left"): ("verb", "حذف کرد"),
+    ("b1_unit19_summarizing", "moved"): ("verb", "جابه‌جا شد"),
     ("b2_unit01_argumentation", "next"): ("adjective", "بعدی"),
     ("b2_unit03_hedging_emphasis", "would"): ("verb", "می‌شد/می‌بود"),
     ("b2_unit07_negotiation", "make"): ("verb", "باعث شدن"),

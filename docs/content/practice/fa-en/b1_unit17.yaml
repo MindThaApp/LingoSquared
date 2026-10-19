@@ -4,27 +4,10 @@ source_language: fa
 target_language: en
 unit_content_key: en.b1.unit17.regret
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: >-
-    Authored via scripted generation against PRACTICE_PACK_RECIPE.md. Recognition
-    (multiple_choice/listen_select) and production (translation) templates use each lessons own
-    fa_en_b1_unit17_lessonNN_words tag, restricted to content POS (noun/verb/adjective/adverb) and
-    deduped by gloss; widened to the unit-wide fa_en_b1_unit17_words tag only for lessons whose own
-    tag pool was <3 distinct glosses. fill_in_blank anchors use a lesson-tag plus single-POS
-    narrowing that yields exactly one course-wide candidate (the tag itself is unique to this
-    lesson, so unit-scope pool equals course-scope pool). matching_pairs pools the unit-wide tag,
-    anchored to the richest lesson. Capacity/coverage/course-scope numbers reported separately by
-    the authoring agent.
-
-
-    REAUTH 2026-07-24 -- dropped lesson02.fill.004 (DEAD; its part_of_speech=adjective constraint
-    against fa_en_b1_unit17_lesson02_words matched 0 lexemes -- that tag's only tagged tokens are 4
-    verbs, talked/express/describe/happen, which are not true synonyms, so neither re-anchoring the
-    POS nor an interchangeable=true escape hatch was viable without a new backfill tag, which is
-    out of scope for a pack-only fix). lesson02 keeps its 3 lesson-anchored matching_pairs
-    templates for structured-tier coverage, so no replacement template was needed to stay viable.
-    0 DEAD remaining per the unit-scope checker; 0 errors per practice-validate.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-19 (fa-en practice pass, fresh context; 6 fixes). (1-2) lesson03/04 fill_in_blank had no cue (unanswerable) -> hint slot with Persian gloss. (3) looking: wrong sense (دنبال چیزی گشتن) vs 'Looking back' -> نگاه کردن. (4) back: verb gloss on adverb -> به گذشته. (5) end: English 'in the end' in gloss -> پایان؛ آخر. (6) fixed: درست کرد clashed with true=درست -> رفع کرد. NATIVE FLAGS: back=به گذشته for 'looking back'; fixed=رفع کرد. Prior note: Authored via scripted generation against PRACTICE_PACK_RECIPE.md. Recognition (multiple_choice/listen_select) and production (translation) templates use each lessons own fa_en_b1_unit17_lessonNN_words tag, restricted to content POS (noun/verb/adjective/adverb) and deduped by gloss; widened to the unit-wide fa_en_b1_unit17_words tag only for lessons whose own tag pool was <3 distinct glosses. fill_in_blank anchors use a lesson-tag plus single-POS narrowing that yields exactly one course-wide candidate (the tag itself is unique to this lesson, so unit-scope pool equals course-scope pool). matching_pairs pools the unit-wide tag, anchored to the richest lesson. Capacity/coverage/course-scope numbers reported separately by the authoring agent. REAUTH 2026-07-24 -- dropped lesson02.fill.004 (DEAD; its part_of_speech=adjective constraint against fa_en_b1_unit17_lesson02_words matched 0 lexemes -- that tag's only tagged tokens are 4 verbs, talked/express/describe/happen, which are not true synonyms, so neither re-anchoring the POS nor an interchangeable=true escape hatch was viable without a new backfill tag, which is out of scope for a pack-only fix). lesson02 keeps its 3 lesson-anchored matching_pairs templates for structured-tier coverage, so no replacement template was needed to stay viable. 0 DEAD remaining per the unit-scope checker; 0 errors per practice-validate."
 tag_schema:
   part_of_speech:
   - symbol
@@ -271,11 +254,18 @@ templates:
   lesson_content_key: en.b1.unit17.lesson03.reading_a_reflective_message
   type: fill_in_blank
   frame:
-    text: 'Please remember this word: {item}.'
+    text: 'Type the English word for “{hint}”: {item}.'
     language_code: en
     direction: ltr
+    slot_rendering:
+      hint: english_gloss
   slots:
     item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: fa_en_b1_unit17_lesson03_words
+    hint:
       language_code: en
       part_of_speech: adverb
       agreement_tags:
@@ -365,11 +355,18 @@ templates:
   lesson_content_key: en.b1.unit17.lesson04.the_regret_dialogue
   type: fill_in_blank
   frame:
-    text: 'Please remember this word: {item}.'
+    text: 'Type the English word for “{hint}”: {item}.'
     language_code: en
     direction: ltr
+    slot_rendering:
+      hint: english_gloss
   slots:
     item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: fa_en_b1_unit17_lesson04_words
+    hint:
       language_code: en
       part_of_speech: verb
       agreement_tags:
