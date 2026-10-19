@@ -4,47 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.a2.unit35.prescription
 review:
-  status: unreviewed
-  fresh_context: 'false'
-  notes: 'Mirrors the nl-en sibling pack (docs/content/practice/nl-en/a2_unit35.yaml, same shared English
-    realization a2_unit35_prescription): 27 lexemes across 4/4 lessons. lesson01 pool = 9 nouns via part_of_speech:[noun]
-    (pharmacy/pharmacist/tablet/dose/refill/side/effects/eight/hours). lesson02 pool = 5 via [noun,verb]
-    (pick/food/are/shouldn''t/stop) -- wider than nl-en because "food" is glossed correctly here (general
-    "food" sense; nl-en excluded it for an unrelated Dutch-specific gloss). lesson03 pool = 4 via [noun,adjective]
-    (bed/tablets/tired/refills), which naturally excludes the verb "taking". lesson04 anchors via a UNION
-    of lesson02+lesson04 tags with part_of_speech:[verb] only (pick/are/shouldn''t/stop/gave), which naturally
-    excludes the nouns "course"/"name" -- same technique as the nl-en sibling.
-
-
-    GLOSS AUDIT (recipe SS0.1, read against docs/content/realizations/en/a2_unit35_prescription.yaml):
-
-    - EXCLUDED "taking" (verb, lesson03): gloss carries the "take a class" sense; the unit only uses "taking"
-    in "stop taking the tablets" (gerund of "to take medicine"). Excluded via the lesson03 [noun,adjective]
-    POS filter (same defect nl-en found for this shared token).
-
-    - EXCLUDED "course" (noun, lesson04): gloss carries the class_noun/education_noun sense; the unit
-    only uses "course" in the idiom "Of course." Excluded via the lesson04 union''s [verb]-only POS filter.
-
-    - FLAGGED, KEPT (no clean exclusion exists): "tablet" (singular, lesson01, noun) carries device_noun
-    tags and a device-sense gloss (tablet computer), but this unit teaches the pill sense ("Take one tablet
-    twice a day"). Unlike "taking"/"course" it shares its POS (noun) with every other desired lesson01
-    lexeme and there is no finer tag to isolate it (this direction''s backfill only has unit-wide + per-lesson
-    granularity, no per-token sub-tag), so excluding it would cost the whole lesson01 noun pool. Routed
-    to the backfill lane for a proper pill-sense reclassification/retag; the plural "tablets" (lesson03)
-    is correctly glossed as pills and is unaffected.
-
-    - KEPT "food" (lesson02, noun): gloss is the plain generic "food" sense, which is exactly correct
-    for "with food" -- no issue here (this is where fa/prs diverges cleanly from the nl-en sibling, which
-    had an unrelated Dutch-specific misgloss for this token).
-
-    - "once" (particle, lesson01) and "not"/"all" (particle/pronoun) are outside every content-POS slot
-    by construction, so their glosses never surface regardless of correctness.
-
-
-    14 templates, all 4 lessons in all 3 tiers (recognition 5, structured 5, production 4) -- same counts
-    as the nl-en sibling pack. word_order uses the generic "Please say {item}." frame (grammatical for
-    any part of speech, no candidate floor; neither "Please" nor "say" is ever a taught token in this
-    unit at any scope). PENDING fresh-context review before import.'
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 3 fixes -- removed lesson01.translate.005 (side=جانبی (در side effects) leaks and effects=عوارض جانبی is underdetermined vs ''side effects''; both share one tag so no lever); lesson02.translate.003 and lesson04.translate.003 re-pointed from verbs (pick/shouldn''t/gave glosses carry Latin ''pick up''/''should not''/''give'' and leak the answer) to nouns (lesson02+lesson04 tags: food/course/name; lesson03+lesson04 tags: bed/tablets/refills/course/name). NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: pick=گرفتن (در pick up: پس گرفتن), shouldn''t=نباید (مخفف should not), gave=داد (زمان گذشتهٔ give), side=جانبی (در side effects) -> plain Dari gloss without Latin (all still appear in MC/word_order pools and as odd MC options); taking=گرفتن (کورس) is a wrong sense (unit teaches taking medicine) but is outside all pools; dose gloss is a long explanation; side/effects overlap as near-synonym glosses in lesson01 MC/matching. Prior note: Mirrors the nl-en sibling pack (docs/content/practice/nl-en/a2_unit35.yaml, same shared English realization a2_unit35_prescription): 27 lexemes across 4/4 lessons. lesson01 pool = 9 nouns via part_of_speech:[noun] (pharmacy/pharmacist/tablet/dose/refill/side/effects/eight/hours). lesson02 pool = 5 via [noun,verb] (pick/food/are/shouldn''t/stop) -- wider than nl-en because "food" is glossed correctly here (general "food" sense; nl-en excluded it for an unrelated Dutch-specific gloss). lesson03 pool = 4 via [noun,adjective] (bed/tablets/tired/refills), which naturally excludes the verb "taking". lesson04 anchors via a UNION of lesson02+lesson04 tags with part_of_speech:[verb] only (pick/are/shouldn''t/stop/gave), which naturally excludes the nouns "course"/"name" -- same technique as the nl-en sibling. GLOSS AUDIT (recipe SS0.1, read against docs/content/realizations/en/a2_unit35_prescription.yaml): - EXCLUDED "taking" (verb, lesson03): gloss carries the "take a class" sense; the unit only uses "taking" in "stop taking the tablets" (gerund of "to take medicine"). Excluded via the lesson03 [noun,adjective] POS filter (same defect nl-en found for this shared token). - EXCLUDED "course" (noun, lesson04): gloss carries the class_noun/education_noun sense; the unit only uses "course" in the idiom "Of course." Excluded via the lesson04 union''s [verb]-only POS filter. - FLAGGED, KEPT (no clean exclusion exists): "tablet" (singular, lesson01, noun) carries device_noun tags and a device-sense gloss (tablet computer), but this unit teaches the pill sense ("Take one tablet twice a day"). Unlike "taking"/"course" it shares its POS (noun) with every other desired lesson01 lexeme and there is no finer tag to isolate it (this direction''s backfill only has unit-wide + per-lesson granularity, no per-token sub-tag), so excluding it would cost the whole lesson01 noun pool. Routed to the backfill lane for a proper pill-sense reclassification/retag; the plural "tablets" (lesson03) is correctly glossed as pills and is unaffected. - KEPT "food" (lesson02, noun): gloss is the plain generic "food" sense, which is exactly correct for "with food" -- no issue here (this is where fa/prs diverges cleanly from the nl-en sibling, which had an unrelated Dutch-specific misgloss for this token). - "once" (particle, lesson01) and "not"/"all" (particle/pronoun) are outside every content-POS slot by construction, so their glosses never surface regardless of correctness. 14 templates, all 4 lessons in all 3 tiers (recognition 5, structured 5, production 4) -- same counts as the nl-en sibling pack. word_order uses the generic "Please say {item}." frame (grammatical for any part of speech, no candidate floor; neither "Please" nor "say" is ever a taught token in this unit at any scope). PENDING fresh-context review before import.'
 tag_schema:
   part_of_speech:
   - symbol
@@ -185,29 +148,6 @@ templates:
     text: '{item} همی کلمه‌ای است که خواسته شده بود.'
     language_code: prs
     direction: rtl
-- content_key: practice.prs-en.en.a2.unit35.lesson01.translate.005
-  lesson_content_key: en.a2.unit35.lesson01.pharmacy_vocabulary
-  type: translation
-  frame:
-    text: '{item}'
-    language_code: prs
-    direction: rtl
-    slot_rendering:
-      item: english_gloss
-  slots:
-    item:
-      language_code: en
-      part_of_speech:
-      - noun
-      agreement_tags:
-        semantic: prs_en_a2_unit35_lesson01_words
-  answer_derivation:
-    kind: slot_text
-    slot: item
-  feedback_frame:
-    text: معادل انگلیسی همی کلمه {item} است.
-    language_code: prs
-    direction: rtl
 - content_key: practice.prs-en.en.a2.unit35.lesson02.choose.001
   lesson_content_key: en.a2.unit35.lesson02.asking_at_the_counter
   type: multiple_choice
@@ -269,9 +209,10 @@ templates:
       language_code: en
       part_of_speech:
       - noun
-      - verb
       agreement_tags:
-        semantic: prs_en_a2_unit35_lesson02_words
+        semantic:
+        - prs_en_a2_unit35_lesson02_words
+        - prs_en_a2_unit35_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -412,10 +353,10 @@ templates:
     item:
       language_code: en
       part_of_speech:
-      - verb
+      - noun
       agreement_tags:
         semantic:
-        - prs_en_a2_unit35_lesson02_words
+        - prs_en_a2_unit35_lesson03_words
         - prs_en_a2_unit35_lesson04_words
   answer_derivation:
     kind: slot_text
