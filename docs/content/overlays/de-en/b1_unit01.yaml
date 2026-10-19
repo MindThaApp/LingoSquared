@@ -5,14 +5,14 @@ source_language: "de"
 target_language: "en"
 status: "complete_draft"
 generation_provenance: {method: "ai_generated", authoring_system: "codex", human_reviewed: false}
-review: {status: "unreviewed", required_next_reviewer: "codex", notes: "First de-en B1 overlay, authored against docs/content/realizations/en/b1_unit01_necessity.yaml. Existing de-en lane register followed: formal Sie in learner-facing instructions, informal du in character/example glosses where appropriate. nl-en B1 was consulted for structure only; all German text authored independently from the English realization. Dialogue/audio distractors checked against the tested speaker's unit audio lines."}
+review: {status: "reviewed", required_next_reviewer: null, notes: "First de-en B1 overlay, authored against docs/content/realizations/en/b1_unit01_necessity.yaml. Existing de-en lane register followed: formal Sie in learner-facing instructions, informal du in character/example glosses where appropriate. nl-en B1 was consulted for structure only; all German text authored independently from the English realization. Dialogue/audio distractors checked against the tested speaker's unit audio lines. Review 2026-10-19: 7 fixes - lesson01 matching_pairs re-oriented to the 2026-08-04 word->definition shape with a German pairs override (validator error); lesson01 listen distractors reminder/dentist/membership were untaught until lessons 03/04, replaced with lesson01 words; unit title was unidiomatic German; must_not note now warns that must not is darf nicht, not muss nicht; grammar_past_regret title/note now also covers should have; lesson02 reply instruction contradicted the displayed prompt (diese Woche vs by Friday) and gained my-rent/By-Friday variants; lesson04 reply_as_daniel gained done-it and no-Oh-no variants. NATIVE FLAGS: reading gloss Telefon (Handy more colloquial); grammar_agreement gloss Sie müssen gehen is ambiguous between they and formal you."}
 
 course:
   title: "Englisch B1"
   description: "Englisch auf B1-Niveau lernen, für Pflichten, Möglichkeiten, hypothetische Situationen und Erzählungen im Alltag, mit ausführlichen deutschen Erklärungen."
 
 units:
-  en.b1.unit01.necessity: {title: "Dinge, die ich tun muss, aufgrund äußerer Pflicht tun muss und tun sollte"}
+  en.b1.unit01.necessity: {title: "Dinge, die ich tun muss oder tun sollte"}
 
 lessons:
   en.b1.unit01.lesson01.necessity_vocabulary: {title: "Must, have to und should"}
@@ -35,9 +35,9 @@ teaching:
   en.b1.unit01.lesson02.teach.grammar_agreement: {title: "Formen von 'have to'", gloss: "Ich muss gehen. Sie muss gehen. Wir müssen gehen. Sie müssen gehen.", note: "Nur bei *he/she/it* wird *have* zu *has*; bei allen anderen Personen bleibt es *have to*."}
 
   en.b1.unit01.lesson03.teach.should_have_called: {title: "Reue über die Vergangenheit ausdrücken", gloss: "Ich hätte früher anrufen sollen.", note: "*should have* + Partizip drückt Reue über etwas aus, das man nicht getan hat.", example_gloss: "Ich hätte früher anrufen sollen."}
-  en.b1.unit01.lesson03.teach.must_not: {title: "must not", gloss: "darf nicht", note: "*must not* bedeutet ein Verbot -- etwas ist absolut nicht erlaubt.", example_gloss: "Du darfst es nicht wieder vergessen."}
+  en.b1.unit01.lesson03.teach.must_not: {title: "must not", gloss: "darf nicht", note: "*must not* bedeutet ein Verbot -- etwas ist absolut nicht erlaubt. Achtung: *must not* heißt nicht 'muss nicht', sondern 'darf nicht'; 'muss nicht' ist *don't have to*.", example_gloss: "Du darfst es nicht wieder vergessen."}
   en.b1.unit01.lesson03.teach.dont_have_to: {title: "don't have to", gloss: "muss nicht / braucht nicht", note: "*don't have to* bedeutet, dass etwas nicht verpflichtend ist; das ist anders als *must not* (Verbot).", example_gloss: "Du musst nicht kommen, wenn du beschäftigt bist."}
-  en.b1.unit01.lesson03.teach.grammar_past_regret: {title: "Verbot gegen keine Pflicht", gloss: "Ich hätte anrufen sollen. Ich habe es vergessen. Du darfst es nicht wieder vergessen. Du musst nicht kommen.", note: "*must not* ist ein Verbot; *don't have to* bedeutet keine Pflicht, aber es ist erlaubt."}
+  en.b1.unit01.lesson03.teach.grammar_past_regret: {title: "Reue, Verbot und keine Pflicht", gloss: "Ich hätte anrufen sollen. Ich habe es vergessen. Du darfst es nicht wieder vergessen. Du musst nicht kommen.", note: "*should have* + Partizip drückt Reue über die Vergangenheit aus. *must not* ist ein Verbot; *don't have to* bedeutet keine Pflicht, aber es ist erlaubt."}
   en.b1.unit01.lesson03.teach.reading_passage: {title: "Lesetext: das Fitnessstudio", gloss: "Gestern vergaß Daniel, seine Mitgliedschaft im Fitnessstudio zu verlängern. Er hätte eine Erinnerung auf seinem Telefon einstellen sollen. Jetzt muss er eine Verspätungsgebühr bezahlen. Er darf es nächsten Monat nicht wieder vergessen.", note: "Ein kurzer Lesetext über Daniels Fehler und die Folgen davon."}
 
   en.b1.unit01.lesson04.teach.q_renew_gym: {title: "Leila fragt nach der Mitgliedschaft", gloss: "Leila sagt: Daniel, hast du deine Mitgliedschaft im Fitnessstudio verlängert?", note: "Eine direkte Frage, um zu prüfen, ob etwas schon erledigt wurde."}
@@ -51,7 +51,7 @@ exercises:
   en.b1.unit01.lesson01.exercise01.listen_word:
     instruction: "Hören Sie zu und wählen Sie das genannte Wort."
     correct_option: "appointment"
-    distractors: ["reminder", "dentist", "membership"]
+    distractors: ["task", "rent", "must"]
     accepted_answers: [{value: "appointment", status: "correct"}]
     feedback: "*appointment* bedeutet Termin."
   en.b1.unit01.lesson01.exercise02.choose_must_do_word:
@@ -67,15 +67,22 @@ exercises:
     accepted_answers: [{value: "appointment", status: "correct"}]
     feedback: "*appointment* bedeutet Termin."
   en.b1.unit01.lesson01.exercise04.match_necessity_words:
-    instruction: "Verbinden Sie jede Bedeutung mit dem richtigen englischen Wort."
+    instruction: "Verbinden Sie jedes englische Wort bzw. jeden Ausdruck mit der passenden deutschen Bedeutung."
+    pairs:
+      - {left: "must", right: "müssen (starke, persönliche Pflicht)"}
+      - {left: "have to", right: "müssen (Pflicht von außen)"}
+      - {left: "should", right: "sollte (Empfehlung)"}
+      - {left: "task", right: "Aufgabe"}
+      - {left: "rent", right: "Miete"}
+      - {left: "appointment", right: "Termin"}
     accepted_answers:
       - value:
-          - {left: "a strong personal obligation", right: "must"}
-          - {left: "an obligation, often from outside", right: "have to"}
-          - {left: "a recommendation, not a strict obligation", right: "should"}
-          - {left: "a job or thing you need to do", right: "task"}
-          - {left: "money you pay to live somewhere", right: "rent"}
-          - {left: "a fixed time to meet someone", right: "appointment"}
+          - {left: "must", right: "müssen (starke, persönliche Pflicht)"}
+          - {left: "have to", right: "müssen (Pflicht von außen)"}
+          - {left: "should", right: "sollte (Empfehlung)"}
+          - {left: "task", right: "Aufgabe"}
+          - {left: "rent", right: "Miete"}
+          - {left: "appointment", right: "Termin"}
         status: "correct"
     feedback: "*must*=starke Pflicht, *have to*=Pflicht von außen, *should*=Empfehlung, *task*=Aufgabe, *rent*=Miete, *appointment*=Termin."
   en.b1.unit01.lesson01.exercise05.write_rent:
@@ -102,10 +109,12 @@ exercises:
     accepted_answers: [{value: ["I", "have", "to", "pay", "the", "rent", "by", "Friday"], status: "correct"}]
     feedback: "Die richtige Reihenfolge ist *I have to pay the rent by Friday*."
   en.b1.unit01.lesson02.exercise04.reply_what_must_you_do:
-    instruction: "Ein Freund fragt, was Sie diese Woche tun müssen. Sagen Sie mit *have to*, dass Sie bis Freitag die Miete bezahlen müssen."
+    instruction: "Ein Freund fragt, was Sie bis Freitag bezahlen müssen. Antworten Sie in einem ganzen Satz mit *have to*: Sie müssen bis Freitag die Miete bezahlen."
     accepted_answers:
       - {value: "I have to pay the rent by Friday.", status: "correct"}
       - {value: "I have to pay the rent by Friday", status: "correct"}
+      - {value: "I have to pay my rent by Friday.", status: "correct"}
+      - {value: "By Friday, I have to pay the rent.", status: "correct"}
     feedback: "*I have to pay the rent by Friday* bedeutet, dass Sie bis Freitag die Miete bezahlen müssen."
   en.b1.unit01.lesson02.exercise05.write_she_has_to:
     instruction: "Schreiben Sie mit *has to*, dass sie einen Termin machen muss."
@@ -173,6 +182,14 @@ exercises:
       - {value: "Oh no, I forgot! I should have done that last week.", status: "correct"}
       - {value: "Oh no, I forgot! I should've done that last week.", status: "correct"}
       - {value: "Oh no I forgot I should have done that last week", status: "correct"}
+      - {value: "Oh no, I forgot! I should have done it last week.", status: "correct"}
+      - {value: "Oh no, I forgot! I should've done it last week.", status: "correct"}
+      - {value: "No, I forgot. I should have done that last week.", status: "correct"}
+      - {value: "No, I forgot. I should've done that last week.", status: "correct"}
+      - {value: "I forgot! I should have done that last week.", status: "correct"}
+      - {value: "I forgot! I should've done that last week.", status: "correct"}
+      - {value: "I forgot! I should have done it last week.", status: "correct"}
+      - {value: "I forgot! I should've done it last week.", status: "correct"}
     feedback: "*Oh no, I forgot! I should have done that last week* ist die akzeptierte Antwort; *should've* ist ebenfalls korrekt."
   en.b1.unit01.lesson04.exercise06.speak_necessity_dialogue:
     instruction: "Leila sagt: Du musst sie heute anrufen, sonst zahlst du eine Verspätungsgebühr. Antworten Sie laut als Daniel: Sagen Sie, dass sie recht hat, dass Sie mit *have to* auch bis Freitag die Miete bezahlen müssen und dass Sie auch beim Zahnarzt anrufen sollten."
