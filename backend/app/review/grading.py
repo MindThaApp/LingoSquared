@@ -353,7 +353,7 @@ def spoken_answer_result(
         return "correct"
     if normalized_response == normalized_correct:
         return "correct"
-    if english_contraction_equivalent(
+    if orthography_strict is not True and english_contraction_equivalent(
         normalized_response, normalized_correct, language_code
     ):
         return "correct"
@@ -394,6 +394,11 @@ def _uses_spoken_tolerance(input_mode: str, exercise_type: str) -> bool:
 #   optional in everyday writing (ट्रैफ़िक = ट्रैफिक), and chandrabindu ँ is
 #   routinely written as anusvara ं (महँगा = महंगा). ड़/ढ़ keep their nukta:
 #   they are native retroflex flaps, distinct letters from ड/ढ.
+#   DELIBERATE DECISION (review 2026-10-20): this also merges real minimal
+#   pairs (खाना/ख़ाना, सजा/सज़ा, हंस/हँस), on orthography_strict and
+#   checkpoint paths too, because native writers drop the nukta and write
+#   anusvara freely. Consequence: no hi exercise can test nukta or
+#   chandrabindu outside dictation (dictation stays byte-strict).
 # - Arabic: the conjunction و is written joined to the next word (وقهوة);
 #   a learner typing it detached (و قهوة) wrote the same words. The general
 #   Arabic-script joining forgiveness already covers this on non-strict
@@ -495,15 +500,28 @@ def optional_subject_pronoun_only_difference(
 
 
 # ---------------------------------------------------------------------------
-# English contractions (2026-10-19)
+# English contractions (2026-10-19, tightened after review 2026-10-20)
 #
 # "I'm" and "I am", "don't" and "do not", "can't"/"cannot"/"can not" are the
 # same answer. Content reviews kept hand-adding contracted variants to
 # individual exercises, and generated practice items have no variant list at
-# all, so the equivalence lives here. Both sides are expanded; ambiguous
-# forms expand to every reading ('s -> is/has after a pronoun or wh-word,
-# 'd -> would/had), and the answers match when any expansions coincide.
-# 's after any other word is left alone: it is usually a possessive.
+# all, so the equivalence lives here. Both sides are expanded and must match.
+#
+# 's and 'd are ambiguous, so their reading is chosen from the NEXT word
+# rather than accepting every reading (which let "He is eaten" pass for
+# "He's eaten" and "If I would known" for "If I'd known"):
+#   's + been / a never-passive participle (eaten, got, come...) -> has
+#   's + another participle or -ed word (done, known, made, closed...)
+#        -> is OR has (passive/adjective and perfect are both grammatical)
+#   's + anything else -> is
+#   'd + been / any participle / "better" -> had; 'd + a bare verb that
+#        equals its participle (read, put, come...) -> would OR had;
+#        otherwise -> would
+# 's is only expanded after a pronoun or wh-word; after any other word
+# (including everyone/someone/nobody) it is usually a possessive.
+#
+# Not applied when orthography_strict is True (author-strict exercises and
+# checkpoints), so such an exercise can require the contracted form.
 # English answers only (language_code == "en"), never dictation.
 # ---------------------------------------------------------------------------
 _EN_IRREGULAR_CONTRACTIONS: dict[str, tuple[str, ...]] = {
@@ -519,29 +537,71 @@ _EN_SUFFIX_CONTRACTIONS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("'re", ("are",)),
     ("'ve", ("have",)),
     ("'ll", ("will",)),
-    ("'d", ("would", "had")),
 )
 _EN_S_CONTRACTION_STEMS = frozenset(
     {
         "he", "she", "it", "that", "this", "there", "here", "what", "where",
         "who", "how", "when", "why", "everything", "nothing", "something",
-        "everyone", "someone", "nobody", "everybody", "somebody",
     }
+)
+# Participles after which 's can only be "has" (intransitive or never
+# passive in everyday English): "he's been", "she's eaten", "it's got".
+_EN_HAS_ONLY_PARTICIPLES = frozenset(
+    {
+        "been", "had", "got", "gotten", "eaten", "fallen", "slept", "sat",
+        "stood", "swum", "risen", "begun", "grown", "come", "become", "run",
+    }
+)
+# Participles that also read as passives/adjectives after "is": "it's done",
+# "it's known", "it's made of wood". 's accepts both is and has here.
+_EN_AMBIGUOUS_PARTICIPLES = frozenset(
+    {
+        "known", "seen", "taken", "given", "written", "spoken", "driven",
+        "ridden", "forgotten", "sung", "flown", "thrown", "worn", "chosen",
+        "woken", "drunk", "bought", "brought", "thought", "taught", "caught",
+        "told", "said", "sent", "left", "met", "kept", "felt", "heard", "won",
+        "found", "made", "understood", "spent", "done", "gone", "broken",
+        "lost", "stolen", "shown", "hidden", "sold", "paid", "built",
+    }
+)
+# Bare verbs identical to their participle: "I'd read it" is would OR had.
+_EN_BARE_EQUALS_PARTICIPLE = frozenset(
+    {"come", "become", "run", "read", "put", "let", "hit", "cut", "shut", "set", "hurt", "cost", "quit"}
 )
 _MAX_CONTRACTION_EXPANSIONS = 32
 
 
-def _english_token_expansions(token: str) -> tuple[str, ...]:
+def _is_participle_like(word: str) -> bool:
+    return (
+        word in _EN_HAS_ONLY_PARTICIPLES
+        or word in _EN_AMBIGUOUS_PARTICIPLES
+        or (len(word) > 3 and word.endswith("ed") and not word.endswith("eed"))
+    )
+
+
+def _english_token_expansions(token: str, next_token: str = "") -> tuple[str, ...]:
     lower = token.lower()
+    following = next_token.lower().strip(".,;:!?")
     if lower in _EN_IRREGULAR_CONTRACTIONS:
         return _EN_IRREGULAR_CONTRACTIONS[lower]
     for suffix, words in _EN_SUFFIX_CONTRACTIONS:
         if lower.endswith(suffix) and len(lower) > len(suffix):
             stem = token[: -len(suffix)]
             return tuple(f"{stem} {word}" for word in words)
+    if lower.endswith("'d") and len(lower) > 2:
+        stem = token[:-2]
+        if following in _EN_BARE_EQUALS_PARTICIPLE:
+            return (f"{stem} would", f"{stem} had")
+        if following == "better" or _is_participle_like(following):
+            return (f"{stem} had",)
+        return (f"{stem} would",)
     if lower.endswith("'s") and lower[:-2] in _EN_S_CONTRACTION_STEMS:
         stem = token[:-2]
-        return (f"{stem} is", f"{stem} has")
+        if following in _EN_HAS_ONLY_PARTICIPLES:
+            return (f"{stem} has",)
+        if _is_participle_like(following):
+            return (f"{stem} is", f"{stem} has")
+        return (f"{stem} is",)
     return (token,)
 
 
@@ -549,8 +609,10 @@ def english_contraction_forms(value: str) -> set[str]:
     """Every expansion of the English contractions in an already-normalized
     answer (capped; beyond the cap only the first reading of each is kept)."""
     forms = [""]
-    for token in value.split():
-        options = _english_token_expansions(token)
+    tokens = value.split()
+    for index, token in enumerate(tokens):
+        following = tokens[index + 1] if index + 1 < len(tokens) else ""
+        options = _english_token_expansions(token, following)
         if len(forms) * len(options) > _MAX_CONTRACTION_EXPANSIONS:
             options = options[:1]
         forms = [f"{form} {option}".strip() for form in forms for option in options]
@@ -568,13 +630,20 @@ def english_contraction_equivalent(
 
 
 def _english_primary_expansion(value: str) -> str:
-    return " ".join(_english_token_expansions(token)[0] for token in value.split())
+    tokens = value.split()
+    return " ".join(
+        _english_token_expansions(
+            token, tokens[index + 1] if index + 1 < len(tokens) else ""
+        )[0]
+        for index, token in enumerate(tokens)
+    )
 
 
 def _english_contraction_distance(a: str, b: str) -> int:
     # Typo tolerance compares only the primary reading of each contraction
-    # ('s -> is, 'd -> would): letting the secondary readings in as well
-    # would make "it's" an "almost" for "it was" via "it has".
+    # ('s -> is unless the next word forces has): letting the secondary
+    # readings in as well would make "it's" an "almost" for "it was" via
+    # "it has".
     return damerau_levenshtein(
         _english_primary_expansion(a), _english_primary_expansion(b)
     )
@@ -605,8 +674,20 @@ NEGATION_INTERJECTION_WORDS: dict[str, frozenset[str]] = {
     "pl": frozenset({"nie"}),
     "ro": frozenset({"nu"}),
 }
+# "No, gracias" and "No gracias" both mean "no thanks": a thank-you can
+# never be the negated verb, so the pause rule does not apply to it. Keeps
+# authors from having to add a comma-less variant to every such answer.
+NEGATION_RULE_EXEMPT_NEXT_WORDS = frozenset(
+    {
+        "gracias",  # es
+        "dziękuję", "dziekuje", "dzięki", "dzieki",  # pl
+        "mulțumesc", "mulţumesc", "multumesc", "mersi",  # ro
+    }
+)
+# Separator: whitespace or a pause mark. The ASCII hyphen is deliberately
+# absent: Romanian Nu-mi / Nu-i / Nu-l are clitic joins, not pauses.
 _LEADING_WORD_RE = re.compile(
-    r"^[\W_]*?(?P<word>\w+)(?P<sep>[\s,;:.!…—–-]+)(?P<rest>\w+)", re.UNICODE
+    r"^[\W_]*?(?P<word>\w+)(?P<sep>[\s,;:.!…—–]+)(?P<rest>\w+)", re.UNICODE
 )
 
 
@@ -620,7 +701,10 @@ def _leading_negation_pause(value: str, language_code: str | None) -> bool | Non
     match = _LEADING_WORD_RE.match(text)
     if not match or match.group("word") not in words:
         return None
-    if match.group("rest") in words:
+    if (
+        match.group("rest") in words
+        or match.group("rest") in NEGATION_RULE_EXEMPT_NEXT_WORDS
+    ):
         return None
     return bool(match.group("sep").strip())
 
@@ -1122,7 +1206,7 @@ def grade_answer(
     if exercise_type not in FREE_TEXT_EXERCISE_TYPES:
         return "incorrect"
 
-    if english_contraction_equivalent(
+    if orthography_strict is not True and english_contraction_equivalent(
         normalized_response, normalized_correct, language_code
     ):
         return "correct"
@@ -1155,6 +1239,7 @@ def grade_answer(
 
     if (
         language_code == "en"
+        and orthography_strict is not True
         and ("'" in normalized_response + normalized_correct
              or "cannot" in normalized_response + normalized_correct)
         and _english_contraction_distance(normalized_response, normalized_correct) == 1
