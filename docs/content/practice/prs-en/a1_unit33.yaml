@@ -4,124 +4,33 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit33.transportation
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: >-
-    Authored 2026-07-11 by the prs-en depth-extension worker, same pass
-    as unit30-32. Single tag: 4-member 'transport_noun' (bus/train/car/
-    bike -- "train"/"car" already classified since unit21's
-    travel_noun/unit20's comparative-unit sentence respectively, reused
-    additively), verified all four fit "I take the {item} to work."
-    "walk" is deliberately excluded (already classified "noun" from
-    unit17's different sense, and "I take the walk to work" is not
-    idiomatic). EN_POS/en_agreement_tags added to
-    scripts/_en_target_lexeme_common.py as part of this pass. Anchoring
-    check: lesson01 introduces new lexemes, safe as an anchor. Every
-    slot's real candidate count verified with
-    scripts/_practice_slot_check.py. Needs the standard fresh-context
-    review before import.
-
-    Fresh-context review, 2026-07-11 (separate worker, zero access to
-    the authoring reasoning above): compile_content.py practice-validate
-    (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot
-    >=1 candidate; every multiple_choice/listen_select/matching_pairs
-    slot enough distinct values), and backfill_lexemes_prs_en.py
-    --dry-run all clean. Verified every tag member is a real
-    introduced_token in this unit's en realization or earlier; every
-    lesson_content_key anchor exists and introduces >=1 new lexeme;
-    word_order uses render_frame (string answer, grade() canonicalizes
-    both shapes); matching_pairs correct_response = {token: gloss}
-    across all distinct slots. Dari feedback text spot-checked as
-    genuine Afghan register (کنین/شنیدین/می‌ته/کدن, صنف/مضمون/موتر/بس/
-    بایسکل/پیشک/بی‌بی), no Iranian Farsi calques, ZWNJ correct. Noted
-    (not a defect): scripts/_en_target_lexeme_common.py now carries
-    three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers);
-    no prs-en generative frame is widened ungrammatically -- the one
-    cross-block union effect (celebration_noun gains 'cake' from a
-    sibling block) is harmless, since 'cake' is genuinely taught in en
-    unit37 and has a Dari gloss, so it is only ever a valid recognition
-    candidate. Upgraded to reviewed: genuinely clean.
-
-    UNIT-SCOPE DEAD/FLOOR FIX (2026-07-24, reauth batch, reverting to
-    unreviewed): scripts/_practice_unit_scope_check.py flagged this pack
-    with 1 DEAD + 2 below-floor, all from the same root cause: this
-    "reviewed" pass verified transport_noun's course-wide 4-member pool
-    (bus/train/car/bike) without checking UNIT scope. Confirmed via
-    iter_specs() filtered to '.a1.unit33.': only bus and bike are
-    actually NATIVE to this unit -- train/car are reused additively from
-    an earlier unit (exactly as this file's own authoring note already
-    says), so generate_checkpoint() (unit-lexeme-scoped only) sees just
-    2 candidates: choose.001/listen.002 (need >=3) were below-floor, and
-    match.003 (needed 4 distinct) was DEAD.
-    Fix: re-anchored choose.001 and listen.002 from transport_noun to a
-    bare `part_of_speech: verb` pool (no semantic tag, SS3.1(c)/SS8.1) --
-    unit33's own lessons carry 5 distinct clean verbs unit-wide
-    (drive/ride/takes/drives/worry), all with distinct glosses, well
-    above the 3-answer floor; MC/listen_select have no course-scope
-    grammaticality requirement (bare `{item}` frame, no literal text), so
-    this widening is safe. match.003 (matching_pairs) was DROPPED, not
-    widened: this unit's other candidate pools are genuinely capped
-    below the 6-pair floor without pulling in malformed lexemes --
-    confirmed via iter_specs() that unit33's `noun`/`adjective` POS pools
-    contain backfill tokenization artifacts with trailing punctuation
-    baked into the token itself ('work?', 'office.', 'daniel?', 'it?',
-    'okay,', 'difficult.' -- all glossed with the same trailing
-    punctuation, e.g. 'work?' -> 'کار؟'), which would display broken
-    text to the learner if pooled. The verb-only pool (the one genuinely
-    clean lever available) tops out at 5, one short of 6. LOGGED for the
-    coordinator: this is a backfill_lexemes_prs_en.py tokenization defect
-    (trailing sentence punctuation surviving into `token`), not a pack
-    defect, and is not fixable from this file alone -- likely affects
-    other units too. word_order (order.005, transport_noun, no floor) is
-    untouched and keeps the structured tier alive.
-    Also ADDED one new template, translate.006, anchored to lesson04
-    (en.a1.unit33.lesson04.two_commuters, which previously had zero
-    templates despite introducing real lexemes) using the same verb pool,
-    per the recipe's "thin lesson01-only pack" guidance (SS0 fix option 2)
-    -- a genuinely new bare-word production exercise, not a duplicate of
-    any existing template, adding real target-lexeme coverage for
-    drives/worry.
-    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
-    below-floor for this pack) and compile_content.py practice-validate.
-    Reverted status to unreviewed/fresh_context: false -- needs a fresh
-    review pass given the substantive change.
-
-    TIER-DEPTH POLISH (2026-07-24, polish wave 2): all three tiers were
-    <3 live. Added choose.007 (lesson03, bare unit-noun pool -- the
-    trailing-punctuation token artifacts this file's earlier note logged
-    are now fixed upstream, so the unit noun pool is 4 clean tokens:
-    bike/bus/office/parking), order.008 (lesson04, 'He takes the {item}
-    to the office') and order.009 (lesson02, 'We go to work by {item}')
-    -- both on transport_noun whose course-scope pool is exactly
-    bike/bus/car/train, all grammatical in both frames -- and
-    translate.010 (lesson02, bare-word adjective translation:
-    late/difficult). No matching_pairs added: the unit still cannot
-    reach 6 semantically-tagged unit-native tokens (only bike/bus carry
-    tags), and a bare-POS matching pool would recreate the POS-only
-    course-scope defect class, so the structured tier is 3x word_order
-    by design here.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 5 fixes -- choose.001/listen.002 moved to lesson01 unit tag (bus/drive/bike/ride) instead of all verbs; translate.006 verbs, choose.007 nouns, translate.010 adjectives moved to unit tag prs_en_a1_unit33_words (were 315/509/147 course candidates); tags registered in tag_schema. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: takes=طول می‌کشه (سوم‌شخص مفرد take) leaks base verb take in translation -> drop Latin. Prior note: Authored 2026-07-11 by the prs-en depth-extension worker, same pass as unit30-32. Single tag: 4-member ''transport_noun'' (bus/train/car/ bike -- "train"/"car" already classified since unit21''s travel_noun/unit20''s comparative-unit sentence respectively, reused additively), verified all four fit "I take the {item} to work." "walk" is deliberately excluded (already classified "noun" from unit17''s different sense, and "I take the walk to work" is not idiomatic). EN_POS/en_agreement_tags added to scripts/_en_target_lexeme_common.py as part of this pass. Anchoring check: lesson01 introduces new lexemes, safe as an anchor. Every slot''s real candidate count verified with scripts/_practice_slot_check.py. Needs the standard fresh-context review before import. Fresh-context review, 2026-07-11 (separate worker, zero access to the authoring reasoning above): compile_content.py practice-validate (0 errors/0 warnings), scripts/_practice_slot_check.py (every slot >=1 candidate; every multiple_choice/listen_select/matching_pairs slot enough distinct values), and backfill_lexemes_prs_en.py --dry-run all clean. Verified every tag member is a real introduced_token in this unit''s en realization or earlier; every lesson_content_key anchor exists and introduces >=1 new lexeme; word_order uses render_frame (string answer, grade() canonicalizes both shapes); matching_pairs correct_response = {token: gloss} across all distinct slots. Dari feedback text spot-checked as genuine Afghan register (کنین/شنیدین/می‌ته/کدن, صنف/مضمون/موتر/بس/ بایسکل/پیشک/بی‌بی), no Iranian Farsi calques, ZWNJ correct. Noted (not a defect): scripts/_en_target_lexeme_common.py now carries three additive unit30-42 tag blocks (prs-en/fa-en/nl-en workers); no prs-en generative frame is widened ungrammatically -- the one cross-block union effect (celebration_noun gains ''cake'' from a sibling block) is harmless, since ''cake'' is genuinely taught in en unit37 and has a Dari gloss, so it is only ever a valid recognition candidate. Upgraded to reviewed: genuinely clean. UNIT-SCOPE DEAD/FLOOR FIX (2026-07-24, reauth batch, reverting to unreviewed): scripts/_practice_unit_scope_check.py flagged this pack with 1 DEAD + 2 below-floor, all from the same root cause: this "reviewed" pass verified transport_noun''s course-wide 4-member pool (bus/train/car/bike) without checking UNIT scope. Confirmed via iter_specs() filtered to ''.a1.unit33.'': only bus and bike are actually NATIVE to this unit -- train/car are reused additively from an earlier unit (exactly as this file''s own authoring note already says), so generate_checkpoint() (unit-lexeme-scoped only) sees just 2 candidates: choose.001/listen.002 (need >=3) were below-floor, and match.003 (needed 4 distinct) was DEAD. Fix: re-anchored choose.001 and listen.002 from transport_noun to a bare `part_of_speech: verb` pool (no semantic tag, SS3.1(c)/SS8.1) -- unit33''s own lessons carry 5 distinct clean verbs unit-wide (drive/ride/takes/drives/worry), all with distinct glosses, well above the 3-answer floor; MC/listen_select have no course-scope grammaticality requirement (bare `{item}` frame, no literal text), so this widening is safe. match.003 (matching_pairs) was DROPPED, not widened: this unit''s other candidate pools are genuinely capped below the 6-pair floor without pulling in malformed lexemes -- confirmed via iter_specs() that unit33''s `noun`/`adjective` POS pools contain backfill tokenization artifacts with trailing punctuation baked into the token itself (''work?'', ''office.'', ''daniel?'', ''it?'', ''okay,'', ''difficult.'' -- all glossed with the same trailing punctuation, e.g. ''work?'' -> ''کار؟''), which would display broken text to the learner if pooled. The verb-only pool (the one genuinely clean lever available) tops out at 5, one short of 6. LOGGED for the coordinator: this is a backfill_lexemes_prs_en.py tokenization defect (trailing sentence punctuation surviving into `token`), not a pack defect, and is not fixable from this file alone -- likely affects other units too. word_order (order.005, transport_noun, no floor) is untouched and keeps the structured tier alive. Also ADDED one new template, translate.006, anchored to lesson04 (en.a1.unit33.lesson04.two_commuters, which previously had zero templates despite introducing real lexemes) using the same verb pool, per the recipe''s "thin lesson01-only pack" guidance (SS0 fix option 2) -- a genuinely new bare-word production exercise, not a duplicate of any existing template, adding real target-lexeme coverage for drives/worry. Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for this pack) and compile_content.py practice-validate. Reverted status to unreviewed/fresh_context: false -- needs a fresh review pass given the substantive change. TIER-DEPTH POLISH (2026-07-24, polish wave 2): all three tiers were <3 live. Added choose.007 (lesson03, bare unit-noun pool -- the trailing-punctuation token artifacts this file''s earlier note logged are now fixed upstream, so the unit noun pool is 4 clean tokens: bike/bus/office/parking), order.008 (lesson04, ''He takes the {item} to the office'') and order.009 (lesson02, ''We go to work by {item}'') -- both on transport_noun whose course-scope pool is exactly bike/bus/car/train, all grammatical in both frames -- and translate.010 (lesson02, bare-word adjective translation: late/difficult). No matching_pairs added: the unit still cannot reach 6 semantically-tagged unit-native tokens (only bike/bus carry tags), and a bare-POS matching pool would recreate the POS-only course-scope defect class, so the structured tier is 3x word_order by design here.'
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [transport_noun]
+    semantic: [transport_noun, prs_en_a1_unit33_words, prs_en_a1_unit33_lesson01_words]
 slot_presets:
   transport_noun: &transport_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: transport_noun}}
-  unit_verb: &unit_verb {language_code: en, part_of_speech: verb}
-  unit_noun: &unit_noun {language_code: en, part_of_speech: noun}
-  unit_adj: &unit_adj {language_code: en, part_of_speech: adjective}
+  unit_verb: &unit_verb {language_code: en, part_of_speech: verb, agreement_tags: {semantic: prs_en_a1_unit33_words}}
+  unit_noun: &unit_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: prs_en_a1_unit33_words}}
+  unit_adj: &unit_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: prs_en_a1_unit33_words}}
+  lesson01_words: &lesson01_words {language_code: en, part_of_speech: [noun, verb], agreement_tags: {semantic: prs_en_a1_unit33_lesson01_words}}
 templates:
   - content_key: practice.prs-en.en.a1.unit33.lesson01.choose.001
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit_verb}
+    slots: {item: *lesson01_words}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit33.lesson01.listen.002
     lesson_content_key: en.a1.unit33.lesson01.transport_vocabulary
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit_verb}
+    slots: {item: *lesson01_words}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit33.lesson01.translate.004
