@@ -4,9 +4,27 @@ source_language: en
 target_language: fa
 unit_content_key: fa.a1.unit04.family
 review:
-  status: unreviewed
-  required_next_reviewer: codex
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-19 (en-fa/en-prs practice pass, fresh context; 6 fixes).
+    (1) have_order.003 rendered any possession verb after "من یک ..." (من یک مادر داری /
+    داره / دارد, من یک مامانم دارم): verb now pinned to the lesson02 first-person
+    forms دارم/ندارم, noun to the side relatives عمو/عمه/دایی/خاله, and یک dropped so
+    the negative reads naturally (من خاله ندارم). (2) kin_order.003 "چند تا {kin} {verb}"
+    rendered statements and wrong persons (چند تا مامانم دارم): now the fixed question
+    "چند تا {side relative} داری؟". (3) kin_translation.003 pool held both برادرم and
+    داداشم glossed "my brother" (underdetermined typed answer): narrowed to the lesson01
+    nouns. (4) kin_pair.004 could deal both "my brother" cards in one exercise: now 6
+    lesson01 + 6 lesson03 words in two distinct groups. (5) lesson03 kin_gloss feedback
+    called mother/father "an extended family member": reworded. (6) kin_gloss.003
+    (lesson05 translation) narrowed to the lesson05 nouns; "my brother" -> برادرم still
+    rejects داداشم (taught in lesson04) because slot_text has no accepted list.
+    NATIVE FLAGS: backfill gloss "باباهم = is my dad too" comes from the L6 line
+    "این مامانمه، این باباهم" which reads like a typo for بابامه (realization lane, not
+    fixed here); confirm "من عمو دارم" without یک is natural.
+
     Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05,
     same gap/methodology as this pair's a1_unit03.yaml (see that file's
     review notes for the general finding: scripts/backfill_lexemes.py
@@ -40,13 +58,19 @@ review:
 tag_schema:
   part_of_speech: [noun, adjective, verb, particle, proper_noun, pronoun, adverb, preposition]
   agreement_tags:
-    semantic: [kinship_term, paternal_side, maternal_side, marital_status, family_description, possession_verb, dialogue_word]
+    semantic: [kinship_term, paternal_side, maternal_side, marital_status, family_description, possession_verb, dialogue_word,
+      en_fa_a1_unit04_lesson01_words, en_fa_a1_unit04_lesson02_words, en_fa_a1_unit04_lesson03_words, en_fa_a1_unit04_lesson05_words]
 slot_presets:
   kinship_term: &kinship_term {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: kinship_term}}
   possession_verb: &possession_verb {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: possession_verb}}
   marital_status: &marital_status {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: marital_status}}
   marital_status_word: &marital_status_word {language_code: fa, part_of_speech: [adjective, verb], agreement_tags: {semantic: marital_status}}
   family_description: &family_description {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: family_description}}
+  core_kin: &core_kin {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a1_unit04_lesson01_words}}
+  extended_kin: &extended_kin {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a1_unit04_lesson03_words}}
+  side_kin: &side_kin {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [paternal_side, maternal_side]}}
+  first_person_have: &first_person_have {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: en_fa_a1_unit04_lesson02_words}}
+  lesson05_kin: &lesson05_kin {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a1_unit04_lesson05_words}}
   dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: dialogue_word}}
 templates:
   # Lesson 1: immediate family.
@@ -61,7 +85,7 @@ templates:
     lesson_content_key: fa.a1.unit04.lesson01.immediate_family
     type: translation
     frame: {text: "{kinship_term}", language_code: en, direction: ltr, slot_rendering: {kinship_term: english_gloss}}
-    slots: {kinship_term: *kinship_term}
+    slots: {kinship_term: *core_kin}
     answer_derivation: {kind: slot_text, slot: kinship_term}
     feedback_frame: {text: "{kinship_term} is the Persian word for this family member.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit04.lesson01.kin_pair.004
@@ -69,20 +93,22 @@ templates:
     type: matching_pairs
     frame: {text: "Match each family word with its meaning.", language_code: en, direction: ltr}
     slots:
-      kinship_term_one: *kinship_term
-      kinship_term_two: *kinship_term
-      kinship_term_three: *kinship_term
-      kinship_term_four: *kinship_term
-      kinship_term_five: *kinship_term
-      kinship_term_six: *kinship_term
-      kinship_term_seven: *kinship_term
-      kinship_term_eight: *kinship_term
-      kinship_term_nine: *kinship_term
-      kinship_term_ten: *kinship_term
-      kinship_term_eleven: *kinship_term
-      kinship_term_twelve: *kinship_term
+      kinship_term_one: *core_kin
+      kinship_term_two: *core_kin
+      kinship_term_three: *core_kin
+      kinship_term_four: *core_kin
+      kinship_term_five: *core_kin
+      kinship_term_six: *core_kin
+      kinship_term_seven: *extended_kin
+      kinship_term_eight: *extended_kin
+      kinship_term_nine: *extended_kin
+      kinship_term_ten: *extended_kin
+      kinship_term_eleven: *extended_kin
+      kinship_term_twelve: *extended_kin
     answer_derivation: {kind: matching_pairs, slots: [kinship_term_one, kinship_term_two, kinship_term_three, kinship_term_four, kinship_term_five, kinship_term_six, kinship_term_seven, kinship_term_eight, kinship_term_nine, kinship_term_ten, kinship_term_eleven, kinship_term_twelve]}
-    slot_relations: [{kind: distinct, slots: [kinship_term_one, kinship_term_two, kinship_term_three, kinship_term_four, kinship_term_five, kinship_term_six, kinship_term_seven, kinship_term_eight, kinship_term_nine, kinship_term_ten, kinship_term_eleven, kinship_term_twelve]}]
+    slot_relations:
+      - {kind: distinct, slots: [kinship_term_one, kinship_term_two, kinship_term_three, kinship_term_four, kinship_term_five, kinship_term_six]}
+      - {kind: distinct, slots: [kinship_term_seven, kinship_term_eight, kinship_term_nine, kinship_term_ten, kinship_term_eleven, kinship_term_twelve]}
     feedback_frame: {text: "Match each family word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 2: describing your own family (دارم/ندارم).
@@ -96,17 +122,17 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit04.lesson02.have_order.003
     lesson_content_key: fa.a1.unit04.lesson02.describing_own_family
     type: word_order
-    frame: {text: "من یک {kinship_term} {possession_verb}", language_code: fa, direction: rtl}
-    slots: {kinship_term: *kinship_term, possession_verb: *possession_verb}
-    answer_derivation: {kind: render_frame, frame: {text: "من یک {kinship_term} {possession_verb}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "Word order: subject, quantity + noun, verb.", language_code: en, direction: ltr}
+    frame: {text: "من {kinship_term} {possession_verb}", language_code: fa, direction: rtl}
+    slots: {kinship_term: *side_kin, possession_verb: *first_person_have}
+    answer_derivation: {kind: render_frame, frame: {text: "من {kinship_term} {possession_verb}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "Word order: subject, noun, verb (دارم / ندارم) at the end.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit04.lesson03.kin_gloss.001
     lesson_content_key: fa.a1.unit04.lesson03.extended_family
     type: multiple_choice
     frame: {text: "{kinship_term}", language_code: fa, direction: rtl}
     slots: {kinship_term: *kinship_term}
     answer_derivation: {kind: slot_gloss, slot: kinship_term}
-    feedback_frame: {text: "{kinship_term} names an extended family member.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{kinship_term} is a family word.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit04.lesson03.side_pair.002
     lesson_content_key: fa.a1.unit04.lesson03.extended_family
     type: matching_pairs
@@ -131,9 +157,9 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit04.lesson04.kin_order.003
     lesson_content_key: fa.a1.unit04.lesson04.asking_about_family
     type: word_order
-    frame: {text: "چند تا {kinship_term} {possession_verb}", language_code: fa, direction: rtl}
-    slots: {kinship_term: *kinship_term, possession_verb: *possession_verb}
-    answer_derivation: {kind: render_frame, frame: {text: "چند تا {kinship_term} {possession_verb}", language_code: fa, direction: rtl}}
+    frame: {text: "چند تا {kinship_term} داری؟", language_code: fa, direction: rtl}
+    slots: {kinship_term: *side_kin}
+    answer_derivation: {kind: render_frame, frame: {text: "چند تا {kinship_term} داری؟", language_code: fa, direction: rtl}}
     feedback_frame: {text: "چند تا ... دارید؟/داری؟ asks how many of a relative someone has.", language_code: en, direction: ltr}
 
   # Lesson 5: marriage and grandchildren.
@@ -148,7 +174,7 @@ templates:
     lesson_content_key: fa.a1.unit04.lesson05.marriage_and_inlaws
     type: translation
     frame: {text: "{kinship_term}", language_code: en, direction: ltr, slot_rendering: {kinship_term: english_gloss}}
-    slots: {kinship_term: *kinship_term}
+    slots: {kinship_term: *lesson05_kin}
     answer_derivation: {kind: slot_text, slot: kinship_term}
     feedback_frame: {text: "{kinship_term} is the Persian word for this family member.", language_code: en, direction: ltr}
 
