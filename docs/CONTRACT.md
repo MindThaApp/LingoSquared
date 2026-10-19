@@ -106,6 +106,9 @@ would/had; a possessive `'s` is never expanded). Practice `translation`
 items store the `{canonical, accepted}` shape when other in-scope lexemes
 for the answer slot share the filled lexeme's exact English gloss
 (برادرم/داداشم "my brother"), since the prompt cannot tell them apart.
+Orthographic folding, on strict paths too: Romanian s/t-cedilla = s/t-comma
+(ş ţ = ș ț); Hindi optional nukta on क ख ग ज फ (not ड़/ढ़) and chandrabindu
+= anusvara; Arabic standalone و may be typed detached from the next word.
 
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
 + `audio_language_code` (a target-language phrase to synthesize/play for

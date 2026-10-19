@@ -330,8 +330,8 @@ def spoken_answer_result(
     """Grade a microphone transcript with bounded word-level tolerance."""
     # Spoken grading always follows the transcript normalization contract:
     # casefold and ignore punctuation, irrespective of typed-answer metadata.
-    normalized_response = _normalize(response)
-    normalized_correct = _normalize(correct)
+    normalized_response = _normalize(response, language_code=language_code)
+    normalized_correct = _normalize(correct, language_code=language_code)
     if (
         exercise_type in FREE_TEXT_EXERCISE_TYPES
         and exercise_type != "dictation"
@@ -383,13 +383,63 @@ def _uses_spoken_tolerance(input_mode: str, exercise_type: str) -> bool:
     return input_mode == "spoken" or exercise_type in {"speak_repeat", "speak_response"}
 
 
-def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False) -> str:
-    return canonical_text(
+# ---------------------------------------------------------------------------
+# Orthographic variant folding (2026-10-19). Applied to both sides of every
+# non-dictation free-text comparison, on strict paths too: none of these
+# change a letter the learner meant, only how it was encoded or spaced.
+#
+# - Romanian: legacy keyboards and fonts emit s/t-CEDILLA (ş ţ, U+015F/0163)
+#   for the correct s/t-COMMA-BELOW (ș ț, U+0219/021B). Same letter.
+# - Hindi: the nukta on the Perso-Arabic loan consonants क़ ख़ ग़ ज़ फ़ is
+#   optional in everyday writing (ट्रैफ़िक = ट्रैफिक), and chandrabindu ँ is
+#   routinely written as anusvara ं (महँगा = महंगा). ड़/ढ़ keep their nukta:
+#   they are native retroflex flaps, distinct letters from ड/ढ.
+# - Arabic: the conjunction و is written joined to the next word (وقهوة);
+#   a learner typing it detached (و قهوة) wrote the same words. The general
+#   Arabic-script joining forgiveness already covers this on non-strict
+#   paths; this narrow rule also covers orthography_strict exercises and
+#   checkpoints. Persian/Dari write و detached, so this is ar-only.
+# ---------------------------------------------------------------------------
+ROMANIAN_CEDILLA_FOLD = str.maketrans({
+    "\u015f": "\u0219", "\u015e": "\u0218",  # ş Ş -> ș Ș
+    "\u0163": "\u021b", "\u0162": "\u021a",  # ţ Ţ -> ț Ț
+})
+DEVANAGARI_NUKTA = "\u093c"
+HINDI_OPTIONAL_NUKTA_BASES = frozenset("\u0915\u0916\u0917\u091c\u092b")  # क ख ग ज फ
+HINDI_CHANDRABINDU_FOLD = str.maketrans({"\u0901": "\u0902"})  # ँ -> ं
+_ARABIC_DETACHED_WAW_RE = re.compile(r"(?:(?<=\s)|^)و\s+(?=[\u0621-\u064a])")
+
+
+def fold_orthographic_variants(value: str, language_code: str | None) -> str:
+    """Fold encoding/spacing variants that never change the answer."""
+    value = value.translate(ROMANIAN_CEDILLA_FOLD)
+    if language_code == "hi":
+        value = value.translate(HINDI_CHANDRABINDU_FOLD)
+        if DEVANAGARI_NUKTA in value:
+            value = "".join(
+                char
+                for index, char in enumerate(value)
+                if not (
+                    char == DEVANAGARI_NUKTA
+                    and index > 0
+                    and value[index - 1] in HINDI_OPTIONAL_NUKTA_BASES
+                )
+            )
+    elif language_code == "ar":
+        value = _ARABIC_DETACHED_WAW_RE.sub("و", value)
+    return value
+
+
+def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False, language_code: str | None = None) -> str:
+    text = canonical_text(
         value,
         case_sensitive=case_sensitive,
         dictation=exercise_type == "dictation",
         punctuation_strict=punctuation_strict,
     )
+    if exercise_type == "dictation":
+        return text
+    return fold_orthographic_variants(text, language_code)
 
 
 def _optional_pronoun_clauses(value: str, language_code: str) -> list[tuple[str, list[str]]]:
@@ -920,12 +970,14 @@ def is_arabic_hamza_only_difference(
         case_sensitive=case_sensitive,
         exercise_type=exercise_type,
         punctuation_strict=punctuation_strict,
+        language_code=language_code,
     )
     normalized_correct = _normalize(
         correct,
         case_sensitive=case_sensitive,
         exercise_type=exercise_type,
         punctuation_strict=punctuation_strict,
+        language_code=language_code,
     )
     if normalized_response == normalized_correct:
         return False
@@ -1019,8 +1071,8 @@ def grade_answer(
     if is_negation_comma_mismatch(response, correct, language_code):
         return "incorrect"
 
-    normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
-    normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
+    normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict, language_code=language_code)
+    normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict, language_code=language_code)
 
     # Arabic-only hamza spelling tolerance. Keep this keyed to the actual
     # language code: Persian and Dari use the same script but distinguish
