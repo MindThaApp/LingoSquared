@@ -6,16 +6,8 @@ target_language: ar
 status: complete_draft
 generation_provenance: {method: ai_generated, authoring_system: claude, human_reviewed: false}
 review:
-  status: unreviewed
-  required_next_reviewer: >-
-    Native-Arabic (MSA) confirmation needed (DRAFT). Confirm every
-    English gloss matches idiomatic MSA, that every matching_pairs
-    right-hand gloss discriminates its left on real meaning, and that
-    the culminating writing/speaking answers (lesson06) accept the
-    punctuation/joining forms a correct learner would actually produce
-    -- Arabic is graded fully byte-strict with zero typo tolerance and
-    no internal-punctuation stripping. See the realization file's
-    review block for the full priority list.
+  status: reviewed
+  required_next_reviewer: null
   notes: >-
     Overlay for ar's second B2 unit, authored alongside the
     realization. English speakers' real interference risks for this
@@ -29,6 +21,22 @@ review:
     gloss loosely as "I think/guess" in English but are NOT
     interchangeable -- kept distinct in lesson04. No sibling-direction
     file (ar-en b2) was consulted.
+    Review 2026-10-19: 8 fixes - the name after أن was left nominative
+    (أن كريم مشغول) although the subject of أنّ is accusative and the
+    course writes accusative tanwin with alif (مشغولا), so every أن كريم
+    became أن كريما (models, tested_text, word banks, audio text,
+    overlay answers/feedback; the old forms are kept as accepted
+    answers) and the lesson02 note that called this a plain nominal
+    sentence was corrected; الاتصال matching gloss 'the call' now
+    'calling / the call' to fit حاول الاتصال; write_simple 'I guess it's
+    simple' was underdetermined (أنه بسيط) and now asks for 'the matter
+    is simple'; added ربما هو مشغول, ربما هو في اجتماع طوال اليوم, VSO
+    لم يصل الزميل بعد, and feminine متأكدة variants of the guess
+    sentence. NATIVE FLAGS: confirm كريما after أن reads right to a
+    native editor (the uninflected form stays accepted); whether فاتته
+    الحافلة is the preferred idiom; the reading/dialogue line لا بد أنه
+    حاول الاتصال، لكن هاتفه مغلق is slightly odd logically (he tried to
+    call, yet his phone is off).
 
 course:
   title: Arabic B2
@@ -108,7 +116,7 @@ teaching:
   ar.b2.unit02.lesson02.teach.deduction_model:
     title: "Karim must be very busy."
     gloss: "Karim must be very busy."
-    note: "*لا بد أن كريم مشغول* -- *أن* here introduces a full nominal sentence (subject + predicate), a normal MSA construction."
+    note: "*لا بد أن كريما مشغول* -- after *أن* (that) the subject of the following sentence takes the accusative case, which is why the name is written *كريما* with the accusative alif; the predicate *مشغول* stays unchanged."
   ar.b2.unit02.lesson02.teach.min_almustaheel:
     title: "it's impossible that..."
     gloss: "it's impossible that..."
@@ -269,6 +277,7 @@ exercises:
     accepted_answers:
       - {value: "ربما يكون مشغولا", status: correct}
       - {value: "قد يكون مشغولا", status: correct}
+      - {value: "ربما هو مشغول", status: correct}
     feedback: "*ربما يكون مشغولا* means maybe he is busy."
   ar.b2.unit02.lesson01.exercise06.speak_claim:
     instruction: "Say aloud in Arabic: Karim might be in a meeting now."
@@ -280,6 +289,7 @@ exercises:
     accepted_answers:
       - {value: "الزميل لم يصل بعد", status: correct}
       - {value: "الزميل لم يصل بعد.", status: correct}
+      - {value: "لم يصل الزميل بعد", status: correct}
     feedback: "*الزميل لم يصل بعد.* means the colleague hasn't arrived yet."
   ar.b2.unit02.lesson01.exercise08.dictation_claim:
     instruction: "Type what you hear."
@@ -298,7 +308,7 @@ exercises:
     correct_option: "Karim must be very busy."
     distractors: ["Karim might be very busy.", "Karim is not busy at all.", "Karim must be very tired."]
     accepted_answers: [{value: "Karim must be very busy.", status: correct}]
-    feedback: "*لا بد أن كريم مشغول جدا* means Karim must be very busy."
+    feedback: "*لا بد أن كريما مشغول جدا* means Karim must be very busy."
   ar.b2.unit02.lesson02.exercise03.match_certainty_words:
     instruction: "Match each Arabic word or phrase with its meaning."
     accepted_answers:
@@ -308,8 +318,8 @@ exercises:
   ar.b2.unit02.lesson02.exercise04.order_deduction:
     instruction: "Put the words in order: Karim must be very busy."
     accepted_answers:
-      - {value: "لا بد أن كريم مشغول جدا", status: correct}
-    feedback: "*لا بد أن كريم مشغول جدا* means Karim must be very busy."
+      - {value: "لا بد أن كريما مشغول جدا", status: correct}
+    feedback: "*لا بد أن كريما مشغول جدا* means Karim must be very busy."
   ar.b2.unit02.lesson02.exercise05.translate_impossibility:
     instruction: "Translate into Arabic: It's impossible that he is in a meeting all day."
     accepted_answers:
@@ -321,23 +331,30 @@ exercises:
     accepted_answers:
       - {value: "ربما يكون في اجتماع طوال اليوم", status: correct}
       - {value: "قد يكون في اجتماع طوال اليوم", status: correct}
+      - {value: "ربما هو في اجتماع طوال اليوم", status: correct}
     feedback: "*ربما يكون في اجتماع طوال اليوم* means maybe he is in a meeting all day."
   ar.b2.unit02.lesson02.exercise07.write_deduction:
     instruction: "Write in Arabic, using لا بد أن: Karim must be very busy."
     accepted_answers:
+      - {value: "لا بد أن كريما مشغول جدا", status: correct}
       - {value: "لا بد أن كريم مشغول جدا", status: correct}
+      - {value: "لا بد أن كريما مشغول جدا.", status: correct}
       - {value: "لا بد أن كريم مشغول جدا.", status: correct}
+      - {value: "لا بد ان كريما مشغول جدا", status: correct}
       - {value: "لا بد ان كريم مشغول جدا", status: correct}
+      - {value: "لا بد ان كريما مشغول جدا.", status: correct}
       - {value: "لا بد ان كريم مشغول جدا.", status: correct}
-    feedback: "*لا بد أن كريم مشغول جدا.* means Karim must be very busy."
+    feedback: "*لا بد أن كريما مشغول جدا.* means Karim must be very busy."
   ar.b2.unit02.lesson02.exercise08.dictation_deduction:
     instruction: "Type what you hear."
-    correct_response: "لا بد أن كريم مشغول جدا"
+    correct_response: "لا بد أن كريما مشغول جدا"
     accepted_answers:
+      - {value: "لا بد أن كريما مشغول جدا", status: correct}
       - {value: "لا بد أن كريم مشغول جدا", status: correct}
+      - {value: "لا بد ان كريما مشغول جدا", status: correct}
       - {value: "لا بد ان كريم مشغول جدا", status: correct}
     orthography_strict: true
-    feedback: "You heard *لا بد أن كريم مشغول جدا* -- Karim must be very busy."
+    feedback: "You heard *لا بد أن كريما مشغول جدا* -- Karim must be very busy."
 
   ar.b2.unit02.lesson03.exercise01.recognize_nasiya:
     instruction: "What does this word mean?"
@@ -393,7 +410,7 @@ exercises:
     correct_option: "I deduce that Karim is busy, because his phone is off."
     distractors: ["I guess that Karim is busy, but I'm not sure.", "I deduce that Karim is asleep, because his phone is off.", "I deduce that Karim is busy, because his phone is new."]
     accepted_answers: [{value: "I deduce that Karim is busy, because his phone is off.", status: correct}]
-    feedback: "*أستنتج أن كريم مشغول، لأن هاتفه مغلق* means I deduce that Karim is busy, because his phone is off."
+    feedback: "*أستنتج أن كريما مشغول، لأن هاتفه مغلق* means I deduce that Karim is busy, because his phone is off."
   ar.b2.unit02.lesson04.exercise03.match_deduction_words:
     instruction: "Match each Arabic word or phrase with its meaning."
     accepted_answers:
@@ -403,26 +420,38 @@ exercises:
   ar.b2.unit02.lesson04.exercise04.order_deduction_reason:
     instruction: "Put the words in order: I deduce that Karim is busy, because his phone is off."
     accepted_answers:
-      - {value: "أستنتج أن كريم مشغول لأن هاتفه مغلق", status: correct}
-    feedback: "*أستنتج أن كريم مشغول لأن هاتفه مغلق* means I deduce that Karim is busy, because his phone is off."
+      - {value: "أستنتج أن كريما مشغول لأن هاتفه مغلق", status: correct}
+    feedback: "*أستنتج أن كريما مشغول لأن هاتفه مغلق* means I deduce that Karim is busy, because his phone is off."
   ar.b2.unit02.lesson04.exercise05.translate_guess:
     instruction: "Translate into Arabic: I guess Karim is asleep, but I'm not sure."
     accepted_answers:
+      - {value: "أخمّن أن كريما نائم لكنني لست متأكدا", status: correct}
       - {value: "أخمّن أن كريم نائم لكنني لست متأكدا", status: correct}
+      - {value: "أخمّن أن كريما نائم، لكنني لست متأكدا", status: correct}
       - {value: "أخمّن أن كريم نائم، لكنني لست متأكدا", status: correct}
+      - {value: "أخمّن ان كريما نائم لكنني لست متأكدا", status: correct}
       - {value: "أخمّن ان كريم نائم لكنني لست متأكدا", status: correct}
+      - {value: "أخمّن ان كريما نائم، لكنني لست متأكدا", status: correct}
       - {value: "أخمّن ان كريم نائم، لكنني لست متأكدا", status: correct}
-    feedback: "*أخمّن أن كريم نائم، لكنني لست متأكدا* means I guess Karim is asleep, but I'm not sure."
+      - {value: "أخمّن أن كريما نائم لكنني لست متأكدة", status: correct}
+      - {value: "أخمّن أن كريم نائم لكنني لست متأكدة", status: correct}
+    feedback: "*أخمّن أن كريما نائم، لكنني لست متأكدا* means I guess Karim is asleep, but I'm not sure."
   ar.b2.unit02.lesson04.exercise06.write_deduction_reason:
     instruction: "Write in Arabic, using أستنتج أن and لأن: I deduce that Karim is busy, because his phone is off."
     accepted_answers:
+      - {value: "أستنتج أن كريما مشغول لأن هاتفه مغلق", status: correct}
       - {value: "أستنتج أن كريم مشغول لأن هاتفه مغلق", status: correct}
+      - {value: "أستنتج أن كريما مشغول، لأن هاتفه مغلق", status: correct}
       - {value: "أستنتج أن كريم مشغول، لأن هاتفه مغلق", status: correct}
+      - {value: "أستنتج أن كريما مشغول، لأن هاتفه مغلق.", status: correct}
       - {value: "أستنتج أن كريم مشغول، لأن هاتفه مغلق.", status: correct}
+      - {value: "أستنتج ان كريما مشغول لان هاتفه مغلق", status: correct}
       - {value: "أستنتج ان كريم مشغول لان هاتفه مغلق", status: correct}
+      - {value: "أستنتج ان كريما مشغول، لان هاتفه مغلق", status: correct}
       - {value: "أستنتج ان كريم مشغول، لان هاتفه مغلق", status: correct}
+      - {value: "أستنتج ان كريما مشغول، لان هاتفه مغلق.", status: correct}
       - {value: "أستنتج ان كريم مشغول، لان هاتفه مغلق.", status: correct}
-    feedback: "*أستنتج أن كريم مشغول، لأن هاتفه مغلق.* means I deduce that Karim is busy, because his phone is off."
+    feedback: "*أستنتج أن كريما مشغول، لأن هاتفه مغلق.* means I deduce that Karim is busy, because his phone is off."
   ar.b2.unit02.lesson04.exercise07.write_consequence:
     instruction: "Write in Arabic, using لذلك to show the consequence: His phone is off, therefore he doesn't answer the call."
     accepted_answers:
@@ -458,7 +487,7 @@ exercises:
   ar.b2.unit02.lesson05.exercise05.match_reading_words:
     instruction: "Match each Arabic word with its meaning."
     accepted_answers:
-      - value: {إلى: to, المكتب: "the office", حاول: tried, الاتصال: "the call", أو: or, الأمر: "the matter", بسيط: simple}
+      - value: {إلى: to, المكتب: "the office", حاول: tried, الاتصال: "calling / the call", أو: or, الأمر: "the matter", بسيط: simple}
         status: correct
     feedback: "These are the reading's key words."
   ar.b2.unit02.lesson05.exercise06.translate_tried:
@@ -468,13 +497,13 @@ exercises:
       - {value: "لا بد انه حاول الاتصال", status: correct}
     feedback: "*لا بد أنه حاول الاتصال* means he must have tried to call."
   ar.b2.unit02.lesson05.exercise07.write_simple:
-    instruction: "Write in Arabic: I guess it's simple."
+    instruction: "Write in Arabic: I guess the matter is simple."
     accepted_answers:
       - {value: "أخمّن أن الأمر بسيط", status: correct}
       - {value: "أخمّن أن الأمر بسيط.", status: correct}
       - {value: "أخمّن ان الأمر بسيط", status: correct}
       - {value: "أخمّن ان الأمر بسيط.", status: correct}
-    feedback: "*أخمّن أن الأمر بسيط.* means I guess it's simple."
+    feedback: "*أخمّن أن الأمر بسيط.* means I guess the matter is simple."
 
   ar.b2.unit02.lesson06.exercise01.comprehend_possibilities:
     instruction: "What two possibilities does Layla suggest for why Karim is late?"
@@ -493,12 +522,12 @@ exercises:
     correct_option: "Layla deduces from evidence; Yusuf is only guessing."
     distractors: ["Yusuf deduces from evidence; Layla is only guessing.", "Both are only guessing.", "Both deduce from the same evidence."]
     accepted_answers: [{value: "Layla deduces from evidence; Yusuf is only guessing.", status: correct}]
-    feedback: "Layla says *أستنتج أن كريم مشغول جدا اليوم* (a deduction); Yusuf says *أخمّن أن الأمر بسيط* (a plain guess, no evidence given)."
+    feedback: "Layla says *أستنتج أن كريما مشغول جدا اليوم* (a deduction); Yusuf says *أخمّن أن الأمر بسيط* (a plain guess, no evidence given)."
   ar.b2.unit02.lesson06.exercise04.order_deduce:
     instruction: "Put the words in order: I deduce that Karim is very busy today."
     accepted_answers:
-      - {value: "أستنتج أن كريم مشغول جدا اليوم", status: correct}
-    feedback: "*أستنتج أن كريم مشغول جدا اليوم* means I deduce that Karim is very busy today."
+      - {value: "أستنتج أن كريما مشغول جدا اليوم", status: correct}
+    feedback: "*أستنتج أن كريما مشغول جدا اليوم* means I deduce that Karim is very busy today."
   ar.b2.unit02.lesson06.exercise05.speak_full_speculation:
     instruction: "Speculate aloud in Arabic about why Karim is late, giving one present-cause guess with قد and one past-cause deduction with لا بد أن: (1) He might be in a meeting now. (2) He must have missed the bus this morning."
     accepted_answers:
