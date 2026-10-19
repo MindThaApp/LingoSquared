@@ -3158,3 +3158,72 @@ was clean: no simple-past -ید in prs-en A1/A2.
 Verification: `scripts/verify.sh --content-only` passes. Course-scoped
 validate + compile (prs-en, and fa-en/nl-en/de-en on merges) was run before
 every commit.
+
+### 2026-10-19 — prs-en practice packs
+Scope: the 81 prs-en practice packs under docs/content/practice/prs-en that had
+not been reviewed (A1 52, A2 9, B1 12, B2 8). The 25 packs that were already
+reviewed were not touched. Method: eight fresh-context workers took 10-11
+packs each in separate worktrees (branch content/review-practice-prs-en, PR
+#48), and a shared audit script dumped every slot pool with its Dari glosses.
+The coordinator then made a cross-pack pass. prs-en practice-validate and
+practice-compile were run before every push. Every pack is now `reviewed`,
+next reviewer `native_speaker_review`.
+
+Fix count: 314 by the workers and 174 slot narrowings by the coordinator,
+plus one revert (a1_unit12 جامه back to لباس, which matches the reviewed
+overlay).
+
+Defect classes:
+- **Level-wide slot pools** (dominant). Many multiple_choice, listen_select and
+  translation slots were filtered by part of speech only. At course scope
+  they pooled the whole level: about 1290 A1, 480 A2, 560 B1 and 580 B2
+  words. Some Dari prompts then had several right English answers
+  (film/movie, stay/staying, pick/take/make/taking, باید = must/should, هم =
+  also/too), and options were never taught in the unit. These slots now use
+  the unit or lesson `prs_en_*_words` tags (about 250 slots).
+- **Answer leakage at A2 and above** (the leak lint skips practice packs).
+  Some backfill glosses contain the English word, such as "رفت (زمان گذشتهٔ
+  go)", "گرفتن (در pick up: ...)" and "(شکل ing فعل keep)". In translation
+  prompts and word_order hints they give the answer away. Pools were
+  narrowed by part of speech or lesson tag. Two templates were removed
+  (a2_unit27 adj_translate.003, a2_unit35 lesson01.translate.005). As a
+  result, B1/B2 translation drills now mostly skip verbs.
+- **Also-correct pairs** in matching and multiple_choice: lend/lending,
+  broken/damaged, might/maybe, coworker/colleague, mistake/mistakes. These
+  were narrowed out where a tag allowed it.
+- **Dari text**: informal تو هم ... استی in a1_unit13 is now شما هم ...
+  استین. English feedback strings (a1 u15, u16, u20, u46-49) are now Dari.
+  Matching feedback that said "two words" for 4-5 pairs was corrected. No
+  Arabic ي/ك, and no simple-past -ید in prs-en practice.
+- **Not pack-fixable (engine)**: `feedback_frame` is stored but never shown by
+  backend/app/practice/service.py. Practice translation has no
+  accepted-answers list and no I'm/I am folding.
+
+Not fixed: backfill glosses in scripts/backfill_lexemes_prs_en.py are outside
+this lane. About 260 BACKFILL GLOSS FLAGS are listed in each pack's
+review.notes. Worst: fee=معاش, next=پهلوی, strong=تُند, sink=نل,
+job=وظیفه, chance=ریسک, expensive=قیمتی, evening=شام, party=میلاد,
+course=کورس for "of course". There are typos (ترمیم کدن, تمرکز کدن), Iranian
+glosses (wants=می‌خواهد, what's=چیست), informal تو glosses (you're, its,
+you'd, آزاد استی؟), and identical glosses (refill/refills, swim/swimming,
+sad/worried both خفه). About 30 glosses carry English words. Some lessons
+have no lesson or unit tag (b1_unit01 lesson01, a1_unit14 lesson04,
+a2_unit38 lesson04). Those slots still draw from the whole level, and a
+backfill tag would fix them.
+
+Native flags (about 36, listed per pack as "NATIVE FLAGS"):
+- لباس vs Afghan کالا/رخت for "clothes" (a1 u12, u38 لباس‌شویی), and تشناب
+  for "bathroom" (a1 u24).
+- Kin and meal terms: بی‌بی/بابه/کاکا/ماما (u06); شب چاشت, صبح‌چاشت and
+  کالا پوشیدن (u16); "خیلی خوش شدن" (u17).
+- Gloss doubts: sound=آواز, juice=شربت میوه, buildings=تعمیرها,
+  Spanish=هسپانوی, "نشان می‌ته" (b2 u03), first-person past glosses (کوچ
+  کدم, داشتم).
+New bug class: yes. "Level-wide practice slot". A slot with no semantic tag
+pools the whole CEFR level in Endless Practice. Nothing lints for it. A check
+in _practice_content_integrity_check.py that flags slots without a semantic
+tag would prevent it. That script's a*_unit* glob still skips B1/B2.
+
+Verification: `scripts/verify.sh --content-only` passes. prs-en
+practice-validate and practice-compile ran before every push. Details are in
+.local/logs/session9-practice-prs-en.md.
