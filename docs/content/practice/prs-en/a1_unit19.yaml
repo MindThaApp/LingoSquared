@@ -4,112 +4,10 @@ source_language: prs
 target_language: en
 unit_content_key: en.a1.unit19.preferences
 review:
-  status: unreviewed
-  fresh_context: false
-  notes: >-
-    Authored 2026-07-06 by the prs-en practice-pool-sync lane extending
-    coverage to units 15-20, mirroring the sibling fa-en/a1_unit19.yaml
-    pack's structure (16 templates). Reuses the already-established
-    narrower preference_verb_full tag (like/prefer/love/hate, 4 members)
-    separate from the 5-member preference_verb (like/don't/prefer/love/
-    hate) for the "I {item} tea/coffee." frames -- "don't" is an
-    auxiliary needing a following verb ("I don't tea." is not a
-    sentence), so the full 5-member set (including the bare "don't"
-    lexeme, whose introduced_tokens entry really represents "don't like"
-    as taught) is used only for bare-word recognition, never embedded
-    in a sentence. All POS/semantic-tag classification was already
-    present in scripts/_en_target_lexeme_common.py before this pass --
-    only scripts/backfill_lexemes_prs_en.py's own Dari gloss dict needed
-    extending (prefer/hate/calmer/very/strong/why/think/prefers/
-    thinks), plus the pre-existing "like" entry was updated in place to
-    add its second sense (خوش داشتن, used here) alongside its unit07
-    sense (خواستن, "would like") -- both senses genuinely needed for the
-    same bare token, same class of reuse the overlay's own review note
-    flags for "hate" (corrected from an earlier unnatural gloss to
-    نفرت داشتن). Cross-checked against docs/content/overlays/prs-en/
-    a1_unit19.yaml's own real Dari phrasing throughout. Verified with
-    scripts/_practice_slot_check.py that every slot has >=1 real
-    candidate lexeme and every multiple_choice/listen_select slot has
-    >=4 distinct candidate values (preference_verb has 5). The
-    underlying en realization unit19 is UNREVIEWED (Codex was usage-
-    limited at authoring time); the prs-en overlay is already reviewed
-    -- the realization needs the standard fresh-context review before
-    import.
-
-    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16):
-    the matching_pairs template widened from 2 to 5 slots (the full
-    course-wide preference_verb pool: like/don't/prefer/love/hate), per
-    the pre-computed retrofit table.
-
-    REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/
-    _practice_unit_scope_check.py found verb_pair.003 DEAD and 5 more
-    templates (verb_meaning.001, verb_listen.002, verb_listen.004,
-    verb_meaning.004, verb_listen.001) below the >=3 MC/listen floor,
-    all because of `preference_verb`: its course-wide pool is 5 (like/
-    don't/prefer/love/hate) but unit19 itself only introduces 2 of them
-    natively -- prefer and hate (lesson01). "like" and "don't" are
-    established in an earlier unit (per this file's own note above,
-    "like" carries a unit07 sense too) and "love" turned out to be
-    native to unit17, not unit19 -- confirmed via the iter_specs unit
-    filter: unit19's own tokens are prefer/hate/calmer/very/strong/why/
-    think/prefers/thinks, and only prefer/hate carry the preference_verb/
-    preference_verb_full tags. generate_checkpoint() only loads unit19's
-    own lexemes, so the matching_pairs' 5 declared slots had only 2
-    real candidates (DEAD) and the 5 MC/listen templates had only 2
-    distinct answers (below the 3-option floor) -- recipe DO-NOT #2.
-    preference_verb_full's own 6 templates (tea_order/coffee_order/
-    verb_full_translate x3) were never at risk: they have no candidate
-    floor (word_order/translation) and preference_verb_full's course-wide
-    pool (hate/like/love/prefer) is already verified grammatical in
-    "I {item} tea/coffee" -- unchanged here.
-
-    PACK-ONLY fix: dropped `preference_verb` and re-anchored all 6
-    affected templates to a new untagged content_pool (verb + adjective +
-    adverb, no semantic filter) -- unit19's own calmer/very/strong/why/
-    think/prefers/thinks, unioned with the native prefer/hate, gives 9
-    distinct unit-scoped candidates (prefer/hate/calmer/very/strong/why/
-    think/prefers/thinks), comfortably clearing both the 3-option
-    MC/listen floor and the matching_pairs need (widened from 5 to 9
-    slots, within the AUTHORING_GUIDE.md #16 6-12 range instead of
-    below it). Bare `{item}` frames (multiple_choice/listen_select) and
-    matching_pairs impose no literal-frame grammaticality constraint, so
-    this widening is course-scope-safe by construction (SS1.1) -- no
-    sentence needs to stay grammatical for every pool member. Read every
-    gloss in the new pool (SS0.1): prefer/prefers and think/thinks are
-    base-form/3rd-person-singular conjugation pairs of the same verb
-    (an acceptable singular/plural-style discrimination per recipe SS6.3,
-    not a paraphrase collision), and all 9 glosses are otherwise
-    distinct. Verified 0 DEAD and 0 below-floor via scripts/
-    _practice_unit_scope_check.py and 0 errors via compile_content.py
-    practice-validate.
-
-    POLISH WAVE 2 AUDIT (2026-07-24, dispatched POS-ONLY-MATCHING for
-    verb_pair.003): re-measured against backfill_lexemes_prs_en
-    iter_specs() -- unit19's own 9 lexemes carry semantic tags on only
-    prefer/hate (preference_verb/preference_verb_full), a maximum
-    semantic-union pool of 2 vs the 6-token floor. Per POLISH_TASK_V2's
-    escape clause verb_pair.003 deliberately STAYS POS-only (bare
-    "{first_verb} — {second_verb}" matching imposes no literal-frame
-    grammaticality risk; the only cost is off-theme course-scope pairs
-    in Endless Practice). Real fix remains a prs-en semantic-tag
-    backfill -- backfill scripts are off-limits to this PACK-ONLY wave.
-
-    Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED --
-    commit 05af7ace generated a unit-scoped semantic tag,
-    prs_en_a1_unit19_words, in backfill_lexemes_prs_en. Re-anchored the
-    dispatched lesson01.verb_pair.003 from the untagged content_pool to
-    a new unit_tag_content preset (semantic prs_en_a1_unit19_words +
-    part_of_speech [verb, adjective, adverb] -- unit19 introduces no
-    nouns, so this is unchanged breadth from content_pool). Unit-scope
-    pool is the identical 9 tokens (calmer/hate/prefer/prefers/strong/
-    think/thinks/very/why; glosses re-read, all distinct -- prefer/
-    prefers and think/thinks remain the acceptable base-form/3rd-person
-    discrimination already noted above), but course scope now equals
-    unit scope, so Endless Practice no longer pulls off-theme
-    course-wide verbs/adjectives/adverbs into this pair. Slot count
-    stays at 9 (already above the 6-pair floor). preference_verb_full's
-    6 templates (tea_order/coffee_order/verb_full_translate x3) are out
-    of this dispatch and unchanged.
+  status: reviewed
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-19 (prs-en practice pass): 2 fixes -- MC/listen/translation pools narrowed from the untagged verb+adjective+adverb pool (523 course candidates) to the unit tag prs_en_a1_unit19_words (9); lesson01 translation additionally restricted to verb+adjective so very/why are excluded (answer leak very=خیلی (در very much)). NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: very=خیلی (در very much) -> خیلی. Prior note: Authored 2026-07-06 by the prs-en practice-pool-sync lane extending coverage to units 15-20, mirroring the sibling fa-en/a1_unit19.yaml pack''s structure (16 templates). Reuses the already-established narrower preference_verb_full tag (like/prefer/love/hate, 4 members) separate from the 5-member preference_verb (like/don''t/prefer/love/ hate) for the "I {item} tea/coffee." frames -- "don''t" is an auxiliary needing a following verb ("I don''t tea." is not a sentence), so the full 5-member set (including the bare "don''t" lexeme, whose introduced_tokens entry really represents "don''t like" as taught) is used only for bare-word recognition, never embedded in a sentence. All POS/semantic-tag classification was already present in scripts/_en_target_lexeme_common.py before this pass -- only scripts/backfill_lexemes_prs_en.py''s own Dari gloss dict needed extending (prefer/hate/calmer/very/strong/why/think/prefers/ thinks), plus the pre-existing "like" entry was updated in place to add its second sense (خوش داشتن, used here) alongside its unit07 sense (خواستن, "would like") -- both senses genuinely needed for the same bare token, same class of reuse the overlay''s own review note flags for "hate" (corrected from an earlier unnatural gloss to نفرت داشتن). Cross-checked against docs/content/overlays/prs-en/ a1_unit19.yaml''s own real Dari phrasing throughout. Verified with scripts/_practice_slot_check.py that every slot has >=1 real candidate lexeme and every multiple_choice/listen_select slot has >=4 distinct candidate values (preference_verb has 5). The underlying en realization unit19 is UNREVIEWED (Codex was usage- limited at authoring time); the prs-en overlay is already reviewed -- the realization needs the standard fresh-context review before import. matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 5 slots (the full course-wide preference_verb pool: like/don''t/prefer/love/hate), per the pre-computed retrofit table. REAUTH 2026-07-24 (unit-scope dead-template repair). scripts/ _practice_unit_scope_check.py found verb_pair.003 DEAD and 5 more templates (verb_meaning.001, verb_listen.002, verb_listen.004, verb_meaning.004, verb_listen.001) below the >=3 MC/listen floor, all because of `preference_verb`: its course-wide pool is 5 (like/ don''t/prefer/love/hate) but unit19 itself only introduces 2 of them natively -- prefer and hate (lesson01). "like" and "don''t" are established in an earlier unit (per this file''s own note above, "like" carries a unit07 sense too) and "love" turned out to be native to unit17, not unit19 -- confirmed via the iter_specs unit filter: unit19''s own tokens are prefer/hate/calmer/very/strong/why/ think/prefers/thinks, and only prefer/hate carry the preference_verb/ preference_verb_full tags. generate_checkpoint() only loads unit19''s own lexemes, so the matching_pairs'' 5 declared slots had only 2 real candidates (DEAD) and the 5 MC/listen templates had only 2 distinct answers (below the 3-option floor) -- recipe DO-NOT #2. preference_verb_full''s own 6 templates (tea_order/coffee_order/ verb_full_translate x3) were never at risk: they have no candidate floor (word_order/translation) and preference_verb_full''s course-wide pool (hate/like/love/prefer) is already verified grammatical in "I {item} tea/coffee" -- unchanged here. PACK-ONLY fix: dropped `preference_verb` and re-anchored all 6 affected templates to a new untagged content_pool (verb + adjective + adverb, no semantic filter) -- unit19''s own calmer/very/strong/why/ think/prefers/thinks, unioned with the native prefer/hate, gives 9 distinct unit-scoped candidates (prefer/hate/calmer/very/strong/why/ think/prefers/thinks), comfortably clearing both the 3-option MC/listen floor and the matching_pairs need (widened from 5 to 9 slots, within the AUTHORING_GUIDE.md #16 6-12 range instead of below it). Bare `{item}` frames (multiple_choice/listen_select) and matching_pairs impose no literal-frame grammaticality constraint, so this widening is course-scope-safe by construction (SS1.1) -- no sentence needs to stay grammatical for every pool member. Read every gloss in the new pool (SS0.1): prefer/prefers and think/thinks are base-form/3rd-person-singular conjugation pairs of the same verb (an acceptable singular/plural-style discrimination per recipe SS6.3, not a paraphrase collision), and all 9 glosses are otherwise distinct. Verified 0 DEAD and 0 below-floor via scripts/ _practice_unit_scope_check.py and 0 errors via compile_content.py practice-validate. POLISH WAVE 2 AUDIT (2026-07-24, dispatched POS-ONLY-MATCHING for verb_pair.003): re-measured against backfill_lexemes_prs_en iter_specs() -- unit19''s own 9 lexemes carry semantic tags on only prefer/hate (preference_verb/preference_verb_full), a maximum semantic-union pool of 2 vs the 6-token floor. Per POLISH_TASK_V2''s escape clause verb_pair.003 deliberately STAYS POS-only (bare "{first_verb} — {second_verb}" matching imposes no literal-frame grammaticality risk; the only cost is off-theme course-scope pairs in Endless Practice). Real fix remains a prs-en semantic-tag backfill -- backfill scripts are off-limits to this PACK-ONLY wave. Polish wave 3 (2026-07-26): the wave-2 blocker above is RESOLVED -- commit 05af7ace generated a unit-scoped semantic tag, prs_en_a1_unit19_words, in backfill_lexemes_prs_en. Re-anchored the dispatched lesson01.verb_pair.003 from the untagged content_pool to a new unit_tag_content preset (semantic prs_en_a1_unit19_words + part_of_speech [verb, adjective, adverb] -- unit19 introduces no nouns, so this is unchanged breadth from content_pool). Unit-scope pool is the identical 9 tokens (calmer/hate/prefer/prefers/strong/ think/thinks/very/why; glosses re-read, all distinct -- prefer/ prefers and think/thinks remain the acceptable base-form/3rd-person discrimination already noted above), but course scope now equals unit scope, so Endless Practice no longer pulls off-theme course-wide verbs/adjectives/adverbs into this pair. Slot count stays at 9 (already above the 6-pair floor). preference_verb_full''s 6 templates (tea_order/coffee_order/verb_full_translate x3) are out of this dispatch and unchanged.'
 tag_schema:
   part_of_speech: [verb, adjective, adverb]
   agreement_tags:
@@ -117,20 +15,21 @@ tag_schema:
 slot_presets:
   content_pool: &content_pool {language_code: en, part_of_speech: [verb, adjective, adverb]}
   unit_tag_content: &unit_tag_content {language_code: en, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: prs_en_a1_unit19_words}}
+  unit_tag_content_no_adv: &unit_tag_content_no_adv {language_code: en, part_of_speech: [verb, adjective], agreement_tags: {semantic: prs_en_a1_unit19_words}}
   preference_verb_full: &preference_verb_full {language_code: en, part_of_speech: verb, agreement_tags: {semantic: preference_verb_full}}
 templates:
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_meaning.001
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای از همی درس است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_listen.002
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson01.verb_pair.003
@@ -145,7 +44,7 @@ templates:
     lesson_content_key: en.a1.unit19.lesson01.like_and_dislike_verbs
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content_no_adv}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} معادل انگلیسی این واژهٔ دری است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson02.tea_order.001
@@ -166,7 +65,7 @@ templates:
     lesson_content_key: en.a1.unit19.lesson02.asking_about_preferences
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson03.coffee_order.001
@@ -187,14 +86,14 @@ templates:
     lesson_content_key: en.a1.unit19.lesson03.reading_a_preference_message
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای از همی درس است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson04.verb_listen.001
     lesson_content_key: en.a1.unit19.lesson04.preference_dialogue
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *content_pool}
+    slots: {item: *unit_tag_content}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} واژه‌ای است که شنیدین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit19.lesson04.tea_order.002
