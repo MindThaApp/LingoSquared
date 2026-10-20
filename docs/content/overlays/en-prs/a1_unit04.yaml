@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Fresh-context review completed 2026-07-05, authored independently of the fa realization per the sibling-isolation rule. Fixes made alongside the paired realization file: 9 multiple_choice exercises' prompts changed from displaying the exact correct-answer text to showing the digit instead (previously solvable by string-matching alone, defeating the point of the question), and lesson06 exercise pacing corrected to recognition->drag->production order. Dialect verified as genuinely Afghan Dari (نمبر not شماره, استم/استین forms), no jargon leaks, no script-purity issues. Compiler validation clean before and after fixes. Supplemental pass 2026-07-05 per AUTHORING_GUIDE §11-13: fact cross-check clean (ages/phone numbers internally consistent), fill_in_blank frames all have real surrounding context, and lesson06's write_ages_summary gained a و-joined variant as status:correct (previously only period-joined, and marked acceptable_with_note instead of correct). URGENT FOLLOW-UP 2026-07-05: live QA found the whole en-prs course failed to actually compile (real `compile`, not just `validate` -- `validate` never exercises the full exercise-answer-derivation check that caught this). Root cause here specifically: 3 exercises (lesson04.exercise07.speak_own_age, lesson05.exercise07.speak_own_phone_number, lesson06.exercise02.speak_own_age_reply) asked the learner to supply their own real age/phone number but had only `acceptable_with_note` accepted_answers with no `status:correct` entry -- the compiler has no canonical answer to derive without one, so compilation crashed. Same root problem as the ungradeable-blank-template bug already fixed once in unit02: rewrote all three to ask for a SPECIFIC given fact (age 30, phone 079-345-678, age 26 matching Bashir) with concrete `status:correct` answers instead of an open-ended real-world placeholder. Re-verified with the actual `compile` command -- now produces valid JSON end-to-end. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): converted the 10 listen_type/bare-listen_select exercises' instructions/correct_option/distractors/accepted_answers to match the realization's multiple_choice/translation conversion (the 3 sequence-listening exercises simplified to single-number recognition since no audio exists) -- see that file's notes for the full list. Re-verified 0 remaining §14 violations, content_key parity intact, both validate and compile clean after the retrofit. MATCHING_PAIRS SCALE RETROFIT 2026-07-06 (§16): expanded match_teens/match_tens/match_age_phrases to match the realization's expansion (10/9/4 pairs) -- match_teens and match_tens previously used only a subset of numbers already fully taught in their own lesson. Left match_phone_vocab (3) and match_dialogue_facts (2) unchanged as genuine small closed sets.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 17 kind:vocabulary teaching entries with example_gloss (11 merged multi-number cards each given a positionally-matched list of examples, one per number), each a natural, comprehensible-from-gloss sentence using the card's own word(s), consistent with this course's full-form استم register. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 17 kind:vocabulary teaching entries with example_gloss (11 merged multi-number cards each given a positionally-matched list of examples, one per number), each a natural, comprehensible-from-gloss sentence using the card's own word(s), consistent with this course's full-form استم register. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    Review 2026-10-20 (en-prs A1 pass): 12 fixes - six example_gloss lines that did not translate their Dari examples (books, people, minutes, pages mismatches); added accepted age and phone-number answer variants (من, سال دارم, نمبر تلفن من). NATIVE FLAGS: see realization."
 
 course:
   title: Dari A1
@@ -43,7 +45,7 @@ teaching:
     title: "Four, five, six"
     gloss: "4, 5, 6"
     note: "چهار is the standard written form; some speakers colloquially shorten it to چار in casual speech, but this course uses the standard spelling."
-    example_gloss: ["I have four books.", "Wait five minutes.", "Six people came."]
+    example_gloss: ["I have four books.", "Wait five minutes.", "He/she has six books."]
   prs.a1.unit04.lesson01.teach.seven_eight:
     title: "Seven, eight"
     gloss: "7, 8"
@@ -64,12 +66,12 @@ teaching:
     title: "Fourteen, fifteen, sixteen"
     gloss: "14, 15, 16"
     note: "چهارده، پانزده، شانزده continue the teens."
-    example_gloss: ["I'll come in fourteen more days.", "I'm fifteen minutes late.", "He/she is sixteen years old."]
+    example_gloss: ["I'll come in fourteen more days.", "He/she has fifteen books.", "He/she is sixteen years old."]
   prs.a1.unit04.lesson02.teach.seventeen_nineteen:
     title: "Seventeen, eighteen, nineteen"
     gloss: "17, 18, 19"
     note: "هفده، هجده، نوزده complete the teens."
-    example_gloss: ["Seventeen people came.", "He/she is eighteen years old.", "Nineteen days remain."]
+    example_gloss: ["He/she has seventeen books.", "He/she is eighteen years old.", "Nineteen days remain."]
   prs.a1.unit04.lesson02.teach.twenty:
     title: "Twenty"
     gloss: "20"
@@ -85,17 +87,17 @@ teaching:
     title: "Fifty, sixty"
     gloss: "50, 60"
     note: "پنجاه، شصت continue the tens."
-    example_gloss: ["Fifty people were at the meeting.", "Sixty minutes is one hour."]
+    example_gloss: ["He/she has fifty books.", "Sixty minutes is one hour."]
   prs.a1.unit04.lesson03.teach.seventy_eighty:
     title: "Seventy, eighty"
     gloss: "70, 80"
     note: "هفتاد، هشتاد continue the tens."
-    example_gloss: ["I read seventy pages of the book.", "Eighty percent is done."]
+    example_gloss: ["This book has seventy pages.", "He/she has eighty books."]
   prs.a1.unit04.lesson03.teach.ninety_hundred:
     title: "Ninety, one hundred"
     gloss: "90, 100"
     note: "نود، صد complete the sequence up to one hundred."
-    example_gloss: ["He/she is ninety years old.", "A hundred people came."]
+    example_gloss: ["He/she is ninety years old.", "He/she has a hundred books."]
   prs.a1.unit04.lesson03.teach.combining_tens:
     title: "Combine tens and ones"
     gloss: "25 is literally 'twenty and five.'"
@@ -323,11 +325,17 @@ exercises:
     instruction: "Translate into Dari: I'm 25 years old."
     accepted_answers:
       - {value: "بیست و پنج ساله استم", status: correct}
+      - {value: "من بیست و پنج ساله استم", status: correct}
+      - {value: "بیست و پنج سال دارم", status: correct}
+      - {value: "من بیست و پنج سال دارم", status: correct}
     feedback: "بیست و پنج ساله استم means I'm 25 years old."
   prs.a1.unit04.lesson04.exercise07.speak_own_age:
     instruction: "چند ساله استین؟ Answer as if you are 30 years old."
     accepted_answers:
       - {value: "سی ساله استم", status: correct}
+      - {value: "من سی ساله استم", status: correct}
+      - {value: "سی سال دارم", status: correct}
+      - {value: "من سی سال دارم", status: correct}
     feedback: "سی ساله استم states an age of 30 using the [number] ساله استم pattern."
 
   prs.a1.unit04.lesson05.exercise01.recognize_phone_question:
@@ -362,12 +370,14 @@ exercises:
     accepted_answers:
       - {value: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است", status: correct}
       - {value: "نمبر تلفنم صفر هفتاد و نه سه چهار پنج شش هفت هشت است", status: correct}
+      - {value: "نمبر تلفن من صفر هفتاد و نه سه چهار پنج شش هفت هشت است", status: correct}
     feedback: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است reads out the phone number in grouped chunks."
   prs.a1.unit04.lesson05.exercise07.speak_own_phone_number:
     instruction: "نمبر تلفن‌تان چند است؟ Answer as if your phone number is 079-345-678, read out in the same grouped style as this lesson's example."
     accepted_answers:
       - {value: "نمبر تلفنم صفر هفتاد و نه، سه چهار پنج، شش هفت هشت است", status: correct}
       - {value: "نمبر تلفنم صفر هفتاد و نه سه چهار پنج شش هفت هشت است", status: correct}
+      - {value: "نمبر تلفن من صفر هفتاد و نه سه چهار پنج شش هفت هشت است", status: correct}
     feedback: "نمبر تلفنم [number] است correctly gives a phone number."
 
   prs.a1.unit04.lesson06.exercise01.listen_context:
@@ -380,11 +390,17 @@ exercises:
     instruction: "تو چند ساله استی؟ Answer as if you are 26, like Bashir in the dialogue."
     accepted_answers:
       - {value: "بیست و شش ساله استم", status: correct}
+      - {value: "من بیست و شش ساله استم", status: correct}
+      - {value: "بیست و شش سال دارم", status: correct}
+      - {value: "من بیست و شش سال دارم", status: correct}
     feedback: "بیست و شش ساله استم states an age of 26, the same pattern Bashir uses in the dialogue."
   prs.a1.unit04.lesson06.exercise03.translate_ages:
     instruction: "Translate into Dari: I'm 28 years old."
     accepted_answers:
       - {value: "بیست و هشت ساله استم", status: correct}
+      - {value: "من بیست و هشت ساله استم", status: correct}
+      - {value: "بیست و هشت سال دارم", status: correct}
+      - {value: "من بیست و هشت سال دارم", status: correct}
     feedback: "Homayoun says بیست و هشت ساله استم."
   prs.a1.unit04.lesson06.exercise04.match_dialogue_facts:
     instruction: "Match each person with their age from the dialogue."

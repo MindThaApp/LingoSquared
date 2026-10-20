@@ -15,8 +15,9 @@ review:
 
     FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Verified every multiple_choice pairs a Dari-script prompt against English-gloss options/distractors -- zero prompt-shows-answer instances (no same-script visual-matching shortcut anywhere). Ran a Python tokenizer (ZWNJ-aware, Persian-punctuation-stripping) checking every accepted_answers/correct_option/distractors value against the realization's cumulative introduced_tokens up to that point in the lesson sequence: found and fixed ONE untaught-word violation -- lesson02.exercise05.dialogue_response_ask_time's accepted_answers included \"ببخشین، ساعت چند است؟\" using ببخشین before its lesson06 introduction; removed that variant (the two remaining forms, with and without the question mark, are both already-taught vocabulary and both status:correct). Confirmed content_key parity exact in both directions against the realization (units/lessons/teaching/exercises, zero orphans) and that this file's flat top-level-dict structure (units/lessons/teaching/exercises each keyed directly by content_key) is schema-correct. Found and fixed a real learner-facing factual error: the qarar_word teaching note claimed قرار \"match[ed] the vocabulary already used in unit09's meeting-scheduling dialogue\" -- verified directly against unit09 and confirmed جلسه, not قرار, is unit09's word for meeting (قرار never appears anywhere in prs content before this unit); corrected the note to accurately distinguish قرار (new, personal-appointment word) from جلسه (unit09's existing meeting word) instead of falsely claiming continuity. Applied the §15 target-language-asterisk convention to every note and feedback string in this file (56 strings, programmatically wrapped every Persian-range span in every note/feedback value) since this is freshly-authored content, not exempt pre-existing prose. Confirmed via actual compile (not just validate) that every exercise produces a real, non-empty correct_response, the multi-clause write_meeting_summary keeps its period-, comma-, and و-joined accepted forms all as status:correct per §12, and (working with the paired realization) that 3 dialogue_response exercises plus 1 writing_prompt no longer duplicate their own instruction text as a redundant second prompt block. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 13 kind:vocabulary teaching entries with example_gloss (2 merged cards -- the numbers list and the names list -- each given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence using the card's own word(s), using the Afghan Dari نان چاشت (lunch) term. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 13 kind:vocabulary teaching entries with example_gloss (2 merged cards -- the numbers list and the names list -- each given a positionally-matched list of examples), each a natural, comprehensible-from-gloss sentence using the card's own word(s), using the Afghan Dari نان چاشت (lunch) term. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 9 fixes - realization: two lesson titles given proper ZWNJ/ezafe spelling, register-note card no longer claims Iranian-only contraction; overlay: register note rewritten (است is often shortened in fast speech), added period-final and optional-من accepted variants on seven translation/response items. NATIVE FLAGS: is the contraction چنده used in Kabul speech; ظهر vs چاشت for noon; ربع به هشت for quarter to eight."
 course:
   title: Dari A1
   description: Beginner Kabul Dari for respectful everyday communication.
@@ -70,8 +71,8 @@ teaching:
     note: "*ساعت چند است؟* is the neutral, polite way to ask the time in Dari."
   prs.a1.unit11.lesson02.teach.register_note:
     title: "Register note"
-    gloss: "ساعت چند است؟ (not the Iranian-colloquial ساعت چنده)"
-    note: "Dari keeps *است* uncontracted; the Iranian-colloquial -e contraction (*چنده*) is not used here."
+    gloss: "ساعت چند است؟ (full, neutral form)"
+    note: "*ساعت چند است؟* is the full, neutral form: it is correct in writing and in speech. In fast casual speech *است* is often shortened to a final -ه (as in *چنده*), but use the full form while you are learning."
   prs.a1.unit11.lesson03.teach.saat_se_ast:
     title: "It's three o'clock."
     gloss: "It's three o'clock."
@@ -239,11 +240,13 @@ exercises:
     instruction: "Translate into Dari: It's five o'clock."
     accepted_answers:
       - {value: "ساعت پنج است", status: correct}
+      - {value: "ساعت پنج است.", status: correct}
     feedback: "*ساعت پنج است* means it's five o'clock."
   prs.a1.unit11.lesson03.exercise06.translate_quarter_past_four:
     instruction: "Translate into Dari: It's a quarter past four."
     accepted_answers:
       - {value: "ساعت چهار و ربع است", status: correct}
+      - {value: "ساعت چهار و ربع است.", status: correct}
     feedback: "*ساعت چهار و ربع است* means it's a quarter past four."
   prs.a1.unit11.lesson04.exercise01.recognize_zohr_reading:
     instruction: "What does this word mean?"
@@ -277,6 +280,7 @@ exercises:
     instruction: "Translate into Dari: It's seven at night."
     accepted_answers:
       - {value: "ساعت هفت شب است", status: correct}
+      - {value: "ساعت هفت شب است.", status: correct}
     feedback: "*ساعت هفت شب است* means it's seven at night."
   prs.a1.unit11.lesson05.exercise01.recognize_appointment_question_reading:
     instruction: "What does this question ask?"
@@ -305,6 +309,7 @@ exercises:
     instruction: "Translate into Dari: My appointment is at eight-thirty."
     accepted_answers:
       - {value: "قرار من ساعت هشت و نیم است", status: correct}
+      - {value: "قرار من ساعت هشت و نیم است.", status: correct}
     feedback: "*قرار من ساعت هشت و نیم است* means my appointment is at eight-thirty."
   prs.a1.unit11.lesson05.exercise06.dialogue_response_own_appointment:
     instruction: "Someone asks what time your appointment is. Say it's at eight-thirty."
@@ -333,6 +338,9 @@ exercises:
     instruction: "Translate into Dari: I'm coming at eight-thirty."
     accepted_answers:
       - {value: "من ساعت هشت و نیم می‌آیم", status: correct}
+      - {value: "من ساعت هشت و نیم می‌آیم.", status: correct}
+      - {value: "ساعت هشت و نیم می‌آیم", status: correct}
+      - {value: "ساعت هشت و نیم می‌آیم.", status: correct}
     feedback: "*من ساعت هشت و نیم می‌آیم* means I'm coming at eight-thirty."
   prs.a1.unit11.lesson06.exercise05.dialogue_response_confirm_time:
     instruction: "Homayoun just told you the meeting is at nine in the morning. Confirm that nine o'clock works well."
@@ -340,6 +348,7 @@ exercises:
       - {value: "ساعت نه؟ خوب است", status: correct}
       - {value: "ساعت نه؟ خوب است.", status: correct}
       - {value: "ساعت نه خوب است", status: correct}
+      - {value: "ساعت نه، خوب است", status: correct}
     feedback: "*ساعت نه؟ خوب است* confirms nine o'clock works well."
   prs.a1.unit11.lesson06.exercise06.write_meeting_summary:
     instruction: "Write one or two sentences in Dari, as Zarmina, summarizing when the meeting is and what time you (Zarmina) are arriving."
@@ -347,4 +356,8 @@ exercises:
       - {value: "جلسه ساعت نه صبح است، من ساعت هشت و نیم می‌آیم", status: correct}
       - {value: "جلسه ساعت نه صبح است. من ساعت هشت و نیم می‌آیم.", status: correct}
       - {value: "جلسه ساعت نه صبح است و من ساعت هشت و نیم می‌آیم", status: correct}
+      - {value: "جلسه ساعت نه صبح است، من ساعت هشت و نیم می‌آیم.", status: correct}
+      - {value: "جلسه ساعت نه صبح است. من ساعت هشت و نیم می‌آیم", status: correct}
+      - {value: "جلسه ساعت نه صبح است، و من ساعت هشت و نیم می‌آیم", status: correct}
+      - {value: "جلسه ساعت نه صبح است و من ساعت هشت و نیم می‌آیم.", status: correct}
     feedback: "Joining the two facts with a comma, a period, or *و* are all equally natural."

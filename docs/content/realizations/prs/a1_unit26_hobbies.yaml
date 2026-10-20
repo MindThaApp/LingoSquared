@@ -10,7 +10,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "2026-07-10 fresh-context review (Claude, zero access to the authoring reasoning). Checked: translation-exercise instructions (all already correctly name the specific sentence -- no bug here, unlike units 23/24), matching_pairs pair counts (6-7 throughout, compliant), reading-passage/dialogue fact consistency with unit24/25's established Homayoun (walks/near house, sometimes tired) and Zarmina (likes reading and music) facts -- consistent, bare-YAML-boolean grep, Persian-vs-Arabic codepoints, jargon leaks, exercise-type registration, and §19 vocabulary-card examples -- all clean. Found and fixed one real bug: lesson04's dialogue_comprehension exercise (exercise01, testing 'what does Zarmina like to do in her free time?') had a distractor 'She likes watching movies.' that is actually TRUE -- Zarmina's own later dialogue line literally says 'من هم فلم دیدن را دوست دارم' (I also like watching movies), so the exercise had two defensible correct answers depending on which of Zarmina's own lines the learner recalled. This is the same same-speaker-distractor bug class documented in CLAUDE.md's nl-unit44-50 footgun; it wasn't caught by the compiler's automated validate_same_speaker_dialogue_distractors check because that check only covers listen_select/dialogue_response types, not dialogue_comprehension, so it needed a manual read. Replaced the distractor with 'She dislikes reading.' (verifiably false, not spoken by anyone in the dialogue). Re-validated clean (0 errors/0 warnings) after the fix."
+  notes: "2026-07-10 fresh-context review (Claude, zero access to the authoring reasoning). Checked: translation-exercise instructions (all already correctly name the specific sentence -- no bug here, unlike units 23/24), matching_pairs pair counts (6-7 throughout, compliant), reading-passage/dialogue fact consistency with unit24/25's established Homayoun (walks/near house, sometimes tired) and Zarmina (likes reading and music) facts -- consistent, bare-YAML-boolean grep, Persian-vs-Arabic codepoints, jargon leaks, exercise-type registration, and §19 vocabulary-card examples -- all clean. Found and fixed one real bug: lesson04's dialogue_comprehension exercise (exercise01, testing 'what does Zarmina like to do in her free time?') had a distractor 'She likes watching movies.' that is actually TRUE -- Zarmina's own later dialogue line literally says 'من هم فلم دیدن را دوست دارم' (I also like watching movies), so the exercise had two defensible correct answers depending on which of Zarmina's own lines the learner recalled. This is the same same-speaker-distractor bug class documented in CLAUDE.md's nl-unit44-50 footgun; it wasn't caught by the compiler's automated validate_same_speaker_dialogue_distractors check because that check only covers listen_select/dialogue_response types, not dialogue_comprehension, so it needed a manual read. Replaced the distractor with 'She dislikes reading.' (verifiably false, not spoken by anyone in the dialogue). Re-validated clean (0 errors/0 warnings) after the fix. Review 2026-10-20 (en-prs A1 pass): 2 fixes - example sentence word order fixed (جمعه روز رخصتی هفته است); reading passage reordered so the cooking line refers to Homayoun, matching the dialogue. NATIVE FLAGS: none beyond: پیاده‌روی vs قدم زدن for walking; فلم دیدن."
 
 course:
   realization_key: prs.a1
@@ -213,7 +213,7 @@ units:
             kind: vocabulary
             target: {text: هفته, language_code: prs, direction: rtl}
             introduced_tokens: [هفته]
-            example: {text: "هفته روز رخصتی جمعه است.", language_code: prs, direction: rtl}
+            example: {text: "جمعه روز رخصتی هفته است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit26.lesson03.teach.har_hafta
             kind: phrase
             target: {text: "هر هفته", language_code: prs, direction: rtl}
@@ -351,7 +351,7 @@ units:
         teaching:
           - content_key: prs.a1.unit26.lesson05.teach.reading_passage
             kind: reading
-            target: {text: "همایون در وقت آزاد پیاده‌روی می‌کند. زرمینه کتاب خواندن را دوست دارد. او هم گاهی آشپزی می‌کند.", language_code: prs, direction: rtl}
+            target: {text: "زرمینه کتاب خواندن را دوست دارد. همایون در وقت آزاد پیاده‌روی می‌کند. او هم گاهی آشپزی می‌کند.", language_code: prs, direction: rtl}
             introduced_tokens: [می‌کند, دارد, او]
         exercises:
           - content_key: prs.a1.unit26.lesson05.exercise01.reading_comprehension_hobbies
@@ -376,7 +376,7 @@ units:
               - {left: او, right: "he/she"}
               - {left: "پیاده‌روی می‌کند.", right: "He walks."}
               - {left: "کتاب خواندن را دوست دارد.", right: "She likes reading."}
-              - {left: "او هم گاهی آشپزی می‌کند.", right: "She also sometimes cooks."}
+              - {left: "او هم گاهی آشپزی می‌کند.", right: "He also sometimes cooks."}
           - content_key: prs.a1.unit26.lesson05.exercise05.order_zarmina_likes_reading
             type: word_order
             tested_text: "کتاب خواندن را دوست دارد"
