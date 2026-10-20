@@ -13,8 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit10_shopping.yaml realization (numbered unit10 to avoid colliding with a separate concurrent session's own in-flight a1_unit09_dates.yaml, still uncommitted at authoring time). Follows the established en-prs overlay convention from unit08 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items to avoid the same-string visual-matching anti-pattern already fixed in units 07/08). Needs the standard fresh-context review before shipping. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14): converted the 6 listen_select/listen_type exercises to match the realization's multiple_choice/translation conversion. MATCHING_PAIRS SCALE (§16) CHECK: all matching_pairs already reasonably sized -- no changes needed. Re-verified 0 remaining §14 violations, both validate and compile clean after the retrofit. FRESH-CONTEXT REVIEW completed 2026-07-06 (zero prior context, paired with the realization's independent review): confirmed content_key parity (22 teaching + 43 exercise keys, exact match both directions against the realization), no jargon leaks, no bare unquoted yes/no/true/false, no Arabic-range kaf/yeh, and every accepted_answers/pairs value checked programmatically against the realization's cumulative introduced_tokens. FOUND AND FIXED, matching the realization-side fixes: (1) exercise01.listen_context's instruction still said 'Listen to the conversation' although the realization now shows the full dialogue as a real visible prompt (the prior retrofit missed this exercise because its type, dialogue_comprehension, wasn't on the retrofit's listen_select/listen_type checklist, and it had zero text fallback and only pending-generation audio) -- reworded to 'Read the conversation'; (2) exercise03.match_dialogue_facts's accepted_answers keyed on English text ('Price per kilo'/'Discounted price for two kilos') that didn't match the realization's actual Dari pairs.left values at all -- a real grading-mismatch bug, since matching_pairs correctness is graded by exact left/right pair equality against what's actually displayed -- fixed by keying on the realization's now-corrected یک کیلو/دو کیلو labels with their Dari price values, keeping the dict shape byte-for-byte in sync with the realization's pairs array; (3) all accepted_answers containing بتین updated to بدهین to match the realization-wide correction of that unverified coinage; (4) exercise06.dialogue_response_ask_discount and exercise08.speak_full_market_scene were each missing a comma-joined multi-clause variant required by §12 (only period- and و-joined forms existed) -- added, all as status:correct. validate and compile both run clean (0 errors/0 warnings) after all fixes, and compile produces valid JSON.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 9 kind:vocabulary teaching entries with example_gloss, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 9 kind:vocabulary teaching entries with example_gloss, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 5 fixes - realization: price-label exercises lesson03 ex01/02 now show the label text they ask about; overlay: added accepted variants for label translate/write (colon and comma forms), من on quantity requests, full-sentence forms for total and purchase summary. NATIVE FLAGS: سیب‌ها قیمتش چند است؟ word order; می‌شه (contracted) next to full forms in this unit."
 course:
   title: "Dari A1"
   description: >-
@@ -246,11 +247,17 @@ exercises:
     instruction: "Translate into Dari: Apples, one kilo, one hundred afghanis."
     accepted_answers:
       - {value: "سیب یک کیلو صد افغانی", status: correct}
+      - {value: "سیب: یک کیلو صد افغانی", status: correct}
+      - {value: "سیب، یک کیلو صد افغانی", status: correct}
+      - {value: "سیب یک کیلو، صد افغانی", status: correct}
     feedback: "سیب یک کیلو صد افغانی is the natural label format."
   prs.a1.unit10.lesson03.exercise07.write_own_label:
     instruction: "Write a price label: apples, one kilo, one hundred afghanis."
     accepted_answers:
       - {value: "سیب یک کیلو صد افغانی", status: correct}
+      - {value: "سیب: یک کیلو صد افغانی", status: correct}
+      - {value: "سیب، یک کیلو صد افغانی", status: correct}
+      - {value: "سیب یک کیلو، صد افغانی", status: correct}
     feedback: "سیب یک کیلو صد افغانی correctly labels the item and price."
 
   prs.a1.unit10.lesson04.exercise01.recognize_quantity_request:
@@ -284,11 +291,13 @@ exercises:
     instruction: "Translate into Dari: I'd like two kilos."
     accepted_answers:
       - {value: "دو کیلو می‌خواهم", status: correct}
+      - {value: "من دو کیلو می‌خواهم", status: correct}
     feedback: "دو کیلو می‌خواهم is the natural way to say this."
   prs.a1.unit10.lesson04.exercise07.speak_ask_quantity:
     instruction: "Tell the shopkeeper you'd like two kilos."
     accepted_answers:
       - {value: "دو کیلو می‌خواهم", status: correct}
+      - {value: "من دو کیلو می‌خواهم", status: correct}
     feedback: "دو کیلو می‌خواهم correctly requests two kilos."
 
   prs.a1.unit10.lesson05.exercise01.recognize_discount_request:
@@ -360,6 +369,7 @@ exercises:
     instruction: "Translate into Dari: It comes to 180 afghanis."
     accepted_answers:
       - {value: "صد و هشتاد افغانی می‌شه", status: correct}
+      - {value: "برای شما صد و هشتاد افغانی می‌شه", status: correct}
     feedback: "The shopkeeper says صد و هشتاد افغانی می‌شه (it comes to 180 afghanis)."
   prs.a1.unit10.lesson06.exercise06.dialogue_response_ask_discount:
     instruction: "The shopkeeper just said one kilo is 100 afghanis. Respond as the customer, asking for two kilos and requesting a discount."
@@ -375,6 +385,9 @@ exercises:
     instruction: "Write a short summary of the purchase: two kilos of apples for 180 afghanis."
     accepted_answers:
       - {value: "دو کیلو سیب صد و هشتاد افغانی", status: correct}
+      - {value: "دو کیلو سیب، صد و هشتاد افغانی", status: correct}
+      - {value: "دو کیلو سیب: صد و هشتاد افغانی", status: correct}
+      - {value: "دو کیلو سیب صد و هشتاد افغانی می‌شه", status: correct}
     feedback: "دو کیلو سیب صد و هشتاد افغانی summarizes the purchase."
   prs.a1.unit10.lesson06.exercise08.speak_full_market_scene:
     instruction: "You are at the market. Ask the price of apples, say you want two kilos, and ask for a discount."

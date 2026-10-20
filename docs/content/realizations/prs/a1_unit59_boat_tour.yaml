@@ -10,7 +10,7 @@ generation_provenance:
 review:
   status: reviewed
   required_next_reviewer: null
-  notes: "2026-07-10 fresh-context review (Claude): checked against the full checklist (same-speaker-distractor risk in multiple_choice/dialogue_response, stray YAML boolean coercion, untaught vocabulary via the compiler, matching_pairs/word_order answer-shape correctness, cross-lesson fact consistency, internal-jargon leaks, Dari translation/register/script correctness, and exercise-type registration against ExerciseRenderer.tsx) -- no real bugs found in this unit. No listen_select/listen_type/dialogue_comprehension exercises exist in this file (prs has zero TTS/audio coverage per AUTHORING_GUIDE.md #14), so the same-speaker-distractor bug class doesn't structurally arise; every multiple_choice item shows the literal Dari text being translated, not audio, so distractor overlap with other same-speaker lines elsewhere in the dialogue can't create ambiguity the way it does for listen_select. matching_pairs accepted_answers use the established flat-dict shape and word_order accepted_answers use the established space-joined-string shape, both of which the compiler/grade() already canonicalize correctly. Compiler validation (grouped with the rest of the prs A1 corpus, per course-level Course-row scoping) is clean: 0 errors, 0 warnings. Re-verified against the file's own original self-report below, which is accurate. New en-prs A1 unit after unit58 (zoo). An exact diff of every spine_outcome_id used in docs/content/realizations/prs/a1_unit*.yaml (plus a2_unit09/10 and b1_unit01) against every outcome id in docs/content/universal_spine.yaml (in the spine file's own line order) found universal.a1.boat_tour.take_a_sightseeing_boat_tour as the next unrealized A1 outcome -- computed programmatically (not by eye): every spine_outcome_id value across all 61 existing prs realization files was collected into a set (via grep -rhoE) and diffed against every universal.a1.* id in the spine file's own order (grep -n '^  - id:' on universal_spine.yaml), confirming boat_tour (line 1704, immediately after zoo's own line 1679) is the earliest gap. Both listed prerequisites -- universal.a1.plans.make_simple_plans [unit13] and universal.a1.travel.handle_basic_journey [unit16] -- are already realized in prs, confirmed against the same collected spine_outcome_id set. Matches all four of the outcome's own assessment_requirements: understand_boat_tour_information (listening substituted with reading-based multiple_choice recognition per AUTHORING_GUIDE.md §14's established no-prs-audio pattern, testing lesson02's operating-hours-and-price sign and lesson04's dialogue statements of departure time/duration/price), request_boat_tour_ticket (speaking substituted the same way this whole corpus substitutes it -- production exercises across lesson04's ticket-counter dialogue asking for a ticket and asking about duration, plus writing_prompts in lessons01/02/03/05/06), read_boat_tour_schedule (lesson02's combined operating-hours-and-ticket-price reading card, a genuine two-fact notice-style sentence, mirroring unit53 museum's and unit58 zoo's own combined-reading precedent), and write_boat_tour_message (writing_prompt exercises across all six lessons). Six lessons, matching zoo/museum's own 6-lesson, service-counter-dialogue shape (distinct from beach/park's friend-outing shape, since this outcome's own assessment_requirements explicitly require buying a ticket and asking about departure/duration, a service transaction, not a friend proposal): boat-and-lake vocabulary (قایق, دریاچه new), a boat-tour sign giving operating hours and ticket price (پure recombination, zero new vocabulary beyond گشت -- از/تا/ده/چهار/صبح/شب/ساعت/حرکت می‌کند/بلیط/هفتاد/افغانی all reviewed, deliberately using different hours (10-4) and a different price (70 afghanis) than unit53 museum's 9-5/40 and unit58 zoo's 8-6/50, so the sign lessons aren't near-verbatim duplicates across units), a beautiful-lake description lesson (زیبا new), a Homayoun/کارمند formal ticket-counter dialogue (پure recombination -- گشت/با/قایق/بیست/دقیقه introduced earlier in-file, everything else review -- combining a ticket request, a departure-time statement, a duration question, and a combined duration+price answer, matching unit53 museum's own combine-two-facts-in-the-staff's-final-line shape), a third-person reading passage recapping the visit (کرد reviewed from unit20/unit36/unit55/unit57, رفت/بود/او/به reviewed from multiple earlier units, no new grammar), and a wrap-up combining a duration-but-interesting contrast with اما (reusing unit53 museum's own single-subject two-fact اما-contrast shape, applied here to duration+quality rather than open/closed hours, since this unit's two established facts -- duration and price -- don't have a natural open/closed-style antonym pair the way a physical venue's hours do) and a formal تان-suffixed question attached to this unit's OWN new noun گشت rather than reusing unit53's exact بلیط‌تان wording verbatim (avoiding a near-duplicate wrap-up sentence across units, per the same discipline unit58 zoo's own محبوب‌تان already applied). Re-declares all review vocabulary in-lesson before first exercise use because the compiler's taught-vocabulary check is per-file (following unit57/unit58's own precedent of redeclaring even within-file review words per lesson, not just once): این/است/در/خوب از multiple earlier units، قایق/دریاچه از این فایل (لسون۰۱)، از/تا/ده/چهار/صبح/شب/ساعت از unit01/unit04/unit08، حرکت می‌کند از unit16، بلیط/چند/افغانی/هفتاد از unit01/unit02/unit04/unit08/unit16، گشت از این فایل (لسون۰۲)، زیبا از این فایل (لسون۰۳)، با از unit24، سلام/بفرمایین/تشکر زیاد/خواهش می‌کنم از units01/09/10/40/46-58، می‌خواهم/یک از unit01/unit02/unit04/unit08، او/رفت/بود/به از multiple earlier units، کرد از unit20/unit36/unit55/unit57، اما/جالب از unit14/unit33/unit39-58/unit52. Uses او only in lesson05's reading passage naming همایون explicitly for the first sentence and switching to او for the following sentences -- the same pattern unit27/unit41/unit47-58's own reading passages already established; no Pashto هغه/هغوی anywhere -- double-checked against the known Pashto-vs-Dari pronoun bug. No fill_in_blank exercises anywhere in this unit (matching the established corpus-wide convention of avoiding that exercise type for prs), so AUTHORING_GUIDE.md §13/§17 don't arise. No multi-clause period/comma/اما-joined accepted_answers exist beyond the single canonical comma-اما wrap-up sentence, matching unit33/39-58's own established precedent that this specific اما-joined-contrast construction has exactly one natural conjunction reading -- confirmed by explicit review, so AUTHORING_GUIDE.md §12's multi-variant requirement doesn't otherwise arise. No listen_type/listen_select/listen_order items are authored for prs (AUTHORING_GUIDE.md §14, zero prs audio/TTS coverage exists) -- listening-modality assessment coverage is provided via reading-based multiple_choice recognition instead; lesson04's six dialogue lines and their speakers (همایون: 3 lines -- request the ticket / ask the duration / thank the staff; کارمند: 3 lines -- greet and state departure time / state duration and price / reply you're welcome) were listed and cross-checked by hand before finalizing any multiple_choice distractor, applying the standing same-speaker-distractor rule to text-based recognition items too, not just audio ones -- every distractor for a tested همایون line is drawn exclusively from کارمند's three lines and vice versa; no exercise in this lesson draws a distractor from the SAME character's other lines. Every matching_pairs exercise uses exactly 7 pairs (AUTHORING_GUIDE.md §16). Every vocabulary teaching card (قایق, دریاچه, گشت, زیبا) has a real example sentence for schema_version 1.1 (AUTHORING_GUIDE.md §19), built only from words already taught earlier in the same lesson or file; grammar_note/phrase/dialogue/reading cards are exempt and correctly carry no example field. Every literal Persian ؟ inside an inline flow-mapping pair (matching_pairs left/right) or a double-quoted scalar is inside a quoted string. A recursive yaml.safe_load boolean-coercion scan (not just grep) was run over both this file and its overlay -- zero stray Python bools found beyond the two legitimate schema fields (human_reviewed, target_language_first); no bare Yes/No/True/False/On/Off values exist anywhere in this unit's content. A script-purity check (recursive scan for Arabic-range kaf/yeh codepoints U+0643/U+064A) found zero stray Arabic-range codepoints -- every keheh/yeh in this file is the Persian-range form (U+06A9/U+06CC). A Pashto-vs-Dari pronoun check found only او for he/she throughout, never هغه/هغوی. §11 cross-lesson fact check: the boat tour's stated operating-hours-and-price fact (از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند؛ بلیط هفتاد افغانی است) is stated identically in lesson02 and restated identically (never contradicted) in lesson04's dialogue (departure ساعت ده صبح matches the sign's window start; price هفتاد افغانی matches exactly); the duration fact (بیست دقیقه), introduced fresh in lesson04 since the sign itself never states a duration, is restated identically in lesson06's wrap-up; lesson05's reading passage states only that Homayoun went to the lake, took a boat tour, and that the lake was beautiful -- consistent with (not contradicting) any fact stated elsewhere; no two facts are ever summed or compared arithmetically. Authored independently of the fa realization per the sibling-isolation rule (fa/a1_unit* files were never opened while authoring this file, and en-prs is the only direction this task covers -- prs-en was not touched)."
+  notes: "2026-07-10 fresh-context review (Claude): checked against the full checklist (same-speaker-distractor risk in multiple_choice/dialogue_response, stray YAML boolean coercion, untaught vocabulary via the compiler, matching_pairs/word_order answer-shape correctness, cross-lesson fact consistency, internal-jargon leaks, Dari translation/register/script correctness, and exercise-type registration against ExerciseRenderer.tsx) -- no real bugs found in this unit. No listen_select/listen_type/dialogue_comprehension exercises exist in this file (prs has zero TTS/audio coverage per AUTHORING_GUIDE.md #14), so the same-speaker-distractor bug class doesn't structurally arise; every multiple_choice item shows the literal Dari text being translated, not audio, so distractor overlap with other same-speaker lines elsewhere in the dialogue can't create ambiguity the way it does for listen_select. matching_pairs accepted_answers use the established flat-dict shape and word_order accepted_answers use the established space-joined-string shape, both of which the compiler/grade() already canonicalize correctly. Compiler validation (grouped with the rest of the prs A1 corpus, per course-level Course-row scoping) is clean: 0 errors, 0 warnings. Re-verified against the file's own original self-report below, which is accurate. New en-prs A1 unit after unit58 (zoo). An exact diff of every spine_outcome_id used in docs/content/realizations/prs/a1_unit*.yaml (plus a2_unit09/10 and b1_unit01) against every outcome id in docs/content/universal_spine.yaml (in the spine file's own line order) found universal.a1.boat_tour.take_a_sightseeing_boat_tour as the next unrealized A1 outcome -- computed programmatically (not by eye): every spine_outcome_id value across all 61 existing prs realization files was collected into a set (via grep -rhoE) and diffed against every universal.a1.* id in the spine file's own order (grep -n '^  - id:' on universal_spine.yaml), confirming boat_tour (line 1704, immediately after zoo's own line 1679) is the earliest gap. Both listed prerequisites -- universal.a1.plans.make_simple_plans [unit13] and universal.a1.travel.handle_basic_journey [unit16] -- are already realized in prs, confirmed against the same collected spine_outcome_id set. Matches all four of the outcome's own assessment_requirements: understand_boat_tour_information (listening substituted with reading-based multiple_choice recognition per AUTHORING_GUIDE.md §14's established no-prs-audio pattern, testing lesson02's operating-hours-and-price sign and lesson04's dialogue statements of departure time/duration/price), request_boat_tour_ticket (speaking substituted the same way this whole corpus substitutes it -- production exercises across lesson04's ticket-counter dialogue asking for a ticket and asking about duration, plus writing_prompts in lessons01/02/03/05/06), read_boat_tour_schedule (lesson02's combined operating-hours-and-ticket-price reading card, a genuine two-fact notice-style sentence, mirroring unit53 museum's and unit58 zoo's own combined-reading precedent), and write_boat_tour_message (writing_prompt exercises across all six lessons). Six lessons, matching zoo/museum's own 6-lesson, service-counter-dialogue shape (distinct from beach/park's friend-outing shape, since this outcome's own assessment_requirements explicitly require buying a ticket and asking about departure/duration, a service transaction, not a friend proposal): boat-and-lake vocabulary (قایق, دریاچه new), a boat-tour sign giving operating hours and ticket price (پure recombination, zero new vocabulary beyond گشت -- از/تا/ده/چهار/صبح/شب/ساعت/حرکت می‌کند/بلیط/هفتاد/افغانی all reviewed, deliberately using different hours (10-4) and a different price (70 afghanis) than unit53 museum's 9-5/40 and unit58 zoo's 8-6/50, so the sign lessons aren't near-verbatim duplicates across units), a beautiful-lake description lesson (زیبا new), a Homayoun/کارمند formal ticket-counter dialogue (پure recombination -- گشت/با/قایق/بیست/دقیقه introduced earlier in-file, everything else review -- combining a ticket request, a departure-time statement, a duration question, and a combined duration+price answer, matching unit53 museum's own combine-two-facts-in-the-staff's-final-line shape), a third-person reading passage recapping the visit (کرد reviewed from unit20/unit36/unit55/unit57, رفت/بود/او/به reviewed from multiple earlier units, no new grammar), and a wrap-up combining a duration-but-interesting contrast with اما (reusing unit53 museum's own single-subject two-fact اما-contrast shape, applied here to duration+quality rather than open/closed hours, since this unit's two established facts -- duration and price -- don't have a natural open/closed-style antonym pair the way a physical venue's hours do) and a formal تان-suffixed question attached to this unit's OWN new noun گشت rather than reusing unit53's exact بلیط‌تان wording verbatim (avoiding a near-duplicate wrap-up sentence across units, per the same discipline unit58 zoo's own محبوب‌تان already applied). Re-declares all review vocabulary in-lesson before first exercise use because the compiler's taught-vocabulary check is per-file (following unit57/unit58's own precedent of redeclaring even within-file review words per lesson, not just once): این/است/در/خوب از multiple earlier units، قایق/دریاچه از این فایل (لسون۰۱)، از/تا/ده/چهار/صبح/شب/ساعت از unit01/unit04/unit08، حرکت می‌کند از unit16، بلیط/چند/افغانی/هفتاد از unit01/unit02/unit04/unit08/unit16، گشت از این فایل (لسون۰۲)، زیبا از این فایل (لسون۰۳)، با از unit24، سلام/بفرمایین/تشکر زیاد/خواهش می‌کنم از units01/09/10/40/46-58، می‌خواهم/یک از unit01/unit02/unit04/unit08، او/رفت/بود/به از multiple earlier units، کرد از unit20/unit36/unit55/unit57، اما/جالب از unit14/unit33/unit39-58/unit52. Uses او only in lesson05's reading passage naming همایون explicitly for the first sentence and switching to او for the following sentences -- the same pattern unit27/unit41/unit47-58's own reading passages already established; no Pashto هغه/هغوی anywhere -- double-checked against the known Pashto-vs-Dari pronoun bug. No fill_in_blank exercises anywhere in this unit (matching the established corpus-wide convention of avoiding that exercise type for prs), so AUTHORING_GUIDE.md §13/§17 don't arise. No multi-clause period/comma/اما-joined accepted_answers exist beyond the single canonical comma-اما wrap-up sentence, matching unit33/39-58's own established precedent that this specific اما-joined-contrast construction has exactly one natural conjunction reading -- confirmed by explicit review, so AUTHORING_GUIDE.md §12's multi-variant requirement doesn't otherwise arise. No listen_type/listen_select/listen_order items are authored for prs (AUTHORING_GUIDE.md §14, zero prs audio/TTS coverage exists) -- listening-modality assessment coverage is provided via reading-based multiple_choice recognition instead; lesson04's six dialogue lines and their speakers (همایون: 3 lines -- request the ticket / ask the duration / thank the staff; کارمند: 3 lines -- greet and state departure time / state duration and price / reply you're welcome) were listed and cross-checked by hand before finalizing any multiple_choice distractor, applying the standing same-speaker-distractor rule to text-based recognition items too, not just audio ones -- every distractor for a tested همایون line is drawn exclusively from کارمند's three lines and vice versa; no exercise in this lesson draws a distractor from the SAME character's other lines. Every matching_pairs exercise uses exactly 7 pairs (AUTHORING_GUIDE.md §16). Every vocabulary teaching card (قایق, دریاچه, گشت, زیبا) has a real example sentence for schema_version 1.1 (AUTHORING_GUIDE.md §19), built only from words already taught earlier in the same lesson or file; grammar_note/phrase/dialogue/reading cards are exempt and correctly carry no example field. Every literal Persian ؟ inside an inline flow-mapping pair (matching_pairs left/right) or a double-quoted scalar is inside a quoted string. A recursive yaml.safe_load boolean-coercion scan (not just grep) was run over both this file and its overlay -- zero stray Python bools found beyond the two legitimate schema fields (human_reviewed, target_language_first); no bare Yes/No/True/False/On/Off values exist anywhere in this unit's content. A script-purity check (recursive scan for Arabic-range kaf/yeh codepoints U+0643/U+064A) found zero stray Arabic-range codepoints -- every keheh/yeh in this file is the Persian-range form (U+06A9/U+06CC). A Pashto-vs-Dari pronoun check found only او for he/she throughout, never هغه/هغوی. §11 cross-lesson fact check: the boat tour's stated operating-hours-and-price fact (از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند؛ بلیط هفتاد افغانی است) is stated identically in lesson02 and restated identically (never contradicted) in lesson04's dialogue (departure ساعت ده صبح matches the sign's window start; price هفتاد افغانی matches exactly); the duration fact (بیست دقیقه), introduced fresh in lesson04 since the sign itself never states a duration, is restated identically in lesson06's wrap-up; lesson05's reading passage states only that Homayoun went to the lake, took a boat tour, and that the lake was beautiful -- consistent with (not contradicting) any fact stated elsewhere; no two facts are ever summed or compared arithmetically. Authored independently of the fa realization per the sibling-isolation rule (fa/a1_unit* files were never opened while authoring this file, and en-prs is the only direction this task covers -- prs-en was not touched).\n\nReview 2026-10-20 (en-prs A1 pass): 3 fixes - بلیط replaced with تکت throughout (incl. lesson title); lesson title نشانی changed to تابلو; شب changed to عصر for the 4 pm end time. NATIVE FLAGS: گشت (tour) may be better as سیر; حرکت می‌کند for runs/departs. Follow-up: English side of the سلام، بفرمایین matching pair changed to Hello, welcome (same as the overlay). Owner follow-up 2026-10-20: register_policy metadata spelling دکاندار changed to دوکاندار."
 
 course:
   realization_key: prs.a1
@@ -21,17 +21,17 @@ course:
     Dari register (units 01-58). Lesson04's dialogue introduces the boat
     tour's ticket-counter کارمند role opposite the established Homayoun
     character, reusing the same polite-service register unit08's
-    دکاندار/مشتری, unit42's داکتر/منشی, unit45's کارمند هوتل, unit50's pool
+    دوکاندار/مشتری, unit42's داکتر/منشی, unit45's کارمند هوتل, unit50's pool
     کارمند, unit52's cinema کارمند, and unit53's museum کارمند exchanges
     already established -- not the informal-تو friendship register used
     for Homayoun/Zarmina outings elsewhere in this course. This unit's
     گشت با قایق extends unit24's own already-established با+mode-of-
     transport pattern to a new noun, its operating-hours sentence (گشت با
-    قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند) reuses unit16 travel's
+    قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند) reuses unit16 travel's
     own established حرکت می‌کند departure verb extended to a window rather
     than a single point in time, and its wrap-up's گشت‌تان چند دقیقه است؟
     extends unit39-58's own established formal تان-suffix pattern to this
-    unit's own new noun گشت rather than reusing unit53's exact بلیط‌تان
+    unit's own new noun گشت rather than reusing unit53's exact تکت‌تان
     wording. Lesson05's reading passage uses a 3rd-person statement naming
     همایون explicitly in its first sentence, then او in the following
     sentences, matching unit27/unit41/unit47-58's own reading-passage
@@ -45,7 +45,7 @@ media_assets:
     status: pending_generation
   - content_key: prs.a1.unit59.audio.dialogue.boat_tour_counter.01
     language: prs
-    text: "همایون: سلام. یک بلیط گشت با قایق می‌خواهم. کارمند: سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند. همایون: گشت چند دقیقه است؟ کارمند: گشت بیست دقیقه است. بلیط هفتاد افغانی است. همایون: تشکر زیاد. کارمند: خواهش می‌کنم."
+    text: "همایون: سلام. یک تکت گشت با قایق می‌خواهم. کارمند: سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند. همایون: گشت چند دقیقه است؟ کارمند: گشت بیست دقیقه است. تکت هفتاد افغانی است. همایون: تشکر زیاد. کارمند: خواهش می‌کنم."
     voice_hint: two_adults_neutral_formal
     status: pending_generation
 
@@ -124,13 +124,13 @@ units:
             prompt: {target_blocks: []}
 
       - content_key: prs.a1.unit59.lesson02.boat_tour_sign
-        title: نشانی گشت با قایق
+        title: تابلوی گشت با قایق
         spine_outcome_id: universal.a1.boat_tour.take_a_sightseeing_boat_tour
         teaching:
           - content_key: prs.a1.unit59.lesson02.teach.review_boat_hours_words
             kind: grammar_note
-            target: {text: "قایق (boat) / از (from) / تا (until) / ده (ten) / صبح (morning) / چهار (four) / شب (evening) / ساعت (o'clock)", language_code: prs, direction: rtl}
-            introduced_tokens: [قایق, از, تا, ده, صبح, چهار, شب, ساعت]
+            target: {text: "قایق (boat) / از (from) / تا (until) / ده (ten) / صبح (morning) / چهار (four) / عصر (afternoon) / ساعت (o'clock)", language_code: prs, direction: rtl}
+            introduced_tokens: [قایق, از, تا, ده, صبح, چهار, عصر, ساعت]
           - content_key: prs.a1.unit59.lesson02.teach.tour_word
             kind: vocabulary
             target: {text: گشت, language_code: prs, direction: rtl}
@@ -138,55 +138,55 @@ units:
             example: {text: "گشت با قایق خوب است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit59.lesson02.teach.review_with_departs_is
             kind: grammar_note
-            target: {text: "با (with/by) / حرکت می‌کند (it departs) / بلیط (ticket) / چند (how much) / افغانی (afghani) / هفتاد (seventy) / است (is)", language_code: prs, direction: rtl}
-            introduced_tokens: [با, "حرکت", "می‌کند", بلیط, چند, افغانی, هفتاد, است]
+            target: {text: "با (with/by) / حرکت می‌کند (it departs) / تکت (ticket) / چند (how much) / افغانی (afghani) / هفتاد (seventy) / است (is)", language_code: prs, direction: rtl}
+            introduced_tokens: [با, "حرکت", "می‌کند", تکت, چند, افغانی, هفتاد, است]
           - content_key: prs.a1.unit59.lesson02.teach.boat_tour_sign_reading
             kind: reading
-            target: {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند. بلیط هفتاد افغانی است.", language_code: prs, direction: rtl}
+            target: {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند. تکت هفتاد افغانی است.", language_code: prs, direction: rtl}
             introduced_tokens: []
         exercises:
           - content_key: prs.a1.unit59.lesson02.exercise01.recognize_sign_sentence
             type: multiple_choice
-            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند. بلیط هفتاد افغانی است."
+            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند. تکت هفتاد افغانی است."
             prompt:
               target_blocks:
-                - {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند. بلیط هفتاد افغانی است.", language_code: prs, direction: rtl}
+                - {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند. تکت هفتاد افغانی است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit59.lesson02.exercise02.reading_operating_hours
             type: multiple_choice
-            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند"
+            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند"
             prompt:
               target_blocks:
-                - {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند.", language_code: prs, direction: rtl}
+                - {text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit59.lesson02.exercise03.reading_ticket_price
             type: multiple_choice
-            tested_text: "بلیط هفتاد افغانی است"
+            tested_text: "تکت هفتاد افغانی است"
             prompt:
               target_blocks:
-                - {text: "بلیط هفتاد افغانی است.", language_code: prs, direction: rtl}
+                - {text: "تکت هفتاد افغانی است.", language_code: prs, direction: rtl}
           - content_key: prs.a1.unit59.lesson02.exercise04.match_sign_vocab
             type: matching_pairs
-            tested_text: "گشت با قایق بلیط هفتاد افغانی گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند. بلیط هفتاد افغانی است."
+            tested_text: "گشت با قایق تکت هفتاد افغانی گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند. تکت هفتاد افغانی است."
             prompt: {target_blocks: []}
             pairs:
               - {left: گشت, right: tour}
               - {left: با, right: "with/by"}
               - {left: قایق, right: boat}
-              - {left: بلیط, right: ticket}
+              - {left: تکت, right: ticket}
               - {left: هفتاد, right: seventy}
               - {left: افغانی, right: afghani}
-              - {left: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند.", right: "The boat tour runs from ten in the morning until four in the evening."}
+              - {left: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند.", right: "The boat tour runs from ten in the morning until four in the afternoon."}
           - content_key: prs.a1.unit59.lesson02.exercise05.order_boat_tour_hours
             type: word_order
-            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند"
+            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند"
             prompt: {target_blocks: []}
-            word_bank: [گشت, با, قایق, از, ساعت, ده, صبح, تا, ساعت, چهار, شب, "حرکت", "می‌کند"]
+            word_bank: [گشت, با, قایق, از, ساعت, ده, صبح, تا, ساعت, چهار, عصر, "حرکت", "می‌کند"]
           - content_key: prs.a1.unit59.lesson02.exercise06.translate_ticket_price
             type: translation
-            tested_text: "بلیط هفتاد افغانی است."
+            tested_text: "تکت هفتاد افغانی است."
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit59.lesson02.exercise07.write_boat_tour_hours
             type: writing_prompt
-            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار شب حرکت می‌کند"
+            tested_text: "گشت با قایق از ساعت ده صبح تا ساعت چهار عصر حرکت می‌کند"
             prompt: {target_blocks: []}
 
       - content_key: prs.a1.unit59.lesson03.beautiful_lake
@@ -250,13 +250,13 @@ units:
             prompt: {target_blocks: []}
 
       - content_key: prs.a1.unit59.lesson04.ticket_counter_dialogue
-        title: خریدن بلیط گشت با قایق
+        title: خریدن تکت گشت با قایق
         spine_outcome_id: universal.a1.boat_tour.take_a_sightseeing_boat_tour
         teaching:
           - content_key: prs.a1.unit59.lesson04.teach.review_hello_want_ticket
             kind: grammar_note
-            target: {text: "سلام (hello) / یک (one/a) / بلیط (ticket) / گشت (tour) / با (with/by) / قایق (boat) / می‌خواهم (I want)", language_code: prs, direction: rtl}
-            introduced_tokens: [سلام, یک, بلیط, گشت, با, قایق, "می‌خواهم"]
+            target: {text: "سلام (hello) / یک (one/a) / تکت (ticket) / گشت (tour) / با (with/by) / قایق (boat) / می‌خواهم (I want)", language_code: prs, direction: rtl}
+            introduced_tokens: [سلام, یک, تکت, گشت, با, قایق, "می‌خواهم"]
           - content_key: prs.a1.unit59.lesson04.teach.review_here_you_go_departs
             kind: grammar_note
             target: {text: "بفرمایین (here you go) / از (from) / ساعت (o'clock) / ده (ten) / صبح (morning) / حرکت می‌کند (it departs)", language_code: prs, direction: rtl}
@@ -275,7 +275,7 @@ units:
             introduced_tokens: ["تشکر", زیاد, "خواهش", "می‌کنم"]
           - content_key: prs.a1.unit59.lesson04.teach.dialogue_line1
             kind: dialogue
-            target: {text: "سلام. یک بلیط گشت با قایق می‌خواهم.", language_code: prs, direction: rtl, speaker: همایون}
+            target: {text: "سلام. یک تکت گشت با قایق می‌خواهم.", language_code: prs, direction: rtl, speaker: همایون}
             introduced_tokens: []
           - content_key: prs.a1.unit59.lesson04.teach.dialogue_line2
             kind: dialogue
@@ -287,7 +287,7 @@ units:
             introduced_tokens: []
           - content_key: prs.a1.unit59.lesson04.teach.dialogue_line4
             kind: dialogue
-            target: {text: "گشت بیست دقیقه است. بلیط هفتاد افغانی است.", language_code: prs, direction: rtl, speaker: کارمند}
+            target: {text: "گشت بیست دقیقه است. تکت هفتاد افغانی است.", language_code: prs, direction: rtl, speaker: کارمند}
             introduced_tokens: []
           - content_key: prs.a1.unit59.lesson04.teach.dialogue_line5
             kind: dialogue
@@ -300,36 +300,36 @@ units:
         exercises:
           - content_key: prs.a1.unit59.lesson04.exercise01.dialogue_request_ticket
             type: multiple_choice
-            tested_text: "سلام. یک بلیط گشت با قایق می‌خواهم."
-            prompt: {target_blocks: [{text: "سلام. یک بلیط گشت با قایق می‌خواهم.", language_code: prs, direction: rtl}]}
+            tested_text: "سلام. یک تکت گشت با قایق می‌خواهم."
+            prompt: {target_blocks: [{text: "سلام. یک تکت گشت با قایق می‌خواهم.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit59.lesson04.exercise02.dialogue_ask_duration
             type: multiple_choice
             tested_text: "گشت چند دقیقه است؟"
             prompt: {target_blocks: [{text: "گشت چند دقیقه است؟", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit59.lesson04.exercise03.dialogue_duration_and_price
             type: multiple_choice
-            tested_text: "گشت بیست دقیقه است. بلیط هفتاد افغانی است."
-            prompt: {target_blocks: [{text: "گشت بیست دقیقه است. بلیط هفتاد افغانی است.", language_code: prs, direction: rtl}]}
+            tested_text: "گشت بیست دقیقه است. تکت هفتاد افغانی است."
+            prompt: {target_blocks: [{text: "گشت بیست دقیقه است. تکت هفتاد افغانی است.", language_code: prs, direction: rtl}]}
           - content_key: prs.a1.unit59.lesson04.exercise04.match_dialogue_words
             type: matching_pairs
-            tested_text: "گشت دقیقه هفتاد سلام. یک بلیط گشت با قایق می‌خواهم. سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند. گشت چند دقیقه است؟ گشت بیست دقیقه است. بلیط هفتاد افغانی است."
+            tested_text: "گشت دقیقه هفتاد سلام. یک تکت گشت با قایق می‌خواهم. سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند. گشت چند دقیقه است؟ گشت بیست دقیقه است. تکت هفتاد افغانی است."
             prompt: {target_blocks: []}
             pairs:
               - {left: گشت, right: tour}
               - {left: دقیقه, right: minute}
               - {left: هفتاد, right: seventy}
-              - {left: "سلام. یک بلیط گشت با قایق می‌خواهم.", right: "Hello. I want a boat tour ticket."}
-              - {left: "سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند.", right: "Hello, here you go. The boat tour departs at ten in the morning."}
+              - {left: "سلام. یک تکت گشت با قایق می‌خواهم.", right: "Hello. I want a boat tour ticket."}
+              - {left: "سلام، بفرمایین. گشت با قایق از ساعت ده صبح حرکت می‌کند.", right: "Hello, welcome. The boat tour departs at ten in the morning."}
               - {left: "گشت چند دقیقه است؟", right: "How many minutes is the tour?"}
-              - {left: "گشت بیست دقیقه است. بلیط هفتاد افغانی است.", right: "The tour is twenty minutes. The ticket is seventy afghanis."}
+              - {left: "گشت بیست دقیقه است. تکت هفتاد افغانی است.", right: "The tour is twenty minutes. The ticket is seventy afghanis."}
           - content_key: prs.a1.unit59.lesson04.exercise05.order_request_ticket
             type: word_order
-            tested_text: "یک بلیط گشت با قایق می‌خواهم"
+            tested_text: "یک تکت گشت با قایق می‌خواهم"
             prompt: {target_blocks: []}
-            word_bank: [یک, بلیط, گشت, با, قایق, "می‌خواهم"]
+            word_bank: [یک, تکت, گشت, با, قایق, "می‌خواهم"]
           - content_key: prs.a1.unit59.lesson04.exercise06.translate_duration_and_price
             type: translation
-            tested_text: "گشت بیست دقیقه است. بلیط هفتاد افغانی است."
+            tested_text: "گشت بیست دقیقه است. تکت هفتاد افغانی است."
             prompt: {target_blocks: []}
           - content_key: prs.a1.unit59.lesson04.exercise07.write_ask_duration
             type: writing_prompt
