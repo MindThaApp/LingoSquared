@@ -15,7 +15,9 @@ review:
 
     SECOND, FULLY INDEPENDENT FRESH-CONTEXT REVIEW, 2026-07-07 (zero access to any prior reviewer's reasoning, dispatched separately after discovering this file had already been marked reviewed by a concurrent pass mid-task): re-verified content_key parity (32 teaching/30 exercises exact both directions), zero jargon leaks, zero same-script leakage in multiple_choice/reading_comprehension/dialogue_comprehension options, zero duplicate instruction-vs-target_blocks text, and a fresh ZWNJ-aware tokenizer pass against file-scoped introduced_tokens (zero untaught-vocabulary violations) -- all independently re-derived, not trusted from the prior pass's self-report. FOUND AND FIXED a real bug the prior pass missed: lesson06.exercise04's (dialogue_response_own_job) feedback explicitly claimed any of this unit's 4 taught occupation/workplace pairings would be accepted, but accepted_answers only listed 2 of the 4 (معلم/مکتب, داکتر/شفاخانه) -- a learner answering with مهندس/دفتر or دوکاندار/دوکان, both fully valid per this unit's own taught vocabulary, would have been wrongly marked incorrect. Fixed by adding the missing 6 variants (both remaining occupation/workplace pairs x period/comma/و joins), bringing this exercise to the same 4-occupation coverage as write_work_profile and making its feedback's claim accurate. Re-ran validate then compile (not just validate): 0 errors/0 warnings, valid JSON, and directly inspected the compiled dialogue_response_own_job exercise to confirm all 12 accepted variants are present. No further issues found; this file is genuinely clean.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 15 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 15 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
+
+    Review 2026-10-20 (en-prs A1 pass): 2 fixes - example gloss for کار دارم changed from I have a job to I have work to do (the Dari does not mean job); added with-pronoun accepted answers (من معلم استم, من در دفتر کار می‌کنم, شما کجا کار می‌کنین؟ etc.). NATIVE FLAGS: کار شما چیست؟ (chist is formal; colloquial would be کارتان چیست or شما چه کار می‌کنین؟); whether کار دارم is natural for I have work to do; هر روز درس می‌دهد for teaches every day. Owner follow-up 2026-10-20: دکاندار/دکان variants accepted with a note (course spelling دوکاندار/دوکان)."
 
 course:
   title: Dari A1
@@ -69,7 +71,7 @@ teaching:
     title: "Work / job"
     gloss: "work / job"
     note: "کار means work or job."
-    example_gloss: "I have a job."
+    example_gloss: "I have work to do."
   prs.a1.unit18.lesson01.teach.am_word:
     title: "I am"
     gloss: "I am"
@@ -208,11 +210,13 @@ exercises:
     instruction: "Translate into Dari: I am a teacher."
     accepted_answers:
       - {value: "معلم استم", status: correct}
+      - {value: "من معلم استم", status: correct}
     feedback: "معلم استم means I am a teacher."
   prs.a1.unit18.lesson01.exercise05.translate_i_am_an_engineer:
     instruction: "Translate into Dari: I am an engineer."
     accepted_answers:
       - {value: "مهندس استم", status: correct}
+      - {value: "من مهندس استم", status: correct}
     feedback: "مهندس استم means I am an engineer."
   prs.a1.unit18.lesson02.exercise01.recognize_office:
     instruction: "What does this word mean?"
@@ -236,11 +240,13 @@ exercises:
     instruction: "Translate into Dari: I work in an office."
     accepted_answers:
       - {value: "در دفتر کار می‌کنم", status: correct}
+      - {value: "من در دفتر کار می‌کنم", status: correct}
     feedback: "در دفتر کار می‌کنم means I work in an office."
   prs.a1.unit18.lesson02.exercise05.translate_i_work_in_a_school:
     instruction: "Translate into Dari: I work in a school."
     accepted_answers:
       - {value: "در مکتب کار می‌کنم", status: correct}
+      - {value: "من در مکتب کار می‌کنم", status: correct}
     feedback: "در مکتب کار می‌کنم means I work in a school."
   prs.a1.unit18.lesson03.exercise01.recognize_where_do_you_work:
     instruction: "What does this phrase mean?"
@@ -264,11 +270,13 @@ exercises:
     instruction: "Translate into Dari: Where do you work?"
     accepted_answers:
       - {value: "کجا کار می‌کنین؟", status: correct}
+      - {value: "شما کجا کار می‌کنین؟", status: correct}
     feedback: "کجا کار می‌کنین؟ means Where do you work?"
   prs.a1.unit18.lesson03.exercise05.translate_teacher_and_school:
     instruction: "Translate into Dari: I am a teacher and I work in a school."
     accepted_answers:
       - {value: "معلم استم و در مکتب کار می‌کنم", status: correct}
+      - {value: "من معلم استم و در مکتب کار می‌کنم", status: correct}
     feedback: "معلم استم و در مکتب کار می‌کنم means I am a teacher and I work in a school."
   prs.a1.unit18.lesson04.exercise01.reading_comprehension_occupation:
     instruction: "Read the profile. What is Laila's job?"
@@ -300,6 +308,7 @@ exercises:
       - {value: "مهندس استم", status: correct}
       - {value: "داکتر استم", status: correct}
       - {value: "دوکاندار استم", status: correct}
+      - {value: "دکاندار استم", status: acceptable_with_note, note: "Also spelled دکاندار/دکان; this course uses the Afghan spelling دوکاندار/دوکان."}
     feedback: "معلم استم means I am a teacher -- a good model answer. Any true occupation using this lesson's vocabulary is equally accepted."
   prs.a1.unit18.lesson05.exercise01.reading_comprehension_activity:
     instruction: "Read the profile. What does Laila do every day?"
@@ -339,6 +348,7 @@ exercises:
       - {value: "معلم استم و در مکتب کار می‌کنم و هر روز کار می‌کنم", status: correct}
       - {value: "داکتر استم. در شفاخانه کار می‌کنم. هر روز کار می‌کنم", status: correct}
       - {value: "دوکاندار استم، در دوکان کار می‌کنم، هر روز کار می‌کنم", status: correct}
+      - {value: "دکاندار استم، در دکان کار می‌کنم، هر روز کار می‌کنم", status: acceptable_with_note, note: "Also spelled دکاندار/دکان; this course uses the Afghan spelling دوکاندار/دوکان."}
       - {value: "مهندس استم و در دفتر کار می‌کنم و هر روز کار می‌کنم", status: correct}
     feedback: "معلم استم، در مکتب کار می‌کنم، هر روز کار می‌کنم means I am a teacher, I work in a school, I work every day -- a good model answer. Any true combination of an occupation, workplace, and frequency from this unit's vocabulary, joined by a period, comma, or و at either boundary, is equally accepted."
   prs.a1.unit18.lesson06.exercise01.dialogue_comprehension_negars_job:
@@ -372,8 +382,11 @@ exercises:
       - {value: "مهندس استم، در دفتر کار می‌کنم", status: correct}
       - {value: "مهندس استم و در دفتر کار می‌کنم", status: correct}
       - {value: "دوکاندار استم. در دوکان کار می‌کنم", status: correct}
+      - {value: "دکاندار استم. در دکان کار می‌کنم", status: acceptable_with_note, note: "Also spelled دکاندار/دکان; this course uses the Afghan spelling دوکاندار/دوکان."}
       - {value: "دوکاندار استم، در دوکان کار می‌کنم", status: correct}
+      - {value: "دکاندار استم، در دکان کار می‌کنم", status: acceptable_with_note, note: "Also spelled دکاندار/دکان; this course uses the Afghan spelling دوکاندار/دوکان."}
       - {value: "دوکاندار استم و در دوکان کار می‌کنم", status: correct}
+      - {value: "دکاندار استم و در دکان کار می‌کنم", status: acceptable_with_note, note: "Also spelled دکاندار/دکان; this course uses the Afghan spelling دوکاندار/دوکان."}
     feedback: "معلم استم، در مکتب کار می‌کنم means I am a teacher, I work in a school. Any true occupation and workplace pairing from this unit's vocabulary, joined by a period, comma, or و, is equally accepted."
   prs.a1.unit18.lesson06.exercise05.write_dialogue_summary:
     instruction: "Write two or three sentences in Dari summarizing the conversation: say Negar's job, her workplace, and that she works every day."

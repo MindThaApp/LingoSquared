@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Fresh-context review completed 2026-07-05. Confirmed spine discipline (all 6 lessons genuinely serve universal.a1.directions.ask_follow_basic_directions, no drift), exercise pacing (recognition -> drag/matching -> production held in every lesson), script purity (no Arabic-range kaf/yeh found), and content_key parity with the overlay (25 teaching + 44 exercise keys match exactly). Found and fixed one significant dialect-authenticity bug (highest-priority check): 'گرد کنین' -- used throughout as the core 'turn left/right' verb -- is not genuine Dari/Persian for giving pedestrian directions; web-verified it's a mechanical/rotational term (screw-thread and motor-rotation direction, چپ‌گرد/راست‌گرد), while a Peace-Corps-derived Dari phrasebook and multiple Persian sources confirm پیچیدن ('به چپ/راست بپیچین') is the real verb. Replaced 'گرد کنین' with 'بپیچین' everywhere (teaching items, exercises, media_assets, word_banks, accepted_answers) in both this file and the overlay. Also fixed: an awkward calque-y lesson02 title ('دادن هدایت گشتن' -> 'پیچیدن به چپ و راست'); a listen_select exercise (lesson01.exercise03) whose recorded audio listed all 4 candidate words including every distractor, making 'select what you hear' ungradeable -- narrowed audio+tested_text to the single tested word, same fix pattern already used in unit05; a tested_text bug in lesson02.exercise08 that concatenated both turn-left and turn-right phrases though only turn-right was being tested. §11 (cross-lesson fact check): the lesson06 dialogue's two-step sequence (go straight, then turn left) and its landmark facts (pharmacy after the mosque, opposite the bank) are consistent across the teaching cards, matching_pairs, word_order, and writing/speaking exercises that reference them; also reworded an instruction that called a landmark fact a 'step' inconsistently with its own matching pairs. §12 (multi-clause forms): added the missing period-joined accepted-answer variant (previously only comma- and و-joined existed) to all 4 free-text exercises combining two direction clauses. §13: no fill_in_blank exercises exist in this unit, nothing to check. Untaught-vocabulary ordering re-verified cumulatively across the whole file after the گرد کنین -> بپیچین token changes: 0 violations. Also fixed two factually-wrong overlay notes (see overlay's own review notes). Compiler validation clean (0 errors/0 warnings) after fixes. Audio remains pending generation; human native-speaker review still recommended before this ships, per project policy of no native-speaker review network for prs. AUDIO-ACCESSIBILITY RETROFIT 2026-07-06 (§14, added after this review completed): a project-wide audit found 9 exercises in this unit (lesson01.exercise03, lesson02.exercise03/06, lesson03.exercise03/06, lesson04.exercise03, lesson05.exercise03/06, lesson06.exercise05) were listen_type or bare-prompt listen_select items -- genuinely unanswerable since fa/prs have zero working TTS/recorded audio. Converted: listen_select -> multiple_choice (added the target Dari text as a real visible prompt, English-gloss correct_option/distractors), listen_type -> translation. MATCHING_PAIRS SCALE RETROFIT (§16, same day, Ramin's direct feedback): expanded match_turn_instructions 3->7, match_sequence_words 2->6, match_asking_phrases 3->7, and match_landmark_words 2->6, all by pooling already-taught vocabulary from earlier in the unit (lesson01's 4 direction words reused across lessons02/03/04/05; lesson04's own دفتر; lesson05's own مسجد/بانک). match_direction_words (4) and match_dialogue_facts (3) left unchanged as genuine small closed sets. Re-verified 0 remaining §14 violations via script, content_key parity intact, validate+compile both clean after both retrofits. POST-SHIP CORPUS-WIDE FIX, 2026-07-07: a project-wide sweep (prompted by unit13's fresh-context reviewer flagging the same bug in units 11/12) found this file also had exercises where realization prompt.target_blocks duplicated the overlay's own instruction text verbatim in English -- the compiler would have rendered the same sentence twice to the learner. Fixed mechanically: every affected exercise's prompt set to target_blocks: []. Re-verified validate+compile clean (0 errors/0 warnings) and confirmed zero remaining instruction-duplicate target_blocks via a script comparing every exercise's target_blocks against its overlay instruction.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 10 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added a real example sentence to all 10 kind:vocabulary teaching cards, each a natural, comprehensible-from-gloss sentence using the card's own word. schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
+
+    Review 2026-10-20 (en-prs A1 pass): 1 fix - speaker label دکاندار changed to دوکاندار (9 places) to match the word taught in unit02. NATIVE FLAGS: روبه‌رو vs مقابل; سفر خوش as a farewell; other A1 units still use the spelling دکاندار."
 
 course:
   realization_key: prs.a1
@@ -59,7 +61,7 @@ media_assets:
     status: pending_generation
   - content_key: prs.a1.audio.dialogue.giving_directions.01
     language: prs
-    text: "سهیلا: ببخشین، می‌توانین بگویین چطور به دواخانه بروم؟ دکاندار: بلی. اول مستقیم بروین. سهیلا: مستقیم، بسیار خوب. بعد چطور؟ دکاندار: بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است. سهیلا: تشکر زیاد، فهمیدم. دکاندار: قابلی نداره، سفر خوش."
+    text: "سهیلا: ببخشین، می‌توانین بگویین چطور به دواخانه بروم؟ دوکاندار: بلی. اول مستقیم بروین. سهیلا: مستقیم، بسیار خوب. بعد چطور؟ دوکاندار: بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است. سهیلا: تشکر زیاد، فهمیدم. دوکاندار: قابلی نداره، سفر خوش."
     voice_hint: two_adults_neutral_polite
     status: pending_generation
 
@@ -382,15 +384,15 @@ units:
             introduced_tokens: [ببخشین, می‌توانین, بگویین, چطور, به, دواخانه, بروم, سهیلا]
           - content_key: prs.a1.unit06.lesson06.teach.turn02
             kind: dialogue
-            target: {text: "بلی. اول مستقیم بروین.", language_code: prs, direction: rtl, speaker: دکاندار}
-            introduced_tokens: [بلی, اول, مستقیم, بروین, دکاندار]
+            target: {text: "بلی. اول مستقیم بروین.", language_code: prs, direction: rtl, speaker: دوکاندار}
+            introduced_tokens: [بلی, اول, مستقیم, بروین, دوکاندار]
           - content_key: prs.a1.unit06.lesson06.teach.turn03
             kind: dialogue
             target: {text: "مستقیم، بسیار خوب. بعد چطور؟", language_code: prs, direction: rtl, speaker: سهیلا}
             introduced_tokens: [مستقیم, بسیار, خوب, بعد, چطور]
           - content_key: prs.a1.unit06.lesson06.teach.turn04
             kind: dialogue
-            target: {text: "بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است.", language_code: prs, direction: rtl, speaker: دکاندار}
+            target: {text: "بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است.", language_code: prs, direction: rtl, speaker: دوکاندار}
             introduced_tokens: [بعد, به, چپ, بپیچین, دواخانه, از, مسجد, روبه‌روی, بانک, است]
           - content_key: prs.a1.unit06.lesson06.teach.turn05
             kind: dialogue
@@ -398,21 +400,21 @@ units:
             introduced_tokens: [تشکر, زیاد, فهمیدم]
           - content_key: prs.a1.unit06.lesson06.teach.turn06
             kind: dialogue
-            target: {text: "قابلی نداره، سفر خوش.", language_code: prs, direction: rtl, speaker: دکاندار}
+            target: {text: "قابلی نداره، سفر خوش.", language_code: prs, direction: rtl, speaker: دوکاندار}
             introduced_tokens: [قابلی, نداره, سفر, خوش]
         exercises:
           - content_key: prs.a1.unit06.lesson06.exercise01.listen_context
             type: dialogue_comprehension
-            tested_text: سهیلا دکاندار دواخانه مسجد بانک
+            tested_text: سهیلا دوکاندار دواخانه مسجد بانک
             media_asset_key: prs.a1.audio.dialogue.giving_directions.01
             prompt:
               target_blocks:
                 - {text: "ببخشین، می‌توانین بگویین چطور به دواخانه بروم؟", language_code: prs, direction: rtl, speaker: سهیلا}
-                - {text: "بلی. اول مستقیم بروین.", language_code: prs, direction: rtl, speaker: دکاندار}
+                - {text: "بلی. اول مستقیم بروین.", language_code: prs, direction: rtl, speaker: دوکاندار}
                 - {text: "مستقیم، بسیار خوب. بعد چطور؟", language_code: prs, direction: rtl, speaker: سهیلا}
-                - {text: "بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است.", language_code: prs, direction: rtl, speaker: دکاندار}
+                - {text: "بعد به چپ بپیچین. دواخانه بعد از مسجد، روبه‌روی بانک است.", language_code: prs, direction: rtl, speaker: دوکاندار}
                 - {text: "تشکر زیاد، فهمیدم.", language_code: prs, direction: rtl, speaker: سهیلا}
-                - {text: "قابلی نداره، سفر خوش.", language_code: prs, direction: rtl, speaker: دکاندار}
+                - {text: "قابلی نداره، سفر خوش.", language_code: prs, direction: rtl, speaker: دوکاندار}
           - content_key: prs.a1.unit06.lesson06.exercise02.recognize_safar_khosh
             type: multiple_choice
             tested_text: سفر خوش

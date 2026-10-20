@@ -13,7 +13,9 @@ review:
   required_next_reviewer: null
   notes: "Authored alongside the new prs a1_unit17_health.yaml realization. Follows the established en-prs overlay convention from units 01-16 (English instruction/correct_option/distractors/feedback, target-language Dari accepted_answers, English glosses for recognize_* multiple_choice items). FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (same pass as the paired realization -- see that file's review notes for the full method: Codex usage-exhausted, fell back to a separate general-purpose subagent with zero access to the authoring reasoning). Two real issues found and fixed here: match_advice_vocab's accepted_answers dict expanded from 5 to 8 entries (سردرد/تب/مریض added) to match the realization's now-8-pair matching_pairs exercise; write_dialogue_summary's accepted_answers expanded from 4 to 12 entries for full period/comma/و coverage at both clause boundaries, and its instruction reworded to explicitly allow either the headache+rest or fever+water combination (previously implied only headache+rest while one accepted variant actually used fever+water, a real instruction/answer mismatch). Content_key parity, jargon leaks, script purity, and §12 coverage on the other two multi-clause exercises (write_health_message, dialogue_response_own_symptom) were all independently re-verified clean. Compiler validate+compile re-run clean (0 errors/0 warnings) after both fixes. SECOND, FULLY INDEPENDENT FRESH-CONTEXT REVIEW, 2026-07-07: re-derived every check from scratch against the paired realization (see that file's notes for full detail) -- independently confirmed both already-applied fixes (match_advice_vocab's 8-pair accepted_answers dict, write_dialogue_summary's 12-variant accepted_answers list with the broadened either-symptom-either-advice instruction) are correct and instruction-coherent, via fresh Python scripts covering stray-boolean scanning, content_key parity, duplicate-instruction-text, prompt-shows-answer same-script leakage, and file-scoped untaught-vocabulary tokenization (all clean). Independently web-verified دل‌درد and standalone تشکر as genuine natural Dari usage. Re-ran the actual compiler (validate then compile) as the final check and directly inspected compiled output: 0 errors/0 warnings, all 30 exercises have non-empty accepted answers, match_advice_vocab and write_dialogue_summary compile with the expected 8 and 12 entries respectively. No further issues found.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
+
+    Review 2026-10-20 (en-prs A1 pass): 2 fixes - feedback on the symptom matching exercise said four words but seven are matched (corrected); added the natural with-pronoun variants (من سردرد دارم, من تب دارم, من مریض استم, من داکتر می‌خواهم, من دوا می‌خواهم) as accepted answers. NATIVE FLAGS: دل‌درد as the everyday word for stomachache; حالم خوب نیست as the natural way to say I do not feel well."
 
 course:
   title: Dari A1
@@ -192,16 +194,18 @@ exercises:
     accepted_answers:
       - value: {سردرد: headache, تب: fever, دل‌درد: stomachache, دارم: "I have", داکتر: doctor, دواخانه: pharmacy, شفاخانه: hospital}
         status: correct
-    feedback: "These four words let you name a symptom and say you have it, plus places and people from earlier units you'd visit for treatment."
+    feedback: "These words let you name a symptom and say you have it, plus a person and places from earlier units that you would visit for treatment."
   prs.a1.unit17.lesson01.exercise04.translate_i_have_a_headache:
     instruction: "Translate into Dari: I have a headache."
     accepted_answers:
       - {value: "سردرد دارم", status: correct}
+      - {value: "من سردرد دارم", status: correct}
     feedback: "سردرد دارم means I have a headache."
   prs.a1.unit17.lesson01.exercise05.translate_i_have_a_fever:
     instruction: "Translate into Dari: I have a fever."
     accepted_answers:
       - {value: "تب دارم", status: correct}
+      - {value: "من تب دارم", status: correct}
     feedback: "تب دارم means I have a fever."
   prs.a1.unit17.lesson02.exercise01.recognize_i_am_sick:
     instruction: "What does this phrase mean?"
@@ -225,6 +229,7 @@ exercises:
     instruction: "Translate into Dari: I am sick."
     accepted_answers:
       - {value: "مریض استم", status: correct}
+      - {value: "من مریض استم", status: correct}
     feedback: "مریض استم means I am sick."
   prs.a1.unit17.lesson02.exercise05.translate_dont_feel_well:
     instruction: "Translate into Dari: I don't feel well."
@@ -253,11 +258,13 @@ exercises:
     instruction: "Translate into Dari: I want a doctor."
     accepted_answers:
       - {value: "داکتر می‌خواهم", status: correct}
+      - {value: "من داکتر می‌خواهم", status: correct}
     feedback: "داکتر می‌خواهم means I want a doctor."
   prs.a1.unit17.lesson03.exercise05.translate_want_medicine:
     instruction: "Translate into Dari: I want medicine."
     accepted_answers:
       - {value: "دوا می‌خواهم", status: correct}
+      - {value: "من دوا می‌خواهم", status: correct}
     feedback: "دوا می‌خواهم means I want medicine."
   prs.a1.unit17.lesson04.exercise01.reading_comprehension_first_instruction:
     instruction: "Read the note. What is the first instruction?"

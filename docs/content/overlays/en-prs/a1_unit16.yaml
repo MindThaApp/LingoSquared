@@ -15,8 +15,9 @@ review:
 
     FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened). Full checklist run against this overlay paired with its realization: spine-outcome coverage (all 4 universal.a1.travel.handle_basic_journey assessment_requirements), exercise pacing, Dari vocabulary/grammar accuracy (بلیط/قطار/بس/میدان هوایی/سکو/حرکت می‌کند/کی/می‌خواهم/بسیار خوب/هرات/سکوی دو/از all verified natural and correctly used, میدان هوایی/تشکر زیاد/قابلی نداره/سفر خوش verified genuinely reused from unit05/unit06's own reviewed dialogues), §17 (zero fill_in_blank, every translation/dialogue_response/writing_prompt's accepted_answers audited including write_own_travel_detail and write_travel_summary), duplicate-instruction-text check (a real Python script comparing realization prompt.target_blocks(en) against this file's own instruction fields -- zero matches), §7 stray-boolean check (a real recursive yaml.safe_load script -- zero stray booleans, only the two legitimate schema booleans), untaught-vocabulary check (a ZWNJ-aware Python tokenizer against cumulative file-scoped introduced_tokens), A1-complexity, script purity (zero Arabic-range kaf/yeh), jargon-leak sweep (zero snake_case in learner-facing fields), content_key parity (exact both directions), and frontend exercise-type registration (all 8 types registered in ExerciseRenderer.tsx). FOUND AND FIXED two real bugs, both originating in this overlay: (1) write_travel_summary's و-joined variant used و without a matching teaching card anywhere in the paired realization file -- added a new teach.va_word grammar_note entry here (title: And, gloss: and) matching the realization's new lesson06 teaching card, introducing و with introduced_tokens: [و] before its first tested use; (2) write_travel_summary's period-joined accepted_answers variant ('قطار به هرات فردا صبح حرکت می‌کند. از سکوی دو حرکت می‌کند') dropped the ساعت هشت detail present in the other three variants and required by this exercise's own instruction -- corrected to 'قطار به هرات فردا صبح ساعت هشت حرکت می‌کند. از سکوی دو حرکت می‌کند' so all four variants carry the same complete fact set. Re-ran validate and compile (not just validate) after both fixes: 0 errors/0 warnings, valid JSON output, all 30 exercises' compiled correct_response confirmed non-empty, write_travel_summary's compiled accepted list directly inspected to confirm the fix took effect.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 10 kind:vocabulary teaching entries, matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 10 kind:vocabulary teaching entries, matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 11 fixes - realization: بلیط replaced by Afghan تکت throughout (ticket vocabulary, dialogue, media text, titles), lesson06 title uses کردن/ZWNJ; overlay: tickets updated, بلیط kept only as acceptable_with_note on ticket translation answers, ticket note explains تکت, write_own_travel_detail instruction and feedback made accurate, more accepted variants. NATIVE FLAGS: تکت vs بلیط; سکو for platform; فروشنده for ticket seller; قابلی نداره (colloquial) beside otherwise full forms; بس for bus."
 course:
   title: Dari A1
   description: >-
@@ -47,7 +48,7 @@ teaching:
   prs.a1.unit16.lesson01.teach.belit_word:
     title: Ticket
     gloss: ticket
-    note: "بلیط means ticket."
+    note: "تکت means ticket. This is the everyday Afghan Dari word; the Iranian-style بلیط is understood but not what you will usually hear."
     example_gloss: "I have a ticket."
   prs.a1.unit16.lesson01.teach.qatar_word:
     title: Train
@@ -97,7 +98,7 @@ teaching:
   prs.a1.unit16.lesson02.teach.belit_be_herat_phrase:
     title: "I want a ticket to Herat"
     gloss: "I want a ticket to Herat"
-    note: "یک بلیط به هرات می‌خواهم combines this lesson's vocabulary into the standard way to request a ticket."
+    note: "یک تکت به هرات می‌خواهم combines this lesson's vocabulary into the standard way to request a ticket."
   prs.a1.unit16.lesson03.teach.sekoo_word:
     title: Platform
     gloss: platform
@@ -165,7 +166,7 @@ exercises:
     correct_option: ticket
     distractors: [train, bus, airport]
     accepted_answers: [{value: ticket, status: correct}]
-    feedback: "بلیط means ticket."
+    feedback: "تکت means ticket."
   prs.a1.unit16.lesson01.exercise02.recognize_qatar:
     instruction: "What does this word mean?"
     correct_option: train
@@ -175,15 +176,17 @@ exercises:
   prs.a1.unit16.lesson01.exercise03.match_travel_vocab:
     instruction: "Match each word with its meaning."
     accepted_answers:
-      - value: {بلیط: ticket, قطار: train, بس: bus, "میدان هوایی": airport, کابل: Kabul, هرات: Herat, چپ: left, راست: right}
+      - value: {تکت: ticket, قطار: train, بس: bus, "میدان هوایی": airport, کابل: Kabul, هرات: Herat, چپ: left, راست: right}
         status: correct
     feedback: "These four are this lesson's core travel vocabulary, plus city and direction words from earlier units useful for planning a trip."
   prs.a1.unit16.lesson01.exercise04.translate_a_train_ticket:
     instruction: "Translate into Dari: a train ticket"
     accepted_answers:
-      - {value: "یک بلیط قطار", status: correct}
-      - {value: "بلیط قطار", status: correct}
-    feedback: "بلیط قطار means train ticket."
+      - {value: "یک تکت قطار", status: correct}
+      - {value: "یک بلیط قطار", status: acceptable_with_note, note: "Understood, but in Afghan Dari the everyday word for ticket is تکت."}
+      - {value: "تکت قطار", status: correct}
+      - {value: "بلیط قطار", status: acceptable_with_note, note: "Understood, but in Afghan Dari the everyday word for ticket is تکت."}
+    feedback: "تکت قطار means train ticket."
   prs.a1.unit16.lesson01.exercise05.translate_the_airport:
     instruction: "Translate into Dari: the airport"
     accepted_answers:
@@ -204,19 +207,25 @@ exercises:
   prs.a1.unit16.lesson02.exercise03.match_ticket_vocab:
     instruction: "Match each word with its meaning."
     accepted_answers:
-      - value: {بلیط: ticket, قطار: train, هرات: Herat, "می‌خواهم": "I want", به: to, بس: bus}
+      - value: {تکت: ticket, قطار: train, هرات: Herat, "می‌خواهم": "I want", به: to, بس: bus}
         status: correct
     feedback: "These combine lesson02's new words with lesson01's review vocabulary."
   prs.a1.unit16.lesson02.exercise04.word_order_belit_be_herat:
     instruction: "Arrange the words to say I want a ticket to Herat."
     accepted_answers:
-      - {value: [یک, بلیط, به, هرات, "می‌خواهم"], status: correct}
-    feedback: "یک بلیط به هرات می‌خواهم means I want a ticket to Herat."
+      - {value: [یک, تکت, به, هرات, "می‌خواهم"], status: correct}
+    feedback: "یک تکت به هرات می‌خواهم means I want a ticket to Herat."
   prs.a1.unit16.lesson02.exercise05.translate_ticket_request:
     instruction: "Translate into Dari: I want a ticket to Herat."
     accepted_answers:
-      - {value: "یک بلیط به هرات می‌خواهم", status: correct}
-    feedback: "یک بلیط به هرات می‌خواهم means I want a ticket to Herat."
+      - {value: "یک تکت به هرات می‌خواهم", status: correct}
+      - {value: "یک بلیط به هرات می‌خواهم", status: acceptable_with_note, note: "Understood, but in Afghan Dari the everyday word for ticket is تکت."}
+      - {value: "من یک تکت به هرات می‌خواهم", status: correct}
+      - {value: "یک تکت به هرات می‌خواهم.", status: correct}
+      - {value: "تکت به هرات می‌خواهم", status: correct}
+      - {value: "من تکت به هرات می‌خواهم", status: correct}
+      - {value: "به هرات یک تکت می‌خواهم", status: correct}
+    feedback: "یک تکت به هرات می‌خواهم means I want a ticket to Herat."
   prs.a1.unit16.lesson03.exercise01.recognize_sekoo:
     instruction: "What does this word mean?"
     correct_option: platform
@@ -232,7 +241,7 @@ exercises:
   prs.a1.unit16.lesson03.exercise03.match_departure_vocab:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {سکو: platform, "حرکت می‌کند": "it departs", کی: when, قطار: train, هرات: Herat, بلیط: ticket}
+      - value: {سکو: platform, "حرکت می‌کند": "it departs", کی: when, قطار: train, هرات: Herat, تکت: ticket}
         status: correct
     feedback: "These combine lesson03's new words with earlier review vocabulary."
   prs.a1.unit16.lesson03.exercise04.translate_when_does_it_depart:
@@ -245,6 +254,7 @@ exercises:
     instruction: "Translate into Dari: The train departs from platform two."
     accepted_answers:
       - {value: "قطار از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار از سکوی دو حرکت می‌کند.", status: correct}
     feedback: "قطار از سکوی دو حرکت می‌کند means the train departs from platform two."
   prs.a1.unit16.lesson04.exercise01.reading_comprehension_departure_time:
     instruction: "Read the announcement. What time does the Herat train depart?"
@@ -268,15 +278,24 @@ exercises:
     instruction: "Translate into Dari: The train departs at eight in the morning."
     accepted_answers:
       - {value: "قطار ساعت هشت صبح حرکت می‌کند", status: correct}
+      - {value: "قطار ساعت هشت صبح حرکت می‌کند.", status: correct}
+      - {value: "ساعت هشت صبح قطار حرکت می‌کند", status: correct}
     feedback: "قطار ساعت هشت صبح حرکت می‌کند means the train departs at eight in the morning."
   prs.a1.unit16.lesson04.exercise05.write_own_travel_detail:
-    instruction: "Write one sentence in Dari giving a travel detail (a departure time and/or platform)."
+    instruction: "Write one sentence in Dari about the train: its departure time, its platform, or both."
     accepted_answers:
       - {value: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کند", status: correct}
       - {value: "قطار ساعت هشت صبح حرکت می‌کند", status: correct}
       - {value: "قطار از سکوی دو حرکت می‌کند", status: correct}
       - {value: "قطار هرات ساعت هشت صبح حرکت می‌کند", status: correct}
-    feedback: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کند means the train departs from platform two at eight in the morning -- a good model answer. Any true detail using this unit's vocabulary is equally accepted."
+      - {value: "قطار هرات از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار هرات ساعت هشت صبح از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار از سکوی دو ساعت هشت صبح حرکت می‌کند", status: correct}
+      - {value: "قطار ساعت هشت از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار ساعت هشت حرکت می‌کند", status: correct}
+      - {value: "قطار هرات ساعت هشت حرکت می‌کند", status: correct}
+      - {value: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کند.", status: correct}
+    feedback: "قطار ساعت هشت صبح از سکوی دو حرکت می‌کند means the train departs from platform two at eight in the morning -- a good model answer. The time, the platform, or both are accepted."
   prs.a1.unit16.lesson05.exercise01.dialogue_comprehension_context:
     instruction: "Read the conversation. When does the traveler want to go?"
     correct_option: "Tomorrow morning"
@@ -286,7 +305,7 @@ exercises:
   prs.a1.unit16.lesson05.exercise02.match_dialogue_facts:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {هرات: Herat, "فردا صبح": "tomorrow morning", "ساعت هشت": "eight o'clock", "سکوی دو": "platform two", بلیط: ticket, "بسیار خوب": "very good/okay"}
+      - value: {هرات: Herat, "فردا صبح": "tomorrow morning", "ساعت هشت": "eight o'clock", "سکوی دو": "platform two", تکت: ticket, "بسیار خوب": "very good/okay"}
         status: correct
     feedback: "These are the dialogue's key words and facts."
   prs.a1.unit16.lesson05.exercise03.reading_comprehension_when_traveling:
@@ -299,12 +318,19 @@ exercises:
     instruction: "The seller asks when you want to go. Say tomorrow morning."
     accepted_answers:
       - {value: "فردا صبح", status: correct}
+      - {value: "فردا صبح.", status: correct}
+      - {value: "صبح فردا", status: correct}
     feedback: "فردا صبح means tomorrow morning."
   prs.a1.unit16.lesson05.exercise05.write_travel_request:
     instruction: "Write a short message in Dari requesting a ticket to Herat."
     accepted_answers:
-      - {value: "یک بلیط به هرات می‌خواهم", status: correct}
-    feedback: "یک بلیط به هرات می‌خواهم means I want a ticket to Herat."
+      - {value: "یک تکت به هرات می‌خواهم", status: correct}
+      - {value: "یک بلیط به هرات می‌خواهم", status: acceptable_with_note, note: "Understood, but in Afghan Dari the everyday word for ticket is تکت."}
+      - {value: "من یک تکت به هرات می‌خواهم", status: correct}
+      - {value: "یک تکت به هرات می‌خواهم.", status: correct}
+      - {value: "تکت به هرات می‌خواهم", status: correct}
+      - {value: "به هرات یک تکت می‌خواهم", status: correct}
+    feedback: "یک تکت به هرات می‌خواهم means I want a ticket to Herat."
   prs.a1.unit16.lesson06.exercise01.recognize_tashakor_ziyad:
     instruction: "What does this phrase mean?"
     correct_option: "thanks a lot"
@@ -322,6 +348,8 @@ exercises:
     accepted_answers:
       - {value: "تشکر زیاد. قابلی نداره", status: correct}
       - {value: "تشکر زیاد، قابلی نداره", status: correct}
+      - {value: "تشکر زیاد. قابلی نداره.", status: correct}
+      - {value: "تشکر زیاد، قابلی نداره.", status: correct}
     feedback: "تشکر زیاد. قابلی نداره means thanks a lot -- you're welcome."
   prs.a1.unit16.lesson06.exercise04.dialogue_response_thank_seller:
     instruction: "The seller just told you the departure details. Thank them."
@@ -335,4 +363,8 @@ exercises:
       - {value: "قطار به هرات، فردا صبح، ساعت هشت، از سکوی دو حرکت می‌کند", status: correct}
       - {value: "قطار به هرات فردا صبح و ساعت هشت از سکوی دو حرکت می‌کند", status: correct}
       - {value: "قطار به هرات فردا صبح ساعت هشت حرکت می‌کند. از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار به هرات فردا صبح ساعت هشت از سکوی دو حرکت می‌کند.", status: correct}
+      - {value: "فردا صبح ساعت هشت قطار به هرات از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار هرات فردا صبح ساعت هشت از سکوی دو حرکت می‌کند", status: correct}
+      - {value: "قطار به هرات از سکوی دو فردا صبح ساعت هشت حرکت می‌کند", status: correct}
     feedback: "قطار به هرات فردا صبح ساعت هشت از سکوی دو حرکت می‌کند means the train to Herat departs tomorrow morning at eight from platform two."
