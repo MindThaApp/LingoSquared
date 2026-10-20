@@ -220,7 +220,7 @@ EN_POS: dict[str, str] = {
     "watched": "verb", "writer's": "noun", "s": "particle", "was": "verb",
     "week": "noun",
     # Unit 19 (expressing likes and preferences), added 2026-07-05.
-    "prefer": "verb", "hate": "verb", "calmer": "adjective", "very": "adverb",
+    "prefer": "verb", "hate": "verb", "milder": "adjective", "very": "adverb",
     "strong": "adjective", "why": "adverb", "think": "verb", "prefers": "verb",
     "thinks": "verb",
     # Unit 20 (making basic comparisons), added 2026-07-06.

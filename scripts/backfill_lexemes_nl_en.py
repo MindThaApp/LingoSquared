@@ -209,7 +209,7 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "was": "was", "week": "week",
     # Unit 19 (expressing likes and preferences), added 2026-07-05.
     "like": "leuk vinden", "don't": "niet leuk vinden", "prefer": "de voorkeur geven aan",
-    "hate": "haten", "calmer": "rustiger", "very": "heel", "strong": "sterk",
+    "hate": "haten", "milder": "milder", "very": "heel", "strong": "sterk",
     "why": "waarom", "think": "denken", "prefers": "geeft de voorkeur aan",
     "thinks": "denkt",
     # Unit 20 (making basic comparisons), added 2026-07-06.
