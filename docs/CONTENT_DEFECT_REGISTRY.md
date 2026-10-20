@@ -3607,3 +3607,41 @@ are unchanged: fa-en 18, fa-en-a2 5, fa-en-b1 2, fa-en-b2 5; practice
 fa-en 0/0. The unit-scope check is unchanged (0 DEAD, 3 tier-short, 110
 below-floor); the self-reference check finds 0 hits. `scripts/verify.sh
 --content-only` passes.
+
+### 2026-10-20 — en-fa A2 u09-18, B1 u01-16, B2 u01-08 language review (fresh-context review; branch content/review-en-fa-upper, PR #57)
+Scope: overlays/en-fa + realizations/fa for 34 units (68 files); practice
+packs, backfill scripts and realizations/en untouched. Seven parallel
+reviewers on disjoint files; the coordinator committed in chunks.
+
+Fix count: 184 (A2 49 · B1 92 · B2 43), plus a follow-up that replaced 216
+template teaching-card notes in B2 u01-08 and the *آب قطع بماند* →
+*آب قطع باشد* change in B2 u02.
+
+Defect classes (all had passed a green compile):
+- **Template learner-facing notes.** Every B2 vocabulary card note was the
+  same "Farsi form: X. Watch ezafe links…" boilerplate. All are now
+  card-specific, and the ezafe claims were hand-checked: three draft
+  rewrites wrongly said *به جای*, *در صورت* and *قابل دفاع* take no ezafe.
+- **Wrong or unanswerable keys.** A2 u12 ex06 asked for what Nima tells
+  the doctor, but the key was the doctor's advice. B1 u08 L05 ex01.
+- **Meaning-changing accepted answers.** B2 u02 accepted "probably" for
+  "must have". B2 u03 dropped a hedge. B2 u05 accepted imperatives for a
+  question.
+- **Missing natural variants.** Pro-drop, که-less clauses, comma joins,
+  and two-word *است*: grading folds ZWNJ but not a space.
+- **Wrong English glosses.** B1 u07 wish forms ("you wish you were" for
+  *کاش اونجا بودی*). *البته* glossed "however". *پیش‌پرداخت* glossed
+  "deposit".
+- **False grammar and register notes.** Mandatory resumptive clitic (B1
+  u10). Copula endings called pronoun suffixes (B1 u04). Colloquial notices
+  called "written register" (A2).
+- **Persian naturalness and ZWNJ.** *میاید* → *می‌آیید*, *همینطور* →
+  *همین‌طور*, *نگفت هیچی* → *هیچی نگفت*, *کمک نیما رو می‌کرد* →
+  *به نیما کمک می‌کرد*.
+- **Validator interaction.** Wrapping a lone Persian quote in *asterisks*
+  inside single-answer dialogue_response feedback fails the compiler. This
+  is now an exception in AUTHORING_GUIDE §15.
+
+Native flags are recorded in each file's review.notes. Examples: register
+mixing in A2 notices, *اعلامیه* vs *اطلاعیه*, Thursday/Friday weekend,
+*برابر* vs *مساوی تقسیم*, spoken -ین/-ید.
