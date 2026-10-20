@@ -3675,7 +3675,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # A2 unit 15 (travel disruption) semantic tags, added 2026-07-11.
     # "disruption_word" (تاخیر/لغو/بسته/مسیر/بدیل/برفباری/اطلاعیه,
     # anchored lesson01) is the unit's core recognition vocabulary.
-    if token in {"تاخیر", "لغو", "بسته", "مسیر", "بدیل", "برفباری", "اطلاعیه"}:
+    if token in {"تاخیر", "تأخیر", "لغو", "بسته", "مسیر", "بدیل", "برفباری", "اطلاعیه"}:
         semantics.append("disruption_word")
     if token in {"ایستگاه", "مسافران"}:
         semantics.append("station_word")
