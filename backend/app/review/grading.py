@@ -550,7 +550,7 @@ _EN_S_CONTRACTION_STEMS = frozenset(
 _EN_HAS_ONLY_PARTICIPLES = frozenset(
     {
         "been", "had", "got", "gotten", "eaten", "fallen", "slept", "sat",
-        "stood", "swum", "risen", "begun", "grown", "come", "become", "run",
+        "stood", "swum", "risen", "begun", "come", "become", "run",
     }
 )
 # Participles that also read as passives/adjectives after "is": "it's done",
@@ -559,7 +559,7 @@ _EN_AMBIGUOUS_PARTICIPLES = frozenset(
     {
         "known", "seen", "taken", "given", "written", "spoken", "driven",
         "ridden", "forgotten", "sung", "flown", "thrown", "worn", "chosen",
-        "woken", "drunk", "bought", "brought", "thought", "taught", "caught",
+        "woken", "drunk", "grown", "bought", "brought", "thought", "taught", "caught",
         "told", "said", "sent", "left", "met", "kept", "felt", "heard", "won",
         "found", "made", "understood", "spent", "done", "gone", "broken",
         "lost", "stolen", "shown", "hidden", "sold", "paid", "built",

@@ -352,3 +352,35 @@ def test_hindi_nukta_folding_is_a_documented_decision():
         script="devanagari", language_code="hi",
     ) == "correct"
     assert grade("सजा", "सज़ा", "dictation", script="devanagari", language_code="hi") == "incorrect"
+
+
+def test_adjectival_participles_accept_is_and_has_where_both_read():
+    # 's + adjectival participle means "is"; accept it.
+    for learner, correct in [
+        ("She is married", "She's married"),
+        ("He is tired", "He's tired"),
+        ("It is closed", "It's closed"),
+        ("I am done", "I'm done"),
+        ("He is finished", "He's finished"),
+        ("He is gone", "He's gone"),
+        ("He is drunk", "He's drunk"),
+        ("It is done", "It's done"),
+    ]:
+        for strict in (None, True):
+            assert _en(learner, correct, orthography_strict=strict) == "correct", learner
+            assert _en(correct, learner, orthography_strict=strict) == "correct", learner
+    # Genuinely ambiguous: both readings are accepted.
+    for learner, correct in [
+        ("He has gone", "He's gone"),
+        ("He has finished", "He's finished"),
+        ("She has grown", "She's grown"),
+    ]:
+        assert _en(learner, correct) == "correct", learner
+        assert _en(correct, learner) == "correct", learner
+    # Clear errors stay rejected.
+    for learner, correct in [
+        ("He is eaten", "He's eaten"),
+        ("It is been", "It's been"),
+        ("If I would known", "If I'd known"),
+    ]:
+        assert _en(learner, correct) == "incorrect", learner
