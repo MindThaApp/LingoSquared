@@ -3847,3 +3847,44 @@ Open (not fixed here; details in .local/logs/session9-checkpoints*.md):
 - One sense per token within B2: fa قطعی / تازه lose their u08 sense.
 - fa B2 checkpoints lean on matching_pairs (5-8 of 15 items); typed answers
   grade strictly, so colloquial variants (بارون for باران) are marked wrong.
+
+### 2026-10-19 — en-prs B2 register fixes
+
+Scope: `realizations/prs/b2_unit01..08` and `overlays/en-prs/b2_unit01..08`
+(Dari for English speakers). 22 fixes. `native_speaker_review` untouched;
+backfill scripts and practice packs untouched (PRs #50/#54).
+
+Register (class 1.28, the 8 `check_dari_register.py` findings, now 0):
+- Iranian 2pl -ید to Afghan -ین (PR #40 convention): u01 card بگویید to
+  بگویین; u03 card بدهید to بدهین; u07 card بیایید to بیایین; u08 grammar
+  card بگویید/کنید to بگویین/کنین. `introduced_tokens` updated to match.
+- Ungrammatical grammar_check prompts used the Iranian copula هستند; the
+  agreement error now uses Dari استند (u03 L3 ex08, u06 L2/L3 ex08, u07 L2
+  ex08). Answers unchanged.
+- u05 formal lesson (lesson03) is deliberately formal written register
+  (institutional letter with خواهشمندم / لطف نموده), so its -ید forms stay
+  (به تعویق بیندازید, امضا کنید, روان کنید). Flag for native review. The one
+  gated hit, بنویسید in card06, became the impersonal formal passive
+  درخواست رسمی باید کوتاه و روشن نوشته شود.
+
+Checklist pass:
+- Wrong-sense or mismatched example glosses: u01 L2 بیشتر شاگردان ("most",
+  not "more"); u05 L2 card01/06/07 glosses described other sentences; u05
+  L2 card09 همکاری ("cooperation"); u05 L3 card01 روان کنید ("send", not
+  "email"); u08 L3 card02 بی‌طرف ("impartial").
+- Naturalness: u02 L1 card07 adds the missing اگر; u03 L2 card09 now
+  تب نشانه بیماری جدی است، اما نه همیشه; u06 L3 card08 now
+  هر خانواده رسم جداگانه خود را دارد.
+- Missing accepted answers: u02 L1 ex05-07 adds ممکن است ...; u08 L2 ex05-07
+  adds the مستقیم variant (the prompt says "directly").
+- ZWNJ and Arabic ي/ك: clean. No answer leakage, no untaught or also-correct
+  distractors found.
+
+Left for native review: the u05 lesson03 -ید decision; audit-tier هستم in
+u05 L2 card09 and u07 L2 card01 (formal written, not gated). New tokens
+(بگویین, بدهین, بیایین, کنین, اگر, اما, نوشته, شود, خود, دارد) need glosses
+in the B2 lexeme backfill (PR #50/#54).
+
+Verification: en-prs-b2 validate and compile 0 errors, 0 warnings;
+`check_dari_register.py` 0 findings; `scripts/verify.sh --content-only`
+passes.
