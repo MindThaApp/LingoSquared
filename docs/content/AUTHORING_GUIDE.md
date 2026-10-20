@@ -431,6 +431,18 @@ until they're touched again; retrofitting them isn't required, but
 apply the convention to any note you edit or write for any other
 reason.
 
+**Exception: single-answer `feedback` that quotes one target-language
+line (e.g. `dialogue_response`).** The compiler treats a lone
+`*emphasized*` span in a single-answer exercise's `feedback` as the
+answer being shown, and fails validation when it differs from the
+accepted answer. In a `dialogue_response` the accepted answer is the
+source-language option while the feedback quotes the speaker's
+target-language line, so they always differ. Leave that one quote
+unwrapped: `"Sara says: آره، فکر کنم باید بمونم و کار کنم."`, not
+`"Sara says: *آره، ...*."` (found 2026-10-20 in en-fa B1 u01/u03).
+Feedback with two or more wrapped spans, or a quote that matches the
+accepted answer, is not affected.
+
 ## 16. `matching_pairs` exercises need real scale — a handful to a dozen
 pairs, not 2-3
 
