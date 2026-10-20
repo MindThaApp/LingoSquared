@@ -285,6 +285,8 @@ UNIT_FILES_C1 = tuple(sorted(
 # Each lexical gloss is deliberately atomic. Capitalized sentence-initial forms
 # below reuse the same hand-authored gloss as their lowercase lexical form.
 NL_GLOSSES = {
+    "lag": "lay; was lying (past)", "liggen": "to lie; to be located",
+    "gemeentelijke": "municipal",
     "'s": "in the (fixed time expression)",
     "Aangenaam": "pleased to meet you", "Belgisch": "Belgian", "België": "Belgium",
     "Duits": "German", "Duitsland": "Germany", "Egypte": "Egypt", "Engels": "English",
@@ -3199,6 +3201,10 @@ def nl_part_of_speech(token: str) -> str:
         if token in members:
             return pos
     raise ValueError(f"missing explicit Dutch part of speech for {token!r}")
+
+
+VERBS.update({"lag", "liggen"})
+ADJECTIVES.update({"gemeentelijke"})
 
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
