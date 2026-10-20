@@ -15,8 +15,9 @@ review:
 
     FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (paired with the realization's own fresh-context review, same pass -- zero prior context, fa sibling files never opened). Verified instruction<->answer-data coherence on every exercise; confirmed every recognize_* multiple_choice's correct_option/distractors are English glosses (no same-script prompt-shows-answer leakage against the Dari-script prompt); confirmed content_key parity exact both directions with the realization (1 unit/6 lessons/26 teaching/32 exercises each side); confirmed zero fill_in_blank exercises and zero bare unquoted yes/no/true/false values (a full recursive yaml.safe_load dict-value boolean scan found only the legitimate human_reviewed schema boolean). FOUND AND FIXED the same real §12 multi-clause gap the realization review found: added the missing period-joined and/or و-joined accepted_answers variants to translate_okay_great, dialogue_response_accept, translate_decline, dialogue_response_decline, write_invitation_reply, dialogue_response_confirm_plan, and write_plan_summary, plus a new teaching entry (lesson03.teach.aali_o_qabool) introducing و since it had never been taught in this unit before. Re-verified via actual compile (not just validate) that every exercise produces a real, non-empty correct_response and that the realization's paired duplicate-prompt-text fix (6 dialogue_response/writing_prompt exercises) produces no remaining duplicate text_blocks. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 14 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 5 fixes - realization: lesson06 title ZWNJ; overlay: invitation gloss no longer adds 'to hear from you', word-order variants for the park proposal, optional من/period/word-order variants on waiting and see-you items. NATIVE FLAGS: بعد از ظهر vs بعد از چاشت; پلان; کار دارم as polite excuse."
 course:
   title: Dari A1
   description: Beginner Kabul Dari for respectful everyday communication.
@@ -116,7 +117,7 @@ teaching:
     example_gloss: "I'm waiting on Friday."
   prs.a1.unit13.lesson05.teach.invitation_message:
     title: "Sample invitation message"
-    gloss: "Hi! Do you want to go to the park Friday at five in the afternoon? I'm waiting to hear from you."
+    gloss: "Hi! Do you want to go to the park Friday at five in the afternoon? I'm waiting."
     note: "A short written invitation message, the kind you might get by text."
   prs.a1.unit13.lesson05.teach.shoma_ra_mibinam_word:
     title: "I'll see you"
@@ -204,11 +205,17 @@ exercises:
     accepted_answers:
       - {value: "می‌خواهین جمعه برویم پارک", status: correct}
       - {value: "می‌خواهین جمعه برویم پارک؟", status: correct}
+      - {value: "می‌خواهین جمعه به پارک برویم؟", status: correct}
+      - {value: "جمعه می‌خواهین برویم پارک؟", status: correct}
+      - {value: "جمعه می‌خواهین به پارک برویم؟", status: correct}
     feedback: "می‌خواهین جمعه برویم پارک؟ means do you want to go to the park on Friday?"
   prs.a1.unit13.lesson02.exercise05.dialogue_response_propose:
     instruction: "Propose to a friend that you go to the park on Friday."
     accepted_answers:
       - {value: "می‌خواهین جمعه برویم پارک؟", status: correct}
+      - {value: "می‌خواهین جمعه به پارک برویم؟", status: correct}
+      - {value: "جمعه می‌خواهین برویم پارک؟", status: correct}
+      - {value: "جمعه می‌خواهین به پارک برویم؟", status: correct}
       - {value: "می‌خواهین جمعه برویم پارک", status: correct}
     feedback: "می‌خواهین جمعه برویم پارک؟ proposes going to the park on Friday."
   prs.a1.unit13.lesson03.exercise01.recognize_khoob_reading:
@@ -307,6 +314,8 @@ exercises:
     instruction: "Translate into Dari: I'm waiting."
     accepted_answers:
       - {value: "منتظر استم", status: correct}
+      - {value: "منتظر استم.", status: correct}
+      - {value: "من منتظر استم", status: correct}
     feedback: "منتظر استم means I'm waiting."
   prs.a1.unit13.lesson05.exercise05.write_invitation_reply:
     instruction: "Write a short reply accepting the invitation for Friday at five in the afternoon."
@@ -337,6 +346,9 @@ exercises:
     instruction: "Translate into Dari: I'll see you Friday."
     accepted_answers:
       - {value: "جمعه شما را می‌بینم", status: correct}
+      - {value: "جمعه شما را می‌بینم.", status: correct}
+      - {value: "شما را جمعه می‌بینم", status: correct}
+      - {value: "شما را جمعه می‌بینم.", status: correct}
     feedback: "جمعه شما را می‌بینم means I'll see you Friday."
   prs.a1.unit13.lesson06.exercise05.dialogue_response_confirm_plan:
     instruction: "Farid just said the park visit is at five in the afternoon. Accept the plan enthusiastically."

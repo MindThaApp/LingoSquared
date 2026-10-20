@@ -15,8 +15,9 @@ review:
 
     FRESH-CONTEXT REVIEW COMPLETED 2026-07-07 (zero prior context, fa sibling files never opened, paired with the realization's own matching review pass). Verified content_key parity exact both directions against the realization (1 unit/6 lessons/29 teaching/30 exercises each side) and that this file's flat top-level dicts (units/lessons/teaching/exercises keyed directly by content_key) correctly match the established overlay schema. Confirmed via direct code read of backend/app/api/router.py's grade()/is_multi_answer_response() that the generic multi-answer accepted-list grading path checks every entry, not just the first, so write_own_preference's 12-and-growing accepted variants and dialogue_response_own_preference's coffee/tea variants all genuinely grade correct, not just the first-authored one. Ran a programmatic jargon-leak check (not just grep) against every learner-facing string value (instruction/correct_option/distractors/options/feedback/title/gloss/note/word_bank/accepted_answers) -- zero snake_case leaks. Ran a real yaml.safe_load-based recursive stray-Python-bool check against every dict value in this file -- clean, only the legitimate schema booleans present. Ran a ZWNJ-aware Persian-punctuation-stripping tokenizer checking every Dari-script token in every accepted_answers/correct_option/distractors value against the paired realization's cumulative file-scoped introduced_tokens -- zero untaught-vocabulary violations. FOUND AND FIXED the missing period-joined §12 variant on translate_like_coffee_because_delicious, translate_like_music_because_interesting, write_own_preference, and dialogue_response_own_preference (added as status:correct, matching the realization-side note's detail). Re-verified via actual compile that every new accepted_answers entry appears correctly in the compiled correct_response.accepted list. Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 12 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 12 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 8 fixes - realization: را grammar card no longer labelled formal; overlay: two notes no longer claim را is formal or that رو is colloquial Dari, write_own_preference instruction now names the allowed choices, added optional من/شما and reversed-order accepted variants. NATIVE FLAGS: none beyond the را note being checked."
 course:
   title: Dari A1
   description: >-
@@ -70,7 +71,7 @@ teaching:
   prs.a1.unit14.lesson01.teach.ra_word:
     title: "(object marker)"
     gloss: "(marks the object of the verb)"
-    note: "را is the formal object marker used with a definite direct object -- this course's dialect uses را, not the colloquial رو."
+    note: "را marks a definite direct object. In Dari it is used in everyday speech as well as in writing; the Iranian-style رو is not used."
   prs.a1.unit14.lesson02.teach.kodam_word:
     title: Which
     gloss: which
@@ -88,7 +89,7 @@ teaching:
   prs.a1.unit14.lesson02.teach.kodam_ra_question:
     title: "Which one do you like?"
     gloss: "Which one do you like?"
-    note: "کدام را دوست دارین؟ -- را is the formal object marker (this course's dialect uses را, not the colloquial رو)."
+    note: "کدام را دوست دارین؟ -- را marks the object, here the thing you are choosing."
   prs.a1.unit14.lesson03.teach.bishtar_word:
     title: More
     gloss: more
@@ -228,6 +229,8 @@ exercises:
     accepted_answers:
       - {value: "کدام را دوست دارین", status: correct}
       - {value: "کدام را دوست دارین؟", status: correct}
+      - {value: "شما کدام را دوست دارین؟", status: correct}
+      - {value: "شما کدام را دوست دارین", status: correct}
     feedback: "کدام را دوست دارین؟ means which one do you like?"
   prs.a1.unit14.lesson03.exercise01.recognize_bishtar:
     instruction: "What does this word mean?"
@@ -284,6 +287,8 @@ exercises:
       - {value: "قهوه را دوست دارم، چون خوش‌مزه است", status: correct}
       - {value: "قهوه را دوست دارم و خوش‌مزه است", status: correct}
       - {value: "قهوه را دوست دارم. چون خوش‌مزه است", status: correct}
+      - {value: "من قهوه را دوست دارم چون خوش‌مزه است", status: correct}
+      - {value: "من قهوه را دوست دارم، چون خوش‌مزه است", status: correct}
     feedback: "قهوه را دوست دارم چون خوش‌مزه است means I like coffee because it's delicious."
   prs.a1.unit14.lesson04.exercise05.translate_like_music_because_interesting:
     instruction: "Translate into Dari: I like music because it's interesting."
@@ -292,6 +297,8 @@ exercises:
       - {value: "موسیقی را دوست دارم، چون جالب است", status: correct}
       - {value: "موسیقی را دوست دارم و جالب است", status: correct}
       - {value: "موسیقی را دوست دارم. چون جالب است", status: correct}
+      - {value: "من موسیقی را دوست دارم چون جالب است", status: correct}
+      - {value: "من موسیقی را دوست دارم، چون جالب است", status: correct}
     feedback: "موسیقی را دوست دارم چون جالب است means I like music because it's interesting."
   prs.a1.unit14.lesson05.exercise01.reading_comprehension_what_negar_likes:
     instruction: "Read the text. What does Negar like?"
@@ -315,9 +322,10 @@ exercises:
     instruction: "Translate into Dari: Negar likes tea."
     accepted_answers:
       - {value: "نگار چای را دوست دارد", status: correct}
+      - {value: "نگار چای را دوست دارد.", status: correct}
     feedback: "نگار چای را دوست دارد means Negar likes tea."
   prs.a1.unit14.lesson05.exercise05.write_own_preference:
-    instruction: "Write one or two sentences in Dari about something you like and why."
+    instruction: "Write in Dari what you like and why. Choose coffee, tea, or music, and give the matching reason: delicious, warm, or interesting."
     accepted_answers:
       - {value: "قهوه را دوست دارم چون خوش‌مزه است", status: correct}
       - {value: "قهوه را دوست دارم، چون خوش‌مزه است", status: correct}
@@ -371,4 +379,9 @@ exercises:
       - {value: "نگار قهوه را دوست دارد. کریم چای را دوست دارد", status: correct}
       - {value: "نگار قهوه را دوست دارد، کریم چای را دوست دارد", status: correct}
       - {value: "نگار قهوه را دوست دارد و کریم چای را دوست دارد", status: correct}
+      - {value: "کریم چای را دوست دارد. نگار قهوه را دوست دارد", status: correct}
+      - {value: "کریم چای را دوست دارد، نگار قهوه را دوست دارد", status: correct}
+      - {value: "کریم چای را دوست دارد و نگار قهوه را دوست دارد", status: correct}
+      - {value: "نگار قهوه را دوست دارد، و کریم چای را دوست دارد", status: correct}
+      - {value: "نگار قهوه را دوست دارد. کریم چای را دوست دارد.", status: correct}
     feedback: "نگار قهوه را دوست دارد، کریم چای را دوست دارد means Negar likes coffee, Karim likes tea."
