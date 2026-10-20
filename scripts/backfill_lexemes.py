@@ -759,7 +759,7 @@ FA_GLOSSES = {
     "اردیبهشت": "Ordibehesht (2nd Persian solar month)",
     "خرداد": "Khordad (3rd Persian solar month)", "تقویم": "calendar",
     "هجری": "Hijri (calendar era)", "شمسی": "solar (calendar)",
-    "استفاده": "use (in استفاده می‌کنه, 'uses')",
+    "استفاده": "use (as in 'uses')",
     "می‌کنه": "does; uses (spoken, 3rd person)",
     "چندشنبه‌ست": "is which day of the week? (spoken contraction)",
     "دهم": "10th", "اردیبهشته": "is Ordibehesht (spoken contraction)",
@@ -799,7 +799,7 @@ FA_GLOSSES = {
     # Unit 16 (A1: travel), added 2026-07-07.
     "بلیط": "ticket", "قطار": "train", "اتوبوس": "bus", "فرودگاه": "airport",
     "سکو": "platform",
-    "سکوی": "platform (ezafe-linked form, as in سکوی دو 'platform two')",
+    "سکوی": "platform (ezafe-linked form, as in 'platform two')",
     "حرکت": "departure; movement (as in 'it departs')",
     "مسافر": "traveler; passenger",
     "می‌خواید": "you want (polite)",
@@ -965,7 +965,7 @@ FA_GLOSSES = {
     "سردرده": "it's a headache (colloquial contraction)",
     "شدیده": "it's severe (colloquial contraction)",
     "شدید": "severe", "داشت": "he/she had (past)",
-    "کند": "he/she does (formal subjunctive of کردن)",
+    "کند": "he/she does (formal subjunctive of 'to do')",
     # Unit 13 (A2: maintenance), added 2026-07-11, same pass as unit11
     # above.
     "لوله": "pipe", "لوله‌ی": "pipe of (ezafe-linked form)",
@@ -974,7 +974,7 @@ FA_GLOSSES = {
     "سرایدار": "building superintendent / custodian",
     "تعمیر": "repair", "زدم": "I hit / I called (past)",
     "زد": "he/she hit / called (past)",
-    "بیاید": "come (polite imperative)",
+    "بیاید": "come (formal, 'can you come')",
     "تعمیرش": "repair it / its repair (object suffix)",
     "درخواست": "request", "ثبت": "registration / logging",
     "تعمیرکار": "repairman",
@@ -4378,6 +4378,12 @@ def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
 # these; the overlay card text and the English source-token extraction are
 # unchanged. Added 2026-10-19 (session9 backfill-gloss leakage pass).
 PHRASE_GLOSS_OVERRIDES: dict[str, str] = {
+    # Teaching-note glosses come from the overlay and quote the Persian
+    # token; the gloss is English-only so no translate item shows its answer.
+    'fa.a1.unit06.lesson01.teach.va_ya': 'and; or',
+    'fa.a1.unit06.lesson02.teach.register_note': 'Use the past-tense form with a stranger or waiter; use the present form only with a close friend.',
+    'fa.a1.unit08.lesson02.teach.contraction_note': 'The everyday spoken contraction of the price word plus "is" (it is ... toman).',
+    'fa.a1.unit09.lesson02.teach.contraction_note': 'The everyday spoken contraction of "how many" plus "is" (what number is it?).',
     'fa.a2.unit09.lesson04.teach.turn01': 'Please, how can I help you?',
     'fa.a2.unit09.lesson04.teach.turn03': 'Since when have you lived at the new address?',
     'fa.a2.unit09.lesson04.teach.turn04': 'Since last month. Could you tell me what I should bring?',
@@ -4535,6 +4541,10 @@ def _classify_fa(files, level, fa_specs, seen_en):
                     # unit09 uses شرکت only in شرکت کردید ("took part").
                     if level == "b1" and token == "می‌دید":
                         english_gloss = "he/she would see / would have seen"
+                    # A1 unit30 (education): می‌خونم means "I study" here
+                    # (دانشگاه ... می‌خونم), not "I read".
+                    if token == "می‌خونم" and lesson_key.startswith("fa.a1.unit30"):
+                        english_gloss = "I study (spoken, 1st person)"
                     if level == "b1" and token == "شرکت":
                         english_gloss = "participation (as in 'to take part')"
                     if token == "تا" and lesson_key in TA_UNTIL_LESSONS:

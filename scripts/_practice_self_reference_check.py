@@ -70,8 +70,29 @@ def _frame_text(fr) -> str:
     return fr if isinstance(fr, str) else ""
 
 
-def main() -> int:
+_ARABIC_RE = re.compile(r"[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]")
+# Directions whose lexeme gloss is English while the token is Persian: an
+# Arabic-script character in english_gloss quotes the token (or a sibling)
+# and gives translate/MC items their answer. (fa-en / prs-en glosses are
+# Persian by design and are not scanned.)
+ENGLISH_GLOSS_DIRECTIONS = ("en-fa", "en-prs")
+
+
+def gloss_script_hits() -> int:
+    """Gloss pass: english_gloss of every en-fa / en-prs spec must be English only."""
     hits = 0
+    for direction in ENGLISH_GLOSS_DIRECTIONS:
+        for s in specs(direction):
+            g = s.get("english_gloss") or ""
+            if _ARABIC_RE.search(g):
+                hits += 1
+                print(f"GLOSS-SCRIPT {direction} {s['content_key'][-60:]}: token={s['token'][:30]!r} "
+                      f"gloss={g[:80]!r}")
+    return hits
+
+
+def main() -> int:
+    hits = gloss_script_hits()
     scanned = 0
     for f in sorted(REPO_ROOT.glob("docs/content/practice/*/*.yaml")):
         direction = f.parent.name
