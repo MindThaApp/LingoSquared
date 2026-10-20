@@ -286,16 +286,26 @@ def test_its_and_it_s_are_not_contraction_equivalents():
     assert _en("it's color", "its color") != "correct"
 
 
-def test_strict_exercise_can_require_the_contracted_form():
-    assert _en("I am ready", "I'm ready", orthography_strict=True) == "incorrect"
-    assert _en("He is eaten", "He's eaten", orthography_strict=True) == "incorrect"
-    assert _en("I can not", "I can't", orthography_strict=True) == "incorrect"
+def test_strict_exercises_accept_correct_expansions_only():
+    for learner, correct in [
+        ("I am ready", "I'm ready"),
+        ("He has eaten", "He's eaten"),
+        ("I can not", "I can't"),
+        ("If I had known", "If I'd known"),
+    ]:
+        assert _en(learner, correct, orthography_strict=True) == "correct", learner
+        assert _en(correct, learner, orthography_strict=True) == "correct", learner
     assert grade(
         "I am ready", "I'm ready", "speak_response", script="latin",
         language_code="en", input_mode="spoken", orthography_strict=True,
-    ) != "correct"
-    # The contracted form itself still grades correct under strict.
-    assert _en("I'm ready", "I'm ready", orthography_strict=True) == "correct"
+    ) == "correct"
+    for learner, correct in [
+        ("He is eaten", "He's eaten"),
+        ("If I would known", "If I'd known"),
+        ("Everyone is book", "Everyone's book"),
+        ("It is been a while", "It's been a while"),
+    ]:
+        assert _en(learner, correct, orthography_strict=True) == "incorrect", learner
 
 
 def test_romanian_hyphenated_clitics_are_not_a_pause():

@@ -106,9 +106,9 @@ full forms, typed and spoken (`I'm` = `I am`, `don't` = `do not`, `can't` =
 `cannot` = `can not`). `'s` (after a pronoun/wh-word only) and `'d` take
 their reading from the next word: `'s been`/`'s eaten` = has, `'s done` =
 is or has, otherwise is; `'d` + participle/`better` = had, otherwise would.
-A possessive `'s` is never expanded. Not applied when `orthography_strict`
-is true (incl. checkpoints), so such an exercise can require the
-contracted form. Practice `translation`
+A possessive `'s` is never expanded. Applies on strict paths too
+(`orthography_strict`, checkpoints): a correct expansion is always accepted,
+a wrong one never. Practice `translation`
 items store the `{canonical, accepted}` shape when other in-scope lexemes
 for the answer slot share the filled lexeme's exact English gloss
 (برادرم/داداشم "my brother"), since the prompt cannot tell them apart.
