@@ -551,8 +551,8 @@ UNIT_FILES_B2 = (
 # guessed). Persian-range codepoints throughout -- Persian keheh/yeh,
 # never the Arabic-range look-alikes (described in prose only).
 PRS_GLOSSES: dict[str, str] = {
-    "حوض آب\u200cبازی": "splash pool; water-play pool",
-    "تکت\u200cتان": "your (plural) ticket",
+    "حوض آب\u200cبازی": "swimming pool",
+    "تکت\u200cتان": "your ticket (polite)",
     "رستورانت": "restaurant",
     "تکتش": "his/her ticket",
     "ا": "a (letter)", "ب": "b (letter)", "ت": "t (letter)", "د": "d (letter)",
