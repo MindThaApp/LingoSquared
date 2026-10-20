@@ -3888,3 +3888,38 @@ in the B2 lexeme backfill (PR #50/#54).
 Verification: en-prs-b2 validate and compile 0 errors, 0 warnings;
 `check_dari_register.py` 0 findings; `scripts/verify.sh --content-only`
 passes.
+
+### 2026-10-20 — en-nl overlay + nl realization language review (A1-C1)
+
+Scope: all 105 en-nl units (overlays/en-nl + realizations/nl, A1 67, A2 11,
+B1 11, B2 8, C1 8). Practice and realizations/en untouched. About 406 fixes,
+most of them missing accepted-answer variants (je/jij, me/mij, er/daar,
+equally natural V2/fronted orders, digit forms, synonyms). Each file's
+`review.notes` has a "Language review 2026-10-20 (session 9, en-nl)" paragraph
+with the per-key list and native flags; `required_next_reviewer` unchanged.
+
+Substantive classes:
+- Dutch grammar/idiom: C1 u06 `iemand aan het hart gaan` (= grieve) taught as
+  "close to my heart" -> `na aan het hart liggen`; C1 u07 `het gemeentelijke
+  rapport/plan`; A1 u62/63 `een rondvaart maken` (not doen); A1 u36 `laten we
+  het vieren`; A1 u33 fietsen word order and `naar mijn werk`; A1 u34 `via de
+  app`; A1 u58 pleonastic `heel geweldig`; A1 u56 `hoe laat wilt u de
+  voorstelling`; A1 u35 `Ik studeer graag nieuwe dingen`; B2 u01 initial Echter.
+- Wrong grammar notes: hardlopen separability (A1 u32/u34), waarover, vroeg of,
+  moet niet, ondanks dat (B1 u02-u06), A1 u14 -er/-st.
+- Logic/canon: A1 u22 callee/caller swapped in the phone dialogue; B1 u08
+  reading contradicted its own counterfactual; B1 u01 "first" question; A1
+  u31 pet canon; A1 u38 `Leuk je te zien` at a first meeting.
+- Answer-key integrity: valid-Dutch distractors (A1 u10, u20, u23, u37);
+  interchangeable matching rights (A1 u11, B2 u01/u03/u08); listen tasks that
+  graded one line against whole-dialogue audio (A1 u46-u48, new pending
+  single-line assets); A1 u45 tested_text vs audio; underdetermined blanks.
+- English: volksuniversiteit "community college" -> "adult education centre";
+  parasol "umbrella" -> "beach umbrella"; English lesson titles in nl
+  realizations A1 u70-u72.
+
+Follow-up outside scope: practice/en-nl/b1_unit08.yaml feedback frame still
+says "Nu heeft Lotte meer tijd" (reading now says geen tijd).
+
+Verification: `scripts/verify.sh --content-only` passes; answer-leakage check
+unchanged from baseline (36 hits, none new).
