@@ -15,8 +15,9 @@ review:
 
     FRESH-CONTEXT REVIEW COMPLETED 2026-07-06 (zero prior context, sibling fa files never opened). Confirmed the flat top-level units/lessons/teaching/exercises dict schema is structurally correct, with exact content_key parity against the paired realization in both directions (32/32 exercises, 24/24 teaching entries). Confirmed every exercise has at least one status:correct accepted answer via direct compile, not just validate. Confirmed every multiple_choice/dialogue_comprehension exercise's correct_option/distractors are in English (source language) while the prompt is Dari, so none are solvable by pure visual script-matching. FOUND AND FIXED a real YAML-footgun bug (AUTHORING_GUIDE §7): lesson06.exercise02.match_dialogue_facts's accepted_answers value had an unquoted بلی: yes, which PyYAML silently coerced to the Python boolean True -- quoted as \"yes\"; re-verified via compile that it now serializes as the string \"yes\". FOUND AND FIXED a real AUTHORING_GUIDE §12 gap: write_own_routine's accepted_answers only had comma-joined and period-joined multi-clause variants -- added the missing pure-و-joined form as status:correct (write_comparison_summary already had all three, unaffected). FOUND AND FIXED a real dialect-accuracy issue: the teaching notes for bidar_mishawam and daftar_miravam, plus the paired realization's register_policy, claimed spoken Dari simply lacks the Iranian-colloquial verb contraction (می‌شم/میرم) -- web-verified this is inaccurate (colloquial Kabuli Dari contracts these verbs too, with a distinct Afghan -om vowel, per the Encyclopaedia Iranica's Kāboli article); corrected the notes to frame the fuller می‌شوم/می‌روم forms as this course's deliberate register choice (consistent with units 01-11's استم/استین convention) rather than an absolute claim about Dari lacking a contraction. FOUND AND FIXED systemic non-compliance with AUTHORING_GUIDE §15 (target-language-asterisk convention): despite being freshly authored after §15 existed, only 1 of 56 note/feedback strings in this file used it (compare unit11's overlay, which applied it correctly throughout) -- wrapped the Dari spans in the remaining 42 mixed-language note/feedback strings that needed it (pure-English strings, e.g. the dialogue_lineN notes, correctly left unchanged). Also fixed a minor typo (\"this unit11's\" -> \"unit11's\"). Cross-referenced against the paired realization's fix for the duplicate-prompt-text bug (4 dialogue_response/writing_prompt exercises whose realization prompt.target_blocks exactly duplicated this overlay's own instruction text) -- confirmed via compile that all 4 now render correctly (no duplicate text shown to the learner). Both validate and compile re-run clean (0 errors/0 warnings) after every fix; compile output is valid JSON.
 
-    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 9 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review."
+    2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added example_gloss to all 9 kind:vocabulary teaching entries (1 merged card -- names -- given a positionally-matched example_gloss list), matching the new example: sentences added to the paired realization. schema_version bumped to 1.1. Pending fresh-context review.
 
+    Review 2026-10-20 (en-prs A1 pass): 8 fixes - realization: lesson06 title ZWNJ/ezafe; overlay: write_own_routine instruction now names the sentence (was open-ended against one answer key), accepted variants added with optional من, period forms, reversed-order and و forms. NATIVE FLAGS: صبحانه vs ناشتا for breakfast; عصر می‌خوابم as afternoon nap."
 course:
   title: Dari A1
   description: Beginner Kabul Dari for respectful everyday communication.
@@ -168,11 +169,13 @@ exercises:
     instruction: "Translate into Dari: I eat breakfast."
     accepted_answers:
       - {value: "صبحانه می‌خورم", status: correct}
+      - {value: "من صبحانه می‌خورم", status: correct}
     feedback: "*صبحانه می‌خورم* means I eat breakfast."
   prs.a1.unit12.lesson01.exercise06.translate_sleep:
     instruction: "Translate into Dari: I sleep at night."
     accepted_answers:
       - {value: "شب می‌خوابم", status: correct}
+      - {value: "من شب می‌خوابم", status: correct}
     feedback: "*شب می‌خوابم* means I sleep at night."
   prs.a1.unit12.lesson02.exercise01.recognize_wake_time_reading:
     instruction: "What does this sentence mean?"
@@ -208,6 +211,8 @@ exercises:
     accepted_answers:
       - {value: "ساعت هفت بیدار می‌شوم", status: correct}
       - {value: "ساعت هفت بیدار می‌شوم.", status: correct}
+      - {value: "من ساعت هفت بیدار می‌شوم", status: correct}
+      - {value: "من ساعت هفت بیدار می‌شوم.", status: correct}
     feedback: "*ساعت هفت بیدار می‌شوم* means I wake up at seven."
   prs.a1.unit12.lesson03.exercise01.recognize_zohr_reading:
     instruction: "What does this word mean?"
@@ -258,6 +263,7 @@ exercises:
     instruction: "Translate into Dari: I sleep at ten."
     accepted_answers:
       - {value: "ساعت ده می‌خوابم", status: correct}
+      - {value: "من ساعت ده می‌خوابم", status: correct}
     feedback: "*ساعت ده می‌خوابم* means I sleep at ten."
   prs.a1.unit12.lesson05.exercise01.recognize_zud_reading:
     instruction: "What does this word mean?"
@@ -282,11 +288,14 @@ exercises:
       - {value: زود, status: correct}
     feedback: "*زود* means early."
   prs.a1.unit12.lesson05.exercise05.write_own_routine:
-    instruction: "Write two or three sentences in Dari about your own daily routine: what time you wake up, and what you do afterward."
+    instruction: "Write in Dari: Every day I wake up at six, I eat breakfast and go to the office."
     accepted_answers:
       - {value: "هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم", status: correct}
       - {value: "هر روز ساعت شش بیدار می‌شوم. صبحانه می‌خورم و به دفتر می‌روم.", status: correct}
       - {value: "هر روز ساعت شش بیدار می‌شوم و صبحانه می‌خورم و به دفتر می‌روم", status: correct}
+      - {value: "هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم.", status: correct}
+      - {value: "هر روز ساعت شش بیدار می‌شوم و صبحانه می‌خورم و به دفتر می‌روم.", status: correct}
+      - {value: "هر روز من ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم", status: correct}
     feedback: "*هر روز ساعت شش بیدار می‌شوم، صبحانه می‌خورم و به دفتر می‌روم* is one accepted sample routine -- joining the clauses with a comma, a period, or *و* are all equally natural."
   prs.a1.unit12.lesson06.exercise01.dialogue_comprehension_context:
     instruction: "Read the conversation. Who wakes up earlier?"
@@ -315,6 +324,8 @@ exercises:
     accepted_answers:
       - {value: "من ساعت شش بیدار می‌شوم", status: correct}
       - {value: "ساعت شش بیدار می‌شوم", status: correct}
+      - {value: "من ساعت شش بیدار می‌شوم.", status: correct}
+      - {value: "ساعت شش بیدار می‌شوم.", status: correct}
     feedback: "*من ساعت شش بیدار می‌شوم* means I wake up at six."
   prs.a1.unit12.lesson06.exercise06.write_comparison_summary:
     instruction: "Write one or two sentences in Dari comparing when Homayoun and Zarmina wake up."
@@ -322,4 +333,8 @@ exercises:
       - {value: "همایون ساعت هفت بیدار می‌شود، زرمینه ساعت شش بیدار می‌شود", status: correct}
       - {value: "همایون ساعت هفت بیدار می‌شود. زرمینه ساعت شش بیدار می‌شود.", status: correct}
       - {value: "همایون ساعت هفت بیدار می‌شود و زرمینه ساعت شش بیدار می‌شود", status: correct}
+      - {value: "زرمینه ساعت شش بیدار می‌شود، همایون ساعت هفت بیدار می‌شود", status: correct}
+      - {value: "زرمینه ساعت شش بیدار می‌شود. همایون ساعت هفت بیدار می‌شود.", status: correct}
+      - {value: "زرمینه ساعت شش بیدار می‌شود و همایون ساعت هفت بیدار می‌شود", status: correct}
+      - {value: "همایون ساعت هفت بیدار می‌شود، و زرمینه ساعت شش بیدار می‌شود", status: correct}
     feedback: "Joining the two facts with a comma, a period, or *و* are all equally natural."
