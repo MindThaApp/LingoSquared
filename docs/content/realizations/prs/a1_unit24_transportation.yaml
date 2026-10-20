@@ -12,7 +12,9 @@ review:
   required_next_reviewer: null
   notes: "2026-07-10 fresh-context review (Claude, zero access to the authoring reasoning). Checked: same-speaker dialogue-distractor rule on lesson04's dialogue_comprehension exercise (no violation -- Homayoun's own line 'بس هم خوب است، ارزان است' is a general comment about the bus, never a first-person claim, so it doesn't overlap with any of the 3 first-person distractors), reading-passage/dialogue fact consistency (Homayoun's house is near so he walks, Zarmina takes a fast-but-not-cheap taxi daily and is saving for a car -- consistent throughout), matching_pairs pair counts (5 in lesson01 under the established first-lesson exception, 6 everywhere else), bare-YAML-boolean grep, Persian-vs-Arabic codepoints, jargon leaks, exercise-type registration, and §19 vocabulary-card examples -- all clean. Found and fixed two real bugs, both in the paired overlay file (no realization-side changes needed here beyond this note): (1) all 5 forward (English-to-Dari) translation exercises had a bare 'Translate into Dari.' instruction with an empty prompt -- unanswerable without already knowing the target sentence, the exact bug this unit's own sibling unit25 flagged as present here without fixing it (out of that unit's scope; fixed now). (2) lesson06's translate_wrap exercise was doubly broken: authored as type: translation (which per AUTHORING_GUIDE §6 must produce a target-language/Dari answer) but its accepted_answers were actually English, paired with the equally bare 'Translate into English.' instruction and an empty prompt -- converted to a normal, consistent English-to-Dari translation exercise. Re-validated clean (0 errors/0 warnings) after fixes.
 
-    MATCHING_PAIRS §16 FOLLOW-UP, 2026-08-05: this file's own prior review described lesson01.exercise04.match_transport_words's 5-pair size as 'under the established first-lesson exception' -- that check only looked within this file; unit16 (travel), an earlier-numbered A1 unit, supplies directly on-topic transportation vocabulary. Expanded 5->8 pairs, pooling قطار (train), بلیط (ticket), and میدان هوایی (airport), all taught in unit16. Overlay accepted_answers synced. Re-ran validate+compile clean (0 errors/0 warnings)."
+    MATCHING_PAIRS §16 FOLLOW-UP, 2026-08-05: this file's own prior review described lesson01.exercise04.match_transport_words's 5-pair size as 'under the established first-lesson exception' -- that check only looked within this file; unit16 (travel), an earlier-numbered A1 unit, supplies directly on-topic transportation vocabulary. Expanded 5->8 pairs, pooling قطار (train), بلیط (ticket), and میدان هوایی (airport), all taught in unit16. Overlay accepted_answers synced. Re-ran validate+compile clean (0 errors/0 warnings).
+
+    Review 2026-10-20 (en-prs A1 pass): 2 fixes - matching pair بلیط (Iranian) replaced with تکت; lesson04 title گفتگوی changed to گفت‌وگوی (ZWNJ, consistent with other units). NATIVE FLAGS: see overlay."
 
 course:
   realization_key: prs.a1
@@ -114,7 +116,7 @@ units:
               - {left: دوچرخه, right: bicycle}
               - {left: پیاده, right: on foot}
               - {left: قطار, right: train}
-              - {left: بلیط, right: ticket}
+              - {left: تکت, right: ticket}
               - {left: "میدان هوایی", right: airport}
           - content_key: prs.a1.unit24.lesson01.exercise05.order_walk
             type: word_order
@@ -256,7 +258,7 @@ units:
             prompt: {target_blocks: []}
 
       - content_key: prs.a1.unit24.lesson04.commute_dialogue
-        title: گفتگوی رفت و آمد
+        title: گفت‌وگوی رفت و آمد
         spine_outcome_id: universal.a1.transportation.getting_around_town
         teaching:
           - content_key: prs.a1.unit24.lesson04.teach.dialogue_line1
