@@ -353,7 +353,7 @@ def spoken_answer_result(
         return "correct"
     if normalized_response == normalized_correct:
         return "correct"
-    if orthography_strict is not True and english_contraction_equivalent(
+    if english_contraction_equivalent(
         normalized_response, normalized_correct, language_code
     ):
         return "correct"
@@ -520,8 +520,9 @@ def optional_subject_pronoun_only_difference(
 # 's is only expanded after a pronoun or wh-word; after any other word
 # (including everyone/someone/nobody) it is usually a possessive.
 #
-# Not applied when orthography_strict is True (author-strict exercises and
-# checkpoints), so such an exercise can require the contracted form.
+# Applied on every non-dictation path, orthography_strict and checkpoints
+# included: a correct expansion is the same answer, not a spelling slip
+# (owner decision 2026-10-20). Wrong expansions are rejected everywhere.
 # English answers only (language_code == "en"), never dictation.
 # ---------------------------------------------------------------------------
 _EN_IRREGULAR_CONTRACTIONS: dict[str, tuple[str, ...]] = {
@@ -1206,7 +1207,7 @@ def grade_answer(
     if exercise_type not in FREE_TEXT_EXERCISE_TYPES:
         return "incorrect"
 
-    if orthography_strict is not True and english_contraction_equivalent(
+    if english_contraction_equivalent(
         normalized_response, normalized_correct, language_code
     ):
         return "correct"
@@ -1239,7 +1240,6 @@ def grade_answer(
 
     if (
         language_code == "en"
-        and orthography_strict is not True
         and ("'" in normalized_response + normalized_correct
              or "cannot" in normalized_response + normalized_correct)
         and _english_contraction_distance(normalized_response, normalized_correct) == 1
