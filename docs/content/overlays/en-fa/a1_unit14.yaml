@@ -17,7 +17,9 @@ review:
 
     2026-07-07: AUTHORING_GUIDE.md §19 retrofit -- added real example sentence(s) to all 12 kind:vocabulary teaching entries with example_gloss (the merged names card given a 2-item list), each a natural, comprehensible-from-gloss sentence using the card's own word(s). schema_version bumped to 1.1. Example sentences are Claude-authored and pending fresh-context review.
 
-    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Found the same real §11-class fact-consistency bug documented in the realization's own review notes: fa.a1.unit14.lesson06.teach.names's example_gloss (\"Nima likes coffee.\", \"Sara likes tea.\") had Nima's and Sara's drink preferences backwards relative to the dialogue's own established facts (Sara prefers coffee, Nima prefers tea). Fixed to match the realization's corrected Farsi text: [\"Nima likes tea.\", \"Sara likes coffee.\"]. Spot-checked every other example_gloss against its paired Farsi example for accurate translation -- all sound. Re-ran validate+compile after the fix: 0 errors/0 warnings, valid JSON, output spot-checked directly."
+    2026-07-07: FRESH-CONTEXT REVIEW of the §19 retrofit examples specifically (paired with the same-dated review of the fa realization; zero prior access to the retrofit's own authoring reasoning; scoped narrowly to the new example_gloss fields). Found the same real §11-class fact-consistency bug documented in the realization's own review notes: fa.a1.unit14.lesson06.teach.names's example_gloss (\"Nima likes coffee.\", \"Sara likes tea.\") had Nima's and Sara's drink preferences backwards relative to the dialogue's own established facts (Sara prefers coffee, Nima prefers tea). Fixed to match the realization's corrected Farsi text: [\"Nima likes tea.\", \"Sara likes coffee.\"]. Spot-checked every other example_gloss against its paired Farsi example for accurate translation -- all sound. Re-ran validate+compile after the fix: 0 errors/0 warnings, valid JSON, output spot-checked directly.
+
+    Review 2026-10-21 (en-fa A1 language review r1): 11 fixes - added missing رو / without-رو and من variants to likes, dislikes, because-sentence, preference and summary answers (e.g. the unit's own example چای رو دوست ندارم was not accepted for \"I don't like tea\"), added بیشتر placement and تو variants, made three open-ended prompts name the allowed topics and reasons, corrected the misleading note that و is an alternative to چون, and corrected the matching pair داره (means has) to دوست داره (likes). NATIVE FLAGS: none."
 
 course:
   title: Farsi A1
@@ -117,7 +119,7 @@ teaching:
   fa.a1.unit14.lesson04.teach.va_word:
     title: And
     gloss: and
-    note: "و means and -- used here to link two clauses as a natural alternative to چون."
+    note: "*و* means 'and' and can link two short statements, such as liking something and describing it. It is looser than *چون* (because), which gives the reason directly."
   fa.a1.unit14.lesson05.teach.sara_name:
     title: Sara
     gloss: Sara
@@ -191,12 +193,16 @@ exercises:
     accepted_answers:
       - {value: "قهوه دوست دارم", status: correct}
       - {value: "من قهوه دوست دارم", status: correct}
+      - {value: "قهوه رو دوست دارم", status: correct}
+      - {value: "من قهوه رو دوست دارم", status: correct}
     feedback: "قهوه دوست دارم means I like coffee."
   fa.a1.unit14.lesson01.exercise05.translate_i_dont_like_tea:
     instruction: "Translate into Farsi: I don't like tea."
     accepted_answers:
       - {value: "چای دوست ندارم", status: correct}
       - {value: "من چای دوست ندارم", status: correct}
+      - {value: "چای رو دوست ندارم", status: correct}
+      - {value: "من چای رو دوست ندارم", status: correct}
     feedback: "چای دوست ندارم means I don't like tea."
   fa.a1.unit14.lesson02.exercise01.recognize_kodum:
     instruction: "What does this word mean?"
@@ -226,6 +232,8 @@ exercises:
     accepted_answers:
       - {value: "کدوم رو دوست داری", status: correct}
       - {value: "کدوم رو دوست داری؟", status: correct}
+      - {value: "تو کدوم رو دوست داری", status: correct}
+      - {value: "تو کدوم رو دوست داری؟", status: correct}
     feedback: "کدوم رو دوست داری؟ means which one do you like?"
   fa.a1.unit14.lesson03.exercise01.recognize_bishtar:
     instruction: "What does this word mean?"
@@ -250,12 +258,20 @@ exercises:
     accepted_answers:
       - {value: "قهوه رو بیشتر دوست دارم", status: correct}
       - {value: "من قهوه رو بیشتر دوست دارم", status: correct}
+      - {value: "قهوه بیشتر دوست دارم", status: correct}
+      - {value: "من قهوه بیشتر دوست دارم", status: correct}
+      - {value: "بیشتر قهوه رو دوست دارم", status: correct}
+      - {value: "من بیشتر قهوه رو دوست دارم", status: correct}
     feedback: "قهوه رو بیشتر دوست دارم means I like coffee more."
   fa.a1.unit14.lesson03.exercise05.dialogue_response_choose_coffee:
     instruction: "Someone asks: coffee or tea? Say you like coffee more."
     accepted_answers:
       - {value: "قهوه رو بیشتر دوست دارم", status: correct}
       - {value: "من قهوه رو بیشتر دوست دارم", status: correct}
+      - {value: "قهوه بیشتر دوست دارم", status: correct}
+      - {value: "من قهوه بیشتر دوست دارم", status: correct}
+      - {value: "بیشتر قهوه رو دوست دارم", status: correct}
+      - {value: "من بیشتر قهوه رو دوست دارم", status: correct}
     feedback: "قهوه رو بیشتر دوست دارم means I like coffee more."
   fa.a1.unit14.lesson04.exercise01.recognize_choon:
     instruction: "What does this word mean?"
@@ -281,6 +297,15 @@ exercises:
       - {value: "قهوه رو دوست دارم چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو دوست دارم، چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم و خوشمزه‌ست", status: correct}
     feedback: "قهوه رو دوست دارم چون خوشمزه‌ست means I like coffee because it's delicious."
   fa.a1.unit14.lesson04.exercise05.translate_like_music_because_interesting:
     instruction: "Translate into Farsi: I like music because it's interesting."
@@ -288,6 +313,15 @@ exercises:
       - {value: "موسیقی رو دوست دارم چون جالبه", status: correct}
       - {value: "موسیقی رو دوست دارم، چون جالبه", status: correct}
       - {value: "موسیقی رو دوست دارم و جالبه", status: correct}
+      - {value: "موسیقی دوست دارم چون جالبه", status: correct}
+      - {value: "موسیقی دوست دارم، چون جالبه", status: correct}
+      - {value: "موسیقی دوست دارم و جالبه", status: correct}
+      - {value: "من موسیقی رو دوست دارم چون جالبه", status: correct}
+      - {value: "من موسیقی رو دوست دارم، چون جالبه", status: correct}
+      - {value: "من موسیقی رو دوست دارم و جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم چون جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم، چون جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم و جالبه", status: correct}
     feedback: "موسیقی رو دوست دارم چون جالبه means I like music because it's interesting."
   fa.a1.unit14.lesson05.exercise01.reading_comprehension_what_sara_likes:
     instruction: "Read the text. What does Sara like?"
@@ -304,29 +338,54 @@ exercises:
   fa.a1.unit14.lesson05.exercise03.match_reading_vocab:
     instruction: "Match each word or phrase with its meaning."
     accepted_answers:
-      - value: {سارا: Sara, داره: "she likes", گرمه: "it's warm", چای: tea, چون: because, "دوست نداره": "she doesn't like"}
+      - value: {سارا: Sara, "دوست داره": "she likes", گرمه: "it's warm", چای: tea, چون: because, "دوست نداره": "she doesn't like"}
         status: correct
     feedback: "These are the reading text's key words."
   fa.a1.unit14.lesson05.exercise04.translate_sara_likes_tea:
     instruction: "Translate into Farsi: Sara likes tea."
     accepted_answers:
       - {value: "سارا چای دوست داره", status: correct}
+      - {value: "سارا چای رو دوست داره", status: correct}
     feedback: "سارا چای دوست داره means Sara likes tea."
   fa.a1.unit14.lesson05.exercise05.write_own_preference:
-    instruction: "Write one or two sentences in Farsi about something you like and why."
+    instruction: "Write one or two sentences in Farsi about something you like and why: coffee because it's delicious, tea because it's warm, or music because it's interesting."
     accepted_answers:
       - {value: "قهوه رو دوست دارم چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو دوست دارم، چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه دوست دارم و خوشمزه‌ست", status: correct}
       - {value: "من قهوه رو دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه دوست دارم و خوشمزه‌ست", status: correct}
       - {value: "چای رو دوست دارم چون گرمه", status: correct}
       - {value: "چای رو دوست دارم، چون گرمه", status: correct}
       - {value: "چای رو دوست دارم و گرمه", status: correct}
+      - {value: "چای دوست دارم چون گرمه", status: correct}
+      - {value: "چای دوست دارم، چون گرمه", status: correct}
+      - {value: "چای دوست دارم و گرمه", status: correct}
       - {value: "من چای رو دوست دارم چون گرمه", status: correct}
+      - {value: "من چای رو دوست دارم، چون گرمه", status: correct}
+      - {value: "من چای رو دوست دارم و گرمه", status: correct}
+      - {value: "من چای دوست دارم چون گرمه", status: correct}
+      - {value: "من چای دوست دارم، چون گرمه", status: correct}
+      - {value: "من چای دوست دارم و گرمه", status: correct}
       - {value: "موسیقی رو دوست دارم چون جالبه", status: correct}
       - {value: "موسیقی رو دوست دارم، چون جالبه", status: correct}
       - {value: "موسیقی رو دوست دارم و جالبه", status: correct}
+      - {value: "موسیقی دوست دارم چون جالبه", status: correct}
+      - {value: "موسیقی دوست دارم، چون جالبه", status: correct}
+      - {value: "موسیقی دوست دارم و جالبه", status: correct}
       - {value: "من موسیقی رو دوست دارم چون جالبه", status: correct}
+      - {value: "من موسیقی رو دوست دارم، چون جالبه", status: correct}
+      - {value: "من موسیقی رو دوست دارم و جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم چون جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم، چون جالبه", status: correct}
+      - {value: "من موسیقی دوست دارم و جالبه", status: correct}
     feedback: "قهوه رو دوست دارم چون خوشمزه‌ست means I like coffee because it's delicious -- a good model answer combining this unit's vocabulary. Tea (چای... چون گرمه) or music (موسیقی... چون جالبه) with a matching reason is equally accepted."
   fa.a1.unit14.lesson06.exercise01.dialogue_comprehension_context:
     instruction: "Read the conversation. What does Sara like more?"
@@ -347,19 +406,58 @@ exercises:
     accepted_answers: [{value: "Tea, because it's warm", status: correct}]
     feedback: "Nima says من چای دوست دارم چون گرمه -- I like tea because it's warm."
   fa.a1.unit14.lesson06.exercise04.dialogue_response_own_preference:
-    instruction: "Someone asks: tea or coffee, which do you like more? Answer with your preference and a reason."
+    instruction: "Someone asks: tea or coffee, which do you like more? Answer with your preference and a reason: coffee because it's delicious, or tea because it's warm."
     accepted_answers:
       - {value: "قهوه رو بیشتر دوست دارم چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو بیشتر دوست دارم، چون خوشمزه‌ست", status: correct}
       - {value: "قهوه رو بیشتر دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "قهوه بیشتر دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه بیشتر دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "قهوه بیشتر دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو بیشتر دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو بیشتر دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه رو بیشتر دوست دارم و خوشمزه‌ست", status: correct}
+      - {value: "من قهوه بیشتر دوست دارم چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه بیشتر دوست دارم، چون خوشمزه‌ست", status: correct}
+      - {value: "من قهوه بیشتر دوست دارم و خوشمزه‌ست", status: correct}
       - {value: "چای رو بیشتر دوست دارم چون گرمه", status: correct}
       - {value: "چای رو بیشتر دوست دارم، چون گرمه", status: correct}
       - {value: "چای رو بیشتر دوست دارم و گرمه", status: correct}
+      - {value: "چای بیشتر دوست دارم چون گرمه", status: correct}
+      - {value: "چای بیشتر دوست دارم، چون گرمه", status: correct}
+      - {value: "چای بیشتر دوست دارم و گرمه", status: correct}
+      - {value: "من چای رو بیشتر دوست دارم چون گرمه", status: correct}
+      - {value: "من چای رو بیشتر دوست دارم، چون گرمه", status: correct}
+      - {value: "من چای رو بیشتر دوست دارم و گرمه", status: correct}
+      - {value: "من چای بیشتر دوست دارم چون گرمه", status: correct}
+      - {value: "من چای بیشتر دوست دارم، چون گرمه", status: correct}
+      - {value: "من چای بیشتر دوست دارم و گرمه", status: correct}
     feedback: "قهوه رو بیشتر دوست دارم چون خوشمزه‌ست means I like coffee more because it's delicious -- either drink with a matching reason is accepted."
   fa.a1.unit14.lesson06.exercise05.write_comparison_summary:
     instruction: "Write one or two sentences in Farsi comparing what Sara and Nima each prefer (Sara likes coffee, Nima likes tea)."
     accepted_answers:
       - {value: "سارا قهوه دوست داره. نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره. سارا قهوه دوست داره", status: correct}
       - {value: "سارا قهوه دوست داره، نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره، سارا قهوه دوست داره", status: correct}
       - {value: "سارا قهوه دوست داره و نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره و سارا قهوه دوست داره", status: correct}
+      - {value: "سارا قهوه دوست داره. نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره. سارا قهوه دوست داره", status: correct}
+      - {value: "سارا قهوه دوست داره، نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره، سارا قهوه دوست داره", status: correct}
+      - {value: "سارا قهوه دوست داره و نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره و سارا قهوه دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره. نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره. سارا قهوه رو دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره، نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره، سارا قهوه رو دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره و نیما چای دوست داره", status: correct}
+      - {value: "نیما چای دوست داره و سارا قهوه رو دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره. نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره. سارا قهوه رو دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره، نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره، سارا قهوه رو دوست داره", status: correct}
+      - {value: "سارا قهوه رو دوست داره و نیما چای رو دوست داره", status: correct}
+      - {value: "نیما چای رو دوست داره و سارا قهوه رو دوست داره", status: correct}
     feedback: "سارا قهوه دوست داره، نیما چای دوست داره means Sara likes coffee, Nima likes tea."
