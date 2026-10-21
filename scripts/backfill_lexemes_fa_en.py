@@ -841,7 +841,7 @@ EN_TARGET_TO_FA_GLOSS: dict[str, str] = {
     # Unit 19 (expressing likes and preferences), added 2026-07-06. "love"
     # (added above, unit17)/"because"/"but" reuse their existing senses
     # unchanged.
-    "prefer": "ترجیح دادن", "hate": "متنفر بودن", "calmer": "آرام‌بخش‌تر",
+    "prefer": "ترجیح دادن", "hate": "متنفر بودن", "milder": "ملایم‌تر",
     "very": "خیلی", "strong": "قوی؛ غلیظ", "why": "چرا",
     "think": "فکر کردن", "prefers": "ترجیح می‌دهد (سوم‌شخص مفرد)",
     "thinks": "فکر می‌کند (سوم‌شخص مفرد)",
