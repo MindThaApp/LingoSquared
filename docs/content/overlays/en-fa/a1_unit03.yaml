@@ -46,6 +46,17 @@ review:
     (19 register corrections, e.g. است/دارد -> spoken -ه/داره) was meaning-
     preserving, so the existing glosses remained correct as-is. Re-validated
     clean (0 errors/0 warnings) after the realization-side fixes.
+
+    Review 2026-10-21 (en-fa A1 language review r1): 16 fixes - 3
+    instructions duplicated by the visible prompt block shortened
+    (order_tens, order_digits, order_want) and 2 translate instructions
+    (lesson05) reduced to avoid showing the English sentence twice;
+    lesson06 exercise01 instruction was missing its question;
+    shomare_meaning distractors made parallel to the long correct option;
+    removed a meaningless ZWNJ accepted variant (بیست‌و‌پنج); added missing
+    variants (comma-joined digit readings, plain-digit endings without the
+    یکه/هشته copula, شماره‌ام forms, سال دارم age forms, written تومان
+    spellings). NATIVE FLAGS: none.
 course:
   title: Farsi A1
   description: >-
@@ -397,7 +408,7 @@ exercises:
     accepted_answers: [{value: [بیست, و, پنج], status: correct}]
     feedback: "بیست و پنج is twenty-five: tens, و, units."
   fa.a1.unit03.lesson02.exercise08.order_tens:
-    instruction: "Arrange the tens from smallest to largest: twenty, thirty, forty, fifty, sixty, seventy, eighty, ninety."
+    instruction: "Arrange the tens from smallest to largest."
     accepted_answers:
       - {value: [بیست, سی, چهل, پنجاه, شصت, هفتاد, هشتاد, نود], status: correct}
     feedback: "This lists the tens in ascending order: 20 through 90."
@@ -405,13 +416,12 @@ exercises:
     instruction: "Translate into Farsi: twenty-five."
     accepted_answers:
       - {value: "بیست و پنج", status: correct}
-      - {value: "بیست‌و‌پنج", status: acceptable_with_note, note: "Accepted spacing variant."}
     feedback: "بیست و پنج means twenty-five (25)."
 
   fa.a1.unit03.lesson03.exercise01.shomare_meaning:
     instruction: "Select the meaning of شماره."
     correct_option: "number (identifying, e.g. phone/house)"
-    distractors: [price, age, quantity]
+    distractors: ["a price (how much)", "an age (how old)", "a quantity (how many)"]
     accepted_answers: [{value: "number (identifying, e.g. phone/house)", status: correct}]
     feedback: "شماره is used for an identifying number, like a phone or house number."
   fa.a1.unit03.lesson03.exercise02.telefon_meaning:
@@ -431,7 +441,7 @@ exercises:
     accepted_answers: [{value: [شماره, تلفنتون, چنده], status: correct}]
     feedback: "شماره تلفنتون چنده؟ is the polite question order."
   fa.a1.unit03.lesson03.exercise05.order_digits:
-    instruction: "Arrange the digits to spell: 0, 9, 1, 2, 3, 4, 5, 6, 7, 8, 8."
+    instruction: "Arrange the words to spell out this phone number."
     accepted_answers:
       - {value: [صفر, نه, یک, دو, سه, چهار, پنج, شش, هفت, هشت, هشت], status: correct}
     feedback: "صفر، نه، یک، دو، سه، چهار، پنج، شش، هفت، هشت، هشت reads the digits one at a time."
@@ -440,11 +450,16 @@ exercises:
     accepted_answers:
       - {value: "صفر نه یک دو سه چهار پنج شش هفت هشت هشت", status: correct}
       - {value: "شماره‌ام صفر نه یک دو سه چهار پنج شش هفت هشت هشته", status: correct}
+      - {value: "شماره‌ام صفر نه یک دو سه چهار پنج شش هفت هشت هشت", status: correct}
+      - {value: "صفر نه یک دو سه چهار پنج شش هفت هشت هشته", status: correct}
+      - {value: "صفر، نه، یک، دو، سه، چهار، پنج، شش، هفت، هشت، هشت", status: correct}
+      - {value: "شماره‌ام صفر، نه، یک، دو، سه، چهار، پنج، شش، هفت، هشت، هشته", status: correct}
     feedback: "Phone numbers are read digit by digit: صفر نه یک دو سه چهار پنج شش هفت هشت هشت."
   fa.a1.unit03.lesson03.exercise07.translate_phone_digits:
     instruction: "Write this phone number in Persian words, one word per digit: 09123456788."
     accepted_answers:
       - {value: "صفر نه یک دو سه چهار پنج شش هفت هشت هشت", status: correct}
+      - {value: "صفر، نه، یک، دو، سه، چهار، پنج، شش، هفت، هشت، هشت", status: correct}
     feedback: "The phone number is صفر نه یک دو سه چهار پنج شش هفت هشت هشت."
   fa.a1.unit03.lesson03.exercise08.speak_number:
     instruction: "Say this phone number aloud, digit by digit: 09123456788."
@@ -481,7 +496,7 @@ exercises:
         status: correct
     feedback: "تا sits between the number and the noun in every phrase."
   fa.a1.unit03.lesson04.exercise06.order_want:
-    instruction: "Arrange the words to say I'd like two apples."
+    instruction: "Arrange the words to say this in Farsi."
     accepted_answers:
       - {value: [دو, تا, سیب, می‌خوام], status: correct}
     feedback: "دو تا سیب می‌خوام means I'd like two apples."
@@ -490,12 +505,16 @@ exercises:
     accepted_answers:
       - {value: "من بیست و پنج سالمه", status: correct}
       - {value: "بیست و پنج سالمه", status: correct}
+      - {value: "من بیست و پنج سال دارم", status: correct}
+      - {value: "بیست و پنج سال دارم", status: correct}
     feedback: "من بیست و پنج سالمه means I'm 25 years old."
   fa.a1.unit03.lesson04.exercise08.dialogue_answer_age:
     instruction: "Reply by saying you are 30 years old."
     accepted_answers:
       - {value: "سی سالمه", status: correct}
       - {value: "من سی سالمه", status: correct}
+      - {value: "سی سال دارم", status: correct}
+      - {value: "من سی سال دارم", status: correct}
     feedback: "Give a number followed by سالمه to state your age."
 
   fa.a1.unit03.lesson05.exercise01.toman_meaning:
@@ -527,26 +546,32 @@ exercises:
     accepted_answers: [{value: [سی, هزار, تومنه], status: correct}]
     feedback: "سی هزار تومنه: number, هزار, then تومنه."
   fa.a1.unit03.lesson05.exercise06.translate_price_answer:
-    instruction: "Translate into Farsi: It's 30,000 toman."
+    instruction: "Translate into Farsi."
     accepted_answers:
       - {value: "سی هزار تومنه", status: correct}
       - {value: "سی هزار تومن", status: acceptable_with_note, note: "Correct amount without the contracted copula."}
+      - {value: "سی هزار تومانه", status: acceptable_with_note, note: "Written spelling of تومن."}
+      - {value: "سی هزار تومان", status: acceptable_with_note, note: "Written spelling of تومن, without the contracted copula."}
     feedback: "سی هزار تومنه means it's 30,000 toman."
   fa.a1.unit03.lesson05.exercise07.dialogue_ask_price:
     instruction: "Reply that it costs 40,000 toman."
     accepted_answers:
       - {value: "چهل هزار تومنه", status: correct}
       - {value: "چهل هزار تومن", status: acceptable_with_note, note: "Correct amount without the contracted copula."}
+      - {value: "چهل هزار تومانه", status: acceptable_with_note, note: "Written spelling of تومن."}
+      - {value: "چهل هزار تومان", status: acceptable_with_note, note: "Written spelling of تومن, without the contracted copula."}
     feedback: "چهل هزار تومنه states a price of 40,000 toman."
   fa.a1.unit03.lesson05.exercise08.translate_price:
-    instruction: "Translate into Persian: It's 20,000 toman."
+    instruction: "Translate into Farsi."
     accepted_answers:
       - {value: "بیست هزار تومنه", status: correct}
       - {value: "بیست هزار تومن", status: acceptable_with_note, note: "Correct amount without the contracted copula."}
+      - {value: "بیست هزار تومانه", status: acceptable_with_note, note: "Written spelling of تومن."}
+      - {value: "بیست هزار تومان", status: acceptable_with_note, note: "Written spelling of تومن, without the contracted copula."}
     feedback: "بیست هزار تومنه is 20,000 toman."
 
   fa.a1.unit03.lesson06.exercise01.listen_purpose:
-    instruction: "Read the conversation. "
+    instruction: "Read the conversation. What does Sara want to do with Mina?"
     correct_option: "to practice Farsi together"
     distractors: ["to invite Mina to a party", "to ask about a price", "to ask for directions"]
     accepted_answers: [{value: "to practice Farsi together", status: correct}]
@@ -577,15 +602,21 @@ exercises:
     instruction: "Write Mina's phone number in Persian words, one word per digit: 09123456788."
     accepted_answers:
       - {value: "صفر نه یک دو سه چهار پنج شش هفت هشت هشت", status: correct}
+      - {value: "صفر، نه، یک، دو، سه، چهار، پنج، شش، هفت، هشت، هشت", status: correct}
     feedback: "Mina's number is صفر نه یک دو سه چهار پنج شش هفت هشت هشت (09123456788)."
   fa.a1.unit03.lesson06.exercise07.dialogue_give_saras_number:
     instruction: "Reply as Sara, giving her number: 09197654321."
     accepted_answers:
       - {value: "صفر نه یک نه هفت شش پنج چهار سه دو یکه", status: correct}
       - {value: "شماره تو چنده صفر نه یک نه هفت شش پنج چهار سه دو یکه", status: correct}
+      - {value: "صفر نه یک نه هفت شش پنج چهار سه دو یک", status: correct}
+      - {value: "صفر، نه، یک، نه، هفت، شش، پنج، چهار، سه، دو، یکه", status: correct}
+      - {value: "صفر، نه، یک، نه، هفت، شش، پنج، چهار، سه، دو، یک", status: correct}
+      - {value: "شماره‌ام صفر نه یک نه هفت شش پنج چهار سه دو یکه", status: correct}
     feedback: "Sara's number, read digit by digit, is صفر نه یک نه هفت شش پنج چهار سه دو یکه."
   fa.a1.unit03.lesson06.exercise08.speak_saras_number:
     instruction: "Say Sara's phone number aloud: 09197654321."
     accepted_answers:
       - {value: "صفر نه یک نه هفت شش پنج چهار سه دو یکه", status: correct}
+      - {value: "صفر نه یک نه هفت شش پنج چهار سه دو یک", status: correct}
     feedback: "Read each digit separately: صفر نه یک نه هفت شش پنج چهار سه دو یکه."
