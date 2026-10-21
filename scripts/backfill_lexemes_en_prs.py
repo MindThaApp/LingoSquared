@@ -2764,6 +2764,30 @@ PRS_B2_EXTRA_TAGS: dict[str, list[str]] = {
     "خواندن": ["b2u08_core", "b2u08_vert"],
 }
 
+# 2026-10-20 (en-prs B2 language review, PR #63): the B2 realizations now use
+# the course spellings with tanwin (حتماً/دقیقاً/فعلاً, as in لطفاً/معمولاً) and
+# hamza (تأخیر/تأکید, as in A1's تأیید). The spellings without them stay as
+# aliases (same gloss, POS, overrides and B2 tags), so either spelling resolves.
+PRS_B2_SPELLING_ALIASES: dict[str, str] = {
+    "حتماً": "حتما",
+    "دقیقاً": "دقیقا",
+    "فعلاً": "فعلا",
+    "تأخیر": "تاخیر",
+    "تأکید": "تاکید",
+}
+for _new, _old in PRS_B2_SPELLING_ALIASES.items():
+    PRS_GLOSSES.setdefault(_new, PRS_GLOSSES[_old])
+    PRS_POS.setdefault(_new, PRS_POS[_old])
+    if _old in PRS_B2_GLOSS_OVERRIDES:
+        PRS_B2_GLOSS_OVERRIDES.setdefault(_new, PRS_B2_GLOSS_OVERRIDES[_old])
+    if _old in PRS_B2_POS_OVERRIDES:
+        PRS_B2_POS_OVERRIDES.setdefault(_new, PRS_B2_POS_OVERRIDES[_old])
+    if _old in PRS_B2_EXTRA_TAGS:
+        PRS_B2_EXTRA_TAGS.setdefault(_new, list(PRS_B2_EXTRA_TAGS[_old]))
+# B2 u05 colleague register now says سپاسگزارم instead of سپاسگزار استم.
+PRS_GLOSSES.setdefault("سپاسگزارم", "I am grateful")
+PRS_POS.setdefault("سپاسگزارم", "phrase")
+
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
 VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_prs_a1_unit38_color_word_05_single'], 'آرزو': ['volume_en_prs_a1_unit02_person_name_04_single'], 'بانک': ['volume_en_prs_a1_unit05_city_place_06_single'], 'بهار': ['volume_en_prs_a1_unit39_specific_season_word_03_single'], 'جمعه': ['volume_en_prs_a1_unit09_weekday_name_10_single'], 'دور': ['volume_en_prs_a1_unit05_location_word_08_single'], 'سند': ['volume_en_prs_a2_unit09_office_word_12_single'], 'شریف': ['volume_en_prs_a1_unit02_city_name_02_single'], 'شوخ': ['volume_en_prs_a1_unit37_personality_word_07_single'], 'غذا': ['volume_en_prs_a1_unit36_cook_object_word_09_single'], 'نامه': ['volume_en_prs_a1_unit35_sendable_item_word_11_single'], 'پولیس': ['volume_en_prs_a1_unit40_emergency_service_word_01_single']}
@@ -3656,7 +3680,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # A2 unit 15 (travel disruption) semantic tags, added 2026-07-11.
     # "disruption_word" (تاخیر/لغو/بسته/مسیر/بدیل/برفباری/اطلاعیه,
     # anchored lesson01) is the unit's core recognition vocabulary.
-    if token in {"تاخیر", "لغو", "بسته", "مسیر", "بدیل", "برفباری", "اطلاعیه"}:
+    if token in {"تاخیر", "تأخیر", "لغو", "بسته", "مسیر", "بدیل", "برفباری", "اطلاعیه"}:
         semantics.append("disruption_word")
     if token in {"ایستگاه", "مسافران"}:
         semantics.append("station_word")
