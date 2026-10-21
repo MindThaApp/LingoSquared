@@ -551,6 +551,10 @@ UNIT_FILES_B2 = (
 # guessed). Persian-range codepoints throughout -- Persian keheh/yeh,
 # never the Arabic-range look-alikes (described in prose only).
 PRS_GLOSSES: dict[str, str] = {
+    "حوض آب\u200cبازی": "swimming pool",
+    "تکت\u200cتان": "your ticket (polite)",
+    "رستورانت": "restaurant",
+    "تکتش": "his/her ticket",
     "ا": "a (letter)", "ب": "b (letter)", "ت": "t (letter)", "د": "d (letter)",
     "ر": "r (letter)", "ز": "z (letter)", "س": "s (letter)", "ش": "sh (letter)",
     "ص": "s, emphatic (letter)", "ج": "j (letter)", "چ": "ch (letter)",
@@ -1447,6 +1451,7 @@ PRS_GLOSSES: dict[str, str] = {
 }
 
 PRS_POS: dict[str, str] = {
+    "حوض آب\u200cبازی": "noun", "تکت\u200cتان": "noun", "رستورانت": "noun", "تکتش": "noun",
     "ا": "symbol", "ب": "symbol", "ت": "symbol", "د": "symbol", "ر": "symbol",
     "ز": "symbol", "س": "symbol", "ش": "symbol", "ص": "symbol", "ج": "symbol",
     "چ": "symbol", "ح": "symbol", "خ": "symbol", "ع": "symbol", "غ": "symbol",
