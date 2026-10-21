@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import random
 import re
 import time
@@ -296,6 +297,120 @@ def derive_answer(
     raise ValueError(f"unsupported answer derivation {kind!r}")
 
 
+#: Upper bound on rendered alternatives for one translation answer, so a
+#: multi-slot frame whose slots all have synonyms cannot explode.
+MAX_TRANSLATION_ALTERNATIVES = 24
+
+
+def _gloss_key(value: Any) -> str:
+    return " ".join(str(value or "").casefold().split())
+
+
+def _same_gloss_lexemes(
+    template: PracticeTemplate,
+    slot: str,
+    filled: dict[str, Lexeme],
+    lexemes: list[Lexeme],
+) -> list[Lexeme]:
+    """The filled lexeme plus every other in-scope lexeme for this slot whose
+    English gloss is identical (e.g. برادرم / داداشم, both "my brother").
+
+    A translation prompt shows the slot's gloss, so lexemes sharing a gloss
+    produce the very same prompt and the learner cannot tell which one the
+    sampler picked: all of them must grade correct. Different glosses (even
+    "brother (informal)") stay distinct, so authors keep full control.
+    Widening only happens when the prompt frame really renders this slot as
+    its english_gloss, and each synonym must keep every slot_relation
+    (same_tag / distinct) true with the other filled slots.
+    """
+    chosen = filled[slot]
+    found = [chosen]
+    gloss = _gloss_key(chosen.english_gloss)
+    constraints = template.slots.get(slot)
+    prompt_rendering = (template.frame or {}).get("slot_rendering", {}) or {}
+    if (
+        not gloss
+        or not isinstance(constraints, dict)
+        or prompt_rendering.get(slot) != "english_gloss"
+    ):
+        return found
+    relations = getattr(template, "slot_relations", None) or []
+    tokens = {chosen.token}
+    for lexeme in lexemes:
+        if (
+            lexeme.token not in tokens
+            and _gloss_key(lexeme.english_gloss) == gloss
+            and lexeme_matches(lexeme, constraints)
+            and all(
+                _relation_holds(relation, {**filled, slot: lexeme})
+                for relation in relations
+            )
+        ):
+            tokens.add(lexeme.token)
+            found.append(lexeme)
+    return found
+
+
+def translation_accepted_answers(
+    template: PracticeTemplate,
+    filled: dict[str, Lexeme],
+    lexemes: list[Lexeme],
+    answer: Any,
+) -> Any:
+    """Widen a practice translation answer to every same-gloss synonym.
+
+    Returns `answer` unchanged when there is nothing to add, otherwise the
+    {"canonical", "accepted"} multi-answer shape grade() already handles
+    (at most MAX_TRANSLATION_ALTERNATIVES entries).
+    """
+    if not isinstance(answer, str):
+        return answer
+    derivation = template.answer_derivation
+    kind = derivation.get("kind")
+    accepted: list[str] = [answer]
+    if kind == "slot_text":
+        for lexeme in _same_gloss_lexemes(template, derivation["slot"], filled, lexemes):
+            if lexeme.token not in accepted:
+                accepted.append(lexeme.token)
+            if len(accepted) >= MAX_TRANSLATION_ALTERNATIVES:
+                break
+    elif kind == "render_frame":
+        frame = derivation["frame"]
+        rendering = frame.get("slot_rendering", {})
+        names = [
+            name
+            for name in dict.fromkeys(SLOT_RE.findall(frame["text"]))
+            if name in filled and rendering.get(name, "token") == "token"
+        ]
+        options = {
+            name: _same_gloss_lexemes(template, name, filled, lexemes)
+            for name in names
+        }
+        relations = getattr(template, "slot_relations", None) or []
+        if any(len(found) > 1 for found in options.values()):
+            for combo in itertools.product(*(options[name] for name in names)):
+                chosen = {**filled, **dict(zip(names, combo))}
+                # Two slots widened at once must still agree with each other.
+                if not all(_relation_holds(relation, chosen) for relation in relations):
+                    continue
+
+                def replacement(match: re.Match) -> str:
+                    name = match.group(1)
+                    if name in names:
+                        return chosen[name].token
+                    field = rendering.get(name, "token")
+                    return str(getattr(filled[name], field))
+
+                rendered = SLOT_RE.sub(replacement, frame["text"])
+                if rendered not in accepted:
+                    accepted.append(rendered)
+                if len(accepted) >= MAX_TRANSLATION_ALTERNATIVES:
+                    break
+    if len(accepted) == 1:
+        return answer
+    return {"canonical": answer, "accepted": accepted}
+
+
 def _block(frame: dict[str, Any], text_value: str) -> dict[str, str]:
     return {
         "text": text_value,
@@ -475,6 +590,7 @@ def build_prompt(
             "answer_language_code": answer_language,
         }
     elif template.type == "translation":
+        answer = translation_accepted_answers(template, filled, lexemes, answer)
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Translate this."),
