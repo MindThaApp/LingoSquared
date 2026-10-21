@@ -816,7 +816,7 @@ EN_TARGET_TO_PRS_GLOSS: dict[str, str] = {
     # Unit 19 (expressing likes and preferences), added 2026-07-06. "hate"
     # confirmed against the overlay's own corrected Dari (نفرت داشتن، not
     # a Farsi-style بدبین بودن).
-    "prefer": "ترجیح دادن", "hate": "نفرت داشتن", "calmer": "آرام‌تر",
+    "prefer": "ترجیح دادن", "hate": "نفرت داشتن", "milder": "ملایم‌تر",
     "very": "خیلی", "strong": "تُند",
     "why": "چرا", "think": "فکر کردن",
     "prefers": "ترجیح می‌ته (سوم شخص مفرد)",
