@@ -330,8 +330,8 @@ def spoken_answer_result(
     """Grade a microphone transcript with bounded word-level tolerance."""
     # Spoken grading always follows the transcript normalization contract:
     # casefold and ignore punctuation, irrespective of typed-answer metadata.
-    normalized_response = _normalize(response)
-    normalized_correct = _normalize(correct)
+    normalized_response = _normalize(response, language_code=language_code)
+    normalized_correct = _normalize(correct, language_code=language_code)
     if (
         exercise_type in FREE_TEXT_EXERCISE_TYPES
         and exercise_type != "dictation"
@@ -352,6 +352,10 @@ def spoken_answer_result(
     ):
         return "correct"
     if normalized_response == normalized_correct:
+        return "correct"
+    if english_contraction_equivalent(
+        normalized_response, normalized_correct, language_code
+    ):
         return "correct"
     response_tokens = normalized_response.split()
     correct_tokens = normalized_correct.split()
@@ -379,13 +383,68 @@ def _uses_spoken_tolerance(input_mode: str, exercise_type: str) -> bool:
     return input_mode == "spoken" or exercise_type in {"speak_repeat", "speak_response"}
 
 
-def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False) -> str:
-    return canonical_text(
+# ---------------------------------------------------------------------------
+# Orthographic variant folding (2026-10-19). Applied to both sides of every
+# non-dictation free-text comparison, on strict paths too: none of these
+# change a letter the learner meant, only how it was encoded or spaced.
+#
+# - Romanian: legacy keyboards and fonts emit s/t-CEDILLA (ş ţ, U+015F/0163)
+#   for the correct s/t-COMMA-BELOW (ș ț, U+0219/021B). Same letter.
+# - Hindi: the nukta on the Perso-Arabic loan consonants क़ ख़ ग़ ज़ फ़ is
+#   optional in everyday writing (ट्रैफ़िक = ट्रैफिक), and chandrabindu ँ is
+#   routinely written as anusvara ं (महँगा = महंगा). ड़/ढ़ keep their nukta:
+#   they are native retroflex flaps, distinct letters from ड/ढ.
+#   DELIBERATE DECISION (review 2026-10-20): this also merges real minimal
+#   pairs (खाना/ख़ाना, सजा/सज़ा, हंस/हँस), on orthography_strict and
+#   checkpoint paths too, because native writers drop the nukta and write
+#   anusvara freely. Consequence: no hi exercise can test nukta or
+#   chandrabindu outside dictation (dictation stays byte-strict).
+# - Arabic: the conjunction و is written joined to the next word (وقهوة);
+#   a learner typing it detached (و قهوة) wrote the same words. The general
+#   Arabic-script joining forgiveness already covers this on non-strict
+#   paths; this narrow rule also covers orthography_strict exercises and
+#   checkpoints. Persian/Dari write و detached, so this is ar-only.
+# ---------------------------------------------------------------------------
+ROMANIAN_CEDILLA_FOLD = str.maketrans({
+    "\u015f": "\u0219", "\u015e": "\u0218",  # ş Ş -> ș Ș
+    "\u0163": "\u021b", "\u0162": "\u021a",  # ţ Ţ -> ț Ț
+})
+DEVANAGARI_NUKTA = "\u093c"
+HINDI_OPTIONAL_NUKTA_BASES = frozenset("\u0915\u0916\u0917\u091c\u092b")  # क ख ग ज फ
+HINDI_CHANDRABINDU_FOLD = str.maketrans({"\u0901": "\u0902"})  # ँ -> ं
+_ARABIC_DETACHED_WAW_RE = re.compile(r"(?:(?<=\s)|^)و\s+(?=[\u0621-\u064a])")
+
+
+def fold_orthographic_variants(value: str, language_code: str | None) -> str:
+    """Fold encoding/spacing variants that never change the answer."""
+    value = value.translate(ROMANIAN_CEDILLA_FOLD)
+    if language_code == "hi":
+        value = value.translate(HINDI_CHANDRABINDU_FOLD)
+        if DEVANAGARI_NUKTA in value:
+            value = "".join(
+                char
+                for index, char in enumerate(value)
+                if not (
+                    char == DEVANAGARI_NUKTA
+                    and index > 0
+                    and value[index - 1] in HINDI_OPTIONAL_NUKTA_BASES
+                )
+            )
+    elif language_code == "ar":
+        value = _ARABIC_DETACHED_WAW_RE.sub("و", value)
+    return value
+
+
+def _normalize(value: str, *, case_sensitive: bool = False, exercise_type: str | None = None, punctuation_strict: bool = False, language_code: str | None = None) -> str:
+    text = canonical_text(
         value,
         case_sensitive=case_sensitive,
         dictation=exercise_type == "dictation",
         punctuation_strict=punctuation_strict,
     )
+    if exercise_type == "dictation":
+        return text
+    return fold_orthographic_variants(text, language_code)
 
 
 def _optional_pronoun_clauses(value: str, language_code: str) -> list[tuple[str, list[str]]]:
@@ -438,6 +497,231 @@ def optional_subject_pronoun_only_difference(
             continue
         return False
     return True
+
+
+# ---------------------------------------------------------------------------
+# English contractions (2026-10-19, tightened after review 2026-10-20)
+#
+# "I'm" and "I am", "don't" and "do not", "can't"/"cannot"/"can not" are the
+# same answer. Content reviews kept hand-adding contracted variants to
+# individual exercises, and generated practice items have no variant list at
+# all, so the equivalence lives here. Both sides are expanded and must match.
+#
+# 's and 'd are ambiguous, so their reading is chosen from the NEXT word
+# rather than accepting every reading (which let "He is eaten" pass for
+# "He's eaten" and "If I would known" for "If I'd known"):
+#   's + been / a never-passive participle (eaten, got, come...) -> has
+#   's + another participle or -ed word (done, known, made, closed...)
+#        -> is OR has (passive/adjective and perfect are both grammatical)
+#   's + anything else -> is
+#   'd + been / any participle / "better" -> had; 'd + a bare verb that
+#        equals its participle (read, put, come...) -> would OR had;
+#        otherwise -> would
+# 's is only expanded after a pronoun or wh-word; after any other word
+# (including everyone/someone/nobody) it is usually a possessive.
+#
+# Applied on every non-dictation path, orthography_strict and checkpoints
+# included: a correct expansion is the same answer, not a spelling slip
+# (owner decision 2026-10-20). Wrong expansions are rejected everywhere.
+# English answers only (language_code == "en"), never dictation.
+# ---------------------------------------------------------------------------
+_EN_IRREGULAR_CONTRACTIONS: dict[str, tuple[str, ...]] = {
+    "can't": ("can not",),
+    "cannot": ("can not",),
+    "won't": ("will not",),
+    "shan't": ("shall not",),
+    "let's": ("let us",),
+}
+_EN_SUFFIX_CONTRACTIONS: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("n't", ("not",)),
+    ("'m", ("am",)),
+    ("'re", ("are",)),
+    ("'ve", ("have",)),
+    ("'ll", ("will",)),
+)
+_EN_S_CONTRACTION_STEMS = frozenset(
+    {
+        "he", "she", "it", "that", "this", "there", "here", "what", "where",
+        "who", "how", "when", "why", "everything", "nothing", "something",
+    }
+)
+# Participles after which 's can only be "has" (intransitive or never
+# passive in everyday English): "he's been", "she's eaten", "it's got".
+_EN_HAS_ONLY_PARTICIPLES = frozenset(
+    {
+        "been", "had", "got", "gotten", "eaten", "fallen", "slept", "sat",
+        "stood", "swum", "risen", "begun", "come", "become", "run",
+    }
+)
+# Participles that also read as passives/adjectives after "is": "it's done",
+# "it's known", "it's made of wood". 's accepts both is and has here.
+_EN_AMBIGUOUS_PARTICIPLES = frozenset(
+    {
+        "known", "seen", "taken", "given", "written", "spoken", "driven",
+        "ridden", "forgotten", "sung", "flown", "thrown", "worn", "chosen",
+        "woken", "drunk", "grown", "bought", "brought", "thought", "taught", "caught",
+        "told", "said", "sent", "left", "met", "kept", "felt", "heard", "won",
+        "found", "made", "understood", "spent", "done", "gone", "broken",
+        "lost", "stolen", "shown", "hidden", "sold", "paid", "built",
+    }
+)
+# Bare verbs identical to their participle: "I'd read it" is would OR had.
+_EN_BARE_EQUALS_PARTICIPLE = frozenset(
+    {"come", "become", "run", "read", "put", "let", "hit", "cut", "shut", "set", "hurt", "cost", "quit"}
+)
+_MAX_CONTRACTION_EXPANSIONS = 32
+
+
+def _is_participle_like(word: str) -> bool:
+    return (
+        word in _EN_HAS_ONLY_PARTICIPLES
+        or word in _EN_AMBIGUOUS_PARTICIPLES
+        or (len(word) > 3 and word.endswith("ed") and not word.endswith("eed"))
+    )
+
+
+def _english_token_expansions(token: str, next_token: str = "") -> tuple[str, ...]:
+    lower = token.lower()
+    following = next_token.lower().strip(".,;:!?")
+    if lower in _EN_IRREGULAR_CONTRACTIONS:
+        return _EN_IRREGULAR_CONTRACTIONS[lower]
+    for suffix, words in _EN_SUFFIX_CONTRACTIONS:
+        if lower.endswith(suffix) and len(lower) > len(suffix):
+            stem = token[: -len(suffix)]
+            return tuple(f"{stem} {word}" for word in words)
+    if lower.endswith("'d") and len(lower) > 2:
+        stem = token[:-2]
+        if following in _EN_BARE_EQUALS_PARTICIPLE:
+            return (f"{stem} would", f"{stem} had")
+        if following == "better" or _is_participle_like(following):
+            return (f"{stem} had",)
+        return (f"{stem} would",)
+    if lower.endswith("'s") and lower[:-2] in _EN_S_CONTRACTION_STEMS:
+        stem = token[:-2]
+        if following in _EN_HAS_ONLY_PARTICIPLES:
+            return (f"{stem} has",)
+        if _is_participle_like(following):
+            return (f"{stem} is", f"{stem} has")
+        return (f"{stem} is",)
+    return (token,)
+
+
+def english_contraction_forms(value: str) -> set[str]:
+    """Every expansion of the English contractions in an already-normalized
+    answer (capped; beyond the cap only the first reading of each is kept)."""
+    forms = [""]
+    tokens = value.split()
+    for index, token in enumerate(tokens):
+        following = tokens[index + 1] if index + 1 < len(tokens) else ""
+        options = _english_token_expansions(token, following)
+        if len(forms) * len(options) > _MAX_CONTRACTION_EXPANSIONS:
+            options = options[:1]
+        forms = [f"{form} {option}".strip() for form in forms for option in options]
+    return {" ".join(form.split()) for form in forms}
+
+
+def english_contraction_equivalent(
+    a: str, b: str, language_code: str | None
+) -> bool:
+    if language_code != "en" or a == b:
+        return False
+    if "'" not in a + b and "cannot" not in a + b:
+        return False
+    return bool(english_contraction_forms(a) & english_contraction_forms(b))
+
+
+def _english_primary_expansion(value: str) -> str:
+    tokens = value.split()
+    return " ".join(
+        _english_token_expansions(
+            token, tokens[index + 1] if index + 1 < len(tokens) else ""
+        )[0]
+        for index, token in enumerate(tokens)
+    )
+
+
+def _english_contraction_distance(a: str, b: str) -> int:
+    # Typo tolerance compares only the primary reading of each contraction
+    # ('s -> is unless the next word forces has): letting the secondary
+    # readings in as well would make "it's" an "almost" for "it was" via
+    # "it has".
+    return damerau_levenshtein(
+        _english_primary_expansion(a), _english_primary_expansion(b)
+    )
+
+
+# ---------------------------------------------------------------------------
+# Meaning-bearing comma after a sentence-initial "no" (2026-10-19)
+#
+# canonical_text() turns internal commas into spaces, which is right for the
+# overwhelming majority of answers (learners omit commas freely, and making
+# every comma count would fail huge numbers of correct answers). But in
+# languages whose answer-word "no" is the SAME word as the verbal negator,
+# that one comma flips the meaning: Spanish "No, está cerca" (no - it's
+# close) vs "No está cerca" (it isn't close); Polish "Nie, jest blisko" vs
+# "Nie jest blisko"; Romanian "Nu, e aproape" vs "Nu e aproape". Languages
+# with a distinct negator (nl nee/niet, de nein/nicht, fr non/ne, it no/non,
+# en no/not) have no such ambiguity and are deliberately not listed.
+#
+# The rule is deliberately narrow: it fires only when BOTH answers open with
+# the listed word followed by more text, and the two disagree on whether a
+# pause mark (, ; : . ! … dash) follows it. "No, no está cerca" vs "No no
+# está cerca" is exempt (the second "no" carries the negation either way).
+# Typed answers only: STT punctuation is unreliable, so spoken grading keeps
+# ignoring it.
+# ---------------------------------------------------------------------------
+NEGATION_INTERJECTION_WORDS: dict[str, frozenset[str]] = {
+    "es": frozenset({"no"}),
+    "pl": frozenset({"nie"}),
+    "ro": frozenset({"nu"}),
+}
+# "No, gracias" and "No gracias" both mean "no thanks": a thank-you can
+# never be the negated verb, so the pause rule does not apply to it. Keeps
+# authors from having to add a comma-less variant to every such answer.
+NEGATION_RULE_EXEMPT_NEXT_WORDS = frozenset(
+    {
+        "gracias",  # es
+        "dziękuję", "dziekuje", "dzięki", "dzieki",  # pl
+        "mulțumesc", "mulţumesc", "multumesc", "mersi",  # ro
+    }
+)
+# Separator: whitespace or a pause mark. The ASCII hyphen is deliberately
+# absent: Romanian Nu-mi / Nu-i / Nu-l are clitic joins, not pauses.
+_LEADING_WORD_RE = re.compile(
+    r"^[\W_]*?(?P<word>\w+)(?P<sep>[\s,;:.!…—–]+)(?P<rest>\w+)", re.UNICODE
+)
+
+
+def _leading_negation_pause(value: str, language_code: str | None) -> bool | None:
+    """None when value does not open with a listed "no" word plus more text;
+    otherwise whether a pause mark separates it from the next word."""
+    words = NEGATION_INTERJECTION_WORDS.get(language_code or "")
+    if not words:
+        return None
+    text = unicodedata.normalize("NFC", value).translate(QUOTE_FOLD).strip().casefold()
+    match = _LEADING_WORD_RE.match(text)
+    if not match or match.group("word") not in words:
+        return None
+    if (
+        match.group("rest") in words
+        or match.group("rest") in NEGATION_RULE_EXEMPT_NEXT_WORDS
+    ):
+        return None
+    return bool(match.group("sep").strip())
+
+
+def is_negation_comma_mismatch(
+    response: str, correct: str, language_code: str | None
+) -> bool:
+    """True when the answers disagree on the meaning-bearing pause after a
+    sentence-initial "no" (see NEGATION_INTERJECTION_WORDS)."""
+    response_pause = _leading_negation_pause(response, language_code)
+    correct_pause = _leading_negation_pause(correct, language_code)
+    return (
+        response_pause is not None
+        and correct_pause is not None
+        and response_pause != correct_pause
+    )
 
 
 def _is_arabic_letter(char: str) -> bool:
@@ -771,12 +1055,14 @@ def is_arabic_hamza_only_difference(
         case_sensitive=case_sensitive,
         exercise_type=exercise_type,
         punctuation_strict=punctuation_strict,
+        language_code=language_code,
     )
     normalized_correct = _normalize(
         correct,
         case_sensitive=case_sensitive,
         exercise_type=exercise_type,
         punctuation_strict=punctuation_strict,
+        language_code=language_code,
     )
     if normalized_response == normalized_correct:
         return False
@@ -865,8 +1151,13 @@ def grade_answer(
             "correct" if dictation_answers_equal(response, correct) else "incorrect"
         )
 
-    normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
-    normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict)
+    # A comma after a sentence-initial "no" can flip the meaning (es "No,
+    # está cerca" vs "No está cerca"); see NEGATION_INTERJECTION_WORDS.
+    if is_negation_comma_mismatch(response, correct, language_code):
+        return "incorrect"
+
+    normalized_response = _normalize(response, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict, language_code=language_code)
+    normalized_correct = _normalize(correct, case_sensitive=case_sensitive, exercise_type=exercise_type, punctuation_strict=punctuation_strict, language_code=language_code)
 
     # Arabic-only hamza spelling tolerance. Keep this keyed to the actual
     # language code: Persian and Dari use the same script but distinguish
@@ -916,6 +1207,11 @@ def grade_answer(
     if exercise_type not in FREE_TEXT_EXERCISE_TYPES:
         return "incorrect"
 
+    if english_contraction_equivalent(
+        normalized_response, normalized_correct, language_code
+    ):
+        return "correct"
+
     if is_script_confusion(normalized_response, normalized_correct):
         return "incorrect"
 
@@ -940,6 +1236,14 @@ def grade_answer(
         return "incorrect"
 
     if damerau_levenshtein(normalized_response, normalized_correct) == 1:
+        return "almost"
+
+    if (
+        language_code == "en"
+        and ("'" in normalized_response + normalized_correct
+             or "cannot" in normalized_response + normalized_correct)
+        and _english_contraction_distance(normalized_response, normalized_correct) == 1
+    ):
         return "almost"
 
     return "incorrect"

@@ -94,6 +94,29 @@ comparison, exactly as it does for every other strict grading path —
 vs e), not the invisible-formatting marks forgiven by that function. See
 `docs/DICTATION_EXERCISE_SPEC.md`.
 
+**Typed free-text equivalences (2026-10-19, `backend/app/review/grading.py`;
+none apply to `dictation`).** Internal punctuation is still ignored, with one
+exception: in es/pl/ro, whose "no" is also the verbal negator, a pause mark
+after a sentence-initial No/Nie/Nu must match (`No, está cerca` ≠ `No está
+cerca`); spoken transcripts keep ignoring it. A hyphen is not a pause
+(ro `Nu-mi`), and a following thank-you is exempt (`No gracias` = `No,
+gracias`).
+English answers (`answer_language_code: en`) treat contractions as their
+full forms, typed and spoken (`I'm` = `I am`, `don't` = `do not`, `can't` =
+`cannot` = `can not`). `'s` (after a pronoun/wh-word only) and `'d` take
+their reading from the next word: `'s been`/`'s eaten` = has, `'s done` =
+is or has, otherwise is; `'d` + participle/`better` = had, otherwise would.
+A possessive `'s` is never expanded. Applies on strict paths too
+(`orthography_strict`, checkpoints): a correct expansion is always accepted,
+a wrong one never. Practice `translation`
+items store the `{canonical, accepted}` shape when other in-scope lexemes
+for the answer slot share the filled lexeme's exact English gloss
+(برادرم/داداشم "my brother"), since the prompt cannot tell them apart.
+Orthographic folding, on strict paths too: Romanian s/t-cedilla = s/t-comma
+(ş ţ = ș ț); Hindi optional nukta on क ख ग ज फ (not ड़/ढ़) and chandrabindu
+= anusvara (deliberately merges minimal pairs such as खाना/ख़ाना, so no hi
+exercise can test nukta outside dictation); Arabic standalone و may be typed detached from the next word.
+
 `ExercisePrompt` additionally carries (all optional, additive): `audio_text`
 + `audio_language_code` (a target-language phrase to synthesize/play for
 `listen_*` types — the learner hears this before answering, it is not
