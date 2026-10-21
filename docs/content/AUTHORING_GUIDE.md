@@ -138,6 +138,10 @@ must get right:
   `correct_response` unless there's genuinely only one acceptable answer.
   The compiler needs the full variant list to grade correctly; a single
   hardcoded string means every other valid phrasing gets marked wrong.
+  Never write both keys on one exercise: `correct_response` silently wins
+  and drops every `accepted_answers` variant, so the compiler rejects the
+  combination as an ERROR. Put the canonical answer first in
+  `accepted_answers` instead.
 
 ## 8. Don't consult sibling-direction files while authoring
 
