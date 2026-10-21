@@ -3961,3 +3961,33 @@ says "Nu heeft Lotte meer tijd" (reading now says geen tijd).
 
 Verification: `scripts/verify.sh --content-only` passes; answer-leakage check
 unchanged from baseline (36 hits, none new).
+
+### 2026-10-21 — en-fa A1 u15-28 language review (fresh-context review; branch content/review-en-fa-a1-r2)
+Scope: overlays/en-fa + realizations/fa for 14 units (28 files). Four
+parallel reviewers on disjoint files. realizations/fa is used only by en-fa.
+
+Fix count: 152 (variants 98 · English 38 · script 7 · consistency 5 ·
+mismatch 3 · Persian 1 · giveaway 0).
+
+Defect classes (all had passed a green compile):
+- **Missing natural variants.** Pro-drop with/without *من*, comma joins,
+  *نگران هستی* vs *نگرانی*, *توی/تو* beside *در*, *به سگم غذا می‌دم*.
+- **Scrambled word_order variants.** Reviewers added alternative orders to
+  word_order exercises; the compiler warns on these, so they were dropped.
+- **Facts contradicting the unit's dialogue.** A1 u25 summary said brown
+  hair (dialogue: black); A1 u28 option said Sara and Nima agree on the
+  bicycle (only Sara does).
+- **False notes.** *منم* explained as *هم/است* (it is *من* + *-م*);
+  *گشنه‌ام* claimed to appear earlier in the course; untaught *مجموع* in a
+  matching exercise.
+- **ZWNJ.** *میشه/میرن* → *می‌شه/می‌رن* (A1 u22); meaningless ZWNJ after
+  *د* in *بلند‌تره/بد‌تره* removed (A1 u15; practice pack and
+  backfill_lexemes.py updated to match).
+
+Native flags: 14, recorded in each file's review.notes (e.g. *در* vs
+*تو* for in/at, *خسته‌ام* vs *خسته‌م*, *آشپزخانه* vs *آشپزخونه*, *رو* with
+*غذا دادن*, *او* vs *اون*, 30 toman per dollar).
+
+Verification: `scripts/verify.sh --content-only` passes with warnings
+identical to baseline; answer-leakage 36 (unchanged); practice
+self-reference 0.
