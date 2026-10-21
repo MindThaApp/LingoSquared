@@ -795,7 +795,7 @@ FA_GLOSSES = {
     "موسیقی": "music", "خوشمزه‌ست": "it's delicious", "جالبه": "it's interesting",
     "اون": "that", "بزرگ‌تره": "it's bigger", "کوچیک‌تره": "it's smaller",
     "گرون‌تره": "it's more expensive", "ارزون‌تره": "it's cheaper", "قد": "height",
-    "بلند‌تره": "it's/he's taller", "جوون‌تره": "he's/she's younger", "بد‌تره": "it's worse",
+    "بلندتره": "it's/he's taller", "جوون‌تره": "he's/she's younger", "بدتره": "it's worse",
     # Unit 16 (A1: travel), added 2026-07-07.
     "بلیط": "ticket", "قطار": "train", "اتوبوس": "bus", "فرودگاه": "airport",
     "سکو": "platform",
@@ -2327,8 +2327,8 @@ FA_VERBS = {
     "رفتم", "خوردم", "دیدم", "کردی", "خوندم", "موندم",
     "رفت", "دید", "کرد", "موند", "خوند",
     "خوشمزه‌ست", "جالبه",
-    "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره", "بلند‌تره", "جوون‌تره",
-    "بد‌تره",
+    "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره", "بلندتره", "جوون‌تره",
+    "بدتره",
     # Unit 16 (A1: travel), added 2026-07-07.
     "می‌خواید",
     # Unit 17 (A1: health), added 2026-07-07.
@@ -3646,8 +3646,8 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("dialogue_word")
     # Unit 15 (A1: comparisons), added 2026-07-07. "comparative_word"
     # pools ALL 8 colloquial comparative forms taught across this unit
-    # (بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/بلند‌تره/جوون‌تره/بهتره/
-    # بد‌تره) into one set rather than fragmenting into per-lesson
+    # (بزرگ‌تره/کوچیک‌تره/گرون‌تره/ارزون‌تره/بلندتره/جوون‌تره/بهتره/
+    # بدتره) into one set rather than fragmenting into per-lesson
     # subgroups, since they all share the exact same "-تره/-ه" contracted
     # comparative form and this gives a much richer >=3-candidate pool for
     # every one of multiple_choice/matching_pairs/translation (بهتره
@@ -3657,7 +3657,7 @@ def fa_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # exists from unit03 with unrelated tags, additive here too).
     if token in {
         "بزرگ‌تره", "کوچیک‌تره", "گرون‌تره", "ارزون‌تره",
-        "بلند‌تره", "جوون‌تره", "بهتره", "بد‌تره",
+        "بلندتره", "جوون‌تره", "بهتره", "بدتره",
     }:
         semantics.append("comparative_word")
     if token in {"این", "اون"}:
