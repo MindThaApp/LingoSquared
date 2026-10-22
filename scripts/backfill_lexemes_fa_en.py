@@ -2480,6 +2480,18 @@ UNIT_SENSE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
     ("a2_unit38_repair_visit", "won't"): ("verb", "نخواهد"),
     # a2_unit39: "the contract is full time" -- full = full-time here (کامل alone is a wrong/vague sense).
     ("a2_unit39_after_the_interview", "full"): ("adjective", "پر؛ تمام‌وقت"),
+    # Added 2026-10-22 (fa-en/prs-en practice review rest)
+    ("a1_unit37_celebrations", "break"): ("noun", "استراحت"),
+    ("a1_unit41_cooking", "ingredient"): ("noun", "مادهٔ اولیه"),
+    ("a1_unit68_borrowing_lending", "share"): ("verb", "به اشتراک گذاشتن"),
+    ("a2_unit33_weekly_schedule", "go"): ("verb", "رفتن"),
+    ("a2_unit33_weekly_schedule", "relax"): ("verb", "استراحت کردن"),
+    ("a2_unit34_shopping_complaint", "stopped"): ("verb", "از کار افتاد"),
+    ("a2_unit34_shopping_complaint", "exchanged"): ("verb", "تعویض شد"),
+    ("b1_unit07_conditions", "meeting"): ("noun", "جلسه"),
+    ("b1_unit08_sequencing", "get"): ("verb", "رسیدن (به خانه)"),
+    ("b1_unit08_sequencing", "arrives"): ("verb", "از راه می‌رسد"),
+    ("b1_unit16_advice", "leading"): ("verb", "سرپرستی کردن؛ مدیریت کردن"),
 }
 
 
