@@ -6,7 +6,17 @@ unit_content_key: fa.a1.unit15.comparisons
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1)+(2)
+    comparative_reason_order.004 and full_comparison_reason_order.005 paired any two
+    distinct comparatives ('ارزون‌تره چون گرون‌تره', 'بزرگ‌تره چون جوون‌تره'); re-authored
+    to the taught lesson04 shape 'بهتره چون {X}' / 'این از اون بهتره چون {X}' with X from
+    the lesson01-03 comparatives (excludes بهتره itself and بدتره). (3) MC feedback 'a
+    comparative form from this unit' (pool also has course-wide بهتره) replaced with an
+    explanation of -تر + ـه. NATIVE FLAGS: 'بهتره چون بلندتره/جوون‌تره' (people) acceptable
+    as practice sentences?
+
     Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
     units 12-15), same pass as a1_unit12.yaml/a1_unit13.yaml/
     a1_unit14.yaml -- see a1_unit12.yaml's notes for the shared
@@ -102,9 +112,11 @@ tag_schema:
   - particle
   - phrase
   agreement_tags:
-    semantic: [comparative_word, demonstrative_word]
+    semantic: [comparative_word, demonstrative_word, en_fa_a1_unit15_lesson01_words, en_fa_a1_unit15_lesson02_words, en_fa_a1_unit15_lesson03_words]
 slot_presets:
   comparative_word: &comparative_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: comparative_word}}
+  # Reason slot after a fixed بهتره: lesson01-03 comparatives only (excludes بهتره itself and بدتره).
+  reason_comparative: &reason_comparative {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: [en_fa_a1_unit15_lesson01_words, en_fa_a1_unit15_lesson02_words, en_fa_a1_unit15_lesson03_words]}}
   demonstrative_word: &demonstrative_word {language_code: fa, part_of_speech: pronoun, agreement_tags: {semantic: demonstrative_word}}
 templates:
   # lesson01 -- basic_comparative (اون, بزرگ‌تره, کوچیک‌تره)
@@ -114,7 +126,7 @@ templates:
     frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
     slots: {comparative_word: *comparative_word}
     answer_derivation: {kind: slot_gloss, slot: comparative_word}
-    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{comparative_word} is a comparative: -تر means '-er/more' and the final ـه means 'it is'.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson01.basic_comparison_order.002
     lesson_content_key: fa.a1.unit15.lesson01.basic_comparative
     type: word_order
@@ -137,7 +149,7 @@ templates:
     frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
     slots: {comparative_word: *comparative_word}
     answer_derivation: {kind: slot_gloss, slot: comparative_word}
-    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{comparative_word} is a comparative: -تر means '-er/more' and the final ـه means 'it is'.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson02.price_comparison_order.002
     lesson_content_key: fa.a1.unit15.lesson02.comparing_prices
     type: word_order
@@ -160,7 +172,7 @@ templates:
     frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
     slots: {comparative_word: *comparative_word}
     answer_derivation: {kind: slot_gloss, slot: comparative_word}
-    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{comparative_word} is a comparative: -تر means '-er/more' and the final ـه means 'it is'.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson03.people_comparison_order.002
     lesson_content_key: fa.a1.unit15.lesson03.comparing_people
     type: word_order
@@ -183,7 +195,7 @@ templates:
     frame: {text: "{comparative_word}", language_code: fa, direction: rtl}
     slots: {comparative_word: *comparative_word}
     answer_derivation: {kind: slot_gloss, slot: comparative_word}
-    feedback_frame: {text: "{comparative_word} is a comparative form from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{comparative_word} is a comparative: -تر means '-er/more' and the final ـه means 'it is'.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_match.002
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: matching_pairs
@@ -202,16 +214,14 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit15.lesson04.comparative_reason_order.004
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: word_order
-    frame: {text: "{comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
-    slots: {comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
-    slot_relations: [{kind: distinct, slots: [comparative_word_one, comparative_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
+    frame: {text: "بهتره چون {comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *reason_comparative}
+    answer_derivation: {kind: render_frame, frame: {text: "بهتره چون {comparative_word}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "چون gives a reason, like بهتره چون ارزون‌تره.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit15.lesson04.full_comparison_reason_order.005
     lesson_content_key: fa.a1.unit15.lesson04.giving_reasons
     type: word_order
-    frame: {text: "این از اون {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}
-    slots: {comparative_word_one: *comparative_word, comparative_word_two: *comparative_word}
-    slot_relations: [{kind: distinct, slots: [comparative_word_one, comparative_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "این از اون {comparative_word_one} چون {comparative_word_two}", language_code: fa, direction: rtl}}
+    frame: {text: "این از اون بهتره چون {comparative_word}", language_code: fa, direction: rtl}
+    slots: {comparative_word: *reason_comparative}
+    answer_derivation: {kind: render_frame, frame: {text: "این از اون بهتره چون {comparative_word}", language_code: fa, direction: rtl}}
     feedback_frame: {text: "این از اون بهتره چون ارزون‌تره means this is better than that because it's cheaper.", language_code: en, direction: ltr}
