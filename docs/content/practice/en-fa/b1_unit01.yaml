@@ -5,8 +5,11 @@ target_language: fa
 unit_content_key: fa.b1.unit01.necessity
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 9 fixes). No backfill gloss in this unit embeds Persian any more, but 8 MC/translation slots had no semantic tag, so Endless Practice drew from all ~470 B1 fa lexemes (later-unit words, untagged particles such as kaash/harchand, Tehran). (1-5) lesson01 choose/translate, lesson02 choose, lesson03 choose, lesson05 translate re-pooled onto cumulative lesson-tag unions (10/8/11/11 tokens). (6) lesson06.translate.001 -> verbs of lessons 01-03+05+06: drops kani gloss you do, which a learner types as mikoni (same gloss). (7) lesson04.choose.001 was a function-word pool (pronoun/particle/preposition, all untagged or course-wide pronoun tag) -> lesson04 dialogue words, feedback updated. (8) lesson04.match.002 and lesson05.match.001 were the same fixed 6-token pool for 6 slots (identical cards every time) incl. reviewed_phrase, which pulls B1 phrases from units 07-11 -> lesson04 / lesson05 words (12/13), feedback updated. (9) lesson02.match.002 feedback said each verb refers to a person (pool has must, was, I do not have) -> English meaning; lesson02.translate.004 proper nouns untagged (pulled Tehran, Hossein) -> person_name. NATIVE FLAGS: none new. Gloss lane: kani you do -> (that) you do (subjunctive); miraftam and natunest have POS noun (should be verb); the conjunctions chon/vali and the pronouns carry no unit lesson tag, so they are not drilled in MC.
+
     Six lessons, 61 fa lexemes (the richest B1 unit). Drills baayad + subjunctive across every person,
     past obligation with the imperfect, and negation.
 
@@ -97,6 +100,12 @@ tag_schema:
     - reviewed_phrase
     - room_word
     - en_fa_b1_unit01_words
+    - en_fa_b1_unit01_lesson01_words
+    - en_fa_b1_unit01_lesson02_words
+    - en_fa_b1_unit01_lesson03_words
+    - en_fa_b1_unit01_lesson04_words
+    - en_fa_b1_unit01_lesson05_words
+    - en_fa_b1_unit01_lesson06_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit01.lesson01.choose.001
   lesson_content_key: fa.b1.unit01.lesson01.present_necessity_1st2nd
@@ -117,6 +126,9 @@ templates:
       - adjective
       - symbol
       - preposition
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -169,6 +181,9 @@ templates:
       - adjective
       - symbol
       - preposition
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -188,6 +203,10 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson01_words
+        - en_fa_b1_unit01_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -258,7 +277,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian verb form with the person it refers to.
+    text: Match each Persian verb form with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit01.lesson02.order.003
@@ -299,6 +318,8 @@ templates:
       language_code: fa
       part_of_speech:
       - proper_noun
+      agreement_tags:
+        semantic: person_name
   answer_derivation:
     kind: slot_text
     slot: item
@@ -320,6 +341,11 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson01_words
+        - en_fa_b1_unit01_lesson02_words
+        - en_fa_b1_unit01_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -361,21 +387,19 @@ templates:
   slots:
     item:
       language_code: fa
-      # `symbol` dropped 2026-07-27 (native review): it pulled و, whose
-      # FA_GLOSSES gloss is the numeral-linking "and (links tens + units)"
-      # sense (from the a1 script-ramp/number units) -- shown as the MC
-      # ground truth here, where this unit teaches و only as the plain
-      # coordinating conjunction "and". No other symbol lexeme is needed by
-      # this recognition drill; pool stays 9 distinct glosses.
       part_of_speech:
-      - pronoun
-      - particle
-      - preposition
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a function word from this unit.'
+    text: '{item} is a word from the dialogue.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit01.lesson04.match.002
@@ -390,80 +414,62 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
     third:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
     fourth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
     fifth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
     sixth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -483,7 +489,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian word from this unit with its English meaning.
+    text: Match each Persian word from the dialogue with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit01.lesson04.fill.003
@@ -519,80 +525,62 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
     third:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
     fourth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
     fifth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
     sixth:
       language_code: fa
       part_of_speech:
       - noun
+      - verb
+      - adjective
       - adverb
       agreement_tags:
         semantic:
-        - advice_word
-        - asking_word
-        - bureaucracy_word
-        - help_word
-        - room_word
-        - reviewed_phrase
+        - en_fa_b1_unit01_lesson05_words
   slot_relations:
   - kind: distinct
     slots:
@@ -612,7 +600,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian content word with its English meaning.
+    text: Match each Persian word from the reading with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit01.lesson05.translate.002
@@ -631,6 +619,9 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson05_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -676,6 +667,13 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit01_lesson01_words
+        - en_fa_b1_unit01_lesson02_words
+        - en_fa_b1_unit01_lesson03_words
+        - en_fa_b1_unit01_lesson05_words
+        - en_fa_b1_unit01_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
