@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit62.phone_calls
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 1 fix). lesson04.fill.003 'The {item} was not clear.' had no cue (sound/voice/message fit) -> added a hint slot rendering the Persian gloss. Checked: MC/translate pool is voicemail/sound/clear only (3 distinct); lesson02 phrase translations are determined, apart from contractions (I'll call back later vs I will: no lever, exact-string answer). NATIVE FLAGS: -ین imperatives (تکرار کنین) beside colloquial می‌تونم. BACKFILL GLOSS FLAGS: none.
+
     THIN UNIT: backfill_lexemes_fa_en.py registers only 3 lexemes for this unit
     (voicemail/sound/clear, lesson01 + lesson04 only -- lesson02/lesson03 have
     zero lexemes and are therefore invisible to any checkpoint no matter what
@@ -95,8 +98,8 @@ templates:
   - content_key: practice.fa-en.en.a1.unit62.lesson04.fill.003
     lesson_content_key: en.a1.unit62.lesson04.phone_message
     type: fill_in_blank
-    frame: {text: "The {item} was not clear.", language_code: en, direction: ltr}
-    slots: {item: *lesson04_noun}
+    frame: {text: "The {item} was not clear. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson04_noun, hint: *lesson04_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «صدا».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit62.lesson04.order.004

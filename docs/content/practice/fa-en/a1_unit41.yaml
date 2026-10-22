@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit41.cooking
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Authored 2026-07-11, fa-en depth-audit lane (unit 12 of the 30-42 batch, see unit30''s pack notes for the full batch
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (fa-en practice pass, rest; 5 fixes). (1) order.005: ''Can you {item} it'' lacked ''?''; feedback was a garbled sentence with the English verb inside Persian -> ''جملهٔ درست: Can you {item} it?''. (2) volume_fill.004: cue-less blank over a single-candidate pool (unanswerable) -> added a hint slot rendering the Persian gloss; English-only feedback -> Persian. (3) volume_match.008: English meta text_block (''Second review matching set for this unit.'') -> Persian. (4)/(5) translate.006 and lesson02.translate.001: written-register prompts (می‌توانی/را/بجوشان) -> colloquial to match the overlay (می‌تونی ... رو ... برام، بجوشون); answers now end in ''?'' / feedback rewritten as ''جملهٔ درست: ...''. NATIVE FLAGS: boil=جوشاندن (overlay uses جوشوندن); written-register glosses (needs=نیاز دارد, makes=درست می‌کند) beside colloquial prompts. BACKFILL GLOSS FLAGS: ingredient=مواد اولیه is plural for a singular noun (override proposed).
+
+    Authored 2026-07-11, fa-en depth-audit lane (unit 12 of the 30-42 batch, see unit30''s pack notes for the full batch
     rationale).
 
     One semantic tag: ''cooking_verb'' (chop/boil/taste from lesson01, three real cooking actions with identical syntax, all
@@ -140,7 +143,7 @@ templates:
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: word_order
   frame:
-    text: Can you {item} it
+    text: Can you {item} it?
     language_code: en
     direction: ltr
   slots:
@@ -148,22 +151,29 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Can you {item} it
+      text: Can you {item} it?
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} کاری است که از او خواسته شد.'
+    text: 'جملهٔ درست: Can you {item} it?'
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit41.lesson01.order.005.volume_fill.004
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: fill_in_blank
   frame:
-    text: Can you {item} it
+    text: 'Can you {item} it? (“{hint}”)'
     language_code: en
     direction: ltr
+    slot_rendering:
+      hint: english_gloss
   slots:
     item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: volume_fa_en_a1_unit41_item_04_single
+    hint:
       language_code: en
       part_of_speech: verb
       agreement_tags:
@@ -172,9 +182,9 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
+    text: 'جملهٔ درست: Can you {item} it?'
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit41.lesson01.match.003.volume_match.008
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: matching_pairs
@@ -183,9 +193,9 @@ templates:
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
+    - text: دورِ دوم وصل‌کردنِ فعل‌ها.
+      language_code: fa
+      direction: rtl
   slots:
     first: &id002
       language_code: en
@@ -230,7 +240,7 @@ templates:
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: translation
   frame:
-    text: می‌توانی پیازها را برایم خرد کنی؟
+    text: می‌تونی پیازها رو برام خرد کنی؟
     language_code: fa
     direction: rtl
   slots:
@@ -238,18 +248,18 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: Can you {item} the onions for me
+      text: Can you {item} the onions for me?
       language_code: en
       direction: ltr
   feedback_frame:
-    text: Can you {item} the onions for me یعنی می‌توانی پیازها را برایم خرد کنی؟
+    text: 'جملهٔ درست: Can you {item} the onions for me?'
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit41.lesson02.translate.001
   lesson_content_key: en.a1.unit41.lesson02.preparing_a_meal
   type: translation
   frame:
-    text: اول پاستا را بجوشان.
+    text: اول پاستا رو بجوشون.
     language_code: fa
     direction: rtl
   slots:
@@ -265,6 +275,6 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: First, {item} the pasta یعنی اول پاستا را بجوشان.
+    text: 'جملهٔ درست: First, {item} the pasta.'
     language_code: fa
     direction: rtl
