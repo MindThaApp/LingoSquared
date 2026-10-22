@@ -5,8 +5,9 @@ target_language: en
 unit_content_key: en.a1.unit16.routines
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: "true"
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; 2 fixes). (1) noun_word and all_word presets (word_choose, word_translate, word_listen in lessons 1-4): scope -- slots had no semantic tag so Endless Practice pulled 147-275 level-wide words (with SAMEGLOSS clashes such as op<-on/up, goed<-fine/good/well); now tagged a1_unit16_routines (unit words only). (2) lesson04.meal_order.005: punctuation -- final period added. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: none. Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split -- this completes the coordinator's requested
     units 11-16 range). Keyed to English target lexemes extended into the
@@ -150,8 +151,8 @@ slot_presets:
   # sentence -- so the SS1.1 course-scope grammatical-in-frame risk does not
   # apply. The pack's one word_order template (meal_order.005) is untouched and
   # keeps the unit's own narrow, already-verified 'meal' tag.
-  noun_word: &noun_word {language_code: en, part_of_speech: noun}
-  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, preposition, particle]}
+  noun_word: &noun_word {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit16_routines}}
+  all_word: &all_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: a1_unit16_routines}}
   # pair_word (wave 3): the generated unit-scoped tag a1_unit16_routines
   # (commit 05af7ace) narrowed to the same content POS as all_word -- exactly
   # unit16's own 9 lexemes (wake/up/dressed/dinner/bed/every/usually/breakfast/
@@ -245,9 +246,9 @@ templates:
   - content_key: practice.nl-en.en.a1.unit16.lesson04.meal_order.005
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
     type: word_order
-    frame: {text: "I have {item} every day", language_code: en, direction: ltr}
+    frame: {text: "I have {item} every day.", language_code: en, direction: ltr}
     slots: {item: *meal}
-    answer_derivation: {kind: render_frame, frame: {text: "I have {item} every day", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "I have {item} every day.", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de maaltijd die je elke dag eet.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit16.lesson04.word_translate.003
     lesson_content_key: en.a1.unit16.lesson04.routine_dialogue

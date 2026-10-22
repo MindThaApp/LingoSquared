@@ -6,7 +6,8 @@ unit_content_key: en.a1.unit04.dates
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; 3 fixes). (1) month_pair.002: matching_pairs below the 6-pair floor (5 pairs) -- re-anchored on unit lesson02 tag with noun POS (5 months plus month=maand) and declared 6 slots; frame and feedback reworded to Engelse woorden over maanden. (2) weekday_pair.003 feedback said twee dagen for a 7-pair match -- reworded. NATIVE FLAGS: 7th=7 and 3rd=3 glosses are bare digits (used in the Dutch frame of birthday_translate.003, so left). BACKFILL GLOSS FLAGS: none. Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split -- a separate agent covers en-fa/fa-en/en-prs).
     Keyed to English target lexemes extended into the SHARED
@@ -45,10 +46,11 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [weekday, month, day_ordinal, farewell]
+    semantic: [weekday, month, day_ordinal, farewell, a1_unit04_dates_lesson02]
 slot_presets:
   weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
   month: &month {language_code: en, part_of_speech: noun, agreement_tags: {semantic: month}}
+  month_words: &month_words {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit04_dates_lesson02}}
   day_ordinal: &day_ordinal {language_code: en, part_of_speech: noun, agreement_tags: {semantic: day_ordinal}}
   farewell_adverb: &farewell_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: farewell}}
 templates:
@@ -73,7 +75,7 @@ templates:
     slots: {first_day: *weekday, second_day: *weekday, third_day: *weekday, fourth_day: *weekday, fifth_day: *weekday, sixth_day: *weekday, seventh_day: *weekday}
     slot_relations: [{kind: distinct, slots: [first_day, second_day, third_day, fourth_day, fifth_day, sixth_day, seventh_day]}]
     answer_derivation: {kind: matching_pairs, slots: [first_day, second_day, third_day, fourth_day, fifth_day, sixth_day, seventh_day]}
-    feedback_frame: {text: "Je hebt twee dagen van de week gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "Je hebt de dagen van de week gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit04.lesson01.weekday_translate.004
     lesson_content_key: en.a1.unit04.lesson01.weekdays
     type: translation
@@ -91,11 +93,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit04.lesson02.month_pair.002
     lesson_content_key: en.a1.unit04.lesson02.months
     type: matching_pairs
-    frame: {text: "Koppel de Engelse maanden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_month: *month, second_month: *month, third_month: *month, fourth_month: *month, fifth_month: *month}
-    slot_relations: [{kind: distinct, slots: [first_month, second_month, third_month, fourth_month, fifth_month]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_month, second_month, third_month, fourth_month, fifth_month]}
-    feedback_frame: {text: "Je hebt twee maanden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden over maanden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_month: *month_words, second_month: *month_words, third_month: *month_words, fourth_month: *month_words, fifth_month: *month_words, sixth_month: *month_words}
+    slot_relations: [{kind: distinct, slots: [first_month, second_month, third_month, fourth_month, fifth_month, sixth_month]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_month, second_month, third_month, fourth_month, fifth_month, sixth_month]}
+    feedback_frame: {text: "Je hebt woorden over maanden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit04.lesson02.month_translate.003
     lesson_content_key: en.a1.unit04.lesson02.months
     type: translation
