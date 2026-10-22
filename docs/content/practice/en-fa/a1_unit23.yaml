@@ -6,7 +6,11 @@ unit_content_key: fa.a1.unit23.emotions
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass, same batch as a1_unit20-22.yaml -- see those
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) Removed volume_fill.001/.003 ({feeling} و ___): any feeling adjective fits the blank but only خسته was accepted. (2) feeling_match.002 drew 6 of exactly 6 feeling adjectives (same cards every time): re-pooled to feeling_word + feeling_1st_person_word (10 in unit). (3) reason_choice feedback called زیاد/فقط/کرده feeling vocabulary: neutral wording. (4) six wide matching feedbacks claimed this unit''s vocabulary for course-wide pools: neutral wording. NATIVE FLAGS: feeling_1st_person_translate accepts only عصبانی‌ام/گشنه‌ام; common spoken spellings عصبانیم/گشنمه are graded wrong. Gloss lane: کرده glossed has done (past perfect), should say present perfect.
+
+
+    Authored 2026-07-09 (en-fa overnight units-20+ practice-depth pass, same batch as a1_unit20-22.yaml -- see those
     files'' own notes for the shared UNIT_FILES-extension pattern). Extends scripts/backfill_lexemes.py with 17 new FA_GLOSSES
     entries, 2 new FA_ADVERBS entries (زیاد/فقط), 6 new FA_ADJECTIVES entries (the core feeling words), 9 new FA_VERBS entries
     (colloquial copula contractions + کرده), and 8 new semantic tags. خسته‌ام/خوب/نیستم/ چطوری/خوبم/من/یکم/چرا/هستی/کار/کردم/چون/امروز/سارا/چه/نیما/تو/نیست
@@ -152,6 +156,13 @@ slot_presets:
     agreement_tags:
       semantic: [feeling_word, feeling_1st_person_word, asking_state_word, reason_word,
         reading_word, reaction_word]
+  feeling_and_1st_person_word: &id014
+    language_code: fa
+    part_of_speech:
+    - adjective
+    - verb
+    agreement_tags:
+      semantic: [feeling_word, feeling_1st_person_word]
   reading_reason_word: &id012
     language_code: fa
     part_of_speech:
@@ -217,7 +228,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson01.basic_feeling_translate.003
@@ -271,7 +282,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson02.hunger_translate.002
@@ -316,12 +327,12 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    first: *id003
-    second: *id003
-    third: *id003
-    fourth: *id003
-    fifth: *id003
-    sixth: *id003
+    first: *id014
+    second: *id014
+    third: *id014
+    fourth: *id014
+    fifth: *id014
+    sixth: *id014
   slot_relations:
   - kind: distinct
     slots:
@@ -341,7 +352,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six words cover all the feeling vocabulary taught in this unit.
+    text: These pairs mix feeling words with I'm ... forms such as خوشحالم (I'm happy).
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson03.feeling_translate.003
@@ -438,7 +449,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_choice.001
@@ -454,7 +465,7 @@ templates:
     kind: slot_gloss
     slot: reason_word
   feedback_frame:
-    text: '{reason_word} is feeling vocabulary from this unit.'
+    text: Remember the meaning of {reason_word}.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_match.002
@@ -490,7 +501,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson04.reason_translate.003
@@ -560,7 +571,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson05.reading_translate.003
@@ -614,7 +625,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: These six cover this unit's feeling, reason, and reading vocabulary.
+    text: These pairs review feeling, reason, and reading words together with other words you have learned.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit23.lesson06.unit_review_match.002
@@ -675,60 +686,3 @@ templates:
     text: This reviews the feeling, reading-passage, and reaction vocabulary taught in this unit.
     language_code: en
     direction: ltr
-- content_key: practice.en-fa.fa.a1.unit23.lesson03.feeling_pair_order.004.volume_fill.001
-  lesson_content_key: fa.a1.unit23.lesson03.more_feelings
-  type: fill_in_blank
-  frame: &id009
-    text: '{feeling_a} و {feeling_b}'
-    language_code: fa
-    direction: rtl
-  slots:
-    feeling_a:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: feeling_word
-    feeling_b:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: volume_en_fa_a1_unit23_feeling_b_01_single
-  slot_relations:
-  - kind: distinct
-    slots:
-    - feeling_a
-    - feeling_b
-  answer_derivation:
-    kind: slot_text
-    slot: feeling_b
-  feedback_frame:
-    text: '{feeling_b}'
-    language_code: fa
-    direction: rtl
-- content_key: practice.en-fa.fa.a1.unit23.lesson03.feeling_pair_order.004.volume_fill.003
-  lesson_content_key: fa.a1.unit23.lesson03.more_feelings
-  type: fill_in_blank
-  frame: *id009
-  slots:
-    feeling_a:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: volume_en_fa_a1_unit23_feeling_a_03_single
-    feeling_b:
-      language_code: fa
-      part_of_speech: adjective
-      agreement_tags:
-        semantic: feeling_word
-  slot_relations:
-  - kind: distinct
-    slots:
-    - feeling_a
-    - feeling_b
-  answer_derivation:
-    kind: slot_text
-    slot: feeling_a
-  feedback_frame:
-    text: '{feeling_a}'
-    language_code: fa
-    direction: rtl
