@@ -6,7 +6,20 @@ unit_content_key: en.a1.unit38.household
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). (1) lesson03.choose.001 and
+    lesson04.translate.001: unit38_noun was a bare part_of_speech:noun slot with no tag (841 course
+    nouns) -> unit tag fa_en_a1_unit38_words (9 nouns, 9 distinct glosses). (2) lesson01.fill.005:
+    Please take out the ___ had no cue (trash/garbage/laundry all fit) -> Persian cue sentence.
+    Checked: He takes out the trash every day and I take out the trash are grammatical; chore_noun
+    pool equal at unit and course scope. Not fixable: lesson02.translate.002 (من زباله را بیرون
+    می‌برم) could also be I-m taking out the trash / I take the trash out; the prompt cannot pin the
+    form. NATIVE FLAGS: fur=پشم (حیوان) is closer to wool (کرک / موی حیوان?); guests=میهمان‌ها
+    (مهمان‌ها is the usual spelling); chore=کار خانه (کار خانگی?); laundry=لباسشویی
+    (رختشویی/لباس‌ها?); sundays=یکشنبه‌ها lowercase token. BACKFILL GLOSS FLAGS: fur, guests, chore,
+    laundry.
+
     Authored 2026-07-11, fa-en depth-audit lane (unit 9 of the 30-42
     batch, see unit30's pack notes for the full batch rationale).
 
@@ -42,11 +55,11 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [chore_noun, trash_word]
+    semantic: [chore_noun, trash_word, fa_en_a1_unit38_words]
 slot_presets:
   chore_noun: &chore_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: chore_noun}}
   trash_single: &trash_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: trash_word}}
-  unit38_noun: &unit38_noun {language_code: en, part_of_speech: noun}
+  unit38_noun: &unit38_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a1_unit38_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit38.lesson01.choose.001
     lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
@@ -80,7 +93,12 @@ templates:
   - content_key: practice.fa-en.en.a1.unit38.lesson01.fill.005
     lesson_content_key: en.a1.unit38.lesson01.household_vocabulary
     type: fill_in_blank
-    frame: {text: "Please take out the {item}", language_code: en, direction: ltr}
+    frame:
+      text: "Please take out the {item}"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "جملهٔ انگلیسی را کامل کنید: «لطفاً زباله را بیرون ببر».", language_code: fa, direction: rtl}
     slots: {item: *trash_single}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی زباله.", language_code: fa, direction: rtl}
