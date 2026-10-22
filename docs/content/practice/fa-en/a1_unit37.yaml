@@ -6,7 +6,19 @@ unit_content_key: en.a1.unit37.celebrations
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). (1) lesson02.choose.001 and
+    translate.002: unit37_noun was a bare part_of_speech:noun slot with no tag (841 course nouns) ->
+    lesson01-03 unit tags, which also drops balloons/break/pair: break is glossed اتاق استراحت
+    (break room), so the bare prompt break/اتاق استراحت was a wrong-sense pair (7 nouns remain:
+    party/gift/congratulations/cake/coworkers/promotion/surprise, all distinct glosses). (2)
+    lesson03.fill.001: We-re having a surprise ___ for Daniel had no cue -> Persian cue sentence.
+    Not fixable: lesson03.translate.002 expects We-re having (contracted) while We are having is
+    equally natural and the Persian cannot distinguish them; the grader has no contraction handling.
+    NATIVE FLAGS: coworkers=همکاران could equally be colleagues; ترفیع for promotion. BACKFILL GLOSS
+    FLAGS: break=اتاق استراحت (break room) is the wrong sense for the bare token (propose استراحت).
+
     Authored 2026-07-11, fa-en depth-audit lane (unit 8 of the 30-42
     batch, see unit30's pack notes for the full batch rationale).
 
@@ -38,11 +50,11 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [celebration_noun, party_word]
+    semantic: [celebration_noun, party_word, fa_en_a1_unit37_lesson01_words, fa_en_a1_unit37_lesson02_words, fa_en_a1_unit37_lesson03_words]
 slot_presets:
   celebration_noun: &celebration_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: celebration_noun}}
   party_single: &party_single {language_code: en, part_of_speech: noun, agreement_tags: {semantic: party_word}}
-  unit37_noun: &unit37_noun {language_code: en, part_of_speech: noun}
+  unit37_noun: &unit37_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: [fa_en_a1_unit37_lesson01_words, fa_en_a1_unit37_lesson02_words, fa_en_a1_unit37_lesson03_words]}}
 templates:
   - content_key: practice.fa-en.en.a1.unit37.lesson01.choose.001
     lesson_content_key: en.a1.unit37.lesson01.celebration_vocabulary
@@ -90,7 +102,12 @@ templates:
   - content_key: practice.fa-en.en.a1.unit37.lesson03.fill.001
     lesson_content_key: en.a1.unit37.lesson03.dialogue_surprise_party
     type: fill_in_blank
-    frame: {text: "We're having a surprise {item} for Daniel", language_code: en, direction: ltr}
+    frame:
+      text: "We're having a surprise {item} for Daniel"
+      language_code: en
+      direction: ltr
+      text_blocks:
+        - {text: "جملهٔ انگلیسی را کامل کنید: «داریم برای دنیل یک مهمانی غافلگیری می‌گیریم».", language_code: fa, direction: rtl}
     slots: {item: *party_single}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی مهمانی.", language_code: fa, direction: rtl}
