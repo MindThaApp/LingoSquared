@@ -5,8 +5,19 @@ target_language: en
 unit_content_key: en.a1.unit17.plans
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). (1) content_word preset
+    (plans_choose.001/.005/.010, plans_listen.002/.008, plans_translate.003/.006/.009/.011) was a
+    part-of-speech-only slot with no tag, so at course scope it drew from 1756 lexemes (ordinals,
+    prices, abandon, able...) -> unit tag fa_en_a1_unit17_words (11 tokens, 11 distinct glosses; the
+    untagged 1pm drops out). (2) love_order.007 feedback called prefer/hate/like a feeling ->
+    neutral wording. fresh_context normalised to boolean. NATIVE FLAGS: would=(فعل کمکی مؤدبانه؛
+    مثلاً «میل دارید...؟») is a long descriptive gloss as a translation prompt; movie translation
+    accepts only movie, not film; works=خوب/مناسب است; busy=شلوغ (سرم شلوغه) colloquial
+    parenthetical. BACKFILL GLOSS FLAGS: would.
+
     Authored 2026-07-06 by the practice-pool-sync lane extending fa-en coverage to units 15-20, mirroring nl-en's already-reviewed
     a1_unit17.yaml. Same deliberate scope decision as nl-en's unit17: lesson01 (proposing an activity: "Do you want to see
     a movie...?"/ "Would you like to go for a walk?") gets ZERO generated templates -- neither invitation phrase mentions
@@ -91,6 +102,8 @@ slot_presets:
   content_word: &id001
     language_code: en
     part_of_speech: [noun, verb, adjective, adverb]
+    agreement_tags:
+      semantic: fa_en_a1_unit17_words
   preference_verb_full: &id002
     language_code: en
     part_of_speech: verb
@@ -229,7 +242,7 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} احساسی است که دربارهٔ تماشای فیلم بیان می‌شود.'
+    text: '{item} نظر شما دربارهٔ تماشای فیلم را نشان می‌دهد.'
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit17.lesson03.plans_listen.008

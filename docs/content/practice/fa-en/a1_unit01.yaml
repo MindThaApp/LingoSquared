@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (fa-en practice pass, rest; 9 fixes). (1) adjective_meaning.001: untagged adjective slot reached 274 course adjectives -> unit tag. (2) practice_translate.905: all-POS untagged slot (2055 course lexemes incl. numbers, pronouns, particles, and good/fine/okay sharing one gloss) -> unit tag, noun/verb/adverb. (3) identity_choose.007: course pool added am/is/i/my/what/your and the I am/I-m near-synonym glosses -> lesson02 tag. (4) variety_politeness_pair.902: pool and instruction said polite words but mixed how/are/bad and fine/okay shared one gloss -> unit tag noun/verb/adverb, neutral instruction. (5) variety_time_order.900: Good day excluded (day_part tag: morning/afternoon/evening). (6) volume_fill.003: blank Good ___ was underdetermined -> Have a good ___ plus Persian cue. (7) volume_fill.002 and volume_fill.005: Persian cue added to cue-less blanks. (8) both fill feedbacks were bare English -> Persian. (9) farewell_meaning feedback wording. NATIVE FLAGS: hi/hello and bye/goodbye are accepted near-synonym options (differ only by the register tag in the gloss); fine/okay/good all glossed as khoob (override proposed in log); I-m bad in variety_wellbeing_order.901 is unnatural but no tag isolates fine/okay. BACKFILL GLOSS FLAGS: fine/okay/good share one gloss.
+
+    Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
     are you? bad, thanks.'', ''I am a engineer.''), narrowed overly broad greeting/farewell/role slots, fixed a matching template
     referencing not-yet-taught vocabulary, fixed a multiple_choice template with fewer than 3 unique options, replaced misleading
     Farsi feedback, added a safe word-order exercise. Independently re-verified by Session 3: compiler 0/0, no jargon leaks,
@@ -124,6 +127,9 @@ tag_schema:
     - politeness
     - identity
     - person_name
+    - day_part
+    - fa_en_a1_unit01_words
+    - fa_en_a1_unit01_lesson02_words
     - volume_fa_en_a1_unit01_farewell_verb_02_single
     - volume_fa_en_a1_unit01_item_03_single
     - volume_fa_en_a1_unit01_item_05_single
@@ -142,6 +148,11 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: time_period
+  time_of_day: &id014
+    language_code: en
+    part_of_speech: noun
+    agreement_tags:
+      semantic: day_part
   farewell: &id008
     language_code: en
     part_of_speech:
@@ -176,7 +187,8 @@ slot_presets:
   taught_adjective: &id003
     language_code: en
     part_of_speech: adjective
-    agreement_tags: {}
+    agreement_tags:
+      semantic: fa_en_a1_unit01_words
   politeness: &id004
     language_code: en
     part_of_speech:
@@ -189,26 +201,19 @@ slot_presets:
   identity: &id006
     language_code: en
     part_of_speech:
-    - pronoun
     - verb
     - adverb
     - adjective
     agreement_tags:
-      semantic: [identity, wellbeing_question, wellbeing_answer]
+      semantic: fa_en_a1_unit01_lesson02_words
   practice_word: &id013
     language_code: en
     part_of_speech:
-    - symbol
     - noun
-    - proper_noun
-    - pronoun
     - verb
-    - adjective
     - adverb
-    - preposition
-    - particle
-    - phrase
-    agreement_tags: {}
+    agreement_tags:
+      semantic: fa_en_a1_unit01_words
 templates:
 - content_key: practice.fa-en.en.a1.unit01.lesson01.greeting_meaning.001
   lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
@@ -449,7 +454,7 @@ templates:
     kind: slot_gloss
     slot: farewell
   feedback_frame:
-    text: '{farewell} واژه‌ای از عبارت‌های خداحافظی درس‌های این بسته است.'
+    text: '{farewell} در عبارت‌های خداحافظی این درس به‌کار می‌رود.'
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit01.lesson05.farewell_order.003
@@ -549,7 +554,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item: *id002
+    item: *id014
   answer_derivation:
     kind: render_frame
     frame:
@@ -583,7 +588,7 @@ templates:
   lesson_content_key: en.a1.unit01.lesson03.wellbeing
   type: matching_pairs
   frame:
-    text: واژه‌های مؤدبانهٔ انگلیسی را به معنی فارسی‌شان وصل کنید.
+    text: واژه‌های انگلیسی را به معنی فارسی‌شان وصل کنید.
     language_code: fa
     direction: rtl
   slots:
@@ -592,12 +597,9 @@ templates:
       part_of_speech:
       - noun
       - verb
-      - adjective
       - adverb
-      - pronoun
-      - particle
       agreement_tags:
-        semantic: [politeness, wellbeing_answer, identity, wellbeing_question]
+        semantic: fa_en_a1_unit01_words
     word_two: *id004_wellbeing_union
     word_three: *id004_wellbeing_union
     word_four: *id004_wellbeing_union
@@ -622,7 +624,7 @@ templates:
     - word_five
     - word_six
   feedback_frame:
-    text: هر واژهٔ مؤدبانه را به معنی فارسی خودش وصل کنید.
+    text: هر واژه را به معنی فارسی خودش وصل کنید.
     language_code: fa
     direction: rtl
 - content_key: practice.fa-en.en.a1.unit01.lesson01.practice_translate.905
@@ -650,6 +652,10 @@ templates:
     text: '{farewell_verb} you later'
     language_code: en
     direction: ltr
+    text_blocks:
+    - text: 'جملهٔ انگلیسی را کامل کنید: «بعداً می‌بینمت».'
+      language_code: fa
+      direction: rtl
   slots:
     farewell_verb:
       language_code: en
@@ -660,16 +666,20 @@ templates:
     kind: slot_text
     slot: farewell_verb
   feedback_frame:
-    text: '{farewell_verb}'
-    language_code: en
-    direction: ltr
+    text: پاسخ درست {farewell_verb} است.
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit01.lesson01.variety_time_order.900.volume_fill.003
   lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
   type: fill_in_blank
   frame:
-    text: Good {item}
+    text: Have a good {item}
     language_code: en
     direction: ltr
+    text_blocks:
+    - text: 'جملهٔ انگلیسی را کامل کنید: «روز خوبی داشته باشی».'
+      language_code: fa
+      direction: rtl
   slots:
     item:
       language_code: en
@@ -680,9 +690,9 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
+    text: پاسخ درست {item} است.
+    language_code: fa
+    direction: rtl
 - content_key: practice.fa-en.en.a1.unit01.lesson03.variety_wellbeing_order.901.volume_fill.005
   lesson_content_key: en.a1.unit01.lesson03.wellbeing
   type: fill_in_blank
@@ -694,6 +704,10 @@ templates:
     text: Not {item}, thanks
     language_code: en
     direction: ltr
+    text_blocks:
+    - text: 'جملهٔ انگلیسی را کامل کنید: «بد نیستم، ممنون».'
+      language_code: fa
+      direction: rtl
   slots:
     item:
       language_code: en
@@ -704,6 +718,6 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: '{item}'
-    language_code: en
-    direction: ltr
+    text: پاسخ درست {item} است.
+    language_code: fa
+    direction: rtl
