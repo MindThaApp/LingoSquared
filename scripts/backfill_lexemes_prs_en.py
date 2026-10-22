@@ -2008,6 +2008,21 @@ PRS_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # "Of course" (البته): کورس (a study course) is the wrong sense here.
     ("a2_unit35_prescription", "course"): "البته (جزء یک عبارت)",
     ("b1_unit05_workplace", "course"): "البته (جزء یک عبارت)",
+    # Added 2026-10-22 (fa-en/prs-en practice review rest)
+    ("a1_unit07_food", "that's"): "این ... استه (مخفف)",
+    ("a1_unit30_hobbies", "paint"): "نقاشی کردن",
+    ("a1_unit30_hobbies", "paints"): "نقاشی می‌کنه (سوم‌شخص مفرد)",
+    ("a1_unit43_colors", "bright"): "درخشان",
+    ("a1_unit44_seasons", "find"): "پیدا کردن",
+    ("a1_unit58_museum", "town"): "شهرک",
+    ("a1_unit59_banking_basics", "balance"): "بیلانس حساب",
+    ("a2_unit26_opinions", "idea"): "فکر",
+    ("a2_unit31_travel_disruption", "train"): "قطار",
+    ("a2_unit31_travel_disruption", "way"): "راه",
+    ("a2_unit32_online_habits", "waste"): "ضایع کردن",
+    ("a2_unit32_online_habits", "screen"): "صفحهٔ نمایش",
+    ("a2_unit32_online_habits", "lot"): "مقدار زیاد",
+    ("a2_unit34_shopping_complaint", "stopped"): "از کار افتاد",
 }
 
 PRS_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
