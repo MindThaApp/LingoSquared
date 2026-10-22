@@ -6,7 +6,19 @@ unit_content_key: fa.a1.unit11.routines
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1)
+    routine_phrase_translate.010: dropped the long sentence شب‌ها ساعت یازده می‌خوابم
+    from typed production (the unit overlay accepts several word orders, practice
+    translation can only accept one): pool now the lesson02/lesson05 phrases (4). (2)
+    routine_verb_match.002 frame said "Persian phrase" for a mixed word/phrase pool. (3)
+    routine_connector_match.006 frame said "word" and feedback claimed "these words
+    sequence and compare" for a pool that includes verbs/phrases: reworded. (4)
+    unit_review_match.011 frame text cleaned. NATIVE FLAGS / LIMITATION: typed answers
+    accept only the taught order (میرم سر کار, not سر کار میرم; ساعت چند بیدار می‌شی؟
+    without تو), as the schema has no alternative-answer field for translation.
+
     Authored 2026-07-07, part of the same pass as a1_unit09.yaml/
     a1_unit10.yaml closing the practice-content gap for A1 units 09-11 --
     see a1_unit09.yaml's notes for the shared scripts/backfill_lexemes.py
@@ -110,7 +122,8 @@ review:
 tag_schema:
   part_of_speech: [phrase, verb, adjective, adverb, noun]
   agreement_tags:
-    semantic: [routine_verb_phrase, routine_connector, routine_phrase]
+    semantic: [routine_verb_phrase, routine_connector, routine_phrase,
+      en_fa_a1_unit11_lesson02_words, en_fa_a1_unit11_lesson05_words]
 slot_presets:
   routine_verb_phrase: &routine_verb_phrase {language_code: fa, part_of_speech: [phrase, verb], agreement_tags: {semantic: routine_verb_phrase}}
   routine_connector: &routine_connector {language_code: fa, part_of_speech: [adjective, adverb], agreement_tags: {semantic: routine_connector}}
@@ -120,6 +133,9 @@ slot_presets:
   # per SS3.1a/SS8.1 -- used to re-anchor the below-floor matching_pairs
   # templates that were declaring only their own narrow tag's exact pool size.
   unit_review_word: &unit_review_word {language_code: fa, part_of_speech: [phrase, verb, adjective, adverb], agreement_tags: {semantic: [routine_verb_phrase, routine_connector, routine_phrase]}}
+  # Review 2026-10-22: short routine phrases only for typed production (the
+  # long lesson03 sentence has several accepted word orders in the unit).
+  routine_phrase_short: &routine_phrase_short {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: [en_fa_a1_unit11_lesson02_words, en_fa_a1_unit11_lesson05_words]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_choice.001
     lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
@@ -131,7 +147,7 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit11.lesson01.routine_verb_match.002
     lesson_content_key: fa.a1.unit11.lesson01.routine_verbs
     type: matching_pairs
-    frame: {text: "Match each Persian phrase with its meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
     slots: {first: *unit_review_word, second: *unit_review_word, third: *unit_review_word, fourth: *unit_review_word, fifth: *unit_review_word, sixth: *unit_review_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
@@ -161,11 +177,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_match.006
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: matching_pairs
-    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
     slots: {first: *unit_review_word, second: *unit_review_word, third: *unit_review_word, fourth: *unit_review_word, fifth: *unit_review_word, sixth: *unit_review_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "These words sequence and compare parts of a daily routine.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit11.lesson06.routine_connector_translate.007
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: translation
@@ -192,13 +208,13 @@ templates:
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: translation
     frame: {text: "{routine_phrase}", language_code: en, direction: ltr, slot_rendering: {routine_phrase: english_gloss}}
-    slots: {routine_phrase: *routine_phrase}
+    slots: {routine_phrase: *routine_phrase_short}
     answer_derivation: {kind: slot_text, slot: routine_phrase}
     feedback_frame: {text: "The Farsi phrase is {routine_phrase}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit11.lesson06.unit_review_match.011
     lesson_content_key: fa.a1.unit11.lesson06.routine_dialogue
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's routine vocabulary.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
     slots:
       first: *unit_review_word
       second: *unit_review_word
