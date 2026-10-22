@@ -6,7 +6,17 @@ unit_content_key: en.a1.unit30.hobbies
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). (1) lesson03.translate.001: content_word
+    was a part-of-speech-only slot with no tag (1756 course lexemes) -> unit tag
+    fa_en_a1_unit30_words (21 tokens, distinct glosses). (2) order.001 feedback used the garbled
+    phrase قید تکراری -> قید تکرار wording. Checked: She {item} cooks dinner is grammatical for
+    always/often/rarely/never/sometimes; hobby and frequency pools equal at unit and course scope
+    (course adds only sometimes). NATIVE FLAGS: goes=می‌رود, cooks=آشپزی می‌کند, paints=نقاشی می‌کند
+    are written verb forms next to colloquial overlay text; ever=هیچ‌وقت (در سؤال) can read as
+    never; video=ویدیویی. BACKFILL GLOSS FLAGS: none.
+
     Authored 2026-07-11 by the fa-en depth-audit lane, extending Endless
     Practice coverage past the shared English realization's unit24
     ceiling (a real content-depth audit found fa-en's practice pool only
@@ -56,12 +66,12 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [hobby_noun, frequency_adverb]
+    semantic: [hobby_noun, frequency_adverb, fa_en_a1_unit30_words]
 slot_presets:
   hobby_noun: &hobby_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: hobby_noun}}
   frequency_adverb: &frequency_adverb {language_code: en, part_of_speech: adverb, agreement_tags: {semantic: frequency_adverb}}
   hobby_or_frequency: &hobby_or_frequency {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: [hobby_noun, frequency_adverb]}}
-  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb]}
+  content_word: &content_word {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a1_unit30_words}}
 templates:
   - content_key: practice.fa-en.en.a1.unit30.lesson01.choose.001
     lesson_content_key: en.a1.unit30.lesson01.free_time_activities
@@ -98,7 +108,7 @@ templates:
     frame: {text: "She {item} cooks dinner", language_code: en, direction: ltr}
     slots: {item: *frequency_adverb}
     answer_derivation: {kind: render_frame, frame: {text: "She {item} cooks dinner", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} قید تکراری است که چقدر زیاد این کار انجام می‌شود را نشان می‌دهد.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "{item} یک قید تکرار است و نشان می‌دهد این کار هر چند وقت یک‌بار انجام می‌شود.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit30.lesson02.translate.002
     lesson_content_key: en.a1.unit30.lesson02.how_often
     type: translation
