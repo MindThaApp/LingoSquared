@@ -6,7 +6,19 @@ unit_content_key: fa.a1.unit10.dates
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 6 fixes). Six
+    matching_pairs templates always showed the same cards (slots = pool): (1)
+    weekday_match.002 7/7 -> 6 of 7, feedback rewritten (no longer "seven days"). (2)
+    month_match.006 3/3 -> 6 over lesson02 nouns/adjectives (7). (3)
+    ordinal_date_match.009 2/2 -> 6 over lesson04-06 nouns/adjectives/adverbs (7),
+    feedback rewritten. (4) calendar_word_match.011 2/2 -> 6 over lesson03-06 incl. the
+    spoken contractions (11), feedback rewritten. (5) date_phrase_match.014 4/4 -> 6
+    over date_phrase + lesson06 dialogue lines (10). (6) unit_review_match.016 10/10 ->
+    6 over all unit lesson-tag nouns/adjectives (21); frame text cleaned. All new pools
+    use unit-only tags (unit == course). NATIVE FLAGS: none.
+
     Authored 2026-07-07, part of the same pass as a1_unit09.yaml/
     a1_unit11.yaml closing the practice-content gap for A1 units 09-11 --
     see a1_unit09.yaml's notes for the shared scripts/backfill_lexemes.py
@@ -50,15 +62,23 @@ review:
     warnings) for the full en-fa pack including this new file. Needs the
     standard fresh-context review before import.
 tag_schema:
-  part_of_speech: [noun, adjective, phrase]
+  part_of_speech: [noun, adjective, phrase, adverb, verb]
   agreement_tags:
-    semantic: [weekday, month_name, ordinal_date_word, calendar_word, date_phrase]
+    semantic: [weekday, month_name, ordinal_date_word, calendar_word, date_phrase,
+      en_fa_a1_unit10_lesson01_words, en_fa_a1_unit10_lesson02_words, en_fa_a1_unit10_lesson03_words,
+      en_fa_a1_unit10_lesson04_words, en_fa_a1_unit10_lesson05_words, en_fa_a1_unit10_lesson06_words]
 slot_presets:
   weekday: &weekday {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: weekday}}
   month_name: &month_name {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: month_name}}
   ordinal_date_word: &ordinal_date_word {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: ordinal_date_word}}
   calendar_word: &calendar_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: calendar_word}}
   date_phrase: &date_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: date_phrase}}
+  # Review 2026-10-22: wider unit-only pools so matching cards vary between attempts.
+  month_lesson_word: &month_lesson_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: en_fa_a1_unit10_lesson02_words}}
+  date_lesson_word: &date_lesson_word {language_code: fa, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [en_fa_a1_unit10_lesson04_words, en_fa_a1_unit10_lesson05_words, en_fa_a1_unit10_lesson06_words]}}
+  date_lesson_word_or_contraction: &date_lesson_word_or_contraction {language_code: fa, part_of_speech: [noun, adjective, adverb, verb], agreement_tags: {semantic: [en_fa_a1_unit10_lesson03_words, en_fa_a1_unit10_lesson04_words, en_fa_a1_unit10_lesson05_words, en_fa_a1_unit10_lesson06_words]}}
+  date_or_dialogue_phrase: &date_or_dialogue_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: [date_phrase, en_fa_a1_unit10_lesson06_words]}}
+  unit_word: &unit_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: [en_fa_a1_unit10_lesson01_words, en_fa_a1_unit10_lesson02_words, en_fa_a1_unit10_lesson04_words, en_fa_a1_unit10_lesson05_words, en_fa_a1_unit10_lesson06_words]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_choice.001
     lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
@@ -71,10 +91,10 @@ templates:
     lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
     type: matching_pairs
     frame: {text: "Match each Persian day with its English meaning.", language_code: en, direction: ltr}
-    slots: {first: *weekday, second: *weekday, third: *weekday, fourth: *weekday, fifth: *weekday, sixth: *weekday, seventh: *weekday}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
-    feedback_frame: {text: "These are the seven days of the week, starting from Saturday.", language_code: en, direction: ltr}
+    slots: {first: *weekday, second: *weekday, third: *weekday, fourth: *weekday, fifth: *weekday, sixth: *weekday}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The Persian week starts on Saturday (شنبه) and ends on Friday (جمعه).", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit10.lesson01.weekday_translate.003
     lesson_content_key: fa.a1.unit10.lesson01.days_of_the_week
     type: translation
@@ -100,11 +120,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_match.006
     lesson_content_key: fa.a1.unit10.lesson02.months
     type: matching_pairs
-    frame: {text: "Match each Persian month with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *month_name, second: *month_name, third: *month_name}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "These are the first three months of the Iranian solar year, in order.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *month_lesson_word, second: *month_lesson_word, third: *month_lesson_word, fourth: *month_lesson_word, fifth: *month_lesson_word, sixth: *month_lesson_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Farvardin, Ordibehesht and Khordad are the first three months of the Iranian solar year.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit10.lesson02.month_translate.007
     lesson_content_key: fa.a1.unit10.lesson02.months
     type: translation
@@ -123,11 +143,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit10.lesson06.ordinal_date_match.009
     lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
     type: matching_pairs
-    frame: {text: "Match each ordinal date with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *ordinal_date_word, second: *ordinal_date_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "دهم and هشتم are the ordinal date words taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *date_lesson_word, second: *date_lesson_word, third: *date_lesson_word, fourth: *date_lesson_word, fifth: *date_lesson_word, sixth: *date_lesson_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Ordinal dates like دهم (10th) and هشتم (8th) come before the month name.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit10.lesson06.ordinal_date_translate.010
     lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
     type: translation
@@ -139,10 +159,10 @@ templates:
     lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *calendar_word, second: *calendar_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
-    feedback_frame: {text: "تاریخ (date) and جلسه (meeting) are both used when arranging a future date.", language_code: en, direction: ltr}
+    slots: {first: *date_lesson_word_or_contraction, second: *date_lesson_word_or_contraction, third: *date_lesson_word_or_contraction, fourth: *date_lesson_word_or_contraction, fifth: *date_lesson_word_or_contraction, sixth: *date_lesson_word_or_contraction}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit10.lesson05.calendar_word_translate.012
     lesson_content_key: fa.a1.unit10.lesson05.asking_about_a_future_date
     type: translation
@@ -161,9 +181,9 @@ templates:
     lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
     type: matching_pairs
     frame: {text: "Match each phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *date_phrase, second: *date_phrase, third: *date_phrase, fourth: *date_phrase}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
+    slots: {first: *date_or_dialogue_phrase, second: *date_or_dialogue_phrase, third: *date_or_dialogue_phrase, fourth: *date_or_dialogue_phrase, fifth: *date_or_dialogue_phrase, sixth: *date_or_dialogue_phrase}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit10.lesson06.date_phrase_translate.015
     lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
@@ -175,20 +195,8 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit10.lesson06.unit_review_match.016
     lesson_content_key: fa.a1.unit10.lesson06.meeting_date_dialogue
     type: matching_pairs
-    frame: {text: "Match each word with its meaning -- a review of this whole unit's days and months.", language_code: en, direction: ltr}
-    slots:
-      w1: *weekday
-      w2: *weekday
-      w3: *weekday
-      w4: *weekday
-      w5: *weekday
-      w6: *weekday
-      w7: *weekday
-      m1: *month_name
-      m2: *month_name
-      m3: *month_name
-    slot_relations:
-      - {kind: distinct, slots: [w1, w2, w3, w4, w5, w6, w7]}
-      - {kind: distinct, slots: [m1, m2, m3]}
-    answer_derivation: {kind: matching_pairs, slots: [w1, w2, w3, w4, w5, w6, w7, m1, m2, m3]}
-    feedback_frame: {text: "This reviews both the days of the week and the months of the Iranian solar year taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit_word, second: *unit_word, third: *unit_word, fourth: *unit_word, fifth: *unit_word, sixth: *unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "This reviews words from across the whole unit.", language_code: en, direction: ltr}
