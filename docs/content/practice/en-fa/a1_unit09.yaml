@@ -6,7 +6,21 @@ unit_content_key: fa.a1.unit09.time
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 7 fixes). (1)
+    time_unit_match.002 had 6 slots over a 6-word unit pool: now unit lesson-tag nouns +
+    day_part_word (9 unit). (2) time_unit_word_order.004 rendered "نیم و ربع" / "دقیقه و
+    ساعت" (meaningless): now ساعت سه و نیمه via the single lesson03 verb anchor;
+    lesson_content_key moved to lesson03. (3) day_part_choice.005 feedback claimed "from
+    this unit" but the course pool adds صبح/عصر/شب from other units: reworded. (4)
+    day_part_match.006 6 = 6: now nouns+adverbs (12). (5) day_part_word_order.008
+    rendered "قرار و ربع" etc.: now من ظهر میام via the lesson04 noun anchor. (6)
+    time_phrase_match.011: bare dialogue_word pooled 171 A1 phrases/words: now
+    time_phrase + lesson06 unit tag (18). (7) unit_review_match.013: same leak (175):
+    now time_phrase + unit lesson tags (21); frame text cleaned. NATIVE FLAGS: من ظهر
+    میام is composed from taught words (not a taught sentence) - confirm natural.
+
     Authored 2026-07-07, closing the practice-content gap for A1 units
     09-11 (Time/Dates/Routines, authored the same night, previously with
     zero Endless Practice coverage). Extended scripts/backfill_lexemes.py's
@@ -109,9 +123,11 @@ review:
     (recognition 3, structured 6, production 4), 13 templates total,
     unchanged from before the fix.
 tag_schema:
-  part_of_speech: [noun, phrase]
+  part_of_speech: [noun, phrase, adverb, verb]
   agreement_tags:
-    semantic: [time_unit_word, day_part_word, appointment_word, time_phrase, dialogue_word]
+    semantic: [time_unit_word, day_part_word, appointment_word, time_phrase, dialogue_word,
+      en_fa_a1_unit09_lesson01_words, en_fa_a1_unit09_lesson03_words, en_fa_a1_unit09_lesson04_words,
+      en_fa_a1_unit09_lesson05_words, en_fa_a1_unit09_lesson06_words]
 slot_presets:
   time_unit_word: &time_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: time_unit_word}}
   day_part_word: &day_part_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: day_part_word}}
@@ -129,6 +145,14 @@ slot_presets:
   lesson06_review_word: &lesson06_review_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [time_phrase, dialogue_word]}}
   # Full-unit union (13 distinct) for the unit-wide review card.
   unit_review_word: &unit_review_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [time_unit_word, day_part_word, appointment_word, dialogue_word, time_phrase]}}
+  # Review 2026-10-22: unit-lesson-tag unions (the bare dialogue_word tag pooled
+  # 150+ phrases/clitic forms from other units in Endless Practice).
+  unit_noun_wide: &unit_noun_wide {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [day_part_word, en_fa_a1_unit09_lesson01_words, en_fa_a1_unit09_lesson04_words, en_fa_a1_unit09_lesson05_words, en_fa_a1_unit09_lesson06_words]}}
+  unit_noun_adverb: &unit_noun_adverb {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: [day_part_word, en_fa_a1_unit09_lesson01_words, en_fa_a1_unit09_lesson04_words, en_fa_a1_unit09_lesson05_words, en_fa_a1_unit09_lesson06_words]}}
+  lesson06_phrase_word: &lesson06_phrase_word {language_code: fa, part_of_speech: [noun, adverb, phrase], agreement_tags: {semantic: [time_phrase, en_fa_a1_unit09_lesson06_words]}}
+  unit_phrase_word: &unit_phrase_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [time_phrase, en_fa_a1_unit09_lesson01_words, en_fa_a1_unit09_lesson04_words, en_fa_a1_unit09_lesson05_words, en_fa_a1_unit09_lesson06_words]}}
+  is_half_single: &is_half_single {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: en_fa_a1_unit09_lesson03_words}}
+  noon_single: &noon_single {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a1_unit09_lesson04_words}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_choice.001
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
@@ -140,11 +164,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_match.002
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
     type: matching_pairs
-    frame: {text: "Match each time word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *unit_noun_review, second: *unit_noun_review, third: *unit_noun_review, fourth: *unit_noun_review, fifth: *unit_noun_review, sixth: *unit_noun_review}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit_noun_wide, second: *unit_noun_wide, third: *unit_noun_wide, fourth: *unit_noun_wide, fifth: *unit_noun_wide, sixth: *unit_noun_wide}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "Match each time word to its English meaning.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_translate.003
     lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
     type: translation
@@ -153,25 +177,24 @@ templates:
     answer_derivation: {kind: slot_text, slot: time_unit_word}
     feedback_frame: {text: "The Farsi word is {time_unit_word}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson01.time_unit_word_order.004
-    lesson_content_key: fa.a1.unit09.lesson01.basic_time_vocabulary
+    lesson_content_key: fa.a1.unit09.lesson03.telling_the_time
     type: word_order
-    frame: {text: "{time_unit_word_one} و {time_unit_word_two}", language_code: fa, direction: rtl}
-    slots: {time_unit_word_one: *time_unit_word, time_unit_word_two: *time_unit_word}
-    slot_relations: [{kind: distinct, slots: [time_unit_word_one, time_unit_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{time_unit_word_one} و {time_unit_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "و joins two time words, like نیم و ربع.", language_code: en, direction: ltr}
+    frame: {text: "ساعت سه و {is_half}", language_code: fa, direction: rtl}
+    slots: {is_half: *is_half_single}
+    answer_derivation: {kind: render_frame, frame: {text: "ساعت سه و {is_half}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "ساعت سه و نیمه means \"It's three-thirty.\" نیمه is the spoken form of نیم است (is half).", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_choice.005
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: multiple_choice
     frame: {text: "{day_part_word}", language_code: fa, direction: rtl}
     slots: {day_part_word: *unit_noun_review}
     answer_derivation: {kind: slot_gloss, slot: day_part_word}
-    feedback_frame: {text: "{day_part_word} is a time-related word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{day_part_word} is a word for times and appointments.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_match.006
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *unit_noun_review, second: *unit_noun_review, third: *unit_noun_review, fourth: *unit_noun_review, fifth: *unit_noun_review, sixth: *unit_noun_review}
+    slots: {first: *unit_noun_adverb, second: *unit_noun_adverb, third: *unit_noun_adverb, fourth: *unit_noun_adverb, fifth: *unit_noun_adverb, sixth: *unit_noun_adverb}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -185,11 +208,10 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson04.day_part_word_order.008
     lesson_content_key: fa.a1.unit09.lesson04.parts_of_the_day
     type: word_order
-    frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}
-    slots: {day_part_word_one: *unit_noun_review, day_part_word_two: *unit_noun_review}
-    slot_relations: [{kind: distinct, slots: [day_part_word_one, day_part_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{day_part_word_one} و {day_part_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "و means 'and' -- it joins two words together, like ربع و ظهر.", language_code: en, direction: ltr}
+    frame: {text: "من {noon} میام", language_code: fa, direction: rtl}
+    slots: {noon: *noon_single}
+    answer_derivation: {kind: render_frame, frame: {text: "من {noon} میام", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "من ظهر میام means \"I'll come at noon.\" The time word comes before the verb.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit09.lesson05.appointment_translate.009
     lesson_content_key: fa.a1.unit09.lesson05.asking_about_an_appointment
     type: translation
@@ -208,7 +230,7 @@ templates:
     lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *lesson06_review_word, second: *lesson06_review_word, third: *lesson06_review_word, fourth: *lesson06_review_word, fifth: *lesson06_review_word, sixth: *lesson06_review_word}
+    slots: {first: *lesson06_phrase_word, second: *lesson06_phrase_word, third: *lesson06_phrase_word, fourth: *lesson06_phrase_word, fifth: *lesson06_phrase_word, sixth: *lesson06_phrase_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
@@ -222,14 +244,14 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit09.lesson06.unit_review_match.013
     lesson_content_key: fa.a1.unit09.lesson06.meeting_time_dialogue
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's time vocabulary.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
     slots:
-      first: *unit_review_word
-      second: *unit_review_word
-      third: *unit_review_word
-      fourth: *unit_review_word
-      fifth: *unit_review_word
-      sixth: *unit_review_word
+      first: *unit_phrase_word
+      second: *unit_phrase_word
+      third: *unit_phrase_word
+      fourth: *unit_phrase_word
+      fifth: *unit_phrase_word
+      sixth: *unit_phrase_word
     slot_relations:
       - {kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}

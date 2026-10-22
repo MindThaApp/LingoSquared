@@ -6,7 +6,22 @@ unit_content_key: fa.a1.unit08.shopping
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5 fixes). (1) shop_noun
+    preset (5 templates): the bare dialogue_word tag pooled 75 A1 nouns in Endless
+    Practice (clitic forms such as اسمم/خونه‌ت), and at unit scope the fragment قابلی
+    and سیب‌ها: re-pooled to the lesson01-05 unit tags, nouns+adverbs (9, unit ==
+    course). (2) Two MC feedbacks claimed "from this unit": now neutral. (3)
+    payment_match.002 had 3 slots over its 3-word pool: now 6 pairs over lesson01-05
+    nouns/adverbs/verbs (11). (4) quantity_unit_word_order.009 rendered "کیلو و نصف" /
+    "نصف و بشقاب" (meaningless): now the taught sentence کیلویی سی تومنه via a
+    single-member lesson02 anchor. (5) payment_word_order.010 rendered "حساب و نقدی"
+    etc. and its feedback cited قیمت, which is not in the pool: now نقدی حساب می‌کنم via
+    a lesson05 anchor. Note: quantity_match/shop_match/service_role_match and
+    quantity_choice/service_role_choice are duplicate templates (same pool); left as is.
+    NATIVE FLAGS: نقدی حساب می‌کنم vs نقدی می‌دم (same flag as the realization).
+
     Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
     part of the same pass as a1_unit06.yaml/a1_unit07.yaml/a2_unit09.yaml/
     a2_unit10.yaml -- see a1_unit06.yaml's notes for the shared
@@ -125,15 +140,20 @@ review:
     compile_content.py practice-validate. No backfill/realization/overlay
     edits made.
 tag_schema:
-  part_of_speech: [noun, adverb, adjective]
+  part_of_speech: [noun, adverb, adjective, verb]
   agreement_tags:
-    semantic: [quantity_unit_word, payment_word, shop_word, service_role_word, dialogue_word]
+    semantic: [quantity_unit_word, payment_word, shop_word, service_role_word, dialogue_word,
+      en_fa_a1_unit08_lesson01_words, en_fa_a1_unit08_lesson02_words, en_fa_a1_unit08_lesson03_words,
+      en_fa_a1_unit08_lesson04_words, en_fa_a1_unit08_lesson05_words]
 slot_presets:
   quantity_unit_word: &quantity_unit_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: quantity_unit_word}}
   payment_word: &payment_word {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: payment_word}}
   service_role_word: &service_role_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: service_role_word}}
   shop_word: &shop_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: shop_word}}
-  shop_noun: &shop_noun {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [quantity_unit_word, dialogue_word, shop_word, service_role_word]}}
+  shop_noun: &shop_noun {language_code: fa, part_of_speech: [noun, adverb], agreement_tags: {semantic: [en_fa_a1_unit08_lesson01_words, en_fa_a1_unit08_lesson02_words, en_fa_a1_unit08_lesson03_words, en_fa_a1_unit08_lesson04_words, en_fa_a1_unit08_lesson05_words]}}
+  shop_word_any: &shop_word_any {language_code: fa, part_of_speech: [noun, adverb, verb], agreement_tags: {semantic: [en_fa_a1_unit08_lesson01_words, en_fa_a1_unit08_lesson02_words, en_fa_a1_unit08_lesson03_words, en_fa_a1_unit08_lesson04_words, en_fa_a1_unit08_lesson05_words]}}
+  per_kilo_single: &per_kilo_single {language_code: fa, part_of_speech: adverb, agreement_tags: {semantic: en_fa_a1_unit08_lesson02_words}}
+  cash_single: &cash_single {language_code: fa, part_of_speech: adverb, agreement_tags: {semantic: en_fa_a1_unit08_lesson05_words}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_choice.001
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
@@ -141,7 +161,7 @@ templates:
     frame: {text: "{quantity_unit_word}", language_code: fa, direction: rtl}
     slots: {quantity_unit_word: *shop_noun}
     answer_derivation: {kind: slot_gloss, slot: quantity_unit_word}
-    feedback_frame: {text: "{quantity_unit_word} is a shopping-related word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{quantity_unit_word} is a word for shopping and paying.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_match.002
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: matching_pairs
@@ -167,11 +187,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_match.002
     lesson_content_key: fa.a1.unit08.lesson05.paying
     type: matching_pairs
-    frame: {text: "Match each payment word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *payment_word, second: *payment_word, third: *payment_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third]}
-    feedback_frame: {text: "Match each payment word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each shopping word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *shop_word_any, second: *shop_word_any, third: *shop_word_any, fourth: *shop_word_any, fifth: *shop_word_any, sixth: *shop_word_any}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each shopping word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_translate.003
     lesson_content_key: fa.a1.unit08.lesson05.paying
     type: translation
@@ -200,7 +220,7 @@ templates:
     frame: {text: "{service_role_word}", language_code: fa, direction: rtl}
     slots: {service_role_word: *shop_noun}
     answer_derivation: {kind: slot_gloss, slot: service_role_word}
-    feedback_frame: {text: "{service_role_word} is a shopping-related word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{service_role_word} is a word for shopping and paying.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson06.service_role_match.004
     lesson_content_key: fa.a1.unit08.lesson06.market_dialogue
     type: matching_pairs
@@ -219,16 +239,14 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit08.lesson03.quantity_unit_word_order.009
     lesson_content_key: fa.a1.unit08.lesson03.quantities_in_shopping
     type: word_order
-    frame: {text: "{quantity_unit_word_one} و {quantity_unit_word_two}", language_code: fa, direction: rtl}
-    slots: {quantity_unit_word_one: *quantity_unit_word, quantity_unit_word_two: *quantity_unit_word}
-    slot_relations: [{kind: distinct, slots: [quantity_unit_word_one, quantity_unit_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{quantity_unit_word_one} و {quantity_unit_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "و joins two quantity words.", language_code: en, direction: ltr}
+    frame: {text: "{per_kilo} سی تومنه", language_code: fa, direction: rtl}
+    slots: {per_kilo: *per_kilo_single}
+    answer_derivation: {kind: render_frame, frame: {text: "{per_kilo} سی تومنه", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "کیلویی سی تومنه means \"It's 30 toman per kilo.\" The price comes after کیلویی.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit08.lesson05.payment_word_order.010
     lesson_content_key: fa.a1.unit08.lesson05.paying
     type: word_order
-    frame: {text: "{payment_word_one} و {payment_word_two}", language_code: fa, direction: rtl}
-    slots: {payment_word_one: *payment_word, payment_word_two: *payment_word}
-    slot_relations: [{kind: distinct, slots: [payment_word_one, payment_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{payment_word_one} و {payment_word_two}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "و joins two payment-related words, like قیمت و تخفیف.", language_code: en, direction: ltr}
+    frame: {text: "{cash} حساب می‌کنم", language_code: fa, direction: rtl}
+    slots: {cash: *cash_single}
+    answer_derivation: {kind: render_frame, frame: {text: "{cash} حساب می‌کنم", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "نقدی حساب می‌کنم means \"I'll pay in cash.\" The verb حساب می‌کنم comes last.", language_code: en, direction: ltr}
