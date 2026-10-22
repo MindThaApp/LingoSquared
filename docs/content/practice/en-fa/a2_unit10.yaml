@@ -6,7 +6,18 @@ unit_content_key: fa.a2.unit10.opinions
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1)-(2)
+    dialogue_word_choice.001 / dialogue_word_match.002 used the course-wide
+    dialogue_word tag: +21 unit09 registry-office words in Endless Practice (incl. ۲۲۱۴
+    '2214 (tracking code)', سارا) plus the names نگار/آرش as MC/matching cards, so 'a
+    word from this unit's office-debate dialogue' was false; now the lesson04 tag, no
+    proper nouns/particles (13). (3) opinion_match.002 was 6 pairs from a 6-word pool:
+    now lesson01+lesson04 nouns (10). (4) opinion_phrase_match.008 was 7 of 7: now 6 of
+    7. Gloss-lane: دوست is glossed 'friend' but the unit only uses it in 'I like (seeing
+    my colleagues)'. NATIVE FLAGS: none.
+
     Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
     part of the same pass as a1_unit06.yaml/a1_unit07.yaml/a1_unit08.yaml/
     a2_unit09.yaml -- see a1_unit06.yaml's notes for the shared
@@ -131,13 +142,14 @@ review:
 tag_schema:
   part_of_speech: [noun, proper_noun, phrase, adjective, verb, adverb, particle]
   agreement_tags:
-    semantic: [opinion_word, family_message_word, opinion_phrase, dialogue_word]
+    semantic: [opinion_word, family_message_word, opinion_phrase, en_fa_a2_unit10_lesson01_words, en_fa_a2_unit10_lesson04_words]
 slot_presets:
   opinion_word: &opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: opinion_word}}
   family_message_word: &family_message_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: family_message_word}}
   family_or_opinion_word: &family_or_opinion_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [family_message_word, opinion_word]}}
   opinion_phrase: &opinion_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: opinion_phrase}}
-  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [adjective, verb, proper_noun, adverb, noun, particle], agreement_tags: {semantic: dialogue_word}}
+  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [adjective, verb, adverb, noun], agreement_tags: {semantic: en_fa_a2_unit10_lesson04_words}}
+  opinion_or_debate_noun: &opinion_or_debate_noun {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [en_fa_a2_unit10_lesson01_words, en_fa_a2_unit10_lesson04_words]}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit10.lesson01.opinion_choice.001
     lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
@@ -150,7 +162,7 @@ templates:
     lesson_content_key: fa.a2.unit10.lesson01.opinions_vocabulary
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *opinion_word, second: *opinion_word, third: *opinion_word, fourth: *opinion_word, fifth: *opinion_word, sixth: *opinion_word}
+    slots: {first: *opinion_or_debate_noun, second: *opinion_or_debate_noun, third: *opinion_or_debate_noun, fourth: *opinion_or_debate_noun, fifth: *opinion_or_debate_noun, sixth: *opinion_or_debate_noun}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -217,9 +229,8 @@ templates:
       fourth: *opinion_phrase
       fifth: *opinion_phrase
       sixth: *opinion_phrase
-      seventh: *opinion_phrase
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh]}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit10.lesson04.opinion_phrase_translate.009
     lesson_content_key: fa.a2.unit10.lesson04.office_debate_dialogue
