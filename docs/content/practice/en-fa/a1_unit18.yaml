@@ -6,7 +6,19 @@ unit_content_key: fa.a1.unit18.work
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) two word_order
+    feedbacks rendered the Persian token inside English ('means I work at a شرکت'); reworded
+    with '...'. (2) lesson02/lesson03 match frames/feedback exposed lesson cross-references
+    ('lesson02's new words with lesson01's...'); neutral wording. (3) matching pools equal
+    to slot count (lesson02 8/8, lesson03 6/6, lesson06 8/8): lesson01-03 matches now 6
+    slots over lesson01-03 words (8), lesson06 6 over the unit (10). (4) workplace_translate
+    pooled در 'in / at' (colloquial تو is equally right; در is also 'door'); now workplace
+    nouns only, unused presets removed. NATIVE FLAGS: practice mirrors the unit's 'در یک
+    شرکت کار می‌کنم'; spoken Tehran would be 'تو یه شرکت کار می‌کنم' -- realization-level
+    call.
+
     Authored 2026-07-07 for the new A1 unit18 (work) realization -- en-fa's
     A1 pack grew 17->19 units this session with zero prior Endless Practice
     coverage. Extended scripts/backfill_lexemes.py's UNIT_FILES tuple and
@@ -153,17 +165,19 @@ tag_schema:
   agreement_tags:
     semantic:
       [job_asking_word, occupation_self_phrase, workplace_word,
-       workplace_grammar_word, occupation_third_person]
+       workplace_grammar_word, occupation_third_person,
+       en_fa_a1_unit18_words, en_fa_a1_unit18_lesson01_words,
+       en_fa_a1_unit18_lesson02_words, en_fa_a1_unit18_lesson03_words]
 slot_presets:
   occupation_self_phrase: &occupation_self_phrase {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: occupation_self_phrase}}
   job_asking_word: &job_asking_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: job_asking_word}}
   workplace_word: &workplace_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: workplace_word}}
   occupation_third_person: &occupation_third_person {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: occupation_third_person}}
   job_or_occupation: &job_or_occupation {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [job_asking_word, occupation_self_phrase]}}
-  job_or_occupation_or_workplace: &job_or_occupation_or_workplace {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [job_asking_word, occupation_self_phrase, workplace_word]}}
-  occupation_or_workplace: &occupation_or_workplace {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [occupation_self_phrase, workplace_word]}}
   occupation_self_or_third: &occupation_self_or_third {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: [occupation_self_phrase, occupation_third_person]}}
-  workplace_or_grammar: &workplace_or_grammar {language_code: fa, part_of_speech: [noun, preposition], agreement_tags: {semantic: [workplace_word, workplace_grammar_word]}}
+  # Review 2026-10-22: matching pools wider than the slot count (variety).
+  job_early_word: &job_early_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [en_fa_a1_unit18_lesson01_words, en_fa_a1_unit18_lesson02_words, en_fa_a1_unit18_lesson03_words]}}
+  job_review_word: &job_review_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: en_fa_a1_unit18_words}}
 templates:
   # Lesson 1: basic occupation vocabulary (مهندسم, معلمم, دکترم).
   - content_key: practice.en-fa.fa.a1.unit18.lesson01.occupation_choice.001
@@ -177,7 +191,7 @@ templates:
     lesson_content_key: fa.a1.unit18.lesson01.basic_job_vocab
     type: matching_pairs
     frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *occupation_or_workplace, second: *occupation_or_workplace, third: *occupation_or_workplace, fourth: *occupation_or_workplace, fifth: *occupation_or_workplace, sixth: *occupation_or_workplace}
+    slots: {first: *job_early_word, second: *job_early_word, third: *job_early_word, fourth: *job_early_word, fifth: *job_early_word, sixth: *job_early_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word or phrase to its English meaning.", language_code: en, direction: ltr}
@@ -200,19 +214,11 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit18.lesson02.job_asking_review_match.002
     lesson_content_key: fa.a1.unit18.lesson02.asking_about_job
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- this lesson's words plus a review of lesson01's and lesson03's.", language_code: en, direction: ltr}
-    slots:
-      r1: *job_or_occupation_or_workplace
-      r2: *job_or_occupation_or_workplace
-      r3: *job_or_occupation_or_workplace
-      r4: *job_or_occupation_or_workplace
-      r5: *job_or_occupation_or_workplace
-      r6: *job_or_occupation_or_workplace
-      r7: *job_or_occupation_or_workplace
-      r8: *job_or_occupation_or_workplace
-    slot_relations: [{kind: distinct, slots: [r1, r2, r3, r4, r5, r6, r7, r8]}]
-    answer_derivation: {kind: matching_pairs, slots: [r1, r2, r3, r4, r5, r6, r7, r8]}
-    feedback_frame: {text: "This combines lesson02's new words with lesson01's and lesson03's review vocabulary.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *job_early_word, second: *job_early_word, third: *job_early_word, fourth: *job_early_word, fifth: *job_early_word, sixth: *job_early_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each job word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson02.job_asking_translate.003
     lesson_content_key: fa.a1.unit18.lesson02.asking_about_job
     type: translation
@@ -233,24 +239,24 @@ templates:
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *occupation_or_workplace, second: *occupation_or_workplace, third: *occupation_or_workplace, fourth: *occupation_or_workplace, fifth: *occupation_or_workplace, sixth: *occupation_or_workplace}
+    slots: {first: *job_early_word, second: *job_early_word, third: *job_early_word, fourth: *job_early_word, fifth: *job_early_word, sixth: *job_early_word}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "These combine lesson03's new words with a review of lesson01's.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each job or workplace word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_translate.003
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: translation
-    frame: {text: "{workplace_or_grammar}", language_code: en, direction: ltr, slot_rendering: {workplace_or_grammar: english_gloss}}
-    slots: {workplace_or_grammar: *workplace_or_grammar}
-    answer_derivation: {kind: slot_text, slot: workplace_or_grammar}
-    feedback_frame: {text: "The Farsi word is {workplace_or_grammar}.", language_code: en, direction: ltr}
+    frame: {text: "{workplace_word}", language_code: en, direction: ltr, slot_rendering: {workplace_word: english_gloss}}
+    slots: {workplace_word: *workplace_word}
+    answer_derivation: {kind: slot_text, slot: workplace_word}
+    feedback_frame: {text: "The Farsi word is {workplace_word}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit18.lesson03.workplace_have_order.004
     lesson_content_key: fa.a1.unit18.lesson03.workplace_vocab
     type: word_order
     frame: {text: "در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}
     slots: {workplace_word: *workplace_word}
     answer_derivation: {kind: render_frame, frame: {text: "در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "در یک {workplace_word} کار می‌کنم means I work at a {workplace_word}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "در یک ... کار می‌کنم means 'I work at a ...', as in در یک شرکت کار می‌کنم (I work at a company).", language_code: en, direction: ltr}
 
   # Lesson 4: describing a work routine.
   - content_key: practice.en-fa.fa.a1.unit18.lesson04.workplace_every_day_order.001
@@ -259,7 +265,7 @@ templates:
     frame: {text: "هر روز در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}
     slots: {workplace_word: *workplace_word}
     answer_derivation: {kind: render_frame, frame: {text: "هر روز در یک {workplace_word} کار می‌کنم", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "هر روز در یک {workplace_word} کار می‌کنم means I work at a {workplace_word} every day.", language_code: en, direction: ltr}
+    feedback_frame: {text: "هر روز در یک ... کار می‌کنم means 'I work at a ... every day.'", language_code: en, direction: ltr}
 
   # Lesson 5: reading a work profile (مهندسه is native here).
   - content_key: practice.en-fa.fa.a1.unit18.lesson05.occupation_choice.001
@@ -302,19 +308,8 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit18.lesson06.unit_review_match.004
     lesson_content_key: fa.a1.unit18.lesson06.jobs_dialogue
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's job vocabulary.", language_code: en, direction: ltr}
-    slots:
-      op1: *occupation_self_phrase
-      op2: *occupation_self_phrase
-      op3: *occupation_self_phrase
-      ww1: *workplace_word
-      ww2: *workplace_word
-      ww3: *workplace_word
-      ot1: *occupation_third_person
-      ot2: *occupation_third_person
-    slot_relations:
-      - {kind: distinct, slots: [op1, op2, op3]}
-      - {kind: distinct, slots: [ww1, ww2, ww3]}
-      - {kind: distinct, slots: [ot1, ot2]}
-    answer_derivation: {kind: matching_pairs, slots: [op1, op2, op3, ww1, ww2, ww3, ot1, ot2]}
-    feedback_frame: {text: "This reviews the occupation, workplace, and third-person job vocabulary taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *job_review_word, second: *job_review_word, third: *job_review_word, fourth: *job_review_word, fifth: *job_review_word, sixth: *job_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each job word to its English meaning.", language_code: en, direction: ltr}
