@@ -6,7 +6,20 @@ unit_content_key: fa.a1.unit14.preferences
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1)
+    unit14_review_word (3 MC + 3 matching) re-pooled from the reviewed_phrase-inclusive
+    union (416 course-wide candidates in Endless, incl. full sentences and an 'I like' gloss
+    collision) onto en_fa_a1_unit14_words (6, unit-only; matching stays at its honest 6/6
+    ceiling). (2) preference_reason_order.006: the checkpoint's only preference_word is
+    موسیقی, so half the items were 'موسیقی رو دوست دارم چون خوشمزه‌ست' (music ... because
+    it's delicious); now a single slot with a fixed جالبه. (3) MC feedback no longer says
+    'vocabulary from this unit's preferences lessons'. NATIVE FLAGS: Endless can render
+    'قهوه/چای رو دوست دارم چون جالبه' -- natural enough? Typed 'tea' accepts only چای (not
+    چایی), 'it's delicious' only خوشمزه‌ست (not خوشمزه است) -- translation has no
+    alternatives field.
+
     Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
     units 12-15), same pass as a1_unit12.yaml/a1_unit13.yaml/
     a1_unit15.yaml -- see a1_unit12.yaml's notes for the shared
@@ -168,7 +181,7 @@ review:
 tag_schema:
   part_of_speech: [noun, verb, pronoun, adverb, particle, phrase]
   agreement_tags:
-    semantic: [preference_word, preference_reason, asking_word, reviewed_phrase]
+    semantic: [preference_word, preference_reason, asking_word, reviewed_phrase, en_fa_a1_unit14_words]
 slot_presets:
   preference_word: &preference_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: preference_word}}
   preference_reason: &preference_reason {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: preference_reason}}
@@ -178,11 +191,11 @@ slot_presets:
   # taught again in this unit's own realization but their canonical
   # lexeme spec is attributed to an EARLIER unit that taught the same bare
   # token first, so generate_checkpoint() can never see them for THIS
-  # unit). This union of every one of this unit's 3 real narrow tags plus
-  # its own reviewed_phrase items is literally the unit's entire real
+  # unit). Now pooled on en_fa_a1_unit14_words (review 2026-10-22), which is
+  # literally the unit's entire real
   # vocabulary (6 distinct) -- used, at its ceiling, to re-anchor the
   # below-floor/DEAD MC and matching_pairs templates.
-  unit14_review_word: &unit14_review_word {language_code: fa, part_of_speech: [noun, verb, adverb, phrase], agreement_tags: {semantic: [preference_word, preference_reason, asking_word, reviewed_phrase]}}
+  unit14_review_word: &unit14_review_word {language_code: fa, part_of_speech: [noun, verb, adverb, phrase], agreement_tags: {semantic: en_fa_a1_unit14_words}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_choice.001
     lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
@@ -190,7 +203,7 @@ templates:
     frame: {text: "{preference_word}", language_code: fa, direction: rtl}
     slots: {preference_word: *unit14_review_word}
     answer_derivation: {kind: slot_gloss, slot: preference_word}
-    feedback_frame: {text: "{preference_word} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{preference_word} is a word or phrase for talking about what you like.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson02.preference_word_match.002
     lesson_content_key: fa.a1.unit14.lesson02.asking_preferences
     type: matching_pairs
@@ -212,7 +225,7 @@ templates:
     frame: {text: "{preference_reason}", language_code: fa, direction: rtl}
     slots: {preference_reason: *unit14_review_word}
     answer_derivation: {kind: slot_gloss, slot: preference_reason}
-    feedback_frame: {text: "{preference_reason} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{preference_reason} is a word or phrase for talking about what you like.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_match.001
     lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
     type: matching_pairs
@@ -234,7 +247,7 @@ templates:
     frame: {text: "{asking_word}", language_code: fa, direction: rtl}
     slots: {asking_word: *unit14_review_word}
     answer_derivation: {kind: slot_gloss, slot: asking_word}
-    feedback_frame: {text: "{asking_word} is vocabulary from this unit's preferences lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{asking_word} is a word or phrase for talking about what you like.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit14.lesson03.asking_word_match.002
     lesson_content_key: fa.a1.unit14.lesson03.choosing_between_options
     type: matching_pairs
@@ -267,7 +280,7 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit14.lesson04.preference_reason_order.006
     lesson_content_key: fa.a1.unit14.lesson04.giving_reasons
     type: word_order
-    frame: {text: "{preference_word} رو دوست دارم چون {preference_reason}", language_code: fa, direction: rtl}
-    slots: {preference_word: *preference_word, preference_reason: *preference_reason}
-    answer_derivation: {kind: render_frame, frame: {text: "{preference_word} رو دوست دارم چون {preference_reason}", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "چون introduces a reason, as in قهوه رو دوست دارم چون خوشمزه‌ست.", language_code: en, direction: ltr}
+    frame: {text: "{preference_word} رو دوست دارم چون جالبه", language_code: fa, direction: rtl}
+    slots: {preference_word: *preference_word}
+    answer_derivation: {kind: render_frame, frame: {text: "{preference_word} رو دوست دارم چون جالبه", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "چون introduces a reason, as in موسیقی رو دوست دارم چون جالبه.", language_code: en, direction: ltr}
