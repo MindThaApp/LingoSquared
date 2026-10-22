@@ -5,20 +5,15 @@ target_language: fa
 unit_content_key: fa.b1.unit14.reported_messages
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: >-
-    21 distinct fa lexemes across 6 lessons with lexemes (goft_ke_message, khabar_dad_ke, azm_khast_ke,
-    dialogue_messages, reading_messages, wrapup_production). matching_pairs anchored to reading_messages
-    (8 pairs), pooled over the unit-wide non-proper-noun distinct tokens (21 available). Template mix:
-    recognition(multiple_choice)=6, structured(matching_pairs x2, word_order x1)=3, production(translation)=6, total=15.
-    No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes
-    such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit
-    realization teaches).
-    Polish 2026-07-25: match.003 slots switched from bare-POS to message_summary_word (9 unit tokens,
-    no course-scope extras) so Endless Practice stays on-theme; added a reporting-verb matching
-    (reported_speech_verb, 8 tokens) and a word_order mirroring the realization (goft ke jalase aghab
-    oftaade) anchored by reported_speech_verb narrowed to part_of_speech adverb (single distinct
-    course candidate aghab).
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes).
+    (1) All six choose templates had no semantic tag (course 449: whole B1 level in Endless) -> unit words (en_fa_b1_unit14_words, 17). (2) The six translate templates likewise untagged -> lesson01/03/04/05/06 words (15): lesson02 is left out because aamaade-st 'is ready' shares its gloss with haazere elsewhere in B1 (underdetermined typed answer). (3) lesson05.match.003 pooled 9 message words for 8 pairs (same cards every time) -> unit words (17). (4) choose feedback 'introduced in this unit' -> 'from this unit'.
+    Checked: order.003 'علی گفت که جلسه عقب افتاده.' natural; azam/azat/azesh/behesh carry only pronoun_incorporated_prep and stay out of the pools.
+    NATIVE FLAGS: confirm aamaade-st (آماده‌ست) is the spelling the unit wants (spoken also آماده‌س); glosses 'behind (as in to be delayed)' / 'has fallen / has been' describe the idiom 'aghab oftaade' piecewise.
+
+    21 distinct fa lexemes across 6 lessons with lexemes (goft_ke_message, khabar_dad_ke, azm_khast_ke, dialogue_messages, reading_messages, wrapup_production). matching_pairs anchored to reading_messages (8 pairs), pooled over the unit-wide non-proper-noun distinct tokens (21 available). Template mix: recognition(multiple_choice)=6, structured(matching_pairs x2, word_order x1)=3, production(translation)=6, total=15. No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit realization teaches). Polish 2026-07-25: match.003 slots switched from bare-POS to message_summary_word (9 unit tokens, no course-scope extras) so Endless Practice stays on-theme; added a reporting-verb matching (reported_speech_verb, 8 tokens) and a word_order mirroring the realization (goft ke jalase aghab oftaade) anchored by reported_speech_verb narrowed to part_of_speech adverb (single distinct course candidate aghab).
 tag_schema:
   part_of_speech:
   - symbol
@@ -35,6 +30,12 @@ tag_schema:
     semantic:
     - message_summary_word
     - reported_speech_verb
+    - en_fa_b1_unit14_words
+    - en_fa_b1_unit14_lesson01_words
+    - en_fa_b1_unit14_lesson03_words
+    - en_fa_b1_unit14_lesson04_words
+    - en_fa_b1_unit14_lesson05_words
+    - en_fa_b1_unit14_lesson06_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit14.lesson01.choose.001
   lesson_content_key: fa.b1.unit14.lesson01.goft_ke_message
@@ -51,14 +52,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson01.translate.002
@@ -78,9 +78,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -103,14 +107,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson02.translate.002
@@ -130,9 +133,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -155,14 +162,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson03.translate.002
@@ -182,9 +188,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -207,14 +217,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson04.translate.002
@@ -234,9 +243,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -259,14 +272,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson05.translate.002
@@ -286,9 +298,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -311,14 +327,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit14.lesson06.translate.002
@@ -338,9 +353,13 @@ templates:
       - verb
       - adjective
       - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic:
+        - en_fa_b1_unit14_lesson01_words
+        - en_fa_b1_unit14_lesson03_words
+        - en_fa_b1_unit14_lesson04_words
+        - en_fa_b1_unit14_lesson05_words
+        - en_fa_b1_unit14_lesson06_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -356,7 +375,7 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &id001
+    first:
       language_code: fa
       part_of_speech:
       - noun
@@ -364,17 +383,73 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: message_summary_word
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
-    seventh: *id001
-    eighth: *id001
+        semantic: en_fa_b1_unit14_words
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    seventh:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
+    eighth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit14_words
   slot_relations:
   - kind: distinct
-    slots: &id002
+    slots:
     - first
     - second
     - third
@@ -385,7 +460,15 @@ templates:
     - eighth
   answer_derivation:
     kind: matching_pairs
-    slots: *id002
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+    - seventh
+    - eighth
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
     language_code: en
@@ -398,21 +481,51 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &id003
+    first:
       language_code: fa
       part_of_speech:
       - verb
       - adverb
       agreement_tags:
         semantic: reported_speech_verb
-    second: *id003
-    third: *id003
-    fourth: *id003
-    fifth: *id003
-    sixth: *id003
+    second:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+    third:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - verb
+      - adverb
+      agreement_tags:
+        semantic: reported_speech_verb
   slot_relations:
   - kind: distinct
-    slots: &id004
+    slots:
     - first
     - second
     - third
@@ -421,7 +534,13 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots: *id004
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each Persian reporting verb form with its English meaning.
     language_code: en
