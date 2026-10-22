@@ -1206,7 +1206,7 @@ FA_GLOSSES = {
     "کوچیکی": "small; little (indefinite adjective form)", "به دنیا اومد": "was born (lit. 'came to the world')", "آروم": "calm; quiet",
     "کمکش": "help him/her (object suffix)", "می‌کردن": "they were doing / used to do (imperfect, 3rd plural)", "برگرده": "(that) he/she return (subjunctive)",
     # Unit 11 (reported speech: reported questions, pronoun shift, plural گفتن).
-    "پرسید": "he/she asked", "کِی": "when (explicit kasre diacritic, not 'who')", "میای": "you're coming (colloquial, 2nd person)",
+    "پرسید": "he/she asked", "کِی": "when", "میای": "you're coming (colloquial, 2nd person)",
     "میری": "you're going (colloquial, 2nd person)", "خودش": "himself / herself", "می‌ره": "he/she goes (colloquial, 3rd person)",
     "گفتیم": "we said", "داریم": "we have", "گفتید": "you (pl./formal) said",
     "میاید": "you (pl./formal) are coming", "بهم": "to me (colloquial)", "من و": "... and I (lit. 'I and', as in 'Maryam and I')",
