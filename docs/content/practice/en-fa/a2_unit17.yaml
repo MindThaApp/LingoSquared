@@ -5,8 +5,28 @@ target_language: fa
 unit_content_key: fa.a2.unit17.weekly_schedule
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5 fixes). (1) The eleven
+    MC/translation slots had no semantic tag: in Endless Practice they pooled every A2
+    noun/adj/verb (88-314 candidates), and at unit scope lesson01-03 items drew words
+    first taught in later lessons. Slots now use the unit's lesson tags cumulatively
+    (lessonNN draws lessons 01..NN; lesson04 the unit tag); l03.choose.001 uses lesson03
+    only. (2) The two list word_order frames pooled every noun and rendered
+    ungrammatical lists with bound forms (برنامه‌ی, دوستامو, برنامه‌ت, and course-wide
+    آدرسمو, تعمیرش ...): now the weekday tag (شنبه ... جمعه, plus سه‌شنبه course-wide),
+    which gives natural lists. (3) Underdetermined: خوبی is glossed 'good' (it is خوب +
+    indefinite ی from هفته‌ی خوبی داری) and the typed prompt 'good' expects خوبی; it is
+    now out of every typed pool (still in l04.choose.001 recognition). (4) Feedback:
+    l02.choose.001 'used when sequencing your week' and l03.choose.001 'appears in the
+    written weekly schedule' were false for most of the pool / for bare برنامه:
+    reworded. (5) l03.match.002 had exactly six unit-scope cards (reviewed_phrase only,
+    same six every time): now reviewed_phrase + lesson01-03 tags. Gloss lane: خوبی
+    'good' should read like 'a good (one) (indefinite)'; it collides with خوب 'good'
+    (unit16). NATIVE FLAGS: هفته‌ات (taught) vs colloquial هفته‌ت -- only the taught
+    spelling is accepted in typed translation.
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint (the unit had lexemes in scripts/backfill_lexemes.py but no
     practice pack at all, so generate_checkpoint() returned checkpoint_unavailable).
@@ -109,6 +129,11 @@ tag_schema:
     - reviewed_phrase
     - routine_connector
     - weekday
+    - en_fa_a2_unit17_words
+    - en_fa_a2_unit17_lesson01_words
+    - en_fa_a2_unit17_lesson02_words
+    - en_fa_a2_unit17_lesson03_words
+    - en_fa_a2_unit17_lesson04_words
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit17.lesson01.choose.001
@@ -123,6 +148,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -234,10 +262,16 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - weekday
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - weekday
   slot_relations:
   - kind: distinct
     slots:
@@ -268,6 +302,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -291,11 +328,15 @@ templates:
       - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is used in this unit when sequencing your week.'
+    text: '{item} is a word from this unit''s lessons on the weekly schedule.'
     language_code: en
     direction: ltr
 
@@ -311,14 +352,23 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - weekday
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - weekday
     third:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - weekday
   slot_relations:
   - kind: distinct
     slots:
@@ -352,6 +402,10 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -374,11 +428,14 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} appears in the written weekly schedule.'
+    text: '{item} is a word from the lesson on reading a weekly schedule.'
     language_code: en
     direction: ltr
 
@@ -398,6 +455,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
     second:
       language_code: fa
       part_of_speech:
@@ -406,6 +466,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
     third:
       language_code: fa
       part_of_speech:
@@ -414,6 +477,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
     fourth:
       language_code: fa
       part_of_speech:
@@ -422,6 +488,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
     fifth:
       language_code: fa
       part_of_speech:
@@ -430,6 +499,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
     sixth:
       language_code: fa
       part_of_speech:
@@ -438,6 +510,9 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
   slot_relations:
   - kind: distinct
     slots:
@@ -477,6 +552,11 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson01_words
+        - en_fa_a2_unit17_lesson02_words
+        - en_fa_a2_unit17_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -500,6 +580,9 @@ templates:
       - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -520,6 +603,9 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -649,6 +735,9 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -671,6 +760,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit17_words
   answer_derivation:
     kind: slot_text
     slot: item
