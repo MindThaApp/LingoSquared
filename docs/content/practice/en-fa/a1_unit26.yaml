@@ -6,8 +6,11 @@ unit_content_key: fa.a1.unit26.animals
 
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) feedback: lesson04.choose.001 said every item 'describes a pet's color or size' (false for خوشگل/گربه‌ی) -> 'is used when describing a pet'. (2) feedback: lesson05.choose.001 'talking about a pet's name' (false for سگم) -> 'talking about a pet'. (3) underdetermined: lesson04.translate.003 dropped the ezafe form گربه‌ی (spelling-ambiguous typed answer), now adjective+verb (خوشگل, سفیده, خوشگله). (4) matching-pool: match.004 pool equalled the 6 slots; widened with pet_name/pet_food/pet_description nouns+adjectives (11). NATIVE FLAGS: سگم رو غذا می‌دم (fill.003, mirrors the unit; standard به سگم غذا می‌دم) and من حیوان دارم (written حیوان vs spoken حیوون).
+
     Vocabulary unit (pets/animals, 36 fa lexemes across all 6 lessons).
     'animal_word' (lessons01-02) is unioned for the recognition/production
     workhorse (حیوان/سگ/گربه/پرنده/ماهی, 5 distinct) and widened with
@@ -195,7 +198,7 @@ templates:
       agreement_tags: {semantic: pet_description_word}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} describes a pet''s color or size.'
+    text: '{item} is used when describing a pet.'
     language_code: en
     direction: ltr
 
@@ -227,7 +230,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adjective]
+      part_of_speech: [adjective, verb]
       agreement_tags: {semantic: pet_description_word}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
@@ -247,7 +250,7 @@ templates:
       agreement_tags: {semantic: pet_name_word}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used when talking about a pet''s name.'
+    text: '{item} is used when talking about a pet.'
     language_code: en
     direction: ltr
 
@@ -334,7 +337,7 @@ templates:
     first: &animal
       language_code: fa
       part_of_speech: [noun, adjective]
-      agreement_tags: {semantic: [animal_word, pet_word]}
+      agreement_tags: {semantic: [animal_word, pet_word, pet_name_word, pet_food_word, pet_description_word]}
     second: *animal
     third: *animal
     fourth: *animal

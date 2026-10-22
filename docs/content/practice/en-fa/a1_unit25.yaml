@@ -6,8 +6,11 @@ unit_content_key: fa.a1.unit25.appearance
 
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) persian: lesson01.order.002 frame 'او {item}.' -> 'او قدش {item}.' (unit teaches height via قدش بلنده/کوتاهه). (2) underdetermined: lesson04.translate.003 narrowed to noun (عینک) - شکلیه/رنگیه are fragments of چه شکلیه؟/چه رنگیه؟, so learners typing the full question were marked wrong. (3) underdetermined: lesson06.translate.002 re-pooled onto nouns+adjectives of the four lesson tags (dialogue vocabulary) for the same reason. (4) matching-pool: match.004 pool was exactly 6 adjectives (same cards every time); widened to nouns+adjectives of the lesson-tag union (14), feedback reworded. NATIVE FLAGS: frames use written-style او with colloquial verbs (او قدش بلنده, او عینک می‌زنه), mirroring the unit; colloquial would be اون.
+
     Vocabulary unit (physical appearance: height/hair/eyes/glasses). Lessons
     01-04 and 06 have lexemes (44 fa lexemes total); lesson05
     (reading_about_nima) has ZERO lexemes per backfill_lexemes and is
@@ -69,7 +72,7 @@ templates:
 - content_key: practice.en-fa.fa.a1.unit25.lesson01.order.002
   lesson_content_key: fa.a1.unit25.lesson01.height
   type: word_order
-  frame: {text: 'او {item}.', language_code: fa, direction: rtl}
+  frame: {text: 'او قدش {item}.', language_code: fa, direction: rtl}
   slots:
     item:
       language_code: fa
@@ -77,9 +80,9 @@ templates:
       agreement_tags: {semantic: height_word}
   answer_derivation:
     kind: render_frame
-    frame: {text: 'او {item}.', language_code: fa, direction: rtl}
+    frame: {text: 'او قدش {item}.', language_code: fa, direction: rtl}
   feedback_frame:
-    text: '"او {item}." describes someone''s height.'
+    text: '"او قدش {item}." describes someone''s height.'
     language_code: en
     direction: ltr
 
@@ -248,7 +251,7 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, verb]
+      part_of_speech: noun
       agreement_tags: {semantic: appearance_question_word}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
@@ -284,15 +287,15 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, verb]
-      agreement_tags: {semantic: appearance_question_word}
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: [height_word, hair_word, eye_word, appearance_question_word]}
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: 'Type the Farsi word for {item}.'
     language_code: en
     direction: ltr
 
-# --- unit-wide matching_pairs over the appearance_adjective union ---
+# --- unit-wide matching_pairs over the lesson-tag union (nouns + adjectives) ---
 - content_key: practice.en-fa.fa.a1.unit25.lesson03.match.004
   lesson_content_key: fa.a1.unit25.lesson03.eyes
   type: matching_pairs
@@ -303,8 +306,8 @@ templates:
   slots:
     first: &appadj
       language_code: fa
-      part_of_speech: adjective
-      agreement_tags: {semantic: appearance_adjective}
+      part_of_speech: [noun, adjective]
+      agreement_tags: {semantic: [height_word, hair_word, eye_word, appearance_question_word]}
     second: *appadj
     third: *appadj
     fourth: *appadj
@@ -317,6 +320,6 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: 'These are the unit''s height/hair/eye-color adjectives.'
+    text: 'These are words for describing what someone looks like.'
     language_code: en
     direction: ltr
