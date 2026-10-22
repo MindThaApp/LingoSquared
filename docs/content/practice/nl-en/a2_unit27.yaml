@@ -5,157 +5,20 @@ target_language: en
 unit_content_key: en.a2.unit27.banking
 review:
   status: reviewed
-  fresh_context: "true"
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
-    Authored 2026-07-07 by the Claude session extending nl-en's practice
-    pool to unit27 (opening a bank account) and unit28 (attending a
-    doctor's appointment) together in one pass -- both units previously
-    had zero practice templates. Follows fa-en's already-authored
-    a2_unit27.yaml pack as the structural reference (same underlying
-    English target-language realization, only Dutch glosses/feedback text
-    differ): most of this unit's real content is multi-word banking
-    compounds ("checking account", "monthly fee", "minimum balance",
-    "direct deposit") that don't reduce to a single fillable slot, so the
-    two bare-word-recognition-only semantic tags fa-en already added to
-    scripts/_en_target_lexeme_common.py tonight are reused as-is, no
-    classifier change needed for this direction: "banking_noun" (account,
-    fee, balance, deposit, business, days, documents, teller) and
-    "banking_adjective" (checking, monthly, minimum, direct) -- both
-    deliberately not used in any shared generative frame (these nouns/
-    adjectives don't collocate uniformly: "keep a minimum {item}" only
-    works for "balance", not "fee"/"deposit"/"teller", etc., same
-    reasoning as unit25's bureaucracy_noun/unit26's dogpark_noun). Only
-    this file's own scripts/backfill_lexemes_nl_en.py Dutch-gloss
-    dict/UNIT_FILES_A2 tuple needed extending (already done alongside
-    unit28 in this same pass) -- no new classifier tags needed for unit27
-    itself, since fa-en's session already added banking_noun/
-    banking_adjective earlier tonight.
+    Review 2026-10-22 (nl-en practice pass, fresh context; 0 fixes). 0 fixes. NATIVE FLAGS: business gloss 'werk- (in werkdagen)' reads oddly as a bare-word prompt. BACKFILL GLOSS FLAGS: deposit.
 
-    One genuine generative frame identified (same one fa-en found):
-    lesson03's real reading text is "Your debit card will arrive in five
-    to seven business days." -- the already-established 'possessive' tag
-    (my/your/his/her, defined for unit06's family lessons, reused
-    identically by this pack's own unit26) generalizes this exact real
-    sentence with zero grammar loss ("My/His/Her debit card will arrive
-    in five to seven business days." all hold) -- a word_order template
-    anchored to lesson03. Deliberately used for word_order ONLY, not
-    listen_select/multiple_choice: this pack's own empirical check (a
-    standalone iter_specs()-driven harness against this session's real
-    backfill_lexemes_nl_en.py, scoped to only the A2-course-level specs,
-    matching how Lexeme rows are actually scoped per-course at runtime --
-    see docs/BUILD_LOG.md's content_key-uniqueness-per-course entry) found
-    only 2 real A2-scoped possessive candidates (my, your -- his/her are
-    never reintroduced in any A2 unit so far), below the >=3 multiple_
-    choice/listen_select floor even though scripts/_practice_slot_check.py
-    itself reports this tag as satisfying the floor (it flattens the
-    entire a1+a2 spec list into one pool rather than modeling the real
-    per-course runtime scoping split, a pre-existing characteristic of
-    that harness noted here rather than silently relied on). A more
-    conservative choice than a2_unit26.yaml's own existing
-    possessive_listen template (which this same empirical method would
-    flag the same way) -- flagging for whoever does this pack's
-    fresh-context review, not fixed retroactively here since it's outside
-    this task's scope.
-
-    Also reused: the already-established 'identity' tag (i/i'm/am/is/are/
-    what/what's/my/your, defined for unit01/02), anchored to lesson04
-    (real dialogue line "I have both with me. Is there a monthly fee?"),
-    bare-word recognition only -- confirmed 6 real A2-scoped candidates
-    (i, is, my, what, what's, your), comfortably above the floor.
-
-    ZERO fill_in_blank templates, matching fa-en's own unit27 pack and
-    this realization's own authoring note (states zero fill_in_blank
-    exercises at all): every noun/adjective candidate pool here is
-    bare-recognition-only by design, and the one genuinely generative
-    frame (possessive) is authored as word_order, which doesn't share
-    fill_in_blank's ambiguity risk. Ran
-    scripts/_fill_in_blank_ambiguity_check.py to confirm zero AMBIGUOUS
-    flags (no fill_in_blank templates exist to flag).
-
-    16 templates: 5 lesson01 (banking_noun x3 [choose/listen/translate] +
-    banking_adjective x2 [choose/listen]), 3 lesson02 (banking_noun x2
-    [choose/listen] + banking_adjective translate), 4 lesson03
-    (possessive word_order + banking_noun choose + banking_adjective
-    listen + banking_noun translate), 4 lesson04 (banking_noun
-    matching_pairs [8 pairs, the full course-wide pool, per
-    AUTHORING_GUIDE.md #16] + identity x2 [choose/listen] +
-    banking_adjective choose). Matches fa-en's own unit27 density
-    (16 templates) exactly, adjusted only to swap the lower-confidence
-    possessive_listen slot for an extra banking_noun translate.
-
-    Verified with scripts/_practice_slot_check.py (added this pack, and
-    a2_unit28.yaml, to scripts/practice_manifest.txt's nl-en line;
-    banking_noun has 8 distinct course-wide candidates, banking_adjective
-    4, identity 6, well above the >=3 multiple_choice/listen_select floor)
-    and compile_content.py practice-validate, 0 errors/0 warnings. Still
-    needs the standard fresh-context review before import.
-
-    RE-AUTHORED 2026-07-24 (unit-scope DEAD-template pass): the harness
-    warning in the possessive paragraph above turned out to understate the
-    real defect. scripts/_practice_unit_scope_check.py (the actual per-course
-    unit-scoped model, run against the real backfill_lexemes_nl_en.py)
-    confirmed 3 DEAD templates: lesson03.possessive_order.001 (0 unit-scoped
-    'possessive' candidates -- 'my'/'your' are BOTH pinned to unit25's own
-    lesson_content_key in the A2 dict, since backfill_lexemes*.py's en_specs
-    dict keys by bare token and only ever assigns provenance on first sight
-    per course -- see backfill_lexemes_nl_en.py:2873-2878's own comment),
-    lesson04.identity_choose.002 and lesson04.identity_listen.003 (0
-    unit-scoped 'identity' candidates -- every identity token pinned to
-    unit25/unit28/unit30, none to unit27; the "6 real A2-scoped candidates"
-    claimed above was never unit27-scoped, it was pooled across the whole
-    A2 course).
-
-    FIXES applied, PACK-ONLY (no backfill/realization/overlay edits):
-    (1) lesson03.possessive_order.001 -> RENAMED card_order.001, RE-ANCHORED
-    from 'possessive' to a new 'card_type' tag (noun, semantic: card_type --
-    'debit' is the only A2 course-wide card_type token, and it IS unit27's
-    own, per.a2.unit27.lesson01.banking_vocabulary). This is a genuine
-    single-member anchor (like the recipe's *_single convention, no new
-    backfill tag needed -- card_type already existed in
-    _en_target_lexeme_common.py, just unused by any pack), so the SAME real
-    sentence ("Your debit card will arrive in five to seven business days")
-    is kept, just with 'debit' itself as the slot instead of the (dead)
-    possessive determiner. Deterministic (1 candidate), no self-reference
-    (no literal word in the frame matches 'debit'), no ambiguity.
-    (2) lesson04.identity_choose.002/identity_listen.003 -> DROPPED (not
-    re-anchored): recognition tier already has 7 other live banking_noun/
-    banking_adjective MC+listen templates covering this unit's real 12
-    distinct nouns+adjectives, so re-anchoring these 2 to yet another
-    banking_noun/adjective MC/listen pair would only add redundant
-    recognition-tier depth while doing nothing for the pack's real gap,
-    which was structured tier (only 2 templates: the now-dead
-    possessive_order and the 8-pair banking_noun matching_pairs).
-    (3) ADDED 1 replacement structured template, anchored to genuinely
-    unit27-native vocab: lesson01.match_combined.006 (matching_pairs, 12
-    pairs = banking_noun's 8 UNION banking_adjective's 4, both entirely
-    unit27's own -- within AUTHORING_GUIDE #16's 6-12 range, no other-unit
-    padding). A second attempt -- lesson02.fill.004, fill_in_blank on the
-    same 'card_type' single-member anchor -- was tried and REVERTED:
-    card_type has only 1 candidate ('debit') within the A2 course, but
-    compile_content.py's fill_in_blank ambiguity check pools EVERY level of
-    the direction at once (SS6.5), and A1 unit15's "payment_words" lesson
-    also carries card_type on 'credit' -- 2 distinct direction-wide
-    candidates, hard-failed with "no other visible text in the frame to
-    disambiguate which one is correct". credit/debit are not true synonyms
-    (interchangeable: true would be dishonest here), so the template was
-    dropped rather than forced; card_order.001 (word_order) is unaffected
-    since word_order's grammaticality bar is COURSE-scoped (A2 only, where
-    card_type really does have exactly 1 member), not direction-wide.
-
-    Net result: 16 templates before -> 15 templates after (3 dropped, 1
-    renamed+re-anchored, 1 added), all now unit-scope LIVE. Tier counts
-    after the fix: recognition 9 (banking_noun/adjective MC+listen across
-    all 4 lessons), structured 3 (card_order word_order, banking_noun
-    8-pair match, banking_combined 12-pair match), production 3
-    (banking_noun/adjective translate x3) -- all three tiers now clear the
-    >=3-templates bar from the recipe's SS8 table (previously structured was
-    1 live template after removing the dead possessive_order, well under
-    the bar). Verified 0 DEAD/0 FLOOR for this pack with scripts/
-    _practice_unit_scope_check.py and 0 errors with compile_content.py
-    practice-validate. tag_schema/slot_presets updated: dropped the
-    now-unused 'possessive'/'identity' tags and presets, added 'card_type'
-    and the 'banking_combined' union preset. Still needs the standard
-    fresh-context review before import.
+    Authored 2026-07-07 by the Claude session extending nl-en's practice pool to unit27 (opening a bank account) and unit28 (attending a doctor's appointment) together in one pass -- both units previously had zero practice templates. Follows fa-en's already-authored a2_unit27.yaml pack as the structural reference (same underlying English target-language realization, only Dutch glosses/feedback text differ): most of this unit's real content is multi-word banking compounds ("checking account", "monthly fee", "minimum balance", "direct deposit") that don't reduce to a single fillable slot, so the two bare-word-recognition-only semantic tags fa-en already added to scripts/_en_target_lexeme_common.py tonight are reused as-is, no classifier change needed for this direction: "banking_noun" (account, fee, balance, deposit, business, days, documents, teller) and "banking_adjective" (checking, monthly, minimum, direct) -- both deliberately not used in any shared generative frame (these nouns/ adjectives don't collocate uniformly: "keep a minimum {item}" only works for "balance", not "fee"/"deposit"/"teller", etc., same reasoning as unit25's bureaucracy_noun/unit26's dogpark_noun). Only this file's own scripts/backfill_lexemes_nl_en.py Dutch-gloss dict/UNIT_FILES_A2 tuple needed extending (already done alongside unit28 in this same pass) -- no new classifier tags needed for unit27 itself, since fa-en's session already added banking_noun/ banking_adjective earlier tonight.
+    One genuine generative frame identified (same one fa-en found): lesson03's real reading text is "Your debit card will arrive in five to seven business days." -- the already-established 'possessive' tag (my/your/his/her, defined for unit06's family lessons, reused identically by this pack's own unit26) generalizes this exact real sentence with zero grammar loss ("My/His/Her debit card will arrive in five to seven business days." all hold) -- a word_order template anchored to lesson03. Deliberately used for word_order ONLY, not listen_select/multiple_choice: this pack's own empirical check (a standalone iter_specs()-driven harness against this session's real backfill_lexemes_nl_en.py, scoped to only the A2-course-level specs, matching how Lexeme rows are actually scoped per-course at runtime -- see docs/BUILD_LOG.md's content_key-uniqueness-per-course entry) found only 2 real A2-scoped possessive candidates (my, your -- his/her are never reintroduced in any A2 unit so far), below the >=3 multiple_ choice/listen_select floor even though scripts/_practice_slot_check.py itself reports this tag as satisfying the floor (it flattens the entire a1+a2 spec list into one pool rather than modeling the real per-course runtime scoping split, a pre-existing characteristic of that harness noted here rather than silently relied on). A more conservative choice than a2_unit26.yaml's own existing possessive_listen template (which this same empirical method would flag the same way) -- flagging for whoever does this pack's fresh-context review, not fixed retroactively here since it's outside this task's scope.
+    Also reused: the already-established 'identity' tag (i/i'm/am/is/are/ what/what's/my/your, defined for unit01/02), anchored to lesson04 (real dialogue line "I have both with me. Is there a monthly fee?"), bare-word recognition only -- confirmed 6 real A2-scoped candidates (i, is, my, what, what's, your), comfortably above the floor.
+    ZERO fill_in_blank templates, matching fa-en's own unit27 pack and this realization's own authoring note (states zero fill_in_blank exercises at all): every noun/adjective candidate pool here is bare-recognition-only by design, and the one genuinely generative frame (possessive) is authored as word_order, which doesn't share fill_in_blank's ambiguity risk. Ran scripts/_fill_in_blank_ambiguity_check.py to confirm zero AMBIGUOUS flags (no fill_in_blank templates exist to flag).
+    16 templates: 5 lesson01 (banking_noun x3 [choose/listen/translate] + banking_adjective x2 [choose/listen]), 3 lesson02 (banking_noun x2 [choose/listen] + banking_adjective translate), 4 lesson03 (possessive word_order + banking_noun choose + banking_adjective listen + banking_noun translate), 4 lesson04 (banking_noun matching_pairs [8 pairs, the full course-wide pool, per AUTHORING_GUIDE.md #16] + identity x2 [choose/listen] + banking_adjective choose). Matches fa-en's own unit27 density (16 templates) exactly, adjusted only to swap the lower-confidence possessive_listen slot for an extra banking_noun translate.
+    Verified with scripts/_practice_slot_check.py (added this pack, and a2_unit28.yaml, to scripts/practice_manifest.txt's nl-en line; banking_noun has 8 distinct course-wide candidates, banking_adjective 4, identity 6, well above the >=3 multiple_choice/listen_select floor) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import.
+    RE-AUTHORED 2026-07-24 (unit-scope DEAD-template pass): the harness warning in the possessive paragraph above turned out to understate the real defect. scripts/_practice_unit_scope_check.py (the actual per-course unit-scoped model, run against the real backfill_lexemes_nl_en.py) confirmed 3 DEAD templates: lesson03.possessive_order.001 (0 unit-scoped 'possessive' candidates -- 'my'/'your' are BOTH pinned to unit25's own lesson_content_key in the A2 dict, since backfill_lexemes*.py's en_specs dict keys by bare token and only ever assigns provenance on first sight per course -- see backfill_lexemes_nl_en.py:2873-2878's own comment), lesson04.identity_choose.002 and lesson04.identity_listen.003 (0 unit-scoped 'identity' candidates -- every identity token pinned to unit25/unit28/unit30, none to unit27; the "6 real A2-scoped candidates" claimed above was never unit27-scoped, it was pooled across the whole A2 course).
+    FIXES applied, PACK-ONLY (no backfill/realization/overlay edits): (1) lesson03.possessive_order.001 -> RENAMED card_order.001, RE-ANCHORED from 'possessive' to a new 'card_type' tag (noun, semantic: card_type -- 'debit' is the only A2 course-wide card_type token, and it IS unit27's own, per.a2.unit27.lesson01.banking_vocabulary). This is a genuine single-member anchor (like the recipe's *_single convention, no new backfill tag needed -- card_type already existed in _en_target_lexeme_common.py, just unused by any pack), so the SAME real sentence ("Your debit card will arrive in five to seven business days") is kept, just with 'debit' itself as the slot instead of the (dead) possessive determiner. Deterministic (1 candidate), no self-reference (no literal word in the frame matches 'debit'), no ambiguity. (2) lesson04.identity_choose.002/identity_listen.003 -> DROPPED (not re-anchored): recognition tier already has 7 other live banking_noun/ banking_adjective MC+listen templates covering this unit's real 12 distinct nouns+adjectives, so re-anchoring these 2 to yet another banking_noun/adjective MC/listen pair would only add redundant recognition-tier depth while doing nothing for the pack's real gap, which was structured tier (only 2 templates: the now-dead possessive_order and the 8-pair banking_noun matching_pairs). (3) ADDED 1 replacement structured template, anchored to genuinely unit27-native vocab: lesson01.match_combined.006 (matching_pairs, 12 pairs = banking_noun's 8 UNION banking_adjective's 4, both entirely unit27's own -- within AUTHORING_GUIDE #16's 6-12 range, no other-unit padding). A second attempt -- lesson02.fill.004, fill_in_blank on the same 'card_type' single-member anchor -- was tried and REVERTED: card_type has only 1 candidate ('debit') within the A2 course, but compile_content.py's fill_in_blank ambiguity check pools EVERY level of the direction at once (SS6.5), and A1 unit15's "payment_words" lesson also carries card_type on 'credit' -- 2 distinct direction-wide candidates, hard-failed with "no other visible text in the frame to disambiguate which one is correct". credit/debit are not true synonyms (interchangeable: true would be dishonest here), so the template was dropped rather than forced; card_order.001 (word_order) is unaffected since word_order's grammaticality bar is COURSE-scoped (A2 only, where card_type really does have exactly 1 member), not direction-wide.
+    Net result: 16 templates before -> 15 templates after (3 dropped, 1 renamed+re-anchored, 1 added), all now unit-scope LIVE. Tier counts after the fix: recognition 9 (banking_noun/adjective MC+listen across all 4 lessons), structured 3 (card_order word_order, banking_noun 8-pair match, banking_combined 12-pair match), production 3 (banking_noun/adjective translate x3) -- all three tiers now clear the >=3-templates bar from the recipe's SS8 table (previously structured was 1 live template after removing the dead possessive_order, well under the bar). Verified 0 DEAD/0 FLOOR for this pack with scripts/ _practice_unit_scope_check.py and 0 errors with compile_content.py practice-validate. tag_schema/slot_presets updated: dropped the now-unused 'possessive'/'identity' tags and presets, added 'card_type' and the 'banking_combined' union preset. Still needs the standard fresh-context review before import.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:

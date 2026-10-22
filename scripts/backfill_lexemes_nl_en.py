@@ -97,7 +97,7 @@ from _en_target_lexeme_common import (  # noqa: E402
 EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "hello": "hallo", "hi": "hoi", "good": "goed", "morning": "ochtend",
     "afternoon": "middag", "evening": "avond", "goodbye": "tot ziens",
-    "bye": "doei", "how": "hoe", "are": "bent (2e persoon)",
+    "bye": "doei", "how": "hoe", "are": "bent; zijn",
     "you": "jij / u", "i'm": "ik ben", "fine": "goed", "thanks": "bedankt",
     "not": "niet", "bad": "slecht", "and": "en", "okay": "oké",
     "nice": "leuk", "to": "te", "meet": "ontmoeten", "too": "ook",
@@ -148,7 +148,7 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "i'd": "ik zou", "like": "willen (graag)", "please": "alstublieft",
     "anything": "iets", "else": "anders", "that's": "dat is", "all": "alles",
     "for": "voor", "here": "hier", "or": "of", "go": "gaan", "menu": "menu",
-    "price": "prijs", "cafe": "cafe", "2": "2", "3": "3", "5": "5", "6": "6",
+    "price": "prijs", "cafe": "café", "2": "2", "3": "3", "5": "5", "6": "6",
     "sure": "zeker",
     # Unit 8 (shopping: prices and quantities), added 2026-07-05.
     "pound": "pond", "of": "van", "dozen": "dozijn", "eggs": "eieren",
@@ -156,9 +156,9 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "rice": "rijst", "pounds": "pond", "fresh": "vers", "per": "per", "4": "4",
     # Unit 9 (common places and locations), added 2026-07-05.
     "bank": "bank", "hospital": "ziekenhuis", "pharmacy": "apotheek",
-    "park": "park", "restaurant": "restaurant", "next": "naast (next to)",
-    "across": "tegenover (across from)", "from": "van", "between": "tussen",
-    "behind": "achter", "front": "voor (in front of)", "where": "waar",
+    "park": "park", "restaurant": "restaurant", "next": "naast",
+    "across": "tegenover", "from": "van", "between": "tussen",
+    "behind": "achter", "front": "voor (vóór iets)", "where": "waar",
     "excuse": "excuseer", "me": "mij", "far": "ver",
     # Unit 10 (asking for and following directions), added 2026-07-05.
     "turn": "sla af", "left": "links", "right": "rechts", "straight": "rechtdoor",
@@ -274,8 +274,8 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     # new-to-unit28 tokens are added here, cross-checked against
     # docs/content/overlays/nl-en/a2_unit28.yaml's own real gloss text.
     "medicine": "medicijn", "prescription": "recept",
-    "follow": "vervolg- (in follow-up appointment)",
-    "getting": "wordt (in getting worse)", "worse": "erger",
+    "follow": "vervolg- (in vervolgafspraak)",
+    "getting": "worden (erger worden)", "worse": "erger",
     "insurance": "verzekering", "i've": "ik heb", "had": "gehad",
     "early": "vroeg", "confirmed": "bevestigd", "3pm": "15.00 uur",
     "7724": "7724", "back": "terug", "within": "binnen",
@@ -288,7 +288,7 @@ EN_TARGET_TO_NL_GLOSS: dict[str, str] = {
     "leaking": "lekken", "sink": "de gootsteen", "building": "het gebouw",
     "manager": "de beheerder", "plumber": "de loodgieter",
     "repair": "de reparatie", "report": "melden", "problem": "het probleem",
-    "been": "geweest (in it's been -- is al ... geweest)",
+    "been": "geweest",
     "someone": "iemand", "fix": "repareren", "2pm": "14.00 uur",
     "4pm": "16.00 uur", "received": "ontvangen", "6180": "6180",
     "send": "sturen", "home": "thuis", "here's": "hier is",
@@ -1732,7 +1732,7 @@ NL_GLOSSES.update({
 # (course, language, token, part_of_speech) -- one row per form per course.
 EN_EXTRA: dict[str, tuple[str, str]] = {
     # A1 unit49 -- sorting household waste.
-    "sort": ("verb", "sorteren"), "waste": ("noun", "afval; (waste time) verspillen"),
+    "sort": ("verb", "sorteren"), "waste": ("noun", "afval; verspillen"),
     "bin": ("noun", "de bak; de container"), "recycle": ("verb", "recyclen"),
     "glass": ("noun", "glas"), "paper": ("noun", "papier"),
     "collection": ("noun", "het ophalen (in ophaaldag)"),
@@ -1785,8 +1785,8 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "quarters": ("noun", "kwartjes (munten van 25 cent)"),
     "machines": ("noun", "de machines"), "detergent": ("noun", "het wasmiddel"),
     "load": ("noun", "het wasje; de lading"), "cycle": ("noun", "de wascyclus"),
-    "pick": ("verb", "ophalen (in pick up)"), "broke": ("verb", "ging kapot"),
-    "down": ("particle", "kapot (in broke down)"), "attendant": ("noun", "de medewerker"),
+    "pick": ("verb", "ophalen"), "broke": ("verb", "ging kapot"),
+    "down": ("particle", "kapot (gaan)"), "attendant": ("noun", "de medewerker"),
     "talked": ("verb", "praatte"), "kept": ("verb", "hield"),
     "probably": ("adverb", "waarschijnlijk"), "fixed": ("verb", "repareerde; vast"),
     # A1 unit55 -- the swimming pool.
@@ -1798,7 +1798,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "tickets": ("noun", "de kaartjes"), "caps": ("noun", "de badmutsen"),
     "required": ("adjective", "verplicht"), "entrance": ("noun", "de ingang"),
     "dollar": ("noun", "dollar- (in dollarmunt)"), "coin": ("noun", "de munt"),
-    "cool": ("verb", "afkoelen"), "sign": ("noun", "het bord; (sign up) zich inschrijven"),
+    "cool": ("verb", "afkoelen"), "sign": ("noun", "het bord; zich inschrijven"),
     "listed": ("verb", "vermeldde"), "bags": ("noun", "de tassen"),
     "swam": ("verb", "zwom"), "try": ("verb", "proberen"),
     "diving": ("noun", "duik- (in duikplank)"), "board": ("noun", "de plank"),
@@ -1853,7 +1853,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "shelf": ("noun", "de plank"), "carried": ("verb", "droeg"),
     # A1 unit64 -- compliments.
     "lovely": ("adjective", "prachtig; heel mooi"), "kind": ("adjective", "aardig"),
-    "smile": ("noun", "de glimlach"), "being": ("verb", "het zijn (in being kind)"),
+    "smile": ("noun", "de glimlach"), "being": ("verb", "het zijn"),
     "compliment": ("noun", "het compliment"),
     # A1 unit65 -- returns and exchanges.
     "exchange": ("verb", "ruilen"), "larger": ("adjective", "groter"),
@@ -1873,12 +1873,12 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     # A2 unit30 -- the job interview.
     "experience": ("noun", "de ervaring"), "position": ("noun", "de functie; het standpunt"),
     "availability": ("noun", "de beschikbaarheid"), "strength": ("noun", "het sterke punt"),
-    "requirement": ("noun", "de vereiste"), "social": ("adjective", "social (in social media)"),
+    "requirement": ("noun", "de vereiste"), "social": ("adjective", "sociaal (in sociale media)"),
     "media": ("noun", "media"), "marketing": ("noun", "marketing"),
     "strengths": ("noun", "de sterke punten"), "resume": ("noun", "het cv"),
     "deadline": ("noun", "de deadline"),
     "path": ("proper_noun", "Path (in de bedrijfsnaam Bright Path Marketing)"),
-    "looking": ("verb", "zoekend (in looking for)"),
+    "looking": ("verb", "op zoek (naar)"),
     "coordinator": ("noun", "de coördinator"), "requirements": ("noun", "de vereisten"),
     "writing": ("noun", "het schrijven"), "immediately": ("adverb", "direct"),
     "interview": ("noun", "het gesprek"), "deadlines": ("noun", "de deadlines"),
@@ -1893,7 +1893,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     # A2 unit32 -- online habits.
     "messaging": ("noun", "berichten- (in berichten-app)"),
     "notification": ("noun", "de melding"), "useful": ("adjective", "nuttig"),
-    "touch": ("noun", "contact (in stay in touch)"),
+    "touch": ("noun", "contact (contact houden)"),
     "notifications": ("noun", "de meldingen"), "sharing": ("verb", "het delen"),
     "spend": ("verb", "doorbrengen"), "thing": ("noun", "het ding; iets"),
     # A2 unit33 -- the weekly schedule.
@@ -1907,7 +1907,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "thirty-five": ("noun", "vijfendertig"),
     # A2 unit35 -- prescription.
     "dose": ("noun", "de dosis"), "refill": ("noun", "de herhaalmedicatie"),
-    "side": ("noun", "de bijwerking (in side effects)"),
+    "side": ("noun", "bij- (in bijwerking)"),
     "effects": ("noun", "de bijwerkingen"), "shouldn't": ("verb", "zou niet moeten"),
     "refills": ("noun", "de herhaalmedicatie"),
     # A2 unit36 -- document correction.
@@ -1919,7 +1919,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     # A2 unit37 -- video calls.
     "microphone": ("noun", "de microfoon"), "connection": ("noun", "de verbinding"),
     "mute": ("verb", "dempen"),
-    "face": ("noun", "het gezicht (in face to face: in levenden lijve)"),
+    "face": ("noun", "het gezicht"),
     "calls": ("noun", "de gesprekken"), "headphones": ("noun", "de koptelefoon"),
     "asks": ("verb", "stelt"), "question": ("noun", "de vraag"),
     "classmates": ("noun", "de medestudenten"), "speaking": ("verb", "pratend"),
@@ -1941,7 +1941,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "done": ("verb", "gedaan"),
     # B1 unit02 -- abilities.
     "able": ("adjective", "in staat"), "manage": ("verb", "erin slagen"),
-    "license": ("noun", "het rijbewijs"), "person": ("noun", "de persoon (in in person)"),
+    "license": ("noun", "het rijbewijs"), "person": ("noun", "de persoon"),
     "system": ("noun", "het systeem"), "licenses": ("noun", "de rijbewijzen"),
     "changed": ("verb", "veranderd"), "hers": ("pronoun", "het hare"),
     "wasn't": ("verb", "was niet"), "save": ("verb", "besparen; sparen"),
@@ -1953,7 +1953,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "reason": ("noun", "de reden"), "focus": ("verb", "je concentreren"),
     "respect": ("verb", "respecteren"), "easily": ("adverb", "makkelijk"),
     "disagrees": ("verb", "is het oneens"), "believes": ("verb", "gelooft"),
-    "seeing": ("verb", "het zien"), "each": ("pronoun", "elkaars (in each other's)"),
+    "seeing": ("verb", "het zien"), "each": ("pronoun", "elk (in elkaars)"),
     "other's": ("pronoun", "elkaars"), "important": ("adjective", "belangrijk"),
     "saves": ("verb", "bespaart"),
     # B1 unit05 -- workplace updates.
@@ -1974,7 +1974,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     # B1 unit07 -- real conditions.
     "unless": ("particle", "tenzij"), "condition": ("noun", "de voorwaarde"),
     "result": ("noun", "het resultaat"),
-    "present": ("adjective", "tegenwoordige (in present tense)"),
+    "present": ("adjective", "tegenwoordige (in tegenwoordige tijd)"),
     "tense": ("noun", "de werkwoordstijd"), "real": ("adjective", "echt"),
     "future": ("noun", "de toekomst"), "backup": ("noun", "reserve- (in reserveplan)"),
     "plan": ("noun", "het plan"), "conference": ("noun", "vergader- (in vergaderruimte)"),
@@ -1985,7 +1985,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "routine": ("noun", "de routine"), "hands": ("noun", "de handen"),
     "clears": ("verb", "ruimt af"),
     # B1 unit09 -- reported speech.
-    "speech": ("noun", "de spraak (in reported speech)"),
+    "speech": ("noun", "de rede (in indirecte rede)"),
     "reported": ("adjective", "gerapporteerd; indirect"),
     "summary": ("noun", "de samenvatting"), "enough": ("adjective", "genoeg"),
     "full": ("adjective", "volledig"), "reply": ("verb", "reageren"),
@@ -2041,7 +2041,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "budget": ("noun", "het budget"), "hope": ("verb", "hopen"),
     "tomorrow's": ("adjective", "van morgen"), "latest": ("adjective", "laatste"),
     "client": ("noun", "de klant"), "best": ("noun", "het best"),
-    "advance": ("noun", "vooraf (in in advance)"), "request": ("noun", "het verzoek"),
+    "advance": ("noun", "vooraf"), "request": ("noun", "het verzoek"),
     "updated": ("adjective", "bijgewerkt"),
     # B1 unit15 -- written complaints.
     "complain": ("verb", "klagen"), "damaged": ("adjective", "beschadigd"),
@@ -2055,12 +2055,12 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     # B1 unit16 -- giving advice.
     "advice": ("noun", "het advies"), "overwhelmed": ("adjective", "overweldigd"),
     "prioritize": ("verb", "prioriteit geven"), "workload": ("noun", "de werklast"),
-    "decline": ("verb", "afwijzen"), "closer": ("adjective", "kortere (in closer deadline)"),
+    "decline": ("verb", "afwijzen"), "closer": ("adjective", "kortere"),
     "asking": ("verb", "het vragen"), "suggestions": ("noun", "de suggesties"),
     "hypothetical": ("noun", "de hypothese"), "recommendation": ("noun", "de aanbeveling"),
     "softer": ("adjective", "zachter"), "suggestion": ("noun", "de suggestie"),
     "stronger": ("adjective", "sterker"), "depending": ("verb", "afhankelijk"),
-    "top": ("noun", "bovenop (in on top of)"), "leading": ("verb", "leidend"),
+    "top": ("noun", "bovenop"), "leading": ("verb", "leidend"),
     "seem": ("verb", "lijken"), "handle": ("verb", "aankunnen"),
     "solid": ("adjective", "solide"),
     # B1 unit17 -- regret.
@@ -2116,9 +2116,9 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "deduction": ("noun", "de conclusie"), "guesswork": ("noun", "het giswerk"),
     "overlap": ("verb", "overlappen"), "explanation": ("noun", "de verklaring"),
     "tentative": ("adjective", "voorzichtig"), "server": ("noun", "de server"),
-    "gone": ("verb", "uitgevallen (in gone down)"), "overnight": ("adverb", "'s nachts"),
+    "gone": ("verb", "uitgevallen"), "overnight": ("adverb", "gedurende de nacht"),
     "generated": ("verb", "gegenereerd"), "failed": ("verb", "mislukt"),
-    "permission": ("noun", "rechten- (in rechtenprobleem)"),
+    "permission": ("noun", "de toegangsrechten"),
     "possibility": ("noun", "de mogelijkheid"), "uncertain": ("adjective", "onzeker"),
     "outage": ("noun", "de storing"), "consequence": ("noun", "het gevolg"),
     "monitoring": ("noun", "monitoring- (in monitoringpagina)"),
@@ -2157,13 +2157,13 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "ongoing": ("adjective", "bezig"), "chronology": ("noun", "de chronologie"),
     "equipment": ("noun", "de apparatuur"), "power": ("noun", "de stroom"),
     "volunteers": ("noun", "de vrijwilligers"), "setting": ("verb", "klaarzettend"),
-    "chairs": ("noun", "de stoelen"), "simple": ("adjective", "eenvoudig (in simple past)"),
+    "chairs": ("noun", "de stoelen"), "simple": ("adjective", "eenvoudig"),
     "events": ("noun", "de gebeurtenissen"), "moment": ("noun", "het moment"),
     "venue": ("noun", "de locatie"), "simon": ("proper_noun", "Simon"),
     "strict": ("adjective", "strikt"), "chronological": ("adjective", "chronologisch"),
     "expected": ("verb", "werd verwacht"), "crew": ("noun", "de ploeg"),
     "lights": ("noun", "de lichten"),
-    "through": ("preposition", "door (in walk me through)"),
+    "through": ("preposition", "door"),
     "event": ("noun", "het evenement"),
     # B2 unit05 -- register.
     "register": ("noun", "het register"), "casual": ("adjective", "informeel"),
@@ -2210,7 +2210,7 @@ EN_EXTRA: dict[str, tuple[str, str]] = {
     "cause": ("noun", "de oorzaak"), "operator": ("noun", "de vervoerder"),
     "includes": ("verb", "bevat"), "staffing": ("noun", "personeels- (in personeelsgegevens)"),
     "records": ("noun", "de gegevens"), "supported": ("adjective", "onderbouwd"),
-    "passenger": ("noun", "passagiers- (in passagiersenquete)"),
+    "passenger": ("noun", "passagiers- (in passagiersenquête)"),
     "buses": ("noun", "de bussen"), "became": ("verb", "werd"),
     "common": ("adjective", "vaak voorkomend"), "opened": ("verb", "opende"),
     "passengers": ("noun", "de passagiers"), "route": ("noun", "de route"),
@@ -2917,6 +2917,163 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # a2_unit40 teaches the noun (overlay: "order is de bestelling zelf", gloss
     # "bestelling"); global is the verb "bestellen; de volgorde".
     ("a2_unit40_online_order_problem", "order"): "de bestelling",
+    # --- 2026-10-22 nl-en practice review (A1): wrong-sense glosses ---
+    ("a1_unit05_time", "close"): "dichtgaan",  # "When does it close?"
+    ("a1_unit06_family", "don't"): "doe niet",  # "No, I don't."
+    ("a1_unit06_family", "any"): "enige",  # "Do you have any siblings?"
+    ("a1_unit07_food", "like"): "graag willen",  # "I'd like ..."
+    ("a1_unit09_places", "excuse"): "pardon",  # overlay: Pardon
+    ("a1_unit10_directions", "turn"): "afslaan",
+    ("a1_unit12_clothing", "medium"): "maat M",  # middelmaat = mediocre
+    ("a1_unit13_emotions", "test"): "toets",
+    ("a1_unit14_communication", "slowly"): "langzaam",
+    ("a1_unit15_money", "credit"): "creditcard",  # krediet = loan
+    ("a1_unit15_money", "debit"): "pinpas; betaalpas",  # debet = accounting term
+    ("a1_unit17_plans", "love"): "dol zijn op",  # was graag willen; later frames say "I love ..."
+    ("a1_unit21_travel", "round"): "retour",  # round trip; overlay retour
+    ("a1_unit22_health", "need"): "nodig hebben",
+    ("a1_unit31_appearance", "short"): "klein",  # person height; overlay klein
+    ("a1_unit32_animals", "still"): "nog steeds",  # "I still need to ..."
+    ("a1_unit36_education", "taking"): "volgen",  # "taking a class"
+    ("a1_unit37_celebrations", "having"): "hebben",  # "having a party"
+    ("a1_unit39_neighborhood", "five-minute"): "van vijf minuten",
+    ("a1_unit39_neighborhood", "move"): "verhuizen",  # "I might move soon"
+    ("a1_unit40_post", "express"): "spoed- (in spoedpost)",  # express mail = spoedpost (overlay), not uiten
+    ("a1_unit41_cooking", "follow"): "volgen",  # recipe sense, not vervolg-
+    ("a1_unit41_cooking", "making"): "maken",
+    ("a1_unit41_cooking", "using"): "gebruiken",
+    ("a1_unit42_personality", "plans"): "plannen",  # noun; "plant" is a verb form
+    ("a1_unit42_personality", "teaches"): "geeft les",  # leert is ambiguous (learns)
+    ("a1_unit42_personality", "spending"): "doorbrengen",
+    ("a1_unit43_colors", "wearing"): "dragen",
+    ("a1_unit44_seasons", "walking"): "het wandelen",
+    ("a1_unit44_seasons", "playing"): "het spelen",
+    ("a1_unit45_emergencies", "department"): "afdeling",
+    ("a1_unit45_emergencies", "burning"): "branden",
+    ("a1_unit48_library", "borrowing"): "het lenen",  # duplicates borrow=lenen: identical MC options
+    ("a1_unit48_library", "teaching"): "het lesgeven",
+    ("a1_unit49_waste_disposal", "waste"): "afval",  # drop English "(waste time) verspillen" from Dutch gloss
+    ("a1_unit49_waste_disposal", "bin"): "de afvalbak",
+    ("a1_unit49_waste_disposal", "correctly"): "goed",
+    ("a1_unit49_waste_disposal", "afterward"): "daarna",
+    ("a1_unit49_waste_disposal", "practicing"): "oefenen",
+    ("a1_unit51_pharmacy", "tissues"): "de zakdoekjes",  # "de tissues" showed the answer
+    ("a1_unit53_bike_rental", "deposit"): "de borg",  # bike deposit, not a bank deposit
+    ("a1_unit56_restaurant", "order"): "bestellen",  # drop off-context "de volgorde"
+    ("a1_unit67_family_news", "must"): "moeten (vermoeden)",  # "you must be proud" = je bent vast trots
+    # --- 2026-10-22 nl-en practice review (A2) ---
+    ("a2_unit25_bureaucracy", "residency"): "woonadres",  # overlay: bewijs van woonadres; woonplaats = town
+    ("a2_unit25_bureaucracy", "last"): "vorige",  # last month = vorige maand
+    ("a2_unit25_bureaucracy", "this"): "deze",  # deze vrijdag
+    ("a2_unit25_bureaucracy", "update"): "wijzigen",  # overlay: adres wijzigen
+    ("a2_unit25_bureaucracy", "works"): "kan",  # overlay: vrijdag om 10 uur kan
+    ("a2_unit25_bureaucracy", "at"): "op",  # at the new address = op het nieuwe adres
+    ("a2_unit26_opinions", "about"): "over",  # "wat dacht je van" is the idiom "how about"; here What do you think about
+    ("a2_unit26_opinions", "close"): "dichtbij",  # very close to
+    ("a2_unit26_opinions", "fair"): "terecht",  # fair point = terechte opmerking; "redelijk" confusable with goed
+    ("a2_unit26_opinions", "should"): "zou moeten",  # "kunt beter" is a calque
+    ("a2_unit27_banking", "deposit"): "storting",  # current "de bijschrijving; storten" is two senses, awkward as bare prompt
+    ("a2_unit28_doctor", "cold"): "verkoudheid",  # a bad cold; overlay "flink verkouden"; koud is wrong sense
+    ("a2_unit28_doctor", "any"): "wat",  # Should I take any medicine; "een aantal" wrong
+    ("a2_unit29_maintenance", "thank"): "bedanken",  # overlay "Hartelijk dank"; "danken" archaic
+    ("a2_unit30_job_interview", "position"): "functie",  # drop "het standpunt"; clashes with role
+    ("a2_unit30_job_interview", "role"): "rol",  # drop "de functie" (duplicate of position); "role of the position"
+    ("a2_unit30_job_interview", "small"): "klein",  # "kleine maat" is clothing size; overlay "klein team"
+    ("a2_unit30_job_interview", "managed"): "stuurde aan",  # overlay "aangestuurd"; drop "slaagde erin"
+    ("a2_unit30_job_interview", "start"): "beginnen",  # drop noun sense "de start"
+    ("a2_unit30_job_interview", "coming"): "komen",  # Thank you for coming in; "komend" wrong
+    ("a2_unit31_travel_disruption", "way"): "manier",  # drop "kant"; overlay "andere manier"
+    ("a2_unit31_travel_disruption", "notice"): "mededeling",  # overlay "mededeling"; bericht too generic
+    ("a2_unit32_online_habits", "staying"): "blijven",  # staying in touch = contact houden; "verblijvend; logerend" wrong sense
+    ("a2_unit32_online_habits", "post"): "plaatsen",  # verb sense here (post photos)
+    ("a2_unit32_online_habits", "spend"): "besteden",  # spend time on phone; "doorbrengen" is time-only
+    ("a2_unit32_online_habits", "thing"): "ding",  # drop "iets"
+    ("a2_unit34_shopping_complaint", "receipt"): "de bon",  # kwitantie is stiff/wrong; overlay says bon
+    ("a2_unit34_shopping_complaint", "items"): "de artikelen",  # voorwerpen; overlay says artikelen
+    ("a2_unit34_shopping_complaint", "stopped"): "hield op",  # stopte is vague; unit = stopped working
+    ("a2_unit35_prescription", "once"): "eenmaal",  # zodra is wrong; unit = once a day (one time)
+    ("a2_unit35_prescription", "food"): "eten",  # current "voedsel- (in gft-afval)" wrong sense
+    ("a2_unit35_prescription", "taking"): "innemen",  # volgend is wrong; do not stop taking the tablets
+    ("a2_unit35_prescription", "course"): "natuurlijk",  # cursus wrong; unit sentence is "Of course"
+    ("a2_unit37_video_calls", "asks"): "vraagt",  # stelt only works in "stelt een vraag"
+    ("a2_unit37_video_calls", "still"): "nog steeds",  # toch wrong sense; overlay says nog steeds
+    ("a2_unit38_repair_visit", "fixed"): "gerepareerd",  # "repareerde; vast" wrong sense/tense; overlay gemaakt, gerepareerd
+    ("a2_unit38_repair_visit", "can't"): "kan niet",  # kunt niet is 2nd person only
+    ("a2_unit38_repair_visit", "by"): "per",  # "met" = with; unit sense is confirm by message
+    ("a2_unit39_after_the_interview", "calling"): "bellen",  # bellend is a participle calque
+    # --- 2026-10-22 nl-en practice review (B1) ---
+    ("b1_unit01_necessity", "should"): "zou moeten",  # global "kunt beter" wrong; overlay "zou moeten (aanbeveling)"
+    ("b1_unit01_necessity", "fee"): "de boete",  # late fee; global "de kosten"; overlay boete voor te late betaling
+    ("b1_unit01_necessity", "next"): "volgende",  # "next month"; "naast" wrong sense (supersedes coordinator leak-fix wording)
+    ("b1_unit01_necessity", "last"): "vorige",  # "last week"
+    ("b1_unit02_abilities", "managed"): "slaagde erin",  # "stuurde aan" wrong sense
+    ("b1_unit03_hypotheticals", "take"): "volgen",  # take a class; "neem" imperative
+    ("b1_unit03_hypotheticals", "plans"): "plannen",  # noun ("your plans"); "plant" is verb form
+    ("b1_unit04_debate", "sense"): "logica",  # makes sense; "gevoel" wrong
+    ("b1_unit04_debate", "different"): "verschillend",  # base form
+    ("b1_unit04_debate", "working"): "werken",  # "working from home"
+    ("b1_unit05_workplace", "report"): "het rapport",  # tagged verb but unit uses noun; overlay rapport
+    ("b1_unit05_workplace", "thank"): "bedanken",  # "danken" archaic
+    ("b1_unit06_narrative", "driving"): "rijden",  # "was driving"
+    ("b1_unit06_narrative", "when"): "toen",  # past narrative sense
+    ("b1_unit07_conditions", "meeting"): "vergadering",  # "afspraak" wrong; fill feedback uses vergadering
+    ("b1_unit08_sequencing", "food"): "het eten",  # "voedsel- (in gft-afval)" is wrong sense
+    ("b1_unit08_sequencing", "then"): "daarna",  # sequencing; "dan" weak
+    ("b1_unit09_reported_speech", "tell"): "vertellen",  # base form, not imperative
+    ("b1_unit02_abilities", "had"): "had",  # "gehad" is participle
+    ("b1_unit10_purpose", "taking"): "volgen",  # taking a class; "volgend" wrong
+    ("b1_unit10_purpose", "saving"): "sparen",  # saving money; "sparend" unnatural
+    ("b1_unit11_unreal_hypotheticals", "past"): "verleden",  # "past tense"; overlay verleden tijd
+    ("b1_unit12_concession", "comfortable"): "comfortabel",  # overlay: "het comfortabel is"
+    ("b1_unit12_concession", "gets"): "krijgt",  # overlay: "krijgt ze thuis meer werk gedaan"
+    ("b1_unit12_concession", "talking"): "praten",  # "likes talking to colleagues"
+    ("b1_unit13_relative_clauses", "works"): "werkt",  # "Mia works with several people"; komt uit is wrong
+    ("b1_unit13_relative_clauses", "desk"): "het bureau",  # overlay: "wiens bureau"; balie = reception desk
+    ("b1_unit14_professional_communication", "direct"): "rechtstreeks",  # "direct command"; automatisch is wrong sense
+    ("b1_unit14_professional_communication", "wondering"): "zich afvragen",  # "I was wondering if"
+    ("b1_unit15_complaints", "item"): "het artikel",  # "refund for this item"
+    ("b1_unit15_complaints", "can't"): "kan niet",  # kunt niet is 2nd person only
+    ("b1_unit15_complaints", "sorry"): "het spijt me",  # "I'm sorry to hear that"
+    ("b1_unit15_complaints", "calling"): "bellen",  # "I'm calling to complain"
+    ("b1_unit16_advice", "any"): "enig",  # "Any advice?"; een aantal is wrong
+    ("b1_unit16_advice", "hypothetical"): "de hypothetische situatie",  # hypothese = theory
+    ("b1_unit16_advice", "leading"): "leiding geven aan",  # "leading two projects"
+    ("b1_unit18_future_plans", "feels"): "voelt",  # voelt aan is separable/odd
+    ("b1_unit19_summarizing", "moved"): "verplaatst",  # "meeting was moved"; overlay verplaatst; verhuisde wrong
+    ("b1_unit19_summarizing", "keeping"): "behouden",  # "keeping the main points"
+    ("b1_unit19_summarizing", "single"): "enkel",  # "the single most important point"
+    # --- 2026-10-22 nl-en practice review (B2): wrong-sense / labelled glosses
+    #     that practice pools show as MC options and translation prompts.
+    #     Gloss-only (POS unchanged), checked against each unit's sentence. ---
+    ("b2_unit01_argumentation", "like"): "zoals",  # "phrases like ..."
+    ("b2_unit01_argumentation", "quarter"): "het kwartaal",  # "next quarter"
+    ("b2_unit01_argumentation", "meeting"): "de vergadering",  # "meeting routines"
+    ("b2_unit01_argumentation", "should"): "zou moeten",
+    ("b2_unit01_argumentation", "may"): "kan; zou kunnen",  # "may suffer"
+    ("b2_unit01_argumentation", "are"): "zijn",  # was "bent (2e persoon)"
+    ("b2_unit01_argumentation", "position"): "het standpunt",  # "defended position"
+    ("b2_unit01_argumentation", "sound"): "klinken",  # "sound reasonable"
+    ("b2_unit01_argumentation", "review"): "beoordelings- (in beoordelingsscores)",
+    ("b2_unit02_speculation", "must"): "moet (wel)",  # deduction, not obligation
+    ("b2_unit02_speculation", "run"): "draaien",  # "reports did not run"
+    ("b2_unit02_speculation", "rules"): "sluit uit",  # "rules ... out"
+    ("b2_unit02_speculation", "only"): "alleen",
+    ("b2_unit02_speculation", "rebuilt"): "opnieuw opgebouwd",
+    ("b2_unit04_narrative_time", "had"): "had",  # "had already moved"
+    ("b2_unit04_narrative_time", "setting"): "aan het klaarzetten",
+    ("b2_unit04_narrative_time", "working"): "aan het werk",
+    ("b2_unit04_narrative_time", "order"): "de volgorde",  # "chronological order"
+    ("b2_unit04_narrative_time", "rain"): "de regen",  # "rain was expected"
+    ("b2_unit04_narrative_time", "entered"): "binnenkwamen",  # "guests entered"
+    ("b2_unit04_narrative_time", "got"): "kwam (er)",  # "before you got there"
+    ("b2_unit05_register", "shift"): "verschuiven; wisselen",  # "shift register"
+    ("b2_unit06_abstraction", "names"): "noemt; benoemt",  # verb use
+    ("b2_unit06_abstraction", "view"): "de visie; het standpunt",
+    ("b2_unit07_negotiation", "push"): "een grens trekken",  # overlay wording for push back
+    ("b2_unit08_synthesis", "account"): "het verslag",  # "which account"
+    ("b2_unit08_synthesis", "name"): "benoemen",  # "name where sources agree"
+    ("b2_unit08_synthesis", "period"): "de periode",
+    ("b2_unit08_synthesis", "service"): "de dienst (busdienst)",
 }
 
 NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {

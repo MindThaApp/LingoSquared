@@ -6,7 +6,8 @@ unit_content_key: en.a1.unit22.health
 review:
   status: reviewed
   fresh_context: "true"
-  notes: "Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; fixes below). (1) lesson01 match.003: pool -- narrowed from unit tag to lesson01 tag (headache/stomachache/fever/cough/sore/throat; 6 pairs) so doctor/better/wrong are not tested before taught. (2) lesson03 choose.001: feedback -- uit deze les was false. (3) lesson04 listen.001: feedback -- removed false in dit gesprek claim. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: need (moeten; nodig hebben) proposed in log. Previous notes follow. Authored 2026-07-06 by a parallel Claude fork continuing the nl-en
     lane of the Endless Practice template-pool sync (main session was
     alternating between nl-en and en-nl directions this whole
     session; Ramin had unused Claude usage headroom, so the coordinator
@@ -38,11 +39,11 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [symptom_noun, a1_unit22_health]
+    semantic: [symptom_noun, a1_unit22_health, a1_unit22_health_lesson01]
 slot_presets:
   symptom_noun: &symptom_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: symptom_noun}}
   # Fresh-context review 2026-10-10: unit-scoped noun/adjective pool for match.003 (6 pairs; symptom_noun alone has only 4 members).
-  pair_word: &pair_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit22_health}}
+  pair_word: &pair_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit22_health_lesson01}}
 templates:
   - content_key: practice.nl-en.en.a1.unit22.lesson01.choose.001
     lesson_content_key: en.a1.unit22.lesson01.common_symptoms
@@ -93,7 +94,7 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *symptom_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is een klacht uit deze les.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is een klacht die je hebt geleerd.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit22.lesson03.order.002
     lesson_content_key: en.a1.unit22.lesson03.reading_health_advice
     type: word_order
@@ -107,7 +108,7 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr}
     slots: {item: *symptom_noun}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is het woord dat je hoorde in dit gesprek.", language_code: nl, direction: ltr}
+    feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit22.lesson04.translate.002
     lesson_content_key: en.a1.unit22.lesson04.feeling_sick_dialogue
     type: translation

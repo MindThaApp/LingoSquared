@@ -5,8 +5,9 @@ target_language: en
 unit_content_key: en.a1.unit41.cooking
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: 'Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). 3-member
+  required_next_reviewer: native_speaker_review
+  fresh_context: true
+  notes: 'Review 2026-10-22 (nl-en practice pass, fresh context; (2 fixes). (1) lesson01.match.003 and (2) lesson01.match.003.volume_match.008: pool -- 3-pair match over only 3 verbs (below floor) widened to a 6-pair match over the lesson01 nouns and verbs (11 words), frame now shows all six slots; the English text block became Dutch. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: follow=vervolg- wrong sense (volgen), making/using gloss as -end forms.  Authored 2026-07-11, nl-en depth-completion sprint (see a1_unit30.yaml''s notes for the sprint context). 3-member
     ''cooking_verb'' tag (chop/boil/taste, all verbs) for bare-word recognition only -- deliberately excludes the lesson''s
     other two vocabulary items (''recipe''/''ingredient'', nouns) to keep part_of_speech uniform within the tag, AND excludes
     the lesson''s own ''cook'' -- a real homograph collision found while extending scripts/_en_target_lexeme_common.py: ''cook''
@@ -55,12 +56,18 @@ tag_schema:
     - cooking_verb
     - chop_word
     - volume_fa_en_a1_unit41_item_04_single
+    - a1_unit41_cooking_lesson01
 slot_presets:
   cooking_verb: &id001
     language_code: en
     part_of_speech: verb
     agreement_tags:
       semantic: cooking_verb
+  cooking_word: &u41_word
+    language_code: en
+    part_of_speech: [noun, verb]
+    agreement_tags:
+      semantic: a1_unit41_cooking_lesson01
   chop_single: &u41_chop
     language_code: en
     part_of_speech: verb
@@ -108,25 +115,34 @@ templates:
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} · {second}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: en
     direction: ltr
   slots:
-    first: *id001
-    second: *id001
-    third: *id001
+    first: *u41_word
+    second: *u41_word
+    third: *u41_word
+    fourth: *u41_word
+    fifth: *u41_word
+    sixth: *u41_word
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Verbind elk woord met de Nederlandse betekenis.
     language_code: nl
@@ -169,33 +185,38 @@ templates:
   lesson_content_key: en.a1.unit41.lesson01.cooking_vocabulary
   type: matching_pairs
   frame:
-    text: '{first} · {second}'
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
     language_code: en
     direction: ltr
     text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
+    - text: Nog een herhalingsronde met dezelfde woorden.
+      language_code: nl
       direction: ltr
   slots:
-    first: &id002
-      language_code: en
-      part_of_speech: verb
-      agreement_tags:
-        semantic: cooking_verb
-    second: *id002
-    third: *id002
+    first: *u41_word
+    second: *u41_word
+    third: *u41_word
+    fourth: *u41_word
+    fifth: *u41_word
+    sixth: *u41_word
   slot_relations:
   - kind: distinct
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   answer_derivation:
     kind: matching_pairs
     slots:
     - first
     - second
     - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Verbind elk woord met de Nederlandse betekenis.
     language_code: nl
