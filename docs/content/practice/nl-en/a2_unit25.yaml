@@ -5,58 +5,14 @@ target_language: en
 unit_content_key: en.a2.unit25.bureaucracy
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: 'Authored 2026-07-06 by the Claude session syncing Endless Practice template pools to lesson content growth (nl-en
-    lane). This is the first A2-level unit for this direction (registering with local authorities: appointments, documents,
-    formal requests). Extended scripts/backfill_lexemes_nl_en.py''s UNIT_FILES to include units 25-26 and added Dutch glosses
-    for the English tokens plus classification for the Dutch source-side tokens found in this unit''s overlay gloss text.
-    Added a 4-member ''bureaucracy_noun'' tag (appointment/document/ form/confirmation, defined in the shared scripts/ _en_target_lexeme_common.py)
-    used ONLY for bare-word recognition -- deliberately did not attempt a generative frame, since this unit''s A2-register
-    content is dominated by multi-word formal phrases (''I was wondering whether...'', ''Could you tell me...'') that don''t
-    reduce to a safe single-token slot, consistent with this session''s standing ''don''t force it'' discipline for vocabulary
-    that doesn''t support a safe shared frame. Every slot''s real candidate count was verified with a standalone lexeme_matches()-replicating
-    harness against this script''s actual output. Needs the standard fresh-context review before import. Same blocking dependency
-    as every earlier nl-en pack: backfill_lexemes_nl_en.py has not actually been run against a real database yet. 2026-07-06
-    matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the bureaucracy_noun (noun) matching_pairs template from 2
-    to 4 pairs. 2026-07-06 depth pass (templates-per-unit audit): added 7 new templates (multiple_choice/listen_select/translation
-    against the same 4-member bureaucracy_noun tag) spread across lesson02/lesson03/lesson04 so every one of this unit''s
-    4 lessons now gets bare-word recognition + translation repetition, mirroring the established pattern already reviewed
-    in a1_unit21.yaml (travel_noun, also a no-generative-frame recognition-only tag) and a1_unit23.yaml (occupation_noun).
-    Did NOT add a second matching_pairs template -- bureaucracy_noun''s real course-wide candidate pool is capped at exactly
-    4 tokens, so a second matching_pairs against the same 4 tokens would be a near-duplicate of the existing one, not new
-    content. Did NOT attempt word_order/fill_in_blank -- this unit''s A2 content is dominated by multi-word formal phrases
-    that don''t reduce to a single fillable slot, same ''don''t force it'' reasoning as the original authoring note above,
-    re-confirmed not re-litigated. 6 -> 13 templates. Every new template''s real candidate count re-verified with the standalone
-    lexeme_matches()-replicating harness (scripts/_practice_slot_check.py).
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: >-
+    Review 2026-10-22 (nl-en practice pass, fresh context; 1 fixes). (1) weekday_translate.006: Dutch -- 'past' -> 'kan' (Vrijdag om 10 uur kan, as in the overlay). NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: residency, last, this, update, works, at.
 
-    Backport of prs-en''s better technique (2026-07-06, same depth-pass program, following prs-en''s a2_unit25.yaml as the
-    structural reference instead of re-deriving independently): rather than only reusing this unit''s own capped-at-4 bureaucracy_noun
-    tag, prs-en noticed this unit''s own REAL taught sentences also generalize an already-classified COURSE-WIDE tag from
-    an earlier unit -- lesson02''s real taught phrase ''Would it be possible to come this Friday?'' and lesson04''s real dialogue
-    line ''Friday at 10am works.'' both generalize to any of the 7 weekdays (course-wide ''weekday'' tag, 7 members, defined
-    in unit04, already safely reused by unit11/unit17''s own nl-en practice packs) with zero grammar loss (''Would it be possible
-    to come this Monday?''/ ''Monday at 10am works.'' are equally grammatical). Added the same 8 templates prs-en added (word_order,
-    fill_in_blank, translation, bare listen_select, x2 lessons), anchored to the same two real lessons (lesson02.making_a_formal_appointment,
-    lesson04.dmv_appointment_ dialogue). No invented English tokens or Dutch glosses -- every weekday gloss (maandag..zondag)
-    already exists in scripts/ backfill_lexemes_nl_en.py''s EN_TARGET_TO_NL_GLOSS, and the weekday tag/POS classification
-    is shared with prs-en/fa-en via scripts/ _en_target_lexeme_common.py, so neither shared file needed a change (both out
-    of scope for this pass anyway). Dutch frame/feedback text follows this pack''s own established convention (see a1_unit04.yaml''s
-    weekday word_order/fill_in_blank/translation templates for the same tag) rather than inventing new phrasing. 13 -> 21
-    templates. Verified with scripts/_practice_slot_check.py (weekday has 7 distinct course-wide candidates, well above the
-    >=3 floor) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review
-    before import.
-
-    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py (the standing harness) pools ALL specs from iter_specs()
-    -- both A1 and A2 -- together when counting a tag''s real distinct-candidate count, but backend/app/practice/service.py''s
-    _material() actually scopes both PracticeTemplate and Lexeme queries by course_id, and ''Engels A1''/''Engels A2'' are
-    separate Course rows -- so a real A2 enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped check (filtering
-    iter_specs() to level==''a2'') found the ''weekday'' course-wide tag (7 members pooled with A1) has only 1 REAL A2-scoped
-    candidate (''friday'' -- the only weekday ever introduced across all four A2 units 25-28) -- both lesson02.weekday_listen.008
-    and lesson04.weekday_listen.007 (listen_select, needs >=3 distinct) could never actually generate for a real A2-course
-    user, despite passing the pooled check. Fixed by converting both to type: translation (bare single-word production, answer_derivation
-    slot_text instead of slot_gloss -- translation has no minimum-candidate floor, and this is a genuinely different exercise
-    from the existing full-sentence weekday_translate templates in the same lessons, not a duplicate) -- renamed to weekday_translate_bare.008/.007
-    respectively. No candidates invented, no A1 vocabulary pooled in as if A2-scoped.'
+    Authored 2026-07-06 by the Claude session syncing Endless Practice template pools to lesson content growth (nl-en lane). This is the first A2-level unit for this direction (registering with local authorities: appointments, documents, formal requests). Extended scripts/backfill_lexemes_nl_en.py's UNIT_FILES to include units 25-26 and added Dutch glosses for the English tokens plus classification for the Dutch source-side tokens found in this unit's overlay gloss text. Added a 4-member 'bureaucracy_noun' tag (appointment/document/ form/confirmation, defined in the shared scripts/ _en_target_lexeme_common.py) used ONLY for bare-word recognition -- deliberately did not attempt a generative frame, since this unit's A2-register content is dominated by multi-word formal phrases ('I was wondering whether...', 'Could you tell me...') that don't reduce to a safe single-token slot, consistent with this session's standing 'don't force it' discipline for vocabulary that doesn't support a safe shared frame. Every slot's real candidate count was verified with a standalone lexeme_matches()-replicating harness against this script's actual output. Needs the standard fresh-context review before import. Same blocking dependency as every earlier nl-en pack: backfill_lexemes_nl_en.py has not actually been run against a real database yet. 2026-07-06 matching_pairs widening (AUTHORING_GUIDE.md #16): expanded the bureaucracy_noun (noun) matching_pairs template from 2 to 4 pairs. 2026-07-06 depth pass (templates-per-unit audit): added 7 new templates (multiple_choice/listen_select/translation against the same 4-member bureaucracy_noun tag) spread across lesson02/lesson03/lesson04 so every one of this unit's 4 lessons now gets bare-word recognition + translation repetition, mirroring the established pattern already reviewed in a1_unit21.yaml (travel_noun, also a no-generative-frame recognition-only tag) and a1_unit23.yaml (occupation_noun). Did NOT add a second matching_pairs template -- bureaucracy_noun's real course-wide candidate pool is capped at exactly 4 tokens, so a second matching_pairs against the same 4 tokens would be a near-duplicate of the existing one, not new content. Did NOT attempt word_order/fill_in_blank -- this unit's A2 content is dominated by multi-word formal phrases that don't reduce to a single fillable slot, same 'don't force it' reasoning as the original authoring note above, re-confirmed not re-litigated. 6 -> 13 templates. Every new template's real candidate count re-verified with the standalone lexeme_matches()-replicating harness (scripts/_practice_slot_check.py).
+    Backport of prs-en's better technique (2026-07-06, same depth-pass program, following prs-en's a2_unit25.yaml as the structural reference instead of re-deriving independently): rather than only reusing this unit's own capped-at-4 bureaucracy_noun tag, prs-en noticed this unit's own REAL taught sentences also generalize an already-classified COURSE-WIDE tag from an earlier unit -- lesson02's real taught phrase 'Would it be possible to come this Friday?' and lesson04's real dialogue line 'Friday at 10am works.' both generalize to any of the 7 weekdays (course-wide 'weekday' tag, 7 members, defined in unit04, already safely reused by unit11/unit17's own nl-en practice packs) with zero grammar loss ('Would it be possible to come this Monday?'/ 'Monday at 10am works.' are equally grammatical). Added the same 8 templates prs-en added (word_order, fill_in_blank, translation, bare listen_select, x2 lessons), anchored to the same two real lessons (lesson02.making_a_formal_appointment, lesson04.dmv_appointment_ dialogue). No invented English tokens or Dutch glosses -- every weekday gloss (maandag..zondag) already exists in scripts/ backfill_lexemes_nl_en.py's EN_TARGET_TO_NL_GLOSS, and the weekday tag/POS classification is shared with prs-en/fa-en via scripts/ _en_target_lexeme_common.py, so neither shared file needed a change (both out of scope for this pass anyway). Dutch frame/feedback text follows this pack's own established convention (see a1_unit04.yaml's weekday word_order/fill_in_blank/translation templates for the same tag) rather than inventing new phrasing. 13 -> 21 templates. Verified with scripts/_practice_slot_check.py (weekday has 7 distinct course-wide candidates, well above the >=3 floor) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import.
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py (the standing harness) pools ALL specs from iter_specs() -- both A1 and A2 -- together when counting a tag's real distinct-candidate count, but backend/app/practice/service.py's _material() actually scopes both PracticeTemplate and Lexeme queries by course_id, and 'Engels A1'/'Engels A2' are separate Course rows -- so a real A2 enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped check (filtering iter_specs() to level=='a2') found the 'weekday' course-wide tag (7 members pooled with A1) has only 1 REAL A2-scoped candidate ('friday' -- the only weekday ever introduced across all four A2 units 25-28) -- both lesson02.weekday_listen.008 and lesson04.weekday_listen.007 (listen_select, needs >=3 distinct) could never actually generate for a real A2-course user, despite passing the pooled check. Fixed by converting both to type: translation (bare single-word production, answer_derivation slot_text instead of slot_gloss -- translation has no minimum-candidate floor, and this is a genuinely different exercise from the existing full-sentence weekday_translate templates in the same lessons, not a duplicate) -- renamed to weekday_translate_bare.008/.007 respectively. No candidates invented, no A1 vocabulary pooled in as if A2-scoped.
 tag_schema:
   part_of_speech:
   - symbol
@@ -396,7 +352,7 @@ templates:
   lesson_content_key: en.a2.unit25.lesson04.dmv_appointment_dialogue
   type: translation
   frame:
-    text: '{item} om 10 uur past.'
+    text: '{item} om 10 uur kan.'
     language_code: nl
     direction: ltr
     slot_rendering:
@@ -410,7 +366,7 @@ templates:
       language_code: en
       direction: ltr
   feedback_frame:
-    text: '{item} at 10am works betekent {item} om 10 uur past.'
+    text: '{item} at 10am works betekent {item} om 10 uur kan.'
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a2.unit25.lesson04.weekday_translate_bare.007

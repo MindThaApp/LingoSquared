@@ -6,7 +6,8 @@ unit_content_key: en.a1.unit06.family
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; 3 fixes). (1) family_pair.003: matching_pairs below the 6-pair floor (4 pairs) -- re-anchored on a1_unit06_family_lesson01 nouns (mother, father, brother, sister, parents, siblings) with 6 slots; feedback no longer says vier. (2) possessive_family_order.002, possessive_family_translate.004: question frame lacked the question mark -- added. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: dont=niet leuk vinden (wrong sense), any=een aantal (wrong sense). Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
     the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
@@ -46,9 +47,10 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [family_singular, family_collective, extended_family, possessive]
+    semantic: [family_singular, family_collective, extended_family, possessive, a1_unit06_family_lesson01]
 slot_presets:
   family_singular: &family_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_singular}}
+  family_words: &family_words {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit06_family_lesson01}}
   family_collective: &family_collective {language_code: en, part_of_speech: noun, agreement_tags: {semantic: family_collective}}
   extended_family: &extended_family {language_code: en, part_of_speech: noun, agreement_tags: {semantic: extended_family}}
   possessive: &possessive {language_code: en, part_of_speech: pronoun, agreement_tags: {semantic: possessive}}
@@ -71,10 +73,10 @@ templates:
     lesson_content_key: en.a1.unit06.lesson01.immediate_family
     type: matching_pairs
     frame: {text: "Koppel de Engelse woorden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_word: *family_singular, second_word: *family_singular, third_word: *family_singular, fourth_word: *family_singular}
-    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word]}
-    feedback_frame: {text: "Je hebt vier familiewoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_word: *family_words, second_word: *family_words, third_word: *family_words, fourth_word: *family_words, fifth_word: *family_words, sixth_word: *family_words}
+    slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
+    feedback_frame: {text: "Je hebt familiewoorden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit06.lesson01.family_translate.004
     lesson_content_key: en.a1.unit06.lesson01.immediate_family
     type: translation
@@ -127,14 +129,14 @@ templates:
   - content_key: practice.nl-en.en.a1.unit06.lesson04.possessive_family_order.002
     lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
     type: word_order
-    frame: {text: "Is this {item} family", language_code: en, direction: ltr}
+    frame: {text: "Is this {item} family?", language_code: en, direction: ltr}
     slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family?", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} laat zien van wie deze familie is.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit06.lesson04.possessive_family_translate.004
     lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
     type: translation
     frame: {text: "Is dit {item} familie?", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *possessive}
-    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "Is this {item} family?", language_code: en, direction: ltr}}
     feedback_frame: {text: "Is this {item} family? betekent Is dit {item} familie?", language_code: nl, direction: ltr}
