@@ -3805,6 +3805,57 @@ def validate_reading_glosses(
                         )
 
 
+#: Internal authoring wording that must never reach learners (spotted in
+#: review-card targets and overlay notes, e.g. "-- already taught from
+#: unit03"). Zero-padded "unitNN" slugs and "already taught from/in unit"
+#: asides are authoring bookkeeping, not teaching text.
+_INTERNAL_AUTHORING_RE = re.compile(
+    r"already taught (?:back )?(?:from|in) units?\s?\d"
+    r"|\bunit\d{2}\b"
+    r"|reviewed_phrase"
+    r"|\bTODO\b"
+)
+
+
+def validate_no_internal_authoring_text(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+) -> None:
+    """Error when learner-visible strings carry internal authoring notes."""
+
+    def walk(value: Any, location: str) -> None:
+        if isinstance(value, dict):
+            for key, child in value.items():
+                key_text = str(key)
+                if key_text.endswith("_key") or key_text in {
+                    "review",
+                    "notes",
+                    "agreement_tags",
+                }:
+                    continue
+                walk(child, f"{location}.{key_text}")
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                walk(child, f"{location}[{index}]")
+        elif isinstance(value, str):
+            match = _INTERNAL_AUTHORING_RE.search(value)
+            if match:
+                report.error(
+                    location,
+                    f"learner-visible text contains internal authoring "
+                    f"wording {match.group(0)!r}; remove it",
+                )
+
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for section in ("teaching", "exercises"):
+                walk(lesson.get(section), f"realization.{section}")
+    for section in ("teaching", "exercises"):
+        walk(overlay.get(section), f"overlay.{section}")
+
+
+
 def validate_audio_references(
     realization: dict[str, Any],
     report: Report,
@@ -4672,6 +4723,7 @@ def validate_documents(
     )
     validate_vocabulary_examples(realization, overlay, report)
     validate_reading_glosses(realization, overlay, report)
+    validate_no_internal_authoring_text(realization, overlay, report)
     validate_underdetermined_production_prompts(realization, overlay, report)
     validate_dictation_byte_equality(realization, overlay, report)
     validate_german_transliteration_variants(realization, overlay, report)
