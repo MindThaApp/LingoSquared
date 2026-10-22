@@ -6,7 +6,21 @@ unit_content_key: fa.a1.unit19.housing
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 6 fixes). (1) lesson02
+    reviewed_phrase MC drew ~395 course-wide phrases and 'چند تا (how many)' prints its
+    answer; re-pooled to room/furniture words. (2) both room_object_order templates built
+    '{room} یه {object} داره' ('حموم یه تخت داره', 'آشپزخانه یه تخت داره'); now 'اتاق خواب
+    یه {object_word} داره'. (3) three feedbacks rendered Persian tokens inside English
+    sentences; reworded. (4) house_possessive_translate x2 asked for خونه‌ی from 'house of /
+    my house (ezafe form)' (not typeable; 'my house' = خونه‌م/خونه‌ی من): lesson06 now
+    خونه‌ت only, lesson05 replaced by MC house_word_choice.002. (5) location_object_match
+    7/7 and unit_review_match 10 of 10(+2) -> 6 slots over 8 and 14. (6) lesson
+    cross-references removed from match frames/feedback. NATIVE FLAGS: unit teaches آشپزخانه
+    / آشپزخانه‌س (formal stem + colloquial clitic) while the overlay accepts آشپزخونه‌س/‌ست;
+    typed 'kitchen' accepts only آشپزخانه.
+
     Authored 2026-07-07, same pass as a1_unit18.yaml -- see that file's
     notes for the shared backfill_lexemes.py UNIT_FILES extension.
 
@@ -152,7 +166,8 @@ tag_schema:
   agreement_tags:
     semantic:
       [room_word, home_room_word, object_word, home_location_word,
-       is_location_verb, house_possessive_word, reviewed_phrase]
+       is_location_verb, house_possessive_word, reviewed_phrase,
+       en_fa_a1_unit19_lesson05_words, en_fa_a1_unit19_lesson06_words]
 slot_presets:
   room_word: &room_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: room_word}}
   home_room_word: &home_room_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: home_room_word}}
@@ -162,7 +177,12 @@ slot_presets:
   house_possessive_word: &house_possessive_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: house_possessive_word}}
   room_or_object: &room_or_object {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [room_word, object_word]}}
   location_or_is: &location_or_is {language_code: fa, part_of_speech: [preposition, verb], agreement_tags: {semantic: [home_location_word, is_location_verb]}}
-  housing_reviewed_phrase: &housing_reviewed_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: reviewed_phrase}}
+  # Review 2026-10-22: wider review pools; "your house" only for typed answers (the ezafe form
+  # خونه‌ی is not typeable from its gloss).
+  location_or_object: &location_or_object {language_code: fa, part_of_speech: [preposition, verb, noun], agreement_tags: {semantic: [home_location_word, is_location_verb, object_word]}}
+  housing_review_word: &housing_review_word {language_code: fa, part_of_speech: [noun, phrase, preposition, verb], agreement_tags: {semantic: [home_location_word, is_location_verb, room_word, object_word, house_possessive_word]}}
+  house_or_room_word: &house_or_room_word {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [en_fa_a1_unit19_lesson05_words, room_word]}}
+  your_house_word: &your_house_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a1_unit19_lesson06_words}}
 templates:
   # Lesson 1: basic room vocabulary (اتاق خواب, آشپزخانه, حموم).
   - content_key: practice.en-fa.fa.a1.unit19.lesson01.room_choice.001
@@ -179,7 +199,7 @@ templates:
     slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "These combine this lesson's rooms with lesson03's household objects.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each room or furniture word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson01.room_translate.003
     lesson_content_key: fa.a1.unit19.lesson01.basic_room_vocab
     type: translation
@@ -193,25 +213,25 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit19.lesson02.reviewed_phrase_choice.001
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: multiple_choice
-    frame: {text: "{housing_reviewed_phrase}", language_code: fa, direction: rtl}
-    slots: {housing_reviewed_phrase: *housing_reviewed_phrase}
-    answer_derivation: {kind: slot_gloss, slot: housing_reviewed_phrase}
-    feedback_frame: {text: "{housing_reviewed_phrase} is a phrase from this unit.", language_code: en, direction: ltr}
+    frame: {text: "{room_or_object}", language_code: fa, direction: rtl}
+    slots: {room_or_object: *room_or_object}
+    answer_derivation: {kind: slot_gloss, slot: room_or_object}
+    feedback_frame: {text: "{room_or_object} is a word for describing a home.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson02.room_review_match.002
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of lesson01's and lesson03's vocabulary.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
     slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "This reviews lesson01's room vocabulary and lesson03's household objects.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each room or furniture word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson02.room_object_order.003
     lesson_content_key: fa.a1.unit19.lesson02.describing_with_numbers
     type: word_order
-    frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}
-    slots: {room_word: *room_word, object_word: *object_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "یه {object_word} داره means it has a {object_word}, as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
+    frame: {text: "اتاق خواب یه {object_word} داره", language_code: fa, direction: rtl}
+    slots: {object_word: *object_word}
+    answer_derivation: {kind: render_frame, frame: {text: "اتاق خواب یه {object_word} داره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یه ... داره means 'it has a ...', as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
 
   # Lesson 3: household objects (تخت, میز, صندلی).
   - content_key: practice.en-fa.fa.a1.unit19.lesson03.object_choice.001
@@ -228,14 +248,14 @@ templates:
     slots: {first: *room_or_object, second: *room_or_object, third: *room_or_object, fourth: *room_or_object, fifth: *room_or_object, sixth: *room_or_object}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "These combine this lesson's objects with lesson01's rooms.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each room or furniture word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson03.room_object_order.003
     lesson_content_key: fa.a1.unit19.lesson03.household_objects
     type: word_order
-    frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}
-    slots: {room_word: *room_word, object_word: *object_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{room_word} یه {object_word} داره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "یه {object_word} داره means it has a {object_word}, as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
+    frame: {text: "اتاق خواب یه {object_word} داره", language_code: fa, direction: rtl}
+    slots: {object_word: *object_word}
+    answer_derivation: {kind: render_frame, frame: {text: "اتاق خواب یه {object_word} داره", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "یه ... داره means 'it has a ...', as in اتاق خواب یه تخت داره (the bedroom has a bed).", language_code: en, direction: ltr}
 
   # Lesson 4: location within the home (تو, بالای, تخته, آشپزخانه‌س).
   - content_key: practice.en-fa.fa.a1.unit19.lesson04.location_choice.001
@@ -249,19 +269,10 @@ templates:
     lesson_content_key: fa.a1.unit19.lesson04.location_in_home
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots:
-      lw1: *location_or_is
-      lw2: *location_or_is
-      lw3: *location_or_is
-      lw4: *location_or_is
-      ow1: *object_word
-      ow2: *object_word
-      ow3: *object_word
-    slot_relations:
-      - {kind: distinct, slots: [lw1, lw2, lw3, lw4]}
-      - {kind: distinct, slots: [ow1, ow2, ow3]}
-    answer_derivation: {kind: matching_pairs, slots: [lw1, lw2, lw3, lw4, ow1, ow2, ow3]}
-    feedback_frame: {text: "These combine lesson04's new words with lesson03's review vocabulary.", language_code: en, direction: ltr}
+    slots: {first: *location_or_object, second: *location_or_object, third: *location_or_object, fourth: *location_or_object, fifth: *location_or_object, sixth: *location_or_object}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson04.is_location_verb_translate.003
     lesson_content_key: fa.a1.unit19.lesson04.location_in_home
     type: translation
@@ -277,41 +288,28 @@ templates:
     frame: {text: "خونه‌ی من یه {home_room_word} داره", language_code: fa, direction: rtl}
     slots: {home_room_word: *home_room_word}
     answer_derivation: {kind: render_frame, frame: {text: "خونه‌ی من یه {home_room_word} داره", language_code: fa, direction: rtl}}
-    feedback_frame: {text: "خونه‌ی من یه {home_room_word} داره means my house has a {home_room_word}.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_possessive_translate.002
+    feedback_frame: {text: "خونه‌ی من یه ... داره means 'my house has a ...', as in خونه‌ی من یه آشپزخانه داره.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit19.lesson05.house_word_choice.002
     lesson_content_key: fa.a1.unit19.lesson05.reading_a_housing_description
-    type: translation
-    frame: {text: "{house_possessive_word}", language_code: en, direction: ltr, slot_rendering: {house_possessive_word: english_gloss}}
-    slots: {house_possessive_word: *house_possessive_word}
-    answer_derivation: {kind: slot_text, slot: house_possessive_word}
-    feedback_frame: {text: "The Farsi word is {house_possessive_word}.", language_code: en, direction: ltr}
+    type: multiple_choice
+    frame: {text: "{house_or_room_word}", language_code: fa, direction: rtl}
+    slots: {house_or_room_word: *house_or_room_word}
+    answer_derivation: {kind: slot_gloss, slot: house_or_room_word}
+    feedback_frame: {text: "{house_or_room_word} is a word for describing a home.", language_code: en, direction: ltr}
 
   # Lesson 6: a dialogue about a home (خونه‌ت is native here).
   - content_key: practice.en-fa.fa.a1.unit19.lesson06.house_possessive_translate.001
     lesson_content_key: fa.a1.unit19.lesson06.housing_dialogue
     type: translation
     frame: {text: "{house_possessive_word}", language_code: en, direction: ltr, slot_rendering: {house_possessive_word: english_gloss}}
-    slots: {house_possessive_word: *house_possessive_word}
+    slots: {house_possessive_word: *your_house_word}
     answer_derivation: {kind: slot_text, slot: house_possessive_word}
     feedback_frame: {text: "The Farsi word is {house_possessive_word}.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit19.lesson06.unit_review_match.002
     lesson_content_key: fa.a1.unit19.lesson06.housing_dialogue
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's housing vocabulary.", language_code: en, direction: ltr}
-    slots:
-      lw1: *location_or_is
-      lw2: *location_or_is
-      lw3: *location_or_is
-      lw4: *location_or_is
-      rw1: *room_word
-      rw2: *room_word
-      rw3: *room_word
-      ow1: *object_word
-      ow2: *object_word
-      ow3: *object_word
-    slot_relations:
-      - {kind: distinct, slots: [lw1, lw2, lw3, lw4]}
-      - {kind: distinct, slots: [rw1, rw2, rw3]}
-      - {kind: distinct, slots: [ow1, ow2, ow3]}
-    answer_derivation: {kind: matching_pairs, slots: [lw1, lw2, lw3, lw4, rw1, rw2, rw3, ow1, ow2, ow3]}
-    feedback_frame: {text: "This reviews the room, object, and location vocabulary taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *housing_review_word, second: *housing_review_word, third: *housing_review_word, fourth: *housing_review_word, fifth: *housing_review_word, sixth: *housing_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each housing word to its English meaning.", language_code: en, direction: ltr}
