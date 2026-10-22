@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit66.pharmacy_symptoms
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). fill.005 'My throat {item}.' and lesson03.fill.003 'It is getting {item}.' had no cue (hurts/aches; worse/better) -> added hint slots rendering the Persian gloss. Checked: pool symptom/hurts/worse distinct; lesson02 phrase translations determined (apart from do you have medicine/any medicine). NATIVE FLAGS: symptom=علامت بیماری; hurts=درد می‌کند (written) beside گلوم درد می‌کنه. BACKFILL GLOSS FLAGS: none.
+
     THIN UNIT: backfill_lexemes_fa_en.py registers only 3 lexemes (symptom/
     hurts in lesson01, worse in lesson03; lesson02/lesson04 have zero
     lexemes and are invisible to any checkpoint). 8 templates at genuine
@@ -78,8 +81,8 @@ templates:
   - content_key: practice.fa-en.en.a1.unit66.lesson01.fill.005
     lesson_content_key: en.a1.unit66.lesson01.symptom_words
     type: fill_in_blank
-    frame: {text: "My throat {item}.", language_code: en, direction: ltr}
-    slots: {item: *lesson01_verb}
+    frame: {text: "My throat {item}. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson01_verb, hint: *lesson01_verb}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «درد می‌کند».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit66.lesson02.translate.001
@@ -106,7 +109,7 @@ templates:
   - content_key: practice.fa-en.en.a1.unit66.lesson03.fill.003
     lesson_content_key: en.a1.unit66.lesson03.dialogue_at_the_pharmacy
     type: fill_in_blank
-    frame: {text: "It is getting {item}.", language_code: en, direction: ltr}
-    slots: {item: *lesson03_single}
+    frame: {text: "It is getting {item}. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson03_single, hint: *lesson03_single}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «بدتر».", language_code: fa, direction: rtl}
