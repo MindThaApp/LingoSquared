@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit68.borrowing_lending
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 4 fixes). (1) fill.004 'I need a {item}.' and (2) lesson02.fill.003 'Thank you for {item} it.' had no cue -> added hint slots rendering the Persian gloss. (3) order.005 'Can you {item} me a charger' lacked '?' (frame and answer). (4) lesson04.order.003 feedback ('simple past or simple verb') was wrong/meaningless for share/lent/remember -> 'جملهٔ درست: I {item} it.'. NATIVE FLAGS: remember=به یاد آوردن (reading means keep in mind: به یاد داشتن/یادش بمونه); lending=قرض‌دهی as a gerund noun in 'Thank you for lending it'. BACKFILL GLOSS FLAGS: share=شریک شدن is the wrong sense for 'Friends Who Share' (override proposed).
+
     THINNEST unit of the batch but the richest of the a1_unit62-68 group:
     backfill_lexemes_fa_en.py registers 7 lexemes (lend/charger in lesson01,
     lending in lesson02, leila's/share/lent/remember in lesson04). "leila's"
@@ -64,16 +67,16 @@ templates:
   - content_key: practice.fa-en.en.a1.unit68.lesson01.fill.004
     lesson_content_key: en.a1.unit68.lesson01.borrowing_words
     type: fill_in_blank
-    frame: {text: "I need a {item}.", language_code: en, direction: ltr}
-    slots: {item: *lesson01_noun}
+    frame: {text: "I need a {item}. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson01_noun, hint: *lesson01_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «شارژر».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit68.lesson01.order.005
     lesson_content_key: en.a1.unit68.lesson01.borrowing_words
     type: word_order
-    frame: {text: "Can you {item} me a charger", language_code: en, direction: ltr}
+    frame: {text: "Can you {item} me a charger?", language_code: en, direction: ltr}
     slots: {item: *lesson01_verb}
-    answer_derivation: {kind: render_frame, frame: {text: "Can you {item} me a charger", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "Can you {item} me a charger?", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} یعنی «قرض دادن».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit68.lesson02.choose.001
     lesson_content_key: en.a1.unit68.lesson02.borrowing_phrases
@@ -92,8 +95,8 @@ templates:
   - content_key: practice.fa-en.en.a1.unit68.lesson02.fill.003
     lesson_content_key: en.a1.unit68.lesson02.borrowing_phrases
     type: fill_in_blank
-    frame: {text: "Thank you for {item} it.", language_code: en, direction: ltr}
-    slots: {item: *lesson02_single}
+    frame: {text: "Thank you for {item} it. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson02_single, hint: *lesson02_single}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «قرض‌دهی».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit68.lesson04.choose.001
@@ -116,7 +119,7 @@ templates:
     frame: {text: "I {item} it", language_code: en, direction: ltr}
     slots: {item: *lesson04_pool}
     answer_derivation: {kind: render_frame, frame: {text: "I {item} it", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} فعل گذشتهٔ ساده یا فعل ساده است.", language_code: fa, direction: rtl}
+    feedback_frame: {text: "جملهٔ درست: I {item} it.", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit68.lesson01.match.006
     lesson_content_key: en.a1.unit68.lesson01.borrowing_words
     type: matching_pairs
