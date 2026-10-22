@@ -6,168 +6,18 @@ unit_content_key: en.a2.unit28.doctor
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-07 by the Claude session extending prs-en's practice
-    pool to unit28 (attending a doctor's appointment), the fourth A2 unit
-    for this direction. Uses fa-en's a2_unit28.yaml as the structural
-    reference, same as unit25/unit26/unit27 -- most of this unit's real
-    content is multi-word health/appointment compounds ("follow-up
-    appointment", "insurance card", "getting worse") that don't reduce to
-    a single fillable slot. EN_POS/en_agreement_tags for this unit's
-    vocabulary (including the new 3-member health_followup_noun tag
-    [medicine, prescription, insurance] and the new 2-member condition_
-    adjective tag [worse, better]) were already present in
-    scripts/_en_target_lexeme_common.py before this pass -- added by the
-    concurrent nl-en lane's own unit28 work (a separate parallel worker,
-    not consulted beyond reading its already-committed shared-module
-    output). Verified every introduced_token across
-    docs/content/realizations/en/a2_unit28_doctor.yaml against EN_POS's
-    keys: zero missing. Only this script's own Dari gloss dict
-    (scripts/backfill_lexemes_prs_en.py) and UNIT_FILES_A2 tuple needed
-    extending beyond that (16 new tokens, cross-checked against
-    docs/content/overlays/prs-en/a2_unit28.yaml's own real text, e.g.
-    medicine=دوا not fa-en's دارو, worse=خرابتر not fa-en's بدتر,
-    twice=دو مرتبه not fa-en's دو بار, within=تا not fa-en's ظرف --
-    genuinely distinct Afghan Dari vocabulary, not a find-replace of the
-    fa-en script).
-
-    ZERO fill_in_blank templates in this pack, same reasoning as fa-en's
-    sibling pack: the unit's real single-token vocabulary is dominated
-    by either true two-word compounds (follow-up appointment, insurance
-    card, getting worse) or by tags too small/cross-course-risky to trust
-    for an unforgiving single-slot fill_in_blank. Ran
-    scripts/_fill_in_blank_ambiguity_check.py after writing this pack to
-    confirm zero AMBIGUOUS flags (there are no fill_in_blank templates to
-    flag in the first place).
-
-    Two genuine generative frames identified, same as fa-en's sibling
-    pack: (1) lesson02's real phrase "...and it's getting worse"
-    generalizes with zero grammar loss to "it's getting better" --
-    authored as word_order against the new condition_adjective tag,
-    anchored to lesson02 (which introduces "getting"/"worse" as new
-    tokens). (2) lesson03's real reading text "Your appointment is
-    confirmed for 3pm today." generalizes with zero grammar loss via the
-    already-established 4-member 'possessive' tag (my/your/his/her,
-    defined for unit06's family lessons, reused identically here) --
-    authored as word_order + a bare listen_select recognition item,
-    anchored to lesson03.
-
-    Also reused, same course-wide-recognition discipline as unit25/26/27:
-    'bureaucracy_noun' (appointment/document/form/confirmation, all
-    within the SAME A2 course since unit25 first introduced it) for
-    lesson02 (appointment)/lesson03 (confirmation)/lesson04 recognition,
-    and 'symptom_noun' (headache/stomachache/fever/cough) for lesson01/
-    lesson04 recap recognition of this unit's own reused_symptoms card.
-
-    Anchoring check (same discipline as every other pack in this batch):
-    verified via iter_specs() that every one of this unit's four lessons
-    introduces at least one new lexeme (lesson01: medicine/prescription/
-    follow/getting/worse/insurance/card [as a fresh A2-course token] plus
-    the reused_symptoms recap; lesson02: i've/had/getting/worse [as full-
-    sentence context]; lesson03: early/confirmed/3pm/7724; lesson04:
-    twice/plenty/back/within), so all four are safe lesson_content_key
-    anchors.
-
-    16 templates: 5 lesson01 (health_followup_noun x3 + symptom_noun x2),
-    3 lesson02 (bureaucracy_noun x2 + condition_adjective word_order x1),
-    4 lesson03 (possessive word_order + possessive listen_select +
-    bureaucracy_noun + health_followup_noun), 4 lesson04
-    (health_followup_noun+bureaucracy_noun matching_pairs [7 pairs, within
-    the AUTHORING_GUIDE.md #16 6-12 target] + symptom_noun + bureaucracy_
-    noun + condition_adjective translation). An honest, real-vocabulary-
-    supported count for a newer, smaller A2 unit -- no padding with
-    untaught words.
-
-    Verified with scripts/_practice_slot_check.py (glob-discovered
-    automatically for prs-en; health_followup_noun has 3 distinct
-    course-wide candidates [safe for MC/listen since all 3 are
-    exclusively new to this unit, no cross-course-level risk],
-    bureaucracy_noun 4, symptom_noun/possessive well above the >=3
-    multiple_choice/listen_select floor via the combined direction-wide
-    check -- same convention this session's own unit27 pack already
-    established for its identity/possessive reuse; condition_adjective
-    deliberately kept off any MC/listen_select template, matching its
-    own 2-member design note in _en_target_lexeme_common.py) and
-    compile_content.py practice-validate, 0 errors/0 warnings. Still
-    needs the standard fresh-context review before import.
-
-    UNIT-SCOPE DEAD-TEMPLATE REPAIR (2026-07-24): scripts/_practice_unit_scope_check.py
-    (which scopes candidates to THIS unit's own lesson_ids, exactly matching
-    generate_checkpoint()) found the note below's "A2-scoping fix" was
-    necessary but not sufficient: 'bureaucracy_noun' (appointment/document/
-    form/confirmation) and 'possessive' (my/your/his/her) are course-wide
-    reuse tags whose REAL members were introduced by unit25/unit06
-    respectively -- unit28 itself introduces ZERO lexemes carrying either
-    tag. Fine for Endless Practice (course-scoped), but 0 unit-scoped
-    candidates for the checkpoint, so every slot built on them silently
-    never generates there (recipe DO-NOT #2). Fixed by RE-ANCHORING to
-    unit28's own tags, never by inventing a new backfill tag:
-    (1) lesson02.choose.001 + lesson02.listen.002 (bureaucracy_noun MC/
-    listen) -> re-anchored to a new 'health_symptom_union' preset (union
-    of health_followup_noun + symptom_noun, both unit28-native, 5 distinct
-    course-wide -- verified via iter_specs, well above the >=3 floor).
-    (2) lesson03.choose.003 (bureaucracy_noun MC) -> same health_symptom_union
-    re-anchor. (3) lesson04.bureaucracy_listen.003 -> renamed
-    lesson04.content_listen.003, same health_symptom_union re-anchor.
-    (4) lesson03.possessive_order.001 (word_order on "{item} appointment is
-    confirmed...") -> the possessive concept has no unit28-native vocabulary
-    to fall back on, so REPLACED with a new frame anchored to the unit's own
-    health_followup_noun tag: renamed lesson03.health_order.001, frame "I
-    need my {item} today" (verified grammatical for all 3 candidates:
-    medicine/prescription/insurance; verified no self-reference and no
-    course-scope widening since health_followup_noun's course-wide pool is
-    the same 3, exclusively unit28-native). (5) lesson03.possessive_translate_bare.002
-    -> REPLACED, renamed lesson03.symptom_translate_bare.002, bare-word
-    translation over symptom_noun (headache/fever, also exclusively
-    unit28-native course-wide). (6) lesson04.match.001 (7-pair matching_pairs,
-    4 of 7 slots dead on bureaucracy_noun) -> reduced to the standard 6 pairs,
-    all from unit28's own three real semantic tags with zero padding:
-    health_followup_noun x3 (medicine/prescription/insurance) + symptom_noun
-    x2 (headache/fever) + condition_adjective x1 (worse) = exactly 6 distinct
-    unit-scoped tokens, a deterministic bijection (no broad/untagged
-    part-of-speech pool needed, so no risk of pulling in a compound-component
-    noun like "throat"/"sore" that this pack's original author deliberately
-    left untagged).
-    Before: 10 DEAD template-slots (7 templates) per _practice_unit_scope_check.py.
-    After: 0 DEAD, 0 below-floor for this file. practice-validate: 0 errors.
-    check_dari_register.py: 0 new findings (all new/changed Dari feedback
-    text reuses already-vetted words and phrases verbatim from elsewhere in
-    this same file -- همی جمله, واژه, است -- no Iranian-register or
-    Tehrani-contraction markers introduced). No backfill/realization/overlay
-    file touched.
-
-    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
-    pools ALL specs from iter_specs() (both A1 and A2) together when
-    counting a tag's real distinct-candidate count, but
-    backend/app/practice/service.py's _material() actually scopes both
-    PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are
-    separate Course rows -- a real A2 enrollee only ever sees A2-scoped
-    lexemes. A standalone A2-only-scoped check (filtering iter_specs() to
-    level=='a2') found three real violations in this file, invalidating
-    the pooled-with-A1 "symptom_noun/possessive well above the >=3 floor"
-    note above: (1) lesson01.symptom_choose.004 AND
-    lesson01.symptom_listen.005 -- 'symptom_noun' (headache/stomachache/
-    fever/cough, 4 members pooled with A1) has only 2 REAL A2-scoped
-    candidates (fever/headache -- stomachache/cough never introduced in
-    any A2 unit). BOTH templates were broken (each needs >=3), and
-    converting both to translation would have produced two duplicate
-    bare-word production templates against the identical 2-candidate
-    pool -- no honest additional candidate exists, so symptom_choose.004
-    was converted to type: translation (renamed
-    symptom_translate_bare.004) and symptom_listen.005 was removed
-    outright. (2) lesson03.possessive_listen.002 -- 'possessive' (my/
-    your/his/her, 4 members pooled with A1) has only 2 REAL A2-scoped
-    candidates (my/your -- his/her never reintroduced in any A2 unit).
-    Fixed by converting to type: translation (renamed
-    possessive_translate_bare.002) -- a genuinely new exercise, not a
-    duplicate of the existing possessive_order.001 (full-sentence
-    word_order). (3) lesson04.symptom_choose.002 -- same 2-candidate
-    symptom_noun pool as (1); no sibling symptom template existed in
-    lesson04 to duplicate, so converted directly to type: translation
-    (renamed symptom_translate_bare.002). All three conversions use
-    answer_derivation slot_text instead of slot_gloss (translation has no
-    minimum-candidate floor). No candidates invented, no A1 vocabulary
-    pooled in as if A2-scoped.
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-22 (prs-en practice pass, rest): 0 fixes -- slots all tagged (health_followup_noun 3, symptom_noun 4, condition_adjective 2); frames 'it's getting {item}', 'I need my {item} today' grammatical; glosses match the reviewed overlay (سردردی, خرابتر, نسخهٔ داکتر). NATIVE FLAGS: خرابتر for worse here vs بدتر in unit66 overlay; 'I need my insurance today' is grammatical but a little odd (no narrower tag exists). BACKFILL GLOSS FLAGS: none.
+    Prior notes: Authored 2026-07-07 by the Claude session extending prs-en's practice pool to unit28 (attending a doctor's appointment), the fourth A2 unit for this direction. Uses fa-en's a2_unit28.yaml as the structural reference, same as unit25/unit26/unit27 -- most of this unit's real content is multi-word health/appointment compounds ("follow-up appointment", "insurance card", "getting worse") that don't reduce to a single fillable slot. EN_POS/en_agreement_tags for this unit's vocabulary (including the new 3-member health_followup_noun tag [medicine, prescription, insurance] and the new 2-member condition_ adjective tag [worse, better]) were already present in scripts/_en_target_lexeme_common.py before this pass -- added by the concurrent nl-en lane's own unit28 work (a separate parallel worker, not consulted beyond reading its already-committed shared-module output). Verified every introduced_token across docs/content/realizations/en/a2_unit28_doctor.yaml against EN_POS's keys: zero missing. Only this script's own Dari gloss dict (scripts/backfill_lexemes_prs_en.py) and UNIT_FILES_A2 tuple needed extending beyond that (16 new tokens, cross-checked against docs/content/overlays/prs-en/a2_unit28.yaml's own real text, e.g. medicine=دوا not fa-en's دارو, worse=خرابتر not fa-en's بدتر, twice=دو مرتبه not fa-en's دو بار, within=تا not fa-en's ظرف -- genuinely distinct Afghan Dari vocabulary, not a find-replace of the fa-en script).
+    ZERO fill_in_blank templates in this pack, same reasoning as fa-en's sibling pack: the unit's real single-token vocabulary is dominated by either true two-word compounds (follow-up appointment, insurance card, getting worse) or by tags too small/cross-course-risky to trust for an unforgiving single-slot fill_in_blank. Ran scripts/_fill_in_blank_ambiguity_check.py after writing this pack to confirm zero AMBIGUOUS flags (there are no fill_in_blank templates to flag in the first place).
+    Two genuine generative frames identified, same as fa-en's sibling pack: (1) lesson02's real phrase "...and it's getting worse" generalizes with zero grammar loss to "it's getting better" -- authored as word_order against the new condition_adjective tag, anchored to lesson02 (which introduces "getting"/"worse" as new tokens). (2) lesson03's real reading text "Your appointment is confirmed for 3pm today." generalizes with zero grammar loss via the already-established 4-member 'possessive' tag (my/your/his/her, defined for unit06's family lessons, reused identically here) -- authored as word_order + a bare listen_select recognition item, anchored to lesson03.
+    Also reused, same course-wide-recognition discipline as unit25/26/27: 'bureaucracy_noun' (appointment/document/form/confirmation, all within the SAME A2 course since unit25 first introduced it) for lesson02 (appointment)/lesson03 (confirmation)/lesson04 recognition, and 'symptom_noun' (headache/stomachache/fever/cough) for lesson01/ lesson04 recap recognition of this unit's own reused_symptoms card.
+    Anchoring check (same discipline as every other pack in this batch): verified via iter_specs() that every one of this unit's four lessons introduces at least one new lexeme (lesson01: medicine/prescription/ follow/getting/worse/insurance/card [as a fresh A2-course token] plus the reused_symptoms recap; lesson02: i've/had/getting/worse [as full- sentence context]; lesson03: early/confirmed/3pm/7724; lesson04: twice/plenty/back/within), so all four are safe lesson_content_key anchors.
+    16 templates: 5 lesson01 (health_followup_noun x3 + symptom_noun x2), 3 lesson02 (bureaucracy_noun x2 + condition_adjective word_order x1), 4 lesson03 (possessive word_order + possessive listen_select + bureaucracy_noun + health_followup_noun), 4 lesson04 (health_followup_noun+bureaucracy_noun matching_pairs [7 pairs, within the AUTHORING_GUIDE.md #16 6-12 target] + symptom_noun + bureaucracy_ noun + condition_adjective translation). An honest, real-vocabulary- supported count for a newer, smaller A2 unit -- no padding with untaught words.
+    Verified with scripts/_practice_slot_check.py (glob-discovered automatically for prs-en; health_followup_noun has 3 distinct course-wide candidates [safe for MC/listen since all 3 are exclusively new to this unit, no cross-course-level risk], bureaucracy_noun 4, symptom_noun/possessive well above the >=3 multiple_choice/listen_select floor via the combined direction-wide check -- same convention this session's own unit27 pack already established for its identity/possessive reuse; condition_adjective deliberately kept off any MC/listen_select template, matching its own 2-member design note in _en_target_lexeme_common.py) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import.
+    UNIT-SCOPE DEAD-TEMPLATE REPAIR (2026-07-24): scripts/_practice_unit_scope_check.py (which scopes candidates to THIS unit's own lesson_ids, exactly matching generate_checkpoint()) found the note below's "A2-scoping fix" was necessary but not sufficient: 'bureaucracy_noun' (appointment/document/ form/confirmation) and 'possessive' (my/your/his/her) are course-wide reuse tags whose REAL members were introduced by unit25/unit06 respectively -- unit28 itself introduces ZERO lexemes carrying either tag. Fine for Endless Practice (course-scoped), but 0 unit-scoped candidates for the checkpoint, so every slot built on them silently never generates there (recipe DO-NOT #2). Fixed by RE-ANCHORING to unit28's own tags, never by inventing a new backfill tag: (1) lesson02.choose.001 + lesson02.listen.002 (bureaucracy_noun MC/ listen) -> re-anchored to a new 'health_symptom_union' preset (union of health_followup_noun + symptom_noun, both unit28-native, 5 distinct course-wide -- verified via iter_specs, well above the >=3 floor). (2) lesson03.choose.003 (bureaucracy_noun MC) -> same health_symptom_union re-anchor. (3) lesson04.bureaucracy_listen.003 -> renamed lesson04.content_listen.003, same health_symptom_union re-anchor. (4) lesson03.possessive_order.001 (word_order on "{item} appointment is confirmed...") -> the possessive concept has no unit28-native vocabulary to fall back on, so REPLACED with a new frame anchored to the unit's own health_followup_noun tag: renamed lesson03.health_order.001, frame "I need my {item} today" (verified grammatical for all 3 candidates: medicine/prescription/insurance; verified no self-reference and no course-scope widening since health_followup_noun's course-wide pool is the same 3, exclusively unit28-native). (5) lesson03.possessive_translate_bare.002 -> REPLACED, renamed lesson03.symptom_translate_bare.002, bare-word translation over symptom_noun (headache/fever, also exclusively unit28-native course-wide). (6) lesson04.match.001 (7-pair matching_pairs, 4 of 7 slots dead on bureaucracy_noun) -> reduced to the standard 6 pairs, all from unit28's own three real semantic tags with zero padding: health_followup_noun x3 (medicine/prescription/insurance) + symptom_noun x2 (headache/fever) + condition_adjective x1 (worse) = exactly 6 distinct unit-scoped tokens, a deterministic bijection (no broad/untagged part-of-speech pool needed, so no risk of pulling in a compound-component noun like "throat"/"sore" that this pack's original author deliberately left untagged). Before: 10 DEAD template-slots (7 templates) per _practice_unit_scope_check.py. After: 0 DEAD, 0 below-floor for this file. practice-validate: 0 errors. check_dari_register.py: 0 new findings (all new/changed Dari feedback text reuses already-vetted words and phrases verbatim from elsewhere in this same file -- همی جمله, واژه, است -- no Iranian-register or Tehrani-contraction markers introduced). No backfill/realization/overlay file touched.
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py pools ALL specs from iter_specs() (both A1 and A2) together when counting a tag's real distinct-candidate count, but backend/app/practice/service.py's _material() actually scopes both PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are separate Course rows -- a real A2 enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped check (filtering iter_specs() to level=='a2') found three real violations in this file, invalidating the pooled-with-A1 "symptom_noun/possessive well above the >=3 floor" note above: (1) lesson01.symptom_choose.004 AND lesson01.symptom_listen.005 -- 'symptom_noun' (headache/stomachache/ fever/cough, 4 members pooled with A1) has only 2 REAL A2-scoped candidates (fever/headache -- stomachache/cough never introduced in any A2 unit). BOTH templates were broken (each needs >=3), and converting both to translation would have produced two duplicate bare-word production templates against the identical 2-candidate pool -- no honest additional candidate exists, so symptom_choose.004 was converted to type: translation (renamed symptom_translate_bare.004) and symptom_listen.005 was removed outright. (2) lesson03.possessive_listen.002 -- 'possessive' (my/ your/his/her, 4 members pooled with A1) has only 2 REAL A2-scoped candidates (my/your -- his/her never reintroduced in any A2 unit). Fixed by converting to type: translation (renamed possessive_translate_bare.002) -- a genuinely new exercise, not a duplicate of the existing possessive_order.001 (full-sentence word_order). (3) lesson04.symptom_choose.002 -- same 2-candidate symptom_noun pool as (1); no sibling symptom template existed in lesson04 to duplicate, so converted directly to type: translation (renamed symptom_translate_bare.002). All three conversions use answer_derivation slot_text instead of slot_gloss (translation has no minimum-candidate floor). No candidates invented, no A1 vocabulary pooled in as if A2-scoped.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
