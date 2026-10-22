@@ -6,176 +6,18 @@ unit_content_key: en.a2.unit26.opinions
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored 2026-07-06 by the Claude session extending prs-en's practice
-    pool to units 21-26 -- this is the second and final A2 unit for this
-    direction so far (giving opinions with reasons: a dog park scenario),
-    completing prs-en's practice-pool coverage through unit26. Uses
-    fa-en's a2_unit26.yaml as the structural reference: the shared
-    4-member 'dogpark_noun' tag (dog/park/playground/space) is used ONLY
-    for bare-word recognition -- most of this unit's content is
-    multi-word discourse-connector phrases ("I think", "in my opinion",
-    "on the other hand") that don't reduce to a safe single-token slot,
-    same discipline as unit25. No new EN_POS/agreement_tags entries were
-    needed; only scripts/backfill_lexemes_prs_en.py's Dari gloss dict and
-    UNIT_FILES tuple were extended (سگ/پارک/زمین بازی/فضا, cross-checked
-    against docs/content/overlays/prs-en/a2_unit26.yaml's own real text).
-
-    HOMOGRAPH LIMITATION DELIBERATELY RESPECTED, not worked around: this
-    unit's lesson03 reintroduces "close" as an ADJECTIVE ("very close to
-    the playground"), but scripts/_en_target_lexeme_common.py's EN_POS
-    already classifies "close" as a VERB (unit05's "the store closes"
-    sense) and its own inline comment explicitly instructs future
-    authors not to force a second, conflicting entry onto that bare
-    token. Grepped every practice pack across en-fa/en-nl/en-prs/fa-en/
-    nl-en/prs-en for any existing use of "close" as a slot value before
-    writing this pack's templates -- none found, so no live template
-    depends on either sense being changed. No template in this pack (or
-    anywhere in this batch) uses "close" as a fillable slot; the
-    dogpark_noun tag itself never included it.
-
-    Anchoring check (same discipline as every other pack in this batch):
-    verified via iter_specs() that every one of this unit's four lessons
-    introduces at least one new lexeme; dogpark_noun's own members
-    (dog/space introduced lesson02, playground lesson03) mean this
-    pack's templates start at lesson02, not lesson01 (lesson01,
-    "opinion_phrases", introduces no dogpark_noun vocabulary at all --
-    same anchoring discipline as fa-en's own unit26 pack).
-
-    Every slot's real candidate count was verified with
-    scripts/_practice_slot_check.py (extended to cover prs-en units
-    21-26) and compile_content.py practice-validate. Needs the standard
-    fresh-context review before import.
-
-    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16):
-    the matching_pairs template widened from 2 to 4 slots (the full
-    course-wide dogpark_noun pool: dog/park/playground/space), per the
-    pre-computed retrofit table.
-
-    Depth pass (2026-07-06, templates-per-unit audit): unit26 was the
-    thinnest pack in prs-en (6 templates vs the pack's 10-16 average),
-    entirely because dogpark_noun stays deliberately bare-recognition-
-    only (its 4 members still don't collocate in one shared frame,
-    same reasoning as above) and lesson01 had zero templates at all
-    (dogpark_noun's own members aren't introduced until lesson02/03).
-    7 new templates fill lesson01 and reinforce lesson04, all reusing
-    already-established course-wide tags rather than inventing new
-    vocabulary or new semantic categories (both shared files --
-    scripts/_en_target_lexeme_common.py and
-    backfill_lexemes_prs_en.py -- are untouched by this pass, since
-    they're shared with the parallel nl-en/fa-en workers doing the
-    identical task on their own files):
-    (1) lesson01 teaches "in my opinion" verbatim, and lesson03's real
-    reading text opens "In my opinion, the new dog park is a good
-    idea." -- the already-established 4-member 'possessive' tag
-    (my/your/his/her, defined for unit06's family lessons, reused
-    identically here) generalizes that exact real sentence with zero
-    grammar loss ("In your/his/her opinion, the dog park is a good
-    idea." all hold), giving a word_order + fill_in_blank pair anchored
-    to lesson01, plus a bare listen_select recognition item (no shared
-    frame needed for bare recognition, same as dogpark_noun's own
-    pattern).
-    (2) lesson01's "I think" is real content for the already-
-    established 'identity' tag (defined for unit01/02, reused as bare-
-    word recognition variety the same way unit11/unit17 already reuse
-    'weekday' in unrelated later units) -- a multiple_choice + a
-    listen_select, bare-word only, no frame risk.
-    (3) lesson04's real dialogue line "Yes, I think that would be
-    better." is real content for the already-established 'politeness'
-    tag (thanks/thank/nice/welcome/yes/no, defined for unit01) -- a
-    multiple_choice + a listen_select, again bare-word only (this
-    pack's local politeness preset broadens the part_of_speech list to
-    [noun, verb, adjective, particle] instead of unit01's noun-only
-    version, since politeness members actually span all four POS
-    course-wide and bare-word recognition doesn't depend on POS
-    uniformity -- verified 6 distinct candidates, well above the
-    multiple_choice/listen_select floor).
-    6 -> 13 templates. Re-verified with scripts/_practice_slot_check.py
-    and compile_content.py practice-validate, 0 errors/0 warnings.
-    Still needs the standard fresh-context review before import.
-
-    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py
-    pools ALL specs from iter_specs() (both A1 and A2) together when
-    counting a tag's real distinct-candidate count, but
-    backend/app/practice/service.py's _material() actually scopes both
-    PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are
-    separate Course rows -- a real A2 enrollee only ever sees A2-scoped
-    lexemes. A standalone A2-only-scoped check (filtering iter_specs() to
-    level=='a2') found two real violations in this file, invalidating the
-    pooled-with-A1 "verified 6 distinct candidates" politeness note
-    above: (1) lesson01.possessive_listen.003 -- 'possessive' (my/your/
-    his/her, 4 members pooled with A1) has only 2 REAL A2-scoped
-    candidates (my/your -- his/her never reintroduced in any A2 unit
-    25-28). Fixed by converting to type: translation (bare single-word
-    production, slot_text derivation instead of slot_gloss -- no
-    minimum-candidate floor), renamed possessive_translate_bare.003 -- a
-    genuinely new exercise, not a duplicate of the existing
-    possessive_order.001 (full-sentence word_order). (2)
-    lesson04.politeness_choose.003 AND lesson04.politeness_listen.004 --
-    'politeness' (thanks/thank/nice/welcome/yes/no, 6 members pooled with
-    A1) has only 2 REAL A2-scoped candidates (yes from this unit, no from
-    unit27's real banking dialogue -- both still within the same A2
-    course). BOTH templates were broken (each needs >=3), and converting
-    both to translation would have produced two duplicate bare-word
-    production templates against the identical 2-candidate pool -- no
-    honest additional candidate exists, so politeness_choose.003 was
-    converted to type: translation (renamed politeness_translate_bare.003)
-    and politeness_listen.004 was removed outright rather than kept as
-    dead duplicate content. No candidates invented, no A1 vocabulary
-    pooled in as if A2-scoped.
-
-    Depth pass (2026-07-07, prs-en/fa-en unit25-26 parity audit): fa-en's
-    a2_unit26.yaml sibling (18 templates) has 7 template shapes this pack
-    lacked. Re-examined fa-en's own anchoring reasoning first (its
-    "Depth pass" note explicitly justifies putting dogpark_noun
-    recognition drills on lesson01 too, even though lesson01 itself
-    introduces no dogpark_noun member, on the grounds that lesson01
-    ["opinion_phrases"] is still a legitimate lesson checkpoint --
-    introduces its own 4 real lexemes [opinion/other/hand/agree] -- and
-    scripts/compile_content.py's practice-validate only requires
-    lesson_content_key to reference a real lesson, not that the
-    anchored tag's own members be taught there; this project's existing
-    bureaucracy_noun templates already spread across all 4 of unit25's
-    lessons on the same reasoning). This supersedes this pack's own
-    earlier note above (which read fa-en's lesson01 exclusion as the
-    stricter rule and skipped it here) -- fa-en's actual shipped file
-    does include lesson01 dogpark_noun items, and the reasoning for
-    doing so is sound and already established project-wide, so this
-    pass now matches it: (1) lesson01 dogpark_choose/dogpark_listen/
-    dogpark_translate (bare recognition, tag-prefixed since lesson01
-    already carries possessive_order/identity_choose templates), (2)
-    lesson02.translate (lesson02 previously had only choose+listen for
-    this tag), (3) lesson03.choose/lesson03.listen (lesson03 previously
-    had only matching_pairs+translate), (4) lesson04.choose (lesson04
-    previously had only listen+translate). Confirmed via a direct
-    iter_specs() read of backfill_lexemes_prs_en.py (level=='a2' filter)
-    that dogpark_noun's 4 members (dog/park/playground/space) are real,
-    already-backfilled A2-scoped lexemes with 4 distinct Dari glosses --
-    same count fa-en's identical English realization gives that
-    direction, well above the >=3 floor. 11 -> 18 templates, matching
-    fa-en's depth exactly. Every new frame/feedback_frame reuses this
-    pack's own existing bare-recognition boilerplate patterns verbatim
-    (not fa-en's Farsi) -- no new Dari text was actually needed. Re-
-    verified with scripts/_practice_slot_check.py (prs-en: OK) and
-    compile_content.py practice-validate, 0 errors/0 warnings. Still
-    needs the standard fresh-context review before import.
-
-    UNIT-SCOPE DEAD/FLOOR FIX (2026-07-24, reauth batch, reverting to
-    unreviewed): scripts/_practice_unit_scope_check.py flagged this pack
-    with 5 DEAD + 1 below-floor. Root cause, confirmed via iter_specs()
-    filtered to '.a2.unit26.': `possessive` (my/your/his/her, defined for
-    unit06) and `identity`/`politeness` (defined for unit01) are reused
-    course-wide tags -- NONE of their members are actually introduced by
-    ANY lesson of unit26 itself. This is defect DO-NOT #2 exactly:
-    "bare-word recognition variety" reuse works fine in Endless Practice
-    (course-scoped) but generate_checkpoint() only ever loads unit26's
-    own lexemes, so lesson01.possessive_order.001,
-    lesson01.possessive_translate_bare.003, lesson01.identity_choose.004,
-    lesson01.identity_listen.005, and lesson04.politeness_translate_bare.003
-    all had ZERO unit-scoped candidates and could never generate at
-    checkpoint time.
-    Fix, per template:
-    - possessive_order.001 (word_order, "In {item} opinion, the dog park
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-22 (prs-en practice pass, rest): 3 fixes -- lesson01 vocab_choose/vocab_listen and lesson04 vocab_translate_bare used the untagged noun slot (pool = every A2 noun of the course, 806 tokens) -> pinned to the existing unit_noun_tagged (prs_en_a2_unit26_words, 9 nouns). NATIVE FLAGS: hand=دست is the literal sense (unit teaches 'on the other hand'). BACKFILL GLOSS FLAGS: idea=فکر؛ نظر shares نظر with opinion=نظر, so 'opinion' and 'idea' are both correct for the same Dari prompt in MC/matching; overlay uses فکر for idea (override proposed in log).
+    Prior notes: Authored 2026-07-06 by the Claude session extending prs-en's practice pool to units 21-26 -- this is the second and final A2 unit for this direction so far (giving opinions with reasons: a dog park scenario), completing prs-en's practice-pool coverage through unit26. Uses fa-en's a2_unit26.yaml as the structural reference: the shared 4-member 'dogpark_noun' tag (dog/park/playground/space) is used ONLY for bare-word recognition -- most of this unit's content is multi-word discourse-connector phrases ("I think", "in my opinion", "on the other hand") that don't reduce to a safe single-token slot, same discipline as unit25. No new EN_POS/agreement_tags entries were needed; only scripts/backfill_lexemes_prs_en.py's Dari gloss dict and UNIT_FILES tuple were extended (سگ/پارک/زمین بازی/فضا, cross-checked against docs/content/overlays/prs-en/a2_unit26.yaml's own real text).
+    HOMOGRAPH LIMITATION DELIBERATELY RESPECTED, not worked around: this unit's lesson03 reintroduces "close" as an ADJECTIVE ("very close to the playground"), but scripts/_en_target_lexeme_common.py's EN_POS already classifies "close" as a VERB (unit05's "the store closes" sense) and its own inline comment explicitly instructs future authors not to force a second, conflicting entry onto that bare token. Grepped every practice pack across en-fa/en-nl/en-prs/fa-en/ nl-en/prs-en for any existing use of "close" as a slot value before writing this pack's templates -- none found, so no live template depends on either sense being changed. No template in this pack (or anywhere in this batch) uses "close" as a fillable slot; the dogpark_noun tag itself never included it.
+    Anchoring check (same discipline as every other pack in this batch): verified via iter_specs() that every one of this unit's four lessons introduces at least one new lexeme; dogpark_noun's own members (dog/space introduced lesson02, playground lesson03) mean this pack's templates start at lesson02, not lesson01 (lesson01, "opinion_phrases", introduces no dogpark_noun vocabulary at all -- same anchoring discipline as fa-en's own unit26 pack).
+    Every slot's real candidate count was verified with scripts/_practice_slot_check.py (extended to cover prs-en units 21-26) and compile_content.py practice-validate. Needs the standard fresh-context review before import.
+    matching_pairs widening retrofit (2026-07-06, AUTHORING_GUIDE.md #16): the matching_pairs template widened from 2 to 4 slots (the full course-wide dogpark_noun pool: dog/park/playground/space), per the pre-computed retrofit table.
+    Depth pass (2026-07-06, templates-per-unit audit): unit26 was the thinnest pack in prs-en (6 templates vs the pack's 10-16 average), entirely because dogpark_noun stays deliberately bare-recognition- only (its 4 members still don't collocate in one shared frame, same reasoning as above) and lesson01 had zero templates at all (dogpark_noun's own members aren't introduced until lesson02/03). 7 new templates fill lesson01 and reinforce lesson04, all reusing already-established course-wide tags rather than inventing new vocabulary or new semantic categories (both shared files -- scripts/_en_target_lexeme_common.py and backfill_lexemes_prs_en.py -- are untouched by this pass, since they're shared with the parallel nl-en/fa-en workers doing the identical task on their own files): (1) lesson01 teaches "in my opinion" verbatim, and lesson03's real reading text opens "In my opinion, the new dog park is a good idea." -- the already-established 4-member 'possessive' tag (my/your/his/her, defined for unit06's family lessons, reused identically here) generalizes that exact real sentence with zero grammar loss ("In your/his/her opinion, the dog park is a good idea." all hold), giving a word_order + fill_in_blank pair anchored to lesson01, plus a bare listen_select recognition item (no shared frame needed for bare recognition, same as dogpark_noun's own pattern). (2) lesson01's "I think" is real content for the already- established 'identity' tag (defined for unit01/02, reused as bare- word recognition variety the same way unit11/unit17 already reuse 'weekday' in unrelated later units) -- a multiple_choice + a listen_select, bare-word only, no frame risk. (3) lesson04's real dialogue line "Yes, I think that would be better." is real content for the already-established 'politeness' tag (thanks/thank/nice/welcome/yes/no, defined for unit01) -- a multiple_choice + a listen_select, again bare-word only (this pack's local politeness preset broadens the part_of_speech list to [noun, verb, adjective, particle] instead of unit01's noun-only version, since politeness members actually span all four POS course-wide and bare-word recognition doesn't depend on POS uniformity -- verified 6 distinct candidates, well above the multiple_choice/listen_select floor). 6 -> 13 templates. Re-verified with scripts/_practice_slot_check.py and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import.
+    A2-scoping correctness fix (2026-07-07): scripts/_practice_slot_check.py pools ALL specs from iter_specs() (both A1 and A2) together when counting a tag's real distinct-candidate count, but backend/app/practice/service.py's _material() actually scopes both PracticeTemplate and Lexeme queries by course_id, and 'A1'/'A2' are separate Course rows -- a real A2 enrollee only ever sees A2-scoped lexemes. A standalone A2-only-scoped check (filtering iter_specs() to level=='a2') found two real violations in this file, invalidating the pooled-with-A1 "verified 6 distinct candidates" politeness note above: (1) lesson01.possessive_listen.003 -- 'possessive' (my/your/ his/her, 4 members pooled with A1) has only 2 REAL A2-scoped candidates (my/your -- his/her never reintroduced in any A2 unit 25-28). Fixed by converting to type: translation (bare single-word production, slot_text derivation instead of slot_gloss -- no minimum-candidate floor), renamed possessive_translate_bare.003 -- a genuinely new exercise, not a duplicate of the existing possessive_order.001 (full-sentence word_order). (2) lesson04.politeness_choose.003 AND lesson04.politeness_listen.004 -- 'politeness' (thanks/thank/nice/welcome/yes/no, 6 members pooled with A1) has only 2 REAL A2-scoped candidates (yes from this unit, no from unit27's real banking dialogue -- both still within the same A2 course). BOTH templates were broken (each needs >=3), and converting both to translation would have produced two duplicate bare-word production templates against the identical 2-candidate pool -- no honest additional candidate exists, so politeness_choose.003 was converted to type: translation (renamed politeness_translate_bare.003) and politeness_listen.004 was removed outright rather than kept as dead duplicate content. No candidates invented, no A1 vocabulary pooled in as if A2-scoped.
+    Depth pass (2026-07-07, prs-en/fa-en unit25-26 parity audit): fa-en's a2_unit26.yaml sibling (18 templates) has 7 template shapes this pack lacked. Re-examined fa-en's own anchoring reasoning first (its "Depth pass" note explicitly justifies putting dogpark_noun recognition drills on lesson01 too, even though lesson01 itself introduces no dogpark_noun member, on the grounds that lesson01 ["opinion_phrases"] is still a legitimate lesson checkpoint -- introduces its own 4 real lexemes [opinion/other/hand/agree] -- and scripts/compile_content.py's practice-validate only requires lesson_content_key to reference a real lesson, not that the anchored tag's own members be taught there; this project's existing bureaucracy_noun templates already spread across all 4 of unit25's lessons on the same reasoning). This supersedes this pack's own earlier note above (which read fa-en's lesson01 exclusion as the stricter rule and skipped it here) -- fa-en's actual shipped file does include lesson01 dogpark_noun items, and the reasoning for doing so is sound and already established project-wide, so this pass now matches it: (1) lesson01 dogpark_choose/dogpark_listen/ dogpark_translate (bare recognition, tag-prefixed since lesson01 already carries possessive_order/identity_choose templates), (2) lesson02.translate (lesson02 previously had only choose+listen for this tag), (3) lesson03.choose/lesson03.listen (lesson03 previously had only matching_pairs+translate), (4) lesson04.choose (lesson04 previously had only listen+translate). Confirmed via a direct iter_specs() read of backfill_lexemes_prs_en.py (level=='a2' filter) that dogpark_noun's 4 members (dog/park/playground/space) are real, already-backfilled A2-scoped lexemes with 4 distinct Dari glosses -- same count fa-en's identical English realization gives that direction, well above the >=3 floor. 11 -> 18 templates, matching fa-en's depth exactly. Every new frame/feedback_frame reuses this pack's own existing bare-recognition boilerplate patterns verbatim (not fa-en's Farsi) -- no new Dari text was actually needed. Re- verified with scripts/_practice_slot_check.py (prs-en: OK) and compile_content.py practice-validate, 0 errors/0 warnings. Still needs the standard fresh-context review before import.
+    UNIT-SCOPE DEAD/FLOOR FIX (2026-07-24, reauth batch, reverting to unreviewed): scripts/_practice_unit_scope_check.py flagged this pack with 5 DEAD + 1 below-floor. Root cause, confirmed via iter_specs() filtered to '.a2.unit26.': `possessive` (my/your/his/her, defined for unit06) and `identity`/`politeness` (defined for unit01) are reused course-wide tags -- NONE of their members are actually introduced by ANY lesson of unit26 itself. This is defect DO-NOT #2 exactly: "bare-word recognition variety" reuse works fine in Endless Practice (course-scoped) but generate_checkpoint() only ever loads unit26's own lexemes, so lesson01.possessive_order.001, lesson01.possessive_translate_bare.003, lesson01.identity_choose.004, lesson01.identity_listen.005, and lesson04.politeness_translate_bare.003 all had ZERO unit-scoped candidates and could never generate at checkpoint time. Fix, per template: - possessive_order.001 (word_order, "In {item} opinion, the dog park
       is a good idea") and possessive_translate_bare.003: DROPPED, not
       re-anchored. This frame's whole point is a possessive-pronoun slot,
       and unit26 introduces no possessive pronoun at all -- there is no
@@ -215,40 +57,9 @@ review:
       only ever needs to hold for dog/park/playground/space -- checked,
       all four are grammatical and sensible. No self-reference (literal
       words "Everyone"/"loves"/"the" are not pool candidates).
-    tag_schema trimmed to [dogpark_noun] (possessive/identity/politeness
-    are no longer referenced by any slot in this file) and the now-unused
-    possessive/identity/politeness slot_presets removed.
-    Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0
-    below-floor for this pack) and compile_content.py practice-validate.
-    Reverted status to unreviewed/fresh_context: false -- needs a fresh
-    review pass given the substantive change.
-
-    POLISH WAVE 2 (2026-07-24): structured tier raised 2->3 live by
-    adding lesson03.dogpark_order.005 (word_order "The {item} is very
-    big" on dogpark_noun -- tag re-verified course-unique at A2 scope,
-    all 4 members grammatical in the frame, no literal frame word is a
-    pool candidate; distinct frame from lesson02.dogpark_order.004).
-    lesson03.match.001 stays deliberately POS-only despite the
-    POS-ONLY-MATCHING flag: the unit's own semantic tags cannot cover
-    the 6-pair floor -- dogpark_noun (4) + condition_adjective (1,
-    "better") = 5 distinct tokens; the only 6th tagged token is "it's"
-    (price_phrase), whose gloss is a grammar note unusable as a
-    matching card, and any wider union (pet_noun/place/
-    neighborhood_noun/price_phrase...) pulls heavily off-theme A2
-    course-scope pools -- a wrong union is worse than the status quo.
-    Needs a backfill semantic tag over this unit's opinion vocabulary
-    (opinion/hand/idea/point/dogs...) before match.001 can be tagged.
-
-    POLISH WAVE 3 (2026-07-26, blocker resolved): commit 05af7ace added the generated per-unit tag
-    prs_en_a2_unit26_words (unit-scoped by construction, exactly the "backfill semantic tag over this
-    unit's opinion vocabulary" the wave-2 note above was waiting on). Re-anchored lesson03.match.001 from
-    the bare unit_noun preset (part_of_speech: noun only, off-theme at Endless-Practice course scope --
-    matches every A2 noun in the course) to a new unit_noun_tagged preset (part_of_speech: noun +
-    agreement_tags.semantic: prs_en_a2_unit26_words). Unit-wide nouns under this tag: opinion, hand, dog,
-    park, idea, dogs, space, playground, point -- 9 distinct tokens, 9 distinct glosses, well above the
-    6-pair floor and a real superset of dogpark_noun's 4. unit_noun (bare, untagged) is left as-is on the
-    three non-matching templates that still use it (vocab_choose.004/vocab_listen.005/
-    vocab_translate_bare.003 -- not dispatched this wave).
+    tag_schema trimmed to [dogpark_noun] (possessive/identity/politeness are no longer referenced by any slot in this file) and the now-unused possessive/identity/politeness slot_presets removed. Re-verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for this pack) and compile_content.py practice-validate. Reverted status to unreviewed/fresh_context: false -- needs a fresh review pass given the substantive change.
+    POLISH WAVE 2 (2026-07-24): structured tier raised 2->3 live by adding lesson03.dogpark_order.005 (word_order "The {item} is very big" on dogpark_noun -- tag re-verified course-unique at A2 scope, all 4 members grammatical in the frame, no literal frame word is a pool candidate; distinct frame from lesson02.dogpark_order.004). lesson03.match.001 stays deliberately POS-only despite the POS-ONLY-MATCHING flag: the unit's own semantic tags cannot cover the 6-pair floor -- dogpark_noun (4) + condition_adjective (1, "better") = 5 distinct tokens; the only 6th tagged token is "it's" (price_phrase), whose gloss is a grammar note unusable as a matching card, and any wider union (pet_noun/place/ neighborhood_noun/price_phrase...) pulls heavily off-theme A2 course-scope pools -- a wrong union is worse than the status quo. Needs a backfill semantic tag over this unit's opinion vocabulary (opinion/hand/idea/point/dogs...) before match.001 can be tagged.
+    POLISH WAVE 3 (2026-07-26, blocker resolved): commit 05af7ace added the generated per-unit tag prs_en_a2_unit26_words (unit-scoped by construction, exactly the "backfill semantic tag over this unit's opinion vocabulary" the wave-2 note above was waiting on). Re-anchored lesson03.match.001 from the bare unit_noun preset (part_of_speech: noun only, off-theme at Endless-Practice course scope -- matches every A2 noun in the course) to a new unit_noun_tagged preset (part_of_speech: noun + agreement_tags.semantic: prs_en_a2_unit26_words). Unit-wide nouns under this tag: opinion, hand, dog, park, idea, dogs, space, playground, point -- 9 distinct tokens, 9 distinct glosses, well above the 6-pair floor and a real superset of dogpark_noun's 4. unit_noun (bare, untagged) is left as-is on the three non-matching templates that still use it (vocab_choose.004/vocab_listen.005/ vocab_translate_bare.003 -- not dispatched this wave).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -262,14 +73,14 @@ templates:
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit_noun}
+    slots: {item: *unit_noun_tagged}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "معنی دری {item} را انتخاب کنین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson01.vocab_listen.005
     lesson_content_key: en.a2.unit26.lesson01.opinion_phrases
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit_noun}
+    slots: {item: *unit_noun_tagged}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "واژه‌ای که شنیدین {item} بود.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson02.choose.001
@@ -326,7 +137,7 @@ templates:
     lesson_content_key: en.a2.unit26.lesson04.opinion_dialogue
     type: translation
     frame: {text: "{item}", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit_noun}
+    slots: {item: *unit_noun_tagged}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "معادل انگلیسی همی واژه {item} است.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a2.unit26.lesson01.dogpark_choose.006
