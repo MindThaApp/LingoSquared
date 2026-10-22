@@ -6,7 +6,22 @@ unit_content_key: fa.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects.
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (en-fa practice rest pass, fresh context; 9 fixes). (1) salam_meaning.006 and (2)
+    welcome_meaning.006 were MC with a fixed answer and a 1-member distractor pool (never generated): now slot_gloss
+    over greeting+farewell and over lesson03''s set phrases. (3) greeting_fill.001 and (4) question_fill.001 had a
+    bare ''{slot}'' frame (masked to a lone blank, rejected at runtime): greeting now blanks into ''X، حالتون
+    چطوره؟''; the question became a fixed translation ''How are you? (polite)''. (5) return_question.006 expected
+    حالتون چطوره؟ after خوبم، ممنون. although the dialogue returns the question with شما چطور؟: now blanks چطور in
+    ''شما ___؟''. (6) dialogue_word pool re-pooled from the level-wide dialogue_word tag (stage-direction glosses
+    such as ''Ali welcomes Narges.'' as translation prompts, other units'' lines in Endless Practice) to this
+    unit''s single words; (7) its feedback no longer claims every word is in the dialogue. (8) volume_fill.002 ''___
+    بخیر'' was underdetermined (any time word fits): now translation ''Good night.'' (9) volume_order.007 was a
+    1-tile word bank: now ''X، حالتون چطوره؟''. NATIVE FLAGS: خداحافظ typed as خدا حافظ is not accepted; خوش آمدید
+    written form in spoken scenes (already flagged in the realization). GLOSS LANE: خوبم, خوبی, حالتون چطوره؟,
+    letter و (see report).
+
+    Fresh review found and resolved translation-direction, phrase-gloss, recombination, and feedback metadata defects.
     A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not a new full
     fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced that 3 multiple_choice
     templates (greeting_meaning, farewell_choice, question_meaning) each had only 1-2 real distinct lexeme candidates against
@@ -170,6 +185,8 @@ tag_schema:
     - volume_en_fa_a1_unit01_good_wish_04_single
     - volume_en_fa_a1_unit01_offered_item_08_single
     - volume_en_fa_a1_unit01_person_name_11_single
+    - en_fa_a1_unit01_words
+    - en_fa_a1_unit01_lesson03_words
     register:
     - neutral
     - polite
@@ -257,9 +274,8 @@ slot_presets:
     - adverb
     - preposition
     - particle
-    - phrase
     agreement_tags:
-      semantic: dialogue_word
+      semantic: en_fa_a1_unit01_words
 templates:
 - content_key: practice.en-fa.fa.a1.unit01.lesson01.letter_gloss.001
   lesson_content_key: fa.a1.unit01.lesson01.script_ramp
@@ -352,28 +368,29 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    greeting: *id002
+    greeting:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - adverb
+      agreement_tags:
+        semantic:
+        - greeting
+        - farewell
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: hello
-      language_code: en
-      direction: ltr
+    kind: slot_gloss
+    slot: greeting
   feedback_frame:
-    text: سلام is the greeting introduced with these letters.
+    text: '{greeting} is used to greet someone or to say goodbye.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson02.greeting_fill.001
   lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
   type: fill_in_blank
   frame:
-    text: '{greeting}'
+    text: '{greeting}، حالتون چطوره؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the everyday greeting.
-      language_code: en
-      direction: ltr
   slots:
     greeting: *id002
   answer_derivation:
@@ -554,37 +571,37 @@ templates:
   lesson_content_key: fa.a1.unit01.lesson03.time_and_farewells
   type: multiple_choice
   frame:
-    text: خوش آمدید
+    text: '{phrase}'
     language_code: fa
     direction: rtl
   slots:
-    good_wish: *id004
+    phrase:
+      language_code: fa
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: en_fa_a1_unit01_lesson03_words
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: welcome
-      language_code: en
-      direction: ltr
+    kind: slot_gloss
+    slot: phrase
   feedback_frame:
-    text: خوش آمدید welcomes someone politely.
+    text: '{phrase} is a set phrase for greeting, welcoming or saying goodbye.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001
   lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
-  type: fill_in_blank
+  type: translation
   frame:
-    text: '{wellbeing_question}'
-    language_code: fa
-    direction: rtl
-    text_blocks:
-    - text: Complete the wellbeing question.
-      language_code: en
-      direction: ltr
+    text: How are you? (polite)
+    language_code: en
+    direction: ltr
   slots:
     wellbeing_question: *id007
   answer_derivation:
-    kind: slot_text
-    slot: wellbeing_question
+    kind: render_frame
+    frame:
+      text: '{wellbeing_question}'
+      language_code: fa
+      direction: rtl
   feedback_frame:
     text: '{wellbeing_question} asks how someone is.'
     language_code: en
@@ -678,16 +695,20 @@ templates:
   lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
   type: fill_in_blank
   frame:
-    text: خوبم، ممنون. {wellbeing_question}
+    text: خوبم، ممنون. شما {how}؟
     language_code: fa
     direction: rtl
   slots:
-    wellbeing_question: *id007
+    how:
+      language_code: fa
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: wellbeing_question
   answer_derivation:
     kind: slot_text
-    slot: wellbeing_question
+    slot: how
   feedback_frame:
-    text: '{wellbeing_question} returns the wellbeing question.'
+    text: شما {how}؟ (“And you?”) returns the wellbeing question.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson05.offer_order.001
@@ -870,7 +891,7 @@ templates:
     kind: slot_gloss
     slot: dialogue_word
   feedback_frame:
-    text: '{dialogue_word} appears in the first-meeting dialogue.'
+    text: '{dialogue_word} has this meaning.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_gloss.004
@@ -888,7 +909,7 @@ templates:
     kind: slot_text
     slot: dialogue_word
   feedback_frame:
-    text: '{dialogue_word} appears in the first-meeting dialogue.'
+    text: '{dialogue_word} is the Persian word for this meaning.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson06.dialogue_pair.005
@@ -938,7 +959,7 @@ templates:
     - person_name_one
     - person_name_two
   feedback_frame:
-    text: Match each dialogue item to its English meaning.
+    text: Match each Persian word to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson06.closing_order.006
@@ -962,11 +983,11 @@ templates:
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002.volume_fill.002
   lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
-  type: fill_in_blank
-  frame: &id012
-    text: '{time_period} {good_wish}'
-    language_code: fa
-    direction: rtl
+  type: translation
+  frame:
+    text: Good night.
+    language_code: en
+    direction: ltr
   slots:
     time_period:
       language_code: fa
@@ -981,16 +1002,22 @@ templates:
       agreement_tags:
         semantic: good_wish
   answer_derivation:
-    kind: slot_text
-    slot: time_period
+    kind: render_frame
+    frame:
+      text: '{time_period} {good_wish}'
+      language_code: fa
+      direction: rtl
   feedback_frame:
-    text: '{time_period}'
-    language_code: fa
-    direction: rtl
+    text: '{time_period} {good_wish} wishes someone a good night.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson02.time_greeting.002.volume_fill.004
   lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
   type: fill_in_blank
-  frame: *id012
+  frame:
+    text: '{time_period} {good_wish}'
+    language_code: fa
+    direction: rtl
   slots:
     time_period:
       language_code: fa
@@ -1033,13 +1060,9 @@ templates:
   lesson_content_key: fa.a1.unit01.lesson02.everyday_greetings
   type: word_order
   frame:
-    text: '{greeting}'
+    text: '{greeting}، حالتون چطوره؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the everyday greeting.
-      language_code: en
-      direction: ltr
   slots:
     greeting:
       language_code: fa
@@ -1051,21 +1074,13 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{greeting}'
+      text: '{greeting}، حالتون چطوره؟'
       language_code: fa
       direction: rtl
-      text_blocks:
-      - text: Complete the everyday greeting.
-        language_code: en
-        direction: ltr
   feedback_frame:
-    text: '{greeting}'
+    text: '{greeting}، حالتون چطوره؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the everyday greeting.
-      language_code: en
-      direction: ltr
 - content_key: practice.en-fa.fa.a1.unit01.lesson04.question_fill.001.volume_order.008
   lesson_content_key: fa.a1.unit01.lesson04.formal_informal_wellbeing
   type: word_order
