@@ -6,7 +6,8 @@ unit_content_key: en.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (prs-en practice pass, rest): 5 fixes -- practice_translate.905 narrowed from the untagged all-POS pool (2919 lexemes, incl. pronoun i''m contraction, particles and the three same-gloss خوب words good/fine/okay) to the greeting/time_period/farewell/wellbeing_question/politeness tags; variety_politeness_pair.902 pool drops wellbeing_answer (fine and okay both gloss خوب = two identical right-hand matching items); politeness_translate feedback no longer claims the item is a thanks word (pool also holds nice); farewell_translate feedback made generic (pool holds see/later); farewell_pair.003 widened 2 -> 4 slots (goodbye/bye/see/later, all unit01 farewell-tagged). Unfixable: wellbeing_translate.004 fine vs okay share the gloss خوب (no tag separates them); variety_wellbeing_order.901 "I''m bad" is awkward English (no lever, tag holds fine/bad/okay); identity i''m / are glosses have contraction ambiguity only in MC (safe). NATIVE FLAGS: evening=شام (Afghan Dari evening greeting word: شام or عصر?); not=نی (Afghan negation word: نی vs نه?); hi/bye glosses with (خودمانی) suffix. BACKFILL GLOSS FLAGS: okay=خوب identical to fine=خوب (suggest distinguishing gloss); i''m=من استم contraction. Prior notes follow. Fresh-context Codex review (2026-07-05, dispatched by Session 3): removed ungrammatical filler frames (e.g. ''How
     are you? bad, thanks.'', ''I am a library/engineer''), fixed an unrelated word-order slot, rebuilt mixed-category matching
     exercises as genuine same-category pairs, replaced unusable multiple_choice pools and tautological feedback, verified
     Dari terminology and Persian-range ک/ی codepoints independently (not derived from Farsi). Independently re-verified by
@@ -186,7 +187,6 @@ slot_presets:
       semantic:
       - greeting
       - time_period
-      - wellbeing_answer
       - politeness
   farewell_identity_review: &id015
     language_code: en
@@ -202,17 +202,17 @@ slot_presets:
   practice_word: &id011
     language_code: en
     part_of_speech:
-    - symbol
     - noun
-    - proper_noun
-    - pronoun
     - verb
     - adjective
     - adverb
-    - preposition
-    - particle
-    - phrase
-    agreement_tags: {}
+    agreement_tags:
+      semantic:
+      - greeting
+      - time_period
+      - farewell
+      - wellbeing_question
+      - politeness
 templates:
 - content_key: practice.prs-en.en.a1.unit01.lesson01.greeting_meaning.001
   lesson_content_key: en.a1.unit01.lesson01.everyday_greetings
@@ -360,7 +360,7 @@ templates:
     kind: slot_text
     slot: politeness
   feedback_frame:
-    text: '{politeness} برای تشکر مؤدبانه استفاده می‌شود.'
+    text: '{politeness} معادل انگلیسی عبارت داده‌شده است.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit01.lesson03.wellbeing_translate.004
@@ -473,18 +473,24 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    farewell_one: *id008
-    farewell_two: *id008
+    farewell_one: *id007
+    farewell_two: *id007
+    farewell_three: *id007
+    farewell_four: *id007
   slot_relations:
   - kind: distinct
     slots:
     - farewell_one
     - farewell_two
+    - farewell_three
+    - farewell_four
   answer_derivation:
     kind: matching_pairs
     slots:
     - farewell_one
     - farewell_two
+    - farewell_three
+    - farewell_four
   feedback_frame:
     text: '{farewell_one} و {farewell_two} را به معنای دری آن‌ها وصل کنین.'
     language_code: prs
@@ -504,7 +510,7 @@ templates:
     kind: slot_text
     slot: farewell
   feedback_frame:
-    text: '{farewell} معادل انگلیسی این عبارت خداحافظی است.'
+    text: '{farewell} معادل انگلیسی عبارت داده‌شده است.'
     language_code: prs
     direction: rtl
 - content_key: practice.prs-en.en.a1.unit01.lesson05.farewell_listen.004
