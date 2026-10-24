@@ -11,6 +11,7 @@ review:
     Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated w_<token> pools). Formal Sie named in English prompts. weil sends the finite verb to the end (weil ich frei habe). Feelings are
     predicate adjectives (Ich bin froh). The word_order pool froh/müde/traurig is natural in Ich bin ___. Reviewer: confirm
     'frei' gloss 'free; off' fits 'Ich habe heute frei' (I am off today).
+    Opus quality pass 2026-10-24: replaced unnatural 'Froh ist ein Gefühl' with 'Das ist ein gutes Gefühl', fixed the frei haben feedback, prompts now say glad (froh).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -59,7 +60,7 @@ templates:
     frame: {text: "{item}", language_code: de, direction: ltr}
     slots: {item: *words_4}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Frei habe: haben means to have; frei haben means to be off.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Frei haben means to have time off: Ich habe heute frei.", language_code: en, direction: ltr}
   - content_key: practice.en-de.de.a1.unit22.lesson01.order.005
     lesson_content_key: de.a1.unit22.lesson01.gefuehle_nennen
     type: word_order
@@ -100,10 +101,10 @@ templates:
   - content_key: practice.en-de.de.a1.unit22.lesson01.fill.010
     lesson_content_key: de.a1.unit22.lesson01.gefuehle_nennen
     type: fill_in_blank
-    frame: {text: "Froh ist ein {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    frame: {text: "Das ist ein gutes {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
     slots: {item: *fill_9, hint: *fill_9}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Gefühl is neuter: ein Gefühl.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Gefühl is neuter, so the adjective takes -es: ein gutes Gefühl.", language_code: en, direction: ltr}
   - content_key: practice.en-de.de.a1.unit22.lesson01.fill.011
     lesson_content_key: de.a1.unit22.lesson01.gefuehle_nennen
     type: fill_in_blank
@@ -135,7 +136,7 @@ templates:
   - content_key: practice.en-de.de.a1.unit22.lesson01.translate.015
     lesson_content_key: de.a1.unit22.lesson01.gefuehle_nennen
     type: translation
-    frame: {text: "I am happy.", language_code: en, direction: ltr}
+    frame: {text: "I am glad.", language_code: en, direction: ltr}
     slots: {item: *one_14}
     answer_derivation: {kind: render_frame, frame: {text: "Ich bin {item}.", language_code: de, direction: ltr}}
     feedback_frame: {text: "Froh follows bin and is not inflected.", language_code: en, direction: ltr}
@@ -156,7 +157,7 @@ templates:
   - content_key: practice.en-de.de.a1.unit22.lesson02.translate.018
     lesson_content_key: de.a1.unit22.lesson02.grund_nennen
     type: translation
-    frame: {text: "I am happy because I am off.", language_code: en, direction: ltr}
+    frame: {text: "I am glad because I have time off.", language_code: en, direction: ltr}
     slots: {item: *order_7}
     answer_derivation: {kind: render_frame, frame: {text: "Ich bin froh, {item} ich frei habe.", language_code: de, direction: ltr}}
     feedback_frame: {text: "After weil the verb habe goes to the end.", language_code: en, direction: ltr}
