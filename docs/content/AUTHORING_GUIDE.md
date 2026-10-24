@@ -860,3 +860,12 @@ listening-distractor collisions, and five missing `accepted_answers`
 variants — all in five units that had already passed `compile_content.
 py` with 0 errors and 0 warnings. Treat compiler-clean as the floor,
 never the bar.
+
+## 18. Practice answer variants
+
+A practice template may carry `answer_derivation.accepted_variants`: a
+non-empty list of extra accepted answers (translation / fill_in_blank).
+`{slot}` placeholders are filled with the sampled lexeme token. Do not use it
+for variants the shared grader already folds: English contractions, and for
+fa/prs the table `PERSIAN_VARIANT_GROUPS` in `backend/app/review/grading.py`
+(تکت = بلیط = بلیت; استم = هستم; نامم = نام من, ...). Never re-key items.
