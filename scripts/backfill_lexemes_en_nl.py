@@ -719,7 +719,7 @@ NL_GLOSSES.update({
     # classified common noun "opa" (unit05, "grandfather") -- here it is
     # used as a name-like reference to Lotte's specific grandfather, the
     # same convention as the capitalized Sander/Fenna/Nina proper nouns.
-    "Opa": "Grandpa (Lotte's grandfather, used as a name)",
+    "Opa": "Grandpa",
     "blond": "blond", "bruin": "brown", "grijs": "grey",
     # "Haar" (capitalized, the noun "hair") is a genuine homograph-of-case
     # with the already-classified possessive pronoun "haar" (her, unit05).
@@ -4457,7 +4457,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # include this unit's two new named characters -- additive only, does
     # not change what "person_name" already matched, same convention as the
     # weekday_pure/travel_noun_pure "_pure" tags elsewhere in this file.
-    if token in {"Nina", "Opa"}: semantic.append("person_name")
+    if token in {"Nina"}: semantic.append("person_name")  # Opa dropped 2026-10-24: "My name is Grandpa" in name frames
 
     # Unit 31 (animals) practice-template tags, added 2026-07-09. 4-member
     # pet-noun tag, verified safe generatively in "Ik heb een {item}." (all
@@ -4893,6 +4893,7 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # --- 2026-10-24 en-nl practice review (session 10): wrong-sense or
     #     same-gloss glosses seen in practice pools; each keyed to the token's
     #     first introducing unit at that level (verified against iter_specs()).
+    ("a1_unit05_family", "kind"): "child",  # possessive frames: "Dit is zijn *the child*"
     ("a1_unit39_post", "schrijf"): "write (with ik)",  # "prescribe" is the a2_unit27 sense
     ("a1_unit47_bibliotheek_lenen", "mee"): "along",  # "Het boek mag twee weken mee"
     ("a1_unit67_markt", "bakker"): "the baker",  # "bij de bakker"; "the bakery" = bakkerij
