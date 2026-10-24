@@ -96,8 +96,21 @@ class Settings(BaseSettings):
     social_nonce_ttl_seconds: int = 600
     google_oauth_client_ids: str = ""
     apple_audience_ids: str = ""
+    # Sentry crash reporting for server errors (app/core/sentry.py). Off
+    # unless SENTRY_DSN is set -- tests and local runs never set it, so
+    # nothing is ever sent from them. SENTRY_RELEASE is the git sha or
+    # version; SENTRY_ENVIRONMENT defaults from APP_ENV (see
+    # sentry_environment_name).
+    sentry_dsn: str = ""
+    sentry_release: str = ""
+    sentry_environment: str = ""
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    @property
+    def sentry_environment_name(self):
+        if self.sentry_environment.strip():
+            return self.sentry_environment.strip()
+        return "development" if self.app_env.lower() in {"dev", "development", "test"} else "production.lan"
     @property
     def cors_origin_list(self): return [x.strip() for x in self.cors_origins.split(",") if x.strip()]
     @property
