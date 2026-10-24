@@ -11,6 +11,7 @@ review:
     Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u03* lesson tags, w_<token> anchors).
     Age frame uses a curated list (no uno, so no 'ho uno anni'); due and sei belong to unit02 and are not used as number candidates. 'Qual' (short form) and 'trent' are left out of bare-word translation pools.
     Reviewer check: 'Quanto costa un caffè/cornetto?' and 'Qual è il tuo numero di telefono?' are the realization's own phrases.
+    Opus pass: removed the fragment token qual from the lesson03 MC/matching pool, removed euro (gloss identical to token) from the bare-word translation pool, fixed the perfetto feedback (agreement is with the noun, not the speaker) and an empty contrast in the costa feedback.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -20,10 +21,10 @@ slot_presets:
   ages: &ages {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_tre, w_quattro, w_cinque, w_sette, w_otto, w_nove, w_dieci]}}
   hai: &hai {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_hai}}
   l2_core: &l2_core {language_code: it, part_of_speech: [noun, pronoun, verb], agreement_tags: {semantic: [w_costa, w_caffè, w_euro, w_cornetto, w_cinquanta, w_ne, w_vuole, w_vorrei]}}
-  l2_words: &l2_words {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_costa, w_caffè, w_euro, w_cornetto, w_cinquanta, w_vorrei, w_vuole]}}
+  l2_words: &l2_words {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_costa, w_caffè, w_cornetto, w_cinquanta, w_vorrei, w_vuole]}}
   drinks: &drinks {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_caffè, w_cornetto]}}
   vorrei: &vorrei {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_vorrei}}
-  l3_core: &l3_core {language_code: it, part_of_speech: [noun, pronoun, adjective, particle], agreement_tags: {semantic: [w_qual, w_il, w_tuo, w_numero, w_telefono, w_mio, w_perfetto]}}
+  l3_core: &l3_core {language_code: it, part_of_speech: [noun, pronoun, adjective, particle], agreement_tags: {semantic: [w_il, w_tuo, w_numero, w_telefono, w_mio, w_perfetto]}}
   l3_words: &l3_words {language_code: it, part_of_speech: [noun, pronoun, adjective], agreement_tags: {semantic: [w_tuo, w_mio, w_numero, w_telefono, w_perfetto]}}
   telefono: &telefono {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_telefono}}
   tuo: &tuo {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_tuo}}
@@ -112,7 +113,7 @@ templates:
     frame: {text: "How much does a {item} cost?", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *drinks}
     answer_derivation: {kind: render_frame, frame: {text: "Quanto costa un {item}?", language_code: it, direction: ltr}}
-    feedback_frame: {text: "Italian puts the question word first and keeps costa singular for one item.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Quanto costa? needs no word for does: quanto, how much, plus costa, it costs.", language_code: en, direction: ltr}
   - content_key: practice.en-it.it.a1.unit03.lesson03.choose.001
     lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
     type: multiple_choice
@@ -148,7 +149,7 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *l3_words}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Perfetto is masculine; a woman saying it about a feminine thing would use perfetta.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Perfetto agrees with what it describes: with a feminine noun it becomes perfetta.", language_code: en, direction: ltr}
   - content_key: practice.en-it.it.a1.unit03.lesson03.translate.006
     lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
     type: translation
