@@ -1,0 +1,125 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit23
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit23.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u23* lesson tags, w_<token> anchors).
+    Pronto is sentence-initial in the unit's phone greeting, so it appears only in recognition and bare-word pools. Questions say informal (tu). 'Sam,' opens the ripetere frame so no slot is sentence-initial.
+    Reviewer check: 'mando' is glossed 'I send' and used only in 'Ti mando un messaggio'.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_chi, w_mando, w_messaggio, w_piano, w_pronto, w_puoi, w_ripetere]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [phrase, pronoun, noun, verb], agreement_tags: {semantic: [w_pronto, w_chi, w_messaggio, w_mando]}}
+  t_chi: &t_chi {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_chi}}
+  t_messaggio: &t_messaggio {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_messaggio}}
+  t_mando: &t_mando {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_mando}}
+  pool5: &pool5 {language_code: it, part_of_speech: [verb, adverb, pronoun], agreement_tags: {semantic: [w_puoi, w_ripetere, w_piano, w_chi]}}
+  t_ripetere: &t_ripetere {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_ripetere}}
+  t_piano: &t_piano {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: w_piano}}
+  t_puoi: &t_puoi {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_puoi}}
+templates:
+  - content_key: practice.en-it.it.a1.unit23.lesson01.choose.001
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pronto is how you answer the phone in Italian.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.listen.002
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Chi means who and is used in chi parla?", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.order.003
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: word_order
+    frame: {text: "Pronto, {item} parla?", language_code: it, direction: ltr}
+    slots: {item: *t_chi}
+    answer_derivation: {kind: render_frame, frame: {text: "Pronto, {item} parla?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Pronto, chi parla? is the standard phone opening.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.order.004
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: word_order
+    frame: {text: "Ti mando un {item}.", language_code: it, direction: ltr}
+    slots: {item: *t_messaggio}
+    answer_derivation: {kind: render_frame, frame: {text: "Ti mando un {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Un messaggio is masculine, so it takes un.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.fill.005
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: fill_in_blank
+    frame: {text: "Ti {item} un messaggio. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_mando, hint: *t_mando}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mando is the I form of mandare: I send.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.translate.006
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: translation
+    frame: {text: "Hello (answering the phone), who is speaking?", language_code: en, direction: ltr}
+    slots: {item: *t_chi}
+    answer_derivation: {kind: render_frame, frame: {text: "Pronto, {item} parla?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Pronto answers the phone and chi means who.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.translate.007
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: translation
+    frame: {text: "I'm sending you a message.", language_code: en, direction: ltr}
+    slots: {item: *t_mando}
+    answer_derivation: {kind: render_frame, frame: {text: "Ti {item} un messaggio.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Ti means to you and comes before the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson01.translate.008
+    lesson_content_key: it.a1.unit23.lesson01.pronto_chi_parla
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pronto is only used on the phone.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.choose.001
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool5}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Puoi is the informal tu form of potere: you can.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.order.002
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: word_order
+    frame: {text: "Sam, puoi {item}, per favore?", language_code: it, direction: ltr}
+    slots: {item: *t_ripetere}
+    answer_derivation: {kind: render_frame, frame: {text: "Sam, puoi {item}, per favore?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Puoi plus an infinitive asks someone to do something.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.order.003
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: word_order
+    frame: {text: "Parla più {item}, per favore.", language_code: it, direction: ltr}
+    slots: {item: *t_piano}
+    answer_derivation: {kind: render_frame, frame: {text: "Parla più {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Più piano means more slowly.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.fill.004
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: fill_in_blank
+    frame: {text: "Sam, {item} ripetere, per favore? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_puoi, hint: *t_puoi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Puoi ends in -i because it is the tu form.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.translate.005
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: translation
+    frame: {text: "Sam, can you repeat, please? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_puoi}
+    answer_derivation: {kind: render_frame, frame: {text: "Sam, {item} ripetere, per favore?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Puoi is the informal form, used with a friend.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit23.lesson02.translate.006
+    lesson_content_key: it.a1.unit23.lesson02.puoi_ripetere
+    type: translation
+    frame: {text: "Speak more slowly, please. (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_piano}
+    answer_derivation: {kind: render_frame, frame: {text: "Parla più {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Piano can mean slow or slowly.", language_code: en, direction: ltr}
