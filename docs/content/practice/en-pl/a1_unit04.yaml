@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit04
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit04.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job A) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u04*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors or short
+    unions in which every member is grammatical in the frame. Fixed English
+    prompts name ty vs pan/pani where it matters.
+    Reviewer: Jest + ordinal (Jest trzecia) is the standard time answer but is only implied by the unit text.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+    Opus pass (2026-10-24): word-count hints on the two short time prompts (Jest godzina trzecia, O której? were equally natural answers); fixed noon/at noon in a feedback line; południu gloss no longer claims the word alone means afternoon. NATIVE FLAG: confirm Jest trzecia as the default short time answer.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_pierwsza, w_druga, w_trzecia, w_czwarta, w_piąta, w_szósta, w_siódma, w_ósma, w_dziewiąta, w_dziesiąta, w_jedenasta, w_dwunasta, w_godzina, w_rano, w_południe, w_południu, w_wieczorem, w_nocy, w_pociąg, w_wstaje, w_odjeżdża, w_może, w_godzinie]
+slot_presets:
+  u04_or: &u04_or {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: [w_pierwsza, w_druga, w_trzecia, w_czwarta, w_piąta, w_szósta, w_siódma, w_ósma, w_dziewiąta, w_dziesiąta, w_jedenasta, w_dwunasta]}}
+  u04_ort: &u04_ort {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: [w_pierwsza, w_druga, w_trzecia, w_czwarta, w_piąta, w_szósta, w_siódma, w_ósma, w_dziewiąta, w_dziesiąta, w_jedenasta, w_dwunasta]}}
+  or_all: &or_all {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: [w_pierwsza, w_druga, w_trzecia, w_czwarta, w_piąta, w_szósta, w_siódma, w_ósma, w_dziewiąta, w_dziesiąta, w_jedenasta, w_dwunasta]}}
+  s_godzina: &s_godzina {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_godzina}}
+  s_trzecia: &s_trzecia {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_trzecia}}
+  u04_l2: &u04_l2 {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_rano, w_południe, w_południu, w_wieczorem, w_nocy, w_pociąg, w_wstaje, w_odjeżdża, w_może]}}
+  u04_l2t: &u04_l2t {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_rano, w_południe, w_wieczorem, w_nocy, w_pociąg, w_wstaje, w_odjeżdża]}}
+  u04_l2m: &u04_l2m {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_rano, w_południe, w_wieczorem, w_nocy, w_pociąg, w_wstaje, w_odjeżdża, w_godzinie, w_może]}}
+  rano: &rano {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_rano}}
+  poludniu: &poludniu {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_południu}}
+  s_wstaje: &s_wstaje {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_wstaje}}
+  s_godzinie: &s_godzinie {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_godzinie}}
+  s_odjezdza: &s_odjezdza {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_odjeżdża}}
+  moze: &moze {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_może}}
+  s_moze: &s_moze {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_może}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.choose.001
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u04_or}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Clock hours use feminine ordinals (pierwsza, druga, trzecia) because they agree with the understood word godzina.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.listen.002
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u04_or}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "For clock times Polish says pierwsza, druga, trzecia, not pierwszy, drugi, trzeci.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.translate.003
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u04_ort}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hours are ordinal numbers: pierwsza is literally first, so one o'clock is the first hour.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.order.004
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: word_order
+    frame: {text: "Która jest godzina? Jest {item}.", language_code: pl, direction: ltr}
+    slots: {item: *or_all}
+    answer_derivation: {kind: render_frame, frame: {text: "Która jest godzina? Jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The answer to Która jest godzina? is simply Jest + the hour, using the feminine ordinal.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.fill.005
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: fill_in_blank
+    frame: {text: "Która jest {item}? ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_godzina, hint: *s_godzina}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Która jest godzina? is the standard way to ask the time; która is feminine because godzina is.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson01.translate.006
+    lesson_content_key: pl.a1.unit04.lesson01.ktora_godzina
+    type: translation
+    frame: {text: "It is three o'clock. (two words)", language_code: en, direction: ltr}
+    slots: {item: *s_trzecia}
+    answer_derivation: {kind: render_frame, frame: {text: "Jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The clock hour is a feminine ordinal, so three o'clock is trzecia, not trzy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.choose.001
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u04_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Rano is in the morning, wieczorem in the evening, and w nocy at night.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.listen.002
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u04_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "In Ewa wstaje o siódmej rano the hour comes first and the part of the day follows.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.translate.003
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u04_l2t}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wstaje and odjeżdża are he/she/it forms, which end in -e or -a rather than -m.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.match.004
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u04_l2m, second: *u04_l2m, third: *u04_l2m, fourth: *u04_l2m, fifth: *u04_l2m, sixth: *u04_l2m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Rano (in the morning) and wieczorem (in the evening) need no preposition, but noon and night are w południe and w nocy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.order.005
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: word_order
+    frame: {text: "Ewa wstaje o siódmej {item}.", language_code: pl, direction: ltr}
+    slots: {item: *rano}
+    answer_derivation: {kind: render_frame, frame: {text: "Ewa wstaje o siódmej {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Ewa wstaje o siódmej rano gives the hour first, then the part of the day.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.order.006
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: word_order
+    frame: {text: "Pociąg odjeżdża o czwartej po {item}.", language_code: pl, direction: ltr}
+    slots: {item: *poludniu}
+    answer_derivation: {kind: render_frame, frame: {text: "Pociąg odjeżdża o czwartej po {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Po południu means in the afternoon, while at noon is w południe, with a different ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.fill.007
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: fill_in_blank
+    frame: {text: "Ewa {item} o siódmej rano. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_wstaje, hint: *s_wstaje}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wstaje is the he/she form of the verb, which is why it fits Ewa.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.translate.008
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: translation
+    frame: {text: "At what time? (three words)", language_code: en, direction: ltr}
+    slots: {item: *s_godzinie}
+    answer_derivation: {kind: render_frame, frame: {text: "O której {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "O której godzinie asks at what time, and both words take the ending used after o.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson02.translate.009
+    lesson_content_key: pl.a1.unit04.lesson02.o_ktorej_godzinie
+    type: translation
+    frame: {text: "The train departs at four in the afternoon.", language_code: en, direction: ltr}
+    slots: {item: *s_odjezdza}
+    answer_derivation: {kind: render_frame, frame: {text: "Pociąg {item} o czwartej po południu.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "After o the hour changes ending: czwarta becomes o czwartej.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson03.order.001
+    lesson_content_key: pl.a1.unit04.lesson03.ustalamy_godzine_spotkania
+    type: word_order
+    frame: {text: "Dobrze, {item} o czwartej po południu?", language_code: pl, direction: ltr}
+    slots: {item: *moze}
+    answer_derivation: {kind: render_frame, frame: {text: "Dobrze, {item} o czwartej po południu?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Może means maybe and softens a suggestion, like Maybe at four?", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit04.lesson03.translate.002
+    lesson_content_key: pl.a1.unit04.lesson03.ustalamy_godzine_spotkania
+    type: translation
+    frame: {text: "Okay, maybe at four in the afternoon?", language_code: en, direction: ltr}
+    slots: {item: *s_moze}
+    answer_derivation: {kind: render_frame, frame: {text: "Dobrze, {item} o czwartej po południu?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Może turns a proposal into a polite suggestion, as in Może o czwartej?", language_code: en, direction: ltr}

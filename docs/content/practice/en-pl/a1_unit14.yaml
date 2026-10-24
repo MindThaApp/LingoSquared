@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit14
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit14.porownania
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job C) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u14*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors so every
+    frame is grammatical (gender, case, number). Fixed English prompts name
+    ty vs pan/pani and speaker gender where it matters, and are worded so only
+    one natural Polish word order fits. Register follows the unit's
+    realization (ty between friends, pan/pani when formal).
+    Reviewer: every comparative frame has a single anchor so noun gender fixes the form; lesson 3 has no first-sight lexemes.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+    Opus pass (2026-10-24): every comparative translation prompt now says use niż (od + genitive, e.g. ode mnie, od herbaty, was an equally natural ungraded answer) and the he-prompt asks for the pronoun; rewrote the unclear niż ja feedback.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_młody, w_stary, w_starszy, w_starsza, w_młodszy, w_młodsza, w_niż, w_zły, w_lepszy, w_lepsza, w_gorszy, w_gorsza]
+slot_presets:
+  u14_l1: &u14_l1 {language_code: pl, part_of_speech: [particle, adjective], agreement_tags: {semantic: [w_młody, w_stary, w_starszy, w_starsza, w_młodszy, w_młodsza, w_niż]}}
+  u14_mp1: &u14_mp1 {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: [w_młody, w_stary, w_starszy, w_młodszy, w_starsza, w_młodsza]}}
+  s_starszy: &s_starszy {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_starszy}}
+  s_mlodszy: &s_mlodszy {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_młodszy}}
+  s_starsza: &s_starsza {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_starsza}}
+  u14_l2: &u14_l2 {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: [w_zły, w_lepszy, w_lepsza, w_gorszy, w_gorsza]}}
+  u14_mp2: &u14_mp2 {language_code: pl, part_of_speech: [particle, adjective], agreement_tags: {semantic: [w_zły, w_lepszy, w_lepsza, w_gorszy, w_gorsza, w_niż]}}
+  s_lepsza: &s_lepsza {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_lepsza}}
+  s_zly: &s_zly {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_zły}}
+  s_gorsza: &s_gorsza {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_gorsza}}
+  s_lepszy: &s_lepszy {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_lepszy}}
+  s_gorszy: &s_gorszy {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_gorszy}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.choose.001
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u14_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Starszy and młodszy are masculine; starsza and młodsza are the feminine forms of the same comparatives.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.listen.002
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u14_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Comparatives like starszy and młodszy are made by changing the ending -y to -szy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.match.003
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u14_mp1, second: *u14_mp1, third: *u14_mp1, fourth: *u14_mp1, fifth: *u14_mp1, sixth: *u14_mp1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Each comparative comes in a masculine and a feminine form, just like byłem and byłam.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.order.004
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: word_order
+    frame: {text: "Dziadek jest {item} niż ojciec.", language_code: pl, direction: ltr}
+    slots: {item: *s_starszy}
+    answer_derivation: {kind: render_frame, frame: {text: "Dziadek jest {item} niż ojciec.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Dziadek is masculine, so the adjective is starszy, not starsza.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.fill.005
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: fill_in_blank
+    frame: {text: "Ojciec jest {item} niż dziadek. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_mlodszy, hint: *s_mlodszy}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Niż joins the two things being compared, like than in English.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.fill.006
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: fill_in_blank
+    frame: {text: "Ewa jest {item} niż Marek. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_starsza, hint: *s_starsza}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adjective matches the person being described: Ewa is a woman, so starsza.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.translate.007
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: translation
+    frame: {text: "Grandfather is older than father. (use niż)", language_code: en, direction: ltr}
+    slots: {item: *s_starszy}
+    answer_derivation: {kind: render_frame, frame: {text: "Dziadek jest {item} niż ojciec.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The masculine noun dziadek takes the masculine comparative starszy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson01.translate.008
+    lesson_content_key: pl.a1.unit14.lesson01.starszy_i_mlodszy
+    type: translation
+    frame: {text: "Grandmother is older than mother. (use niż)", language_code: en, direction: ltr}
+    slots: {item: *s_starsza}
+    answer_derivation: {kind: render_frame, frame: {text: "Babcia jest {item} niż matka.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The feminine noun babcia takes the feminine comparative starsza.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.choose.001
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u14_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Zły, bad, is irregular: its comparative gorszy is not built by adding -szy to the stem.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.listen.002
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u14_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lepszy and gorszy are irregular comparatives of dobry and zły.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.match.003
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u14_mp2, second: *u14_mp2, third: *u14_mp2, fourth: *u14_mp2, fifth: *u14_mp2, sixth: *u14_mp2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Lepszy and gorszy have feminine forms lepsza and gorsza, like starszy and starsza.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.order.004
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: word_order
+    frame: {text: "Kawa jest {item} niż herbata.", language_code: pl, direction: ltr}
+    slots: {item: *s_lepsza}
+    answer_derivation: {kind: render_frame, frame: {text: "Kawa jest {item} niż herbata.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Kawa is feminine, so the comparative is lepsza.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.order.005
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: word_order
+    frame: {text: "To jest {item} dzień.", language_code: pl, direction: ltr}
+    slots: {item: *s_zly}
+    answer_derivation: {kind: render_frame, frame: {text: "To jest {item} dzień.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Zły is masculine here because dzień is a masculine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.fill.006
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: fill_in_blank
+    frame: {text: "Herbata jest {item} niż kawa. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_gorsza, hint: *s_gorsza}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gorsza is the feminine form, agreeing with herbata.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.fill.007
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: fill_in_blank
+    frame: {text: "On jest {item} niż ja. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_lepszy, hint: *s_lepszy}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After niż the pronoun keeps its basic form, niż ja; the alternative with od uses another form, ode mnie.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.translate.008
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: translation
+    frame: {text: "Coffee is better than tea. (use niż)", language_code: en, direction: ltr}
+    slots: {item: *s_lepsza}
+    answer_derivation: {kind: render_frame, frame: {text: "Kawa jest {item} niż herbata.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Kawa is feminine, so it takes lepsza, not lepszy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.translate.009
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: translation
+    frame: {text: "He is worse than me. (use niż; include the pronoun)", language_code: en, direction: ltr}
+    slots: {item: *s_gorszy}
+    answer_derivation: {kind: render_frame, frame: {text: "On jest {item} niż ja.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "On is masculine, so the comparative is gorszy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit14.lesson02.translate.010
+    lesson_content_key: pl.a1.unit14.lesson02.lepszy_i_gorszy
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u14_l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lepszy and gorszy are opposites; the feminine forms are lepsza and gorsza.", language_code: en, direction: ltr}

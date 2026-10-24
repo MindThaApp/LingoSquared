@@ -1,0 +1,169 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit09
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit09.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job B) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u09*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors or short
+    unions in which every member is grammatical in the frame. Fixed English
+    prompts name ty vs pan/pani and speaker gender where it matters. Register
+    follows the unit's realization (formal pan/pani to strangers, ty between friends).
+    Reviewer: lesson 3 has a single lexeme (rozumiem), covered through unit-level pools only.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_iść, w_dojść, w_prosto, w_tam, w_potem, w_prawo, w_lewo, w_skręcić, w_ulica, w_rozumiem]
+slot_presets:
+  u09_l1: &u09_l1 {language_code: pl, part_of_speech: [adverb, verb], agreement_tags: {semantic: [w_iść, w_dojść, w_prosto, w_tam, w_potem]}}
+  u09_l1m: &u09_l1m {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_iść, w_dojść, w_prosto, w_tam, w_potem, w_prawo, w_lewo, w_skręcić]}}
+  u09_then: &u09_then {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_potem}}
+  s_dojsc: &s_dojsc {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_dojść}}
+  s_tam: &s_tam {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_tam}}
+  u09_l2: &u09_l2 {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_prawo, w_lewo, w_skręcić, w_ulica, w_tam, w_potem]}}
+  u09_l2m: &u09_l2m {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_prawo, w_lewo, w_skręcić, w_ulica, w_iść, w_dojść, w_tam, w_potem, w_prosto]}}
+  u09_dir: &u09_dir {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: [w_prawo, w_lewo]}}
+  s_skrecic: &s_skrecic {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_skręcić}}
+  s_lewo: &s_lewo {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_lewo}}
+  s_prawo: &s_prawo {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_prawo}}
+  u09_l2t: &u09_l2t {language_code: pl, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_prawo, w_lewo, w_skręcić, w_ulica]}}
+  u09_l3: &u09_l3 {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_rozumiem, w_prosto, w_tam, w_potem, w_prawo, w_lewo]}}
+  u09_l3m: &u09_l3m {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_rozumiem, w_prosto, w_tam, w_potem, w_prawo, w_lewo, w_ulica]}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.choose.001
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u09_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dojść means to get to a place, while iść simply means to go on foot.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.listen.002
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u09_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Proszę plus an infinitive is the polite way to give a direction, as in Proszę iść prosto.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.match.003
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u09_l1m, second: *u09_l1m, third: *u09_l1m, fourth: *u09_l1m, fifth: *u09_l1m, sixth: *u09_l1m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Directions are often chained with potem, which means then.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.order.004
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: word_order
+    frame: {text: "Proszę iść prosto, {item} skręcić na prawo.", language_code: pl, direction: ltr}
+    slots: {item: *u09_then}
+    answer_derivation: {kind: render_frame, frame: {text: "Proszę iść prosto, {item} skręcić na prawo.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Potem links two steps in the order they happen: first straight, then turn.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.fill.005
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: fill_in_blank
+    frame: {text: "Jak {item} do banku? ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_dojsc, hint: *s_dojsc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Jak dojść do plus the genitive asks how to get to a place.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.translate.006
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: translation
+    frame: {text: "The bank is there.", language_code: en, direction: ltr}
+    slots: {item: *s_tam}
+    answer_derivation: {kind: render_frame, frame: {text: "Bank jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Tam means there and stays the same in any sentence about location.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson01.translate.007
+    lesson_content_key: pl.a1.unit09.lesson01.jak_dojsc
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u09_l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Prosto means straight ahead and is often combined with iść.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.choose.001
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u09_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Na prawo and na lewo show the direction to turn, and the words stay fixed after na.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.listen.002
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u09_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Skręcić is the verb for turning; the polite instruction is Proszę skręcić.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.match.003
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u09_l2m, second: *u09_l2m, third: *u09_l2m, fourth: *u09_l2m, fifth: *u09_l2m, sixth: *u09_l2m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Prawo and lewo are used after na to say on or to the right and left.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.order.004
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: word_order
+    frame: {text: "Proszę skręcić na {item}.", language_code: pl, direction: ltr}
+    slots: {item: *u09_dir}
+    answer_derivation: {kind: render_frame, frame: {text: "Proszę skręcić na {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Na prawo and na lewo both follow the verb skręcić in a direction.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.fill.005
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: fill_in_blank
+    frame: {text: "Proszę {item} na lewo. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_skrecic, hint: *s_skrecic}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After proszę the next verb stays in the infinitive, as in Proszę skręcić.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.translate.006
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: translation
+    frame: {text: "The park is on the left.", language_code: en, direction: ltr}
+    slots: {item: *s_lewo}
+    answer_derivation: {kind: render_frame, frame: {text: "Park jest na {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Na lewo says on the left; the matching word for right is na prawo.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.translate.007
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: translation
+    frame: {text: "The bank is on the right.", language_code: en, direction: ltr}
+    slots: {item: *s_prawo}
+    answer_derivation: {kind: render_frame, frame: {text: "Bank jest na {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The word after na stays unchanged: na prawo.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson02.translate.008
+    lesson_content_key: pl.a1.unit09.lesson02.na_prawo_na_lewo
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u09_l2t}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ulica is feminine because it ends in -a.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson03.choose.001
+    lesson_content_key: pl.a1.unit09.lesson03.jak_dojsc_do_parku
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u09_l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Rozumiem is the I form; it shows you followed the directions.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson03.match.002
+    lesson_content_key: pl.a1.unit09.lesson03.jak_dojsc_do_parku
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u09_l3m, second: *u09_l3m, third: *u09_l3m, fourth: *u09_l3m, fifth: *u09_l3m, sixth: *u09_l3m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "After directions people confirm with rozumiem, which means I understand.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit09.lesson03.translate.003
+    lesson_content_key: pl.a1.unit09.lesson03.jak_dojsc_do_parku
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u09_l3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Rozumiem ends in -m, the usual ending for I in the present tense.", language_code: en, direction: ltr}
