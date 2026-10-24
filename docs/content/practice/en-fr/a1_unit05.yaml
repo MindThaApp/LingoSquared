@@ -8,7 +8,7 @@ review:
   required_next_reviewer: native_speaker_review
   fresh_context: "false"
   notes: >-
-    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u05*, single-member w_<token> anchors). Sentence frames use curated w_ unions where every member is grammatical and agrees: Je voudrais un {masculine noun} (cafe, dessert, verre, poulet, poisson), Je voudrais une {feminine noun} (salade, boisson), Qu'est-ce que vous avez comme {dessert|boisson}. l'eau is deliberately kept out of Un verre de {item} frames (de l'eau would be needed). The suite lexeme (tout de suite) is not used in any pool because its single-word gloss is not a clean answer. Reviewer: please confirm the vouloir/un-une frames read naturally for a cafe order.
+    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u05*, single-member w_<token> anchors). Sentence frames use curated w_ unions where every member is grammatical and agrees: Je voudrais un {masculine noun} (cafe, dessert, verre, poulet, poisson), Je voudrais une {feminine noun} (salade, boisson), Qu'est-ce que vous avez comme {dessert|boisson}. l'eau is deliberately kept out of Un verre de {item} frames (de l'eau would be needed). The suite lexeme (tout de suite) is not used in any pool because its single-word gloss is not a clean answer. Reviewer: please confirm the vouloir/un-une frames read naturally for a cafe order. Opus pass 2026-10-24: removed poulet and poisson from Je voudrais un {item} (un poulet / un poisson means a whole animal; the unit teaches du poulet / le poulet); fixed a misleading de/de l'eau feedback line and the rouge agreement line. NATIVE FLAG: confirm Je voudrais un verre, s'il vous plaît as a cafe order.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -21,7 +21,7 @@ slot_presets:
   listen3: &listen3 {language_code: fr, part_of_speech: [noun, adjective, pronoun], agreement_tags: {semantic: [w_boisson, w_verre, w_rouge, w_faim, w_cette, w_nous]}}
   mfood: &mfood {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_poulet, w_poisson, w_salade, w_riz, w_vin, w_dessert, w_café, w_boisson, w_verre, "w_l'eau"]}}
   mwords: &mwords {language_code: fr, part_of_speech: [noun, adjective, verb, pronoun], agreement_tags: {semantic: [w_délicieux, w_rouge, w_avez, w_choisi, w_donné, w_faim, w_boisson, w_verre, w_café, w_dessert, w_nous, w_cette]}}
-  masc: &masc {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_café, w_dessert, w_verre, w_poulet, w_poisson]}}
+  masc: &masc {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_café, w_dessert, w_verre]}}
   fem: &fem {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_salade, w_boisson]}}
   comme: &comme {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_dessert, w_boisson]}}
   avez: &avez {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_avez}}
@@ -54,7 +54,7 @@ templates:
     slots: {first: *mfood, second: *mfood, third: *mfood, fourth: *mfood, fifth: *mfood, sixth: *mfood}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "With drinks and food French uses de after a container: un verre de vin, but you say de l'eau for water.", language_code: en, direction: ltr}
+    feedback_frame: {text: "After a container French uses de with no article: un verre de vin, un verre d'eau.", language_code: en, direction: ltr}
   - content_key: practice.en-fr.fr.a1.unit05.lesson01.translate.004
     lesson_content_key: fr.a1.unit05.lesson01.a_table
     type: translation
@@ -124,7 +124,7 @@ templates:
     frame: {text: "{item}", language_code: fr, direction: ltr}
     slots: {item: *w3}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Rouge describes a masculine noun here (vin rouge); verre de vin rouge means a glass of red wine.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Rouge has the same form for masculine and feminine nouns: un verre de vin rouge, a glass of red wine.", language_code: en, direction: ltr}
   - content_key: practice.en-fr.fr.a1.unit05.lesson03.listen.002
     lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
     type: listen_select
