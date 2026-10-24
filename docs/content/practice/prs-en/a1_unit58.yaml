@@ -5,20 +5,30 @@ target_language: en
 unit_content_key: en.a1.unit58.museum
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: 'Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit58 (museum). backfill_lexemes_prs_en.py
-    carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}), so per-lesson/union
-    semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the
-    full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml).
-    word_order and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member
-    anchor, fill_in_blank would course-wide hard-fail the compiler''s single-candidate check, and an untagged
-    word_order slot pools every A1 content word at course/Endless-Practice scope (recipe §1.1/§3.1c),
-    which is unsafe for any frame with literal text. matching_pairs was originally pooled across the
-    WHOLE unit''s lexemes (untagged); every template remains anchored via lesson_content_key to one
-    lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes.
-    Capacity measured with §0/§9''s f".{level}.{unit}." filter: 12 distinct tokens across 4 lesson(s)
-    with lexemes. Register: colloquial Dari per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md
-    (2pl -ین, no Iranian -ید). Wave-3 (2026-07-26): commit 05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words), resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_a1_unit58_words (all 4 lessons; no single lesson clears the floor alone), preferring a lesson-scoped tag where that lesson alone clears the 6-pair floor and falling back to the unit-wide tag otherwise; declared the referenced tags in tag_schema.agreement_tags.semantic. pool_check.py confirms every re-anchored slot has >=6 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped by construction). Templates and slot counts unchanged (all were already 6 slots).'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (prs-en practice pass, rest): 4 fixes -- 4 matching feedback_frames English -> Dari (all slots
+    already pinned to prs_en_a1_unit58_words; 12 unit tokens, bare-word frames only). city=شهر and town=شهر قدیمی overlap
+    in MC/translation (Dari ''شهر'' accepts either; no lever, both nouns in the unit pool). NATIVE FLAGS: town, کلان‌سال (تکت
+    کلان‌سالان) for adult, چوک (square), موزیم, مجسمه. BACKFILL GLOSS FLAGS: town=شهر قدیمی (sense is ''old town'' only);
+    adult gloss embeds a phrase. Prior note: Authored against docs/content/PRACTICE_PACK_RECIPE.md for prs-en unit58 (museum).
+    backfill_lexemes_prs_en.py carries no agreement_tags.semantic for this direction (every lexeme has agreement_tags: {}),
+    so per-lesson/union semantic tagging (recipe §3.1/§8.1) is not available; slots are constrained by language_code + the
+    full part_of_speech set only, matching the established prs-en pattern (docs/content/practice/prs-en/a1_unit48.yaml). word_order
+    and fill_in_blank were deliberately NOT authored: without a semantic tag to pin a single-member anchor, fill_in_blank
+    would course-wide hard-fail the compiler''s single-candidate check, and an untagged word_order slot pools every A1 content
+    word at course/Endless-Practice scope (recipe §1.1/§3.1c), which is unsafe for any frame with literal text. matching_pairs
+    was originally pooled across the WHOLE unit''s lexemes (untagged); every template remains anchored via lesson_content_key
+    to one lesson so the checkpoint''s per-lesson stratification still sees every lesson that has lexemes. Capacity measured
+    with §0/§9''s f".{level}.{unit}." filter: 12 distinct tokens across 4 lesson(s) with lexemes. Register: colloquial Dari
+    per docs/content/DARI_REGISTER_REPAIR.md and docs/content/CLAUDE.md (2pl -ین, no Iranian -ید). Wave-3 (2026-07-26): commit
+    05af7ace added generated agreement_tags.semantic to backfill_lexemes_prs_en.py (prs_en_<unit>_words / prs_en_<unit>_lessonNN_words),
+    resolving the blocker above for matching_pairs. Re-anchored all 4 POS-only matching_pairs slot bodies from the bare part_of_speech
+    union to language_code + [noun, verb, adjective, adverb] + agreement_tags.semantic: prs_en_a1_unit58_words (all 4 lessons;
+    no single lesson clears the floor alone), preferring a lesson-scoped tag where that lesson alone clears the 6-pair floor
+    and falling back to the unit-wide tag otherwise; declared the referenced tags in tag_schema.agreement_tags.semantic. pool_check.py
+    confirms every re-anchored slot has >=6 distinct unit tokens/glosses with zero course-scope extras (tags are unit-scoped
+    by construction). Templates and slot counts unchanged (all were already 6 slots).'
 tag_schema:
   part_of_speech:
   - symbol
@@ -201,9 +211,9 @@ templates:
     kind: matching_pairs
     slots: *id001
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit58.lesson02.choose.001
   lesson_content_key: en.a1.unit58.lesson02.phrases_for_the_museum
   type: multiple_choice
@@ -370,9 +380,9 @@ templates:
     kind: matching_pairs
     slots: *id002
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit58.lesson03.choose.001
   lesson_content_key: en.a1.unit58.lesson03.dialogue_at_the_museum
   type: multiple_choice
@@ -539,9 +549,9 @@ templates:
     kind: matching_pairs
     slots: *id003
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl
 - content_key: practice.prs-en.en.a1.unit58.lesson04.choose.001
   lesson_content_key: en.a1.unit58.lesson04.an_afternoon_at_the_museum
   type: multiple_choice
@@ -708,6 +718,6 @@ templates:
     kind: matching_pairs
     slots: *id004
   feedback_frame:
-    text: Match each word with its meaning.
-    language_code: en
-    direction: ltr
+    text: هر واژه را به معنی دری خودش وصل کنین.
+    language_code: prs
+    direction: rtl

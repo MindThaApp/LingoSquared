@@ -6,7 +6,16 @@ unit_content_key: en.a1.unit11.weather
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (prs-en practice pass, rest): 4 fixes -- weather_pair.003 feedback said two words
+    matched (pack has 6 pairs): now count-free; today_translate.003 and tomorrow_translate.003 feedback
+    mixed the English slot value into the Dari sentence (would render sunny inside Dari text): now state
+    the correct English sentence; ZWNJ پیش‌بینی‌شده in tomorrow_order.001 feedback. Unfixable:
+    translation render_frame answers It's {item} / It will be {item} tomorrow have no accepted It is /
+    expanded variant. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: going=می‌خواهد (آیندهٔ نزدیک) is Iranian
+    formal 3sg (proposed override in worker log). Prior notes follow.
+
     Fresh-context native review 2026-07-28 (batch 4): CLEAN — verified via
     iter_specs (weather_condition=6, course-scope-safe), all gates (0 DEAD,
     0 self-ref, practice-validate 0/0), dialogue↔audio↔speaker attribution,
@@ -96,7 +105,7 @@ templates:
     slots: {first_word: *weather_condition, second_word: *weather_condition, third_word: *weather_condition, fourth_word: *weather_condition, fifth_word: *weather_condition, sixth_word: *weather_condition}
     slot_relations: [{kind: distinct, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}]
     answer_derivation: {kind: matching_pairs, slots: [first_word, second_word, third_word, fourth_word, fifth_word, sixth_word]}
-    feedback_frame: {text: "دو واژهٔ هوا را به معنی دری درست وصل کردین.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "واژه‌های هوا را به معنی دری درست وصل کردین.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit11.lesson01.weather_translate.004
     lesson_content_key: en.a1.unit11.lesson01.weather_words
     type: translation
@@ -117,21 +126,21 @@ templates:
     frame: {text: "هوا {item} است.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *weather_condition}
     answer_derivation: {kind: render_frame, frame: {text: "It's {item}", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It's {item} یعنی هوا {item} است.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "جملهٔ درست به انگلیسی: It's {item}", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit11.lesson03.tomorrow_order.001
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: word_order
     frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}
     slots: {item: *weather_condition}
     answer_derivation: {kind: render_frame, frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}}
-    feedback_frame: {text: "{item} هوای پیشبینی‌شده برای فرداست.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "{item} هوای پیش‌بینی‌شده برای فرداست.", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit11.lesson03.tomorrow_translate.003
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: translation
     frame: {text: "فردا هوا {item} می‌شه.", language_code: prs, direction: rtl, slot_rendering: {item: english_gloss}}
     slots: {item: *weather_condition}
     answer_derivation: {kind: render_frame, frame: {text: "It will be {item} tomorrow", language_code: en, direction: ltr}}
-    feedback_frame: {text: "It will be {item} tomorrow یعنی فردا هوا {item} می‌شه.", language_code: prs, direction: rtl}
+    feedback_frame: {text: "جملهٔ درست به انگلیسی: It will be {item} tomorrow", language_code: prs, direction: rtl}
   - content_key: practice.prs-en.en.a1.unit11.lesson03.weather_listen.004
     lesson_content_key: en.a1.unit11.lesson03.reading_a_forecast
     type: listen_select
