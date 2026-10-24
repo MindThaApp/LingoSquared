@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit17
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job C) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items, and inflected variants of a noun are kept out of bare-word pools so no prompt has two defensible answers. English prompts name informal/formal address and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the informal/formal labels in the English prompts and the case notes in feedback. No character facts are asserted and no speaker names are baked into any card.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_больница", "w_больнице", "w_врач", "w_инженер", "w_кем", "w_магазине", "w_он", "w_офис", "w_офисе", "w_повар", "w_работает", "w_работаешь", "w_ресторане", "w_учитель", "w_школа", "w_школе"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["noun", "pronoun"], agreement_tags: {semantic: ["w_врач", "w_больница", "w_учитель", "w_школа", "w_инженер", "w_офис", "w_он"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_врач", "w_учитель", "w_инженер", "w_больница", "w_школа", "w_офис"]}}
+  p3: &p3 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_работает"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_больнице"}}
+  p5: &p5 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_офисе"}}
+  p6: &p6 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_врач"}}
+  p7: &p7 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_школе"}}
+  p8: &p8 {language_code: "ru", part_of_speech: ["noun", "pronoun", "verb"], agreement_tags: {semantic: ["w_кем", "w_работаешь", "w_повар", "w_магазине", "w_ресторане"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_работаешь"}}
+  p10: &p10 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_ресторане"}}
+  p11: &p11 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_магазине"}}
+  p12: &p12 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_повар"}}
+  p13: &p13 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_врач", "w_учитель", "w_инженер", "w_офис"]}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.choose.001
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Russian job names such as врач or инженер need no word for a or an.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.match.002
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "A job is named with a bare noun: Я врач means I am a doctor.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.order.003
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: word_order
+    frame: {text: "Он {item} в офисе.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Он {item} в офисе.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Работает is the he or she form of работать, to work.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.fill.004
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: fill_in_blank
+    frame: {text: "Я работаю в {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "After в, meaning in or at, the noun takes the prepositional ending -е: больница becomes больнице.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.fill.005
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: fill_in_blank
+    frame: {text: "Он инженер. Он работает в {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Офис takes the prepositional ending -е after в: в офисе.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.translate.006
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: translation
+    frame: {text: "I am a doctor.", language_code: "en", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "No word for a is needed before a job name.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.translate.007
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: translation
+    frame: {text: "He works in the office.", language_code: "en", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Он работает в {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "В plus the prepositional ending -е answers where.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.translate.008
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: translation
+    frame: {text: "She is a teacher. She works at school.", language_code: "en", direction: "ltr"}
+    slots: {item: *p7}
+    answer_derivation: {kind: "render_frame", frame: {text: "Она учитель. Она работает в {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Школа becomes школе after в, at school.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.translate.009
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p2}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Job names such as врач and учитель keep the same form for men and women.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.choose.001
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p8}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Кем ты работаешь? literally asks as whom do you work, which is how Russians ask what your job is.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.order.002
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: word_order
+    frame: {text: "Кем ты {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "Кем ты {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Работаешь is the informal ты form of работать.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.fill.003
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: fill_in_blank
+    frame: {text: "Кем ты {item}? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "The ты ending -ешь marks work as done by you, informal.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.fill.004
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: fill_in_blank
+    frame: {text: "Он повар. Он работает в {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Ресторан takes the prepositional ending -е after в: в ресторане.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.translate.005
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: translation
+    frame: {text: "What do you work as? (informal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "Кем ты {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Кем asks about someone's job, and ты shows an informal question.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.translate.006
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: translation
+    frame: {text: "I work in a store.", language_code: "en", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я работаю в {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Магазин becomes магазине after в, in a store.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson02.translate.007
+    lesson_content_key: ru.a1.unit17.lesson02.kem_ty_rabotayesh
+    type: translation
+    frame: {text: "She is a cook. She works in a restaurant.", language_code: "en", direction: "ltr"}
+    slots: {a: *p12, b: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Она {a}. Она работает в {b}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Повар stays masculine in form even when it names a woman.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit17.lesson01.listen.010
+    lesson_content_key: ru.a1.unit17.lesson01.ya_vrach
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p13}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "These job and workplace nouns need no word for a or the.", language_code: "en", direction: "ltr"}
