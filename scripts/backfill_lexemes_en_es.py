@@ -9,8 +9,10 @@ directions. All plumbing lives in scripts/_target_lexeme_backfill_common.py
 (see its docstring for the tag scheme); this file is data only:
 one hand-written English gloss and one part of speech per citation form.
 
-Scope: A1 only (the "en-es" manifest group, units 01-15). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 ("en-es" manifest group, units 01-15) and A2 ("en-es-a2", units
+16-25; session 11). B1+ is not classified yet; extend LEVELS and the tables
+below together. A token already glossed for A1 keeps that gloss in A2 unless
+A2_GLOSS_OVERRIDES says the A2 unit teaches another sense.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -46,11 +48,11 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "es"
-LEVELS = {"a1": "en-es"}
+LEVELS = {"a1": "en-es", "a2": "en-es-a2"}
 
 PROPER_NOUNS = {
     "Elena", "Mateo", "Lucía", "Diego", "Carlos", "Ana", "México", "Colombia",
-    "Londres", "España", "Barcelona", "Sofía", "Madrid", "Rosa",
+    "Londres", "España", "Barcelona", "Sofía", "Madrid", "Rosa", "García",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -241,6 +243,115 @@ GLOSSES: dict[str, str] = {
     "espacio": "space", "viste": "you saw (informal)",
     "mudarme": "to move (house), said of myself", "sentido": "sense",
     "exacto": "exactly", "cocinas": "you cook (informal)",
+    # a2 unit16 tramites (A2 course, glossed at first sight in that course)
+    "cita": "appointment", "trámite": "procedure; official paperwork",
+    "registrarse": "to register (oneself)", "quisiera": "I would like",
+    "hacer": "to do; to make", "registrarme": "to register myself",
+    "pasaporte": "passport", "contrato": "contract", "alquiler": "rent",
+    "comprobante": "proof; supporting document",
+    "domicilio": "home address; residence", "documentos": "documents",
+    "traigo": "I bring", "podría": "could; you could (formal)",
+    "ayudarme": "to help me", "dirección": "address", "mes": "month",
+    "pasado": "last; past", "necesario": "necessary",
+    "traiga": "bring (after a phrase like it is necessary that; formal)",
+    "llegue": "arrive (after a phrase like it is important that; formal)",
+    "traer": "to bring", "siguientes": "following (plural)",
+    "válido": "valid", "si": "if", "corresponde": "applies; is appropriate",
+    "haga": "make; do (formal command)", "venir": "to come",
+    "recibirá": "will receive; you will receive (formal)",
+    "registro": "registration; record", "correo": "mail; post",
+    "unos": "some; about (masc. plural)", "puedo": "I can",
+    "ayudarle": "to help you (formal)", "nueva": "new (fem.)",
+    "mostrarme": "to show me", "orden": "order; tidy state",
+    "firme": "sign (formal command)", "listo": "ready; done",
+    "recibiré": "I will receive", "paciencia": "patience", "ayuda": "help",
+    "registró": "registered (he or she did)",
+    "pasa": "happens; goes by",
+    # a2 unit17 opiniones
+    "opinión": "opinion", "pensar": "to think", "parece": "seems",
+    "mejor": "better; best", "tiendas": "shops", "piensas": "you think (informal)",
+    "sea": "is; may be (after a phrase like I do not think that)",
+    "tranquilo": "calm; quiet (masc.)", "extraño": "I miss",
+    "tranquilidad": "peace and quiet", "sin": "without",
+    "embargo": "however (as the second half of a fixed phrase)",
+    "ventajas": "advantages", "era": "was (a past description)",
+    "conveniencia": "convenience", "supongo": "I suppose",
+    "cree": "believes; thinks", "piensa": "thinks",
+    # a2 unit18 banco
+    "bancaria": "bank (as in bank account)", "abrir": "to open",
+    "gustaría": "would please (used to say you would like)",
+    "identificación": "identification; ID", "tarjeta": "card",
+    "débito": "debit", "saldo": "balance (of an account)",
+    "le": "to you (formal); to him; to her", "daremos": "we will give",
+    "consultar": "to check; to look up", "puede": "can; you can (formal)",
+    "línea": "line; online", "gratuita": "free of charge (fem.)",
+    "cualquier": "any", "sucursal": "branch (of a bank)",
+    "transferencias": "transfers", "cuentas": "accounts",
+    "gratuitas": "free of charge (fem. plural)", "excelente": "excellent",
+    "abrió": "opened (he or she did)",
+    # a2 unit19 medico
+    "dolor": "pain; ache", "cabeza": "head", "fiebre": "fever",
+    "sentirse": "to feel (oneself)", "duele": "hurts; aches",
+    "ayer": "yesterday", "consultorio": "doctor's office",
+    "explicarme": "to explain to me", "recomiendo": "I recommend",
+    "descanse": "rest (formal command)", "tome": "take (formal command)",
+    "estas": "these (fem.)", "pastillas": "pills",
+    "beba": "drink (formal command)", "mucha": "much; a lot of (fem.)",
+    "paciente": "patient (person)", "García": "García (a surname)",
+    "síntoma": "symptom", "leve": "mild", "recomendación": "recommendation",
+    "descansar": "to rest", "tomar": "to take; to drink",
+    "recetadas": "prescribed (fem. plural)", "beber": "to drink",
+    "síntomas": "symptoms", "continúan": "they continue",
+    "doctora": "doctor (female)", "tenía": "had (he or she; ongoing past)",
+    "recomendó": "recommended (he or she did)",
+    "descansara": "would rest (past, after a request)",
+    "bebiera": "would drink (past, after a request)",
+    # a2 unit20 mantenimiento
+    "calentador": "water heater", "gotera": "leak (in a roof or pipe)",
+    "plomero": "plumber", "funciona": "works; functions",
+    "empeorando": "getting worse", "revisemos": "we check (after a phrase like it is necessary that)",
+    "pronto": "soon", "ahí": "there", "estaré": "I will be (a place or state)",
+    "problema": "problem", "reportado": "reported", "técnico": "technician",
+    "asignado": "assigned", "confirma": "confirms; is confirmed",
+    "visita": "visit", "esté": "be (formal command; a place or state)",
+    "disponible": "available", "enviaré": "I will send", "ese": "that (masc.)",
+    "rápida": "quick (fem.)", "reportó": "reported (he or she did)",
+    "casera": "landlady", "enviará": "will send; you will send (formal)",
+    # a2 unit21 entrevista
+    "entrevista": "interview", "presentarse": "to introduce oneself",
+    "presentarme": "to introduce myself", "interesa": "interests; is of interest to",
+    "horario": "schedule; working hours", "busca": "looks for; is wanted",
+    "profesor": "teacher (male)", "experiencia": "experience",
+    "interesados": "interested people", "enviar": "to send",
+    "currículum": "résumé; CV", "alguna": "any; some (fem.)",
+    "oportunidad": "opportunity", "presentó": "introduced (he or she did)",
+    "explicó": "explained (he or she did)", "preguntó": "asked (he or she did)",
+    "terminar": "to finish",
+    # a2 unit22 viaje interrumpido
+    "retraso": "delay", "tren": "train", "lleva": "carries; takes; has been (of time elapsed)",
+    "minutos": "minutes", "cancelado": "cancelled (masc.)",
+    "cancelada": "cancelled (fem.)", "opción": "option",
+    "centro": "town centre; downtown", "pasajeros": "passengers",
+    "pueden": "they can; you can (plural)", "autobús": "bus",
+    "salida": "exit", "principal": "main", "disculpe": "excuse me (formal)",
+    "tarda": "takes (time)", "avisar": "to let someone know",
+    # a2 unit23 vida digital
+    "móvil": "mobile phone", "redes": "networks", "sociales": "social (plural)",
+    "miro": "I look at; I watch", "paso": "I spend (time)",
+    "leer": "to read", "noticias": "news", "escribir": "to write",
+    "mensajes": "messages", "útil": "useful", "veces": "times (occasions)",
+    "cansa": "tires; is tiring",
+    # a2 unit24 semana ocupada
+    "gimnasio": "gym", "fin": "end", "descanso": "I rest", "veo": "I see",
+    "amigos": "friends", "compro": "I buy", "normalmente": "normally",
+    "haces": "you do (informal)",
+    # a2 unit25 reclamacion
+    "cremallera": "zipper", "devolver": "to return (an item)",
+    "reembolso": "refund", "ofrecerle": "to offer you (formal)",
+    "cambio": "exchange; change", "artículo": "item; article",
+    "debe": "must; should; you must (formal)", "recibo": "receipt",
+    "estar": "to be (a state or place)", "usar": "to use",
+    "ofrecer": "to offer", "compré": "I bought",
 }
 
 POS_SETS = {
@@ -248,25 +359,29 @@ POS_SETS = {
     "pronoun": split_words(
         "usted tú nos se me te este esta su tu mi yo qué cuántos cuál mis tus "
         "estos ellos sus tuyo eso mí algo cuánto todo esa nosotros lo esto les "
-        "contigo alguien nada"
+        "contigo alguien nada ese estas alguna le"
     ),
     "preposition": split_words(
-        "hasta de en al por para con a del entre desde durante"
+        "hasta de en al por para con a del entre desde durante sin"
     ),
-    "particle": split_words("y que un el la una los las o no sí ni porque pero"),
+    "particle": split_words("y que un el la una los las o no sí ni porque pero si embargo"),
     "adjective": split_words(
         "buenos buenas buen primera bueno media perfecto próxima grande pequeña "
         "muchos menor bonito cada cierto siguiente buena genial incluido fresca "
         "medio todos frescas frescos útiles fácil muchas nublado importante "
         "mediana barato nervioso nerviosa contento contenta cansado cansada "
         "preocupado preocupada orgulloso orgullosa nuevo nerviosos preocupados "
-        "orgullosos contentos otra interesante desocupado pequeño mismo viejo"
+        "orgullosos contentos otra interesante desocupado pequeño mismo viejo "
+        "pasado necesario siguientes válido nueva mejor tranquilo bancaria "
+        "gratuita gratuitas cualquier excelente mucha leve recetadas reportado "
+        "asignado disponible rápida principal útil cancelado cancelada listo "
+        "sociales unos"
     ),
     "adverb": split_words(
         "cómo bien muy luego mucho igualmente dónde poco todavía aquí también "
         "dentro claro como así más cerca hoy cuándo después menos antes "
         "entonces ya primero tan lejos enfrente bastante donde derecho "
-        "demasiado casi mal solo ahora juntos definitivamente exacto"
+        "demasiado casi mal solo ahora juntos definitivamente exacto ayer pronto ahí normalmente"
     ),
     "verb": split_words(
         "está estás vemos tenga llama llamo llamas soy es eres vivo habla estoy "
@@ -279,7 +394,18 @@ POS_SETS = {
         "llegamos usas uso queda voy comprarlo ayudo buscamos usan sientes "
         "siento quema preocupes empezar estaban quemó empezaron salió están "
         "hacemos intentarlo logramos enseño trabajar trabajas preferimos trabaja "
-        "enseña prefieren enseñar alquilar llamar mudarse viste mudarme cocinas"
+        "enseña prefieren enseñar alquilar llamar mudarse viste mudarme cocinas "
+        "registrarse quisiera hacer registrarme traigo podría ayudarme traiga "
+        "llegue traer corresponde haga venir recibirá puedo ayudarle mostrarme "
+        "firme recibiré registró pensar parece piensas sea extraño era supongo "
+        "cree piensa abrir gustaría daremos consultar puede abrió sentirse duele "
+        "explicarme recomiendo descanse tome beba descansar tomar beber "
+        "continúan tenía recomendó descansara bebiera funciona empeorando "
+        "revisemos estaré confirma esté enviaré reportó enviará presentarse "
+        "presentarme interesa busca enviar presentó explicó preguntó terminar "
+        "lleva pueden disculpe tarda avisar miro paso leer escribir cansa "
+        "descanso veo compro haces devolver ofrecerle debe estar usar ofrecer "
+        "compré pasa"
     ),
     "phrase": split_words("hola gracias adiós oye felicidades ah ay"),
 }
@@ -299,6 +425,14 @@ for _tag, _words in {
     for _w in _words.split():
         CATEGORY_TAGS.setdefault(_w, []).append(_tag)
 
+A2_GLOSS_OVERRIDES = {
+    ("a2_unit18_banco", "cuenta"): "account (bank); bill",
+    ("a2_unit21_entrevista", "puesto"): "position; job post",
+    ("a2_unit21_entrevista", "hace"): "makes; does; ago (with a length of time)",
+    ("a2_unit17_opiniones", "razón"): "reason; being right",
+    ("a2_unit16_tramites", "desde"): "since; from",
+}
+
 part_of_speech = pos_lookup(POS_SETS)
 
 
@@ -313,6 +447,7 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=A2_GLOSS_OVERRIDES,
         )
 
 

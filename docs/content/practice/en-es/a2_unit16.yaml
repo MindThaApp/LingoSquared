@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a2.unit16
+source_language: en
+target_language: es
+unit_content_key: es.a2.unit16.tramites
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 11, en-es A2 set) from scripts/backfill_lexemes_en_es.py lexemes (es_a2_uNN* tags, w_<token> anchors). Fixed-sentence translations and fill-in-blanks use single-token anchors so each prompt has one answer; formal usted register throughout, as in the registration-office scenes. NATIVE FLAG: trámite and comprobante de domicilio are common in Latin America and Spain alike; check that the register of "registrarse" suits both.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_cita, w_trámite, w_pasaporte, w_contrato, w_alquiler, w_comprobante, w_domicilio, w_documentos, w_dirección, w_registro, w_correo, w_oficina, w_ayudarme, w_mes, w_podría, w_vivo, w_vive, w_traiga, w_llegue, w_necesario, w_importante, w_traer, w_venir, w_válido, w_número, w_firme, w_puedo, w_ayudarle, w_mostrarme, w_listo, w_recibiré, w_paciencia, w_ayuda, w_orden, w_nueva]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_cita, w_trámite, w_pasaporte, w_contrato, w_alquiler, w_comprobante, w_domicilio, w_documentos, w_dirección, w_registro, w_correo, w_oficina]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_cita]}}
+  p3: &p3 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_trámite]}}
+  p4: &p4 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_pasaporte, w_contrato, w_comprobante, w_domicilio]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_pasaporte, w_contrato, w_alquiler, w_comprobante, w_domicilio, w_documentos]}}
+  p6: &p6 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_ayudarme]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_mes]}}
+  p8: &p8 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_podría, w_ayudarme, w_vivo, w_vive, w_dirección, w_mes]}}
+  p9: &p9 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_traiga]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llegue]}}
+  p11: &p11 {language_code: es, part_of_speech: [adjective, verb], agreement_tags: {semantic: [w_necesario, w_importante, w_traiga, w_llegue, w_traer, w_venir]}}
+  p12: &p12 {language_code: es, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_oficina, w_registro, w_correo, w_válido, w_traer, w_venir]}}
+  p13: &p13 {language_code: es, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_oficina, w_registro, w_correo, w_número, w_válido, w_traer, w_venir]}}
+  p14: &p14 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_firme]}}
+  p15: &p15 {language_code: es, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_puedo, w_ayudarle, w_mostrarme, w_listo, w_recibiré, w_paciencia, w_ayuda]}}
+  p16: &p16 {language_code: es, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_paciencia, w_ayuda, w_orden, w_nueva, w_listo]}}
+templates:
+  - content_key: practice.en-es.es.a2.unit16.lesson01.choose.001
+    lesson_content_key: es.a2.unit16.lesson01.hacer_una_cita
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "All of these words belong to the registration-office scenes in this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson01.fill.002
+    lesson_content_key: es.a2.unit16.lesson01.hacer_una_cita
+    type: fill_in_blank
+    frame: {text: "Quisiera hacer una {item} para registrarme. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p2, hint: *p2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Quisiera is the polite way to say I would like; hacer una cita means to make an appointment.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson01.translate.003
+    lesson_content_key: es.a2.unit16.lesson01.hacer_una_cita
+    type: translation
+    frame: {text: "This procedure is quick.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Este {item} es rápido.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Trámite is the everyday word for an official procedure or piece of paperwork.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson01.listen.004
+    lesson_content_key: es.a2.unit16.lesson01.hacer_una_cita
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard is a noun from the registration scenes.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson02.order.001
+    lesson_content_key: es.a2.unit16.lesson02.que_documentos_necesito
+    type: word_order
+    frame: {text: "Traigo mi {item}.", language_code: es, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Traigo mi {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Mi stays the same before masculine nouns like these.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson02.translate.002
+    lesson_content_key: es.a2.unit16.lesson02.que_documentos_necesito
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the documents Mateo needs for his registration.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson02.match.003
+    lesson_content_key: es.a2.unit16.lesson02.que_documentos_necesito
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p5, second: *p5, third: *p5, fourth: *p5, fifth: *p5, sixth: *p5}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Comprobante de domicilio is proof of address, such as a utility bill or a rental contract.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson03.fill.001
+    lesson_content_key: es.a2.unit16.lesson03.en_la_oficina
+    type: fill_in_blank
+    frame: {text: "¿Podría {item}, por favor? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Podría is the conditional of poder; it makes the request softer and more polite than puede.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson03.translate.002
+    lesson_content_key: es.a2.unit16.lesson03.en_la_oficina
+    type: translation
+    frame: {text: "I have lived here since last month.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Vivo aquí desde el {item} pasado.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish uses the present tense with desde for something that started in the past and still continues.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson03.choose.003
+    lesson_content_key: es.a2.unit16.lesson03.en_la_oficina
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Podría and ayudarme come from the polite request in the office scene.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson04.fill.001
+    lesson_content_key: es.a2.unit16.lesson04.es_necesario_que
+    type: fill_in_blank
+    frame: {text: "Es necesario que {item} su pasaporte. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After es necesario que, Spanish uses the subjunctive: traiga, not trae.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson04.translate.002
+    lesson_content_key: es.a2.unit16.lesson04.es_necesario_que
+    type: translation
+    frame: {text: "It is important that you arrive on time.", language_code: en, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "Es importante que {item} a tiempo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Es importante que is followed by the subjunctive, so llegue replaces llega.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson04.choose.003
+    lesson_content_key: es.a2.unit16.lesson04.es_necesario_que
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p11}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The phrases es necesario que and es importante que are followed by the subjunctive.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson05.match.001
+    lesson_content_key: es.a2.unit16.lesson05.leer_el_aviso
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p12, second: *p12, third: *p12, fourth: *p12, fifth: *p12, sixth: *p12}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The notice lists what to bring before coming to the office.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson05.translate.002
+    lesson_content_key: es.a2.unit16.lesson05.leer_el_aviso
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The notice uses these words to explain how to register.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson06.fill.001
+    lesson_content_key: es.a2.unit16.lesson06.mateo_se_registra
+    type: fill_in_blank
+    frame: {text: "Es necesario que {item} aquí. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p14, hint: *p14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Firme is the formal command form of firmar, used with usted.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson06.choose.002
+    lesson_content_key: es.a2.unit16.lesson06.mateo_se_registra
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p15}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The official and Mateo use these words during the appointment.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit16.lesson06.listen.003
+    lesson_content_key: es.a2.unit16.lesson06.mateo_se_registra
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p16}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the end of Mateo's appointment.", language_code: en, direction: ltr}
