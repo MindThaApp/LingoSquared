@@ -67,8 +67,8 @@ def normalize(token: str) -> str:
 GLOSSES: dict[str, str] = {
     # unit01 greetings
     "ciao": "hi; bye", "buongiorno": "good morning; good day",
-    "come": "how; like", "stai": "you are (informal), for how you are",
-    "sta": "is; you are (formal), for how you are", "tu": "you (informal)",
+    "come": "how; like", "stai": "you are (informal), as in how are you",
+    "sta": "is; you are (formal), as in how are you", "tu": "you (informal)",
     "informale": "informal", "lei": "you (formal)", "formale": "formal",
     "o": "or", "rispettoso": "respectful", "bene": "well; fine",
     "grazie": "thank you", "e": "and", "buonasera": "good evening",
@@ -92,7 +92,7 @@ GLOSSES: dict[str, str] = {
     "po": "bit (shortened form, in: a little)", "d": "of (shortened form before a vowel)",
     "inglese": "English (language)", "studio": "I study", "da": "for; since; from",
     "anno": "year", "quanto": "how long; how much", "studi": "you study (informal)",
-    "che": "what; which", "lavoro": "work; job", "fai": "you do (informal)",
+    "che": "what; which", "lavoro": "work; job; I work", "fai": "you do (informal)",
     "fa": "does; makes; you do (formal)", "ingegnere": "engineer",
     "qui": "here", "per": "for", "due": "two", "anni": "years",
     "bello": "nice; beautiful (masc.)",

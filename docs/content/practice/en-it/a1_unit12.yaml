@@ -11,6 +11,7 @@ review:
     Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u12* lesson tags, w_<token> anchors).
     Plans use earlier-unit time words (alle otto, domani) as literal text. se (if) and non (not) are glossed as single words; the se-frame starts with 'Allora,' so no slot is sentence-initial.
     Reviewer check: allora and poi are separate units; allora is glossed 'then; so'.
+    Opus pass: removed cinema (gloss identical to token) from the bare-word translation pool; fixed a feedback line that claimed stasera must go at the end of the question.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -28,7 +29,7 @@ slot_presets:
   t_se: &t_se {language_code: it, part_of_speech: particle, agreement_tags: {semantic: w_se}}
   t_non: &t_non {language_code: it, part_of_speech: particle, agreement_tags: {semantic: w_non}}
   pool12: &pool12 {language_code: it, part_of_speech: [adverb, verb, noun, preposition, particle], agreement_tags: {semantic: [w_stasera, w_andiamo, w_cinema, w_davanti, w_allora, w_se, w_non]}}
-  pool13: &pool13 {language_code: it, part_of_speech: [adverb, noun, preposition, particle], agreement_tags: {semantic: [w_stasera, w_cinema, w_davanti, w_allora, w_se, w_non]}}
+  pool13: &pool13 {language_code: it, part_of_speech: [adverb, noun, preposition, particle], agreement_tags: {semantic: [w_stasera, w_davanti, w_allora, w_se, w_non]}}
 templates:
   - content_key: practice.en-it.it.a1.unit12.lesson01.choose.001
     lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
@@ -57,7 +58,7 @@ templates:
     frame: {text: "Andiamo al cinema {item}? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
     slots: {item: *t_stasera, hint: *t_stasera}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Stasera means tonight and goes at the end of the question.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Stasera, tonight, also gives the goodbye a stasera: see you tonight.", language_code: en, direction: ltr}
   - content_key: practice.en-it.it.a1.unit12.lesson01.fill.005
     lesson_content_key: it.a1.unit12.lesson01.andiamo_al_cinema_stasera
     type: fill_in_blank
