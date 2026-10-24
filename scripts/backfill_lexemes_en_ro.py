@@ -9,8 +9,8 @@ All plumbing lives in scripts/_target_lexeme_backfill_common.py (see its
 docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
-Scope: A1 only (the "en-ro" manifest group, units 01-20). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 ("en-ro", units 01-20) and A2 ("en-ro-a2", units 21-26; session 11).
+B1+ is not classified yet; extend LEVELS and the tables below together.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
