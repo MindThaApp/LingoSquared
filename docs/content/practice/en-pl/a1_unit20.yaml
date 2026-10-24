@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit20
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit20.ubrania
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job C) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u20*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors so every
+    frame is grammatical (gender, case, number). Fixed English prompts name
+    ty vs pan/pani and speaker gender where it matters, and are worded so only
+    one natural Polish word order fits. Register follows the unit's
+    realization (ty between friends, pan/pani when formal).
+    Reviewer: single-letter token M (size M) is excluded from pools; chce is used only with formal pan; kupić frames avoid sentence-initial slots.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_sklep, w_koszula, w_spodnie, w_kupić, w_koszulę, w_sukienka, w_kolor, w_niebieska, w_czerwona, w_rozmiar, w_chce]
+slot_presets:
+  u20_l1: &u20_l1 {language_code: pl, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_sklep, w_koszula, w_spodnie, w_kupić, w_koszulę]}}
+  u20_mp1: &u20_mp1 {language_code: pl, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_sklep, w_koszula, w_spodnie, w_kupić, w_koszulę, w_sukienka]}}
+  s_spodnie: &s_spodnie {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_spodnie}}
+  s_koszule: &s_koszule {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_koszulę}}
+  u20_l2: &u20_l2 {language_code: pl, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_kolor, w_sukienka, w_niebieska, w_czerwona]}}
+  s_niebieska: &s_niebieska {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_niebieska}}
+  s_czerwona: &s_czerwona {language_code: pl, part_of_speech: adjective, agreement_tags: {semantic: w_czerwona}}
+  s_kolor: &s_kolor {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_kolor}}
+  u20_l3: &u20_l3 {language_code: pl, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_rozmiar, w_chce, w_kolor, w_sklep]}}
+  s_chce: &s_chce {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_chce}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.choose.001
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Spodnie is always plural in Polish, like trousers in English.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.listen.002
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Koszula is the basic form and koszulę is the object form used after kupić.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.match.003
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u20_mp1, second: *u20_mp1, third: *u20_mp1, fourth: *u20_mp1, fifth: *u20_mp1, sixth: *u20_mp1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Koszula, sukienka and spodnie are clothes; koszula and sukienka are feminine singular, spodnie plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.order.004
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: word_order
+    frame: {text: "To są {item}.", language_code: pl, direction: ltr}
+    slots: {item: *s_spodnie}
+    answer_derivation: {kind: render_frame, frame: {text: "To są {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Spodnie is plural, so it takes są instead of jest.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.fill.005
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: fill_in_blank
+    frame: {text: "Chcę kupić {item}. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_koszule, hint: *s_koszule}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After kupić a feminine noun in -a ends in -ę.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.translate.006
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: translation
+    frame: {text: "These are trousers.", language_code: en, direction: ltr}
+    slots: {item: *s_spodnie}
+    answer_derivation: {kind: render_frame, frame: {text: "To są {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Spodnie is plural, so the verb is są.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson01.translate.007
+    lesson_content_key: pl.a1.unit20.lesson01.w_sklepie
+    type: translation
+    frame: {text: "I want to buy a shirt.", language_code: en, direction: ltr}
+    slots: {item: *s_koszule}
+    answer_derivation: {kind: render_frame, frame: {text: "Chcę kupić {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The thing you buy takes the object form koszulę.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.choose.001
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Niebieska and czerwona are feminine, matching koszula and sukienka.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.listen.002
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Colour adjectives agree with the noun: feminine nouns take -a.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.order.003
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: word_order
+    frame: {text: "Koszula jest {item}.", language_code: pl, direction: ltr}
+    slots: {item: *s_niebieska}
+    answer_derivation: {kind: render_frame, frame: {text: "Koszula jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Niebieska is feminine, matching koszula.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.fill.004
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: fill_in_blank
+    frame: {text: "Koszula jest {item}. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_niebieska, hint: *s_niebieska}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adjective copies the feminine gender of koszula.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.translate.005
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: translation
+    frame: {text: "The dress is red.", language_code: en, direction: ltr}
+    slots: {item: *s_czerwona}
+    answer_derivation: {kind: render_frame, frame: {text: "Sukienka jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Czerwona matches the feminine noun sukienka.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.translate.006
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: translation
+    frame: {text: "The shirt is blue.", language_code: en, direction: ltr}
+    slots: {item: *s_niebieska}
+    answer_derivation: {kind: render_frame, frame: {text: "Koszula jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Niebieska matches the feminine noun koszula.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson02.translate.007
+    lesson_content_key: pl.a1.unit20.lesson02.jaki_kolor
+    type: translation
+    frame: {text: "What color?", language_code: en, direction: ltr}
+    slots: {item: *s_kolor}
+    answer_derivation: {kind: render_frame, frame: {text: "Jaki {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Jaki is masculine, matching kolor.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson03.choose.001
+    lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Chce is the he, she or formal you form of chcieć; Co pan chce? is polite.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson03.listen.002
+    lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u20_l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Rozmiar means size and is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson03.order.003
+    lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+    type: word_order
+    frame: {text: "Co pan {item} kupić?", language_code: pl, direction: ltr}
+    slots: {item: *s_chce}
+    answer_derivation: {kind: render_frame, frame: {text: "Co pan {item} kupić?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Pan takes the he form chce, not chcesz.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit20.lesson03.translate.004
+    lesson_content_key: pl.a1.unit20.lesson03.kupujemy_ubrania
+    type: translation
+    frame: {text: "What do you want to buy? (to a man, formal pan)", language_code: en, direction: ltr}
+    slots: {item: *s_chce}
+    answer_derivation: {kind: render_frame, frame: {text: "Co pan {item} kupić?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Pan takes chce, which is the same form as for he.", language_code: en, direction: ltr}

@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit15
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit15.podroz
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job C) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u15*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors so every
+    frame is grammatical (gender, case, number). Fixed English prompts name
+    ty vs pan/pani and speaker gender where it matters, and are worded so only
+    one natural Polish word order fits. Register follows the unit's
+    realization (ty between friends, pan/pani when formal).
+    Reviewer: miłej and podróży (lesson 3, taught only as the whole phrase Miłej podróży) are left out of every pool because their glosses are partial fragments; kraków has no clean single-slot frame (nominative needs a sentence-initial slot) and is left out.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_dworzec, w_bilet, w_peron, w_jechać, w_jadę, w_jedzie, w_jutro, w_Krakowa, w_autobus, w_Warszawa, w_Warszawy, w_dokąd]
+slot_presets:
+  u15_l1: &u15_l1 {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_dworzec, w_bilet, w_peron, w_jechać, w_jadę, w_jedzie, w_jutro]}}
+  s_jedzie: &s_jedzie {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_jedzie}}
+  s_Krakowa: &s_Krakowa {language_code: pl, part_of_speech: proper_noun, agreement_tags: {semantic: w_Krakowa}}
+  s_jade: &s_jade {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_jadę}}
+  u15_l2: &u15_l2 {language_code: pl, part_of_speech: [proper_noun, particle, noun], agreement_tags: {semantic: [w_autobus, w_Warszawa, w_Warszawy, w_dokąd, w_bilet]}}
+  u15_mp2: &u15_mp2 {language_code: pl, part_of_speech: [proper_noun, particle, noun], agreement_tags: {semantic: [w_autobus, w_Warszawa, w_Warszawy, w_dokąd, w_bilet, w_dworzec]}}
+  s_Warszawy: &s_Warszawy {language_code: pl, part_of_speech: proper_noun, agreement_tags: {semantic: w_Warszawy}}
+  s_autobus: &s_autobus {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_autobus}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.choose.001
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u15_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Jadę is the I form of jechać and jedzie is the he or she form; both are for travel by vehicle.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.listen.002
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u15_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dworzec is the station building; the peron is the platform where the train stops.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.match.003
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u15_l1, second: *u15_l1, third: *u15_l1, fourth: *u15_l1, fifth: *u15_l1, sixth: *u15_l1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Jechać is the dictionary form; jadę (I) and jedzie (he or she) are two of its forms.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.order.004
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: word_order
+    frame: {text: "Marek {item} do Krakowa jutro.", language_code: pl, direction: ltr}
+    slots: {item: *s_jedzie}
+    answer_derivation: {kind: render_frame, frame: {text: "Marek {item} do Krakowa jutro.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Jedzie is the he or she form, so it goes with a name like Marek.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.order.005
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: word_order
+    frame: {text: "Bilet do {item}, proszę.", language_code: pl, direction: ltr}
+    slots: {item: *s_Krakowa}
+    answer_derivation: {kind: render_frame, frame: {text: "Bilet do {item}, proszę.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "After do the city name changes: Kraków becomes Krakowa.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.fill.006
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: fill_in_blank
+    frame: {text: "Bilet do {item}, proszę. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_Krakowa, hint: *s_Krakowa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A form like Krakowa is learned together with do, as one chunk.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.fill.007
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: fill_in_blank
+    frame: {text: "Ja {item} do Warszawy. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_jade, hint: *s_jade}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Jadę is the I form of jechać, for going by vehicle.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.translate.008
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: translation
+    frame: {text: "A ticket to Kraków, please.", language_code: en, direction: ltr}
+    slots: {item: *s_Krakowa}
+    answer_derivation: {kind: render_frame, frame: {text: "Bilet do {item}, proszę.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Do requires a different form of the city: Kraków becomes Krakowa.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.translate.009
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: translation
+    frame: {text: "Marek is going to Kraków (by vehicle).", language_code: en, direction: ltr}
+    slots: {item: *s_jedzie}
+    answer_derivation: {kind: render_frame, frame: {text: "Marek {item} do Krakowa.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Jedzie is the he or she form of jechać.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson01.translate.010
+    lesson_content_key: pl.a1.unit15.lesson01.na_dworcu
+    type: translation
+    frame: {text: "I am going to Warsaw (by vehicle; include the pronoun for I).", language_code: en, direction: ltr}
+    slots: {item: *s_jade}
+    answer_derivation: {kind: render_frame, frame: {text: "Ja {item} do Warszawy.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Ja is added here for emphasis; the ending -ę already marks the I form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.choose.001
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u15_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dokąd asks where someone is going, so it expects an answer with do.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.listen.002
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u15_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Warszawa is the basic name of the city; after do it becomes Warszawy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.match.003
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u15_mp2, second: *u15_mp2, third: *u15_mp2, fourth: *u15_mp2, fifth: *u15_mp2, sixth: *u15_mp2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Cities change differently after do: Kraków becomes Krakowa, Warszawa becomes Warszawy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.order.004
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: word_order
+    frame: {text: "Autobus do {item} odjeżdża o siódmej.", language_code: pl, direction: ltr}
+    slots: {item: *s_Warszawy}
+    answer_derivation: {kind: render_frame, frame: {text: "Autobus do {item} odjeżdża o siódmej.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "After do the city takes a different ending: Warszawa becomes Warszawy.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.order.005
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: word_order
+    frame: {text: "Dokąd jedzie {item}?", language_code: pl, direction: ltr}
+    slots: {item: *s_autobus}
+    answer_derivation: {kind: render_frame, frame: {text: "Dokąd jedzie {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Autobus is masculine, so the verb jedzie is the he or she form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.fill.006
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: fill_in_blank
+    frame: {text: "Ewa jedzie do {item} jutro. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_Warszawy, hint: *s_Warszawy}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Each city has its own form after do, so learn them one by one.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.translate.007
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: translation
+    frame: {text: "The bus to Warsaw leaves at seven.", language_code: en, direction: ltr}
+    slots: {item: *s_Warszawy}
+    answer_derivation: {kind: render_frame, frame: {text: "Autobus do {item} odjeżdża o siódmej.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Do is followed by Warszawy, not Warszawa.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit15.lesson02.translate.008
+    lesson_content_key: pl.a1.unit15.lesson02.kiedy_odjezdza_autobus
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u15_l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dokąd asks about direction, while gdzie asks about location.", language_code: en, direction: ltr}
