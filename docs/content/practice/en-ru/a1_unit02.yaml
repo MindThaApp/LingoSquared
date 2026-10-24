@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit02
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit02.introductions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы register labels in the English prompts and the case/number notes in feedback (genitive after из, 2-4 vs 5+ noun forms, genitive of clock-time parts of day). No character facts are asserted. Opus pass 2026-10-24: listen.002 feedback on who offers ты reworded as a convention. NATIVE FLAG: confirm the who-offers-ты convention wording.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Виктор", "w_Джон", "w_Ирина", "w_Канады", "w_Москвы", "w_вас", "w_вы", "w_давайте", "w_зовут", "w_из", "w_меня", "w_можно", "w_на", "w_откуда", "w_очень", "w_перейдём", "w_познакомимся", "w_приятно", "w_ты", "w_я"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["adjective", "adverb", "preposition", "pronoun", "verb"], agreement_tags: {semantic: ["w_зовут", "w_меня", "w_вы", "w_ты", "w_можно", "w_на", "w_давайте", "w_перейдём", "w_откуда", "w_я", "w_из", "w_познакомимся", "w_очень", "w_приятно"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_вас"}}
+  p3: &p3 {language_code: "ru", part_of_speech: "proper_noun", agreement_tags: {semantic: ["w_Виктор", "w_Джон", "w_Ирина"]}}
+  p4: &p4 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_зовут"}}
+  p5: &p5 {language_code: "ru", part_of_speech: ["adjective", "adverb", "preposition", "pronoun", "verb"], agreement_tags: {semantic: ["w_вы", "w_ты", "w_можно", "w_давайте", "w_перейдём", "w_откуда", "w_я", "w_из"]}}
+  p6: &p6 {language_code: "ru", part_of_speech: ["adjective", "adverb", "pronoun", "verb"], agreement_tags: {semantic: ["w_вы", "w_ты", "w_я", "w_меня", "w_можно", "w_откуда", "w_давайте", "w_перейдём", "w_познакомимся", "w_очень", "w_приятно"]}}
+  p7: &p7 {language_code: "ru", part_of_speech: "proper_noun", agreement_tags: {semantic: ["w_Канады", "w_Москвы"]}}
+  p8: &p8 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_ты"}}
+  p9: &p9 {language_code: "ru", part_of_speech: ["adjective", "adverb", "pronoun", "verb"], agreement_tags: {semantic: ["w_зовут", "w_меня", "w_вы", "w_ты", "w_можно", "w_давайте", "w_перейдём", "w_откуда", "w_я", "w_познакомимся", "w_очень", "w_приятно"]}}
+  p10: &p10 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_вы"}}
+  p11: &p11 {language_code: "ru", part_of_speech: "adjective", agreement_tags: {semantic: "w_приятно"}}
+  p12: &p12 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_познакомимся"}}
+  p13: &p13 {language_code: "ru", part_of_speech: ["adjective", "adverb", "verb"], agreement_tags: {semantic: ["w_познакомимся", "w_очень", "w_приятно", "w_перейдём", "w_давайте"]}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.choose.001
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Russian has two words for you: ты for friends, family, children and peers, and вы for strangers, people owed respect, or several people.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.order.002
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: word_order
+    frame: {text: "Как {item} зовут?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Как {item} зовут?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Как вас зовут? is the formal What is your name?; it literally asks how they call you.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.order.003
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: word_order
+    frame: {text: "Меня зовут {name}.", language_code: "ru", direction: "ltr"}
+    slots: {name: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Меня зовут {name}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Меня зовут literally means they call me, so the name that follows stays in its plain form.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.fill.004
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: fill_in_blank
+    frame: {text: "Меня {item} Виктор. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Зовут appears in both the question and the answer: Как вас зовут? and Меня зовут Виктор.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.translate.005
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: translation
+    frame: {text: "My name is {name}.", language_code: "en", direction: "ltr", slot_rendering: {name: "english_gloss"}}
+    slots: {name: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Меня зовут {name}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Russians introduce themselves with Меня зовут plus a first name; adding the patronymic, as in Ирина Петровна, is more formal.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson01.translate.006
+    lesson_content_key: ru.a1.unit02.lesson01.kak_vas_zovut
+    type: translation
+    frame: {text: "What is your name? (formal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Как {item} зовут?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Вас is the formal form of вы used in this question; with a friend you ask Как тебя зовут?", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.choose.001
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Откуда вы? asks where you are from, and the answer repeats it with из plus the place: Я из Канады, Я из Москвы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.listen.002
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Можно на ты? politely asks to switch from вы to ты; by convention the older or more senior person is the one who offers it.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.match.003
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p6, second: *p6, third: *p6, fourth: *p6, fifth: *p6, sixth: *p6}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Ты is for people you know well and вы for formal contact, so choosing between them is part of every conversation.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.order.004
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: word_order
+    frame: {text: "Я из {place}.", language_code: "ru", direction: "ltr"}
+    slots: {place: *p7}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я из {place}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Из is followed by the genitive case, so Канада becomes Канады and Москва becomes Москвы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.fill.005
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: fill_in_blank
+    frame: {text: "Давайте перейдём на {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Давайте перейдём на ты proposes dropping formality; the proposal itself is still phrased politely with давайте.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.translate.006
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p9}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Меня is the object form of я, which is why the name answer says Меня зовут, literally they call me.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson02.translate.007
+    lesson_content_key: ru.a1.unit02.lesson02.vy_i_ty
+    type: translation
+    frame: {text: "Where are you from? (formal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Откуда {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Откуда means from where; the formal question uses вы and the answer uses из plus the place.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson03.fill.001
+    lesson_content_key: ru.a1.unit02.lesson03.davayte_poznakomimsya
+    type: fill_in_blank
+    frame: {text: "Очень {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Очень приятно literally means very pleasant and is the standard reply after hearing someone's name.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson03.order.002
+    lesson_content_key: ru.a1.unit02.lesson03.davayte_poznakomimsya
+    type: word_order
+    frame: {text: "Давайте {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "render_frame", frame: {text: "Давайте {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Давайте plus a we-form of a verb makes a polite suggestion: Давайте познакомимся means Let's get acquainted.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson03.listen.003
+    lesson_content_key: ru.a1.unit02.lesson03.davayte_poznakomimsya
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p13}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Давайте познакомимся is a polite way to start an introduction with someone you address as вы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit02.lesson03.translate.004
+    lesson_content_key: ru.a1.unit02.lesson03.davayte_poznakomimsya
+    type: translation
+    frame: {text: "Nice to meet you.", language_code: "en", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "render_frame", frame: {text: "Очень {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Очень приятно works with both ты and вы because it does not address the person directly.", language_code: "en", direction: "ltr"}
