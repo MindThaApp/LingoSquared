@@ -1,0 +1,154 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit13
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit13.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u13*, single-member w_<token> anchors). The six first-sight
+    lexemes are all used in matching. The past-tense first-person verbs are spelled the same for a male or
+    female speaker, and are written without a pronoun as in the unit, so production prompts add "(no separate
+    word for I)". فعلت in the unit's question is Yusuf asking Layla, so the English prompt names the
+    addressee instead of guessing a gender. تفاحا (apples as the thing bought, with the accusative alif) is
+    never offered beside تفاح from unit 8. السوق, إلى, ثم, قهوة, ماذا are earlier-unit words used as literal
+    text. Reviewer: confirm "اشتريت تفاحا" and the accusative alif.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ذهبت, w_أمس, w_اشتريت, w_تفاحا, w_فعلت, w_شربت]
+slot_presets:
+  all6: &all6 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_ذهبت, w_أمس, w_اشتريت, w_تفاحا, w_فعلت, w_شربت]}}
+  l01: &l01 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_ذهبت, w_أمس, w_اشتريت, w_تفاحا]}}
+  l02: &l02 {language_code: ar, part_of_speech: [verb, adverb], agreement_tags: {semantic: [w_فعلت, w_شربت, w_أمس, w_ذهبت]}}
+  dhahabtu: &dhahabtu {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_ذهبت}}
+  ams: &ams {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_أمس}}
+  ishtaraytu: &ishtaraytu {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_اشتريت}}
+  tuffahan: &tuffahan {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_تفاحا}}
+  faalta: &faalta {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_فعلت}}
+  shariba: &shariba {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_شربت}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.choose.001
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ذهبت is I went and اشتريت is I bought; both are past-tense first-person verbs.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.listen.002
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أمس means yesterday; the past-tense verbs go with it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.match.003
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *all6, second: *all6, third: *all6, fourth: *all6, fifth: *all6, sixth: *all6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The past-tense endings -ت mark I (ذهبت, اشتريت, شربت); فعلت is you did in the unit's question.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.order.004
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: word_order
+    frame: {text: "ذهبت إلى السوق {item}.", language_code: ar, direction: rtl}
+    slots: {item: *ams}
+    answer_derivation: {kind: render_frame, frame: {text: "ذهبت إلى السوق {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أمس (yesterday) usually closes the sentence: I went to the market yesterday.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.fill.005
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: fill_in_blank
+    frame: {text: "ذهبت إلى السوق ثم اشتريت {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tuffahan, hint: *tuffahan}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تفاحا is apples as the thing bought, so it ends in alif.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.translate.006
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ذهبت is I went; اشتريت is I bought; تفاحا is apples as the thing bought.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.translate.007
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: translation
+    frame: {text: "I went to the market yesterday. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *dhahabtu, b: *ams}
+    answer_derivation: {kind: render_frame, frame: {text: "{a} إلى السوق {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The past-tense -ت ending already means I, so no pronoun is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson01.translate.008
+    lesson_content_key: ar.a1.unit13.lesson01.yesterday
+    type: translation
+    frame: {text: "I bought apples. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *ishtaraytu, b: *tuffahan}
+    answer_derivation: {kind: render_frame, frame: {text: "{a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The thing bought takes the alif ending: تفاحا.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.choose.001
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "فعلت is you did, as in ماذا فعلت أمس؟ What did you do yesterday?", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.listen.002
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "شربت is I drank; compare ذهبت, which ends in the same -ت.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.match.003
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *all6, second: *all6, third: *all6, fourth: *all6, fifth: *all6, sixth: *all6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The same -ت ending marks the past in ذهبت, اشتريت and شربت; فعلت (you did) is in the question form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.order.004
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: word_order
+    frame: {text: "ماذا {item} أمس؟", language_code: ar, direction: rtl}
+    slots: {item: *faalta}
+    answer_derivation: {kind: render_frame, frame: {text: "ماذا {item} أمس؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ماذا plus the past verb asks what did you do; أمس places it in yesterday.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.fill.005
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: fill_in_blank
+    frame: {text: "ذهبت إلى السوق. اشتريت تفاحا. {item} قهوة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *shariba, hint: *shariba}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "شربت is I drank; the past ending -ت means I.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.fill.006
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: fill_in_blank
+    frame: {text: "ماذا {item} أمس؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *faalta, hint: *faalta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "فعلت is the past of do; the question asks you what you did yesterday.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.translate.007
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "فعلت (you did) and شربت (I drank) are past-tense verbs with -ت endings.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.translate.008
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: translation
+    frame: {text: "Yusuf asks Layla: What did you do yesterday?", language_code: en, direction: ltr}
+    slots: {a: *faalta, b: *ams}
+    answer_derivation: {kind: render_frame, frame: {text: "ماذا {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "فعلت is the past-tense you-form; its written form is the same for a man or a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit13.lesson02.translate.009
+    lesson_content_key: ar.a1.unit13.lesson02.recent_event
+    type: translation
+    frame: {text: "I drank coffee. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *shariba}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} قهوة", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Past tense uses the -ت ending for I: شربت is I drank.", language_code: en, direction: ltr}
