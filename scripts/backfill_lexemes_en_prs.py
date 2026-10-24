@@ -811,7 +811,9 @@ PRS_GLOSSES: dict[str, str] = {
     # reused as-is. "کی" (already glossed "who" from unit07) is a genuine
     # homograph here -- this unit's own sense ("when") is special-cased
     # in _classify() below rather than overwriting the existing entry.
-    "بلیط": "ticket", "قطار": "train", "بس": "bus", "سکو": "platform",
+    # تکت (ticket) is glossed with unit24 below; بلیط/بلیت are accepted
+    # answer variants only, never taught (owner decision 2026-10-24).
+    "قطار": "train", "بس": "bus", "سکو": "platform",
     "سکوی": "platform (ezafe form, used before a following noun)",
     "حرکت": "departure; movement",
     "مسافر": "traveler; passenger", "فروشنده": "seller; vendor",
@@ -1337,25 +1339,24 @@ PRS_GLOSSES: dict[str, str] = {
     "لباس شویی": "laundry; laundry shop", "بشویم": "(so that) I wash",
     "لباس‌ها": "the clothes (plural)", "اتو": "iron; ironing",
     "تیار": "ready", "لباس شویی‌تان": "your laundry",
-    # Unit 50 (swimming pool), added 2026-07-22. بلیط/نمبر/سه/ساعت/
+    # Unit 50 (swimming pool), added 2026-07-22. تکت/نمبر/سه/ساعت/
     # باز/بسته/افغانی/او are REUSED.
     "حوض آببازی": "swimming pool", "کمد": "locker", "کمد‌تان": "your locker",
-    "کمدش": "his/her locker", "بلیط‌تان": "your ticket",
+    "کمدش": "his/her locker",
     # Unit 51 (restaurant), added 2026-07-22. غذا/چای/نان/چند/افغانی/
     # می‌خواهم/لطفاً/حساب are REUSED (this unit revisits unit08's
     # restaurant material at a service-encounter level).
     "رستوران": "restaurant", "پیشخدمت": "waiter", "مینو": "menu",
     "کباب": "kabob", "فرمایش": "order; request", "کبابش": "his/her kabob",
     "فرمایش‌تان": "your order",
-    # Unit 52 (cinema), added 2026-07-22. فلم/بلیط/ساعت/جالب/است are
+    # Unit 52 (cinema), added 2026-07-22. فلم/تکت/ساعت/جالب/است are
     # REUSED. آسمان is taught as the NAME of the film on the schedule.
     "سینما": "cinema",
     "آسمان": "sky",
-    "بلیطش": "its ticket",
-    # Unit 53 (museum), added 2026-07-22. بلیط/ساعت/باز/بسته/رفت/
+    # Unit 53 (museum), added 2026-07-22. تکت/ساعت/باز/بسته/رفت/
     # بود are REUSED. دید is the 3rd-person simple past of دیدن.
     "موزیم": "museum", "نمایشگاه": "exhibition", "دید": "he/she saw",
-    # Unit 54 (concert), added 2026-07-22. موسیقی/بلیط/ساعت/است are
+    # Unit 54 (concert), added 2026-07-22. موسیقی/تکت/ساعت/است are
     # REUSED. سیما is a new character name (the singer on the poster).
     "کنسرت": "concert", "خواننده": "singer", "سیما": "Sima (name)",
     # Unit 55 (park), added 2026-07-22. پارک/برویم/نزدیک/خانه/زیباست
@@ -1384,16 +1385,16 @@ PRS_GLOSSES: dict[str, str] = {
     "باغ": "garden (as in 'zoo')", "وحش": "wild animals (as in 'zoo')",
     "شیر": "lion", "فیل": "elephant", "میمون": "monkey",
     "محبوب‌تان": "your favourite",
-    # Unit 59 (boat tour), added 2026-07-22. بلیط/دقیقه/چند/است are
+    # Unit 59 (boat tour), added 2026-07-22. تکت/دقیقه/چند/است are
     # REUSED.
     "قایق": "boat", "دریاچه": "lake", "گشت": "tour; excursion",
     "زیبا": "beautiful", "گشت‌تان": "your tour",
-    # Unit 60 (sports event), added 2026-07-22. ورزش/بلیط/کی/
+    # Unit 60 (sports event), added 2026-07-22. ورزش/تکت/کی/
     # شروع می‌شود are REUSED. برد is the 3rd-person simple past of
     # بردن in its "won (a match)" sense.
     "مسابقه": "match; game", "تیم": "team", "برد": "he/she/it won",
     "مسابقه‌تان": "your match",
-    # Unit 61 (amusement park), added 2026-07-22. قد/بلیط/چند/است/
+    # Unit 61 (amusement park), added 2026-07-22. قد/تکت/چند/است/
     # می‌تانین are REUSED. This is the last A1 unit on disk.
     "شهربازی": "amusement park", "سانتی‌متر": "centimetre",
     "قدتان": "your height",
@@ -1607,7 +1608,7 @@ PRS_POS: dict[str, str] = {
     "بلندتر": "adjective", "جوان‌تر": "adjective", "بدتر": "adjective",
     "اما": "particle",
     # Unit 16 (travel), added 2026-07-07.
-    "بلیط": "noun", "قطار": "noun", "بس": "noun", "سکو": "noun",
+    "قطار": "noun", "بس": "noun", "سکو": "noun",
     "سکوی": "noun", "حرکت": "noun",
     "مسافر": "noun", "فروشنده": "noun",
     # Unit 17 (health), added 2026-07-07.
@@ -1849,12 +1850,11 @@ PRS_POS: dict[str, str] = {
     "تیار": "adjective", "لباس شویی‌تان": "noun",
     # Unit 50 (swimming pool), added 2026-07-22.
     "حوض آببازی": "noun", "کمد": "noun", "کمد‌تان": "noun", "کمدش": "noun",
-    "بلیط‌تان": "noun",
     # Unit 51 (restaurant), added 2026-07-22.
     "رستوران": "noun", "پیشخدمت": "noun", "مینو": "noun", "کباب": "noun",
     "فرمایش": "noun", "کبابش": "noun", "فرمایش‌تان": "noun",
     # Unit 52 (cinema), added 2026-07-22.
-    "سینما": "noun", "آسمان": "noun", "بلیطش": "noun",
+    "سینما": "noun", "آسمان": "noun",
     # Unit 53 (museum), added 2026-07-22.
     "موزیم": "noun", "نمایشگاه": "noun", "دید": "verb",
     # Unit 54 (concert), added 2026-07-22.
@@ -3110,9 +3110,9 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("height_word")
 
     # Unit 16 (travel) semantic tags, added 2026-07-07.
-    if token in {"بلیط", "قطار", "بس"}:
+    if token in {"تکت", "قطار", "بس"}:
         semantics.append("travel_noun_core")
-    if token in {"بلیط", "قطار", "بس", "سکو"}:
+    if token in {"تکت", "قطار", "بس", "سکو"}:
         semantics.append("travel_noun")
     if token == "حرکت":
         semantics.append("depart_noun")
@@ -3951,10 +3951,10 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # counterpart. Both are morphological, not topical, so they generalise
     # cleanly across the band.
     if token in {"نسخه‌تان", "قرارتان", "کرایه‌تان", "لباس شویی‌تان",
-        "کمد‌تان", "بلیط‌تان", "فرمایش‌تان", "خانه‌تان", "عضویت‌تان",
+        "کمد‌تان", "تکت\u200cتان", "فرمایش‌تان", "خانه‌تان", "عضویت‌تان",
         "چتر آفتابی‌تان", "محبوب‌تان", "گشت‌تان", "مسابقه‌تان", "قدتان"}:
         semantics.append("formal_possessive_word")
-    if token in {"خریطه‌اش", "کمدش", "کبابش", "بلیطش"}:
+    if token in {"خریطه‌اش", "کمدش", "کبابش", "تکتش"}:
         semantics.append("third_person_possessive_word")
     # Unit 42 (appointments) / 43 (library) / 44 (waste disposal).
     if token == "دندان":
