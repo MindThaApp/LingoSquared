@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit08
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job B) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u08*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors or short
+    unions in which every member is grammatical in the frame. Fixed English
+    prompts name ty vs pan/pani and speaker gender where it matters. Register
+    follows the unit's realization (formal pan/pani to strangers, ty between friends).
+    Reviewer: lesson 3 has a single lexeme (przepraszam), so it is covered through unit-level pools only; a sentence slot for it would be sentence-initial.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+    Opus pass (2026-10-24): reworded an illogical feedback line about niedaleko.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_bank, w_poczta, w_apteka, w_restauracja, w_hotel, w_park, w_blisko, w_daleko, w_niedaleko, w_obok, w_naprzeciwko, w_banku, w_hotelu, w_parku, w_przepraszam]
+slot_presets:
+  u08_l1: &u08_l1 {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: [w_bank, w_poczta, w_apteka, w_restauracja, w_hotel, w_park]}}
+  u08_where: &u08_where {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: [w_bank, w_poczta, w_apteka, w_restauracja, w_hotel, w_park]}}
+  s_poczta: &s_poczta {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_poczta}}
+  s_apteka: &s_apteka {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_apteka}}
+  u08_l2: &u08_l2 {language_code: pl, part_of_speech: [preposition, adverb, noun], agreement_tags: {semantic: [w_blisko, w_daleko, w_niedaleko, w_obok, w_naprzeciwko, w_banku, w_hotelu, w_parku]}}
+  u08_gen: &u08_gen {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: [w_banku, w_hotelu, w_parku]}}
+  u08_dist: &u08_dist {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: [w_blisko, w_daleko, w_niedaleko]}}
+  s_naprzeciwko: &s_naprzeciwko {language_code: pl, part_of_speech: preposition, agreement_tags: {semantic: w_naprzeciwko}}
+  s_banku: &s_banku {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_banku}}
+  u08_l3: &u08_l3 {language_code: pl, part_of_speech: [preposition, adverb, verb, noun], agreement_tags: {semantic: [w_przepraszam, w_blisko, w_daleko, w_obok, w_bank, w_park, w_hotel]}}
+  u08_l3m: &u08_l3m {language_code: pl, part_of_speech: [preposition, adverb, verb, noun], agreement_tags: {semantic: [w_przepraszam, w_blisko, w_daleko, w_niedaleko, w_obok, w_naprzeciwko, w_poczta]}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.choose.001
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u08_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Polish nouns for places are used without a or the, so bank can mean a bank or the bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.listen.002
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u08_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Poczta, apteka and restauracja end in -a and are feminine; bank, hotel and park are masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.match.003
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u08_l1, second: *u08_l1, third: *u08_l1, fourth: *u08_l1, fifth: *u08_l1, sixth: *u08_l1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hotel, bank and park look like their English equivalents and are all masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.order.004
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: word_order
+    frame: {text: "Gdzie jest {item}?", language_code: pl, direction: ltr}
+    slots: {item: *u08_where}
+    answer_derivation: {kind: render_frame, frame: {text: "Gdzie jest {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Gdzie jest asks where something is, and the place stays in its basic form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.fill.005
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: fill_in_blank
+    frame: {text: "To jest {item}. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_poczta, hint: *s_poczta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "To jest introduces a thing, and the noun that follows stays in its basic form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.translate.006
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: translation
+    frame: {text: "Where is the pharmacy?", language_code: en, direction: ltr}
+    slots: {item: *s_apteka}
+    answer_derivation: {kind: render_frame, frame: {text: "Gdzie jest {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Gdzie jest plus a place is the all-purpose question for finding something.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson01.translate.007
+    lesson_content_key: pl.a1.unit08.lesson01.miejsca_w_miescie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u08_l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Poczta is the short everyday word for the post office.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.choose.001
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u08_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Obok and naprzeciwko are followed by the genitive case, which is why bank turns into banku.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.listen.002
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u08_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Masculine nouns like bank, hotel and park take -u after obok, naprzeciwko and blisko.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.order.003
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: word_order
+    frame: {text: "Apteka jest obok {item}.", language_code: pl, direction: ltr}
+    slots: {item: *u08_gen}
+    answer_derivation: {kind: render_frame, frame: {text: "Apteka jest obok {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "The genitive ending of these masculine nouns is -u, as in banku, hotelu and parku.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.order.004
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: word_order
+    frame: {text: "Park jest {item}.", language_code: pl, direction: ltr}
+    slots: {item: *u08_dist}
+    answer_derivation: {kind: render_frame, frame: {text: "Park jest {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Blisko, daleko and niedaleko are adverbs, so they stay the same with every noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.fill.005
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: fill_in_blank
+    frame: {text: "Restauracja jest {item} hotelu. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_naprzeciwko, hint: *s_naprzeciwko}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Naprzeciwko takes the genitive, which is why hotel becomes hotelu.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.translate.006
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: translation
+    frame: {text: "The pharmacy is next to the bank.", language_code: en, direction: ltr}
+    slots: {item: *s_banku}
+    answer_derivation: {kind: render_frame, frame: {text: "Apteka jest obok {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "After obok the place takes a genitive ending, so bank becomes banku.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson02.translate.007
+    lesson_content_key: pl.a1.unit08.lesson02.blisko_czy_daleko
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u08_l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Niedaleko is nie plus daleko, literally not far, so it means fairly close.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson03.choose.001
+    lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u08_l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Przepraszam is used both to say excuse me, before asking a stranger something, and to say sorry.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson03.match.002
+    lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u08_l3m, second: *u08_l3m, third: *u08_l3m, fourth: *u08_l3m, fifth: *u08_l3m, sixth: *u08_l3m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Przepraszam starts a polite question to a stranger, such as asking where a place is.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit08.lesson03.translate.003
+    lesson_content_key: pl.a1.unit08.lesson03.gdzie_jest_apteka
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u08_l3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Przepraszam covers both excuse me and I am sorry, so context decides the English.", language_code: en, direction: ltr}
