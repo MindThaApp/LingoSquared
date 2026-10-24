@@ -13,6 +13,13 @@ Candidates are scoped to the pack's own unit (matching generate_checkpoint). Sin
 character candidate pools (letter-ordering spelling exercises, where the letters ARE
 the content) are excluded -- they are legitimately made of their own tiles.
 
+Third pass (bilingual slot reuse): in ANY frame text (prompt or feedback) a
+{slot} must not appear twice -- slot_rendering is per frame, so a "target --
+English" feedback frame prints the target token in both halves ("that is her
+vader"). A PROMPT frame in a different language from its slot's must render the
+slot via slot_rendering: english_gloss (or be a proper noun, or a quoted
+"Translate using {slot}:" hint).
+
 Usage: .content-venv/bin/python3 scripts/_practice_self_reference_check.py
 """
 from __future__ import annotations
@@ -91,8 +98,53 @@ def gloss_script_hits() -> int:
     return hits
 
 
+def _texts(o, path=""):
+    """Yield (path, node) for every dict carrying a str `text` with a placeholder."""
+    if isinstance(o, dict):
+        if isinstance(o.get("text"), str) and "{" in o["text"]:
+            yield path, o
+        for k, v in o.items():
+            yield from _texts(v, f"{path}/{k}")
+    elif isinstance(o, list):
+        for i, v in enumerate(o):
+            yield from _texts(v, f"{path}/{i}")
+
+
+def slot_reuse_hits() -> int:
+    hits = 0
+    for f in sorted(REPO_ROOT.glob("docs/content/practice/*/*.yaml")):
+        try:
+            pack = yaml.safe_load(f.read_text(encoding="utf-8"))
+        except (yaml.YAMLError, OSError):
+            continue
+        for t in (pack or {}).get("templates", []) if isinstance(pack, dict) else []:
+            slots = t.get("slots") or {}
+            body = {k: v for k, v in t.items() if k != "slots"}
+            for path, node in _texts(body):
+                names = re.findall(r"\{(\w+)\}", node["text"])
+                key = t.get("content_key", "")[-44:]
+                dup = sorted({n for n in names if names.count(n) > 1})
+                if dup:
+                    hits += 1
+                    print(f"SLOT-REUSE {f.parent.name}/{f.name} {key} {path}: {dup} repeated | {node['text'][:70]!r}")
+                if path != "/frame":
+                    continue
+                rend = node.get("slot_rendering") or {}
+                for n in set(names):
+                    sl = slots.get(n) or {}
+                    if (sl.get("language_code") in (None, node.get("language_code"))
+                            or rend.get(n) in ("english_gloss", "token")
+                            or sl.get("part_of_speech") == "proper_noun"
+                            or node["text"].startswith("Translate using {")):
+                        continue
+                    hits += 1
+                    print(f"SLOT-LANG {f.parent.name}/{f.name} {key}: {n!r} ({sl.get('language_code')}) "
+                          f"in {node.get('language_code')} prompt without english_gloss | {node['text'][:70]!r}")
+    return hits
+
+
 def main() -> int:
-    hits = gloss_script_hits()
+    hits = gloss_script_hits() + slot_reuse_hits()
     scanned = 0
     for f in sorted(REPO_ROOT.glob("docs/content/practice/*/*.yaml")):
         direction = f.parent.name
