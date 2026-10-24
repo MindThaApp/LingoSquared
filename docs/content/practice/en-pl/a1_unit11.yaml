@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-pl.a1.unit11
+source_language: en
+target_language: pl
+unit_content_key: pl.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-pl wave, job B) against
+    PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_pl.py
+    (tags pl_a1_u11*, w_<token> anchors). Recognition and bare-word
+    production pools are curated w_ lists of this unit's own tokens with
+    pairwise distinct glosses; sentence frames use single anchors or short
+    unions in which every member is grammatical in the frame. Fixed English
+    prompts name ty vs pan/pani and speaker gender where it matters. Register
+    follows the unit's realization (formal pan/pani to strangers, ty between friends).
+    Reviewer: invitation lines use informal ty (friends), as in the realization; lesson 3 has no first-sight lexemes so no template is anchored to it.
+    Feedback lines carry a usage or grammar point, never the task or the answer.
+    Opus pass (2026-10-24): fixed a false ending claim in a feedback line (jesteś).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_chcieć, w_chcę, w_chcesz, w_kino, w_móc, w_mogę, w_możesz, w_przyjść, w_chętnie, w_niestety, w_sobotę]
+slot_presets:
+  u11_l1: &u11_l1 {language_code: pl, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_chcieć, w_chcę, w_chcesz, w_kino, w_móc, w_mogę, w_możesz]}}
+  u11_i: &u11_i {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: [w_chcę, w_mogę]}}
+  s_chcesz: &s_chcesz {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_chcesz}}
+  s_chce: &s_chce {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_chcę}}
+  u11_l2: &u11_l2 {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_móc, w_mogę, w_możesz, w_przyjść, w_chętnie, w_niestety, w_sobotę]}}
+  u11_l2m: &u11_l2m {language_code: pl, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: [w_móc, w_mogę, w_możesz, w_przyjść, w_chętnie, w_niestety, w_sobotę, w_kino]}}
+  u11_come: &u11_come {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_przyjść}}
+  u11_sat: &u11_sat {language_code: pl, part_of_speech: noun, agreement_tags: {semantic: w_sobotę}}
+  s_moge: &s_moge {language_code: pl, part_of_speech: verb, agreement_tags: {semantic: w_mogę}}
+  s_chetnie: &s_chetnie {language_code: pl, part_of_speech: adverb, agreement_tags: {semantic: w_chętnie}}
+templates:
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.choose.001
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u11_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Chcę is the I form of chcieć and chcesz is the ty form, used with friends and family.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.listen.002
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u11_l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The ending -sz marks informal you: chcesz, możesz, masz (jesteś is the exception, ending in -ś).", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.match.003
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u11_l1, second: *u11_l1, third: *u11_l1, fourth: *u11_l1, fifth: *u11_l1, sixth: *u11_l1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Chcieć and móc follow the same pattern: -ę for I and -sz for you.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.order.004
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: word_order
+    frame: {text: "Dziś {item} iść do kina.", language_code: pl, direction: ltr}
+    slots: {item: *u11_i}
+    answer_derivation: {kind: render_frame, frame: {text: "Dziś {item} iść do kina.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "After chcę or mogę the second verb stays in the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.fill.005
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: fill_in_blank
+    frame: {text: "Czy {item} iść razem do kina? ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_chcesz, hint: *s_chcesz}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A question to a friend uses the ty form chcesz, with czy opening the question.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.translate.006
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: translation
+    frame: {text: "Today I want to go to the cinema.", language_code: en, direction: ltr}
+    slots: {item: *s_chce}
+    answer_derivation: {kind: render_frame, frame: {text: "Dziś {item} iść do kina.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Chcę is followed by an infinitive, so iść stays in its dictionary form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson01.translate.007
+    lesson_content_key: pl.a1.unit11.lesson01.propozycja
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u11_l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Móc means to be able to or can and is used the same way as chcieć.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.choose.001
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u11_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Chętnie and niestety are adverbs, so they never change their form.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.listen.002
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: listen_select
+    frame: {text: "{item}", language_code: pl, direction: ltr}
+    slots: {item: *u11_l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sobotę is the form used after w: feminine day names change -a to -ę, so sobota becomes sobotę.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.match.003
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: pl, direction: ltr}
+    slots: {first: *u11_l2m, second: *u11_l2m, third: *u11_l2m, fourth: *u11_l2m, fifth: *u11_l2m, sixth: *u11_l2m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Przyjść means to come and follows mogę or możesz as an infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.order.004
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: word_order
+    frame: {text: "Czy możesz {item} w piątek?", language_code: pl, direction: ltr}
+    slots: {item: *u11_come}
+    answer_derivation: {kind: render_frame, frame: {text: "Czy możesz {item} w piątek?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Czy możesz plus an infinitive politely asks a friend whether they can do something.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.order.005
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: word_order
+    frame: {text: "Czy możesz przyjść w {item}?", language_code: pl, direction: ltr}
+    slots: {item: *u11_sat}
+    answer_derivation: {kind: render_frame, frame: {text: "Czy możesz przyjść w {item}?", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Masculine days like piątek stay the same after w, but feminine days like sobota become sobotę.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.fill.006
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: fill_in_blank
+    frame: {text: "Niestety, nie {item}. ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_moge, hint: *s_moge}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nie mogę is the polite way to say you cannot make it.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.fill.007
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: fill_in_blank
+    frame: {text: "Tak, bardzo {item}! ({hint})", language_code: pl, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *s_chetnie, hint: *s_chetnie}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Bardzo chętnie is a warm way to accept an invitation.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.translate.008
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: translation
+    frame: {text: "Unfortunately, I cannot.", language_code: en, direction: ltr}
+    slots: {item: *s_moge}
+    answer_derivation: {kind: render_frame, frame: {text: "Niestety, nie {item}.", language_code: pl, direction: ltr}}
+    feedback_frame: {text: "Nie goes before the verb to make it negative.", language_code: en, direction: ltr}
+  - content_key: practice.en-pl.pl.a1.unit11.lesson02.translate.009
+    lesson_content_key: pl.a1.unit11.lesson02.tak_czy_nie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *u11_l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Przyjść is the dictionary form of to come, used here after mogę.", language_code: en, direction: ltr}
