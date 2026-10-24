@@ -1,0 +1,145 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit08
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit08.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job B) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u08* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm the enclitic definite forms (gara, banca, magazinul, spitalul, poșta, stația, biblioteca) and the vizavi de / lângă / între frames.
+    Opus quality pass 2026-10-24: match.003 re-anchored to lesson02 (its pool is lesson02 vocabulary); aproape called an adverb; vizavi/lângă feedback rewritten.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_gară, w_magazin, w_bancă, w_aproape, w_departe, w_spital, w_poștă, w_bibliotecă, w_stație, w_autobuz, w_lângă, w_vizavi, w_între, w_gara, w_banca, w_poșta]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_gară, w_magazin, w_bancă, w_aproape, w_departe]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [noun, preposition], agreement_tags: {semantic: [w_spital, w_poștă, w_bibliotecă, w_stație, w_autobuz, w_lângă, w_vizavi, w_între]}}
+  p_match: &p_match {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_magazin, w_bancă, w_spital, w_poștă, w_bibliotecă, w_autobuz]}}
+  t_gara: &t_gara {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_gara}}
+  t_banca: &t_banca {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_banca}}
+  t_aproape: &t_aproape {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_aproape}}
+  t_vizavi: &t_vizavi {language_code: ro, part_of_speech: preposition, agreement_tags: {semantic: w_vizavi}}
+  t_langa: &t_langa {language_code: ro, part_of_speech: preposition, agreement_tags: {semantic: w_lângă}}
+  t_autobuz: &t_autobuz {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_autobuz}}
+  t_posta: &t_posta {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_poșta}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.choose.001
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Gară is a train station, magazin a store and bancă a bank; aproape and departe say how far.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.listen.002
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Aproape means close and departe means far; both describe where something is.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.match.009
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *p_match, second: *p_match, third: *p_match, fourth: *p_match, fifth: *p_match, sixth: *p_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Bancă, poștă and bibliotecă end in -ă and are feminine; magazin, spital and autobuz have no such ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.translate.004
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gară, magazin and bancă are the bare nouns; with the article added they become gara, magazinul and banca.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.order.005
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: word_order
+    frame: {text: "Da, magazinul este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_aproape}
+    answer_derivation: {kind: render_frame, frame: {text: "Da, magazinul este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Aproape means close; Este aproape? asks whether something is close.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.fill.006
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: fill_in_blank
+    frame: {text: "Unde este {item}? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_banca, hint: *t_banca}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The article sits at the end: bancă becomes banca, so Unde este banca? means Where is the bank?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.translate.007
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: translation
+    frame: {text: "Where is the train station?", language_code: en, direction: ltr}
+    slots: {item: *t_gara}
+    answer_derivation: {kind: render_frame, frame: {text: "Unde este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Gară becomes gara with the article added at the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson01.translate.008
+    lesson_content_key: ro.a1.unit08.lesson01.unde_este
+    type: translation
+    frame: {text: "The store is close.", language_code: en, direction: ltr}
+    slots: {item: *t_aproape}
+    answer_derivation: {kind: render_frame, frame: {text: "Magazinul este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Magazinul is magazin plus the article -ul; aproape is an adverb and never changes.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.choose.001
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lângă, vizavi and între go before the place they point to: lângă bibliotecă, vizavi de magazin.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.listen.002
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Poștă is the post office and bibliotecă is a library; stație is a stop and autobuz a bus.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.translate.003
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Spital and bibliotecă are nouns; lângă, vizavi and între are location words with no endings.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.order.004
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: word_order
+    frame: {text: "Spitalul este {item} de magazin.", language_code: ro, direction: ltr}
+    slots: {item: *t_vizavi}
+    answer_derivation: {kind: render_frame, frame: {text: "Spitalul este {item} de magazin.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vizavi is always followed by de: vizavi de magazin means opposite the store.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.order.005
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: word_order
+    frame: {text: "Stația de autobuz este {item} bibliotecă.", language_code: ro, direction: ltr}
+    slots: {item: *t_langa}
+    answer_derivation: {kind: render_frame, frame: {text: "Stația de autobuz este {item} bibliotecă.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Lângă means next to and takes the noun straight after it: lângă bibliotecă.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.fill.006
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: fill_in_blank
+    frame: {text: "Stația de {item} este lângă bibliotecă. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_autobuz, hint: *t_autobuz}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Stația de autobuz is a bus stop: the article attaches to stație, not to autobuz.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.translate.007
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: translation
+    frame: {text: "The hospital is opposite the store.", language_code: en, direction: ltr}
+    slots: {item: *t_vizavi}
+    answer_derivation: {kind: render_frame, frame: {text: "Spitalul este {item} de magazin.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Spital plus -ul gives spitalul; vizavi needs de before the second place.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit08.lesson02.translate.008
+    lesson_content_key: ro.a1.unit08.lesson02.langa_vizavi_intre
+    type: translation
+    frame: {text: "Where is the post office?", language_code: en, direction: ltr}
+    slots: {item: *t_posta}
+    answer_derivation: {kind: render_frame, frame: {text: "Unde este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Poștă becomes poșta with the article; the question word unde stays the same.", language_code: en, direction: ltr}
