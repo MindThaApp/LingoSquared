@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit18
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u18* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm o casă / o cameră / o bucătărie / o baie (feminine) versus un dormitor / un apartament, trei and două camere, and the definite forms casa, baia, apartamentul.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_casă, w_cameră, w_camere, w_dormitor, w_bucătărie, w_baie, w_are, w_apartament, w_fereastră, w_apartamentul, w_baia]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_casă, w_cameră, w_camere, w_dormitor, w_bucătărie, w_baie, w_are]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_apartament, w_fereastră, w_apartamentul, w_baia, w_casă]}}
+  m6: &m6 {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_casă, w_cameră, w_dormitor, w_bucătărie, w_baie, w_apartament]}}
+  fem4: &fem4 {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_casă, w_cameră, w_bucătărie, w_baie]}}
+  t_are: &t_are {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_are}}
+  t_casa: &t_casa {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_casă}}
+  t_camera: &t_camera {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_cameră}}
+  t_camere: &t_camere {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_camere}}
+  t_dormitor: &t_dormitor {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_dormitor}}
+  t_bucatarie: &t_bucatarie {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_bucătărie}}
+  t_apartament: &t_apartament {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_apartament}}
+  t_fereastra: &t_fereastra {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_fereastră}}
+  t_baia: &t_baia {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_baia}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.choose.001
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Casă, cameră, bucătărie and baie are all feminine and take o; dormitor takes un.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.listen.002
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cameră is one room and camere is the plural, rooms.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.match.003
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Casă, cameră, bucătărie and baie take o; dormitor and apartament take un.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.order.004
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: word_order
+    frame: {text: "Ana {item} o casă mare.", language_code: ro, direction: ltr}
+    slots: {item: *t_are}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana {item} o casă mare.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Are is the he or she form of have.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.order.005
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: word_order
+    frame: {text: "Ana are o {item} mare.", language_code: ro, direction: ltr}
+    slots: {item: *t_camera}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana are o {item} mare.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cameră is feminine, so it takes o and the adjective stays mare.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.order.006
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: word_order
+    frame: {text: "Casa are trei {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_camere}
+    answer_derivation: {kind: render_frame, frame: {text: "Casa are trei {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "After trei the plural camere is used.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.fill.007
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: fill_in_blank
+    frame: {text: "Ana are un {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_dormitor, hint: *t_dormitor}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dormitor is masculine, so it takes un, not o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.fill.008
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: fill_in_blank
+    frame: {text: "Ana are o {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_bucatarie, hint: *t_bucatarie}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Bucătărie is feminine, so it takes o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.translate.009
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: translation
+    frame: {text: "Ana has a big house.", language_code: en, direction: ltr}
+    slots: {item: *t_casa}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana are o {item} mare.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Casă is feminine, so it takes o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.translate.010
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: translation
+    frame: {text: "The house has three rooms.", language_code: en, direction: ltr}
+    slots: {item: *t_camere}
+    answer_derivation: {kind: render_frame, frame: {text: "Casa are trei {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Camere is the plural of cameră and follows the number.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson01.translate.011
+    lesson_content_key: ro.a1.unit18.lesson01.casa_anei
+    type: translation
+    frame: {text: "Ana has a {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *fem4}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana are o {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "All four of these nouns are feminine, so each takes o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.choose.001
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Apartamentul and baia are apartament and baie with the article added.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.listen.002
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Fereastră is a feminine noun: o fereastră.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.order.003
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: word_order
+    frame: {text: "Mihai are un {item} mic.", language_code: ro, direction: ltr}
+    slots: {item: *t_apartament}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai are un {item} mic.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Apartament is masculine, so it takes un.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.order.004
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: word_order
+    frame: {text: "Apartamentul are o {item} mare.", language_code: ro, direction: ltr}
+    slots: {item: *t_fereastra}
+    answer_derivation: {kind: render_frame, frame: {text: "Apartamentul are o {item} mare.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Fereastră is feminine, so it takes o and the adjective mare.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.fill.005
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: fill_in_blank
+    frame: {text: "Unde este {item}? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_baia, hint: *t_baia}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Baia is baie plus the article, the bathroom.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.translate.006
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: translation
+    frame: {text: "Where is the bathroom?", language_code: en, direction: ltr}
+    slots: {item: *t_baia}
+    answer_derivation: {kind: render_frame, frame: {text: "Unde este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Baie ends in -e and takes -a for the article: baia.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.translate.007
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: translation
+    frame: {text: "Mihai has a small apartment.", language_code: en, direction: ltr}
+    slots: {item: *t_apartament}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai are un {item} mic.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Un apartament mic: the adjective follows the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit18.lesson02.translate.008
+    lesson_content_key: ro.a1.unit18.lesson02.apartamentul_lui_mihai
+    type: translation
+    frame: {text: "The apartment has a big window.", language_code: en, direction: ltr}
+    slots: {item: *t_fereastra}
+    answer_derivation: {kind: render_frame, frame: {text: "Apartamentul are o {item} mare.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Apartamentul is apartament plus -ul, so it means the apartment.", language_code: en, direction: ltr}

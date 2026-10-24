@@ -1,0 +1,139 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit13
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit13.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u13* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm Îmi place / Nu-mi place with definite nouns, Vă place as the formal question, Prefer cafeaua and Cafea sau ceai?. Only 7 lexemes, two of them phrase-only: no matching_pairs.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_cafeaua, w_ceaiul, w_pâinea, w_prefer, w_sau]
+slot_presets:
+  f_pool: &f_pool {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_cafeaua, w_ceaiul, w_pâinea]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [noun, particle, verb], agreement_tags: {semantic: [w_prefer, w_sau, w_cafeaua, w_ceaiul, w_pâinea]}}
+  t_cafeaua: &t_cafeaua {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_cafeaua}}
+  t_ceaiul: &t_ceaiul {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_ceaiul}}
+  t_painea: &t_painea {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_pâinea}}
+  t_sau: &t_sau {language_code: ro, part_of_speech: particle, agreement_tags: {semantic: w_sau}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.choose.001
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *f_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Romanian puts the article at the end: cafea becomes cafeaua and ceai becomes ceaiul.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.listen.002
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *f_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cafeaua, ceaiul and pâinea are definite forms; the ending -a or -ul does the work of the.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.order.003
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: word_order
+    frame: {text: "Îmi place {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_cafeaua}
+    answer_derivation: {kind: render_frame, frame: {text: "Îmi place {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Îmi place plus a noun with its article says that you like that thing.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.order.004
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: word_order
+    frame: {text: "Nu-mi place {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_painea}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu-mi place {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Nu-mi place is the negative; the noun keeps its article: pâinea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.fill.005
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: fill_in_blank
+    frame: {text: "Îmi place {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_ceaiul, hint: *t_ceaiul}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ceaiul is ceai plus the article -ul, so it says the tea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.translate.006
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: translation
+    frame: {text: "I like the tea.", language_code: en, direction: ltr}
+    slots: {item: *t_ceaiul}
+    answer_derivation: {kind: render_frame, frame: {text: "Îmi place {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Îmi place works like it is pleasing to me, so the thing liked comes after.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.translate.007
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: translation
+    frame: {text: "I don't like the coffee.", language_code: en, direction: ltr}
+    slots: {item: *t_cafeaua}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu-mi place {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Nu-mi is nu plus mi joined: not pleasing to me.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson01.translate.008
+    lesson_content_key: ro.a1.unit13.lesson01.imi_place
+    type: translation
+    frame: {text: "I like {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *f_pool}
+    answer_derivation: {kind: render_frame, frame: {text: "Îmi place {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Whatever you like stays the subject: Îmi place cafeaua, Îmi place ceaiul, Îmi place pâinea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.choose.001
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Prefer means I prefer, and sau joins two choices.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.listen.002
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sau means or, as in cafea sau ceai.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.order.003
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: word_order
+    frame: {text: "Prefer {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_cafeaua}
+    answer_derivation: {kind: render_frame, frame: {text: "Prefer {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Prefer is I prefer; what you prefer follows it with its article.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.order.004
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: word_order
+    frame: {text: "Cafea {item} ceai?", language_code: ro, direction: ltr}
+    slots: {item: *t_sau}
+    answer_derivation: {kind: render_frame, frame: {text: "Cafea {item} ceai?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Sau offers a choice between two things.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.fill.005
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: fill_in_blank
+    frame: {text: "Cafea {item} ceai? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_sau, hint: *t_sau}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sau means or and never changes its form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.translate.006
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: translation
+    frame: {text: "Do you like the coffee? (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_cafeaua}
+    answer_derivation: {kind: render_frame, frame: {text: "Vă place {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vă place is the dumneavoastră question; with a friend you would say Îți place.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.translate.007
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: translation
+    frame: {text: "I prefer the coffee.", language_code: en, direction: ltr}
+    slots: {item: *t_cafeaua}
+    answer_derivation: {kind: render_frame, frame: {text: "Prefer {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Prefer needs no separate word for I; the ending shows the person.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit13.lesson02.translate.008
+    lesson_content_key: ro.a1.unit13.lesson02.va_place_prefer
+    type: translation
+    frame: {text: "Coffee or tea?", language_code: en, direction: ltr}
+    slots: {item: *t_sau}
+    answer_derivation: {kind: render_frame, frame: {text: "Cafea {item} ceai?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Sau links the two options in one short question.", language_code: en, direction: ltr}

@@ -1,0 +1,150 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit17
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u17* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm Mihai este inginer / Lucrează la birou, Sunt profesoară (said by a woman), Unde lucrați? as the formal question and Lucrez la școală.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_lucrează, w_inginer, w_birou, w_școală, w_profesoară, w_lucrați]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_lucrează, w_inginer, w_birou, w_școală]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_profesoară, w_școală, w_lucrați, w_inginer]}}
+  m6: &m6 {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_lucrează, w_inginer, w_birou, w_profesoară, w_școală, w_lucrați]}}
+  t_lucreaza: &t_lucreaza {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_lucrează}}
+  t_inginer: &t_inginer {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_inginer}}
+  t_birou: &t_birou {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_birou}}
+  t_prof: &t_prof {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_profesoară}}
+  t_scoala: &t_scoala {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_școală}}
+  t_lucrati: &t_lucrati {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_lucrați}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.choose.001
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lucrează fits he or she; Mihai lucrează la birou.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.listen.002
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Inginer and birou are masculine nouns, so they take un: un inginer, un birou.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.order.003
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: word_order
+    frame: {text: "Mihai este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_inginer}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "With a job Romanian drops the article: Mihai este inginer.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.order.004
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: word_order
+    frame: {text: "Lucrează la {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_birou}
+    answer_derivation: {kind: render_frame, frame: {text: "Lucrează la {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "La means at, and birou follows it without an article here.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.fill.005
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: fill_in_blank
+    frame: {text: "Mihai {item} la birou. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_lucreaza, hint: *t_lucreaza}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lucrează is the he or she form of work.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.translate.006
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: translation
+    frame: {text: "Mihai is an engineer.", language_code: en, direction: ltr}
+    slots: {item: *t_inginer}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "No word for a or an is needed before a job.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.translate.007
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: translation
+    frame: {text: "Mihai works at the office.", language_code: en, direction: ltr}
+    slots: {item: *t_lucreaza}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai {item} la birou.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Lucrează is used for he or she, so it fits Mihai.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson01.translate.008
+    lesson_content_key: ro.a1.unit17.lesson01.mihai_este_inginer
+    type: translation
+    frame: {text: "He works at the office.", language_code: en, direction: ltr}
+    slots: {item: *t_birou}
+    answer_derivation: {kind: render_frame, frame: {text: "Lucrează la {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Romanian often leaves out he or she when the verb makes it clear.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.choose.001
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Profesoară is the feminine form; lucrați is the formal you work.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.listen.002
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lucrați is the dumneavoastră form, used with someone you address formally.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.match.003
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These words give jobs, workplaces and verbs for working; lucrează and lucrați differ by person.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.order.004
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: word_order
+    frame: {text: "Sunt {item}. Lucrez la școală.", language_code: ro, direction: ltr}
+    slots: {item: *t_prof}
+    answer_derivation: {kind: render_frame, frame: {text: "Sunt {item}. Lucrez la școală.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Profesoară ends in -ă because the speaker is a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.order.005
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: word_order
+    frame: {text: "Lucrez la {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_scoala}
+    answer_derivation: {kind: render_frame, frame: {text: "Lucrez la {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Școală is feminine; lucrez la școală means I work at school.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.fill.006
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: fill_in_blank
+    frame: {text: "Unde {item}? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_lucrati, hint: *t_lucrati}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lucrați is the formal question: where do you work?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.translate.007
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: translation
+    frame: {text: "Where do you work? (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_lucrati}
+    answer_derivation: {kind: render_frame, frame: {text: "Unde {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Lucrați goes with dumneavoastră; with a friend you would say lucrezi.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.translate.008
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: translation
+    frame: {text: "I am a teacher. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *t_prof}
+    answer_derivation: {kind: render_frame, frame: {text: "Sunt {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Profesoară is the feminine job title; no a or an is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit17.lesson02.translate.009
+    lesson_content_key: ro.a1.unit17.lesson02.ana_este_profesoara
+    type: translation
+    frame: {text: "I work at the school.", language_code: en, direction: ltr}
+    slots: {item: *t_scoala}
+    answer_derivation: {kind: render_frame, frame: {text: "Lucrez la {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Lucrez is the I form and la means at.", language_code: en, direction: ltr}
