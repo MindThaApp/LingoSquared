@@ -14,7 +14,20 @@ review:
     -- ''mikhwaham lebasha ra beshuyam'' is the standard Dari subjunctive-purpose construction). Production
     tier gets 1 extra fixed-sentence translation on the same single-candidate ready_word slot (''My clothes
     are ready.''). 12 templates total (the recipe''s floor, exactly), recognition 4, structured 3, production
-    5. All 4 lexeme lessons covered in every tier. No mis-glossed lexemes found.'
+    5. All 4 lexeme lessons covered in every tier. No mis-glossed lexemes found.
+
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 4 fixes. (1) MC/translation pools narrowed
+    from 18 course-wide ''your X'' possessives (units 46-61) + laundry words to the unit''s own words
+    (en_prs_a1_unit49_words + laundry_word, 5 words; لباس شویی‌تان has no unit tag because of the space).
+    (2) lesson06 MC/translation and the matching template keep formal_possessive_word so the wrap-up word
+    لباس شویی‌تان stays reachable; their feedback no longer claims ''laundry vocabulary from this unit''.
+    (3) matching_pairs feedback ''Match each laundry word'' was false for the mixed pool -> neutral. (4)
+    fill.004 ''لباس‌های من ___ است'' was open-ended (any adjective) -> ''لباس‌های من فردا ساعت پنج ___
+    است.'' (the taught تیار collocation). NATIVE FLAGS: ''لباس‌های من تیار است'' plural subject + singular
+    است (colloquial) and alternative لباس‌هایم تیار است; matching pool is mixed-unit (22 words) because
+    the unit has only 5 tagged words.'
+  required_next_reviewer: native_speaker_review
 tag_schema:
   part_of_speech:
   - symbol
@@ -29,6 +42,7 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
+    - en_prs_a1_unit49_words
     - formal_possessive_word
     - laundry_word
     - ready_word
@@ -42,18 +56,16 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
+    item: &id001
       language_code: prs
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - verb
       - adjective
       agreement_tags:
-        semantic: &id002
+        semantic:
+        - en_prs_a1_unit49_words
         - laundry_word
-        - wash_verb
-        - ready_word
-        - formal_possessive_word
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -71,11 +83,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -91,11 +99,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -113,11 +117,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -133,11 +133,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -155,11 +151,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -175,16 +167,22 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
+    item: &id002
       language_code: prs
-      part_of_speech: *id001
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
       agreement_tags:
-        semantic: *id002
+        semantic:
+        - en_prs_a1_unit49_words
+        - laundry_word
+        - formal_possessive_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is laundry vocabulary from this unit.'
+    text: Recall this word and its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit49.lesson06.wrap_up.translate.002
@@ -197,11 +195,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id002
   answer_derivation:
     kind: slot_text
     slot: item
@@ -217,34 +211,15 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    first:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: &id003
-        semantic: *id002
-    second:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    third:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    fourth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    fifth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    sixth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
+    first: *id002
+    second: *id002
+    third: *id002
+    fourth: *id002
+    fifth: *id002
+    sixth: *id002
   slot_relations:
   - kind: distinct
-    slots: &id004
+    slots: &id003
     - first
     - second
     - third
@@ -253,16 +228,16 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots: *id004
+    slots: *id003
   feedback_frame:
-    text: Match each laundry word with its English meaning.
+    text: Match each Dari word with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit49.lesson03.wash_and_iron_and_ready_time.fill.004
   lesson_content_key: prs.a1.unit49.lesson03.wash_and_iron_and_ready_time
   type: fill_in_blank
   frame:
-    text: لباس‌های من {item} است.
+    text: لباس‌های من فردا ساعت پنج {item} است.
     language_code: prs
     direction: rtl
   slots:
@@ -276,7 +251,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: My clothes are ready.
+    text: My clothes will be ready tomorrow at five.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit49.lesson02.washing_clothes_and_price_per_kilo.order.005
