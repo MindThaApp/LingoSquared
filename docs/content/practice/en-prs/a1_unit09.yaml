@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit09.dates
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: 'Authored 2026-07-07, closing the en-prs practice-pool gap for the real A1 realization''s new unit09 (dates: weekdays,
     Hijri Shamsi calendar months, asking/giving a date, arranging a meeting date -- grew from 8 to 15 A1 units the same night
     this pack was authored; units 12-15 are a separate parallel worker''s lane, not touched here).
@@ -46,7 +47,16 @@ review:
     you", نوزدهم "19th" -- 4 distinct unit-scoped tokens, no collisions, clears the 3-option MC floor. Slot renamed
     person_name -> item; frame/feedback text genericized accordingly. Also widened calendar_pair.005 (4 slots, below the
     6-pair floor) by unioning calendar_word with this unit''s own month_name (no overlap): تاریخ, تقویم, هجری, شمسی, حمل,
-    ثور, جوزا -- 7 distinct, 6 slots used. person_name removed from tag_schema (no longer referenced by any slot).'
+    ثور, جوزا -- 7 distinct, 6 slots used. person_name removed from tag_schema (no longer referenced by any slot).
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. lesson06 vocabulary pool
+    (office_word/state_adjective/meeting_verb union) leaked unit11 می‌آیم/منتظر and unit48 تذکره into
+    ''vocabulary from this dialogue'' items: now the generated en_prs_a1_unit09_lesson06_words tag (نوزدهم,
+    فکر, وقت, داری, مصروف, مشکل, می‌بینمت). weekday_order.004.volume_fill.010 blanked ''امروز ___ است'' with a
+    single accepted weekday (any day fits): now ''فردا شنبه است. امروز ___ است.'' (answer جمعه), feedback
+    updated. NATIVE FLAGS: confirm ''فردا شنبه است'' (Saturday as first day of the week) reads naturally as a
+    clue; داری glossed ''you have (informal)''.'
+
 tag_schema:
   part_of_speech:
   - noun
@@ -63,6 +73,7 @@ tag_schema:
     - state_adjective
     - meeting_verb
     - volume_en_prs_a1_unit09_weekday_name_10_single
+    - en_prs_a1_unit09_lesson06_words
 slot_presets:
   weekday_name: &id001
     language_code: prs
@@ -86,11 +97,10 @@ slot_presets:
     - adjective
     agreement_tags:
       semantic: calendar_word
-  # REAUTH 2026-07-24: replaces person_name (0 unit-scoped candidates --
-  # see review.notes). Unions lesson06's own office_word/state_adjective/
-  # meeting_verb tags with ordinal_date (also lesson06's نوزدهم) to reach
-  # 4 distinct unit-scoped tokens for lesson06's recognition/production
-  # templates.
+  # Review 2026-10-24: this unit's own lesson06 dialogue words (generated
+  # en_prs_a1_unit09_lesson06_words tag) -- the old office_word/
+  # state_adjective/meeting_verb union leaked unit11 (می‌آیم, منتظر) and
+  # unit48 (تذکره) into a "from this dialogue" pool.
   lesson06_word: &id006
     language_code: prs
     part_of_speech:
@@ -98,11 +108,7 @@ slot_presets:
     - verb
     - adjective
     agreement_tags:
-      semantic:
-      - office_word
-      - state_adjective
-      - meeting_verb
-      - ordinal_date
+      semantic: en_prs_a1_unit09_lesson06_words
   date_word: &id005
     language_code: prs
     part_of_speech:
@@ -441,7 +447,7 @@ templates:
   lesson_content_key: prs.a1.unit09.lesson01.days_of_the_week
   type: fill_in_blank
   frame:
-    text: امروز {weekday_name} است
+    text: فردا شنبه است. امروز {weekday_name} است.
     language_code: prs
     direction: rtl
   slots:
@@ -454,6 +460,6 @@ templates:
     kind: slot_text
     slot: weekday_name
   feedback_frame:
-    text: '{weekday_name}'
+    text: 'امروز {weekday_name} است؛ فردا شنبه است.'
     language_code: prs
     direction: rtl
