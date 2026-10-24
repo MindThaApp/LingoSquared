@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit11
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit11.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u11*, single-member w_<token> anchors). Pools are
+    unit-scoped. The hour ordinals السابعة, التاسعة, العاشرة are feminine to agree with الساعة (as in unit 5)
+    and are slotted after في الساعة. The first-person present verbs are written without a pronoun as in
+    the unit, so production prompts add "(no separate word for I)"; only the order frame with أنا takes
+    the pronoun. تفعل is the masculine you-form, so the question prompts say "to a man".
+    Reviewer: confirm "ماذا تفعل كل يوم" and the hour sentences.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_كل, w_يوم, w_أستيقظ, w_أدرس, w_أنام, w_السابعة, w_التاسعة, w_العاشرة, w_ماذا, w_تفعل]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_كل, w_يوم, w_أستيقظ, w_أدرس, w_أنام]}}
+  l01h: &l01h {language_code: ar, part_of_speech: [verb, adjective], agreement_tags: {semantic: [w_السابعة, w_التاسعة, w_العاشرة, w_أستيقظ, w_أدرس, w_أنام]}}
+  m6a: &m6a {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_كل, w_يوم, w_أستيقظ, w_أدرس, w_أنام, w_ماذا]}}
+  m6b: &m6b {language_code: ar, part_of_speech: [verb, adjective], agreement_tags: {semantic: [w_السابعة, w_التاسعة, w_العاشرة, w_أستيقظ, w_أدرس, w_أنام]}}
+  verbs: &verbs {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: [w_أستيقظ, w_أدرس, w_أنام]}}
+  hours: &hours {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_السابعة, w_التاسعة, w_العاشرة]}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_ماذا, w_تفعل, w_كل, w_يوم]}}
+  sabia: &sabia {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_السابعة}}
+  tasia: &tasia {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_التاسعة}}
+  ashira: &ashira {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_العاشرة}}
+  astaiqiz: &astaiqiz {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أستيقظ}}
+  adrus: &adrus {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أدرس}}
+  anam: &anam {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أنام}}
+  tafal: &tafal {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_تفعل}}
+  yawm: &yawm {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_يوم}}
+  madha: &madha {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_ماذا}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.choose.001
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01h}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أستيقظ, أدرس and أنام are all first-person present verbs: I wake up, I study, I sleep.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.listen.002
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "كل يوم is every day: كل (every) plus يوم (day).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.match.003
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6a, second: *m6a, third: *m6a, fourth: *m6a, fifth: *m6a, sixth: *m6a}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "كل يوم means every day; ماذا is the question word what.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.match.004
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6b, second: *m6b, third: *m6b, fourth: *m6b, fifth: *m6b, sixth: *m6b}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The hours are feminine ordinals that agree with الساعة: السابعة is the seventh.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.order.005
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: word_order
+    frame: {text: "أنا {item} كل يوم.", language_code: ar, direction: rtl}
+    slots: {item: *verbs}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} كل يوم.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The unit's verbs are first person: أستيقظ, أدرس and أنام; أنا (I) is optional.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.order.006
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: word_order
+    frame: {text: "أستيقظ في الساعة {item}.", language_code: ar, direction: rtl}
+    slots: {item: *hours}
+    answer_derivation: {kind: render_frame, frame: {text: "أستيقظ في الساعة {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The hour follows الساعة and is feminine: الساعة السابعة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.fill.007
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: fill_in_blank
+    frame: {text: "أدرس في الساعة {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tasia, hint: *tasia}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "التاسعة is the ninth, feminine to agree with الساعة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.translate.008
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01h}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are verbs and feminine hour ordinals; the verbs are all first person.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.translate.009
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: translation
+    frame: {text: "I wake up at seven o'clock. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *sabia}
+    answer_derivation: {kind: render_frame, frame: {text: "أستيقظ في الساعة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The hour is a feminine ordinal because الساعة is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.translate.010
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: translation
+    frame: {text: "I study at nine o'clock. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *tasia}
+    answer_derivation: {kind: render_frame, frame: {text: "أدرس في الساعة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Verbs in the first person need no pronoun: أدرس alone means I study.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson01.translate.011
+    lesson_content_key: ar.a1.unit11.lesson01.daily_actions
+    type: translation
+    frame: {text: "I sleep at ten o'clock. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *ashira}
+    answer_derivation: {kind: render_frame, frame: {text: "أنام في الساعة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "العاشرة is the tenth, and it ends in ة like the other feminine hours.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.listen.001
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ماذا is the question word what; ماذا تفعل؟ asks what do you do.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.choose.002
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تفعل is the masculine you-form of do; ماذا تفعل كل يوم؟ asks a man what he does every day.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.order.003
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: word_order
+    frame: {text: "ماذا {item} كل يوم؟", language_code: ar, direction: rtl}
+    slots: {item: *tafal}
+    answer_derivation: {kind: render_frame, frame: {text: "ماذا {item} كل يوم؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The verb follows ماذا directly: ماذا تفعل؟ is what do you do.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.fill.004
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: fill_in_blank
+    frame: {text: "ماذا تفعل كل {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *yawm, hint: *yawm}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "كل يوم is every day, with يوم (day) after كل (every).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.translate.005
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تفعل is the masculine you-form: you do. ماذا is what.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit11.lesson02.translate.006
+    lesson_content_key: ar.a1.unit11.lesson02.my_day
+    type: translation
+    frame: {text: "What do you do every day? (to a man)", language_code: en, direction: ltr}
+    slots: {a: *madha, b: *tafal}
+    answer_derivation: {kind: render_frame, frame: {text: "{a} {b} كل يوم", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The question word comes first, then the verb: ماذا تفعل.", language_code: en, direction: ltr}

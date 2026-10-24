@@ -1,0 +1,110 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit12
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit12.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u12*, single-member w_<token> anchors). The unit has only three
+    first-sight lexemes (غدا, نذهب, جيد), so there is no matching_pairs, the recognition pool is those
+    three, and the templates are fewer. Frames reuse the unit's own sentences (هل نذهب إلى المقهى غدا؟,
+    نعم، في الساعة الخامسة, جيد. إلى اللقاء.); هل, إلى, المقهى, الساعة الخامسة, اللقاء, نعم are earlier-unit words used
+    as literal text. Reviewer: confirm "هل نذهب إلى المقهى غدا؟" and the dialogue closing.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_غدا, w_نذهب, w_جيد]
+slot_presets:
+  mc: &mc {language_code: ar, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: [w_غدا, w_نذهب, w_جيد]}}
+  ghadan: &ghadan {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_غدا}}
+  nadhhab: &nadhhab {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_نذهب}}
+  jayyid: &jayyid {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_جيد}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.choose.001
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "غدا means tomorrow; نذهب is we go.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.listen.002
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "نذهب is the we form of go; the we form begins with ن.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.order.003
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: word_order
+    frame: {text: "هل نذهب إلى المقهى {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *ghadan}
+    answer_derivation: {kind: render_frame, frame: {text: "هل نذهب إلى المقهى {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "غدا (tomorrow) usually ends the sentence: Shall we go to the cafe tomorrow?", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.order.004
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: word_order
+    frame: {text: "هل {item} إلى المقهى غدا؟", language_code: ar, direction: rtl}
+    slots: {item: *nadhhab}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {item} إلى المقهى غدا؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "هل plus the we form turns the plan into a yes or no question.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.fill.005
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: fill_in_blank
+    frame: {text: "نذهب إلى المقهى {item} في الساعة الخامسة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ghadan, hint: *ghadan}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "غدا is tomorrow; the time follows it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.fill.006
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: fill_in_blank
+    frame: {text: "هل {item} إلى المقهى غدا؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *nadhhab, hint: *nadhhab}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "نذهب is we go, and it can also mean we are going.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.translate.007
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "غدا is tomorrow; نذهب is we go; جيد is good.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson01.translate.008
+    lesson_content_key: ar.a1.unit12.lesson01.time_for_plans
+    type: translation
+    frame: {text: "Shall we go to the cafe tomorrow?", language_code: en, direction: ltr}
+    slots: {a: *nadhhab, b: *ghadan}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {a} إلى المقهى {b}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The same verb form نذهب covers we go and shall we go.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson02.choose.001
+    lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "جيد means good; here it is a short reply that accepts the plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson02.fill.002
+    lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+    type: fill_in_blank
+    frame: {text: "نعم، في الساعة الخامسة. {item}. إلى اللقاء. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *jayyid, hint: *jayyid}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "جيد. إلى اللقاء. is good, goodbye: agreeing to the plan and closing.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson02.translate.003
+    lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "جيد is the adjective good, used here to agree to the plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit12.lesson02.translate.004
+    lesson_content_key: ar.a1.unit12.lesson02.make_a_plan
+    type: translation
+    frame: {text: "We are going to the cafe tomorrow.", language_code: en, direction: ltr}
+    slots: {item: *ghadan}
+    answer_derivation: {kind: render_frame, frame: {text: "نذهب إلى المقهى {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The we form نذهب needs no pronoun and also means we are going; the time word غدا ends the sentence.", language_code: en, direction: ltr}
