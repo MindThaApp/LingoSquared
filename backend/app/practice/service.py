@@ -251,6 +251,43 @@ def fill_slots(
     return None
 
 
+_GLOSS_NOTE_RE = re.compile(r"\s*\([^()]*\)")
+
+
+def display_gloss(gloss: Any) -> str:
+    """Learner-facing form of an English gloss: bracketed notes removed.
+
+    Authoring/disambiguation notes such as "call (with ik)" or
+    "(inflected)" are hidden in practice cards and rendered frames; the full
+    gloss stays in vocabulary lists and lexeme views. Slashes and semicolons
+    are meaning-bearing and kept. Never returns an empty string: if stripping
+    would leave nothing, the original gloss is returned.
+    """
+    original = str(gloss or "")
+    if not _GLOSS_NOTE_RE.search(original):
+        return original
+    text = original
+    previous = None
+    while previous != text:  # innermost-first, so nested notes also go
+        previous = text
+        text = _GLOSS_NOTE_RE.sub("", text)
+    text = re.sub(r"\s+([,;:.!?])", r"\1", " ".join(text.split()))
+    return text if text.strip() else original
+
+
+def _display_glosses(lexemes_by_key: dict[Any, Lexeme]) -> dict[Any, str]:
+    """display_gloss per key, but keep the full gloss for options that would
+    otherwise become identical (e.g. "eat (with ik)" vs "eat")."""
+    shown = {k: display_gloss(v.english_gloss) for k, v in lexemes_by_key.items()}
+    counts: dict[str, int] = {}
+    for value in shown.values():
+        counts[value.casefold()] = counts.get(value.casefold(), 0) + 1
+    return {
+        k: (str(lexemes_by_key[k].english_gloss) if counts[v.casefold()] > 1 else v)
+        for k, v in shown.items()
+    }
+
+
 def render_frame(
     frame: dict[str, Any],
     filled: dict[str, Lexeme],
@@ -266,6 +303,8 @@ def render_frame(
             return "___"
         field = rendering.get(name, default_field)
         value = str(getattr(filled[name], field))
+        if field == "english_gloss":
+            value = display_gloss(value)
         # `emphasize` wraps just the substituted span in the existing
         # single-asterisk convention (docs/content/AUTHORING_GUIDE.md #15,
         # `frontend/src/components/EmphasizedText.tsx`) so a mixed-language
@@ -287,16 +326,14 @@ def derive_answer(
     if kind == "slot_text":
         return filled[derivation["slot"]].token
     if kind == "slot_gloss":
-        return filled[derivation["slot"]].english_gloss
+        return display_gloss(filled[derivation["slot"]].english_gloss)
     if kind == "render_frame":
         return render_frame(derivation["frame"], filled)
     if kind == "ordered_slot_texts":
         return [filled[name].token for name in derivation["slots"]]
     if kind == "matching_pairs":
-        return {
-            filled[name].token: filled[name].english_gloss
-            for name in derivation["slots"]
-        }
+        glosses = _display_glosses({n: filled[n] for n in derivation["slots"]})
+        return {filled[name].token: glosses[name] for name in derivation["slots"]}
     raise ValueError(f"unsupported answer derivation {kind!r}")
 
 
@@ -476,7 +513,7 @@ def _distractor_values(
     if derivation["kind"] == "slot_gloss":
         constraints = template.slots[derivation["slot"]]
         values = [
-            lexeme.english_gloss
+            display_gloss(lexeme.english_gloss)
             for lexeme in lexemes
             if lexeme_matches(lexeme, constraints)
         ]
@@ -495,7 +532,7 @@ def _distractor_values(
                 if lexeme_matches(lexeme, constraints)
             ]
             if answer_language == "en":
-                values.extend(lexeme.english_gloss for lexeme in matching)
+                values.extend(display_gloss(lexeme.english_gloss) for lexeme in matching)
             elif answer_language == constraints.get("language_code"):
                 values.extend(lexeme.token for lexeme in matching)
         # There is deliberately no language-only fallback. If no declared
@@ -1405,7 +1442,7 @@ def _speaking_prompt(
                     f"Say it in {_language_english_name(target.language_code)}.",
                 ),
                 {
-                    "text": target.english_gloss,
+                    "text": display_gloss(target.english_gloss),
                     "language_code": "en",
                     "direction": "ltr",
                 },
