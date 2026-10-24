@@ -12,7 +12,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [w_opinión, w_barrio, w_tiendas, w_trabajo, w_ventajas, w_conveniencia, w_tranquilidad, w_acuerdo, w_hay, w_más, w_cerca, w_también, w_porque, w_piensas, w_creo, w_sea, w_extraño, w_tranquilo, w_viejo, w_tan, w_como, w_cada, w_mejor, w_razón, w_tienes, w_entiendo, w_supongo, w_verdad, w_era]
+    semantic: [w_opinión, w_barrio, w_tiendas, w_trabajo, w_ventajas, w_conveniencia, w_tranquilidad, w_acuerdo, w_hay, w_más, w_cerca, w_también, w_porque, w_piensas, w_creo, w_sea, w_extraño, w_tranquilo, w_viejo, w_tan, w_como, w_cada, w_mejor, w_razón, w_tienes, w_entiendo, w_supongo, w_verdad, w_era, w_pensar, w_piensa, w_parece, w_nuevo, w_me, w_sin, w_sus, w_mí, w_del, w_no, w_yo, w_estoy, w_pero, w_gusta, w_cree, w_este, w_dos, w_están]
 slot_presets:
   p1: &p1 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_opinión, w_barrio, w_tiendas, w_trabajo, w_ventajas, w_conveniencia, w_tranquilidad, w_acuerdo]}}
   p2: &p2 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_opinión]}}
@@ -31,6 +31,9 @@ slot_presets:
   p15: &p15 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_razón]}}
   p16: &p16 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_tienes, w_razón, w_entiendo, w_supongo, w_verdad, w_conveniencia, w_era]}}
   p17: &p17 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_razón, w_verdad, w_conveniencia, w_acuerdo, w_ventajas, w_opinión]}}
+  x1: &x1 {language_code: es, part_of_speech: [adjective, pronoun, verb], agreement_tags: {semantic: [w_pensar, w_piensa, w_parece, w_nuevo, w_me]}}
+  x2: &x2 {language_code: es, part_of_speech: [particle, preposition, pronoun], agreement_tags: {semantic: [w_sin, w_sus, w_mí, w_del, w_no, w_yo]}}
+  x3: &x3 {language_code: es, part_of_speech: [noun, particle, pronoun, verb], agreement_tags: {semantic: [w_estoy, w_pero, w_gusta, w_cree, w_este, w_dos, w_están]}}
 templates:
   - content_key: practice.en-es.es.a2.unit17.lesson01.choose.001
     lesson_content_key: es.a2.unit17.lesson01.mi_opinion
@@ -160,3 +163,52 @@ templates:
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "These nouns carry the reasons and opinions in the dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson01.choose.004
+    lesson_content_key: es.a2.unit17.lesson01.mi_opinion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *x1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the opinion dialogue: what people think and how things seem.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson01.translate.005
+    lesson_content_key: es.a2.unit17.lesson01.mi_opinion
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Write the Spanish word as it appears in the opinion dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson05.choose.003
+    lesson_content_key: es.a2.unit17.lesson05.leer_la_nota
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *x2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Small words from the note that link ideas or point to people.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson05.translate.004
+    lesson_content_key: es.a2.unit17.lesson05.leer_la_nota
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the word as written in the note; an accent can change the meaning of a short word.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson06.choose.005
+    lesson_content_key: es.a2.unit17.lesson06.elena_mateo_debaten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the debate: what people believe, like and do.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson06.translate.006
+    lesson_content_key: es.a2.unit17.lesson06.elena_mateo_debaten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the word as it is written in the debate.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit17.lesson06.listen.007
+    lesson_content_key: es.a2.unit17.lesson06.elena_mateo_debaten
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Listen to the last syllable; it can separate a singular form from a plural one.", language_code: en, direction: ltr}
