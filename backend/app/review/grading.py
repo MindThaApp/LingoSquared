@@ -415,9 +415,46 @@ HINDI_CHANDRABINDU_FOLD = str.maketrans({"\u0901": "\u0902"})  # ँ -> ं
 _ARABIC_DETACHED_WAW_RE = re.compile(r"(?:(?<=\s)|^)و\s+(?=[\u0621-\u064a])")
 
 
+# Dari/Persian synonym and register variants (2026-10-24). Shared per-language
+# table applied to BOTH sides of the comparison, so any item whose expected
+# answer contains one member accepts the others. canonical <- variants.
+# - ticket: Dari says تکت, Persian بلیط, and بلیت is the common spelling slip.
+# - written vs spoken register: copula استم/هستم and the possessive clitic
+#   vs analytic form (نامم / نام من), as the lessons already accept by hand.
+PERSIAN_VARIANT_GROUPS: dict[str, tuple[str, ...]] = {
+    "تکت": ("بلیط", "بلیت"),
+    "هستم": ("استم",),
+    "هستی": ("استی",),
+    "هستیم": ("استیم",),
+    "نامم": ("نام من",),
+    "نامت": ("نام تو",),
+    "نامش": ("نام او",),
+}
+_PERSIAN_VARIANT_WORD = "[\\w\u200c]"
+PERSIAN_VARIANT_RES: tuple[tuple[re.Pattern, str], ...] = tuple(
+    (
+        re.compile(
+            "(?<!" + _PERSIAN_VARIANT_WORD + ")(?:"
+            + "|".join(re.escape(v) for v in variants)
+            + ")(?!" + _PERSIAN_VARIANT_WORD + ")"
+        ),
+        canonical,
+    )
+    for canonical, variants in PERSIAN_VARIANT_GROUPS.items()
+)
+
+
+def fold_persian_variants(value: str) -> str:
+    for pattern, canonical in PERSIAN_VARIANT_RES:
+        value = pattern.sub(canonical, value)
+    return value
+
+
 def fold_orthographic_variants(value: str, language_code: str | None) -> str:
     """Fold encoding/spacing variants that never change the answer."""
     value = value.translate(ROMANIAN_CEDILLA_FOLD)
+    if language_code in ("fa", "prs"):
+        value = fold_persian_variants(value)
     if language_code == "hi":
         value = value.translate(HINDI_CHANDRABINDU_FOLD)
         if DEVANAGARI_NUKTA in value:

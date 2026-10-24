@@ -2942,6 +2942,25 @@ def _validate_answer_derivation(
             f"must be one of {sorted(PRACTICE_ANSWER_KINDS)}",
         )
         return
+    variants = derivation.get("accepted_variants")
+    if variants is not None:
+        if (
+            not isinstance(variants, list)
+            or not variants
+            or not all(isinstance(v, str) and v.strip() for v in variants)
+        ):
+            report.error(
+                f"{location}.accepted_variants",
+                "must be a non-empty list of non-empty strings",
+            )
+        else:
+            for index, variant in enumerate(variants):
+                for name in SLOT_PLACEHOLDER_RE.findall(variant):
+                    if name not in slots:
+                        report.error(
+                            f"{location}.accepted_variants[{index}]",
+                            f"references unknown slot {name!r}",
+                        )
     if kind == "render_frame":
         _validate_frame_slots(
             derivation.get("frame"),
