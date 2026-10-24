@@ -6,7 +6,14 @@ unit_content_key: nl.a1.unit46.afspraak
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-24 (en-nl practice pass, session 10): 5 fixes -- lesson01.choose.001 and
+    lesson01.translate.003 untagged -> unit tag union; lesson02.choose feedback made neutral;
+    lesson02.order.002 feedback showed Dutch token inside English -> 'I am available on Wednesday.';
+    authoring text removed (volume_match.007). Native flags: lexeme parts of speech for
+    bevestigd/Waarvoor (listed as nouns) and capitalised Voor/Woensdag/Bevestiging.
+
     Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 46. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
 
@@ -132,16 +139,8 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      part_of_speech: [noun, adjective, preposition, verb]
+      agreement_tags: {semantic: [appointment_time_availability, appointment_purpose, appointment_wrapup_dialogue, confirmation_reading]}
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -197,16 +196,8 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech:
-      - symbol
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      part_of_speech: [noun, adjective, preposition, verb]
+      agreement_tags: {semantic: [appointment_time_availability, appointment_purpose, appointment_wrapup_dialogue, confirmation_reading]}
   answer_derivation:
     kind: slot_text
     slot: item
@@ -221,10 +212,6 @@ templates:
     text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
     first: *u46_appointment_match_word
     second: *u46_appointment_match_word
@@ -267,7 +254,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is an appointment word from this unit.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a1.unit46.lesson02.order.002
@@ -286,7 +273,7 @@ templates:
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Ik ben woensdag {item}. -- I am {item} on Wednesday.
+    text: I am available on Wednesday.
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a1.unit46.lesson03.listen.001
