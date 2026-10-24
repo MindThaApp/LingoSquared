@@ -14,7 +14,7 @@ classified yet; extend LEVELS and the tables below together.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
-  with two taught senses gets both ("more; still; May"),
+  with two taught senses gets both ("more; still; May (the month)"),
 * inflected forms say who they belong to ("you have (formal)"), so a
   bare-word translation prompt names one form,
 * gender pairs are glossed "(masc.)"/"(fem.)" so the two are never
@@ -65,10 +65,10 @@ def normalize(token: str) -> str:
 
 GLOSSES: dict[str, str] = {
     # unit01 greetings
-    "bună": "hi; hello", "salut": "hi; bye", "ziua": "the day",
+    "bună": "hi; hello", "salut": "hi; bye (informal)", "ziua": "the day",
     "la": "at; to", "revedere": "seeing again (in a farewell)",
     "tu": "you (informal)", "dumneavoastră": "you (formal)",
-    "ce": "what; how", "mai": "more; still; May", "faceți": "you do (formal)",
+    "ce": "what", "mai": "more; still; May (the month)", "faceți": "you do (formal)",
     "faci": "you do (informal)", "bine": "well; fine",
     "mulțumesc": "thank you", "mă": "me; myself", "numesc": "I am named",
     "Ana": "Ana", "cum": "how", "vă": "you (formal, object)",
@@ -88,7 +88,7 @@ GLOSSES: dict[str, str] = {
     "o": "a; an (fem.); one (fem.)", "sută": "hundred", "câți": "how many (masc. plural)",
     "ani": "years", "ai": "you have (informal)", "am": "I have",
     "aveți": "you have (formal)", "de": "of (after numbers above nineteen)",
-    "care": "which; what", "e": "is", "numărul": "the number", "tău": "your (informal, masc.)",
+    "care": "which; what", "e": "is (short form)", "numărul": "the number", "tău": "your (informal, masc. and neut.)",
     "telefon": "telephone; phone", "este": "is",
     # unit03 dates
     "astăzi": "today", "mâine": "tomorrow", "luni": "Monday", "marți": "Tuesday",
@@ -97,7 +97,7 @@ GLOSSES: dict[str, str] = {
     "săptămână": "week", "ieri": "yesterday", "săptămâna": "the week",
     "trecută": "last; past (fem.)", "viitoare": "next; coming (fem.)",
     "zilele": "the days", "nu": "not; no", "se": "oneself (reflexive marker)",
-    "scriu": "they are written", "cu": "with", "literă": "letter", "mare": "big; capital (of a letter)",
+    "scriu": "they write (with the reflexive: are written)", "cu": "with", "literă": "letter", "mare": "big; capital (of a letter)",
     "ianuarie": "January", "februarie": "February", "martie": "March",
     "aprilie": "April", "iunie": "June", "iulie": "July", "august": "August (month)",
     "septembrie": "September", "octombrie": "October", "noiembrie": "November",
@@ -105,13 +105,13 @@ GLOSSES: dict[str, str] = {
     "lunile": "the months", "când": "when", "întâlnirea": "the meeting",
     # unit04 time
     "ora": "the hour; the time", "jumătate": "half", "cât": "how much",
-    "un": "a; an (masc.); one (masc.)", "sfert": "quarter", "fără": "without; to (minutes before the hour)",
+    "un": "a; an (masc. and neut.); one (masc. and neut.)", "sfert": "quarter", "fără": "without; to (minutes before the hour)",
     "oră": "hour; time of day", "târziu": "late", "dimineața": "the morning",
-    "după": "after", "amiaza": "the midday", "seara": "the evening",
+    "după": "after", "amiaza": "midday; noon (with the article)", "seara": "the evening",
     "noaptea": "the night", "cursul": "the class; the course", "începe": "begins",
     # unit05 family
     "familie": "family", "mamă": "mother", "tată": "father", "părinți": "parents",
-    "meu": "my (masc.)", "mea": "my (fem.)", "mama": "the mother", "tatăl": "the father",
+    "meu": "my (masc. and neut.)", "mea": "my (fem.)", "mama": "the mother", "tatăl": "the father",
     "da": "yes", "frate": "brother", "soră": "sister", "frați": "brothers",
     "surori": "sisters", "copil": "child", "copii": "children", "fiu": "son",
     "fiică": "daughter", "căsătorit": "married (masc.)",
@@ -138,14 +138,14 @@ GLOSSES: dict[str, str] = {
     # unit09 directions
     "ajung": "I arrive; I get to", "mergeți": "go (formal command)",
     "înainte": "ahead; forward", "dreapta": "right (side)", "stânga": "left (side)",
-    "aici": "here", "acolo": "there", "apoi": "then; next",
+    "aici": "here", "acolo": "there", "apoi": "then; afterwards",
     # unit10 routines
-    "trezesc": "I wake up", "mănânc": "I eat", "beau": "I drink",
+    "trezesc": "I wake up (reflexive)", "mănânc": "I eat", "beau": "I drink",
     "lucrez": "I work", "merg": "I go", "acasă": "home; at home",
-    "culc": "I go to bed",
+    "culc": "I go to bed (reflexive)",
     # unit11 plans
     "mergem": "we go; let us go", "cinema": "movie theater; cinema",
-    "parc": "park", "atunci": "then; in that case", "sigur": "sure; certainly",
+    "parc": "park", "atunci": "in that case; then", "sigur": "sure; certainly",
     # unit12 past events
     "fost": "been; was", "mâncat": "eaten (as in 'have eaten')", "băut": "drunk (as in 'have drunk')",
     "a": "has (helper for the past)",
@@ -158,7 +158,7 @@ GLOSSES: dict[str, str] = {
     # unit15 travel
     "tren": "train", "pleacă": "leaves; departs (he, she, it)", "trenul": "the train",
     "peron": "platform", "peronul": "the platform", "bilet": "ticket",
-    "București": "Bucharest", "drum": "road; journey", "bun": "good (masc.)",
+    "București": "Bucharest", "drum": "road; journey", "bun": "good (masc. and neut.)",
     # unit16 health
     "doare": "hurts", "cap": "head", "capul": "the head", "stomac": "stomach",
     "stomacul": "the stomach", "simt": "I feel", "sunt": "I am",
