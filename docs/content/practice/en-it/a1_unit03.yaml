@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit03
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit03.basic_numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u03* lesson tags, w_<token> anchors).
+    Age frame uses a curated list (no uno, so no 'ho uno anni'); due and sei belong to unit02 and are not used as number candidates. 'Qual' (short form) and 'trent' are left out of bare-word translation pools.
+    Reviewer check: 'Quanto costa un caffè/cornetto?' and 'Qual è il tuo numero di telefono?' are the realization's own phrases.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_caffè, w_cinquanta, w_cinque, w_cornetto, w_costa, w_dieci, w_euro, w_hai, w_il, w_mio, w_ne, w_nove, w_numero, w_otto, w_perfetto, w_qual, w_quattro, w_sette, w_telefono, w_tre, w_tuo, w_uno, w_vorrei, w_vuole, w_zero]
+slot_presets:
+  nums: &nums {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_zero, w_uno, w_tre, w_quattro, w_cinque, w_sette, w_otto, w_nove, w_dieci]}}
+  ages: &ages {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_tre, w_quattro, w_cinque, w_sette, w_otto, w_nove, w_dieci]}}
+  hai: &hai {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_hai}}
+  l2_core: &l2_core {language_code: it, part_of_speech: [noun, pronoun, verb], agreement_tags: {semantic: [w_costa, w_caffè, w_euro, w_cornetto, w_cinquanta, w_ne, w_vuole, w_vorrei]}}
+  l2_words: &l2_words {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_costa, w_caffè, w_euro, w_cornetto, w_cinquanta, w_vorrei, w_vuole]}}
+  drinks: &drinks {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_caffè, w_cornetto]}}
+  vorrei: &vorrei {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_vorrei}}
+  l3_core: &l3_core {language_code: it, part_of_speech: [noun, pronoun, adjective, particle], agreement_tags: {semantic: [w_qual, w_il, w_tuo, w_numero, w_telefono, w_mio, w_perfetto]}}
+  l3_words: &l3_words {language_code: it, part_of_speech: [noun, pronoun, adjective], agreement_tags: {semantic: [w_tuo, w_mio, w_numero, w_telefono, w_perfetto]}}
+  telefono: &telefono {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_telefono}}
+  tuo: &tuo {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_tuo}}
+templates:
+  - content_key: practice.en-it.it.a1.unit03.lesson01.choose.001
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *nums}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Uno is the counting number; before a masculine noun it shortens to un, and before a feminine noun it becomes una.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson01.listen.002
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *nums}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sette and otto both have a double t; hold it slightly longer.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson01.order.003
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: word_order
+    frame: {text: "Ho {age} anni.", language_code: it, direction: ltr}
+    slots: {age: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "Ho {age} anni.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Italian gives age with avere, to have: ho cinque anni literally means I have five years.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson01.fill.004
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: fill_in_blank
+    frame: {text: "Quanti anni {item}? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *hai, hint: *hai}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hai is the tu form of avere; with Lei the question is Quanti anni ha?", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson01.match.005
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *nums, second: *nums, third: *nums, fourth: *nums, fifth: *nums, sixth: *nums}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Zero to ten are the basic building blocks; the teens and tens are built from them later.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson01.translate.006
+    lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+    type: translation
+    frame: {text: "I am {age} years old.", language_code: en, direction: ltr, slot_rendering: {age: english_gloss}}
+    slots: {age: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "Ho {age} anni.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Never use sono for age: Ho dieci anni, not Sono dieci anni.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.choose.001
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *l2_core}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ne stands for of it or of them: Ne vorrei tre means I would like three of them.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.listen.002
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *l2_core}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Caffè has the stress on the last syllable, marked by the accent.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.order.003
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: word_order
+    frame: {text: "Quanto costa un {item}?", language_code: it, direction: ltr}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "Quanto costa un {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Costa is singular, so it goes with one item: Quanto costa un cornetto? For several you say costano.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.fill.004
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: fill_in_blank
+    frame: {text: "Ne {item} tre, grazie. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *vorrei, hint: *vorrei}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Vorrei is the polite way to order or ask for something, softer than I want.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.translate.005
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cinquanta is fifty; Italian tens end in -anta from forty onward.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson02.translate.006
+    lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+    type: translation
+    frame: {text: "How much does a {item} cost?", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "Quanto costa un {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Italian puts the question word first and keeps costa singular for one item.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.choose.001
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *l3_core}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tuo and mio change with gender; both are masculine here because numero is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.order.002
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: word_order
+    frame: {text: "Qual è il tuo numero di {item}?", language_code: it, direction: ltr}
+    slots: {item: *telefono}
+    answer_derivation: {kind: render_frame, frame: {text: "Qual è il tuo numero di {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Qual is short for quale; it drops the final e before a form of essere.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.fill.003
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: fill_in_blank
+    frame: {text: "Qual è il {item} numero di telefono? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tuo, hint: *tuo}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il tuo numero asks about the other person's number; il mio numero answers with your own.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.match.004
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *l3_core, second: *l3_core, third: *l3_core, fourth: *l3_core, fifth: *l3_core, sixth: *l3_core}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Il is the masculine singular the; numero and telefono are both masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.translate.005
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l3_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Perfetto is masculine; a woman saying it about a feminine thing would use perfetta.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit03.lesson03.translate.006
+    lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+    type: translation
+    frame: {text: "What's your phone number? (informal)", language_code: en, direction: ltr}
+    slots: {item: *telefono}
+    answer_derivation: {kind: render_frame, frame: {text: "Qual è il tuo numero di {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Tuo is the informal your; with Lei you would say il Suo numero.", language_code: en, direction: ltr}
