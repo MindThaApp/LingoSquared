@@ -1,0 +1,122 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit02
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit02.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u02*, w_<token> anchors). Number slots in
+    sentence frames use curated number lists that are natural in the frame (prices, ages). Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_शून्य, w_एक, w_दो, w_तीन, w_चार, w_पाँच, w_छह, w_सात, w_आठ, w_नौ, w_दस, w_ग्यारह, w_बारह, w_पंद्रह, w_बीस, w_तीस, w_पचास, w_सौ, w_फ़ोन, w_नंबर, w_उम्र, w_साल, w_कीमत, w_रुपये]
+slot_presets:
+  digits: &digits {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शून्य, w_एक, w_दो, w_तीन, w_चार, w_पाँच, w_छह, w_सात, w_आठ, w_नौ, w_दस]}}
+  listen: &listen {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शून्य, w_एक, w_दो, w_तीन, w_चार, w_पाँच, w_छह, w_सात, w_आठ, w_नौ, w_दस, w_ग्यारह, w_बारह, w_पंद्रह, w_बीस, w_तीस, w_पचास, w_सौ]}}
+  l3words: &l3words {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_फ़ोन, w_नंबर, w_उम्र, w_साल, w_कीमत, w_रुपये]}}
+  unitall: &unitall {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सात, w_बीस, w_पचास, w_सौ, w_कीमत, w_रुपये, w_फ़ोन, w_उम्र, w_साल, w_नंबर, w_तीन]}}
+  prices: &prices {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_ग्यारह, w_बारह, w_पंद्रह, w_बीस, w_तीस, w_पचास, w_सौ]}}
+  ages: &ages {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_पंद्रह, w_बीस, w_तीस, w_पचास]}}
+  kimat: &kimat {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_कीमत}}
+  tees: &tees {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_तीस}}
+  phone: &phone {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_फ़ोन}}
+  words: &words {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शून्य, w_एक, w_चार, w_छह, w_आठ, w_दस, w_बीस, w_सौ, w_कीमत, w_रुपये, w_फ़ोन, w_उम्र, w_साल]}}
+  saal: &saal {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_साल}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit02.lesson01.choose.001
+    lesson_content_key: hi.a1.unit02.lesson01.numbers_zero_to_ten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *digits}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Hindi number words are irregular and must be learned one by one; for example छह is six and सात is seven.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson01.listen.002
+    lesson_content_key: hi.a1.unit02.lesson01.numbers_zero_to_ten
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *listen}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Hindi number words from eleven to ninety-nine are irregular, so each one, such as पंद्रह (fifteen) or पचास (fifty), must be learned separately.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson02.match.001
+    lesson_content_key: hi.a1.unit02.lesson02.numbers_and_prices
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *unitall, second: *unitall, third: *unitall, fourth: *unitall, fifth: *unitall, sixth: *unitall}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hindi nouns such as नंबर, फ़ोन and कीमत are used without a or the; the context decides whether it means a price or the price.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson02.fill.002
+    lesson_content_key: hi.a1.unit02.lesson02.numbers_and_prices
+    type: fill_in_blank
+    frame: {text: "इसकी {item} पचास रुपये है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kimat, hint: *kimat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "इसकी means its and agrees with the feminine noun कीमत, which is why it ends in -ी, not -ा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson02.order.003
+    lesson_content_key: hi.a1.unit02.lesson02.numbers_and_prices
+    type: word_order
+    frame: {text: "इसकी कीमत {item} रुपये है।", language_code: hi, direction: ltr}
+    slots: {item: *prices}
+    answer_derivation: {kind: render_frame, frame: {text: "इसकी कीमत {item} रुपये है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "In Hindi the number comes before the thing counted, and the verb है stays at the end: इसकी कीमत पचास रुपये है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson02.translate.004
+    lesson_content_key: hi.a1.unit02.lesson02.numbers_and_prices
+    type: translation
+    frame: {text: "What is its price?", language_code: en, direction: ltr}
+    slots: {item: *kimat}
+    answer_derivation: {kind: render_frame, frame: {text: "इसकी {item} क्या है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi keeps question word order like a statement: इसकी कीमत पचास रुपये है answers इसकी कीमत क्या है?", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.choose.001
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Possessives agree with the thing owned: आपका फ़ोन नंबर uses the masculine आपका, but आपकी उम्र uses the feminine आपकी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.order.002
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: word_order
+    frame: {text: "मेरी उम्र {item} साल है।", language_code: hi, direction: ltr}
+    slots: {item: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "मेरी उम्र {item} साल है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Age is given as a number of साल (years) with है: literally My age is thirty years.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.order.003
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: word_order
+    frame: {text: "आपका {item} नंबर क्या है?", language_code: hi, direction: ltr}
+    slots: {item: *phone}
+    answer_derivation: {kind: render_frame, frame: {text: "आपका {item} नंबर क्या है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "आपका is the formal your, here masculine because नंबर is masculine; with तुम you would say तुम्हारा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.fill.004
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: fill_in_blank
+    frame: {text: "मेरी उम्र तीस {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *saal, hint: *saal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "साल (year) does not change in the plural after a number: तीस साल is thirty years.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.translate.005
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: translation
+    frame: {text: "My age is {n} years.", language_code: en, direction: ltr, slot_rendering: {n: english_gloss}}
+    slots: {n: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "मेरी उम्र {n} साल है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "उम्र is a feminine noun, so the possessive is मेरी, not मेरा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.translate.006
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: translation
+    frame: {text: "What is your phone number? (formal)", language_code: en, direction: ltr}
+    slots: {item: *phone}
+    answer_derivation: {kind: render_frame, frame: {text: "आपका {item} नंबर क्या है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "A phone number is read digit by digit in Hindi, for example छह दो आठ तीन पाँच.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit02.lesson03.translate.007
+    lesson_content_key: hi.a1.unit02.lesson03.phone_and_age
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After a number above one, money is counted with the plural रुपये; the singular is रुपया.", language_code: en, direction: ltr}
