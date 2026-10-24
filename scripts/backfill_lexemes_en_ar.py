@@ -154,7 +154,7 @@ GLOSSES: dict[str, str] = {
     # unit18 work
     "عمل": "work", "عملك": "your work", "مهندس": "engineer (masc.)",
     "مكتب": "office", "أعمل": "I work", "أكتب": "I write", "أقرأ": "I read",
-    "العمل": "the work", "وأقرأ": "and I read",
+    "العمل": "the work", "عملا": "work (object ending)", "وأقرأ": "and I read",
     # unit19 housing
     "بيت": "house", "بيتي": "my house", "غرفة": "room", "مطبخ": "kitchen",
     "طاولة": "table", "الغرفة": "the room", "بيتك": "your house",
@@ -165,7 +165,7 @@ GLOSSES: dict[str, str] = {
     # unit21 clothing
     "ملابس": "clothes", "قميص": "shirt", "قميصا": "shirt (as something wanted)",
     "القميص": "the shirt", "أزرق": "blue (masc.)", "المقاس": "the size",
-    "مقاس": "size", "متوسط": "medium",
+    "مقاس": "size", "متوسط": "medium", "بمقاس": "in a size",
     # unit22 emotions
     "شعور": "feeling", "سعيد": "happy (masc.)", "سعيدة": "happy (fem.)",
     "حزين": "sad (masc.)", "حزينة": "sad (fem.)", "لأن": "because",
@@ -203,7 +203,7 @@ POS_SETS = {
         "وأقرأ نشرب تشعر أسمعك أعد تكلم أدفع سأدفع أستطيع عندي عندك"
     ),
     "phrase": split_words(
-        "مرحبا شكرا عفوا أهلا وسهلا تشرفنا تفضلي بلقائك بخمسة بعشرة بالبطاقة "
+        "مرحبا شكرا عفوا أهلا وسهلا تشرفنا تفضلي بلقائك بخمسة بعشرة بمقاس بالبطاقة "
         "اسمي اسمك اسمها"
     ),
 }
