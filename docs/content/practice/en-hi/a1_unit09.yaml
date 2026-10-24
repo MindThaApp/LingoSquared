@@ -1,0 +1,152 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit09
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit09.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job B) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u09*, w_<token> anchors). All commands are informal (tum-level, -o endings) and every English prompt says so. The token 'gaya' (first seen in 'samajh gaya', understood) is kept out of every pool because its first-sight gloss 'went' would mislead. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_सीधे, w_बाएँ, w_दाएँ, w_जाओ, w_मुड़ो, w_गिनो, w_जाऊँ, w_तक, w_पहले, w_नुक्कड़, w_पर, w_समझ]
+slot_presets:
+  dirs: &dirs {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सीधे, w_बाएँ, w_दाएँ]}}
+  dirverb: &dirverb {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सीधे, w_बाएँ, w_दाएँ, w_जाओ, w_मुड़ो, w_गिनो]}}
+  lr: &lr {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_बाएँ, w_दाएँ]}}
+  seedhe: &seedhe {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_सीधे}}
+  jao: &jao {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_जाओ}}
+  mudo: &mudo {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_मुड़ो}}
+  daen: &daen {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_दाएँ}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_जाऊँ, w_तक, w_पहले, w_सीधे, w_बाएँ, w_दाएँ]}}
+  jaun: &jaun {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_जाऊँ}}
+  tak: &tak {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_तक}}
+  pehle: &pehle {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_पहले}}
+  l3: &l3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_नुक्कड़, w_पर, w_समझ, w_सीधे]}}
+  nukkad: &nukkad {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_नुक्कड़}}
+  par: &par {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_पर}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.choose.001
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *dirverb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "जाओ, मुड़ो and गिनो are informal commands: they end in -ो and are used with तुम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.listen.002
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *dirs}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "बाएँ and दाएँ are adverbs of direction, so they never change for gender or number.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.match.003
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *dirverb, second: *dirverb, third: *dirverb, fourth: *dirverb, fifth: *dirverb, sixth: *dirverb}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hindi gives directions with an adverb plus a verb: सीधे जाओ is literally go straight, and बाएँ मुड़ो turn left.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.order.004
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: word_order
+    frame: {text: "यहाँ से {item} जाओ।", language_code: hi, direction: ltr}
+    slots: {item: *seedhe}
+    answer_derivation: {kind: render_frame, frame: {text: "यहाँ से {item} जाओ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "से after यहाँ means from: यहाँ से is from here.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.order.005
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: word_order
+    frame: {text: "फिर {item} मुड़ो।", language_code: hi, direction: ltr}
+    slots: {item: *lr}
+    answer_derivation: {kind: render_frame, frame: {text: "फिर {item} मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi puts the direction before the verb: बाएँ मुड़ो, not turn left.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.fill.006
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: fill_in_blank
+    frame: {text: "यहाँ से सीधे {item}। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *jao, hint: *jao}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "जाओ is the informal command form of जाना; formal speech would use a different ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.translate.007
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: translation
+    frame: {text: "Go straight from here. (informal)", language_code: en, direction: ltr}
+    slots: {item: *seedhe}
+    answer_derivation: {kind: render_frame, frame: {text: "यहाँ से {item} जाओ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "जाओ is the तुम-level command; the verb comes last, after the direction.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson01.translate.008
+    lesson_content_key: hi.a1.unit09.lesson01.seedhe_baaen_daaen
+    type: translation
+    frame: {text: "Then turn right. (informal)", language_code: en, direction: ltr}
+    slots: {item: *daen}
+    answer_derivation: {kind: render_frame, frame: {text: "फिर {item} मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मुड़ो is the informal command form of मुड़ना, to turn.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.choose.001
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "तक means up to or until, as in बैंक तक सीधे जाओ, go straight as far as the bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.order.002
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: word_order
+    frame: {text: "बैंक {item} सीधे जाओ।", language_code: hi, direction: ltr}
+    slots: {item: *tak}
+    answer_derivation: {kind: render_frame, frame: {text: "बैंक {item} सीधे जाओ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "तक marks the endpoint of the movement and comes right after the place.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.order.003
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: word_order
+    frame: {text: "यहाँ से {item} सीधे जाओ, फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+    slots: {item: *pehle}
+    answer_derivation: {kind: render_frame, frame: {text: "यहाँ से {item} सीधे जाओ, फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "पहले and फिर mark first and then, so the order of the steps matches the order of the words.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.fill.004
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: fill_in_blank
+    frame: {text: "स्कूल कैसे {item}? ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *jaun, hint: *jaun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "जाऊँ is a question asking what I should do, so it means how should I go, not how do I go in general.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.translate.005
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: translation
+    frame: {text: "How do I get to the bank?", language_code: en, direction: ltr}
+    slots: {item: *jaun}
+    answer_derivation: {kind: render_frame, frame: {text: "बैंक कैसे {item}?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "जाऊँ is the form used when asking for advice about your own action: how should I go?", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson02.translate.006
+    lesson_content_key: hi.a1.unit09.lesson02.yahan_se_kaise_jaun
+    type: translation
+    frame: {text: "From here, first go straight, then turn left. (informal)", language_code: en, direction: ltr}
+    slots: {item: *pehle}
+    answer_derivation: {kind: render_frame, frame: {text: "यहाँ से {item} सीधे जाओ, फिर बाएँ मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "पहले is first and फिर is then; the two commands both end in -ो because they use तुम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson03.choose.001
+    lesson_content_key: hi.a1.unit09.lesson03.priya_arjun_rasta_poochna
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "पर after a place means at or on: नुक्कड़ पर is at the corner.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson03.order.002
+    lesson_content_key: hi.a1.unit09.lesson03.priya_arjun_rasta_poochna
+    type: word_order
+    frame: {text: "फिर बैंक के {item} पर बाएँ मुड़ो।", language_code: hi, direction: ltr}
+    slots: {item: *nukkad}
+    answer_derivation: {kind: render_frame, frame: {text: "फिर बैंक के {item} पर बाएँ मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "के links बैंक to the corner, and पर then places the turn at that corner.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit09.lesson03.translate.003
+    lesson_content_key: hi.a1.unit09.lesson03.priya_arjun_rasta_poochna
+    type: translation
+    frame: {text: "Then turn left at the corner of the bank. (informal)", language_code: en, direction: ltr}
+    slots: {item: *nukkad}
+    answer_derivation: {kind: render_frame, frame: {text: "फिर बैंक के {item} पर बाएँ मुड़ो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi names the reference place first (बैंक के नुक्कड़ पर), then the direction, then the verb.", language_code: en, direction: ltr}
