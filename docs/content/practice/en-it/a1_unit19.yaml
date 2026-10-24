@@ -1,0 +1,124 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit19
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u19* lesson tags, w_<token> anchors).
+    The unit has only four lexemes and lesson 2 introduces none, so there is no matching_pairs and the frames reuse the unit's own sentences (Il treno parte alle otto, Hai il biglietto per Roma?). Questions say informal (tu).
+    Reviewer check: parte is glossed 'leaves; departs' and is used only in train frames.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_biglietto, w_binario, w_parte, w_treno]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_treno, w_binario, w_biglietto, w_parte]}}
+  pool2: &pool2 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_treno, w_biglietto, w_binario]}}
+  t_treno: &t_treno {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_treno}}
+  t_parte: &t_parte {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_parte}}
+  t_binario: &t_binario {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_binario}}
+  t_biglietto: &t_biglietto {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_biglietto}}
+  pool7: &pool7 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_treno, w_binario, w_biglietto]}}
+templates:
+  - content_key: practice.en-it.it.a1.unit19.lesson01.choose.001
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Il treno, il binario and il biglietto are all masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.listen.002
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Parte is the form for it leaves, used with the train.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.choose.003
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "A biglietto is what you buy to travel; the binario is where the train stops.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.order.004
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: word_order
+    frame: {text: "Il {item} è alla stazione.", language_code: it, direction: ltr}
+    slots: {item: *t_treno}
+    answer_derivation: {kind: render_frame, frame: {text: "Il {item} è alla stazione.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Alla stazione means at the station.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.order.005
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: word_order
+    frame: {text: "Il treno {item} alle otto.", language_code: it, direction: ltr}
+    slots: {item: *t_parte}
+    answer_derivation: {kind: render_frame, frame: {text: "Il treno {item} alle otto.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Parte is the it-form of partire: it leaves.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.order.006
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: word_order
+    frame: {text: "Il treno parte dal {item} tre.", language_code: it, direction: ltr}
+    slots: {item: *t_binario}
+    answer_derivation: {kind: render_frame, frame: {text: "Il treno parte dal {item} tre.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Dal is da plus il, used for the departure platform.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.fill.007
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: fill_in_blank
+    frame: {text: "Il {item} è per Roma. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_biglietto, hint: *t_biglietto}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Per Roma means for Rome, the destination.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.fill.008
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: fill_in_blank
+    frame: {text: "A che ora {item} il treno per Roma? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_parte, hint: *t_parte}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Parte agrees with il treno: what time does the train leave?", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.fill.009
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: fill_in_blank
+    frame: {text: "Il {item} per Roma parte alle otto. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_treno, hint: *t_treno}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il treno per Roma is the train going to Rome.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.translate.010
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: translation
+    frame: {text: "The train leaves at eight.", language_code: en, direction: ltr}
+    slots: {item: *t_parte}
+    answer_derivation: {kind: render_frame, frame: {text: "Il treno {item} alle otto.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Parte is the third person singular: it leaves.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.translate.011
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: translation
+    frame: {text: "Do you have the ticket for Rome? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_biglietto}
+    answer_derivation: {kind: render_frame, frame: {text: "Hai il {item} per Roma?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Hai is the informal tu form of have.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.translate.012
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: translation
+    frame: {text: "The train leaves from platform three.", language_code: en, direction: ltr}
+    slots: {item: *t_binario}
+    answer_derivation: {kind: render_frame, frame: {text: "Il treno parte dal {item} tre.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Dal binario tre means from platform three.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.translate.013
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: translation
+    frame: {text: "The train for Rome leaves at eight.", language_code: en, direction: ltr}
+    slots: {item: *t_treno}
+    answer_derivation: {kind: render_frame, frame: {text: "Il {item} per Roma parte alle otto.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Per Roma tells you where the train is going.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit19.lesson01.translate.014
+    lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il treno, il binario and il biglietto are masculine nouns.", language_code: en, direction: ltr}

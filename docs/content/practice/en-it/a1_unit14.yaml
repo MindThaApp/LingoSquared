@@ -1,0 +1,143 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit14
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u14* lesson tags, w_<token> anchors).
+    Tè (tea) and te (you, after a preposition) are homophones, so they never share a listen_select pool. Prompts for preferisci/piace say informal; frames use caffè, cornetto and molto from earlier units as literal text.
+    Reviewer check: piace is glossed 'is pleasing' for the mi piace construction; no frame treats it as 'like' in isolation.
+    Opus pass: the 'And you?' prompt now says it asks back about liking (otherwise 'E tu?' is also right); fixed a circular feedback line.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_me, w_piace, w_preferire, w_preferisci, w_preferisco, w_te, "w_tè"]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_preferire, w_preferisco, w_preferisci, "w_tè"]}}
+  t_te: &t_te {language_code: it, part_of_speech: noun, agreement_tags: {semantic: "w_tè"}}
+  t_preferisco: &t_preferisco {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_preferisco}}
+  pool4: &pool4 {language_code: it, part_of_speech: [verb, noun, pronoun], agreement_tags: {semantic: [w_preferire, w_preferisco, w_preferisci, "w_tè", w_piace, w_te, w_me]}}
+  pool5: &pool5 {language_code: it, part_of_speech: [verb, pronoun], agreement_tags: {semantic: [w_piace, w_te, w_me, w_preferisco]}}
+  pool6: &pool6 {language_code: it, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_piace, w_preferisco, w_preferisci, "w_tè"]}}
+  t_piace: &t_piace {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_piace}}
+  t_tex: &t_tex {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_te}}
+  t_me: &t_me {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_me}}
+  pool10: &pool10 {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_tè", w_preferire, w_preferisco, w_preferisci]}}
+templates:
+  - content_key: practice.en-it.it.a1.unit14.lesson01.choose.001
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Preferisco is the I form and preferisci is the informal you form of preferire.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson01.listen.002
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Preferisco and preferisci differ only in the last vowel.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson01.order.003
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: word_order
+    frame: {text: "Preferisci il caffè o il {item}?", language_code: it, direction: ltr}
+    slots: {item: *t_te}
+    answer_derivation: {kind: render_frame, frame: {text: "Preferisci il caffè o il {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Tè has an accent to separate it from te, you.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson01.fill.004
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: fill_in_blank
+    frame: {text: "Io {item} il caffè. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_preferisco, hint: *t_preferisco}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Preferisco ends in -o because the subject is I.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson01.translate.005
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: translation
+    frame: {text: "Do you prefer coffee or tea? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_te}
+    answer_derivation: {kind: render_frame, frame: {text: "Preferisci il caffè o il {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Preferisci is the informal tu form of the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson03.translate.001
+    lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+    type: translation
+    frame: {text: "I prefer coffee too!", language_code: en, direction: ltr}
+    slots: {item: *t_preferisco}
+    answer_derivation: {kind: render_frame, frame: {text: "Anch'io {item} il caffè!", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Anch'io means me too, and preferisco is the I form.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson03.match.002
+    lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool4, second: *pool4, third: *pool4, fourth: *pool4, fifth: *pool4, sixth: *pool4}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Tè is tea; te is a pronoun used after a preposition.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson03.choose.003
+    lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool5}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Piace is used in mi piace, which means I like it.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson02.listen.001
+    lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mi piace molto means I like it a lot.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson02.order.002
+    lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+    type: word_order
+    frame: {text: "Mi {item} molto il cornetto.", language_code: it, direction: ltr}
+    slots: {item: *t_piace}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi {item} molto il cornetto.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Piace agrees with the thing liked, which is singular here.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson02.fill.003
+    lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+    type: fill_in_blank
+    frame: {text: "E a {item}? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_tex, hint: *t_tex}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A te means to you and is the informal way to ask the same back.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson02.translate.004
+    lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+    type: translation
+    frame: {text: "I really like the croissant.", language_code: en, direction: ltr}
+    slots: {item: *t_piace}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi {item} molto il cornetto.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Mi piace molto means I like it a lot, literally it is very pleasing to me.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson02.translate.005
+    lesson_content_key: it.a1.unit14.lesson02.mi_piace_il_cornetto
+    type: translation
+    frame: {text: "And you? (informal, asking back after saying you like something)", language_code: en, direction: ltr}
+    slots: {item: *t_tex}
+    answer_derivation: {kind: render_frame, frame: {text: "E a {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "After a preposition such as a, tu becomes te: a te, to you.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson03.fill.004
+    lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+    type: fill_in_blank
+    frame: {text: "A {item} no, preferisco il tè. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_me, hint: *t_me}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A me means to me; after a preposition io becomes me.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson03.translate.005
+    lesson_content_key: it.a1.unit14.lesson03.anch_io_preferisco_il_caffe
+    type: translation
+    frame: {text: "Not me, I prefer tea.", language_code: en, direction: ltr}
+    slots: {item: *t_me}
+    answer_derivation: {kind: render_frame, frame: {text: "A {item} no, preferisco il tè.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "A me no means not me.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit14.lesson01.translate.006
+    lesson_content_key: it.a1.unit14.lesson01.preferisci_il_caffe_o_il_te
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Preferire is to prefer; preferisco is I prefer.", language_code: en, direction: ltr}

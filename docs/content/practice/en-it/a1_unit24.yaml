@@ -1,0 +1,144 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit24
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u24* lesson tags, w_<token> anchors).
+    Payment frames use the unit's own sentences. 'Scusi, posso pagare con la carta?' opens with Scusi so posso is not sentence-initial; the prompt marks it formal. con is glossed 'with; by' and used in 'pago con la carta'.
+    Reviewer check: ecco is only used after 'Grazie,'.
+    Opus pass: no changes. NATIVE FLAG: 'I pay by card' grades only 'con la carta'; 'con carta' is also common.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_carta, w_certo, w_con, w_contanti, w_ecco, w_pagare, w_pago, w_posso, w_scontrino, w_soldi]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [noun, verb, preposition], agreement_tags: {semantic: [w_soldi, w_carta, w_contanti, w_scontrino, w_pago, w_con]}}
+  pool2: &pool2 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_soldi, w_carta, w_contanti, w_scontrino]}}
+  t_carta: &t_carta {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_carta}}
+  t_contanti: &t_contanti {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_contanti}}
+  t_soldi: &t_soldi {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_soldi}}
+  t_pago: &t_pago {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_pago}}
+  pool7: &pool7 {language_code: it, part_of_speech: [verb, adverb, phrase, preposition], agreement_tags: {semantic: [w_posso, w_pagare, w_certo, w_ecco, w_con]}}
+  t_posso: &t_posso {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_posso}}
+  t_certo: &t_certo {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: w_certo}}
+  t_ecco: &t_ecco {language_code: it, part_of_speech: phrase, agreement_tags: {semantic: w_ecco}}
+  pool11: &pool11 {language_code: it, part_of_speech: [noun, verb, adverb, phrase], agreement_tags: {semantic: [w_soldi, w_carta, w_contanti, w_scontrino, w_posso, w_pagare, w_certo, w_ecco]}}
+templates:
+  - content_key: practice.en-it.it.a1.unit24.lesson01.choose.001
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pago means I pay and con means with.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.listen.002
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lo scontrino is the receipt and la carta is the card.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.order.003
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: word_order
+    frame: {text: "Pago con la {item}.", language_code: it, direction: ltr}
+    slots: {item: *t_carta}
+    answer_derivation: {kind: render_frame, frame: {text: "Pago con la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Con la carta means by card.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.order.004
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: word_order
+    frame: {text: "Pago in {item}.", language_code: it, direction: ltr}
+    slots: {item: *t_contanti}
+    answer_derivation: {kind: render_frame, frame: {text: "Pago in {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "In contanti means in cash, with no article.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.fill.005
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: fill_in_blank
+    frame: {text: "Ho i {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_soldi, hint: *t_soldi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Soldi is plural, so it takes i.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.fill.006
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: fill_in_blank
+    frame: {text: "Oggi {item} in contanti. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_pago, hint: *t_pago}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pago is the I form of pagare.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.translate.007
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: translation
+    frame: {text: "I pay by card.", language_code: en, direction: ltr}
+    slots: {item: *t_carta}
+    answer_derivation: {kind: render_frame, frame: {text: "Pago con la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Italian says with the card where English says by card.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.translate.008
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: translation
+    frame: {text: "I pay in cash today.", language_code: en, direction: ltr}
+    slots: {item: *t_contanti}
+    answer_derivation: {kind: render_frame, frame: {text: "Oggi pago in {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Contanti is always plural and follows in.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson01.translate.009
+    lesson_content_key: it.a1.unit24.lesson01.soldi_carta_contanti
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Soldi and contanti are both plural words.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.choose.001
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Posso is the I form of potere: I can.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.order.002
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: word_order
+    frame: {text: "Scusi, {item} pagare con la carta?", language_code: it, direction: ltr}
+    slots: {item: *t_posso}
+    answer_derivation: {kind: render_frame, frame: {text: "Scusi, {item} pagare con la carta?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Scusi opens a polite question; posso means I can.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.fill.003
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: fill_in_blank
+    frame: {text: "Sì, {item}, pago con la carta. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_certo, hint: *t_certo}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sì, certo means yes, of course.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.fill.004
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: fill_in_blank
+    frame: {text: "Grazie, {item} lo scontrino. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_ecco, hint: *t_ecco}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ecco points something out: here it is.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.translate.005
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: translation
+    frame: {text: "Excuse me, can I pay by card? (formal)", language_code: en, direction: ltr}
+    slots: {item: *t_posso}
+    answer_derivation: {kind: render_frame, frame: {text: "Scusi, {item} pagare con la carta?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Scusi is the formal way to get someone's attention.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.translate.006
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: translation
+    frame: {text: "Thanks, here is the receipt.", language_code: en, direction: ltr}
+    slots: {item: *t_ecco}
+    answer_derivation: {kind: render_frame, frame: {text: "Grazie, {item} lo scontrino.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Ecco means here is or here it is.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit24.lesson02.match.007
+    lesson_content_key: it.a1.unit24.lesson02.posso_pagare
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool11, second: *pool11, third: *pool11, fourth: *pool11, fifth: *pool11, sixth: *pool11}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Pagare is to pay; pago and posso are I forms.", language_code: en, direction: ltr}

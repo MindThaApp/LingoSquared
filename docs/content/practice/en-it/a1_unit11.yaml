@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit11
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit11.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u11* lesson tags, w_<token> anchors).
+    Routine frames use earlier-unit words (alle sette, alle sei e trenta, di solito) as literals; 'I' forms are first person and the question forms say informal. The anch'io frame starts with 'Sì,' so no slot is sentence-initial.
+    Reviewer check: 'trenta' is taught here (6:30), distinct from 'trent' (a fragment from unit03) which is kept out of every pool.
+    Opus pass: deleted lesson02.translate.007 ('I go back home at six thirty') because 'alle sei e mezzo' (unit05) is an equally correct answer; reworded the presto feedback.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_anch'io", w_casa, w_colazione, w_faccio, w_letto, w_presto, w_solito, w_torni, w_torno, w_trenta, w_vado]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_faccio, w_colazione, w_vado, w_torno, w_casa, w_letto, w_solito]}}
+  pool2: &pool2 {language_code: it, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_faccio, w_colazione, w_vado, w_torno, w_casa, w_letto]}}
+  t_colazione: &t_colazione {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_colazione}}
+  t_casa: &t_casa {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_casa}}
+  t_letto: &t_letto {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_letto}}
+  t_solito: &t_solito {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_solito}}
+  pool7: &pool7 {language_code: it, part_of_speech: [verb, noun, adverb], agreement_tags: {semantic: [w_faccio, w_colazione, w_vado, w_torno, w_casa, w_letto, w_presto, w_trenta]}}
+  pool8: &pool8 {language_code: it, part_of_speech: [verb, noun, adverb], agreement_tags: {semantic: [w_torni, w_trenta, w_presto, w_torno, w_vado]}}
+  t_trenta: &t_trenta {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_trenta}}
+  t_torni: &t_torni {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_torni}}
+  t_presto: &t_presto {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: w_presto}}
+  pool12: &pool12 {language_code: it, part_of_speech: [adverb, verb, noun], agreement_tags: {semantic: ["w_anch'io", w_faccio, w_colazione, w_letto, w_presto]}}
+  t_anch_io: &t_anch_io {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: "w_anch'io"}}
+templates:
+  - content_key: practice.en-it.it.a1.unit11.lesson01.choose.001
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Faccio colazione literally means I make breakfast.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.listen.002
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vado and torno are I forms: I go and I go back.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.order.003
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: word_order
+    frame: {text: "Faccio {item} alle sette e poi vado al lavoro.", language_code: it, direction: ltr}
+    slots: {item: *t_colazione}
+    answer_derivation: {kind: render_frame, frame: {text: "Faccio {item} alle sette e poi vado al lavoro.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Faccio colazione is a set phrase meaning to have breakfast.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.fill.004
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: fill_in_blank
+    frame: {text: "Vado al lavoro e poi torno a {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_casa, hint: *t_casa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A casa means at home or home, with no article.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.fill.005
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: fill_in_blank
+    frame: {text: "Alle dieci vado a {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_letto, hint: *t_letto}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A letto means to bed, with no article.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.translate.006
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: translation
+    frame: {text: "I have breakfast at seven.", language_code: en, direction: ltr}
+    slots: {item: *t_colazione}
+    answer_derivation: {kind: render_frame, frame: {text: "Faccio {item} alle sette.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Faccio colazione literally means I make breakfast.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson01.translate.007
+    lesson_content_key: it.a1.unit11.lesson01.faccio_colazione_vado_al_lavoro
+    type: translation
+    frame: {text: "What time do you usually have breakfast? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_solito}
+    answer_derivation: {kind: render_frame, frame: {text: "A che ora fai colazione di {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Di solito means usually; fai is the informal tu form.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.match.001
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool7, second: *pool7, third: *pool7, fourth: *pool7, fifth: *pool7, sixth: *pool7}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Vado and torno are I forms; faccio is I do or I make.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.choose.002
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool8}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Torni is the tu form and torno the I form of tornare.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.listen.003
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool8}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Presto means early in this unit, as in vado a letto presto.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.fill.004
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: fill_in_blank
+    frame: {text: "Torno a casa alle sei e {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_trenta, hint: *t_trenta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "E trenta adds thirty minutes: alle sei e trenta is 6:30.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.order.005
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: word_order
+    frame: {text: "A che ora {item} a casa la sera?", language_code: it, direction: ltr}
+    slots: {item: *t_torni}
+    answer_derivation: {kind: render_frame, frame: {text: "A che ora {item} a casa la sera?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Torni is the informal you form, used with friends and colleagues.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.order.006
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: word_order
+    frame: {text: "Vado a letto {item}.", language_code: it, direction: ltr}
+    slots: {item: *t_presto}
+    answer_derivation: {kind: render_frame, frame: {text: "Vado a letto {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Presto means early here; in a presto, see you soon, it means soon.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson02.translate.008
+    lesson_content_key: it.a1.unit11.lesson02.a_che_ora_torni_a_casa
+    type: translation
+    frame: {text: "I go to bed early.", language_code: en, direction: ltr}
+    slots: {item: *t_presto}
+    answer_derivation: {kind: render_frame, frame: {text: "Vado a letto {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Presto can mean early or soon.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson03.choose.001
+    lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool12}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Anch'io means me too and starts the answer to a friend.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson03.fill.002
+    lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+    type: fill_in_blank
+    frame: {text: "Sì, {item} faccio colazione alle sette. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_anch_io, hint: *t_anch_io}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Anch'io is one word with an apostrophe: me too.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit11.lesson03.translate.003
+    lesson_content_key: it.a1.unit11.lesson03.la_mia_giornata
+    type: translation
+    frame: {text: "Yes, I have breakfast at seven too.", language_code: en, direction: ltr}
+    slots: {item: *t_anch_io}
+    answer_derivation: {kind: render_frame, frame: {text: "Sì, {item} faccio colazione alle sette.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Anch'io agrees with a speaker and means I too.", language_code: en, direction: ltr}
