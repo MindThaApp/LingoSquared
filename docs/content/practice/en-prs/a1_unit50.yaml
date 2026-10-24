@@ -16,7 +16,19 @@ review:
     grammaticality check is only course-scoped so this is safe there) and pool_word (course-wide 2 members:
     حوض آببازی and کمد, both fit ''in X ast''). Production tier gets 1 extra fixed-sentence translation
     on the same A1-single disruption_word slot. 14 templates, recognition 4, structured 3, production
-    5, all 4 lexeme lessons covered. No mis-glossed lexemes found.'
+    5, all 4 lexeme lessons covered. No mis-glossed lexemes found.
+
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 5 fixes. (1) MC/translation/matching pools
+    narrowed from 196 course-wide tokens (dialogue_word etc.) to the unit''s own 7 tagged words (en_prs_a1_unit50_words);
+    ''from this unit'' now true. (2) order.004 disruption_word pool also held unit15/02 words (e.g. بدیل
+    ''alternative'': ''امروز حوض آب‌بازی بدیل است'') -> adjectives of the unit tag (بسته/باز). (3) translate.006
+    fixed English ''The pool is closed today.'' could expect a non-''closed'' lexeme (بدیل) -> English
+    now built from the slot gloss (''closed''/''open''). (4) order.005 feedback listed ''[the pool / the
+    locker]'' but حوض آب‌بازی is untagged, so only کمد appears -> ''This is the locker.'' NATIVE FLAGS:
+    حوض آب‌بازی (and لباس شویی) multi-word compounds get no practice tag, so they never appear in pools
+    (backfill lane).'
+  required_next_reviewer: native_speaker_review
 tag_schema:
   part_of_speech:
   - symbol
@@ -31,11 +43,8 @@ tag_schema:
   - phrase
   agreement_tags:
     semantic:
-    - dialogue_word
-    - disruption_word
-    - formal_possessive_word
+    - en_prs_a1_unit50_words
     - pool_word
-    - third_person_possessive_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit50.lesson01.pool_and_staff_vocabulary.choose.001
   lesson_content_key: prs.a1.unit50.lesson01.pool_and_staff_vocabulary
@@ -45,18 +54,14 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
+    item: &id001
       language_code: prs
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       - adjective
       agreement_tags:
-        semantic: &id002
-        - pool_word
-        - dialogue_word
-        - formal_possessive_word
-        - disruption_word
-        - third_person_possessive_word
+        semantic:
+        - en_prs_a1_unit50_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -74,11 +79,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -94,11 +95,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -116,11 +113,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -136,11 +129,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -158,11 +147,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -178,11 +163,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -200,11 +181,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -220,34 +197,15 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    first:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: &id003
-        semantic: *id002
-    second:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    third:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    fourth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    fifth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
-    sixth:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags: *id003
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
   slot_relations:
   - kind: distinct
-    slots: &id004
+    slots: &id002
     - first
     - second
     - third
@@ -256,7 +214,7 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots: *id004
+    slots: *id002
   feedback_frame:
     text: Match each swimming-pool word with its English meaning.
     language_code: en
@@ -274,7 +232,7 @@ templates:
       part_of_speech: adjective
       agreement_tags:
         semantic:
-        - disruption_word
+        - en_prs_a1_unit50_words
   answer_derivation:
     kind: render_frame
     frame:
@@ -306,23 +264,25 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: This is [the pool / the locker].
+    text: This is the locker.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit50.lesson03.locker_and_hours.translate.006
   lesson_content_key: prs.a1.unit50.lesson03.locker_and_hours
   type: translation
   frame:
-    text: The pool is closed today.
+    text: The pool is {item} today.
     language_code: en
     direction: ltr
+    slot_rendering:
+      item: english_gloss
   slots:
     item:
       language_code: prs
       part_of_speech: adjective
       agreement_tags:
         semantic:
-        - disruption_word
+        - en_prs_a1_unit50_words
   answer_derivation:
     kind: render_frame
     frame:
