@@ -65,14 +65,14 @@ def normalize(token: str) -> str:
 GLOSSES: dict[str, str] = {
     # unit01 greetings
     "आप": "you (formal, respectful)", "तुम": "you (informal, familiar)",
-    "कैसे": "how (with a formal or plural subject)", "हैं": "are; is (with a formal or plural subject)",
+    "कैसे": "how (masc. plural or formal; also: in what way)", "हैं": "are; is (with a formal or plural subject)",
     "कैसी": "how (fem.)", "हो": "you are (informal)", "मैं": "I",
     "ठीक": "fine; okay", "हूँ": "I am", "शुक्रिया": "thank you", "और": "and; more",
     "नमस्ते": "hello; goodbye", "नमस्कार": "hello (more formal, respectful)",
     "फिर": "again; then", "मिलेंगे": "we will meet", "अलविदा": "goodbye; farewell",
     "मिलते": "meet (habitual, masc. plural, or we)", "शुभ": "auspicious; good",
     "रात्रि": "night (formal)", "आपका": "your (formal, masc.)", "दिन": "day",
-    "अच्छा": "good; nice; I see", "रहे": "may it be; stay",
+    "अच्छा": "good; nice (masc.); I see", "रहे": "may it be; stay",
     "नाम": "name", "क्या": "what; (question word)", "है": "is (he, she, it)",
     "तुम्हारा": "your (informal, masc.)", "मेरा": "my (masc.)", "प्रिया": "Priya",
     "आपसे": "with you (formal)", "मिलकर": "on meeting", "खुशी": "happiness; joy",
@@ -99,7 +99,7 @@ GLOSSES: dict[str, str] = {
     "आज": "today", "सोमवार": "Monday", "मंगलवार": "Tuesday",
     "बुधवार": "Wednesday", "गुरुवार": "Thursday", "शुक्रवार": "Friday",
     "शनिवार": "Saturday", "रविवार": "Sunday", "कौन": "who; which",
-    "सा": "(added to 'who' to mean 'which one')", "क्लास": "class",
+    "सा": "(particle: with 'who' it makes 'which')", "क्लास": "class",
     "को": "on; to", "जनवरी": "January", "फ़रवरी": "February", "मार्च": "March",
     "अप्रैल": "April", "मई": "May", "जून": "June", "जुलाई": "July",
     "अगस्त": "August", "सितंबर": "September", "अक्टूबर": "October",
@@ -107,7 +107,7 @@ GLOSSES: dict[str, str] = {
     "कितनी": "how many; how much (fem.)", "कब": "when", "अगली": "next (fem.)",
     "जन्मदिन": "birthday", "कोई": "any; some", "बात": "matter; talk",
     # unit04 time
-    "बजे": "o'clock (for two and above)", "बजा": "o'clock (for one only)",
+    "बजे": "o'clock; at ... o'clock", "बजा": "o'clock (only in 'it is one o'clock')",
     "कितने": "how many; how much (masc.)", "सुबह": "morning",
     "दोपहर": "afternoon; noon", "शाम": "evening", "रात": "night",
     "कल": "tomorrow; yesterday",
@@ -158,11 +158,11 @@ GLOSSES: dict[str, str] = {
     "काम": "work", "जाता": "go (habitual, masc.)", "जाती": "go (habitual, fem.)",
     "वह": "he; she; that", "वे": "they", "सोता": "sleep (habitual, masc.)",
     "सोती": "sleep (habitual, fem.)",
-    "उठते": "get up (habitual, masc. plural, or you informal)",
-    "सोते": "sleep (habitual, masc. plural, or you informal)",
+    "उठते": "get up (habitual, masc. plural, or informal you to a man)",
+    "सोते": "sleep (habitual, masc. plural, or informal you to a man)",
     "वापस": "back", "आता": "come (habitual, masc.)", "आती": "come (habitual, fem.)",
     "खाता": "eat (habitual, masc.)", "खाती": "eat (habitual, fem.)",
-    "आते": "come (habitual, masc. plural, or you informal)",
+    "आते": "come (habitual, masc. plural, or informal you to a man)",
     # unit11 plans
     "फ़िल्म": "movie", "देखते": "watch (habitual, masc. plural, or we)",
     "साथ": "together; with", "पीते": "drink (habitual, masc. plural, or we)",
@@ -173,7 +173,7 @@ GLOSSES: dict[str, str] = {
     "था": "was (masc.)", "थी": "was (fem.)", "कैसा": "how (masc. singular)",
     "अच्छी": "good; nice (fem.)", "गई": "went; gone (fem.)",
     "मिला": "met (masc.)", "मिली": "met (fem.)",
-    "मिले": "met (masc. plural, or you informal)",
+    "मिले": "met (we, they, or masc. plural)",
     # unit13 preferences
     "पसंद": "liking; liked", "संगीत": "music", "किताब": "book",
     "किताबें": "books", "खेल": "sport; game", "ज़्यादा": "more",
@@ -189,7 +189,7 @@ GLOSSES: dict[str, str] = {
     # unit17 work
     "शिक्षक": "teacher (male)", "शिक्षिका": "teacher (female)",
     "इंजीनियर": "engineer", "दफ़्तर": "office",
-    "जाते": "go (habitual, masc. plural, or you informal)",
+    "जाते": "go (habitual, masc. plural, or informal you to a man)",
     # unit18 housing
     "कमरा": "room", "कमरे": "rooms", "रसोई": "kitchen", "बाथरूम": "bathroom",
     "बेडरूम": "bedroom", "मेज़": "table", "कुर्सी": "chair",
