@@ -1,0 +1,128 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a2.unit22
+source_language: en
+target_language: fr
+unit_content_key: fr.a2.unit22.vie_numerique
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-24 (session 11, en-fr A2) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level a2, group en-fr-a2); pools are curated w_<token> lists drawn from this unit's own first-sight tokens. Native flags: Internet is capitalised in the realization and folded to lower case in the lexeme table. The regarde and passe glosses are overridden for this unit (look at; spend)."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_appli", "w_consulte", "w_consulter", "w_contact", "w_déménagement", "w_internet", "w_j'essaie", "w_j'utilise", "w_ligne", "w_limiter", "w_message", "w_messages", "w_métro", "w_parfois", "w_passe", "w_pauses", "w_pratique", "w_presque", "w_recettes", "w_regarde", "w_rester", "w_réponds", "w_réseaux", "w_souvent", "w_ton", "w_trop", "w_téléphone", "w_utilises"]
+slot_presets:
+  net_words: &net_words {language_code: fr, part_of_speech: [noun, adverb, adjective, verb], agreement_tags: {semantic: ["w_messages", "w_réseaux", "w_métro", "w_contact", "w_téléphone", "w_appli", "w_recettes", "w_presque", "w_pratique", "w_parfois", "w_trop", "w_ligne", "w_consulter"]}}
+  net_audio: &net_audio {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: ["w_consulter", "w_consulte", "w_rester", "w_limiter", "w_j'utilise", "w_j'essaie", "w_regarde", "w_passe"]}}
+  net_match: &net_match {language_code: fr, part_of_speech: [noun, adverb, adjective], agreement_tags: {semantic: ["w_messages", "w_réseaux", "w_métro", "w_contact", "w_téléphone", "w_appli", "w_recettes", "w_presque", "w_pratique", "w_parfois", "w_trop", "w_ligne"]}}
+  msg_item: &msg_item {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: ["w_messages", "w_recettes"]}}
+  utilise_single: &utilise_single {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_j'utilise"}}
+  net_tr: &net_tr {language_code: fr, part_of_speech: [noun, adverb, adjective, verb], agreement_tags: {semantic: ["w_messages", "w_réseaux", "w_métro", "w_contact", "w_téléphone", "w_appli", "w_recettes", "w_presque", "w_message", "w_pratique", "w_parfois", "w_trop", "w_ligne", "w_consulter", "w_limiter"]}}
+  pratique_single: &pratique_single {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_pratique"}}
+  opinion_words: &opinion_words {language_code: fr, part_of_speech: [noun, adverb, adjective, verb], agreement_tags: {semantic: ["w_internet", "w_pauses", "w_déménagement", "w_souvent", "w_ton", "w_utilises", "w_réponds"]}}
+  opinion_audio: &opinion_audio {language_code: fr, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_internet", "w_pauses", "w_déménagement", "w_utilises", "w_souvent", "w_réponds"]}}
+  demenagement_single: &demenagement_single {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_déménagement"}}
+  utilises_single: &utilises_single {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_utilises"}}
+  reponds_single: &reponds_single {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_réponds"}}
+templates:
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.choose.001
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *net_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Réseaux sociaux is the French for social networks.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.listen.002
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *net_audio}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Consulter and limiter are -er verbs; the je form drops the -er and adds -e.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.match.003
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *net_match, second: *net_match, third: *net_match, fourth: *net_match, fifth: *net_match, sixth: *net_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Everyday words about phones, apps and social networks.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.order.004
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: word_order
+    frame: {text: "Je consulte mes {item} tous les jours.", language_code: fr, direction: ltr}
+    slots: {item: *msg_item}
+    answer_derivation: {kind: render_frame, frame: {text: "Je consulte mes {item} tous les jours.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Mes is the plural of mon and ma.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.fill.005
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: fill_in_blank
+    frame: {text: "{item} une appli de recettes presque tous les jours. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *utilise_single, hint: *utilise_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "J'utilise is je plus utiliser, with the e dropped before the vowel.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.translate.006
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *net_tr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Message and messages differ only by the final -s.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson01.translate.007
+    lesson_content_key: fr.a2.unit22.lesson01.habitudes_en_ligne
+    type: translation
+    frame: {text: "It is practical.", language_code: en, direction: ltr}
+    slots: {item: *pratique_single}
+    answer_derivation: {kind: render_frame, frame: {text: "C'est {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Pratique stays the same for masculine and feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.choose.001
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *opinion_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ton is the informal your before a masculine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.listen.002
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *opinion_audio}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Utilises and réponds are tu and je forms of present-tense verbs.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.match.003
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *opinion_words, second: *opinion_words, third: *opinion_words, fourth: *opinion_words, fifth: *opinion_words, sixth: *opinion_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words used to talk about your own habits online.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.order.004
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: word_order
+    frame: {text: "Depuis mon {item}, je consulte mes messages tous les matins.", language_code: fr, direction: ltr}
+    slots: {item: *demenagement_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Depuis mon {item}, je consulte mes messages tous les matins.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Depuis plus a noun says since when something has been true.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.fill.005
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: fill_in_blank
+    frame: {text: "Tu {item} souvent ton téléphone depuis ton déménagement ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *utilises_single, hint: *utilises_single}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With tu, the present of utiliser ends in -es.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.translate.006
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *opinion_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Internet is written in lower case in French.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit22.lesson02.translate.007
+    lesson_content_key: fr.a2.unit22.lesson02.donner_avis_numerique
+    type: translation
+    frame: {text: "I answer my family in the evening.", language_code: en, direction: ltr}
+    slots: {item: *reponds_single}
+    answer_derivation: {kind: render_frame, frame: {text: "Je {item} à ma famille le soir.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Répondre à takes à before the person you answer.", language_code: en, direction: ltr}
