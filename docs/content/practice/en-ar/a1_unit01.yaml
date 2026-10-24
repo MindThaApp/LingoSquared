@@ -1,0 +1,162 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit01
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u01*, single-member w_<token> anchors). All
+    pools are unit-scoped; confusable glosses (e.g. على "on; to" vs إلى "to; until", خير vs الخير) are kept
+    out of the same pool by curated w_ lists. Arabic is graded unvocalized (harakat are stripped) and the
+    pack shows undiacritized forms only. Gender: the written forms تصبح, حالك, بك, وأنت are shared by men
+    and women, so English prompts that need a speaker say "(to a man)". Reviewer: confirm the
+    sabah/masaa time-of-day span in the L2 feedback and the ممتاز vs ممتازة note.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [ar_a1_u01_l01, w_صباح, w_الخير, w_مساء, w_مع, w_السلامة, w_شكرا, w_عفوا, w_تصبح, w_أهلا, w_وسهلا, w_بك, w_اللقاء, w_النور, w_يوما, w_سعيدا, w_كيف, w_حالك, w_بخير, w_الحمد, w_لله, w_وأنت, w_ممتاز, w_لا, w_بأس, w_خير]
+slot_presets:
+  letters: &letters {language_code: ar, part_of_speech: [symbol, phrase], agreement_tags: {semantic: ar_a1_u01_l01}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, preposition, phrase], agreement_tags: {semantic: [w_صباح, w_الخير, w_مساء, w_مع, w_السلامة, w_شكرا, w_عفوا]}}
+  l03: &l03 {language_code: ar, part_of_speech: [noun, verb, adjective, preposition, phrase], agreement_tags: {semantic: [w_تصبح, w_أهلا, w_وسهلا, w_بك, w_اللقاء, w_النور, w_يوما, w_سعيدا]}}
+  l03w: &l03w {language_code: ar, part_of_speech: [noun, verb, preposition, phrase], agreement_tags: {semantic: [w_تصبح, w_أهلا, w_وسهلا, w_بك, w_اللقاء, w_النور]}}
+  l04: &l04 {language_code: ar, part_of_speech: [noun, pronoun, adjective, adverb, preposition, particle], agreement_tags: {semantic: [w_كيف, w_حالك, w_بخير, w_الحمد, w_لله, w_وأنت, w_ممتاز, w_لا, w_بأس]}}
+  salama: &salama {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_السلامة}}
+  bik: &bik {language_code: ar, part_of_speech: preposition, agreement_tags: {semantic: w_بك}}
+  khayr: &khayr {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_خير}}
+  alhamd: &alhamd {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الحمد}}
+  halak: &halak {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_حالك}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit01.lesson01.choose.001
+    lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *letters}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Arabic is written from right to left, and ر and ا never join the letter that follows them.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson01.match.002
+    lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *letters, second: *letters, third: *letters, fourth: *letters, fifth: *letters, sixth: *letters}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "مرحبا starts with م on the right, because Arabic is read from right to left.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson01.translate.003
+    lesson_content_key: ar.a1.unit01.lesson01.script_ramp
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *letters}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Short vowels are usually left out of Arabic spelling; readers supply them from the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson02.listen.001
+    lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Arabic greets by time of day: صباح الخير in the morning, مساء الخير from the afternoon on.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson02.match.002
+    lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l02, second: *l02, third: *l02, fourth: *l02, fifth: *l02, sixth: *l02}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "عفوا is the standard reply to شكرا, and مع السلامة is the everyday goodbye.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson02.order.003
+    lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+    type: word_order
+    frame: {text: "شكرا، مع {item}!", language_code: ar, direction: rtl}
+    slots: {item: *salama}
+    answer_derivation: {kind: render_frame, frame: {text: "شكرا، مع {item}!", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "مع السلامة literally means with safety; ال is the word the, joined to the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson02.translate.004
+    lesson_content_key: ar.a1.unit01.lesson02.everyday_greetings
+    type: translation
+    frame: {text: "Thank you, goodbye.", language_code: en, direction: ltr}
+    slots: {item: *salama}
+    answer_derivation: {kind: render_frame, frame: {text: "شكرا، مع {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The definite article ال attaches to the front of the noun: سلامة (safety) becomes السلامة (the safety).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson03.choose.001
+    lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l03}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Many greetings come in pairs: a greeting and its conventional reply, such as صباح الخير and صباح النور.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson03.order.002
+    lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+    type: word_order
+    frame: {text: "أهلا وسهلا! أهلا {item}.", language_code: ar, direction: rtl}
+    slots: {item: *bik}
+    answer_derivation: {kind: render_frame, frame: {text: "أهلا وسهلا! أهلا {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "بك means to you; the written form is the same for a man or a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson03.fill.003
+    lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+    type: fill_in_blank
+    frame: {text: "تصبح على {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *khayr, hint: *khayr}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تصبح على خير literally wishes that you wake up to goodness; it is said when parting for the night.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson03.translate.004
+    lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l03w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ال in النور and اللقاء is the Arabic word for the, written joined to the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson03.translate.005
+    lesson_content_key: ar.a1.unit01.lesson03.time_and_farewells
+    type: translation
+    frame: {text: "Good night! (to a man)", language_code: en, direction: ltr}
+    slots: {item: *khayr}
+    answer_derivation: {kind: render_frame, frame: {text: "تصبح على {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "To a woman the verb takes the ending ـين: تصبحين على خير.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.choose.001
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l04}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ممتاز is the masculine form; a woman says ممتازة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.match.002
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l04, second: *l04, third: *l04, fourth: *l04, fifth: *l04, sixth: *l04}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "الحمد لله literally means praise be to God, and it is a very common answer to how are you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.order.003
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: word_order
+    frame: {text: "بخير، {item} لله.", language_code: ar, direction: rtl}
+    slots: {item: *alhamd}
+    answer_derivation: {kind: render_frame, frame: {text: "بخير، {item} لله.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "After الحمد comes لله, a joined form of ل (for) and الله (God).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.fill.004
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: fill_in_blank
+    frame: {text: "كيف {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *halak, hint: *halak}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "حال means state or condition and the ending ـك means your, so the question is literally how is your condition.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.translate.005
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l04}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "وأنت is و (and) written attached to أنت (you): and you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit01.lesson04.translate.006
+    lesson_content_key: ar.a1.unit01.lesson04.wellbeing_exchange
+    type: translation
+    frame: {text: "How are you? (to a man)", language_code: en, direction: ltr}
+    slots: {item: *halak}
+    answer_derivation: {kind: render_frame, frame: {text: "كيف {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The written word حالك is the same for a man and a woman; only the short vowel at the end differs when spoken.", language_code: en, direction: ltr}

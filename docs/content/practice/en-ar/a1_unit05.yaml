@@ -1,0 +1,142 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit05
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit05.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u05*, single-member w_<token> anchors). This unit
+    has only six first-sight lexemes (الساعة, الثالثة, الخامسة, صباحا, متى, ومتى), so the pools are small;
+    the matching pairs use all six. ومتى ("and when") is kept out of the MC/listen pools next to متى
+    ("when") so they are never offered as rival options; it is covered by matching, a fill-in and a
+    bare translation. The hour ordinals are feminine (الثالثة, الخامسة) because they agree with الساعة,
+    unlike the masculine ordinals used for dates in unit 04. مساء, الدرس, في, كم are earlier-unit words used
+    only as literal frame text.
+    Reviewer: confirm "الساعة الخامسة صباحا" and the register of ومتى الدرس.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_الساعة, w_الثالثة, w_الخامسة, w_صباحا, w_متى, w_ومتى]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [w_الساعة, w_الثالثة, w_الخامسة, w_صباحا]}}
+  mc: &mc {language_code: ar, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [w_الساعة, w_الثالثة, w_الخامسة, w_صباحا, w_متى]}}
+  all6: &all6 {language_code: ar, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [w_الساعة, w_الثالثة, w_الخامسة, w_صباحا, w_متى, w_ومتى]}}
+  hours: &hours {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_الثالثة, w_الخامسة]}}
+  bare2: &bare2 {language_code: ar, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_متى, w_ومتى, w_الساعة, w_صباحا]}}
+  saa: &saa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الساعة}}
+  sabaha: &sabaha {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_صباحا}}
+  wamata: &wamata {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_ومتى}}
+  thalitha: &thalitha {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_الثالثة}}
+  khamisa: &khamisa {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_الخامسة}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.choose.001
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "الساعة is ال (the) plus ساعة (hour); it means both the hour and the clock time.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.match.002
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *all6, second: *all6, third: *all6, fourth: *all6, fifth: *all6, sixth: *all6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hour numbers are feminine to agree with الساعة: الثالثة and الخامسة end in ة, unlike the masculine ordinals used for dates.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.order.003
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: word_order
+    frame: {text: "الساعة {item}.", language_code: ar, direction: rtl}
+    slots: {item: *hours}
+    answer_derivation: {kind: render_frame, frame: {text: "الساعة {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The hour follows الساعة directly and agrees with it, so both are feminine: الساعة الثالثة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.fill.004
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: fill_in_blank
+    frame: {text: "كم {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *saa, hint: *saa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "كم الساعة؟ is literally how much the hour, the usual way to ask what time it is.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.translate.005
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "صباحا means in the morning and comes after the time; for the evening the unit uses مساء.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.translate.006
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: translation
+    frame: {text: "It is three o'clock.", language_code: en, direction: ltr}
+    slots: {item: *thalitha}
+    answer_derivation: {kind: render_frame, frame: {text: "الساعة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The hour ordinal الثالثة is feminine to agree with الساعة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.translate.007
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: translation
+    frame: {text: "It is five o'clock in the morning.", language_code: en, direction: ltr}
+    slots: {a: *khamisa, b: *sabaha}
+    answer_derivation: {kind: render_frame, frame: {text: "الساعة {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The time of day goes at the end: الساعة الخامسة صباحا.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.order.008
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: word_order
+    frame: {text: "الساعة الخامسة {item}.", language_code: ar, direction: rtl}
+    slots: {item: *sabaha}
+    answer_derivation: {kind: render_frame, frame: {text: "الساعة الخامسة {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Add صباحا (morning) after the time, or مساء for the afternoon and evening.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.listen.001
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "متى is the question word when; it asks about time.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.match.002
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *all6, second: *all6, third: *all6, fourth: *all6, fifth: *all6, sixth: *all6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "ومتى is و (and) joined to متى (when): and when. It is how a speaker moves on to a second question.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.order.003
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: word_order
+    frame: {text: "الدرس في الساعة {item}.", language_code: ar, direction: rtl}
+    slots: {item: *hours}
+    answer_derivation: {kind: render_frame, frame: {text: "الدرس في الساعة {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في الساعة before a number gives the time of an event: at three o'clock.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.fill.004
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: fill_in_blank
+    frame: {text: "كم الساعة؟ الساعة الثالثة. {item} الدرس؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *wamata, hint: *wamata}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The و in ومتى links the question to what was just said, like and in English.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.translate.005
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "متى asks when and ومتى asks and when; only the second one continues a previous question.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson02.translate.006
+    lesson_content_key: ar.a1.unit05.lesson02.time_exchange
+    type: translation
+    frame: {text: "The lesson is at five o'clock.", language_code: en, direction: ltr}
+    slots: {item: *khamisa}
+    answer_derivation: {kind: render_frame, frame: {text: "الدرس في الساعة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في الساعة plus the hour says at that hour: الدرس في الساعة الخامسة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit05.lesson01.listen.009
+    lesson_content_key: ar.a1.unit05.lesson01.ask_time
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The shared ending ة marks الثالثة and الخامسة as feminine ordinals.", language_code: en, direction: ltr}

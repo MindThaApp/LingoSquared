@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit06
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit06.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u06*, single-member w_<token> anchors). Pools are
+    unit-scoped; وأخت is kept out of every pool that holds أخت (and وأم likewise stays apart from أم) so a
+    conjunction form is never offered beside its base word. عندي frames take the unit's kin nouns. The
+    sister question uses أختك, spelled identically for a male or female addressee, so the prompts name
+    Yusuf. Reviewer: confirm "من في عائلتك يا يوسف" and "ما اسم أختك" read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_عائلة, w_أب, w_أم, w_أخ, w_أخت, w_عندي, w_عائلتك, w_اسمها, w_وأم, w_اسم, w_أختك, w_يا, w_نور]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_عائلة, w_أب, w_أم, w_أخ, w_أخت]}}
+  l01w: &l01w {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_عائلة, w_أب, w_أم, w_أخ, w_أخت, w_عندي]}}
+  kin: &kin {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_أب, w_أم, w_أخ, w_أخت]}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, phrase], agreement_tags: {semantic: [w_عائلتك, w_اسمها, w_وأم, w_اسم, w_أختك]}}
+  l02m: &l02m {language_code: ar, part_of_speech: [noun, particle, phrase], agreement_tags: {semantic: [w_عائلتك, w_اسمها, w_وأم, w_اسم, w_أختك, w_يا]}}
+  akht: &akht {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_أخت}}
+  akh: &akh {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_أخ}}
+  ab: &ab {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_أب}}
+  ism: &ism {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_اسم}}
+  waum: &waum {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_وأم}}
+  ailatuka: &ailatuka {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_عائلتك}}
+  akhtuka: &akhtuka {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_أختك}}
+  nour: &nour {language_code: ar, part_of_speech: proper_noun, agreement_tags: {semantic: w_نور}}
+  ismuha: &ismuha {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_اسمها}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.choose.001
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01w}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أب is father and أم is mother; عندي is a single word meaning I have.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.listen.002
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01w}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "عائلة means family; the same word with a possessive ending, عائلتك, comes in the next lesson.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.match.003
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l01w, second: *l01w, third: *l01w, fourth: *l01w, fifth: *l01w, sixth: *l01w}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "عندي carries the idea of I have in one word; the kin words are أب, أم, أخ and أخت.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.order.004
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: word_order
+    frame: {text: "عندي {item}.", language_code: ar, direction: rtl}
+    slots: {item: *kin}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "عندي plus a noun says I have: عندي أخت is I have a sister.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.fill.005
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: fill_in_blank
+    frame: {text: "عندي {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *akht, hint: *akht}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أخت is sister; its masculine counterpart is أخ.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.translate.006
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These family words are nouns; أب is father and أم is mother.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.translate.007
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: translation
+    frame: {text: "I have a sister.", language_code: en, direction: ltr}
+    slots: {item: *akht}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic has no word for a: عندي أخت is simply I have sister.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.translate.008
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: translation
+    frame: {text: "I have a brother.", language_code: en, direction: ltr}
+    slots: {item: *akh}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أخ (brother) and أخت (sister) differ only by the final ت.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson01.order.009
+    lesson_content_key: ar.a1.unit06.lesson01.family_members
+    type: word_order
+    frame: {text: "عندي {item} وأم.", language_code: ar, direction: rtl}
+    slots: {item: *ab}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي {item} وأم.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The conjunction و (and) joins to the next word: وأم is and mother.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.listen.001
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The ending ـك on عائلتك means your, so عائلتك is your family.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.choose.002
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02m}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "يا is placed before a name when calling or addressing a person, as in يا يوسف.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.match.003
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l02m, second: *l02m, third: *l02m, fourth: *l02m, fifth: *l02m, sixth: *l02m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The ending ـك means your: عائلتك is your family and أختك is your sister.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.order.004
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: word_order
+    frame: {text: "من في {item} يا يوسف؟", language_code: ar, direction: rtl}
+    slots: {item: *ailatuka}
+    answer_derivation: {kind: render_frame, frame: {text: "من في {item} يا يوسف؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "من في عائلتك؟ asks who is in your family; يا يوسف addresses Yusuf.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.fill.005
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: fill_in_blank
+    frame: {text: "ما {item} أختك؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ism, hint: *ism}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "اسم means name; ما اسم أختك؟ asks what is your sister's name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.fill.006
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: fill_in_blank
+    frame: {text: "عندي أب {item} وأخت. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *waum, hint: *waum}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "و (and) is written attached to the following word, so and mother is وأم.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.translate.007
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "اسمها is اسم plus ـها, which makes it her name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.translate.008
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: translation
+    frame: {text: "Layla asks Yusuf: What is your sister's name?", language_code: en, direction: ltr}
+    slots: {item: *akhtuka}
+    answer_derivation: {kind: render_frame, frame: {text: "ما اسم {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أختك is written the same for a male or female listener; here Yusuf is addressed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit06.lesson02.translate.009
+    lesson_content_key: ar.a1.unit06.lesson02.family_description
+    type: translation
+    frame: {text: "Her name is Nour.", language_code: en, direction: ltr}
+    slots: {item: *nour}
+    answer_derivation: {kind: render_frame, frame: {text: "اسمها {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "اسمها is name plus ـها (her), so no separate word for is is needed.", language_code: en, direction: ltr}

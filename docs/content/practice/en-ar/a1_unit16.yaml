@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit16
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit16.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u16*, single-member w_<token> anchors). Pools are
+    unit-scoped. رصيف (platform) and الرصيف (the platform) are never in the same pool; matching uses
+    الرصيف only, which gives exactly six distinct-sense tokens. أريد, إلى, من, فضلك and the hour are
+    earlier-unit words used as literal text. Prompts for أريد say "(no separate word for I)".
+    Reviewer: confirm "من أي رصيف؟" and "من الرصيف الثاني".
+    Opus pass 2026-10-24: fixed two feedback lines that wrongly said the city name has no ال (القاهرة).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_تذكرة, w_القطار, w_القاهرة, w_الرصيف, w_الثاني, w_أي, w_رصيف]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, proper_noun], agreement_tags: {semantic: [w_تذكرة, w_القطار, w_القاهرة]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, proper_noun, adjective], agreement_tags: {semantic: [w_تذكرة, w_القطار, w_القاهرة, w_الرصيف, w_الثاني, w_أي]}}
+  l2a: &l2a {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_الرصيف, w_الثاني, w_أي, w_القطار, w_تذكرة]}}
+  l2b: &l2b {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_رصيف, w_الثاني, w_أي, w_القطار, w_تذكرة]}}
+  tazkira: &tazkira {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_تذكرة}}
+  qahira: &qahira {language_code: ar, part_of_speech: proper_noun, agreement_tags: {semantic: w_القاهرة}}
+  qitar: &qitar {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_القطار}}
+  rasif: &rasif {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_رصيف}}
+  rasifd: &rasifd {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الرصيف}}
+  thani: &thani {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_الثاني}}
+  ayy: &ayy {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أي}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.choose.001
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تذكرة is a ticket, القطار is the train and القاهرة is Cairo.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.listen.002
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "إلى means to, so إلى القاهرة is to Cairo.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.match.003
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "أي (which) comes before a singular noun; الثاني (the second) comes after the noun it describes.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.order.004
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: word_order
+    frame: {text: "أريد {item} إلى القاهرة.", language_code: ar, direction: rtl}
+    slots: {item: *tazkira}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} إلى القاهرة.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The thing wanted follows أريد, and إلى (to) introduces the destination.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.order.005
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: word_order
+    frame: {text: "أريد تذكرة إلى {item}.", language_code: ar, direction: rtl}
+    slots: {item: *qahira}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد تذكرة إلى {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The destination follows إلى directly; the ال in القاهرة is part of the city's name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.fill.006
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: fill_in_blank
+    frame: {text: "أريد {item} إلى القاهرة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tazkira, hint: *tazkira}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تذكرة is a ticket; أريد (I want) needs no separate word for I.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.translate.007
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are two common nouns and a city name; the ال in القاهرة belongs to the name itself.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.translate.008
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: translation
+    frame: {text: "I want a ticket to Cairo, please. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *tazkira, b: *qahira}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {a} إلى {b} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "A ticket request is أريد plus the ticket plus إلى and the destination.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson01.translate.009
+    lesson_content_key: ar.a1.unit16.lesson01.ticket_destination
+    type: translation
+    frame: {text: "I want a ticket. The train is at five o'clock. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *tazkira, b: *qitar}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {a}. {b} في الساعة الخامسة.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The hour uses في الساعة plus a feminine ordinal: الساعة الخامسة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.choose.001
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2a}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "الرصيف is the platform, with ال because it is a specific platform.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.listen.002
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2a}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "الثاني is the masculine second; it agrees with the masculine noun الرصيف.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.order.003
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: word_order
+    frame: {text: "من أي {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *rasif}
+    answer_derivation: {kind: render_frame, frame: {text: "من أي {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أي (which) is followed by a noun without ال: من أي رصيف؟ is from which platform.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.order.004
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: word_order
+    frame: {text: "من الرصيف {item}.", language_code: ar, direction: rtl}
+    slots: {item: *thani}
+    answer_derivation: {kind: render_frame, frame: {text: "من الرصيف {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The ordinal follows the noun and takes ال too: الرصيف الثاني.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.fill.005
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: fill_in_blank
+    frame: {text: "من أي {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *rasif, hint: *rasif}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After أي the noun has no ال: من أي رصيف؟", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.fill.006
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: fill_in_blank
+    frame: {text: "من الرصيف {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *thani, hint: *thani}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ordinal repeats the ال of the noun: الرصيف الثاني.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.translate.007
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2b}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These words are used to talk about the platform; أي means which.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.translate.008
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: translation
+    frame: {text: "From which platform?", language_code: en, direction: ltr}
+    slots: {a: *ayy, b: *rasif}
+    answer_derivation: {kind: render_frame, frame: {text: "من {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The question is من plus أي plus a noun with no ال.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit16.lesson02.translate.009
+    lesson_content_key: ar.a1.unit16.lesson02.departure_platform
+    type: translation
+    frame: {text: "From the second platform.", language_code: en, direction: ltr}
+    slots: {a: *rasifd, b: *thani}
+    answer_derivation: {kind: render_frame, frame: {text: "من {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Both the noun and the ordinal take ال: الرصيف الثاني.", language_code: en, direction: ltr}
