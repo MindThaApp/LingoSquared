@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit18
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit18.arbeit
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated w_<token> pools). Canon (grepped from the realizations): Anna ist Kellnerin im Cafe and bringt Kaffee und Tee; Felix ist
+    Ingenieur and arbeitet im Büro. Frames follow that canon exactly. Only seven lexemes, so one matching_pairs. Reviewer:
+    confirm 'Was machen Sie beruflich?' is glossed What do you do for a living? (formal).
+    Opus quality pass 2026-10-24: spelled Café consistently with the lexeme.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Beruf, w_Ingenieur, w_Kellnerin, w_beruflich, w_Büro, w_bringe, w_bringt]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_Beruf, w_Ingenieur, w_Kellnerin, w_beruflich, w_Büro]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_Beruf, w_Ingenieur, w_Kellnerin, w_beruflich]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_Büro, w_bringe, w_bringt, w_Beruf]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_Büro, w_bringe, w_bringt, w_Kellnerin]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Beruf}}
+  order_6: &order_6 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_beruflich}}
+  order_7: &order_7 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_bringe}}
+  match_8: &match_8 {language_code: de, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_Beruf, w_Ingenieur, w_Kellnerin, w_beruflich, w_Büro, w_bringe]}}
+  fill_9: &fill_9 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Ingenieur}}
+  fill_10: &fill_10 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Kellnerin}}
+  fill_11: &fill_11 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Büro}}
+  fill_12: &fill_12 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_bringt}}
+  bare_13: &bare_13 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Beruf, w_Ingenieur, w_Kellnerin, w_Büro]}}
+templates:
+  - content_key: practice.en-de.de.a1.unit18.lesson01.choose.001
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Kellnerin is the feminine job title; the masculine is Kellner.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.listen.002
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Beruflich is the adverb for work or professionally.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.choose.003
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Bringen: ich bringe, sie bringt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.listen.004
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ich bringe ends in -e; sie bringt ends in -t.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.order.005
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: word_order
+    frame: {text: "Mein {item} ist Ingenieur.", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Mein {item} ist Ingenieur.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Mein Beruf ist ... states your job; there is no article before the job title.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.order.006
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: word_order
+    frame: {text: "Was machen Sie {item}?", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Was machen Sie {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The question word comes first, then the verb: Was machen Sie ...?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.order.007
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: word_order
+    frame: {text: "Ich {item} Kaffee und Tee.", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} Kaffee und Tee.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "With ich the verb ends in -e: ich bringe.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.match.008
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_8, second: *match_8, third: *match_8, fourth: *match_8, fifth: *match_8, sixth: *match_8}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Job titles take no article after sein: Ich bin Ingenieur.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.fill.009
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: fill_in_blank
+    frame: {text: "Felix ist {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_9, hint: *fill_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Job titles take no article after sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.fill.010
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: fill_in_blank
+    frame: {text: "Anna ist {item} im Caf\u00e9. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_10, hint: *fill_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The feminine ends in -in: Kellnerin.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.fill.011
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: fill_in_blank
+    frame: {text: "Felix arbeitet im {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_11, hint: *fill_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Im is in plus dem; Büro is neuter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.fill.012
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: fill_in_blank
+    frame: {text: "Anna {item} Kaffee und Tee. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_12, hint: *fill_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With a name the verb ends in -t.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.translate.013
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.translate.014
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: translation
+    frame: {text: "Felix is an engineer.", language_code: en, direction: ltr}
+    slots: {item: *fill_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "No article before the job title.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson01.translate.015
+    lesson_content_key: de.a1.unit18.lesson01.berufe
+    type: translation
+    frame: {text: "What do you do for a living? (formal)", language_code: en, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Was machen Sie {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Beruflich asks about your work.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.translate.016
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: translation
+    frame: {text: "I work in the office.", language_code: en, direction: ltr}
+    slots: {item: *fill_11}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich arbeite im {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Im is in plus dem.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.translate.017
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: translation
+    frame: {text: "I bring coffee and tea.", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} Kaffee und Tee.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The ich form of bringen ends in -e.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit18.lesson02.translate.018
+    lesson_content_key: de.a1.unit18.lesson02.arbeitsort
+    type: translation
+    frame: {text: "Anna brings coffee and tea.", language_code: en, direction: ltr}
+    slots: {item: *fill_12}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna {item} Kaffee und Tee.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "With a name the verb ends in -t.", language_code: en, direction: ltr}

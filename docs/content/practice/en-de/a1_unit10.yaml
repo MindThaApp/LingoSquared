@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit10
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit10.wegbeschreibungen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). All instructions use the formal Sie imperative (Biegen Sie ... ab, Gehen Sie ...),
+    and English prompts say "(formal)" so the form is named. The separable verb abbiegen has its prefix
+    ab at the end of the clause (Biegen Sie links ab). Lesson 4 production is a bare-word pool of
+    abbiegen and verfehlen (infinitives only). Reviewer: confirm Nehmen Sie die erste Straße links.
+    Opus quality pass 2026-10-24: fixed three feedback lines (lowercase claims written with capitals, a garbled abbiegen note).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_links, w_rechts, w_geradeaus, w_Ecke, w_biegen, w_halten, w_Minuten, w_verfehlen, w_können, w_zur, w_erste, w_zweite, w_Straße, w_Wegbeschreibung, w_nehmen, w_abbiegen]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_links, w_rechts, w_geradeaus, w_Ecke, w_biegen, w_halten]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [noun, preposition, verb], agreement_tags: {semantic: [w_Minuten, w_verfehlen, w_können, w_zur, w_Ecke]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_erste, w_zweite, w_Straße, w_Wegbeschreibung, w_nehmen]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_abbiegen, w_verfehlen, w_Minuten, w_Wegbeschreibung, w_geradeaus]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: [w_links, w_rechts]}}
+  order_6: &order_6 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_erste, w_zweite]}}
+  order_7: &order_7 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_zur}}
+  match_8: &match_8 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Minuten, w_verfehlen, w_Straße, w_Wegbeschreibung, w_erste, w_zweite]}}
+  fill_9: &fill_9 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_können}}
+  fill_10: &fill_10 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Straße}}
+  bare_11: &bare_11 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_links, w_rechts, w_geradeaus, w_Ecke]}}
+  bare_12: &bare_12 {language_code: de, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_erste, w_zweite, w_Straße, w_Wegbeschreibung]}}
+  fill_13: &fill_13 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_abbiegen}}
+  bare_14: &bare_14 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: [w_abbiegen, w_verfehlen]}}
+  one_15: &one_15 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_links}}
+templates:
+  - content_key: practice.en-de.de.a1.unit10.lesson01.choose.001
+    lesson_content_key: de.a1.unit10.lesson01.grundlegende_richtungswoerter
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Biegen and halten are the formal command forms the unit uses with Sie.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson02.listen.002
+    lesson_content_key: de.a1.unit10.lesson02.fragen_wie_man_hinkommt
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Zur is zu plus der, used before a feminine noun: zur Bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson03.choose.003
+    lesson_content_key: de.a1.unit10.lesson03.eine_route_lesen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Erste and zweite are ordinal numbers and take an ending before a noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson04.listen.004
+    lesson_content_key: de.a1.unit10.lesson04.wegbeschreibung_geben_dialog
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Abbiegen is a separable verb: ab goes to the end of the clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson01.order.005
+    lesson_content_key: de.a1.unit10.lesson01.grundlegende_richtungswoerter
+    type: word_order
+    frame: {text: "Biegen Sie {item} ab.", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Biegen Sie {item} ab.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The prefix ab of abbiegen goes to the end: Biegen Sie links ab.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson03.order.006
+    lesson_content_key: de.a1.unit10.lesson03.eine_route_lesen
+    type: word_order
+    frame: {text: "Nehmen Sie die {item} Straße links.", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Nehmen Sie die {item} Straße links.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The ordinal takes an ending before the feminine noun: die erste Straße.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson02.order.007
+    lesson_content_key: de.a1.unit10.lesson02.fragen_wie_man_hinkommt
+    type: word_order
+    frame: {text: "Wie komme ich {item} Bank?", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie komme ich {item} Bank?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Zur combines zu and der before the feminine noun Bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson01.match.008
+    lesson_content_key: de.a1.unit10.lesson01.grundlegende_richtungswoerter
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *words_1, second: *words_1, third: *words_1, fourth: *words_1, fifth: *words_1, sixth: *words_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Biegen and halten are command forms used with Sie.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson03.match.009
+    lesson_content_key: de.a1.unit10.lesson03.eine_route_lesen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_8, second: *match_8, third: *match_8, fourth: *match_8, fifth: *match_8, sixth: *match_8}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Wegbeschreibung comes from describing the way: Weg (way) plus Beschreibung (description).", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson02.fill.010
+    lesson_content_key: de.a1.unit10.lesson02.fragen_wie_man_hinkommt
+    type: fill_in_blank
+    frame: {text: "Das {item} Sie nicht verfehlen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_9, hint: *fill_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Können goes with the formal Sie; the verb stays second after das.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson03.fill.011
+    lesson_content_key: de.a1.unit10.lesson03.eine_route_lesen
+    type: fill_in_blank
+    frame: {text: "Nehmen Sie die erste {item} links. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_10, hint: *fill_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Straße is feminine, so it follows die erste.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson01.translate.012
+    lesson_content_key: de.a1.unit10.lesson01.grundlegende_richtungswoerter
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adverbs links and rechts are lowercase; Ecke is a noun with a capital.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson03.translate.013
+    lesson_content_key: de.a1.unit10.lesson03.eine_route_lesen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ordinals erste and zweite are written lowercase.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson04.fill.014
+    lesson_content_key: de.a1.unit10.lesson04.wegbeschreibung_geben_dialog
+    type: fill_in_blank
+    frame: {text: "An der Ecke links {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_13, hint: *fill_13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Short instructions often use the bare infinitive at the end: An der Ecke links abbiegen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson04.translate.015
+    lesson_content_key: de.a1.unit10.lesson04.wegbeschreibung_geben_dialog
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The infinitive ends in -en: abbiegen, verfehlen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson01.translate.016
+    lesson_content_key: de.a1.unit10.lesson01.grundlegende_richtungswoerter
+    type: translation
+    frame: {text: "Turn left. (formal)", language_code: en, direction: ltr}
+    slots: {item: *one_15}
+    answer_derivation: {kind: render_frame, frame: {text: "Biegen Sie {item} ab.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The prefix ab goes to the end: Biegen Sie links ab.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit10.lesson02.translate.017
+    lesson_content_key: de.a1.unit10.lesson02.fragen_wie_man_hinkommt
+    type: translation
+    frame: {text: "How do I get to the bank?", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie komme ich {item} Bank?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "German asks how do I come to the bank, using zur before a feminine noun.", language_code: en, direction: ltr}

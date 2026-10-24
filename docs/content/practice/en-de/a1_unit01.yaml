@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit01
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools drawn from this unit's own tokens; no course-wide tag). Sie/du are always marked
+    (formal)/(informal) in English prompts. guten/gute are kept out of bare-word pools (same gloss, not
+    a standalone word); Wiedersehen/auf/bis are not used as bare prompts. Reviewer: check that
+    "Good day!" for Guten Tag and "See you later/soon!" for Bis später/bald read as the only natural
+    renderings, and that Wie geht es Ihnen? is the only formal how-are-you the unit teaches.
+    Opus quality pass 2026-10-24: fixed a feedback line that capitalised dir.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_hallo, w_Morgen, w_Tag, w_Abend, w_tschüss, w_Nacht, w_bald, w_später, w_Sie, w_du, w_Ihnen, w_dir, w_danke, w_gut, w_sehr, w_wie, w_und, w_es, w_bitte, w_Entschuldigung, w_Problem, w_gern]
+slot_presets:
+  hello_words: &hello_words {language_code: de, part_of_speech: [phrase, noun, adverb], agreement_tags: {semantic: [w_hallo, w_Morgen, w_Tag, w_Abend, w_tschüss, w_Nacht, w_bald, w_später]}}
+  day_parts: &day_parts {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Morgen, w_Tag, w_Abend]}}
+  bye_words: &bye_words {language_code: de, part_of_speech: [phrase, noun, adverb], agreement_tags: {semantic: [w_tschüss, w_Nacht, w_bald, w_später, w_hallo, w_Abend]}}
+  see_you: &see_you {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: [w_später, w_bald]}}
+  you_words: &you_words {language_code: de, part_of_speech: [pronoun, phrase, adjective, adverb], agreement_tags: {semantic: [w_Sie, w_du, w_Ihnen, w_dir, w_danke, w_gut, w_sehr, w_wie]}}
+  you_match: &you_match {language_code: de, part_of_speech: [pronoun, phrase, adjective, adverb, particle], agreement_tags: {semantic: [w_Sie, w_du, w_Ihnen, w_dir, w_danke, w_gut, w_sehr, w_und, w_es, w_wie]}}
+  polite_words: &polite_words {language_code: de, part_of_speech: [particle, phrase, noun, adverb, adjective], agreement_tags: {semantic: [w_bitte, w_Entschuldigung, w_Problem, w_gern, w_danke, w_gut]}}
+  polite_bare: &polite_bare {language_code: de, part_of_speech: [particle, phrase, noun, adverb], agreement_tags: {semantic: [w_bitte, w_Entschuldigung, w_Problem, w_gern]}}
+  ihnen: &ihnen {language_code: de, part_of_speech: [pronoun], agreement_tags: {semantic: w_Ihnen}}
+  dir: &dir {language_code: de, part_of_speech: [pronoun], agreement_tags: {semantic: w_dir}}
+  gern: &gern {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_gern}}
+templates:
+  - content_key: practice.en-de.de.a1.unit01.lesson01.choose.001
+    lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *hello_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Guten Morgen is used in the morning, Guten Tag through the day, and Guten Abend from the evening on.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson02.listen.001
+    lesson_content_key: de.a1.unit01.lesson02.abschied
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *bye_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tsch\u00fcss is the casual goodbye; Auf Wiedersehen is the polite one for strangers and formal settings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.choose.001
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *you_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "German has two words for you: Sie is formal (strangers, officials), du is informal (friends, family, children).", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson04.listen.001
+    lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *polite_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Bitte covers both please and you are welcome, and Entschuldigung gets someone's attention or says sorry.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.order.002
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: word_order
+    frame: {text: "Wie geht es {item}?", language_code: de, direction: ltr}
+    slots: {item: *ihnen}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie geht es {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wie geht es Ihnen? is the formal how-are-you; with a friend you ask Wie geht's?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson02.order.002
+    lesson_content_key: de.a1.unit01.lesson02.abschied
+    type: word_order
+    frame: {text: "Bis {item}!", language_code: de, direction: ltr}
+    slots: {item: *see_you}
+    answer_derivation: {kind: render_frame, frame: {text: "Bis {item}!", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bis means until, so Bis bald is like see you soon and Bis sp\u00e4ter is see you later.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson01.order.002
+    lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+    type: word_order
+    frame: {text: "Guten {item}!", language_code: de, direction: ltr}
+    slots: {item: *day_parts}
+    answer_derivation: {kind: render_frame, frame: {text: "Guten {item}!", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Guten ends in -n because Morgen, Tag and Abend are masculine; the feminine Nacht takes Gute Nacht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson02.match.003
+    lesson_content_key: de.a1.unit01.lesson02.abschied
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *hello_words, second: *hello_words, third: *hello_words, fourth: *hello_words, fifth: *hello_words, sixth: *hello_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Tsch\u00fcss is informal; Auf Wiedersehen is the polite goodbye for people you do not know well.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.match.003
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *you_match, second: *you_match, third: *you_match, fourth: *you_match, fifth: *you_match, sixth: *you_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Sie, Ihnen and Ihr are capitalised in the formal register; du and dir are not.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson04.match.002
+    lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *polite_words, second: *polite_words, third: *polite_words, fourth: *polite_words, fifth: *polite_words, sixth: *polite_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Danke and bitte are the two everyday politeness words; bitte can also mean you are welcome.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.fill.004
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: fill_in_blank
+    frame: {text: "Und {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *dir, hint: *dir}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The informal form here is dir, written lowercase; the formal question is Und Ihnen?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson04.fill.003
+    lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+    type: fill_in_blank
+    frame: {text: "{item} geschehen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *gern, hint: *gern}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gern geschehen is the standard reply to danke, literally something like gladly happened.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson01.translate.003
+    lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *hello_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "All German nouns are capitalised, so Morgen, Tag, Abend and Nacht start with a capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.translate.005
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *you_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sie and du are the subject forms of you; Ihnen and dir are the forms meaning to you.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson04.translate.004
+    lesson_content_key: de.a1.unit01.lesson04.hoeflichkeit
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *polite_bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Kein Problem is the everyday reply to thanks or a small apology.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson01.translate.004
+    lesson_content_key: de.a1.unit01.lesson01.hallo_und_tageszeiten
+    type: translation
+    frame: {text: "Good {item}!", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *day_parts}
+    answer_derivation: {kind: render_frame, frame: {text: "Guten {item}!", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Guten Tag works from late morning on and doubles as a general hello.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson02.translate.004
+    lesson_content_key: de.a1.unit01.lesson02.abschied
+    type: translation
+    frame: {text: "See you {item}!", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *see_you}
+    answer_derivation: {kind: render_frame, frame: {text: "Bis {item}!", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bis bald and Bis sp\u00e4ter are both casual; Auf Wiedersehen is the formal goodbye.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit01.lesson03.translate.006
+    lesson_content_key: de.a1.unit01.lesson03.formell_und_informell
+    type: translation
+    frame: {text: "How are you? (formal)", language_code: en, direction: ltr}
+    slots: {item: *ihnen}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie geht es {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Sie and Ihnen are capitalised in the formal register, so the capital I in Ihnen is part of the spelling.", language_code: en, direction: ltr}

@@ -1,0 +1,156 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit02
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit02.introductions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools from this unit's own tokens). Names and countries are proper nouns and only appear
+    in frames and matching_pairs (never in multiple_choice). Prompts use "I am called" (not "My name
+    is") so only the taught Ich heiße ... fits; "Where are you from? (informal)" fixes the du form.
+    heißen is left out of bare prompts because its gloss names the formal Sie form. Reviewer: confirm
+    the countries pool needs no article (aus Deutschland ... aus Russland) for all six.
+    Opus quality pass 2026-10-24: lowercased du in a feedback line.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ich, w_mich, w_ganz, w_meinerseits, w_heiße, w_heißt, w_freut, w_bin, w_bist, w_komme, w_kommst, w_aus, w_woher, w_Name, w_Land, w_kommen, w_Anna, w_Felix, w_Deutschland, w_England, w_Frankreich, w_Italien, w_Spanien, w_Russland]
+slot_presets:
+  name_words: &name_words {language_code: de, part_of_speech: [pronoun, adverb, verb], agreement_tags: {semantic: [w_ich, w_mich, w_ganz, w_meinerseits, w_heiße, w_heißt, w_freut, w_bin]}}
+  be_come: &be_come {language_code: de, part_of_speech: [verb, preposition, adverb, pronoun], agreement_tags: {semantic: [w_bin, w_bist, w_komme, w_kommst, w_aus, w_woher, w_ich, w_mich]}}
+  come_words: &come_words {language_code: de, part_of_speech: [adverb, preposition, verb, noun], agreement_tags: {semantic: [w_woher, w_aus, w_komme, w_kommst, w_Name, w_Land, w_kommen]}}
+  meet_words: &meet_words {language_code: de, part_of_speech: [verb, pronoun, adverb], agreement_tags: {semantic: [w_heiße, w_heißt, w_freut, w_mich, w_ganz, w_meinerseits, w_ich, w_bin]}}
+  names: &names {language_code: de, part_of_speech: [proper_noun], agreement_tags: {semantic: [w_Anna, w_Felix]}}
+  countries: &countries {language_code: de, part_of_speech: [proper_noun], agreement_tags: {semantic: [w_Deutschland, w_England, w_Frankreich, w_Italien, w_Spanien, w_Russland]}}
+  intro_match: &intro_match {language_code: de, part_of_speech: [pronoun, verb, adverb, preposition, noun], agreement_tags: {semantic: [w_ich, w_mich, w_heiße, w_freut, w_ganz, w_bin, w_bist, w_komme, w_kommst, w_woher, w_aus, w_Name, w_Land]}}
+  aus: &aus {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_aus}}
+  kommst: &kommst {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_kommst}}
+  heisst: &heisst {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_heißt}}
+  intro_bare1: &intro_bare1 {language_code: de, part_of_speech: [pronoun, adverb, verb], agreement_tags: {semantic: [w_ich, w_mich, w_ganz, w_meinerseits, w_heiße, w_freut, w_bin, w_bist]}}
+  intro_bare2: &intro_bare2 {language_code: de, part_of_speech: [verb, preposition, adverb, noun], agreement_tags: {semantic: [w_komme, w_kommst, w_aus, w_woher, w_Name, w_Land]}}
+templates:
+  - content_key: practice.en-de.de.a1.unit02.lesson01.choose.001
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *name_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ich is only capitalised at the start of a sentence; mid-sentence it is lowercase, unlike English I.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson02.listen.001
+    lesson_content_key: de.a1.unit02.lesson02.ich_bin_du_bist
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *be_come}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The verb ending changes with the person: ich komme, du kommst.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.choose.001
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *come_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Woher asks where from, and the answer uses aus: Ich komme aus Deutschland.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.listen.002
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *meet_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Freut mich and Ganz meinerseits are the polite pair on meeting someone: pleased to meet you, likewise.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.order.003
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: word_order
+    frame: {text: "Ich hei\u00dfe {item}.", language_code: de, direction: ltr}
+    slots: {item: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich hei\u00dfe {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Hei\u00dfe is the ich form of hei\u00dfen; with du it becomes hei\u00dft.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson02.order.002
+    lesson_content_key: de.a1.unit02.lesson02.ich_bin_du_bist
+    type: word_order
+    frame: {text: "Du bist {item}.", language_code: de, direction: ltr}
+    slots: {item: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Du bist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bist is the du form of sein; ich uses bin.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.order.002
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: word_order
+    frame: {text: "Ich komme aus {item}.", language_code: de, direction: ltr}
+    slots: {item: *countries}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich komme aus {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Country names take no article here: aus Deutschland, aus Frankreich.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.match.004
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *intro_match, second: *intro_match, third: *intro_match, fourth: *intro_match, fifth: *intro_match, sixth: *intro_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The pairs ich bin and du bist show how the verb sein changes with the person.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson03.match.001
+    lesson_content_key: de.a1.unit02.lesson03.laender
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *countries, second: *countries, third: *countries, fourth: *countries, fifth: *countries, sixth: *countries}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Most country names have no article in German: Deutschland, Frankreich, Italien.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.fill.003
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: fill_in_blank
+    frame: {text: "Ich komme {item} Deutschland. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *aus, hint: *aus}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Aus means from in the sense of coming from a place.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.fill.004
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: fill_in_blank
+    frame: {text: "Woher {item} du? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kommst, hint: *kommst}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The du form ends in -st: du kommst, with the same ending as du bist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.fill.005
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: fill_in_blank
+    frame: {text: "Wie {item} du? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *heisst, hint: *heisst}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The du ending -st merges with the \u00df of the stem: du hei\u00dft, not hei\u00dfst.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.translate.006
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *intro_bare1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Verbs change their endings with the person: ich bin, du bist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.translate.005
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *intro_bare2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Komme and kommst are the ich and du forms of the same verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson01.translate.007
+    lesson_content_key: de.a1.unit02.lesson01.namen
+    type: translation
+    frame: {text: "I am called {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich hei\u00dfe {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Ich hei\u00dfe literally says I am called, which is how German gives a name.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.translate.006
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: translation
+    frame: {text: "I come from {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *countries}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich komme aus {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The verb stays in second position: Ich komme aus England.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit02.lesson04.translate.007
+    lesson_content_key: de.a1.unit02.lesson04.woher_kommen_sie
+    type: translation
+    frame: {text: "Where are you from? (informal)", language_code: en, direction: ltr}
+    slots: {item: *kommst}
+    answer_derivation: {kind: render_frame, frame: {text: "Woher {item} du?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The question word Woher comes first, then the verb, then du.", language_code: en, direction: ltr}

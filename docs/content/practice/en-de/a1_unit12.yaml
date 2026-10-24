@@ -1,0 +1,156 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit12
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit12.plaene
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). Small unit (8 tokens, 2 lessons), so several frames share a sentence across tiers
+    with a different anchor; the checker's distinct-item estimate is lower than in bigger units. The
+    formal Sie is named in English prompts. Wir-questions (Gehen wir ins Museum?) put the verb first, so
+    wir is never sentence-initial as a slot. Reviewer: confirm "Um wie viel Uhr?" reads as at what time.
+    Opus quality pass 2026-10-24: fixed morgen/Morgen feedback capitals and cued the Gehen wir prompt (Sollen wir ... gehen? is also correct).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_morgen, w_Zeit, w_Museum, w_leider, w_Nachricht, w_viel, w_wir, w_ins]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adverb, noun, pronoun], agreement_tags: {semantic: [w_morgen, w_Zeit, w_Museum, w_leider, w_Nachricht, w_viel, w_wir]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [adverb, noun, preposition, pronoun], agreement_tags: {semantic: [w_morgen, w_Zeit, w_Museum, w_leider, w_ins, w_wir]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adverb, noun, preposition, pronoun], agreement_tags: {semantic: [w_Nachricht, w_viel, w_ins, w_wir, w_Zeit]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_Nachricht, w_viel, w_leider, w_morgen]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_morgen}}
+  order_6: &order_6 {language_code: de, part_of_speech: [pronoun], agreement_tags: {semantic: w_wir}}
+  order_7: &order_7 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_viel}}
+  match_8: &match_8 {language_code: de, part_of_speech: [adverb, noun, preposition, pronoun], agreement_tags: {semantic: [w_morgen, w_Zeit, w_wir, w_Museum, w_leider, w_ins]}}
+  match_9: &match_9 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_Nachricht, w_viel, w_morgen, w_Zeit, w_leider, w_Museum]}}
+  fill_10: &fill_10 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Zeit}}
+  fill_11: &fill_11 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_ins}}
+  bare_12: &bare_12 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_morgen, w_Zeit, w_Museum, w_leider]}}
+  one_13: &one_13 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Nachricht}}
+templates:
+  - content_key: practice.en-de.de.a1.unit12.lesson01.choose.001
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lowercase morgen means tomorrow; capitalised Morgen is the noun morning.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.listen.002
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ins is in plus das: ins Museum.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.choose.003
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Viel appears in the question Um wie viel Uhr?, at what time.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.listen.004
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Nachricht is feminine: die Nachricht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.order.005
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: word_order
+    frame: {text: "Haben Sie {item} Zeit?", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Haben Sie {item} Zeit?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "A yes/no question starts with the verb: Haben Sie morgen Zeit?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.order.006
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: word_order
+    frame: {text: "Gehen {item} ins Museum?", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Gehen {item} ins Museum?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "A suggestion with wir is a question with the verb first: Gehen wir ...?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.order.007
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: word_order
+    frame: {text: "Um wie {item} Uhr?", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Um wie {item} Uhr?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Um wie viel Uhr? literally asks at how much clock.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.match.008
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_8, second: *match_8, third: *match_8, fourth: *match_8, fifth: *match_8, sixth: *match_8}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Ins is in plus das, so it appears before a neuter noun: ins Museum.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.match.009
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_9, second: *match_9, third: *match_9, fourth: *match_9, fifth: *match_9, sixth: *match_9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Nachricht, Zeit and Museum are nouns, so they are capitalised.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.fill.010
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: fill_in_blank
+    frame: {text: "Haben Sie morgen {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_10, hint: *fill_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zeit is a noun, so it keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.fill.011
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: fill_in_blank
+    frame: {text: "Gehen wir {item} Museum? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_11, hint: *fill_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ins is in plus das; Museum is neuter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.fill.012
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: fill_in_blank
+    frame: {text: "Um wie {item} Uhr? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *order_7, hint: *order_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The fixed question Um wie viel Uhr? asks for a clock time.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.translate.013
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Leider is a sentence adverb: Leider kann ich nicht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.translate.014
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: translation
+    frame: {text: "Shall we go to the museum? (wir, verb first)", language_code: en, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Gehen {item} ins Museum?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "This question puts the verb first and wir after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson01.translate.015
+    lesson_content_key: de.a1.unit12.lesson01.vorschlagen_und_antworten
+    type: translation
+    frame: {text: "Do you have time tomorrow? (formal)", language_code: en, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Haben Sie {item} Zeit?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Here morgen means tomorrow, an adverb, so it stays lowercase.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.translate.016
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: translation
+    frame: {text: "At what time?", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Um wie {item} Uhr?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The question is a fixed phrase: Um wie viel Uhr?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit12.lesson02.translate.017
+    lesson_content_key: de.a1.unit12.lesson02.einen_plan_festmachen
+    type: translation
+    frame: {text: "The message is from Anna.", language_code: en, direction: ltr}
+    slots: {item: *one_13}
+    answer_derivation: {kind: render_frame, frame: {text: "Die {item} ist von Anna.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Nachricht is feminine, so it takes die.", language_code: en, direction: ltr}

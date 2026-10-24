@@ -1,0 +1,140 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit24
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit24.geld
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated w_<token> pools). Formal Sie named in English prompts. Both pay verbs (bezahlen, zahlen) share the English sense pay, so they are
+    never in one recognition, matching or bare pool. 'Ich zahle ...' uses the literal verb (zahle is not a unit lexeme).
+    Zahlung is only in recognition/matching: a natural single-slot frame would be sentence-initial or stilted.
+    Reviewer: confirm 'Ich möchte bezahlen' is acceptable as the bezahlen frame.
+    Opus quality pass 2026-10-24: removed translate.014/015/016/018 and bezahlen from the bare pool (zahlen and bezahlen are interchangeable there, so the typed answer was underdetermined) and added a Betrag sentence; NATIVE FLAG: confirm zahlen/bezahlen interchangeability.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Geld, w_bezahlen, w_bar, w_Karte, w_mit, w_Betrag, w_zahlen, w_Quittung, w_Zahlung, w_zahlt]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adjective, noun, preposition, verb], agreement_tags: {semantic: [w_Geld, w_bezahlen, w_bar, w_Karte, w_mit, w_Betrag]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Geld, w_bezahlen, w_bar, w_Karte, w_Betrag]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_Betrag, w_zahlen, w_Quittung, w_Zahlung, w_zahlt, w_Karte]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_Quittung, w_Zahlung, w_zahlt, w_zahlen, w_Betrag]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_zahlen}}
+  fill_6: &fill_6 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_bar}}
+  fill_7: &fill_7 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_mit}}
+  fill_8: &fill_8 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Betrag}}
+  fill_9: &fill_9 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_zahlt}}
+  bare_10: &bare_10 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Geld, w_bar, w_Karte]}}
+  one_11: &one_11 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Geld}}
+  one_14: &one_14 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Quittung}}
+templates:
+  - content_key: practice.en-de.de.a1.unit24.lesson01.choose.001
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lowercase bar means in cash; the noun die Bar is a bar for drinks.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.listen.002
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Die Karte is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.choose.003
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Zahlen is the infinitive; er, sie, es zahlt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.listen.004
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Die Quittung and die Zahlung are both feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.order.005
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: word_order
+    frame: {text: "Kann ich mit Karte {item}?", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Kann ich mit Karte {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After kann the second verb is an infinitive at the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.match.006
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *words_1, second: *words_1, third: *words_1, fourth: *words_1, fifth: *words_1, sixth: *words_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Mit means with or by: mit Karte is by card.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.match.007
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *words_3, second: *words_3, third: *words_3, fourth: *words_3, fifth: *words_3, sixth: *words_3}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Zahlen is the infinitive; zahlt goes with er, sie, es.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.fill.008
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: fill_in_blank
+    frame: {text: "Ich zahle {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_6, hint: *fill_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ich zahle bar: bar is an adverb here, so it is lowercase.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.fill.009
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: fill_in_blank
+    frame: {text: "Ich zahle {item} Karte. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_7, hint: *fill_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mit takes the dative and means with or by.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.fill.010
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: fill_in_blank
+    frame: {text: "Der {item} ist acht Euro. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_8, hint: *fill_8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Betrag is masculine: der Betrag.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.fill.011
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: fill_in_blank
+    frame: {text: "Felix {item} acht Euro. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_9, hint: *fill_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With a name the verb ends in -t.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.translate.012
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson01.translate.013
+    lesson_content_key: de.a1.unit24.lesson01.bezahlen
+    type: translation
+    frame: {text: "I have money.", language_code: en, direction: ltr}
+    slots: {item: *one_11}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Geld has no article here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.translate.017
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: translation
+    frame: {text: "Here is your receipt. (formal)", language_code: en, direction: ltr}
+    slots: {item: *one_14}
+    answer_derivation: {kind: render_frame, frame: {text: "Hier ist Ihre {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Ihre agrees with the feminine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit24.lesson02.translate.019
+    lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
+    type: translation
+    frame: {text: "The amount is eight euros.", language_code: en, direction: ltr}
+    slots: {item: *fill_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} ist acht Euro.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Euro stays singular after a number: acht Euro.", language_code: en, direction: ltr}
