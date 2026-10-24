@@ -1,0 +1,156 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit01
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job A) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u01* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register explicitly. Feedback lines
+    carry a usage or grammar point. Reviewer: revedere is kept out of every pool because its gloss only makes sense inside a farewell; the cheamă and numiți prompts name register in English.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_bună, w_ziua, w_tu, w_dumneavoastră, w_bine, w_mulțumesc, w_faceți, w_faci, w_numesc, w_cum, w_numiți, w_cheamă, w_pare, w_și, w_Ana, w_Mihai, w_mie]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [adverb, noun, phrase, pronoun, verb], agreement_tags: {semantic: [w_bună, w_ziua, w_tu, w_dumneavoastră, w_bine, w_mulțumesc, w_faceți, w_faci]}}
+  l1_match: &l1_match {language_code: ro, part_of_speech: [adverb, noun, phrase, pronoun, verb], agreement_tags: {semantic: [w_ziua, w_tu, w_dumneavoastră, w_bine, w_mulțumesc, w_faceți]}}
+  l1_words: &l1_words {language_code: ro, part_of_speech: [adverb, noun, phrase, pronoun, verb], agreement_tags: {semantic: [w_ziua, w_tu, w_dumneavoastră, w_bine, w_mulțumesc, w_faci, w_faceți]}}
+  t_ziua: &t_ziua {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_ziua}}
+  t_dumneavoastra: &t_dumneavoastra {language_code: ro, part_of_speech: pronoun, agreement_tags: {semantic: w_dumneavoastră}}
+  t_faci: &t_faci {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_faci}}
+  t_faceti: &t_faceti {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_faceți}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [adverb, particle, verb], agreement_tags: {semantic: [w_numesc, w_cum, w_numiți, w_cheamă, w_pare, w_și]}}
+  l2_words: &l2_words {language_code: ro, part_of_speech: [adverb, particle, verb], agreement_tags: {semantic: [w_cum, w_și, w_numesc, w_numiți, w_pare]}}
+  names: &names {language_code: ro, part_of_speech: proper_noun, agreement_tags: {semantic: [w_Ana, w_Mihai]}}
+  t_pare: &t_pare {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_pare}}
+  t_cheama: &t_cheama {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_cheamă}}
+  t_mie: &t_mie {language_code: ro, part_of_speech: pronoun, agreement_tags: {semantic: w_mie}}
+  t_multumesc: &t_multumesc {language_code: ro, part_of_speech: phrase, agreement_tags: {semantic: w_mulțumesc}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.choose.001
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Romanian has two words for you: tu with friends and family, dumneavoastră with strangers and to show respect.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.listen.002
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Faceți goes with dumneavoastră and faci goes with tu, so the verb ending already shows the register.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.match.003
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l1_match, second: *l1_match, third: *l1_match, fourth: *l1_match, fifth: *l1_match, sixth: *l1_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Bună ziua pairs with dumneavoastră and salut with tu: the greeting you choose sets the register for the whole conversation.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.translate.004
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mulțumesc is the everyday thank you and works with both tu and dumneavoastră.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.order.005
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: word_order
+    frame: {text: "Bună {item}!", language_code: ro, direction: ltr}
+    slots: {item: *t_ziua}
+    answer_derivation: {kind: render_frame, frame: {text: "Bună {item}!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Bună ziua is the polite daytime greeting for strangers; with friends you say salut.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.fill.006
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: fill_in_blank
+    frame: {text: "Ce mai faceți, {item}? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_dumneavoastra, hint: *t_dumneavoastra}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Faceți is the dumneavoastră form; with tu the verb becomes faci: Ce mai faci?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.translate.007
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: translation
+    frame: {text: "How are you? (informal, to a friend)", language_code: en, direction: ltr}
+    slots: {item: *t_faci}
+    answer_derivation: {kind: render_frame, frame: {text: "Ce mai {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ce mai faci? is for a friend (tu); with a stranger you say Ce mai faceți?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson01.translate.008
+    lesson_content_key: ro.a1.unit01.lesson01.tu_dumneavoastra_greetings
+    type: translation
+    frame: {text: "How are you? (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_faceti}
+    answer_derivation: {kind: render_frame, frame: {text: "Ce mai {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ce mai faceți? is the polite question; the polite reply is Bine, mulțumesc. Și dumneavoastră?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.order.001
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: word_order
+    frame: {text: "Mă numesc {name}.", language_code: ro, direction: ltr}
+    slots: {name: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Mă numesc {name}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mă numesc literally means I name myself; Mă cheamă means I am called.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.fill.002
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: fill_in_blank
+    frame: {text: "Îmi {item} bine! ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_pare, hint: *t_pare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Îmi pare bine literally means it seems good to me; the reply is Și mie îmi pare bine.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.translate.003
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: translation
+    frame: {text: "What are you called? (informal, to a friend)", language_code: en, direction: ltr}
+    slots: {item: *t_cheama}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum te {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cum te cheamă? uses te for a friend; to a stranger you say Cum vă numiți?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.choose.004
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cum vă numiți? is the polite question about a name and uses vă; with a friend it becomes Cum te cheamă?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.listen.005
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Numesc is the I form (mă numesc) and numiți is the dumneavoastră form (cum vă numiți).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.translate.006
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Și means and, and also starts the return question: Și dumneavoastră? or Și tu?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson02.match.007
+    lesson_content_key: ro.a1.unit01.lesson02.names_introductions
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l2_pool, second: *l2_pool, third: *l2_pool, fourth: *l2_pool, fifth: *l2_pool, sixth: *l2_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Romanian puts the pronoun before the verb in these name phrases: mă numesc, vă numiți, te cheamă.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson03.translate.001
+    lesson_content_key: ro.a1.unit01.lesson03.street_meeting
+    type: translation
+    frame: {text: "Fine, thank you.", language_code: en, direction: ltr}
+    slots: {item: *t_multumesc}
+    answer_derivation: {kind: render_frame, frame: {text: "Bine, {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "After Bine, mulțumesc you hand the question back: Și dumneavoastră? (formal) or Și tu? (informal).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit01.lesson03.order.002
+    lesson_content_key: ro.a1.unit01.lesson03.street_meeting
+    type: word_order
+    frame: {text: "Și {item} îmi pare bine!", language_code: ro, direction: ltr}
+    slots: {item: *t_mie}
+    answer_derivation: {kind: render_frame, frame: {text: "Și {item} îmi pare bine!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Și mie îmi pare bine means nice to meet you too; mie stresses to me and answers the other person.", language_code: en, direction: ltr}

@@ -1,0 +1,274 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit03
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit03.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    R
+    e
+    v
+    i
+    e
+    w
+    e
+    r
+    :
+     
+    m
+    a
+    i
+     
+    (
+    M
+    a
+    y
+    )
+     
+    i
+    s
+     
+    a
+     
+    u
+    n
+    i
+    t
+    0
+    1
+     
+    t
+    o
+    k
+    e
+    n
+     
+    s
+    o
+     
+    t
+    h
+    e
+     
+    m
+    o
+    n
+    t
+    h
+     
+    p
+    o
+    o
+    l
+     
+    a
+    n
+    d
+     
+    f
+    r
+    a
+    m
+    e
+    s
+     
+    l
+    e
+    a
+    v
+    e
+     
+    i
+    t
+     
+    o
+    u
+    t
+    ;
+     
+    d
+    a
+    y
+    s
+     
+    a
+    n
+    d
+     
+    m
+    o
+    n
+    t
+    h
+    s
+     
+    s
+    t
+    a
+    y
+     
+    l
+    o
+    w
+    e
+    r
+    c
+    a
+    s
+    e
+     
+    o
+    n
+     
+    p
+    u
+    r
+    p
+    o
+    s
+    e
+    .
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_luni, w_marți, w_miercuri, w_joi, w_vineri, w_sâmbătă, w_duminică, w_astăzi, w_mâine, w_ieri, w_zi, w_literă, w_ianuarie, w_februarie, w_martie, w_aprilie, w_iunie, w_iulie, w_august, w_septembrie, w_octombrie, w_noiembrie, w_decembrie, w_mulți, w_dată, w_când, w_întâlnirea, w_lunile, w_întâi]
+slot_presets:
+  days: &days {language_code: ro, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_luni, w_marți, w_miercuri, w_joi, w_vineri, w_sâmbătă, w_duminică, w_astăzi, w_mâine, w_ieri]}}
+  days_match: &days_match {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_luni, w_marți, w_miercuri, w_joi, w_vineri, w_sâmbătă]}}
+  t_zi: &t_zi {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_zi}}
+  t_vineri: &t_vineri {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_vineri}}
+  t_litera: &t_litera {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_literă}}
+  months: &months {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_ianuarie, w_februarie, w_martie, w_aprilie, w_iunie, w_iulie, w_august, w_septembrie, w_octombrie, w_noiembrie, w_decembrie]}}
+  months_match: &months_match {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_ianuarie, w_februarie, w_martie, w_aprilie, w_iunie, w_iulie]}}
+  t_aprilie: &t_aprilie {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_aprilie}}
+  t_august: &t_august {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_august}}
+  t_multi: &t_multi {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_mulți}}
+  t_data: &t_data {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_dată}}
+  mixed_pool: &mixed_pool {language_code: ro, part_of_speech: [adjective, adverb, noun], agreement_tags: {semantic: [w_când, w_întâlnirea, w_lunile, w_dată, w_întâi, w_mulți]}}
+  t_cand: &t_cand {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_când}}
+  t_intalnirea: &t_intalnirea {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_întâlnirea}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.choose.001
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *days}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Romanian days and months are written with a small letter: luni, vineri, not Luni, Vineri.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.listen.002
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *days}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sâmbătă is Saturday and duminică is Sunday; every day is a single word and none takes a capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.match.003
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *days_match, second: *days_match, third: *days_match, fourth: *days_match, fifth: *days_match, sixth: *days_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Luni to sâmbătă are six of the seven days; duminică, Sunday, completes the week.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.translate.004
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *days}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Astăzi means today and mâine means tomorrow; ieri means yesterday.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.order.005
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: word_order
+    frame: {text: "Ce {item} este astăzi?", language_code: ro, direction: ltr}
+    slots: {item: *t_zi}
+    answer_derivation: {kind: render_frame, frame: {text: "Ce {item} este astăzi?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ce zi este astăzi? asks for the weekday; answer with Astăzi este + day: Astăzi este vineri.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.translate.006
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: translation
+    frame: {text: "Today is Friday.", language_code: en, direction: ltr}
+    slots: {item: *t_vineri}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Days of the week start with a small letter in Romanian: vineri, not Vineri.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson01.fill.007
+    lesson_content_key: ro.a1.unit03.lesson01.zilele_saptamanii
+    type: fill_in_blank
+    frame: {text: "Zilele nu se scriu cu {item} mare. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_litera, hint: *t_litera}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Literă mare means capital letter; Romanian writes days and months with a small letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.choose.001
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *months}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Month names look like their English cousins but are written with a small letter: aprilie, iulie.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.match.002
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *months_match, second: *months_match, third: *months_match, fourth: *months_match, fifth: *months_match, sixth: *months_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Month names are masculine or feminine nouns but never take a capital letter: ianuarie, februarie, martie.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.translate.003
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *months}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Several months look close to English (februarie, septembrie) but drop the capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.order.004
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: word_order
+    frame: {text: "Astăzi este trei {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_aprilie}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este trei {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Dates are number + month: trei aprilie. The first of the month uses întâi, not unu.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.translate.005
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: translation
+    frame: {text: "Today is August first.", language_code: en, direction: ltr}
+    slots: {item: *t_august}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este întâi {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "The first of the month is întâi, not unu: întâi august; from the second on use the plain number.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.fill.006
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: fill_in_blank
+    frame: {text: "La {item} ani! ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_multi, hint: *t_multi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "La mulți ani! literally means to many years; it wishes someone a happy birthday or a happy New Year.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson02.translate.007
+    lesson_content_key: ro.a1.unit03.lesson02.lunile_si_datele
+    type: translation
+    frame: {text: "What is the date today?", language_code: en, direction: ltr}
+    slots: {item: *t_data}
+    answer_derivation: {kind: render_frame, frame: {text: "Ce {item} este astăzi?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ce dată este astăzi? asks the date; Ce zi este astăzi? asks the weekday.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson03.order.001
+    lesson_content_key: ro.a1.unit03.lesson03.cand_ne_intalnim
+    type: word_order
+    frame: {text: "Mihai, {item} este întâlnirea?", language_code: ro, direction: ltr}
+    slots: {item: *t_cand}
+    answer_derivation: {kind: render_frame, frame: {text: "Mihai, {item} este întâlnirea?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Când? asks when; the answer gives the weekday and the date with no word for on: vineri, întâi august.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson03.translate.002
+    lesson_content_key: ro.a1.unit03.lesson03.cand_ne_intalnim
+    type: translation
+    frame: {text: "When is the meeting?", language_code: en, direction: ltr}
+    slots: {item: *t_intalnirea}
+    answer_derivation: {kind: render_frame, frame: {text: "Când este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Days and dates need no word for on: Întâlnirea este vineri, întâi august.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit03.lesson03.choose.003
+    lesson_content_key: ro.a1.unit03.lesson03.cand_ne_intalnim
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *mixed_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lunile means the months: the ending -le is the definite article added to luni.", language_code: en, direction: ltr}
