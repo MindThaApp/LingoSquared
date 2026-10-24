@@ -1,0 +1,133 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit15
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit15.vergleiche
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated w_<token> pools). Small unit (5 lexemes), so no matching_pairs (needs six unit tokens); the structured tier is word_order and
+    fill_in_blank. Comparatives are predicate adjectives (Der Tee ist billiger), never inflected. Reviewer: confirm
+    word_order frames with a single natural order.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_billiger, w_teurer, w_kälter, w_näher, w_kostet]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adjective, verb], agreement_tags: {semantic: [w_billiger, w_teurer, w_kälter, w_näher, w_kostet]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_billiger, w_teurer, w_kälter, w_näher]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adjective, verb], agreement_tags: {semantic: [w_kostet, w_billiger, w_teurer, w_näher]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adjective, verb], agreement_tags: {semantic: [w_kostet, w_teurer, w_kälter, w_näher]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_billiger}}
+  order_6: &order_6 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_kälter}}
+  order_7: &order_7 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_kostet}}
+  fill_8: &fill_8 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_teurer}}
+  fill_9: &fill_9 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_näher}}
+templates:
+  - content_key: practice.en-de.de.a1.unit15.lesson01.choose.001
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Comparatives end in -er: billiger, teurer, kälter, näher.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.listen.002
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Comparatives end in -er; kälter adds an umlaut to kalt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson02.choose.003
+    lesson_content_key: de.a1.unit15.lesson02.optionen_vergleichen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Kostet is the verb costs: Der Kaffee kostet drei Euro.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson02.listen.004
+    lesson_content_key: de.a1.unit15.lesson02.optionen_vergleichen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "With a noun as subject the verb ends in -t: der Kaffee kostet.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.order.005
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: word_order
+    frame: {text: "Der Tee ist {item}.", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Tee ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The comparative follows ist: Der Tee ist billiger.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.order.006
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: word_order
+    frame: {text: "Das Wasser ist {item} als der Tee.", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Wasser ist {item} als der Tee.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Als introduces the thing compared: kälter als der Tee.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson02.order.007
+    lesson_content_key: de.a1.unit15.lesson02.optionen_vergleichen
+    type: word_order
+    frame: {text: "Der Kaffee {item} drei Euro.", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Kaffee {item} drei Euro.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The verb stays in second position: Der Kaffee kostet drei Euro.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.fill.008
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: fill_in_blank
+    frame: {text: "Der Kaffee ist {item} als der Tee. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_8, hint: *fill_8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Als is the word for than after a comparative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.fill.009
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: fill_in_blank
+    frame: {text: "Das Museum ist {item} als der Park. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_9, hint: *fill_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Näher als der Park: nearer than the park.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson02.fill.010
+    lesson_content_key: de.a1.unit15.lesson02.optionen_vergleichen
+    type: fill_in_blank
+    frame: {text: "Der Tee {item} zwei Euro. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *order_7, hint: *order_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The verb agrees with the noun subject: der Tee kostet.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.translate.011
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These comparatives end in -er, like English cheaper.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.translate.012
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: translation
+    frame: {text: "The tea is cheaper.", language_code: en, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Tee ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Billiger follows ist and is not inflected here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.translate.013
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: translation
+    frame: {text: "The museum is nearer than the park.", language_code: en, direction: ltr}
+    slots: {item: *fill_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Museum ist {item} als der Park.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Als means than after a comparative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson01.translate.014
+    lesson_content_key: de.a1.unit15.lesson01.billiger_und_teurer
+    type: translation
+    frame: {text: "The water is colder than the tea.", language_code: en, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Wasser ist {item} als der Tee.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Kälter is kalt plus umlaut plus -er.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit15.lesson02.translate.015
+    lesson_content_key: de.a1.unit15.lesson02.optionen_vergleichen
+    type: translation
+    frame: {text: "The coffee costs three euros.", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Kaffee {item} drei Euro.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Kosten is a regular verb: der Kaffee kostet.", language_code: en, direction: ltr}
