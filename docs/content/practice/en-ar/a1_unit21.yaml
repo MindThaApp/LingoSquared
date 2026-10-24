@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit21
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit21.clothing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u21*, single-member w_<token> anchors). Pools are
+    unit-scoped. The unit has only 5 distinct-sense tokens, so there is no matching_pairs. قميص, قميصا and
+    القميص, and مقاس and المقاس, are never in a shared pool. قميصا has accusative tanwin as the object of
+    أريد (the unit writes أريد قميصا أزرق); أزرق is a diptote, so it looks the same in both cases.
+    أريد is written without a pronoun, so prompts add "(no separate word for I)". Reviewer: confirm
+    "أريد قميصا أزرق مقاس متوسط" and the seller line "تفضلي. القميص بعشرة دراهم".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ملابس, w_قميص, w_أزرق, w_المقاس, w_متوسط, w_مقاس, w_قميصا, w_القميص]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_ملابس, w_قميص, w_أزرق]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_المقاس, w_متوسط, w_ملابس, w_أزرق, w_قميص]}}
+  l2b: &l2b {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_مقاس, w_متوسط, w_ملابس, w_أزرق, w_قميص]}}
+  malabis: &malabis {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_ملابس}}
+  qamisan: &qamisan {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_قميصا}}
+  qamis: &qamis {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_قميص}}
+  alqamis: &alqamis {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_القميص}}
+  azraq: &azraq {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أزرق}}
+  almiqas: &almiqas {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_المقاس}}
+  miqas: &miqas {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مقاس}}
+  mutawassit: &mutawassit {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_متوسط}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.choose.001
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ملابس is clothes, قميص is a shirt and أزرق is blue (masculine).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.listen.002
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أريد قميصا أزرق is I want a blue shirt; the shirt takes the ending ـا as the thing wanted.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.order.003
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: word_order
+    frame: {text: "أريد {item} أزرق.", language_code: ar, direction: rtl}
+    slots: {item: *qamisan}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} أزرق.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "After أريد the thing wanted ends in tanwin: قميصا, and the color follows the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.order.004
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: word_order
+    frame: {text: "أريد قميصا {item}.", language_code: ar, direction: rtl}
+    slots: {item: *azraq}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد قميصا {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The adjective comes after the noun and agrees with it: قميصا أزرق.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.fill.005
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: fill_in_blank
+    frame: {text: "أريد {item} أزرق. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *qamisan, hint: *qamisan}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "قميصا is the form used for the thing wanted after أريد.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.translate.006
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ملابس is a plural noun meaning clothes; قميص is one shirt and أزرق is a color.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.translate.007
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: translation
+    frame: {text: "I want clothes. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *malabis}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أريد already means I want, so no أنا is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson01.translate.008
+    lesson_content_key: ar.a1.unit21.lesson01.item_color
+    type: translation
+    frame: {text: "I want a blue shirt. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *qamisan, b: *azraq}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The noun takes the object ending ـا and the color follows it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.choose.001
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "المقاس is the size, with ال; the seller asks ما المقاس؟", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.listen.002
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2b}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "مقاس متوسط is a medium size; متوسط means medium.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.order.003
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: word_order
+    frame: {text: "ما {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *almiqas}
+    answer_derivation: {kind: render_frame, frame: {text: "ما {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ما المقاس؟ asks what is the size, with ال because it is a specific size.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.order.004
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: word_order
+    frame: {text: "مقاس {item}.", language_code: ar, direction: rtl}
+    slots: {item: *mutawassit}
+    answer_derivation: {kind: render_frame, frame: {text: "مقاس {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The adjective follows the noun: مقاس متوسط is a medium size.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.order.005
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: word_order
+    frame: {text: "تفضلي. {item} بعشرة دراهم.", language_code: ar, direction: rtl}
+    slots: {item: *alqamis}
+    answer_derivation: {kind: render_frame, frame: {text: "تفضلي. {item} بعشرة دراهم.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The seller says تفضلي to a woman, then names the shirt with ال.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.fill.006
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: fill_in_blank
+    frame: {text: "ما {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *almiqas, hint: *almiqas}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With ال the word means the size: ما المقاس؟", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.fill.007
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: fill_in_blank
+    frame: {text: "مقاس {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *mutawassit, hint: *mutawassit}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "متوسط means medium and follows the noun مقاس.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.translate.008
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2b}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are everyday shopping words: size, medium, clothes, blue and shirt.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.translate.009
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: translation
+    frame: {text: "What is the size?", language_code: en, direction: ltr}
+    slots: {item: *almiqas}
+    answer_derivation: {kind: render_frame, frame: {text: "ما {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic needs no word for is: ما المقاس؟ is literally what the size.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit21.lesson02.translate.010
+    lesson_content_key: ar.a1.unit21.lesson02.size_purchase
+    type: translation
+    frame: {text: "I want a blue shirt, medium size. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *qamisan, b: *azraq, c: *miqas, d: *mutawassit}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {a} {b} {c} {d}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The size is named after the shirt: مقاس متوسط.", language_code: en, direction: ltr}

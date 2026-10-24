@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit19
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit19.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u19*, single-member w_<token> anchors). Pools are
+    unit-scoped. غرفة/الغرفة, مطبخ/ومطبخ and the possessives بيت/بيتي/بيتك are never mixed in one pool
+    except where noted: matching uses بيت and بيتك, whose glosses differ (house, your house). Possessive
+    suffixes: ـي my, ـك your; عندك is written the same for a man or a woman, so the prompt says only
+    "you". Canon checked: Yusuf's house is near the library and has one room and a kitchen (ليلى asks
+    him أين بيتك يا يوسف؟). Reviewer: confirm "في بيتي غرفة واحدة ومطبخ".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_بيت, w_غرفة, w_مطبخ, w_طاولة, w_عندك, w_بيتك, w_الغرفة, w_ومطبخ, w_بيتي]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_بيت, w_غرفة, w_مطبخ, w_طاولة]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_بيت, w_غرفة, w_مطبخ, w_طاولة, w_عندك, w_بيتك]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_طاولة, w_الغرفة, w_بيتك, w_عندك, w_ومطبخ]}}
+  rooms: &rooms {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_غرفة, w_مطبخ]}}
+  mine: &mine {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_بيتي, w_بيتك]}}
+  bayt: &bayt {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_بيت}}
+  bayti: &bayti {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_بيتي}}
+  baytak: &baytak {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_بيتك}}
+  ghurfa: &ghurfa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_غرفة}}
+  matbakh: &matbakh {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مطبخ}}
+  tawila: &tawila {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_طاولة}}
+  alghurfa: &alghurfa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الغرفة}}
+  wamatbakh: &wamatbakh {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_ومطبخ}}
+  indak: &indak {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_عندك}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.choose.001
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "بيت is house, غرفة is room and مطبخ is kitchen; these nouns have no ال here.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.listen.002
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "في بيتي غرفة واحدة is in my house there is one room; غرفة is the room noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.match.003
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "بيتك is بيت (house) plus ـك (your); عندك means you have.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.order.004
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: word_order
+    frame: {text: "في بيتي {item} واحدة.", language_code: ar, direction: rtl}
+    slots: {item: *ghurfa}
+    answer_derivation: {kind: render_frame, frame: {text: "في بيتي {item} واحدة.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The number one follows the noun and agrees with it: غرفة واحدة is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.order.005
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: word_order
+    frame: {text: "في بيتي {item}.", language_code: ar, direction: rtl}
+    slots: {item: *rooms}
+    answer_derivation: {kind: render_frame, frame: {text: "في بيتي {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في بيتي starts the sentence and means in my house; the thing in it follows.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.fill.006
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: fill_in_blank
+    frame: {text: "في {item} غرفة واحدة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bayti, hint: *bayti}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ـي ending on بيت means my.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.translate.007
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are four nouns for the home: house, room, kitchen and table.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson01.translate.008
+    lesson_content_key: ar.a1.unit19.lesson01.rooms
+    type: translation
+    frame: {text: "In my house there is one room.", language_code: en, direction: ltr}
+    slots: {a: *bayti, b: *ghurfa}
+    answer_derivation: {kind: render_frame, frame: {text: "في {a} {b} واحدة", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic has no verb for there is: في بيتي غرفة is literally in my house a room.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.choose.001
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "طاولة is a table; ال on الغرفة makes it the room.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.listen.002
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "عندك is you have; it is built from عند plus the ending ـك.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.order.003
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: word_order
+    frame: {text: "عندي طاولة في {item}.", language_code: ar, direction: rtl}
+    slots: {item: *alghurfa}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي طاولة في {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في الغرفة is in the room, with ال for a specific room.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.order.004
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: word_order
+    frame: {text: "أين {item} يا يوسف؟", language_code: ar, direction: rtl}
+    slots: {item: *baytak}
+    answer_derivation: {kind: render_frame, frame: {text: "أين {item} يا يوسف؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The ending ـك means your, so أين بيتك؟ is where is your house.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.order.005
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: word_order
+    frame: {text: "هل {item} طاولة؟", language_code: ar, direction: rtl}
+    slots: {item: *indak}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {item} طاولة؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "هل makes a yes-or-no question: هل عندك طاولة؟ is do you have a table.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.fill.006
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: fill_in_blank
+    frame: {text: "في بيتي غرفة واحدة {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *wamatbakh, hint: *wamatbakh}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The و is attached to the next word: ومطبخ means and a kitchen.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.translate.007
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mine}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The endings ـي (my) and ـك (your) are added to بيت.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.translate.008
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: translation
+    frame: {text: "I have a table in the room.", language_code: en, direction: ltr}
+    slots: {a: *tawila, b: *alghurfa}
+    answer_derivation: {kind: render_frame, frame: {text: "عندي {a} في {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The phrase في الغرفة keeps ال after في.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.translate.009
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: translation
+    frame: {text: "Do you have a table?", language_code: en, direction: ltr}
+    slots: {a: *indak, b: *tawila}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "هل starts the question and the word order stays the same.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit19.lesson02.translate.010
+    lesson_content_key: ar.a1.unit19.lesson02.location_objects
+    type: translation
+    frame: {text: "Where is your house, Yusuf?", language_code: en, direction: ltr}
+    slots: {item: *baytak}
+    answer_derivation: {kind: render_frame, frame: {text: "أين {item} يا يوسف", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Layla asks Yusuf with the ـك ending for your.", language_code: en, direction: ltr}
