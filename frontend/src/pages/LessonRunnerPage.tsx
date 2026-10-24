@@ -8,6 +8,7 @@ import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { TeachingCardView } from "../components/TeachingCardView";
 import { EmphasizedText } from "../components/EmphasizedText";
+import { setReportContext } from "../lib/reportContext";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { SpeakButton } from "../components/SpeakButton";
 import { QuitConfirm } from "../components/QuitConfirm";
@@ -215,6 +216,12 @@ export function LessonRunnerPage() {
 
   const teaching = lessonQuery.data?.teaching ?? [];
   const current = queue?.[0];
+  const currentExerciseId = current?.exercise.id;
+  // So a "Report a problem" sent from here names the exercise on screen.
+  useEffect(
+    () => setReportContext({ courseId, itemId: currentExerciseId }),
+    [courseId, currentExerciseId],
+  );
 
   async function handleReviewAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     const item = reviewItems?.[reviewIndex];

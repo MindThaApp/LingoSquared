@@ -6,6 +6,7 @@ import { NavBar } from "./components/layout/NavBar";
 import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { FeedbackWidget } from "./components/FeedbackWidget";
+import { CrashReportPrompt } from "./components/CrashReportPrompt";
 import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
@@ -212,6 +213,7 @@ function App() {
         </ErrorBoundary>
       </main>
       {!isRunner && <FeedbackWidget />}
+      <CrashReportPrompt />
     </div>
   );
 }

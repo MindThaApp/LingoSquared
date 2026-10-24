@@ -6,6 +6,7 @@ import { CatalogApi, PracticeApi, ProgressApi } from "@lingo/shared/api/endpoint
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
+import { setReportContext } from "../lib/reportContext";
 import { ReportIssueButton } from "../components/ReportIssueButton";
 import { EmphasizedText } from "../components/EmphasizedText";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
@@ -103,6 +104,7 @@ function PracticeCard({
   const [submitError, setSubmitError] = useState(false);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [lastSpoken, setLastSpoken] = useState(false);
+  useEffect(() => setReportContext({ courseId: courseId ?? undefined, itemId: item.id }), [courseId, item.id]);
 
   async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
     setSubmitting(true);

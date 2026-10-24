@@ -9,6 +9,7 @@ import './i18n'
 import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext'
 import { installGlobalCrashReporting } from './lib/crashReporter'
+import { initSentry, installCrashCapture } from './lib/sentry'
 import { queryClient } from './queryClient'
 
 // @lingo/shared's api/client.ts and lib/answerInputMode.ts moved out of
@@ -64,6 +65,10 @@ configureApi({
 // above -- FeedbackApi throws if the client isn't configured yet.
 // ErrorBoundary.componentDidCatch reports through the same path.
 installGlobalCrashReporting()
+
+// Sentry (only when VITE_SENTRY_DSN is set). Automatic crash events are
+// gated by the learner's Never / Ask / Always setting; see lib/sentry.ts.
+if (initSentry()) installCrashCapture()
 
 // Same storage key/behavior as the pre-extraction answerInputMode.ts,
 // including the private-browsing/quota-error swallow on set.
