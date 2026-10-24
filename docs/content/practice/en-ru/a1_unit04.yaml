@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit04
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit04.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы register labels in the English prompts and the case/number notes in feedback (genitive after из, 2-4 vs 5+ noun forms, genitive of clock-time parts of day). No character facts are asserted.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_апреля", "w_во", "w_воскресенье", "w_встреча", "w_вторник", "w_да", "w_девятого", "w_десятое", "w_какое", "w_какой", "w_октября", "w_первое", "w_понедельник", "w_пятница", "w_пятое", "w_сегодня", "w_среда", "w_суббота", "w_третье", "w_четверг", "w_число", "w_января"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["adverb", "noun", "pronoun"], agreement_tags: {semantic: ["w_понедельник", "w_вторник", "w_среда", "w_четверг", "w_пятница", "w_суббота", "w_воскресенье", "w_какой", "w_сегодня"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_понедельник", "w_вторник", "w_среда", "w_четверг", "w_пятница", "w_суббота", "w_воскресенье"]}}
+  p3: &p3 {language_code: "ru", part_of_speech: "adverb", agreement_tags: {semantic: "w_сегодня"}}
+  p4: &p4 {language_code: "ru", part_of_speech: ["adjective", "noun", "pronoun"], agreement_tags: {semantic: ["w_какое", "w_число", "w_первое", "w_третье", "w_пятое", "w_десятое", "w_января", "w_апреля", "w_октября"]}}
+  p5: &p5 {language_code: "ru", part_of_speech: "adjective", agreement_tags: {semantic: ["w_первое", "w_третье", "w_пятое", "w_десятое"]}}
+  p6: &p6 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_января", "w_апреля", "w_октября"]}}
+  p7: &p7 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_число"}}
+  p8: &p8 {language_code: "ru", part_of_speech: ["adjective", "noun"], agreement_tags: {semantic: ["w_первое", "w_третье", "w_пятое", "w_десятое", "w_января", "w_апреля", "w_октября"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: "adjective", agreement_tags: {semantic: "w_третье"}}
+  p10: &p10 {language_code: "ru", part_of_speech: "preposition", agreement_tags: {semantic: "w_во"}}
+  p11: &p11 {language_code: "ru", part_of_speech: ["noun", "particle", "preposition"], agreement_tags: {semantic: ["w_во", "w_встреча", "w_да", "w_девятого"]}}
+  p12: &p12 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_девятого"}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.choose.001
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Russian weekday names are written with a small letter, and the present tense needs no verb: Сегодня суббота means Today is Saturday.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.listen.002
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Среда, пятница and суббота are feminine, while the other weekdays are masculine or neuter.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.match.003
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Days of the week are not capitalised in Russian: понедельник, вторник, среда.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.order.004
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: word_order
+    frame: {text: "Сегодня {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Сегодня {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Russian drops the verb to be in the present, so Сегодня суббота is simply today plus the day.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.fill.005
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: fill_in_blank
+    frame: {text: "Какой {item} день? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Какой agrees with the masculine день, which is why the date question later uses какое with the neuter число.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.translate.006
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p2}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Russian weekday names do not take capital letters.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson01.translate.007
+    lesson_content_key: ru.a1.unit04.lesson01.dni_nedeli
+    type: translation
+    frame: {text: "What day is it today?", language_code: "en", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Какой {item} день?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Какой сегодня день? asks for the day of the week; for the date you ask Какое сегодня число?", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.choose.001
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Dates use a neuter ordinal plus the month in the genitive: десятое апреля means the tenth of April.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.order.002
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: word_order
+    frame: {text: "Сегодня {item} января.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Сегодня {item} января.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "The ordinal is neuter (первое, третье) because it agrees with the implied word число, the date.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.order.003
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: word_order
+    frame: {text: "Сегодня десятое {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "render_frame", frame: {text: "Сегодня десятое {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "After the day the month goes into the genitive: десятое января, десятое апреля, десятое октября.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.fill.004
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: fill_in_blank
+    frame: {text: "Какое сегодня {item}? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Число is neuter, so the question uses какое, while день is masculine and uses какой.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.translate.005
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p8}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Ordinals in dates end in -ое or -ье because they agree with the neuter число.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.translate.006
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: translation
+    frame: {text: "What is today's date?", language_code: "en", direction: "ltr"}
+    slots: {item: *p7}
+    answer_derivation: {kind: "render_frame", frame: {text: "Какое сегодня {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Какое сегодня число? literally asks which number is today.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson02.translate.007
+    lesson_content_key: ru.a1.unit04.lesson02.mesyatsy_i_chisla
+    type: translation
+    frame: {text: "Today is the third of January.", language_code: "en", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "Сегодня {item} января.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Third of January is said third January, with the month in the genitive: третье января.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson03.fill.001
+    lesson_content_key: ru.a1.unit04.lesson03.naznachaem_vstrechu
+    type: fill_in_blank
+    frame: {text: "Встреча {item} вторник. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Before вторник the preposition becomes во (во вторник); before most other weekdays it is simply в.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson03.choose.002
+    lesson_content_key: ru.a1.unit04.lesson03.naznachaem_vstrechu
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Встреча во вторник, девятого января puts the weekday first and the date second, using the genitive month.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson03.order.003
+    lesson_content_key: ru.a1.unit04.lesson03.naznachaem_vstrechu
+    type: word_order
+    frame: {text: "Встреча во вторник, {item} января.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "render_frame", frame: {text: "Встреча во вторник, {item} января.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "In a date the ordinal девятого is in the genitive too: девятого января means on the ninth of January.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit04.lesson03.translate.004
+    lesson_content_key: ru.a1.unit04.lesson03.naznachaem_vstrechu
+    type: translation
+    frame: {text: "The meeting is on Tuesday.", language_code: "en", direction: "ltr"}
+    slots: {item: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Встреча {item} вторник.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Во вторник means on Tuesday; во is the extended form of в used here.", language_code: "en", direction: "ltr"}

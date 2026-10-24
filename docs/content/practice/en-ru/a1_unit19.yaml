@@ -1,0 +1,93 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit19
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job C) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items, and inflected variants of a noun are kept out of bare-word pools so no prompt has two defensible answers. English prompts name informal/formal address and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the informal/formal labels in the English prompts and the case notes in feedback. No character facts are asserted and no speaker names are baked into any card. Opus pass 2026-10-24: lesson02.translate.004 feedback made accurate. Unit has only 4 lexemes, so the pack stays at 10 templates (below 12).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Тулы", "w_билет", "w_платформа"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["noun", "proper_noun"], agreement_tags: {semantic: ["w_билет", "w_платформа", "w_Тулы"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "proper_noun", agreement_tags: {semantic: "w_Тулы"}}
+  p3: &p3 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_платформа"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_билет", "w_платформа"]}}
+  p5: &p5 {language_code: "ru", part_of_speech: ["noun", "proper_noun"], agreement_tags: {semantic: ["w_платформа", "w_билет", "w_Тулы"]}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit19.lesson01.choose.001
+    lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Билет до Тулы, пожалуйста is a polite request for a ticket to Tula.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson01.listen.002
+    lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "До means up to or as far as, and the city name then takes the form Тулы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson01.order.003
+    lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+    type: word_order
+    frame: {text: "Билет до {item}, пожалуйста.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Билет до {item}, пожалуйста.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "До is followed by the genitive form of the place: Тула becomes Тулы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson01.fill.004
+    lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+    type: fill_in_blank
+    frame: {text: "Билет до {item}, пожалуйста. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p2, hint: *p2}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "After до the city name changes: Тула becomes Тулы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson01.translate.005
+    lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+    type: translation
+    frame: {text: "A ticket to Tula, please.", language_code: "en", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Билет до {item}, пожалуйста.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Russian needs no word for a before билет.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson02.order.001
+    lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+    type: word_order
+    frame: {text: "Поезд в десять часов, {item} два.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Поезд в десять часов, {item} два.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "A number placed after платформа names the platform, like platform two.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson02.fill.002
+    lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+    type: fill_in_blank
+    frame: {text: "Поезд в десять часов, {item} два. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Платформа is feminine; the platform number follows the noun.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson02.translate.003
+    lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+    type: translation
+    frame: {text: "The train is at ten o'clock, platform two.", language_code: "en", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Поезд в десять часов, {item} два.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Платформа два literally says platform two.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson02.translate.004
+    lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Билет and платформа are the two key nouns for a train trip: what you buy and where you board.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit19.lesson02.choose.005
+    lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Платформа is a feminine noun; the number after it names the platform.", language_code: "en", direction: "ltr"}

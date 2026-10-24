@@ -1,0 +1,126 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit23
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit23.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job C) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items, and inflected variants of a noun are kept out of bare-word pools so no prompt has two defensible answers. English prompts name informal/formal address and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the informal/formal labels in the English prompts and the case notes in feedback. No character facts are asserted and no speaker names are baked into any card. Opus pass 2026-10-24: deleted lesson01.translate.004 ("Please speak slowly." -> Пожалуйста, говори медленно.), which had the same two valid word orders as translate.005 under exact match; lesson02.translate.005 now expects Повтори, пожалуйста., the dialogue order. The Пожалуйста-first word_order/fill frames are kept (grammatical; the overlay accepts that order).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_алло", "w_говори", "w_медленно", "w_напиши", "w_повтори", "w_сообщение"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["adverb", "phrase", "verb"], agreement_tags: {semantic: ["w_алло", "w_говори", "w_медленно"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_говори"}}
+  p3: &p3 {language_code: "ru", part_of_speech: "adverb", agreement_tags: {semantic: "w_медленно"}}
+  p4: &p4 {language_code: "ru", part_of_speech: ["noun", "verb"], agreement_tags: {semantic: ["w_повтори", "w_напиши", "w_сообщение"]}}
+  p5: &p5 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_повтори"}}
+  p6: &p6 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_сообщение"}}
+  p7: &p7 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_напиши"}}
+  p8: &p8 {language_code: "ru", part_of_speech: ["adverb", "noun", "phrase", "verb"], agreement_tags: {semantic: ["w_алло", "w_говори", "w_медленно", "w_повтори", "w_напиши", "w_сообщение"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: ["noun", "verb"], agreement_tags: {semantic: ["w_повтори", "w_напиши", "w_сообщение", "w_говори"]}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit23.lesson01.choose.001
+    lesson_content_key: ru.a1.unit23.lesson01.allo_eto_dima
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Алло is how Russians answer or start a phone call.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson01.order.002
+    lesson_content_key: ru.a1.unit23.lesson01.allo_eto_dima
+    type: word_order
+    frame: {text: "Пожалуйста, {item} медленно.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Пожалуйста, {item} медленно.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Говори is the informal command; the polite form would be говорите.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson01.fill.003
+    lesson_content_key: ru.a1.unit23.lesson01.allo_eto_dima
+    type: fill_in_blank
+    frame: {text: "Говори {item}, пожалуйста. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Медленно is an adverb and does not change.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson01.translate.005
+    lesson_content_key: ru.a1.unit23.lesson01.allo_eto_dima
+    type: translation
+    frame: {text: "Speak slowly, please. (informal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Говори {item}, пожалуйста.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Медленно means slowly and keeps one form.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson01.translate.006
+    lesson_content_key: ru.a1.unit23.lesson01.allo_eto_dima
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Говори is an informal command, so it is for a friend.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.choose.001
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Повтори and напиши are informal commands; the polite forms would end in -те.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.order.002
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: word_order
+    frame: {text: "Пожалуйста, {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Пожалуйста, {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Повтори is the informal command to repeat.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.fill.003
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: fill_in_blank
+    frame: {text: "Напиши мне {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Сообщение is neuter and does not change here.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.fill.004
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: fill_in_blank
+    frame: {text: "Пожалуйста, {item} мне. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Напиши is the informal command, for a friend.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.translate.005
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: translation
+    frame: {text: "Repeat that, please. (informal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "{item}, пожалуйста.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Повтори is the ты command; with вы it would be повторите.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.translate.006
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: translation
+    frame: {text: "Write me a message. (informal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "render_frame", frame: {text: "Напиши мне {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Мне means to me, so the sentence says write to me.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.translate.007
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Повтори and напиши are informal commands.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.match.008
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p8, second: *p8, third: *p8, fourth: *p8, fifth: *p8, sixth: *p8}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Commands ending in -и such as говори, повтори and напиши are the informal singular forms.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit23.lesson02.listen.009
+    lesson_content_key: ru.a1.unit23.lesson02.povtori_pozhaluysta
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Повтори, напиши and говори are informal commands, for a friend.", language_code: "en", direction: "ltr"}
