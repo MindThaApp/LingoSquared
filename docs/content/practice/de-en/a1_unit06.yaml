@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.de-en.a1.unit06
+source_language: de
+target_language: en
+unit_content_key: en.a1.unit06.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, de-en lane) against PRACTICE_PACK_RECIPE.md and the lexemes of
+    scripts/backfill_lexemes_de_en.py (per-unit tags en_a1_uNN*, single-member w_<token> anchors).
+    Recognition, matching and bare-word production pools are unit-scoped or curated w_ lists of this
+    unit's tokens; sentence frames use a single w_ anchor or a curated w_ union, so the course-scope pool
+    equals the unit-scope pool. Hint slots are rendered as the German gloss; production prompts show the
+    German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
+    of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
+    which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: false claim that parents/siblings have no singular corrected (2 feedback lines); casual example prompt switched to du.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["en_a1_u06_l01", "en_a1_u06_l04", "w_any", "w_aunt", "w_brother", "w_brothers", "w_child", "w_cousin", "w_family", "w_father", "w_grandfather", "w_grandmother", "w_her", "w_his", "w_just", "w_mother", "w_only", "w_photo", "w_she's", "w_siblings", "w_sister", "w_uncle", "w_who"]
+slot_presets:
+  l1: &l1 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "en_a1_u06_l01"}}
+  fam2: &fam2 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_grandmother", "w_grandfather", "w_aunt", "w_uncle", "w_cousin"]}}
+  l3n: &l3n {"language_code": "en", "part_of_speech": ["adjective", "noun", "particle", "pronoun"], "agreement_tags": {"semantic": ["w_brothers", "w_child", "w_only", "w_any", "w_she's"]}}
+  l4: &l4 {"language_code": "en", "part_of_speech": ["adverb", "noun", "pronoun"], "agreement_tags": {"semantic": "en_a1_u06_l04"}}
+  fam: &fam {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_mother", "w_father", "w_brother", "w_sister", "w_grandmother", "w_grandfather", "w_aunt", "w_uncle"]}}
+  hh: &hh {"language_code": "en", "part_of_speech": "pronoun", "agreement_tags": {"semantic": ["w_his", "w_her"]}}
+  fp: &fp {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_family", "w_photo"]}}
+  tr3: &tr3 {"language_code": "en", "part_of_speech": ["adjective", "noun"], "agreement_tags": {"semantic": ["w_child", "w_brothers", "w_only"]}}
+  tr4: &tr4 {"language_code": "en", "part_of_speech": ["noun", "pronoun"], "agreement_tags": {"semantic": ["w_photo", "w_family", "w_who"]}}
+  w_brothers: &w_brothers {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_brothers"}}
+  w_sister: &w_sister {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_sister"}}
+  w_his: &w_his {"language_code": "en", "part_of_speech": "pronoun", "agreement_tags": {"semantic": "w_his"}}
+  w_any: &w_any {"language_code": "en", "part_of_speech": "particle", "agreement_tags": {"semantic": "w_any"}}
+  w_just: &w_just {"language_code": "en", "part_of_speech": "adverb", "agreement_tags": {"semantic": "w_just"}}
+  w_only: &w_only {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "w_only"}}
+  w_siblings: &w_siblings {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_siblings"}}
+templates:
+  - content_key: practice.de-en.en.a1.unit06.lesson01.choose.001
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l1}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Parents und siblings stehen im Englischen im Plural; statt der Einzahl sibling sagen Sie im Alltag meist brother oder sister.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson01.listen.002
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: listen_select
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l1}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Die Wörter mother, father und brother enthalten den Laut th, den Sie mit der Zungenspitze zwischen den Zähnen sprechen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.choose.003
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *fam2}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Grandmother und grandfather bestehen aus grand- und mother oder father; im Deutschen entspricht das der Vorsilbe Groß-.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson03.choose.004
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l3n}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Child ist die Einzahl, der Plural lautet children; brothers ist der Plural von brother.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson04.choose.005
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l4}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Who fragt nach einer Person: Who is this? Für Dinge verwenden Sie what.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.order.006
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: word_order
+    frame: {"text": "This is {item} sister.", "language_code": "en", "direction": "ltr"}
+    slots: {item: *hh}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "This is {item} sister.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "His gehört zu einem Mann und her zu einer Frau: his sister ist die Schwester eines Mannes, her sister die einer Frau.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson03.order.007
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: word_order
+    frame: {"text": "I have two {item}.", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_brothers}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "I have two {item}.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Nach der Zahl two steht im Englischen der Plural: two brothers, nicht two brother.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson04.order.008
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: word_order
+    frame: {"text": "Is this your {item}?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *fp}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Is this your {item}?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Your steht vor dem Nomen; in der Ja-Nein-Frage Is this your family? steht is vor this.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.fill.009
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: fill_in_blank
+    frame: {"text": "Daniel has one sister. This is {item} sister. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_his, hint: *w_his}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "His bezieht sich auf einen Mann, hier Daniel; bei einer Frau würden Sie her sagen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson03.fill.010
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: fill_in_blank
+    frame: {"text": "Do you have {item} siblings? ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_any, hint: *w_any}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "In Fragen und Verneinungen steht any, in Aussagen dagegen some: Do you have any siblings?", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson04.fill.011
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: fill_in_blank
+    frame: {"text": "I {item} have one sister. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_just, hint: *w_just}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Just steht vor dem Vollverb: I just have one sister bedeutet, dass es nur diese eine Schwester gibt.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.match.012
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: matching_pairs
+    frame: {"text": "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", "language_code": "en", "direction": "ltr"}
+    slots: {first: *fam, second: *fam, third: *fam, fourth: *fam, fifth: *fam, sixth: *fam}
+    slot_relations: [{"kind": "distinct", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {"kind": "matching_pairs", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {"text": "Familienwörter wie mother und grandmother zeigen Verwandtschaft; grand- steht für die Generation darüber.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson01.translate.013
+    lesson_content_key: en.a1.unit06.lesson01.immediate_family
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *l1}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Parents (Eltern) und siblings (Geschwister) stehen hier im Plural; die Einzahl lautet parent und sibling.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.translate.014
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *fam2}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Aunt und uncle bezeichnen die Geschwister der Eltern; cousin gilt für Jungen und Mädchen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson04.translate.015
+    lesson_content_key: en.a1.unit06.lesson04.family_photo_dialogue
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *tr4}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Who fragt nach Personen; photo ist die Kurzform von photograph und wird im Alltag fast immer verwendet.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson02.translate.016
+    lesson_content_key: en.a1.unit06.lesson02.extended_family_possessives
+    type: translation
+    frame: {"text": "Das ist meine Schwester. (mit This)", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_sister}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "This is my {item}.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Mit This is stellen Sie jemanden vor, den Sie zeigen oder dem Sie die Person vorstellen; my steht vor dem Nomen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson03.translate.017
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: translation
+    frame: {"text": "Ich habe zwei Brüder.", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_brothers}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "I have two {item}.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Bei der Zahl two steht das Nomen im Plural: two brothers.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit06.lesson03.translate.018
+    lesson_content_key: en.a1.unit06.lesson03.describing_family
+    type: translation
+    frame: {"text": "Hast du Geschwister? (mit any)", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_siblings}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Do you have any {item}?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "In Fragen steht any: Do you have any siblings? Die Antwort lautet I have two brothers oder No, I don't.", "language_code": "de", "direction": "ltr"}

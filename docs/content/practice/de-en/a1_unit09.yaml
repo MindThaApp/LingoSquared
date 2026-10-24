@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.de-en.a1.unit09
+source_language: de
+target_language: en
+unit_content_key: en.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, de-en lane) against PRACTICE_PACK_RECIPE.md and the lexemes of
+    scripts/backfill_lexemes_de_en.py (per-unit tags en_a1_uNN*, single-member w_<token> anchors).
+    Recognition, matching and bare-word production pools are unit-scoped or curated w_ lists of this
+    unit's tokens; sentence frames use a single w_ anchor or a curated w_ union, so the course-scope pool
+    equals the unit-scope pool. Hint slots are rendered as the German gloss; production prompts show the
+    German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
+    of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
+    which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: park and restaurant dropped from the bare-word translation pools (glosses Park/Restaurant are identical to the answers); bank kept for its Bank/bench false-friend value.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["en_a1_u09_l01", "w_across", "w_bank", "w_behind", "w_between", "w_excuse", "w_far", "w_hospital", "w_me", "w_next", "w_park", "w_pharmacy", "w_restaurant", "w_where"]
+slot_presets:
+  places: &places {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "en_a1_u09_l01"}}
+  l2p: &l2p {"language_code": "en", "part_of_speech": ["adjective", "preposition"], "agreement_tags": {"semantic": ["w_across", "w_between", "w_behind", "w_next"]}}
+  mix: &mix {"language_code": "en", "part_of_speech": ["noun", "preposition"], "agreement_tags": {"semantic": ["w_bank", "w_hospital", "w_pharmacy", "w_park", "w_restaurant", "w_behind", "w_between", "w_across"]}}
+  l3m: &l3m {"language_code": "en", "part_of_speech": ["adjective", "noun", "preposition", "pronoun"], "agreement_tags": {"semantic": ["w_where", "w_far", "w_park", "w_between"]}}
+  l4m: &l4m {"language_code": "en", "part_of_speech": ["adjective", "pronoun", "verb"], "agreement_tags": {"semantic": ["w_excuse", "w_me", "w_far", "w_where"]}}
+  tr1: &tr1 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_bank", "w_hospital", "w_pharmacy"]}}
+  tr3: &tr3 {"language_code": "en", "part_of_speech": ["adjective", "preposition", "pronoun"], "agreement_tags": {"semantic": ["w_where", "w_far", "w_between"]}}
+  np_: &np_ {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_bank", "w_park"]}}
+  w_between: &w_between {"language_code": "en", "part_of_speech": "preposition", "agreement_tags": {"semantic": "w_between"}}
+  w_far: &w_far {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "w_far"}}
+  w_pharmacy: &w_pharmacy {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_pharmacy"}}
+  w_behind: &w_behind {"language_code": "en", "part_of_speech": "preposition", "agreement_tags": {"semantic": "w_behind"}}
+  w_across: &w_across {"language_code": "en", "part_of_speech": "preposition", "agreement_tags": {"semantic": "w_across"}}
+  w_me: &w_me {"language_code": "en", "part_of_speech": "pronoun", "agreement_tags": {"semantic": "w_me"}}
+  w_bank: &w_bank {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_bank"}}
+  w_hospital: &w_hospital {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_hospital"}}
+templates:
+  - content_key: practice.de-en.en.a1.unit09.lesson01.choose.001
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *places}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Hospital, pharmacy und restaurant sind im Englischen Nomen mit dem Artikel the oder a: the hospital, a restaurant.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson02.choose.002
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l2p}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Across from bedeutet gegenüber, next to bedeutet neben; beide Wendungen stehen vor dem Ort, auf den Sie sich beziehen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson03.choose.003
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l3m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Where fragt nach dem Ort: Where is the bank? Das Verb is steht nach where.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson04.choose.004
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l4m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Excuse me spricht jemanden höflich an, bevor Sie nach dem Weg fragen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson01.order.005
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: word_order
+    frame: {"text": "The {item} is next to the pharmacy.", "language_code": "en", "direction": "ltr"}
+    slots: {item: *np_}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "The {item} is next to the pharmacy.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Next to bedeutet neben; auf der Karte der Einheit liegen bank und park beide neben der pharmacy.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson02.order.006
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: word_order
+    frame: {"text": "The pharmacy is {item} the bank and the park.", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_between}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "The pharmacy is {item} the bank and the park.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Between steht mit and: between the bank and the park, also zwischen zwei Orten.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson03.order.007
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: word_order
+    frame: {"text": "Where is the {item}?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *places}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Where is the {item}?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Mit Where is the ...? fragen Sie nach dem Ort eines einzelnen Gebäudes.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson04.order.008
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: word_order
+    frame: {"text": "Is it {item} from here?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_far}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Is it {item} from here?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Far heißt weit; far from here bedeutet weit von hier.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson01.fill.009
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: fill_in_blank
+    frame: {"text": "The {item} is next to the bank. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_pharmacy, hint: *w_pharmacy}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Pharmacy ist die Apotheke; im Englischen steht der Artikel the vor dem bekannten Ort.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson02.fill.010
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: fill_in_blank
+    frame: {"text": "The restaurant is {item} the bank. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_behind, hint: *w_behind}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Behind bedeutet hinter und steht direkt vor dem Ort, auf den Sie sich beziehen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson04.fill.011
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: fill_in_blank
+    frame: {"text": "Excuse {item}, where is the pharmacy? ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_me, hint: *w_me}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Excuse me ist eine feste Wendung, mit der Sie höflich jemanden ansprechen.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson01.match.012
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: matching_pairs
+    frame: {"text": "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", "language_code": "en", "direction": "ltr"}
+    slots: {first: *mix, second: *mix, third: *mix, fourth: *mix, fifth: *mix, sixth: *mix}
+    slot_relations: [{"kind": "distinct", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {"kind": "matching_pairs", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {"text": "Bank, hospital, pharmacy, park und restaurant sind Orte; behind, between und across zeigen deren Lage.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson01.translate.013
+    lesson_content_key: en.a1.unit09.lesson01.common_places
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *tr1}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Bank bedeutet Geldinstitut; hospital ist das Krankenhaus und pharmacy die Apotheke.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson02.translate.014
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *l2p}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Behind (hinter), between (zwischen) und across (gegenüber) beschreiben, wo etwas liegt.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson03.translate.015
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *tr3}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Where fragt nach dem Ort; far heißt weit entfernt.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson04.translate.016
+    lesson_content_key: en.a1.unit09.lesson04.asking_directions_dialogue
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *l4m}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Excuse und me gehören in Excuse me zusammen; das Wort far beschreibt eine große Entfernung.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson03.translate.017
+    lesson_content_key: en.a1.unit09.lesson03.asking_where
+    type: translation
+    frame: {"text": "Wo ist die Bank (Geldinstitut)?", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_bank}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Where is the {item}?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Where is the bank? fragt nach dem Ort; die Parkbank hieße im Englischen bench.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit09.lesson02.translate.018
+    lesson_content_key: en.a1.unit09.lesson02.location_prepositions
+    type: translation
+    frame: {"text": "Das Restaurant ist hinter der Bank (Geldinstitut).", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_behind}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "The restaurant is {item} the bank.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Behind steht ohne weitere Präposition direkt vor dem Nomen.", "language_code": "de", "direction": "ltr"}
