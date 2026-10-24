@@ -2909,7 +2909,8 @@ def practice_answer(
         ),
         "xp_awarded": xp_awarded,
         "feedback": render_item_feedback(
-            db, template, item.course_id, item.filled_slots
+            db, template, item.course_id, item.filled_slots,
+            item.target_lexeme_id,
         ),
     }
 

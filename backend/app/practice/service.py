@@ -1,5 +1,6 @@
 import hashlib
 import itertools
+import logging
 import random
 import re
 import time
@@ -41,6 +42,8 @@ from app.models import (
 # correctly still excluded either way.
 from app.services.tts import tts_actually_configured
 
+
+logger = logging.getLogger(__name__)
 
 PRACTICE_XP = 5
 RECENT_ITEM_LIMIT = 50
@@ -709,57 +712,121 @@ def build_prompt(
     return prompt, answer
 
 
+_FEEDBACK_SUPPRESS_RULES: tuple[tuple[str, re.Pattern], ...] = (
+    (
+        "instruction",
+        re.compile(
+            r"^\s*(?:match|choose|select|pick|type|enter|listen|arrange|"
+            r"tap|verbind|kies|typ|luister|"
+            r"[^.!?]*(?:انتخاب|وصل|وارد|گوش)\s+کن(?:ید|ین)\b)",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "restates_answer",
+        re.compile(
+            r"^\s*(?:the\s+(?:correct\s+)?answer\s+is\b|"
+            r"het\s+juiste\s+antwoord\s+is\b|"
+            r"(?:پاسخ|جواب)\s+درست)",
+            re.IGNORECASE,
+        ),
+    ),
+)
+
+
+def feedback_suppression_reason(raw_text: str) -> str | None:
+    """Why a feedback_frame adds nothing for the learner, or None to show it.
+
+    Conservative on purpose: a bare slot (e.g. "{item}"), a task
+    instruction ("Match each word ..."), or a "the correct answer is ..."
+    restatement of the existing correct-answer line.
+    """
+    if not SLOT_RE.sub("", raw_text).strip(" \t.,:;!?-'\"*()\u060c\u061b"):
+        return "bare_slot"
+    for name, pattern in _FEEDBACK_SUPPRESS_RULES:
+        if pattern.search(raw_text):
+            return name
+    return None
+
+
 def render_item_feedback(
     db: Session,
     template: PracticeTemplate,
     course_id: str,
     stored_slots: dict[str, Any] | None,
+    target_lexeme_id: str | None = None,
 ) -> str | None:
     """Render the template's authored `feedback_frame` for an answered item.
 
-    PracticeItem only keeps slot -> token, so the lexemes are re-resolved
-    (course + token + the template's own slot constraints) to honour the
-    frame's `slot_rendering`. Returns None when the template has no
-    feedback text or a slot can no longer be resolved; feedback is purely
-    additive and must never fail an answer.
+    Never raises: this runs after the answer is committed, so any failure
+    is logged and yields None. Generated speaking items borrow an unrelated
+    template and get no feedback.
     """
+    try:
+        return _render_item_feedback(
+            db, template, course_id, stored_slots, target_lexeme_id
+        )
+    except Exception:  # noqa: BLE001 - additive feature, must not 500
+        logger.exception("practice feedback render failed")
+        return None
+
+
+def _render_item_feedback(
+    db: Session,
+    template: PracticeTemplate,
+    course_id: str,
+    stored_slots: dict[str, Any] | None,
+    target_lexeme_id: str | None,
+) -> str | None:
+    stored = stored_slots if isinstance(stored_slots, dict) else {}
+    if stored.get("_generated_type"):
+        return None
     frame = template.feedback_frame
     text_value = frame.get("text") if isinstance(frame, dict) else None
     if not isinstance(text_value, str) or not text_value.strip():
         return None
+    reason = feedback_suppression_reason(text_value)
+    if reason:
+        logger.info(
+            "practice feedback suppressed (%s): %s", reason, text_value[:80]
+        )
+        return None
     names = set(SLOT_RE.findall(text_value))
-    stored = stored_slots if isinstance(stored_slots, dict) else {}
     filled: dict[str, Lexeme] = {}
     if names:
         tokens = [stored[n] for n in names if isinstance(stored.get(n), str)]
         if len(tokens) != len(names):
             return None
         rows = db.scalars(
-            select(Lexeme).where(
+            select(Lexeme)
+            .where(
                 Lexeme.course_id == course_id,
                 Lexeme.token.in_(tokens),
             )
+            .order_by(Lexeme.id)
         ).all()
-        for name in names:
+        rendering = frame.get("slot_rendering") or {}
+        for name in sorted(names):
             constraints = template.slots.get(name)
             if not isinstance(constraints, dict):
                 return None
-            match = next(
-                (
-                    row
-                    for row in rows
-                    if row.token == stored[name]
-                    and lexeme_matches(row, constraints)
-                ),
-                None,
-            )
-            if match is None:
+            matches = [
+                row
+                for row in rows
+                if row.token == stored[name]
+                and lexeme_matches(row, constraints)
+            ]
+            if not matches:
                 return None
-            filled[name] = match
-    try:
-        return render_frame(frame, filled) or None
-    except (KeyError, AttributeError):
-        return None
+            field = rendering.get(name, "token")
+            if len({str(getattr(m, field)) for m in matches}) > 1:
+                # Ambiguous (e.g. noun vs verb with different glosses):
+                # prefer the exact target lexeme, else show nothing.
+                matches = [m for m in matches if m.id == target_lexeme_id]
+                if not matches:
+                    return None
+            filled[name] = matches[0]
+    return render_frame(frame, filled) or None
 
 
 def _answer_slot_names(template: PracticeTemplate) -> set[str]:

@@ -562,7 +562,7 @@ export function LessonRunnerPage() {
                 </p>
               )}
               {reviewResult.feedback && (
-                <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                <p dir="auto" style={{ margin: "0 0 10px", fontWeight: 400 }}>
                   <EmphasizedText text={reviewResult.feedback} />
                 </p>
               )}
