@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit04
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit04.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u04*, single-member w_<token> anchors). Sentence frames use curated w_ unions in which every member is grammatical: Je voudrais un kilo de {tomates|fromage|légumes|fruits|pain}; C'est combien le {pain|fromage|lait|kilo|litre}; Les {légumes|fruits} sont chers (masculine plural only, so chers agrees). The gloss-rendered sentence I would like a kilo of {food}, please uses only food nouns whose gloss reads naturally in English. Reviewer: please confirm un kilo de pain and le litre are natural. Opus pass 2026-10-24: removed pain from the un kilo de {food} pool (bread is bought by the loaf, un kilo de pain is unidiomatic); C'est combien le litre? kept. NATIVE FLAG: confirm C'est combien le litre ? out of a milk context.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_acheter, w_aujourd'hui, w_autre, w_boulangerie, w_cher, w_chers, w_chose, w_cinquante, w_coûte, w_euro, w_euros, w_fait, w_fermée, w_frais, w_fromage, w_fruits, w_kilo, w_lait, w_litre, w_légumes, w_marché, w_pain, w_peut, w_prix, w_tomates, w_voilà, w_voudrais]
+slot_presets:
+  n1: &n1 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_marché, w_boulangerie, w_légumes, w_fruits, w_prix]}}
+  n2: &n2 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_kilo, w_tomates, w_litre, w_lait, w_euro, w_euros, w_pain]}}
+  n_l: &n_l {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_marché, w_boulangerie, w_légumes, w_fruits, w_prix, w_tomates, w_lait, w_pain, w_fromage, w_kilo, w_litre]}}
+  w3: &w3 {language_code: fr, part_of_speech: [noun, adjective, verb, phrase], agreement_tags: {semantic: [w_fromage, w_chose, w_cinquante, w_frais, w_fermée, w_autre, w_voilà, w_acheter, w_peut]}}
+  w12: &w12 {language_code: fr, part_of_speech: [adjective, verb, adverb], agreement_tags: {semantic: [w_cher, w_chers, w_coûte, w_voudrais, w_fait, "w_aujourd'hui"]}}
+  mnoun: &mnoun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_marché, w_boulangerie, w_légumes, w_fruits, w_prix, w_kilo, w_tomates, w_litre, w_lait, w_pain, w_fromage, w_chose]}}
+  mwords: &mwords {language_code: fr, part_of_speech: [adjective, verb, adverb, phrase], agreement_tags: {semantic: ["w_aujourd'hui", w_coûte, w_voudrais, w_fait, w_cher, w_frais, w_fermée, w_autre, w_acheter, w_peut, w_voilà]}}
+  food: &food {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_tomates, w_fromage, w_légumes, w_fruits]}}
+  lait: &lait {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_lait}}
+  cbn: &cbn {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_pain, w_fromage, w_lait, w_kilo, w_litre]}}
+  fruitsveg: &fruitsveg {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_légumes, w_fruits]}}
+  coute: &coute {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_coûte}}
+  voud: &voud {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_voudrais}}
+  boul: &boul {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_boulangerie}}
+  cinq: &cinq {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_cinquante}}
+  acheter: &acheter {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_acheter}}
+  bare_n: &bare_n {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_marché, w_boulangerie, w_légumes, w_fruits, w_prix, w_kilo, w_tomates, w_litre, w_lait, w_pain, w_fromage, w_chose]}}
+  bare_w: &bare_w {language_code: fr, part_of_speech: [adjective, verb, adverb, phrase, noun], agreement_tags: {semantic: [w_cher, w_chers, w_coûte, w_voudrais, "w_aujourd'hui", w_frais, w_fermée, w_autre, w_voilà, w_euro, w_euros]}}
+  pain: &pain {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_pain}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.choose.001
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Marché and prix are masculine (le marché, le prix) while boulangerie is feminine (la boulangerie); learn each noun with its article.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.listen.002
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n_l}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Many market words are food nouns used with de after a quantity: un kilo de tomates, un litre de lait.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.match.003
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mnoun, second: *mnoun, third: *mnoun, fourth: *mnoun, fifth: *mnoun, sixth: *mnoun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Weights and measures take de before the food: un kilo de tomates, un litre de lait.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.order.004
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: word_order
+    frame: {text: "Les {item} sont chers aujourd'hui.", language_code: fr, direction: ltr}
+    slots: {item: *fruitsveg}
+    answer_derivation: {kind: render_frame, frame: {text: "Les {item} sont chers aujourd'hui.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Chers is masculine plural because légumes and fruits are masculine plural nouns.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.fill.005
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: fill_in_blank
+    frame: {text: "La {item} est fermée aujourd'hui. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *boul, hint: *boul}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Fermée ends in -ée because boulangerie is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson01.translate.006
+    lesson_content_key: fr.a1.unit04.lesson01.au_marche
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_n}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Each noun is learned with its article in French: le marché, le prix, la boulangerie.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.choose.001
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Euro adds -s in the plural (euros), but the s is silent, so you hear the number rather than the ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.choose.002
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *w12}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Chers is the plural of cher; adjectives add -s to agree with plural nouns like les légumes.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.order.003
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: word_order
+    frame: {text: "Je voudrais un kilo de {item}.", language_code: fr, direction: ltr}
+    slots: {item: *food}
+    answer_derivation: {kind: render_frame, frame: {text: "Je voudrais un kilo de {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je voudrais is the polite way to ask for something; un kilo de + noun names the quantity.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.order.004
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: word_order
+    frame: {text: "C'est combien le {item} ?", language_code: fr, direction: ltr}
+    slots: {item: *cbn}
+    answer_derivation: {kind: render_frame, frame: {text: "C'est combien le {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "C'est combien? asks the price of one thing; le shows the noun is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.fill.005
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: fill_in_blank
+    frame: {text: "Combien ça {item} ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *coute, hint: *coute}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Combien ça coûte? asks how much something costs; it works for any single item.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.fill.006
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: fill_in_blank
+    frame: {text: "Je {item} un kilo de tomates, s'il vous plaît. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *voud, hint: *voud}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Je voudrais is more polite than je veux, which would sound blunt when ordering.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.translate.007
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cher agrees with its noun: cher (masculine singular), chers (masculine plural).", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.translate.008
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: translation
+    frame: {text: "I would like a kilo of {item}, please. (formal)", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *food}
+    answer_derivation: {kind: render_frame, frame: {text: "Je voudrais un kilo de {item}, s'il vous plaît.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "S'il vous plaît is the polite please; with a friend you could say s'il te plaît.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson02.translate.009
+    lesson_content_key: fr.a1.unit04.lesson02.combien_ca_coute
+    type: translation
+    frame: {text: "How much is the bread?", language_code: en, direction: ltr}
+    slots: {item: *pain}
+    answer_derivation: {kind: render_frame, frame: {text: "C'est combien le {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "C'est combien le pain? asks the price of one item; the answer starts with an amount in euros.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson03.choose.001
+    lesson_content_key: fr.a1.unit04.lesson03.dialogue_marche
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *w3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Voilà is what you say when handing something over or pointing it out: here it is, there you go.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson03.match.002
+    lesson_content_key: fr.a1.unit04.lesson03.dialogue_marche
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mwords, second: *mwords, third: *mwords, fourth: *mwords, fifth: *mwords, sixth: *mwords}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Fermée is feminine because it describes la boulangerie; a masculine noun would take fermé.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit04.lesson03.fill.003
+    lesson_content_key: fr.a1.unit04.lesson03.dialogue_marche
+    type: fill_in_blank
+    frame: {text: "On peut {item} du pain ici aussi. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *acheter, hint: *acheter}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After peut (can) the next verb stays in its basic form: on peut acheter.", language_code: en, direction: ltr}

@@ -1,0 +1,162 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit01
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u01*, single-member w_<token> anchors). Recognition and bare-word pools are unit-scoped curated w_ lists (gender homophones enchanté/enchantée and fatigué/fatiguée are kept out of listen pools; toi, au, tout are kept out of bare-word pools because their glosses are not unique answers). Sentence frames use single w_ anchors or curated w_ unions in which every member is grammatical (names in Bonjour, je m’appelle X; Lille/Lyon after être de; Montreuil/Saint-Ouen after habiter à). Feedback lines carry a usage point. Reviewer: please check that the formal/informal How are you? prompts name the register, and that the gloss-only hints for allez-vous / vas-tu read acceptably in word_order. Opus pass 2026-10-24: allez-vous / vas-tu re-glossed are you doing (formal/informal) so the word_order prompt reads naturally; fixed a false feedback claim (vous is also the plural you) and tightened three feedback lines.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Camille, w_Inès, w_Lille, w_Lyon, w_Mathieu, w_Montreuil, w_Noé, w_Saint-Ouen, w_allez-vous, w_atelier, w_bien, w_bonjour, w_commence, w_comment, w_cuisine, w_c’est, w_enchanté, w_enchantée, w_et, w_fatigué, w_fatiguée, w_habitez, w_je, w_j’habite, w_mal, w_merci, w_moi, w_m’appelle, w_non, w_oui, w_pas, w_peu, w_quartier, w_rue, w_salut, w_suis, w_très, w_tu, w_t’appelles, w_va, w_vas-tu, w_vous, w_ça, w_êtes]
+slot_presets:
+  greet: &greet {language_code: fr, part_of_speech: [phrase, pronoun, adverb], agreement_tags: {semantic: [w_bonjour, w_salut, w_tu, w_vous, w_comment]}}
+  greet_l: &greet_l {language_code: fr, part_of_speech: [phrase, pronoun], agreement_tags: {semantic: [w_bonjour, w_salut, w_merci, w_oui, w_non, w_tu, w_vous]}}
+  well: &well {language_code: fr, part_of_speech: [adverb, adjective, particle, phrase, pronoun, verb], agreement_tags: {semantic: [w_très, w_bien, w_merci, w_mal, w_peu, w_pas, w_fatigué, w_fatiguée, w_ça, w_va, w_suis]}}
+  nouns: &nouns {language_code: fr, part_of_speech: [noun], agreement_tags: {semantic: [w_atelier, w_quartier, w_rue, w_cuisine]}}
+  reply: &reply {language_code: fr, part_of_speech: [pronoun, verb, adjective, particle, phrase], agreement_tags: {semantic: [w_je, w_moi, w_et, w_enchanté, w_enchantée, "w_c’est", "w_m’appelle", "w_t’appelles"]}}
+  basic: &basic {language_code: fr, part_of_speech: [phrase, pronoun, adverb, noun], agreement_tags: {semantic: [w_bonjour, w_salut, w_tu, w_vous, w_comment, w_merci, w_oui, w_non, w_très, w_bien, w_atelier, w_quartier, w_rue]}}
+  state: &state {language_code: fr, part_of_speech: [adverb, adjective, verb, pronoun, particle], agreement_tags: {semantic: [w_très, w_bien, w_mal, w_peu, w_pas, w_fatigué, w_fatiguée, w_suis, w_ça, w_va]}}
+  names: &names {language_code: fr, part_of_speech: proper_noun, agreement_tags: {semantic: [w_Camille, w_Noé, w_Inès, w_Mathieu]}}
+  how: &how {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: ["w_allez-vous", "w_vas-tu"]}}
+  origin: &origin {language_code: fr, part_of_speech: proper_noun, agreement_tags: {semantic: [w_Lille, w_Lyon]}}
+  home: &home {language_code: fr, part_of_speech: proper_noun, agreement_tags: {semantic: [w_Montreuil, "w_Saint-Ouen"]}}
+  fat: &fat {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_fatigué}}
+  habitez: &habitez {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_habitez}}
+  allez: &allez {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_allez-vous"}}
+  vas: &vas {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_vas-tu"}}
+  bare1: &bare1 {language_code: fr, part_of_speech: [phrase, pronoun, adverb, noun, verb, adjective], agreement_tags: {semantic: [w_bonjour, w_salut, w_tu, w_vous, w_comment, w_merci, w_oui, w_non, w_très, w_bien, w_mal, w_peu, w_atelier, w_quartier, w_rue, w_cuisine, w_suis, w_habitez, w_commence, w_fatigué, w_fatiguée]}}
+  verbs: &verbs {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: ["w_j’habite", w_êtes, w_habitez, w_commence, w_suis]}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.choose.001
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *greet}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "French has two words for you: tu with friends, family and peers, and vous with strangers, in formal settings and for more than one person.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.listen.002
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *greet_l}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Bonjour works at any time of day with anyone; salut is only for people you would call tu.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.match.003
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *basic, second: *basic, third: *basic, fourth: *basic, fifth: *basic, sixth: *basic}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Tu and vous both mean you: tu is for one friend, relative or peer; vous is for a stranger, a formal setting, or more than one person.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.order.004
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: word_order
+    frame: {text: "Comment {item} ?", language_code: fr, direction: ltr}
+    slots: {item: *how}
+    answer_derivation: {kind: render_frame, frame: {text: "Comment {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Both are ways to ask How are you?: allez-vous is formal, vas-tu is informal.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.translate.005
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Bonjour, merci, oui and non never change form, but adjectives do: fatigué for a man, fatiguée for a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.translate.006
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: translation
+    frame: {text: "How are you? (formal)", language_code: en, direction: ltr}
+    slots: {item: *allez}
+    answer_derivation: {kind: render_frame, frame: {text: "Comment {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Allez-vous is the formal question; with a friend you would ask comment vas-tu?", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson01.translate.007
+    lesson_content_key: fr.a1.unit01.lesson01.tu_vous_greetings
+    type: translation
+    frame: {text: "How are you? (informal)", language_code: en, direction: ltr}
+    slots: {item: *vas}
+    answer_derivation: {kind: render_frame, frame: {text: "Comment {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Vas-tu is the informal question, for friends and family; with a stranger you would ask comment allez-vous?", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson02.choose.001
+    lesson_content_key: fr.a1.unit01.lesson02.names_introductions
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *reply}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Enchanté is said by a man and enchantée by a woman; moi c’est + name is a casual way to introduce yourself.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson02.order.002
+    lesson_content_key: fr.a1.unit01.lesson02.names_introductions
+    type: word_order
+    frame: {text: "Bonjour, je m’appelle {name}.", language_code: fr, direction: ltr}
+    slots: {name: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Bonjour, je m’appelle {name}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je m’appelle literally means I call myself; it is the everyday way to give your name.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson02.translate.003
+    lesson_content_key: fr.a1.unit01.lesson02.names_introductions
+    type: translation
+    frame: {text: "My name is {name}.", language_code: en, direction: ltr, slot_rendering: {name: token}}
+    slots: {name: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "Je m’appelle {name}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je m’appelle is used for yourself; to ask someone else you say tu t’appelles comment? or comment vous appelez-vous?", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson03.choose.001
+    lesson_content_key: fr.a1.unit01.lesson03.reading_aloud
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *verbs}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Je shortens to j’ before a vowel (j’habite), while êtes is the vous form of être, to be.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson04.choose.001
+    lesson_content_key: fr.a1.unit01.lesson04.wellbeing
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *well}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ça va? is answered with très bien or pas mal; adding un peu softens a state, as in un peu fatigué.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson04.match.002
+    lesson_content_key: fr.a1.unit01.lesson04.wellbeing
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *state, second: *state, third: *state, fourth: *state, fifth: *state, sixth: *state}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Fatigué is masculine and fatiguée is feminine: the adjective agrees with the person it describes.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson04.fill.003
+    lesson_content_key: fr.a1.unit01.lesson04.wellbeing
+    type: fill_in_blank
+    frame: {text: "Je suis un peu {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fat, hint: *fat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A man says fatigué and a woman says fatiguée; the two are spelled differently but sound the same.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson05.listen.001
+    lesson_content_key: fr.a1.unit01.lesson05.first_meeting_small_talk
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *nouns}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "A quartier is a whole neighbourhood and a rue is a single street; an atelier is a workshop.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson05.order.002
+    lesson_content_key: fr.a1.unit01.lesson05.first_meeting_small_talk
+    type: word_order
+    frame: {text: "Je suis de {place}.", language_code: fr, direction: ltr}
+    slots: {place: *origin}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis de {place}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Être de + place says where you are from; habiter à + place says where you live.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson05.order.003
+    lesson_content_key: fr.a1.unit01.lesson05.first_meeting_small_talk
+    type: word_order
+    frame: {text: "J’habite à {place}.", language_code: fr, direction: ltr}
+    slots: {place: *home}
+    answer_derivation: {kind: render_frame, frame: {text: "J’habite à {place}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Use à before a town name: j’habite à Montreuil, j’habite à Saint-Ouen.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit01.lesson05.fill.004
+    lesson_content_key: fr.a1.unit01.lesson05.first_meeting_small_talk
+    type: fill_in_blank
+    frame: {text: "Vous {item} dans le quartier ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *habitez, hint: *habitez}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With vous the verb ends in -ez: vous habitez; with tu it is tu habites.", language_code: en, direction: ltr}
