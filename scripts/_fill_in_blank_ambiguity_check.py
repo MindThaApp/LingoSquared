@@ -99,6 +99,15 @@ DIRECTION_SPEC_MODULES: dict[tuple[str, str], str] = {
     ("nl", "en"): "backfill_lexemes_nl_en",
 }
 
+# Session 10 (2026-10-24): any further practice direction whose backfill
+# follows the backfill_lexemes_<src>_<tgt>.py naming convention (en-es,
+# en-de, ...) is discovered automatically, so a new direction never needs
+# a hand edit here.
+for _dir in sorted(p.name for p in (Path(__file__).resolve().parent.parent / "docs/content/practice").iterdir() if p.is_dir()):
+    _mod = "backfill_lexemes_" + _dir.replace("-", "_")
+    if (Path(__file__).resolve().parent / (_mod + ".py")).exists() and tuple(_dir.split("-")) not in DIRECTION_SPEC_MODULES:
+        DIRECTION_SPEC_MODULES[tuple(_dir.split("-"))] = _mod
+
 
 def load_lexemes_for_pair(source_language: str, target_language: str) -> list[dict] | None:
     """Returns the normalized lexeme list for a (source, target) pair via its
@@ -188,6 +197,9 @@ DIRECTIONS: list[tuple[str, str, tuple[str, str]]] = [
     ("en-nl (target=nl)", "en-nl", ("en", "nl")),
     ("nl-en (target=en)", "nl-en", ("nl", "en")),
 ]
+for (_src, _tgt), _mod in DIRECTION_SPEC_MODULES.items():
+    if not any(d[2] == (_src, _tgt) for d in DIRECTIONS):
+        DIRECTIONS.append((f"{_src}-{_tgt} (target={_tgt})", f"{_src}-{_tgt}", (_src, _tgt)))
 
 
 def main() -> int:
