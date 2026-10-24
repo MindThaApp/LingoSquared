@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit11.time
 review:
   status: reviewed
   fresh_context: false
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-07, closing the en-prs practice-pool gap for the
     real A1 realization's new unit11 (time: basic time vocabulary,
@@ -105,6 +106,15 @@ review:
     meeting_verb_translate/state_adjective_translate) is untouched --
     translation has no candidate floor and each still hosts its own
     genuinely-native lexeme directly.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. day_part_order.004 frame 'ساعت نه
+    {time_of_day} است' produced wrong Dari for ظهر/عصر ('nine at noon/in the afternoon'): now 'جلسه
+    {time_of_day} است' (works for صبح/ظهر/عصر/شب). appointment_order.003 frame lacked شما ('قرار ساعت چند
+    است'); the taught shape is 'قرار شما ساعت چند است؟': شما added, feedback 'your [word]'. day_part_gloss.001
+    / scheduling_gloss.004 feedback claimed 'from this unit' for a level-wide pool (صبح, جلسه, مصروف...):
+    neutral wording. NATIVE FLAGS: 'جلسه ظهر/شب است' as natural time-of-day phrases; the older comment about
+    'ساعت نه صبح است' in these notes describes the previous frame.
+
 tag_schema:
   part_of_speech: [noun, verb, adjective]
   agreement_tags:
@@ -165,7 +175,7 @@ templates:
     frame: {text: "{item}", language_code: prs, direction: rtl}
     slots: {item: *unit_vocab}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is vocabulary from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is time and scheduling vocabulary.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_translate.002
     lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
     type: translation
@@ -186,14 +196,14 @@ templates:
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit11.lesson04.day_part_order.004
     lesson_content_key: prs.a1.unit11.lesson04.parts_of_the_day
-    # Reuses the exact "ساعت نه صبح است" shape taught in this lesson,
-    # generalized across every time_of_day candidate -- checked by hand:
-    # ...صبح/عصر/شب/ظهر است are all natural Dari.
+    # Review 2026-10-24: frame is "جلسه ... است" (the meeting is in the
+    # morning/at noon/...), which fits every time_of_day candidate; the
+    # older "ساعت نه ... است" frame gave "nine at noon".
     type: word_order
-    frame: {text: "ساعت نه {time_of_day} است", language_code: prs, direction: rtl}
+    frame: {text: "جلسه {time_of_day} است", language_code: prs, direction: rtl}
     slots: {time_of_day: *time_of_day}
-    answer_derivation: {kind: render_frame, frame: {text: "ساعت نه {time_of_day} است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: ساعت نه [part of day] است (it's nine in the [part of day]).", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "جلسه {time_of_day} است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: جلسه [part of day] است (the meeting is at that time of day).", language_code: en, direction: ltr}
 
   # Lesson 5: asking about a personal appointment.
   - content_key: practice.en-prs.prs.a1.unit11.lesson05.appointment_translate.001
@@ -221,10 +231,10 @@ templates:
     # (lesson06's dialogue_line1), simplified to drop شما so the same
     # frame is grammatical for both appointment_word candidates.
     type: word_order
-    frame: {text: "{appointment_word} ساعت چند است", language_code: prs, direction: rtl}
+    frame: {text: "{appointment_word} شما ساعت چند است", language_code: prs, direction: rtl}
     slots: {appointment_word: *appointment_word}
-    answer_derivation: {kind: render_frame, frame: {text: "{appointment_word} ساعت چند است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [word] ساعت چند است (what time is the [word]?).", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "{appointment_word} شما ساعت چند است", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [word] شما ساعت چند است (what time is your [word]?).", language_code: en, direction: ltr}
 
   # Lesson 6: the meeting-time dialogue (Zarmina and Homayoun).
   # POLISH 2026-07-24: recognition-tier addition (see slot_presets note).
@@ -234,7 +244,7 @@ templates:
     frame: {text: "{item}", language_code: prs, direction: rtl}
     slots: {item: *scheduling_vocab}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is scheduling vocabulary from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is scheduling vocabulary.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit11.lesson06.meeting_verb_translate.001
     lesson_content_key: prs.a1.unit11.lesson06.meeting_time_dialogue
     type: translation
