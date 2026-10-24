@@ -12,6 +12,7 @@ review:
     never in one recognition, matching or bare pool. 'Ich zahle ...' uses the literal verb (zahle is not a unit lexeme).
     Zahlung is only in recognition/matching: a natural single-slot frame would be sentence-initial or stilted.
     Reviewer: confirm 'Ich möchte bezahlen' is acceptable as the bezahlen frame.
+    Opus quality pass 2026-10-24: removed translate.014/015/016/018 and bezahlen from the bare pool (zahlen and bezahlen are interchangeable there, so the typed answer was underdetermined) and added a Betrag sentence; NATIVE FLAG: confirm zahlen/bezahlen interchangeability.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -26,10 +27,8 @@ slot_presets:
   fill_7: &fill_7 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_mit}}
   fill_8: &fill_8 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Betrag}}
   fill_9: &fill_9 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_zahlt}}
-  bare_10: &bare_10 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Geld, w_bezahlen, w_bar, w_Karte]}}
+  bare_10: &bare_10 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Geld, w_bar, w_Karte]}}
   one_11: &one_11 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Geld}}
-  one_12: &one_12 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_bezahlen}}
-  one_13: &one_13 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Karte}}
   one_14: &one_14 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Quittung}}
 templates:
   - content_key: practice.en-de.de.a1.unit24.lesson01.choose.001
@@ -38,7 +37,7 @@ templates:
     frame: {text: "{item}", language_code: de, direction: ltr}
     slots: {item: *words_1}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "Bar means in cash.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Lowercase bar means in cash; the noun die Bar is a bar for drinks.", language_code: en, direction: ltr}
   - content_key: practice.en-de.de.a1.unit24.lesson01.listen.002
     lesson_content_key: de.a1.unit24.lesson01.bezahlen
     type: listen_select
@@ -89,7 +88,7 @@ templates:
     frame: {text: "Ich zahle {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
     slots: {item: *fill_6, hint: *fill_6}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "Bar means in cash.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ich zahle bar: bar is an adverb here, so it is lowercase.", language_code: en, direction: ltr}
   - content_key: practice.en-de.de.a1.unit24.lesson01.fill.009
     lesson_content_key: de.a1.unit24.lesson01.bezahlen
     type: fill_in_blank
@@ -125,27 +124,6 @@ templates:
     slots: {item: *one_11}
     answer_derivation: {kind: render_frame, frame: {text: "Ich habe {item}.", language_code: de, direction: ltr}}
     feedback_frame: {text: "Geld has no article here.", language_code: en, direction: ltr}
-  - content_key: practice.en-de.de.a1.unit24.lesson01.translate.014
-    lesson_content_key: de.a1.unit24.lesson01.bezahlen
-    type: translation
-    frame: {text: "I would like to pay.", language_code: en, direction: ltr}
-    slots: {item: *one_12}
-    answer_derivation: {kind: render_frame, frame: {text: "Ich möchte {item}.", language_code: de, direction: ltr}}
-    feedback_frame: {text: "The infinitive goes to the end after möchte.", language_code: en, direction: ltr}
-  - content_key: practice.en-de.de.a1.unit24.lesson01.translate.015
-    lesson_content_key: de.a1.unit24.lesson01.bezahlen
-    type: translation
-    frame: {text: "I pay in cash.", language_code: en, direction: ltr}
-    slots: {item: *fill_6}
-    answer_derivation: {kind: render_frame, frame: {text: "Ich zahle {item}.", language_code: de, direction: ltr}}
-    feedback_frame: {text: "Bar means in cash.", language_code: en, direction: ltr}
-  - content_key: practice.en-de.de.a1.unit24.lesson01.translate.016
-    lesson_content_key: de.a1.unit24.lesson01.bezahlen
-    type: translation
-    frame: {text: "I pay by card.", language_code: en, direction: ltr}
-    slots: {item: *one_13}
-    answer_derivation: {kind: render_frame, frame: {text: "Ich zahle mit {item}.", language_code: de, direction: ltr}}
-    feedback_frame: {text: "Mit takes the dative.", language_code: en, direction: ltr}
   - content_key: practice.en-de.de.a1.unit24.lesson02.translate.017
     lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
     type: translation
@@ -153,10 +131,10 @@ templates:
     slots: {item: *one_14}
     answer_derivation: {kind: render_frame, frame: {text: "Hier ist Ihre {item}.", language_code: de, direction: ltr}}
     feedback_frame: {text: "Ihre agrees with the feminine noun.", language_code: en, direction: ltr}
-  - content_key: practice.en-de.de.a1.unit24.lesson02.translate.018
+  - content_key: practice.en-de.de.a1.unit24.lesson02.translate.019
     lesson_content_key: de.a1.unit24.lesson02.betrag_und_quittung
     type: translation
-    frame: {text: "Can I pay by card?", language_code: en, direction: ltr}
-    slots: {item: *order_5}
-    answer_derivation: {kind: render_frame, frame: {text: "Kann ich mit Karte {item}?", language_code: de, direction: ltr}}
-    feedback_frame: {text: "The infinitive goes to the end after kann.", language_code: en, direction: ltr}
+    frame: {text: "The amount is eight euros.", language_code: en, direction: ltr}
+    slots: {item: *fill_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} ist acht Euro.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Euro stays singular after a number: acht Euro.", language_code: en, direction: ltr}

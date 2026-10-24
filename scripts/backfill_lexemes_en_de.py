@@ -124,8 +124,8 @@ GLOSSES: dict[str, str] = {
     # unit01 greetings
     "hallo": "hello", "guten": "good (in a greeting)", "Morgen": "morning",
     "Tag": "day", "Abend": "evening", "tschüss": "bye",
-    "auf": "on; until (in a farewell); up (in a verb meaning to get up)",
-    "Wiedersehen": "meeting again", "bis": "until; see you",
+    "auf": "on; to (in the formal goodbye); up (part of the verb meaning get up)",
+    "Wiedersehen": "meeting again", "bis": "until",
     "bald": "soon", "später": "later", "gute": "good (in a greeting)",
     "Nacht": "night", "Sie": "you (formal)", "du": "you (informal)",
     "wie": "how", "geht": "goes; is going (as in how you are doing)",
@@ -266,7 +266,7 @@ GLOSSES: dict[str, str] = {
     "zurück": "back", "fährt": "travels; departs (a vehicle)", "Art": "type; kind",
     # unit17 health
     "Kopfschmerzen": "headache", "Bauchschmerzen": "stomachache",
-    "Hals": "throat; neck", "Kopf": "head", "tut": "does (as in: it hurts)",
+    "Hals": "throat; neck", "Kopf": "head", "tut": "does (part of the phrase meaning hurts)",
     "weh": "sore; painful", "mir": "to me", "schlecht": "bad; sick",
     "brauchen": "need; you need (formal)", "Hilfe": "help",
     "brauche": "I need", "Pause": "break; pause", "trinken": "drink (formal command)",
@@ -297,7 +297,7 @@ GLOSSES: dict[str, str] = {
     "rufe": "I call", "wiederholen": "to repeat", "sprechen": "speak (formal command)",
     "langsam": "slowly; slow", "wegen": "because of; about",
     "des": "of the (masc. or neuter genitive)", "Treffen": "meeting",
-    "schreibe": "I write", "treffen": "meet (we)", "uns": "ourselves; each other",
+    "schreibe": "I write", "treffen": "we meet; to meet", "uns": "us; ourselves; each other",
     # unit24 money
     "Geld": "money", "bezahlen": "to pay", "bar": "in cash", "Karte": "card",
     "mit": "with; by (means of)", "Betrag": "amount", "zahlen": "pay; to pay",
