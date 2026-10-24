@@ -1,0 +1,137 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit09
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit09.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job B) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u09* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm that mergeți is the formal (dumneavoastră) imperative and that the prompts name it; check la dreapta / la stânga without an article.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ajung, w_mergeți, w_înainte, w_dreapta, w_stânga, w_aici, w_acolo, w_apoi]
+slot_presets:
+  d_pool: &d_pool {language_code: ro, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_ajung, w_mergeți, w_înainte, w_dreapta, w_stânga, w_aici, w_acolo, w_apoi]}}
+  d1_pool: &d1_pool {language_code: ro, part_of_speech: [adverb, verb], agreement_tags: {semantic: [w_ajung, w_mergeți, w_înainte]}}
+  d2_pool: &d2_pool {language_code: ro, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_dreapta, w_stânga, w_aici, w_acolo, w_apoi, w_înainte]}}
+  d_words: &d_words {language_code: ro, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_înainte, w_dreapta, w_stânga, w_aici, w_acolo, w_apoi]}}
+  t_inainte: &t_inainte {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_înainte}}
+  t_ajung: &t_ajung {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_ajung}}
+  t_stanga: &t_stanga {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_stânga}}
+  t_aici: &t_aici {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_aici}}
+  t_acolo: &t_acolo {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_acolo}}
+  t_apoi: &t_apoi {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_apoi}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit09.lesson01.choose.001
+    lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *d1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mergeți is the command for dumneavoastră; to a friend you would use a different form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.listen.001
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *d2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "La dreapta and la stânga are the two turns; aici and acolo say here and there.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson03.choose.001
+    lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *d_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Apoi means then and links the steps of a route, after commands like mergeți înainte.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.match.002
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *d_pool, second: *d_pool, third: *d_pool, fourth: *d_pool, fifth: *d_pool, sixth: *d_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Mergeți and ajung are verbs; înainte, aici, acolo and apoi are adverbs that do not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson01.order.002
+    lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+    type: word_order
+    frame: {text: "Mergeți {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_inainte}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergeți {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mergeți înainte is a polite instruction to someone you address with dumneavoastră.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson01.order.003
+    lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+    type: word_order
+    frame: {text: "Cum pot să {item} la gară?", language_code: ro, direction: ltr}
+    slots: {item: *t_ajung}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum pot să {item} la gară?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "After pot Romanian adds să and the verb: Cum pot să ajung la gară?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.order.003
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: word_order
+    frame: {text: "Gara este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_acolo}
+    answer_derivation: {kind: render_frame, frame: {text: "Gara este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Acolo means there and aici means here; the verb este stays the same.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.fill.004
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: fill_in_blank
+    frame: {text: "Mergeți la {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_stanga, hint: *t_stanga}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "La stânga means to the left; the noun comes after la without an article.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.fill.005
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: fill_in_blank
+    frame: {text: "Magazinul este {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_aici, hint: *t_aici}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Aici points to where you are; acolo points away from you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson03.order.002
+    lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+    type: word_order
+    frame: {text: "Mergeți înainte, {item} la dreapta.", language_code: ro, direction: ltr}
+    slots: {item: *t_apoi}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergeți înainte, {item} la dreapta.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Apoi links the steps of a route: first straight ahead, then to the right.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.translate.006
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *d_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dreapta and stânga are used after la: la dreapta, la stânga.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson01.translate.004
+    lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+    type: translation
+    frame: {text: "Go straight ahead. (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_inainte}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergeți {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mergeți is the dumneavoastră command; înainte means ahead.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson01.translate.005
+    lesson_content_key: ro.a1.unit09.lesson01.cum_ajung
+    type: translation
+    frame: {text: "How can I get to the train station?", language_code: en, direction: ltr}
+    slots: {item: *t_ajung}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum pot să {item} la gară?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cum pot să ajung... is the standard way to ask for directions.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson02.translate.007
+    lesson_content_key: ro.a1.unit09.lesson02.dreapta_stanga
+    type: translation
+    frame: {text: "Go to the left. (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_stanga}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergeți la {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "La stânga is to the left; la dreapta is to the right.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit09.lesson03.translate.003
+    lesson_content_key: ro.a1.unit09.lesson03.pe_strada
+    type: translation
+    frame: {text: "Go straight ahead, then to the right. (formal)", language_code: en, direction: ltr}
+    slots: {item: *t_apoi}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergeți înainte, {item} la dreapta.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Apoi means then and joins two steps of the route.", language_code: en, direction: ltr}

@@ -1,0 +1,134 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit11
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job B) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u11* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm that Ana, mergem...? and the Nu pot sâmbătă, atunci duminică? frame are natural. The unit has only 5 lexemes so there is no matching_pairs.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_mergem, w_cinema, w_parc, w_atunci, w_sigur]
+slot_presets:
+  p_pool: &p_pool {language_code: ro, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_mergem, w_cinema, w_parc, w_atunci, w_sigur]}}
+  p_first: &p_first {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_mergem, w_cinema, w_parc]}}
+  p_second: &p_second {language_code: ro, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_mergem, w_cinema, w_parc, w_atunci]}}
+  t_mergem: &t_mergem {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_mergem}}
+  t_cinema: &t_cinema {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_cinema}}
+  t_parc: &t_parc {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_parc}}
+  t_atunci: &t_atunci {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_atunci}}
+  t_sigur: &t_sigur {language_code: ro, part_of_speech: adverb, agreement_tags: {semantic: w_sigur}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.choose.001
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *p_first}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mergem means we go and is also how you suggest a plan: Mergem la parc?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson02.listen.001
+    lesson_content_key: ro.a1.unit11.lesson02.nu_pot_atunci
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *p_second}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cinema and parc are the two places in this unit; both come after la, and atunci links a refusal to a new idea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson03.choose.001
+    lesson_content_key: ro.a1.unit11.lesson03.planul_de_duminica
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *p_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sigur is a quick, warm yes: Sigur! means sure.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.order.002
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: word_order
+    frame: {text: "Ana, {item} la cinema?", language_code: ro, direction: ltr}
+    slots: {item: *t_mergem}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana, {item} la cinema?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mergem is the we form of go and works as a suggestion with a question mark.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.order.003
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: word_order
+    frame: {text: "Mergem la {item} duminică?", language_code: ro, direction: ltr}
+    slots: {item: *t_parc}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergem la {item} duminică?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mergem la parc? follows the pattern verb + la + place.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson02.order.002
+    lesson_content_key: ro.a1.unit11.lesson02.nu_pot_atunci
+    type: word_order
+    frame: {text: "Nu pot sâmbătă, {item} duminică?", language_code: ro, direction: ltr}
+    slots: {item: *t_atunci}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu pot sâmbătă, {item} duminică?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Atunci means in that case and lets you offer another day after a no.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson03.order.002
+    lesson_content_key: ro.a1.unit11.lesson03.planul_de_duminica
+    type: word_order
+    frame: {text: "Mergem la parc duminică? Da, {item}!", language_code: ro, direction: ltr}
+    slots: {item: *t_sigur}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergem la parc duminică? Da, {item}!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Da, sigur! is a friendly way to accept a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.fill.004
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: fill_in_blank
+    frame: {text: "Mergem la {item}? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_cinema, hint: *t_cinema}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "La cinema means to the cinema; there is no article after la here.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson02.fill.003
+    lesson_content_key: ro.a1.unit11.lesson02.nu_pot_atunci
+    type: fill_in_blank
+    frame: {text: "Nu pot sâmbătă, {item} duminică? ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_atunci, hint: *t_atunci}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Atunci connects the refusal to the new suggestion.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson03.fill.003
+    lesson_content_key: ro.a1.unit11.lesson03.planul_de_duminica
+    type: fill_in_blank
+    frame: {text: "Mergem la parc duminică? Da, {item}! ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_sigur, hint: *t_sigur}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sigur is an adverb and never changes its form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.translate.005
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mergem is the we form, and sigur is a fixed adverb; neither changes with number or gender.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.translate.006
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: translation
+    frame: {text: "Shall we go to the park on Saturday?", language_code: en, direction: ltr}
+    slots: {item: *t_parc}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergem la {item} sâmbătă?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "The same word mergem means both we go and shall we go; the question mark makes the difference.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson01.translate.007
+    lesson_content_key: ro.a1.unit11.lesson01.mergem_la_cinema
+    type: translation
+    frame: {text: "Ana, shall we go to the cinema?", language_code: en, direction: ltr}
+    slots: {item: *t_mergem}
+    answer_derivation: {kind: render_frame, frame: {text: "Ana, {item} la cinema?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mergem la cinema? proposes a shared plan in the we form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson02.translate.004
+    lesson_content_key: ro.a1.unit11.lesson02.nu_pot_atunci
+    type: translation
+    frame: {text: "I cannot on Saturday; in that case, Sunday?", language_code: en, direction: ltr}
+    slots: {item: *t_atunci}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu pot sâmbătă, {item} duminică?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Atunci duminică? is a short way to suggest another day.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit11.lesson03.translate.004
+    lesson_content_key: ro.a1.unit11.lesson03.planul_de_duminica
+    type: translation
+    frame: {text: "Shall we go to the park on Sunday? Yes, sure!", language_code: en, direction: ltr}
+    slots: {item: *t_sigur}
+    answer_derivation: {kind: render_frame, frame: {text: "Mergem la parc duminică? Da, {item}!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Da, sigur! accepts a plan firmly.", language_code: en, direction: ltr}

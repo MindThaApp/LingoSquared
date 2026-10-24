@@ -1,0 +1,154 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit06
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job B) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u06* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm o cafea / un ceai gender choices, Mi-e foame / Mi-e sete as fixed phrases, and the vă rog / te rog register prompts.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_aș, w_dori, w_apă, w_cafea, w_ceai, w_suc, w_lapte, w_sete, w_foame, w_pâine, w_mâncare, w_carne, w_pui, w_fructe, w_rog]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_aș, w_dori, w_apă, w_cafea, w_ceai, w_suc, w_lapte, w_sete]}}
+  l1_match: &l1_match {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_apă, w_cafea, w_ceai, w_suc, w_lapte, w_sete]}}
+  l1_words: &l1_words {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_aș, w_apă, w_cafea, w_ceai, w_suc, w_lapte, w_sete]}}
+  t_cafea: &t_cafea {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_cafea}}
+  t_ceai: &t_ceai {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_ceai}}
+  t_sete: &t_sete {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_sete}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_foame, w_pâine, w_mâncare, w_carne, w_pui, w_fructe]}}
+  t_foame: &t_foame {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_foame}}
+  t_paine: &t_paine {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_pâine}}
+  t_pui: &t_pui {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_pui}}
+  t_fructe: &t_fructe {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_fructe}}
+  t_rog: &t_rog {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_rog}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.choose.001
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Aș dori means I would like and is the polite way to ask for something; it stays the same for every drink.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.listen.002
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Apă, cafea, ceai, suc and lapte are the basic drinks; sete (thirst) works with mi-e in Mi-e sete.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.match.003
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l1_match, second: *l1_match, third: *l1_match, fourth: *l1_match, fifth: *l1_match, sixth: *l1_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Cafea and apă are feminine and take o (o cafea); ceai, suc and lapte take un (un ceai).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.translate.004
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Aș dori means I would like; the drink follows it, with o or un in front when you ask for one cup or glass.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.order.005
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: word_order
+    frame: {text: "Aș dori o {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_cafea}
+    answer_derivation: {kind: render_frame, frame: {text: "Aș dori o {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cafea is feminine, so it takes o: o cafea. A tea is un ceai.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.fill.006
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: fill_in_blank
+    frame: {text: "Aș dori un {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_ceai, hint: *t_ceai}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ceai takes un, not o: un ceai. Compare o cafea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.translate.007
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: translation
+    frame: {text: "I would like a coffee.", language_code: en, direction: ltr}
+    slots: {item: *t_cafea}
+    answer_derivation: {kind: render_frame, frame: {text: "Aș dori o {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Aș dori is polite and works with tu and dumneavoastră alike; cafea takes o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson01.translate.008
+    lesson_content_key: ro.a1.unit06.lesson01.bauturi
+    type: translation
+    frame: {text: "I am thirsty.", language_code: en, direction: ltr}
+    slots: {item: *t_sete}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi-e {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mi-e sete literally says thirst is to me; Mi-e foame works the same way.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.choose.001
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Foame means hunger; you say Mi-e foame for I am hungry, as with Mi-e sete.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.listen.002
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mâncare is food in general; pâine, carne, pui and fructe are specific things to eat.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.match.003
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l2_pool, second: *l2_pool, third: *l2_pool, fourth: *l2_pool, fifth: *l2_pool, sixth: *l2_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Fructe is plural and means fruit in general; pâine, carne and mâncare are singular and feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.translate.004
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mâncare is the general word for food and carne means meat; pui is chicken and fructe is fruit.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.order.005
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: word_order
+    frame: {text: "Aș dori {item} și pui.", language_code: ro, direction: ltr}
+    slots: {item: *t_paine}
+    answer_derivation: {kind: render_frame, frame: {text: "Aș dori {item} și pui.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Bread needs no o or un here: Aș dori pâine și pui, like Aș dori apă.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.fill.006
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: fill_in_blank
+    frame: {text: "Mi-e {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_foame, hint: *t_foame}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mi-e foame (I am hungry) is a fixed phrase: the feeling comes after mi-e.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.fill.007
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: fill_in_blank
+    frame: {text: "Aș dori carne și {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_pui, hint: *t_pui}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pui means chicken and is the word you use on a menu or in a shop.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.translate.008
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: translation
+    frame: {text: "I would like a tea, please. (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_rog}
+    answer_derivation: {kind: render_frame, frame: {text: "Aș dori un ceai, vă {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vă rog is the polite please for dumneavoastră; with a friend you say te rog.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit06.lesson02.translate.009
+    lesson_content_key: ro.a1.unit06.lesson02.va_rog_si_mancare
+    type: translation
+    frame: {text: "I would like fruit.", language_code: en, direction: ltr}
+    slots: {item: *t_fructe}
+    answer_derivation: {kind: render_frame, frame: {text: "Aș dori {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Fructe is plural, so there is no o or un before it.", language_code: en, direction: ltr}
