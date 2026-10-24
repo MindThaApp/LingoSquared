@@ -9,8 +9,10 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 only (the "en-de" manifest group, units 01-24). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-de" manifest group, units 01-24) and A2 (the "en-de-a2"
+group, units 25-34; session 11). B1+ is not classified yet; extend LEVELS and
+the tables below together. A1 and A2 are separate courses, so A2 re-glosses
+every token it introduces, function words included.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -66,7 +68,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "de"
-LEVELS = {"a1": "en-de"}
+LEVELS = {"a1": "en-de", "a2": "en-de-a2"}
 
 PROPER_NOUNS = {
     "Anna", "Felix", "Berlin", "Deutschland", "England", "Frankreich",
@@ -113,6 +115,10 @@ CITATION_FORMS: dict[str, str] = {
     "Mit": "mit", "Zahlen": "zahlen",
     # sign text
     "Geschlossen": "geschlossen",
+    # A2 (units 25-34)
+    "Welche": "welche", "Bekomme": "bekomme", "Gibt": "gibt",
+    "Kommen": "kommen", "In": "in", "Am": "am", "Leider": "leider",
+    "Vielen": "vielen",
 }
 
 
@@ -304,6 +310,77 @@ GLOSSES: dict[str, str] = {
     "Quittung": "receipt", "Zahlung": "payment", "zahlt": "pays (he/she/it)",
 }
 
+# A2 (session 11): units 25-34, glosses for the tokens A1 did not teach.
+GLOSSES.update({
+    # unit25 Behördengang
+    "Termin": "appointment", "Anmeldung": "registration (with the authorities)",
+    "für": "for", "Pass": "passport", "Meldeformular": "registration form",
+    "bringen": "bring (formal command)", "mitbringen": "to bring along",
+    "Ihren": "your (formal, before a masc. noun used as an object)",
+    "Weber": "Weber (a surname)", "Adresse": "address",
+    "Lindenstraße": "Linden Street (a street name)",
+    "8": "the digit 8 (a house number)", "wohne": "I live (reside)",
+    "wohnen": "to live (reside)", "muss": "must; have to (I, he, she, it)",
+    "abgeben": "to hand in; to submit", "bestätigen": "to confirm",
+    "vielen": "many; much (in a thank-you)", "Dank": "thanks",
+    # unit26 Meinungen
+    "finde": "I find; I consider (giving an opinion)", "Meinung": "opinion", "ruhig": "quiet; calm",
+    "interessant": "interesting", "teuer": "expensive",
+    "denke": "I think", "dass": "that (introducing a clause)",
+    "Kurs": "course; class", "anderer": "different; other (in 'of a different opinion')",
+    "verstehe": "I understand",
+    # unit27 Bankkonto
+    "Bankkonto": "bank account", "Konto": "account",
+    "eröffnen": "to open (an account)", "Telefonnummer": "phone number",
+    "Kosten": "costs; expenses", "Bankkarte": "bank card",
+    "Online-Banking": "online banking", "gehört": "belongs; is part of",
+    "monatlich": "monthly; per month", "welche": "which (fem. or plural)",
+    "Unterlagen": "documents; papers", "bekomme": "I get; I receive",
+    "monatliche": "monthly (before a plural noun)",
+    # unit28 Beim Arzt
+    "Arzt": "doctor; physician", "Symptom": "symptom",
+    "Halsschmerzen": "sore throat", "seit": "since; for (a length of time up to now)",
+    "Tagen": "days (dative plural, as in for three days)",
+    "stark": "strong; severe", "starke": "strong; severe (before a plural noun)",
+    "wiederkommen": "to come back", "Fieber": "fever",
+    # unit29 Wohnungsproblem
+    "meiner": "my (before a fem. noun after 'in')", "Heizung": "heating",
+    "funktioniert": "works; functions", "Reparatur": "repair",
+    "Handwerker": "tradesman; repair worker", "kommt": "comes; is coming",
+    "jemand": "someone; anyone",
+    # unit30 Vorstellungsgespräch
+    "Vorstellungsgespräch": "job interview", "Erfahrung": "experience",
+    "Bewerbung": "job application", "Stärke": "strength", "Team": "team",
+    "verfügbar": "available", "Teilzeit": "part-time work",
+    "Stelle": "job; position", "Aufgaben": "tasks; duties",
+    "gehören": "belong", "zu": "to; too (before 'much')",
+    "Einladung": "invitation", "freundlichen": "friendly (after 'with', before a plural noun)",
+    "Grüßen": "greetings (plural)",
+    # unit31 Reisechaos
+    "Verspätung": "delay", "fällt": "falls; is cancelled (with the particle 'out')",
+    "Alternative": "alternative; option", "alternative": "alternative (before a fem. noun)",
+    "Bus": "bus", "Verbindung": "service; transport link",
+    "spätere": "later (before a fem. noun)",
+    "Anschluss": "connecting train or bus (the next one you change to)",
+    "verpasse": "I miss (a train or bus)", "meinen": "my (before a masc. noun used as an object)",
+    # unit32 Online-Alltag
+    "online": "online", "Nachrichten": "news", "lese": "I read",
+    "jeden": "every (before a masc. noun used as an object)",
+    "Smartphone": "smartphone", "benutze": "I use",
+    "soziale": "social (before a plural noun)", "Medien": "media",
+    "nützlich": "useful", "manchmal": "sometimes",
+    # unit33 Wochenplan
+    "Vormittag": "late morning; the time before noon",
+    "vormittags": "in the late mornings", "unter": "under; during (a week)",
+    "Woche": "week", "Wochenende": "weekend", "zuerst": "first; at first",
+    "danach": "afterwards", "tun": "to do", "treffe": "I meet",
+    # unit34 Beschwerde
+    "Artikel": "item; article", "kaputt": "broken",
+    "Kassenbon": "till receipt (from a shop)", "umtauschen": "to exchange (a purchase)",
+    "Ersatz": "replacement", "Reklamation": "complaint about a purchase",
+    "zurückbekommen": "to get back",
+})
+
 POS_SETS = {
     "proper_noun": PROPER_NOUNS,
     "symbol": split_words("1 2 3 4 5 6 M"),
@@ -348,6 +425,26 @@ POS_SETS = {
     ),
     "phrase": split_words("hallo tschüss danke Entschuldigung"),
 }
+for _pos, _words in {
+    "proper_noun": "Weber Lindenstraße",
+    "symbol": "8",
+    "pronoun": "Ihren meiner meinen jemand jeden",
+    "preposition": "für seit unter zu",
+    "particle": "dass welche",
+    "adjective": (
+        "vielen ruhig interessant teuer anderer monatlich monatliche stark "
+        "starke verfügbar nützlich kaputt alternative spätere soziale "
+        "freundlichen"
+    ),
+    "adverb": "manchmal zuerst danach online vormittags",
+    "verb": (
+        "bringen mitbringen wohne wohnen muss abgeben bestätigen finde denke "
+        "verstehe eröffnen gehört bekomme wiederkommen funktioniert kommt "
+        "gehören fällt verpasse lese benutze tun treffe umtauschen "
+        "zurückbekommen"
+    ),
+}.items():
+    POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}

@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a2.unit27
+source_language: en
+target_language: de
+unit_content_key: de.a2.unit27.bankkonto
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 11, en-de A2 practice pack) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_de.py (curated w_<token> pools of this unit's own tokens). Sentence frames use single anchors or small unions in which every member is grammatical; English prompts name the formal Sie where the German form depends on it. Reviewer: confirm Bankkonto vs Konto are both natural for opening an account, and that gehört (belongs to) reads naturally in Zum Konto gehört Online-Banking.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Bankkonto", "w_Telefonnummer", "w_Kosten", "w_eröffnen", "w_brauchen", "w_Bankkarte", "w_Online-Banking", "w_Unterlagen", "w_monatlich", "w_gehört", "w_bekomme", "w_brauche", "w_welche", "w_Konto", "w_monatliche"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_Bankkonto", "w_Telefonnummer", "w_Kosten", "w_eröffnen", "w_brauchen"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: ["w_Bankkarte", "w_Online-Banking", "w_Unterlagen", "w_monatlich", "w_gehört"]}}
+  p3: &p3 {language_code: de, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: ["w_Bankkarte", "w_Unterlagen", "w_monatlich", "w_bekomme", "w_brauche", "w_welche"]}}
+  p4: &p4 {language_code: de, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_Konto", "w_Telefonnummer", "w_Kosten", "w_eröffnen", "w_brauchen"]}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Konto", "w_Bankkonto"]}}
+  p6: &p6 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Telefonnummer", "w_Bankkarte"]}}
+  p7: &p7 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_monatliche"}}
+  p8: &p8 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Bankkarte"}}
+  p9: &p9 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Bankkonto", "w_Telefonnummer", "w_Kosten", "w_Bankkarte", "w_Online-Banking", "w_Unterlagen"]}}
+  p10: &p10 {language_code: de, part_of_speech: [verb, adjective], agreement_tags: {semantic: ["w_eröffnen", "w_brauchen", "w_gehört", "w_bekomme", "w_brauche", "w_monatlich"]}}
+  p11: &p11 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_eröffnen"}}
+  p12: &p12 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_brauche"}}
+  p13: &p13 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_gehört"}}
+  p14: &p14 {language_code: de, part_of_speech: [noun, adjective], agreement_tags: {semantic: ["w_Konto", "w_Bankkarte", "w_Online-Banking", "w_Unterlagen", "w_monatlich"]}}
+  p15: &p15 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Bankkonto"}}
+templates:
+  - content_key: practice.en-de.de.a2.unit27.lesson01.choose.001
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Eröffnen is the usual verb for opening an account.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.listen.002
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Unterlagen is always plural and means documents.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.choose.003
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Bekomme and brauche are the forms that go with ich.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.listen.004
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Kosten as a noun is plural: the costs.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.order.005
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: word_order
+    frame: {text: "Ich möchte ein {item} eröffnen.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich möchte ein {item} eröffnen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Konto and Bankkonto are both neuter, so they take ein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.order.006
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: word_order
+    frame: {text: "Wir brauchen Ihre {item}.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wir brauchen Ihre {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Both nouns are feminine, so the formal your is Ihre.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.order.007
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: word_order
+    frame: {text: "Gibt es {item} Kosten?", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Gibt es {item} Kosten?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Monatliche has an ending because it stands before the plural Kosten.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.order.008
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: word_order
+    frame: {text: "Bekomme ich eine {item}?", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Bekomme ich eine {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bankkarte is feminine, so it takes eine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.match.009
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p9, second: *p9, third: *p9, fourth: *p9, fifth: *p9, sixth: *p9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Bankkonto and Bankkarte both start with Bank, the bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.match.010
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p10, second: *p10, third: *p10, fourth: *p10, fifth: *p10, sixth: *p10}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Brauche and bekomme go with ich; brauchen is also the formal Sie form.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.fill.011
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: fill_in_blank
+    frame: {text: "Ich möchte ein Konto {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After möchte the infinitive goes to the end of the sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.fill.012
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: fill_in_blank
+    frame: {text: "Welche Unterlagen {item} ich? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Brauche is the ich form, and in this question it comes before ich.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.fill.013
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: fill_in_blank
+    frame: {text: "Zum Konto {item} Online-Banking. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gehört is the he/she/it form of gehören.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.translate.014
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nouns keep their capital: Bankkonto, Telefonnummer, Kosten.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.translate.015
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Online-Banking is written with a hyphen and a capital B.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson01.translate.016
+    lesson_content_key: de.a2.unit27.lesson01.konto_eroeffnen
+    type: translation
+    frame: {text: "I would like to open a bank account.", language_code: en, direction: ltr}
+    slots: {item: *p15}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich möchte ein {item} eröffnen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bankkonto is neuter, so it takes ein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.translate.017
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: translation
+    frame: {text: "Which documents do I need?", language_code: en, direction: ltr}
+    slots: {item: *p12}
+    answer_derivation: {kind: render_frame, frame: {text: "Welche Unterlagen {item} ich?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Brauche comes before ich in a question.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit27.lesson02.translate.018
+    lesson_content_key: de.a2.unit27.lesson02.fragen_zum_konto
+    type: translation
+    frame: {text: "Are there monthly costs?", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Gibt es {item} Kosten?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Monatliche has an ending before the plural noun Kosten.", language_code: en, direction: ltr}
