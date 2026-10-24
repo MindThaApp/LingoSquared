@@ -1,0 +1,166 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit08
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit08.einkaufen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). Measure words (ein Pfund, ein Kilo, ein Dutzend) stay singular and are followed
+    directly by the goods in the frames: the pooled goods (Äpfel, Tomaten, Reis) are all fine after ein Kilo. Natürlich is
+    sentence-initial in the unit audio, so it is only used as a bare word (never as a slot at the start
+    of a sentence). Kosten is glossed as the plural form because the unit teaches Was kosten die Äpfel?.
+    Reviewer: confirm ein Kilo Tomaten / Äpfel / Reis and eine Tüte Reis read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Pfund, w_Dutzend, w_Flasche, w_Tüte, w_Kilo, w_Reis, w_Äpfel, w_Eier, w_Tomaten, w_kosten, w_frisch, w_Markt, w_Preisschild, w_natürlich, w_pro]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Pfund, w_Dutzend, w_Flasche, w_Tüte, w_Kilo, w_Reis]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Äpfel, w_Eier, w_Reis, w_Tomaten, w_Dutzend, w_Tüte]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adjective, adverb, noun, verb], agreement_tags: {semantic: [w_kosten, w_frisch, w_Markt, w_Preisschild, w_natürlich]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_Markt, w_Preisschild, w_Äpfel, w_Eier, w_Reis, w_frisch]}}
+  words_5: &words_5 {language_code: de, part_of_speech: [adjective, adverb, noun, verb], agreement_tags: {semantic: [w_natürlich, w_frisch, w_Markt, w_Preisschild, w_kosten]}}
+  order_6: &order_6 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Äpfel, w_Tomaten, w_Reis]}}
+  order_7: &order_7 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_kosten}}
+  order_8: &order_8 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Dutzend}}
+  match_9: &match_9 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Pfund, w_Dutzend, w_Flasche, w_Tüte, w_Kilo, w_Äpfel]}}
+  match_10: &match_10 {language_code: de, part_of_speech: [adjective, adverb, noun, preposition, verb], agreement_tags: {semantic: [w_kosten, w_frisch, w_pro, w_Markt, w_Preisschild, w_natürlich]}}
+  fill_11: &fill_11 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Flasche}}
+  fill_12: &fill_12 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_frisch}}
+  fill_13: &fill_13 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_pro}}
+  fill_14: &fill_14 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Reis}}
+  bare_15: &bare_15 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Pfund, w_Dutzend, w_Flasche, w_Tüte, w_Kilo, w_Reis, w_Äpfel, w_Eier, w_Tomaten]}}
+  bare_16: &bare_16 {language_code: de, part_of_speech: [adjective, adverb, noun], agreement_tags: {semantic: [w_Markt, w_Preisschild, w_natürlich, w_frisch]}}
+templates:
+  - content_key: practice.en-de.de.a1.unit08.lesson01.choose.001
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pfund, Dutzend and Kilo stay singular after a number word: zwei Pfund, zwei Kilo.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.listen.002
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Äpfel and Eier are plural; Reis has no plural in this use.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson02.choose.003
+    lesson_content_key: de.a1.unit08.lesson02.nach_preisen_fragen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Was kosten ...? asks for a price and takes a plural verb for plural goods.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson03.choose.004
+    lesson_content_key: de.a1.unit08.lesson03.preisschilder_lesen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Preisschild is a compound: Preis (price) plus Schild (sign).", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson04.listen.005
+    lesson_content_key: de.a1.unit08.lesson04.auf_dem_markt
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_5}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Natürlich is an adverb meaning of course and a common polite reply.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.order.006
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: word_order
+    frame: {text: "Ich möchte ein Kilo {item}, bitte.", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich möchte ein Kilo {item}, bitte.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After a measure word the goods follow directly, with no word for of.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson02.order.007
+    lesson_content_key: de.a1.unit08.lesson02.nach_preisen_fragen
+    type: word_order
+    frame: {text: "Was {item} die Äpfel?", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Was {item} die Äpfel?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The question word comes first and the verb stays second: Was kosten die Äpfel?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.order.008
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: word_order
+    frame: {text: "Ich möchte ein {item} Eier, bitte.", language_code: de, direction: ltr}
+    slots: {item: *order_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich möchte ein {item} Eier, bitte.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "A dozen is ein Dutzend, and the eggs follow directly.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.match.009
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_9, second: *match_9, third: *match_9, fourth: *match_9, fifth: *match_9, sixth: *match_9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Measure words (Pfund, Kilo, Dutzend) are followed by the goods without any joining word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson03.match.010
+    lesson_content_key: de.a1.unit08.lesson03.preisschilder_lesen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_10, second: *match_10, third: *match_10, fourth: *match_10, fifth: *match_10, sixth: *match_10}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Pro means per: zwei Euro pro Pfund.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.fill.011
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: fill_in_blank
+    frame: {text: "Ich möchte eine {item} Wasser, bitte. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_11, hint: *fill_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Flasche is feminine, so it takes eine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson02.fill.012
+    lesson_content_key: de.a1.unit08.lesson02.nach_preisen_fragen
+    type: fill_in_blank
+    frame: {text: "Ist es {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_12, hint: *fill_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Frisch is an adjective after ist and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson03.fill.013
+    lesson_content_key: de.a1.unit08.lesson03.preisschilder_lesen
+    type: fill_in_blank
+    frame: {text: "Äpfel kosten zwei Euro {item} Pfund. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_13, hint: *fill_13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pro Pfund means per pound.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.fill.014
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: fill_in_blank
+    frame: {text: "Ich möchte eine Tüte {item}, bitte. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_14, hint: *fill_14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Reis is a mass noun, so it needs no article after eine Tüte.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson01.translate.015
+    lesson_content_key: de.a1.unit08.lesson01.einkaufsmengen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_15}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Plurals: Äpfel adds an umlaut, Eier adds -er, Tomaten adds -n.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson03.translate.016
+    lesson_content_key: de.a1.unit08.lesson03.preisschilder_lesen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_16}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Markt is a noun, so it is capitalised; natürlich is lowercase.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson02.translate.017
+    lesson_content_key: de.a1.unit08.lesson02.nach_preisen_fragen
+    type: translation
+    frame: {text: "Is it fresh?", language_code: en, direction: ltr}
+    slots: {item: *fill_12}
+    answer_derivation: {kind: render_frame, frame: {text: "Ist es {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "In a yes/no question the verb comes first: Ist es frisch?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit08.lesson02.translate.018
+    lesson_content_key: de.a1.unit08.lesson02.nach_preisen_fragen
+    type: translation
+    frame: {text: "How much are the apples?", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Was {item} die Äpfel?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "German asks what the apples cost, not how much they are.", language_code: en, direction: ltr}
