@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit05
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit05.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы register labels in the English prompts and the case/number notes in feedback (genitive after из, 2-4 vs 5+ noun forms, genitive of clock-time parts of day). No character facts are asserted.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_вечера", "w_вечером", "w_дня", "w_днём", "w_кассир", "w_когда", "w_который", "w_ночью", "w_отходит", "w_пассажир", "w_поезд", "w_пожалуйста", "w_сейчас", "w_скажите", "w_утра", "w_утром", "w_час", "w_часа", "w_часов", "w_часу"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["adverb", "noun", "pronoun"], agreement_tags: {semantic: ["w_который", "w_час", "w_сейчас"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: ["adverb", "noun", "pronoun"], agreement_tags: {semantic: ["w_сейчас", "w_час", "w_который"]}}
+  p3: &p3 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_часа"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_часов"}}
+  p5: &p5 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_час"}}
+  p6: &p6 {language_code: "ru", part_of_speech: ["adverb", "noun", "verb"], agreement_tags: {semantic: ["w_пассажир", "w_кассир", "w_поезд", "w_отходит", "w_когда", "w_сейчас"]}}
+  p7: &p7 {language_code: "ru", part_of_speech: ["adverb", "noun", "pronoun"], agreement_tags: {semantic: ["w_утром", "w_днём", "w_вечером", "w_ночью", "w_сейчас", "w_когда", "w_час", "w_который"]}}
+  p8: &p8 {language_code: "ru", part_of_speech: "adverb", agreement_tags: {semantic: ["w_утром", "w_днём", "w_вечером", "w_ночью", "w_сейчас", "w_когда"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_дня"}}
+  p10: &p10 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_часу"}}
+  p11: &p11 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_вечера"}}
+  p12: &p12 {language_code: "ru", part_of_speech: ["adverb", "noun", "phrase", "verb"], agreement_tags: {semantic: ["w_пассажир", "w_кассир", "w_поезд", "w_скажите", "w_пожалуйста", "w_когда", "w_отходит"]}}
+  p13: &p13 {language_code: "ru", part_of_speech: "phrase", agreement_tags: {semantic: "w_пожалуйста"}}
+  p14: &p14 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_отходит"}}
+  p15: &p15 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_утра"}}
+  p16: &p16 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_поезд"}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit05.lesson01.choose.001
+    lesson_content_key: ru.a1.unit05.lesson01.skolko_seychas_vremeni
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Который час? literally asks which hour, and Сейчас means now; together they are the standard ask-and-answer pair for the time.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson01.listen.002
+    lesson_content_key: ru.a1.unit05.lesson01.skolko_seychas_vremeni
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Which noun form follows a number depends on it: час after 1, часа after 2-4, часов after 5 and up.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson01.order.003
+    lesson_content_key: ru.a1.unit05.lesson01.skolko_seychas_vremeni
+    type: word_order
+    frame: {text: "Сейчас три {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Сейчас три {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "After 2, 3 and 4 the noun takes the form часа, as in два часа and три часа.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson01.fill.004
+    lesson_content_key: ru.a1.unit05.lesson01.skolko_seychas_vremeni
+    type: fill_in_blank
+    frame: {text: "Сейчас десять {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "From five upward the noun takes the plural genitive часов: пять часов, десять часов.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson01.translate.005
+    lesson_content_key: ru.a1.unit05.lesson01.skolko_seychas_vremeni
+    type: translation
+    frame: {text: "What time is it?", language_code: "en", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Который {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Который час? literally means which hour; it is the standard way to ask the time.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.translate.001
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p6}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Russian often builds a question with a question word first and the verb next: Когда отходит поезд?", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.choose.001
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p7}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Утром, днём, вечером and ночью are adverbs ending in -ом or -ью, used without a preposition.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.match.002
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p8, second: *p8, third: *p8, fourth: *p8, fifth: *p8, sixth: *p8}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Parts of the day are adverbs in Russian: утром, днём, вечером, ночью.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.order.003
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: word_order
+    frame: {text: "В два часа {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "В два часа {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "After a clock time, дня means in the afternoon, just as утра means a.m. and вечера means in the evening.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.fill.004
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: fill_in_blank
+    frame: {text: "В котором {item}? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "В котором часу? is the question for at what time something happens, not what time it is now.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.translate.005
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p8}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Russian time words such as утром and вечером stand alone without a preposition.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson02.translate.006
+    lesson_content_key: ru.a1.unit05.lesson02.chasti_dnya
+    type: translation
+    frame: {text: "At seven o'clock in the evening.", language_code: "en", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "render_frame", frame: {text: "В семь часов {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "After a clock time the part of the day goes into the genitive: семь часов вечера.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.listen.002
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Скажите, пожалуйста is a polite way to start a question to a stranger.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.order.003
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: word_order
+    frame: {text: "Скажите, {item}, который час?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p13}
+    answer_derivation: {kind: "render_frame", frame: {text: "Скажите, {item}, который час?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Скажите is the polite вы command meaning tell me, and пожалуйста softens the request.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.order.004
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: word_order
+    frame: {text: "Когда {item} поезд?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p14}
+    answer_derivation: {kind: "render_frame", frame: {text: "Когда {item} поезд?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Отходит is the he/she/it form of the verb, so it agrees with the singular поезд.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.fill.005
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: fill_in_blank
+    frame: {text: "Поезд отходит в восемь часов {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p15, hint: *p15}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "After a clock time утра means a.m., so восемь часов утра is eight in the morning.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.translate.006
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: translation
+    frame: {text: "When does the train leave?", language_code: "en", direction: "ltr"}
+    slots: {item: *p16}
+    answer_derivation: {kind: "render_frame", frame: {text: "Когда отходит {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Когда asks when, and the verb отходит agrees with the singular поезд.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit05.lesson03.translate.007
+    lesson_content_key: ru.a1.unit05.lesson03.na_vokzale
+    type: translation
+    frame: {text: "At two o'clock in the afternoon.", language_code: "en", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "В два часа {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Дня is used for afternoon clock times, while утра and вечера are used for morning and evening.", language_code: "en", direction: "ltr"}

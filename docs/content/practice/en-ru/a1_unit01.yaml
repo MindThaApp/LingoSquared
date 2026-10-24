@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit01
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit01.greetings
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы register labels in the English prompts and the case/number notes in feedback (genitive after из, 2-4 vs 5+ noun forms, genitive of clock-time parts of day). No character facts are asserted.
+    Unit 01 note: lesson01 lexemes are letters (a few letters double as words and are kept out of pools); the letters pool is the symbol-tagged ones only.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_вечер", "w_д", "w_дела", "w_день", "w_до", "w_доброе", "w_добрый", "w_е", "w_з", "w_завтра", "w_здравствуйте", "w_й", "w_как", "w_поживаете", "w_пока", "w_привет", "w_р", "w_свидания", "w_спасибо", "w_т", "w_тебя", "w_тоже", "w_утро", "w_хорошо", "w_ъ", "w_ь"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: "symbol", agreement_tags: {semantic: ["w_з", "w_д", "w_р", "w_т", "w_е", "w_ъ", "w_ь", "w_й"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "symbol", agreement_tags: {semantic: ["w_з", "w_д", "w_р", "w_т", "w_е", "w_й"]}}
+  p3: &p3 {language_code: "ru", part_of_speech: "phrase", agreement_tags: {semantic: "w_здравствуйте"}}
+  p4: &p4 {language_code: "ru", part_of_speech: ["adjective", "noun", "phrase"], agreement_tags: {semantic: ["w_привет", "w_доброе", "w_утро", "w_добрый", "w_день", "w_вечер"]}}
+  p5: &p5 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_день", "w_вечер"]}}
+  p6: &p6 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_утро"}}
+  p7: &p7 {language_code: "ru", part_of_speech: ["adjective", "adverb", "noun", "particle", "phrase", "verb"], agreement_tags: {semantic: ["w_привет", "w_доброе", "w_утро", "w_добрый", "w_день", "w_вечер", "w_пока", "w_завтра", "w_тоже", "w_поживаете"]}}
+  p8: &p8 {language_code: "ru", part_of_speech: ["noun", "phrase"], agreement_tags: {semantic: ["w_привет", "w_утро", "w_день", "w_вечер", "w_здравствуйте", "w_спасибо"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: ["adverb", "noun", "particle", "phrase", "preposition", "pronoun", "verb"], agreement_tags: {semantic: ["w_как", "w_дела", "w_поживаете", "w_хорошо", "w_спасибо", "w_тебя", "w_до", "w_свидания", "w_пока", "w_завтра", "w_тоже"]}}
+  p10: &p10 {language_code: "ru", part_of_speech: ["adverb", "noun", "particle", "phrase", "verb"], agreement_tags: {semantic: ["w_хорошо", "w_спасибо", "w_пока", "w_завтра", "w_тоже", "w_поживаете", "w_дела"]}}
+  p11: &p11 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_дела"}}
+  p12: &p12 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_поживаете"}}
+  p13: &p13 {language_code: "ru", part_of_speech: "phrase", agreement_tags: {semantic: "w_спасибо"}}
+  p14: &p14 {language_code: "ru", part_of_speech: "adverb", agreement_tags: {semantic: "w_завтра"}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit01.lesson01.choose.001
+    lesson_content_key: ru.a1.unit01.lesson01.script_ramp
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Cyrillic letters often look like Latin ones but sound different: р is R, в is V, у is the oo of food and й is a short i.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson01.match.002
+    lesson_content_key: ru.a1.unit01.lesson01.script_ramp
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Some Cyrillic letters are false friends: р looks like P but is R, and е is pronounced ye, so the word здравствуйте is spelled with several of them.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson01.translate.003
+    lesson_content_key: ru.a1.unit01.lesson01.script_ramp
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Russian is written in Cyrillic; the first word you learn, здравствуйте, uses з, д, р, а, в, с, т, у, й and е.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson01.translate.004
+    lesson_content_key: ru.a1.unit01.lesson01.script_ramp
+    type: translation
+    frame: {text: "Type the one-word formal greeting for hello.", language_code: "en", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "{item}!", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Здравствуйте is the formal hello for strangers and for several people at once; the first в is silent, so it sounds like zdrAstvuyte.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.choose.001
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Russian greetings follow the time of day: доброе утро (morning), добрый день (day), добрый вечер (evening). Утро is neuter, день and вечер are masculine, so the adjective ending changes.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.listen.002
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Привет is the casual hi for friends and family; with strangers use здравствуйте or a time-of-day greeting.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.order.003
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: word_order
+    frame: {text: "Добрый {item}!", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Добрый {item}!", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Добрый goes with masculine nouns such as день and вечер, while the neuter утро takes доброе.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.fill.004
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: fill_in_blank
+    frame: {text: "Доброе {item}! ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Утро is a neuter noun, so the greeting uses доброе, not добрый.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.translate.005
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p7}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Russian has no words for a or the, so a one-word answer is just the bare word, such as утро or завтра.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson02.match.006
+    lesson_content_key: ru.a1.unit01.lesson02.vremya_dnya
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p8, second: *p8, third: *p8, fourth: *p8, fifth: *p8, sixth: *p8}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Привет is casual, while здравствуйте is the formal hello you use with strangers.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.choose.001
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Как дела? is the casual question for friends and peers (ты), and Как поживаете? is the formal вы question.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.listen.002
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p10}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Пока is a casual bye, while до свидания is the neutral or formal goodbye.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.order.003
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: word_order
+    frame: {text: "Привет! Как {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "render_frame", frame: {text: "Привет! Как {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Как дела? literally asks how affairs are going; it is the casual question you use with ты.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.order.004
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: word_order
+    frame: {text: "Здравствуйте! Как {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "render_frame", frame: {text: "Здравствуйте! Как {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Поживаете ends in -ете, the вы form, so it pairs with the formal здравствуйте.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.fill.005
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: fill_in_blank
+    frame: {text: "Хорошо, {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Хорошо, спасибо is the standard reply to Как дела? and means that things are fine.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.fill.006
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: fill_in_blank
+    frame: {text: "До {item}! ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p14, hint: *p14}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "До means until, so До завтра! is the everyday way to say see you tomorrow.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.translate.007
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: translation
+    frame: {text: "Fine, thanks.", language_code: "en", direction: "ltr"}
+    slots: {item: *p13}
+    answer_derivation: {kind: "render_frame", frame: {text: "Хорошо, {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Хорошо, спасибо is the polite stock reply to Как дела? and works with both ты and вы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit01.lesson03.translate.008
+    lesson_content_key: ru.a1.unit01.lesson03.kak_dela_i_proshchanie
+    type: translation
+    frame: {text: "See you tomorrow.", language_code: "en", direction: "ltr"}
+    slots: {item: *p14}
+    answer_derivation: {kind: "render_frame", frame: {text: "До {item}!", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "До завтра! uses до, until, with завтра, tomorrow.", language_code: "en", direction: "ltr"}
