@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit02
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit02.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u02*, single-member w_<token> anchors). Number pools are the unit's own number lexemes (zero..one hundred; the realization teaches no word for one, so J'ai ... ans / de ... oeufs pools start at two or higher). Sentence frames use curated w_ unions where every member is grammatical (J'ai {n} ans: eleven..sixteen, twenty, thirty, thirty-four, twenty-eight; Deux tasses de {farine|sucre}). tu/vous questions name the register in English. Reviewer: please confirm the age/eggs translations accept the same string they display.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fr_a1_u02_l01, fr_a1_u02_l02, w_ans, w_as, w_as-tu, w_aussi, w_avez-vous, w_besoin, w_cinq, w_cours, w_dernière, w_deux, w_douze, w_environ, w_farine, w_il, w_numéro, w_onze, w_parfait, w_peux, w_plaît, w_quatorze, w_quatre, w_question, w_quinze, w_recette, w_répéter, w_seize, w_six, w_sucre, w_sûr, w_table, w_tasses, w_te, w_treize, w_trente, w_trente-quatre, w_trois, w_téléphone, w_vingt, w_vingt-huit, w_âge, w_œufs]
+slot_presets:
+  n1: &n1 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: fr_a1_u02_l01}}
+  n2: &n2 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: fr_a1_u02_l02}}
+  nall: &nall {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [fr_a1_u02_l01, fr_a1_u02_l02]}}
+  words3: &words3 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_âge, w_numéro, w_téléphone, w_ans]}}
+  phone: &phone {language_code: fr, part_of_speech: [pronoun, verb, adjective, noun], agreement_tags: {semantic: [w_numéro, w_téléphone, w_peux, w_répéter, w_il, w_te, w_plaît, w_sûr]}}
+  food: &food {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_œufs, w_tasses, w_farine, w_sucre, w_table, w_recette]}}
+  food_l: &food_l {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_œufs, w_tasses, w_farine, w_sucre, w_table, w_recette, w_question, w_cours]}}
+  foodm: &foodm {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_œufs, w_tasses, w_farine, w_sucre, w_table, w_recette, w_question, w_cours, w_besoin, w_ans]}}
+  num_age: &num_age {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_onze, w_douze, w_treize, w_quatorze, w_quinze, w_seize, w_vingt, w_trente, "w_trente-quatre", "w_vingt-huit"]}}
+  num_egg: &num_egg {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_deux, w_trois, w_quatre, w_cinq, w_six]}}
+  numero: &numero {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_numéro}}
+  astu: &astu {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_as-tu"}}
+  avezvous: &avezvous {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_avez-vous"}}
+  as_: &as_ {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_as}}
+  bare_n: &bare_n {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [fr_a1_u02_l01, fr_a1_u02_l02]}}
+  bare_w: &bare_w {language_code: fr, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: [w_âge, w_numéro, w_téléphone, w_ans, w_œufs, w_tasses, w_farine, w_sucre, w_table, w_recette, w_question, w_cours, w_besoin, w_aussi, w_environ, w_parfait, w_dernière]}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit02.lesson01.choose.001
+    lesson_content_key: fr.a1.unit02.lesson01.numbers_zero_to_ten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "French numbers up to sixteen are single words; from seventeen on they are built from smaller pieces, like dix-sept, ten-seven.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson01.translate.002
+    lesson_content_key: fr.a1.unit02.lesson01.numbers_zero_to_ten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_n}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mind the spelling: zéro has an accent, and compound numbers such as trente-quatre are joined with a hyphen.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson02.choose.001
+    lesson_content_key: fr.a1.unit02.lesson02.numbers_eleven_to_hundred
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "From seventy the system changes: soixante-dix is sixty-ten and quatre-vingts is four-twenties.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson02.listen.002
+    lesson_content_key: fr.a1.unit02.lesson02.numbers_eleven_to_hundred
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *nall}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Zero to sixteen are individual words, then vingt, trente and soixante give the tens; the rest is built by combining them.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson02.match.003
+    lesson_content_key: fr.a1.unit02.lesson02.numbers_eleven_to_hundred
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *n2, second: *n2, third: *n2, fourth: *n2, fifth: *n2, sixth: *n2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Quatre-vingts takes a final s, but it drops it when another number follows: quatre-vingt-dix.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.choose.001
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *words3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Quel âge as-tu? asks someone's age: French says you have so many years, not you are so many years old.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.order.002
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: word_order
+    frame: {text: "J'ai {n} ans.", language_code: fr, direction: ltr}
+    slots: {n: *num_age}
+    answer_derivation: {kind: render_frame, frame: {text: "J'ai {n} ans.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "French says I have so many years (j'ai ... ans), not I am so many.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.fill.003
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: fill_in_blank
+    frame: {text: "Quel âge {item} ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *astu, hint: *astu}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Quel âge as-tu? is informal; with a stranger you would ask quel âge avez-vous?", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.translate.004
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: translation
+    frame: {text: "I am {n} years old.", language_code: en, direction: ltr, slot_rendering: {n: english_gloss}}
+    slots: {n: *num_age}
+    answer_derivation: {kind: render_frame, frame: {text: "J'ai {n} ans.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "French uses avoir (to have) for age: j'ai vingt-huit ans, literally I have twenty-eight years.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.translate.005
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: translation
+    frame: {text: "How old are you? (informal)", language_code: en, direction: ltr}
+    slots: {item: *astu}
+    answer_derivation: {kind: render_frame, frame: {text: "Quel âge {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Quel âge as-tu? uses tu: only for friends, family and peers.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson03.translate.006
+    lesson_content_key: fr.a1.unit02.lesson03.asking_age
+    type: translation
+    frame: {text: "How old are you? (formal)", language_code: en, direction: ltr}
+    slots: {item: *avezvous}
+    answer_derivation: {kind: render_frame, frame: {text: "Quel âge {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Quel âge avez-vous? uses vous: for strangers and in polite situations.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson04.choose.001
+    lesson_content_key: fr.a1.unit02.lesson04.phone_numbers
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *phone}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "S'il te plaît is the informal please and s'il vous plaît the formal one; the pattern matches tu and vous.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson04.fill.002
+    lesson_content_key: fr.a1.unit02.lesson04.phone_numbers
+    type: fill_in_blank
+    frame: {text: "Quel est ton {item} de téléphone ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *numero, hint: *numero}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ton is the informal your; with a stranger you would use a different, polite word for your", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson05.listen.001
+    lesson_content_key: fr.a1.unit02.lesson05.recipe_quantities
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *food}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Œufs is plural: the f of œuf is silent in the plural, so œufs sounds different from the singular.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson05.match.002
+    lesson_content_key: fr.a1.unit02.lesson05.recipe_quantities
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *foodm, second: *foodm, third: *foodm, fourth: *foodm, fifth: *foodm, sixth: *foodm}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Quantities in French use de: deux tasses de farine, une demi-tasse de sucre.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson05.order.003
+    lesson_content_key: fr.a1.unit02.lesson05.recipe_quantities
+    type: word_order
+    frame: {text: "J'ai besoin de {n} œufs.", language_code: fr, direction: ltr}
+    slots: {n: *num_egg}
+    answer_derivation: {kind: render_frame, frame: {text: "J'ai besoin de {n} œufs.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Avoir besoin de + noun means to need; the number sits between de and the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson05.translate.004
+    lesson_content_key: fr.a1.unit02.lesson05.recipe_quantities
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Many of these words are used with de after a quantity, like tasses de farine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit02.lesson06.fill.001
+    lesson_content_key: fr.a1.unit02.lesson06.recipe_count_dialogue
+    type: fill_in_blank
+    frame: {text: "Tu {item} aussi besoin de sucre ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *as_, hint: *as_}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tu as is the informal you have; the formal form would be vous avez.", language_code: en, direction: ltr}
