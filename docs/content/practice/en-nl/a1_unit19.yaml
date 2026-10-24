@@ -6,7 +6,10 @@ unit_content_key: nl.a1.unit19.weather
 review:
   status: reviewed
   fresh_context: "true"
-  notes: "Authored 2026-07-06 by the Claude session closing the en-nl
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-24 (en-nl practice pass, session 10): 5 fixes -- weather-vocab feedback/match text no longer claims every word (wandeling, regent) is a weather word (choose/listen/match); lesson02.translate.001 prompt pins the word order; 2 Dutch feedback frames retagged nl. Native flags: capitalised Zaterdag/Zondag (unit-scope weekday tokens) show in feedback; Vandaag is het ... is otherwise equally valid.
+
+    Authored 2026-07-06 by the Claude session closing the en-nl
     practice-pool gap behind its lesson content (lesson content already
     goes through unit23; practice templates previously stopped at
     unit16). This unit (unit19) covers weather: describing current
@@ -105,7 +108,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *weather_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the weather lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson01.listen.003
     lesson_content_key: nl.a1.unit19.lesson01.wat_voor_weer
     type: listen_select
@@ -120,12 +123,12 @@ templates:
     slots: {first: *weather_vocab_pure, second: *weather_vocab_pure, third: *weather_vocab_pure, fourth: *weather_vocab_pure, fifth: *weather_vocab_pure, sixth: *weather_vocab_pure}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "Match each weather word with its English meaning.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson02.translate.001
     lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
     type: translation
     frame:
-      text: "It is {item} today."
+      text: "It is {item} today. (Keep the English word order.)"
       language_code: en
       direction: ltr
       slot_rendering: {item: english_gloss}
@@ -133,7 +136,7 @@ templates:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *weather_adj}
     answer_derivation: {kind: render_frame, frame: {text: "Het is {item} vandaag.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Het is {item} vandaag.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Het is {item} vandaag.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson02.choose.002
     lesson_content_key: nl.a1.unit19.lesson02.koud_of_warm
     type: multiple_choice
@@ -145,7 +148,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *weather_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the weather lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson03.order.001
     lesson_content_key: nl.a1.unit19.lesson03.het_weerbericht
     type: word_order
@@ -177,7 +180,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *weather_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the weather lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson04.listen.002
     lesson_content_key: nl.a1.unit19.lesson04.plannen_maken_bij_weer
     type: listen_select
@@ -192,7 +195,7 @@ templates:
     slots: {first: *weather_vocab_pure, second: *weather_vocab_pure, third: *weather_vocab_pure, fourth: *weather_vocab_pure, fifth: *weather_vocab_pure, sixth: *weather_vocab_pure}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
-    feedback_frame: {text: "Match each weather word with its English meaning.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson05.choose.001
     lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
     type: multiple_choice
@@ -204,7 +207,7 @@ templates:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
     slots: {item: *weather_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the weather lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson05.translate.002
     lesson_content_key: nl.a1.unit19.lesson05.weerbericht_lezen
     type: translation
@@ -217,14 +220,14 @@ templates:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *weather_adj}
     answer_derivation: {kind: render_frame, frame: {text: "Het is {item}.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Het is {item}.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Het is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson06.listen.001
     lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
     slots: {item: *weather_vocab_pure}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a weather word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a word from the weather lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit19.lesson06.order.002
     lesson_content_key: nl.a1.unit19.lesson06.weekend_plannen
     type: word_order

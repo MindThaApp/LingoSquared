@@ -320,7 +320,7 @@ NL_GLOSSES = {
     "krijgen": "get; receive", "kwart": "quarter", "kwartier": "quarter-hour", "laat": "late; what time",
     "leer": "learn", "maand": "month", "maandag": "Monday", "maart": "March", "me": "myself; me",
     "mei": "May", "mensen": "people", "met": "with", "middag": "afternoon", "middags": "in the afternoon",
-    "mijn": "my", "moet": "must; is due", "na": "after", "naam": "name", "naar": "toward; to",
+    "mijn": "my", "moet": "must; has to", "na": "after", "naam": "name", "naar": "toward; to",
     "nacht": "night", "nachts": "at night", "negen": "nine", "negende": "ninth",
     "negenennegentig": "ninety-nine", "negenentwintigste": "twenty-ninth", "negentien": "nineteen",
     "negentiende": "nineteenth", "negentig": "ninety", "nieuw": "new", "normaal": "normally",
@@ -719,7 +719,7 @@ NL_GLOSSES.update({
     # classified common noun "opa" (unit05, "grandfather") -- here it is
     # used as a name-like reference to Lotte's specific grandfather, the
     # same convention as the capitalized Sander/Fenna/Nina proper nouns.
-    "Opa": "Grandpa (Lotte's grandfather, used as a name)",
+    "Opa": "Grandpa",
     "blond": "blond", "bruin": "brown", "grijs": "grey",
     # "Haar" (capitalized, the noun "hair") is a genuine homograph-of-case
     # with the already-classified possessive pronoun "haar" (her, unit05).
@@ -4457,7 +4457,7 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # include this unit's two new named characters -- additive only, does
     # not change what "person_name" already matched, same convention as the
     # weekday_pure/travel_noun_pure "_pure" tags elsewhere in this file.
-    if token in {"Nina", "Opa"}: semantic.append("person_name")
+    if token in {"Nina"}: semantic.append("person_name")  # Opa dropped 2026-10-24: "My name is Grandpa" in name frames
 
     # Unit 31 (animals) practice-template tags, added 2026-07-09. 4-member
     # pet-noun tag, verified safe generatively in "Ik heb een {item}." (all
@@ -4890,6 +4890,32 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ('c1_unit04_toegeven_en_wegen', 'wanneer'): 'when (conjunction)',
     ('c1_unit05_contrafeitelijk_redeneren', 'jou'): 'you (informal singular, object form)',
     ('c1_unit07_bronnen_bemiddelen', 'deze'): 'this; these',
+    # --- 2026-10-24 en-nl practice review (session 10): wrong-sense or
+    #     same-gloss glosses seen in practice pools; each keyed to the token's
+    #     first introducing unit at that level (verified against iter_specs()).
+    ("a1_unit05_family", "kind"): "child",  # possessive frames: "Dit is zijn *the child*"
+    ("a1_unit20_clothing", "broek"): "the trousers",  # prompt read "I am looking for the pants; the trousers."
+    ("a1_unit30_appearance", "lang"): "tall",  # "He is tall; long."
+    ("a1_unit30_appearance", "bruine"): "brown (before a noun)",  # was "(inflected)"; stays distinct from bruin
+    ("a1_unit30_appearance", "groene"): "green (before a noun)",
+    ("a1_unit32_sporten", "voetbal"): "football",  # "I do football; soccer."
+    ("a1_unit32_sporten", "hardlopen"): "running",  # "I do running; to run."
+    ("a1_unit32_sporten", "zwemmen"): "swimming",
+    ("a1_unit39_post", "schrijf"): "write (with ik)",  # "prescribe" is the a2_unit27 sense
+    ("a1_unit47_bibliotheek_lenen", "mee"): "along",  # "Het boek mag twee weken mee"
+    ("a1_unit67_markt", "bakker"): "the baker",  # "bij de bakker"; "the bakery" = bakkerij
+    ("a1_unit69_ijssalon", "bloemist"): "the florist",
+    ("a2_unit26_bankrekening", "betaalrekening"): "the current account",  # slash gloss
+    ("a2_unit27_huisarts", "pijn"): "pain",  # "Ik heb pijn" hint read "I have the pain"
+    ("a2_unit74_reisvertraging", "aansluiting"): "the connecting train",  # = verbinding "the connection"
+    ("a2_unit76_drukke_week", "slotte"): "finally (as in 'ten slotte')",
+    ("b1_unit03_werkoverleg", "agenda"): "the agenda",  # meeting agenda, not "planner"
+    ("b1_unit07_kunnen_en_konden", "Kun"): "can (in a question with jij)",  # = kan "can"
+    ("b1_unit07_kunnen_en_konden", "goede"): "good (before a noun)",  # = goed "good"
+    ("b1_unit10_werkverantwoordelijkheden", "langer"): "longer",  # "duurt iets langer"
+    ("b2_unit02_speculatie", "spreken"): "to speak",  # "vanochtend sprak ... spreken"
+    ("b2_unit04_verhaal", "was"): "was (past tense of 'to be')",  # "ik was moe", not afwassen
+    ("b2_unit07_onderhandelen", "alleen"): "only; alone",  # "maar alleen als"
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding

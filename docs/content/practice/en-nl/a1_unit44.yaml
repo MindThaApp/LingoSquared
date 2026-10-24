@@ -6,7 +6,14 @@ unit_content_key: nl.a1.unit44.noodgevallen
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-24 (en-nl practice pass, session 10): 4 fixes -- lesson01.choose.001 untagged -> unit
+    tag union; lesson03.choose feedback made neutral; lesson03.order.002 feedback showed the Dutch token
+    inside English -> English gloss; authoring text 'Second review matching set' removed
+    (lesson04.match.001). Native flags: Politie (capital P, duplicate of politie) cannot be excluded
+    from the service-noun pool, so 'Ik bel de Politie.' can appear in word_order.
+
     Authored 2026-07-12 as an additive Endless Practice coverage backfill for en-nl A1 unit 44. Uses the established
     broad bare-word recognition, matching_pairs, and translation shapes only; no new frame-specific grammar assumptions.
 
@@ -116,15 +123,8 @@ templates:
   slots:
     item:
       language_code: nl
-      part_of_speech:
-      - noun
-      - pronoun
-      - verb
-      - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      part_of_speech: [noun, verb, pronoun, adjective]
+      agreement_tags: {semantic: [emergency_help, emergency_safety_noun_lesson, emergency_service_noun_lesson, emergency_reading, emergency_wrapup_dialogue]}
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -236,7 +236,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is an emergency service from this unit.'
+    text: Remember the English meaning of {item}.
     language_code: en
     direction: ltr
 - content_key: practice.en-nl.nl.a1.unit44.lesson03.order.002
@@ -255,9 +255,11 @@ templates:
       language_code: nl
       direction: ltr
   feedback_frame:
-    text: Ik bel de {item}. -- I am calling the {item}.
+    text: I am calling the {item}.
     language_code: en
     direction: ltr
+    slot_rendering:
+      item: english_gloss
 - content_key: practice.en-nl.nl.a1.unit44.lesson04.match.001
   lesson_content_key: nl.a1.unit44.lesson04.brand_bij_het_taalcafe
   type: matching_pairs
@@ -265,10 +267,6 @@ templates:
     text: '{first} — {second} — {third} — {fourth} — {fifth} — {sixth}'
     language_code: nl
     direction: ltr
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
     first: *u44_emergency_review_word
     second: *u44_emergency_review_word

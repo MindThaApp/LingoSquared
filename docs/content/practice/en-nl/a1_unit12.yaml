@@ -6,8 +6,12 @@ unit_content_key: nl.a1.unit12.past_events
 review:
   status: reviewed
   required_next_reviewer: native_speaker_pass
-  fresh_context: "false"
+  fresh_context: "true"
   notes: >-
+    Review 2026-10-24 (en-nl practice pass, session 10): 1 fix --
+    lesson02.choose.001 (1 unit answer, below the 3-option floor) now unions the
+    hebben participles; feedback made true for both forms. Native flags: none.
+
     Original authoring notes (2026-07-06): hebben/zijn auxiliary choice is a
     hard constraint on tag design -- "Ik heb gegaan" is ungrammatical
     (gaan/komen take zijn) -- so participle_hebben (gedronken/gegeten/
@@ -122,6 +126,8 @@ slot_presets:
   infinitive_hebben: &infinitive_hebben {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: infinitive_hebben}}
   participle_zijn: &participle_zijn {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: participle_zijn}}
   recent_time: &recent_time {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: recent_time}}
+  # hebben_forms: lesson02.choose.001 only; the lone unit-scoped infinitive (kopen) was below the 3-option floor, so the unit's hebben participles are unioned in.
+  hebben_forms: &hebben_forms {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: [infinitive_hebben, participle_hebben]}}
   participle_all: &participle_all {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: [participle_hebben, participle_zijn]}}
 templates:
   - content_key: practice.en-nl.nl.a1.unit12.lesson01.choose.001
@@ -160,9 +166,9 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: *infinitive_hebben}
+    slots: {item: *hebben_forms}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is an infinitive that uses hebben in the perfect tense.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a verb form used with hebben in the perfect tense.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit12.lesson02.listen.002
     lesson_content_key: nl.a1.unit12.lesson02.met_hebben
     type: listen_select
