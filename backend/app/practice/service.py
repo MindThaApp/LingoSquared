@@ -391,6 +391,40 @@ def _same_gloss_lexemes(
     return found
 
 
+def _with_authored_variants(
+    template: PracticeTemplate,
+    filled: dict[str, Lexeme],
+    answer: Any,
+) -> Any:
+    """Add the template's optional answer_derivation.accepted_variants.
+
+    Variants are literal strings; `{slot}` placeholders are filled with the
+    sampled lexeme's token. Returns the plain answer when there is nothing
+    to add, else the {"canonical", "accepted"} shape grade() handles.
+    """
+    variants = (template.answer_derivation or {}).get("accepted_variants")
+    if not variants or not isinstance(variants, list):
+        return answer
+    if isinstance(answer, dict):
+        canonical, accepted = answer["canonical"], list(answer["accepted"])
+    elif isinstance(answer, str):
+        canonical, accepted = answer, [answer]
+    else:
+        return answer
+    for variant in variants:
+        if not isinstance(variant, str):
+            continue
+        rendered = SLOT_RE.sub(
+            lambda m: filled[m.group(1)].token if m.group(1) in filled else m.group(0),
+            variant,
+        )
+        if rendered not in accepted:
+            accepted.append(rendered)
+    if len(accepted) == 1:
+        return answer
+    return {"canonical": canonical, "accepted": accepted}
+
+
 def translation_accepted_answers(
     template: PracticeTemplate,
     filled: dict[str, Lexeme],
@@ -622,6 +656,7 @@ def build_prompt(
             })
             if len(pool) > 1:
                 answer = {"canonical": answer, "accepted": pool}
+        answer = _with_authored_variants(template, filled, answer)
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Fill in the missing word."),
@@ -631,6 +666,7 @@ def build_prompt(
         }
     elif template.type == "translation":
         answer = translation_accepted_answers(template, filled, lexemes, answer)
+        answer = _with_authored_variants(template, filled, answer)
         prompt = {
             "text_blocks": [
                 _instruction_block(course, "Translate this."),
