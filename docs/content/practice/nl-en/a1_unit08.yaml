@@ -5,8 +5,9 @@ target_language: en
 unit_content_key: en.a1.unit08.shopping
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; 2 fixes). (1) label_pair.002: matching_pairs below the 6-pair floor (5 pairs) -- widened to the quantity_unit plus food_plural union with 6 slots; frame and feedback now speak of words on the price label instead of only units. (2) price_question_order.001: question frame lacked the question mark -- added. NATIVE FLAGS: pounds_translate.003 and total_translate.002 translate a bare digit 4 to 4 (identity exercise). BACKFILL GLOSS FLAGS: none. Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
     the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
@@ -140,9 +141,9 @@ templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson02.price_question_order.001
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
     type: word_order
-    frame: {text: "How much are the {item}", language_code: en, direction: ltr}
+    frame: {text: "How much are the {item}?", language_code: en, direction: ltr}
     slots: {item: *food_plural}
-    answer_derivation: {kind: render_frame, frame: {text: "How much are the {item}", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "How much are the {item}?", language_code: en, direction: ltr}}
     feedback_frame: {text: "Je vraagt naar de prijs van: {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson02.pounds_translate.003
     lesson_content_key: en.a1.unit08.lesson02.asking_prices
@@ -168,11 +169,11 @@ templates:
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_pair.002
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: matching_pairs
-    frame: {text: "Koppel de eenheden aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
-    slots: {first_unit: *quantity_unit, second_unit: *quantity_unit, third_unit: *quantity_unit, fourth_unit: *quantity_unit, fifth_unit: *quantity_unit}
-    slot_relations: [{kind: distinct, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}]
-    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit]}
-    feedback_frame: {text: "Je hebt de eenheden gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    frame: {text: "Koppel de Engelse woorden van het prijslabel aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
+    slots: {first_unit: *quantity_food_union, second_unit: *quantity_food_union, third_unit: *quantity_food_union, fourth_unit: *quantity_food_union, fifth_unit: *quantity_food_union, sixth_unit: *quantity_food_union}
+    slot_relations: [{kind: distinct, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit, sixth_unit]}]
+    answer_derivation: {kind: matching_pairs, slots: [first_unit, second_unit, third_unit, fourth_unit, fifth_unit, sixth_unit]}
+    feedback_frame: {text: "Je hebt de woorden van het prijslabel gekoppeld aan hun Nederlandse betekenis.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit08.lesson03.label_translate.003
     lesson_content_key: en.a1.unit08.lesson03.reading_price_labels
     type: translation
