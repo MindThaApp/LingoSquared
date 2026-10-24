@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit06
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit06.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u06*, single-member w_<token> anchors, curated w_ lists). Frames follow this unit's straight apostrophes. Clock frames: Il est dix heures et quart / onze heures moins le quart. Heure and heures are kept out of shared choose and match pools because their glosses differ only by number. The sentence-initial slot case (a slot that would open a sentence) is avoided throughout. Reviewer: confirm the le matin / le soir frames and clock-time wording read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fr_a1_u06_l01, fr_a1_u06_l03, w_alors, w_crois, "w_d'habitude", w_demie, w_dix-huit, w_finit, w_heures, w_matin, w_midi, w_moins, w_pratique, w_quart, w_quelle, w_soir, w_travail, w_vers]
+slot_presets:
+  n_l01: &n_l01 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: fr_a1_u06_l01}}
+  mt: &mt {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_matin, w_soir]}}
+  a_midi_noun: &a_midi_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_midi}}
+  a_soir_noun: &a_soir_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_soir}}
+  c2: &c2 {language_code: fr, part_of_speech: [adjective, noun, adverb], agreement_tags: {semantic: [w_quelle, w_quart, w_demie, w_moins, w_heures]}}
+  a_quelle_adje: &a_quelle_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_quelle}}
+  a_moins_adve: &a_moins_adve {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: w_moins}}
+  a_quart_noun: &a_quart_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_quart}}
+  n_l03: &n_l03 {language_code: fr, part_of_speech: [noun, adjective, verb, adverb, preposition, pronoun, particle, phrase], agreement_tags: {semantic: fr_a1_u06_l03}}
+  lis3: &lis3 {language_code: fr, part_of_speech: [noun, adjective, verb, preposition, adverb], agreement_tags: {semantic: [w_travail, w_pratique, w_finit, w_vers, w_alors, w_dix-huit]}}
+  a_pratique_adje: &a_pratique_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_pratique}}
+  a_finit_verb: &a_finit_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_finit}}
+  a_d_habitude_adve: &a_d_habitude_adve {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: "w_d'habitude"}}
+  a_crois_verb: &a_crois_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_crois}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.choose.001
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n_l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Le matin, l'après-midi and le soir name parts of the day; midi and minuit are noon and midnight and take no article.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.listen.002
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n_l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "L'heure is la heure shortened: heure begins with a silent h, so la becomes l' before it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.match.003
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *n_l01, second: *n_l01, third: *n_l01, fourth: *n_l01, fifth: *n_l01, sixth: *n_l01}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Matin, après-midi and soir usually come with le or l' when you say in the morning, in the afternoon, in the evening.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.order.004
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: word_order
+    frame: {text: "Le marché est ouvert le {item}.", language_code: fr, direction: ltr}
+    slots: {item: *mt}
+    answer_derivation: {kind: render_frame, frame: {text: "Le marché est ouvert le {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Le matin and le soir mean in the morning and in the evening, with no word for in.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.fill.005
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: fill_in_blank
+    frame: {text: "Nous mangeons à {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_midi_noun, hint: *a_midi_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "À midi means at noon; midi is the same word for noon whatever the day.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson01.translate.006
+    lesson_content_key: fr.a1.unit06.lesson01.moments_de_la_journee
+    type: translation
+    frame: {text: "The workshop starts in the evening, not in the morning.", language_code: en, direction: ltr}
+    slots: {item: *a_soir_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "L'atelier commence le {item}, pas le matin.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Le soir means in the evening; pas negates the contrast with le matin.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson02.choose.001
+    lesson_content_key: fr.a1.unit06.lesson02.dire_lheure
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Demie is the feminine form here because heure is feminine: dix heures et demie.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson02.listen.002
+    lesson_content_key: fr.a1.unit06.lesson02.dire_lheure
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Et quart and moins le quart are the two quarter-hour phrases: past the hour and to the hour.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson02.order.003
+    lesson_content_key: fr.a1.unit06.lesson02.dire_lheure
+    type: word_order
+    frame: {text: "L'atelier commence à {item} heure ?", language_code: fr, direction: ltr}
+    slots: {item: *a_quelle_adje}
+    answer_derivation: {kind: render_frame, frame: {text: "L'atelier commence à {item} heure ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Quelle heure? asks what time; quelle is feminine to agree with heure.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson02.fill.004
+    lesson_content_key: fr.a1.unit06.lesson02.dire_lheure
+    type: fill_in_blank
+    frame: {text: "Il est onze heures {item} le quart. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_moins_adve, hint: *a_moins_adve}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Moins le quart subtracts a quarter from the next hour, so onze heures moins le quart is 10:45.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson02.translate.005
+    lesson_content_key: fr.a1.unit06.lesson02.dire_lheure
+    type: translation
+    frame: {text: "It is a quarter past ten.", language_code: en, direction: ltr}
+    slots: {item: *a_quart_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Il est dix heures et {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Et quart adds a quarter hour; in French you say ten hours and quarter.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.choose.001
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *n_l03}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Alors, vers and après are small linking words that carry timing or sequence in the dialogue.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.listen.002
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vers means around, as in vers vingt heures quinze, giving an approximate time.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.match.003
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *n_l03, second: *n_l03, third: *n_l03, fourth: *n_l03, fifth: *n_l03, sixth: *n_l03}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Après le travail means after work; vers and d'habitude give approximate and habitual timing.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.order.004
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: word_order
+    frame: {text: "C'est plus {item} après le travail.", language_code: fr, direction: ltr}
+    slots: {item: *a_pratique_adje}
+    answer_derivation: {kind: render_frame, frame: {text: "C'est plus {item} après le travail.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Plus pratique means more convenient; pratique has the same form for masculine and feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.fill.005
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: fill_in_blank
+    frame: {text: "Et il {item} à quelle heure ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_finit_verb, hint: *a_finit_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Finit is the il form of finir, so it matches il in the question.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.fill.006
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: fill_in_blank
+    frame: {text: "Vers vingt heures quinze, comme {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_d_habitude_adve, hint: *a_d_habitude_adve}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Comme d'habitude means as usual.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit06.lesson03.translate.007
+    lesson_content_key: fr.a1.unit06.lesson03.dialogue_prochain_atelier
+    type: translation
+    frame: {text: "It starts at 6:30 p.m., I think.", language_code: en, direction: ltr}
+    slots: {item: *a_crois_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Il commence à dix-huit heures trente, je {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je crois is the je form of croire and softens a statement: I think so.", language_code: en, direction: ltr}

@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit10
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit10.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u10*, single-member w_<token> anchors, curated w_ lists). Frames follow this unit's straight apostrophes. Routine verbs are reflexive (me/m' + verb); frames keep Je me ... and Tu ... with the right pronoun. Rentre/rentres style homophones are kept out of listen pools; m'habille and s'habiller are never in one choose pool. Reviewer: confirm vers vingt-trois heures and le samedi frames.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_avant, w_couche, w_coucher, "w_d'abord", w_douche, w_dîner, w_dînons, w_ensemble, w_fais, w_petit-déjeuner, w_prendre, w_puis, w_quitte, w_quitter, w_quoi, w_rentre, w_rentrer, w_rentres, w_repose, w_réveiller, "w_s'habiller", w_tard, w_vais, w_vingt-trois, w_week-end]
+slot_presets:
+  c1: &c1 {language_code: fr, part_of_speech: [noun, verb, preposition, adverb], agreement_tags: {semantic: [w_douche, w_petit-déjeuner, w_avant, "w_d'abord", "w_s'habiller", w_quitter, w_prendre, w_réveiller]}}
+  lis1: &lis1 {language_code: fr, part_of_speech: [noun, verb, preposition, adverb], agreement_tags: {semantic: [w_douche, w_petit-déjeuner, w_avant, "w_d'abord", "w_s'habiller", w_quitter, w_prendre]}}
+  a_quitte_verb: &a_quitte_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_quitte}}
+  a_douche_noun: &a_douche_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_douche}}
+  a_petit_dejeuner_noun: &a_petit_dejeuner_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_petit-déjeuner}}
+  c2: &c2 {language_code: fr, part_of_speech: [verb, adverb, noun], agreement_tags: {semantic: [w_rentrer, w_dîner, w_ensemble, w_coucher, w_week-end, w_tard, w_puis, w_vingt-trois, w_vais]}}
+  lis2: &lis2 {language_code: fr, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_ensemble, w_tard, w_puis, w_week-end, w_vingt-trois, w_vais]}}
+  a_rentre_verb: &a_rentre_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_rentre}}
+  a_dinons_verb: &a_dinons_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_dînons}}
+  a_couche_verb: &a_couche_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_couche}}
+  c3: &c3 {language_code: fr, part_of_speech: [pronoun, verb, adverb], agreement_tags: {semantic: [w_quoi, w_rentres, w_repose, w_vais, w_fais, "w_d'abord"]}}
+  lis3: &lis3 {language_code: fr, part_of_speech: [pronoun, verb, adverb, noun], agreement_tags: {semantic: [w_quoi, w_repose, w_vais, w_fais, w_puis, w_tard]}}
+  a_vais_verb: &a_vais_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_vais}}
+  a_repose_verb: &a_repose_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_repose}}
+  a_quoi_pron: &a_quoi_pron {language_code: fr, part_of_speech: pronoun, agreement_tags: {semantic: w_quoi}}
+  a_rentres_verb: &a_rentres_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_rentres}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.choose.001
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Avant means before; d'abord means first, at the start of a sequence.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.listen.002
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "S'habiller is reflexive: je m'habille, tu t'habilles; the s' becomes m' with je.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.match.003
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *c1, second: *c1, third: *c1, fourth: *c1, fifth: *c1, sixth: *c1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Several routine verbs are reflexive (se réveiller, s'habiller); the others, such as prendre and quitter, are not.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.order.004
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: word_order
+    frame: {text: "Je {item} la maison à neuf heures.", language_code: fr, direction: ltr}
+    slots: {item: *a_quitte_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Je {item} la maison à neuf heures.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Quitter la maison means to leave the house; with je the verb is quitte.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.fill.005
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: fill_in_blank
+    frame: {text: "Je prends une {item} le matin. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_douche_noun, hint: *a_douche_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Prendre une douche is the usual way to say take a shower.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson01.translate.007
+    lesson_content_key: fr.a1.unit10.lesson01.vocabulaire_routine
+    type: translation
+    frame: {text: "I get dressed before breakfast.", language_code: en, direction: ltr}
+    slots: {item: *a_petit_dejeuner_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Je m'habille avant le {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je m'habille uses the reflexive m' before a vowel sound.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.choose.001
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tard means late; puis means then, used to link steps in a routine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.listen.002
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vingt-trois is 23; French times can use the 24-hour clock, so vingt-trois heures is 11 p.m.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.match.003
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *c2, second: *c2, third: *c2, fourth: *c2, fifth: *c2, sixth: *c2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Rentrer, dîner and coucher are the infinitives; the je and nous forms change their endings.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.fill.005
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: fill_in_blank
+    frame: {text: "Je {item} à la maison après le travail. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_rentre_verb, hint: *a_rentre_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Rentre is the je form; rentrer means to go back home.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.translate.007
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: translation
+    frame: {text: "We have dinner together on Saturday evening.", language_code: en, direction: ltr}
+    slots: {item: *a_dinons_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Nous {item} ensemble le samedi soir.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Nous dînons is the nous form; ensemble means together.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson02.translate.008
+    lesson_content_key: fr.a1.unit10.lesson02.la_journee_complete
+    type: translation
+    frame: {text: "I go to bed around 11 p.m. (23:00).", language_code: en, direction: ltr}
+    slots: {item: *a_couche_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Je me {item} vers vingt-trois heures.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Vers gives an approximate time; vingt-trois heures uses the 24-hour clock.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.choose.001
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tu fais quoi ? is the casual way to ask what you are doing; quoi replaces que after the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.listen.002
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Je me repose means I rest; repose is the je form of se reposer.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.order.004
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: word_order
+    frame: {text: "Ensuite, je prends le petit-déjeuner et je {item} au marché.", language_code: fr, direction: ltr}
+    slots: {item: *a_vais_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ensuite, je prends le petit-déjeuner et je {item} au marché.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je vais is the je form of aller; au is à plus le.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.fill.005
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: fill_in_blank
+    frame: {text: "Je me {item} avant l'atelier du soir. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_repose_verb, hint: *a_repose_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Se reposer is reflexive, so je takes me.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.translate.006
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: translation
+    frame: {text: "What do you do on Saturday before the workshop? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *a_quoi_pron}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu fais {item} le samedi avant l'atelier ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Tu fais quoi ? is the informal way to ask what someone is doing.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit10.lesson03.translate.007
+    lesson_content_key: fr.a1.unit10.lesson03.dialogue_routine_samedi
+    type: translation
+    frame: {text: "What time do you get home? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *a_rentres_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu {item} à quelle heure ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Rentres is the tu form; à quelle heure asks for the time.", language_code: en, direction: ltr}
