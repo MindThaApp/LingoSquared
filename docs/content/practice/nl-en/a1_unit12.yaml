@@ -5,8 +5,9 @@ target_language: en
 unit_content_key: en.a1.unit12.clothing
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: true
-  notes: "Authored 2026-07-05 by the Claude session syncing Endless Practice
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; 2 fixes). (1) lesson03.color_translate.003: floor -- pool was only blue/black (2); now draws on the lesson02 tag (3 sizes + 2 colors, 5 candidates) via new lesson02_adjective preset. (2) word_order frames: punctuation -- question marks / period added. NATIVE FLAGS: medium=middelmaat (overlay: maat M). BACKFILL GLOSS FLAGS: medium=middelmaat; i'll=ik zal. Authored 2026-07-05 by the Claude session syncing Endless Practice
     template pools to lesson content growth (nl-en direction, per the
     coordinator's scope split). Keyed to English target lexemes extended into
     the shared scripts/_en_target_lexeme_common.py plus this pair's own Dutch
@@ -51,12 +52,14 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [clothing_item, clothing_singular, clothing_size, clothing_color]
+    semantic: [clothing_item, clothing_singular, clothing_size, clothing_color, a1_unit12_clothing_lesson02]
 slot_presets:
   clothing_item: &clothing_item {language_code: en, part_of_speech: noun, agreement_tags: {semantic: clothing_item}}
   clothing_singular: &clothing_singular {language_code: en, part_of_speech: noun, agreement_tags: {semantic: clothing_singular}}
   clothing_size: &clothing_size {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: clothing_size}}
   clothing_color: &clothing_color {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: clothing_color}}
+  # lesson02 word pool (3 sizes + 2 colors): used for the bare-word translation so it has >=3 candidates
+  lesson02_adjective: &lesson02_adjective {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: a1_unit12_clothing_lesson02}}
 templates:
   - content_key: practice.nl-en.en.a1.unit12.lesson01.clothing_meaning.001
     lesson_content_key: en.a1.unit12.lesson01.clothing_items
@@ -90,9 +93,9 @@ templates:
   - content_key: practice.nl-en.en.a1.unit12.lesson02.size_order.001
     lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
     type: word_order
-    frame: {text: "Do you have this in a {item}", language_code: en, direction: ltr}
+    frame: {text: "Do you have this in a {item}?", language_code: en, direction: ltr}
     slots: {item: *clothing_size}
-    answer_derivation: {kind: render_frame, frame: {text: "Do you have this in a {item}", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you have this in a {item}?", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de maat waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit12.lesson02.size_translate.003
     lesson_content_key: en.a1.unit12.lesson02.sizes_and_colors
@@ -111,15 +114,15 @@ templates:
   - content_key: practice.nl-en.en.a1.unit12.lesson03.label_size_order.001
     lesson_content_key: en.a1.unit12.lesson03.reading_a_label
     type: word_order
-    frame: {text: "The shirt is a {item}", language_code: en, direction: ltr}
+    frame: {text: "The shirt is a {item}.", language_code: en, direction: ltr}
     slots: {item: *clothing_size}
-    answer_derivation: {kind: render_frame, frame: {text: "The shirt is a {item}", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "The shirt is a {item}.", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is de maat in deze zin.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit12.lesson03.color_translate.003
     lesson_content_key: en.a1.unit12.lesson03.reading_a_label
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *clothing_color}
+    slots: {item: *lesson02_adjective}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit12.lesson03.clothing_meaning.004
@@ -139,9 +142,9 @@ templates:
   - content_key: practice.nl-en.en.a1.unit12.lesson04.item_size_order.002
     lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
     type: word_order
-    frame: {text: "Do you have this {item} in a medium", language_code: en, direction: ltr}
+    frame: {text: "Do you have this {item} in a medium?", language_code: en, direction: ltr}
     slots: {item: *clothing_singular}
-    answer_derivation: {kind: render_frame, frame: {text: "Do you have this {item} in a medium", language_code: en, direction: ltr}}
+    answer_derivation: {kind: render_frame, frame: {text: "Do you have this {item} in a medium?", language_code: en, direction: ltr}}
     feedback_frame: {text: "{item} is het kledingstuk waarnaar gevraagd wordt.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit12.lesson04.clothing_translate.004
     lesson_content_key: en.a1.unit12.lesson04.clothing_store_dialogue
