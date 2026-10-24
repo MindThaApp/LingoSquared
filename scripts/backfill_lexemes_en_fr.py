@@ -179,16 +179,16 @@ GLOSSES: dict[str, str] = {
     # unit07 places
     "gare": "train station", "pharmacie": "pharmacy", "banque": "bank",
     "l'école": "the school", "poste": "post office", "où": "where",
-    "face": "face; front", "côté": "side", "d'ici": "from here",
+    "face": "opposite; facing", "côté": "side; next to", "d'ici": "from here",
     "loin": "far", "n'est": "is not", "excusez-moi": "excuse me",
-    "minutes": "minutes", "pied": "foot", "prie": "I ask; I beg",
+    "minutes": "minutes", "pied": "foot", "prie": "I beg; (in a set phrase) you are welcome",
     # unit08 dates
     "lundi": "Monday", "samedi": "Saturday", "lieu": "place",
     "dimanche": "Sunday", "demain": "tomorrow", "hier": "yesterday",
-    "jour": "day", "sommes": "we are", "mars": "March", "date": "date",
+    "jour": "day", "sommes": "we are", "mars": "March", "date": "calendar date",
     "premier": "first (masc.)", "termine": "ends", "vingt-deux": "twenty-two",
     "quand": "when", "séance": "session", "donc": "so; therefore",
-    "temps": "time; weather", "préparer": "to prepare",
+    "temps": "time (to do something)", "préparer": "to prepare",
     "l'occasion": "the occasion", "bonne": "good (fem.)", "idée": "idea",
     "voit": "sees",
     # unit09 directions
@@ -242,7 +242,7 @@ GLOSSES: dict[str, str] = {
     # unit13 preferences
     "préférer": "to prefer", "préfère": "prefer; prefers", "tarte": "tart; pie",
     "chocolat": "chocolate", "aimer": "to like; to love",
-    "j'aime": "I like", "mieux": "better", "plats": "dishes",
+    "j'aime": "I like", "mieux": "better (adverb)", "plats": "dishes",
     "salés": "savoury (masc. plural)", "sucrés": "sweet (masc. plural)",
     "détester": "to hate", "déteste": "hate; hates", "épices": "spices",
     "trop": "too much; too", "fortes": "strong (fem. plural)",
@@ -259,7 +259,7 @@ GLOSSES: dict[str, str] = {
     "irrégulier": "irregular", "comparons": "we compare",
     "d'acheter": "of buying", "sortes": "kinds; sorts",
     "lequel": "which one (masc.)", "prend": "takes",
-    "celui-ci": "this one (masc.)", "l'air": "the air; the look",
+    "celui-ci": "this one (masc.)", "l'air": "the look; the appearance",
     "trouve": "find; finds; think", "vrai": "true",
     "celui-là": "that one (masc.)", "meilleure": "better (fem.)",
     "option": "option", "reste": "stays; remains; is left",

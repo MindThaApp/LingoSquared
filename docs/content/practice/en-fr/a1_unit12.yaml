@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit12
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit12.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u12*, single-member w_<token> anchors, curated w_ lists). Frames follow this unit's straight apostrophes. Past participles in -e/-ee sound alike (arrive/arrivee, alle/allee), so they are never in a listen pool and are kept out of choose and match pools. Each participle frame is a single w_ anchor with its own auxiliary. Reviewer: confirm the speaker-gender notes (said by a woman) and agreement with le bus / Mathieu.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_acheté, w_aimé, w_allée, w_arrivé, w_beurre, w_bus, w_dernier, w_finalement, w_goûté, w_gâteau, "w_l'épicerie", w_là-bas, w_nettoyer, w_oublié, w_préparé, w_pu, w_rapidement, w_resté, w_retard, w_sauce, w_sujet, w_trouvé, w_venir, w_était, w_être]
+slot_presets:
+  c1: &c1 {language_code: fr, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_gâteau, w_beurre, w_sauce, w_préparé, w_acheté, w_oublié, w_goûté]}}
+  lis1: &lis1 {language_code: fr, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_gâteau, w_beurre, w_sauce, w_acheté, w_oublié, w_goûté, w_aimé]}}
+  a_aime_verb: &a_aime_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_aimé}}
+  a_achete_verb: &a_achete_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_acheté}}
+  a_prepare_verb: &a_prepare_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_préparé}}
+  a_oublie_verb: &a_oublie_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_oublié}}
+  c2: &c2 {language_code: fr, part_of_speech: [noun, adverb, verb], agreement_tags: {semantic: [w_retard, w_bus, w_finalement, w_était, w_nettoyer, w_resté, w_être, w_sujet]}}
+  lis2: &lis2 {language_code: fr, part_of_speech: [noun, adverb, verb], agreement_tags: {semantic: [w_retard, w_bus, w_finalement, w_était, w_nettoyer, w_sujet]}}
+  a_arrive_adje: &a_arrive_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_arrivé}}
+  a_reste_verb: &a_reste_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_resté}}
+  a_allee_adje: &a_allee_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_allée}}
+  a_etait_verb: &a_etait_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_était}}
+  c3: &c3 {language_code: fr, part_of_speech: [noun, adverb, verb, adjective], agreement_tags: {semantic: ["w_l'épicerie", w_rapidement, w_trouvé, w_là-bas, w_venir, w_dernier, w_pu]}}
+  lis3: &lis3 {language_code: fr, part_of_speech: [noun, adverb, verb, adjective], agreement_tags: {semantic: ["w_l'épicerie", w_rapidement, w_là-bas, w_venir, w_dernier, w_trouvé]}}
+  a_rapidement_adve: &a_rapidement_adve {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: w_rapidement}}
+  a_pu_verb: &a_pu_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_pu}}
+  a_la_bas_adve: &a_la_bas_adve {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: w_là-bas}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.choose.001
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Préparé, acheté, oublié and goûté are past participles of -er verbs: they end in -é.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.listen.002
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "All these participles end in -é, pronounced like the final sound of café.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.order.004
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: word_order
+    frame: {text: "Tu as {item} le gâteau ?", language_code: fr, direction: ltr}
+    slots: {item: *a_aime_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu as {item} le gâteau ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Tu as aimé? is the past question: as plus the participle aimé.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.fill.006
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: fill_in_blank
+    frame: {text: "J'ai {item} des légumes au marché. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_achete_verb, hint: *a_achete_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Acheté is the participle of acheter, used after j'ai.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.translate.007
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: translation
+    frame: {text: "I prepared a cake for the workshop.", language_code: en, direction: ltr}
+    slots: {item: *a_prepare_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "J'ai {item} un gâteau pour l'atelier.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "J'ai préparé uses avoir plus the participle; there is no ending change after avoir.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson01.translate.008
+    lesson_content_key: fr.a1.unit12.lesson01.passe_compose_avoir
+    type: translation
+    frame: {text: "I forgot the butter at home.", language_code: en, direction: ltr}
+    slots: {item: *a_oublie_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "J'ai {item} le beurre à la maison.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "J'ai oublié is the passé composé of oublier.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.choose.001
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Être is the auxiliary for movement verbs such as arriver, aller and rester: je suis arrivé, il est resté.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.listen.002
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Finalement is built on the adjective final plus the ending -ment.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.order.004
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: word_order
+    frame: {text: "Le bus est {item} en retard.", language_code: fr, direction: ltr}
+    slots: {item: *a_arrive_adje}
+    answer_derivation: {kind: render_frame, frame: {text: "Le bus est {item} en retard.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Arrivé agrees with le bus, so it is masculine singular with no extra -e.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.fill.006
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: fill_in_blank
+    frame: {text: "Mathieu est {item} pour nettoyer la cuisine. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_reste_verb, hint: *a_reste_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Rester takes être, so resté agrees with Mathieu: masculine singular.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.translate.007
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: translation
+    frame: {text: "I went to the market before the workshop. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *a_allee_adje}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis {item} au marché avant l'atelier.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "With être the participle agrees with the subject, so a woman writes allée.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson02.translate.008
+    lesson_content_key: fr.a1.unit12.lesson02.passe_compose_etre
+    type: translation
+    frame: {text: "Finally, the cake was delicious.", language_code: en, direction: ltr}
+    slots: {item: *a_etait_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Finalement, le gâteau {item} délicieux.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Était is the imperfect of être; finalement opens the sentence to mean in the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.choose.001
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Je n'ai pas pu venir means I could not come; pu is the participle of pouvoir.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.listen.002
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Samedi dernier means last Saturday; dernier follows the noun here.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.match.003
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *c3, second: *c3, third: *c3, fourth: *c3, fifth: *c3, sixth: *c3}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Là-bas means over there, and rapidement means quickly.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.order.004
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: word_order
+    frame: {text: "Je suis allé {item} à l'épicerie du coin.", language_code: fr, direction: ltr}
+    slots: {item: *a_rapidement_adve}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis allé {item} à l'épicerie du coin.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Rapidement is an adverb and stays unchanged.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.fill.005
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: fill_in_blank
+    frame: {text: "Je n'ai pas {item} venir. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_pu_verb, hint: *a_pu_verb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pu is the participle of pouvoir; n'ai pas surrounds the auxiliary.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit12.lesson03.translate.006
+    lesson_content_key: fr.a1.unit12.lesson03.dialogue_atelier_dernier
+    type: translation
+    frame: {text: "Did you find some butter over there? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *a_la_bas_adve}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu as trouvé du beurre {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Tu as trouvé? is informal, and du beurre means some butter.", language_code: en, direction: ltr}
