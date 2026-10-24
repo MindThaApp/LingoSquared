@@ -264,13 +264,18 @@ curl -X POST http://192.168.4.4:8010/admin/content/import \
 #      original 6:  backfill_lexemes.py (en-fa), backfill_lexemes_en_nl.py,
 #                   backfill_lexemes_en_prs.py, backfill_lexemes_fa_en.py,
 #                   backfill_lexemes_nl_en.py, backfill_lexemes_prs_en.py
-#      new 10 (Session 10, A1 only, shared runner
-#      scripts/_target_lexeme_backfill_common.py):
+#      new 10 (Session 10 A1; since Session 11 the nine en-* ones also
+#      cover A2, shared runner scripts/_target_lexeme_backfill_common.py):
 #                   backfill_lexemes_en_es.py, backfill_lexemes_en_fr.py,
 #                   backfill_lexemes_en_de.py, backfill_lexemes_en_it.py,
 #                   backfill_lexemes_en_ru.py, backfill_lexemes_en_pl.py,
 #                   backfill_lexemes_en_ro.py, backfill_lexemes_en_hi.py,
 #                   backfill_lexemes_en_ar.py, backfill_lexemes_de_en.py
+#    A2 NOTE: the en-es/en-fr/en-it/en-de/en-ru/en-pl/en-ro/en-hi/en-ar
+#    backfills now also cover A2, so the A2 courses must be imported in
+#    step 7 first (order: course import -> backfills -> practice import);
+#    otherwise the A2 lessons are missing and the backfill/practice import
+#    fails for those units.
 #    sync_dev_db.sh globs scripts/backfill_lexemes*.py, so it runs all 16;
 #    by hand, list them explicitly. _target_lexeme_backfill_common.py is a
 #    library, not a backfill: never run it directly. Each script supports
