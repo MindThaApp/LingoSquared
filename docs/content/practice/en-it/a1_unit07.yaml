@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit07
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit07.food_and_drink
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u07* lesson tags, w_<token> anchors).
+    Bar vocabulary pools are the unit's own w_ tokens. Frames use only earlier-unit words as literals (vorrei, caffè, cornetto, per favore). Waiter register is formal (desidera, Lei); no frame asserts a character fact.
+    Reviewer check: 'Grazie, basta così' and 'Un panino e un'acqua, per favore' follow the unit dialogue.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_basta, w_conto, w_cosa, "w_così", w_desidera, w_favore, "w_l'acqua", "w_menù", w_panino, "w_un'acqua"]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [noun, pronoun, verb], agreement_tags: {semantic: [w_panino, "w_l'acqua", w_cosa, w_desidera, w_favore]}}
+  pool2: &pool2 {language_code: it, part_of_speech: [noun, verb, pronoun], agreement_tags: {semantic: [w_panino, "w_l'acqua", w_desidera, w_favore, w_cosa]}}
+  t_panino: &t_panino {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_panino}}
+  t_favore: &t_favore {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_favore}}
+  t_desidera: &t_desidera {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_desidera}}
+  pool6: &pool6 {language_code: it, part_of_speech: [verb, adverb, noun], agreement_tags: {semantic: [w_basta, "w_così", "w_menù", w_conto, w_favore]}}
+  pool7: &pool7 {language_code: it, part_of_speech: [verb, adverb, noun], agreement_tags: {semantic: [w_basta, "w_così", w_conto, "w_menù", w_favore]}}
+  t_basta: &t_basta {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_basta}}
+  pool9: &pool9 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: ["w_menù", w_conto, "w_un'acqua", w_panino]}}
+  t_conto: &t_conto {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_conto}}
+  t_un_acqua: &t_un_acqua {language_code: it, part_of_speech: noun, agreement_tags: {semantic: "w_un'acqua"}}
+  pool12: &pool12 {language_code: it, part_of_speech: [noun, pronoun, verb], agreement_tags: {semantic: [w_panino, "w_l'acqua", w_cosa, w_desidera, w_favore, "w_menù", w_conto]}}
+  pool13: &pool13 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_panino, "w_l'acqua", "w_menù", w_conto, w_favore, "w_un'acqua"]}}
+templates:
+  - content_key: practice.en-it.it.a1.unit07.lesson01.choose.001
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cosa desidera? is the formal way a bar worker asks what you would like.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson01.listen.002
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Per favore is the polite phrase added to every order.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson01.order.003
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: word_order
+    frame: {text: "Vorrei un caffè e un {item}, per favore.", language_code: it, direction: ltr}
+    slots: {item: *t_panino}
+    answer_derivation: {kind: render_frame, frame: {text: "Vorrei un caffè e un {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Vorrei means I would like and is the polite way to order.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson01.fill.004
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: fill_in_blank
+    frame: {text: "Vorrei un caffè, per {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_favore, hint: *t_favore}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Per favore means please and goes at the end of a request.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson01.translate.005
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: translation
+    frame: {text: "I would like a coffee and a croissant, please.", language_code: en, direction: ltr}
+    slots: {item: *t_favore}
+    answer_derivation: {kind: render_frame, frame: {text: "Vorrei un caffè e un cornetto, per {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Vorrei un is followed by a masculine noun such as caffè or cornetto.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson01.translate.006
+    lesson_content_key: it.a1.unit07.lesson01.al_bar
+    type: translation
+    frame: {text: "What would you like? (formal, Lei)", language_code: en, direction: ltr}
+    slots: {item: *t_desidera}
+    answer_derivation: {kind: render_frame, frame: {text: "Cosa {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Desidera is the formal Lei form a server uses, not the informal tu form.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.choose.001
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Basta così is a set phrase that means that is all, no more.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.listen.002
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Così means like this or so, and in basta così it closes an order.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson02.fill.001
+    lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+    type: fill_in_blank
+    frame: {text: "Grazie, {item} così. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_basta, hint: *t_basta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Basta means it is enough; basta così tells the server to stop.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson02.translate.002
+    lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+    type: translation
+    frame: {text: "That's all, thanks.", language_code: en, direction: ltr}
+    slots: {item: *t_basta}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} così, grazie.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Basta così, grazie is the polite way to finish an order.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.choose.003
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool9}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Un'acqua keeps the apostrophe because acqua is feminine and starts with a vowel.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.listen.004
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool9}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Il menù and il conto are masculine, so they take il.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.fill.005
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: fill_in_blank
+    frame: {text: "Il {item}, per favore. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_conto, hint: *t_conto}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il conto, per favore is how you ask for the bill.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.order.006
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: word_order
+    frame: {text: "Un panino e {item}, per favore.", language_code: it, direction: ltr}
+    slots: {item: *t_un_acqua}
+    answer_derivation: {kind: render_frame, frame: {text: "Un panino e {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Un'acqua is the feminine form: una becomes un' before a vowel.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.match.007
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool12, second: *pool12, third: *pool12, fourth: *pool12, fifth: *pool12, sixth: *pool12}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Il panino and il conto are masculine; l'acqua is feminine and elided.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.translate.008
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: translation
+    frame: {text: "A sandwich and a water, please.", language_code: en, direction: ltr}
+    slots: {item: *t_un_acqua}
+    answer_derivation: {kind: render_frame, frame: {text: "Un panino e {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Un'acqua is feminine, so a feminine water takes una, elided to un'.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.translate.009
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: translation
+    frame: {text: "The bill, please.", language_code: en, direction: ltr}
+    slots: {item: *t_conto}
+    answer_derivation: {kind: render_frame, frame: {text: "Il {item}, per favore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Il conto is the bill you ask for at the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit07.lesson03.translate.010
+    lesson_content_key: it.a1.unit07.lesson03.il_conto
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Italian nouns come with an article: il panino, l'acqua, il menù, il conto.", language_code: en, direction: ltr}
