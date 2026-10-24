@@ -5,63 +5,19 @@ target_language: prs
 unit_content_key: prs.a1.unit06.directions
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: >-
-    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle's a1_unit03.yaml
-    sibling (see that file's notes for the full extension rationale and verification method).
-
-    Note on dialect authenticity: this unit's own realization review already found and fixed a real bug where "گرد کنین"
-    (a mechanical/ rotational term, not genuine direction-giving Dari) had been used throughout instead of the correct "بپیچین"
-    -- confirmed the fix fully carried through before building any template on top of it, so every frame below correctly uses
-    بپیچین.
-
-    Two full groups plus one thin single-member group: direction_word (مستقیم/چپ/راست, 3 members), sequence_word (اول/بعد,
-    2 members -- matching_pairs/translation only, below the multiple_choice threshold), and turn_verb (بپیچین, 1 member --
-    translation/fill_in_ blank only, the verb these direction words combine with). Skipped the thin روبه‌رو/بعد "landmark"
-    pairing (بعد is already covered under sequence_word) and the multi-word polite-ask/landmark phrases, matching this bundle's
-    standing precedent of not forcing phrase-level content into single-token slots.
-
-    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context (guide §13). Every
-    lesson_content_key anchor verified against the real realization file. No listen_select/listen_type anywhere. No bare unquoted
-    yes/no/true/false anywhere.
-
-    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against
-    scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate
-    for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before
-    import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
-
-    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): "direction_word
-    (مستقیم/چپ/راست, 3 members)" and "sequence_word (اول/بعد, 2 members)" above measured the WHOLE-DIRECTION pool.
-    generate_checkpoint() only loads a unit's own lexemes, and every one of those five tokens turned out to be
-    introduced by an EARLIER unit: مستقیم and بعد by unit05, اول by unit01 -- this unit's own direction_word pool
-    is only 2 (چپ/راست) and its own sequence_word pool is 0. Worse, lesson03 (sequencing_directions) re-teaches
-    ONLY اول/بعد, so it introduces zero lexemes of its own at all -- a genuine backfill gap (recipe SS0), not a
-    slot-tag problem, and not fixable pack-only. This left direction_gloss.001 below the multiple_choice floor
-    (2<3), direction_pair.004 DEAD (5 slots declared, real ceiling 2), and both lesson03 templates
-    (sequence_translate.002, sequence_pair.003) DEAD (0 candidates). Fixed, pack-only, no backfill/realization/
-    overlay edits: (1) direction_gloss.001 and direction_translate.003 widened via direction_or_turn (direction_word
-    UNION turn_verb = 2+1 = 3 distinct: چپ/راست/بپیچین). (2) direction_pair.004 re-anchored to a new
-    unit_content_word preset -- an untagged, part_of_speech-only pool (recipe SS3.1c) spanning every real
-    unit06-native content word across lessons 01/04/05/06 (proper_noun excluded so سهیلا's self-gloss never
-    appears), 10 distinct. (3) sequence_translate.002 and sequence_pair.003 REMOVED -- lesson03 has no lexemes of
-    its own to re-anchor to; logged for the coordinator as a backfill gap (لesson03's اول/بعد need their own
-    introduced-token registration in scripts/backfill_lexemes_en_prs.py, out of scope for a pack-only pass). To
-    keep the checkpoint's production/recognition tiers viable after that removal (this pack also had ZERO
-    templates anchored to lessons 02/04/05/06 before this pass, despite 04/05/06 having real vocabulary of their
-    own), ADDED three new templates: lesson05.review_choose.001 (multiple_choice over unit_content_word, restoring
-    lesson05 coverage), lesson06.people_choose.001 and lesson06.people_translate.002 (role_word UNION
-    travel_farewell_word, plus turn_verb for the multiple_choice floor -- 2/3 distinct respectively), restoring
-    lesson06 coverage. Lessons 02 and 03 remain uncovered by any template -- both have 0 introduced tokens of
-    their own per iter_specs() and are backfill-blocked, not a defect this pass can close. Post-fix tier counts:
-    recognition 3 (direction_gloss, review_choose, people_choose), structured 3 (turn_verb_fill, direction_pair,
-    turn_verb_fill.volume_order), production 3 (direction_translate, turn_verb_translate, people_translate) -- all
-    three now clear the recipe's >=3-per-tier bar (previously 1/2/2 live). Re-verified 0 DEAD / 0 below-floor for
-    this pack via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py
-    practice-validate (see coordinator report for the exact invocation/output).
-
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle's a1_unit03.yaml sibling (see that file's notes for the full extension rationale and verification method).
+    Note on dialect authenticity: this unit's own realization review already found and fixed a real bug where "گرد کنین" (a mechanical/ rotational term, not genuine direction-giving Dari) had been used throughout instead of the correct "بپیچین" -- confirmed the fix fully carried through before building any template on top of it, so every frame below correctly uses بپیچین.
+    Two full groups plus one thin single-member group: direction_word (مستقیم/چپ/راست, 3 members), sequence_word (اول/بعد, 2 members -- matching_pairs/translation only, below the multiple_choice threshold), and turn_verb (بپیچین, 1 member -- translation/fill_in_ blank only, the verb these direction words combine with). Skipped the thin روبه‌رو/بعد "landmark" pairing (بعد is already covered under sequence_word) and the multi-word polite-ask/landmark phrases, matching this bundle's standing precedent of not forcing phrase-level content into single-token slots.
+    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context (guide §13). Every lesson_content_key anchor verified against the real realization file. No listen_select/listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): "direction_word (مستقیم/چپ/راست, 3 members)" and "sequence_word (اول/بعد, 2 members)" above measured the WHOLE-DIRECTION pool. generate_checkpoint() only loads a unit's own lexemes, and every one of those five tokens turned out to be introduced by an EARLIER unit: مستقیم and بعد by unit05, اول by unit01 -- this unit's own direction_word pool is only 2 (چپ/راست) and its own sequence_word pool is 0. Worse, lesson03 (sequencing_directions) re-teaches ONLY اول/بعد, so it introduces zero lexemes of its own at all -- a genuine backfill gap (recipe SS0), not a slot-tag problem, and not fixable pack-only. This left direction_gloss.001 below the multiple_choice floor (2<3), direction_pair.004 DEAD (5 slots declared, real ceiling 2), and both lesson03 templates (sequence_translate.002, sequence_pair.003) DEAD (0 candidates). Fixed, pack-only, no backfill/realization/ overlay edits: (1) direction_gloss.001 and direction_translate.003 widened via direction_or_turn (direction_word UNION turn_verb = 2+1 = 3 distinct: چپ/راست/بپیچین). (2) direction_pair.004 re-anchored to a new unit_content_word preset -- an untagged, part_of_speech-only pool (recipe SS3.1c) spanning every real unit06-native content word across lessons 01/04/05/06 (proper_noun excluded so سهیلا's self-gloss never appears), 10 distinct. (3) sequence_translate.002 and sequence_pair.003 REMOVED -- lesson03 has no lexemes of its own to re-anchor to; logged for the coordinator as a backfill gap (لesson03's اول/بعد need their own introduced-token registration in scripts/backfill_lexemes_en_prs.py, out of scope for a pack-only pass). To keep the checkpoint's production/recognition tiers viable after that removal (this pack also had ZERO templates anchored to lessons 02/04/05/06 before this pass, despite 04/05/06 having real vocabulary of their own), ADDED three new templates: lesson05.review_choose.001 (multiple_choice over unit_content_word, restoring lesson05 coverage), lesson06.people_choose.001 and lesson06.people_translate.002 (role_word UNION travel_farewell_word, plus turn_verb for the multiple_choice floor -- 2/3 distinct respectively), restoring lesson06 coverage. Lessons 02 and 03 remain uncovered by any template -- both have 0 introduced tokens of their own per iter_specs() and are backfill-blocked, not a defect this pass can close. Post-fix tier counts: recognition 3 (direction_gloss, review_choose, people_choose), structured 3 (turn_verb_fill, direction_pair, turn_verb_fill.volume_order), production 3 (direction_translate, turn_verb_translate, people_translate) -- all three now clear the recipe's >=3-per-tier bar (previously 1/2/2 live). Re-verified 0 DEAD / 0 below-floor for this pack via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see coordinator report for the exact invocation/output).
     POLISH WAVE 4 (2026-07-26): the direction_pair.004 + review_choose.001 POS-only honest-leave is RESOLVED via the generated en_prs_a1_unit06_words tag (see the unit_content_word preset + direction_pair.004 comments). Course-scope pool now == the unit pool. Verified with pool_check.py + unit-scope check (0 DEAD, 8-pair floor holds; review_choose.001 keeps >=3 distinct glosses).
-
     FRESH-CONTEXT NATIVE REVIEW 2026-07-27 (batch 1): reviewed against AUTHORING_PREFLIGHT.md with the realization/overlay + live backfill lexeme pools cross-checked. All CRITICAL/MAJOR findings fixed and committed (see docs/RAMIN_REVIEW_BACKLOG.md 'Native review batch 1' for the per-pack findings + residual MINOR/known-limitation notes; some backfill gloss fixes take effect on the next re-backfill). Status -> reviewed.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. people_choose.001 and people_translate.002 drew level-wide role_word / travel_farewell_word tokens (تشکر, قابلی, نداره, مشتری; glosses like 'worth (in "don't mention it")') and now use the 8-word unit06 pool. NATIVE FLAGS: روبه‌رو vs مقابل; سفر خوش as a farewell; people_choose.001 now duplicates review_choose.001's pool.
 tag_schema:
   part_of_speech:
   - noun
@@ -325,7 +281,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item: *people_travel_or_turn
+    item: *unit_content_word
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -348,7 +304,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item: *people_and_travel
+    item: *unit_content_word
   answer_derivation:
     kind: slot_text
     slot: item

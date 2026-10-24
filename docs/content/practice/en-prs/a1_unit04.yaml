@@ -6,64 +6,15 @@ unit_content_key: prs.a1.unit04.numbers
 review:
   status: reviewed
   fresh_context: false
-  notes: >-
-    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
-    same pass as this bundle's a1_unit03.yaml sibling (see that file's
-    notes for the full extension rationale and verification method).
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle's a1_unit03.yaml sibling (see that file's notes for the full extension rationale and verification method).
+    Four semantic groups: ones_number (یک..ده, 10 members), teens_number (یازده..نوزده, 9 members), tens_number (بیست..صد, 9 members), phone_word (نمبر/تلفن/صفر, 3 members) -- all well above the >=3-distinct-candidate threshold for multiple_choice/ matching_pairs. Deliberately left چند/سال (how many / year) and the استین/استی age-question copula pair untested by a template here -- thin (1-2 members), and this pass prioritized the four richer, better-populated groups; still taught in the lesson itself.
+    Every fill_in_blank frame embeds the number/phone-word slot in a real Dari sentence with visible surrounding context (guide §13), never a bare blanked digit alone. Every lesson_content_key anchor verified against the real realization file to introduce genuinely new vocabulary at that lesson. No listen_select/listen_type anywhere (Dari has zero TTS coverage project-wide). No bare unquoted yes/no/true/false anywhere.
+    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): "ones_number (یک..ده, 10 members)" above measured the WHOLE-DIRECTION pool, not this unit's own. generate_checkpoint() only loads a unit's own lexemes, and 5 of those 10 digits (یک/دو/چهار/پنج/شش) were actually first introduced in unit03's family_size lesson (counting family members) -- this unit's OWN ones_number pool is only 5 (سه/هفت/هشت/نه/ده). That left ones_pair.004 DEAD (declared 10 slots, could never fill from unit04 alone). Likewise phone_pair.004 pooled in unit07's phone_opening/ message_word tokens to reach its declared 6 slots -- also DEAD at checkpoint scope, since those tokens aren't unit04 lexemes either. Fixed pack-only, no backfill/realization/overlay edits, no new vocabulary: (1) ones_pair.004 widened via a new ones_and_phone preset (ones_number UNION phone_word, both genuinely unit04-native) to 8 distinct. (2) phone_pair.004 REMOVED -- with phone_word now used by ones_pair.004 and no other unit04-native tag left for it to pool with honestly, this unit cannot support a second 6-distinct phone-only matching_pairs template without either re-declaring an earlier-unit dependency or fully duplicating ones_pair.004's own pool; per the recipe's option 3 it was dropped (phone_gloss.001/phone_translate.003 still cover phone_word, and its tokens remain hostable via the widened ones_pair.004). Structured tier for this pack is now 3 live matching_pairs templates (ones_pair, teens_pair, tens_pair), meeting the recipe's >=3-structured floor. Re-verified 0 DEAD / 0 below-floor via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see coordinator report for the exact invocation/output).
 
-    Four semantic groups: ones_number (یک..ده, 10 members),
-    teens_number (یازده..نوزده, 9 members), tens_number (بیست..صد, 9
-    members), phone_word (نمبر/تلفن/صفر, 3 members) -- all well above
-    the >=3-distinct-candidate threshold for multiple_choice/
-    matching_pairs. Deliberately left چند/سال (how many / year) and the
-    استین/استی age-question copula pair untested by a template here --
-    thin (1-2 members), and this pass prioritized the four richer,
-    better-populated groups; still taught in the lesson itself.
-
-    Every fill_in_blank frame embeds the number/phone-word slot in a
-    real Dari sentence with visible surrounding context (guide §13),
-    never a bare blanked digit alone. Every lesson_content_key anchor
-    verified against the real realization file to introduce genuinely
-    new vocabulary at that lesson. No listen_select/listen_type
-    anywhere (Dari has zero TTS coverage project-wide). No bare
-    unquoted yes/no/true/false anywhere.
-
-    Verified with a standalone throwaway script reusing
-    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
-    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
-    output -- 0 problems. scripts/compile_content.py practice-validate
-    for the full en-prs pack (units 01-10 together) -- 0 errors/0
-    warnings. Needs the standard fresh-context review before import; no
-    backfill_lexemes_en_prs.py run has actually happened against a real
-    database yet in this pass.
-
-    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix,
-    scripts/_practice_unit_scope_check.py): "ones_number (یک..ده, 10
-    members)" above measured the WHOLE-DIRECTION pool, not this unit's
-    own. generate_checkpoint() only loads a unit's own lexemes, and 5 of
-    those 10 digits (یک/دو/چهار/پنج/شش) were actually first introduced in
-    unit03's family_size lesson (counting family members) -- this unit's
-    OWN ones_number pool is only 5 (سه/هفت/هشت/نه/ده). That left
-    ones_pair.004 DEAD (declared 10 slots, could never fill from unit04
-    alone). Likewise phone_pair.004 pooled in unit07's phone_opening/
-    message_word tokens to reach its declared 6 slots -- also DEAD at
-    checkpoint scope, since those tokens aren't unit04 lexemes either.
-    Fixed pack-only, no backfill/realization/overlay edits, no new
-    vocabulary: (1) ones_pair.004 widened via a new ones_and_phone preset
-    (ones_number UNION phone_word, both genuinely unit04-native) to 8
-    distinct. (2) phone_pair.004 REMOVED -- with phone_word now used by
-    ones_pair.004 and no other unit04-native tag left for it to pool with
-    honestly, this unit cannot support a second 6-distinct phone-only
-    matching_pairs template without either re-declaring an earlier-unit
-    dependency or fully duplicating ones_pair.004's own pool; per the
-    recipe's option 3 it was dropped (phone_gloss.001/phone_translate.003
-    still cover phone_word, and its tokens remain hostable via the
-    widened ones_pair.004). Structured tier for this pack is now 3 live
-    matching_pairs templates (ones_pair, teens_pair, tens_pair), meeting
-    the recipe's >=3-structured floor. Re-verified 0 DEAD / 0 below-floor
-    via scripts/_practice_unit_scope_check.py and 0 errors via
-    scripts/compile_content.py practice-validate (see coordinator report
-    for the exact invocation/output).
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. teens_pair.004 and tens_pair.004 feedback said 'to its digit' but the pairs show English meanings. NATIVE FLAGS: none specific; ones_pair mixes digits with نمبر / تلفن words by design (unit-scope pool).
 tag_schema:
   part_of_speech: [noun, adjective, particle]
   agreement_tags:
@@ -139,7 +90,7 @@ templates:
     slots: {teens_number_one: *teens_number, teens_number_two: *teens_number, teens_number_three: *teens_number, teens_number_four: *teens_number, teens_number_five: *teens_number, teens_number_six: *teens_number, teens_number_seven: *teens_number, teens_number_eight: *teens_number, teens_number_nine: *teens_number}
     slot_relations: [{kind: distinct, slots: [teens_number_one, teens_number_two, teens_number_three, teens_number_four, teens_number_five, teens_number_six, teens_number_seven, teens_number_eight, teens_number_nine]}]
     answer_derivation: {kind: matching_pairs, slots: [teens_number_one, teens_number_two, teens_number_three, teens_number_four, teens_number_five, teens_number_six, teens_number_seven, teens_number_eight, teens_number_nine]}
-    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each Dari number word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 3: tens up to a hundred.
   - content_key: practice.en-prs.prs.a1.unit04.lesson03.tens_gloss.001
@@ -166,7 +117,7 @@ templates:
     slots: {tens_number_one: *tens_number, tens_number_two: *tens_number, tens_number_three: *tens_number, tens_number_four: *tens_number, tens_number_five: *tens_number, tens_number_six: *tens_number, tens_number_seven: *tens_number, tens_number_eight: *tens_number, tens_number_nine: *tens_number}
     slot_relations: [{kind: distinct, slots: [tens_number_one, tens_number_two, tens_number_three, tens_number_four, tens_number_five, tens_number_six, tens_number_seven, tens_number_eight, tens_number_nine]}]
     answer_derivation: {kind: matching_pairs, slots: [tens_number_one, tens_number_two, tens_number_three, tens_number_four, tens_number_five, tens_number_six, tens_number_seven, tens_number_eight, tens_number_nine]}
-    feedback_frame: {text: "Match each Dari number word to its digit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each Dari number word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 5: exchanging phone numbers.
   - content_key: practice.en-prs.prs.a1.unit04.lesson05.phone_gloss.001
