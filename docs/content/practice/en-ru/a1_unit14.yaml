@@ -1,0 +1,135 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit14
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. English prompts name ты/вы and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы labels in the English prompts and the case notes in feedback. No character facts are asserted (character names appear only as bare vocabulary items).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_не хочу", "w_нравится", "w_сок", "w_тебе"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["noun", "pronoun", "verb"], agreement_tags: {semantic: ["w_нравится", "w_не хочу", "w_сок", "w_тебе"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_нравится"}}
+  p3: &p3 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_не хочу"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_сок"}}
+  p5: &p5 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_тебе"}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit14.lesson01.choose.001
+    lesson_content_key: ru.a1.unit14.lesson01.mne_nravitsya
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Нравится is the verb for liking: Мне нравится кофе literally says coffee is pleasing to me.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson01.order.002
+    lesson_content_key: ru.a1.unit14.lesson01.mne_nravitsya
+    type: word_order
+    frame: {text: "Мне {item} кофе.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Мне {item} кофе.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "In Мне нравится кофе the thing liked is the grammatical subject and мне is the person who likes it.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson01.fill.003
+    lesson_content_key: ru.a1.unit14.lesson01.mne_nravitsya
+    type: fill_in_blank
+    frame: {text: "Мне {item} чай. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p2, hint: *p2}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Нравится is used with мне, to me, to say you like something.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson01.translate.004
+    lesson_content_key: ru.a1.unit14.lesson01.mne_nravitsya
+    type: translation
+    frame: {text: "I like coffee.", language_code: "en", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Мне {item} кофе.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Russian says to me coffee is pleasing rather than I like coffee.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson01.translate.005
+    lesson_content_key: ru.a1.unit14.lesson01.mne_nravitsya
+    type: translation
+    frame: {text: "I don't like tea.", language_code: "en", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Мне не {item} чай.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Put не before нравится to say you do not like something.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.listen.001
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Не хочу is I don't want; не goes right before the verb.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.order.002
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: word_order
+    frame: {text: "Я {item} кофе.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я {item} кофе.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Не хочу negates я хочу, I want.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.order.003
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: word_order
+    frame: {text: "Я хочу {item}.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я хочу {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Сок is a masculine noun and does not change after хочу.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.fill.004
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: fill_in_blank
+    frame: {text: "Я хочу {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Хочу is followed directly by the thing wanted.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.translate.005
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: translation
+    frame: {text: "I want juice.", language_code: "en", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я хочу {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Я хочу plus a noun is a plain, direct request.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson02.translate.006
+    lesson_content_key: ru.a1.unit14.lesson02.ya_hochu
+    type: translation
+    frame: {text: "I don't want coffee.", language_code: "en", direction: "ltr"}
+    slots: {item: *p3}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я {item} кофе.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Не stands before хочу to negate it.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson03.choose.001
+    lesson_content_key: ru.a1.unit14.lesson03.tebe_nravitsya_kofe
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Тебе is the informal ты form meaning to you; the polite вы form is вам.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson03.order.002
+    lesson_content_key: ru.a1.unit14.lesson03.tebe_nravitsya_kofe
+    type: word_order
+    frame: {text: "Да, мне нравится кофе. А {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Да, мне нравится кофе. А {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "А тебе? hands the question back with the informal ты.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson03.fill.003
+    lesson_content_key: ru.a1.unit14.lesson03.tebe_nravitsya_kofe
+    type: fill_in_blank
+    frame: {text: "А {item} нравится кофе? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Тебе is the informal to you, used with friends.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson03.translate.004
+    lesson_content_key: ru.a1.unit14.lesson03.tebe_nravitsya_kofe
+    type: translation
+    frame: {text: "Yes, I like coffee. And you? (informal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Да, мне нравится кофе. А {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Тебе is to you, informal; to a stranger you would say вам.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit14.lesson03.translate.005
+    lesson_content_key: ru.a1.unit14.lesson03.tebe_nravitsya_kofe
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "These are the building blocks of likes and wants: нравится, не хочу, сок and тебе.", language_code: "en", direction: "ltr"}

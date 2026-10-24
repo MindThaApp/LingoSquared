@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit11
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit11.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. English prompts name ты/вы and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы labels in the English prompts and the case notes in feedback. No character facts are asserted (character names appear only as bare vocabulary items).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Мария", "w_Олег", "w_встаю", "w_встаёте", "w_девяти", "w_делаете", "w_завтракаю", "w_ложусь", "w_одиннадцать", "w_понятно", "w_пяти", "w_работаете", "w_работаю", "w_спать", "w_ужинаю"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: ["w_встаю", "w_встаёте", "w_завтракаю", "w_работаю", "w_ужинаю"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: ["w_встаю", "w_завтракаю", "w_ужинаю"]}}
+  p3: &p3 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_завтракаю"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_встаёте"}}
+  p5: &p5 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_встаю"}}
+  p6: &p6 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: ["w_встаю", "w_завтракаю", "w_работаю", "w_ужинаю"]}}
+  p7: &p7 {language_code: "ru", part_of_speech: ["noun", "verb"], agreement_tags: {semantic: ["w_работаю", "w_ужинаю", "w_ложусь", "w_спать", "w_одиннадцать"]}}
+  p8: &p8 {language_code: "ru", part_of_speech: ["noun", "verb"], agreement_tags: {semantic: ["w_работаю", "w_ужинаю", "w_ложусь", "w_спать", "w_одиннадцать", "w_встаю"]}}
+  p9: &p9 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_спать"}}
+  p10: &p10 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_пяти"}}
+  p11: &p11 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_девяти"}}
+  p12: &p12 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_одиннадцать"}}
+  p13: &p13 {language_code: "ru", part_of_speech: ["adjective", "proper_noun", "verb"], agreement_tags: {semantic: ["w_Олег", "w_делаете", "w_Мария", "w_работаете", "w_понятно"]}}
+  p14: &p14 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_делаете"}}
+  p15: &p15 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_работаете"}}
+  p16: &p16 {language_code: "ru", part_of_speech: ["adjective", "proper_noun"], agreement_tags: {semantic: ["w_Олег", "w_Мария", "w_понятно"]}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.choose.001
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Verbs ending in -ю go with я (I get up: я встаю), while -ете goes with вы (вы встаёте).", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.order.002
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: word_order
+    frame: {text: "Я {item} в семь часов.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я {item} в семь часов.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Each verb ends in -ю because the subject is я.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.fill.003
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: fill_in_blank
+    frame: {text: "Я {item} в восемь часов. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Завтракаю is the я form of the verb meaning to have breakfast.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.fill.004
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: fill_in_blank
+    frame: {text: "Когда вы {item}? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Встаёте ends in -ёте, the вы form; the я form is встаю.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.translate.005
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: translation
+    frame: {text: "I get up at seven o'clock.", language_code: "en", direction: "ltr"}
+    slots: {item: *p5}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я {item} в семь часов.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "In a time of day, в is followed by the number and часов: в семь часов.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson01.translate.006
+    lesson_content_key: ru.a1.unit11.lesson01.vstavat_zavtrakat
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p6}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "These verbs are the я forms, so each carries the meaning I do something.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.choose.001
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p7}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Ложусь спать literally means I lie down to sleep and is the usual way to say I go to bed.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.match.002
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p8, second: *p8, third: *p8, fourth: *p8, fifth: *p8, sixth: *p8}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Спать is the infinitive to sleep, and ложусь is the я form of a different verb.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.order.003
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: word_order
+    frame: {text: "Я ложусь {item} в одиннадцать часов.", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я ложусь {item} в одиннадцать часов.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Ложусь спать is a fixed pair: the verb ложусь plus the infinitive спать.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.fill.004
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: fill_in_blank
+    frame: {text: "Я работаю с девяти до {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "С and до are followed by the genitive, so девять and пять become девяти and пяти.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.translate.005
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: translation
+    frame: {text: "I work from nine to five.", language_code: "en", direction: "ltr"}
+    slots: {a: *p11, b: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я работаю с {a} до {b}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "С ... до ... means from ... to ... and puts both numbers in the genitive.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson02.translate.006
+    lesson_content_key: ru.a1.unit11.lesson02.rabotat_uzhinat
+    type: translation
+    frame: {text: "I go to bed at eleven o'clock.", language_code: "en", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "render_frame", frame: {text: "Я ложусь спать в {item} часов.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "After the number одиннадцать the noun is in the plural genitive: часов.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.choose.001
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p13}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Делаете and работаете end in -ете, the вы forms, so they pair with вы.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.order.002
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: word_order
+    frame: {text: "Что вы {item} утром?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p14}
+    answer_derivation: {kind: "render_frame", frame: {text: "Что вы {item} утром?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Что вы делаете? asks what you do; утром means in the morning.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.order.003
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: word_order
+    frame: {text: "А когда вы {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p15}
+    answer_derivation: {kind: "render_frame", frame: {text: "А когда вы {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "А links the question to the earlier one, and работаете is the вы form.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.fill.004
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: fill_in_blank
+    frame: {text: "Что вы {item} вечером? ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p14, hint: *p14}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Делаете is the вы form of делать, to do.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.translate.005
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: translation
+    frame: {text: "What do you do in the morning? (formal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p14}
+    answer_derivation: {kind: "render_frame", frame: {text: "Что вы {item} утром?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Что вы делаете утром? combines a question word, the вы verb form and a time word.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit11.lesson03.translate.006
+    lesson_content_key: ru.a1.unit11.lesson03.moy_den
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p16}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Понятно means I see or understood, and it is a polite way to close a conversation.", language_code: "en", direction: "ltr"}
