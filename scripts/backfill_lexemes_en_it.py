@@ -9,8 +9,10 @@ All plumbing lives in scripts/_target_lexeme_backfill_common.py (see its
 docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
-Scope: A1 only (the "en-it-a1" manifest group, units 01-24). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-it-a1" manifest group, units 01-24) and A2 (the "en-it-a2"
+group, units 25-34, added in session 11). B1+ is not classified yet; extend
+LEVELS and the tables below together. The A2 course is its own course, so a
+token already glossed for A1 is simply reused at first sight in A2.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -53,9 +55,9 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "it"
-LEVELS = {"a1": "en-it-a1"}
+LEVELS = {"a1": "en-it-a1", "a2": "en-it-a2"}
 
-PROPER_NOUNS = {"Elena", "Sam", "Chicago", "Milano", "Roma"}
+PROPER_NOUNS = {"Elena", "Sam", "Chicago", "Milano", "Roma", "Bologna", "Italia"}
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
 
@@ -214,30 +216,92 @@ GLOSSES: dict[str, str] = {
     "scontrino": "receipt", "pago": "I pay", "con": "with; by",
     "posso": "I can", "pagare": "to pay", "certo": "certainly",
     "ecco": "here is; here it is",
+    # A2 unit25 bureaucracy
+    "c": "there (shortened form of ci, in: there is)",
+    "documento": "document; ID", "d'identità": "of identity (in: identity document)",
+    "codice": "code", "fiscale": "tax; fiscal", "contratto": "contract",
+    "d'affitto": "of rent (in: rental contract)", "modulo": "form",
+    "registrare": "to register", "residenza": "residence",
+    "entro": "by; within", "prendere": "to take; to have",
+    "appuntamento": "appointment", "comune": "town hall; municipality",
+    "porti": "bring (formal command)", "consegnare": "to hand in; to submit",
+    # A2 unit26 opinions
+    "secondo": "according to", "quartiere": "neighborhood",
+    "comodo": "convenient; comfortable (masc.)", "rumoroso": "noisy (masc.)",
+    "d'accordo": "in agreement (in: I agree)",
+    "metropolitana": "subway; metro", "capisco": "I understand",
+    "vero": "true", "però": "however; but", "negozi": "shops",
+    "utili": "useful (plural)", "troppo": "too; too much", "utile": "useful",
+    # A2 unit27 bank
+    "corrente": "current; checking (in: checking account)",
+    "l'indirizzo": "the address", "aprire": "to open",
+    "inclusa": "included (fem.)", "aiutarla": "to help you (formal)",
+    "servono": "are needed", "informazioni": "information", "Italia": "Italy",
+    # A2 unit28 doctor
+    "mal": "ache; pain", "forte": "strong; severe", "leggera": "light; mild (fem.)",
+    "giorni": "days", "sintomi": "symptoms", "ha": "has; you have (formal)",
+    "prenda": "take (formal command)", "beva": "drink (formal command)",
+    "molta": "a lot of; much (fem.)", "acqua": "water",
+    "prenotare": "to book", "visita": "visit; medical examination",
+    # A2 unit29 home repairs
+    "perdita": "leak; loss", "d'acqua": "of water (in: water leak)",
+    "lavandino": "sink", "pavimento": "floor", "bagnato": "wet (masc.)",
+    "dica": "tell (formal command)", "tecnico": "technician",
+    "riparazione": "repair", "può": "can; you can (formal)", "venire": "to come",
+    # A2 unit30 interview
+    "l'esperienza": "the experience", "l'ingegnere": "the engineer",
+    "gruppo": "group; team", "disponibile": "available",
+    "esperienza": "experience", "della": "of the (fem.)",
+    "sua": "your (formal, fem.); his; her", "l'orario": "the schedule; the hours",
+    "dalle": "from the (fem. plural)", "confermo": "I confirm",
+    "colloquio": "interview",
+    # A2 unit31 travel disruption
+    "Bologna": "Bologna", "ritardo": "delay", "cancellato": "cancelled (masc.)",
+    "coincidenza": "connection (between trains)", "venti": "twenty",
+    "perso": "lost; missed", "alternativa": "alternative", "autobus": "bus",
+    "sostitutivo": "replacement (masc.)", "quaranta": "forty", "tardi": "late",
+    # A2 unit32 online life
+    "internet": "internet", "social": "social media", "notizie": "news",
+    "messaggi": "messages", "mandare": "to send", "uso": "I use",
+    "ogni": "every; each", "leggere": "to read", "spesso": "often",
+    "poco": "little; not much", "perdo": "I lose; I waste",
+    # A2 unit33 busy week
+    "durante": "during", "settimana": "week", "palestra": "gym", "fine": "end",
+    "invece": "instead; on the other hand", "riposo": "I rest", "vedo": "I see",
+    "gli": "the (masc. plural)", "amici": "friends", "prima": "first; before",
+    # A2 unit34 complaint
+    "caricatore": "charger", "prodotto": "product",
+    "difettoso": "faulty; defective (masc.)", "funziona": "works",
+    "rimborso": "refund", "sostituzione": "replacement", "possiamo": "we can",
+    "fare": "to do; to make", "oppure": "or else", "quattordici": "fourteen",
+    "reso": "return (of goods)",
 }
 
 POS_SETS = {
     "proper_noun": PROPER_NOUNS,
     "pronoun": split_words(
         "tu lei ci si ti mi io che quanto cosa chi ne questo questa te me "
-        "quale qual lo mio mia tuo quanti"
+        "quale qual lo mio mia tuo quanti sua"
     ),
     "preposition": split_words(
-        "a di in da per con al alla alle dal nel nella dei delle accanto "
+        "entro secondo durante della dalle a di in da per con al alla alle dal nel nella dei delle accanto "
         "davanti dietro sopra sotto"
     ),
     "particle": split_words(
-        "e o il la le i un una non se ma d perché come"
+        "e o il la le i un una non se ma d perché come c gli oppure però invece"
     ),
     "adjective": split_words(
         "informale formale rispettoso americano americana italiana italiano "
         "bello perfetto lontano gentile buone "
+        "fiscale comodo rumoroso utile utili corrente inclusa forte leggera molta "
+        "bagnato disponibile cancellato sostitutivo difettoso "
         "bel caldo freddo piccola media grande felice triste stanco stanca "
         "nervoso blu postale vicino dritto benvenuto"
     ),
     "adverb": split_words(
         "dove dov quando sì no poi allora così bene domani oggi dopodomani meno più molto solo sempre presto "
-        "ieri stamattina stasera male piano certo anch'io qui po po'"
+        "ieri stamattina stasera male piano certo anch'io qui po po' "
+        "troppo spesso poco tardi prima ogni"
     ),
     "verb": {"ce n'è"} | split_words(
         "stai sta vediamo chiama chiami chiamo sono sei è parli parla parlo "
@@ -246,10 +310,14 @@ POS_SETS = {
         "andato andata visto mangiato fatto preferire preferisco preferisci "
         "piace sento devo andare prendi inizio finisco inizi lavori parte "
         "piove restiamo senti sto mando puoi ripetere pago posso pagare "
-        "desidera basta riposa arrivi arrivo dov'è conoscerla scusi"
+        "desidera basta riposa arrivi arrivo dov'è conoscerla scusi "
+        "registrare prendere porti consegnare capisco aprire aiutarla servono "
+        "ha prenda beva prenotare dica può venire confermo perso mandare uso "
+        "leggere perdo riposo vedo funziona possiamo fare"
     ),
     "phrase": split_words(
-        "ciao buongiorno buonasera buonanotte grazie ecco pronto arrivederla"
+        "ciao buongiorno buonasera buonanotte grazie ecco pronto arrivederla "
+        "d'identità d'affitto d'accordo"
     ),
 }
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
@@ -257,7 +325,7 @@ POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 CATEGORY_TAGS: dict[str, list[str]] = {}
 for _tag, _words in {
     "it_number": "zero uno due tre quattro cinque sette otto nove dieci "
-                 "dodici quindici trenta cinquanta",
+                 "dodici quindici trenta cinquanta venti quaranta quattordici",
     "it_weekday": "lunedì martedì mercoledì giovedì venerdì sabato domenica",
     "it_month": "gennaio febbraio marzo aprile",
     "it_family": "madre padre fratello sorella nonno nonna fratelli sorelle "
@@ -265,6 +333,16 @@ for _tag, _words in {
 }.items():
     for _w in _words.split():
         CATEGORY_TAGS.setdefault(_w, []).append(_tag)
+
+# First-sight glosses reused from A1 that do not fit the A2 unit's sense,
+# keyed by (realization stem, token).
+GLOSS_OVERRIDES = {
+    ("a2_unit27_banca", "conto"): "bank account; bill",
+    ("a2_unit30_colloquio", "parli"): "speak (formal command)",
+    ("a2_unit31_viaggio_interrotto", "dal"): "from the (masc.)",
+    ("a2_unit32_vita_online", "tempo"): "time",
+    ("a2_unit34_reclamo", "lo"): "the (masc., before some sounds)",
+}
 
 part_of_speech = pos_lookup(POS_SETS)
 
@@ -280,6 +358,7 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=GLOSS_OVERRIDES,
         )
 
 
