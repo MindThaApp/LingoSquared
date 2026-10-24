@@ -16,10 +16,11 @@ review:
     German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
     of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
     which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: fill_in_blank on warm replaced (hint gloss 'warm' was the answer) by sunny; warm dropped from the bare-word translation pool for the same reason (should added); the weather-question prompt now pins like (How's the weather today? was an equally valid answer).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: ["en_a1_u11_l01", "w_be", "w_but", "w_cloudy", "w_cold", "w_going", "w_hot", "w_idea", "w_rain", "w_raining", "w_rainy", "w_so", "w_sunny", "w_tomorrow", "w_umbrella", "w_warm", "w_weather", "w_will", "w_windy"]
+    semantic: ["en_a1_u11_l01", "w_be", "w_but", "w_cloudy", "w_cold", "w_going", "w_hot", "w_idea", "w_rain", "w_raining", "w_rainy", "w_should", "w_so", "w_sunny", "w_tomorrow", "w_umbrella", "w_warm", "w_weather", "w_will", "w_windy"]
 slot_presets:
   l1: &l1 {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "en_a1_u11_l01"}}
   sw: &sw {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": ["w_sunny", "w_rainy", "w_cloudy", "w_windy"]}}
@@ -27,9 +28,10 @@ slot_presets:
   l3m: &l3m {"language_code": "en", "part_of_speech": ["noun", "verb"], "agreement_tags": {"semantic": ["w_tomorrow", "w_rain", "w_be", "w_will"]}}
   l4m: &l4m {"language_code": "en", "part_of_speech": ["adverb", "noun", "particle", "verb"], "agreement_tags": {"semantic": ["w_idea", "w_but", "w_so", "w_going"]}}
   mix: &mix {"language_code": "en", "part_of_speech": ["adjective", "noun"], "agreement_tags": {"semantic": ["w_sunny", "w_rainy", "w_cloudy", "w_cold", "w_hot", "w_windy", "w_warm", "w_umbrella"]}}
-  tr2: &tr2 {"language_code": "en", "part_of_speech": ["adjective", "noun"], "agreement_tags": {"semantic": ["w_weather", "w_warm", "w_umbrella"]}}
+  tr2: &tr2 {"language_code": "en", "part_of_speech": ["noun", "verb"], "agreement_tags": {"semantic": ["w_weather", "w_umbrella", "w_should"]}}
   tr3: &tr3 {"language_code": "en", "part_of_speech": ["noun", "verb"], "agreement_tags": {"semantic": ["w_tomorrow", "w_rain", "w_be"]}}
   tr4: &tr4 {"language_code": "en", "part_of_speech": ["adverb", "noun", "particle"], "agreement_tags": {"semantic": ["w_idea", "w_but", "w_so"]}}
+  w_sunny: &w_sunny {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "w_sunny"}}
   w_umbrella: &w_umbrella {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_umbrella"}}
   w_rain: &w_rain {"language_code": "en", "part_of_speech": "verb", "agreement_tags": {"semantic": "w_rain"}}
   w_be: &w_be {"language_code": "en", "part_of_speech": "verb", "agreement_tags": {"semantic": "w_be"}}
@@ -93,10 +95,10 @@ templates:
   - content_key: practice.de-en.en.a1.unit11.lesson02.fill.008
     lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
     type: fill_in_blank
-    frame: {"text": "It's sunny and {item}. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
-    slots: {item: *w_warm, hint: *w_warm}
+    frame: {"text": "It's {item} and warm. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_sunny, hint: *w_sunny}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
-    feedback_frame: {"text": "Warm beschreibt angenehme Temperaturen; sunny and warm ist eine häufige Kombination.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Sunny bedeutet sonnig und kommt von sun, die Sonne; sunny and warm ist eine häufige Kombination.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit11.lesson02.fill.009
     lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
     type: fill_in_blank
@@ -139,7 +141,7 @@ templates:
     frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
     slots: {item: *tr2}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
-    feedback_frame: {"text": "Weather ist das Wetter; mit warm beschreiben Sie angenehme Temperaturen.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Weather ist das Wetter und umbrella der Regenschirm; mit should geben Sie einen Rat: You should take an umbrella.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit11.lesson04.translate.015
     lesson_content_key: en.a1.unit11.lesson04.weather_plan_dialogue
     type: translation
@@ -157,7 +159,7 @@ templates:
   - content_key: practice.de-en.en.a1.unit11.lesson02.translate.017
     lesson_content_key: en.a1.unit11.lesson02.describing_todays_weather
     type: translation
-    frame: {"text": "Wie ist das Wetter heute? (mit Kurzform)", "language_code": "de", "direction": "ltr"}
+    frame: {"text": "Wie ist das Wetter heute? (mit Kurzform und like)", "language_code": "de", "direction": "ltr"}
     slots: {item: *w_weather}
     answer_derivation: {"kind": "render_frame", "frame": {"text": "What's the {item} like today?", "language_code": "en", "direction": "ltr"}}
     feedback_frame: {"text": "What's the weather like? fragt nach dem Wetter; like bedeutet hier wie.", "language_code": "de", "direction": "ltr"}

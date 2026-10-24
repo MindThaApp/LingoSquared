@@ -16,6 +16,7 @@ review:
     German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
     of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
     which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: cafe dropped from the bare-word translation pool (Café -> cafe/café is a near-identical, accent-ambiguous answer; soup takes its place); the I'd like prompt no longer spells out half the answer (Ich möchte ... mit Kurzform); three feedback lines fixed (soup is not only a mass noun, broken 'Antworten können Sie mit', Sure is said by the server).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -27,7 +28,7 @@ slot_presets:
   l4m: &l4m {"language_code": "en", "part_of_speech": ["adjective", "adverb", "pronoun"], "agreement_tags": {"semantic": ["w_sure", "w_please", "w_anything", "w_else"]}}
   dr: &dr {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_coffee", "w_tea", "w_salad", "w_sandwich"]}}
   tr2: &tr2 {"language_code": "en", "part_of_speech": ["adverb", "pronoun"], "agreement_tags": {"semantic": ["w_please", "w_anything", "w_else", "w_here", "w_all"]}}
-  tr3: &tr3 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_menu", "w_price", "w_cafe"]}}
+  tr3: &tr3 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_menu", "w_price", "w_soup"]}}
   w_else: &w_else {"language_code": "en", "part_of_speech": "adverb", "agreement_tags": {"semantic": "w_else"}}
   w_here: &w_here {"language_code": "en", "part_of_speech": "adverb", "agreement_tags": {"semantic": "w_here"}}
   w_sandwich: &w_sandwich {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_sandwich"}}
@@ -44,7 +45,7 @@ templates:
     frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
     slots: {item: *food}
     answer_derivation: {"kind": "slot_gloss", "slot": "item"}
-    feedback_frame: {"text": "Water, bread und soup sind Stoffnamen: Im Englischen sagen Sie dafür some water, aber a coffee oder a sandwich für eine Portion.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Water und bread sind Stoffnamen: Im Englischen sagen Sie dafür some water, aber a coffee oder a sandwich für eine Portion.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit07.lesson01.listen.002
     lesson_content_key: en.a1.unit07.lesson01.food_drink_vocabulary
     type: listen_select
@@ -58,7 +59,7 @@ templates:
     frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
     slots: {item: *l2m}
     answer_derivation: {"kind": "slot_gloss", "slot": "item"}
-    feedback_frame: {"text": "Anything else? ist die übliche Frage im Café, wenn Sie bestellt haben; Antworten können Sie mit No, that's all.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Anything else? ist die übliche Frage im Café, wenn Sie bestellt haben; darauf antworten Sie zum Beispiel mit No, that's all.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit07.lesson02.listen.004
     lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
     type: listen_select
@@ -72,7 +73,7 @@ templates:
     frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
     slots: {item: *l4m}
     answer_derivation: {"kind": "slot_gloss", "slot": "item"}
-    feedback_frame: {"text": "Sure bedeutet hier klar oder gern; Sie bestätigen damit freundlich eine Bestellung, bevor Sie nachfragen: Sure. Anything else?", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Sure bedeutet hier klar oder gern; mit Sure. Anything else? bestätigt die Bedienung freundlich die Bestellung und fragt nach weiteren Wünschen.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit07.lesson03.choose.006
     lesson_content_key: en.a1.unit07.lesson03.reading_a_menu
     type: multiple_choice
@@ -150,11 +151,11 @@ templates:
     frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
     slots: {item: *tr3}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
-    feedback_frame: {"text": "Cafe ist hier die englische Schreibweise ohne Akzent; menu meint die Speisekarte.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Menu meint die Speisekarte, nicht ein Menü als Gericht; price ist der Preis.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit07.lesson02.translate.017
     lesson_content_key: en.a1.unit07.lesson02.ordering_phrases
     type: translation
-    frame: {"text": "Ich hätte gern einen Kaffee, bitte. (mit I'd like)", "language_code": "de", "direction": "ltr"}
+    frame: {"text": "Ich möchte einen Kaffee, bitte. (mit Kurzform)", "language_code": "de", "direction": "ltr"}
     slots: {item: *w_coffee}
     answer_derivation: {"kind": "render_frame", "frame": {"text": "I'd like a {item}, please.", "language_code": "en", "direction": "ltr"}}
     feedback_frame: {"text": "I'd like ist höflicher als I want; please am Satzende rundet die Bitte ab.", "language_code": "de", "direction": "ltr"}

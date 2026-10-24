@@ -102,7 +102,7 @@ EN_TARGET_TO_DE_GLOSS: dict[str, str] = {
     "sunday": "Sonntag", "it": "es", "today": "heute", "january": "Januar",
     "march": "März", "july": "Juli", "september": "September",
     "december": "Dezember", "which": "welche; welcher; welches", "month": "Monat",
-    "today's": "heutig; heutiges", "date": "Datum", "7th": "der 7. (Datum)",
+    "today's": "heutige; heutiges (von heute)", "date": "Datum", "7th": "der 7. (Datum)",
     "can": "können; kann", "also": "auch", "write": "schreiben", "as": "als",
     "when's": "wann ist", "birthday": "Geburtstag", "3rd": "der 3. (Datum)",
     "opens": "öffnet", "again": "wieder", "open": "öffnen; geöffnet sein",
@@ -165,7 +165,7 @@ EN_TARGET_TO_DE_GLOSS: dict[str, str] = {
     "size": "Größe", "color": "Farbe", "20": "Ziffer (zwanzig)", "i'll": "ich werde",
     "we": "wir",
     # unit13 emotions
-    "happy": "glücklich", "sad": "traurig", "tired": "müde", "excited": "aufgeregt",
+    "happy": "glücklich", "sad": "traurig", "tired": "müde", "excited": "aufgeregt (voller Vorfreude)",
     "worried": "besorgt", "feeling": "Gefühl; sich fühlen", "little": "ein wenig",
     "because": "weil", "big": "groß", "test": "Prüfung", "class": "Unterricht",
     "almost": "fast", "over": "vorbei", "last": "letzte; letzter", "year": "Jahr",

@@ -16,6 +16,7 @@ review:
     German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
     of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
     which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: park and restaurant dropped from the bare-word translation pools (glosses Park/Restaurant are identical to the answers); bank kept for its Bank/bench false-friend value.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -26,6 +27,8 @@ slot_presets:
   mix: &mix {"language_code": "en", "part_of_speech": ["noun", "preposition"], "agreement_tags": {"semantic": ["w_bank", "w_hospital", "w_pharmacy", "w_park", "w_restaurant", "w_behind", "w_between", "w_across"]}}
   l3m: &l3m {"language_code": "en", "part_of_speech": ["adjective", "noun", "preposition", "pronoun"], "agreement_tags": {"semantic": ["w_where", "w_far", "w_park", "w_between"]}}
   l4m: &l4m {"language_code": "en", "part_of_speech": ["adjective", "pronoun", "verb"], "agreement_tags": {"semantic": ["w_excuse", "w_me", "w_far", "w_where"]}}
+  tr1: &tr1 {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_bank", "w_hospital", "w_pharmacy"]}}
+  tr3: &tr3 {"language_code": "en", "part_of_speech": ["adjective", "preposition", "pronoun"], "agreement_tags": {"semantic": ["w_where", "w_far", "w_between"]}}
   np_: &np_ {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_bank", "w_park"]}}
   w_between: &w_between {"language_code": "en", "part_of_speech": "preposition", "agreement_tags": {"semantic": "w_between"}}
   w_far: &w_far {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "w_far"}}
@@ -125,7 +128,7 @@ templates:
     lesson_content_key: en.a1.unit09.lesson01.common_places
     type: translation
     frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
-    slots: {item: *places}
+    slots: {item: *tr1}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
     feedback_frame: {"text": "Bank bedeutet Geldinstitut; hospital ist das Krankenhaus und pharmacy die Apotheke.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit09.lesson02.translate.014
@@ -139,7 +142,7 @@ templates:
     lesson_content_key: en.a1.unit09.lesson03.asking_where
     type: translation
     frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
-    slots: {item: *l3m}
+    slots: {item: *tr3}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
     feedback_frame: {"text": "Where fragt nach dem Ort; far heißt weit entfernt.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit09.lesson04.translate.016
