@@ -11,7 +11,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: ["w_administratives", "w_adresse", "w_aller", "w_apportiez", "w_arrondissement", "w_avis", "w_carte", "w_changement", "w_confirmer", "w_devez", "w_dois", "w_domicile", "w_dossier", "w_délai", "w_démarche", "w_démarches", "w_emménagement", "w_envoyez", "w_explique", "w_facture", "w_faudrait", "w_faut", "w_formel", "w_formulaire", "w_j'aimerais", "w_justificatif", "w_madame", "w_mairie", "w_merci", "w_mois", "w_monsieur", "w_nouvelle", "w_obligatoire", "w_parfait", "w_partir", "w_pièce", "w_pourriez-vous", "w_prendre", "w_présenter", "w_présentez-vous", "w_présentiez", "w_registre", "w_remplir", "w_remplissiez", "w_rendez-vous", "w_rue", "w_récent", "w_semaine", "w_signaler", "w_suivre", "w_troisième", "w_valide", "w_voici", "w_votre"]
+    semantic: ["w_administratives", "w_adresse", "w_aller", "w_apportiez", "w_arrondissement", "w_avis", "w_carte", "w_changement", "w_confirmer", "w_devez", "w_dois", "w_domicile", "w_dossier", "w_délai", "w_démarche", "w_démarches", "w_emménagement", "w_envoyez", "w_explique", "w_facture", "w_faudrait", "w_faut", "w_formel", "w_formulaire", "w_j'aimerais", "w_justificatif", "w_madame", "w_mairie", "w_merci", "w_mois", "w_monsieur", "w_nouvelle", "w_obligatoire", "w_parfait", "w_partir", "w_pièce", "w_pourriez-vous", "w_prendre", "w_présenter", "w_présentez-vous", "w_présentiez", "w_registre", "w_remplir", "w_remplissiez", "w_rendez-vous", "w_rue", "w_récent", "w_semaine", "w_signaler", "w_suivre", "w_troisième", "w_valide", "w_voici", "w_votre", w_viens, w_prochaine, w_avant, "w_l'agent", w_trente, w_jours, w_lundi, w_trois, w_moins, w_après, w_tout, "w_l'accueil", w_avec, w_bonjour, w_avez, w_oui, w_très, w_bien, w_plaît, w_douze, w_faire, w_dans, w_comme]
 slot_presets:
   mairie_nouns: &mairie_nouns {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: ["w_mairie", "w_changement", "w_justificatif", "w_domicile", "w_formulaire", "w_démarche", "w_délai", "w_rendez-vous", "w_semaine"]}}
   mairie_verbs: &mairie_verbs {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: ["w_signaler", "w_présenter", "w_remplir", "w_partir", "w_suivre", "w_aller", "w_prendre"]}}
@@ -31,6 +31,9 @@ slot_presets:
   remplissiez_single: &remplissiez_single {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_remplissiez"}}
   dlg_tr: &dlg_tr {language_code: fr, part_of_speech: [noun, adjective, phrase, verb], agreement_tags: {semantic: ["w_madame", "w_monsieur", "w_carte", "w_facture", "w_arrondissement", "w_rue", "w_troisième", "w_voici", "w_parfait", "w_merci", "w_remplissiez", "w_présentiez"]}}
   monsieur_single: &monsieur_single {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_monsieur"}}
+  x1: &x1 {language_code: fr, part_of_speech: [adjective, noun, preposition, verb], agreement_tags: {semantic: [w_viens, w_prochaine, w_avant, w_l'agent, w_trente, w_jours]}}
+  x2: &x2 {language_code: fr, part_of_speech: [adverb, noun, preposition], agreement_tags: {semantic: [w_lundi, w_trois, w_moins, w_après, w_tout, w_l'accueil, w_avec]}}
+  x3: &x3 {language_code: fr, part_of_speech: [adverb, noun, phrase, preposition, verb], agreement_tags: {semantic: [w_bonjour, w_avez, w_oui, w_très, w_bien, w_plaît, w_douze, w_faire, w_dans, w_comme]}}
 templates:
   - content_key: practice.en-fr.fr.a2.unit15.lesson01.choose.001
     lesson_content_key: fr.a2.unit15.lesson01.vocabulaire_mairie
@@ -160,3 +163,52 @@ templates:
     slots: {item: *monsieur_single}
     answer_derivation: {kind: render_frame, frame: {text: "Bonjour, {item}.", language_code: fr, direction: ltr}}
     feedback_frame: {text: "Bonjour, monsieur is the standard polite greeting to a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson01.choose.007
+    lesson_content_key: fr.a2.unit15.lesson01.vocabulaire_mairie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *x1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the town-hall vocabulary: dates, delays and the person you deal with.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson01.translate.008
+    lesson_content_key: fr.a2.unit15.lesson01.vocabulaire_mairie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the French word exactly as written, with its accent where it has one.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson02.choose.007
+    lesson_content_key: fr.a2.unit15.lesson02.registre_formel
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *x2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the formal-register lesson: days, numbers and linking words.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson02.translate.008
+    lesson_content_key: fr.a2.unit15.lesson02.registre_formel
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Write the word as it appears in the formal text.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson03.choose.007
+    lesson_content_key: fr.a2.unit15.lesson03.dialogue_rendez_vous_mairie
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the town-hall conversation: greetings, polite replies and common verbs.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson03.translate.008
+    lesson_content_key: fr.a2.unit15.lesson03.dialogue_rendez_vous_mairie
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the word as written in the conversation; accents are part of the spelling.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a2.unit15.lesson03.listen.009
+    lesson_content_key: fr.a2.unit15.lesson03.dialogue_rendez_vous_mairie
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *x3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Listen for the silent final letters; many written endings are not pronounced.", language_code: en, direction: ltr}
