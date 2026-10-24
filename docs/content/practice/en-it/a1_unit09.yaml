@@ -1,0 +1,145 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit09
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u09* lesson tags, w_<token> anchors).
+    Lesson 3 has no first-sight tokens, so nothing is anchored there. Place frames with 'la' use a curated list of feminine nouns (farmacia, banca, stazione); l'ufficio is excluded because it already carries its article. Prompts say formal for Scusi.
+    Reviewer check: dov'è is a single tokenized form in the audio/text but its realization tokens are dov + è, so no pool contains it.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_accanto, w_alla, w_banca, "w_c'è", "w_ce n'è", w_farmacia, "w_l'ufficio", w_postale, w_stazione, w_via, w_vicino]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_farmacia, w_banca, w_stazione, "w_l'ufficio", w_postale, w_vicino, w_via]}}
+  pool2: &pool2 {language_code: it, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_farmacia, w_banca, w_stazione, "w_l'ufficio", w_via, w_vicino]}}
+  pool3: &pool3 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_farmacia, w_banca, w_stazione]}}
+  t_vicino: &t_vicino {language_code: it, part_of_speech: adjective, agreement_tags: {semantic: w_vicino}}
+  pool5: &pool5 {language_code: it, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_farmacia, w_banca, w_stazione, "w_l'ufficio", w_via, w_vicino, w_postale]}}
+  t_farmacia: &t_farmacia {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_farmacia}}
+  pool7: &pool7 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_farmacia, w_banca, w_stazione, "w_l'ufficio", w_via]}}
+  pool8: &pool8 {language_code: it, part_of_speech: [verb, preposition, adjective, noun], agreement_tags: {semantic: ["w_c'è", "w_ce n'è", w_accanto, w_alla, w_vicino, w_banca]}}
+  pool9: &pool9 {language_code: it, part_of_speech: [verb, preposition], agreement_tags: {semantic: ["w_c'è", "w_ce n'è", w_accanto, w_alla]}}
+  t_banca: &t_banca {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_banca}}
+  t_ce_n_e: &t_ce_n_e {language_code: it, part_of_speech: verb, agreement_tags: {semantic: "w_ce n'è"}}
+  t_accanto: &t_accanto {language_code: it, part_of_speech: preposition, agreement_tags: {semantic: w_accanto}}
+  t_alla: &t_alla {language_code: it, part_of_speech: preposition, agreement_tags: {semantic: w_alla}}
+templates:
+  - content_key: practice.en-it.it.a1.unit09.lesson01.choose.001
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "La farmacia, la banca and la stazione are feminine; l'ufficio postale is masculine with an elided article.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.listen.002
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Via can mean street or road and is used in names such as Via Roma.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.order.003
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: word_order
+    frame: {text: "Scusi, dov'è la {item}?", language_code: it, direction: ltr}
+    slots: {item: *pool3}
+    answer_derivation: {kind: render_frame, frame: {text: "Scusi, dov'è la {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Dov'è la plus a feminine noun asks where a place is; scusi is the formal excuse me.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.fill.004
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: fill_in_blank
+    frame: {text: "È qui {item}, in Via Roma. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_vicino, hint: *t_vicino}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Qui vicino means nearby, right here.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.match.005
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool5, second: *pool5, third: *pool5, fourth: *pool5, fifth: *pool5, sixth: *pool5}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Vicino means near; qui vicino means nearby.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.translate.006
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: translation
+    frame: {text: "Excuse me, where is the pharmacy? (formal)", language_code: en, direction: ltr}
+    slots: {item: *t_farmacia}
+    answer_derivation: {kind: render_frame, frame: {text: "Scusi, dov'è la {item}?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Scusi is the formal imperative, suited to a stranger.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson01.translate.007
+    lesson_content_key: it.a1.unit09.lesson01.i_luoghi_in_citta
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *pool7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il or la changes with gender, but l' is used before a vowel: l'ufficio.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.choose.001
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool8}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "C'è asks or states that something exists; ce n'è answers with one of them.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.listen.002
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool9}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ce n'è una means there is one: ne stands for of them.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.fill.003
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: fill_in_blank
+    frame: {text: "C'è una {item} qui vicino? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_banca, hint: *t_banca}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "C'è una banca? asks whether any bank exists near here.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.order.004
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: word_order
+    frame: {text: "Sì, {item} una qui vicino.", language_code: it, direction: ltr}
+    slots: {item: *t_ce_n_e}
+    answer_derivation: {kind: render_frame, frame: {text: "Sì, {item} una qui vicino.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Ce n'è una answers a c'è una ... question by saying there is one.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.fill.005
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: fill_in_blank
+    frame: {text: "È {item} alla stazione. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_accanto, hint: *t_accanto}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Accanto alla means next to the; alla is a plus la.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.fill.006
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: fill_in_blank
+    frame: {text: "Sì, ce n'è una qui vicino, accanto {item} stazione. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_alla, hint: *t_alla}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Alla combines a and la before a feminine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.translate.007
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: translation
+    frame: {text: "Is there a bank nearby?", language_code: en, direction: ltr}
+    slots: {item: *t_banca}
+    answer_derivation: {kind: render_frame, frame: {text: "C'è una {item} qui vicino?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "C'è una banca qui vicino? uses una because banca is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.translate.008
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: translation
+    frame: {text: "Yes, there's one nearby.", language_code: en, direction: ltr}
+    slots: {item: *t_ce_n_e}
+    answer_derivation: {kind: render_frame, frame: {text: "Sì, {item} una qui vicino.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Ce n'è una means there is one of them.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit09.lesson02.translate.009
+    lesson_content_key: it.a1.unit09.lesson02.ce_una_banca_qui_vicino
+    type: translation
+    frame: {text: "It's next to the station.", language_code: en, direction: ltr}
+    slots: {item: *t_accanto}
+    answer_derivation: {kind: render_frame, frame: {text: "È {item} alla stazione.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Accanto alla stazione is next to the station.", language_code: en, direction: ltr}
