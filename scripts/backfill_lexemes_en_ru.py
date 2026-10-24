@@ -9,8 +9,12 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 only (the "en-ru-a1" manifest group, units 01-24). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-ru-a1" manifest group, units 01-24) and A2 (the
+"en-ru-a2" group, units 25-34; session 11). B1+ is not classified yet; extend
+LEVELS and the tables below together. A1 and A2 are separate courses, so A2
+re-glosses every token it introduces, function words included; where A2 teaches
+a different sense of an A1 token (банка, дня, за, работы) GLOSS_OVERRIDES keys the
+A2 gloss by (realization stem, token).
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md section 0.1, 6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -50,7 +54,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "ru"
-LEVELS = {"a1": "en-ru-a1"}
+LEVELS = {"a1": "en-ru-a1", "a2": "en-ru-a2"}
 
 PROPER_NOUNS = {
     "Анна", "Максим", "Виктор", "Канады", "Канада", "Москвы", "Москва",
@@ -262,6 +266,110 @@ GLOSSES: dict[str, str] = {
     "только": "only",
 }
 
+# A2 (session 11): units 25-34, glosses for the tokens A1 did not teach.
+GLOSSES.update({
+    # unit25 registration
+    "регистрация": "registration",
+    "регистрацию": "registration (accusative case, as in 'for registration')",
+    "зарегистрироваться": "to register (oneself)", "адрес": "address",
+    "копия": "copy", "паспорт": "passport",
+    "паспорта": "passport (genitive case, 'of the passport')",
+    "заявление": "application form; written request", "договор": "contract",
+    "аренды": "rent (genitive case, as in 'rental contract')",
+    "по": "by; at (an address); on (as in 'on Tuesdays'); according to",
+    "новому": "new (dative case, masc., after the word for 'at an address')",
+    "адресу": "address (dative case, as in 'at the address')",
+    "новый": "new (masc.)", "приходите": "come (formal command)",
+    "десяти": "ten (dative case, as in 'by ten o'clock')",
+    # unit26 opinions
+    "моему": "my (dative case, in the phrase for 'in my opinion')",
+    "удобно": "convenient; comfortable", "думаю": "I think",
+    "важно": "important", "потому что": "because", "быстро": "quickly; fast",
+    "согласна": "agreed (said by a woman)",
+    "согласны": "agreed (said by several people)", "трудно": "difficult; hard",
+    "понимаю": "I understand", "мнение": "opinion", "для": "for",
+    "думаешь": "you think (informal)", "работать": "to work",
+    "ехать": "to go (by vehicle); to travel", "вместе": "together",
+    "людьми": "people (instrumental case, as in 'with people')",
+    "спокойнее": "calmer; more peaceful", "но": "but",
+    # unit27 bank
+    "открыть": "to open", "счёт": "bank account",
+    "банке": "bank (prepositional case, 'in the bank')",
+    "сотрудник": "employee; staff member", "номер": "number",
+    "телефона": "phone (genitive case, as in 'phone number')",
+    "обслуживание": "service; upkeep", "карты": "card (genitive case, 'of the card')",
+    "бесплатное": "free of charge (neuter)",
+    "бесплатной": "free of charge (fem., after 'will be')",
+    "будет": "will be (he, she or it)", "конечно": "of course",
+    # unit28 doctor
+    "беспокоит": "bothers; troubles", "сильно": "strongly; badly",
+    "уже": "already; by now", "принимайте": "take (formal command, of medicine)",
+    "лекарство": "medicine", "раза": "times, as used after two to four",
+    "отдыхайте": "rest (formal command)", "снова": "again",
+    "пятницу": "Friday (accusative case, as in 'on Friday')",
+    "идти": "to go (on foot)", "работу": "work (accusative case, 'to work')",
+    "записаться": "to make an appointment; to sign up",
+    "врачу": "doctor (dative case, as in 'to the doctor')",
+    "прийти": "to come (arrive on foot)",
+    # unit29 repairs
+    "проблема": "problem", "отопление": "heating", "течёт": "leaks; flows",
+    "кран": "tap; faucet", "мастер": "repairman; tradesman",
+    "придёт": "will come (he or she)",
+    "одной": "one (fem., prepositional case, 'in one room')",
+    "комнате": "room (prepositional case, 'in the room')", "или": "or",
+    "всей": "whole; all (fem., prepositional case)",
+    # unit30 interview
+    "собеседование": "job interview", "опыт": "experience",
+    "опыте": "experience (prepositional case, as in 'about experience')",
+    "расскажите": "tell about; recount (formal command)", "о": "about; of",
+    "вашем": "your (formal, prepositional case, masc. or neuter)",
+    "можете": "you can (formal)", "начать": "to begin", "график": "schedule",
+    "должность": "position; job title",
+    "должности": "position (prepositional case, 'in this position')",
+    "этой": "this (fem., prepositional case)", "работала": "worked (fem.)",
+    "детьми": "children (instrumental case, as in 'with children')",
+    # unit31 delay
+    "задержка": "delay", "задерживается": "is delayed", "двадцать": "twenty",
+    "отмена": "cancellation", "рейс": "flight; scheduled trip",
+    "рейса": "flight (genitive case, 'of the flight')",
+    "пересадка": "connection; transfer",
+    "пересадку": "connection; transfer (accusative case, 'for the connection')",
+    "успею": "I will make it in time", "другой": "other; another (masc.)",
+    "третьей": "third (fem., genitive case, 'from the third platform')",
+    "через": "in (a length of time); after",
+    # unit32 online life
+    "интернет": "internet",
+    "интернетом": "internet (instrumental case, as in 'use the internet')",
+    "онлайн": "online", "каждый": "every; each (masc.)", "пользуюсь": "I use",
+    "пользуешься": "you use (informal)", "часто": "often", "редко": "rarely",
+    "телефон": "phone", "телефоном": "phone (instrumental case, 'with the phone')",
+    "новости": "news", "читаю": "I read", "читать": "to read", "видео": "video",
+    "смотрю": "I watch", "смотреть": "to watch", "полезно": "useful",
+    "иногда": "sometimes", "занимает": "takes (time)",
+    "времени": "time (genitive case, as in 'a lot of time')",
+    "стараюсь": "I try", "сидеть": "to sit; to stay",
+    # unit33 week
+    "неделя": "week", "обычная": "usual; ordinary (fem.)", "обычно": "usually",
+    "проходит": "passes; goes by (of time)", "твоя": "your (informal, fem.)",
+    "будни": "weekdays", "выходные": "weekend; days off", "отдыхаю": "I rest",
+    "вторникам": "Tuesdays (dative plural, as in 'on Tuesdays')",
+    "после": "after", "хожу": "I go (regularly, on foot)",
+    "курсы": "courses; classes", "встречаюсь": "I meet up (with someone)",
+    "друзьями": "friends (instrumental case, as in 'with friends')",
+    # unit34 complaint
+    "купила": "bought (said by a woman)", "эту": "this (fem., accusative case)",
+    "рубашку": "shirt (accusative case, as an object)",
+    "мала": "too small (fem.)", "обменять": "to exchange",
+})
+
+# A2 senses that differ from the A1 gloss of the same token.
+GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    ("a2_unit27_bank", "банка"): "bank (genitive case, as in 'employee of the bank')",
+    ("a2_unit28_u_vracha", "дня"): "days, as used after two to four",
+    ("a2_unit30_sobesedovanie", "за"): "for (as in 'thank you for')",
+    ("a2_unit30_sobesedovanie", "работы"): "work (genitive case, as in 'work experience')",
+}
+
 POS_SETS = {
     "symbol": split_words("з д р т е ъ ь й"),
     "proper_noun": PROPER_NOUNS,
@@ -295,6 +403,30 @@ POS_SETS = {
     ) | {"не хочу"},
     "phrase": split_words("здравствуйте привет спасибо пожалуйста алло пока"),
 }
+for _pos, _words in {
+    "pronoun": "моему вашем этой твоя эту",
+    "preposition": "по для о через после",
+    "particle": "но или",
+    "adjective": (
+        "новому новый удобно важно согласна согласны трудно спокойнее "
+        "бесплатное бесплатной одной всей другой третьей каждый обычная "
+        "полезно мала"
+    ),
+    "adverb": (
+        "быстро сильно уже снова вместе конечно часто редко иногда обычно "
+        "онлайн"
+    ),
+    "verb": (
+        "зарегистрироваться приходите думаю понимаю думаешь работать ехать "
+        "открыть будет принимайте отдыхайте идти записаться прийти "
+        "беспокоит течёт придёт расскажите можете начать задерживается "
+        "успею пользуюсь пользуешься читаю читать смотрю смотреть занимает "
+        "стараюсь сидеть проходит отдыхаю хожу встречаюсь купила обменять "
+        "работала"
+    ),
+}.items():
+    POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
+POS_SETS["particle"] = set(POS_SETS["particle"]) | {"потому что"}
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -322,6 +454,7 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=GLOSS_OVERRIDES,
         )
 
 
