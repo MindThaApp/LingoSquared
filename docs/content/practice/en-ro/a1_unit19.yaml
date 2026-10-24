@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit19
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit19.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u19* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm Cum este vremea?, Astăzi este soare / cald, Mâine plouă / este vânt / este frig and the soare = sun; sunny, cald = warm; hot glosses.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_vreme, w_vremea, w_soare, w_cald, w_plouă, w_vânt, w_frig]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_vreme, w_vremea, w_soare, w_cald]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_plouă, w_vânt, w_frig, w_soare, w_cald]}}
+  m6: &m6 {language_code: ro, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_vreme, w_soare, w_cald, w_plouă, w_vânt, w_frig]}}
+  t_vremea: &t_vremea {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_vremea}}
+  t_soare: &t_soare {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_soare}}
+  t_cald: &t_cald {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_cald}}
+  t_plouea: &t_plouea {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_plouă}}
+  t_vant: &t_vant {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_vânt}}
+  t_frig: &t_frig {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_frig}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.choose.001
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vremea is vreme plus the article -a, the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.listen.002
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cum este vremea? asks about the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.order.003
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: word_order
+    frame: {text: "Cum este {item}?", language_code: ro, direction: ltr}
+    slots: {item: *t_vremea}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cum este asks how something is; vremea is the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.order.004
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: word_order
+    frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_soare}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Romanian says today is sun to mean it is sunny.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.order.005
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: word_order
+    frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_cald}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cald is a fixed adjective after este for weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.fill.006
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: fill_in_blank
+    frame: {text: "Astăzi este {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_soare, hint: *t_soare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Soare names the sun and also describes sunny weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.translate.007
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: translation
+    frame: {text: "How is the weather?", language_code: en, direction: ltr}
+    slots: {item: *t_vremea}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum este {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vremea takes the article because it means the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.translate.008
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: translation
+    frame: {text: "Today it is sunny.", language_code: en, direction: ltr}
+    slots: {item: *t_soare}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Este soare is the usual way to say it is sunny.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson01.translate.009
+    lesson_content_key: ro.a1.unit19.lesson01.vremea_de_azi
+    type: translation
+    frame: {text: "Today it is warm.", language_code: en, direction: ltr}
+    slots: {item: *t_cald}
+    answer_derivation: {kind: render_frame, frame: {text: "Astăzi este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cald covers both warm and hot depending on the situation.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.choose.001
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Plouă means it rains; vânt and frig are nouns used after este.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.listen.002
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Este vânt and este frig both use este plus a noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.match.003
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Vreme, soare, vânt and frig are nouns; plouă is a verb; cald is an adjective.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.order.004
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: word_order
+    frame: {text: "Mâine {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_plouea}
+    answer_derivation: {kind: render_frame, frame: {text: "Mâine {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Plouă stands alone with no subject, like it rains.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.order.005
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: word_order
+    frame: {text: "Mâine este {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_vant}
+    answer_derivation: {kind: render_frame, frame: {text: "Mâine este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Este vânt says it is windy.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.fill.006
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: fill_in_blank
+    frame: {text: "Mâine este {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_frig, hint: *t_frig}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Este frig says it is cold.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.translate.007
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: translation
+    frame: {text: "Tomorrow it rains.", language_code: en, direction: ltr}
+    slots: {item: *t_plouea}
+    answer_derivation: {kind: render_frame, frame: {text: "Mâine {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Plouă needs no word for it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.translate.008
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: translation
+    frame: {text: "Tomorrow it is windy.", language_code: en, direction: ltr}
+    slots: {item: *t_vant}
+    answer_derivation: {kind: render_frame, frame: {text: "Mâine este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vânt is a noun, so Romanian says it is wind.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit19.lesson02.translate.009
+    lesson_content_key: ro.a1.unit19.lesson02.vremea_de_maine
+    type: translation
+    frame: {text: "Tomorrow it is cold.", language_code: en, direction: ltr}
+    slots: {item: *t_frig}
+    answer_derivation: {kind: render_frame, frame: {text: "Mâine este {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Frig is a noun, used after este.", language_code: en, direction: ltr}
