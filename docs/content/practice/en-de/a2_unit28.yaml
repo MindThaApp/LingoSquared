@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a2.unit28
+source_language: en
+target_language: de
+unit_content_key: de.a2.unit28.beim_arzt
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 11, en-de A2 practice pack) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_de.py (curated w_<token> pools of this unit's own tokens). Sentence frames use single anchors or small unions in which every member is grammatical; English prompts name the formal Sie where the German form depends on it. Reviewer: confirm seit drei Tagen (dative plural) and the polite commands Trinken Sie / Kommen Sie wieder as used by a doctor.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Arzt", "w_Symptom", "w_Halsschmerzen", "w_Tagen", "w_stark", "w_Wasser", "w_Fieber", "w_Freitag", "w_wiederkommen", "w_trinken", "w_heute", "w_wieder", "w_kann", "w_seit", "w_starke", "w_viel", "w_auch"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, adjective], agreement_tags: {semantic: ["w_Arzt", "w_Symptom", "w_Halsschmerzen", "w_Tagen", "w_stark"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_Wasser", "w_Fieber", "w_Freitag", "w_wiederkommen", "w_trinken", "w_heute"]}}
+  p3: &p3 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_Wasser", "w_Fieber", "w_Freitag", "w_wieder", "w_heute", "w_kann"]}}
+  p4: &p4 {language_code: de, part_of_speech: [noun, adjective, preposition], agreement_tags: {semantic: ["w_Arzt", "w_Symptom", "w_Halsschmerzen", "w_stark", "w_seit"]}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Halsschmerzen", "w_Fieber"]}}
+  p6: &p6 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_starke"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Wasser"}}
+  p8: &p8 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Freitag"}}
+  p9: &p9 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Arzt", "w_Symptom", "w_Halsschmerzen", "w_Wasser", "w_Fieber", "w_Freitag"]}}
+  p10: &p10 {language_code: de, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: ["w_stark", "w_trinken", "w_viel", "w_wieder", "w_heute", "w_auch", "w_kann"]}}
+  p11: &p11 {language_code: de, part_of_speech: preposition, agreement_tags: {semantic: "w_seit"}}
+  p12: &p12 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_kann"}}
+  p13: &p13 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Fieber"}}
+  p14: &p14 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_Wasser", "w_Fieber", "w_Freitag", "w_wiederkommen", "w_heute", "w_viel"]}}
+  p15: &p15 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Halsschmerzen"}}
+templates:
+  - content_key: practice.en-de.de.a2.unit28.lesson01.choose.001
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tagen is the dative plural, used after seit drei.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.listen.002
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Wiederkommen is separable: kommen ... wieder.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.choose.003
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Wieder means again; heute means today.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.listen.004
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Halsschmerzen is plural in German.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.order.005
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: word_order
+    frame: {text: "Ich habe seit drei Tagen {item}.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe seit drei Tagen {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Neither noun takes an article after Ich habe.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.order.006
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: word_order
+    frame: {text: "Ich habe {item} Halsschmerzen.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe {item} Halsschmerzen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Starke has an ending because it stands before a plural noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.order.007
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: word_order
+    frame: {text: "Trinken Sie viel {item}.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Trinken Sie viel {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Trinken Sie is the polite command: the verb comes first, then Sie.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.order.008
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: word_order
+    frame: {text: "Kommen Sie am {item} wieder.", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Kommen Sie am {item} wieder.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Am Freitag means on Friday; wieder goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.match.009
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p9, second: *p9, third: *p9, fourth: *p9, fifth: *p9, sixth: *p9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Halsschmerzen is plural; Fieber is singular.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.match.010
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p10, second: *p10, third: *p10, fourth: *p10, fifth: *p10, sixth: *p10}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Viel means much or a lot; wieder means again.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.fill.011
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: fill_in_blank
+    frame: {text: "Ich habe {item} drei Tagen Halsschmerzen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Seit with the dative shows how long something has lasted.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.fill.012
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: fill_in_blank
+    frame: {text: "Wann {item} ich kommen? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Kann is the ich form, and in this question it comes before ich.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.fill.013
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: fill_in_blank
+    frame: {text: "Ich habe auch {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Fieber has no article here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.translate.014
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Arzt, Symptom and Halsschmerzen are nouns and keep their capital.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.translate.015
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wiederkommen is one word in the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson01.translate.016
+    lesson_content_key: de.a2.unit28.lesson01.symptome_beschreiben
+    type: translation
+    frame: {text: "I have had a sore throat for three days.", language_code: en, direction: ltr}
+    slots: {item: *p15}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe seit drei Tagen {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "German uses the present tense with seit for something still going on.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.translate.017
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: translation
+    frame: {text: "Drink a lot of water. (formal)", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Trinken Sie viel {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The polite command puts the verb first, then Sie.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit28.lesson02.translate.018
+    lesson_content_key: de.a2.unit28.lesson02.anweisung_und_nachricht
+    type: translation
+    frame: {text: "Come back on Friday. (formal)", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Kommen Sie am {item} wieder.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wieder goes to the end because wiederkommen is separable.", language_code: en, direction: ltr}
