@@ -6,6 +6,7 @@ unit_content_key: prs.a2.unit16.online_habits
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint. en-prs A2 unit16 had a full realization + overlay and 53
@@ -45,6 +46,19 @@ review:
     lane -- realizations/fa, overlays/*fa*, practice/en-fa -- was never opened while
     authoring this pack. scripts/check_dari_register.py reports zero findings on it.
     Needs the standard fresh-context review before import.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 5 fixes. lesson02
+    choose/translate drew from ALL unit nouns (incl. construct forms شبکهٔ /
+    شبکه‌های, and مردم "people" vs افراد "individuals; people" = ambiguous MC
+    options / translation) -> restricted to online_habit_word +
+    technology_role_word nouns; lesson04 matching_pairs pool was exactly 6
+    words for 6 slots (same cards every time) -> tag restriction removed
+    (all unit verbs/adjectives/adverbs/pronouns); two word_order/fill
+    feedbacks hard-coded or used '[word]'/'___' placeholders -> {item}.
+    NATIVE FLAGS: gloss 'free (available time)' for آزاد; زیاد 'much; a lot'
+    vs بسیاری 'many (of)'; spelling انترنت / پیام‌رسان / کمپیوتری;
+    fill.004 'این ___ هر روز از انترنت استفاده می‌کند' has a single accepted
+    answer کاربر but مردم / افراد also fit grammatically.
 tag_schema:
   part_of_speech:
   - symbol
@@ -185,11 +199,15 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - online_habit_word
+        - technology_role_word
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: "{item} is one of the nouns this unit teaches."
+    text: "{item} is one of the technology nouns this unit teaches."
     language_code: en
     direction: ltr
 
@@ -207,6 +225,10 @@ templates:
       language_code: prs
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - online_habit_word
+        - technology_role_word
   answer_derivation:
     kind: slot_text
     slot: item
@@ -297,13 +319,6 @@ templates:
       - adjective
       - adverb
       - pronoun
-      agreement_tags:
-        semantic:
-        - frequency_word
-        - identity
-        - plan_verb
-        - accept_decline_word
-        - health_advice_word
     second: *pool_forms
     third: *pool_forms
     fourth: *pool_forms
@@ -328,7 +343,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: "Match each Dari word form with its English meaning."
+    text: "Match each Dari word with its English meaning."
     language_code: en
     direction: ltr
 
@@ -380,7 +395,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "Word order: این [word] است (this is a ___)."
+    text: "Word order: این {item} است. (This is a ...)"
     language_code: en
     direction: ltr
 
@@ -406,7 +421,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: "به نظر من انترنت مفید است. (In my opinion the internet is useful)."
+    text: "به نظر من {item} مفید است. (In my opinion the ... is useful.)"
     language_code: en
     direction: ltr
 

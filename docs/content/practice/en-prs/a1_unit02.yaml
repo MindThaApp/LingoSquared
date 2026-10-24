@@ -6,62 +6,17 @@ unit_content_key: prs.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: false
-  notes: 'Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05, closing the gap where en-prs''s practice pool
-    only covered unit01 despite the realization/overlay already having units 1-7 (units 2-6 reviewed and stable, unit07 unreviewed/mid-edit
-    -- correctly left alone). Extended scripts/backfill_lexemes_en_prs.py''s UNIT_FILES to cover unit02 (previously unit01
-    only), hand-classifying all 28 genuinely new introduced_tokens directly from docs/content/realizations/prs/a1_unit02_introductions.yaml
-    (checked against the existing unit01 token set first so no already-reviewed gloss/POS entry was silently overwritten).
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05, closing the gap where en-prs's practice pool only covered unit01 despite the realization/overlay already having units 1-7 (units 2-6 reviewed and stable, unit07 unreviewed/mid-edit -- correctly left alone). Extended scripts/backfill_lexemes_en_prs.py's UNIT_FILES to cover unit02 (previously unit01 only), hand-classifying all 28 genuinely new introduced_tokens directly from docs/content/realizations/prs/a1_unit02_introductions.yaml (checked against the existing unit01 token set first so no already-reviewed gloss/POS entry was silently overwritten).
+    Found and fixed a real pre-existing bug while extending the classifier: "کابل" (Kabul, a city) was incorrectly tagged semantic=person_name in the ORIGINAL unit01-era code (grouped with real person names حامد/نجیب) -- moved it to a proper city_name tag (now shared with unit02's هرات/مزار/شریف) instead.
+    No listen_select anywhere in this pack, matching the existing a1_unit01.yaml pack's own stated rule: Dari has zero TTS voice coverage project-wide, a hard exclusion, not a style choice.
+    Deliberately did NOT pair the "title" slot (جناب/خانم, 2 candidates) with any specific person_name in a single frame -- جناب is male-specific and خانم is female-specific, but this course's lexeme model has no gender agreement tag on either titles or names yet, so a randomly-filled "{title} فریدون"-shaped frame would render the ungrammatical "خانم فریدون" (Ms. Faridun) roughly half the time. Same class of bug as the nl-en lane's زیjn/homograph caution and this lane's own en-fa/en-fa unit03/04 "quantity"/title-pairing avoidances -- verified via scripts/_practice_slot_check.py that no template below combines two independently-slotted values that could disagree on an untracked grammatical feature. "title" is tested standalone (multiple_choice/translation/a name-free fill_in_blank frame) instead.
+    "title" (2 candidates) and "name_word" (3 candidates: نام/نام‌تان/نامت) are at or near the minimum for multiple_choice; "title" specifically is never used in multiple_choice here (2 < 3), only fill_in_blank/ translation. Not yet compiler-validated or DB-verified as of this writing (left for the end-of-session scripts/verify.sh run); status left unreviewed pending a real fresh-context review -- this lane does not self-certify review status, and human native-speaker review is still recommended before Dari content ships, per standing project policy.
 
-    Found and fixed a real pre-existing bug while extending the classifier: "کابل" (Kabul, a city) was incorrectly tagged
-    semantic=person_name in the ORIGINAL unit01-era code (grouped with real person names حامد/نجیب) -- moved it to a proper
-    city_name tag (now shared with unit02''s هرات/مزار/شریف) instead.
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): generate_checkpoint() scopes candidates to THIS unit's own lexemes only, and several slots here had silently drifted to depend on lexemes actually introduced by an EARLIER unit (the backfill classifier keys glosses by bare token, so a token re-taught in this unit but first classified in an earlier one contributes 0 to unit02's own pool). Fixed, all pack-only (no backfill/realization/overlay edits): (1) person_pair.004 was DEAD (10 slots declared, only 3 unit-scoped person_name candidates existed -- ONLY 3 person names are actually introduced anywhere in this unit). Repurposed to a "social words" matching_pairs over politeness UNION title (4+2=6 distinct, both genuinely unit02-introduced, no overlap with the other two matching_pairs templates below). (2) city_pair.004 was DEAD (5 slots declared, only 4 unit-scoped city_name+country candidates existed). Widened to the full unit-scoped proper-noun pool (person_name UNION city_name UNION country = 3+3+1 = 7 distinct), reusing the person names freed up by fix (1) instead of duplicating them into two separate templates. (3) occupation_pair.004 was below the 6-pair floor (4 occupation-only candidates). Widened to occupation UNION relationship_word (4+2=6 distinct, both genuinely unit02-introduced, disjoint from politeness/title used in fix (1)). (4) name_gloss.001 was below the multiple_choice 3-option floor (name_word alone = 1 unit-scoped candidate, نامت). Widened to name_word UNION person_name (1+3=4 distinct); name_translate.003 widened the same way for consistency/variety (translation has no floor, this is purely a quality improvement). (5) relationship_gloss.001 was below the multiple_choice 3-option floor (relationship_word alone = 2 unit-scoped candidates). Widened to relationship_word UNION title (2+2=4 distinct); relationship_translate.004 widened the same way for consistency. All five fixes only recombine semantic tags this unit's OWN lexemes already carry -- no new vocabulary, no backfill/gloss changes. Re-verified 0 DEAD / 0 below-floor for this pack via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see coordinator report for the exact invocation/output).
 
-    No listen_select anywhere in this pack, matching the existing a1_unit01.yaml pack''s own stated rule: Dari has zero TTS
-    voice coverage project-wide, a hard exclusion, not a style choice.
-
-    Deliberately did NOT pair the "title" slot (جناب/خانم, 2 candidates) with any specific person_name in a single frame --
-    جناب is male-specific and خانم is female-specific, but this course''s lexeme model has no gender agreement tag on either
-    titles or names yet, so a randomly-filled "{title} فریدون"-shaped frame would render the ungrammatical "خانم فریدون" (Ms.
-    Faridun) roughly half the time. Same class of bug as the nl-en lane''s زیjn/homograph caution and this lane''s own en-fa/en-fa
-    unit03/04 "quantity"/title-pairing avoidances -- verified via scripts/_practice_slot_check.py that no template below combines
-    two independently-slotted values that could disagree on an untracked grammatical feature. "title" is tested standalone
-    (multiple_choice/translation/a name-free fill_in_blank frame) instead.
-
-    "title" (2 candidates) and "name_word" (3 candidates: نام/نام‌تان/نامت) are at or near the minimum for multiple_choice;
-    "title" specifically is never used in multiple_choice here (2 < 3), only fill_in_blank/ translation. Not yet compiler-validated
-    or DB-verified as of this writing (left for the end-of-session scripts/verify.sh run); status left unreviewed pending
-    a real fresh-context review -- this lane does not self-certify review status, and human native-speaker review is still
-    recommended before Dari content ships, per standing project policy.
-
-
-    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py):
-    generate_checkpoint() scopes candidates to THIS unit''s own lexemes only, and several slots
-    here had silently drifted to depend on lexemes actually introduced by an EARLIER unit (the
-    backfill classifier keys glosses by bare token, so a token re-taught in this unit but first
-    classified in an earlier one contributes 0 to unit02''s own pool). Fixed, all pack-only (no
-    backfill/realization/overlay edits):
-    (1) person_pair.004 was DEAD (10 slots declared, only 3 unit-scoped person_name candidates
-    existed -- ONLY 3 person names are actually introduced anywhere in this unit). Repurposed to
-    a "social words" matching_pairs over politeness UNION title (4+2=6 distinct, both genuinely
-    unit02-introduced, no overlap with the other two matching_pairs templates below).
-    (2) city_pair.004 was DEAD (5 slots declared, only 4 unit-scoped city_name+country candidates
-    existed). Widened to the full unit-scoped proper-noun pool (person_name UNION city_name UNION
-    country = 3+3+1 = 7 distinct), reusing the person names freed up by fix (1) instead of
-    duplicating them into two separate templates.
-    (3) occupation_pair.004 was below the 6-pair floor (4 occupation-only candidates). Widened to
-    occupation UNION relationship_word (4+2=6 distinct, both genuinely unit02-introduced,
-    disjoint from politeness/title used in fix (1)).
-    (4) name_gloss.001 was below the multiple_choice 3-option floor (name_word alone = 1
-    unit-scoped candidate, نامت). Widened to name_word UNION person_name (1+3=4 distinct);
-    name_translate.003 widened the same way for consistency/variety (translation has no floor,
-    this is purely a quality improvement).
-    (5) relationship_gloss.001 was below the multiple_choice 3-option floor (relationship_word
-    alone = 2 unit-scoped candidates). Widened to relationship_word UNION title (2+2=4 distinct);
-    relationship_translate.004 widened the same way for consistency.
-    All five fixes only recombine semantic tags this unit''s OWN lexemes already carry -- no new
-    vocabulary, no backfill/gloss changes. Re-verified 0 DEAD / 0 below-floor for this pack via
-    scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py
-    practice-validate (see coordinator report for the exact invocation/output).'
+    Review 2026-10-24 (en-prs practice native-quality pass): 7 fixes. dialogue_gloss/translate/pair now use the 22 unit02 words (was level-wide dialogue_word, 184 words, feedback said gathering dialogue); city_order.003 now uses the country slot (a city_name slot could render the ungrammatical من از مزار استم / من از شریف استم); the two volume_fill templates (underdetermined blanks, the city one expected شریف) became gloss translations; this_is_person_order, politeness and city_gloss feedback corrected. NATIVE FLAGS: should the split tokens مزار / شریف be drilled separately at all (mazar-i-sharif is one name); the unit uses formal-written استم / استین in spoken scenes; pair templates whose slot count equals the unit pool (proper_noun_pool 7 of 7, social_words 6 of 6) deal the same cards at checkpoint scope.
 tag_schema:
   part_of_speech:
   - noun
@@ -83,6 +38,7 @@ tag_schema:
     - dialogue_word
     - volume_en_prs_a1_unit02_city_name_02_single
     - volume_en_prs_a1_unit02_person_name_04_single
+    - en_prs_a1_unit02_words
 slot_presets:
   name_word: &id001
     language_code: prs
@@ -139,12 +95,11 @@ slot_presets:
     language_code: prs
     part_of_speech:
     - noun
-    - proper_noun
     - verb
     - adjective
     - adverb
     agreement_tags:
-      semantic: dialogue_word
+      semantic: en_prs_a1_unit02_words
   # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix pass, see review.notes below):
   # name_word alone has only 1 unit-scoped member (نامت); unioned with
   # person_name (all 3 introduced somewhere in this unit) it clears the
@@ -302,26 +257,26 @@ templates:
     kind: slot_gloss
     slot: city_name
   feedback_frame:
-    text: '{city_name} is a place name used with از (from).'
+    text: '{city_name} is a place name used with *از* (from).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_order.003
   lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
   type: word_order
   frame:
-    text: من از {city_name} استم
+    text: من از {country} استم
     language_code: prs
     direction: rtl
   slots:
-    city_name: *id003
+    country: *id005
   answer_derivation:
     kind: render_frame
     frame:
-      text: من از {city_name} استم
+      text: من از {country} استم
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: من از [city] استم.'
+    text: 'Word order: من از [country] استم (I am from [country]).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_pair.004
@@ -484,7 +439,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: این [name] است names who is being introduced.
+    text: 'Word order: این [name] است (this is [name]).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson04.relationship_translate.004
@@ -536,7 +491,7 @@ templates:
     kind: slot_gloss
     slot: politeness_word
   feedback_frame:
-    text: '{politeness_word} is used in polite speech.'
+    text: '{politeness_word} is a word used in polite conversation.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson05.politeness_translate.004
@@ -570,7 +525,7 @@ templates:
     kind: slot_gloss
     slot: dialogue_word
   feedback_frame:
-    text: '{dialogue_word} appears in the gathering dialogue.'
+    text: '{dialogue_word} is a word from this unit''s introduction lessons.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson06.dialogue_translate.002
@@ -642,11 +597,13 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson02.city_order.003.volume_fill.002
   lesson_content_key: prs.a1.unit02.lesson02.origin_and_hometown
-  type: fill_in_blank
+  type: translation
   frame:
-    text: من از {city_name} استم
-    language_code: prs
-    direction: rtl
+    text: '{city_name}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      city_name: english_gloss
   slots:
     city_name:
       language_code: prs
@@ -657,16 +614,18 @@ templates:
     kind: slot_text
     slot: city_name
   feedback_frame:
-    text: '{city_name}'
-    language_code: prs
-    direction: rtl
+    text: '{city_name} is the second half of the city name مزار شریف (Mazar-i-Sharif).'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit02.lesson04.this_is_person_order.003.volume_fill.004
   lesson_content_key: prs.a1.unit02.lesson04.introducing_others
-  type: fill_in_blank
+  type: translation
   frame:
-    text: این {person_name} است
-    language_code: prs
-    direction: rtl
+    text: '{person_name}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      person_name: english_gloss
   slots:
     person_name:
       language_code: prs
@@ -677,6 +636,6 @@ templates:
     kind: slot_text
     slot: person_name
   feedback_frame:
-    text: '{person_name}'
-    language_code: prs
-    direction: rtl
+    text: '{person_name} is the name of the colleague introduced in this lesson.'
+    language_code: en
+    direction: ltr

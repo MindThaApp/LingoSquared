@@ -6,6 +6,7 @@ unit_content_key: prs.b1.unit08.opinions
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     en-prs B1 practice pack (unit08 opinions -- concession/agreement/
     disagreement), authored 2026-07-23. GRAMMAR UNIT: per §8.1, unions ALL
@@ -37,6 +38,20 @@ review:
     against realizations/prs -- موافق استم/مخالف استم/می‌فهمم are the
     unit's own Kabuli-colloquial forms). No mis-glossed lexemes found. No
     listen_select (no prs TTS).
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. Pool: the
+    15-tag course-wide unit_content union (it reached B1 unit01/02/09/10: است,
+    چون, و, خوب, استند, ارزان...) is replaced by en_prs_b1_unit08_words
+    (noun/verb/adjective/adverb), so 'from this unit's vocabulary' is true;
+    particle connectors هرچند/اگرچه/اما/چون leave the bare-word pool (هرچند
+    'although' and اگرچه 'although; even though' were an underdetermined typed
+    pair). lesson04.fill.001 (نکنیم vs the equally grammatical کنیم) became a
+    fixed-English translation; key unchanged. Matching feedback made specific.
+    NATIVE FLAGS: (1) 'هرچند ... اما ...' (although ... but) double connector -
+    confirm natural. (2) 'دربارهٔ' with hamza vs spoken 'درباره'. (3) 'تیل' for
+    petrol/fuel in Kabul usage. (4) 'با این حال، فکر می‌کنم عجله نکنیم بهتر است'
+    word order.
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -66,27 +81,13 @@ tag_schema:
     - sequence_word
     - sequence_connector
     - about_preposition
+    - en_prs_b1_unit08_words
 slot_presets:
   unit_content: &uc
     language_code: prs
-    part_of_speech: [noun, verb, adjective, adverb, particle, preposition]
+    part_of_speech: [noun, verb, adjective, adverb]
     agreement_tags:
-      semantic:
-      - concession_connector
-      - connector_word
-      - fuel_word
-      - shop_word
-      - buy_verb
-      - opinion_stance_word
-      - wellbeing_answer
-      - identity
-      - understand_verb
-      - opinion_word
-      - debate_word
-      - subjunctive_negative_verb
-      - sequence_word
-      - sequence_connector
-      - about_preposition
+      semantic: en_prs_b1_unit08_words
   fuel_single: &fl
     language_code: prs
     part_of_speech: noun
@@ -177,7 +178,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: 'Match each word to its meaning.'
+    text: 'Match each Dari word from this unit to its English meaning.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit08.lesson01.fill.001
@@ -204,11 +205,13 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit08.lesson04.fill.001
   lesson_content_key: prs.b1.unit08.lesson04.dialogue_debate
-  type: fill_in_blank
-  frame: {text: 'با این حال، فکر می‌کنم عجله {item} بهتر است.', language_code: prs, direction: rtl}
+  type: translation
+  frame: {text: 'Nevertheless, I think it is better that we not rush.', language_code: en, direction: ltr}
   slots:
     item: *nd
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'با این حال، فکر می‌کنم عجله {item} بهتر است.', language_code: prs, direction: rtl}
   feedback_frame:
     text: 'با این حال، فکر می‌کنم عجله نکنیم بهتر است. = Nevertheless, I think it''s better we don''t rush.'
     language_code: en

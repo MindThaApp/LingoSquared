@@ -5,6 +5,7 @@ target_language: prs
 unit_content_key: prs.a1.unit39.seasons
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: true
   notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context). Realization and overlay are both status reviewed.
@@ -36,14 +37,19 @@ review:
     Polish wave 2 (2026-07-24): tier-thinness fix — added 2 recognition templates (sentence MC over the taught "…را دوست دارم"
     frame with the specific_season pool; English-gloss-to-Dari-token MC over season_word via slot_text, same mechanism the
     prs-en listen.002 corpus already uses) and 1 production template (deterministic fixed-sentence translation "I like spring."
-    over the single-member volume_…_specific_season_word_03_single anchor). No existing template touched.'
+    over the single-member volume_…_specific_season_word_03_single anchor). No existing template touched.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 4 fixes. Replaced a fill_in_blank whose single-member slot (بهار) left any season valid in ___ را دوست دارم with a translation (Spring is warm and sunny. -> بهار گرم است و آفتابی است, verbatim from the dialogue); both matching sets now draw 5 of the unit 6 generated words (seasons plus خنک) instead of the same 5 every time; neutral MC feedback; removed an unused text_blocks stub. NATIVE FLAGS: confirm خزان as autumn in everyday Kabul speech (vs پاییز); confirm بهار گرم است is natural for spring.'
+
 tag_schema:
   part_of_speech:
   - noun
+  - adjective
   agreement_tags:
     semantic:
     - season_word
     - specific_season_word
+    - en_prs_a1_unit39_words
     - volume_en_prs_a1_unit39_specific_season_word_03_single
 slot_presets:
   season_word: &id001
@@ -56,6 +62,14 @@ slot_presets:
     part_of_speech: noun
     agreement_tags:
       semantic: specific_season_word
+  # Matching-only preset: season_word has exactly 5 members and the matching
+  # templates deal 5 cards, so the same 5 cards every time. The unit's own
+  # generated tag adds خنک (cool): 6 candidates, 5 cards dealt.
+  season_pair_word: &season_pair_word
+    language_code: prs
+    part_of_speech: [noun, adjective]
+    agreement_tags:
+      semantic: en_prs_a1_unit39_words
 templates:
 - content_key: practice.en-prs.prs.a1.unit39.lesson01.season_gloss.001
   lesson_content_key: prs.a1.unit39.lesson01.primary_seasons
@@ -70,7 +84,7 @@ templates:
     kind: slot_gloss
     slot: season_word
   feedback_frame:
-    text: '{season_word} belongs to this unit''s seasons vocabulary.'
+    text: '{season_word} is a season word.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit39.lesson01.season_pair.002
@@ -81,11 +95,11 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    word_one: *id001
-    word_two: *id001
-    word_three: *id001
-    word_four: *id001
-    word_five: *id001
+    word_one: *season_pair_word
+    word_two: *season_pair_word
+    word_three: *season_pair_word
+    word_four: *season_pair_word
+    word_five: *season_pair_word
   slot_relations:
   - kind: distinct
     slots:
@@ -145,11 +159,11 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit39.lesson03.season_liked_order.001.volume_fill.003
   lesson_content_key: prs.a1.unit39.lesson03.asking_about_seasons
-  type: fill_in_blank
+  type: translation
   frame:
-    text: '{specific_season_word} را دوست دارم'
-    language_code: prs
-    direction: rtl
+    text: Spring is warm and sunny.
+    language_code: en
+    direction: ltr
   slots:
     specific_season_word:
       language_code: prs
@@ -157,12 +171,15 @@ templates:
       agreement_tags:
         semantic: volume_en_prs_a1_unit39_specific_season_word_03_single
   answer_derivation:
-    kind: slot_text
-    slot: specific_season_word
+    kind: render_frame
+    frame:
+      text: '{specific_season_word} گرم است و آفتابی است'
+      language_code: prs
+      direction: rtl
   feedback_frame:
-    text: '{specific_season_word}'
-    language_code: prs
-    direction: rtl
+    text: '"Spring is warm and sunny." is بهار گرم است و آفتابی است in Dari.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit39.lesson01.season_pair.002.volume_match.002
   lesson_content_key: prs.a1.unit39.lesson01.primary_seasons
   type: matching_pairs
@@ -170,20 +187,12 @@ templates:
     text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five}'
     language_code: prs
     direction: rtl
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
-    word_one: &id003
-      language_code: prs
-      part_of_speech: noun
-      agreement_tags:
-        semantic: season_word
-    word_two: *id003
-    word_three: *id003
-    word_four: *id003
-    word_five: *id003
+    word_one: *season_pair_word
+    word_two: *season_pair_word
+    word_three: *season_pair_word
+    word_four: *season_pair_word
+    word_five: *season_pair_word
   slot_relations:
   - kind: distinct
     slots:
