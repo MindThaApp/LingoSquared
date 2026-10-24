@@ -62,9 +62,10 @@ export function initSentry(): boolean {
   return true;
 }
 
+// A crash waiting for the learner's answer in Ask mode. Several senders can
+// queue on the same prompt (Sentry and the app's own feedback reporter).
 export interface PendingCrash {
-  error: Error;
-  componentStack?: string;
+  sends: Array<() => void>;
 }
 
 type Listener = (pending: PendingCrash | null) => void;
@@ -84,12 +85,12 @@ function setPending(next: PendingCrash | null) {
   listeners.forEach((fn) => fn(next));
 }
 
-function send(crash: PendingCrash) {
-  approved.add(crash.error);
+function sendToSentry(error: Error, componentStack?: string) {
+  approved.add(error);
   Sentry.withScope((scope) => {
     scope.setTags(collectReportTags(window.location.pathname));
-    if (crash.componentStack) scope.setExtra("component_stack", crash.componentStack.slice(0, 1000));
-    Sentry.captureException(crash.error);
+    if (componentStack) scope.setExtra("component_stack", componentStack.slice(0, 1000));
+    Sentry.captureException(error);
   });
 }
 
@@ -98,28 +99,39 @@ function toError(value: unknown): Error {
   return new Error(typeof value === "string" ? value : "Unknown error");
 }
 
-// Entry point for every unhandled error. Consent decides what happens.
-export function handleCrash(value: unknown, componentStack?: string): void {
+// The single consent gate for every automatic crash report. Never: nothing
+// is sent. Always: send now. Ask: hold the sender until the learner answers.
+export function sendWithCrashConsent(send: () => void): void {
   try {
-    if (!isSentryEnabled()) return;
     const consent = getCrashConsent();
     if (consent === "never") return;
-    const crash = { error: toError(value), componentStack };
-    if (consent === "always") send(crash);
-    else setPending(crash); // "ask": hold it until the learner answers
+    if (consent === "always") {
+      send();
+      return;
+    }
+    setPending({ sends: [...(pending?.sends ?? []), send] });
   } catch {
     // Reporting must never be the thing that crashes the app.
   }
+}
+
+// Entry point for every unhandled error going to Sentry.
+export function handleCrash(value: unknown, componentStack?: string): void {
+  if (!isSentryEnabled()) return;
+  const error = toError(value);
+  sendWithCrashConsent(() => sendToSentry(error, componentStack));
 }
 
 export function answerPendingCrash(sendIt: boolean): void {
   const crash = pending;
   setPending(null);
   if (crash && sendIt) {
-    try {
-      send(crash);
-    } catch {
-      // ignore
+    for (const send of crash.sends) {
+      try {
+        send();
+      } catch {
+        // ignore
+      }
     }
   }
 }
