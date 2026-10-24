@@ -6,7 +6,21 @@ unit_content_key: fa.a1.unit03.numbers
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5
+    fixes). (1) dialogue_word pool re-pooled from the level-wide
+    dialogue_word tag to the lesson06 dialogue's own words (feedback
+    says the word appears in Sara and Mina's dialogue). (2)
+    digit_order.003 drew 11-90 as 'phone digits': now lesson01's
+    zero-to-ten words. (3) price_order.003 rendered 'صفر هزار تومنه' /
+    'یک هزار تومنه': now lesson02's 11-90 words. (4) phone_word_pair.004
+    and (5) price_pair.004 showed the same 4 cards every time: now 6
+    pairs from 9-10 phone/age/quantity/price words. NATIVE FLAGS:
+    quantity_translation accepts only 'دو تا سیب می‌خوام' (not 'دوتا',
+    not with من); number_order.001 sets two random numbers side by side
+    without و in the 11-99 lesson.
+
     Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-05,
     to close a gap where scripts/backfill_lexemes.py already covered fa
     units 1-4 (lexemes exist and are live-backfillable) but no practice
@@ -44,12 +58,19 @@ review:
 tag_schema:
   part_of_speech: [noun, adjective, verb, particle, proper_noun, pronoun, adverb, preposition]
   agreement_tags:
-    semantic: [number, phone_number, price, dialogue_word, confirm_word]
+    semantic: [number, phone_number, price, age, quantity, dialogue_word, confirm_word, en_fa_a1_unit03_lesson01_words, en_fa_a1_unit03_lesson02_words, en_fa_a1_unit03_lesson06_words]
 slot_presets:
   number: &number {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: number}}
   phone_number_word: &phone_number_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: phone_number}}
   price_word: &price_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: price}}
-  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: dialogue_word}}
+  # Re-pooled 2026-10-22 onto the lesson06 dialogue's own words: the bare
+  # dialogue_word tag pulled every dialogue word of the whole level in Endless
+  # Practice, contradicting the "appears in ... dialogue" feedback.
+  dialogue_word: &dialogue_word {language_code: fa, part_of_speech: [noun, pronoun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: en_fa_a1_unit03_lesson06_words}}
+  # Words for phone/age/quantity/price matching (lessons 03-06), so the two
+  # matching exercises reach 6 pairs instead of the same 4 cards every time.
+  unit_word_a: &unit_word_a {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [phone_number, age, quantity]}}
+  unit_word_b: &unit_word_b {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: [price, age, quantity]}}
 templates:
   # Lesson 1: zero to ten.
   - content_key: practice.en-fa.fa.a1.unit03.lesson01.number_gloss.001
@@ -114,22 +135,28 @@ templates:
     lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
     type: word_order
     frame: {text: "{number_one} {number_two} {number_three}", language_code: fa, direction: rtl}
-    slots: {number_one: *number, number_two: *number, number_three: *number}
+    # Digits only (lesson01's zero-to-ten words), not the 11-90 words.
+    slots:
+      number_one: &digit {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: en_fa_a1_unit03_lesson01_words}}
+      number_two: *digit
+      number_three: *digit
     answer_derivation: {kind: ordered_slot_texts, slots: [number_one, number_two, number_three]}
     slot_relations: [{kind: distinct, slots: [number_one, number_two, number_three]}]
-    feedback_frame: {text: "Phone numbers are read one digit word at a time, in order.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Phone numbers are read out one number word at a time, in order.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit03.lesson03.phone_word_pair.004
     lesson_content_key: fa.a1.unit03.lesson03.phone_numbers
     type: matching_pairs
-    frame: {text: "Match each phone-related word with its meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
     slots:
-      phone_number_word_one: *phone_number_word
-      phone_number_word_two: *phone_number_word
-      phone_number_word_three: *phone_number_word
-      phone_number_word_four: *phone_number_word
-    answer_derivation: {kind: matching_pairs, slots: [phone_number_word_one, phone_number_word_two, phone_number_word_three, phone_number_word_four]}
-    slot_relations: [{kind: distinct, slots: [phone_number_word_one, phone_number_word_two, phone_number_word_three, phone_number_word_four]}]
-    feedback_frame: {text: "Match each phone-related word to its English meaning.", language_code: en, direction: ltr}
+      phone_number_word_one: *unit_word_a
+      phone_number_word_two: *unit_word_a
+      phone_number_word_three: *unit_word_a
+      phone_number_word_four: *unit_word_a
+      phone_number_word_five: *unit_word_a
+      phone_number_word_six: *unit_word_a
+    answer_derivation: {kind: matching_pairs, slots: [phone_number_word_one, phone_number_word_two, phone_number_word_three, phone_number_word_four, phone_number_word_five, phone_number_word_six]}
+    slot_relations: [{kind: distinct, slots: [phone_number_word_one, phone_number_word_two, phone_number_word_three, phone_number_word_four, phone_number_word_five, phone_number_word_six]}]
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: ages and quantities. Reuses the number pool (no separate
   # slot for سال/تا/سیب/کتاب -- see pack-level review notes on why a
@@ -161,21 +188,25 @@ templates:
     lesson_content_key: fa.a1.unit03.lesson05.prices
     type: word_order
     frame: {text: "{number} هزار تومنه", language_code: fa, direction: rtl}
-    slots: {number: *number}
+    # Lesson02's 11-90 words only: the full number pool rendered
+    # "صفر هزار تومنه" / "یک هزار تومنه".
+    slots: {number: {language_code: fa, part_of_speech: adjective, agreement_tags: {semantic: en_fa_a1_unit03_lesson02_words}}}
     answer_derivation: {kind: render_frame, frame: {text: "{number} هزار تومنه", language_code: fa, direction: rtl}}
     feedback_frame: {text: "number + هزار + تومنه states a price in thousands of toman.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit03.lesson05.price_pair.004
     lesson_content_key: fa.a1.unit03.lesson05.prices
     type: matching_pairs
-    frame: {text: "Match each price-related word with its meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
     slots:
-      price_word_one: *price_word
-      price_word_two: *price_word
-      price_word_three: *price_word
-      price_word_four: *price_word
-    answer_derivation: {kind: matching_pairs, slots: [price_word_one, price_word_two, price_word_three, price_word_four]}
-    slot_relations: [{kind: distinct, slots: [price_word_one, price_word_two, price_word_three, price_word_four]}]
-    feedback_frame: {text: "Match each price-related word to its English meaning.", language_code: en, direction: ltr}
+      price_word_one: *unit_word_b
+      price_word_two: *unit_word_b
+      price_word_three: *unit_word_b
+      price_word_four: *unit_word_b
+      price_word_five: *unit_word_b
+      price_word_six: *unit_word_b
+    answer_derivation: {kind: matching_pairs, slots: [price_word_one, price_word_two, price_word_three, price_word_four, price_word_five, price_word_six]}
+    slot_relations: [{kind: distinct, slots: [price_word_one, price_word_two, price_word_three, price_word_four, price_word_five, price_word_six]}]
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 6: exchanging phone numbers (dialogue).
   - content_key: practice.en-fa.fa.a1.unit03.lesson06.dialogue_gloss.001

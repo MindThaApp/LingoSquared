@@ -6,7 +6,22 @@ unit_content_key: fa.a1.unit02.introductions
 review:
   status: reviewed
   fresh_context: true
-  notes: 'Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (en-fa practice rest pass, fresh context; 12 fixes). (1) name_fill.001 and (8) origin_fill.001 had
+    bare ''{slot}'' frames (rejected at runtime): name now blanks into ''X شما چیه؟''; origin became a bare-gloss
+    translation (a ''من ___ ایران هستم'' blank would also fit از). (2) volume_order.001 and (9) volume_order.003
+    were 1-tile word banks: now ''اسم شما چیه؟'' / ''شما اهل کجا هستین؟''. (3) name_translation.004 prompt now says
+    ''(formal)'' since the unit also teaches اسمم ساراست for ''My name is Sara''. (4) name_pair.005 had 2
+    self-glossed name pairs: now 6 lesson02/03 words + 2 names. (5) copula_choice feedback claimed a course-wide
+    pool was introduced in this lesson; (6) pronoun_pair feedback had a meaningless clause; (7) three_letter_match
+    feedback claimed all letters were from this lesson. (10) name_reply.002 used formal-written اسم من … است in the
+    spoken dialogue lesson: now من … هستم as Mina says it. (11) dialogue_word pool re-pooled from the level-wide tag
+    (stage-direction sentence glosses, proper nouns) to this unit''s single words. (12) dialogue_pair.005
+    instruction was formal Persian for an English-speaking learner: now English. NATIVE FLAGS: translation prompts
+    that hinge on the labels ''polite standard'' (هستید) vs ''polite spoken'' (هستین). GLOSS LANE: letter و glossed
+    ''and (links tens + units)'' in the letter pools.
+
+    Fresh review found and resolved name morphology, country coupling, letter gloss, dialogue-slot, and answer-derivation
     defects. A targeted post-review fix removed leaked review-process language from learner-facing feedback; this was not
     a new full fresh-context review. Second targeted post-review fix, 2026-07-06: scripts/_practice_slot_check.py surfaced
     that 2 multiple_choice templates (name_word, origin_marker) each had only 1 real distinct lexeme candidate against the
@@ -141,6 +156,9 @@ tag_schema:
     - class_word
     - dialogue_word
     - reviewed_phrase
+    - en_fa_a1_unit02_words
+    - en_fa_a1_unit02_lesson02_words
+    - en_fa_a1_unit02_lesson03_words
     register:
     - neutral
     - polite
@@ -225,16 +243,14 @@ slot_presets:
     language_code: fa
     part_of_speech:
     - noun
-    - proper_noun
     - pronoun
     - verb
     - adjective
     - adverb
     - preposition
     - particle
-    - phrase
     agreement_tags:
-      semantic: dialogue_word
+      semantic: en_fa_a1_unit02_words
 templates:
 - content_key: practice.en-fa.fa.a1.unit02.lesson01.letter_gloss.001
   lesson_content_key: fa.a1.unit02.lesson01.script_ramp
@@ -387,20 +403,16 @@ templates:
     - letter_seven
     - letter_eight
   feedback_frame:
-    text: All of these letters use sound labels taught in this script lesson.
+    text: Match each letter to its sound label.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001
   lesson_content_key: fa.a1.unit02.lesson02.names
   type: fill_in_blank
   frame:
-    text: '{name_word}'
+    text: '{name_word} شما چیه؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the word for 'name.'
-      language_code: en
-      direction: ltr
   slots:
     name_word: *id002
   answer_derivation:
@@ -433,7 +445,7 @@ templates:
   lesson_content_key: fa.a1.unit02.lesson02.names
   type: translation
   frame:
-    text: My name is {person_name}.
+    text: My name is {person_name}. (formal)
     language_code: en
     direction: ltr
     slot_rendering:
@@ -458,20 +470,49 @@ templates:
     language_code: en
     direction: ltr
   slots:
+    name_word_one: &id013
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic:
+        - en_fa_a1_unit02_lesson02_words
+        - en_fa_a1_unit02_lesson03_words
+    name_word_two: *id013
+    name_word_three: *id013
+    name_word_four: *id013
+    name_word_five: *id013
+    name_word_six: *id013
     person_name_one: *id003
     person_name_two: *id003
   answer_derivation:
     kind: matching_pairs
     slots:
+    - name_word_one
+    - name_word_two
+    - name_word_three
+    - name_word_four
+    - name_word_five
+    - name_word_six
     - person_name_one
     - person_name_two
   slot_relations:
   - kind: distinct
     slots:
+    - name_word_one
+    - name_word_two
+    - name_word_three
+    - name_word_four
+    - name_word_five
+    - name_word_six
+  - kind: distinct
+    slots:
     - person_name_one
     - person_name_two
   feedback_frame:
-    text: Match each name to its English label.
+    text: Match each word or name to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_choice.001
@@ -487,7 +528,7 @@ templates:
     kind: slot_gloss
     slot: copula
   feedback_frame:
-    text: '{copula} is a form of the verb ‘to be’ introduced in this lesson.'
+    text: '{copula} is a form of the verb ‘to be’.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson03.copula_gloss.002
@@ -562,7 +603,7 @@ templates:
     - copula_five
     - copula_six
   feedback_frame:
-    text: Match each form to its English meaning; person agreement is shown separately.
+    text: Match each Persian form to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson04.country_gloss.001
@@ -649,15 +690,13 @@ templates:
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_fill.001
   lesson_content_key: fa.a1.unit02.lesson05.origin
-  type: fill_in_blank
+  type: translation
   frame:
     text: '{origin_marker}'
-    language_code: fa
-    direction: rtl
-    text_blocks:
-    - text: Complete the word that links a person to their place of origin.
-      language_code: en
-      direction: ltr
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      origin_marker: english_gloss
   slots:
     origin_marker: *id008
   answer_derivation:
@@ -810,7 +849,7 @@ templates:
   lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
   type: word_order
   frame:
-    text: اسم من {person_name} است
+    text: من {person_name} هستم
     language_code: fa
     direction: rtl
   slots:
@@ -818,11 +857,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: اسم من {person_name} است
+      text: من {person_name} هستم
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: The speaker gives the name {person_name}.
+    text: من {person_name} هستم gives the speaker's name, as Mina does in the dialogue.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson06.origin_reply.003
@@ -859,16 +898,16 @@ templates:
     kind: slot_text
     slot: dialogue_word
   feedback_frame:
-    text: '{dialogue_word} appears in the class dialogue.'
+    text: '{dialogue_word} is the Persian word for this meaning.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson06.dialogue_pair.005
   lesson_content_key: fa.a1.unit02.lesson06.language_class_dialogue
   type: matching_pairs
   frame:
-    text: کلمات را به معنی انگلیسی‌شان وصل کنید.
-    language_code: fa
-    direction: rtl
+    text: Match each word with its meaning.
+    language_code: en
+    direction: ltr
   slots:
     dialogue_word_1: *id011
     dialogue_word_2: *id011
@@ -909,20 +948,16 @@ templates:
     - person_name_1
     - person_name_2
   feedback_frame:
-    text: Match each dialogue item to its English meaning.
+    text: Match each Persian word or name to its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_fill.001.volume_order.001
   lesson_content_key: fa.a1.unit02.lesson02.names
   type: word_order
   frame:
-    text: '{name_word}'
+    text: '{name_word} شما چیه؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the word for 'name.'
-      language_code: en
-      direction: ltr
   slots:
     name_word:
       language_code: fa
@@ -932,21 +967,13 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{name_word}'
+      text: '{name_word} شما چیه؟'
       language_code: fa
       direction: rtl
-      text_blocks:
-      - text: Complete the word for 'name.'
-        language_code: en
-        direction: ltr
   feedback_frame:
-    text: '{name_word}'
+    text: '{name_word} شما چیه؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the word for 'name.'
-      language_code: en
-      direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson02.name_translation.004.volume_order.002
   lesson_content_key: fa.a1.unit02.lesson02.names
   type: word_order
@@ -974,13 +1001,9 @@ templates:
   lesson_content_key: fa.a1.unit02.lesson05.origin
   type: word_order
   frame:
-    text: '{origin_marker}'
+    text: 'شما {origin_marker} کجا هستین؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the word that links a person to their place of origin.
-      language_code: en
-      direction: ltr
   slots:
     origin_marker:
       language_code: fa
@@ -992,21 +1015,13 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: '{origin_marker}'
+      text: 'شما {origin_marker} کجا هستین؟'
       language_code: fa
       direction: rtl
-      text_blocks:
-      - text: Complete the word that links a person to their place of origin.
-        language_code: en
-        direction: ltr
   feedback_frame:
-    text: '{origin_marker}'
+    text: 'شما {origin_marker} کجا هستین؟'
     language_code: fa
     direction: rtl
-    text_blocks:
-    - text: Complete the word that links a person to their place of origin.
-      language_code: en
-      direction: ltr
 - content_key: practice.en-fa.fa.a1.unit02.lesson05.origin_translation.004.volume_order.004
   lesson_content_key: fa.a1.unit02.lesson05.origin
   type: word_order

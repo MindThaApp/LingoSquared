@@ -5,8 +5,28 @@ target_language: fa
 unit_content_key: fa.a2.unit15.travel_disruption
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) The ten
+    MC/translation slots had no semantic tag: in Endless Practice they pooled every A2
+    noun/adj/verb (170-314 candidates), and at unit scope lesson01-03 items drew words
+    first taught in later lessons. Slots now use the unit's lesson tags cumulatively
+    (lessonNN draws lessons 01..NN; lesson04 the unit tag; l04.choose.001 lesson04
+    only). (2) The two list word_order frames pooled every noun and rendered
+    ungrammatical lists with the ezafe form سکوی (and course-wide bound forms such as
+    آدرسمو, برنامه‌ی, تعمیرش): now travel_vocab_word + departure_detail_word (قطار,
+    بلیط, سکو, حرکت). (3) Feedback: l02.choose.001 'used when asking about alternatives'
+    was false for most of the pool and l04.choose.001 'is said in the station counter
+    conversation' was false for قطارم (only in a lesson04 example): reworded. (4)
+    match.002 (lesson01/03) missed the core lesson01 words تاخیر, اعلامیه, مسیر and drew
+    lesson04 بلیط into lesson01: now reviewed_phrase + lesson tags. Kept reviewed_phrase
+    in matching (multiword items such as مسیر جایگزین, مشکل فنی only carry that tag).
+    Gloss lane: جایگزینی shares the gloss of جایگزین; grading does not fold hamza, so
+    typed تأخیر/متأسفانه would miss the taught تاخیر/متاسفانه. NATIVE FLAGS: list frames
+    may render semantically odd pairs (قطار و حرکت); اعلامیه vs اطلاعیه for a station
+    notice (already flagged in the realization).
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint (the unit had lexemes in scripts/backfill_lexemes.py but no
     practice pack at all, so generate_checkpoint() returned checkpoint_unavailable).
@@ -115,6 +135,11 @@ tag_schema:
     - departure_detail_word
     - time_unit_word
     - number
+    - en_fa_a2_unit15_words
+    - en_fa_a2_unit15_lesson01_words
+    - en_fa_a2_unit15_lesson02_words
+    - en_fa_a2_unit15_lesson03_words
+    - en_fa_a2_unit15_lesson04_words
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit15.lesson01.choose.001
@@ -129,6 +154,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -153,9 +181,7 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
-        - travel_vocab_word
-        - departure_detail_word
-        - time_unit_word
+        - en_fa_a2_unit15_lesson01_words
     second: *u15_match_l01_pool
     third: *u15_match_l01_pool
     fourth: *u15_match_l01_pool
@@ -196,10 +222,18 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - travel_vocab_word
+        - departure_detail_word
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - travel_vocab_word
+        - departure_detail_word
   slot_relations:
   - kind: distinct
     slots:
@@ -230,6 +264,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -253,11 +290,15 @@ templates:
       - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson01_words
+        - en_fa_a2_unit15_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is used in this unit when asking about alternatives.'
+    text: '{item} is a word from this unit''s lessons on travel disruption.'
     language_code: en
     direction: ltr
 
@@ -273,14 +314,26 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - travel_vocab_word
+        - departure_detail_word
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - travel_vocab_word
+        - departure_detail_word
     third:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - travel_vocab_word
+        - departure_detail_word
   slot_relations:
   - kind: distinct
     slots:
@@ -314,6 +367,10 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson01_words
+        - en_fa_a2_unit15_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -336,6 +393,9 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -360,9 +420,8 @@ templates:
       agreement_tags:
         semantic:
         - reviewed_phrase
-        - travel_vocab_word
-        - departure_detail_word
-        - time_unit_word
+        - en_fa_a2_unit15_lesson01_words
+        - en_fa_a2_unit15_lesson03_words
     second: *u15_match_l03_pool
     third: *u15_match_l03_pool
     fourth: *u15_match_l03_pool
@@ -407,6 +466,11 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson01_words
+        - en_fa_a2_unit15_lesson02_words
+        - en_fa_a2_unit15_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -430,11 +494,14 @@ templates:
       - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is said in the station counter conversation.'
+    text: '{item} is a word from the station-counter conversation lesson.'
     language_code: en
     direction: ltr
 
@@ -450,6 +517,9 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -527,6 +597,9 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -549,6 +622,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit15_words
   answer_derivation:
     kind: slot_text
     slot: item
