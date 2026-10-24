@@ -320,7 +320,7 @@ NL_GLOSSES = {
     "krijgen": "get; receive", "kwart": "quarter", "kwartier": "quarter-hour", "laat": "late; what time",
     "leer": "learn", "maand": "month", "maandag": "Monday", "maart": "March", "me": "myself; me",
     "mei": "May", "mensen": "people", "met": "with", "middag": "afternoon", "middags": "in the afternoon",
-    "mijn": "my", "moet": "must; is due", "na": "after", "naam": "name", "naar": "toward; to",
+    "mijn": "my", "moet": "must; has to", "na": "after", "naam": "name", "naar": "toward; to",
     "nacht": "night", "nachts": "at night", "negen": "nine", "negende": "ninth",
     "negenennegentig": "ninety-nine", "negenentwintigste": "twenty-ninth", "negentien": "nineteen",
     "negentiende": "nineteenth", "negentig": "ninety", "nieuw": "new", "normaal": "normally",
@@ -4890,6 +4890,24 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ('c1_unit04_toegeven_en_wegen', 'wanneer'): 'when (conjunction)',
     ('c1_unit05_contrafeitelijk_redeneren', 'jou'): 'you (informal singular, object form)',
     ('c1_unit07_bronnen_bemiddelen', 'deze'): 'this; these',
+    # --- 2026-10-24 en-nl practice review (session 10): wrong-sense or
+    #     same-gloss glosses seen in practice pools; each keyed to the token's
+    #     first introducing unit at that level (verified against iter_specs()).
+    ("a1_unit39_post", "schrijf"): "write (with ik)",  # "prescribe" is the a2_unit27 sense
+    ("a1_unit47_bibliotheek_lenen", "mee"): "along",  # "Het boek mag twee weken mee"
+    ("a1_unit67_markt", "bakker"): "the baker",  # "bij de bakker"; "the bakery" = bakkerij
+    ("a1_unit69_ijssalon", "bloemist"): "the florist",
+    ("a2_unit26_bankrekening", "betaalrekening"): "the current account",  # slash gloss
+    ("a2_unit27_huisarts", "pijn"): "pain",  # "Ik heb pijn" hint read "I have the pain"
+    ("a2_unit74_reisvertraging", "aansluiting"): "the connecting train",  # = verbinding "the connection"
+    ("a2_unit76_drukke_week", "slotte"): "finally (as in 'ten slotte')",
+    ("b1_unit03_werkoverleg", "agenda"): "the agenda",  # meeting agenda, not "planner"
+    ("b1_unit07_kunnen_en_konden", "Kun"): "can (in a question with jij)",  # = kan "can"
+    ("b1_unit07_kunnen_en_konden", "goede"): "good (before a noun)",  # = goed "good"
+    ("b1_unit10_werkverantwoordelijkheden", "langer"): "longer",  # "duurt iets langer"
+    ("b2_unit02_speculatie", "spreken"): "to speak",  # "vanochtend sprak ... spreken"
+    ("b2_unit04_verhaal", "was"): "was (past tense of 'to be')",  # "ik was moe", not afwassen
+    ("b2_unit07_onderhandelen", "alleen"): "only; alone",  # "maar alleen als"
     # HELD (see docs/EN_NL_HOMOGRAPH_OVERRIDE_CANDIDATES.md): b1 `waar` is taught
     # in BOTH senses -- "true" (b1_unit02/09) and relative "where" (b1_unit04) --
     # but a single course-scoped lexeme can carry only one gloss, so overriding
