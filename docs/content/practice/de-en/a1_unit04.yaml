@@ -16,6 +16,7 @@ review:
     German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
     of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
     which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: September dropped from the bare-word translation pool (gloss identical to the answer); it stays in recognition and word order.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -27,6 +28,7 @@ slot_presets:
   l4: &l4 {"language_code": "en", "part_of_speech": ["adjective", "adverb", "noun", "preposition", "verb"], "agreement_tags": {"semantic": ["w_again", "w_open", "w_on", "w_9th", "w_great", "w_then"]}}
   l2: &l2 {"language_code": "en", "part_of_speech": ["noun", "pronoun"], "agreement_tags": {"semantic": ["w_january", "w_march", "w_july", "w_september", "w_december", "w_which", "w_month"]}}
   mt: &mt {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_monday", "w_friday", "w_sunday", "w_january", "w_march", "w_december", "w_july", "w_september"]}}
+  mo_tr: &mo_tr {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_january", "w_march", "w_july", "w_december"]}}
   tr4: &tr4 {"language_code": "en", "part_of_speech": ["adjective", "adverb"], "agreement_tags": {"semantic": ["w_again", "w_then", "w_great"]}}
   w_today: &w_today {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_today"}}
   w_month: &w_month {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_month"}}
@@ -137,7 +139,7 @@ templates:
     lesson_content_key: en.a1.unit04.lesson02.months
     type: translation
     frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
-    slots: {item: *mo}
+    slots: {item: *mo_tr}
     answer_derivation: {"kind": "slot_text", "slot": "item"}
     feedback_frame: {"text": "Monatsnamen schreiben Sie im Englischen immer groß.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit04.lesson02.translate.016
