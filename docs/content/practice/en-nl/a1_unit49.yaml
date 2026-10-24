@@ -6,33 +6,36 @@ unit_content_key: nl.a1.unit49.accommodatie
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
-    Vocabulary unit (accommodatie / booking a room), 17 unit lexemes across
-    all 6 lessons per scripts/backfill_lexemes_en_nl.py. lesson02
-    (breakfast_included, 1 token) and lesson03 (key_and_wifi, 2 tokens) are
-    under the multiple_choice floor on their own tag, so both fall back to
-    the unit-wide union accommodatie_vocab (S3.1a/S8.1). lesson01
-    (room_booking), lesson04 (checkin_dialogue), lesson05
-    (confirmation_reading) and lesson06 (accommodation_wrapup_dialogue,
-    restricted to part_of_speech:[verb,adjective] to exclude the proper noun
-    Maastricht and the noun kamer that would otherwise duplicate lesson01)
-    each had >=3 of their own tokens. word_order and fill_in_blank both
-    anchor on the single-member accommodatie_bevestiging_single tag
-    (bevestiging). Capacity/coverage measured via RECIPE S9 step 4 (see
-    report).
+    Review 2026-10-24 (en-nl practice pass, session 10): 7 fixes -- feedback_frame texts that named
+    "this unit" or claimed topic membership (false for the level-scope pool) replaced with true generic
+    feedback; fixed-sentence feedback now gives the full Dutch sentence with English. Native flags:
+    bare-verb glosses carrying '(with ik)' style hints, 'kaart' gloss (map vs card), 'zwemmen =
+    swimming', 'dicht = close' (see report).
+
+    Vocabulary unit (accommodatie / booking a room), 17 unit lexemes across all 6 lessons per
+    scripts/backfill_lexemes_en_nl.py. lesson02 (breakfast_included, 1 token) and lesson03
+    (key_and_wifi, 2 tokens) are under the multiple_choice floor on their own tag, so both fall back to
+    the unit-wide union accommodatie_vocab (S3.1a/S8.1). lesson01 (room_booking), lesson04
+    (checkin_dialogue), lesson05 (confirmation_reading) and lesson06 (accommodation_wrapup_dialogue,
+    restricted to part_of_speech:[verb,adjective] to exclude the proper noun Maastricht and the noun
+    kamer that would otherwise duplicate lesson01) each had >=3 of their own tokens. word_order and
+    fill_in_blank both anchor on the single-member accommodatie_bevestiging_single tag (bevestiging).
+    Capacity/coverage measured via RECIPE S9 step 4 (see report).
 
     Fresh-context review 2026-10-10 (content-reviewer.md checklist): checked all 15 templates against
     unit- and course-scoped pools, glosses vs the realization, frame grammar/self-reference, floors,
-    booleans and jargon. FIXED lesson05.choose.001: confirmation_reading pooled the unit46 
-    case-duplicate Bevestiging => 'Confirmation' at course scope, so 'the confirmation' and 'Confirmation'
-    could both appear as options (two correct answers); switched the slot to accommodatie_vocab [noun,
-    verb] (unit pool 11 incl. lesson05's bevestiging/uitchecken) and made the feedback text match. FIXED
-    lesson05.fill.004: 'Kunt u mij de {item} sturen?' was equally satisfied by reservering (taught
-    lesson04) and graded only bevestiging; frame now 'Kunt u mij de {item} van de reservering sturen?'
-    (feedback updated). DEFERRED (lexeme gloss, backfill lane): noun glosses carry 'the' while tokens
-    are bare (kamer 'the room', sleutel 'the key', wifiwachtwoord, receptionist, reservering,
-    bevestiging), so typing 'de kamer' in the bare-word translations is graded wrong -- glosses should
-    drop 'the'. No native-judgment flags.
+    booleans and jargon. FIXED lesson05.choose.001: confirmation_reading pooled the unit46
+    case-duplicate Bevestiging => 'Confirmation' at course scope, so 'the confirmation' and
+    'Confirmation' could both appear as options (two correct answers); switched the slot to
+    accommodatie_vocab [noun, verb] (unit pool 11 incl. lesson05's bevestiging/uitchecken) and made the
+    feedback text match. FIXED lesson05.fill.004: 'Kunt u mij de {item} sturen?' was equally satisfied
+    by reservering (taught lesson04) and graded only bevestiging; frame now 'Kunt u mij de {item} van de
+    reservering sturen?' (feedback updated). DEFERRED (lexeme gloss, backfill lane): noun glosses carry
+    'the' while tokens are bare (kamer 'the room', sleutel 'the key', wifiwachtwoord, receptionist,
+    reservering, bevestiging), so typing 'de kamer' in the bare-word translations is graded wrong --
+    glosses should drop 'the'. No native-judgment flags.
 tag_schema:
   part_of_speech:
   - symbol
@@ -71,7 +74,7 @@ templates:
       agreement_tags: {semantic: room_booking}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used when booking a room.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
@@ -135,7 +138,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: Match each accommodation word with its English meaning.
+    text: Match each Dutch word with its English meaning.
     language_code: en
     direction: ltr
 
@@ -154,7 +157,7 @@ templates:
       agreement_tags: {semantic: accommodatie_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is accommodation vocabulary from this unit.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
@@ -192,7 +195,7 @@ templates:
       agreement_tags: {semantic: accommodatie_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is accommodation vocabulary from this unit.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
@@ -230,7 +233,7 @@ templates:
       agreement_tags: {semantic: checkin_dialogue}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is used at the check-in desk.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
@@ -268,7 +271,7 @@ templates:
       agreement_tags: {semantic: accommodatie_vocab}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is accommodation vocabulary from this unit.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
@@ -347,7 +350,7 @@ templates:
       agreement_tags: {semantic: accommodation_wrapup_dialogue}
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is said when telling someone about the stay.'
+    text: The word you saw was {item}.
     language_code: en
     direction: ltr
 
