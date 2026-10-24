@@ -5,6 +5,7 @@ target_language: prs
 unit_content_key: prs.a1.unit45.accommodation
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: 'true'
   notes: >-
     Pilot en-prs A1 practice pack (unit45 accommodation), authored 2026-07-22.
@@ -24,6 +25,9 @@ review:
     است — inclusion_word ∩ adjective = {شامل} is single-member course-wide, so
     the original "no reliable single-member anchor" note was wrong for this one
     tag; inclusion_word added to tag_schema).
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. Replaced a fill_in_blank whose blank (چای صبح ___ است) accepted only شامل although other adjectives fit with a translation (Morning tea is included. -> چای صبح شامل است); the dialogue_word MC feedback no longer claims words are from this unit check-in dialogue (the tag pools every A1 41-61 dialogue lesson course-wide). NATIVE FLAGS: confirm چای صبح for breakfast tea and خروج for check-out in a hotel context.
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -84,7 +88,7 @@ templates:
     item: *dw
   answer_derivation: {kind: slot_gloss, slot: item}
   feedback_frame:
-    text: '{item} is a word from this unit''s check-in dialogue.'
+    text: '{item} is a word from the A1 service dialogues (hotel, shop, clinic and similar).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit45.lesson02.choose.001
@@ -101,17 +105,19 @@ templates:
 # ---- structured ----
 - content_key: practice.en-prs.prs.a1.unit45.lesson04.fill.001
   lesson_content_key: prs.a1.unit45.lesson04.hotel_checkin_dialogue
-  type: fill_in_blank
-  frame: {text: 'چای صبح {item} است', language_code: prs, direction: rtl}
+  type: translation
+  frame: {text: 'Morning tea is included.', language_code: en, direction: ltr}
   slots:
     item:
       language_code: prs
       part_of_speech: adjective
       agreement_tags:
         semantic: inclusion_word
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'چای صبح {item} است', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'The missing word is شامل (included) — چای صبح شامل است means "morning tea is included".'
+    text: '"Morning tea is included." is چای صبح شامل است in Dari (شامل means included).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit45.lesson03.order.001

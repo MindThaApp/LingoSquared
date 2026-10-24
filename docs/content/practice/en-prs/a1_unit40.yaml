@@ -5,6 +5,7 @@ target_language: prs
 unit_content_key: prs.a1.unit40.emergencies
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: true
   notes: 'Authored 2026-07-11, same units 31-40 practice-pool depth-extension pass as this bundle''s a1_unit31.yaml sibling
     (see that file''s notes for the shared pass context) -- the last unit in this pass. Realization and overlay are both status
@@ -40,7 +41,10 @@ review:
     Polish wave 2 (2026-07-24): tier-thinness fix — added 2 recognition templates (bare MC over the 3-member emergency_service_word
     pool; sentence MC over the taught "…می‌خواهم" frame, grammatical for every course-scope member of the service pool) and 1
     production template (deterministic fixed-sentence translation "I need the police." over the single-member
-    volume_…_emergency_service_word_01_single anchor). No existing template touched.'
+    volume_…_emergency_service_word_01_single anchor). No existing template touched.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. Replaced a fill_in_blank whose single-member slot (پولیس) left any service valid in ___ می‌خواهم with a translation (This is an emergency! I need the police. -> این اضطراری است! پولیس می‌خواهم); removed an unused text_blocks stub. NATIVE FLAGS: confirm پولیس می‌خواهم (I want the police) is idiomatic for calling for help, versus پولیس را خبر کنین.'
+
 tag_schema:
   part_of_speech:
   - noun
@@ -158,11 +162,11 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit40.lesson01.emergency_service_order.001.volume_fill.001
   lesson_content_key: prs.a1.unit40.lesson01.emergency_types
-  type: fill_in_blank
+  type: translation
   frame:
-    text: '{emergency_service_word} می‌خواهم'
-    language_code: prs
-    direction: rtl
+    text: This is an emergency! I need the police.
+    language_code: en
+    direction: ltr
   slots:
     emergency_service_word:
       language_code: prs
@@ -170,12 +174,15 @@ templates:
       agreement_tags:
         semantic: volume_en_prs_a1_unit40_emergency_service_word_01_single
   answer_derivation:
-    kind: slot_text
-    slot: emergency_service_word
+    kind: render_frame
+    frame:
+      text: 'این اضطراری است! {emergency_service_word} می‌خواهم'
+      language_code: prs
+      direction: rtl
   feedback_frame:
-    text: '{emergency_service_word}'
-    language_code: prs
-    direction: rtl
+    text: '"This is an emergency! I need the police." is این اضطراری است! پولیس می‌خواهم in Dari.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit40.lesson03.emergency_pair.002.volume_match.001
   lesson_content_key: prs.a1.unit40.lesson03.describing_the_emergency
   type: matching_pairs
@@ -183,10 +190,6 @@ templates:
     text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}'
     language_code: prs
     direction: rtl
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
     word_one: &id003
       language_code: prs

@@ -5,6 +5,7 @@ target_language: prs
 unit_content_key: prs.a1.unit37.personality
 review:
   status: reviewed
+  required_next_reviewer: native_speaker_review
   fresh_context: 'true'
   notes: 'TIER-DEPTH POLISH 2026-07-24 (wave-2 rubric): recognition tier was 1 live template and production tier 2. Added
     (1) lesson02.personality_he_gloss.001 (multiple_choice, "او {personality_word} است" -- the pack''s own already-vetted
@@ -42,7 +43,10 @@ review:
     has zero TTS); no bare YAML booleans; no snake_case jargon in learner-facing text. The three unit31/33 homograph splits
     (حقوق law vs salary, ظرف dishes vs within-period, می‌شویم wash vs become) are correctly scoped by content_key in _classify()
     and by lesson_key in prs_agreement_tags(), leaving each other sense untouched. practice-validate 0/0 and _practice_slot_check.py
-    clean for the full en-prs set.'
+    clean for the full en-prs set.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. Replaced a fill_in_blank whose single-member slot (شوخ) left any adjective valid in او ___ است with a translation (I am funny. -> من شوخ استم); both matching sets now deal 6 cards from the 7-word pool (was 7 of 7, identical every time); removed an unused English text_blocks stub. NATIVE FLAGS: confirm کم‌حرف gloss quiet; reserved and that من شوخ استم is natural alongside او شوخ است.'
+
 tag_schema:
   part_of_speech:
   - adjective
@@ -77,7 +81,7 @@ templates:
   lesson_content_key: prs.a1.unit37.lesson02.more_traits
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
   slots:
@@ -87,7 +91,6 @@ templates:
     word_four: *id001
     word_five: *id001
     word_six: *id001
-    word_seven: *id001
   slot_relations:
   - kind: distinct
     slots:
@@ -97,7 +100,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -107,7 +109,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
@@ -151,11 +152,11 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit37.lesson01.personality_order.001.volume_fill.007
   lesson_content_key: prs.a1.unit37.lesson01.personality_words
-  type: fill_in_blank
+  type: translation
   frame:
-    text: او {personality_word} است
-    language_code: prs
-    direction: rtl
+    text: I am funny.
+    language_code: en
+    direction: ltr
   slots:
     personality_word:
       language_code: prs
@@ -163,12 +164,15 @@ templates:
       agreement_tags:
         semantic: volume_en_prs_a1_unit37_personality_word_07_single
   answer_derivation:
-    kind: slot_text
-    slot: personality_word
+    kind: render_frame
+    frame:
+      text: من {personality_word} استم
+      language_code: prs
+      direction: rtl
   feedback_frame:
-    text: '{personality_word}'
-    language_code: prs
-    direction: rtl
+    text: 'من شوخ استم means "I am funny" (Afghan Dari uses استم for "I am").'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit37.lesson02.personality_he_gloss.001
   lesson_content_key: prs.a1.unit37.lesson02.more_traits
   type: multiple_choice
@@ -228,13 +232,9 @@ templates:
   lesson_content_key: prs.a1.unit37.lesson02.more_traits
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
     language_code: prs
     direction: rtl
-    text_blocks:
-    - text: Second review matching set for this unit.
-      language_code: en
-      direction: ltr
   slots:
     word_one: &id002
       language_code: prs
@@ -246,7 +246,6 @@ templates:
     word_four: *id002
     word_five: *id002
     word_six: *id002
-    word_seven: *id002
   slot_relations:
   - kind: distinct
     slots:
@@ -256,7 +255,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -266,7 +264,6 @@ templates:
     - word_four
     - word_five
     - word_six
-    - word_seven
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en
