@@ -9,8 +9,11 @@ All plumbing lives in scripts/_target_lexeme_backfill_common.py (see its
 docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
-Scope: A1 only (the "en-ar-a1" manifest group, units 01-24). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-ar-a1" manifest group, units 01-24) and A2 (the
+"en-ar-a2" group, units 25-34, added 2026-10-24 in session 11). A2 is a
+separate Course row, so its lexemes are first-sight per course and carry
+their own gloss and part-of-speech tables (GLOSSES_A2, POS_SETS_A2). B1+ is
+not classified yet; extend LEVELS and the tables together.
 
 Normalization: Arabic has no case, so normalize() is the identity. The
 A1 realizations are written without harakat (short-vowel marks) and the
@@ -54,7 +57,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "ar"
-LEVELS = {"a1": "en-ar-a1"}
+LEVELS = {"a1": "en-ar-a1", "a2": "en-ar-a2"}
 
 # token as written in the realization -> single undiacritized citation form.
 # Empty: no A1 word is spelled two ways (see module docstring).
@@ -221,17 +224,184 @@ for _tag, _words in {
 part_of_speech = pos_lookup(POS_SETS)
 
 
+# ---------------------------------------------------------------------------
+# A2 (course "Arabic A2", manifest group en-ar-a2, units 25-34). Separate
+# tables: A2 is its own Course, so every token is first-sight again and is
+# glossed for the sense the A2 unit teaches. Same rules as the A1 table
+# above: no Arabic and no transliteration inside a gloss, "(masc.)"/"(fem.)"
+# where the written word is gender-specific, the sense taught at first sight.
+# The A2 realizations are written without harakat, like A1.
+# ---------------------------------------------------------------------------
+GLOSSES_A2: dict[str, str] = {
+    # unit25 registering an address
+    "تسجيل": "registration", "السلطات": "the authorities",
+    "التسجيل": "the registration", "استمارة": "form",
+    "جواز": "passport (first of two words)", "سفر": "travel (in 'passport')",
+    "أحتاج": "I need", "إلى": "to", "موعد": "appointment",
+    "يوم": "day", "الثلاثاء": "Tuesday", "الساعة": "the hour; the time",
+    "العاشرة": "the tenth (fem.)",
+    "صباح": "morning", "الخير": "the good", "كيف": "how",
+    "أساعدك": "I help you", "أريد": "I want", "عنواني": "my address",
+    "الجديد": "the new (masc.)", "اسمي": "my name", "ليلى": "Layla",
+    "حسن": "Hassan (a surname)", "العنوان": "the address",
+    "ورقم": "and the number of", "الهاتف": "the phone", "شارع": "street",
+    "النور": "the light (in a street name)", "بناية": "building",
+    "خمسة": "five", "والعنوان": "and the address", "رقم": "number",
+    "صفر": "zero", "سبعة": "seven",
+    "هل": "(starts a yes-or-no question)", "الموظف": "the employee (masc.)",
+    "ما": "what", "اسمك": "your name", "الكامل": "the full (masc.)",
+    "نعم": "yes", "تحتاجين": "you need (fem.)", "وجواز": "and passport",
+    "الموعد": "the appointment",
+    # unit26 opinions
+    "رأي": "opinion", "رأيك": "your opinion", "أعتقد": "I think; I believe",
+    "أن": "that (joins a statement to what was said)", "لأن": "because",
+    "لأنه": "because it (masc.)", "لأنها": "because it (fem.)",
+    "الدرس": "the lesson", "مفيد": "useful (masc.)", "سهل": "easy (masc.)",
+    "الحصة": "the class (session)", "هادئ": "quiet; calm (masc.)",
+    "هادئة": "quiet; calm (fem.)",
+    "الصباحية": "the morning one (fem.)", "الصباح": "the morning",
+    "المسائية": "the evening one (fem.)", "أفضل": "better",
+    "لا": "no; not", "أوافقك": "I agree with you", "الرأي": "the opinion",
+    "أرى": "I think; I see", "تناسب": "it suits (fem.)", "عملي": "my work",
+    "أفهم": "I understand", "لكن": "but", "أسهل": "easier", "لي": "for me",
+    "في": "in", "أنا": "I",
+    # unit27 opening a bank account
+    "بنك": "bank", "حساب": "account", "بنكي": "bank (adj., masc.)",
+    "بنكية": "bank (adj., fem.)", "فتح": "opening", "إثبات": "proof",
+    "وإثبات": "and proof", "عنوان": "address", "عندي": "I have", "و": "and",
+    "أهلا": "welcome", "وسهلا": "and ease (in a welcome)", "يوسف": "Yusuf",
+    "خوري": "Khoury (a surname)", "بطاقة": "card",
+    "مصرفية": "banking (fem.)", "رسوم": "fees", "شهرية": "monthly (fem.)",
+    "وهل": "and (starts a question)", "الحساب": "the account",
+    "الأساسي": "the basic (masc.)", "أساسي": "basic (masc.)",
+    "توجد": "there is (fem.)", "الموظفة": "the employee (fem.)",
+    "عندك": "you have", "وعنوانك": "and your address", "يشمل": "includes",
+    "ولا": "and not; and no", "للحساب": "for the account",
+    # unit28 at the doctor
+    "الحلق": "the throat", "ألم": "pain", "منذ": "since; for",
+    "ثلاثة": "three", "أيام": "days", "شديد": "severe (masc.)",
+    "والألم": "and the pain", "بسيط": "mild (masc.)", "حمى": "fever",
+    "وحمى": "and fever", "أيضا": "also", "مشكلتك": "your problem",
+    "دواء": "medicine", "الدواء": "the medicine", "مرتين": "twice",
+    "اليوم": "the day; today", "كثيرا": "a lot", "ماء": "water",
+    "اشربي": "drink (to a woman)", "آخر": "another (masc.)", "بعد": "after",
+    "أسبوع": "week", "إذا": "if", "لم": "did not; do not (with a verb)",
+    "تتحسني": "you get better (fem.)", "الطبيبة": "the doctor (fem.)",
+    "أم": "or (between two options)", "خذي": "take (to a woman)",
+    "هذا": "this (masc.)", "واشربي": "and drink (to a woman)",
+    "عودي": "come back (to a woman)",
+    # unit29 a problem at home
+    "تسرب": "leak", "مشكلة": "problem", "المطبخ": "the kitchen",
+    "هناك": "there is; there", "متى": "when", "يومين": "two days",
+    "تزداد": "it increases (fem.)", "سوءا": "worse",
+    "والمشكلة": "and the problem", "فني": "technician",
+    "فنيا": "technician (as something sent)", "إصلاح": "repair",
+    "المشكلة": "the problem",
+    "سنرسل": "we will send", "غدا": "tomorrow", "صباحا": "in the morning",
+    "أكون": "I am; I will be", "البيت": "the house; the home",
+    "كن": "be (to a man)", "التاسعة": "the ninth (fem.)", "من": "from; of",
+    "فضلك": "your favor (in a polite request)", "الإصلاح": "the repair",
+    "موجود": "present; there (masc.)", "لإصلاح": "to repair; for the repair of",
+    # unit30 a job interview
+    "خبرة": "experience", "مجال": "field", "المجال": "the field",
+    "عملت": "I worked", "لمدة": "for a period of", "سنتين": "two years",
+    "متاحة": "available (fem.)", "وأنا": "and I", "عطلة": "holiday; break",
+    "نهاية": "end", "الأسبوع": "the week",
+    "لديك": "you have", "أي": "any", "سؤال": "question", "عن": "about",
+    "الوظيفة": "the job", "ساعات": "hours", "العمل": "the work",
+    "الثامنة": "the eighth (fem.)", "حتى": "until", "الرابعة": "the fourth (fem.)",
+    "مساء": "in the evening", "أخبريني": "tell me (to a woman)",
+    "خبرتك": "your experience", "المديرة": "the manager (fem.)",
+    "نور": "Nour", "للعمل": "for work", "أنت": "you",
+    # unit31 a delayed train
+    "متأخر": "late; delayed (masc.)", "القطار": "the train", "نصف": "half",
+    "ساعة": "hour", "فنية": "technical (fem.)", "بسبب": "because of",
+    "قطار": "train", "بديل": "alternative (masc.)", "يوجد": "there is (masc.)",
+    "الرصيف": "the platform", "اثنين": "two (in a number)",
+    "عشر": "ten (before a plural noun)", "دقائق": "minutes",
+    "سيصل": "it will arrive (masc.)", "نفس": "same", "الوقت": "the time",
+    "تقريبا": "approximately", "سيتأخر": "it will be late (masc.)",
+    "فقط": "only", "عذرا": "sorry; excuse me",
+    # unit32 digital life
+    "الذكي": "the smart (masc.)", "أستخدم": "I use", "هاتفي": "my phone",
+    "يوميا": "daily", "وسائل": "means; media", "التواصل": "communication",
+    "الاجتماعي": "the social (masc.)", "لوسائل": "for the media of",
+    "ساعتين": "two hours", "حوالي": "about; around", "خاصة": "especially",
+    "كم": "how many; how much", "تستخدمين": "you use (fem.)",
+    "هاتفك": "your phone", "مفيدة": "useful (fem.)",
+    "للتواصل": "for communication", "مع": "with", "الأصدقاء": "the friends",
+    "أنها": "that it (fem.)", "تأخذ": "it takes (fem.)",
+    "وقتا": "time (as something taken)", "لكنها": "but it (fem.)",
+    # unit33 a busy week
+    "صالة": "hall", "الرياضة": "the sport", "السادسة": "the sixth (fem.)",
+    "أولا": "first", "أذهب": "I go", "ثم": "then", "أطبخ": "I cook",
+    "العشاء": "the dinner",
+    "ألتقي": "I meet", "بأصدقائي": "with my friends", "وفي": "and in",
+    "أزور": "I visit", "عائلتي": "my family", "وأزور": "and I visit",
+    "كل": "every",
+    # unit34 a complaint
+    "إرجاع": "returning (an item)", "القميص": "the shirt", "فيه": "it has; in it",
+    "عيب": "defect", "الحجم": "the size", "غير": "not; non-",
+    "صحيح": "correct; right (masc.)", "ممزق": "torn (masc.)",
+    "قليلا": "a little", "وممزق": "and torn (masc.)",
+    "معك": "you have (with you)", "الإيصال": "the receipt",
+    "معي": "I have (with me)", "استرداد": "refund", "المال": "the money",
+    "استبدال": "exchange", "تريد": "you want (masc.)",
+    "البائعة": "the shop assistant (fem.)",
+}
+
+POS_SETS_A2 = {
+    "proper_noun": split_words("ليلى حسن يوسف خوري نور"),
+    "pronoun": split_words("أنا أنت ما هذا"),
+    "preposition": split_words(
+        "إلى في من منذ عن حتى مع بعد بسبب لمدة لي فيه معك معي لديك عندي عندك "
+        "للحساب للعمل للتواصل لوسائل لإصلاح"
+    ),
+    "particle": split_words(
+        "هل وهل أن أنها لأن لأنه لأنها لكن لكنها إذا لم أم و ولا لا نعم أي غير"
+    ),
+    "adjective": split_words(
+        "الجديد الكامل مفيد سهل هادئ هادئة مفيدة بنكي بنكية مصرفية شهرية "
+        "الأساسي أساسي شديد بسيط آخر موجود متاحة متأخر فنية بديل الذكي "
+        "الاجتماعي صحيح ممزق وممزق العاشرة التاسعة الثامنة الرابعة السادسة "
+        "الصباحية المسائية أفضل أسهل"
+    ),
+    "adverb": split_words(
+        "كيف كم متى هناك أيضا كثيرا مرتين يوميا غدا صباحا مساء تقريبا فقط "
+        "أولا ثم خاصة حوالي قليلا سوءا عذرا اليوم"
+    ),
+    "verb": split_words(
+        "أساعدك أريد أحتاج تحتاجين أعتقد أرى أوافقك أفهم تناسب توجد يشمل "
+        "اشربي واشربي خذي عودي تتحسني تزداد سنرسل أكون كن عملت أخبريني "
+        "سيصل سيتأخر أستخدم تستخدمين تأخذ أذهب أطبخ ألتقي أزور وأزور تريد "
+        "يوجد"
+    ),
+    "phrase": split_words("أهلا وسهلا"),
+}
+POS_SETS_A2["noun"] = set(GLOSSES_A2) - set().union(*POS_SETS_A2.values())
+
+CATEGORY_TAGS_A2: dict[str, list[str]] = {}
+for _tag, _words in {
+    "ar_number": "خمسة سبعة صفر ثلاثة اثنين عشر",
+}.items():
+    for _w in _words.split():
+        CATEGORY_TAGS_A2.setdefault(_w, []).append(_tag)
+
+part_of_speech_a2 = pos_lookup(POS_SETS_A2)
+
+
 def iter_specs():
     for level, group in LEVELS.items():
         realizations, _ = manifest_group(group)
+        a2 = level == "a2"
         yield from classify(
             lang=LANG,
             level=level,
             unit_files=realizations,
-            glosses=GLOSSES,
-            part_of_speech=part_of_speech,
+            glosses=GLOSSES_A2 if a2 else GLOSSES,
+            part_of_speech=part_of_speech_a2 if a2 else part_of_speech,
             normalize=normalize,
-            category_tags=CATEGORY_TAGS,
+            category_tags=CATEGORY_TAGS_A2 if a2 else CATEGORY_TAGS,
         )
 
 
