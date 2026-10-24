@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit26.hobbies
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD-
     template fix, PACK-ONLY): lesson01.hobby_pair.002 slotted
@@ -94,6 +95,8 @@ review:
     POLISH WAVE 4 (2026-07-26): hobby_pair.002's HONEST LIMIT above is RESOLVED -- backfill_lexemes_en_prs.py now emits en_prs_a1_unit26_words. The matcher is de-aliased from the shared unit_noun_pool onto its own hobby_pair_word preset carrying that tag (6 distinct unit nouns = the 6-pair need, collision-free); unit_noun_pool is left untouched for the gloss/translate templates that share it. Course pool == unit pool. Verified with pool_check.py + unit-scope check.
 
     FRESH-CONTEXT NATIVE REVIEW 2026-07-27 (batch 1): reviewed against AUTHORING_PREFLIGHT.md with the realization/overlay + live backfill lexeme pools cross-checked. All CRITICAL/MAJOR findings fixed and committed (see docs/RAMIN_REVIEW_BACKLOG.md 'Native review batch 1' for the per-pack findings + residual MINOR/known-limitation notes; some backfill gloss fixes take effect on the next re-backfill). Status -> reviewed.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. bracketed [activity] feedback replaced by real slot text (2 word_orders); 'this unit's' feedback on pools that span units made neutral (hobby_gloss, free_time_word_gloss, unit_noun_gloss). NATIVE FLAGS: گوش glossed 'listening' and آخر glossed 'end' are bare-word glosses that mislead (گوش = ear; آخر هفته = weekend) -- proposed in the log; hobby 'پیاده‌روی می‌کنم' vs 'قدم می‌زنم'.
 tag_schema:
   # POLISH 2026-07-24: verb/adjective added for the free_time_word_gloss
   # pool below (خواندن/می‌کنی/آزاد are this unit's own untagged
@@ -134,7 +137,7 @@ templates:
     frame: {text: "{hobby_topic_word}", language_code: prs, direction: rtl}
     slots: {hobby_topic_word: *hobby_topic_word}
     answer_derivation: {kind: slot_gloss, slot: hobby_topic_word}
-    feedback_frame: {text: "{hobby_topic_word} belongs to this unit's free-time vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{hobby_topic_word}* is a free-time word.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit26.lesson01.hobby_pair.002
     lesson_content_key: prs.a1.unit26.lesson01.hobby_vocabulary
     # Re-anchored (2026-07-24) to unit_noun_pool: hobby_topic_word alone is
@@ -164,7 +167,7 @@ templates:
     frame: {text: "{free_time_word}", language_code: prs, direction: rtl}
     slots: {free_time_word: *verb_adjective_pool}
     answer_derivation: {kind: slot_gloss, slot: free_time_word}
-    feedback_frame: {text: "{free_time_word} is one of this unit's own free-time words.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{free_time_word}* is a word from the free-time lessons.", language_code: en, direction: ltr}
 
   # Lesson 3: every week / weekend.
   - content_key: practice.en-prs.prs.a1.unit26.lesson03.weekly_hobby_order.001
@@ -173,7 +176,7 @@ templates:
     frame: {text: "من هر هفته {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}
     slots: {hobby_activity_word: *hobby_activity_word}
     answer_derivation: {kind: render_frame, frame: {text: "من هر هفته {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: من هر هفته [activity] می‌کنم (I do [activity] every week).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *من هر هفته {hobby_activity_word} می‌کنم* -- I do ... every week.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit26.lesson03.unit_noun_gloss.002
     lesson_content_key: prs.a1.unit26.lesson03.frequency
     type: multiple_choice
@@ -185,7 +188,7 @@ templates:
     frame: {text: "{unit_noun}", language_code: prs, direction: rtl}
     slots: {unit_noun: *unit_noun_pool}
     answer_derivation: {kind: slot_gloss, slot: unit_noun}
-    feedback_frame: {text: "{unit_noun} is one of this unit's own words.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{unit_noun}* is a noun from the hobbies lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit26.lesson03.unit_noun_translate.003
     lesson_content_key: prs.a1.unit26.lesson03.frequency
     type: translation
@@ -205,7 +208,7 @@ templates:
     frame: {text: "من هم گاهی {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}
     slots: {hobby_activity_word: *hobby_activity_word}
     answer_derivation: {kind: render_frame, frame: {text: "من هم گاهی {hobby_activity_word} می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: من هم گاهی [activity] می‌کنم (I also sometimes do [activity]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *من هم گاهی {hobby_activity_word} می‌کنم* -- I also sometimes do ...", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit26.lesson04.hobby_activity_translate.002
     lesson_content_key: prs.a1.unit26.lesson04.hobbies_dialogue
     type: translation
