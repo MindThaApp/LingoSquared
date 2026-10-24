@@ -1,0 +1,165 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit09
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit09.orte
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). Lesson 4 is dialogue-only (no first-sight tokens), so lessons 1-3 carry all three
+    tiers. Case: neben/hinter/zwischen take the dative (neben dem Park, hinter der Bank); frames pin the
+    article and use one preposition per gender. Only feminine Apotheke/Bank are used with Die. The frame
+    Die Apotheke ist {neben|hinter} dem Park has two prepositions that are both correct, so it is a
+    word-order frame only (never a recognition item). Reviewer: confirm vom Krankenhaus (von + dem).
+    Opus quality pass 2026-10-24: fixed a false claim that nicht follows the word it negates.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Bank, w_Krankenhaus, w_Apotheke, w_Park, w_Restaurant, w_neben, w_gegenüber, w_zwischen, w_hinter, w_wo, w_weit, w_von, w_nicht]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Bank, w_Krankenhaus, w_Apotheke, w_Park, w_Restaurant]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: [w_neben, w_gegenüber, w_zwischen, w_hinter]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adjective, adverb, particle, preposition], agreement_tags: {semantic: [w_wo, w_weit, w_von, w_nicht]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adjective, adverb, particle, preposition], agreement_tags: {semantic: [w_wo, w_weit, w_nicht, w_neben, w_hinter]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Apotheke, w_Bank]}}
+  order_6: &order_6 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: [w_neben, w_hinter]}}
+  order_7: &order_7 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_weit}}
+  match_8: &match_8 {language_code: de, part_of_speech: [adverb, noun], agreement_tags: {semantic: [w_Bank, w_Krankenhaus, w_Apotheke, w_Park, w_Restaurant, w_wo]}}
+  match_9: &match_9 {language_code: de, part_of_speech: [adjective, particle, preposition], agreement_tags: {semantic: [w_neben, w_gegenüber, w_zwischen, w_hinter, w_weit, w_nicht]}}
+  fill_10: &fill_10 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_gegenüber}}
+  fill_11: &fill_11 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_zwischen}}
+  fill_12: &fill_12 {language_code: de, part_of_speech: [particle], agreement_tags: {semantic: w_nicht}}
+  one_13: &one_13 {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_wo}}
+  one_14: &one_14 {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_hinter}}
+templates:
+  - content_key: practice.en-de.de.a1.unit09.lesson01.choose.001
+    lesson_content_key: de.a1.unit09.lesson01.haeufige_orte_in_der_stadt
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Krankenhaus is a compound: Kranken (sick) plus Haus (house).", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson01.listen.002
+    lesson_content_key: de.a1.unit09.lesson01.haeufige_orte_in_der_stadt
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Restaurant and Park look like their English twins but are said the German way.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.choose.003
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These prepositions of place take the dative: neben dem Park, hinter der Bank.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.choose.004
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Wo asks where; the verb comes right after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.listen.005
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Nicht goes before the word it negates: nicht weit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson01.order.006
+    lesson_content_key: de.a1.unit09.lesson01.haeufige_orte_in_der_stadt
+    type: word_order
+    frame: {text: "Die {item} ist neben dem Park.", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Die {item} ist neben dem Park.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Both nouns are feminine, so both take die; neben takes the dative dem for the masculine Park.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.order.007
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: word_order
+    frame: {text: "Die Apotheke ist {item} dem Park.", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Die Apotheke ist {item} dem Park.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Both neben and hinter take the dative: dem Park.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.order.008
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: word_order
+    frame: {text: "Ist es {item} von hier?", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ist es {item} von hier?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "A yes/no question starts with the verb: Ist es weit von hier?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson01.match.009
+    lesson_content_key: de.a1.unit09.lesson01.haeufige_orte_in_der_stadt
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_8, second: *match_8, third: *match_8, fourth: *match_8, fifth: *match_8, sixth: *match_8}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Wo is the question word you need to ask where any of these places is.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.match.010
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_9, second: *match_9, third: *match_9, fourth: *match_9, fifth: *match_9, sixth: *match_9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Gegenüber is used before a dative phrase: gegenüber vom Krankenhaus.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.fill.011
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: fill_in_blank
+    frame: {text: "Die Apotheke ist {item} vom Krankenhaus. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_10, hint: *fill_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Vom is von plus dem: gegenüber vom Krankenhaus.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.fill.012
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: fill_in_blank
+    frame: {text: "Die Apotheke ist {item} der Bank und dem Park. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_11, hint: *fill_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zwischen is followed by the dative: zwischen der Bank und dem Park.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.fill.013
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: fill_in_blank
+    frame: {text: "Nein, es ist {item} weit. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_12, hint: *fill_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nicht comes before the word it negates: nicht weit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson01.translate.014
+    lesson_content_key: de.a1.unit09.lesson01.haeufige_orte_in_der_stadt
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Apotheke is feminine; Park and Krankenhaus are not.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.translate.015
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hinter means behind and neben means next to.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.translate.016
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: translation
+    frame: {text: "Excuse me, where is the bank?", language_code: en, direction: ltr}
+    slots: {item: *one_13}
+    answer_derivation: {kind: render_frame, frame: {text: "Entschuldigung, {item} ist die Bank?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wo ist ...? asks where something is.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson03.translate.017
+    lesson_content_key: de.a1.unit09.lesson03.nach_dem_ort_fragen
+    type: translation
+    frame: {text: "Is it far from here?", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ist es {item} von hier?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Weit is an adjective and stays the same after ist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit09.lesson02.translate.018
+    lesson_content_key: de.a1.unit09.lesson02.lageangaben
+    type: translation
+    frame: {text: "The restaurant is behind the bank.", language_code: en, direction: ltr}
+    slots: {item: *one_14}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Restaurant ist {item} der Bank.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Hinter is followed by the dative: hinter der Bank.", language_code: en, direction: ltr}

@@ -1,0 +1,166 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit05
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit05.uhrzeit
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). Clock-time sentences keep the unit03 number words as literal frame text and put
+    this unit's own token in the slot (a slot on a unit03 number would have no unit05 candidates).
+    Es ist halb vier is 3:30 (half to four), so the English prompts say "half past three" and are
+    fixed single-answer prompts; halb is never a number-slot frame. Reviewer: check the halb /
+    Viertel nach / Viertel vor pairings against the unit's own audio lines.
+    Opus quality pass 2026-10-24: cued the What-time prompt toward Wie spät ist es? (Wie viel Uhr ist es? is equally correct).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_spät, w_Uhr, w_halb, w_Viertel, w_nach, w_vor, w_Mittag, w_Nachmittag, w_Mitternacht, w_Laden, w_um, w_morgens, w_schließt, w_sie, w_dann, w_Öffnungszeiten]
+slot_presets:
+  clock_words: &clock_words {language_code: de, part_of_speech: [adjective, noun, preposition], agreement_tags: {semantic: [w_spät, w_Uhr, w_halb, w_Viertel, w_nach, w_vor]}}
+  daytime_words: &daytime_words {language_code: de, part_of_speech: [noun, preposition, adverb, verb], agreement_tags: {semantic: [w_Mittag, w_Nachmittag, w_Mitternacht, w_Laden, w_um, w_morgens, w_schließt]}}
+  shop_words: &shop_words {language_code: de, part_of_speech: [pronoun, adverb, noun, verb], agreement_tags: {semantic: [w_sie, w_dann, w_Öffnungszeiten, w_schließt, w_Laden, w_morgens]}}
+  clock_listen: &clock_listen {language_code: de, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_Uhr, w_spät, w_halb, w_Mittag, w_Nachmittag, w_Mitternacht]}}
+  nach_vor: &nach_vor {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: [w_nach, w_vor]}}
+  halb: &halb {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_halb}}
+  schliesst: &schliesst {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_schließt}}
+  um: &um {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_um}}
+  viertel: &viertel {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Viertel}}
+  vor: &vor {language_code: de, part_of_speech: [preposition], agreement_tags: {semantic: w_vor}}
+  uhr: &uhr {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Uhr}}
+  laden: &laden {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Laden}}
+  spaet: &spaet {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_spät}}
+  shop_match: &shop_match {language_code: de, part_of_speech: [noun, adverb, verb, pronoun, preposition], agreement_tags: {semantic: [w_Mittag, w_Nachmittag, w_Mitternacht, w_Laden, w_morgens, w_schließt, w_sie, w_dann, w_Öffnungszeiten, w_um]}}
+  shop_bare: &shop_bare {language_code: de, part_of_speech: [noun, adverb, verb], agreement_tags: {semantic: [w_Mittag, w_Nachmittag, w_Mitternacht, w_Laden, w_morgens, w_schließt, w_dann, w_Öffnungszeiten]}}
+templates:
+  - content_key: practice.en-de.de.a1.unit05.lesson01.choose.001
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *clock_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Uhr never changes: es ist ein Uhr, zwei Uhr, drei Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.listen.001
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *daytime_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Um answers the question at what time: um neun Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson04.choose.001
+    lesson_content_key: de.a1.unit05.lesson04.im_gespraech_ueber_die_bibliothekszeiten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *shop_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dann means then and is a handy way to order events.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson01.listen.002
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *clock_listen}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mittag, Nachmittag and Mitternacht are capitalised nouns; morgens is a lowercase adverb.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.order.002
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: word_order
+    frame: {text: "Der {item} schlie\u00dft um achtzehn Uhr.", language_code: de, direction: ltr}
+    slots: {item: *laden}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} schlie\u00dft um achtzehn Uhr.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "In a main clause the verb stays second: Der Laden schlie\u00dft um achtzehn Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson02.order.001
+    lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+    type: word_order
+    frame: {text: "Es ist Viertel {item} drei.", language_code: de, direction: ltr}
+    slots: {item: *nach_vor}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist Viertel {item} drei.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Nach counts past the hour and vor counts to the next one.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson02.match.002
+    lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *clock_words, second: *clock_words, third: *clock_words, fourth: *clock_words, fifth: *clock_words, sixth: *clock_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Halb counts toward the next hour, so halb vier is half past three.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.match.003
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *shop_match, second: *shop_match, third: *shop_match, fourth: *shop_match, fifth: *shop_match, sixth: *shop_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Mittag, Nachmittag and Mitternacht are capitalised nouns; morgens is a lowercase adverb.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson01.fill.003
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: fill_in_blank
+    frame: {text: "Es ist {item} vier. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *halb, hint: *halb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Es ist halb vier means 3:30, because German counts half to the next hour.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.fill.004
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: fill_in_blank
+    frame: {text: "Der Laden {item} um achtzehn Uhr. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *schliesst, hint: *schliesst}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The verb stays in second position: Der Laden schlie\u00dft um achtzehn Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.fill.005
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: fill_in_blank
+    frame: {text: "Der Laden \u00f6ffnet {item} neun Uhr morgens. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *um, hint: *um}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Um introduces a clock time: um neun Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson02.translate.003
+    lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *clock_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Viertel is a noun, so it keeps its capital letter even in the middle of a sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson03.translate.006
+    lesson_content_key: de.a1.unit05.lesson03.tageszeiten_und_oeffnungszeiten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *shop_bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "\u00d6ffnungszeiten comes from the verb \u00f6ffnen, to open, plus Zeiten, times.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson01.translate.004
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: translation
+    frame: {text: "It is three o'clock.", language_code: en, direction: ltr}
+    slots: {item: *uhr}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist drei {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Uhr never changes: ein Uhr, zwei Uhr, drei Uhr.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson01.translate.005
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: translation
+    frame: {text: "What time is it? (literally: how late is it?)", language_code: en, direction: ltr}
+    slots: {item: *spaet}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie {item} ist es?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wie sp\u00e4t ist es? literally asks how late it is.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson01.translate.006
+    lesson_content_key: de.a1.unit05.lesson01.volle_und_halbe_stunden
+    type: translation
+    frame: {text: "It is half past three.", language_code: en, direction: ltr}
+    slots: {item: *halb}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist {item} vier.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Halb vier is half the way to four, which is 3:30.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson02.translate.004
+    lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+    type: translation
+    frame: {text: "It is a quarter past three.", language_code: en, direction: ltr}
+    slots: {item: *viertel}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist {item} nach drei.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Viertel nach drei is 3:15.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit05.lesson02.translate.005
+    lesson_content_key: de.a1.unit05.lesson02.viertel_nach_und_vor
+    type: translation
+    frame: {text: "It is a quarter to four.", language_code: en, direction: ltr}
+    slots: {item: *vor}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist Viertel {item} vier.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Viertel vor vier is 3:45.", language_code: en, direction: ltr}
