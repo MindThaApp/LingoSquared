@@ -1,0 +1,167 @@
+schema_version: "1.0"
+pack_key: practice.de-en.a1.unit14
+source_language: de
+target_language: en
+unit_content_key: en.a1.unit14.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, de-en lane) against PRACTICE_PACK_RECIPE.md and the lexemes of
+    scripts/backfill_lexemes_de_en.py (per-unit tags en_a1_uNN*, single-member w_<token> anchors).
+    Recognition, matching and bare-word production pools are unit-scoped or curated w_ lists of this
+    unit's tokens; sentence frames use a single w_ anchor or a curated w_ union, so the course-scope pool
+    equals the unit-scope pool. Hint slots are rendered as the German gloss; production prompts show the
+    German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
+    of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
+    which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_about", "w_free", "w_hear", "w_meeting", "w_message", "w_place", "w_repeat", "w_slowly", "w_sorry", "w_speak", "w_suggest", "w_tonight", "w_well"]
+slot_presets:
+  l1m: &l1m {"language_code": "en", "part_of_speech": ["adjective", "noun"], "agreement_tags": {"semantic": ["w_free", "w_tonight", "w_message", "w_place"]}}
+  l2m: &l2m {"language_code": "en", "part_of_speech": ["adjective", "adverb", "verb"], "agreement_tags": {"semantic": ["w_sorry", "w_repeat", "w_speak", "w_slowly", "w_hear"]}}
+  l3m: &l3m {"language_code": "en", "part_of_speech": ["noun", "verb"], "agreement_tags": {"semantic": ["w_message", "w_suggest", "w_meeting", "w_place"]}}
+  l4m: &l4m {"language_code": "en", "part_of_speech": ["adjective", "noun", "preposition"], "agreement_tags": {"semantic": ["w_about", "w_free", "w_tonight", "w_place"]}}
+  mix: &mix {"language_code": "en", "part_of_speech": ["adjective", "adverb", "noun", "verb"], "agreement_tags": {"semantic": ["w_sorry", "w_repeat", "w_speak", "w_slowly", "w_hear", "w_message", "w_suggest", "w_meeting"]}}
+  tr1: &tr1 {"language_code": "en", "part_of_speech": ["adjective", "noun"], "agreement_tags": {"semantic": ["w_free", "w_tonight", "w_message"]}}
+  tr2: &tr2 {"language_code": "en", "part_of_speech": ["adjective", "adverb", "verb"], "agreement_tags": {"semantic": ["w_sorry", "w_repeat", "w_speak", "w_slowly", "w_hear"]}}
+  w_free: &w_free {"language_code": "en", "part_of_speech": "adjective", "agreement_tags": {"semantic": "w_free"}}
+  w_slowly: &w_slowly {"language_code": "en", "part_of_speech": "adverb", "agreement_tags": {"semantic": "w_slowly"}}
+  w_hear: &w_hear {"language_code": "en", "part_of_speech": "verb", "agreement_tags": {"semantic": "w_hear"}}
+  w_suggest: &w_suggest {"language_code": "en", "part_of_speech": "verb", "agreement_tags": {"semantic": "w_suggest"}}
+  w_about: &w_about {"language_code": "en", "part_of_speech": "preposition", "agreement_tags": {"semantic": "w_about"}}
+  w_tonight: &w_tonight {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_tonight"}}
+  w_repeat: &w_repeat {"language_code": "en", "part_of_speech": "verb", "agreement_tags": {"semantic": "w_repeat"}}
+  w_well: &w_well {"language_code": "en", "part_of_speech": "adverb", "agreement_tags": {"semantic": "w_well"}}
+  w_message: &w_message {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_message"}}
+templates:
+  - content_key: practice.de-en.en.a1.unit14.lesson01.choose.001
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l1m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Free bedeutet hier frei im Sinne von Zeit haben: Are you free tonight? fragt, ob Sie Zeit haben.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.choose.002
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l2m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Sorry, can you repeat that? ist die höfliche Bitte, etwas zu wiederholen; sorry leitet sie ein.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson03.choose.003
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l3m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "Meeting bedeutet Treffen oder Besprechung; place ist der Ort, an dem das Treffen stattfindet.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson04.choose.004
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: multiple_choice
+    frame: {"text": "{item}", "language_code": "en", "direction": "ltr"}
+    slots: {item: *l4m}
+    answer_derivation: {"kind": "slot_gloss", "slot": "item"}
+    feedback_frame: {"text": "How about ...? ist ein Vorschlag; es folgt eine Zeit oder ein Ort: How about 6pm?", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson01.order.005
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: word_order
+    frame: {"text": "Are you {item} tonight?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_free}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Are you {item} tonight?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Are you free? ist die Standardfrage, ob jemand Zeit hat; tonight steht am Satzende.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.order.006
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: word_order
+    frame: {"text": "Can you speak more {item}, please?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_slowly}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Can you speak more {item}, please?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "More slowly bedeutet langsamer; das Adverb steht nach more.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson03.order.007
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: word_order
+    frame: {"text": "This message is to {item} a meeting time and place.", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_suggest}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "This message is to {item} a meeting time and place.", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "To suggest bedeutet vorschlagen; die Zusammenfassung benennt den Zweck der Nachricht.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson04.order.008
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: word_order
+    frame: {"text": "How {item} 6pm at the cafe?", "language_code": "en", "direction": "ltr"}
+    slots: {item: *w_about}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "How {item} 6pm at the cafe?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "How about ...? macht einen Vorschlag; es folgt eine Zeit oder ein Ort.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson01.fill.009
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: fill_in_blank
+    frame: {"text": "Are you free {item}? ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_tonight, hint: *w_tonight}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Tonight bedeutet heute Abend; im Englischen steht davor keine Präposition.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.fill.010
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: fill_in_blank
+    frame: {"text": "Can you {item} that, please? ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_repeat, hint: *w_repeat}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Repeat that bedeutet wiederholen Sie das; can you ...? macht die Bitte höflich.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.fill.011
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: fill_in_blank
+    frame: {"text": "I can't hear you {item}. ({hint})", "language_code": "en", "direction": "ltr", "slot_rendering": {"hint": "english_gloss"}}
+    slots: {item: *w_well, hint: *w_well}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Well ist hier das Adverb zu good; I can't hear you well bedeutet, dass die Verbindung schlecht ist.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson01.match.012
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: matching_pairs
+    frame: {"text": "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", "language_code": "en", "direction": "ltr"}
+    slots: {first: *mix, second: *mix, third: *mix, fourth: *mix, fifth: *mix, sixth: *mix}
+    slot_relations: [{"kind": "distinct", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {"kind": "matching_pairs", "slots": ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {"text": "Sorry, repeat, speak, slowly und hear helfen am Telefon; message, suggest und meeting gehören zur Verabredung.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson01.translate.013
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *tr1}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Free steht hier für frei im Sinne von Zeit haben; tonight bedeutet heute Abend.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.translate.014
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *tr2}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Sorry, repeat, speak, slowly und hear sind die Wörter, mit denen Sie um Wiederholung bitten.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson03.translate.015
+    lesson_content_key: en.a1.unit14.lesson03.reading_a_text_message
+    type: translation
+    frame: {"text": "{item}", "language_code": "de", "direction": "ltr", "slot_rendering": {"item": "english_gloss"}}
+    slots: {item: *l3m}
+    answer_derivation: {"kind": "slot_text", "slot": "item"}
+    feedback_frame: {"text": "Message ist eine Nachricht, meeting ein Treffen und place ein Ort.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson01.translate.016
+    lesson_content_key: en.a1.unit14.lesson01.answering_the_phone
+    type: translation
+    frame: {"text": "Hast du heute Abend Zeit?", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_free}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Are you {item} tonight?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Are you free? fragt, ob jemand Zeit hat; tonight steht am Satzende.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson02.translate.017
+    lesson_content_key: en.a1.unit14.lesson02.asking_to_repeat
+    type: translation
+    frame: {"text": "Können Sie das wiederholen, bitte?", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_repeat}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "Can you {item} that, please?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "Can you ...? ist eine höfliche Bitte; auf can folgt die Grundform repeat.", "language_code": "de", "direction": "ltr"}
+  - content_key: practice.de-en.en.a1.unit14.lesson04.translate.018
+    lesson_content_key: en.a1.unit14.lesson04.phone_call_dialogue
+    type: translation
+    frame: {"text": "Wie wäre es mit 18 Uhr im Café? (schreiben Sie 6pm)", "language_code": "de", "direction": "ltr"}
+    slots: {item: *w_about}
+    answer_derivation: {"kind": "render_frame", "frame": {"text": "How {item} 6pm at the cafe?", "language_code": "en", "direction": "ltr"}}
+    feedback_frame: {"text": "How about ...? macht einen Vorschlag; im Englischen schreiben Sie die Uhrzeit hier als 6pm.", "language_code": "de", "direction": "ltr"}
