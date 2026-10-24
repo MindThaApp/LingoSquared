@@ -1,0 +1,155 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit02
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit02.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u02* lesson tags,
+    w_<token> anchors). Number pools are the unit's own lesson tags; the
+    age frame uses a curated list of ages so every candidate reads naturally
+    (no "tengo uno años").
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u02_l01, es_a1_u02_l02, es_a1_u02_l03, es_a1_u02_l04, es_a1_u02_l05, es_a1_u02_l06, w_diez, w_once, w_doce, w_trece, w_catorce, w_quince, w_veinte, w_treinta, w_veintiocho, w_tienes, w_repetir, w_huevos, w_tazas, w_azúcar, w_pregunta]
+slot_presets:
+  small: &small {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u02_l01}}
+  numbers: &numbers {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [es_a1_u02_l01, es_a1_u02_l02]}}
+  age: &age {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_diez, w_once, w_doce, w_trece, w_catorce, w_quince, w_veinte, w_treinta, w_veintiocho]}}
+  phone: &phone {language_code: es, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [es_a1_u02_l03, es_a1_u02_l04]}}
+  recipe: &recipe {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: es_a1_u02_l05}}
+  recipe_noun: &recipe_noun {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u02_l05}}
+  plural_food: &plural_food {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_huevos, w_tazas]}}
+  dialogue: &dialogue {language_code: es, part_of_speech: [noun, verb, adjective, adverb, phrase], agreement_tags: {semantic: es_a1_u02_l06}}
+  later: &later {language_code: es, part_of_speech: [noun, verb, adjective, adverb, phrase], agreement_tags: {semantic: [es_a1_u02_l03, es_a1_u02_l04, es_a1_u02_l05, es_a1_u02_l06]}}
+  tienes: &tienes {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_tienes}}
+  repetir: &repetir {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_repetir}}
+  azucar: &azucar {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_azúcar}}
+  pregunta: &pregunta {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_pregunta}}
+templates:
+  - content_key: practice.en-es.es.a1.unit02.lesson01.choose.001
+    lesson_content_key: es.a1.unit02.lesson01.numbers_zero_to_ten
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *small}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Uno shortens to un before a masculine noun (un huevo) and becomes una before a feminine one (una taza).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson01.listen.002
+    lesson_content_key: es.a1.unit02.lesson01.numbers_zero_to_ten
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *numbers}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Seis has one syllable, siete has two (sie-te); listen for the t.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson02.match.001
+    lesson_content_key: es.a1.unit02.lesson02.numbers_eleven_to_hundred
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *numbers, second: *numbers, third: *numbers, fourth: *numbers, fifth: *numbers, sixth: *numbers}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Eleven to fifteen have their own words (once, doce, trece, catorce, quince); from sixteen they are built from diez: dieciséis.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson02.translate.002
+    lesson_content_key: es.a1.unit02.lesson02.numbers_eleven_to_hundred
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *numbers}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cien is exactly one hundred; above it Spanish says ciento: ciento uno.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson03.order.001
+    lesson_content_key: es.a1.unit02.lesson03.asking_age
+    type: word_order
+    frame: {text: "Tengo {age} años.", language_code: es, direction: ltr}
+    slots: {age: *age}
+    answer_derivation: {kind: render_frame, frame: {text: "Tengo {age} años.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish gives age with tener, to have: you have years rather than being them.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson03.translate.002
+    lesson_content_key: es.a1.unit02.lesson03.asking_age
+    type: translation
+    frame: {text: "I am {age} years old.", language_code: en, direction: ltr, slot_rendering: {age: english_gloss}}
+    slots: {age: *age}
+    answer_derivation: {kind: render_frame, frame: {text: "Tengo {age} años.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Never use soy for age: Tengo veinte años, not Soy veinte.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson03.fill.003
+    lesson_content_key: es.a1.unit02.lesson03.asking_age
+    type: fill_in_blank
+    frame: {text: "¿Cuántos años {item}? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tienes, hint: *tienes}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With usted the question becomes ¿Cuántos años tiene usted?", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson04.choose.001
+    lesson_content_key: es.a1.unit02.lesson04.phone_numbers
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *phone}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Phone numbers are usually read in pairs in Spanish: 62 41 ... as sesenta y dos, cuarenta y uno.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson04.order.002
+    lesson_content_key: es.a1.unit02.lesson04.phone_numbers
+    type: word_order
+    frame: {text: "¿Puedes {item}, por favor?", language_code: es, direction: ltr}
+    slots: {item: *repetir}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Puedes {item}, por favor?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Can you repeat that, please?", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson04.translate.003
+    lesson_content_key: es.a1.unit02.lesson04.phone_numbers
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *phone}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Por favor, please, and claro, of course, are two of the most useful words in any conversation.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson05.choose.001
+    lesson_content_key: es.a1.unit02.lesson05.recipe_quantities
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *recipe}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Quantities link to the ingredient with de: dos tazas de harina.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson05.translate.002
+    lesson_content_key: es.a1.unit02.lesson05.recipe_quantities
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *recipe_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Spanish plurals add -s after a vowel (taza, tazas) and -es after a consonant.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson05.translate.003
+    lesson_content_key: es.a1.unit02.lesson05.recipe_quantities
+    type: translation
+    frame: {text: "I need three {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *plural_food}
+    answer_derivation: {kind: render_frame, frame: {text: "Necesito tres {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Necesito, I need, comes from necesitar; to ask someone else use ¿Cuántos necesitas?", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson05.fill.004
+    lesson_content_key: es.a1.unit02.lesson05.recipe_quantities
+    type: fill_in_blank
+    frame: {text: "Media taza de {item}. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *azucar, hint: *azucar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Taza is feminine, so half a cup is media taza; with a masculine noun it is medio: medio kilo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson06.listen.001
+    lesson_content_key: es.a1.unit02.lesson06.recipe_count_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *dialogue}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Oye is a friendly way to get someone's attention, like hey in English.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson06.translate.002
+    lesson_content_key: es.a1.unit02.lesson06.recipe_count_dialogue
+    type: translation
+    frame: {text: "One more question.", language_code: en, direction: ltr}
+    slots: {item: *pregunta}
+    answer_derivation: {kind: render_frame, frame: {text: "Una {item} más.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Más usually follows the noun: una pregunta más, one more question.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit02.lesson06.match.003
+    lesson_content_key: es.a1.unit02.lesson06.recipe_count_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *later, second: *later, third: *later, fourth: *later, fifth: *later, sixth: *later}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Tengo, tienes and tiene are all forms of tener: I have, you have, he or she has.", language_code: en, direction: ltr}

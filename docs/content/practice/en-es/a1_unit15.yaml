@@ -1,0 +1,114 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit15
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u15* tags, w_<token>
+    anchors). The unit reuses earlier words for más/menos/tan, so it
+    introduces only 9 new tokens (lessons 01 and 03 none). Every template
+    is anchored to a lesson that owns lexemes; the comparison structures
+    themselves are in the sentence frames.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u15, w_viejo, w_equipo, w_espacio, w_mudarme, w_cocinas, w_sentido]
+slot_presets:
+  content: &content {language_code: es, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: es_a1_u15}}
+  viejo: &viejo {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: w_viejo}}
+  equipo: &equipo {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_equipo}}
+  espacio: &espacio {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_espacio}}
+  mudarme: &mudarme {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_mudarme}}
+  cocinas: &cocinas {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_cocinas}}
+  sentido: &sentido {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_sentido}}
+templates:
+  - content_key: practice.en-es.es.a1.unit15.lesson02.order.001
+    lesson_content_key: es.a1.unit15.lesson02.comparar_los_apartamentos
+    type: word_order
+    frame: {text: "El apartamento nuevo es más grande que el {item}.", language_code: es, direction: ltr}
+    slots: {item: *viejo}
+    answer_derivation: {kind: render_frame, frame: {text: "El apartamento nuevo es más grande que el {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The new apartment is bigger than the old one. Más + adjective + que compares two things.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson02.choose.002
+    lesson_content_key: es.a1.unit15.lesson02.comparar_los_apartamentos
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Spanish compares with más ... que (more than), menos ... que (less than) and tan ... como (as ... as).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson04.translate.001
+    lesson_content_key: es.a1.unit15.lesson04.tan_bien_como
+    type: translation
+    frame: {text: "We're a good team.", language_code: en, direction: ltr}
+    slots: {item: *equipo}
+    answer_derivation: {kind: render_frame, frame: {text: "Somos un buen {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Bueno shortens to buen before a masculine singular noun: un buen equipo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson04.listen.002
+    lesson_content_key: es.a1.unit15.lesson04.tan_bien_como
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tan bien como means as well as: cocinas tan bien como yo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson05.fill.001
+    lesson_content_key: es.a1.unit15.lesson05.leer_la_comparacion
+    type: fill_in_blank
+    frame: {text: "El apartamento nuevo tiene más {item} para cocinar. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *espacio, hint: *espacio}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Más before a noun means more of it: más espacio, more space.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson05.match.002
+    lesson_content_key: es.a1.unit15.lesson05.leer_la_comparacion
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *content, second: *content, third: *content, fourth: *content, fifth: *content, sixth: *content}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Mudarse is to move house; Mateo says quiero mudarme because he is the one moving.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson06.order.001
+    lesson_content_key: es.a1.unit15.lesson06.comparar_apartamentos_dialogue
+    type: word_order
+    frame: {text: "El viejo es más pequeño. Por eso quiero {item}.", language_code: es, direction: ltr}
+    slots: {item: *mudarme}
+    answer_derivation: {kind: render_frame, frame: {text: "El viejo es más pequeño. Por eso quiero {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The old one is smaller. That's why I want to move. Por eso means that's why.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson06.translate.002
+    lesson_content_key: es.a1.unit15.lesson06.comparar_apartamentos_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Viejo is old for things and people; nuevo is its opposite.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson06.fill.003
+    lesson_content_key: es.a1.unit15.lesson06.comparar_apartamentos_dialogue
+    type: fill_in_blank
+    frame: {text: "Tú {item} tan bien como yo. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *cocinas, hint: *cocinas}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tan + adverb + como compares two people doing something equally well.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson06.translate.004
+    lesson_content_key: es.a1.unit15.lesson06.comparar_apartamentos_dialogue
+    type: translation
+    frame: {text: "It makes a lot of sense.", language_code: en, direction: ltr}
+    slots: {item: *sentido}
+    answer_derivation: {kind: render_frame, frame: {text: "Tiene mucho {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish says it has a lot of sense: tiene mucho sentido.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson06.choose.005
+    lesson_content_key: es.a1.unit15.lesson06.comparar_apartamentos_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "¡Exacto! is a quick way to agree: exactly.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit15.lesson05.translate.003
+    lesson_content_key: es.a1.unit15.lesson05.leer_la_comparacion
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Espacio is space or room; más espacio para cocinar, more room to cook.", language_code: en, direction: ltr}

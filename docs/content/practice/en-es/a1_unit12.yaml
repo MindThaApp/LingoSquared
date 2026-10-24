@@ -1,0 +1,140 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit12
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit12.emotions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u12* tags, w_<token>
+    anchors). Lesson02 (estar + adjective) introduces no new tokens; its
+    structure is drilled through the "Mateo está ..." / "Elena está ..."
+    frames, which split masculine and feminine adjective pools so every
+    sentence agrees.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u12, es_a1_u12_l01, es_a1_u12_l05, w_nervioso, w_contento, w_cansado, w_preocupado, w_orgulloso, w_nerviosa, w_contenta, w_cansada, w_preocupada, w_orgullosa, w_siento, w_sientes, w_preocupes, w_quema, w_empezar, w_juntos]
+slot_presets:
+  feelings: &feelings {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: es_a1_u12_l01}}
+  feeling_m: &feeling_m {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: [w_nervioso, w_contento, w_cansado, w_preocupado, w_orgulloso]}}
+  feeling_f: &feeling_f {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: [w_nerviosa, w_contenta, w_cansada, w_preocupada, w_orgullosa]}}
+  reading: &reading {language_code: es, part_of_speech: [verb, adjective, noun, adverb], agreement_tags: {semantic: es_a1_u12_l05}}
+  content: &content {language_code: es, part_of_speech: [noun, verb, adjective, adverb, phrase], agreement_tags: {semantic: es_a1_u12}}
+  siento: &siento {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_siento}}
+  sientes: &sientes {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_sientes}}
+  preocupes: &preocupes {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_preocupes}}
+  quema: &quema {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_quema}}
+  empezar: &empezar {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_empezar}}
+  juntos: &juntos {language_code: es, part_of_speech: adverb, agreement_tags: {semantic: w_juntos}}
+templates:
+  - content_key: practice.en-es.es.a1.unit12.lesson01.choose.001
+    lesson_content_key: es.a1.unit12.lesson01.sentimientos_vocabulario
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *feelings}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Feeling adjectives end in -o for a man and -a for a woman: nervioso, nerviosa.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson01.listen.002
+    lesson_content_key: es.a1.unit12.lesson01.sentimientos_vocabulario
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *feelings}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The last vowel tells you whether the speaker means a man (-o) or a woman (-a).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson01.match.003
+    lesson_content_key: es.a1.unit12.lesson01.sentimientos_vocabulario
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *feelings, second: *feelings, third: *feelings, fourth: *feelings, fifth: *feelings, sixth: *feelings}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Contento means happy or pleased about something; it is used with estar.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson01.order.004
+    lesson_content_key: es.a1.unit12.lesson01.sentimientos_vocabulario
+    type: word_order
+    frame: {text: "Hoy Mateo está {item}.", language_code: es, direction: ltr}
+    slots: {item: *feeling_m}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoy Mateo está {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Feelings use estar because they can change: Mateo está nervioso hoy.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson01.order.005
+    lesson_content_key: es.a1.unit12.lesson01.sentimientos_vocabulario
+    type: word_order
+    frame: {text: "Hoy Elena está {item}.", language_code: es, direction: ltr}
+    slots: {item: *feeling_f}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoy Elena está {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Elena is a woman, so the adjective ends in -a: Elena está cansada.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson03.order.001
+    lesson_content_key: es.a1.unit12.lesson03.como_te_sientes
+    type: word_order
+    frame: {text: "Me {item} un poco nervioso.", language_code: es, direction: ltr}
+    slots: {item: *siento}
+    answer_derivation: {kind: render_frame, frame: {text: "Me {item} un poco nervioso.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "I feel a little nervous. Sentirse takes me, te, se: me siento, te sientes.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson03.translate.002
+    lesson_content_key: es.a1.unit12.lesson03.como_te_sientes
+    type: translation
+    frame: {text: "How do you feel? (informal)", language_code: en, direction: ltr}
+    slots: {item: *sientes}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Cómo te {item}?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "With usted the question becomes ¿Cómo se siente?", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson04.fill.001
+    lesson_content_key: es.a1.unit12.lesson04.algo_se_quema
+    type: fill_in_blank
+    frame: {text: "No te {item}, podemos empezar de nuevo. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *preocupes, hint: *preocupes}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "No te preocupes is the fixed way to say don't worry to a friend.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson04.translate.002
+    lesson_content_key: es.a1.unit12.lesson04.algo_se_quema
+    type: translation
+    frame: {text: "Something is burning!", language_code: en, direction: ltr}
+    slots: {item: *quema}
+    answer_derivation: {kind: render_frame, frame: {text: "¡Algo se {item}!", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish uses the simple present for what is happening right now: algo se quema.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson04.order.003
+    lesson_content_key: es.a1.unit12.lesson04.algo_se_quema
+    type: word_order
+    frame: {text: "Podemos {item} de nuevo.", language_code: es, direction: ltr}
+    slots: {item: *empezar}
+    answer_derivation: {kind: render_frame, frame: {text: "Podemos {item} de nuevo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "We can start again. De nuevo means again, like otra vez.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson05.choose.001
+    lesson_content_key: es.a1.unit12.lesson05.leer_la_reflexion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *reading}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The reading moves through time: antes (before), durante (during), al final (in the end), ahora (now).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson05.translate.002
+    lesson_content_key: es.a1.unit12.lesson05.leer_la_reflexion
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "For a group that includes a man, the adjective takes -os: nerviosos, contentos.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson06.order.001
+    lesson_content_key: es.a1.unit12.lesson06.el_pastel_se_quema_dialogue
+    type: word_order
+    frame: {text: "Lo logramos {item}.", language_code: es, direction: ltr}
+    slots: {item: *juntos}
+    answer_derivation: {kind: render_frame, frame: {text: "Lo logramos {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "We did it together. Lograr means to manage or achieve something.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson06.listen.002
+    lesson_content_key: es.a1.unit12.lesson06.el_pastel_se_quema_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "¡Ay, no! is the natural reaction when something goes wrong.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit12.lesson05.match.003
+    lesson_content_key: es.a1.unit12.lesson05.leer_la_reflexion
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *reading, second: *reading, third: *reading, fourth: *reading, fifth: *reading, sixth: *reading}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Estaban and están are both estar: they were, they are.", language_code: en, direction: ltr}
