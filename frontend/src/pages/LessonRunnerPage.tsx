@@ -561,6 +561,11 @@ export function LessonRunnerPage() {
                   )}
                 </p>
               )}
+              {reviewResult.feedback && (
+                <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                  <EmphasizedText text={reviewResult.feedback} />
+                </p>
+              )}
               <button className="btn btn-block" onClick={handleReviewContinue}>
                 {t("lesson_runner.continue")}
               </button>

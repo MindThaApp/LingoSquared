@@ -1312,3 +1312,82 @@ def test_speaking_practice_batch_is_seed_repeatable_for_same_state(
 
     assert [item["type"] for item in second_items] == first_types
     assert practice_item_answers([item["id"] for item in second_items]) == first_answers
+
+
+def test_practice_answer_returns_rendered_template_feedback(client, admin, auth):
+    course_id, lesson_id = create_course_with_lexemes()
+    body = artifact(include_listen=False)
+    templates = body["packs"][0]["templates"]
+    by_key = {t["content_key"]: t for t in templates}
+    by_key["test.practice.multiple_choice"]["feedback_frame"] = {
+        "text": "{word} means {word}.",
+        "language_code": "en",
+        "direction": "ltr",
+        "slot_rendering": {"word": "english_gloss"},
+    }
+    by_key["test.practice.fill_in_blank"]["feedback_frame"] = {
+        "text": "Remember *{word}*.",
+        "language_code": "en",
+        "direction": "ltr",
+    }
+    by_key["test.practice.translation"]["feedback_frame"] = {
+        "text": "  ",
+        "language_code": "en",
+        "direction": "ltr",
+    }
+    import_templates(client, admin, course_id, body)
+    complete_lesson(auth, lesson_id)
+    uid = user_id(auth)
+    with SessionLocal() as db:
+        gloss = db.scalar(
+            select(Lexeme.english_gloss).where(
+                Lexeme.course_id == course_id, Lexeme.token == "uno"
+            )
+        )
+        ids = {}
+        for key in (
+            "test.practice.multiple_choice",
+            "test.practice.fill_in_blank",
+            "test.practice.translation",
+        ):
+            template = db.scalar(
+                select(PracticeTemplate).where(
+                    PracticeTemplate.course_id == course_id,
+                    PracticeTemplate.content_key == key,
+                )
+            )
+            item = PracticeItem(
+                user_id=uid,
+                course_id=course_id,
+                template_id=template.id,
+                filled_slots={"word": "uno"},
+                prompt={"text_blocks": []},
+                correct_response="one",
+                xp_value=5,
+                expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
+            )
+            db.add(item)
+            db.flush()
+            ids[key] = item.id
+        db.commit()
+
+    def answer(key, response):
+        r = client.post(
+            f"/practice/items/{ids[key]}/answer",
+            headers=auth,
+            json={"response": response},
+        )
+        assert r.status_code == 200, r.text
+        return r.json()
+
+    # Rendered for a correct answer, honouring slot_rendering.
+    mc = answer("test.practice.multiple_choice", "one")
+    assert mc["correct"] is True
+    assert mc["feedback"] == f"{gloss} means {gloss}."
+    # Rendered for an incorrect answer too, using the stored token.
+    fib = answer("test.practice.fill_in_blank", "wrong")
+    assert fib["correct"] is False
+    assert fib["feedback"] == "Remember *uno*."
+    # Blank feedback text is omitted (field stays backwards compatible).
+    blank = answer("test.practice.translation", "one")
+    assert "feedback" not in blank
