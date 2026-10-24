@@ -98,7 +98,7 @@ tag_schema:
     - travel_farewell_word
     - ones_number
     - travel_role_word
-    - ticket_word
+    - ticket_only
 slot_presets:
   travel_noun_core: &id001
     language_code: prs
@@ -165,7 +165,7 @@ slot_presets:
   # سفر -- are all registered to a1 unit01/unit05/unit06, despite this
   # file's original notes claiming they were "this unit's closing polite
   # phrases"; LOG FOR COORDINATOR). This unit's TRUE own vocabulary is
-  # only 9 tokens total: travel_noun (بلیط/قطار/بس/سکو, 4),
+  # only 9 tokens total: travel_noun (تکت/قطار/بس/سکو, 4),
   # platform_ezafe (سکوی, 1), depart_noun (حرکت, 1), when_word (کی, 1),
   # and travel_role_word (مسافر/فروشنده, 2 -- newly declared below, the
   # only genuinely-new-to-the-corpus tokens this unit introduces). Widened
@@ -177,7 +177,7 @@ slot_presets:
   # earlier-unit tag), slots reduced 10->6 where declared.
   # REVIEW 2026-10-24: platform_ezafe (سکوی) removed from this pool -- it is a
   # bound ezafe form whose gloss duplicates سکو's, which made two near-identical
-  # options/pairs; ticket_word (تکت) added. 8 distinct: ticket/train/bus/
+  # options/pairs; ticket now via travel_noun (ticket_word dropped 2026-10-24: it also pulled unit24 ایستگاه). 8 distinct: ticket/train/bus/
   # platform/departure/when/traveler/seller.
   travel_review_pool: &id012
     language_code: prs
@@ -187,24 +187,25 @@ slot_presets:
     agreement_tags:
       semantic:
       - travel_noun
-      - ticket_word
       - depart_noun
       - when_word
       - travel_role_word
   # REVIEW 2026-10-24: lesson01 nouns only (ticket/train/bus).
+  # 2026-10-24 (Dari ticket decision): travel_noun_core again carries تکت
+  # (backfill), so ticket_word (which also pulls unit24 ایستگاه) is dropped.
   lesson01_nouns: &id015
     language_code: prs
     part_of_speech: noun
     agreement_tags:
       semantic:
       - travel_noun_core
-      - ticket_word
-  # ticket_word pin (تکت only) for the taught phrase یک تکت به هرات می‌خواهم.
+  # ticket_only pin (تکت only) for the taught phrase یک تکت به هرات می‌خواهم.
+  # (ticket_word also carries unit24 ایستگاه, which gave 'a station to Herat'.)
   ticket_pin: &id016
     language_code: prs
     part_of_speech: noun
     agreement_tags:
-      semantic: ticket_word
+      semantic: ticket_only
   # Narrower unit_core_pool (no longer used: travel_noun_core_pair.003 dropped)
   # for travel_noun_core_pair.003 (lesson01): just
   # the "core travel nouns" cluster (travel_noun + platform_ezafe +
