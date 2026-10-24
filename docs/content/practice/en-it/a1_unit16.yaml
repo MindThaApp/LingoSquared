@@ -1,0 +1,162 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit16
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u16* lesson tags, w_<token> anchors).
+    Body-part frames use only feminine singular nouns (testa, pancia, gola) so la agrees. 'dal dottore' is masculine, so the English prompt says the doctor is a man. Imperatives (riposa, prendi) say informal in the prompt. Pools span lessons where a lesson has too few lexemes for a recognition item.
+    Reviewer check: male is glossed 'pain; badly' and is used only in 'mi fa male'.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_andare, w_devo, w_dottore, w_dottoressa, w_febbre, w_gola, w_male, w_medicina, w_pancia, w_prendi, w_riposa, w_sento, w_testa, w_tosse]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_testa, w_pancia, w_gola, w_male]}}
+  pool2: &pool2 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_testa, w_pancia, w_gola]}}
+  t_male: &t_male {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: w_male}}
+  t_testa: &t_testa {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_testa}}
+  t_gola: &t_gola {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_gola}}
+  pool6: &pool6 {language_code: it, part_of_speech: [verb, noun], agreement_tags: {semantic: [w_sento, w_febbre, w_tosse, w_testa]}}
+  pool7: &pool7 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_febbre, w_tosse]}}
+  t_sento: &t_sento {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_sento}}
+  t_febbre: &t_febbre {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_febbre}}
+  pool10: &pool10 {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_dottore, w_dottoressa, w_medicina, w_riposa, w_prendi]}}
+  pool11: &pool11 {language_code: it, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_dottore, w_dottoressa, w_medicina, w_riposa, w_devo]}}
+  t_andare: &t_andare {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_andare}}
+  t_riposa: &t_riposa {language_code: it, part_of_speech: verb, agreement_tags: {semantic: w_riposa}}
+  t_dottore: &t_dottore {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_dottore}}
+  t_medicina: &t_medicina {language_code: it, part_of_speech: noun, agreement_tags: {semantic: w_medicina}}
+  pool16: &pool16 {language_code: it, part_of_speech: noun, agreement_tags: {semantic: [w_testa, w_pancia, w_gola, w_febbre, w_tosse, w_dottore, w_medicina]}}
+templates:
+  - content_key: practice.en-it.it.a1.unit16.lesson01.choose.001
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "La testa, la pancia and la gola are all feminine, so they take la.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson01.listen.002
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mi fa male la testa means my head hurts.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson01.order.003
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: word_order
+    frame: {text: "Mi fa male la {item}.", language_code: it, direction: ltr}
+    slots: {item: *pool2}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi fa male la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Mi fa male plus la and a body part says that part hurts.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson01.fill.004
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: fill_in_blank
+    frame: {text: "Mi fa {item} la testa. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_male, hint: *t_male}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mi fa male literally means it does me pain.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson01.translate.005
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: translation
+    frame: {text: "My head hurts.", language_code: en, direction: ltr}
+    slots: {item: *t_testa}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi fa male la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "The body part follows mi fa male and takes la.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson01.translate.006
+    lesson_content_key: it.a1.unit16.lesson01.mi_fa_male_la_testa
+    type: translation
+    frame: {text: "My throat hurts.", language_code: en, direction: ltr}
+    slots: {item: *t_gola}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi fa male la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Gola is feminine, so it takes la.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson02.choose.001
+    lesson_content_key: it.a1.unit16.lesson02.non_mi_sento_bene
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ho la febbre and ho la tosse use ho, I have, with la.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson02.order.002
+    lesson_content_key: it.a1.unit16.lesson02.non_mi_sento_bene
+    type: word_order
+    frame: {text: "Ho la {item}.", language_code: it, direction: ltr}
+    slots: {item: *pool7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ho la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Ho la febbre means I have a fever; ho la tosse means I have a cough.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson02.fill.003
+    lesson_content_key: it.a1.unit16.lesson02.non_mi_sento_bene
+    type: fill_in_blank
+    frame: {text: "Oggi non mi {item} bene. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_sento, hint: *t_sento}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mi sento is the I form: I feel.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson02.translate.004
+    lesson_content_key: it.a1.unit16.lesson02.non_mi_sento_bene
+    type: translation
+    frame: {text: "I have a fever.", language_code: en, direction: ltr}
+    slots: {item: *t_febbre}
+    answer_derivation: {kind: render_frame, frame: {text: "Ho la {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Italian uses la with illnesses: ho la febbre.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson02.translate.005
+    lesson_content_key: it.a1.unit16.lesson02.non_mi_sento_bene
+    type: translation
+    frame: {text: "I don't feel well today.", language_code: en, direction: ltr}
+    slots: {item: *t_sento}
+    answer_derivation: {kind: render_frame, frame: {text: "Oggi non mi {item} bene.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Non mi sento bene means I don't feel well.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.choose.001
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool10}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dottore is a male doctor and dottoressa a female doctor.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.listen.002
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool11}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Devo means I must and is followed by an infinitive such as andare.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.order.003
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: word_order
+    frame: {text: "Devo {item} dal dottore.", language_code: it, direction: ltr}
+    slots: {item: *t_andare}
+    answer_derivation: {kind: render_frame, frame: {text: "Devo {item} dal dottore.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Devo plus an infinitive means I have to do something.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.fill.004
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: fill_in_blank
+    frame: {text: "Prendi questa medicina e {item}. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_riposa, hint: *t_riposa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Riposa is the informal command: rest.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.translate.005
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: translation
+    frame: {text: "I have to go to the doctor (a man).", language_code: en, direction: ltr}
+    slots: {item: *t_dottore}
+    answer_derivation: {kind: render_frame, frame: {text: "Devo andare dal {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Dal is da plus il: it is used for going to a person, so dal dottore means to the doctor's.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.translate.006
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: translation
+    frame: {text: "Take this medicine and rest. (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_medicina}
+    answer_derivation: {kind: render_frame, frame: {text: "Prendi questa {item} e riposa.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Prendi and riposa are informal commands, for someone you call tu.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit16.lesson03.match.007
+    lesson_content_key: it.a1.unit16.lesson03.devo_andare_dal_dottore
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *pool16, second: *pool16, third: *pool16, fourth: *pool16, fifth: *pool16, sixth: *pool16}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Testa, pancia and gola are body parts; febbre and tosse are symptoms.", language_code: en, direction: ltr}

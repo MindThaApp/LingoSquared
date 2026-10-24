@@ -1,0 +1,140 @@
+schema_version: "1.0"
+pack_key: practice.en-it.a1.unit15
+source_language: en
+target_language: it
+unit_content_key: it.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-it) from scripts/backfill_lexemes_en_it.py lexemes (it_a1_u15* lesson tags, w_<token> anchors).
+    Comparison frames use the unit's own sentences (Le mele costano più dei pomodori). dei takes masculine plural pomodori and delle takes feminine plural mele, so each is a single-member slot. The unit has only five lexemes, so there is no matching_pairs. Question frames start with 'Ciao,' so no slot is sentence-initial.
+    Reviewer check: dei and delle are glossed both 'of the' and 'than the'; only the comparison sense is used in frames.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_buone, w_dei, w_delle, "w_più", w_quale]
+slot_presets:
+  pool1: &pool1 {language_code: it, part_of_speech: [adverb, preposition], agreement_tags: {semantic: ["w_più", w_dei, w_delle]}}
+  t_piu: &t_piu {language_code: it, part_of_speech: adverb, agreement_tags: {semantic: "w_più"}}
+  t_delle: &t_delle {language_code: it, part_of_speech: preposition, agreement_tags: {semantic: w_delle}}
+  t_dei: &t_dei {language_code: it, part_of_speech: preposition, agreement_tags: {semantic: w_dei}}
+  pool5: &pool5 {language_code: it, part_of_speech: [pronoun, adverb, preposition, adjective], agreement_tags: {semantic: [w_quale, "w_più", w_dei, w_delle, w_buone]}}
+  t_quale: &t_quale {language_code: it, part_of_speech: pronoun, agreement_tags: {semantic: w_quale}}
+  pool7: &pool7 {language_code: it, part_of_speech: [adjective, pronoun, adverb, preposition], agreement_tags: {semantic: [w_buone, w_quale, "w_più", w_dei, w_delle]}}
+  pool8: &pool8 {language_code: it, part_of_speech: [adjective, pronoun, adverb, preposition], agreement_tags: {semantic: [w_buone, w_quale, "w_più", w_delle]}}
+  t_buone: &t_buone {language_code: it, part_of_speech: adjective, agreement_tags: {semantic: w_buone}}
+templates:
+  - content_key: practice.en-it.it.a1.unit15.lesson01.choose.001
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Più means more; dei and delle are the plural forms of di plus the.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.listen.002
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Dei goes with masculine plural nouns and delle with feminine plural nouns.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.order.003
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: word_order
+    frame: {text: "Voglio {item} caffè, meno tè.", language_code: it, direction: ltr}
+    slots: {item: *t_piu}
+    answer_derivation: {kind: render_frame, frame: {text: "Voglio {item} caffè, meno tè.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Più means more and meno means less.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.order.004
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: word_order
+    frame: {text: "I pomodori costano meno {item} mele.", language_code: it, direction: ltr}
+    slots: {item: *t_delle}
+    answer_derivation: {kind: render_frame, frame: {text: "I pomodori costano meno {item} mele.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Mele is feminine plural, so di plus le becomes delle.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.fill.005
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: fill_in_blank
+    frame: {text: "Le mele costano più {item} pomodori. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_dei, hint: *t_dei}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pomodori is masculine plural, so di plus i becomes dei.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.translate.006
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: translation
+    frame: {text: "The apples cost more than the tomatoes.", language_code: en, direction: ltr}
+    slots: {item: *t_dei}
+    answer_derivation: {kind: render_frame, frame: {text: "Le mele costano più {item} pomodori.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Più dei compares two plural masculine things; the first thing costs more.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson01.translate.007
+    lesson_content_key: it.a1.unit15.lesson01.piu_meno_di
+    type: translation
+    frame: {text: "The tomatoes cost less than the apples.", language_code: en, direction: ltr}
+    slots: {item: *t_delle}
+    answer_derivation: {kind: render_frame, frame: {text: "I pomodori costano meno {item} mele.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Meno delle means less than the, before a feminine plural noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.choose.001
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool5}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Quale means which and asks you to choose between options.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson02.order.001
+    lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+    type: word_order
+    frame: {text: "Ciao, {item} preferisci, le mele o i pomodori?", language_code: it, direction: ltr}
+    slots: {item: *t_quale}
+    answer_derivation: {kind: render_frame, frame: {text: "Ciao, {item} preferisci, le mele o i pomodori?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Quale preferisci? asks which of two things you prefer.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson02.fill.002
+    lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+    type: fill_in_blank
+    frame: {text: "Ciao, {item} preferisci, il caffè o il tè? ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_quale, hint: *t_quale}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Quale means which and comes before the verb in this question.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson02.translate.003
+    lesson_content_key: it.a1.unit15.lesson02.quale_preferisci
+    type: translation
+    frame: {text: "Hi, which do you prefer, the apples or the tomatoes? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *t_quale}
+    answer_derivation: {kind: render_frame, frame: {text: "Ciao, {item} preferisci, le mele o i pomodori?", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Preferisci is the informal tu form, so this question is for a friend.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.choose.002
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Buone is the feminine plural of buono and agrees with mele.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.listen.003
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *pool8}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Buone ends in -e because it describes a feminine plural noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.order.004
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: word_order
+    frame: {text: "Sì, le mele sono {item} come i pomodori.", language_code: it, direction: ltr}
+    slots: {item: *t_buone}
+    answer_derivation: {kind: render_frame, frame: {text: "Sì, le mele sono {item} come i pomodori.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Sono buone is plural, so buono becomes buone with the feminine plural mele.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.fill.005
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: fill_in_blank
+    frame: {text: "Le mele sono {item} come i pomodori. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_buone, hint: *t_buone}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Come links two equal things: buone come means as good as.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.a1.unit15.lesson03.translate.006
+    lesson_content_key: it.a1.unit15.lesson03.buone_come
+    type: translation
+    frame: {text: "The apples are as good as the tomatoes.", language_code: en, direction: ltr}
+    slots: {item: *t_buone}
+    answer_derivation: {kind: render_frame, frame: {text: "Le mele sono {item} come i pomodori.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Buone agrees with mele; come means as in this comparison.", language_code: en, direction: ltr}
