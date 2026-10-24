@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit19.housing
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-07 for the new A1 unit19 (housing) realization, same
     pass as this bundle's a1_unit18.yaml sibling (see that file's notes
@@ -118,6 +119,8 @@ review:
     per recipe SS6.6(a): lesson01.room_word_translate.004 (room_word, 3
     unit-scoped) and lesson02.object_word_translate.004 (object_word, 3
     unit-scoped). Production tier now 3 live; no other change.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 8 fixes. Dropped room_word_pair.002 (needs 6 words but lesson01 teaches 3; at lesson02 identical to object_word_pair.002); object_word_pair.002 and review_pair.003 dealt the same 6 cards every time, now 6 of 7 (adds بزرگ), anchored lesson05/06; re-anchored number_room_order.001, house_bedroom_count_order.001, preference_verb_gloss.002 to lesson05 (بزرگ is a lesson05 word); object_word_gloss.001 feedback said furniture although کلکین (window) is in the pool. NATIVE FLAGS: نزدیک / مقابل without a preposition (چوکی نزدیک تخت است) as taught; confirm natural.
 tag_schema:
   part_of_speech: [noun, verb, adjective, preposition, proper_noun]
   agreement_tags:
@@ -158,18 +161,7 @@ templates:
     slots: {room_word: *room_word}
     answer_derivation: {kind: slot_gloss, slot: room_word}
     feedback_frame: {text: "{room_word} names a room or part of a home.", language_code: en, direction: ltr}
-  - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_pair.002
-    lesson_content_key: prs.a1.unit19.lesson01.room_words
-    type: matching_pairs
-    # Widened from the bare room_word tag (3 unit-scoped candidates --
-    # needed 4, never generated) to room_object_pool (6): room_word +
-    # object_word. Declared slot count raised 4 -> 6 to match the real
-    # pool size.
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
-    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
+  # REVIEW 2026-10-24: lesson01.room_word_pair.002 DROPPED -- a 6-pair match needs 6 words but only 3 are taught by lesson01; at lesson02 it was identical to object_word_pair.002 (6 of a 6-word pool = same cards every time).
   - content_key: practice.en-prs.prs.a1.unit19.lesson01.room_word_have_order.003
     lesson_content_key: prs.a1.unit19.lesson01.room_words
     type: word_order
@@ -197,16 +189,16 @@ templates:
     frame: {text: "{object_word}", language_code: prs, direction: rtl}
     slots: {object_word: *object_word}
     answer_derivation: {kind: slot_gloss, slot: object_word}
-    feedback_frame: {text: "{object_word} names a piece of household furniture.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{object_word} names a household object.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson02.object_word_pair.002
-    lesson_content_key: prs.a1.unit19.lesson02.object_words
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
     type: matching_pairs
     # Widened from the bare object_word tag (3 unit-scoped candidates --
     # needed 4, never generated) to room_object_pool (6): room_word +
     # object_word. Declared slot count raised 4 -> 6 to match the real
     # pool size.
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
+    slots: {word_one: *unit_vocab_pool, word_two: *unit_vocab_pool, word_three: *unit_vocab_pool, word_four: *unit_vocab_pool, word_five: *unit_vocab_pool, word_six: *unit_vocab_pool}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -232,7 +224,7 @@ templates:
 
   # Lesson 3: quantity and location.
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.number_room_order.001
-    lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
     type: word_order
     # Re-anchored from the course-wide `ones_number` tag (0 unit-scoped
     # candidates -- established unit04, unit19 introduces no new
@@ -253,21 +245,21 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "{object_word_one} نزدیک {object_word_two} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: [object] نزدیک [object] است (the [object] is near the [object]).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson03.review_pair.003
-    lesson_content_key: prs.a1.unit19.lesson03.quantity_and_location
+    lesson_content_key: prs.a1.unit19.lesson06.home_dialogue
     type: matching_pairs
     # Widened from an 8-slot room_word(4)+object_word(4) split (needed
     # 8, unit-scoped pool has only 6: 3 room_word + 3 object_word) to a
     # single 6-slot room_object_pool union, matching this unit's real
     # combined native pool size exactly.
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *room_object_pool, word_two: *room_object_pool, word_three: *room_object_pool, word_four: *room_object_pool, word_five: *room_object_pool, word_six: *room_object_pool}
+    slots: {word_one: *unit_vocab_pool, word_two: *unit_vocab_pool, word_three: *unit_vocab_pool, word_four: *unit_vocab_pool, word_five: *unit_vocab_pool, word_six: *unit_vocab_pool}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
-    feedback_frame: {text: "Match each word to its English meaning -- rooms and objects together.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 4: reading a home description.
   - content_key: practice.en-prs.prs.a1.unit19.lesson04.house_bedroom_count_order.001
-    lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
     type: word_order
     # Re-anchored from the course-wide `ones_number` tag (0 unit-scoped
     # candidates) to home_description_adjective (1: بزرگ), a
@@ -277,7 +269,7 @@ templates:
     answer_derivation: {kind: render_frame, frame: {text: "این خانه {home_description_word} است", language_code: prs, direction: rtl}}
     feedback_frame: {text: "Word order: این خانه بزرگ است (this house is big).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit19.lesson04.preference_verb_gloss.002
-    lesson_content_key: prs.a1.unit19.lesson04.reading_a_home_description
+    lesson_content_key: prs.a1.unit19.lesson05.reading_a_longer_description
     type: multiple_choice
     # Re-anchored from the course-wide `preference_verb` tag (0
     # unit-scoped candidates -- established unit14, unit19 introduces no
