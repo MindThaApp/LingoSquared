@@ -181,7 +181,7 @@ GLOSSES: dict[str, str] = {
     "wstawać": "to get up", "wstaję": "I get up", "jeść": "to eat",
     "jem": "I eat", "śniadanie": "breakfast", "pić": "to drink",
     "piję": "I drink", "obiad": "lunch; midday meal", "pracować": "to work",
-    "pracuję": "I work", "dom": "home; house", "domu": "of the home; house",
+    "pracuję": "I work", "dom": "home; house", "domu": "of the home; of the house",
     "wracać": "to return; to go back", "wracam": "I return; I go back",
     "spać": "to sleep", "śpię": "I sleep", "też": "too; also",
     "wcześnie": "early",
