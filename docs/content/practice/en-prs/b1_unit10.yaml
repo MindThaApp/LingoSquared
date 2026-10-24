@@ -6,6 +6,7 @@ unit_content_key: prs.b1.unit10.descriptions
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     en-prs B1 practice pack (unit10 descriptions: subject/object/preposition
     relative clauses with the indefinite -ی/-ای head noun), authored
@@ -55,6 +56,19 @@ review:
     b1_unit10_descriptions.yaml's own register_policy (-ین convention,
     consistent with the rest of the corpus; no 2pl verb form appears in this
     pool). Needs the standard fresh-context review before import.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 6 fixes. Pool: the
+    unit_word preset ended in dialogue_word, i.e. every B1 dialogue word in the
+    course (unit01-11); feedback claimed 'this unit's descriptions vocabulary'.
+    Now en_prs_b1_unit10_words (19). The four identical word_order templates (من
+    {item} دارم) carried fixed feedback naming one of six head nouns, wrong for
+    5/6 of draws; they now echo {item}. Matching feedback made specific. NATIVE
+    FLAGS: (1) 'من همکاری دارم' etc. are elliptical (the relative clause is cut
+    off); confirm they read as acceptable tile exercises. (2) fill.001 'من دیروز
+    این کار را کردم' accepts only کردم although other verbs fit (accepted
+    limitation). (3) 'کاری دارم' can mean 'I have business/a matter', not only
+    'a job'.
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -82,25 +96,13 @@ tag_schema:
     - description_adjective
     - home_description_word
     - dialogue_word
+    - en_prs_b1_unit10_words
 slot_presets:
   unit_word: &uw
     language_code: prs
     part_of_speech: [noun, verb, adjective]
     agreement_tags:
-      semantic:
-      - relative_head_noun
-      - personality_word
-      - shop_word
-      - location_word
-      - clothing_size_adjective
-      - accept_decline_word
-      - glad_predicate
-      - past_verb_second_b1
-      - work_past_verb
-      - see_verb
-      - description_adjective
-      - home_description_word
-      - dialogue_word
+      semantic: en_prs_b1_unit10_words
   relative_noun: &rel
     language_code: prs
     part_of_speech: noun
@@ -190,7 +192,7 @@ templates:
     kind: render_frame
     frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: من همکاری دارم. (I have a colleague that...)'
+    text: 'Word order: من {item} دارم. (I have a/an ... -- the noun shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit10.lesson02.order.001
@@ -203,7 +205,7 @@ templates:
     kind: render_frame
     frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: من موتری دارم. (I have a car that...)'
+    text: 'Word order: من {item} دارم. (I have a/an ... -- the noun shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit10.lesson03.order.001
@@ -216,7 +218,7 @@ templates:
     kind: render_frame
     frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: من مدیری دارم. (I have a manager that...)'
+    text: 'Word order: من {item} دارم. (I have a/an ... -- the noun shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit10.lesson06.order.001
@@ -229,7 +231,7 @@ templates:
     kind: render_frame
     frame: {text: 'من {item} دارم.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: من خانه‌ای دارم. (I have a house that...)'
+    text: 'Word order: من {item} دارم. (I have a/an ... -- the noun shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit10.lesson04.fill.001
@@ -255,7 +257,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: 'Match each word to its meaning.'
+    text: 'Match each Dari word from this unit to its English meaning.'
     language_code: en
     direction: ltr
 # ---- production ----

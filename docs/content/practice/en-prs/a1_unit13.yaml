@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit13.plans
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
     7 DEAD templates + 1 below-floor, all from tags reused from EARLIER units (DO-NOT
     #2), despite this file''s original notes claiming they were unit13''s own. weekday_order.003
@@ -51,7 +52,18 @@ review:
     Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
     slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
     warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has happened against
-    a real database yet in this pass.'
+    a real database yet in this pass.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 5 fixes. plan_pool also pulled every level-wide
+    person_name (14 other units'' names, self-glossed ''Hamed (name)'') into plan_pool_pair.003,
+    person_name_gloss.001, person_name_pair.002 and waiting_word_translate.002 while feedback called them
+    ''this unit''s plan-making vocabulary'': plan_pool is now the unit''s own ten words
+    (en_prs_a1_unit13_words); plan_pool_pair.003 reduced 11->8 slots (10 distinct available).
+    accept_decline_gloss feedback ''used to accept, decline'' was false for منتظر ''waiting'': ''a word for
+    reacting to a plan or invitation''. NATIVE FLAGS: برویم gloss contains the grammar term ''subjunctive''
+    (gloss lane); weekday_gloss.003 (lesson05) is a plan_verb item under a misleading slot name, kept for tier
+    balance.'
+
 tag_schema:
   part_of_speech:
   - noun
@@ -66,6 +78,7 @@ tag_schema:
     - waiting_word
     - weekday_name
     - person_name
+    - en_prs_a1_unit13_words
 slot_presets:
   plan_noun: &id001
     language_code: prs
@@ -97,26 +110,20 @@ slot_presets:
     part_of_speech: proper_noun
     agreement_tags:
       semantic: person_name
-  # UNIT-SCOPE REPAIR 2026-07-24: widened with `person_name` (+
-  # `proper_noun` POS) so this preset reaches exactly the 11 distinct
-  # tokens plan_pool_pair.003 already declared (پلان/پارک/برویم/می‌خواهین/
-  # عالی/قبول/متأسف/نمی‌توانم/دعوت/می‌بینم = 10 without person_name, one
-  # short of the declared 11 -- see plan_pool_pair.003). Also now used by
-  # person_name_gloss.001 / person_name_pair.002 (both re-anchored off
-  # the 0-candidate `person_name`-alone constraint).
+  # Review 2026-10-24: this unit's own ten generated vocabulary words
+  # (en_prs_a1_unit13_words: پلان/پارک/برویم/می‌خواهین/عالی/قبول/متأسف/
+  # نمی‌توانم/دعوت/می‌بینم). The previous plan_pool also pulled in every
+  # level-wide person_name (14 other units' names, self-glossed
+  # "Hamed (name)" etc.), so "vocabulary from this unit" feedback was false
+  # and the pairs/MC were mostly names.
   plan_pool: &id005
     language_code: prs
     part_of_speech:
     - noun
     - verb
     - adjective
-    - proper_noun
     agreement_tags:
-      semantic:
-      - plan_noun
-      - plan_verb
-      - accept_decline_word
-      - person_name
+      semantic: en_prs_a1_unit13_words
 templates:
 - content_key: practice.en-prs.prs.a1.unit13.lesson01.plan_noun_gloss.001
   lesson_content_key: prs.a1.unit13.lesson01.plan_vocabulary
@@ -218,7 +225,7 @@ templates:
     kind: slot_gloss
     slot: accept_decline_word
   feedback_frame:
-    text: '{accept_decline_word} is used to accept, decline, or react to a plan.'
+    text: '{accept_decline_word} is a word for reacting to a plan or invitation.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit13.lesson03.accept_decline_translate.002
@@ -243,8 +250,7 @@ templates:
   lesson_content_key: prs.a1.unit13.lesson03.accepting_a_plan
   type: matching_pairs
   frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} —
-      {word_nine} — {word_ten} — {word_eleven}'
+    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight}'
     language_code: prs
     direction: rtl
   slots:
@@ -256,9 +262,6 @@ templates:
     word_six: *id005
     word_seven: *id005
     word_eight: *id005
-    word_nine: *id005
-    word_ten: *id005
-    word_eleven: *id005
   slot_relations:
   - kind: distinct
     slots:
@@ -270,9 +273,6 @@ templates:
     - word_six
     - word_seven
     - word_eight
-    - word_nine
-    - word_ten
-    - word_eleven
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -284,9 +284,6 @@ templates:
     - word_six
     - word_seven
     - word_eight
-    - word_nine
-    - word_ten
-    - word_eleven
   feedback_frame:
     text: Match each word to its English meaning.
     language_code: en

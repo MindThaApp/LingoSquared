@@ -6,11 +6,15 @@ unit_content_key: prs.a1.unit01.greetings
 review:
   status: reviewed
   fresh_context: true
-  notes: "Fresh-context Codex review (2026-07-05, dispatched by Session 3): included the taught letter و (was missing), excluded خوش from the greeting category since its isolated gloss doesn't represent the taught خوش آمدین phrase, replaced an unsafe frame, fixed lesson 5 drawing lesson-6 vocabulary by mistake, corrected misleading feedback. Confirmed clean: no listen_select (Dari has zero TTS), no empty slots, no Arabic-range codepoints, no Iranian-Farsi forms leaking into Dari content, the known good_wish coverage-gap template absent. CAVEAT, not this pack's own defect but blocking full confidence: the underlying en-prs overlay this pack depends on is itself still unreviewed and was flagged by this same review pass as containing learner-facing snake_case jargon (informal_singular, w_or_v, the_youngest_person) and some non-confusable multiple_choice distractors -- Session 2/CONTENT's lane, flagged separately, not fixed here. Independently re-verified by Session 3: compiler 0/0. Status left unreviewed pending human sign-off, per project convention -- Session 3 does not self-certify review status."
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Fresh-context Codex review (2026-07-05, dispatched by Session 3): included the taught letter و (was missing), excluded خوش from the greeting category since its isolated gloss doesn't represent the taught خوش آمدین phrase, replaced an unsafe frame, fixed lesson 5 drawing lesson-6 vocabulary by mistake, corrected misleading feedback. Confirmed clean: no listen_select (Dari has zero TTS), no empty slots, no Arabic-range codepoints, no Iranian-Farsi forms leaking into Dari content, the known good_wish coverage-gap template absent. CAVEAT, not this pack's own defect but blocking full confidence: the underlying en-prs overlay this pack depends on is itself still unreviewed and was flagged by this same review pass as containing learner-facing snake_case jargon (informal_singular, w_or_v, the_youngest_person) and some non-confusable multiple_choice distractors -- Session 2/CONTENT's lane, flagged separately, not fixed here. Independently re-verified by Session 3: compiler 0/0. Status left unreviewed pending human sign-off, per project convention -- Session 3 does not self-certify review status.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. lesson06 dialogue_translate.002 now draws only the 12 lesson-06 words (was the level-wide dialogue_word tag, 123 words, with feedback claiming each appears in the workplace dialogue); identity_meaning and practice_translate.901 feedback no longer claims membership in one dialogue. NATIVE FLAGS: the pack teaches the formal-written نام من حامد است in a spoken workplace scene (spoken Dari would say اسمم); علیکم / وعلیکم are shown as bare MC items with glosses 'upon you'; greeting_meaning.001 always shows the same 3 options.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [letter, greeting, time_period, good_wish, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word]
+    semantic: [letter, greeting, time_period, good_wish, farewell, wellbeing_question, wellbeing_answer, politeness, identity, person_name, dialogue_word, en_prs_a1_unit01_lesson06_words]
     register: [formal, informal]
     person: [first, second, third]
 slot_presets:
@@ -22,7 +26,9 @@ slot_presets:
   wellbeing_answer: &wellbeing_answer {language_code: prs, part_of_speech: adjective, agreement_tags: {semantic: wellbeing_answer}}
   politeness: &politeness {language_code: prs, part_of_speech: [noun, verb], agreement_tags: {semantic: politeness}}
   identity: &identity {language_code: prs, part_of_speech: [pronoun, verb, noun], agreement_tags: {semantic: identity}}
-  dialogue_word: &dialogue_word {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: dialogue_word}}
+  # Lesson-6 dialogue words only (office, colleague, new, name, ...): the old
+  # level-wide dialogue_word tag also drew 100+ words from later units.
+  dialogue_word: &dialogue_word {language_code: prs, part_of_speech: [noun, adjective, verb, adverb], agreement_tags: {semantic: en_prs_a1_unit01_lesson06_words}}
   practice_word: &practice_word {language_code: prs, part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase], agreement_tags: {}}
   # POLISH 2026-07-24 (tier-thinness, recipe SS8): the structured tier had
   # only 1 live template (letter_pair.003). Two new presets below feed the
@@ -126,14 +132,14 @@ templates:
     frame: {text: "{identity}", language_code: prs, direction: rtl}
     slots: {identity: *identity}
     answer_derivation: {kind: slot_gloss, slot: identity}
-    feedback_frame: {text: "{identity} is used in the taught first-meeting dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{identity} is a word from the introductions and the first-meeting dialogue.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit01.lesson06.dialogue_translate.002
     lesson_content_key: prs.a1.unit01.lesson06.first_meeting_dialogue
     type: translation
     frame: {text: "{dialogue_word}", language_code: en, direction: ltr, slot_rendering: {dialogue_word: english_gloss}}
     slots: {dialogue_word: *dialogue_word}
     answer_derivation: {kind: slot_text, slot: dialogue_word}
-    feedback_frame: {text: "{dialogue_word} appears in the taught workplace dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{dialogue_word} is a word from the workplace first-meeting dialogue.", language_code: en, direction: ltr}
   # POLISH 2026-07-24: structured-tier addition (see slot_presets note).
   # Frame taught verbatim in this lesson's dialogue ("نام من حامد است").
   # Self-reference checked at course scope: the frame literals نام/من/است
@@ -154,4 +160,4 @@ templates:
     frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
     slots: {item: *practice_word}
     answer_derivation: {kind: slot_text, slot: item}
-    feedback_frame: {text: "{item} is the Dari item for this prompt.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is the Dari word for this meaning.", language_code: en, direction: ltr}

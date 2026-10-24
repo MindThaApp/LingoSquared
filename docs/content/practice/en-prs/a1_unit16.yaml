@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit16.travel
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: 'UNIT-SCOPE REPAIR 2026-07-24 (pack-only): _practice_unit_scope_check.py found
     10 DEAD templates + 1 below-floor -- the worst of this reauth batch. LOG FOR
     COORDINATOR: contrary to this file''s original notes, want_verb (می‌خواهم), city_name
@@ -73,7 +74,9 @@ review:
     Verified with scripts/_practice_slot_check.py (reusing backfill_lexemes_en_prs.py''s real iter_specs() output) -- every
     slot has enough distinct candidates. scripts/compile_content.py practice-validate for the full en-prs pack -- 0 errors/0
     warnings. scripts/_fill_in_blank_ambiguity_check.py -- zero AMBIGUOUS flags. Needs the standard fresh-context review before
-    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.'
+    import; no backfill_lexemes_en_prs.py run has happened against a real database yet in this pass.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 10 fixes. Dropped travel_noun_core_pair.003 (DEAD: only 4 taught lesson01 words, 6-pair match cannot be built; identical to the review pair at lesson06); travel_noun_core MC/translate now ticket/train/bus (was 2 distinct); removed سکوی from travel_review_pool (bound ezafe form with a jargon gloss that duplicates سکو); added تکت to it (8 distinct); ticket_request_order.003 now the taught phrase یک تکت به هرات می‌خواهم (old frame این [noun] است could yield this is a platform at lesson02); re-anchored want_verb_translate.001 and city_name_gloss.002 to lesson05; three feedback lines no longer say basic or travel words for mixed pools. NATIVE FLAGS: fill templates depart_noun_fill.001 / when_word_fill.002 / tomorrow_word_fill.002 show Dari-only frames with no English cue; confirm they are answerable; سکوی دو (platform two) with ezafe is kept as in the realization.'
 tag_schema:
   part_of_speech:
   - noun
@@ -95,6 +98,7 @@ tag_schema:
     - travel_farewell_word
     - ones_number
     - travel_role_word
+    - ticket_word
 slot_presets:
   travel_noun_core: &id001
     language_code: prs
@@ -171,6 +175,10 @@ slot_presets:
   # travel_farewell_gloss.001, travel_farewell_translate.002 and
   # travel_review_pair.003 (all previously constrained on a 0-candidate
   # earlier-unit tag), slots reduced 10->6 where declared.
+  # REVIEW 2026-10-24: platform_ezafe (سکوی) removed from this pool -- it is a
+  # bound ezafe form whose gloss duplicates سکو's, which made two near-identical
+  # options/pairs; ticket_word (تکت) added. 8 distinct: ticket/train/bus/
+  # platform/departure/when/traveler/seller.
   travel_review_pool: &id012
     language_code: prs
     part_of_speech:
@@ -179,11 +187,26 @@ slot_presets:
     agreement_tags:
       semantic:
       - travel_noun
-      - platform_ezafe
+      - ticket_word
       - depart_noun
       - when_word
       - travel_role_word
-  # Narrower unit_core_pool for travel_noun_core_pair.003 (lesson01): just
+  # REVIEW 2026-10-24: lesson01 nouns only (ticket/train/bus).
+  lesson01_nouns: &id015
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - travel_noun_core
+      - ticket_word
+  # ticket_word pin (تکت only) for the taught phrase یک تکت به هرات می‌خواهم.
+  ticket_pin: &id016
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ticket_word
+  # Narrower unit_core_pool (no longer used: travel_noun_core_pair.003 dropped)
+  # for travel_noun_core_pair.003 (lesson01): just
   # the "core travel nouns" cluster (travel_noun + platform_ezafe +
   # depart_noun = 6 distinct), no when_word/travel_role_word.
   unit_core_pool: &id014
@@ -205,18 +228,20 @@ slot_presets:
 templates:
 - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_gloss.001
   lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
+  # REVIEW 2026-10-24: travel_noun_core alone is 2 distinct (train/bus), below
+  # the 3-option MC floor; now lesson01 nouns ticket/train/bus.
   type: multiple_choice
   frame:
     text: '{travel_noun_core}'
     language_code: prs
     direction: rtl
   slots:
-    travel_noun_core: *id001
+    travel_noun_core: *id015
   answer_derivation:
     kind: slot_gloss
     slot: travel_noun_core
   feedback_frame:
-    text: '{travel_noun_core} is one of this unit''s basic travel words.'
+    text: '{travel_noun_core} is one of this lesson''s basic travel words.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_translate.002
@@ -229,7 +254,7 @@ templates:
     slot_rendering:
       travel_noun_core: english_gloss
   slots:
-    travel_noun_core: *id001
+    travel_noun_core: *id015
   answer_derivation:
     kind: slot_text
     slot: travel_noun_core
@@ -237,47 +262,8 @@ templates:
     text: '{travel_noun_core} is the Dari word for this.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit16.lesson01.travel_noun_core_pair.003
-  lesson_content_key: prs.a1.unit16.lesson01.basic_travel_vocab
-  # UNIT-SCOPE REPAIR 2026-07-24: travel_noun_core alone only has 3
-  # members, below the recipe's 6-pair floor. Widened to unit_core_pool
-  # (travel_noun + platform_ezafe + depart_noun = 6 distinct exact).
-  type: matching_pairs
-  frame:
-    text: '{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}'
-    language_code: prs
-    direction: rtl
-  slots:
-    word_one: *id014
-    word_two: *id014
-    word_three: *id014
-    word_four: *id014
-    word_five: *id014
-    word_six: *id014
-  slot_relations:
-  - kind: distinct
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  answer_derivation:
-    kind: matching_pairs
-    slots:
-    - word_one
-    - word_two
-    - word_three
-    - word_four
-    - word_five
-    - word_six
-  feedback_frame:
-    text: Match each word to its English meaning.
-    language_code: en
-    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.want_verb_translate.001
-  lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
   # UNIT-SCOPE REPAIR 2026-07-24: `want_verb` (می‌خواهم) has ZERO
   # unit16-scoped candidates -- it's registered to a1 unit07, despite
   # this file's original notes claiming it as "a single Lexeme
@@ -302,7 +288,7 @@ templates:
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.city_name_gloss.002
-  lesson_content_key: prs.a1.unit16.lesson02.buying_a_ticket
+  lesson_content_key: prs.a1.unit16.lesson05.ticket_counter_dialogue
   # UNIT-SCOPE REPAIR 2026-07-24: `city_name` has ZERO unit16-scoped
   # candidates (هرات/کابل/مزار/شریف are all registered to earlier units --
   # LOG FOR COORDINATOR, same class as want_verb above). Re-anchored to
@@ -318,7 +304,7 @@ templates:
     kind: slot_gloss
     slot: city_name
   feedback_frame:
-    text: '{city_name} is one of this unit''s travel words.'
+    text: '{city_name} is a word from this unit''s vocabulary.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson02.ticket_request_order.003
@@ -333,21 +319,23 @@ templates:
   # platform), all of which are grammatical in this shape. Course-scope
   # checked: travel_noun is unit16-exclusive within the a1 course (see
   # review notes), so no widening risk.
+  # REVIEW 2026-10-24: now the taught lesson02 phrase یک تکت به هرات می‌خواهم
+  # (was 'این {travel_noun} است', whose pool included lesson03 platform).
   type: word_order
   frame:
-    text: این {travel_noun} است
+    text: یک {ticket_word} به هرات می‌خواهم
     language_code: prs
     direction: rtl
   slots:
-    travel_noun: *id006
+    ticket_word: *id016
   answer_derivation:
     kind: render_frame
     frame:
-      text: این {travel_noun} است
+      text: یک {ticket_word} به هرات می‌خواهم
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: این [thing] است (this is a/the [thing]).'
+    text: 'Word order: یک تکت به هرات می‌خواهم (I want a ticket to Herat).'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson03.depart_noun_fill.001
@@ -395,7 +383,7 @@ templates:
     kind: slot_gloss
     slot: travel_noun
   feedback_frame:
-    text: '{travel_noun} is one of this unit''s travel words.'
+    text: '{travel_noun} is a travel word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson04.platform_ezafe_order.001
@@ -481,7 +469,7 @@ templates:
     kind: slot_gloss
     slot: travel_farewell_word
   feedback_frame:
-    text: '{travel_farewell_word} is one of this unit''s travel words.'
+    text: '{travel_farewell_word} is a word from this unit''s vocabulary.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit16.lesson06.travel_farewell_translate.002

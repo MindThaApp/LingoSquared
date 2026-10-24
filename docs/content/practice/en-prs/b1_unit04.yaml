@@ -6,6 +6,7 @@ unit_content_key: prs.b1.unit04.sequencing
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
     unit04 (وقتی که / temporal clauses and sequencing, present and past) had a
@@ -55,6 +56,22 @@ review:
     (including tired_word/emotion_word -> خسته/نگران/خوشحال in lesson01). Every
     frame is lifted from the realization's own tested_text. Needs the standard
     fresh-context review before import.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 15 fixes. Pools:
+    the unit-scoped tag en_prs_b1_unit04_words / _lessonNN_words now replaces
+    course-wide verb and dialogue_word pools (they pulled in B1 unit01-03/08-11
+    verbs, adding subjunctive and unrelated past forms behind 'present-tense'
+    feedback and 'said in the Zarmina/Homayoun conversation'). Three fixed-
+    feedback word_orders now echo the drawn {item}. lesson01.fill.003 and
+    lesson04.fill.002 became fixed-English translations because several fillers
+    fit the blank (tired/worried/happy; television/film/news). Keys unchanged.
+    Inline Dari in English feedback wrapped in *asterisks*. NATIVE FLAGS: (1)
+    'بعد غذا می‌خورم' as in the realization vs the more usual 'بعد از غذا'. (2)
+    mixed 2pl/3pl register: می‌شین (-ین) beside می‌شوند in the same paradigm.
+    (3) 'وقتی که کار تمام شد، رسیدم/پختم' - sequence reads slightly odd for
+    'پختم'. (4) glosses of می‌شوم/می‌شوی ('wake up') are wrong for this unit;
+    see log Gloss lane.
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -84,6 +101,12 @@ tag_schema:
     - completion_word
     - receipt_word
     - dialogue_word
+    - en_prs_b1_unit04_words
+    - en_prs_b1_unit04_lesson01_words
+    - en_prs_b1_unit04_lesson02_words
+    - en_prs_b1_unit04_lesson03_words
+    - en_prs_b1_unit04_lesson04_words
+    - en_prs_b1_unit04_lesson05_words
 templates:
 
 # ---------------------------------------------------------------------------
@@ -102,15 +125,14 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - routine_verb
-        - become_verb_plural
-        - work_verb_form
-        - plan_verb
+        - en_prs_b1_unit04_lesson01_words
+        - en_prs_b1_unit04_lesson02_words
+        - en_prs_b1_unit04_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a present-tense form -- the ending tells you who the وقتی که clause is about.'
+    text: '{item} is a present-tense form -- the ending tells you who the *وقتی که* clause is about.'
     language_code: en
     direction: ltr
 
@@ -136,17 +158,17 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'وقتی که کار می‌کنم، خسته می‌شوم. -- When I work, I get tired.'
+    text: 'وقتی که کار می‌کنم، {item} می‌شوم. -- When I work, I get [that feeling].'
     language_code: en
     direction: ltr
 
 - content_key: practice.en-prs.prs.b1.unit04.lesson01.fill.003
   lesson_content_key: prs.b1.unit04.lesson01.present_time_clause_1st2nd
-  type: fill_in_blank
+  type: translation
   frame:
-    text: 'وقتی که کار می‌کنی، {item} می‌شوی؟'
-    language_code: prs
-    direction: rtl
+    text: When you work, do you get tired?
+    language_code: en
+    direction: ltr
   slots:
     item:
       language_code: prs
@@ -154,8 +176,11 @@ templates:
       agreement_tags:
         semantic: tired_word
   answer_derivation:
-    kind: slot_text
-    slot: item
+    kind: render_frame
+    frame:
+      text: 'وقتی که کار می‌کنی، {item} می‌شوی؟'
+      language_code: prs
+      direction: rtl
   feedback_frame:
     text: 'وقتی که کار می‌کنی، خسته می‌شوی؟ -- When you work, do you get tired?'
     language_code: en
@@ -176,15 +201,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - routine_verb
-        - become_verb_plural
-        - work_verb_form
-        - plan_verb
-        - past_verb_first_b1
-        - past_verb_second_b1
-        - past_verb_second
-        - past_verb_third
-        - past_verb_third_b1
+        - en_prs_b1_unit04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -209,10 +226,9 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - routine_verb
-        - become_verb_plural
-        - work_verb_form
-        - plan_verb
+        - en_prs_b1_unit04_lesson01_words
+        - en_prs_b1_unit04_lesson02_words
+        - en_prs_b1_unit04_lesson04_words
     second: *present_verb
     third: *present_verb
     fourth: *present_verb
@@ -254,15 +270,7 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - routine_verb
-        - become_verb_plural
-        - work_verb_form
-        - plan_verb
-        - past_verb_first_b1
-        - past_verb_second_b1
-        - past_verb_second
-        - past_verb_third
-        - past_verb_third_b1
+        - en_prs_b1_unit04_words
     second: *any_verb
     third: *any_verb
     fourth: *any_verb
@@ -306,10 +314,9 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - routine_verb
-        - become_verb_plural
-        - work_verb_form
-        - plan_verb
+        - en_prs_b1_unit04_lesson01_words
+        - en_prs_b1_unit04_lesson02_words
+        - en_prs_b1_unit04_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -334,16 +341,13 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - past_verb_first_b1
-        - past_verb_second_b1
-        - past_verb_second
-        - past_verb_third
-        - past_verb_third_b1
+        - en_prs_b1_unit04_lesson03_words
+        - en_prs_b1_unit04_lesson05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a simple-past form -- these follow وقتی که when the sequence already happened.'
+    text: '{item} is a simple-past form -- these follow *وقتی که* when the sequence already happened.'
     language_code: en
     direction: ltr
 
@@ -367,7 +371,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'وقتی که کار تمام شد، رسیدم. -- When the work was finished, I arrived.'
+    text: 'وقتی که کار تمام شد، {item}. -- When the work was finished, I [did the action shown in the hint].'
     language_code: en
     direction: ltr
 
@@ -386,11 +390,8 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - past_verb_first_b1
-        - past_verb_second_b1
-        - past_verb_second
-        - past_verb_third
-        - past_verb_third_b1
+        - en_prs_b1_unit04_lesson03_words
+        - en_prs_b1_unit04_lesson05_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -418,7 +419,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: dialogue_word
+        semantic: en_prs_b1_unit04_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -429,11 +430,11 @@ templates:
 
 - content_key: practice.en-prs.prs.b1.unit04.lesson04.fill.002
   lesson_content_key: prs.b1.unit04.lesson04.dialogue_after_work
-  type: fill_in_blank
+  type: translation
   frame:
-    text: 'بعد غذا می‌خورم و {item} می‌بینم.'
-    language_code: prs
-    direction: rtl
+    text: Then I eat and watch television.
+    language_code: en
+    direction: ltr
   slots:
     item:
       language_code: prs
@@ -441,8 +442,11 @@ templates:
       agreement_tags:
         semantic: household_object_word
   answer_derivation:
-    kind: slot_text
-    slot: item
+    kind: render_frame
+    frame:
+      text: 'بعد غذا می‌خورم و {item} می‌بینم.'
+      language_code: prs
+      direction: rtl
   feedback_frame:
     text: 'بعد غذا می‌خورم و تلویزیون می‌بینم. -- Then I eat and watch television.'
     language_code: en
@@ -465,12 +469,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic:
-        - tired_word
-        - emotion_word
-        - household_object_word
-        - completion_word
-        - dialogue_word
+        semantic: en_prs_b1_unit04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -493,21 +492,15 @@ templates:
     item:
       language_code: prs
       part_of_speech:
-      - noun
+      - verb
       - adjective
-      - adverb
       agreement_tags:
-        semantic:
-        - tired_word
-        - emotion_word
-        - household_object_word
-        - completion_word
-        - dialogue_word
+        semantic: en_prs_b1_unit04_lesson05_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is one of the describing words this unit uses to narrate a day.'
+    text: '{item} is one of the words from the reading about Homayoun''s day.'
     language_code: en
     direction: ltr
 
@@ -572,11 +565,7 @@ templates:
       - verb
       - adjective
       agreement_tags:
-        semantic:
-        - past_verb_third
-        - past_verb_third_b1
-        - receipt_word
-        - completion_word
+        semantic: en_prs_b1_unit04_lesson05_words
   answer_derivation:
     kind: slot_text
     slot: item
