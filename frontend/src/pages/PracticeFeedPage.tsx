@@ -200,7 +200,7 @@ function PracticeCard({
                   })}
               </p>
               {result.feedback && (
-                <p style={{ margin: "6px 0 0", fontWeight: 400 }}>
+                <p dir="auto" style={{ margin: "6px 0 0", fontWeight: 400 }}>
                   <EmphasizedText text={result.feedback} />
                 </p>
               )}

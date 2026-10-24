@@ -1391,3 +1391,89 @@ def test_practice_answer_returns_rendered_template_feedback(client, admin, auth)
     # Blank feedback text is omitted (field stays backwards compatible).
     blank = answer("test.practice.translation", "one")
     assert "feedback" not in blank
+
+
+def _feedback_template(db, course_id, text, slot_rendering=None, pos=("noun",)):
+    from app.practice.service import render_item_feedback  # noqa: F401
+
+    frame = {"text": text, "language_code": "en", "direction": "ltr"}
+    if slot_rendering:
+        frame["slot_rendering"] = slot_rendering
+    template = db.scalar(
+        select(PracticeTemplate).where(PracticeTemplate.course_id == course_id)
+    )
+    template.feedback_frame = frame
+    template.slots = {
+        "word": {
+            "language_code": "es",
+            "part_of_speech": list(pos),
+            "agreement_tags": {"semantic": "word"},
+        }
+    }
+    return template
+
+
+def test_render_item_feedback_guards(client, admin, auth):
+    from app.practice.service import (
+        feedback_suppression_reason,
+        render_item_feedback,
+    )
+
+    course_id, _ = create_course_with_lexemes()
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    with SessionLocal() as db:
+        template = _feedback_template(db, course_id, "Note: {word} is one.")
+        # Generated speaking items borrow an unrelated template: no feedback.
+        assert (
+            render_item_feedback(
+                db, template, course_id,
+                {"word": "uno", "_generated_type": "speak_repeat"},
+            )
+            is None
+        )
+        assert (
+            render_item_feedback(db, template, course_id, {"word": "uno"})
+            == "Note: uno is one."
+        )
+
+        # Same token, two parts of speech with different glosses.
+        lex = db.scalar(
+            select(Lexeme).where(Lexeme.course_id == course_id, Lexeme.token == "uno")
+        )
+        other = Lexeme(
+            course_id=course_id,
+            token="uno",
+            language_code="es",
+            part_of_speech="adjective",
+            english_gloss="single",
+            agreement_tags={"semantic": "word"},
+            provenance_lesson_id=lex.provenance_lesson_id,
+            provenance_lesson_content_key=LESSON_KEY,
+            provenance_content_key="test.lexeme.uno.adj",
+        )
+        db.add(other)
+        db.flush()
+        template = _feedback_template(
+            db, course_id, "Meaning: {word}.", {"word": "english_gloss"},
+            pos=("noun", "adjective"),
+        )
+        slots = {"word": "uno"}
+        assert render_item_feedback(db, template, course_id, slots) is None
+        assert (
+            render_item_feedback(db, template, course_id, slots, other.id)
+            == "Meaning: single."
+        )
+        assert (
+            render_item_feedback(db, template, course_id, slots, lex.id)
+            == f"Meaning: {lex.english_gloss}."
+        )
+
+        # Render errors never propagate.
+        template.feedback_frame = {"text": "{word}!", "slot_rendering": {"word": "nope"}}
+        assert render_item_feedback(db, template, course_id, slots, lex.id) is None
+        db.rollback()
+
+    assert feedback_suppression_reason("{item}") == "bare_slot"
+    assert feedback_suppression_reason("Match each word with its meaning.") == "instruction"
+    assert feedback_suppression_reason("The correct answer is {item}.") == "restates_answer"
+    assert feedback_suppression_reason("The Dutch word is {item}.") is None
