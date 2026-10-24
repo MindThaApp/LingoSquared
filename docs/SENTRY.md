@@ -28,7 +28,7 @@ Web: automatic crash events depend on a per-device learner setting (Profile, "Cr
 
 Grouping: both sides set a fingerprint from the exception type plus a message with ids and numbers normalised (and the route template on the backend), so one bug is one issue across ids.
 
-The older automatic reporter (`frontend/src/lib/crashReporter.ts`, POST /feedback with category `app_bug`) is unchanged and still runs independently of the Sentry setting.
+The older automatic reporter (`frontend/src/lib/crashReporter.ts`, `POST /feedback` with category `app_bug`) goes through the same consent gate: Never sends nothing, Ask uses the same prompt, Always sends.
 
 ## Source maps
 
