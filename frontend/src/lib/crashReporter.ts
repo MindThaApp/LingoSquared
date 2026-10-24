@@ -1,4 +1,5 @@
 import { FeedbackApi } from "@lingo/shared/api/endpoints";
+import { sendWithCrashConsent } from "./sentry";
 
 // Automatic crash reporting over the EXISTING unauthenticated
 // POST /feedback channel (category "app_bug") -- deliberately zero new
@@ -44,7 +45,9 @@ export function reportCrash(
     if (reportedMessages.has(key)) return;
     reportedMessages.add(key);
 
-    FeedbackApi.submit({
+    // Nothing leaves the device before the learner's crash-report setting
+    // (Never / Ask / Always) allows it; see lib/sentry.ts.
+    const submit = () => FeedbackApi.submit({
       category: "app_bug",
       description: `[automatic crash report] ${source}: ${key}`.slice(0, MAX_DESCRIPTION_CHARS),
       page_path: window.location.pathname.slice(0, MAX_PAGE_PATH_CHARS),
@@ -62,6 +65,7 @@ export function reportCrash(
       // Swallowing here also guarantees this promise can never feed the
       // unhandledrejection handler below and recurse.
     });
+    sendWithCrashConsent(() => void submit());
   } catch {
     // Same guarantee for the synchronous half.
   }
