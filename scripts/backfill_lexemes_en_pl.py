@@ -45,11 +45,12 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "pl"
-LEVELS = {"a1": "en-pl"}
+LEVELS = {"a1": "en-pl", "a2": "en-pl-a2"}
 
 PROPER_NOUNS = {
     "Anna", "Kowalska", "Kanady", "Warszawie", "Marek", "Wójcik", "Ewa",
     "Gdańsku", "Krakowie", "Kraków", "Krakowa", "Warszawa", "Warszawy",
+    "Kwiatowa",
 }
 # Capital kept on purpose: proper nouns plus the clothing size letter.
 _KEEP_CASE = PROPER_NOUNS | {"M"}
@@ -248,6 +249,60 @@ GLOSSES: dict[str, str] = {
     "kupić": "to buy", "koszulę": "shirt (object form)", "kolor": "color",
     "sukienka": "dress", "niebieska": "blue (fem.)", "czerwona": "red (fem.)",
     "rozmiar": "size", "M": "size M", "chce": "wants (he; she; formal you)",
+    # a2 unit21 official matters
+    "nowy": "new (masc.)", "urząd": "office (government)",
+    "urzędzie": "office (after 'in', government)", "adres": "address",
+    "dokumenty": "documents", "dowód": "proof; ID card",
+    "osobisty": "personal (masc.)", "zameldować": "to register (as a resident)",
+    "chciałabym": "I would like (said by a woman)",
+    "czym": "what; how (in 'how can I help')", "pomóc": "to help",
+    "ponieważ": "because (joins two clauses)",
+    "przeprowadziłam": "I moved (house; said by a woman)",
+    "muszę": "I must; I have to", "umowa": "agreement; contract",
+    "umowę": "contract (object form)", "najmu": "of renting; rental",
+    "dni": "days", "Kwiatowa": "Kwiatowa (a street name)",
+    "od": "since; from", "przeprowadzki": "of the move (change of home)",
+    "wszystko": "everything", "gotowe": "ready; done (neut.)",
+    # a2 unit22 opinions
+    "opinia": "opinion", "opinię": "opinion (object form)",
+    "myślę": "I think", "że": "that (introduces a clause)",
+    "rację": "being right (object form, in 'you are right')",
+    "jedzenie": "food", "smaczne": "tasty (neut.)",
+    "moim": "my (in 'in my opinion')", "zdaniem": "opinion; view (in 'in my opinion')",
+    "droga": "expensive (fem.)", "za": "too (before an adjective)",
+    "zgadzam": "I agree", "spróbuję": "I will try", "raz": "time; once",
+    # a2 unit23 bank
+    "konto": "account", "pieniądze": "money", "pieniędzy": "money (form used after 'a lot of')",
+    "pesel": "PESEL (national ID number)",
+    "chciałbym": "I would like (said by a man)", "otworzyć": "to open",
+    "bankowe": "bank (neut., as in 'bank account')", "potrzebuję": "I need",
+    "dowodu": "ID card (form used after 'I need')",
+    "osobistego": "personal (form used after 'I need')",
+    "żeby": "in order to", "wpłacić": "to pay in; to deposit",
+    "oczywiście": "of course",
+    # a2 unit24 doctor
+    "panią": "Ms.; ma'am (object form)", "trzech": "three (form used after 'since')",
+    "powinna": "should (she; formal you to a woman)",
+    "powinnam": "I should (said by a woman)", "lekarstwo": "medicine",
+    "brać": "to take", "razy": "times", "dziennie": "per day; daily",
+    "wrócić": "to return; to come back", "tydzień": "week",
+    # a2 unit25 repairs
+    "mieszkaniu": "apartment (after 'in')", "ogrzewanie": "heating",
+    "działa": "works; is working", "zepsute": "broken (neut.)",
+    "naprawić": "to repair; to fix",
+    "mógłby": "could (he; polite request to a man)",
+    "najszybciej": "soonest; most quickly",
+    # a2 unit26 interview
+    "praca": "work; job", "pracy": "work; job (form used after 'looking for')",
+    "rozmowa": "conversation; interview", "rozmowę": "conversation; interview (object form)",
+    "kwalifikacyjna": "job-interview (fem., describes 'interview')",
+    "kwalifikacyjną": "job-interview (fem., object form)",
+    "doświadczenie": "experience", "doświadczenia": "experience (form used after 'no' or 'of')",
+    "pytania": "questions", "pracowałem": "I worked (said by a man)",
+    "jako": "as (in the role of)", "dostępny": "available (masc.)",
+    "razu": "time; occasion (in 'right away')", "godziny": "hours",
+    "elastyczne": "flexible (plural)", "jakie": "what kind of (plural)",
+    "doskonale": "excellent; perfectly",
 }
 
 POS_SETS = {
@@ -291,6 +346,33 @@ POS_SETS = {
         "cześć dobranoc widzenia zobaczenia"
     ),
 }
+POS_SETS["proper_noun"] = POS_SETS["proper_noun"] | {"Kwiatowa"}
+POS_SETS["verb"] |= split_words(
+    "zameldować chciałabym pomóc przeprowadziłam muszę myślę zgadzam spróbuję "
+    "chciałbym otworzyć potrzebuję wpłacić powinna powinnam brać wrócić działa "
+    "naprawić mógłby pracowałem"
+)
+POS_SETS["adjective"] |= split_words(
+    "nowy osobisty gotowe smaczne droga bankowe osobistego elastyczne dostępny "
+    "kwalifikacyjna kwalifikacyjną zepsute trzech"
+)
+POS_SETS["adverb"] |= split_words("oczywiście najszybciej dziennie doskonale")
+POS_SETS["pronoun"] |= split_words("czym wszystko moim panią jakie")
+POS_SETS["preposition"] |= split_words("od za jako")
+POS_SETS["particle"] |= split_words("ponieważ żeby że")
+POS_SETS["verb"] |= split_words(
+    "zameldować chciałabym pomóc przeprowadziłam muszę myślę zgadzam spróbuję "
+    "chciałbym otworzyć potrzebuję wpłacić powinna powinnam brać wrócić działa "
+    "naprawić mógłby pracowałem"
+)
+POS_SETS["adjective"] |= split_words(
+    "nowy osobisty gotowe smaczne droga bankowe osobistego elastyczne dostępny "
+    "kwalifikacyjna kwalifikacyjną zepsute trzech"
+)
+POS_SETS["adverb"] |= split_words("oczywiście najszybciej dziennie doskonale")
+POS_SETS["pronoun"] |= split_words("czym wszystko moim panią jakie")
+POS_SETS["preposition"] |= split_words("od za jako")
+POS_SETS["particle"] |= split_words("ponieważ żeby że")
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
