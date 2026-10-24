@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit05
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit05.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job A) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u05*, single-member w_<token> anchors). Sentence frames use curated w_ unions where every member is grammatical and agrees: Je voudrais un {masculine noun} (cafe, dessert, verre, poulet, poisson), Je voudrais une {feminine noun} (salade, boisson), Qu'est-ce que vous avez comme {dessert|boisson}. l'eau is deliberately kept out of Un verre de {item} frames (de l'eau would be needed). The suite lexeme (tout de suite) is not used in any pool because its single-word gloss is not a clean answer. Reviewer: please confirm the vouloir/un-une frames read naturally for a cafe order.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [fr_a1_u05_l01, w_avez, w_boisson, w_café, w_cette, w_choisi, w_dessert, w_donné, w_délicieux, w_faim, w_l'addition, w_l'eau, w_nous, w_poisson, w_poulet, w_riz, w_rouge, w_salade, w_verre, w_vin]
+slot_presets:
+  food1: &food1 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: fr_a1_u05_l01}}
+  w2: &w2 {language_code: fr, part_of_speech: [noun, adjective, verb], agreement_tags: {semantic: [w_dessert, "w_l'addition", w_avez, w_choisi, w_café, w_délicieux]}}
+  w3: &w3 {language_code: fr, part_of_speech: [noun, adjective, verb, pronoun], agreement_tags: {semantic: [w_boisson, w_verre, w_rouge, w_faim, w_donné, w_nous, w_cette]}}
+  listen1: &listen1 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_poulet, w_poisson, w_salade, w_riz, w_vin, w_dessert, w_café, w_boisson, w_verre]}}
+  listen3: &listen3 {language_code: fr, part_of_speech: [noun, adjective, pronoun], agreement_tags: {semantic: [w_boisson, w_verre, w_rouge, w_faim, w_cette, w_nous]}}
+  mfood: &mfood {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_poulet, w_poisson, w_salade, w_riz, w_vin, w_dessert, w_café, w_boisson, w_verre, "w_l'eau"]}}
+  mwords: &mwords {language_code: fr, part_of_speech: [noun, adjective, verb, pronoun], agreement_tags: {semantic: [w_délicieux, w_rouge, w_avez, w_choisi, w_donné, w_faim, w_boisson, w_verre, w_café, w_dessert, w_nous, w_cette]}}
+  masc: &masc {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_café, w_dessert, w_verre, w_poulet, w_poisson]}}
+  fem: &fem {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_salade, w_boisson]}}
+  comme: &comme {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_dessert, w_boisson]}}
+  avez: &avez {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_avez}}
+  deli: &deli {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_délicieux}}
+  addi: &addi {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_l'addition"}}
+  donne: &donne {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_donné}}
+  bare_f: &bare_f {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: [w_poulet, w_poisson, w_salade, w_riz, w_vin, w_dessert, w_café, w_boisson, w_verre, "w_l'eau"]}}
+  bare_w: &bare_w {language_code: fr, part_of_speech: [adjective, verb, noun, pronoun], agreement_tags: {semantic: [w_délicieux, w_rouge, w_avez, w_choisi, w_donné, w_faim, w_nous]}}
+  cafe: &cafe {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_café}}
+  deli1: &deli1 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_délicieux}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit05.lesson01.choose.001
+    lesson_content_key: fr.a1.unit05.lesson01.a_table
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *food1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Le poulet, le poisson, le riz and le vin are masculine, while la salade is feminine; l'eau drops the article's vowel before eau.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson01.listen.002
+    lesson_content_key: fr.a1.unit05.lesson01.a_table
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *listen1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Café means both the drink and the place; context tells you which one is meant.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson01.match.003
+    lesson_content_key: fr.a1.unit05.lesson01.a_table
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mfood, second: *mfood, third: *mfood, fourth: *mfood, fifth: *mfood, sixth: *mfood}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "With drinks and food French uses de after a container: un verre de vin, but you say de l'eau for water.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson01.translate.004
+    lesson_content_key: fr.a1.unit05.lesson01.a_table
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_f}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the foods and drinks of the menu; learn the article with each noun: le vin, la salade.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.choose.001
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *w2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vous avez choisi? is how a waiter asks if you have decided; avez choisi is a past form, literally have chosen.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.order.002
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: word_order
+    frame: {text: "Je voudrais un {item}, s'il vous plaît.", language_code: fr, direction: ltr}
+    slots: {item: *masc}
+    answer_derivation: {kind: render_frame, frame: {text: "Je voudrais un {item}, s'il vous plaît.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Un goes before masculine nouns such as café, dessert and verre.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.order.003
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: word_order
+    frame: {text: "Qu'est-ce que vous avez comme {item} ?", language_code: fr, direction: ltr}
+    slots: {item: *comme}
+    answer_derivation: {kind: render_frame, frame: {text: "Qu'est-ce que vous avez comme {item} ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Comme here means as or for: what do you have for dessert?", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.fill.004
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: fill_in_blank
+    frame: {text: "Vous {item} choisi ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *avez, hint: *avez}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Vous avez choisi? is the waiter's polite question, using vous.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.fill.005
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: fill_in_blank
+    frame: {text: "C'est {item} ! ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *deli, hint: *deli}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Délicieux is masculine singular because c'est refers to something unspecified.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.fill.006
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: fill_in_blank
+    frame: {text: "{item}, s'il vous plaît. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *addi, hint: *addi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "L'addition is how you ask for the bill; the l' is the article le/la shortened before a vowel.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.translate.007
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: translation
+    frame: {text: "I would like a coffee, please. (formal)", language_code: en, direction: ltr}
+    slots: {item: *cafe}
+    answer_derivation: {kind: render_frame, frame: {text: "Je voudrais un {item}, s'il vous plaît.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je voudrais un café, s'il vous plaît is the standard polite order.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson02.translate.008
+    lesson_content_key: fr.a1.unit05.lesson02.au_cafe
+    type: translation
+    frame: {text: "It's delicious!", language_code: en, direction: ltr}
+    slots: {item: *deli1}
+    answer_derivation: {kind: render_frame, frame: {text: "C'est {item} !", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "C'est délicieux! is a compliment to the cook or the food.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.choose.001
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *w3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Rouge describes a masculine noun here (vin rouge); verre de vin rouge means a glass of red wine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.listen.002
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *listen3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Cette is used before feminine nouns (cette salade); the masculine equivalent is ce.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.match.003
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mwords, second: *mwords, third: *mwords, fourth: *mwords, fifth: *mwords, sixth: *mwords}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Délicieux and rouge describe nouns; avez, choisi and donné are verb forms in the past or present.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.order.004
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: word_order
+    frame: {text: "Je voudrais une {item}, s'il vous plaît.", language_code: fr, direction: ltr}
+    slots: {item: *fem}
+    answer_derivation: {kind: render_frame, frame: {text: "Je voudrais une {item}, s'il vous plaît.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Une goes before feminine nouns such as salade and boisson.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.translate.005
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Rouge, délicieux and the verb forms avez, choisi and donné all appear in the café scene.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit05.lesson03.translate.006
+    lesson_content_key: fr.a1.unit05.lesson03.dialogue_cafe
+    type: translation
+    frame: {text: "The workshop made us hungry.", language_code: en, direction: ltr}
+    slots: {item: *donne}
+    answer_derivation: {kind: render_frame, frame: {text: "L'atelier nous a {item} faim.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Donner faim is an idiom: literally the workshop gave us hunger.", language_code: en, direction: ltr}
