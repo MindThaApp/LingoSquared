@@ -1,0 +1,130 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit04
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit04.time
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u04*, w_<token> anchors). The unit introduces
+    only eight new tokens, so number words (taught in unit 02) stay as literal frame text.
+    The baje/baja contrast (one o'clock vs. every other hour) is tested in separate single-anchor frames. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_सुबह, w_दोपहर, w_शाम, w_रात, w_कल, w_बजे, w_बजा, w_कितने]
+slot_presets:
+  parts: &parts {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सुबह, w_दोपहर, w_शाम, w_रात, w_कल, w_बजे, w_बजा, w_कितने]}}
+  parts6: &parts6 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सुबह, w_दोपहर, w_शाम, w_रात, w_कल, w_कितने]}}
+  match6: &match6 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_कितने, w_सुबह, w_दोपहर, w_शाम, w_रात, w_कल]}}
+  times: &times {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: [w_सुबह, w_शाम]}}
+  baje: &baje {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_बजे}}
+  baja: &baja {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_बजा}}
+  kitne: &kitne {language_code: hi, part_of_speech: pronoun, agreement_tags: {semantic: w_कितने}}
+  kal: &kal {language_code: hi, part_of_speech: adverb, agreement_tags: {semantic: w_कल}}
+  shaam: &shaam {language_code: hi, part_of_speech: noun, agreement_tags: {semantic: w_शाम}}
+  words: &words {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सुबह, w_दोपहर, w_शाम, w_रात, w_कल]}}
+  ex: &ex {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_बजे, w_बजा, w_कितने, w_सुबह, w_रात]}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.choose.001
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *ex}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "In Hindi the hour takes बजे (o'clock) after the number, except for one o'clock, which takes बजा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson02.listen.001
+    lesson_content_key: hi.a1.unit04.lesson02.din_ka_samay
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *parts6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Hindi divides the day into सुबह, दोपहर, शाम and रात; there is no single word for a.m. or p.m.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson03.choose.001
+    lesson_content_key: hi.a1.unit04.lesson03.agli_class_ka_samay
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *parts}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "कल means both tomorrow and yesterday, and the verb tense shows which one is meant.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson02.match.002
+    lesson_content_key: hi.a1.unit04.lesson02.din_ka_samay
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *match6, second: *match6, third: *match6, fourth: *match6, fifth: *match6, sixth: *match6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Times of day are feminine or masculine nouns without an article; सुबह, शाम and रात are all feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.order.002
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: word_order
+    frame: {text: "अभी पाँच {item} हैं।", language_code: hi, direction: ltr}
+    slots: {item: *baje}
+    answer_derivation: {kind: render_frame, frame: {text: "अभी पाँच {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "बजे goes with every hour except one, and the verb is plural: पाँच बजे हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.order.003
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: word_order
+    frame: {text: "अभी एक {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *baja}
+    answer_derivation: {kind: render_frame, frame: {text: "अभी एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Only one o'clock takes the singular बजा and the singular है: एक बजा है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson02.order.003
+    lesson_content_key: hi.a1.unit04.lesson02.din_ka_samay
+    type: word_order
+    frame: {text: "क्लास {item} सात बजे है।", language_code: hi, direction: ltr}
+    slots: {item: *times}
+    answer_derivation: {kind: render_frame, frame: {text: "क्लास {item} सात बजे है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The part of the day comes directly before the hour, with no word between them: सुबह सात बजे.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.fill.004
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: fill_in_blank
+    frame: {text: "क्लास {item} बजे है? ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kitne, hint: *kitne}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "कितने बजे है? is the everyday way to ask what time something happens.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.fill.005
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: fill_in_blank
+    frame: {text: "अभी पाँच {item} हैं। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *baje, hint: *baje}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "बजे is the plural form used with any hour from two to twelve.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson03.fill.002
+    lesson_content_key: hi.a1.unit04.lesson03.agli_class_ka_samay
+    type: fill_in_blank
+    frame: {text: "ठीक है, {item} मिलते हैं! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kal, hint: *kal}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ठीक है, कल मिलते हैं literally means OK, tomorrow we meet; the present tense often refers to the near future.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.translate.006
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: translation
+    frame: {text: "What time is it?", language_code: en, direction: ltr}
+    slots: {item: *kitne}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} बजे हैं?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "To say the time, put the number before बजे: अभी पाँच बजे हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson02.translate.004
+    lesson_content_key: hi.a1.unit04.lesson02.din_ka_samay
+    type: translation
+    frame: {text: "The next class is at five in the evening.", language_code: en, direction: ltr}
+    slots: {item: *shaam}
+    answer_derivation: {kind: render_frame, frame: {text: "अगली क्लास {item} पाँच बजे है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "अगली agrees with the feminine noun क्लास, so it ends in -ी, not -ा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson01.translate.007
+    lesson_content_key: hi.a1.unit04.lesson01.kitne_baje_hain
+    type: translation
+    frame: {text: "It is one o'clock now.", language_code: en, direction: ltr}
+    slots: {item: *baja}
+    answer_derivation: {kind: render_frame, frame: {text: "अभी एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "One o'clock is the only hour with a singular verb: एक बजा है but दो बजे हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit04.lesson02.translate.005
+    lesson_content_key: hi.a1.unit04.lesson02.din_ka_samay
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hindi has no separate word for noon: दोपहर covers midday and the afternoon.", language_code: en, direction: ltr}
