@@ -9,7 +9,7 @@ review:
   fresh_context: "false"
   notes: >-
     Authored 2026-10-24 (session 10, en-ru A1 practice pack, job C) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items, and inflected variants of a noun are kept out of bare-word pools so no prompt has two defensible answers. English prompts name informal/formal address and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
-    Reviewer: check the informal/formal labels in the English prompts and the case notes in feedback. No character facts are asserted and no speaker names are baked into any card.
+    Reviewer: check the informal/formal labels in the English prompts and the case notes in feedback. No character facts are asserted and no speaker names are baked into any card. Opus pass 2026-10-24: lesson01.translate.007 ("In the kitchen there is a table.") now expects На кухне есть стол., the natural rendering of there is (the bare На кухне стол. stays as a word_order item, as in the dialogue), with feedback no longer claiming Russian drops there is; choose.001 feedback ending list fixed.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -36,7 +36,7 @@ templates:
     frame: {text: "{item}", language_code: "ru", direction: "ltr"}
     slots: {item: *p1}
     answer_derivation: {kind: "slot_gloss", slot: "item"}
-    feedback_frame: {text: "Квартира, кухня and спальня are feminine nouns ending in -а, -я or -я.", language_code: "en", direction: "ltr"}
+    feedback_frame: {text: "Квартира, кухня and спальня are feminine nouns ending in -а or -я; кровать is feminine too.", language_code: "en", direction: "ltr"}
   - content_key: practice.en-ru.ru.a1.unit18.lesson01.match.002
     lesson_content_key: ru.a1.unit18.lesson01.eto_moya_kvartira
     type: matching_pairs
@@ -78,8 +78,8 @@ templates:
     type: translation
     frame: {text: "In the kitchen there is a table.", language_code: "en", direction: "ltr"}
     slots: {item: *p3}
-    answer_derivation: {kind: "render_frame", frame: {text: "На {item} стол.", language_code: "ru", direction: "ltr"}}
-    feedback_frame: {text: "Russian leaves out there is; На кухне стол simply names the place and the thing.", language_code: "en", direction: "ltr"}
+    answer_derivation: {kind: "render_frame", frame: {text: "На {item} есть стол.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "There is ... is есть, and Russian puts the place first and the new thing last; кухня takes на, not в: на кухне.", language_code: "en", direction: "ltr"}
   - content_key: practice.en-ru.ru.a1.unit18.lesson02.choose.001
     lesson_content_key: ru.a1.unit18.lesson02.divan_v_gostinoy
     type: multiple_choice
