@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit22
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit22.emotions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u22*, single-member w_<token> anchors). Pools are
+    unit-scoped. Adjectives agree with the speaker, so every prompt says (said by a man) or (said by a woman);
+    masculine and feminine forms are never together in a bare-word pool, and matching uses the masculine
+    forms only. تشعر is the masculine you-form (the unit has كيف تشعر يا يوسف؟). Canon checked: Yusuf is happy
+    because the weather is sunny, and Layla (a woman) is tired because she has work. أنا, الجو, مشمس and
+    عندي عمل are earlier-unit words used as literal text. Reviewer: confirm "أنا متعبة لأن عندي عمل".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_شعور, w_سعيد, w_حزين, w_لأن, w_تشعر, w_متعب, w_سعيدة, w_حزينة, w_متعبة]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, adjective, particle], agreement_tags: {semantic: [w_شعور, w_سعيد, w_حزين, w_لأن]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: [w_شعور, w_سعيد, w_حزين, w_لأن, w_تشعر, w_متعب]}}
+  masc: &masc {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_سعيد, w_حزين, w_متعب]}}
+  fem: &fem {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_سعيدة, w_حزينة, w_متعبة]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, verb, adjective, particle], agreement_tags: {semantic: [w_تشعر, w_متعب, w_شعور, w_لأن]}}
+  sa3id: &sa3id {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_سعيد}}
+  sa3ida: &sa3ida {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_سعيدة}}
+  hazin: &hazin {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_حزين}}
+  hazina: &hazina {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_حزينة}}
+  li2anna: &li2anna {language_code: ar, part_of_speech: particle, agreement_tags: {semantic: w_لأن}}
+  tash3ur: &tash3ur {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_تشعر}}
+  mut3ab: &mut3ab {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_متعب}}
+  mut3aba: &mut3aba {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_متعبة}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.choose.001
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "سعيد is the masculine happy; شعور is the noun feeling and لأن is because.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.listen.002
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أنا سعيد لأن الجو مشمس is I am happy because the weather is sunny.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.order.003
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: word_order
+    frame: {text: "أنا {item} لأن الجو مشمس.", language_code: ar, direction: rtl}
+    slots: {item: *sa3id}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} لأن الجو مشمس.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "A man says سعيد; the reason follows لأن (because).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.order.004
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: word_order
+    frame: {text: "أنا سعيد {item} الجو مشمس.", language_code: ar, direction: rtl}
+    slots: {item: *li2anna}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا سعيد {item} الجو مشمس.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "لأن (because) introduces the reason and is followed by the clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.fill.005
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: fill_in_blank
+    frame: {text: "أنا {item} لأن الجو مشمس. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *sa3id, hint: *sa3id}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A man uses the masculine form سعيد; a woman would say سعيدة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.fill.006
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: fill_in_blank
+    frame: {text: "أنا {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *hazina, hint: *hazina}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The feminine ending ة shows that a woman is speaking.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.translate.007
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "سعيد and حزين are masculine adjectives; لأن is the word because.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson01.translate.008
+    lesson_content_key: ar.a1.unit22.lesson01.feeling_cause
+    type: translation
+    frame: {text: "I am happy because the weather is sunny. (said by a man)", language_code: en, direction: ltr}
+    slots: {item: *sa3id}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} لأن الجو مشمس", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "A man says سعيد; لأن (because) introduces the reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.choose.001
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تشعر is the masculine you-form of feel; كيف تشعر يا يوسف؟ asks a man how he feels.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.listen.002
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *masc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "متعب is the masculine tired; the feminine adds ة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.match.003
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "سعيد, حزين and متعب are masculine adjectives; تشعر is a verb and لأن means because.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.order.004
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: word_order
+    frame: {text: "كيف {item} يا يوسف؟", language_code: ar, direction: rtl}
+    slots: {item: *tash3ur}
+    answer_derivation: {kind: render_frame, frame: {text: "كيف {item} يا يوسف؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The ت prefix marks you (masculine here), since Yusuf is a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.order.005
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: word_order
+    frame: {text: "أنا {item} لأن عندي عمل.", language_code: ar, direction: rtl}
+    slots: {item: *mut3aba}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} لأن عندي عمل.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Layla is a woman, so she says متعبة, with the feminine ending ة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.fill.006
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: fill_in_blank
+    frame: {text: "كيف {item} يا يوسف؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tash3ur, hint: *tash3ur}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تشعر is you feel, addressed to a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.fill.007
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: fill_in_blank
+    frame: {text: "أنا {item} لأن عندي عمل. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *mut3aba, hint: *mut3aba}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A woman speaking about herself uses the feminine متعبة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.translate.008
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تشعر is a verb, متعب an adjective, شعور a noun and لأن a conjunction.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.translate.009
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: translation
+    frame: {text: "How do you feel, Yusuf?", language_code: en, direction: ltr}
+    slots: {item: *tash3ur}
+    answer_derivation: {kind: render_frame, frame: {text: "كيف {item} يا يوسف", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Yusuf is a man, so the you-form is تشعر.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit22.lesson02.translate.010
+    lesson_content_key: ar.a1.unit22.lesson02.ask_feelings
+    type: translation
+    frame: {text: "I am tired because I have work. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *mut3aba}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} لأن عندي عمل", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The speaker is a woman, so the adjective is متعبة.", language_code: en, direction: ltr}
