@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit25.emotions
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     RE-AUTH PASS 2026-07-24 (scripts/_practice_unit_scope_check.py DEAD-
     template fix, PACK-ONLY): lesson01.emotion_pair.002 slotted emotion_word
@@ -97,6 +98,8 @@ review:
     POLISH WAVE 4 (2026-07-26): emotion_pair.002's POS-only honest-leave is RESOLVED -- backfill_lexemes_en_prs.py now emits en_prs_a1_unit25_words, and the matcher's dedicated unit_word_pool preset is re-anchored onto it ([adjective,adverb] preserved; 7 distinct unit-scoped tokens, collision-free). The matcher was trimmed 7 slots -> 6 (the pair floor) so the exactly-7 pool now carries 1 token of slack + sampling variety instead of generating deterministically at the pool ceiling. Course pool == unit pool. Verified with pool_check.py + unit-scope check.
 
     FRESH-CONTEXT NATIVE REVIEW 2026-07-27 (batch 1): reviewed against AUTHORING_PREFLIGHT.md with the realization/overlay + live backfill lexeme pools cross-checked. All CRITICAL/MAJOR findings fixed and committed (see docs/RAMIN_REVIEW_BACKLOG.md 'Native review batch 1' for the per-pack findings + residual MINOR/known-limitation notes; some backfill gloss fixes take effect on the next re-backfill). Status -> reviewed.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 2 fixes. bracketed [feeling] feedback replaced by real slot text (2 word_orders); adverb_gloss.001 feedback no longer says 'small words'. NATIVE FLAGS: ناراحت has two lexeme rows with different glosses ('sad' a1 vs 'upset' b2) so an MC can offer both (gloss proposal); چرا ... استین (2pl) vs استی.
 tag_schema:
   part_of_speech: [adjective, adverb]
   agreement_tags:
@@ -145,7 +148,7 @@ templates:
     frame: {text: "{emotion_word}", language_code: prs, direction: rtl}
     slots: {emotion_word: *emotion_word}
     answer_derivation: {kind: slot_gloss, slot: emotion_word}
-    feedback_frame: {text: "{emotion_word} names a feeling.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{emotion_word}* names a feeling.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit25.lesson01.emotion_pair.002
     lesson_content_key: prs.a1.unit25.lesson01.feelings_vocabulary
     # Re-anchored (2026-07-24) to unit_word_pool: emotion_word alone is only
@@ -170,7 +173,7 @@ templates:
     frame: {text: "چرا {emotion_word} استین", language_code: prs, direction: rtl}
     slots: {emotion_word: *emotion_word}
     answer_derivation: {kind: render_frame, frame: {text: "چرا {emotion_word} استین", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: چرا [feeling] استین (why are you [feeling]?).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *چرا {emotion_word} استین* -- why are you ...? The feeling goes between چرا and استین.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit25.lesson02.adverb_translate.002
     lesson_content_key: prs.a1.unit25.lesson02.why_and_because
     type: translation
@@ -192,7 +195,7 @@ templates:
     frame: {text: "{emotion_word} استم", language_code: prs, direction: rtl}
     slots: {emotion_word: *emotion_word}
     answer_derivation: {kind: render_frame, frame: {text: "{emotion_word} استم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [feeling] استم (I am [feeling]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *{emotion_word} استم* -- I am ... The feeling comes before استم.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit25.lesson03.feeling_state_gloss.002
     lesson_content_key: prs.a1.unit25.lesson03.more_feelings_and_reasons
     type: multiple_choice
@@ -230,7 +233,7 @@ templates:
     frame: {text: "{adverb_word}", language_code: prs, direction: rtl}
     slots: {adverb_word: *adverb_word_pool}
     answer_derivation: {kind: slot_gloss, slot: adverb_word}
-    feedback_frame: {text: "{adverb_word} is one of this unit's own small words.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{adverb_word}* is a question word or adverb from this unit.", language_code: en, direction: ltr}
 
   # Lesson 6: wrap-up.
   - content_key: practice.en-prs.prs.a1.unit25.lesson06.emotion_translate.001

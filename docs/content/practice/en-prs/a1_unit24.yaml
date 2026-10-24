@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit24.transportation
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-09, same practice-pool depth-extension pass as this
     bundle's a1_unit20.yaml/a1_unit21.yaml/a1_unit22.yaml/a1_unit23.yaml
@@ -105,6 +106,8 @@ review:
     unit-scoped distinct glosses) anchored to lesson03 (own vocab
     تکت/ایستگاه, 2 glosses, below the 3-option floor alone). Recognition
     tier now 3 live; no other change.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. bracketed [vehicle] feedback replaced by real slot text in 3 word_orders; 'unit's transportation vocabulary' feedback (pool spans units) made neutral; review-pair feedback trimmed. NATIVE FLAGS: دوچرخه vs بایسکل/سایکل in Kabul speech; 'با دوچرخه می‌روم' vs 'بایسکل سواری می‌کنم'.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb]
   agreement_tags:
@@ -168,7 +171,7 @@ templates:
     frame: {text: "با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}
     slots: {transport_mode_word: *transport_mode_word}
     answer_derivation: {kind: render_frame, frame: {text: "با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: با [vehicle] می‌روم (I go by [vehicle]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *با {transport_mode_word} می‌روم* -- با (by) + the vehicle, then the verb.", language_code: en, direction: ltr}
 
   # Lesson 2: how you go.
   - content_key: practice.en-prs.prs.a1.unit24.lesson02.on_foot_translate.001
@@ -213,7 +216,7 @@ templates:
     frame: {text: "{travel_word}", language_code: prs, direction: rtl}
     slots: {travel_word: *transport_ticket_pool}
     answer_derivation: {kind: slot_gloss, slot: travel_word}
-    feedback_frame: {text: "{travel_word} is from this unit's getting-around vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{travel_word}* is a word from the getting-around lessons.", language_code: en, direction: ltr}
 
   # Lesson 4: commute dialogue.
   - content_key: practice.en-prs.prs.a1.unit24.lesson04.speed_adjective_translate.001
@@ -254,7 +257,7 @@ templates:
     frame: {text: "{unit_vocab_word}", language_code: prs, direction: rtl}
     slots: {unit_vocab_word: *unit_vocab_pool}
     answer_derivation: {kind: slot_gloss, slot: unit_vocab_word}
-    feedback_frame: {text: "{unit_vocab_word} is from this unit's transportation vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{unit_vocab_word}* is a word from the getting-around lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson05.commute_go_order.002
     lesson_content_key: prs.a1.unit24.lesson05.reading_commute
     # Re-anchored (2026-07-24): the original frame required "person_name",
@@ -269,7 +272,7 @@ templates:
     frame: {text: "با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}
     slots: {transport_mode_word: *transport_mode_word, go_verb_third: *go_verb_third}
     answer_derivation: {kind: render_frame, frame: {text: "با {transport_mode_word} {go_verb_third}", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: با [vehicle] می‌رود ((he/she) goes by [vehicle]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *با {transport_mode_word} {go_verb_third}* -- با (by) + the vehicle, then the verb.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson05.transport_word_translate.003
     lesson_content_key: prs.a1.unit24.lesson05.reading_commute
     type: translation
@@ -303,14 +306,14 @@ templates:
     slot_relations:
       - {kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine, word_ten]}
-    feedback_frame: {text: "Match each word to its English meaning -- transportation.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson06.daily_commute_order.002
     lesson_content_key: prs.a1.unit24.lesson06.wrap_up
     type: word_order
     frame: {text: "من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}
     slots: {on_foot_word: *on_foot_word, transport_mode_word: *transport_mode_word}
     answer_derivation: {kind: render_frame, frame: {text: "من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: من هر روز پیاده یا با [vehicle] می‌روم (I go on foot or by [vehicle] every day).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *من هر روز {on_foot_word} یا با {transport_mode_word} می‌روم* -- I go on foot or by vehicle every day.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit24.lesson06.ticket_word_translate.003
     lesson_content_key: prs.a1.unit24.lesson06.wrap_up
     # Replaced (2026-07-24): the original slotted "buy_verb" (می‌خرم),
