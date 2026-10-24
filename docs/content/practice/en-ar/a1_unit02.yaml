@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit02
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit02.introductions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u02*, single-member w_<token> anchors). Pools are
+    unit-scoped. Names and countries are proper nouns: they are used as sentence slots and, for countries,
+    as MC/matching items whose English gloss is the English country name. Name and place frames are
+    grammatical for every pool member (the article in الأردن, المغرب, العراق is part of the country name).
+    Sentence translations render the slot as its English gloss (Layla, Egypt). The L4 dialogue lesson
+    introduces only two names and دائما, so recognition for L4 is hosted by a curated L3+L4 pool.
+    Reviewer: confirm that "اسمي" with a woman's name and "مرحبا بك دائما" read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ما, w_اسمك, w_اسمي, w_أنا, w_تشرفنا, w_كريم, w_سارة, w_يوسف, w_ليلى, w_من, w_أين, w_أنت, w_لبنان, w_مصر, w_الأردن, w_المغرب, w_سوريا, w_العراق, w_هل, w_نعم, w_سعدت, w_بلقائك, w_دائما]
+slot_presets:
+  l01w: &l01w {language_code: ar, part_of_speech: [pronoun, phrase], agreement_tags: {semantic: [w_ما, w_اسمك, w_اسمي, w_أنا, w_تشرفنا]}}
+  l01all: &l01all {language_code: ar, part_of_speech: [proper_noun, pronoun, phrase], agreement_tags: {semantic: [w_ما, w_اسمك, w_اسمي, w_كريم, w_أنا, w_سارة, w_تشرفنا]}}
+  names: &names {language_code: ar, part_of_speech: proper_noun, agreement_tags: {semantic: [w_كريم, w_سارة, w_يوسف, w_ليلى]}}
+  l02mc: &l02mc {language_code: ar, part_of_speech: [proper_noun, pronoun, adverb, preposition], agreement_tags: {semantic: [w_من, w_أين, w_أنت, w_لبنان, w_مصر, w_الأردن, w_المغرب, w_سوريا, w_العراق]}}
+  countries: &countries {language_code: ar, part_of_speech: proper_noun, agreement_tags: {semantic: [w_لبنان, w_مصر, w_الأردن, w_المغرب, w_سوريا, w_العراق]}}
+  l34mc: &l34mc {language_code: ar, part_of_speech: [verb, adverb, particle, phrase], agreement_tags: {semantic: [w_هل, w_نعم, w_سعدت, w_بلقائك, w_دائما]}}
+  l34bare: &l34bare {language_code: ar, part_of_speech: [verb, adverb, particle, phrase], agreement_tags: {semantic: [w_نعم, w_سعدت, w_بلقائك, w_دائما]}}
+  ismuka: &ismuka {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_اسمك}}
+  ayna: &ayna {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_أين}}
+  naam: &naam {language_code: ar, part_of_speech: particle, agreement_tags: {semantic: w_نعم}}
+  biliqaaik: &biliqaaik {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_بلقائك}}
+  daaiman: &daaiman {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_دائما}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit02.lesson01.listen.001
+    lesson_content_key: ar.a1.unit02.lesson01.names
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01w}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Arabic marks possession by an ending: اسم is name, اسمي is my name and اسمك is your name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson01.match.002
+    lesson_content_key: ar.a1.unit02.lesson01.names
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l01all, second: *l01all, third: *l01all, fourth: *l01all, fifth: *l01all, sixth: *l01all}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The ending ـي means my (اسمي) and ـك means your (اسمك); the written form of your is the same for a man and a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson01.fill.003
+    lesson_content_key: ar.a1.unit02.lesson01.names
+    type: fill_in_blank
+    frame: {text: "ما {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ismuka, hint: *ismuka}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ما means what, so ما اسمك is literally what your name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson01.translate.004
+    lesson_content_key: ar.a1.unit02.lesson01.names
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أنا (I) is used in simple sentences like أنا سارة, where English needs the word am.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson01.translate.005
+    lesson_content_key: ar.a1.unit02.lesson01.names
+    type: translation
+    frame: {text: "My name is {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *names}
+    answer_derivation: {kind: render_frame, frame: {text: "اسمي {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Names are written as they sound: Arabic has no capital letters.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.choose.001
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Country names such as لبنان and مصر take no article, but الأردن, المغرب and العراق include ال as part of the name.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.match.002
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *countries, second: *countries, third: *countries, fourth: *countries, fifth: *countries, sixth: *countries}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The article ال is part of the names الأردن, المغرب and العراق.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.order.003
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: word_order
+    frame: {text: "أنا من {item}.", language_code: ar, direction: rtl}
+    slots: {item: *countries}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا من {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "من means from, so أنا من plus a place says where you come from.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.fill.004
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: fill_in_blank
+    frame: {text: "من {item} أنت؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ayna, hint: *ayna}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أين is the question word where; من أين أنت asks where you are from, to a man or a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.translate.005
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The word أنت means you; written without vowels it is the same for a man and a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson02.translate.006
+    lesson_content_key: ar.a1.unit02.lesson02.where_from
+    type: translation
+    frame: {text: "I am from {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *countries}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا من {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic has no word for am: أنا من plus a place already means I am from.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson03.listen.001
+    lesson_content_key: ar.a1.unit02.lesson03.closing_the_exchange
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l34mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "A yes-or-no question starts with هل, and the answer is نعم for yes.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson03.order.002
+    lesson_content_key: ar.a1.unit02.lesson03.closing_the_exchange
+    type: word_order
+    frame: {text: "سعدت {item}.", language_code: ar, direction: rtl}
+    slots: {item: *biliqaaik}
+    answer_derivation: {kind: render_frame, frame: {text: "سعدت {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "سعدت بلقائك is the polite closing line, literally I was pleased with meeting you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson03.fill.003
+    lesson_content_key: ar.a1.unit02.lesson03.closing_the_exchange
+    type: fill_in_blank
+    frame: {text: "هل أنت من مصر؟ {item}، أنا من مصر. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *naam, hint: *naam}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "نعم is yes; no yes-or-no question word is needed in the reply.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson03.translate.004
+    lesson_content_key: ar.a1.unit02.lesson03.closing_the_exchange
+    type: translation
+    frame: {text: "I was pleased to meet you.", language_code: en, direction: ltr}
+    slots: {item: *biliqaaik}
+    answer_derivation: {kind: render_frame, frame: {text: "سعدت {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The written ending ـك in بلقائك is the same for a man and a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson04.choose.001
+    lesson_content_key: ar.a1.unit02.lesson04.first_meeting_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l34mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "دائما means always and can follow مرحبا بك to say welcome any time.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson04.fill.002
+    lesson_content_key: ar.a1.unit02.lesson04.first_meeting_dialogue
+    type: fill_in_blank
+    frame: {text: "مرحبا بك {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *daaiman, hint: *daaiman}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The phrase مرحبا بك دائما says you are always welcome.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit02.lesson04.translate.003
+    lesson_content_key: ar.a1.unit02.lesson04.first_meeting_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l34bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "سعدت is a past-tense verb with the ending ـت for I, which is why it means I was pleased.", language_code: en, direction: ltr}

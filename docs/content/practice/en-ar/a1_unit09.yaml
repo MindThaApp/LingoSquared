@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit09
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u09*, single-member w_<token> anchors). Pools are
+    unit-scoped. Indefinite place nouns (مكتبة, سوق, مقهى) and their definite forms (المكتبة, السوق, المقهى)
+    are never in the same recognition, matching or bare-word pool. Place frames only use the definite forms,
+    which is what the unit's sentences use (أين المكتبة؟, المكتبة قرب السوق). أين, مرحبا are earlier-unit
+    words used as literal text. Reviewer: confirm "المقهى قرب السوق" style place combinations read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_مكان, w_مكتبة, w_سوق, w_مقهى, w_هنا, w_قرب, w_وأين, w_المكتبة, w_المقهى, w_السوق]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_مكان, w_مكتبة, w_سوق, w_مقهى, w_هنا]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, adverb, preposition], agreement_tags: {semantic: [w_مكان, w_مكتبة, w_سوق, w_مقهى, w_هنا, w_قرب]}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, adverb, preposition], agreement_tags: {semantic: [w_قرب, w_وأين, w_المكتبة, w_المقهى]}}
+  places: &places {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_المكتبة, w_السوق, w_المقهى]}}
+  near: &near {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_المكتبة, w_السوق]}}
+  maktaba: &maktaba {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_المكتبة}}
+  suq: &suq {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_السوق}}
+  maqha: &maqha {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_المقهى}}
+  hunaa: &hunaa {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_هنا}}
+  qurb: &qurb {language_code: ar, part_of_speech: preposition, agreement_tags: {semantic: w_قرب}}
+  waayna: &waayna {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_وأين}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.choose.001
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "مكان is the general word for place; مكتبة is a library and مقهى a cafe.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.listen.002
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "هنا means here; سوق is a market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.match.003
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "قرب (near) is a preposition, while هنا (here) is an adverb; the other four are nouns.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.order.004
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: word_order
+    frame: {text: "أين {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *places}
+    answer_derivation: {kind: render_frame, frame: {text: "أين {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أين asks where; the place noun has ال: the library, the market or the cafe.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.fill.005
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: fill_in_blank
+    frame: {text: "المكتبة {item} السوق. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *qurb, hint: *qurb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "قرب (near) comes before the place it is near, here the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.translate.006
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "مكتبة (library), سوق (market) and مقهى (cafe) are places; مكان is the general word place.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.translate.007
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: translation
+    frame: {text: "Where is the library?", language_code: en, direction: ltr}
+    slots: {item: *maktaba}
+    answer_derivation: {kind: render_frame, frame: {text: "أين {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ال is the Arabic the; it is attached to the front of the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.translate.008
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: translation
+    frame: {text: "Where is the market?", language_code: en, direction: ltr}
+    slots: {item: *suq}
+    answer_derivation: {kind: render_frame, frame: {text: "أين {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic needs no word for is: أين السوق؟ is literally where the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson01.order.009
+    lesson_content_key: ar.a1.unit09.lesson01.common_places
+    type: word_order
+    frame: {text: "المكتبة {item} قرب السوق.", language_code: ar, direction: rtl}
+    slots: {item: *hunaa}
+    answer_derivation: {kind: render_frame, frame: {text: "المكتبة {item} قرب السوق.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "هنا (here) can sit before قرب: the library is here, near the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.choose.001
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "قرب means near; it is followed directly by the place noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.listen.002
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "وأين is و (and) joined to أين (where): and where.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.order.003
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: word_order
+    frame: {text: "المقهى قرب {item}.", language_code: ar, direction: rtl}
+    slots: {item: *near}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى قرب {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "قرب needs no extra word: المقهى قرب المكتبة is the cafe is near the library.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.order.004
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: word_order
+    frame: {text: "وأين {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *maqha}
+    answer_derivation: {kind: render_frame, frame: {text: "وأين {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "وأين المقهى؟ continues the conversation: and where is the cafe?", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.fill.005
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: fill_in_blank
+    frame: {text: "أين المكتبة؟ {item} المقهى؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *waayna, hint: *waayna}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The و in وأين links the new question to the one before it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.translate.006
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "وأين is and where, a follow-up question; قرب is near.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.translate.007
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: translation
+    frame: {text: "The library is near the market.", language_code: en, direction: ltr}
+    slots: {a: *qurb, b: *suq}
+    answer_derivation: {kind: render_frame, frame: {text: "المكتبة {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Place nouns after قرب keep the article: قرب السوق is near the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit09.lesson02.translate.008
+    lesson_content_key: ar.a1.unit09.lesson02.locate_places
+    type: translation
+    frame: {text: "The cafe is near the library.", language_code: en, direction: ltr}
+    slots: {item: *maktaba}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى قرب {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The unit's dialogue answers وأين المقهى؟ with exactly this sentence.", language_code: en, direction: ltr}
