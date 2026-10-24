@@ -151,7 +151,7 @@ GLOSSES: dict[str, str] = {
     "गिनो": "count! (informal command)", "जाऊँ": "I should go",
     "तक": "until; up to", "पहले": "first; before",
     "नुक्कड़": "street corner", "पर": "at; on",
-    "समझ": "understand (stem)", "गया": "went; gone (masc.)",
+    "समझ": "understand (stem)", "गया": "went; gone (masc.); also marks completion, as in understood",
     # unit10 routines
     "उठता": "get up (habitual, masc.)", "उठती": "get up (habitual, fem.)",
     "रोज़": "every day", "नाश्ता": "breakfast", "करता": "do (habitual, masc.)",
@@ -175,7 +175,7 @@ GLOSSES: dict[str, str] = {
     "मिला": "met (masc.)", "मिली": "met (fem.)",
     "मिले": "met (masc. plural, or you informal)",
     # unit13 preferences
-    "पसंद": "liked; preferred", "संगीत": "music", "किताब": "book",
+    "पसंद": "liking; liked", "संगीत": "music", "किताब": "book",
     "किताबें": "books", "खेल": "sport; game", "ज़्यादा": "more",
     # unit14 comparisons
     "लंबा": "tall; long (masc.)", "लंबी": "tall; long (fem.)",
@@ -198,7 +198,7 @@ GLOSSES: dict[str, str] = {
     # unit19 weather
     "मौसम": "weather", "धूप": "sun; sunshine", "बारिश": "rain", "हवा": "wind",
     "गर्म": "hot", "ठंडा": "cold (masc.)", "ठंडी": "cold (fem.)",
-    "बादल": "cloud", "बुरा": "bad (masc.)", "बाहर": "outside",
+    "बादल": "cloud; clouds", "बुरा": "bad (masc.)", "बाहर": "outside",
 }
 
 POS_SETS = {

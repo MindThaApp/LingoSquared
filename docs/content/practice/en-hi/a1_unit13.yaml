@@ -1,0 +1,134 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit13
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit13.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u13*, w_<token> anchors). Lesson 3 (dialogue) introduces no lexemes, so it has no templates. Questions are not used as translation targets because a leading kya is optional in Hindi. The unit has only six lexemes; pools are the unit tag or curated w_ lists. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_पसंद, w_संगीत, w_किताब, w_किताबें, w_खेल, w_ज़्यादा]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_पसंद, w_संगीत, w_किताब, w_किताबें]}}
+  l1l: &l1l {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_संगीत, w_किताब, w_किताबें]}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_खेल, w_ज़्यादा, w_संगीत, w_किताब]}}
+  music: &music {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_संगीत}}
+  book1: &book1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_संगीत, w_किताब]}}
+  books: &books {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_किताबें}}
+  pasand: &pasand {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_पसंद}}
+  khel: &khel {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_खेल}}
+  zyada: &zyada {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_ज़्यादा}}
+  l2w: &l2w {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_खेल, w_ज़्यादा]}}
+  kitab: &kitab {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_किताब}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.choose.001
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "पसंद है means is pleasing: मुझे चाय पसंद है is I like tea, built with मुझे rather than मैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.listen.002
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1l}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "है goes with one thing and हैं with more than one: किताब पसंद है, किताबें पसंद हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.order.003
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: word_order
+    frame: {text: "मुझे {item} पसंद है।", language_code: hi, direction: ltr}
+    slots: {item: *book1}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} पसंद है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi has no word for a or the, and the liked thing sits between मुझे and पसंद.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.order.004
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: word_order
+    frame: {text: "मुझे {item} पसंद हैं।", language_code: hi, direction: ltr}
+    slots: {item: *books}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} पसंद हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The verb is हैं here because किताबें is plural: पसंद है becomes पसंद हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.fill.005
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: fill_in_blank
+    frame: {text: "मुझे चाय {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *pasand, hint: *pasand}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "पसंद is not a verb in Hindi; it is a word used with है, so the sentence is built like to me tea is liked.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.fill.006
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: fill_in_blank
+    frame: {text: "मुझे {item} पसंद हैं। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *books, hint: *books}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A plural thing liked takes हैं after पसंद.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.translate.007
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: translation
+    frame: {text: "I like music.", language_code: en, direction: ltr}
+    slots: {item: *music}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} पसंद है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The person who likes goes in the मुझे slot, and the music is the thing that is pleasing.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.translate.008
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: translation
+    frame: {text: "I like books.", language_code: en, direction: ltr}
+    slots: {item: *books}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} पसंद हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "किताबें is plural, so the verb is हैं, not है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson01.translate.009
+    lesson_content_key: hi.a1.unit13.lesson01.pasand_hai
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The singular किताब and the plural किताबें differ only in the ending -ें, which marks the plural for this feminine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.choose.001
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "खेल means both sport and game, and ज़्यादा means more: मुझे चाय ज़्यादा पसंद है is I like tea more.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.order.002
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: word_order
+    frame: {text: "मुझे यह {item} पसंद है।", language_code: hi, direction: ltr}
+    slots: {item: *khel}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे यह {item} पसंद है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "यह (this) comes right before the noun it points to, as in यह खेल.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.fill.003
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: fill_in_blank
+    frame: {text: "मुझे चाय {item} पसंद है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *zyada, hint: *zyada}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ज़्यादा sits before पसंद to say which of two things is liked more.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.translate.004
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: translation
+    frame: {text: "I like this sport.", language_code: en, direction: ltr}
+    slots: {item: *khel}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे यह {item} पसंद है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "खेल is masculine, but the verb stays है, which agrees with the thing liked.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.translate.005
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: translation
+    frame: {text: "I like tea more.", language_code: en, direction: ltr}
+    slots: {item: *zyada}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे चाय {item} पसंद है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi says literally tea is more pleasing to me, with ज़्यादा just before पसंद.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit13.lesson02.translate.006
+    lesson_content_key: hi.a1.unit13.lesson02.tumhein_kya_pasand
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2w}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "खेल (sport or game) is a masculine noun, while ज़्यादा (more) never changes its form.", language_code: en, direction: ltr}

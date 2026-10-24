@@ -1,0 +1,144 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit14
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit14.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u14*, w_<token> anchors). Lesson 3 (dialogue) introduces no lexemes, so it has no templates. Only four lexemes (tall/new, masc. and fem.), so pools are the unit tag; every frame fixes the noun so the adjective gender is determined. Speaker-gender frames say (said by a woman). Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_लंबा, w_लंबी, w_नया, w_नई]
+slot_presets:
+  all: &all {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_लंबा, w_लंबी, w_नया, w_नई]}}
+  lamba: &lamba {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_लंबा}}
+  lambi: &lambi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_लंबी}}
+  naya: &naya {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_नया}}
+  nai: &nai {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_नई}}
+  lam: &lam {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_लंबा, w_लंबी]}}
+  nn: &nn {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_नया, w_नई]}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.choose.001
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "लंबा and लंबी are the masculine and feminine forms of one adjective, like बड़ा and बड़ी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.listen.002
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The adjective follows the person it describes: मेरा भाई लंबा है, मेरी बहन लंबी है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.order.003
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: word_order
+    frame: {text: "मेरा भाई {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *lamba}
+    answer_derivation: {kind: render_frame, frame: {text: "मेरा भाई {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "भाई is masculine, so the adjective takes the -ा form लंबा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.order.004
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: word_order
+    frame: {text: "मेरी बहन {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *lambi}
+    answer_derivation: {kind: render_frame, frame: {text: "मेरी बहन {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "बहन is feminine, so the adjective takes the -ी form लंबी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.fill.005
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: fill_in_blank
+    frame: {text: "अर्जुन प्रिया से {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lamba, hint: *lamba}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "से after the person compared means than, and the adjective agrees with the one who is taller.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.fill.006
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: fill_in_blank
+    frame: {text: "मैं {item} हूँ। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lambi, hint: *lambi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The speaker here is a woman, so the adjective ends in -ी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.translate.007
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: translation
+    frame: {text: "Arjun is taller than Priya.", language_code: en, direction: ltr}
+    slots: {item: *lamba}
+    answer_derivation: {kind: render_frame, frame: {text: "अर्जुन प्रिया से {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The thing compared with takes से, and the adjective agrees with Arjun, the subject.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.translate.008
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: translation
+    frame: {text: "My sister is tall.", language_code: en, direction: ltr}
+    slots: {item: *lambi}
+    answer_derivation: {kind: render_frame, frame: {text: "मेरी बहन {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मेरी and the adjective both end in -ी because बहन is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson01.translate.009
+    lesson_content_key: hi.a1.unit14.lesson01.se_tulna
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *lam}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The masculine -ा ending changes to -ी for a feminine subject: लंबा becomes लंबी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.choose.001
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "नया and नई are the masculine and feminine of new; note that the feminine ending is -ई, not -ी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.order.002
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: word_order
+    frame: {text: "यह बैग {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *naya}
+    answer_derivation: {kind: render_frame, frame: {text: "यह बैग {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "बैग is masculine, so the adjective is नया.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.order.003
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: word_order
+    frame: {text: "यह टोपी {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *nai}
+    answer_derivation: {kind: render_frame, frame: {text: "यह टोपी {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "टोपी is feminine, so the adjective is नई.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.fill.004
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: fill_in_blank
+    frame: {text: "टोपी बैग से {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *nai, hint: *nai}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "से after बैग means than, and the adjective agrees with टोपी, which is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.fill.005
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: fill_in_blank
+    frame: {text: "बैग टोपी से {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *naya, hint: *naya}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adjective agrees with the subject बैग, not with the thing after से.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.translate.006
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: translation
+    frame: {text: "The hat is newer than the bag.", language_code: en, direction: ltr}
+    slots: {item: *nai}
+    answer_derivation: {kind: render_frame, frame: {text: "टोपी बैग से {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With a comparison the adjective follows the subject: टोपी is feminine, so नई.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.translate.007
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: translation
+    frame: {text: "This bag is new.", language_code: en, direction: ltr}
+    slots: {item: *naya}
+    answer_derivation: {kind: render_frame, frame: {text: "यह बैग {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "नया changes to नई only for feminine nouns such as टोपी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit14.lesson02.translate.008
+    lesson_content_key: hi.a1.unit14.lesson02.vastu_tulna
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *nn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Like बड़ा and बड़ी, the adjective for new changes with gender, but its feminine form is नई.", language_code: en, direction: ltr}
