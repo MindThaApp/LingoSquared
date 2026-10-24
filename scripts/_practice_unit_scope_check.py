@@ -169,6 +169,14 @@ DIRECTIONS: list[tuple[str, str, str]] = [
     ("en-nl", "en-nl", "backfill_lexemes_en_nl"),
     ("nl-en", "nl-en", "backfill_lexemes_nl_en"),
 ]
+# Session 10 (2026-10-24): any further practice direction whose backfill
+# follows the backfill_lexemes_<src>_<tgt>.py naming convention (en-es,
+# en-de, ...) is discovered automatically, so a new direction never needs
+# a hand edit here.
+for _dir in sorted(p.name for p in (Path(__file__).resolve().parent.parent / "docs/content/practice").iterdir() if p.is_dir()):
+    _mod = "backfill_lexemes_" + _dir.replace("-", "_")
+    if (Path(__file__).resolve().parent / (_mod + ".py")).exists() and _dir not in {d[0] for d in DIRECTIONS}:
+        DIRECTIONS.append((_dir, _dir, _mod))
 
 
 def main() -> int:
