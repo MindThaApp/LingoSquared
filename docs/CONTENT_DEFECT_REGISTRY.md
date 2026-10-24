@@ -3991,3 +3991,57 @@ Native flags: 14, recorded in each file's review.notes (e.g. *در* vs
 Verification: `scripts/verify.sh --content-only` passes with warnings
 identical to baseline; answer-leakage 36 (unchanged); practice
 self-reference 0.
+
+### 2026-10-24 — en-de/en-es/en-fr residual realization language review (fresh-context review; branch content/review-real-en-de-es-fr)
+Scope: 49 files with no session-9 pass (de 14, es 13, fr 22), plus their paired overlays.
+Fix count: about 113 (de 53, es about 19, fr about 41).
+
+Defect classes (all had passed a green compile):
+- **False grammar notes.** de *den* glossed "accusative/dative"; de *dennoch*
+  called "stronger than allerdings"; de *kein* rule too narrow; fr *vraiment* note.
+- **Ungrammatical or unidiomatic target text.** fr *se reposer la voix*;
+  de *beiseitewischen*; es *un buen desarrollo* and *muy delicioso*.
+- **Mood.** es *eso no quita que* and fr *cela n'empêche pas que* were
+  followed by the indicative; both now take the subjunctive.
+- **Broken English.** "the disadvantages outweigh for me"; "He is maybe
+  late"; "I wear medium size"; "has hurt since yesterday".
+- **Answer giveaway.** fr A1 u02 prompt "soixante plus dix" revealed the blank.
+- **Audio script out of sync.** A worker changed a dialogue line but not
+  its audio script (fr B2 u01); the Opus spot-check caught it.
+- **Missing variants.** Digits, punctuation and short answers.
+
+Native flags: about 20, recorded in review.notes and in
+.local/logs/session10-review-en-defr*.md.
+
+Verification: verify.sh --content-only passes with WARN 2651 (the same set
+as the baseline); answer-leakage 36 (unchanged); practice self-reference 0.
+
+Owner decisions applied (same PR, follow-up commit). No item was re-keyed and
+`required_next_reviewer` is unchanged:
+- **de B1 u38:** the weil-clause hung on a dass-clause, so the reason was
+  ambiguous. The disagreement now gives its reason with *denn*: "Ich stimme
+  nicht zu, dass Homeoffice besser ist, denn Teamarbeit ist im Büro einfacher."
+- **de B1 u50:** "Trotzdem sollten wir ..." came right after agreeing, which
+  broke the discourse logic. It is now "Deshalb sollten wir ...".
+- **de C1 u07:** "sicher übertragen" is now "zuverlässig übertragen"
+  (reliability is meant), with the English changed to "reliably".
+- **es A2 u21:** "de ocho a tres de la tarde" is now "de ocho de la mañana a
+  tres de la tarde". "Me interesa porque está más cerca" (the job as the
+  subject) is now "porque la escuela está más cerca".
+- **es B1 u27:** past regret is now the personal "Tendría que haber entregado
+  el formulario ayer". The impersonal "Habría sido necesario que entregara..."
+  stays accepted.
+- **fr A1 u02:** the phone numbers had 8 digits. They now have 10 (06 15 02 97 43
+  and 07 20 41 89 36).
+- **fr B2 u08:** "Les deux avis aiment les croissants" personified the reviews.
+  It is now "vantent", and *vanter* is taught.
+- **fr A2 u16 and B2 u02:** two non sequiturs were rewritten:
+  - A2 u16: "C'est pour ça que c'est ton choix" is now "C'est ta passion,
+    c'est pour ça que tu préfères la pâtisserie".
+  - B2 u02: "raté le bus à cause de la circulation" is now "Son bus a
+    peut-être pris du retard à cause de la circulation".
+
+Defect class: **discourse-logic / connector misuse.** Each text compiled and
+was grammatical, but its connector (weil, trotzdem, c'est pour ça que,
+à cause de) did not match the logic of the sentence or dialogue. Changed audio
+scripts stay pending_generation.
