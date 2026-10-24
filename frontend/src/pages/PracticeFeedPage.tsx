@@ -7,6 +7,7 @@ import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ConversationRunner, type ConversationPrompt } from "../components/ConversationRunner";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { EmphasizedText } from "../components/EmphasizedText";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
@@ -198,6 +199,11 @@ function PracticeCard({
                     answer: formatCorrectResponse(result.correct_response),
                   })}
               </p>
+              {result.feedback && (
+                <p dir="auto" style={{ margin: "6px 0 0", fontWeight: 400 }}>
+                  <EmphasizedText text={result.feedback} />
+                </p>
+              )}
             </div>
           );
         })()}

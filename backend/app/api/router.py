@@ -157,6 +157,7 @@ from app.services import push as push_service
 from app.services.push_scheduler import claim_notification, local_date_for
 from app.services import feedback_attachments as feedback_attachment_service
 from app.practice.service import (
+    render_item_feedback,
     generate_batch,
     generate_checkpoint,
     generate_conversation_batch,
@@ -2907,6 +2908,10 @@ def practice_answer(
             item.correct_response
         ),
         "xp_awarded": xp_awarded,
+        "feedback": render_item_feedback(
+            db, template, item.course_id, item.filled_slots,
+            item.target_lexeme_id,
+        ),
     }
 
 def temporary_password() -> str:
