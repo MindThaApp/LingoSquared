@@ -9,8 +9,9 @@ All plumbing lives in scripts/_target_lexeme_backfill_common.py (see its
 docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
-Scope: A1 only (the "en-fr" manifest group, units 01-14). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-fr" group, units 01-14) and A2 (the "en-fr-a2" group, units
+15-24; table A2_ENTRIES, session 11). B1+ is not classified yet; extend LEVELS
+and the tables below together.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md section 0.1, 6.6):
 * the gloss is the sense the unit actually teaches at first sight,
@@ -51,11 +52,12 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "fr"
-LEVELS = {"a1": "en-fr"}
+LEVELS = {"a1": "en-fr", "a2": "en-fr-a2"}
 
 PROPER_NOUNS = {
     "Camille", "Noé", "Montreuil", "Lille", "Inès", "Mathieu", "Trois-Frères",
-    "Saint-Ouen", "Lyon", "Paris",
+    "Saint-Ouen", "Lyon", "Paris", "Fleurs", "Fournier", "Lambert",
+    "République", "Vitale", "Girard", "Lefebvre", "Dijon",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -330,6 +332,281 @@ for _set in POS_SETS.values():
     _set -= _D_FORMS
 POS_SETS["phrase"] |= _D_FORMS | {"c'est", "c’est"}
 POS_SETS["adverb"] |= {"combien"}
+# --- A2 additions (session 11): "French A2" course, units 15-24 ---------------
+# One entry per A2 first-sight token: (part of speech, hand-written gloss).
+# Codes: n noun, v verb, a adjective, d adverb, p preposition, c conjunction/
+# particle, r pronoun, h phrase, N proper noun, s symbol.
+_POS_CODE = {
+    "n": "noun", "v": "verb", "a": "adjective", "d": "adverb",
+    "p": "preposition", "c": "particle", "r": "pronoun", "h": "phrase",
+    "N": "proper_noun", "s": "symbol",
+}
+A2_ENTRIES: dict[str, tuple[str, str]] = {
+    # unit15 administrative procedures
+    "mairie": ("n", "town hall"), "dois": ("v", "I must; you must (informal)"),
+    "changement": ("n", "change"), "d'adresse": ("h", "of address"),
+    "signaler": ("v", "to report; to notify"), "pièce": ("n", "document; piece"),
+    "d'identité": ("h", "of identity"), "devez": ("v", "you must (formal or plural)"),
+    "présenter": ("v", "to present; to show"), "valide": ("a", "valid"),
+    "justificatif": ("n", "supporting document; proof"),
+    "domicile": ("n", "home address; residence"), "récent": ("a", "recent (masc.)"),
+    "obligatoire": ("a", "compulsory"), "rendez-vous": ("n", "appointment"),
+    "j'aimerais": ("v", "I would like"), "remplir": ("v", "to fill in; to fill out"),
+    "formulaire": ("n", "form (to fill in)"), "partir": ("v", "to leave"),
+    "l'agent": ("n", "the officer; the clerk"),
+    "d'accueil": ("h", "of welcome; front-desk (after a noun)"),
+    "explique": ("v", "explains; explain"),
+    "démarche": ("n", "procedure; step to take"), "suivre": ("v", "to follow"),
+    "délai": ("n", "time limit; deadline"), "jours": ("n", "days"),
+    "registre": ("n", "register (level of formality); record book"),
+    "formel": ("a", "formal (masc.)"), "démarches": ("n", "procedures; formalities"),
+    "administratives": ("a", "administrative (fem. plural)"),
+    "faudrait": ("v", "it would be necessary"),
+    "apportiez": ("v", "that you bring (subjunctive)"),
+    "votre": ("a", "your (formal or plural)"),
+    "pourriez-vous": ("v", "could you (formal)"), "confirmer": ("v", "to confirm"),
+    "nouvelle": ("a", "new (fem.)"), "adresse": ("n", "address"),
+    "faut": ("v", "it is necessary"),
+    "n'expire": ("v", "expires (with a formal n' that does not negate)"),
+    "envoyez": ("v", "send (formal or plural command)"),
+    "dossier": ("n", "file; application folder"),
+    "est-ce": ("h", "is it that (opens a yes/no question)"),
+    "qu'il": ("h", "that he; that it"), "avis": ("n", "opinion; notice"),
+    "présentez-vous": ("v", "report in person (formal command)"),
+    "l'accueil": ("n", "the reception desk"), "mois": ("n", "month; months"),
+    "emménagement": ("n", "moving in"), "madame": ("n", "madam; Mrs"),
+    "monsieur": ("n", "sir; Mr"),
+    "présentiez": ("v", "that you present (subjunctive)"),
+    "carte": ("n", "card"), "facture": ("n", "bill; invoice"),
+    "d'électricité": ("h", "of electricity"),
+    "Fleurs": ("N", "Fleurs (part of a street name)"),
+    "troisième": ("a", "third"), "arrondissement": ("n", "city district"),
+    "remplissiez": ("v", "that you fill in (subjunctive)"),
+    # unit16 opinions
+    "pâtisserie": ("n", "pastry-making; pastry shop"),
+    "intéressante": ("a", "interesting (fem.)"), "utile": ("a", "useful"),
+    "quotidien": ("n", "everyday life"), "parce": ("c", "because (first half of a two-word conjunction)"),
+    "créatif": ("a", "creative (masc.)"), "vend": ("v", "sells"),
+    "tous": ("a", "every; all (masc. plural)"), "toujours": ("d", "always; still"),
+    "boulangers": ("n", "bakers"), "par": ("p", "by; through"),
+    "contre": ("p", "against"), "demande": ("v", "requires; asks for"),
+    "créativité": ("n", "creativity"), "stable": ("a", "stable"),
+    "financièrement": ("d", "financially"),
+    "pâtissiers": ("n", "pastry chefs (masc. plural)"),
+    "demandés": ("a", "in demand (masc. plural)"), "mariages": ("n", "weddings"),
+    "même": ("d", "even; same"), "si": ("c", "if"),
+    "indicatif": ("n", "indicative (a verb mood)"), "jamais": ("d", "never; ever"),
+    "subjonctif": ("n", "subjunctive (a verb mood)"),
+    "vaudrait": ("v", "would be worth"),
+    "choisisses": ("v", "that you choose (informal, subjunctive)"),
+    "pense": ("v", "think; thinks"), "vaut": ("v", "is worth"),
+    "commencer": ("v", "to start"), "possible": ("a", "possible"),
+    "sois": ("v", "that you be (informal, subjunctive)"),
+    "heureuse": ("a", "happy (fem.)"), "d'un": ("h", "from one; on one (side)"),
+    "créative": ("a", "creative (fem.)"), "dépend": ("v", "depends"),
+    "chacun": ("r", "each person; everyone"), "son": ("a", "his; her; one's (masc.)"),
+    "spécialité": ("n", "specialty; field of study"), "l'année": ("n", "the year"),
+    "encore": ("d", "yet; still; again"), "risqué": ("a", "risky"),
+    "gens": ("n", "people"), "achètent": ("v", "buy (they)"),
+    "stabilité": ("n", "stability"), "passion": ("n", "passion"),
+    # unit17 bank account
+    "ouvrir": ("v", "to open"), "compte": ("n", "account"),
+    "courant": ("a", "current; checking (masc.)"), "prouve": ("v", "proves"),
+    "actuellement": ("d", "currently"), "contrat": ("n", "contract"),
+    "revenus": ("n", "income"), "apporté": ("v", "brought (past participle)"),
+    "fiche": ("n", "slip; sheet"), "paie": ("n", "pay (wages)"),
+    "bancaire": ("a", "bank; banking"), "pouvez": ("v", "you can (formal or plural)"),
+    "payer": ("v", "to pay"), "retirer": ("v", "to withdraw"),
+    "l'argent": ("n", "the money"), "virement": ("n", "bank transfer"),
+    "employeur": ("n", "employer"), "salaire": ("n", "salary"),
+    "découvert": ("n", "overdraft"), "autorisé": ("a", "authorised (masc.)"),
+    "laisse": ("v", "leaves; lets"), "marge": ("n", "margin; leeway"),
+    "agence": ("n", "branch; agency"), "centre-ville": ("n", "town centre"),
+    "conseillère": ("n", "advisor (fem.)"), "répond": ("v", "answers"),
+    "toutes": ("a", "every; all (fem. plural)"), "questions": ("n", "questions"),
+    "conseiller": ("n", "advisor (masc.)"), "renseignements": ("n", "information"),
+    "comptes": ("n", "accounts"), "courants": ("a", "current; checking (masc. plural)"),
+    "pourriez": ("v", "could (you, formal)"),
+    "m'expliquer": ("v", "to explain to me"), "signer": ("v", "to sign"),
+    "soit": ("v", "that it be (subjunctive)"), "actif": ("a", "active (masc.)"),
+    "faut-il": ("v", "is it necessary (question)"), "prête": ("a", "ready (fem.)"),
+    "tenue": ("n", "keeping; upkeep"),
+    "gratuit": ("a", "free of charge (masc.)"),
+    "gratuite": ("a", "free of charge (fem.)"), "première": ("a", "first (fem.)"),
+    "année": ("n", "year"), "conditionnel": ("n", "conditional (a verb mood)"),
+    "politesse": ("n", "politeness"), "notre": ("a", "our"),
+    "apprentissage": ("n", "apprenticeship"),
+    "pâtissière": ("n", "pastry chef (fem.)"), "félicitations": ("n", "congratulations"),
+    "dire": ("v", "to say; to tell"), "élevés": ("a", "high (masc. plural)"),
+    "restent": ("v", "stay; remain (they)"), "raisonnables": ("a", "reasonable (plural)"),
+    "aurez": ("v", "you will have (formal or plural)"), "cents": ("n", "cents"),
+    "sera": ("v", "will be"), "receviez": ("v", "that you receive (subjunctive)"),
+    # unit18 at the doctor
+    "gorge": ("n", "throat"), "depuis": ("p", "since; for"),
+    "commencé": ("v", "started (past participle)"), "tôt": ("d", "early"),
+    "douleur": ("n", "pain"), "forte": ("a", "strong; severe (fem.)"),
+    "surtout": ("d", "especially"), "avaler": ("v", "to swallow"),
+    "épuisé": ("a", "exhausted (masc.)"), "épuisée": ("a", "exhausted (fem.)"),
+    "cause": ("n", "cause"), "debout": ("d", "standing up"),
+    "chaleur": ("n", "heat"), "fours": ("n", "ovens"),
+    "empirer": ("v", "to get worse"), "empire": ("v", "gets worse"),
+    "docteur": ("n", "doctor"), "voix": ("n", "voice"),
+    "enrouée": ("a", "hoarse (fem.)"),
+    "s'améliorer": ("v", "to get better; to improve"),
+    "s'améliore": ("v", "gets better; improves"),
+    "revenez": ("v", "come back (formal or plural command)"),
+    "voir": ("v", "to see"), "arrêt": ("n", "stop; sick leave"),
+    "m'a": ("v", "has (to me, for me)"), "conseille": ("v", "advise; advises"),
+    "reposiez": ("v", "that you rest (subjunctive)"), "boire": ("v", "to drink"),
+    "d'eau": ("h", "of water"), "chaude": ("a", "hot; warm (fem.)"),
+    "preniez": ("v", "that you take (subjunctive)"), "sirop": ("n", "syrup; cough syrup"),
+    "fois": ("n", "times; occasions"), "veux": ("v", "I want; you want (informal)"),
+    "reveniez": ("v", "that you come back (subjunctive)"), "reposer": ("v", "to rest"),
+    "confirmation": ("n", "confirmation"), "Fournier": ("N", "Fournier"),
+    "mardi": ("n", "Tuesday"), "14h30": ("s", "14:30 (half past two in the afternoon)"),
+    "cabinet": ("n", "doctor's office; practice"), "Lambert": ("N", "Lambert"),
+    "République": ("N", "Republic (part of a street name)"),
+    "d'arriver": ("h", "of arriving"), "d'apporter": ("h", "of bringing"),
+    "Vitale": ("N", "Vitale (name of the French health insurance card)"),
+    "d'autres": ("h", "of others; other"), "symptômes": ("n", "symptoms"),
+    "fièvre": ("n", "fever"), "exemple": ("n", "example"),
+    "toute": ("a", "whole; all (fem.)"), "journée": ("n", "whole day"),
+    "vois": ("v", "see (I)"), "ouvrez": ("v", "open (formal or plural command)"),
+    "bouche": ("n", "mouth"), "angine": ("n", "tonsillitis; throat infection"),
+    "vos": ("a", "your (plural)"), "cordes": ("n", "cords; strings"),
+    "vocales": ("a", "vocal (fem. plural)"), "irritées": ("a", "irritated (fem. plural)"),
+    "autant": ("d", "as much"), "miel": ("n", "honey"),
+    "prescrire": ("v", "to prescribe"),
+    # unit19 housing problem
+    "panne": ("n", "breakdown; fault"), "four": ("n", "oven"),
+    "utiliser": ("v", "to use"), "pâtisseries": ("n", "pastries"),
+    "chauffage": ("n", "heating"), "marche": ("v", "works (of a device); walks"),
+    "froid": ("a", "cold"), "fonctionne": ("v", "works; functions"),
+    "salle": ("n", "room"), "bain": ("n", "bath"), "fuite": ("n", "leak"),
+    "fuir": ("v", "to leak"), "fuit": ("v", "leaks"), "sous": ("p", "under"),
+    "l'évier": ("n", "the sink"), "robinet": ("n", "tap; faucet"),
+    "réparer": ("v", "to repair"), "réparation": ("n", "repair"),
+    "vite": ("d", "quickly"), "propriétaire": ("n", "landlord; owner"),
+    "locataire": ("n", "tenant"), "doit": ("v", "must; has to (he, she, one)"),
+    "envoyer": ("v", "to send"), "quelqu'un": ("r", "someone"),
+    "tant": ("d", "so much; so many"), "problèmes": ("n", "problems"),
+    "serait": ("v", "would be"), "passer": ("v", "to come by; to drop by"),
+    "vienne": ("v", "that he or she comes (subjunctive)"),
+    "réparé": ("v", "repaired (past participle)"), "dès": ("p", "from; as early as"),
+    "m'appeliez": ("v", "that you call me (subjunctive)"),
+    "problème": ("n", "problem"), "écris": ("v", "write (I; you, informal)"),
+    "appartement": ("n", "flat; apartment"),
+    "n'y": ("h", "not there (as in there is no ...)"),
+    "savoir": ("v", "to know"), "pourrez": ("v", "you will be able to (formal or plural)"),
+    "chauffe": ("v", "heats; warms"), "vraiment": ("d", "really"),
+    "l'appartement": ("n", "the flat; the apartment"), "Girard": ("N", "Girard"),
+    "étage": ("n", "floor; storey"), "désolé": ("a", "sorry (masc.)"),
+    "d'entendre": ("h", "of hearing"),
+    "j'en": ("h", "I ... of it; I ... some of it"),
+    "appeler": ("v", "to call"), "technicien": ("n", "technician"),
+    "devrait": ("v", "should; ought to"), "entre": ("p", "between"),
+    "serai": ("v", "I will be"), "chez": ("p", "at the home of"),
+    "matinée": ("n", "morning (the whole morning)"),
+    "n'hésitez": ("v", "do not hesitate (formal command)"),
+    "rappeler": ("v", "to call back"), "passera": ("v", "will come by"),
+    "9h": ("s", "9 o'clock"), "12h": ("s", "12 o'clock (noon)"),
+    # unit20 job interview
+    "Lefebvre": ("N", "Lefebvre"), "cherche": ("v", "looks for; is looking for"),
+    "un(e)": ("c", "a (masc. or fem.)"),
+    "apprenti(e)": ("n", "apprentice (masc. or fem.)"),
+    "motivé(e)": ("a", "motivated (masc. or fem.)"),
+    "rentrée": ("n", "start of the new school or work year"),
+    "demandons": ("v", "we ask for"), "disponibilité": ("n", "availability"),
+    "compris": ("a", "included (masc.)"),
+    "candidature": ("n", "job application"), "postuler": ("v", "to apply (for a job)"),
+    "postulé": ("v", "applied (past participle)"),
+    "passionnée": ("a", "passionate; keen (fem.)"), "entretien": ("n", "interview"),
+    "d'embauche": ("h", "of hiring"),
+    "présente": ("v", "introduces; presents"), "m'appelle": ("v", "I am called"),
+    "l'expérience": ("n", "the experience"), "d'": ("p", "of; from (before a vowel)"),
+    "suivi": ("v", "followed; attended (past participle)"), "ami": ("n", "friend (masc.)"),
+    "stage": ("n", "internship; work placement"), "cet": ("a", "this (masc., before a vowel)"),
+    "semaines": ("n", "weeks"), "disponible": ("a", "available"),
+    "point": ("n", "point"), "fort": ("a", "strong (masc.)"),
+    "motivée": ("a", "motivated (fem.)"), "j'apprends": ("v", "I learn"),
+    "utilise": ("v", "uses"), "pourrais": ("v", "I could"),
+    "poser": ("v", "to ask (a question); to put"),
+    "travaillerais": ("v", "I would work"), "matins": ("n", "mornings"),
+    "l'apprentissage": ("n", "the apprenticeship"),
+    "formateur": ("n", "trainer (masc.)"), "former": ("v", "to train"),
+    "auprès": ("p", "alongside; with"), "chef": ("n", "head; chef"),
+    "pâtissier": ("n", "pastry chef (masc.)"), "intéressée": ("a", "interested (fem.)"),
+    "récemment": ("d", "recently"), "envie": ("n", "wish; desire"),
+    "d'aller": ("h", "of going"), "d'être": ("h", "of being"),
+    "venue": ("v", "come (fem. past participle)"),
+    "parlez-moi": ("v", "tell me (formal command)"), "expérience": ("n", "experience"),
+    "début": ("n", "beginning"), "professionnelle": ("a", "professional (fem.)"),
+    "appris": ("v", "learned (past participle)"),
+    "viennoiseries": ("n", "breakfast pastries (croissants and similar)"),
+    "seriez-vous": ("v", "would you be (formal)"),
+    "pose": ("v", "poses; puts"), "aucun": ("a", "no; not any"),
+    "fermés": ("a", "closed (masc. plural)"), "plupart": ("n", "most; majority"),
+    "travailleriez": ("v", "you would work (formal)"),
+    "l'ouverture": ("n", "the opening"), "j'espérais": ("v", "I was hoping"),
+    # unit21 disrupted journey
+    "train": ("n", "train"), "annulé": ("a", "cancelled (masc.)"),
+    "technique": ("a", "technical"), "voie": ("n", "platform; track"),
+    "partira": ("v", "will leave"), "correspondance": ("n", "connection (to another train)"),
+    "Dijon": ("N", "Dijon"), "billet": ("n", "ticket"), "valable": ("a", "valid"),
+    "aux": ("p", "to the; at the (plural)"), "voyageurs": ("n", "travellers"),
+    "18h40": ("s", "18:40 (twenty to seven in the evening)"),
+    "retardé": ("a", "delayed (masc.)"), "quarante": ("n", "forty"),
+    "peuvent": ("v", "can (they)"),
+    "prévenir": ("v", "to warn; to let someone know"),
+    "j'arriverai": ("v", "I will arrive"), "rater": ("v", "to miss"),
+    "raté": ("v", "missed (past participle)"), "arriver": ("v", "to arrive"),
+    "prévu": ("a", "expected; scheduled (masc.)"), "annoncé": ("a", "announced (masc.)"),
+    "dix-neuf": ("n", "nineteen"), "soirée": ("n", "evening"),
+    # unit22 digital life
+    "consulter": ("v", "to check; to consult"), "messages": ("n", "messages"),
+    "consulte": ("v", "checks; consults"), "réseaux": ("n", "networks"),
+    "sociaux": ("a", "social (masc. plural)"), "métro": ("n", "underground; subway"),
+    "rester": ("v", "to stay; to remain"), "contact": ("n", "contact"),
+    "j'utilise": ("v", "I use"), "d'écran": ("h", "of the screen"),
+    "j'essaie": ("v", "I try"), "limiter": ("v", "to limit"),
+    "vingt-et-une": ("a", "twenty-one (fem.)"), "appli": ("n", "app"),
+    "recettes": ("n", "recipes"), "presque": ("d", "almost"),
+    "message": ("n", "message"), "parfois": ("d", "sometimes"),
+    "ligne": ("n", "line"), "internet": ("n", "the internet"),
+    "pauses": ("n", "breaks"), "déménagement": ("n", "move (to a new home)"),
+    "utilises": ("v", "use (you, informal)"), "souvent": ("d", "often"),
+    "réponds": ("v", "answer; reply (I)"),
+    # unit23 busy week
+    "chargée": ("a", "busy (fem.)"), "j'appelle": ("v", "I call"),
+    "réviser": ("v", "to revise; to study again"), "planning": ("n", "schedule"),
+    "d'inès": ("h", "of Inès"), "jeudi": ("n", "Thursday"), "appel": ("n", "call"),
+    "révise": ("v", "revises; studies"), "travailler": ("v", "to work"),
+    "travaille": ("v", "works; work (I; he, she)"), "général": ("a", "general"),
+    "reposes": ("v", "rest (you, informal)"), "tranquille": ("a", "calm; quiet"),
+    # unit24 complaint
+    "réclamation": ("n", "complaint"), "service": ("n", "service; department"),
+    "client": ("n", "customer"), "balance": ("n", "scale (for weighing)"),
+    "ticket": ("n", "receipt; ticket"), "caisse": ("n", "cash register; checkout"),
+    "gardé": ("v", "kept (past participle)"), "l'échange": ("n", "the exchange"),
+    "l'écran": ("n", "the screen"), "l'allume": ("v", "turn(s) it on"),
+    "noir": ("a", "black; dark"), "produit": ("n", "product"),
+    "défectueux": ("a", "faulty (masc.)"), "magasin": ("n", "shop"),
+    "reprend": ("v", "takes back"), "remboursement": ("n", "refund"),
+    "demander": ("v", "to ask for"), "retours": ("n", "returns"),
+    "produits": ("n", "products"), "échangés": ("a", "exchanged (masc. plural)"),
+    "remboursés": ("a", "refunded (masc. plural)"), "pendant": ("p", "during; for"),
+    "échange": ("n", "exchange"), "vendeur": ("n", "salesperson (masc.)"),
+    "propose": ("v", "suggests; offers"), "cas": ("n", "case"),
+    "proposer": ("v", "to suggest; to offer"), "nouveau": ("a", "new (masc.)"),
+    "modèle": ("n", "model"), "pourrai": ("v", "I will be able to"),
+    "présentation": ("n", "showing; presentation"),
+}
+POS_SETS["preposition"].discard("d'autres")  # A2 classifies the elided form as a phrase
+for _tok, (_code, _gloss) in A2_ENTRIES.items():
+    GLOSSES[_tok] = _gloss
+    if _code != "n":
+        POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
+
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -349,6 +626,16 @@ for _tag, _words in {
 
 part_of_speech = pos_lookup(POS_SETS)
 
+# A2 re-uses a few A1 spellings in a different sense; the A2 course gets its own
+# gloss (and part of speech) keyed by (realization stem, token).
+GLOSS_OVERRIDES = {
+    ("a2_unit17_compte_bancaire", "frais"): "fees; charges",
+    ("a2_unit20_entretien_embauche", "poste"): "job; position",
+    ("a2_unit22_vie_numerique", "regarde"): "look at; watch (I; he, she)",
+    ("a2_unit22_vie_numerique", "passe"): "spend (time); pass",
+}
+POS_OVERRIDES = {("a2_unit17_compte_bancaire", "frais"): "noun"}
+
 
 def iter_specs():
     for level, group in LEVELS.items():
@@ -361,6 +648,8 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=GLOSS_OVERRIDES,
+            pos_overrides=POS_OVERRIDES,
         )
 
 
