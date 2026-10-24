@@ -1,0 +1,160 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit23
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit23.communication
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u23*, single-member w_<token> anchors). Pools are
+    unit-scoped. أعد and تكلم are masculine commands (Layla speaks to Yusuf), so prompts say "(to a man)";
+    أسمعك is written without a pronoun, so prompts add "(no separate word for I)". Canon checked: Yusuf is a
+    man (قال يوسف), Layla a woman who cannot hear him on the phone. من فضلك, لا, هذه and the hour are
+    earlier-unit words used as literal text. Matching uses 6 of the 7 distinct-sense tokens.
+    Reviewer: confirm "تكلم ببطء من فضلك" and "أعد من فضلك".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_هاتف, w_أسمعك, w_أعد, w_تكلم, w_ببطء, w_رسالة, w_الموعد]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_هاتف, w_أسمعك, w_أعد, w_تكلم, w_ببطء]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_هاتف, w_أسمعك, w_أعد, w_تكلم, w_ببطء, w_رسالة]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_رسالة, w_الموعد, w_هاتف, w_ببطء]}}
+  hatif: &hatif {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_هاتف}}
+  asma3uk: &asma3uk {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أسمعك}}
+  a3id: &a3id {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أعد}}
+  takallam: &takallam {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_تكلم}}
+  bibutu: &bibutu {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_ببطء}}
+  risala: &risala {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_رسالة}}
+  maw3id: &maw3id {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الموعد}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.choose.001
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أعد is a masculine command meaning repeat; تكلم is speak.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.listen.002
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "لا أسمعك is I do not hear you; أسمعك includes the object you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.match.003
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "أعد and تكلم are commands to a man; أسمعك is I hear you; ببطء is an adverb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.order.004
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: word_order
+    frame: {text: "لا {item}.", language_code: ar, direction: rtl}
+    slots: {item: *asma3uk}
+    answer_derivation: {kind: render_frame, frame: {text: "لا {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "لا before the verb negates it: لا أسمعك is I cannot hear you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.order.005
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: word_order
+    frame: {text: "لا أسمعك. {item} من فضلك.", language_code: ar, direction: rtl}
+    slots: {item: *a3id}
+    answer_derivation: {kind: render_frame, frame: {text: "لا أسمعك. {item} من فضلك.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أعد is the masculine command repeat, addressed to Yusuf.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.order.006
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: word_order
+    frame: {text: "يا يوسف تكلم {item} من فضلك.", language_code: ar, direction: rtl}
+    slots: {item: *bibutu}
+    answer_derivation: {kind: render_frame, frame: {text: "يا يوسف تكلم {item} من فضلك.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ببطء is slowly and comes after the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.fill.007
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: fill_in_blank
+    frame: {text: "لا {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *asma3uk, hint: *asma3uk}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أسمعك combines I hear with you, so no separate word for you is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.fill.008
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: fill_in_blank
+    frame: {text: "يا يوسف تكلم {item} من فضلك. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bibutu, hint: *bibutu}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ببطء follows the verb it describes.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.translate.009
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أعد and تكلم are commands to a man, أسمعك is a verb with an object, and ببطء is an adverb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.translate.010
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: translation
+    frame: {text: "I cannot hear you. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *asma3uk}
+    answer_derivation: {kind: render_frame, frame: {text: "لا {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "لا negates the verb; أسمعك already includes both I and you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson01.translate.011
+    lesson_content_key: ar.a1.unit23.lesson01.phone_clarify
+    type: translation
+    frame: {text: "Yusuf, please repeat. (to a man)", language_code: en, direction: ltr}
+    slots: {item: *a3id}
+    answer_derivation: {kind: render_frame, frame: {text: "يا يوسف {item} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Layla speaks to Yusuf with the masculine command أعد.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.choose.001
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "رسالة is a message and الموعد is the appointment, with ال.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.listen.002
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "الموعد في الساعة الخامسة is the appointment is at five o'clock.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.order.003
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: word_order
+    frame: {text: "قال يوسف: {item} في الساعة الخامسة.", language_code: ar, direction: rtl}
+    slots: {item: *maw3id}
+    answer_derivation: {kind: render_frame, frame: {text: "قال يوسف: {item} في الساعة الخامسة.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ال makes it the appointment, a specific one: الموعد في الساعة الخامسة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.fill.004
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: fill_in_blank
+    frame: {text: "هذه {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *risala, hint: *risala}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "هذه (this) is feminine and goes with رسالة, which ends in ة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.fill.005
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: fill_in_blank
+    frame: {text: "قال يوسف: {item} في الساعة الخامسة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *maw3id, hint: *maw3id}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With ال the word means the appointment.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.translate.006
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "رسالة, هاتف and الموعد are nouns; ببطء is an adverb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit23.lesson02.translate.007
+    lesson_content_key: ar.a1.unit23.lesson02.phone_message
+    type: translation
+    frame: {text: "Yusuf, please speak slowly. (to a man)", language_code: en, direction: ltr}
+    slots: {a: *takallam, b: *bibutu}
+    answer_derivation: {kind: render_frame, frame: {text: "يا يوسف {a} {b} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "تكلم is the masculine command and ببطء follows it.", language_code: en, direction: ltr}

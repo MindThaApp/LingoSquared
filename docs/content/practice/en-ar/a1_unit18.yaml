@@ -1,0 +1,163 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit18
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit18.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u18*, single-member w_<token> anchors). Pools are
+    unit-scoped. عمل, عملك and العمل are never together in a pool, nor are أقرأ and وأقرأ. مهندس is masculine
+    (Yusuf is the engineer in the unit), so prompts say "(said by a man)". Verbs are written without a pronoun,
+    so prompts add "(no separate word for I)". Canon checked: Yusuf is the engineer who works in an office and
+    Layla asks him (ما عملك يا يوسف؟). Matching uses 6 distinct-sense tokens. Reviewer: confirm
+    "أكتب وأقرأ في العمل".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_مهندس, w_مكتب, w_أعمل, w_عملك, w_عمل, w_أكتب, w_أقرأ, w_العمل, w_وأقرأ]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_مهندس, w_مكتب, w_أعمل, w_عملك]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_عمل, w_مهندس, w_مكتب, w_أعمل, w_أكتب, w_أقرأ]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_أكتب, w_أقرأ, w_العمل, w_مكتب]}}
+  verbs: &verbs {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: [w_أكتب, w_أقرأ]}}
+  amal: &amal {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_عمل}}
+  amalak: &amalak {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_عملك}}
+  muhandis: &muhandis {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مهندس}}
+  maktab: &maktab {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مكتب}}
+  aamal: &aamal {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أعمل}}
+  aktub: &aktub {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أكتب}}
+  aqra: &aqra {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أقرأ}}
+  alamal: &alamal {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_العمل}}
+  waqra: &waqra {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_وأقرأ}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.choose.001
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "مهندس is an engineer (masculine); the feminine would add ة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.listen.002
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أعمل في مكتب is I work in an office; أعمل is the first-person verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.match.003
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "عمل is the noun work, while أعمل is the verb I work; أكتب and أقرأ are first-person verbs too.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.order.004
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: word_order
+    frame: {text: "أنا {item}.", language_code: ar, direction: rtl}
+    slots: {item: *muhandis}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic needs no word for am: أنا مهندس is literally I engineer.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.order.005
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: word_order
+    frame: {text: "أعمل في {item}.", language_code: ar, direction: rtl}
+    slots: {item: *maktab}
+    answer_derivation: {kind: render_frame, frame: {text: "أعمل في {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في (in) is followed by the place; مكتب is an office.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.fill.006
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: fill_in_blank
+    frame: {text: "أعمل في {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *maktab, hint: *maktab}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أعمل في مكتب is I work in an office.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.fill.007
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: fill_in_blank
+    frame: {text: "ما {item} يا يوسف؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *amalak, hint: *amalak}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ـك ending means your: عملك is your work.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.translate.008
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "عملك has the ending ـك (your); أعمل is a first-person verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.translate.009
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: translation
+    frame: {text: "I am an engineer. (said by a man)", language_code: en, direction: ltr}
+    slots: {item: *muhandis}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "A man says مهندس; no verb for am is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson01.translate.010
+    lesson_content_key: ar.a1.unit18.lesson01.job_workplace
+    type: translation
+    frame: {text: "I work in an office. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *maktab}
+    answer_derivation: {kind: render_frame, frame: {text: "أعمل في {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أعمل already means I work, so no أنا is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.choose.001
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أكتب is I write and أقرأ is I read; both are first-person verbs.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.listen.002
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "العمل has ال, so it is the work; في العمل is at work.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.order.003
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: word_order
+    frame: {text: "أنا {item} في العمل.", language_code: ar, direction: rtl}
+    slots: {item: *verbs}
+    answer_derivation: {kind: render_frame, frame: {text: "أنا {item} في العمل.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أنا (I) is optional with these verbs, which already mean I write and I read.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.order.004
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: word_order
+    frame: {text: "أكتب وأقرأ في {item}.", language_code: ar, direction: rtl}
+    slots: {item: *alamal}
+    answer_derivation: {kind: render_frame, frame: {text: "أكتب وأقرأ في {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في العمل means at work; ال is part of العمل.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.fill.005
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: fill_in_blank
+    frame: {text: "أكتب {item} في العمل. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *waqra, hint: *waqra}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The و is attached to the verb: وأقرأ means and I read.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.translate.006
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أكتب and أقرأ are first-person verbs; العمل is the work with ال.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.translate.007
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: translation
+    frame: {text: "I write at work. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *alamal}
+    answer_derivation: {kind: render_frame, frame: {text: "أكتب في {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في plus العمل means at work.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit18.lesson02.translate.008
+    lesson_content_key: ar.a1.unit18.lesson02.work_activity
+    type: translation
+    frame: {text: "I read at work. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {b: *alamal}
+    answer_derivation: {kind: render_frame, frame: {text: "أقرأ في {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The verb comes first, then في and the place.", language_code: en, direction: ltr}

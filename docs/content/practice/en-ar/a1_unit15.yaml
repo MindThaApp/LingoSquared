@@ -1,0 +1,135 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit15
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit15.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u15*, single-member w_<token> anchors). Pools are
+    unit-scoped. The unit has only five lexemes (four comparatives and والسوق), so there is no matching_pairs
+    (fewer than 6 distinct-sense tokens). The comparatives are masculine singular and agree with the masculine
+    subjects السوق, المقهى, الماء; من (than) and the place/drink nouns are earlier-unit words used as literal
+    text. Reviewer: confirm the comparative sentences read naturally, e.g. الماء أرخص من القهوة.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_أكبر, w_أصغر, w_أقرب, w_أرخص, w_والسوق]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_أكبر, w_أصغر, w_أقرب]}}
+  comp4: &comp4 {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_أكبر, w_أصغر, w_أقرب, w_أرخص]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_أرخص, w_والسوق, w_أكبر, w_أقرب]}}
+  akbar: &akbar {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أكبر}}
+  asghar: &asghar {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أصغر}}
+  aqrab: &aqrab {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أقرب}}
+  arkhas: &arkhas {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_أرخص}}
+  walsuq: &walsuq {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_والسوق}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.choose.001
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أكبر, أصغر and أقرب are comparatives; each is followed by من (than).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.listen.002
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The comparative adjective has one form for the comparison, followed by من: أقرب من is closer than.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.order.003
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: word_order
+    frame: {text: "السوق {item} من المقهى.", language_code: ar, direction: rtl}
+    slots: {item: *comp4}
+    answer_derivation: {kind: render_frame, frame: {text: "السوق {item} من المقهى.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The comparative comes between the two things compared, with من (than) before the second one.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.order.004
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: word_order
+    frame: {text: "المقهى {item} من السوق.", language_code: ar, direction: rtl}
+    slots: {item: *comp4}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى {item} من السوق.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic needs no word for is: المقهى أصغر من السوق is literally the cafe smaller than the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.fill.005
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: fill_in_blank
+    frame: {text: "المقهى {item} من السوق. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *asghar, hint: *asghar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أصغر is smaller; the same pattern gives أكبر, bigger.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.translate.006
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Comparatives are short Arabic adjectives with no separate word for more; من follows them.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.translate.007
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: translation
+    frame: {text: "The cafe is smaller than the market.", language_code: en, direction: ltr}
+    slots: {item: *asghar}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى {item} من السوق", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The comparative stays in one form and is followed by من (than).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson01.translate.008
+    lesson_content_key: ar.a1.unit15.lesson01.basic_comparisons
+    type: translation
+    frame: {text: "The cafe is closer than the market.", language_code: en, direction: ltr}
+    slots: {item: *aqrab}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى {item} من السوق", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أقرب is closer, from the idea of near, and is followed by من.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.choose.001
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أرخص is cheaper; it follows the same pattern as the other comparatives.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.listen.002
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "والسوق joins و (and) to السوق (the market) in one written word.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.order.003
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: word_order
+    frame: {text: "الماء {item} من القهوة.", language_code: ar, direction: rtl}
+    slots: {item: *arkhas}
+    answer_derivation: {kind: render_frame, frame: {text: "الماء {item} من القهوة.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أرخص is cheaper: الماء أرخص من القهوة means water is cheaper than coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.fill.004
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: fill_in_blank
+    frame: {text: "الماء {item} من القهوة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *arkhas, hint: *arkhas}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cheaper uses the same comparative pattern followed by من.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.translate.005
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *comp4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are four comparatives: bigger, smaller, closer and cheaper.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.translate.006
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: translation
+    frame: {text: "Water is cheaper than coffee.", language_code: en, direction: ltr}
+    slots: {item: *arkhas}
+    answer_derivation: {kind: render_frame, frame: {text: "الماء {item} من القهوة", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The comparative takes من before the second thing: cheaper than coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit15.lesson02.translate.007
+    lesson_content_key: ar.a1.unit15.lesson02.compare_choices
+    type: translation
+    frame: {text: "The cafe is closer than the market, and the market is bigger than the cafe.", language_code: en, direction: ltr}
+    slots: {a: *aqrab, b: *walsuq}
+    answer_derivation: {kind: render_frame, frame: {text: "المقهى {a} من السوق، {b} أكبر من المقهى", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The و (and) is written as part of the next word: والسوق.", language_code: en, direction: ltr}

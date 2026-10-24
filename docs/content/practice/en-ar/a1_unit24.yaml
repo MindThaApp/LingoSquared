@@ -1,0 +1,164 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit24
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit24.money
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u24*, single-member w_<token> anchors). Pools are
+    unit-scoped. بطاقة and بالبطاقة, and أدفع and سأدفع (present and future), are never together in a
+    recognition, matching or bare-word pool; matching uses 6 of the distinct-sense tokens. The verbs are
+    written without a pronoun, so prompts add "(no separate word for I)". نقدا has accusative tanwin as the
+    unit writes it. Canon checked: Layla is the customer, the seller (البائع) quotes ten dirhams.
+    Reviewer: confirm "هل أستطيع الدفع بالبطاقة؟" and "سأدفع بالبطاقة".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_مال, w_بطاقة, w_نقدا, w_أدفع, w_المبلغ, w_أستطيع, w_بالبطاقة, w_سأدفع, w_الدفع]
+slot_presets:
+  l1: &l1 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_مال, w_بطاقة, w_نقدا, w_أدفع]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_مال, w_أدفع, w_بطاقة, w_نقدا, w_المبلغ, w_أستطيع]}}
+  how: &how {language_code: ar, part_of_speech: [adverb, phrase], agreement_tags: {semantic: [w_بالبطاقة, w_نقدا]}}
+  tense: &tense {language_code: ar, part_of_speech: [verb, adverb], agreement_tags: {semantic: [w_أدفع, w_سأدفع, w_أستطيع, w_نقدا]}}
+  l2: &l2 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_المبلغ, w_أستطيع, w_الدفع, w_مال]}}
+  mal: &mal {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مال}}
+  adfa3: &adfa3 {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أدفع}}
+  bitaqa: &bitaqa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_بطاقة}}
+  bilbitaqa: &bilbitaqa {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_بالبطاقة}}
+  sadfa3: &sadfa3 {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_سأدفع}}
+  naqdan: &naqdan {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_نقدا}}
+  mablagh: &mablagh {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_المبلغ}}
+  astatii3: &astatii3 {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أستطيع}}
+  dafe: &dafe {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الدفع}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.choose.001
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "مال is money, بطاقة is a card and نقدا is cash; أدفع is I pay.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.listen.002
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *tense}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The prefix س before a verb makes it future: سأدفع is I will pay, while أدفع is I pay.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.match.003
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "أدفع and أستطيع are first-person verbs; المبلغ has ال, so it is the amount.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.order.004
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: word_order
+    frame: {text: "سأدفع {item}.", language_code: ar, direction: rtl}
+    slots: {item: *how}
+    answer_derivation: {kind: render_frame, frame: {text: "سأدفع {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The way of paying follows the verb: بالبطاقة is by card and نقدا is in cash.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.fill.005
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: fill_in_blank
+    frame: {text: "سأدفع {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bilbitaqa, hint: *bilbitaqa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ب in بالبطاقة means by or with; it is attached to the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.fill.006
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: fill_in_blank
+    frame: {text: "أدفع {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *naqdan, hint: *naqdan}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "نقدا means in cash and follows the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.translate.007
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "مال, بطاقة and نقدا describe money and paying; أدفع is the verb I pay.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.translate.008
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: translation
+    frame: {text: "I will pay by card. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {item: *bilbitaqa}
+    answer_derivation: {kind: render_frame, frame: {text: "سأدفع {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The prefix س makes the verb future, and بالبطاقة means by card.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson01.translate.009
+    lesson_content_key: ar.a1.unit24.lesson01.pay_method
+    type: translation
+    frame: {text: "I pay in cash. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {b: *naqdan}
+    answer_derivation: {kind: render_frame, frame: {text: "أدفع {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The present-tense verb أدفع already includes I.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.choose.001
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "المبلغ is the amount, with ال, and is what the seller names after كم.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.listen.002
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أستطيع is I can; it is followed by الدفع, paying.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.order.003
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: word_order
+    frame: {text: "كم {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *mablagh}
+    answer_derivation: {kind: render_frame, frame: {text: "كم {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "كم المبلغ؟ asks how much is the amount.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.order.004
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: word_order
+    frame: {text: "هل {item} الدفع بالبطاقة؟", language_code: ar, direction: rtl}
+    slots: {item: *astatii3}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {item} الدفع بالبطاقة؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The question word هل comes first, then the verb I can.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.order.005
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: word_order
+    frame: {text: "هل أستطيع {item} بالبطاقة؟", language_code: ar, direction: rtl}
+    slots: {item: *dafe}
+    answer_derivation: {kind: render_frame, frame: {text: "هل أستطيع {item} بالبطاقة؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "الدفع is the noun paying, with ال; after أستطيع it names what you can do.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.fill.006
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: fill_in_blank
+    frame: {text: "هل {item} الدفع بالبطاقة؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *astatii3, hint: *astatii3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أستطيع is I can; no separate word for I is needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.translate.007
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "المبلغ and الدفع have ال and are nouns; أستطيع is I can.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.translate.008
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: translation
+    frame: {text: "How much is the amount?", language_code: en, direction: ltr}
+    slots: {item: *mablagh}
+    answer_derivation: {kind: render_frame, frame: {text: "كم {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic needs no word for is: كم المبلغ؟ is literally how much the amount.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit24.lesson02.translate.009
+    lesson_content_key: ar.a1.unit24.lesson02.amount_payment
+    type: translation
+    frame: {text: "Can I pay by card? (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *dafe, b: *bilbitaqa}
+    answer_derivation: {kind: render_frame, frame: {text: "هل أستطيع {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The pattern is هل plus I can plus the noun paying.", language_code: en, direction: ltr}
