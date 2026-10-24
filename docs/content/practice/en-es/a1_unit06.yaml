@@ -1,0 +1,124 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit06
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u06* tags, w_<token>
+    anchors). Food pools are a curated w_ list (excludes provecho, glossed
+    "benefit", which only makes sense inside buen provecho); the "un ..."
+    order frames use masculine nouns only.
+    Opus pass 2026-10-24: replaced an off-topic incluido feedback on the food matching item and reworded the podemos feedback. NATIVE FLAG: Spain would usually say tarta rather than pastel for cake.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u06, w_sándwich, w_ensalada, w_sopa, w_agua, w_café, w_postre, w_pastel, w_comida, w_menú, w_cuenta, w_quieres, w_provecho, w_quiero, w_comer, w_podemos, w_ver, w_quieren, w_incluido]
+slot_presets:
+  food: &food {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_sándwich, w_ensalada, w_sopa, w_agua, w_café, w_postre, w_pastel, w_comida, w_menú, w_cuenta]}}
+  food_m: &food_m {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_sándwich, w_café, w_pastel]}}
+  verbs: &verbs {language_code: es, part_of_speech: [verb, adjective], agreement_tags: {semantic: es_a1_u06}}
+  production: &production {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [w_sándwich, w_ensalada, w_sopa, w_agua, w_café, w_postre, w_pastel, w_comida, w_menú, w_cuenta, w_quiero, w_comer, w_podemos, w_ver, w_quieren, w_incluido]}}
+  quieres: &quieres {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_quieres}}
+  menu: &menu {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_menú}}
+  provecho: &provecho {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_provecho}}
+  cuenta: &cuenta {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_cuenta}}
+  pastel: &pastel {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_pastel}}
+templates:
+  - content_key: practice.en-es.es.a1.unit06.lesson01.choose.001
+    lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *food}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Agua is feminine but takes el in the singular because it starts with a stressed a: el agua fría.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson01.listen.002
+    lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *food}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Café, menú and sándwich carry written accents; the accent marks the stressed syllable.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson02.order.001
+    lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+    type: word_order
+    frame: {text: "Quiero un {item}, por favor.", language_code: es, direction: ltr}
+    slots: {item: *food_m}
+    answer_derivation: {kind: render_frame, frame: {text: "Quiero un {item}, por favor.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Un goes with masculine nouns (un café); feminine nouns take una (una ensalada).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson02.translate.002
+    lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+    type: translation
+    frame: {text: "I want a {item}, please.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *food_m}
+    answer_derivation: {kind: render_frame, frame: {text: "Quiero un {item}, por favor.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Another common way to order is para mí + the dish: para mí, un café.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson02.fill.003
+    lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+    type: fill_in_blank
+    frame: {text: "¿Qué {item} comer? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *quieres, hint: *quieres}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Querer changes its stem: quiero, quieres, quiere, but queremos.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson03.order.001
+    lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+    type: word_order
+    frame: {text: "¿Podemos ver el {item}?", language_code: es, direction: ltr}
+    slots: {item: *menu}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Podemos ver el {item}?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Can we see the menu? ¿Podemos + infinitive? is a polite way to ask for something.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson03.translate.002
+    lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+    type: translation
+    frame: {text: "Enjoy your meal!", language_code: en, direction: ltr}
+    slots: {item: *provecho}
+    answer_derivation: {kind: render_frame, frame: {text: "¡Buen {item}!", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Buen provecho is said to people who are about to eat, even strangers at the next table.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson04.fill.001
+    lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+    type: fill_in_blank
+    frame: {text: "La {item}, por favor. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *cuenta, hint: *cuenta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In Spain the waiter usually waits for you to ask for the bill.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson04.translate.002
+    lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+    type: translation
+    frame: {text: "For dessert, I want cake.", language_code: en, direction: ltr}
+    slots: {item: *pastel}
+    answer_derivation: {kind: render_frame, frame: {text: "De postre quiero {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "De postre means for dessert; no article is needed before pastel here.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson05.match.001
+    lesson_content_key: es.a1.unit06.lesson05.leer_el_menu
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *food, second: *food, third: *food, fourth: *food, fifth: *food, sixth: *food}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Spain's menú del día is a set lunch: starter, main course, postre and usually bread and a drink, for one price.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson06.translate.001
+    lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *production}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Comida means both food and the midday meal, the main meal of the day in Spain.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson06.choose.002
+    lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *verbs}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The waiter says ¿Qué quieren comer? because quieren addresses both of you.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit06.lesson06.match.003
+    lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *production, second: *production, third: *production, fourth: *production, fifth: *production, sixth: *production}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Quiero, quieres and quieren are all forms of querer, to want.", language_code: en, direction: ltr}

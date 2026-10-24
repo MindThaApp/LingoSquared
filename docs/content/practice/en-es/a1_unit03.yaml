@@ -1,0 +1,154 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit03
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit03.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u03* tags, w_<token>
+    anchors). Sentence frames use curated w_ lists so every candidate agrees
+    with the frame (familia is feminine; mis/tus take plural nouns).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u03, es_a1_u03_l01, es_a1_u03_l03, es_a1_u03_l06, w_grande, w_pequeña, w_hermanas, w_abuelos, w_padres, w_primos, w_casa, w_menor, w_semana]
+slot_presets:
+  close: &close {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u03_l01}}
+  extended: &extended {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u03_l03}}
+  nouns: &nouns {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u03}}
+  content: &content {language_code: es, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: es_a1_u03}}
+  verbs_adj: &verbs_adj {language_code: es, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: es_a1_u03}}
+  dialogue: &dialogue {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: es_a1_u03_l06}}
+  size: &size {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: [w_grande, w_pequeña]}}
+  people_pl: &people_pl {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_abuelos, w_padres, w_primos]}}
+  parents: &parents {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_padres, w_abuelos]}}
+  hermanas: &hermanas {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_hermanas}}
+  casa: &casa {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_casa}}
+  menor: &menor {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: w_menor}}
+  semana: &semana {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_semana}}
+templates:
+  - content_key: practice.en-es.es.a1.unit03.lesson01.choose.001
+    lesson_content_key: es.a1.unit03.lesson01.immediate_family
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *close}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Family words often pair by gender: hermano and hermana, hijo and hija.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson01.listen.002
+    lesson_content_key: es.a1.unit03.lesson01.immediate_family
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *close}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The masculine plural covers mixed groups: padres is parents, hermanos can be siblings.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson01.translate.003
+    lesson_content_key: es.a1.unit03.lesson01.immediate_family
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *nouns}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mamá and papá are the everyday words at home; madre and padre are neutral.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson02.order.001
+    lesson_content_key: es.a1.unit03.lesson02.possessives_and_asking
+    type: word_order
+    frame: {text: "Mi familia es {item}.", language_code: es, direction: ltr}
+    slots: {item: *size}
+    answer_derivation: {kind: render_frame, frame: {text: "Mi familia es {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Familia is feminine, so small is pequeña; grande stays the same for both genders.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson02.translate.002
+    lesson_content_key: es.a1.unit03.lesson02.possessives_and_asking
+    type: translation
+    frame: {text: "I have two sisters.", language_code: en, direction: ltr}
+    slots: {item: *hermanas}
+    answer_derivation: {kind: render_frame, frame: {text: "Tengo dos {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "To ask: ¿Tienes hermanos? uses the masculine plural, which covers brothers and sisters.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson03.choose.001
+    lesson_content_key: es.a1.unit03.lesson03.extended_family
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *extended}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Primo is a male cousin and prima a female cousin; primos covers a mixed group.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson03.match.002
+    lesson_content_key: es.a1.unit03.lesson03.extended_family
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *nouns, second: *nouns, third: *nouns, fourth: *nouns, fifth: *nouns, sixth: *nouns}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Abuelo and abuela make abuelos, grandparents, in the plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson03.order.003
+    lesson_content_key: es.a1.unit03.lesson03.extended_family
+    type: word_order
+    frame: {text: "Vivo con mis {item}.", language_code: es, direction: ltr}
+    slots: {item: *people_pl}
+    answer_derivation: {kind: render_frame, frame: {text: "Vivo con mis {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Mis is the plural of mi: mi abuelo, mis abuelos.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson04.translate.001
+    lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+    type: translation
+    frame: {text: "I live with my {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *people_pl}
+    answer_derivation: {kind: render_frame, frame: {text: "Vivo con mis {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Vivo already means I live, so yo is not needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson04.fill.002
+    lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+    type: fill_in_blank
+    frame: {text: "Somos cinco en {item}. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *casa, hint: *casa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Somos cinco literally says we are five: there are five of us.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson04.order.003
+    lesson_content_key: es.a1.unit03.lesson04.describing_family_size
+    type: word_order
+    frame: {text: "¿Vives cerca de tus {item}?", language_code: es, direction: ltr}
+    slots: {item: *parents}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Vives cerca de tus {item}?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Cerca de means near; tus is the plural of tu, your.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson05.fill.001
+    lesson_content_key: es.a1.unit03.lesson05.reading_a_family_profile
+    type: fill_in_blank
+    frame: {text: "Mi hermana {item} se llama Sofía. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *menor, hint: *menor}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Menor follows the noun and does not change for gender: mi hermano menor, mi hermana menor.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson05.choose.002
+    lesson_content_key: es.a1.unit03.lesson05.reading_a_family_profile
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *content}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vive is he or she lives; viven is they live.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson06.listen.001
+    lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *dialogue}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "¡Qué bonito! is a warm reaction to a photo: how nice!", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson06.translate.002
+    lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+    type: translation
+    frame: {text: "We talk on the phone every week.", language_code: en, direction: ltr}
+    slots: {item: *semana}
+    answer_derivation: {kind: render_frame, frame: {text: "Hablamos por teléfono cada {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish says by phone, por teléfono, and cada never changes: cada día, cada semana.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson06.match.003
+    lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *verbs_adj, second: *verbs_adj, third: *verbs_adj, fourth: *verbs_adj, fifth: *verbs_adj, sixth: *verbs_adj}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Somos and son both come from ser: we are, they are.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit03.lesson06.translate.004
+    lesson_content_key: es.a1.unit03.lesson06.family_photos_dialogue
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *verbs_adj}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Spanish verb endings show the person: vivo, vives, vive, viven.", language_code: en, direction: ltr}

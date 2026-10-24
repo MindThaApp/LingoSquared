@@ -1,0 +1,126 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a1.unit10
+source_language: en
+target_language: es
+unit_content_key: es.a1.unit10.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-es reference set) from
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u10* tags, w_<token>
+    anchors). Lesson03 introduces no new tokens and has no template. Hace
+    calor / hace frío frames use single anchors so the month in the frame
+    always matches the weather.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [es_a1_u10, es_a1_u10_l01, w_calor, w_frío, w_llueve, w_nublado, w_porque, w_demasiado, w_razón, w_tienda]
+slot_presets:
+  weather: &weather {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u10_l01}}
+  nouns: &nouns {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u10}}
+  content: &content {language_code: es, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: es_a1_u10}}
+  words: &words {language_code: es, part_of_speech: [noun, adjective, adverb], agreement_tags: {semantic: es_a1_u10}}
+  others: &others {language_code: es, part_of_speech: [verb, adjective, adverb], agreement_tags: {semantic: es_a1_u10}}
+  calor: &calor {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_calor}}
+  frio: &frio {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_frío}}
+  llueve: &llueve {language_code: es, part_of_speech: verb, agreement_tags: {semantic: w_llueve}}
+  nublado: &nublado {language_code: es, part_of_speech: adjective, agreement_tags: {semantic: w_nublado}}
+  porque: &porque {language_code: es, part_of_speech: particle, agreement_tags: {semantic: w_porque}}
+  demasiado: &demasiado {language_code: es, part_of_speech: adverb, agreement_tags: {semantic: w_demasiado}}
+  razon: &razon {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_razón}}
+  tienda: &tienda {language_code: es, part_of_speech: noun, agreement_tags: {semantic: w_tienda}}
+templates:
+  - content_key: practice.en-es.es.a1.unit10.lesson01.choose.001
+    lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *weather}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Tiempo means both weather and time: ¿Qué tiempo hace? asks about the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson01.listen.002
+    lesson_content_key: es.a1.unit10.lesson01.el_tiempo_vocabulario
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *nouns}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Lluvia is the noun rain; llueve is the verb, it rains.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson02.order.001
+    lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+    type: word_order
+    frame: {text: "En julio hace {item}.", language_code: es, direction: ltr}
+    slots: {item: *calor}
+    answer_derivation: {kind: render_frame, frame: {text: "En julio hace {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish weather uses hacer with a noun: hace calor, literally it makes heat.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson02.translate.002
+    lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+    type: translation
+    frame: {text: "It's cold in December.", language_code: en, direction: ltr}
+    slots: {item: *frio}
+    answer_derivation: {kind: render_frame, frame: {text: "En diciembre hace {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Frío here is a noun after hace; very cold is hace mucho frío, not muy frío.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson02.fill.003
+    lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+    type: fill_in_blank
+    frame: {text: "Hoy {item} y hace frío. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *llueve, hint: *llueve}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Llover needs no subject: llueve simply means it rains or it is raining.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson02.order.004
+    lesson_content_key: es.a1.unit10.lesson02.expresiones_del_tiempo
+    type: word_order
+    frame: {text: "Hoy está {item}.", language_code: es, direction: ltr}
+    slots: {item: *nublado}
+    answer_derivation: {kind: render_frame, frame: {text: "Hoy está {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "It's cloudy today. Nublado is an adjective, so it goes with está, not hace.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson04.fill.001
+    lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+    type: fill_in_blank
+    frame: {text: "Necesitamos agua {item} hace calor. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *porque, hint: *porque}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Porque, one word without an accent, means because; ¿por qué?, two words with an accent, asks why.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson04.translate.002
+    lesson_content_key: es.a1.unit10.lesson04.el_invierno_en_madrid
+    type: translation
+    frame: {text: "In July it's too hot.", language_code: en, direction: ltr}
+    slots: {item: *demasiado}
+    answer_derivation: {kind: render_frame, frame: {text: "En julio hace {item} calor.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Demasiado means too much and goes before the noun: demasiado calor.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson05.match.001
+    lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *content, second: *content, third: *content, fourth: *content, fifth: *content, sixth: *content}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Es importante + infinitive gives advice: es importante llevar agua.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson05.translate.002
+    lesson_content_key: es.a1.unit10.lesson05.leer_el_pronostico
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Spanish weather words: sol, lluvia, viento and nube are nouns; nublado is an adjective.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson06.choose.001
+    lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *others}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Prefiero comes from preferir; the e changes to ie: prefiero, prefieres.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson06.translate.002
+    lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+    type: translation
+    frame: {text: "You're right. (informal)", language_code: en, direction: ltr}
+    slots: {item: *razon}
+    answer_derivation: {kind: render_frame, frame: {text: "Tienes {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Spanish has reason rather than being right: tener razón.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a1.unit10.lesson06.order.003
+    lesson_content_key: es.a1.unit10.lesson06.camino_al_taller_dialogue
+    type: word_order
+    frame: {text: "Hay una {item} cerca de aquí.", language_code: es, direction: ltr}
+    slots: {item: *tienda}
+    answer_derivation: {kind: render_frame, frame: {text: "Hay una {item} cerca de aquí.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "There is a shop near here. Tienda is feminine, so it takes una.", language_code: en, direction: ltr}
