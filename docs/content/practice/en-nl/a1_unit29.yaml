@@ -6,7 +6,10 @@ unit_content_key: nl.a1.unit29.hobbies
 review:
   status: reviewed
   fresh_context: "true"
-  notes: "Fresh-context native review 2026-07-29 (batch 6): CLEAN — verified via
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-24 (en-nl practice pass, session 10): 5 fixes -- lesson03 choose/listen adverb slot narrowed from every A1 adverb (Hoe, Waar, eruit, capitalised duplicates) to the unit's dialogue adverbs; word_order.001 feedback no longer drops the Dutch adverb into an English sentence; matching feedback no longer calls adverbs hobby words; 2 Dutch feedback frames retagged nl. Native flags: none.
+
+    Fresh-context native review 2026-07-29 (batch 6): CLEAN — verified via
     iter_specs (all 5 tags are hand-coded exact-token sets, no _cat-derived
     course-wide/capitalized contamination), gates 0 DEAD / 0 self-ref / validate
     0-0, realization↔overlay pairs+audio cross-checked, de/het + register clean.
@@ -74,7 +77,7 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [hobby_verb, freq_adverb, hobby_boek_single, hobby_vrienden_single, hobby_vrije_single]
+    semantic: [hobby_verb, freq_adverb, hobby_boek_single, hobby_vrienden_single, hobby_vrije_single, hobby_dialogue, hobby_weekend_dialogue]
 slot_presets:
   hobby_verb: &hobby_verb {language_code: nl, part_of_speech: verb, agreement_tags: {semantic: hobby_verb}}
   freq_adverb: &freq_adverb {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: freq_adverb}}
@@ -152,14 +155,14 @@ templates:
       direction: ltr
       text_blocks:
         - {text: "Choose the English meaning.", language_code: en, direction: ltr}
-    slots: {item: {language_code: nl, part_of_speech: adverb}}
+    slots: {item: {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: [hobby_dialogue, hobby_weekend_dialogue]}}}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is a word from this unit.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson03.listen.002
     lesson_content_key: nl.a1.unit29.lesson03.vrije_tijd_vraag
     type: listen_select
     frame: {text: "{item}", language_code: nl, direction: ltr}
-    slots: {item: {language_code: nl, part_of_speech: adverb}}
+    slots: {item: {language_code: nl, part_of_speech: adverb, agreement_tags: {semantic: [hobby_dialogue, hobby_weekend_dialogue]}}}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is the word you heard.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson03.translate.003
@@ -174,7 +177,7 @@ templates:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *freq_adverb}
     answer_derivation: {kind: render_frame, frame: {text: "Ik lees {item} een boek.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik lees {item} een boek.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik lees {item} een boek.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson03.fill.004
     lesson_content_key: nl.a1.unit29.lesson03.vrije_tijd_vraag
     type: fill_in_blank
@@ -188,7 +191,7 @@ templates:
     frame: {text: "Ik sport {item} op zaterdag.", language_code: nl, direction: ltr}
     slots: {item: *freq_adverb}
     answer_derivation: {kind: render_frame, frame: {text: "Ik sport {item} op zaterdag.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik sport {item} op zaterdag. -- I exercise {item} on Saturday.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik sport {item} op zaterdag.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson04.listen.002
     lesson_content_key: nl.a1.unit29.lesson04.taalcafe_hobbies
     type: listen_select
@@ -203,7 +206,7 @@ templates:
     slots: {first: *hobby_verb, second: *hobby_verb, third: *hobby_verb, fourth: *hobby_verb, fifth: *hobby_verb, sixth: *hobby_verb, seventh: *freq_adverb, eighth: *freq_adverb}
     slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}, {kind: distinct, slots: [seventh, eighth]}]
     answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth]}
-    feedback_frame: {text: "Match each hobby word from this unit with its English meaning.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each word with its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson06.translate.001
     lesson_content_key: nl.a1.unit29.lesson06.weekend_plan
     type: translation
@@ -216,7 +219,7 @@ templates:
         - {text: "Translate into Dutch.", language_code: en, direction: ltr}
     slots: {item: *freq_adverb}
     answer_derivation: {kind: render_frame, frame: {text: "Ik kook {item} voor vrienden.", language_code: nl, direction: ltr}}
-    feedback_frame: {text: "Ik kook {item} voor vrienden.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Ik kook {item} voor vrienden.", language_code: nl, direction: ltr}
   - content_key: practice.en-nl.nl.a1.unit29.lesson06.choose.002
     lesson_content_key: nl.a1.unit29.lesson06.weekend_plan
     type: multiple_choice
