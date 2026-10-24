@@ -759,9 +759,9 @@ PRS_GLOSSES: dict[str, str] = {
     # person_name semantic tag until this unit's own dialogue -- fixed
     # below alongside this unit's own additions.
     "خواب": "sleep (noun)", "بیدار": "awake",
-    "می‌شوم": "I become / I wake up", "صبحانه": "breakfast",
+    "می‌شوم": "I become; I get (e.g. awake, tired)", "صبحانه": "breakfast",
     "می‌خورم": "I eat", "می‌روم": "I go", "می‌خوابم": "I sleep",
-    "می‌شوی": "you wake up (informal)", "هر": "every", "زود": "early",
+    "می‌شوی": "you become; you get (informal)", "هر": "every", "زود": "early",
     "چطور؟": "how? (turning a question back, as in 'what about you?')",
     # می‌شود ALREADY EXISTS in this dict (A2 unit09: "would it be
     # possible; is it okay") -- a genuine homograph, not the same
@@ -776,7 +776,7 @@ PRS_GLOSSES: dict[str, str] = {
     # چطور/است/خوب/استم/کار/دارم/ساعت/پنج/بعد/از/ظهر/سلام/شما/را/فرید/چه
     # were all already glossed from earlier units (جمعه/کدام/منتظر too,
     # from the parallel session's units 09/11), reused as-is.
-    "پلان": "plan", "پارک": "park", "برویم": "let's go (subjunctive, we)",
+    "پلان": "plan", "پارک": "park", "برویم": "let's go",
     "است؟": "is (it)? (question form of 'to be')",
     "می‌خواهین": "do you want (polite)", "عالی": "great; excellent",
     "قبول": "accepted; agreed", "متأسف": "sorry",
@@ -858,7 +858,7 @@ PRS_GLOSSES: dict[str, str] = {
     "می‌تانم": "I can", "می‌توانم": "I can", "این‌را": "this (object marker)",
     "پرو": "try-on", "پرو کنین": "try it on (polite imperative)",
     "پنجصد": "five hundred", "اندازه‌اش": "its size",
-    "می‌خرم": "I buy", "خرید": "bought",
+    "می‌خرم": "I buy", "خرید": "he/she bought",
     # Unit 22 (weather), added 2026-07-09. چطور/گرم/یا/فردا/می‌شود/پارک/
     # بهتر/برویم/اما are REUSED existing lexemes, not re-added here.
     # می‌شود gets a THIRD homograph sense here (weather "will become"),
@@ -866,7 +866,7 @@ PRS_GLOSSES: dict[str, str] = {
     # existing A2-unit09/unit12 split.
     "هوا": "weather", "آفتابی": "sunny", "ابری": "cloudy",
     "باران": "rain", "برف": "snow", "می‌بارد": "is falling (rain/snow)",
-    "سرد": "cold", "بمانیم": "let's stay / we stay (subjunctive)",
+    "سرد": "cold", "بمانیم": "let's stay",
     "پس": "so / then", "می‌مانیم": "we stay", "نمی‌توانیم": "we can't",
     "فلم": "film", "می‌بینیم": "we watch / we see", "می‌مانند": "they stay",
     # Unit 23 (money), added 2026-07-09. دارم/صد/می‌تانم/افغانی/است/
@@ -1098,7 +1098,7 @@ PRS_GLOSSES: dict[str, str] = {
     # all already glossed from earlier A1/A2 units, reused as-is.
     # بخرم (unit01 above) and نداشتم (unit01 above) are REUSED existing
     # B1 lexemes -- same meaning, not re-added.
-    "بخری": "(that) you buy", "خودش": "itself",
+    "بخری": "(that) you buy", "خودش": "himself; herself; itself",
     "همیشه": "always", "شکل": "form; shape",
     "فعل": "verb (grammar term)", "فاعل": "subject (grammar term)",
     "بخره": "he/she (should) buy", "بخریم": "(that) we buy",
@@ -1350,7 +1350,7 @@ PRS_GLOSSES: dict[str, str] = {
     # Unit 52 (cinema), added 2026-07-22. فلم/بلیط/ساعت/جالب/است are
     # REUSED. آسمان is taught as the NAME of the film on the schedule.
     "سینما": "cinema",
-    "آسمان": "sky (also the film title on this unit's schedule)",
+    "آسمان": "sky",
     "بلیطش": "its ticket",
     # Unit 53 (museum), added 2026-07-22. بلیط/ساعت/باز/بسته/رفت/
     # بود are REUSED. دید is the 3rd-person simple past of دیدن.
@@ -1361,7 +1361,7 @@ PRS_GLOSSES: dict[str, str] = {
     # Unit 55 (park), added 2026-07-22. پارک/برویم/نزدیک/خانه/زیباست
     # are REUSED. میله is the Afghan word for a picnic/outing.
     "درخت": "tree", "گل": "flower", "میله": "picnic; outing",
-    "می‌خواهی": "do you want (informal)", "خانه‌تان": "your house",
+    "می‌خواهی": "you want (informal)", "خانه‌تان": "your house",
     # Unit 56 (gym), added 2026-07-22. ورزش/کارت/روزانه/صد/افغانی/
     # بفرمایین/تشکر زیاد are REUSED. الماری is glossed
     # "locker; cupboard" rather than bare "locker" so it stays

@@ -6,6 +6,7 @@ unit_content_key: prs.b1.unit03.conditions
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md. en-prs B1
     unit03 (اگر / real conditionals with داشته باشم + a present result clause)
@@ -46,6 +47,20 @@ review:
     was normalized باشید -> باشین on 2026-07-11); every frame here is lifted
     from the realization's own tested_text, so no new form is introduced. Needs
     the standard fresh-context review before import.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 9 fixes. Verb pools
+    no longer include routine_verb (unit04 می‌شوم/می‌شوی carry the wrong gloss
+    "wake up") and the typed translation no longer asks for the subjunctive
+    باشم/باشی/... from "(if) I have"; lesson04 recognition and typed pools are
+    unit-scoped (en_prs_b1_unit03_lesson04_words, 8 words) instead of 101
+    course-wide dialogue words; the Friday fill_in_blank had a bare
+    "___ چه کار می‌کنی؟" (any time word fits) and now asks for the day after
+    Thursday; word_order lesson03 frame/feedback made consistent for ببارد/
+    نبارد; false "from this unit/dialogue" feedback replaced. NATIVE FLAGS:
+    باشین as "if you (polite) have" next to standard -د forms; whether
+    "روز بعد از پنجشنبه جمعه است" is natural; امروز هوا آفتابی است word order
+    (only this order is accepted).
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -65,13 +80,13 @@ tag_schema:
     - meeting_verb
     - go_verb_plural
     - go_verb_present
-    - routine_verb
     - stay_verb
     - drink_verb_plural
     - past_verb_plural_third
     - rain_verb
     - know_verb
     - dialogue_word
+    - en_prs_b1_unit03_lesson04_words
     - weather_precip_noun
     - weather_descriptor
     - weather_noun
@@ -105,7 +120,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is the subjunctive بودن form that closes an اگر ... داشته clause.'
+    text: '*{item}* is the subjunctive form of *بودن* that closes an *اگر ... داشته* clause.'
     language_code: en
     direction: ltr
 
@@ -129,7 +144,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'اگر وقت داشته باشم، می‌آیم. -- If I have time, I''ll come.'
+    text: '*اگر وقت داشته {item}، می‌آیم.* -- The *اگر* clause ends in *داشته* + the subjunctive of *بودن* that matches the person (I / you / we / you polite have time).'
     language_code: en
     direction: ltr
 
@@ -151,7 +166,6 @@ templates:
         - meeting_verb
         - go_verb_plural
         - go_verb_present
-        - routine_verb
         - stay_verb
         - drink_verb_plural
         - past_verb_plural_third
@@ -200,12 +214,10 @@ templates:
       part_of_speech: verb
       agreement_tags:
         semantic:
-        - subjunctive_be_verb
         - come_verb_present
         - meeting_verb
         - go_verb_plural
         - go_verb_present
-        - routine_verb
         - stay_verb
         - drink_verb_plural
         - past_verb_plural_third
@@ -239,7 +251,6 @@ templates:
         - meeting_verb
         - go_verb_plural
         - go_verb_present
-        - routine_verb
         - stay_verb
         - drink_verb_plural
         - past_verb_plural_third
@@ -249,7 +260,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is the result-clause verb -- it keeps the ordinary present or past ending.'
+    text: '*{item}* is a verb form from the *اگر* sentences of this unit -- in the *اگر* clause or in the result clause.'
     language_code: en
     direction: ltr
 
@@ -260,7 +271,7 @@ templates:
   lesson_content_key: prs.b1.unit03.lesson03.negative_and_weather_condition
   type: word_order
   frame:
-    text: 'اگر باران {item}، در خانه می‌مانیم.'
+    text: 'اگر باران {item}، می‌آیم.'
     language_code: prs
     direction: rtl
   slots:
@@ -272,11 +283,11 @@ templates:
   answer_derivation:
     kind: render_frame
     frame:
-      text: 'اگر باران {item}، در خانه می‌مانیم.'
+      text: 'اگر باران {item}، می‌آیم.'
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'اگر باران ببارد، در خانه می‌مانیم. -- If it rains, we stay at home.'
+    text: '*اگر باران {item}، می‌آیم.* -- If it rains / if it does not rain, I come. After *اگر* the verb is subjunctive.'
     language_code: en
     direction: ltr
 
@@ -310,7 +321,7 @@ templates:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} belongs to this unit''s weather-and-weekend-plans vocabulary.'
+    text: '*{item}* is a word from the B1 vocabulary (weather, plans, food, politeness).'
     language_code: en
     direction: ltr
 
@@ -321,7 +332,7 @@ templates:
   lesson_content_key: prs.b1.unit03.lesson04.dialogue_friday_plan
   type: fill_in_blank
   frame:
-    text: '{item} چه کار می‌کنی؟'
+    text: 'روز بعد از پنجشنبه {item} است.'
     language_code: prs
     direction: rtl
   slots:
@@ -334,7 +345,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'جمعه چه کار می‌کنی؟ -- What are you doing on Friday?'
+    text: '*روز بعد از پنجشنبه جمعه است.* -- The day after Thursday is Friday.'
     language_code: en
     direction: ltr
 
@@ -358,7 +369,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'اگر باران ببارد، در خانه می‌مانیم و چای می‌نوشیم. -- If it rains, we stay home and drink tea.'
+    text: '*اگر باران ببارد، در خانه می‌مانیم و چای می‌نوشیم.* -- If it rains, we stay home and drink tea.'
     language_code: en
     direction: ltr
 
@@ -378,12 +389,12 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: dialogue_word
+        semantic: en_prs_b1_unit03_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is said in the Friday-plans conversation between Zarmina and Homayoun.'
+    text: '*{item}* is a word from the Friday-plans lesson of this unit.'
     language_code: en
     direction: ltr
 
@@ -405,7 +416,7 @@ templates:
       - adjective
       - adverb
       agreement_tags:
-        semantic: dialogue_word
+        semantic: en_prs_b1_unit03_lesson04_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -467,7 +478,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Dari word from this unit with its English meaning.
+    text: Match each Dari word with its English meaning.
     language_code: en
     direction: ltr
 
@@ -527,7 +538,7 @@ templates:
     kind: slot_text
     slot: item
   feedback_frame:
-    text: 'امروز هوا آفتابی است. -- Today the weather is sunny.'
+    text: '*امروز هوا آفتابی است.* -- Today the weather is sunny.'
     language_code: en
     direction: ltr
 

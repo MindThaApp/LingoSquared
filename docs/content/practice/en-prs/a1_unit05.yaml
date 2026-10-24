@@ -6,53 +6,16 @@ unit_content_key: prs.a1.unit05.places
 review:
   status: reviewed
   fresh_context: false
-  notes: 'Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle''s a1_unit03.yaml
-    sibling (see that file''s notes for the full extension rationale and verification method).
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle's a1_unit03.yaml sibling (see that file's notes for the full extension rationale and verification method).
+    Two semantic groups: city_place (بازار/بانک/مسجد/شفاخانه/مکتب/ دواخانه/سفارت/دفتر, 8 members, spanning lessons 01-02 -- these are literally "places in the city," this unit's own title, so grouping lesson01's everyday places with lesson02's سفارت/دفتر is a natural fit, not a forced one) and location_word (نزدیک/دور/این‌جا/آن‌جا, 4 members) from lesson04. Deliberately skipped multi-word phrase tokens as slot fillers entirely -- پوسته/خانه (post office) and میدان/هوایی (airport) are taught as two-token phrases in the realization, and this project's backfill scripts don't build phrase-level lexemes (only single tokens), so slotting them would either be ungrammatical (rendering just "پوسته" or "هوایی" alone) or impossible; they remain taught in the lesson itself, just not drilled via a template here, matching this bundle's en-fa/a1_unit05 sibling's own precedent for single-candidate/phrase tokens. Also skipped the thin (2-member) پشت/مقابل preposition pair and the kojast-question phrases for the same reason.
+    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context (guide §13). Every lesson_content_key anchor verified against the real realization file. No listen_select/listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
+    DEPTH PASS 2026-07-06 (per-unit template audit found this unit thin at 8 vs unit02/03/04's 16-24): added a word_order template for each of city_place and location_word (8 -> 10 templates), the one PRACTICE_EXERCISE_TYPES member (word_order) neither tag had yet. This is the real ceiling for this unit without inventing vocabulary or extending scripts/backfill_lexemes_en_prs.py's classifier: city_ place and location_word are the ONLY two semantic tags this unit's real taught vocabulary supports (verified by re-reading the classifier's own unit05 section) -- lesson03's کجاست questions and lesson05's پشت/مقابل prepositions have no semantic tag at all in the classifier (POS-only), and lesson06's dialogue words are intentionally dialogue-only per this file's own prior notes above; giving them one would require editing the shared backfill script, out of scope for a practice-pack-only pass. Both new word_order frames reuse real sentence patterns already taught verbatim elsewhere in this unit ([place] این‌جا است from lesson04.exercise07; میدان هوایی [location_word] است from lesson04.teach.airport_far), confirmed grammatical for every candidate in each pool, not invented. Re-verified: scripts/_practice_slot_check.py 0 problems across the whole en-prs pack; scripts/compile_content.py practice-validate for the full pack -- 0 errors/0 warnings.
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): the whole-direction checks above only prove a slot has candidates SOMEWHERE in en-prs; generate_checkpoint() scopes candidates to THIS unit's own lexemes only. دفتر (this pack's assumed 8th city_place member) was actually introduced in unit01, and نزدیک (the assumed 4th location_word member) was actually introduced in unit02 -- neither recounts at unit05's checkpoint scope. That left place_pair.004 DEAD (8 slots declared, real ceiling 7) and location_pair.004 DEAD (4 slots declared, real ceiling 3). Fixed pack-only, no backfill/realization/overlay edits, no new vocabulary: (1) place_pair.004 reduced to 7 slots, matching its honest unit-scoped city_place pool exactly -- still clears the 6-pair floor, no widening needed. (2) location_pair.004 widened via a new location_review preset (location_word UNION direction_word UNION sequence_word UNION home_description_word = 3+1+1+1 = 6 distinct: دور/این‌جا/آن‌جا/مستقیم/بعد/مقابل), all genuinely introduced by this unit's own lesson04/ lesson06, and disjoint from place_pair.004's city_place pool. Re-verified 0 DEAD / 0 below-floor for this pack via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see coordinator report for the exact invocation/output).
 
-    Two semantic groups: city_place (بازار/بانک/مسجد/شفاخانه/مکتب/ دواخانه/سفارت/دفتر, 8 members, spanning lessons 01-02 --
-    these are literally "places in the city," this unit''s own title, so grouping lesson01''s everyday places with lesson02''s
-    سفارت/دفتر is a natural fit, not a forced one) and location_word (نزدیک/دور/این‌جا/آن‌جا, 4 members) from lesson04. Deliberately
-    skipped multi-word phrase tokens as slot fillers entirely -- پوسته/خانه (post office) and میدان/هوایی (airport) are taught
-    as two-token phrases in the realization, and this project''s backfill scripts don''t build phrase-level lexemes (only
-    single tokens), so slotting them would either be ungrammatical (rendering just "پوسته" or "هوایی" alone) or impossible;
-    they remain taught in the lesson itself, just not drilled via a template here, matching this bundle''s en-fa/a1_unit05
-    sibling''s own precedent for single-candidate/phrase tokens. Also skipped the thin (2-member) پشت/مقابل preposition pair
-    and the kojast-question phrases for the same reason.
-
-    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context (guide §13). Every
-    lesson_content_key anchor verified against the real realization file. No listen_select/listen_type anywhere. No bare unquoted
-    yes/no/true/false anywhere.
-
-    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py''s lexeme_matches()/check_pack() against
-    scripts/backfill_lexemes_en_prs.py''s real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate
-    for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before
-    import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
-
-    DEPTH PASS 2026-07-06 (per-unit template audit found this unit thin at 8 vs unit02/03/04''s 16-24): added a word_order
-    template for each of city_place and location_word (8 -> 10 templates), the one PRACTICE_EXERCISE_TYPES member (word_order)
-    neither tag had yet. This is the real ceiling for this unit without inventing vocabulary or extending scripts/backfill_lexemes_en_prs.py''s
-    classifier: city_ place and location_word are the ONLY two semantic tags this unit''s real taught vocabulary supports
-    (verified by re-reading the classifier''s own unit05 section) -- lesson03''s کجاست questions and lesson05''s پشت/مقابل
-    prepositions have no semantic tag at all in the classifier (POS-only), and lesson06''s dialogue words are intentionally
-    dialogue-only per this file''s own prior notes above; giving them one would require editing the shared backfill script,
-    out of scope for a practice-pack-only pass. Both new word_order frames reuse real sentence patterns already taught verbatim
-    elsewhere in this unit ([place] این‌جا است from lesson04.exercise07; میدان هوایی [location_word] است from lesson04.teach.airport_far),
-    confirmed grammatical for every candidate in each pool, not invented. Re-verified: scripts/_practice_slot_check.py 0 problems
-    across the whole en-prs pack; scripts/compile_content.py practice-validate for the full pack -- 0 errors/0 warnings.
-
-    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): the whole-direction
-    checks above only prove a slot has candidates SOMEWHERE in en-prs; generate_checkpoint() scopes candidates to
-    THIS unit''s own lexemes only. دفتر (this pack''s assumed 8th city_place member) was actually introduced in
-    unit01, and نزدیک (the assumed 4th location_word member) was actually introduced in unit02 -- neither recounts
-    at unit05''s checkpoint scope. That left place_pair.004 DEAD (8 slots declared, real ceiling 7) and
-    location_pair.004 DEAD (4 slots declared, real ceiling 3). Fixed pack-only, no backfill/realization/overlay
-    edits, no new vocabulary: (1) place_pair.004 reduced to 7 slots, matching its honest unit-scoped city_place
-    pool exactly -- still clears the 6-pair floor, no widening needed. (2) location_pair.004 widened via a new
-    location_review preset (location_word UNION direction_word UNION sequence_word UNION home_description_word =
-    3+1+1+1 = 6 distinct: دور/این‌جا/آن‌جا/مستقیم/بعد/مقابل), all genuinely introduced by this unit''s own lesson04/
-    lesson06, and disjoint from place_pair.004''s city_place pool. Re-verified 0 DEAD / 0 below-floor for this pack
-    via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see
-    coordinator report for the exact invocation/output).'
+    Review 2026-10-24 (en-prs practice native-quality pass): 6 fixes. location_gloss/translate use only the 3 lesson04 words and location_pair/direction_gloss/direction_translate the 6 unit05 spatial adjectives/adverbs (the old pools pulled in big, first, left, right and the unit41 variant glossed 'here (spelling variant, no ZWNJ)'; direction feedback claimed 'from this unit'); both volume_fill templates (blank answers بانک / دور were underdetermined) became gloss translations; location_order feedback no longer shows a raw ___. NATIVE FLAGS: مقابل (opposite) is dropped from spatial pools because the generated tag does not cover it; میدان هوایی vs فرودگاه for airport; این‌جا (ZWNJ) vs اینجا spelling.
 tag_schema:
   part_of_speech:
   - noun
@@ -62,6 +25,8 @@ tag_schema:
   agreement_tags:
     semantic:
     - city_place
+    - en_prs_a1_unit05_lesson04_words
+    - en_prs_a1_unit05_lesson06_words
     - location_word
     - volume_en_prs_a1_unit05_city_place_06_single
     - volume_en_prs_a1_unit05_location_word_08_single
@@ -102,6 +67,26 @@ slot_presets:
       - direction_word
       - sequence_word
       - home_description_word
+  # Spatial words of this unit only (lesson04 here/there/far + lesson06
+  # straight/after/much). Replaces the level-wide location_word /
+  # location_review pools, which also pulled in big, first, left, right and
+  # the unit41 'here (spelling variant, no ZWNJ)' variant.
+  location_lesson04: &location_lesson04
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic: en_prs_a1_unit05_lesson04_words
+  spatial_words: &spatial_words
+    language_code: prs
+    part_of_speech:
+    - adjective
+    - adverb
+    agreement_tags:
+      semantic:
+      - en_prs_a1_unit05_lesson04_words
+      - en_prs_a1_unit05_lesson06_words
 templates:
 - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_gloss.001
   lesson_content_key: prs.a1.unit05.lesson01.everyday_places
@@ -209,7 +194,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    location_word: *id002
+    location_word: *location_lesson04
   answer_derivation:
     kind: slot_gloss
     slot: location_word
@@ -227,7 +212,7 @@ templates:
     slot_rendering:
       location_word: english_gloss
   slots:
-    location_word: *id002
+    location_word: *location_lesson04
   answer_derivation:
     kind: slot_text
     slot: location_word
@@ -249,12 +234,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item_one: *location_review
-    item_two: *location_review
-    item_three: *location_review
-    item_four: *location_review
-    item_five: *location_review
-    item_six: *location_review
+    item_one: *spatial_words
+    item_two: *spatial_words
+    item_three: *spatial_words
+    item_four: *spatial_words
+    item_five: *spatial_words
+    item_six: *spatial_words
   slot_relations:
   - kind: distinct
     slots:
@@ -293,7 +278,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: میدان هوایی [word] است (the airport is ___).'
+    text: 'Word order: میدان هوایی [word] است (the airport is [word]).'
     language_code: en
     direction: ltr
 # POLISH 2026-07-24 (tier-thinness, recipe SS8): recognition and production
@@ -309,12 +294,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item: *location_review
+    item: *spatial_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} describes a location, direction, or sequence from this unit.'
+    text: '{item} is a word for saying where something is or how to get there.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit05.lesson06.direction_translate.002
@@ -327,7 +312,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item: *location_review
+    item: *spatial_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -337,11 +322,13 @@ templates:
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit05.lesson01.place_order.005.volume_fill.006
   lesson_content_key: prs.a1.unit05.lesson01.everyday_places
-  type: fill_in_blank
+  type: translation
   frame:
-    text: '{city_place} این‌جا است'
-    language_code: prs
-    direction: rtl
+    text: '{city_place}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      city_place: english_gloss
   slots:
     city_place:
       language_code: prs
@@ -352,16 +339,18 @@ templates:
     kind: slot_text
     slot: city_place
   feedback_frame:
-    text: '{city_place}'
-    language_code: prs
-    direction: rtl
+    text: '{city_place} is the Dari word for this place.'
+    language_code: en
+    direction: ltr
 - content_key: practice.en-prs.prs.a1.unit05.lesson04.location_order.005.volume_fill.008
   lesson_content_key: prs.a1.unit05.lesson04.simple_location_answers
-  type: fill_in_blank
+  type: translation
   frame:
-    text: میدان هوایی {location_word} است
-    language_code: prs
-    direction: rtl
+    text: '{location_word}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      location_word: english_gloss
   slots:
     location_word:
       language_code: prs
@@ -372,6 +361,6 @@ templates:
     kind: slot_text
     slot: location_word
   feedback_frame:
-    text: '{location_word}'
-    language_code: prs
-    direction: rtl
+    text: '{location_word} is the Dari word for this.'
+    language_code: en
+    direction: ltr

@@ -6,68 +6,16 @@ unit_content_key: prs.a1.unit07.communication
 review:
   status: reviewed
   fresh_context: true
-  notes: >-
-    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
-    same pass as this bundle's a1_unit03.yaml sibling (see that file's
-    notes for the full extension rationale and verification method).
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle's a1_unit03.yaml sibling (see that file's notes for the full extension rationale and verification method).
+    REAUTH 2026-07-24 (unit-scope DEAD-template repair, docs/content/PRACTICE_PACK_RECIPE.md §1.1/§3.1/§8.1): the original phone_and_message preset pooled this unit's phone_opening/ message_word with unit04's phone_word -- exactly recipe DO-NOT #2 (a slot constrained to vocabulary introduced in an EARLIER unit). generate_checkpoint() scopes candidates to unit07's own lexemes only, so phone_word contributed 0 there and the pool sat at 3, not the 6 the templates declared -- phone_open_pair.003, message_pair.003 DEAD. Likewise name_pair.004 declared 10 slots against the course-wide person_name population (10 names across the whole direction) while unit07 itself introduces only 2 (فرید, لیمه) -- also DEAD; name_gloss.001 (MC over the same 2) sat below the 3-option floor.
+    FIX: re-anchored all four to the unit's own already-tagged `dialogue_word` vocabulary (an established corpus-wide tag; see a1_unit45's pilot pack), unioned with this unit's own phone_opening/message_word (§3.1a). unit07 carries 10 distinct unit-scoped tokens under {phone_opening, message_word, dialogue_word}: الو, پیام, کوتاه, می‌کند, لطفاً, کنین, می‌خواهم, فردا, ساعت, برای -- 10 distinct glosses, no collisions. Verified via the iter_specs filter in REAUTH_TASK.md. phone_open_pair.003 (6 slots, lesson01), message_pair.003 (6 slots, lesson04) and name_pair.004 (reduced from 10 to the standard 6 slots, lesson06) now draw from this pool; name_gloss.001 (MC, lesson06) does too -- 7 -> 10 distinct answer values, clears the 3-option floor. person_name (فرید/لیمه) stays real, single-purpose vocabulary in name_translate.003 (bare-word translation has no candidate floor) -- unaffected, still hosts both names. phone_opening/message_word keep their own narrow translation templates unchanged. dropped the stale unit04 phone_word cross-reference entirely (PACK-ONLY: no other unit's tag is referenced here anymore).
+    This unit's own vocabulary is mostly full phrases (کی صحبت می‌کند؟, لطفاً آهسته صحبت کنین, etc.) rather than atomic nouns, so well- populated single-token semantic groups are thinner here than in other units. Deliberately skipped the many multi-word phrase tokens (بلی بفرمایین, کی صحبت می‌کند, لطفاً آهسته صحبت کنین, etc.) as slot fillers -- this project's backfill scripts only build single-token lexemes, so phrase-level vocabulary stays taught in the lesson itself rather than forced into an ungrammatical partial slot, matching this bundle's standing precedent.
+    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context (guide §13). Every lesson_content_key anchor verified against the real realization file to introduce genuinely new vocabulary. No listen_select/ listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
+    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems. scripts/compile_content.py practice-validate for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before import; no backfill_lexemes_en_prs.py run has actually happened against a real database yet in this pass.
 
-    REAUTH 2026-07-24 (unit-scope DEAD-template repair,
-    docs/content/PRACTICE_PACK_RECIPE.md §1.1/§3.1/§8.1): the original
-    phone_and_message preset pooled this unit's phone_opening/
-    message_word with unit04's phone_word -- exactly recipe DO-NOT #2
-    (a slot constrained to vocabulary introduced in an EARLIER unit).
-    generate_checkpoint() scopes candidates to unit07's own lexemes
-    only, so phone_word contributed 0 there and the pool sat at 3, not
-    the 6 the templates declared -- phone_open_pair.003, message_pair.003
-    DEAD. Likewise name_pair.004 declared 10 slots against the
-    course-wide person_name population (10 names across the whole
-    direction) while unit07 itself introduces only 2 (فرید, لیمه) --
-    also DEAD; name_gloss.001 (MC over the same 2) sat below the
-    3-option floor.
-
-    FIX: re-anchored all four to the unit's own already-tagged
-    `dialogue_word` vocabulary (an established corpus-wide tag; see
-    a1_unit45's pilot pack), unioned with this unit's own
-    phone_opening/message_word (§3.1a). unit07 carries 10 distinct
-    unit-scoped tokens under {phone_opening, message_word,
-    dialogue_word}: الو, پیام, کوتاه, می‌کند, لطفاً, کنین, می‌خواهم,
-    فردا, ساعت, برای -- 10 distinct glosses, no collisions. Verified via
-    the iter_specs filter in REAUTH_TASK.md. phone_open_pair.003 (6
-    slots, lesson01), message_pair.003 (6 slots, lesson04) and
-    name_pair.004 (reduced from 10 to the standard 6 slots, lesson06)
-    now draw from this pool; name_gloss.001 (MC, lesson06) does too --
-    7 -> 10 distinct answer values, clears the 3-option floor.
-    person_name (فرید/لیمه) stays real, single-purpose vocabulary in
-    name_translate.003 (bare-word translation has no candidate floor)
-    -- unaffected, still hosts both names. phone_opening/message_word
-    keep their own narrow translation templates unchanged. dropped the
-    stale unit04 phone_word cross-reference entirely (PACK-ONLY: no
-    other unit's tag is referenced here anymore).
-
-    This unit's own vocabulary is mostly full phrases (کی صحبت می‌کند؟,
-    لطفاً آهسته صحبت کنین, etc.) rather than atomic nouns, so well-
-    populated single-token semantic groups are thinner here than in
-    other units. Deliberately skipped the many multi-word phrase
-    tokens (بلی بفرمایین, کی صحبت می‌کند, لطفاً آهسته صحبت کنین, etc.)
-    as slot fillers -- this project's backfill scripts only build
-    single-token lexemes, so phrase-level vocabulary stays taught in
-    the lesson itself rather than forced into an ungrammatical partial
-    slot, matching this bundle's standing precedent.
-
-    Every fill_in_blank frame embeds the slot in a real Dari sentence
-    with visible surrounding context (guide §13). Every
-    lesson_content_key anchor verified against the real realization
-    file to introduce genuinely new vocabulary. No listen_select/
-    listen_type anywhere. No bare unquoted yes/no/true/false anywhere.
-
-    Verified with a standalone throwaway script reusing
-    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
-    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
-    output -- 0 problems. scripts/compile_content.py practice-validate
-    for the full en-prs pack (units 01-10 together) -- 0 errors/0
-    warnings. Needs the standard fresh-context review before import; no
-    backfill_lexemes_en_prs.py run has actually happened against a real
-    database yet in this pass.
+    Review 2026-10-24 (en-prs practice native-quality pass): 4 fixes. unit_vocab (phone_open_pair, message_pair, name_gloss, name_pair) now uses the unit07 words instead of the level-wide dialogue_word tag (189 words); phone_verb_gloss uses the 8 unit07 verbs with accurate feedback; message_time and name_translate feedback no longer make false unit/speaker claims. NATIVE FLAGS: الو as phone greeting; بگذارم / می‌رسانم glosses are phrase-fragments ('let me leave / put', 'I'll pass it along / deliver') and may need a native check; Homayoun is a speaker but not in the unit-scoped name pool.
 tag_schema:
   part_of_speech:
   - symbol
@@ -81,7 +29,7 @@ tag_schema:
   - particle
   - phrase
   agreement_tags:
-    semantic: [person_name, phone_opening, message_word, dialogue_word, tomorrow_word, appointment_word, time_unit, want_verb, phone_action_verb, work_verb_form]
+    semantic: [person_name, phone_opening, message_word, dialogue_word, tomorrow_word, appointment_word, time_unit, want_verb, phone_action_verb, work_verb_form, en_prs_a1_unit07_words]
 slot_presets:
   person_name: &person_name {language_code: prs, part_of_speech: proper_noun, agreement_tags: {semantic: person_name}}
   phone_opening: &phone_opening {language_code: prs, part_of_speech: [noun, particle], agreement_tags: {semantic: phone_opening}}
@@ -93,7 +41,7 @@ slot_presets:
   # dialogue_word (7, this unit's own already-tagged dialogue vocabulary
   # spanning lessons 02-06) = 10 distinct unit-scoped tokens, comfortably
   # over the 6-pair matching_pairs floor and the 3-option MC floor.
-  unit_vocab: &unit_vocab {language_code: prs, part_of_speech: [noun, verb, adjective, adverb, preposition, particle], agreement_tags: {semantic: [phone_opening, message_word, dialogue_word]}}
+  unit_vocab: &unit_vocab {language_code: prs, part_of_speech: [noun, verb, adjective, adverb, particle], agreement_tags: {semantic: [phone_opening, en_prs_a1_unit07_words]}}
   # POLISH 2026-07-24 (tier-thinness, recipe SS8): the recognition tier had
   # only 1 live template (name_gloss.001). Two narrower unions of this
   # unit's OWN tags (SS3.1a) feed the two added multiple_choice templates
@@ -107,7 +55,7 @@ slot_presets:
   # glosses -- exactly clears the 3-option MC floor. کنین deliberately
   # left out (its "do (polite imperative)" gloss is confusable with
   # می‌کند's "does / is doing" as an option pair).
-  phone_verbs: &phone_verbs {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: [want_verb, phone_action_verb, work_verb_form]}}
+  phone_verbs: &phone_verbs {language_code: prs, part_of_speech: verb, agreement_tags: {semantic: en_prs_a1_unit07_words}}
 templates:
   # Lesson 1: answering the phone.
   - content_key: practice.en-prs.prs.a1.unit07.lesson01.phone_open_translate.002
@@ -156,7 +104,7 @@ templates:
     frame: {text: "{item}", language_code: prs, direction: rtl}
     slots: {item: *phone_verbs}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is a first-person or third-person verb from this unit's phone conversations.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a verb form from this unit's phone conversations.", language_code: en, direction: ltr}
 
   # Lesson 5: text messages.
   # POLISH 2026-07-24: recognition-tier addition (see slot_presets note).
@@ -168,7 +116,7 @@ templates:
     frame: {text: "{item}", language_code: prs, direction: rtl}
     slots: {item: *message_time}
     answer_derivation: {kind: slot_gloss, slot: item}
-    feedback_frame: {text: "{item} is message or time vocabulary from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{item} is a message or time word.", language_code: en, direction: ltr}
 
   # Lesson 6: the full phone call dialogue (Farid, Homayoun, Lima).
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_gloss.001
@@ -188,7 +136,7 @@ templates:
     frame: {text: "{person_name}", language_code: en, direction: ltr, slot_rendering: {person_name: english_gloss}}
     slots: {person_name: *person_name}
     answer_derivation: {kind: slot_text, slot: person_name}
-    feedback_frame: {text: "{person_name} is this speaker's name in Dari.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{person_name} is the Dari spelling of this name.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit07.lesson06.name_pair.004
     lesson_content_key: prs.a1.unit07.lesson06.phone_call_dialogue
     type: matching_pairs

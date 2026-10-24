@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit28.animals
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     TIER-THINNESS + POS-ONLY-MATCHING POLISH 2026-07-24 (wave 2), two
     fixes: (1) animal_pair.002's pet_vocab_word preset was a bare
@@ -112,10 +113,12 @@ review:
     all animal/pet-themed, no confusable or duplicate glosses. Re-verified
     with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
     this file) and scripts/compile_content.py practice-validate.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. animal_pair.002 / pet_food_gloss.001 / pet_food_translate.002: pool was animal_topic_word+food_item, which at course scope pulls bread, tea, apples, 'the apples' etc. into a pets item; now the unit-only en_prs_a1_unit28_words (6 nouns, matching widened with خانگی and the two give-verbs); false 'pet vocabulary' feedback replaced; bracketed [animal] feedback replaced by real slot text (2 word_orders). NATIVE FLAGS: 'سگ حیوان خانگی من است' word order; پشک for cat in Kabul speech.
 tag_schema:
-  part_of_speech: [noun, adjective]
+  part_of_speech: [noun, adjective, verb]
   agreement_tags:
-    semantic: [animal_topic_word, animal_word, pet_animal, food_item]
+    semantic: [animal_topic_word, animal_word, pet_animal, en_prs_a1_unit28_words]
 slot_presets:
   animal_topic_word: &animal_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: animal_topic_word}}
   # pet_animal = unit28's own 4 pets only (backfill_lexemes_en_prs.py):
@@ -128,7 +131,13 @@ slot_presets:
   # scope). animal_topic_word is unit28-only; food_item reaches the unit's
   # own lesson04 lexeme غذا (pet food). 6 distinct unit-scoped tokens/
   # glosses: حیوان سگ پشک پرنده ماهی غذا -- at the 6-pair floor.
-  pet_vocab_word: &pet_vocab_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [animal_topic_word, food_item]}}
+  pet_vocab_word: &pet_vocab_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: en_prs_a1_unit28_words}}
+  # REVIEW 2026-10-24: the animal_topic_word+food_item union pulled bread,
+  # tea, apples, etc. (every food_item noun) into course-scope animal/pet
+  # items. en_prs_a1_unit28_words is unit28-only: 6 nouns (حیوان سگ پشک
+  # پرنده ماهی غذا); the matching pool also takes the unit's adjective
+  # خانگی and its two give-verbs (9 tokens for 6 slots).
+  animal_review_word: &animal_review_word {language_code: prs, part_of_speech: [noun, adjective, verb], agreement_tags: {semantic: en_prs_a1_unit28_words}}
 templates:
   # Lesson 1: animal vocabulary.
   - content_key: practice.en-prs.prs.a1.unit28.lesson01.animal_gloss.001
@@ -142,7 +151,7 @@ templates:
     lesson_content_key: prs.a1.unit28.lesson01.animal_vocabulary
     type: matching_pairs
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *pet_vocab_word, word_two: *pet_vocab_word, word_three: *pet_vocab_word, word_four: *pet_vocab_word, word_five: *pet_vocab_word, word_six: *pet_vocab_word}
+    slots: {word_one: *animal_review_word, word_two: *animal_review_word, word_three: *animal_review_word, word_four: *animal_review_word, word_five: *animal_review_word, word_six: *animal_review_word}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -168,7 +177,7 @@ templates:
     frame: {text: "یک {animal_word} دارم", language_code: prs, direction: rtl}
     slots: {animal_word: *animal_word}
     answer_derivation: {kind: render_frame, frame: {text: "یک {animal_word} دارم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: یک [animal] دارم (I have a [animal]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *یک {animal_word} دارم* -- I have a ...", language_code: en, direction: ltr}
 
   # Lesson 3: describing a pet.
   - content_key: practice.en-prs.prs.a1.unit28.lesson03.pet_ownership_order.001
@@ -177,7 +186,7 @@ templates:
     frame: {text: "{animal_word} حیوان خانگی من است", language_code: prs, direction: rtl}
     slots: {animal_word: *animal_word}
     answer_derivation: {kind: render_frame, frame: {text: "{animal_word} حیوان خانگی من است", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [animal] حیوان خانگی من است ([animal] is my pet).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *{animal_word} حیوان خانگی من است* -- ... is my pet.", language_code: en, direction: ltr}
 
   # Lesson 4: pet dialogue (feeding your pet).
   - content_key: practice.en-prs.prs.a1.unit28.lesson04.pet_food_gloss.001
@@ -186,7 +195,7 @@ templates:
     frame: {text: "{pet_vocab_word}", language_code: prs, direction: rtl}
     slots: {pet_vocab_word: *pet_vocab_word}
     answer_derivation: {kind: slot_gloss, slot: pet_vocab_word}
-    feedback_frame: {text: "{pet_vocab_word} belongs to this unit's pet vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{pet_vocab_word}* is a word from the pets lessons.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit28.lesson04.pet_food_translate.002
     lesson_content_key: prs.a1.unit28.lesson04.pet_dialogue
     type: translation

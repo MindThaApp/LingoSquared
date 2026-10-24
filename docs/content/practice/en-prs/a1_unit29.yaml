@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit29.sports
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     TIER-THINNESS POLISH 2026-07-24 (wave 2): recognition and production
     tiers each had only 1 live template. Added 2 multiple_choice + 2
@@ -69,17 +70,21 @@ review:
     no listen_select/listen_type, no bare YAML booleans, no jargon
     leaks. practice-validate 0/0 and scripts/_practice_slot_check.py
     clean for the full en-prs set.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. sport_game_gloss.002 pool no longer includes online_habit_word (internet, download, video, messaging app) -- now sport_topic_word + sport_place_word; sport_pair.002 uses the same widened pool (6 of 6 dealt the same cards before); false 'unit's sports vocabulary' feedback made neutral; bracketed [sport]/[place] feedback replaced by real slot text (2 word_orders). NATIVE FLAGS: 'در باشگاه بازی می‌کنم' (gym) vs 'ورزش می‌کنم'; باشگاه as a sports word.
 tag_schema:
   part_of_speech: [noun]
   agreement_tags:
-    semantic: [sport_topic_word, ball_sport_word, sport_place_word, online_habit_word]
+    semantic: [sport_topic_word, ball_sport_word, sport_place_word]
 slot_presets:
   sport_topic_word: &sport_topic_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: sport_topic_word}}
   ball_sport_word: &ball_sport_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: ball_sport_word}}
   sport_place_word: &sport_place_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: sport_place_word}}
-  # Union of the unit's own tags: online_habit_word reaches the unit's own
-  # lesson01 lexeme بازی ("game"), giving 7 distinct unit-scoped tokens.
-  sport_game_word: &sport_game_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [sport_topic_word, online_habit_word]}}
+  # REVIEW 2026-10-24: union of sport_topic_word + sport_place_word (6 unit
+  # tokens + پارک at course scope). The earlier online_habit_word union also
+  # pulled course-wide internet/download/video/messaging-app nouns into a
+  # sports item.
+  sport_game_word: &sport_game_word {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [sport_topic_word, sport_place_word]}}
 templates:
   # Lesson 1: sport vocabulary.
   - content_key: practice.en-prs.prs.a1.unit29.lesson01.sport_gloss.001
@@ -88,12 +93,12 @@ templates:
     frame: {text: "{sport_topic_word}", language_code: prs, direction: rtl}
     slots: {sport_topic_word: *sport_topic_word}
     answer_derivation: {kind: slot_gloss, slot: sport_topic_word}
-    feedback_frame: {text: "{sport_topic_word} belongs to this unit's sports vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{sport_topic_word}* is a sports word.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit29.lesson01.sport_pair.002
     lesson_content_key: prs.a1.unit29.lesson01.sport_vocabulary
     type: matching_pairs
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *sport_topic_word, word_two: *sport_topic_word, word_three: *sport_topic_word, word_four: *sport_topic_word, word_five: *sport_topic_word, word_six: *sport_topic_word}
+    slots: {word_one: *sport_game_word, word_two: *sport_game_word, word_three: *sport_game_word, word_four: *sport_game_word, word_five: *sport_game_word, word_six: *sport_game_word}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -105,7 +110,7 @@ templates:
     frame: {text: "من دو بار در هفته {ball_sport_word} بازی می‌کنم", language_code: prs, direction: rtl}
     slots: {ball_sport_word: *ball_sport_word}
     answer_derivation: {kind: render_frame, frame: {text: "من دو بار در هفته {ball_sport_word} بازی می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: من دو بار در هفته [sport] بازی می‌کنم (I play [sport] twice a week).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *من دو بار در هفته {ball_sport_word} بازی می‌کنم* -- I play ... twice a week.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit29.lesson02.ball_sport_gloss.002
     lesson_content_key: prs.a1.unit29.lesson02.frequency_question
     type: multiple_choice
@@ -128,14 +133,14 @@ templates:
     frame: {text: "در {sport_place_word} بازی می‌کنم", language_code: prs, direction: rtl}
     slots: {sport_place_word: *sport_place_word}
     answer_derivation: {kind: render_frame, frame: {text: "در {sport_place_word} بازی می‌کنم", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: در [place] بازی می‌کنم (I play at the [place]).", language_code: en, direction: ltr}
+    feedback_frame: {text: "Word order: *در {sport_place_word} بازی می‌کنم* -- I play at the ...", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit29.lesson03.sport_game_gloss.002
     lesson_content_key: prs.a1.unit29.lesson03.location
     type: multiple_choice
     frame: {text: "{sport_game_word}", language_code: prs, direction: rtl}
     slots: {sport_game_word: *sport_game_word}
     answer_derivation: {kind: slot_gloss, slot: sport_game_word}
-    feedback_frame: {text: "{sport_game_word} belongs to this unit's sports vocabulary.", language_code: en, direction: ltr}
+    feedback_frame: {text: "*{sport_game_word}* is a sport or a place where people play sports.", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit29.lesson03.place_translate.003
     lesson_content_key: prs.a1.unit29.lesson03.location
     type: translation

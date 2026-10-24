@@ -17,13 +17,22 @@ review:
     خواننده, both fit ''in X ast''). 2026-07-24 polish wave 2: added a 3rd recognition MC (choose.006,
     REVERSED direction -- English gloss shown via slot_rendering, options are the Dari tokens via slot_text;
     backend build_prompt/_distractor_values and the unit-scope checker both support MC+slot_text, and
-    this is the only way to get a genuinely non-clone 3rd MC when the unit''s only >=3-gloss pool is
-    already used by both siblings) and a 3rd structured word_order (order.007, ''{item} خواننده است.''
-    over person_name/proper_noun -- unit candidate سیما, matching lesson02''s own poster content; every
-    course-scope person_name member is a name, so ''X is a singer'' stays grammatical). Both tiers now
-    3 live. 1 extra fixed-sentence translation added for production depth. 9 templates total -- BELOW the 12-template floor and the >=40-distinct-item floor. Backfill-thin:
-    lessons 03-06 contribute 0 lexemes each; routing to the backfill lane is the real fix. No mis-glossed
-    lexemes found.'
+    this is the only way to get a genuinely non-clone 3rd MC when the unit''s only >=3-gloss pool is already
+    used by both siblings) and a 3rd structured word_order (order.007, ''{item} خواننده است.'' over person_name/proper_noun
+    -- unit candidate سیما, matching lesson02''s own poster content; every course-scope person_name member
+    is a name, so ''X is a singer'' stays grammatical). Both tiers now 3 live. 1 extra fixed-sentence
+    translation added for production depth. 9 templates total -- BELOW the 12-template floor and the >=40-distinct-item
+    floor. Backfill-thin: lessons 03-06 contribute 0 lexemes each; routing to the backfill lane is the
+    real fix. No mis-glossed lexemes found.
+
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. (1) MC/translation pools narrowed
+    from 17/40 course-wide tokens (staff roles, 23 personal names, ...) to the unit''s 3 nouns (en_prs_a1_unit54_words);
+    the proper noun سیما is practiced via order.007. (2) order.003 and translate.005 used workplace_word,
+    whose course members include ایمیل / کارمندان / جلسه‌های, so the fixed English ''The concert starts
+    at seven.'' could expect ''ایمیل'' and the frame could read ''کنسرت ساعت هفت ایمیل می‌شود'' -> lesson02
+    tag (شروع only). NATIVE FLAGS: ''کنسرت ساعت هفت شروع می‌شود''.'
+  required_next_reviewer: native_speaker_review
 tag_schema:
   part_of_speech:
   - symbol
@@ -39,9 +48,9 @@ tag_schema:
   agreement_tags:
     semantic:
     - concert_word
+    - en_prs_a1_unit54_lesson02_words
+    - en_prs_a1_unit54_words
     - person_name
-    - service_person_word
-    - workplace_word
 templates:
 - content_key: practice.en-prs.prs.a1.unit54.lesson01.concert_and_singer_vocabulary.choose.001
   lesson_content_key: prs.a1.unit54.lesson01.concert_and_singer_vocabulary
@@ -51,15 +60,13 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
+    item: &id001
       language_code: prs
-      part_of_speech: &id001
+      part_of_speech:
       - noun
       agreement_tags:
-        semantic: &id002
-        - concert_word
-        - service_person_word
-        - workplace_word
+        semantic:
+        - en_prs_a1_unit54_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -77,17 +84,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: &id003
-      - noun
-      - proper_noun
-      agreement_tags:
-        semantic: &id004
-        - concert_word
-        - service_person_word
-        - workplace_word
-        - person_name
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -103,11 +100,7 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id001
-      agreement_tags:
-        semantic: *id002
+    item: *id001
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -125,11 +118,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech: *id003
-      agreement_tags:
-        semantic: *id004
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -145,12 +134,12 @@ templates:
     language_code: prs
     direction: rtl
   slots:
-    item:
+    item: &id002
       language_code: prs
       part_of_speech: noun
       agreement_tags:
         semantic:
-        - workplace_word
+        - en_prs_a1_unit54_lesson02_words
   answer_derivation:
     kind: render_frame
     frame:
@@ -195,15 +184,7 @@ templates:
     slot_rendering:
       item: english_gloss
   slots:
-    item:
-      language_code: prs
-      part_of_speech:
-      - noun
-      agreement_tags:
-        semantic:
-        - concert_word
-        - service_person_word
-        - workplace_word
+    item: *id001
   answer_derivation:
     kind: slot_text
     slot: item
@@ -243,12 +224,7 @@ templates:
     language_code: en
     direction: ltr
   slots:
-    item:
-      language_code: prs
-      part_of_speech: noun
-      agreement_tags:
-        semantic:
-        - workplace_word
+    item: *id002
   answer_derivation:
     kind: render_frame
     frame:
