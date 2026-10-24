@@ -6,6 +6,7 @@ unit_content_key: prs.b1.unit09.workplace
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
     en-prs B1 practice pack (unit09 workplace: suggestions/polite requests),
     authored 2026-07-23. GRAMMAR UNIT (recipe SS8.1) -- all 6 lessons have
@@ -59,6 +60,21 @@ review:
     b1_unit09_workplace.yaml's own register_policy (-ین, not -ید) --
     بفرستین/می‌کنین pattern, matches. Needs the standard fresh-context review
     before import.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 8 fixes. Pool: the
+    17-tag course-wide union (reaching B1 unit01-05/07/08/10/11) is replaced by
+    en_prs_b1_unit09_words. lesson01/02/03 fill_in_blank (می‌بود vs است;
+    هفته‌وار vs ماهانه; می‌شود vs ممکن است all fit) became fixed-English
+    translations lifted from the realization (lesson02 now uses the taught
+    sentence 'پیشنهاد می‌کنم که جلسه‌های هفته‌وار را زودتر شروع کنیم'; the
+    untaught 'گزارش ... برایم بفرستین' is gone). lesson06.fill.001 frame 'این
+    خبر را به مدیر بدین' (unnatural, not taught) now 'لطفاً کارمندان را {item}
+    کنین' (taught خبر کنین). Two fixed-feedback word_orders echo {item}. NATIVE
+    FLAGS: (1) 'خبر کنین' (notify) vs 'خبر بدین' - confirm the Kabuli light-
+    verb. (2) 'خوب می‌بود اگر' as a formal suggestion. (3) 'می‌شود که ...؟' as a
+    polite request vs 'ممکن است ...'. (4) نه ('nine') is in the pool and is a
+    homograph of 'no'.
+
 tag_schema:
   part_of_speech:
   - symbol
@@ -90,29 +106,13 @@ tag_schema:
     - negative_copula_verb
     - notify_word
     - workplace_person_word
+    - en_prs_b1_unit09_words
 slot_presets:
   unit_word: &uw
     language_code: prs
     part_of_speech: [noun, verb, adjective, adverb, phrase]
     agreement_tags:
-      semantic:
-      - suggestion_word
-      - appointment_word
-      - workplace_word
-      - polite_request_verb
-      - politeness
-      - relationship_word
-      - time_period
-      - time_of_day
-      - wellbeing_answer
-      - phone_action_verb
-      - accept_verb
-      - see_verb
-      - past_verb_third
-      - emotion_word
-      - negative_copula_verb
-      - notify_word
-      - workplace_person_word
+      semantic: en_prs_b1_unit09_words
   suggestion_verb_single: &sv
     language_code: prs
     part_of_speech: verb
@@ -214,46 +214,52 @@ templates:
 # ---- structured ----
 - content_key: practice.en-prs.prs.b1.unit09.lesson01.fill.001
   lesson_content_key: prs.b1.unit09.lesson01.formal_suggestion
-  type: fill_in_blank
-  frame: {text: 'خوب {item} اگر این تغییر را امتحان کنیم.', language_code: prs, direction: rtl}
+  type: translation
+  frame: {text: 'It would be good if we tried this change.', language_code: en, direction: ltr}
   slots:
     item: *sv
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'خوب {item} اگر این تغییر را امتحان کنیم.', language_code: prs, direction: rtl}
   feedback_frame:
     text: 'خوب می‌بود اگر این تغییر را امتحان کنیم. = It would be good if we tried this change.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson02.fill.001
   lesson_content_key: prs.b1.unit09.lesson02.making_a_suggestion
-  type: fill_in_blank
-  frame: {text: 'گزارش {item} را برایم بفرستین.', language_code: prs, direction: rtl}
+  type: translation
+  frame: {text: 'I suggest that we start the weekly meetings earlier.', language_code: en, direction: ltr}
   slots:
     item: *wa
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: 'پیشنهاد می‌کنم که جلسه‌های {item} را زودتر شروع کنیم.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'گزارش هفته‌وار را برایم بفرستین. = Send me the weekly report.'
+    text: 'پیشنهاد می‌کنم که جلسه‌های هفته‌وار را زودتر شروع کنیم. = I suggest that we start the weekly meetings earlier.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson03.fill.001
   lesson_content_key: prs.b1.unit09.lesson03.polite_request
-  type: fill_in_blank
-  frame: {text: '{item} که یک ایمیل بفرستین؟', language_code: prs, direction: rtl}
+  type: translation
+  frame: {text: 'Could we start the meeting earlier? (polite request)', language_code: en, direction: ltr}
   slots:
     item: *prp
-  answer_derivation: {kind: slot_text, slot: item}
+  answer_derivation:
+    kind: render_frame
+    frame: {text: '{item} که جلسه را زودتر شروع کنیم؟', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'می‌شود که یک ایمیل بفرستین؟ = Would it be possible for you to send an email?'
+    text: 'می‌شود که جلسه را زودتر شروع کنیم؟ = Would it be possible for us to start the meeting earlier?'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson06.fill.001
   lesson_content_key: prs.b1.unit09.lesson06.wrapup_production
   type: fill_in_blank
-  frame: {text: 'لطفاً این {item} را به مدیر بدین.', language_code: prs, direction: rtl}
+  frame: {text: 'لطفاً کارمندان را {item} کنین.', language_code: prs, direction: rtl}
   slots:
     item: *ns
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: 'لطفاً این خبر را به مدیر بدین. = Please give this notice to the manager.'
+    text: 'لطفاً کارمندان را خبر کنین. = Please notify the employees.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson04.order.001
@@ -266,7 +272,7 @@ templates:
     kind: render_frame
     frame: {text: 'جلسه {item} است.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: جلسه ظهر است. (The meeting is at noon.)'
+    text: 'Word order: جلسه {item} است. (The meeting is at the time shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson05.order.001
@@ -279,7 +285,7 @@ templates:
     kind: render_frame
     frame: {text: 'مدیر {item} بود.', language_code: prs, direction: rtl}
   feedback_frame:
-    text: 'Word order: مدیر خوشحال بود. (The manager was happy.)'
+    text: 'Word order: مدیر {item} بود. (The manager felt the way shown in the hint.)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.b1.unit09.lesson04.match.001
@@ -294,7 +300,7 @@ templates:
     kind: matching_pairs
     slots: [first, second, third, fourth, fifth, sixth]
   feedback_frame:
-    text: 'Match each workplace word to its meaning.'
+    text: 'Match each Dari word from this unit to its English meaning.'
     language_code: en
     direction: ltr
 # ---- production ----
