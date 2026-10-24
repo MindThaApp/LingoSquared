@@ -6,7 +6,8 @@ unit_content_key: en.a1.unit39.neighborhood
 review:
   status: reviewed
   fresh_context: true
-  notes: "Authored 2026-07-11, nl-en depth-completion sprint (see
+  required_next_reviewer: native_speaker_review
+  notes: "Review 2026-10-22 (nl-en practice pass, fresh context; (1) lesson01.choose.001, lesson01.listen.002, lesson01.translate.004: pool -- narrowed from whole unit to lesson01 tag (5 words). (2) lesson04.translate.001: pool -- narrowed to lesson04 nouns (mr/building etc. no longer asked). 2 fixes. NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: five-minute=vijf-minuten, move=verplaatsen (should be verhuizen). Authored 2026-07-11, nl-en depth-completion sprint (see
     a1_unit30.yaml's notes for the sprint context). 3-member
     'neighborhood_adj' tag (quiet/noisy/friendly, all adjectives) for
     bare-word recognition only -- deliberately excludes the lesson's
@@ -104,26 +105,28 @@ review:
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [neighborhood_adj, volume_prs_en_a1_unit39_item_07_single, a1_unit39_neighborhood]
+    semantic: [neighborhood_adj, volume_prs_en_a1_unit39_item_07_single, a1_unit39_neighborhood, a1_unit39_neighborhood_lesson01, a1_unit39_neighborhood_lesson04]
 slot_presets:
   neighborhood_adj: &neighborhood_adj {language_code: en, part_of_speech: [noun, adjective]}
   area_adj: &area_adj {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: neighborhood_adj}}
   noisy_single: &noisy_single {language_code: en, part_of_speech: adjective, agreement_tags: {semantic: volume_prs_en_a1_unit39_item_07_single}}
   unit39_noun: &unit39_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit39_neighborhood}}
   unit39_match_word: &unit39_match_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit39_neighborhood}}
+  unit39_lesson01_word: &unit39_lesson01_word {language_code: en, part_of_speech: [noun, adjective], agreement_tags: {semantic: a1_unit39_neighborhood_lesson01}}
+  unit39_lesson04_noun: &unit39_lesson04_noun {language_code: en, part_of_speech: noun, agreement_tags: {semantic: a1_unit39_neighborhood_lesson04}}
 templates:
   - content_key: practice.nl-en.en.a1.unit39.lesson01.choose.001
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
     type: multiple_choice
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit39_match_word}
+    slots: {item: *unit39_lesson01_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is een woord uit deze les.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit39.lesson01.listen.002
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
     type: listen_select
     frame: {text: "{item}", language_code: en, direction: ltr}
-    slots: {item: *unit39_match_word}
+    slots: {item: *unit39_lesson01_word}
     answer_derivation: {kind: slot_gloss, slot: item}
     feedback_frame: {text: "{item} is het woord dat je hoorde.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit39.lesson01.match.003
@@ -138,7 +141,7 @@ templates:
     lesson_content_key: en.a1.unit39.lesson01.neighborhood_vocabulary
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit39_match_word}
+    slots: {item: *unit39_lesson01_word}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}
   - content_key: practice.nl-en.en.a1.unit39.lesson02.choose.002
@@ -177,6 +180,6 @@ templates:
     lesson_content_key: en.a1.unit39.lesson04.three_neighborhoods
     type: translation
     frame: {text: "{item}", language_code: nl, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *unit39_noun}
+    slots: {item: *unit39_lesson04_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "De Engelse vertaling is {item}.", language_code: nl, direction: ltr}

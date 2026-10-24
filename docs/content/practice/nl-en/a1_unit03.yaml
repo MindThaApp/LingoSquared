@@ -5,8 +5,10 @@ target_language: en
 unit_content_key: en.a1.unit03.numbers
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (nl-en practice pass, fresh context; 3 fixes). (1) market_pair.002: matching_pairs below the 6-pair floor (3 pairs) -- widened slot POS to noun/pronoun/adjective on the market_dialogue tag and declared 6 slots (this, market, apples, theyre, ok, shop); feedback no longer says twee woorden. (2) number_pair.003 feedback said twee getallen for a 12-pair match -- reworded. NATIVE FLAGS: age_order and age_translate can produce I am zero years old (zero is in the count pool). BACKFILL GLOSS FLAGS: none.
     Authored 2026-07-05 by the Claude session syncing Endless Practice template pools to lesson content growth, per
     an explicit scope split from the coordinator (a separate agent covers en-fa/fa-en/en-prs; this session covers nl-en only).
     Keyed to English target lexemes extended into the SHARED scripts/_en_target_lexeme_common.py (EN_POS/en_agreement_tags,
@@ -83,7 +85,10 @@ slot_presets:
       semantic: count_plural_no_hundred
   market_noun: &id003
     language_code: en
-    part_of_speech: noun
+    part_of_speech:
+    - noun
+    - pronoun
+    - adjective
     agreement_tags:
       semantic: market_dialogue
   place_singular: &id004
@@ -175,7 +180,7 @@ templates:
     - eleventh_number
     - twelfth_number
   feedback_frame:
-    text: Je hebt twee Engelse getallen gekoppeld aan hun Nederlandse betekenis.
+    text: Je hebt Engelse getallen gekoppeld aan hun Nederlandse betekenis.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit03.lesson01.number_translate.004
@@ -316,20 +321,29 @@ templates:
     first_word: *id003
     second_word: *id003
     third_word: *id003
+    fourth_word: *id003
+    fifth_word: *id003
+    sixth_word: *id003
   slot_relations:
   - kind: distinct
     slots:
     - first_word
     - second_word
     - third_word
+    - fourth_word
+    - fifth_word
+    - sixth_word
   answer_derivation:
     kind: matching_pairs
     slots:
     - first_word
     - second_word
     - third_word
+    - fourth_word
+    - fifth_word
+    - sixth_word
   feedback_frame:
-    text: Je hebt twee woorden uit het marktgesprek gekoppeld aan hun Nederlandse betekenis.
+    text: Je hebt woorden uit het marktgesprek gekoppeld aan hun Nederlandse betekenis.
     language_code: nl
     direction: ltr
 - content_key: practice.nl-en.en.a1.unit03.lesson04.place_order.003
