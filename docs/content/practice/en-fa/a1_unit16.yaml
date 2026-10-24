@@ -6,7 +6,19 @@ unit_content_key: fa.a1.unit16.travel
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5 fixes). (1)
+    lesson04/lesson05 reviewed_phrase MCs drew ~395 course-wide phrases and this unit's
+    token 'حرکت می‌کنه (it departs)' prints its own answer; re-pooled onto lesson04-05
+    words/phrases (4). (2) reviewed_phrase_translate.002 asked learners to type the whole
+    timetable sentence (digit/word-order variants) or the parenthetical token; replaced by
+    word_order schedule_sentence_order.002 on the lesson04 sentence. (3) unit_review_match
+    dealt 7 slots from exactly 7 words; now 6 slots from 8 (adds مسافر). (4) learner-facing
+    'this unit'/'this whole unit' wording removed from 3 feedbacks + the match frame. (5)
+    unused reviewed_phrase preset removed. NATIVE FLAGS: '{قطار/اتوبوس} از سکو حرکت می‌کنه'
+    without a platform number -- natural? Typed 'ticket' accepts only بلیط (not بلیت).
+
     Authored 2026-07-07 closing the practice-content gap for the new en-fa
     A1 units 16-17 (Travel/Health, authored the same night with zero prior
     Endless Practice coverage). Extended scripts/backfill_lexemes.py's
@@ -164,14 +176,18 @@ tag_schema:
   - particle
   - phrase
   agreement_tags:
-    semantic: [travel_vocab_word, transport_mode, ticket_request_word, departure_detail_word, dialogue_role_word, reviewed_phrase]
+    semantic: [travel_vocab_word, transport_mode, ticket_request_word, departure_detail_word, dialogue_role_word, reviewed_phrase, en_fa_a1_unit16_lesson04_words, en_fa_a1_unit16_lesson05_words]
 slot_presets:
   travel_vocab_word: &travel_vocab_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: travel_vocab_word}}
   transport_mode: &transport_mode {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: transport_mode}}
   ticket_request_word: &ticket_request_word {language_code: fa, part_of_speech: [proper_noun, verb, preposition], agreement_tags: {semantic: ticket_request_word}}
   departure_detail_word: &departure_detail_word {language_code: fa, part_of_speech: [noun, pronoun], agreement_tags: {semantic: departure_detail_word}}
   dialogue_role_word: &dialogue_role_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: dialogue_role_word}}
-  reviewed_phrase: &reviewed_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: reviewed_phrase}}
+  # Review 2026-10-22: lesson04-05 words/phrases (the course-wide reviewed_phrase tag pulled ~395
+  # phrases, and this unit's own "حرکت می‌کنه (it departs)" token prints its answer).
+  schedule_dialogue_word: &schedule_dialogue_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: [en_fa_a1_unit16_lesson04_words, en_fa_a1_unit16_lesson05_words]}}
+  schedule_sentence: &schedule_sentence {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: en_fa_a1_unit16_lesson04_words}}
+  travel_review_word: &travel_review_word {language_code: fa, part_of_speech: [noun, pronoun], agreement_tags: {semantic: [travel_vocab_word, departure_detail_word, en_fa_a1_unit16_lesson05_words]}}
   travel_or_departure_word: &travel_or_departure_word {language_code: fa, part_of_speech: [noun, pronoun], agreement_tags: {semantic: [travel_vocab_word, departure_detail_word]}}
 templates:
   # lesson01 -- basic_travel_vocab (بلیط, قطار, اتوبوس, فرودگاه)
@@ -181,7 +197,7 @@ templates:
     frame: {text: "{travel_vocab_word}", language_code: fa, direction: rtl}
     slots: {travel_vocab_word: *travel_vocab_word}
     answer_derivation: {kind: slot_gloss, slot: travel_vocab_word}
-    feedback_frame: {text: "{travel_vocab_word} is one of this unit's basic travel words.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{travel_vocab_word} is a basic travel word.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit16.lesson01.basic_travel_order.002
     lesson_content_key: fa.a1.unit16.lesson01.basic_travel_vocab
     type: word_order
@@ -257,16 +273,16 @@ templates:
     lesson_content_key: fa.a1.unit16.lesson04.reading_a_schedule
     type: multiple_choice
     frame: {text: "{reviewed_phrase}", language_code: fa, direction: rtl}
-    slots: {reviewed_phrase: *reviewed_phrase}
+    slots: {reviewed_phrase: *schedule_dialogue_word}
     answer_derivation: {kind: slot_gloss, slot: reviewed_phrase}
-    feedback_frame: {text: "{reviewed_phrase} is a phrase from this unit.", language_code: en, direction: ltr}
-  - content_key: practice.en-fa.fa.a1.unit16.lesson04.reviewed_phrase_translate.002
+    feedback_frame: {text: "{reviewed_phrase} is useful at a train station ticket counter.", language_code: en, direction: ltr}
+  - content_key: practice.en-fa.fa.a1.unit16.lesson04.schedule_sentence_order.002
     lesson_content_key: fa.a1.unit16.lesson04.reading_a_schedule
-    type: translation
-    frame: {text: "{reviewed_phrase}", language_code: en, direction: ltr, slot_rendering: {reviewed_phrase: english_gloss}}
-    slots: {reviewed_phrase: *reviewed_phrase}
-    answer_derivation: {kind: slot_text, slot: reviewed_phrase}
-    feedback_frame: {text: "The Farsi phrase is {reviewed_phrase}.", language_code: en, direction: ltr}
+    type: word_order
+    frame: {text: "{schedule_sentence}", language_code: fa, direction: rtl}
+    slots: {schedule_sentence: *schedule_sentence}
+    answer_derivation: {kind: render_frame, frame: {text: "{schedule_sentence}", language_code: fa, direction: rtl}}
+    feedback_frame: {text: "A timetable sentence: train, time, platform, then حرکت می‌کنه (it departs).", language_code: en, direction: ltr}
 
   # lesson05 -- ticket_counter_dialogue (مسافر; فروشنده/فردا/باشه are
   # earlier-unit vocabulary, see notes)
@@ -281,9 +297,9 @@ templates:
     lesson_content_key: fa.a1.unit16.lesson05.ticket_counter_dialogue
     type: multiple_choice
     frame: {text: "{reviewed_phrase}", language_code: fa, direction: rtl}
-    slots: {reviewed_phrase: *reviewed_phrase}
+    slots: {reviewed_phrase: *schedule_dialogue_word}
     answer_derivation: {kind: slot_gloss, slot: reviewed_phrase}
-    feedback_frame: {text: "{reviewed_phrase} is a phrase from this unit's dialogue.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{reviewed_phrase} is useful at a train station ticket counter.", language_code: en, direction: ltr}
 
   # lesson06 -- confirming_travel_plans (no new vocabulary of its own; hosts
   # this unit's full review, pooling lesson01's travel_vocab_word with
@@ -291,24 +307,15 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit16.lesson06.unit_review_match.001
     lesson_content_key: fa.a1.unit16.lesson06.confirming_travel_plans
     type: matching_pairs
-    frame: {text: "Match each word with its meaning -- a review of this whole unit's travel vocabulary.", language_code: en, direction: ltr}
-    slots:
-      tv1: *travel_vocab_word
-      tv2: *travel_vocab_word
-      tv3: *travel_vocab_word
-      tv4: *travel_vocab_word
-      dd1: *departure_detail_word
-      dd2: *departure_detail_word
-      dd3: *departure_detail_word
-    slot_relations:
-      - {kind: distinct, slots: [tv1, tv2, tv3, tv4]}
-      - {kind: distinct, slots: [dd1, dd2, dd3]}
-    answer_derivation: {kind: matching_pairs, slots: [tv1, tv2, tv3, tv4, dd1, dd2, dd3]}
-    feedback_frame: {text: "This reviews both the basic travel vocabulary and the departure-detail words taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each travel word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *travel_review_word, second: *travel_review_word, third: *travel_review_word, fourth: *travel_review_word, fifth: *travel_review_word, sixth: *travel_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each travel word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit16.lesson06.unit_review_choice.002
     lesson_content_key: fa.a1.unit16.lesson06.confirming_travel_plans
     type: multiple_choice
     frame: {text: "{travel_or_departure_word}", language_code: fa, direction: rtl}
     slots: {travel_or_departure_word: *travel_or_departure_word}
     answer_derivation: {kind: slot_gloss, slot: travel_or_departure_word}
-    feedback_frame: {text: "{travel_or_departure_word} is a review word from this unit.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{travel_or_departure_word} is a word for talking about train and bus travel.", language_code: en, direction: ltr}

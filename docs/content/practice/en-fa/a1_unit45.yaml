@@ -6,8 +6,20 @@ unit_content_key: fa.a1.unit45.pharmacy
 
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1) lesson01.order.003
+    'روی نسخه نوشته {item}.' used نسخه (prescription), first taught at A2, and read oddly with
+    قبل/روزی/داروخانه: frame is now 'این {item} خوبه.' (the dialogue's 'این قرص خوبه') over the
+    lesson01/02 nouns (داروخانه, قرص). (2) lesson02.order.003 'اینجا نوشته {item}.' gave 'اینجا
+    نوشته قبل/روزی': frame is now the taught dosage phrase 'روزی دو تا {item}.' anchored on lesson02
+    (قرص). (3) lesson03.fill.003 'قرص رو {item} از غذا بخورید.' also accepts بعد (taught, and what
+    the pharmacist actually says), but only قبل was graded right: frame now ends '، نه بعد از غذا'
+    so only قبل fits; feedback no longer says 'the only adverb in this unit's pharmacy vocabulary'.
+    NATIVE FLAGS: none new. Gloss lane: روزی 'day (indefinite form, e.g. the day that.../what day)'
+    is taught here as 'per day, daily' ('روزی دو تا'); proposed gloss 'per day, a day'.
+
     THIN UNIT -- flagging per recipe §0/§3 "capacity, don't pad". Pharmacy has
     only 5 distinct fa lexemes total per backfill_lexemes_en_fa across all 4
     lessons: pharmacy_word 4 (داروخانه "pharmacy" noun, قرص "pill/tablet"
@@ -63,6 +75,8 @@ tag_schema:
     semantic:
     - pharmacy_word
     - person_name
+    - en_fa_a1_unit45_lesson01_words
+    - en_fa_a1_unit45_lesson02_words
 
 templates:
 # --- lesson01 (new_pharmacy_one) ---
@@ -106,23 +120,23 @@ templates:
   lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
   type: word_order
   frame:
-    text: روی نسخه نوشته {item}.
+    text: این {item} خوبه.
     language_code: fa
     direction: rtl
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adverb]
+      part_of_speech: [noun]
       agreement_tags:
-        semantic: pharmacy_word
+        semantic: [en_fa_a1_unit45_lesson01_words, en_fa_a1_unit45_lesson02_words]
   answer_derivation:
     kind: render_frame
     frame:
-      text: روی نسخه نوشته {item}.
+      text: این {item} خوبه.
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: 'روی نسخه نوشته قرص. -- It says on the prescription: pill.'
+    text: 'این {item} خوبه. -- "This ... is good": این comes before the noun and خوبه closes the sentence.'
     language_code: en
     direction: ltr
 
@@ -167,23 +181,23 @@ templates:
   lesson_content_key: fa.a1.unit45.lesson02.new_pharmacy_two
   type: word_order
   frame:
-    text: اینجا نوشته {item}.
+    text: روزی دو تا {item}.
     language_code: fa
     direction: rtl
   slots:
     item:
       language_code: fa
-      part_of_speech: [noun, adverb]
+      part_of_speech: [noun]
       agreement_tags:
-        semantic: pharmacy_word
+        semantic: en_fa_a1_unit45_lesson02_words
   answer_derivation:
     kind: render_frame
     frame:
-      text: اینجا نوشته {item}.
+      text: روزی دو تا {item}.
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: 'اینجا نوشته قرص. -- Here it says: pill.'
+    text: 'روزی دو تا قرص. -- Two pills a day: روزی (per day) comes first, then the amount.'
     language_code: en
     direction: ltr
 
@@ -228,7 +242,7 @@ templates:
   lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
   type: fill_in_blank
   frame:
-    text: قرص رو {item} از غذا بخورید.
+    text: قرص رو {item} از غذا بخورید، نه بعد از غذا.
     language_code: fa
     direction: rtl
   slots:
@@ -239,7 +253,7 @@ templates:
         semantic: pharmacy_word
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
-    text: قرص رو قبل از غذا بخورید means "take the pill before food" -- قبل is the only adverb in this unit's pharmacy vocabulary.
+    text: 'قرص رو قبل از غذا بخورید، نه بعد از غذا. -- Take the pill before food, not after food: قبل means before, بعد means after.'
     language_code: en
     direction: ltr
 

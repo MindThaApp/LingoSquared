@@ -6,7 +6,19 @@ unit_content_key: fa.a1.unit12.plans
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1)
+    unit12_review_word (7 templates) unioned reviewed_phrase, which pools every A1
+    phrase in Endless Practice (420 candidates): re-pooled onto the four plan tags +
+    lesson02/lesson04 unit tags (9 unit, 13 course: + باشه/عالیه/بریم/می‌بینمت). (2) At
+    unit scope the same pool served the whole invitation text, the name pair آرش، سارا
+    and the fragment ساعتی؟ as MC/matching items: excluded by the re-pool. (3) Three MC
+    feedbacks said "from this unit's plan-making lessons" (false at course scope): now
+    "a word for making plans". NATIVE FLAGS / LIMITATION: decline_translate accepts only
+    متأسفم (hamza); a learner typing متاسفم is marked wrong (no alternative-answer
+    field; fa grading does not fold hamza).
+
     Authored 2026-07-07 by the practice-content-gap-closing pass (en-fa
     units 12-15, closing the gap where the new A1 units 09-15 grew from
     8 to 15 units tonight but this pack only covered 01-08). A parallel
@@ -122,7 +134,8 @@ review:
 tag_schema:
   part_of_speech: [noun, verb, phrase]
   agreement_tags:
-    semantic: [plan_core_word, accept_word, decline_word, invitation_word, reviewed_phrase]
+    semantic: [plan_core_word, accept_word, decline_word, invitation_word, reviewed_phrase,
+      en_fa_a1_unit12_lesson02_words, en_fa_a1_unit12_lesson04_words]
 slot_presets:
   plan_core_word: &plan_core_word {language_code: fa, part_of_speech: [noun, verb], agreement_tags: {semantic: plan_core_word}}
   accept_word: &accept_word {language_code: fa, part_of_speech: verb, agreement_tags: {semantic: accept_word}}
@@ -134,7 +147,11 @@ slot_presets:
   # unit's own `reviewed_phrase` items (also unit-scoped once filtered by
   # lesson_content_key) gives 14 real distinct unit-scoped tokens per
   # SS3.1a/SS8.1 -- used to re-anchor the below-floor/DEAD templates.
-  unit12_review_word: &unit12_review_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: [plan_core_word, accept_word, decline_word, invitation_word, reviewed_phrase]}}
+  # Review 2026-10-22: reviewed_phrase pooled every A1 phrase in Endless Practice
+  # (420 candidates) and, at unit scope, the whole invitation text, the name pair
+  # آرش، سارا and the fragment ساعتی؟. Re-pooled onto the four plan tags plus the
+  # lesson02/lesson04 unit tags (9 unit tokens; course adds باشه/عالیه/بریم/می‌بینمت).
+  unit12_review_word: &unit12_review_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: [plan_core_word, accept_word, decline_word, invitation_word, en_fa_a1_unit12_lesson02_words, en_fa_a1_unit12_lesson04_words]}}
 templates:
   - content_key: practice.en-fa.fa.a1.unit12.lesson01.plan_core_choice.001
     lesson_content_key: fa.a1.unit12.lesson01.plan_vocabulary
@@ -142,7 +159,7 @@ templates:
     frame: {text: "{plan_core_word}", language_code: fa, direction: rtl}
     slots: {plan_core_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: plan_core_word}
-    feedback_frame: {text: "{plan_core_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{plan_core_word} is a word for making plans.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson01.plan_core_match.002
     lesson_content_key: fa.a1.unit12.lesson01.plan_vocabulary
     type: matching_pairs
@@ -164,7 +181,7 @@ templates:
     frame: {text: "{accept_word}", language_code: fa, direction: rtl}
     slots: {accept_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: accept_word}
-    feedback_frame: {text: "{accept_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{accept_word} is a word for making plans.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson03.accept_match.002
     lesson_content_key: fa.a1.unit12.lesson03.accepting_a_plan
     type: matching_pairs
@@ -208,7 +225,7 @@ templates:
     frame: {text: "{invitation_word}", language_code: fa, direction: rtl}
     slots: {invitation_word: *unit12_review_word}
     answer_derivation: {kind: slot_gloss, slot: invitation_word}
-    feedback_frame: {text: "{invitation_word} is vocabulary from this unit's plan-making lessons.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{invitation_word} is a word for making plans.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit12.lesson05.invitation_match.002
     lesson_content_key: fa.a1.unit12.lesson05.reading_an_invitation
     type: matching_pairs

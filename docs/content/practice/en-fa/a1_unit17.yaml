@@ -6,7 +6,15 @@ unit_content_key: fa.a1.unit17.health
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1) advice_choice
+    feedback claimed دکتر/دارو are 'advice you might get from a doctor'; reworded. (2)
+    advice_phrase_translate.003 prompt 'rest' also fits the taught noun استراحت; frame now
+    'Tell a friend to {advice_phrase}.' (3) unit_review_match dealt 12 slots from exactly 12
+    items (same cards every time); now 6 slots from 12, 'this whole unit's' wording removed.
+    NATIVE FLAGS: none new.
+
     Authored 2026-07-07, same pass as a1_unit16.yaml -- see that file's
     notes for the shared backfill_lexemes.py UNIT_FILES extension.
 
@@ -114,6 +122,7 @@ slot_presets:
   help_phrase: &help_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: help_word}}
   advice_word: &advice_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: advice_word}}
   advice_phrase: &advice_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: advice_phrase}}
+  health_review_word: &health_review_word {language_code: fa, part_of_speech: [noun, verb, phrase], agreement_tags: {semantic: [symptom_word, help_word, advice_word, advice_phrase]}}
   advice_or_advice_phrase: &advice_or_advice_phrase {language_code: fa, part_of_speech: [noun, phrase], agreement_tags: {semantic: [advice_word, advice_phrase]}}
 templates:
   # lesson01 -- basic_symptoms (حالم خوب نیست, سردرد, تب)
@@ -192,7 +201,7 @@ templates:
     frame: {text: "{advice_or_advice_phrase}", language_code: fa, direction: rtl}
     slots: {advice_or_advice_phrase: *advice_or_advice_phrase}
     answer_derivation: {kind: slot_gloss, slot: advice_or_advice_phrase}
-    feedback_frame: {text: "{advice_or_advice_phrase} is advice you might get from a doctor.", language_code: en, direction: ltr}
+    feedback_frame: {text: "{advice_or_advice_phrase} comes up when you get advice about being sick.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_word_translate.002
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
     type: translation
@@ -203,7 +212,7 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit17.lesson04.advice_phrase_translate.003
     lesson_content_key: fa.a1.unit17.lesson04.simple_advice
     type: translation
-    frame: {text: "{advice_phrase}", language_code: en, direction: ltr, slot_rendering: {advice_phrase: english_gloss}}
+    frame: {text: "Tell a friend to {advice_phrase}.", language_code: en, direction: ltr, slot_rendering: {advice_phrase: english_gloss}}
     slots: {advice_phrase: *advice_phrase}
     answer_derivation: {kind: slot_text, slot: advice_phrase}
     feedback_frame: {text: "The Farsi phrase is {advice_phrase}.", language_code: en, direction: ltr}
@@ -221,24 +230,8 @@ templates:
   - content_key: practice.en-fa.fa.a1.unit17.lesson06.unit_review_match.001
     lesson_content_key: fa.a1.unit17.lesson06.advice_dialogue
     type: matching_pairs
-    frame: {text: "Match each word or phrase with its meaning -- a review of this whole unit's health vocabulary.", language_code: en, direction: ltr}
-    slots:
-      sw1: *symptom_word
-      sw2: *symptom_word
-      sw3: *symptom_word
-      sw4: *symptom_word
-      sw5: *symptom_word
-      hw1: *help_word
-      hw2: *help_word
-      hw3: *help_word
-      aw1: *advice_word
-      aw2: *advice_word
-      ap1: *advice_phrase
-      ap2: *advice_phrase
-    slot_relations:
-      - {kind: distinct, slots: [sw1, sw2, sw3, sw4, sw5]}
-      - {kind: distinct, slots: [hw1, hw2, hw3]}
-      - {kind: distinct, slots: [aw1, aw2]}
-      - {kind: distinct, slots: [ap1, ap2]}
-    answer_derivation: {kind: matching_pairs, slots: [sw1, sw2, sw3, sw4, sw5, hw1, hw2, hw3, aw1, aw2, ap1, ap2]}
-    feedback_frame: {text: "This reviews the symptom, help, and advice vocabulary taught in this unit.", language_code: en, direction: ltr}
+    frame: {text: "Match each health word or phrase with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *health_review_word, second: *health_review_word, third: *health_review_word, fourth: *health_review_word, fifth: *health_review_word, sixth: *health_review_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each health word or phrase to its English meaning.", language_code: en, direction: ltr}

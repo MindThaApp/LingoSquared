@@ -5,24 +5,14 @@ target_language: fa
 unit_content_key: fa.b1.unit16.goals_and_plans
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: >-
-    6 distinct fa lexemes across 3 lessons with lexemes (study_goal, saving_goal, work_goal). CAPACITY-THIN
-    unit: far below the recipe's 40-distinct-item pack floor and 12-template floor by construction --
-    the realization itself introduces very few fa lexemes in this unit (a themed vocabulary unit with
-    1-4 content words per lesson plus proper names / a reading sign / a wrap-up sentence). Authored what
-    the pool supports; not padded with untaught vocabulary. matching_pairs anchored to work_goal (6 pairs),
-    pooled over the unit-wide non-proper-noun distinct tokens (6 available). Template mix: recognition(multiple_choice)=3,
-    structured(matching_pairs x1, word_order x2)=3, production(translation)=3, total=9. No listen_select authored (fa has
-    no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed
-    lexemes found in this pool (every gloss checked against what the unit realization teaches).
-    Polish 2026-07-25: match.003 slots switched from bare-POS to teamwork_word + ability_purpose_verb
-    (exactly the unit's 6 content tokens, no course-scope extras) so Endless Practice stays on-theme;
-    structured tier brought to 3 live with two word_order templates: one on the dialogue's
-    yaaddaasht-haa sentence (personal_progress_word noun slot; course extras faarsi-am/faarsi-ash both
-    grammatical objects of morur kardan) and one drilling ro-before-verb order with a teamwork_word
-    noun slot (all four course candidates grammatical objects of shoru kardan). Unit stays
-    capacity-thin by construction (7 fa lexemes) -- not padded with untaught vocabulary.
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5 fixes).
+    (1) All three choose + three translate templates had no semantic tag (course 449: whole B1 level in Endless) -> unit words (en_fa_b1_unit16_words, 10; pish 'ago; before' is untagged and its gloss is wrong for this unit, see flags). (2) lesson03.match.003 pooled exactly 6 members for 6 pairs (same cards every time) -> unit words (10). (3) lesson04.order.001 personal_progress_word pulled unit15's faarsi-am / faarsi-ash in Endless ('بعد از کلاس فارسی‌اش رو مرور می‌کنم' = 'I review his Farsi') -> lesson04 tag (yaaddaasht-haa only). (4) lesson02.order.003 'فردا {item} رو شروع می‌کنیم.' was not in the unit and rendered odd sentences for kharj / taghsim ('we start the spending / the division tomorrow') -> the lesson02 hero sentence 'تا بتونم پول جمع کنم، کمتر خرج می‌کنم.' with the slot on betoonam (lesson01 verb, single candidate). (5) choose feedback 'introduced in this unit' -> 'from this unit'.
+    NATIVE FLAGS: backfill gloss of pish is 'ago; before' but the unit uses it in pish bere 'goes ahead / proceeds'.
+
+    6 distinct fa lexemes across 3 lessons with lexemes (study_goal, saving_goal, work_goal). CAPACITY-THIN unit: far below the recipe's 40-distinct-item pack floor and 12-template floor by construction -- the realization itself introduces very few fa lexemes in this unit (a themed vocabulary unit with 1-4 content words per lesson plus proper names / a reading sign / a wrap-up sentence). Authored what the pool supports; not padded with untaught vocabulary. matching_pairs anchored to work_goal (6 pairs), pooled over the unit-wide non-proper-noun distinct tokens (6 available). Template mix: recognition(multiple_choice)=3, structured(matching_pairs x1, word_order x2)=3, production(translation)=3, total=9. No listen_select authored (fa has no TTS configured -- AZURE_SPEECH_KEY unset -- _material() deletes such templates). No mis-glossed lexemes found in this pool (every gloss checked against what the unit realization teaches). Polish 2026-07-25: match.003 slots switched from bare-POS to teamwork_word + ability_purpose_verb (exactly the unit's 6 content tokens, no course-scope extras) so Endless Practice stays on-theme; structured tier brought to 3 live with two word_order templates: one on the dialogue's yaaddaasht-haa sentence (personal_progress_word noun slot; course extras faarsi-am/faarsi-ash both grammatical objects of morur kardan) and one drilling ro-before-verb order with a teamwork_word noun slot (all four course candidates grammatical objects of shoru kardan). Unit stays capacity-thin by construction (7 fa lexemes) -- not padded with untaught vocabulary.
 tag_schema:
   part_of_speech:
   - symbol
@@ -40,6 +30,9 @@ tag_schema:
     - teamwork_word
     - ability_purpose_verb
     - personal_progress_word
+    - en_fa_b1_unit16_words
+    - en_fa_b1_unit16_lesson04_words
+    - en_fa_b1_unit16_lesson01_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit16.lesson01.choose.001
   lesson_content_key: fa.b1.unit16.lesson01.study_goal
@@ -55,15 +48,13 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit16.lesson01.translate.002
@@ -82,10 +73,8 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -107,15 +96,13 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit16.lesson02.translate.002
@@ -134,10 +121,8 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -159,15 +144,13 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit16.lesson03.translate.002
@@ -186,10 +169,8 @@ templates:
       - noun
       - verb
       - adjective
-      - adverb
-      - preposition
-      - particle
-      - phrase
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -205,23 +186,57 @@ templates:
     language_code: fa
     direction: rtl
   slots:
-    first: &id001
+    first:
       language_code: fa
       part_of_speech:
       - noun
       - verb
+      - adjective
       agreement_tags:
-        semantic:
-        - teamwork_word
-        - ability_purpose_verb
-    second: *id001
-    third: *id001
-    fourth: *id001
-    fifth: *id001
-    sixth: *id001
+        semantic: en_fa_b1_unit16_words
+    second:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
+    third:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
+    fourth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
+    fifth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
+    sixth:
+      language_code: fa
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      agreement_tags:
+        semantic: en_fa_b1_unit16_words
   slot_relations:
   - kind: distinct
-    slots: &id002
+    slots:
     - first
     - second
     - third
@@ -230,7 +245,13 @@ templates:
     - sixth
   answer_derivation:
     kind: matching_pairs
-    slots: *id002
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
   feedback_frame:
     text: Match each Persian word from this unit with its English meaning.
     language_code: en
@@ -245,10 +266,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
+      part_of_speech: noun
       agreement_tags:
-        semantic: personal_progress_word
+        semantic: en_fa_b1_unit16_lesson04_words
   answer_derivation:
     kind: render_frame
     frame:
@@ -263,23 +283,22 @@ templates:
   lesson_content_key: fa.b1.unit16.lesson02.saving_goal
   type: word_order
   frame:
-    text: فردا {item} رو شروع می‌کنیم.
+    text: تا {item} پول جمع کنم، کمتر خرج می‌کنم.
     language_code: fa
     direction: rtl
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - noun
+      part_of_speech: verb
       agreement_tags:
-        semantic: teamwork_word
+        semantic: en_fa_b1_unit16_lesson01_words
   answer_derivation:
     kind: render_frame
     frame:
-      text: فردا {item} رو شروع می‌کنیم.
+      text: تا {item} پول جمع کنم، کمتر خرج می‌کنم.
       language_code: fa
       direction: rtl
   feedback_frame:
-    text: The time word opens the sentence and the ro-marked object comes right before shoru mikonim.
+    text: The taa purpose clause with its subjunctive verb comes first; the main clause follows.
     language_code: en
     direction: ltr

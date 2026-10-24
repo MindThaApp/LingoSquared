@@ -5,8 +5,28 @@ target_language: fa
 unit_content_key: fa.a2.unit16.online_habits
 review:
   status: reviewed
-  fresh_context: 'true'
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 4 fixes). (1) The eleven
+    MC/translation slots and the two list word_order slots had no semantic tag: in
+    Endless Practice they pooled every A2 noun/adj/verb (88-314 candidates; list frames
+    rendered bound forms such as آدرسمو, برنامه‌ی, تعمیرش), and at unit scope
+    lesson01-03 items drew words first taught in later lessons. Slots now use the unit's
+    lesson tags cumulatively (lessonNN draws lessons 01..NN; lesson04 the unit tag);
+    list frames use the lesson01(+02) nouns (شبکه, اپلیکیشن, صفحه, خبر, استفاده). (2)
+    Giveaway: اینستاگرامه 'is Instagram (colloquial contraction)' is a transliteration
+    of its own gloss, so it is kept out of the two lesson04 multiple_choice pools (still
+    in typed translation and matching). (3) Feedback: l02/l03/l04.choose.001 claimed
+    every word was 'used when describing your own habit', 'appears in the message about
+    habits' or 'is said in the conversation' -- false for most of the pool (مورد, علاقه
+    are never said alone): reworded; l04.choose.001 now pools lesson04 only. (4)
+    match.002 (lesson01/03) had exactly six unit-scope cards (the same six every time,
+    incl. lesson04 خوب and the unit-wide هر/دو/می‌کنی): now reviewed_phrase + lesson
+    tags (9/14 cards). Gloss lane: خوب (here) and خوبی (unit17) are both glossed 'good'.
+    NATIVE FLAGS: علاقه‌ام is typed exactly as taught (colloquial علاقه‌م would be
+    marked wrong); استفاده in a noun list (e.g. خبر، صفحه و استفاده) may sound odd.
+
     Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this
     unit's checkpoint (the unit had lexemes in scripts/backfill_lexemes.py but no
     practice pack at all, so generate_checkpoint() returned checkpoint_unavailable).
@@ -122,6 +142,10 @@ tag_schema:
     - number
     - recent_event_word
     - en_fa_a2_unit16_words
+    - en_fa_a2_unit16_lesson01_words
+    - en_fa_a2_unit16_lesson02_words
+    - en_fa_a2_unit16_lesson03_words
+    - en_fa_a2_unit16_lesson04_words
 templates:
 
 - content_key: practice.en-fa.fa.a2.unit16.lesson01.choose.001
@@ -136,6 +160,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -157,14 +184,11 @@ templates:
       part_of_speech:
       - noun
       - adjective
-      - verb
+      - adverb
       agreement_tags:
         semantic:
         - reviewed_phrase
-        - routine_connector
-        - work_verb_form
-        - number
-        - recent_event_word
+        - en_fa_a2_unit16_lesson01_words
     second: *u16_match_l01_pool
     third: *u16_match_l01_pool
     fourth: *u16_match_l01_pool
@@ -205,10 +229,16 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
   slot_relations:
   - kind: distinct
     slots:
@@ -239,6 +269,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -262,11 +295,15 @@ templates:
       - adjective
       - adverb
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is used in this unit when describing your own habit.'
+    text: '{item} is a word from this unit''s lessons on online habits.'
     language_code: en
     direction: ltr
 
@@ -282,14 +319,26 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
     second:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
     third:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
   slot_relations:
   - kind: distinct
     slots:
@@ -323,6 +372,10 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -345,11 +398,16 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
+        - en_fa_a2_unit16_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} appears in the message about habits.'
+    text: '{item} is a word from this unit''s lessons on online habits.'
     language_code: en
     direction: ltr
 
@@ -366,14 +424,13 @@ templates:
       part_of_speech:
       - noun
       - adjective
-      - verb
+      - adverb
       agreement_tags:
         semantic:
         - reviewed_phrase
-        - routine_connector
-        - work_verb_form
-        - number
-        - recent_event_word
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
+        - en_fa_a2_unit16_lesson03_words
     second: *u16_match_l03_pool
     third: *u16_match_l03_pool
     fourth: *u16_match_l03_pool
@@ -418,6 +475,11 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
+        - en_fa_a2_unit16_lesson03_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -440,12 +502,14 @@ templates:
       - noun
       - adjective
       - adverb
-      - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson04_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is said in the conversation about habits.'
+    text: '{item} is a word from the habits-conversation lesson.'
     language_code: en
     direction: ltr
 
@@ -461,6 +525,11 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_lesson01_words
+        - en_fa_a2_unit16_lesson02_words
+        - en_fa_a2_unit16_lesson03_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -582,6 +651,9 @@ templates:
       language_code: fa
       part_of_speech:
       - verb
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -604,6 +676,9 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
+      agreement_tags:
+        semantic:
+        - en_fa_a2_unit16_words
   answer_derivation:
     kind: slot_text
     slot: item
