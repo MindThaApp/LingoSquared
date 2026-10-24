@@ -1,0 +1,154 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit03
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit03.zahlen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). Numerals are classed as adjectives in the backfill. Age frames use a curated list
+    of ages (no eins, null or hundert: "eins Jahre" is ungrammatical, "null Jahre alt" is odd);
+    the fixed English prompt "How old are you? (formal)" uses the taught Wie alt sind Sie? only.
+    Reviewer: confirm the age list reads naturally ("zwölf Jahre alt" ... "fünfzig Jahre alt").
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_null, w_eins, w_zwei, w_drei, w_vier, w_fünf, w_sechs, w_sieben, w_acht, w_neun, w_zehn, w_elf, w_zwölf, w_dreizehn, w_vierzehn, w_fünfzehn, w_sechzehn, w_siebzehn, w_achtzehn, w_neunzehn, w_zwanzig, w_dreißig, w_vierzig, w_fünfzig, w_sechzig, w_siebzig, w_achtzig, w_neunzig, w_hundert, w_einundzwanzig, w_zweiunddreißig, w_alt, w_sind, w_Jahre, w_wenn, w_fragen, w_darf, w_achtundzwanzig, w_einunddreißig]
+slot_presets:
+  zero_ten: &zero_ten {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_null, w_eins, w_zwei, w_drei, w_vier, w_fünf, w_sechs, w_sieben, w_acht, w_neun, w_zehn]}}
+  eleven_twenty: &eleven_twenty {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_elf, w_zwölf, w_dreizehn, w_vierzehn, w_fünfzehn, w_sechzehn, w_siebzehn, w_achtzehn, w_neunzehn, w_zwanzig]}}
+  tens: &tens {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_dreißig, w_vierzig, w_fünfzig, w_sechzig, w_siebzig, w_achtzig, w_neunzig, w_hundert, w_einundzwanzig, w_zweiunddreißig]}}
+  zero_twenty: &zero_twenty {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_null, w_eins, w_zwei, w_drei, w_vier, w_fünf, w_sechs, w_sieben, w_acht, w_neun, w_zehn, w_elf, w_zwölf, w_dreizehn, w_vierzehn, w_fünfzehn, w_sechzehn, w_siebzehn, w_achtzehn, w_neunzehn, w_zwanzig]}}
+  age_words: &age_words {language_code: de, part_of_speech: [adjective, verb, noun, particle], agreement_tags: {semantic: [w_alt, w_sind, w_Jahre, w_wenn, w_fragen, w_darf, w_achtundzwanzig, w_einunddreißig]}}
+  age_match: &age_match {language_code: de, part_of_speech: [adjective, verb, noun, particle], agreement_tags: {semantic: [w_alt, w_sind, w_Jahre, w_wenn, w_fragen, w_darf]}}
+  age_bare: &age_bare {language_code: de, part_of_speech: [adjective, noun, particle, verb], agreement_tags: {semantic: [w_alt, w_Jahre, w_wenn, w_fragen, w_darf]}}
+  ages: &ages {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_zwölf, w_fünfzehn, w_siebzehn, w_zwanzig, w_einundzwanzig, w_achtundzwanzig, w_dreißig, w_einunddreißig, w_zweiunddreißig, w_vierzig, w_fünfzig]}}
+  alt: &alt {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_alt}}
+  sind: &sind {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_sind}}
+  a28: &a28 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_achtundzwanzig}}
+templates:
+  - content_key: practice.en-de.de.a1.unit03.lesson01.choose.001
+    lesson_content_key: de.a1.unit03.lesson01.null_bis_zehn
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *zero_ten}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Eins becomes ein before a noun (ein Jahr), but the counting form is eins.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson02.listen.001
+    lesson_content_key: de.a1.unit03.lesson02.elf_bis_zwanzig
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *eleven_twenty}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Sixteen and seventeen drop letters from the base numbers: sechzehn, siebzehn.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson03.choose.001
+    lesson_content_key: de.a1.unit03.lesson03.die_zehnerzahlen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *tens}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Numbers above twenty put the units first: einundzwanzig is literally one and twenty.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson05.listen.001
+    lesson_content_key: de.a1.unit03.lesson05.im_gespraech_ueber_das_alter
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *age_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Wenn ich fragen darf is a polite softener, literally if I may ask.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.order.001
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: word_order
+    frame: {text: "Ich bin {age} Jahre alt.", language_code: de, direction: ltr}
+    slots: {age: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin {age} Jahre alt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "German states age with sein: Ich bin zwanzig Jahre alt, literally I am twenty years old.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.order.002
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: word_order
+    frame: {text: "Wie alt {item} Sie?", language_code: de, direction: ltr}
+    slots: {item: *sind}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie alt {item} Sie?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Sind is the form of sein that goes with Sie, so the question is Wie alt sind Sie?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson01.match.002
+    lesson_content_key: de.a1.unit03.lesson01.null_bis_zehn
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *zero_twenty, second: *zero_twenty, third: *zero_twenty, fourth: *zero_twenty, fifth: *zero_twenty, sixth: *zero_twenty}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Eleven and twelve are irregular, but thirteen to nineteen are built from the units plus zehn.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson03.match.002
+    lesson_content_key: de.a1.unit03.lesson03.die_zehnerzahlen
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *tens, second: *tens, third: *tens, fourth: *tens, fifth: *tens, sixth: *tens}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The tens end in -zig (zwanzig, vierzig ...) except drei\u00dfig, which ends in -\u00dfig.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson05.match.002
+    lesson_content_key: de.a1.unit03.lesson05.im_gespraech_ueber_das_alter
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *age_match, second: *age_match, third: *age_match, fourth: *age_match, fifth: *age_match, sixth: *age_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Alt means old, and Jahre is the plural of Jahr: zwanzig Jahre.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.fill.003
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: fill_in_blank
+    frame: {text: "Wie {item} sind Sie? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *alt, hint: *alt}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wie alt sind Sie? is the formal way to ask someone's age.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.fill.004
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: fill_in_blank
+    frame: {text: "Ich bin {item} Jahre alt. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a28, hint: *a28}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Compound numbers are written as one word, with the units before the tens.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson01.translate.003
+    lesson_content_key: de.a1.unit03.lesson01.null_bis_zehn
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *zero_ten}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The numbers zero to ten are the base for everything that follows.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson02.translate.002
+    lesson_content_key: de.a1.unit03.lesson02.elf_bis_zwanzig
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *zero_twenty}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Thirteen to nineteen end in -zehn, and twenty is zwanzig.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson03.translate.003
+    lesson_content_key: de.a1.unit03.lesson03.die_zehnerzahlen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *tens}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hundert can stand alone as one hundred, without ein in front.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson05.translate.003
+    lesson_content_key: de.a1.unit03.lesson05.im_gespraech_ueber_das_alter
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *age_bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wenn can mean if or when depending on the sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.translate.005
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: translation
+    frame: {text: "I am {age} years old.", language_code: en, direction: ltr, slot_rendering: {age: english_gloss}}
+    slots: {age: *ages}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin {age} Jahre alt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The age comes before Jahre and alt closes the sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit03.lesson04.translate.006
+    lesson_content_key: de.a1.unit03.lesson04.wie_alt_sind_sie
+    type: translation
+    frame: {text: "How old are you? (formal)", language_code: en, direction: ltr}
+    slots: {item: *alt}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie {item} sind Sie?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Sie takes sind, the same form used for we and they.", language_code: en, direction: ltr}
