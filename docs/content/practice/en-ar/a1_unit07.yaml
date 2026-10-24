@@ -1,0 +1,156 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit07
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u07*, single-member w_<token> anchors). Pools are
+    unit-scoped. وقهوة (and coffee) is kept out of the recognition and bare-word pools beside قهوة; it appears in
+    matching and in a fill-in. Only ماء and قهوة are slotted after أريد because خبز takes the accusative
+    ending (خبزا) once it is the object, as the unit shows in هل تريدين خبزا؟. تريدين is the feminine
+    you-form and تفضلي is addressed to a woman, so the prompts say so; the unit-1 word مرحبا and unit-2 هل/نعم
+    are literal frame text only. Reviewer: confirm "أريد ماء وقهوة" and the خبزا accusative spelling.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ماء, w_قهوة, w_خبز, w_أريد, w_فضلك, w_وقهوة, w_تريدين, w_خبزا, w_قطعة, w_واحدة, w_تفضلي]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_ماء, w_قهوة, w_خبز, w_أريد, w_فضلك]}}
+  l01m: &l01m {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_ماء, w_قهوة, w_وقهوة, w_خبز, w_أريد, w_فضلك]}}
+  drinks: &drinks {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_ماء, w_قهوة]}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, verb, adjective, phrase], agreement_tags: {semantic: [w_تريدين, w_خبزا, w_قطعة, w_واحدة, w_تفضلي]}}
+  maa: &maa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_ماء}}
+  qahwa: &qahwa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_قهوة}}
+  wqahwa: &wqahwa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_وقهوة}}
+  fadlak: &fadlak {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_فضلك}}
+  turidin: &turidin {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_تريدين}}
+  khubza: &khubza {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_خبزا}}
+  qita: &qita {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_قطعة}}
+  wahida: &wahida {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_واحدة}}
+  tafaddali: &tafaddali {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_تفضلي}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.choose.001
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أريد means I want; the same form is used by a man or a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.listen.002
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ماء is water and قهوة is coffee; خبز (bread) is a third thing you can ask for.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.match.003
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l01m, second: *l01m, third: *l01m, fourth: *l01m, fifth: *l01m, sixth: *l01m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "و (and) attaches to the next word: وقهوة is and coffee. من فضلك is the polite please.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.order.004
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: word_order
+    frame: {text: "أريد {item} من فضلك.", language_code: ar, direction: rtl}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} من فضلك.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أريد plus a noun is I want; من فضلك (please) closes the request.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.fill.005
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: fill_in_blank
+    frame: {text: "أريد ماء {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *wqahwa, hint: *wqahwa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Here و is part of the next word: وقهوة is and coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.fill.006
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: fill_in_blank
+    frame: {text: "أريد ماء وقهوة من {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fadlak, hint: *fadlak}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "من فضلك is literally from your favor, the everyday way to say please.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.translate.007
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أريد is a verb meaning I want; the other words here are things you can ask for.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.translate.008
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: translation
+    frame: {text: "I want water, please.", language_code: en, direction: ltr}
+    slots: {item: *maa}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic leaves out a before nouns: أريد ماء is I want water.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson01.translate.009
+    lesson_content_key: ar.a1.unit07.lesson01.food_drink
+    type: translation
+    frame: {text: "I want coffee, please.", language_code: en, direction: ltr}
+    slots: {item: *qahwa}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "قهوة ends in ة, the common feminine ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.listen.001
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تريدين is the feminine you-form of want; a man would be addressed with a different ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.choose.002
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "قطعة means piece; قطعة خبز is a piece of bread, and the next word واحدة (one) agrees with it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.order.003
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: word_order
+    frame: {text: "هل تريدين {item}؟", language_code: ar, direction: rtl}
+    slots: {item: *khubza}
+    answer_derivation: {kind: render_frame, frame: {text: "هل تريدين {item}؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "هل turns a statement into a yes or no question; خبزا is bread as the thing wanted.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.order.004
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: word_order
+    frame: {text: "نعم، أريد قطعة خبز {item}.", language_code: ar, direction: rtl}
+    slots: {item: *wahida}
+    answer_derivation: {kind: render_frame, frame: {text: "نعم، أريد قطعة خبز {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "واحدة is feminine one, matching the feminine word قطعة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.fill.005
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: fill_in_blank
+    frame: {text: "هل {item} خبزا؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *turidin, hint: *turidin}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تريدين is you (fem.) want, so هل تريدين خبزا؟ asks a woman Do you want bread?", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.translate.006
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تفضلي is said to a woman and means here you are; a man would hear a different ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.translate.007
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: translation
+    frame: {text: "Do you want bread? (said to a woman)", language_code: en, direction: ltr}
+    slots: {a: *turidin, b: *khubza}
+    answer_derivation: {kind: render_frame, frame: {text: "هل {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The -ين ending marks the feminine you-form, and bread as the thing wanted is written خبزا.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit07.lesson02.translate.008
+    lesson_content_key: ar.a1.unit07.lesson02.cafe_exchange
+    type: translation
+    frame: {text: "one piece of bread", language_code: en, direction: ltr}
+    slots: {a: *qita, b: *wahida}
+    answer_derivation: {kind: render_frame, frame: {text: "{a} خبز {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "واحدة follows قطعة and matches its feminine gender.", language_code: en, direction: ltr}

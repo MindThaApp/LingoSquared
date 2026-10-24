@@ -1,0 +1,137 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit10
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit10.directions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u10*, single-member w_<token> anchors). The unit has only five
+    senses (right, left, front, walk, then) so there is no matching_pairs: the indefinite يمين/يسار and
+    definite اليمين/اليسار would otherwise be near-duplicate lefts. They are also kept from sharing a
+    pool. Frames use the definite forms after إلى, as in the unit (إلى اليمين). امش is the masculine
+    imperative, so every prompt that needs it says "to a man". المكتبة and أين are earlier-unit
+    words used as literal text. Reviewer: confirm "امش إلى الأمام ثم إلى اليسار".
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_يمين, w_الأمام, w_اليسار, w_امش, w_ثم, w_يسار, w_اليمين]
+slot_presets:
+  mc: &mc {language_code: ar, part_of_speech: [noun, verb, particle], agreement_tags: {semantic: [w_يمين, w_الأمام, w_اليسار, w_امش, w_ثم]}}
+  mcb: &mcb {language_code: ar, part_of_speech: [noun, verb, particle], agreement_tags: {semantic: [w_يسار, w_الأمام, w_اليمين, w_امش, w_ثم]}}
+  dirs: &dirs {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_الأمام, w_اليمين, w_اليسار]}}
+  sides: &sides {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_اليمين, w_اليسار]}}
+  amam: &amam {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الأمام}}
+  yamin: &yamin {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_اليمين}}
+  yasar: &yasar {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_اليسار}}
+  imshi: &imshi {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_امش}}
+  thumma: &thumma {language_code: ar, part_of_speech: particle, agreement_tags: {semantic: w_ثم}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.choose.001
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "يمين is the noun right and اليسار is the left with ال attached; the article ال makes it the left.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.listen.002
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mcb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "الأمام means the front, and إلى الأمام is straight ahead.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.order.003
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: word_order
+    frame: {text: "امش إلى {item}.", language_code: ar, direction: rtl}
+    slots: {item: *dirs}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "إلى (to) comes before the direction, which takes ال: الأمام, اليمين or اليسار.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.fill.004
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: fill_in_blank
+    frame: {text: "امش إلى {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *amam, hint: *amam}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "إلى الأمام is the usual way to say straight ahead.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.translate.005
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "يمين is right (the direction), the opposite of يسار.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.translate.006
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: translation
+    frame: {text: "Walk straight ahead. (to a man)", language_code: en, direction: ltr}
+    slots: {item: *amam}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "امش is a command to a man; إلى الأمام means forward.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson01.translate.007
+    lesson_content_key: ar.a1.unit10.lesson01.direction_words
+    type: translation
+    frame: {text: "Walk to the right. (to a man)", language_code: en, direction: ltr}
+    slots: {item: *yamin}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The direction after إلى takes ال: اليمين is the right.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.choose.001
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "امش is the command walk, said to a man; ثم means then.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.listen.002
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mcb}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ثم joins two steps in order: then.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.order.003
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: word_order
+    frame: {text: "امش إلى الأمام ثم إلى {item}.", language_code: ar, direction: rtl}
+    slots: {item: *sides}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى الأمام ثم إلى {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ثم (then) links the first step to the second, each with its own إلى.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.fill.004
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: fill_in_blank
+    frame: {text: "امش إلى الأمام {item} إلى اليمين. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *thumma, hint: *thumma}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ثم means then and sits between the two directions.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.fill.005
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: fill_in_blank
+    frame: {text: "أين المكتبة؟ {item} إلى الأمام. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *imshi, hint: *imshi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "امش is a command to one man; the answer to أين المكتبة؟ gives directions.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.translate.006
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mcb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ثم means then; امش means walk, said to a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.translate.007
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: translation
+    frame: {text: "Walk straight ahead, then to the right. (to a man)", language_code: en, direction: ltr}
+    slots: {a: *amam, b: *thumma, c: *yamin}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى {a} {b} إلى {c}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The route is two steps: ahead first, then right.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit10.lesson02.translate.008
+    lesson_content_key: ar.a1.unit10.lesson02.basic_route
+    type: translation
+    frame: {text: "Walk to the left. (to a man)", language_code: en, direction: ltr}
+    slots: {item: *yasar}
+    answer_derivation: {kind: render_frame, frame: {text: "امش إلى {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "اليسار is the left; the opposite is اليمين.", language_code: en, direction: ltr}

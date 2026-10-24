@@ -1,0 +1,142 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit03
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit03.numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u03*, single-member w_<token> anchors). Pools are
+    unit-scoped. The number words are the masculine counting forms the unit teaches; the frame
+    "رقمي {item}" uses رقمي (my number, from the unit's own example رقمي واحد) and every number from one to
+    ten fits it. Counting frames use only the unit's own words. Reviewer: confirm that رقمي + any numeral
+    reads naturally and that بخمسة/بعشرة (for five/ten) is the right price pattern.
+    Opus pass 2026-10-24: fixed a false 'most numbers' feedback claim and made the price prompt natural English (This costs five).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [ar_a1_u03_l01, ar_a1_u03_l02, w_واحد, w_اثنان, w_ثلاثة, w_أربعة, w_خمسة, w_ستة, w_سبعة, w_ثمانية, w_تسعة, w_عشرة, w_كم, w_هذا, w_رقم, w_بخمسة, w_بعشرة, w_وهذا]
+slot_presets:
+  n1: &n1 {language_code: ar, part_of_speech: [adjective, noun], agreement_tags: {semantic: ar_a1_u03_l01}}
+  n2: &n2 {language_code: ar, part_of_speech: [adjective, noun], agreement_tags: {semantic: ar_a1_u03_l02}}
+  nums: &nums {language_code: ar, part_of_speech: [noun, adjective], agreement_tags: {semantic: [w_واحد, w_اثنان, w_ثلاثة, w_أربعة, w_خمسة, w_ستة, w_سبعة, w_ثمانية, w_تسعة, w_عشرة]}}
+  l03mc: &l03mc {language_code: ar, part_of_speech: [noun, pronoun, adverb, phrase], agreement_tags: {semantic: [w_كم, w_هذا, w_رقم, w_بخمسة, w_بعشرة]}}
+  l03all: &l03all {language_code: ar, part_of_speech: [noun, pronoun, adverb, phrase], agreement_tags: {semantic: [w_كم, w_هذا, w_رقم, w_بخمسة, w_وهذا, w_بعشرة]}}
+  l03bare: &l03bare {language_code: ar, part_of_speech: [noun, pronoun, adverb, phrase], agreement_tags: {semantic: [w_كم, w_هذا, w_رقم, w_بخمسة, w_وهذا, w_بعشرة]}}
+  thalatha: &thalatha {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_ثلاثة}}
+  ithnan: &ithnan {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_اثنان}}
+  ashara: &ashara {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_عشرة}}
+  haadha: &haadha {language_code: ar, part_of_speech: pronoun, agreement_tags: {semantic: w_هذا}}
+  bikhamsa: &bikhamsa {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_بخمسة}}
+  bi_ashara: &bi_ashara {language_code: ar, part_of_speech: phrase, agreement_tags: {semantic: w_بعشرة}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit03.lesson01.choose.001
+    lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *n1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Each number word is read right to left; ثلاثة begins with ث, which sounds like th in think.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson01.match.002
+    lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *nums, second: *nums, third: *nums, fourth: *nums, fifth: *nums, sixth: *nums}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "ثلاثة (three) and ثمانية (eight) both begin with ث, the th sound; the rest of the word tells them apart.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson01.order.003
+    lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+    type: word_order
+    frame: {text: "واحد، اثنان، {item}.", language_code: ar, direction: rtl}
+    slots: {item: *thalatha}
+    answer_derivation: {kind: render_frame, frame: {text: "واحد، اثنان، {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The word for three, ثلاثة, ends in ة, the same ending found on many other Arabic nouns.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson01.fill.004
+    lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+    type: fill_in_blank
+    frame: {text: "واحد، {item}، ثلاثة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ithnan, hint: *ithnan}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Arabic has a special dual ending ـان for two of something; اثنان is the word two itself.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson01.translate.005
+    lesson_content_key: ar.a1.unit03.lesson01.numbers_one_to_five
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *n1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The numbers three to ten end in ة when counting, as in ثلاثة and خمسة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson02.listen.001
+    lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *n2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "سبعة (seven) and تسعة (nine) end in the same letters عة, so listen for the first sound: s versus t.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson02.order.002
+    lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+    type: word_order
+    frame: {text: "رقمي {item}.", language_code: ar, direction: rtl}
+    slots: {item: *nums}
+    answer_derivation: {kind: render_frame, frame: {text: "رقمي {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "رقمي means my number: رقم is number and the ending ـي means my.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson02.fill.003
+    lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+    type: fill_in_blank
+    frame: {text: "ثمانية، تسعة، {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ashara, hint: *ashara}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "عشرة is ten; like every counting number from three to ten it ends in ة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson02.translate.004
+    lesson_content_key: ar.a1.unit03.lesson02.numbers_six_to_ten
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *nums}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ستة (six) and سبعة (seven) both begin with س; read the ending letters to tell them apart.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.choose.001
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l03mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "كم asks how much or how many, and هذا points to something near you.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.match.002
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *l03all, second: *l03all, third: *l03all, fourth: *l03all, fifth: *l03all, sixth: *l03all}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "بخمسة and بعشرة start with ب, which here means for or at a price of.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.fill.003
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: fill_in_blank
+    frame: {text: "كم {item}؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *haadha, hint: *haadha}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "كم هذا asks the price of one thing; هذا (this) is the masculine form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.translate.004
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l03bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "وهذا is و (and) joined to هذا (this): and this.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.translate.005
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: translation
+    frame: {text: "How much is this?", language_code: en, direction: ltr}
+    slots: {item: *haadha}
+    answer_derivation: {kind: render_frame, frame: {text: "كم {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic has no word for is in this question: كم هذا is literally how much this.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit03.lesson03.translate.006
+    lesson_content_key: ar.a1.unit03.lesson03.using_numbers
+    type: translation
+    frame: {text: "This costs five.", language_code: en, direction: ltr}
+    slots: {item: *bikhamsa}
+    answer_derivation: {kind: render_frame, frame: {text: "هذا {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The preposition ب is written attached to the number: ب + خمسة becomes بخمسة.", language_code: en, direction: ltr}

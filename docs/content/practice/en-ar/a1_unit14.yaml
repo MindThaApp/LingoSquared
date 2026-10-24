@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit14
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit14.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u14*, single-member w_<token> anchors). Pools are
+    unit-scoped. The definite forms القهوة, الشاي, الماء are used after أحب/أفضل as in the unit (أحب الماء,
+    لا أحب الشاي); شاي and الشاي are never in the same pool, and the unit-7 words ماء and قهوة are not
+    slotted. تفضل is the masculine you-form (the unit has ماذا تفضل يا يوسف؟), so those prompts say
+    "to a man"; it is a verb and different from the unit-7 word تفضلي (here you are). Verbs are written
+    without a pronoun, so production prompts add "(no separate word for I)". Reviewer: confirm
+    "أحب القهوة ولا أحب الشاي".
+    Opus pass 2026-10-24: replaced the prompt answered by أريد شاي (an indefinite object of أريد must be accusative, شايا, which the unit does not teach) with هذا شاي, and made I like water natural English.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_أحب, w_القهوة, w_شاي, w_الماء, w_ولا, w_أفضل, w_تفضل, w_الشاي]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, verb, particle], agreement_tags: {semantic: [w_أحب, w_القهوة, w_شاي, w_الماء, w_ولا]}}
+  m6: &m6 {language_code: ar, part_of_speech: [noun, verb, particle], agreement_tags: {semantic: [w_أحب, w_القهوة, w_شاي, w_الماء, w_ولا, w_أفضل]}}
+  l02: &l02 {language_code: ar, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_أفضل, w_تفضل, w_القهوة, w_الشاي]}}
+  drinks: &drinks {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_القهوة, w_الشاي, w_الماء]}}
+  qahwa: &qahwa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_القهوة}}
+  shay: &shay {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_شاي}}
+  shayd: &shayd {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الشاي}}
+  maa: &maa {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_الماء}}
+  uhibb: &uhibb {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أحب}}
+  wala: &wala {language_code: ar, part_of_speech: particle, agreement_tags: {semantic: w_ولا}}
+  ufaddil: &ufaddil {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_أفضل}}
+  tufaddil: &tufaddil {language_code: ar, part_of_speech: verb, agreement_tags: {semantic: w_تفضل}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.choose.001
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أحب is the verb I like; it is followed directly by what you like.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.listen.002
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "ولا is و (and) plus لا (not): and not.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.match.003
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "أحب is I like and أفضل is I prefer; ولا (and not) joins a negative statement to the previous one.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.order.004
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: word_order
+    frame: {text: "أحب {item}.", language_code: ar, direction: rtl}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "أحب {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The thing liked follows أحب, with ال for the general kind: أحب القهوة is I like coffee.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.order.005
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: word_order
+    frame: {text: "لا أحب {item}.", language_code: ar, direction: rtl}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "لا أحب {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "لا before the verb negates it: لا أحب is I do not like.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.fill.006
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: fill_in_blank
+    frame: {text: "أحب القهوة {item} أحب الشاي. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *wala, hint: *wala}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ولا joins a negative clause: I like coffee and I do not like tea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.fill.007
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: fill_in_blank
+    frame: {text: "أنا {item} الماء. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *uhibb, hint: *uhibb}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أنا (I) can be added for emphasis, but أحب alone already means I like.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.translate.008
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "شاي is tea without the article, while الماء is the water with ال; أحب is I like.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.translate.009
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: translation
+    frame: {text: "I like water. (no separate word for I)", language_code: en, direction: ltr}
+    slots: {a: *uhibb, b: *maa}
+    answer_derivation: {kind: render_frame, frame: {text: "{a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic uses ال for a thing in general after أحب, so I like water is أحب الماء.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson01.translate.010
+    lesson_content_key: ar.a1.unit14.lesson01.likes
+    type: translation
+    frame: {text: "This is tea.", language_code: en, direction: ltr}
+    slots: {item: *shay}
+    answer_derivation: {kind: render_frame, frame: {text: "هذا {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Without ال, شاي is just tea, and Arabic needs no word for is: هذا شاي.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.choose.001
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "أفضل is I prefer; تفضل with the ت prefix is the masculine you-form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.listen.002
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تفضل is you prefer, addressed to a man: ماذا تفضل يا يوسف؟", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.order.003
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: word_order
+    frame: {text: "ماذا {item} يا يوسف؟", language_code: ar, direction: rtl}
+    slots: {item: *tufaddil}
+    answer_derivation: {kind: render_frame, frame: {text: "ماذا {item} يا يوسف؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The ت prefix marks you; ماذا تفضل؟ asks a man what he prefers.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.order.004
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: word_order
+    frame: {text: "أفضل {item}.", language_code: ar, direction: rtl}
+    slots: {item: *drinks}
+    answer_derivation: {kind: render_frame, frame: {text: "أفضل {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "أفضل is followed by the thing preferred, with ال: أفضل القهوة.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.fill.005
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: fill_in_blank
+    frame: {text: "أنا {item} القهوة. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ufaddil, hint: *ufaddil}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أفضل is I prefer; the أ prefix marks I, as in أحب and أريد.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.translate.006
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "أفضل is I prefer and تفضل is you (masc.) prefer; the prefix أ or ت marks who.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit14.lesson02.translate.007
+    lesson_content_key: ar.a1.unit14.lesson02.choices
+    type: translation
+    frame: {text: "What do you prefer, Yusuf?", language_code: en, direction: ltr}
+    slots: {item: *tufaddil}
+    answer_derivation: {kind: render_frame, frame: {text: "ماذا {item} يا يوسف", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Yusuf is a man, so the you-form is تفضل.", language_code: en, direction: ltr}

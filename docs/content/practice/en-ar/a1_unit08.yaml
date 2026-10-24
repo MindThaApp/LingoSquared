@@ -1,0 +1,127 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit08
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u08*, single-member w_<token> anchors). The unit has only
+    five first-sight lexemes (سعر, تفاح, دراهم, التفاح, تفاحتين), so there is no matching_pairs and the
+    recognition pool is four words; التفاح (the apples) stays out of the pool that holds تفاح. Frames reuse
+    the unit's own sentences (كم سعر التفاح؟ / التفاح بعشرة دراهم / أريد تفاحتين من فضلك); كم, بعشرة, أريد, من فضلك
+    are earlier-unit words used as literal text. Reviewer: confirm بعشرة دراهم and the dual تفاحتين after أريد.
+    Opus pass 2026-10-24: corrected the dual-ending feedback (the ending is ـين; the ة of تفاحة becomes ت).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_سعر, w_تفاح, w_دراهم, w_تفاحتين, w_التفاح]
+slot_presets:
+  mc: &mc {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_سعر, w_تفاح, w_دراهم, w_تفاحتين]}}
+  l01: &l01 {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_سعر, w_تفاح, w_دراهم]}}
+  siir: &siir {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_سعر}}
+  darahim: &darahim {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_دراهم}}
+  tuffah: &tuffah {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_التفاح}}
+  tufahatayn: &tufahatayn {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_تفاحتين}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.choose.001
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "سعر means price; كم سعر ...؟ asks how much something costs.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.listen.002
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تفاح is a collective noun for apples in general; دراهم is the plural of dirham.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.order.003
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: word_order
+    frame: {text: "كم {item} التفاح؟", language_code: ar, direction: rtl}
+    slots: {item: *siir}
+    answer_derivation: {kind: render_frame, frame: {text: "كم {item} التفاح؟", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "كم سعر التفاح؟ is how much is the price of the apples.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.order.004
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: word_order
+    frame: {text: "التفاح بعشرة {item}.", language_code: ar, direction: rtl}
+    slots: {item: *darahim}
+    answer_derivation: {kind: render_frame, frame: {text: "التفاح بعشرة {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ب before a number gives the price: بعشرة is for ten, followed by the currency.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.fill.005
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: fill_in_blank
+    frame: {text: "كم {item} التفاح؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *siir, hint: *siir}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "سعر is price; the question asks the price of the apples.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.fill.006
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: fill_in_blank
+    frame: {text: "التفاح بعشرة {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *darahim, hint: *darahim}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "دراهم is the plural of dirham, used after a number like ten.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.translate.007
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are nouns: سعر is price and تفاح is apples.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.translate.008
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: translation
+    frame: {text: "How much are the apples?", language_code: en, direction: ltr}
+    slots: {a: *siir, b: *tuffah}
+    answer_derivation: {kind: render_frame, frame: {text: "كم {a} {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The article ال on التفاح means the apples, so the question is about specific apples.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson01.translate.009
+    lesson_content_key: ar.a1.unit08.lesson01.prices
+    type: translation
+    frame: {text: "The apples are ten dirhams.", language_code: en, direction: ltr}
+    slots: {item: *darahim}
+    answer_derivation: {kind: render_frame, frame: {text: "التفاح بعشرة {item}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "ب before a number gives the price.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson02.listen.001
+    lesson_content_key: ar.a1.unit08.lesson02.purchase
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "تفاحتين is تفاحة (an apple) with the dual ending ـين; the ة turns into ت before it, so it means exactly two apples.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson02.order.002
+    lesson_content_key: ar.a1.unit08.lesson02.purchase
+    type: word_order
+    frame: {text: "أريد {item} من فضلك.", language_code: ar, direction: rtl}
+    slots: {item: *tufahatayn}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} من فضلك.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Arabic has a special dual form: تفاحتين is two apples, no separate word for two.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson02.fill.003
+    lesson_content_key: ar.a1.unit08.lesson02.purchase
+    type: fill_in_blank
+    frame: {text: "أريد {item} من فضلك. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tufahatayn, hint: *tufahatayn}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The dual ending ـين means two of something; before it the ة of تفاحة is written ت: تفاحتين.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson02.translate.004
+    lesson_content_key: ar.a1.unit08.lesson02.purchase
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "تفاح is apples in general, but تفاحتين with the dual ending is exactly two.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit08.lesson02.translate.005
+    lesson_content_key: ar.a1.unit08.lesson02.purchase
+    type: translation
+    frame: {text: "I want two apples, please.", language_code: en, direction: ltr}
+    slots: {item: *tufahatayn}
+    answer_derivation: {kind: render_frame, frame: {text: "أريد {item} من فضلك", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The dual ending ـتين already says two, so no separate number word is used.", language_code: en, direction: ltr}
