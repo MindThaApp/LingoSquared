@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit17.health
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
     Authored 2026-07-07 for the new A1 unit17 (health) realization, same
     pass as this bundle's a1_unit16.yaml sibling (see that file's notes
@@ -143,6 +144,8 @@ review:
     for this file after the fix), scripts/compile_content.py
     practice-validate (0 errors), and scripts/check_dari_register.py
     (0 new findings) -- see the coordinator report for exact output.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. health_review_pair.003 dealt the same 9 cards every time and included صاحب with a jargon gloss, now 6 slots over 8 words without صاحب; health_advice_pair.003 dealt the same 6 cards, widened to 8 (adds مریض and حالم, taught in lesson02); symptom_and_word_order.002 was the fragment [symptom] و [symptom], now the sentence from the message, [symptom] و [symptom] دارم. NATIVE FLAGS: wellbeing_question_translate.002 prompts the long gloss for صاحب; see Gloss lane. حالم خوب نیست and مریض استم are as taught.
 tag_schema:
   part_of_speech: [noun, verb, adjective, adverb, particle, proper_noun]
   agreement_tags:
@@ -194,7 +197,9 @@ slot_presets:
   # distinct real unit-scoped tokens (widened from the original 3-tag,
   # 6-distinct union, which was 4 short of the 10 pairs this template
   # declared -- see the matching_pairs slot count below, now 9).
-  health_review_pool: &health_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [symptom_word, seek_help_noun, health_advice_word, condition_word, health_feeling_word, title]}}
+  health_review_pool: &health_review_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [symptom_word, seek_help_noun, health_advice_word, condition_word, health_feeling_word]}}
+  # REVIEW 2026-10-24: pool for health_advice_pair.003 (lesson04): adds مریض/حالم (lesson02) so it is not the same 6 cards every time.
+  advice_pair_pool: &advice_pair_pool {language_code: prs, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [health_advice_word, seek_help_noun, symptom_word, health_feeling_word, condition_word]}}
 templates:
   # Lesson 1: symptom vocabulary.
   - content_key: practice.en-prs.prs.a1.unit17.lesson01.symptom_word_gloss.001
@@ -289,7 +294,7 @@ templates:
     # symptom_word -- exactly the 6-pair floor. Declared slot count
     # dropped 5 -> 6 to match the real pool size.
     frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
-    slots: {word_one: *advice_review_pool, word_two: *advice_review_pool, word_three: *advice_review_pool, word_four: *advice_review_pool, word_five: *advice_review_pool, word_six: *advice_review_pool}
+    slots: {word_one: *advice_pair_pool, word_two: *advice_pair_pool, word_three: *advice_pair_pool, word_four: *advice_pair_pool, word_five: *advice_pair_pool, word_six: *advice_pair_pool}
     slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
     answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
@@ -312,11 +317,13 @@ templates:
   - content_key: practice.en-prs.prs.a1.unit17.lesson05.symptom_and_word_order.002
     lesson_content_key: prs.a1.unit17.lesson05.reading_a_health_message
     type: word_order
-    frame: {text: "{symptom_word_one} و {symptom_word_two}", language_code: prs, direction: rtl}
+    # REVIEW 2026-10-24: was the bare fragment '{a} و {b}'; now the full sentence
+    # from the lesson05 message (سردرد و تب دارم).
+    frame: {text: "{symptom_word_one} و {symptom_word_two} دارم", language_code: prs, direction: rtl}
     slots: {symptom_word_one: *symptom_word, symptom_word_two: *symptom_word}
     slot_relations: [{kind: distinct, slots: [symptom_word_one, symptom_word_two]}]
-    answer_derivation: {kind: render_frame, frame: {text: "{symptom_word_one} و {symptom_word_two}", language_code: prs, direction: rtl}}
-    feedback_frame: {text: "Word order: [symptom] و [symptom] ([symptom] and [symptom]).", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "{symptom_word_one} و {symptom_word_two} دارم", language_code: prs, direction: rtl}}
+    feedback_frame: {text: "Word order: [symptom] و [symptom] دارم (I have a [symptom] and a [symptom]).", language_code: en, direction: ltr}
 
   # Lesson 6: a dialogue with the doctor.
   - content_key: practice.en-prs.prs.a1.unit17.lesson06.person_name_gloss.001
@@ -352,8 +359,8 @@ templates:
     # condition_word + health_feeling_word + title. Declared slot count
     # dropped 10 -> 9 to match the real pool size (this unit's total
     # native content-word count).
-    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six} — {word_seven} — {word_eight} — {word_nine}", language_code: prs, direction: rtl}
-    slots: {word_one: *health_review_pool, word_two: *health_review_pool, word_three: *health_review_pool, word_four: *health_review_pool, word_five: *health_review_pool, word_six: *health_review_pool, word_seven: *health_review_pool, word_eight: *health_review_pool, word_nine: *health_review_pool}
-    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine]}]
-    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six, word_seven, word_eight, word_nine]}
+    frame: {text: "{word_one} — {word_two} — {word_three} — {word_four} — {word_five} — {word_six}", language_code: prs, direction: rtl}
+    slots: {word_one: *health_review_pool, word_two: *health_review_pool, word_three: *health_review_pool, word_four: *health_review_pool, word_five: *health_review_pool, word_six: *health_review_pool}
+    slot_relations: [{kind: distinct, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}]
+    answer_derivation: {kind: matching_pairs, slots: [word_one, word_two, word_three, word_four, word_five, word_six]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
