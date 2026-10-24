@@ -1,0 +1,138 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.a1.unit11
+source_language: en
+target_language: fr
+unit_content_key: fr.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-fr job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (per-unit tags fr_a1_u11*, single-member w_<token> anchors, curated w_ lists). Frames follow this unit's straight apostrophes. Lesson 03 (dialogue) has no first-sight lexemes, so all templates anchor to lessons 01 and 02. Invitations use tu, as in the unit; occupe is masculine in the taught sentence, so the English prompt says said by a man. Reviewer: check the Avec plaisir / ca te va frames.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_chercher, w_courses, w_devant, w_faire, w_libre, w_ne, w_occupé, w_plaisir, w_retrouver, w_vendredi]
+slot_presets:
+  c1: &c1 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_libre, w_occupé, w_vendredi, w_courses, w_chercher, w_faire, w_retrouver]}}
+  lis1: &lis1 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_libre, w_vendredi, w_courses, w_chercher, w_faire, w_retrouver]}}
+  a_chercher_verb: &a_chercher_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_chercher}}
+  a_faire_verb: &a_faire_verb {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: w_faire}}
+  a_occupe_adje: &a_occupe_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_occupé}}
+  a_vendredi_noun: &a_vendredi_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_vendredi}}
+  a_libre_adje: &a_libre_adje {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: w_libre}}
+  tb1: &tb1 {language_code: fr, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_libre, w_occupé, w_vendredi]}}
+  c2: &c2 {language_code: fr, part_of_speech: [particle, noun, preposition, adjective], agreement_tags: {semantic: [w_ne, w_plaisir, w_devant, w_libre, w_courses]}}
+  lis2: &lis2 {language_code: fr, part_of_speech: [noun, preposition, adjective, verb], agreement_tags: {semantic: [w_plaisir, w_devant, w_libre, w_courses, w_chercher]}}
+  m2: &m2 {language_code: fr, part_of_speech: [noun, preposition, adjective, verb, particle], agreement_tags: {semantic: [w_plaisir, w_devant, w_libre, w_courses, w_chercher, w_retrouver]}}
+  a_plaisir_noun: &a_plaisir_noun {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: w_plaisir}}
+  a_ne_part: &a_ne_part {language_code: fr, part_of_speech: particle, agreement_tags: {semantic: w_ne}}
+  a_devant_prep: &a_devant_prep {language_code: fr, part_of_speech: preposition, agreement_tags: {semantic: w_devant}}
+templates:
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.choose.001
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Faire les courses means to go shopping for groceries; courses is plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.listen.002
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Vendredi is Friday; days of the week are masculine and written with a small letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.match.003
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *c1, second: *c1, third: *c1, fourth: *c1, fifth: *c1, sixth: *c1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Libre and occupé are opposite adjectives for being free or busy.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.order.004
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: word_order
+    frame: {text: "Tu viens me {item} vers dix-huit heures ?", language_code: fr, direction: ltr}
+    slots: {item: *a_chercher_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu viens me {item} vers dix-huit heures ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Venir chercher quelqu'un means to come and pick someone up; chercher stays in the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.order.005
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: word_order
+    frame: {text: "Ça te dit de {item} les courses ensemble ?", language_code: fr, direction: ltr}
+    slots: {item: *a_faire_verb}
+    answer_derivation: {kind: render_frame, frame: {text: "Ça te dit de {item} les courses ensemble ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Ça te dit de plus an infinitive suggests doing something together.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.fill.006
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: fill_in_blank
+    frame: {text: "Je suis {item} vendredi soir. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_occupe_adje, hint: *a_occupe_adje}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Occupé is masculine; a woman would write occupée.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.fill.007
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: fill_in_blank
+    frame: {text: "Devant le marché, {item} soir ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_vendredi_noun, hint: *a_vendredi_noun}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Vendredi soir means Friday evening; the day needs no article or preposition.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.translate.008
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: translation
+    frame: {text: "Are you free on Saturday? (informal, tu)", language_code: en, direction: ltr}
+    slots: {item: *a_libre_adje}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu es {item} samedi ?", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Tu es libre? asks a friend about availability; samedi needs no preposition.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson01.translate.009
+    lesson_content_key: fr.a1.unit11.lesson01.vocabulaire_projets
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *tb1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Libre has one form for both genders; occupé is masculine and occupée feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.choose.001
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *c2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ne is the first half of a negation; the second half, pas, follows the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.listen.002
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *lis2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Avec plaisir is a warm way to accept an invitation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.match.003
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *m2, second: *m2, third: *m2, fourth: *m2, fifth: *m2, sixth: *m2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Devant means in front of and is often used to name a meeting point.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.order.004
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: word_order
+    frame: {text: "Avec {item} !", language_code: fr, direction: ltr}
+    slots: {item: *a_plaisir_noun}
+    answer_derivation: {kind: render_frame, frame: {text: "Avec {item} !", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Avec plaisir means with pleasure and is a polite yes.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.fill.005
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: fill_in_blank
+    frame: {text: "Je {item} peux pas, je suis occupé. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *a_ne_part, hint: *a_ne_part}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Je ne peux pas is negative: ne goes before the verb and pas after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.a1.unit11.lesson02.translate.006
+    lesson_content_key: fr.a1.unit11.lesson02.accepter_refuser
+    type: translation
+    frame: {text: "We meet in front of the market.", language_code: en, direction: ltr}
+    slots: {item: *a_devant_prep}
+    answer_derivation: {kind: render_frame, frame: {text: "On se retrouve {item} le marché.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Devant means in front of; on se retrouve means we meet up.", language_code: en, direction: ltr}
