@@ -1,0 +1,111 @@
+schema_version: "1.0"
+pack_key: practice.en-es.a2.unit25
+source_language: en
+target_language: es
+unit_content_key: es.a2.unit25.reclamacion
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 11, en-es A2 set) from scripts/backfill_lexemes_en_es.py lexemes (es_a2_uNN* tags, w_<token> anchors). Returns and complaints vocabulary in the formal customer-service register. NATIVE FLAG: cremallera is the Spain word for zipper; Latin America also says cierre or zíper.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_cremallera, w_chaqueta, w_reembolso, w_cambio, w_artículo, w_recibo, w_devolver, w_claro, w_compré, w_estar, w_debe, w_usar, w_ofrecer]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_cremallera, w_chaqueta, w_reembolso, w_cambio, w_artículo, w_recibo]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_cremallera]}}
+  p3: &p3 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_devolver]}}
+  p4: &p4 {language_code: es, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: [w_devolver, w_chaqueta, w_claro, w_compré, w_cremallera]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_reembolso]}}
+  p6: &p6 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_cambio]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_recibo]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_estar]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_artículo, w_debe, w_recibo, w_estar, w_usar, w_ofrecer, w_compré]}}
+templates:
+  - content_key: practice.en-es.es.a2.unit25.lesson01.choose.001
+    lesson_content_key: es.a2.unit25.lesson01.el_problema
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These nouns come from returning a faulty jacket.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson01.fill.002
+    lesson_content_key: es.a2.unit25.lesson01.el_problema
+    type: fill_in_blank
+    frame: {text: "La {item} no funciona. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p2, hint: *p2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cremallera is feminine, so it takes la.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson01.listen.003
+    lesson_content_key: es.a2.unit25.lesson01.el_problema
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard is a noun from the returns scene.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson02.translate.001
+    lesson_content_key: es.a2.unit25.lesson02.quisiera_devolver
+    type: translation
+    frame: {text: "I would like to return this jacket.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Quisiera {item} esta chaqueta.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Devolver means to give back; for a person returning to a place Spanish uses volver.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson02.choose.002
+    lesson_content_key: es.a2.unit25.lesson02.quisiera_devolver
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The customer explains what she bought and what is wrong.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson03.translate.001
+    lesson_content_key: es.a2.unit25.lesson03.reembolso_o_cambio
+    type: translation
+    frame: {text: "I prefer a refund, please.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Prefiero un {item}, por favor.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Reembolso is masculine, so it takes un.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson03.order.002
+    lesson_content_key: es.a2.unit25.lesson03.reembolso_o_cambio
+    type: word_order
+    frame: {text: "Podemos ofrecerle un reembolso o un {item}.", language_code: es, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Podemos ofrecerle un reembolso o un {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Ofrecerle means to offer you; le is the formal you.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson03.match.003
+    lesson_content_key: es.a2.unit25.lesson03.reembolso_o_cambio
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Reembolso is a refund and cambio is an exchange.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson04.fill.001
+    lesson_content_key: es.a2.unit25.lesson04.mensaje_reclamacion
+    type: fill_in_blank
+    frame: {text: "Debe traer el {item} dentro de treinta días. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Recibo is the receipt; dentro de plus a time means within.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson04.order.002
+    lesson_content_key: es.a2.unit25.lesson04.mensaje_reclamacion
+    type: word_order
+    frame: {text: "El artículo debe {item} sin usar.", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "El artículo debe {item} sin usar.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Estar is used for the state the item has to be in.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson04.choose.003
+    lesson_content_key: es.a2.unit25.lesson04.mensaje_reclamacion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The store policy uses these words.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.a2.unit25.lesson04.translate.004
+    lesson_content_key: es.a2.unit25.lesson04.mensaje_reclamacion
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These nouns come from returning an item to the store.", language_code: en, direction: ltr}
