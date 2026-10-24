@@ -4894,6 +4894,13 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     #     same-gloss glosses seen in practice pools; each keyed to the token's
     #     first introducing unit at that level (verified against iter_specs()).
     ("a1_unit05_family", "kind"): "child",  # possessive frames: "Dit is zijn *the child*"
+    ("a1_unit20_clothing", "broek"): "the trousers",  # prompt read "I am looking for the pants; the trousers."
+    ("a1_unit30_appearance", "lang"): "tall",  # "He is tall; long."
+    ("a1_unit30_appearance", "bruine"): "brown (before a noun)",  # was "(inflected)"; stays distinct from bruin
+    ("a1_unit30_appearance", "groene"): "green (before a noun)",
+    ("a1_unit32_sporten", "voetbal"): "football",  # "I do football; soccer."
+    ("a1_unit32_sporten", "hardlopen"): "running",  # "I do running; to run."
+    ("a1_unit32_sporten", "zwemmen"): "swimming",
     ("a1_unit39_post", "schrijf"): "write (with ik)",  # "prescribe" is the a2_unit27 sense
     ("a1_unit47_bibliotheek_lenen", "mee"): "along",  # "Het boek mag twee weken mee"
     ("a1_unit67_markt", "bakker"): "the baker",  # "bij de bakker"; "the bakery" = bakkerij
