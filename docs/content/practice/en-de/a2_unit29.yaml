@@ -1,0 +1,167 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a2.unit29
+source_language: en
+target_language: de
+unit_content_key: de.a2.unit29.wohnungsproblem
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 11, en-de A2 practice pack) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_de.py (curated w_<token> pools of this unit's own tokens). Sentence frames use single anchors or small unions in which every member is grammatical; English prompts name the formal Sie where the German form depends on it. Reviewer: confirm In meiner Wohnung gibt es ein Problem and Die Heizung funktioniert seit gestern nicht sound natural for a report to a landlord.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Wohnung", "w_Problem", "w_Heizung", "w_funktioniert", "w_gestern", "w_Reparatur", "w_Handwerker", "w_jemand", "w_kommt", "w_morgen", "w_Uhr", "w_neun", "w_nicht"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_Wohnung", "w_Problem", "w_Heizung", "w_funktioniert", "w_gestern"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, pronoun, verb, adverb], agreement_tags: {semantic: ["w_Reparatur", "w_Handwerker", "w_jemand", "w_kommt", "w_morgen", "w_Uhr"]}}
+  p3: &p3 {language_code: de, part_of_speech: [noun, pronoun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Reparatur", "w_Handwerker", "w_kommt", "w_morgen", "w_neun", "w_jemand"]}}
+  p4: &p4 {language_code: de, part_of_speech: [noun, verb, adverb, particle], agreement_tags: {semantic: ["w_Wohnung", "w_Problem", "w_Heizung", "w_funktioniert", "w_gestern", "w_nicht"]}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Wohnung"}}
+  p6: &p6 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Heizung"}}
+  p7: &p7 {language_code: de, part_of_speech: adverb, agreement_tags: {semantic: "w_gestern"}}
+  p8: &p8 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Handwerker"}}
+  p9: &p9 {language_code: de, part_of_speech: adverb, agreement_tags: {semantic: "w_morgen"}}
+  p10: &p10 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: ["w_Wohnung", "w_Problem", "w_Heizung", "w_Reparatur", "w_Handwerker", "w_Uhr"]}}
+  p11: &p11 {language_code: de, part_of_speech: [pronoun, verb, adjective, adverb, particle], agreement_tags: {semantic: ["w_funktioniert", "w_kommt", "w_gestern", "w_morgen", "w_jemand", "w_neun", "w_nicht"]}}
+  p12: &p12 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_funktioniert"}}
+  p13: &p13 {language_code: de, part_of_speech: pronoun, agreement_tags: {semantic: "w_jemand"}}
+  p14: &p14 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_kommt"}}
+  p15: &p15 {language_code: de, part_of_speech: [noun, pronoun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Reparatur", "w_Handwerker", "w_jemand", "w_morgen", "w_neun", "w_kommt"]}}
+templates:
+  - content_key: practice.en-de.de.a2.unit29.lesson01.choose.001
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Funktioniert is the he/she/it form of funktionieren.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.listen.002
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Morgen as a lowercase adverb means tomorrow.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.choose.003
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Handwerker is a person who does repair and building work.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.listen.004
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Nicht negates the verb: funktioniert nicht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.order.005
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: word_order
+    frame: {text: "In meiner {item} gibt es ein Problem.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "In meiner {item} gibt es ein Problem.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After in with the dative, the feminine mein becomes meiner.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.order.006
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: word_order
+    frame: {text: "Die {item} funktioniert nicht.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Die {item} funktioniert nicht.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Nicht comes after the verb: funktioniert nicht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.order.007
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: word_order
+    frame: {text: "Die Heizung funktioniert seit {item} nicht.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Die Heizung funktioniert seit {item} nicht.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Seit gestern marks the starting point: since yesterday.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.order.008
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: word_order
+    frame: {text: "Der {item} kommt morgen um neun Uhr.", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} kommt morgen um neun Uhr.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Um neun Uhr gives the clock time.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.order.009
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: word_order
+    frame: {text: "Der Handwerker kommt {item} um neun Uhr.", language_code: de, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Handwerker kommt {item} um neun Uhr.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Morgen is an adverb here, so it is not capitalised.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.match.010
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p10, second: *p10, third: *p10, fourth: *p10, fifth: *p10, sixth: *p10}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Die Reparatur is feminine; der Handwerker is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.match.011
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p11, second: *p11, third: *p11, fourth: *p11, fifth: *p11, sixth: *p11}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Gestern is yesterday and morgen is tomorrow.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.fill.012
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: fill_in_blank
+    frame: {text: "Die Heizung {item} nicht. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Funktioniert is the he/she/it form.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.fill.013
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: fill_in_blank
+    frame: {text: "Wann kann {item} kommen? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Jemand takes the third-person verb form: kann.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.fill.014
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: fill_in_blank
+    frame: {text: "Der Handwerker {item} morgen um neun Uhr. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p14, hint: *p14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Kommt is the he/she/it form of kommen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.translate.015
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wohnung, Problem and Heizung are nouns and keep their capital.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.translate.016
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p15}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Morgen as a lowercase adverb means tomorrow.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.translate.017
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: translation
+    frame: {text: "The heating has not worked since yesterday.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Die Heizung funktioniert seit {item} nicht.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "German uses the present tense with seit for something still going on.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson02.translate.018
+    lesson_content_key: de.a2.unit29.lesson02.reparatur_vereinbaren
+    type: translation
+    frame: {text: "The repairman is coming tomorrow at nine o'clock.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Handwerker kommt {item} um neun Uhr.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Um neun Uhr gives the clock time.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a2.unit29.lesson01.translate.019
+    lesson_content_key: de.a2.unit29.lesson01.problem_melden
+    type: translation
+    frame: {text: "There is a problem in my apartment.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "In meiner {item} gibt es ein Problem.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Es gibt means there is.", language_code: en, direction: ltr}
