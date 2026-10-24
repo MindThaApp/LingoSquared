@@ -1,0 +1,152 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit15
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit15.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u15*, w_<token> anchors). Yes/no questions are used only as fixed frames (word_order/fill), never as translation targets, because a leading kya is optional in Hindi. 'I have to go' is the only English reading of mujhe ... jaana hai used here. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_जाना, w_टिकट, w_ट्रेन, w_प्लेटफ़ॉर्म, w_हमें]
+slot_presets:
+  all: &all {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_जाना, w_टिकट, w_ट्रेन, w_प्लेटफ़ॉर्म, w_हमें]}}
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_जाना, w_टिकट, w_ट्रेन]}}
+  jana: &jana {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_जाना}}
+  ticket: &ticket {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_टिकट}}
+  train: &train {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_ट्रेन}}
+  plat: &plat {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_प्लेटफ़ॉर्म}}
+  hamein: &hamein {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_हमें}}
+  l1l: &l1l {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_टिकट, w_ट्रेन, w_प्लेटफ़ॉर्म]}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.choose.001
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "जाना is the dictionary form to go, and मुझे ... जाना है means I have to go.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.listen.002
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1l}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "टिकट, ट्रेन and प्लेटफ़ॉर्म are English words used in everyday Hindi.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.order.003
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: word_order
+    frame: {text: "मुझे स्टेशन {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *jana}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे स्टेशन {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मुझे ... जाना है expresses need, and, like चाहिए, it does not change with the speaker's gender.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.order.004
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: word_order
+    frame: {text: "मुझे दिल्ली का {item} चाहिए।", language_code: hi, direction: ltr}
+    slots: {item: *ticket}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे दिल्ली का {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "का links दिल्ली to the masculine noun टिकट, as in a ticket of Delhi.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.order.005
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: word_order
+    frame: {text: "यह दिल्ली की {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *train}
+    answer_derivation: {kind: render_frame, frame: {text: "यह दिल्ली की {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "की is feminine because ट्रेन is feminine, which is why this sentence uses की and not का.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.fill.006
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: fill_in_blank
+    frame: {text: "मेरा {item} कहाँ है? ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ticket, hint: *ticket}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "मेरा is masculine because टिकट is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.fill.007
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: fill_in_blank
+    frame: {text: "मुझे स्टेशन {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *jana, hint: *jana}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The dictionary form जाना, to go, is used with है to say that something must be done.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.translate.008
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: translation
+    frame: {text: "I have to go to the station.", language_code: en, direction: ltr}
+    slots: {item: *jana}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे स्टेशन {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi says literally to me the going is, so the speaker's gender never changes the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.translate.009
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: translation
+    frame: {text: "I would like a ticket to Delhi.", language_code: en, direction: ltr}
+    slots: {item: *ticket}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे दिल्ली का {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi says a ticket of Delhi, with का agreeing with the masculine noun टिकट.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson01.translate.010
+    lesson_content_key: hi.a1.unit15.lesson01.station_jana
+    type: translation
+    frame: {text: "This is a Delhi train.", language_code: en, direction: ltr}
+    slots: {item: *train}
+    answer_derivation: {kind: render_frame, frame: {text: "यह दिल्ली की {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "की agrees with ट्रेन, which is a feminine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson02.choose.001
+    lesson_content_key: hi.a1.unit15.lesson02.platform_samay
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "प्लेटफ़ॉर्म is the English word platform used in Hindi, and it is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson02.order.002
+    lesson_content_key: hi.a1.unit15.lesson02.platform_samay
+    type: word_order
+    frame: {text: "ट्रेन {item} नंबर तीन से जाती है।", language_code: hi, direction: ltr}
+    slots: {item: *plat}
+    answer_derivation: {kind: render_frame, frame: {text: "ट्रेन {item} नंबर तीन से जाती है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "नंबर comes after प्लेटफ़ॉर्म, and से marks the place the train leaves from.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson02.fill.003
+    lesson_content_key: hi.a1.unit15.lesson02.platform_samay
+    type: fill_in_blank
+    frame: {text: "यह {item} बड़ा है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *plat, hint: *plat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adjective is बड़ा because प्लेटफ़ॉर्म is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson02.translate.004
+    lesson_content_key: hi.a1.unit15.lesson02.platform_samay
+    type: translation
+    frame: {text: "The train leaves from platform number three.", language_code: en, direction: ltr}
+    slots: {item: *plat}
+    answer_derivation: {kind: render_frame, frame: {text: "ट्रेन {item} नंबर तीन से जाती है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "से marks the place the train leaves from, and जाती agrees with the feminine ट्रेन.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson03.listen.001
+    lesson_content_key: hi.a1.unit15.lesson03.priya_arjun_station
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "हमें is the हम form of मुझे: मुझे is to me and हमें is to us.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson03.order.002
+    lesson_content_key: hi.a1.unit15.lesson03.priya_arjun_station
+    type: word_order
+    frame: {text: "प्रिया, {item} स्टेशन जाना है।", language_code: hi, direction: ltr}
+    slots: {item: *hamein}
+    answer_derivation: {kind: render_frame, frame: {text: "प्रिया, {item} स्टेशन जाना है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Starting with the name addresses the person; हमें then says that both speakers have to go.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson03.fill.003
+    lesson_content_key: hi.a1.unit15.lesson03.priya_arjun_station
+    type: fill_in_blank
+    frame: {text: "प्रिया, {item} स्टेशन जाना है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *hamein, hint: *hamein}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "हमें plays the role of मुझे when more than one person is involved.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit15.lesson03.translate.004
+    lesson_content_key: hi.a1.unit15.lesson03.priya_arjun_station
+    type: translation
+    frame: {text: "Priya, we have to go to the station.", language_code: en, direction: ltr}
+    slots: {item: *hamein}
+    answer_derivation: {kind: render_frame, frame: {text: "प्रिया, {item} स्टेशन जाना है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "हमें works like मुझे, so जाना है stays the same.", language_code: en, direction: ltr}
