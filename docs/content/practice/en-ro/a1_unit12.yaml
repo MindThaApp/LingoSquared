@@ -1,0 +1,132 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit12
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit12.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job B) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u12* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm Am fost / Am mâncat / Am băut (compound past with am), A fost with a third-person subject, and Da, a fost bine!. Only 4 lexemes: no matching_pairs and recognition pools hold 3 to 4 tokens.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_fost, w_mâncat, w_băut, w_a]
+slot_presets:
+  q_pool3: &q_pool3 {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: [w_fost, w_mâncat, w_băut]}}
+  q_pool4: &q_pool4 {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: [w_fost, w_mâncat, w_băut, w_a]}}
+  t_fost: &t_fost {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_fost}}
+  t_mancat: &t_mancat {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_mâncat}}
+  t_baut: &t_baut {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_băut}}
+  t_a: &t_a {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_a}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit12.lesson01.choose.001
+    lesson_content_key: ro.a1.unit12.lesson01.am_fost_la_parc
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Am fost combines am with fost (been); the same fost works with a for he or she: a fost.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.listen.001
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Am mâncat and am băut are built the same way: am plus a past form ending in -t.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson03.listen.001
+    lesson_content_key: ro.a1.unit12.lesson03.cum_a_fost_duminica
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "In Cum a fost duminică? the helper a goes before fost, for it was.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson01.order.002
+    lesson_content_key: ro.a1.unit12.lesson01.am_fost_la_parc
+    type: word_order
+    frame: {text: "Ieri am {item} la parc.", language_code: ro, direction: ltr}
+    slots: {item: *t_fost}
+    answer_derivation: {kind: render_frame, frame: {text: "Ieri am {item} la parc.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Am fost la parc means I went to or I was at the park; ieri places it in the past.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.order.002
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: word_order
+    frame: {text: "Am {item} pâine și am băut ceai.", language_code: ro, direction: ltr}
+    slots: {item: *t_mancat}
+    answer_derivation: {kind: render_frame, frame: {text: "Am {item} pâine și am băut ceai.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "The past of mănânc is am mâncat: am plus the past form, which does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.order.003
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: word_order
+    frame: {text: "Am mâncat pâine și am {item} ceai.", language_code: ro, direction: ltr}
+    slots: {item: *t_baut}
+    answer_derivation: {kind: render_frame, frame: {text: "Am mâncat pâine și am {item} ceai.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Am băut is the past of beau; each verb repeats am in the sentence.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson03.order.002
+    lesson_content_key: ro.a1.unit12.lesson03.cum_a_fost_duminica
+    type: word_order
+    frame: {text: "Cum {item} fost duminică?", language_code: ro, direction: ltr}
+    slots: {item: *t_a}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum {item} fost duminică?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "A fost is it was; the helper a replaces am when the subject is he, she or it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson01.fill.003
+    lesson_content_key: ro.a1.unit12.lesson01.am_fost_la_parc
+    type: fill_in_blank
+    frame: {text: "Am {item} la cinema. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_fost, hint: *t_fost}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Fost is the past form of both be and go; context shows which meaning applies.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.fill.004
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: fill_in_blank
+    frame: {text: "Am {item} pâine. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_mancat, hint: *t_mancat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mâncat is the past form that goes after am to say I ate.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.fill.005
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: fill_in_blank
+    frame: {text: "Am {item} ceai. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_baut, hint: *t_baut}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Băut is the past form that goes after am to say I drank.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.translate.006
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *q_pool3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Romanian past forms like fost, mâncat and băut end in -t and combine with am for I.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson01.translate.004
+    lesson_content_key: ro.a1.unit12.lesson01.am_fost_la_parc
+    type: translation
+    frame: {text: "Yesterday I went to the park.", language_code: en, direction: ltr}
+    slots: {item: *t_fost}
+    answer_derivation: {kind: render_frame, frame: {text: "Ieri am {item} la parc.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ieri marks the past; am fost la parc is the compound past of going.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.translate.007
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: translation
+    frame: {text: "I ate bread.", language_code: en, direction: ltr}
+    slots: {item: *t_mancat}
+    answer_derivation: {kind: render_frame, frame: {text: "Am {item} pâine.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Am mâncat pâine uses am for the I form of the past.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson02.translate.008
+    lesson_content_key: ro.a1.unit12.lesson02.am_mancat_am_baut
+    type: translation
+    frame: {text: "I drank tea.", language_code: en, direction: ltr}
+    slots: {item: *t_baut}
+    answer_derivation: {kind: render_frame, frame: {text: "Am {item} ceai.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Am băut ceai: am plus the past form of beau.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit12.lesson03.translate.003
+    lesson_content_key: ro.a1.unit12.lesson03.cum_a_fost_duminica
+    type: translation
+    frame: {text: "How was Sunday?", language_code: en, direction: ltr}
+    slots: {item: *t_a}
+    answer_derivation: {kind: render_frame, frame: {text: "Cum {item} fost duminică?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cum a fost duminică? uses a (it was) because Sunday is the subject.", language_code: en, direction: ltr}
