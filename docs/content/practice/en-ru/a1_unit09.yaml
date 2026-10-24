@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-ru.a1.unit09
+source_language: en
+target_language: ru
+unit_content_key: ru.a1.unit09.places
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ru A1 practice pack, job B) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_ru.py. Pools are curated w_<token> unions of this unit's own tokens; sentence frames use single anchors or curated unions in which every member is grammatical (checked at course scope). Inflected forms (case/number/gender) are tested only through single-anchor fill-in or fixed-sentence items so no bare-word prompt has two defensible answers. English prompts name ты/вы and the speaker's gender where the Russian form depends on them. Feedback lines carry a usage or grammar point.
+    Reviewer: check the ты/вы labels in the English prompts and the case notes in feedback. No character facts are asserted (character names appear only as bare vocabulary items).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Пушкина", "w_аптека", "w_банк", "w_библиотека", "w_большое", "w_вашей", "w_вокзал", "w_где", "w_гостиница", "w_моей", "w_находится", "w_ресторан", "w_улица", "w_улице"]
+slot_presets:
+  p1: &p1 {language_code: "ru", part_of_speech: ["adverb", "noun", "verb"], agreement_tags: {semantic: ["w_где", "w_находится", "w_улица", "w_банк", "w_аптека"]}}
+  p2: &p2 {language_code: "ru", part_of_speech: "verb", agreement_tags: {semantic: "w_находится"}}
+  p3: &p3 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_улице"}}
+  p4: &p4 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_аптека"}}
+  p5: &p5 {language_code: "ru", part_of_speech: ["adverb", "noun", "verb"], agreement_tags: {semantic: ["w_где", "w_находится", "w_улица"]}}
+  p6: &p6 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: ["w_банк", "w_аптека", "w_вокзал", "w_гостиница", "w_ресторан", "w_библиотека"]}}
+  p7: &p7 {language_code: "ru", part_of_speech: "proper_noun", agreement_tags: {semantic: "w_Пушкина"}}
+  p8: &p8 {language_code: "ru", part_of_speech: "noun", agreement_tags: {semantic: "w_гостиница"}}
+  p9: &p9 {language_code: "ru", part_of_speech: ["adjective", "noun", "pronoun"], agreement_tags: {semantic: ["w_вашей", "w_моей", "w_большое", "w_библиотека", "w_банк"]}}
+  p10: &p10 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_вашей"}}
+  p11: &p11 {language_code: "ru", part_of_speech: "pronoun", agreement_tags: {semantic: "w_моей"}}
+  p12: &p12 {language_code: "ru", part_of_speech: "adjective", agreement_tags: {semantic: "w_большое"}}
+templates:
+  - content_key: practice.en-ru.ru.a1.unit09.lesson01.choose.001
+    lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p1}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Где asks where, and находится adds is located; together they ask for the location of a place.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson01.order.002
+    lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+    type: word_order
+    frame: {text: "Где {item} магазин?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p2}
+    answer_derivation: {kind: "render_frame", frame: {text: "Где {item} магазин?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Находится is a he/she/it verb form, so it agrees with a singular noun such as магазин.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson01.fill.003
+    lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+    type: fill_in_blank
+    frame: {text: "Магазин на Тверской {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "After на meaning on, улица changes to улице to show where something is.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson01.translate.004
+    lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+    type: translation
+    frame: {text: "Where is the pharmacy located?", language_code: "en", direction: "ltr"}
+    slots: {item: *p4}
+    answer_derivation: {kind: "render_frame", frame: {text: "Где находится {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Где находится ...? is the standard way to ask where a place is.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson01.translate.005
+    lesson_content_key: ru.a1.unit09.lesson01.gde_nakhoditsya
+    type: translation
+    frame: {text: "{item}", language_code: "en", direction: "ltr", slot_rendering: {item: "english_gloss"}}
+    slots: {item: *p5}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Где asks where, and улица is the street.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.choose.001
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Банк, вокзал and ресторан are masculine; аптека, гостиница and библиотека are feminine.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.listen.002
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: listen_select
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "These place names are nouns, and no word for the is needed in Где находится банк?", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.match.003
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: "ru", direction: "ltr"}
+    slots: {first: *p6, second: *p6, third: *p6, fourth: *p6, fifth: *p6, sixth: *p6}
+    slot_relations: [{kind: "distinct", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}]
+    answer_derivation: {kind: "matching_pairs", slots: ["first", "second", "third", "fourth", "fifth", "sixth"]}
+    feedback_frame: {text: "Many place names are near-cognates: банк, ресторан, аптека and библиотека have recognizable English roots.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.order.004
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: word_order
+    frame: {text: "Где находится {item}?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p6}
+    answer_derivation: {kind: "render_frame", frame: {text: "Где находится {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Где находится ...? works with any singular place noun.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.fill.005
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: fill_in_blank
+    frame: {text: "Банк на улице {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Street names are in the genitive: улица Пушкина means Pushkin Street.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson02.translate.006
+    lesson_content_key: ru.a1.unit09.lesson02.mesta_v_gorode
+    type: translation
+    frame: {text: "Where is the hotel located?", language_code: "en", direction: "ltr"}
+    slots: {item: *p8}
+    answer_derivation: {kind: "render_frame", frame: {text: "Где находится {item}?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Гостиница is a feminine noun meaning hotel.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.choose.001
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: "ru", direction: "ltr"}
+    slots: {item: *p9}
+    answer_derivation: {kind: "slot_gloss", slot: "item"}
+    feedback_frame: {text: "Вашей and моей are feminine forms of ваш and мой used after на: на вашей улице, на моей улице.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.order.002
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: word_order
+    frame: {text: "Что есть на {item} улице?", language_code: "ru", direction: "ltr"}
+    slots: {item: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Что есть на {item} улице?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Вашей agrees with the feminine улице; this is the formal вы question.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.fill.003
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: fill_in_blank
+    frame: {text: "На {item} улице есть банк. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Моей is the form of моя used after на, because улица is feminine and in the prepositional case.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.fill.004
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: fill_in_blank
+    frame: {text: "Спасибо {item}. ({hint})", language_code: "ru", direction: "ltr", slot_rendering: {hint: "english_gloss"}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: "slot_text", slot: "item"}
+    feedback_frame: {text: "Спасибо большое is a warm way to say thank you very much.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.translate.005
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: translation
+    frame: {text: "What is on your street? (formal)", language_code: "en", direction: "ltr"}
+    slots: {item: *p10}
+    answer_derivation: {kind: "render_frame", frame: {text: "Что есть на {item} улице?", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Что есть на вашей улице? asks what exists on the street; the вы form вашей keeps it polite.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.translate.006
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: translation
+    frame: {text: "Thank you very much.", language_code: "en", direction: "ltr"}
+    slots: {item: *p12}
+    answer_derivation: {kind: "render_frame", frame: {text: "Спасибо {item}.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "Большое agrees with the neuter спасибо, so it ends in -ое.", language_code: "en", direction: "ltr"}
+  - content_key: practice.en-ru.ru.a1.unit09.lesson03.translate.007
+    lesson_content_key: ru.a1.unit09.lesson03.moya_ulitsa
+    type: translation
+    frame: {text: "There is a bank on my street.", language_code: "en", direction: "ltr"}
+    slots: {item: *p11}
+    answer_derivation: {kind: "render_frame", frame: {text: "На {item} улице есть банк.", language_code: "ru", direction: "ltr"}}
+    feedback_frame: {text: "У меня есть is for having; for something located on a street Russian uses На моей улице есть.", language_code: "en", direction: "ltr"}

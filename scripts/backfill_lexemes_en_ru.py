@@ -156,9 +156,9 @@ GLOSSES: dict[str, str] = {
     "штуку": "piece (item), as the object of 'give me'",
     "штук": "pieces, as used after five and up",
     "помидоры": "tomatoes", "огурцы": "cucumbers", "картофель": "potatoes",
-    "капуста": "cabbage", "яблок": "apples, as used after five and up",
-    "апельсины": "oranges", "апельсинов": "oranges, as used after five and up",
-    "помидоров": "tomatoes, as used after five and up", "кило": "kilo (colloquial)",
+    "капуста": "cabbage", "яблок": "apples, as used after a quantity word (kilo, five and up)",
+    "апельсины": "oranges", "апельсинов": "oranges, as used after a quantity word (kilo, five and up)",
+    "помидоров": "tomatoes, as used after a quantity word (kilo, five and up)", "кило": "kilo (colloquial)",
     "двести": "two hundred",
     # unit09 places
     "где": "where", "находится": "is located", "улица": "street",
@@ -184,8 +184,8 @@ GLOSSES: dict[str, str] = {
     # unit11 routines
     "встаю": "I get up", "встаёте": "you get up (formal)",
     "завтракаю": "I have breakfast", "работаю": "I work",
-    "девяти": "nine (genitive case, after 'until')",
-    "пяти": "five (genitive case, after 'until')", "ужинаю": "I have dinner",
+    "девяти": "nine (genitive case, after 'from' or 'until')",
+    "пяти": "five (genitive case, after 'from' or 'until')", "ужинаю": "I have dinner",
     "ложусь": "I lie down; I go (to bed)", "спать": "to sleep",
     "одиннадцать": "eleven", "Олег": "Oleg", "делаете": "you do (formal)",
     "Мария": "Maria", "работаете": "you work (formal)", "понятно": "understood; I see",
