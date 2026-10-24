@@ -6,6 +6,7 @@ unit_content_key: prs.a2.unit09.bureaucracy
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: 'Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, same pass as this bundle''s a1_unit03.yaml
     sibling (see that file''s notes for the full extension rationale and verification method) -- this is the first A2-level
     en-prs practice pack, matching prs''s own first A2 realization unit (registering a new address at the municipality). Smaller
@@ -48,7 +49,16 @@ review:
     difference is genuine, from how this unit''s teaching cards chunk newly-introduced tokens per card, not a gap). Added
     3 new templates (multiple_choice, matching_pairs over all 10, translation) anchored at lesson04 where the pool completes
     -- 8 -> 11 templates. Re-verified: scripts/ _practice_slot_check.py 0 problems across the whole en-prs pack; scripts/compile_content.py
-    practice-validate for the full pack -- 0 errors/0 warnings.'
+    practice-validate for the full pack -- 0 errors/0 warnings.
+    Review 2026-10-24 (en-prs practice native-quality pass): 7 fixes. (1,2) office_pair and
+    paperwork_pair both dealt the same 7 cards (pool of 7 = 7 slots, and identical to each other) -> office_pair now draws 6
+    from office+paperwork+lesson03 nouns (12), paperwork_pair 6 from the 7 lesson03 nouns. (3) bureaucracy_phrase_pair
+    10 slots = 10-member pool -> 6 slots. (4) bureaucracy_phrase_translate.003 DROPPED: English->Dari typing of whole
+    dialogue lines (up to three sentences with numbers) is underdetermined and unmarkable. (5) office_order.005.volume_fill.012
+    DROPPED: frame ''این ___ است'' is underdetermined (any office word fits; answer سند) and its feedback was the bare
+    answer. (6,7) word_order feedback placeholders ''[word]'' / ''___'' replaced by the rendered sentence pattern.
+    NATIVE FLAGS: تذکره (Afghan e-/paper ID booklet, confirm term); ''وقت'' glossed ''appointment / time''
+    (وقت گرفتن); بیارین/بگویین register; ''نمبر'' Afghan spelling in phrase pool. Gloss lane: see log.'
 tag_schema:
   part_of_speech:
   - noun
@@ -58,6 +68,7 @@ tag_schema:
     - office_word
     - paperwork_word
     - bureaucracy_phrase
+    - en_prs_a2_unit09_lesson03_words
     - volume_en_prs_a2_unit09_office_word_12_single
 slot_presets:
   office_word: &id001
@@ -77,6 +88,19 @@ slot_presets:
       semantic:
       - office_word
       - paperwork_word
+  office_and_lesson03: &id005
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - office_word
+      - paperwork_word
+      - en_prs_a2_unit09_lesson03_words
+  lesson03_noun: &id006
+    language_code: prs
+    part_of_speech: noun
+    agreement_tags:
+      semantic: en_prs_a2_unit09_lesson03_words
   bureaucracy_phrase: &id004
     language_code: prs
     part_of_speech: phrase
@@ -122,17 +146,16 @@ templates:
   type: matching_pairs
   frame:
     text: '{office_word_one} — {office_word_two} — {office_word_three} — {office_word_four} — {office_word_five} — {office_word_six}
-      — {office_word_seven}'
+     '
     language_code: prs
     direction: rtl
   slots:
-    office_word_one: *id002
-    office_word_two: *id002
-    office_word_three: *id002
-    office_word_four: *id002
-    office_word_five: *id002
-    office_word_six: *id002
-    office_word_seven: *id002
+    office_word_one: *id005
+    office_word_two: *id005
+    office_word_three: *id005
+    office_word_four: *id005
+    office_word_five: *id005
+    office_word_six: *id005
   slot_relations:
   - kind: distinct
     slots:
@@ -142,7 +165,6 @@ templates:
     - office_word_four
     - office_word_five
     - office_word_six
-    - office_word_seven
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -152,7 +174,6 @@ templates:
     - office_word_four
     - office_word_five
     - office_word_six
-    - office_word_seven
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -173,7 +194,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: این [word] است (this is ___).'
+    text: 'Word order: این {office_word} است. (This is ...)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a2.unit09.lesson03.paperwork_translate.002
@@ -199,17 +220,16 @@ templates:
   type: matching_pairs
   frame:
     text: '{paperwork_word_one} — {paperwork_word_two} — {paperwork_word_three} — {paperwork_word_four} — {paperwork_word_five}
-      — {paperwork_word_six} — {paperwork_word_seven}'
+      — {paperwork_word_six}'
     language_code: prs
     direction: rtl
   slots:
-    paperwork_word_one: *id002
-    paperwork_word_two: *id002
-    paperwork_word_three: *id002
-    paperwork_word_four: *id002
-    paperwork_word_five: *id002
-    paperwork_word_six: *id002
-    paperwork_word_seven: *id002
+    paperwork_word_one: *id006
+    paperwork_word_two: *id006
+    paperwork_word_three: *id006
+    paperwork_word_four: *id006
+    paperwork_word_five: *id006
+    paperwork_word_six: *id006
   slot_relations:
   - kind: distinct
     slots:
@@ -219,7 +239,6 @@ templates:
     - paperwork_word_four
     - paperwork_word_five
     - paperwork_word_six
-    - paperwork_word_seven
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -229,7 +248,6 @@ templates:
     - paperwork_word_four
     - paperwork_word_five
     - paperwork_word_six
-    - paperwork_word_seven
   feedback_frame:
     text: Match each word with its English meaning.
     language_code: en
@@ -266,7 +284,7 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: 'Word order: این [word] است (this is ___).'
+    text: 'Word order: این {paperwork_word} است. (This is ...)'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a2.unit09.lesson04.bureaucracy_phrase_choice.001
@@ -299,10 +317,6 @@ templates:
     fourth: *id004
     fifth: *id004
     sixth: *id004
-    seventh: *id004
-    eighth: *id004
-    ninth: *id004
-    tenth: *id004
   slot_relations:
   - kind: distinct
     slots:
@@ -312,10 +326,6 @@ templates:
     - fourth
     - fifth
     - sixth
-    - seventh
-    - eighth
-    - ninth
-    - tenth
   answer_derivation:
     kind: matching_pairs
     slots:
@@ -325,49 +335,7 @@ templates:
     - fourth
     - fifth
     - sixth
-    - seventh
-    - eighth
-    - ninth
-    - tenth
   feedback_frame:
     text: Match each sentence or phrase to its English meaning.
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a2.unit09.lesson04.bureaucracy_phrase_translate.003
-  lesson_content_key: prs.a2.unit09.lesson04.at_the_municipality_office
-  type: translation
-  frame:
-    text: '{bureaucracy_phrase}'
-    language_code: en
-    direction: ltr
-    slot_rendering:
-      bureaucracy_phrase: english_gloss
-  slots:
-    bureaucracy_phrase: *id004
-  answer_derivation:
-    kind: slot_text
-    slot: bureaucracy_phrase
-  feedback_frame:
-    text: This sentence or phrase appears in this unit's municipality-office scenario.
-    language_code: en
-    direction: ltr
-- content_key: practice.en-prs.prs.a2.unit09.lesson01.office_order.005.volume_fill.012
-  lesson_content_key: prs.a2.unit09.lesson01.bureaucracy_vocabulary
-  type: fill_in_blank
-  frame:
-    text: این {office_word} است
-    language_code: prs
-    direction: rtl
-  slots:
-    office_word:
-      language_code: prs
-      part_of_speech: noun
-      agreement_tags:
-        semantic: volume_en_prs_a2_unit09_office_word_12_single
-  answer_derivation:
-    kind: slot_text
-    slot: office_word
-  feedback_frame:
-    text: '{office_word}'
-    language_code: prs
-    direction: rtl
