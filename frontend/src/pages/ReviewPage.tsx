@@ -344,7 +344,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
               </p>
             )}
             {result.feedback && (
-              <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+              <p dir="auto" style={{ margin: "0 0 6px", fontWeight: 400 }}>
                 <EmphasizedText text={result.feedback} />
               </p>
             )}
