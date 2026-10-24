@@ -9,16 +9,17 @@ review:
   fresh_context: "false"
   notes: >-
     Authored 2026-10-24 (session 10, en-es reference set) from
-    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u04* tags, es_month,
+    scripts/backfill_lexemes_en_es.py lexemes (es_a1_u04* tags,
     w_<token> anchors). Weekday and month frames use pools that hold only
     weekdays or only months at course scope.
+    Opus pass 2026-10-24: month pool now a w_ list of this unit's months instead of the course-wide es_month tag; fixed ¿Y tuyo? to the grammatical ¿Y el tuyo? (as in the dialogue).
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
-    semantic: [es_a1_u04, es_a1_u04_l01, es_a1_u04_l02, es_month, w_fecha, w_veintidós, w_veintinueve, w_tuyo]
+    semantic: [es_a1_u04, es_a1_u04_l01, es_a1_u04_l02, w_enero, w_febrero, w_marzo, w_abril, w_mayo, w_junio, w_julio, w_agosto, w_septiembre, w_octubre, w_noviembre, w_diciembre, w_fecha, w_veintidós, w_veintinueve, w_tuyo]
 slot_presets:
   weekday: &weekday {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u04_l01}}
-  month: &month {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_month}}
+  month: &month {language_code: es, part_of_speech: noun, agreement_tags: {semantic: [w_enero, w_febrero, w_marzo, w_abril, w_mayo, w_junio, w_julio, w_agosto, w_septiembre, w_octubre, w_noviembre, w_diciembre]}}
   month_words: &month_words {language_code: es, part_of_speech: noun, agreement_tags: {semantic: es_a1_u04_l02}}
   content: &content {language_code: es, part_of_speech: [noun, verb, adverb, phrase, adjective], agreement_tags: {semantic: es_a1_u04}}
   words: &words {language_code: es, part_of_speech: [noun, adverb, phrase], agreement_tags: {semantic: es_a1_u04}}
@@ -124,8 +125,8 @@ templates:
     type: translation
     frame: {text: "And yours? (informal)", language_code: en, direction: ltr}
     slots: {item: *tuyo}
-    answer_derivation: {kind: render_frame, frame: {text: "¿Y {item}?", language_code: es, direction: ltr}}
-    feedback_frame: {text: "Tuyo matches a masculine noun like el cumpleaños; with a feminine noun it is tuya.", language_code: en, direction: ltr}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Y el {item}?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "El tuyo stands for tu cumpleaños, a masculine noun; for a feminine noun it is la tuya.", language_code: en, direction: ltr}
   - content_key: practice.en-es.es.a1.unit04.lesson06.match.004
     lesson_content_key: es.a1.unit04.lesson06.planear_la_proxima_clase_dialogue
     type: matching_pairs
