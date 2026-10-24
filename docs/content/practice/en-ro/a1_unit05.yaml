@@ -1,0 +1,152 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit05
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit05.family
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Reviewer: confirm meu/mea agreement frames (tatăl meu, mama mea) and un/o gender pairs in
+    the sibling frames.
+    Opus quality pass 2026-10-24: meu feedback now covers neuter nouns; clarified the părinți note.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_familie, w_mamă, w_tată, w_părinți, w_meu, w_mea, w_mama, w_tatăl, w_frate, w_soră, w_frați, w_surori, w_copil, w_copii, w_fiu, w_fiică, w_căsătorit, w_da]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_familie, w_mamă, w_tată, w_părinți, w_meu, w_mea]}}
+  l1_words: &l1_words {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: [w_familie, w_mamă, w_tată, w_părinți, w_mama, w_tatăl]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [adjective, noun, particle], agreement_tags: {semantic: [w_frate, w_soră, w_frați, w_surori, w_copil, w_copii, w_fiu, w_fiică, w_căsătorit, w_da]}}
+  l2_match: &l2_match {language_code: ro, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_frate, w_soră, w_copil, w_fiu, w_fiică, w_căsătorit]}}
+  l2_words: &l2_words {language_code: ro, part_of_speech: [adjective, noun, particle], agreement_tags: {semantic: [w_frate, w_soră, w_frați, w_surori, w_copil, w_copii, w_fiu, w_fiică, w_căsătorit, w_da]}}
+  t_mea: &t_mea {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_mea}}
+  t_meu: &t_meu {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_meu}}
+  t_frati: &t_frati {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_frați}}
+  t_frate: &t_frate {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_frate}}
+  t_fiica: &t_fiica {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_fiică}}
+  t_copii: &t_copii {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_copii}}
+  t_sora: &t_sora {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_soră}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.choose.001
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Meu and mea both mean my: meu goes with masculine and neuter nouns (tatăl meu) and mea with feminine ones (mama mea).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.listen.002
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Părinți means parents and is plural; the two parents are mamă and tată.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.match.003
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l1_pool, second: *l1_pool, third: *l1_pool, fourth: *l1_pool, fifth: *l1_pool, sixth: *l1_pool}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Mamă and tată are the bare nouns; mama and tatăl add the definite article at the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.translate.004
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Romanian puts the definite article at the end of the noun: mamă becomes mama and tată becomes tatăl.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.order.005
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: word_order
+    frame: {text: "Mama {item} și tatăl meu.", language_code: ro, direction: ltr}
+    slots: {item: *t_mea}
+    answer_derivation: {kind: render_frame, frame: {text: "Mama {item} și tatăl meu.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Possessives agree with the noun: mama mea (feminine) but tatăl meu (masculine).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.fill.006
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: fill_in_blank
+    frame: {text: "Mama mea și tatăl {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_meu, hint: *t_meu}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tatăl is masculine, so it takes meu; mama is feminine and takes mea.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson01.translate.007
+    lesson_content_key: ro.a1.unit05.lesson01.familia_mea
+    type: translation
+    frame: {text: "My mother.", language_code: en, direction: ltr}
+    slots: {item: *t_mea}
+    answer_derivation: {kind: render_frame, frame: {text: "Mama {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "The possessive follows the noun in Romanian: mama mea, not mea mama.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.choose.001
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Romanian plurals change the ending: frate becomes frați, soră becomes surori, copil becomes copii.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.listen.002
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Fiu is son and fiică is daughter; a married man is căsătorit.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.match.003
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *l2_match, second: *l2_match, third: *l2_match, fourth: *l2_match, fifth: *l2_match, sixth: *l2_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Frate, fiu and copil are masculine and take un; soră and fiică are feminine and take o.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.translate.004
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Frați is the plural of frate and surori is the plural of soră.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.order.005
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: word_order
+    frame: {text: "Ai {item}?", language_code: ro, direction: ltr}
+    slots: {item: *t_frati}
+    answer_derivation: {kind: render_frame, frame: {text: "Ai {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ai frați? is the question for a friend; with dumneavoastră it becomes Aveți frați?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.fill.006
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: fill_in_blank
+    frame: {text: "Am un {item} și o soră. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_frate, hint: *t_frate}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Un goes with masculine nouns (un frate) and o with feminine ones (o soră).", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.translate.007
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: translation
+    frame: {text: "I have a daughter.", language_code: en, direction: ltr}
+    slots: {item: *t_fiica}
+    answer_derivation: {kind: render_frame, frame: {text: "Am o {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Fiică is feminine, so it takes o; a son is un fiu.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson02.translate.008
+    lesson_content_key: ro.a1.unit05.lesson02.frati_si_copii
+    type: translation
+    frame: {text: "How many children do you have? (informal)", language_code: en, direction: ltr}
+    slots: {item: *t_copii}
+    answer_derivation: {kind: render_frame, frame: {text: "Câți {item} ai?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Câți is the masculine plural form of how many and goes with copii, the plural of copil.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson03.translate.001
+    lesson_content_key: ro.a1.unit05.lesson03.o_discutie_despre_familie
+    type: translation
+    frame: {text: "Do you have brothers, Mihai? (formal)", language_code: en, direction: ltr}
+    slots: {item: *t_frati}
+    answer_derivation: {kind: render_frame, frame: {text: "Aveți {item}, Mihai?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Aveți is the polite form of have; with a friend you would ask Ai frați?", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit05.lesson03.order.002
+    lesson_content_key: ro.a1.unit05.lesson03.o_discutie_despre_familie
+    type: word_order
+    frame: {text: "Da, am un frate și o {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_sora}
+    answer_derivation: {kind: render_frame, frame: {text: "Da, am un frate și o {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Un frate is masculine and o soră is feminine; the sentence answers Aveți frați?", language_code: en, direction: ltr}

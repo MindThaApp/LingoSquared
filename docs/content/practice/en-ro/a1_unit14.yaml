@@ -1,0 +1,139 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit14
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit14.comparisons
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u14* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm mic (masc./neut.) versus mică (fem.) with ceaiul (neuter) and cafeaua/pâinea (feminine), and mai ... decât. Only 3 lexemes: no matching_pairs and recognition pools hold 3 tokens.
+    Opus quality pass 2026-10-24: ceai gender feedback no longer hedges (ceai is neuter).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_mic, w_mică, w_decât]
+slot_presets:
+  q_pool: &q_pool {language_code: ro, part_of_speech: [adjective, particle], agreement_tags: {semantic: [w_mic, w_mică, w_decât]}}
+  mm_pool: &mm_pool {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: [w_mic, w_mică]}}
+  t_mic: &t_mic {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_mic}}
+  t_mica: &t_mica {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_mică}}
+  t_decat: &t_decat {language_code: ro, part_of_speech: particle, agreement_tags: {semantic: w_decât}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.choose.001
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mic goes with masculine and neuter nouns, mică with feminine ones.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.listen.002
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ceaiul e mic but cafeaua e mică; the adjective follows the noun gender.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.order.003
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: word_order
+    frame: {text: "Ceaiul e {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_mic}
+    answer_derivation: {kind: render_frame, frame: {text: "Ceaiul e {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ceai is neuter, and a neuter singular noun takes the masculine form mic.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.order.004
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: word_order
+    frame: {text: "Pâinea e {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_mica}
+    answer_derivation: {kind: render_frame, frame: {text: "Pâinea e {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Pâine is feminine, so the adjective is mică.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.fill.005
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: fill_in_blank
+    frame: {text: "Cafeaua e {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_mica, hint: *t_mica}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cafea is feminine, so the adjective takes the ending -ă: mică.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.fill.006
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: fill_in_blank
+    frame: {text: "Ceaiul e {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_mic, hint: *t_mic}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With a neuter noun like ceai the adjective stays mic.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.translate.007
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: translation
+    frame: {text: "The tea is small.", language_code: en, direction: ltr}
+    slots: {item: *t_mic}
+    answer_derivation: {kind: render_frame, frame: {text: "Ceaiul e {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Ceaiul e mic: the neuter noun takes the same form as a masculine one.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.translate.008
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: translation
+    frame: {text: "The coffee is small.", language_code: en, direction: ltr}
+    slots: {item: *t_mica}
+    answer_derivation: {kind: render_frame, frame: {text: "Cafeaua e {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Cafeaua e mică: a feminine noun needs the feminine form.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson01.translate.009
+    lesson_content_key: ro.a1.unit14.lesson01.mare_mic
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *mm_pool}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mic and mică are one adjective in two forms, chosen by the gender of the noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.choose.001
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Decât means than and follows mai plus an adjective.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.listen.002
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *q_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "In mai mare decât the word decât introduces what you compare with.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.order.003
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: word_order
+    frame: {text: "Cafeaua e mai mare {item} ceaiul.", language_code: ro, direction: ltr}
+    slots: {item: *t_decat}
+    answer_derivation: {kind: render_frame, frame: {text: "Cafeaua e mai mare {item} ceaiul.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mai mare decât builds a comparison: bigger than.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.fill.004
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: fill_in_blank
+    frame: {text: "Pâinea e mai mică {item} cafeaua. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_decat, hint: *t_decat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Decât means than and never changes.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.translate.005
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: translation
+    frame: {text: "The coffee is bigger than the tea.", language_code: en, direction: ltr}
+    slots: {item: *t_decat}
+    answer_derivation: {kind: render_frame, frame: {text: "Cafeaua e mai mare {item} ceaiul.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mai plus adjective gives the comparative; decât names the second item.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.translate.006
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: translation
+    frame: {text: "The bread is smaller than the coffee.", language_code: en, direction: ltr}
+    slots: {item: *t_decat}
+    answer_derivation: {kind: render_frame, frame: {text: "Pâinea e mai mică {item} cafeaua.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "The adjective still agrees with the first noun: pâinea is feminine, so mică.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit14.lesson02.translate.007
+    lesson_content_key: ro.a1.unit14.lesson02.mai_mare_mai_mica
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *t_decat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Decât is the word for than in every comparison.", language_code: en, direction: ltr}
