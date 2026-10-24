@@ -1,0 +1,141 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit12
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit12.past_events
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job B) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u12*, w_<token> anchors). Past-tense frames name the speaker's gender in English; time adverbs and place words are kept out of production prompts where their position can vary, so only one natural Hindi answer exists. 'gaya' (unit09) is not a unit12 lexeme, so the went-forms in slots are gayi only. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_था, w_थी, w_कैसा, w_अच्छी, w_गई, w_मिला, w_मिली, w_मिले]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_था, w_थी, w_कैसा, w_अच्छी]}}
+  thi: &thi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_थी}}
+  kaisa: &kaisa {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_कैसा}}
+  achhi: &achhi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_अच्छी}}
+  tha: &tha {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_था}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_गई, w_मिला, w_मिली]}}
+  gayi: &gayi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_गई}}
+  mila: &mila {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मिला, w_मिली]}}
+  milee: &milee {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_मिली}}
+  l3: &l3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मिले, w_मिला, w_मिली]}}
+  mile: &mile {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_मिले}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.choose.001
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "था and थी replace है in the past and agree with the subject: दिन अच्छा था, फ़िल्म अच्छी थी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.order.002
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: word_order
+    frame: {text: "कल का दिन {item} था?", language_code: hi, direction: ltr}
+    slots: {item: *kaisa}
+    answer_derivation: {kind: render_frame, frame: {text: "कल का दिन {item} था?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "कैसा agrees with the masculine noun दिन; with a feminine noun it would be कैसी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.order.003
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: word_order
+    frame: {text: "चाय की दुकान बहुत {item} थी।", language_code: hi, direction: ltr}
+    slots: {item: *achhi}
+    answer_derivation: {kind: render_frame, frame: {text: "चाय की दुकान बहुत {item} थी।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "अच्छी is feminine because दुकान is feminine, and थी agrees with it.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.fill.004
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: fill_in_blank
+    frame: {text: "फ़िल्म अच्छी {item}। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *thi, hint: *thi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "थी is the feminine past of be, and it agrees with the feminine noun फ़िल्म.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.translate.005
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: translation
+    frame: {text: "The film was good.", language_code: en, direction: ltr}
+    slots: {item: *thi}
+    answer_derivation: {kind: render_frame, frame: {text: "फ़िल्म अच्छी {item}।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "फ़िल्म is feminine, so both the adjective and the past of be take the feminine form.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson01.translate.006
+    lesson_content_key: hi.a1.unit12.lesson01.tha_thi
+    type: translation
+    frame: {text: "The tea shop was very good.", language_code: en, direction: ltr}
+    slots: {item: *achhi}
+    answer_derivation: {kind: render_frame, frame: {text: "चाय की दुकान बहुत {item} थी।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "की links चाय to the feminine noun दुकान, and अच्छी and थी agree with it.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.choose.001
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The past forms of जाना and मिलना end in -आ for a man and -ई for a woman: गया or गई, मिला or मिली.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.order.002
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: word_order
+    frame: {text: "मैं वहाँ प्रिया से {item}।", language_code: hi, direction: ltr}
+    slots: {item: *mila}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं वहाँ प्रिया से {item}।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "से here means with: प्रिया से मिला is met Priya, and the ending follows the speaker.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.fill.003
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: fill_in_blank
+    frame: {text: "मैं कल बाज़ार {item}। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *gayi, hint: *gayi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The ending -ई shows that the speaker is a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.fill.004
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: fill_in_blank
+    frame: {text: "मैं वहाँ अर्जुन से {item}। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *milee, hint: *milee}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The past of मिलना agrees with the speaker, so a woman says मिली.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.translate.005
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: translation
+    frame: {text: "I went home. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *gayi}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं घर {item}।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "A woman uses गई; a man would say गया.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.translate.006
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: translation
+    frame: {text: "I met Priya. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *milee}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं प्रिया से {item}।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "से after the person met means with; the verb ending follows the speaker.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson02.translate.007
+    lesson_content_key: hi.a1.unit12.lesson02.gaya_gai_mila_mili
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The past of a verb agrees with the doer: a man says मिला and a woman says मिली.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson03.choose.001
+    lesson_content_key: hi.a1.unit12.lesson03.arjun_priya_kal
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "मिले is used with हम, तुम and वे: हम मिले, we met.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson03.fill.002
+    lesson_content_key: hi.a1.unit12.lesson03.arjun_priya_kal
+    type: fill_in_blank
+    frame: {text: "वहाँ हम {item}। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *mile, hint: *mile}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With हम the past form ends in -ए, the same as the masculine plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit12.lesson03.translate.003
+    lesson_content_key: hi.a1.unit12.lesson03.arjun_priya_kal
+    type: translation
+    frame: {text: "We met.", language_code: en, direction: ltr}
+    slots: {item: *mile}
+    answer_derivation: {kind: render_frame, frame: {text: "हम {item}।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "हम takes the plural form मिले, whoever is in the group.", language_code: en, direction: ltr}
