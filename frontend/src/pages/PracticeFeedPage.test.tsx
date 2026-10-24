@@ -17,8 +17,17 @@ vi.mock("@lingo/shared/api/endpoints", () => ({
 
 // Render just the item id so the test can see which batch's items are shown.
 vi.mock("../components/exercises/ExerciseRenderer", () => ({
-  ExerciseRenderer: ({ exercise }: { exercise: { id: string } }) => (
-    <div data-testid="item">{exercise.id}</div>
+  ExerciseRenderer: ({
+    exercise,
+    onAnswer,
+  }: {
+    exercise: { id: string };
+    onAnswer: (response: string) => void;
+  }) => (
+    <div data-testid="item">
+      {exercise.id}
+      <button onClick={() => onAnswer("x")}>submit-answer</button>
+    </div>
   ),
 }));
 vi.mock("../components/ConversationRunner", () => ({ ConversationRunner: () => null }));
@@ -89,5 +98,45 @@ describe("PracticeFeedPage mode switch during an in-flight batch", () => {
 
     await waitFor(() => expect(screen.getAllByTestId("item")).toHaveLength(1));
     expect(screen.getByTestId("item")).toHaveTextContent("new-speaking");
+  });
+});
+
+describe("PracticeFeedPage template feedback", () => {
+  function renderFeed() {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <MemoryRouter>
+          <PracticeFeedPage />
+        </MemoryRouter>
+      </QueryClientProvider>,
+    );
+  }
+
+  it("shows the authored feedback after an incorrect answer", async () => {
+    vi.mocked(PracticeApi.batch).mockResolvedValue({ locked: false, items: [item("a")] } as never);
+    vi.mocked(PracticeApi.answer).mockResolvedValue({
+      correct: false,
+      result: "incorrect",
+      correct_response: "one",
+      xp_awarded: 0,
+      feedback: "uno is the number one.",
+    } as never);
+    renderFeed();
+    fireEvent.click(await screen.findByRole("button", { name: "submit-answer" }));
+    expect(await screen.findByText("uno is the number one.")).toBeInTheDocument();
+  });
+
+  it("renders no feedback line when the server sends none", async () => {
+    vi.mocked(PracticeApi.batch).mockResolvedValue({ locked: false, items: [item("a")] } as never);
+    vi.mocked(PracticeApi.answer).mockResolvedValue({
+      correct: true,
+      result: "correct",
+      correct_response: "one",
+      xp_awarded: 5,
+    } as never);
+    renderFeed();
+    fireEvent.click(await screen.findByRole("button", { name: "submit-answer" }));
+    await waitFor(() => expect(PracticeApi.answer).toHaveBeenCalled());
+    expect(screen.queryByText("uno is the number one.")).toBeNull();
   });
 });

@@ -7,6 +7,7 @@ import { CatalogApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { CourseTargetLanguage } from "../components/CourseTargetLanguage";
 import { ExerciseRenderer } from "../components/exercises/ExerciseRenderer";
 import { ReportIssueButton } from "../components/ReportIssueButton";
+import { EmphasizedText } from "../components/EmphasizedText";
 import { QuitConfirm } from "../components/QuitConfirm";
 import { FixMistakes } from "../components/FixMistakes";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
@@ -340,6 +341,11 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
             {status !== "correct" && (
               <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
                 {t("review.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+              </p>
+            )}
+            {result.feedback && (
+              <p style={{ margin: "0 0 6px", fontWeight: 400 }}>
+                <EmphasizedText text={result.feedback} />
               </p>
             )}
             <div style={{ display: "flex", gap: 8 }}>

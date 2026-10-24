@@ -302,7 +302,7 @@ class PracticeBatchIn(BaseModel):
         return self
 class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
-class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None
+class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None; feedback:str|None=None
 class ReviewDueCourseOut(BaseModel):
     course_id: str
     due_count: int

@@ -709,6 +709,59 @@ def build_prompt(
     return prompt, answer
 
 
+def render_item_feedback(
+    db: Session,
+    template: PracticeTemplate,
+    course_id: str,
+    stored_slots: dict[str, Any] | None,
+) -> str | None:
+    """Render the template's authored `feedback_frame` for an answered item.
+
+    PracticeItem only keeps slot -> token, so the lexemes are re-resolved
+    (course + token + the template's own slot constraints) to honour the
+    frame's `slot_rendering`. Returns None when the template has no
+    feedback text or a slot can no longer be resolved; feedback is purely
+    additive and must never fail an answer.
+    """
+    frame = template.feedback_frame
+    text_value = frame.get("text") if isinstance(frame, dict) else None
+    if not isinstance(text_value, str) or not text_value.strip():
+        return None
+    names = set(SLOT_RE.findall(text_value))
+    stored = stored_slots if isinstance(stored_slots, dict) else {}
+    filled: dict[str, Lexeme] = {}
+    if names:
+        tokens = [stored[n] for n in names if isinstance(stored.get(n), str)]
+        if len(tokens) != len(names):
+            return None
+        rows = db.scalars(
+            select(Lexeme).where(
+                Lexeme.course_id == course_id,
+                Lexeme.token.in_(tokens),
+            )
+        ).all()
+        for name in names:
+            constraints = template.slots.get(name)
+            if not isinstance(constraints, dict):
+                return None
+            match = next(
+                (
+                    row
+                    for row in rows
+                    if row.token == stored[name]
+                    and lexeme_matches(row, constraints)
+                ),
+                None,
+            )
+            if match is None:
+                return None
+            filled[name] = match
+    try:
+        return render_frame(frame, filled) or None
+    except (KeyError, AttributeError):
+        return None
+
+
 def _answer_slot_names(template: PracticeTemplate) -> set[str]:
     """Slots whose filled lexeme actually shows up in the GRADED answer.
 
