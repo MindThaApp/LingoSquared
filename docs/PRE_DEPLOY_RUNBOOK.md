@@ -258,10 +258,23 @@ curl -X POST http://192.168.4.4:8010/admin/content/import \
 # 8. Backfill lexemes — MUST run after step 7 (needs the real lessons to
 #    exist) and before practice-template import (step 9). Needs the full
 #    repo mounted, not just backend/ (the image only contains backend/).
-#    Run the correct backfill script(s) for every course direction actually
-#    imported in step 7: backfill_lexemes.py (en-fa, original),
-#    backfill_lexemes_en_nl.py, backfill_lexemes_en_prs.py,
-#    backfill_lexemes_fa_en.py, backfill_lexemes_nl_en.py, backfill_lexemes_prs_en.py.
+#    Order is fixed: course import (step 7) -> backfills (this step) ->
+#    practice import (step 9). Run the backfill script for every course
+#    direction actually imported in step 7. All 16 scripts:
+#      original 6:  backfill_lexemes.py (en-fa), backfill_lexemes_en_nl.py,
+#                   backfill_lexemes_en_prs.py, backfill_lexemes_fa_en.py,
+#                   backfill_lexemes_nl_en.py, backfill_lexemes_prs_en.py
+#      new 10 (Session 10, A1 only, shared runner
+#      scripts/_target_lexeme_backfill_common.py):
+#                   backfill_lexemes_en_es.py, backfill_lexemes_en_fr.py,
+#                   backfill_lexemes_en_de.py, backfill_lexemes_en_it.py,
+#                   backfill_lexemes_en_ru.py, backfill_lexemes_en_pl.py,
+#                   backfill_lexemes_en_ro.py, backfill_lexemes_en_hi.py,
+#                   backfill_lexemes_en_ar.py, backfill_lexemes_de_en.py
+#    sync_dev_db.sh globs scripts/backfill_lexemes*.py, so it runs all 16;
+#    by hand, list them explicitly. _target_lexeme_backfill_common.py is a
+#    library, not a backfill: never run it directly. Each script supports
+#    --dry-run; dry-run all 16 before the real run.
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run --rm -v \"\$(cd .. && pwd):/repo\" -e PYTHONPATH=/repo/backend --entrypoint python api /repo/scripts/backfill_lexemes.py"
 # repeat per launch-pair backfill script as needed
 
