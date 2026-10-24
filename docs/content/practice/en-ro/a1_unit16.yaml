@@ -1,0 +1,196 @@
+schema_version: "1.0"
+pack_key: practice.en-ro.a1.unit16
+source_language: en
+target_language: ro
+unit_content_key: ro.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ro job C) from scripts/backfill_lexemes_en_ro.py
+    lexemes (ro_a1_u16* tags). Recognition, matching and bare-word production use curated
+    w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
+    single w_ anchors. English prompts name tu versus dumneavoastră register and speaker gender where it matters.
+    Feedback lines carry a usage or grammar point. Reviewer: confirm Mă doare capul / stomacul, Vă doare... (formal), Nu mă simt bine, Sunt bolnav (said by Mihai), Am nevoie de un doctor, Aveți nevoie de odihnă and multă apă.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_doare, w_cap, w_stomac, w_capul, w_stomacul, w_simt, w_sunt, w_bolnav, w_doctor, w_nevoie, w_odihnă, w_multă]
+slot_presets:
+  l1_pool: &l1_pool {language_code: ro, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_doare, w_cap, w_stomac, w_capul, w_stomacul]}}
+  l2_pool: &l2_pool {language_code: ro, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_simt, w_sunt, w_bolnav, w_doctor, w_nevoie]}}
+  l3_pool: &l3_pool {language_code: ro, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_odihnă, w_multă, w_doctor, w_bolnav]}}
+  m6: &m6 {language_code: ro, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_doare, w_cap, w_stomac, w_bolnav, w_doctor, w_odihnă]}}
+  t_doare: &t_doare {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_doare}}
+  t_capul: &t_capul {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_capul}}
+  t_stomacul: &t_stomacul {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_stomacul}}
+  t_simt: &t_simt {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: w_simt}}
+  t_bolnav: &t_bolnav {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_bolnav}}
+  t_nevoie: &t_nevoie {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_nevoie}}
+  t_doctor: &t_doctor {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_doctor}}
+  t_odihna: &t_odihna {language_code: ro, part_of_speech: noun, agreement_tags: {semantic: w_odihnă}}
+  t_multa: &t_multa {language_code: ro, part_of_speech: adjective, agreement_tags: {semantic: w_multă}}
+templates:
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.choose.001
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Capul and stomacul are cap and stomac with the article -ul; doare means hurts.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.listen.002
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l1_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Mă doare plus the part of the body says that it hurts.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.order.003
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: word_order
+    frame: {text: "Mă {item} capul.", language_code: ro, direction: ltr}
+    slots: {item: *t_doare}
+    answer_derivation: {kind: render_frame, frame: {text: "Mă {item} capul.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mă doare capul literally says the head hurts me.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.order.004
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: word_order
+    frame: {text: "Mă doare {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_stomacul}
+    answer_derivation: {kind: render_frame, frame: {text: "Mă doare {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Stomacul is stomac plus the article -ul.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.fill.005
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: fill_in_blank
+    frame: {text: "Mă doare {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_capul, hint: *t_capul}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Capul is cap plus -ul, so the sentence says the head.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.translate.006
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: translation
+    frame: {text: "My head hurts.", language_code: en, direction: ltr}
+    slots: {item: *t_capul}
+    answer_derivation: {kind: render_frame, frame: {text: "Mă doare {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Romanian says the head hurts me instead of my head.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.translate.007
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: translation
+    frame: {text: "My stomach hurts.", language_code: en, direction: ltr}
+    slots: {item: *t_stomacul}
+    answer_derivation: {kind: render_frame, frame: {text: "Mă doare {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Doare stays the same because the thing that hurts is singular.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson01.translate.008
+    lesson_content_key: ro.a1.unit16.lesson01.ma_doare_capul
+    type: translation
+    frame: {text: "Does your head or your stomach hurt? (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_stomacul}
+    answer_derivation: {kind: render_frame, frame: {text: "Vă doare capul sau {item}?", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Vă is the dumneavoastră form of you; with a friend you would say Te doare.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.choose.001
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Simt means I feel, as in Mă simt bine; sunt means I am.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.listen.002
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: listen_select
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l2_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Nevoie appears in Am nevoie de un doctor, meaning I need a doctor.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.match.003
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ro, direction: ltr}
+    slots: {first: *m6, second: *m6, third: *m6, fourth: *m6, fifth: *m6, sixth: *m6}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These words name body parts, a state and a person who helps; doare is the one verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.order.004
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: word_order
+    frame: {text: "Nu mă {item} bine.", language_code: ro, direction: ltr}
+    slots: {item: *t_simt}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu mă {item} bine.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Mă simt is a reflexive verb, so mă stays before it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.order.005
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: word_order
+    frame: {text: "Nu mă simt bine. Sunt {item}.", language_code: ro, direction: ltr}
+    slots: {item: *t_bolnav}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu mă simt bine. Sunt {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Bolnav is the masculine form, used when a man says it.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.fill.006
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: fill_in_blank
+    frame: {text: "Am {item} de un doctor. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_nevoie, hint: *t_nevoie}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Am nevoie de means I need and is followed by de.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.fill.007
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: fill_in_blank
+    frame: {text: "Am nevoie de un {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_doctor, hint: *t_doctor}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Doctor takes un: un doctor.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.translate.008
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: translation
+    frame: {text: "I do not feel well.", language_code: en, direction: ltr}
+    slots: {item: *t_simt}
+    answer_derivation: {kind: render_frame, frame: {text: "Nu mă {item} bine.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Nu goes before mă simt to make the negative.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.translate.009
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: translation
+    frame: {text: "I am sick. (said by a man)", language_code: en, direction: ltr}
+    slots: {item: *t_bolnav}
+    answer_derivation: {kind: render_frame, frame: {text: "Sunt {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Bolnav is the form for a male speaker; a woman would use a different ending.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson02.translate.010
+    lesson_content_key: ro.a1.unit16.lesson02.nu_ma_simt_bine
+    type: translation
+    frame: {text: "I need a doctor.", language_code: en, direction: ltr}
+    slots: {item: *t_doctor}
+    answer_derivation: {kind: render_frame, frame: {text: "Am nevoie de un {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Am nevoie de is the usual way to say I need.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson03.choose.001
+    lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ro, direction: ltr}
+    slots: {item: *l3_pool}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Odihnă means rest and multă means a lot of, agreeing with feminine nouns.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson03.order.002
+    lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+    type: word_order
+    frame: {text: "Odihnă și {item} apă!", language_code: ro, direction: ltr}
+    slots: {item: *t_multa}
+    answer_derivation: {kind: render_frame, frame: {text: "Odihnă și {item} apă!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Apă is feminine, so a lot of is multă.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson03.fill.003
+    lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+    type: fill_in_blank
+    frame: {text: "Aveți nevoie de {item}. ({hint})", language_code: ro, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *t_odihna, hint: *t_odihna}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Aveți nevoie de is the formal you need; odihnă follows de.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson03.translate.004
+    lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+    type: translation
+    frame: {text: "You need rest. (formal, to someone you address with dumneavoastră)", language_code: en, direction: ltr}
+    slots: {item: *t_odihna}
+    answer_derivation: {kind: render_frame, frame: {text: "Aveți nevoie de {item}.", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Aveți is the dumneavoastră form of have; with a friend you would say Ai.", language_code: en, direction: ltr}
+  - content_key: practice.en-ro.ro.a1.unit16.lesson03.translate.005
+    lesson_content_key: ro.a1.unit16.lesson03.mihai_este_bolnav
+    type: translation
+    frame: {text: "Rest and a lot of water!", language_code: en, direction: ltr}
+    slots: {item: *t_multa}
+    answer_derivation: {kind: render_frame, frame: {text: "Odihnă și {item} apă!", language_code: ro, direction: ltr}}
+    feedback_frame: {text: "Multă agrees with the feminine noun apă.", language_code: en, direction: ltr}
