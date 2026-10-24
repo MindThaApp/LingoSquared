@@ -6,6 +6,7 @@ unit_content_key: prs.a1.unit20.past_events
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: 'Authored 2026-07-09, part of an overnight practice-pool depth-extension pass closing the gap between the practice
     manifest (previously capped at unit19) and the real prs realization depth (now through unit44+). This pass covers units
     20-24 only.
@@ -67,7 +68,9 @@ review:
     slot_presets and tag_schema entries (nothing in this pack references them anymore). Template count unchanged (16 -- nothing
     dropped, only re-anchored/widened/reduced). Verified with scripts/_practice_unit_scope_check.py (0 DEAD, 0 below-floor for
     this file after the fix), scripts/compile_content.py practice-validate (0 errors), and scripts/check_dari_register.py (0
-    new findings) -- see the coordinator report for exact output.'
+    new findings) -- see the coordinator report for exact output.
+
+    Review 2026-10-24 (en-prs practice native-quality pass): 5 fixes. time_reference_gloss.001 feedback no longer claims all pool words are this unit''s own (pool spans units); tired_fill.001 frame now carries context (دیروز کار کردم و ___ شدم) instead of a bare ''___ شدم''; tired_fill volume_order feedback was the bare Dari sentence, now an English explanation; person_past_order.002 word_order replaced by a past_verb_third translation (the third-person pool also fills کرد/شد/دید/برد, ungrammatical after a bare دیروز); past_verb_pool_pair.003 feedback no longer says ''in this unit''. NATIVE FLAGS: the third-person gloss of کرد (''did; made (he/she, past)'') is inconsistent with the others (see gloss lane); native speaker to confirm that ''دیروز کار کردم و خسته شدم'' is the natural phrasing.'
 tag_schema:
   part_of_speech:
   - noun
@@ -168,7 +171,7 @@ templates:
     kind: slot_gloss
     slot: unit_word
   feedback_frame:
-    text: '{unit_word} is one of this unit''s own words.'
+    text: '*{unit_word}* is a time word or a past-tense verb from the yesterday lessons.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson01.yesterday_went_order.002
@@ -311,7 +314,7 @@ templates:
   lesson_content_key: prs.a1.unit20.lesson05.reading_longer_yesterday
   type: fill_in_blank
   frame:
-    text: '{tired_word} شدم'
+    text: دیروز کار کردم و {tired_word} شدم
     language_code: prs
     direction: rtl
   slots:
@@ -320,7 +323,7 @@ templates:
     kind: slot_text
     slot: tired_word
   feedback_frame:
-    text: خسته شدم means I got tired.
+    text: '*خسته شدم* means I got tired.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson05.past_verb_first_gloss.002
@@ -374,29 +377,26 @@ templates:
     text: '{past_verb_third} is a third-person simple-past verb form.'
     language_code: en
     direction: ltr
-- content_key: practice.en-prs.prs.a1.unit20.lesson06.person_past_order.002
+- content_key: practice.en-prs.prs.a1.unit20.lesson06.past_verb_third_translate.002
   lesson_content_key: prs.a1.unit20.lesson06.yesterday_dialogue
-  type: word_order
-  # Re-anchored from a 2-slot person_name+past_verb_third combo
-  # (person_name: 0 unit-scoped candidates -- reused from earlier
-  # units) to a single past_verb_third slot (3: رفت/کرد/شد), all
-  # grammatical in this frame regardless of which of the three fills it
-  # (دیروز رفت / دیروز کرد / دیروز شد, all valid "yesterday [he/she]
-  # ...").
+  type: translation
+  # REVIEW 2026-10-24: replaced the word_order "دیروز {past_verb_third}"
+  # -- the course-wide third-person pool also fills it with کرد/شد/دید/
+  # برد, which are not grammatical after a bare دیروز (دیروز کرد, دیروز
+  # شد, ...). A single-word translation is correct for every filler.
   frame:
-    text: دیروز {past_verb_third}
-    language_code: prs
-    direction: rtl
+    text: '{past_verb_third}'
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      past_verb_third: english_gloss
   slots:
     past_verb_third: *id009
   answer_derivation:
-    kind: render_frame
-    frame:
-      text: دیروز {past_verb_third}
-      language_code: prs
-      direction: rtl
+    kind: slot_text
+    slot: past_verb_third
   feedback_frame:
-    text: 'Word order: دیروز رفت (he/she went yesterday).'
+    text: '*{past_verb_third}* is the Dari word for this.'
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson06.past_verb_pool_pair.003
@@ -442,7 +442,7 @@ templates:
     - word_seven
     - word_eight
   feedback_frame:
-    text: Match each word to its meaning -- all the past-tense verb forms in this unit.
+    text: Match each past-tense verb form to its meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-prs.prs.a1.unit20.lesson06.past_verb_second_translate.004
@@ -483,6 +483,6 @@ templates:
       language_code: prs
       direction: rtl
   feedback_frame:
-    text: '{tired_word} شدم'
-    language_code: prs
-    direction: rtl
+    text: '*{tired_word} شدم* means I got tired.'
+    language_code: en
+    direction: ltr
