@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit07
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit07.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job B) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u07*, w_<token> anchors). का/की and सस्ता/सस्ती frames fix the noun (bag masc., shirt and hat fem.) so agreement is deterministic. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_दुकान, w_बाज़ार, w_दुकानदार, w_कमीज़, w_बैग, w_टोपी, w_सिर्फ़, w_बताओ, w_सस्ता, w_महंगा, w_सस्ती, w_महंगी, w_का, w_की, w_खरीदना, w_खरीदते, w_जी]
+slot_presets:
+  shop: &shop {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_दुकान, w_बाज़ार, w_दुकानदार, w_कमीज़, w_बैग, w_टोपी]}}
+  shopm: &shopm {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_दुकान, w_बाज़ार, w_दुकानदार, w_कमीज़, w_बैग, w_टोपी, w_सिर्फ़, w_बताओ]}}
+  items: &items {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_कमीज़, w_बैग, w_टोपी]}}
+  degree: &degree {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सस्ता, w_महंगा, w_सस्ती, w_महंगी, w_का, w_की]}}
+  l3: &l3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_खरीदना, w_खरीदते, w_दुकान, w_बाज़ार, w_बताओ]}}
+  words: &words {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_दुकान, w_बाज़ार, w_दुकानदार, w_कमीज़, w_बैग, w_टोपी]}}
+  bag2: &bag2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_कमीज़, w_बैग]}}
+  sirf: &sirf {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_सिर्फ़}}
+  ji: &ji {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_जी}}
+  ka: &ka {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_का}}
+  ki: &ki {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_की}}
+  hatadj: &hatadj {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सस्ती, w_महंगी]}}
+  mahngi: &mahngi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_महंगी}}
+  sasta: &sasta {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_सस्ता}}
+  kharid: &kharid {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_खरीदते}}
+  kamiz: &kamiz {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_कमीज़}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.choose.001
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *shop}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "दुकानदार is formed from दुकान (shop) plus -दार, a common ending for a person who keeps or has something.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.listen.002
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *shop}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "कमीज़ and टोपी are feminine nouns, while बैग is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.order.003
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: word_order
+    frame: {text: "मुझे यह {item} चाहिए।", language_code: hi, direction: ltr}
+    slots: {item: *items}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे यह {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "यह (this) comes right before the noun it points to: मुझे यह कमीज़ चाहिए.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.fill.004
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: fill_in_blank
+    frame: {text: "जी नहीं, {item} यह। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *sirf, hint: *sirf}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "जी नहीं is a polite no; सिर्फ़ narrows the request to only this.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.match.005
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *shopm, second: *shopm, third: *shopm, fourth: *shopm, fifth: *shopm, sixth: *shopm}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hindi shop words are used without a or the, so बाज़ार can be a market or the market.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.translate.006
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: translation
+    frame: {text: "I would like this shirt.", language_code: en, direction: ltr}
+    slots: {item: *kamiz}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे यह {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मुझे ... चाहिए stays the same for every speaker, and यह points at the noun right after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson01.translate.007
+    lesson_content_key: hi.a1.unit07.lesson01.dukaan_mein
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In a Hindi shop the person selling is the दुकानदार and the place is the दुकान; the market itself is the बाज़ार.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.choose.001
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *degree}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "सस्ता and महंगा change like मेरा and मेरी: feminine nouns take सस्ती and महंगी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.order.002
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: word_order
+    frame: {text: "यह टोपी {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *hatadj}
+    answer_derivation: {kind: render_frame, frame: {text: "यह टोपी {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "टोपी is feminine, so the adjective ends in -ी: सस्ती or महंगी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.fill.003
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: fill_in_blank
+    frame: {text: "यह कमीज़ बहुत {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *mahngi, hint: *mahngi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "कमीज़ is feminine, so the adjective is महंगी and not महंगा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.fill.004
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: fill_in_blank
+    frame: {text: "यह बैग {item} है! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *sasta, hint: *sasta}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "बैग is masculine, so the adjective is सस्ता and not सस्ती.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.translate.005
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: translation
+    frame: {text: "How much is this shirt?", language_code: en, direction: ltr}
+    slots: {item: *ki}
+    answer_derivation: {kind: render_frame, frame: {text: "यह कमीज़ कितने {item} है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The का or की in a price question agrees with the thing being priced, not with कितने: कमीज़ is feminine, so की.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson02.translate.006
+    lesson_content_key: hi.a1.unit07.lesson02.keemat_aur_matra
+    type: translation
+    frame: {text: "How much is this bag?", language_code: en, direction: ltr}
+    slots: {item: *ka}
+    answer_derivation: {kind: render_frame, frame: {text: "यह बैग कितने {item} है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The का or की in a price question agrees with the thing being priced: बैग is masculine, so का.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson03.listen.001
+    lesson_content_key: hi.a1.unit07.lesson03.priya_aur_arjun_ki_khareedari
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "खरीदते हैं after चलो makes a suggestion, while खरीदना is the dictionary form to buy.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson03.order.002
+    lesson_content_key: hi.a1.unit07.lesson03.priya_aur_arjun_ki_khareedari
+    type: word_order
+    frame: {text: "ठीक है! {item} या टोपी?", language_code: hi, direction: ltr}
+    slots: {item: *bag2}
+    answer_derivation: {kind: render_frame, frame: {text: "ठीक है! {item} या टोपी?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "या joins the two choices, and the question is carried only by the rising voice and the question mark.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson03.fill.003
+    lesson_content_key: hi.a1.unit07.lesson03.priya_aur_arjun_ki_khareedari
+    type: fill_in_blank
+    frame: {text: "चलो, कुछ {item} हैं! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kharid, hint: *kharid}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "खरीदते with हैं after चलो means let us buy; the -ते form does not depend on the gender of the group.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson03.fill.004
+    lesson_content_key: hi.a1.unit07.lesson03.priya_aur_arjun_ki_khareedari
+    type: fill_in_blank
+    frame: {text: "यह टोपी पचास रुपये {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *ki, hint: *ki}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In यह टोपी पचास रुपये की है, की agrees with the feminine noun टोपी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit07.lesson03.translate.005
+    lesson_content_key: hi.a1.unit07.lesson03.priya_aur_arjun_ki_khareedari
+    type: translation
+    frame: {text: "Let's buy something!", language_code: en, direction: ltr}
+    slots: {item: *kharid}
+    answer_derivation: {kind: render_frame, frame: {text: "चलो, कुछ {item} हैं!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "चलो plus a plural -ते verb with हैं is the usual way to make a suggestion.", language_code: en, direction: ltr}
