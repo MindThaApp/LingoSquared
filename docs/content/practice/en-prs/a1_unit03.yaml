@@ -6,79 +6,20 @@ unit_content_key: prs.a1.unit03.family
 review:
   status: reviewed
   fresh_context: false
-  notes: >-
-    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06,
-    closing the en-prs gap where the practice pool only covered units
-    01-02 despite the realization/overlay already having 8 stable A1
-    units plus 2 A2 units. Extended scripts/backfill_lexemes_en_prs.py's
-    UNIT_FILES to add units 03-08 and a2 units 09-10 in one pass,
-    hand-classifying every genuinely new introduced_token directly from
-    each real realization/overlay file pair (not guessed), reusing this
-    file's own established four-slot-shape convention (multiple_choice
-    recognition, a natural-sentence fill_in_blank per guide §13,
-    translation, matching_pairs) exactly as unit02's pack already does.
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Authored by the practice-pool-sync lane (fa/prs bundle), 2026-07-06, closing the en-prs gap where the practice pool only covered units 01-02 despite the realization/overlay already having 8 stable A1 units plus 2 A2 units. Extended scripts/backfill_lexemes_en_prs.py's UNIT_FILES to add units 03-08 and a2 units 09-10 in one pass, hand-classifying every genuinely new introduced_token directly from each real realization/overlay file pair (not guessed), reusing this file's own established four-slot-shape convention (multiple_choice recognition, a natural-sentence fill_in_blank per guide §13, translation, matching_pairs) exactly as unit02's pack already does.
+    Four semantic groups, each with >=3 distinct members (verified against scripts/_practice_slot_check.py's >=3-for-multiple_choice/ matching_pairs rule): immediate_family (مادر/پدر/برادر/خواهر), uncle_aunt (کاکا/عمه/ماما/خاله -- the paternal/maternal distinction this unit's own review notes call out as the key English-speaker teaching point), marital_word (متأهل/مجرد/شوهر/خانم), have_verb (دارم/داریم/دارین). Deliberately left the two-member پدرکلان/ مادرکلان "grandparent" pair untested by any template (thin, below the matching_pairs-friendly threshold this pass prioritized covering the richer groups instead) -- still taught in the lesson itself, just not drilled here; a follow-up pass could add a matching_pairs-only pair for it later.
+    Every fill_in_blank frame embeds the slot in a real Dari sentence with visible surrounding context, never a bare blanked token alone (guide §13). Every lesson_content_key anchor verified directly against the real realization file to introduce genuinely new vocabulary of its own (non-empty introduced_tokens) -- avoiding the exact anchor-bug class found and fixed live tonight in this session's fa-en QA pass (a template pointing at a pure-review lesson with no Lexeme provenance). No listen_select/listen_type anywhere, matching this direction's standing zero-TTS-for-Dari exclusion. No bare unquoted yes/no/true/false anywhere.
+    Verified with a standalone throwaway script reusing scripts/_practice_slot_check.py's lexeme_matches()/check_pack() against scripts/backfill_lexemes_en_prs.py's real iter_specs() output -- 0 problems across all templates in this pack. Also ran scripts/compile_content.py practice-validate for the full en-prs pack (units 01-10 together) -- 0 errors/0 warnings. Needs the standard fresh-context review before import; no backfill_lexemes_ en_prs.py run has actually happened against a real database yet in this pass.
+    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix, scripts/_practice_unit_scope_check.py): the whole-direction check above only proves a slot has candidates SOMEWHERE in en-prs; generate_checkpoint() scopes candidates to THIS unit's own lexemes only, and khanem/خانم above turned out to be introduced in unit02, not here -- marital_word's real unit03-scoped pool is 3 (متأهل/مجرد/شوهر), not 4, which left marital_pair.004 DEAD (declared 4 slots, 0 could ever fill from this unit alone) and have_pair.004 below the 6-pair floor (3 slots, the honest have_verb-only ceiling). Fixed pack-only, no backfill/realization/overlay edits, no new vocabulary: (1) marital_pair.004 widened via a new marital_review preset (marital_word UNION study_vocab_word UNION family_message_word UNION time_reference = 3+1+1+1 = 6 distinct: متأهل/مجرد/شوهر/محصل/فامیل/هنوز, all genuinely introduced by this unit's own lesson05/lesson06). (2) have_pair.004 widened via a new have_and_preference preset (have_verb UNION preference_verb = the full داشتن paradigm this unit teaches: دارم/داریم/دارین/ندارم/دارد/ندارد, 6 distinct), kept disjoint from marital_review so the two matching_pairs templates don't recycle each other's tokens. Re-verified 0 DEAD / 0 below-floor for this pack via scripts/_practice_unit_scope_check.py and 0 errors via scripts/compile_content.py practice-validate (see coordinator report for the exact invocation/output).
 
-    Four semantic groups, each with >=3 distinct members (verified
-    against scripts/_practice_slot_check.py's >=3-for-multiple_choice/
-    matching_pairs rule): immediate_family (مادر/پدر/برادر/خواهر),
-    uncle_aunt (کاکا/عمه/ماما/خاله -- the paternal/maternal distinction
-    this unit's own review notes call out as the key English-speaker
-    teaching point), marital_word (متأهل/مجرد/شوهر/خانم), have_verb
-    (دارم/داریم/دارین). Deliberately left the two-member پدرکلان/
-    مادرکلان "grandparent" pair untested by any template (thin,
-    below the matching_pairs-friendly threshold this pass prioritized
-    covering the richer groups instead) -- still taught in the lesson
-    itself, just not drilled here; a follow-up pass could add a
-    matching_pairs-only pair for it later.
-
-    Every fill_in_blank frame embeds the slot in a real Dari sentence
-    with visible surrounding context, never a bare blanked token alone
-    (guide §13). Every lesson_content_key anchor verified directly
-    against the real realization file to introduce genuinely new
-    vocabulary of its own (non-empty introduced_tokens) -- avoiding the
-    exact anchor-bug class found and fixed live tonight in this
-    session's fa-en QA pass (a template pointing at a pure-review
-    lesson with no Lexeme provenance). No listen_select/listen_type
-    anywhere, matching this direction's standing zero-TTS-for-Dari
-    exclusion. No bare unquoted yes/no/true/false anywhere.
-
-    Verified with a standalone throwaway script reusing
-    scripts/_practice_slot_check.py's lexeme_matches()/check_pack()
-    against scripts/backfill_lexemes_en_prs.py's real iter_specs()
-    output -- 0 problems across all templates in this pack. Also ran
-    scripts/compile_content.py practice-validate for the full en-prs
-    pack (units 01-10 together) -- 0 errors/0 warnings. Needs the
-    standard fresh-context review before import; no backfill_lexemes_
-    en_prs.py run has actually happened against a real database yet in
-    this pass.
-
-    REAUTH PASS 2026-07-24 (unit-scope DEAD/FLOOR fix,
-    scripts/_practice_unit_scope_check.py): the whole-direction check
-    above only proves a slot has candidates SOMEWHERE in en-prs;
-    generate_checkpoint() scopes candidates to THIS unit's own lexemes
-    only, and khanem/خانم above turned out to be introduced in unit02, not
-    here -- marital_word's real unit03-scoped pool is 3 (متأهل/مجرد/شوهر),
-    not 4, which left marital_pair.004 DEAD (declared 4 slots, 0 could
-    ever fill from this unit alone) and have_pair.004 below the 6-pair
-    floor (3 slots, the honest have_verb-only ceiling). Fixed pack-only,
-    no backfill/realization/overlay edits, no new vocabulary:
-    (1) marital_pair.004 widened via a new marital_review preset
-    (marital_word UNION study_vocab_word UNION family_message_word UNION
-    time_reference = 3+1+1+1 = 6 distinct: متأهل/مجرد/شوهر/محصل/فامیل/هنوز,
-    all genuinely introduced by this unit's own lesson05/lesson06).
-    (2) have_pair.004 widened via a new have_and_preference preset
-    (have_verb UNION preference_verb = the full داشتن paradigm this unit
-    teaches: دارم/داریم/دارین/ندارم/دارد/ندارد, 6 distinct), kept disjoint
-    from marital_review so the two matching_pairs templates don't recycle
-    each other's tokens. Re-verified 0 DEAD / 0 below-floor for this pack
-    via scripts/_practice_unit_scope_check.py and 0 errors via
-    scripts/compile_content.py practice-validate (see coordinator report
-    for the exact invocation/output).
+    Review 2026-10-24 (en-prs practice native-quality pass): 3 fixes. uncle_aunt_pair.004 was an exact duplicate of family_pair.004 (same 8 words); it now uses the 12 lesson-02 extended-family words. have_pair feedback said 'to its subject' for a pool that includes negatives; Dari verb *داشتن* wrapped in asterisks in two feedback lines. NATIVE FLAGS: پدرکلان / مادرکلان as grandparent terms (vs بابا کلان / ننه کلان regionally); کاکا for paternal uncle.
 tag_schema:
   part_of_speech: [noun, adjective, verb, adverb]
   agreement_tags:
     semantic: [immediate_family, uncle_aunt, marital_word, have_verb,
-               study_vocab_word, family_message_word, time_reference, preference_verb]
+               en_prs_a1_unit03_lesson02_words, study_vocab_word, family_message_word, time_reference, preference_verb]
 slot_presets:
   immediate_family: &immediate_family {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: immediate_family}}
   uncle_aunt: &uncle_aunt {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: uncle_aunt}}
@@ -88,6 +29,8 @@ slot_presets:
   # alone; pooled together for the matching_pairs templates below to reach
   # 8 (AUTHORING_GUIDE.md #16) -- both are lesson01/lesson02 of this same
   # unit, a coherent single "family members" theme, real vocabulary only.
+  # Lesson-2 extended-family words (uncles, aunts, grandparents, my-forms, paternal/maternal).
+  extended_family: &extended_family {language_code: prs, part_of_speech: [noun, adjective], agreement_tags: {semantic: en_prs_a1_unit03_lesson02_words}}
   family_pool: &family_pool {language_code: prs, part_of_speech: noun, agreement_tags: {semantic: [immediate_family, uncle_aunt]}}
   # REAUTH 2026-07-24 (unit-scope DEAD/FLOOR fix, see review.notes below):
   # marital_word alone has only 3 unit-scoped candidates (متأهل/مجرد/شوهر --
@@ -151,13 +94,13 @@ templates:
     lesson_content_key: prs.a1.unit03.lesson02.extended_family
     type: matching_pairs
     # Expanded 2->8 pairs 2026-07-06 (AUTHORING_GUIDE.md #16 retrofit),
-    # pooling uncle_aunt with lesson01's immediate_family (family_pool
-    # preset above) -- verified via scripts/_practice_slot_check.py.
+    # now the lesson-2 extended-family words (uncles, aunts, grandparents,
+    # my-forms, paternal/maternal; the old pool duplicated family_pair.004 exactly) -- verified via scripts/_practice_slot_check.py.
     frame: {text: "{family_one} — {family_two} — {family_three} — {family_four} — {family_five} — {family_six} — {family_seven} — {family_eight}", language_code: prs, direction: rtl}
-    slots: {family_one: *family_pool, family_two: *family_pool, family_three: *family_pool, family_four: *family_pool, family_five: *family_pool, family_six: *family_pool, family_seven: *family_pool, family_eight: *family_pool}
+    slots: {family_one: *extended_family, family_two: *extended_family, family_three: *extended_family, family_four: *extended_family, family_five: *extended_family, family_six: *extended_family, family_seven: *extended_family, family_eight: *extended_family}
     slot_relations: [{kind: distinct, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}]
     answer_derivation: {kind: matching_pairs, slots: [family_one, family_two, family_three, family_four, family_five, family_six, family_seven, family_eight]}
-    feedback_frame: {text: "Match each word to the exact relationship it names.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each extended-family word to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 3: describing family size, incl. the دارم/داریم/دارین have-forms.
   - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_gloss.001
@@ -166,7 +109,7 @@ templates:
     frame: {text: "{have_verb}", language_code: prs, direction: rtl}
     slots: {have_verb: *have_verb}
     answer_derivation: {kind: slot_gloss, slot: have_verb}
-    feedback_frame: {text: "{have_verb} is a form of داشتن (to have).", language_code: en, direction: ltr}
+    feedback_frame: {text: "{have_verb} is a form of *داشتن* (to have).", language_code: en, direction: ltr}
   - content_key: practice.en-prs.prs.a1.unit03.lesson03.have_translate.003
     lesson_content_key: prs.a1.unit03.lesson03.family_size
     type: translation
@@ -186,7 +129,7 @@ templates:
     slots: {have_verb_one: *have_and_preference, have_verb_two: *have_and_preference, have_verb_three: *have_and_preference, have_verb_four: *have_and_preference, have_verb_five: *have_and_preference, have_verb_six: *have_and_preference}
     slot_relations: [{kind: distinct, slots: [have_verb_one, have_verb_two, have_verb_three, have_verb_four, have_verb_five, have_verb_six]}]
     answer_derivation: {kind: matching_pairs, slots: [have_verb_one, have_verb_two, have_verb_three, have_verb_four, have_verb_five, have_verb_six]}
-    feedback_frame: {text: "Match each form of داشتن (to have) to its subject.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Match each form of *داشتن* (to have) to its English meaning.", language_code: en, direction: ltr}
 
   # Lesson 5: marriage and marital status.
   - content_key: practice.en-prs.prs.a1.unit03.lesson05.marital_gloss.001
