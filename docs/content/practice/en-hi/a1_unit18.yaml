@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit18
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u18*, w_<token> anchors). Lesson 3 (dialogue) introduces no lexemes, so it has no templates. Existence frames are 'ghar mein <number> X hai/hain' with the number as literal text so is/are agreement is deterministic. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+    Opus pass 2026-10-24: table prompt says one (optional एक); two feedback lines wrongly called रसोई an English loanword.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_कमरा, w_कमरे, w_रसोई, w_बाथरूम, w_बेडरूम, w_मेज़, w_कुर्सी, w_कुर्सियाँ, w_बिस्तर, w_खिड़की, w_खिड़कियाँ]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_कमरा, w_कमरे, w_रसोई, w_बाथरूम, w_बेडरूम]}}
+  one: &one {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_कमरा, w_रसोई, w_बाथरूम]}}
+  kamre: &kamre {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_कमरे}}
+  bed: &bed {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बेडरूम}}
+  rasoi: &rasoi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_रसोई}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मेज़, w_कुर्सी, w_कुर्सियाँ, w_बिस्तर, w_खिड़की, w_खिड़कियाँ]}}
+  mk: &mk {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मेज़, w_कुर्सी]}}
+  kursiyan: &kursiyan {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_कुर्सियाँ}}
+  khidkiyan: &khidkiyan {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_खिड़कियाँ}}
+  bistar: &bistar {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बिस्तर}}
+  mez: &mez {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_मेज़}}
+  khidki: &khidki {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_खिड़की}}
+  l2s: &l2s {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मेज़, w_कुर्सी, w_कुर्सियाँ, w_बिस्तर]}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.choose.001
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "कमरा is one room and कमरे is more than one; बाथरूम and बेडरूम are English loanwords, while रसोई is the Hindi word for kitchen.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.listen.002
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "A masculine noun ending in -ा changes to -े in the plural: कमरा, कमरे.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.order.003
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: word_order
+    frame: {text: "घर में एक {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *one}
+    answer_derivation: {kind: render_frame, frame: {text: "घर में एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "एक is the number one, and it also does the job of English a: घर में एक रसोई है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.order.004
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: word_order
+    frame: {text: "घर में तीन {item} हैं।", language_code: hi, direction: ltr}
+    slots: {item: *kamre}
+    answer_derivation: {kind: render_frame, frame: {text: "घर में तीन {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With a number above one the noun is plural and the verb is हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.fill.005
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: fill_in_blank
+    frame: {text: "घर में एक {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *rasoi, hint: *rasoi}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "With one thing the verb is है; with two or more it is हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.fill.006
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: fill_in_blank
+    frame: {text: "घर में तीन {item} हैं। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *kamre, hint: *kamre}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The plural कमरे is used with any number above one.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.translate.007
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: translation
+    frame: {text: "There is one kitchen in the house.", language_code: en, direction: ltr}
+    slots: {item: *rasoi}
+    answer_derivation: {kind: render_frame, frame: {text: "घर में एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi puts the place first: घर में, then the number, then the thing.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.translate.008
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: translation
+    frame: {text: "There are three rooms in the house.", language_code: en, direction: ltr}
+    slots: {item: *kamre}
+    answer_derivation: {kind: render_frame, frame: {text: "घर में तीन {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The plural noun is followed by हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson01.translate.009
+    lesson_content_key: hi.a1.unit18.lesson01.kamra_rasoi_bathroom_bedroom
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "बाथरूम and बेडरूम are loanwords from English, but रसोई (kitchen) is a native Hindi word.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.listen.001
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The plural of कुर्सी is कुर्सियाँ and of खिड़की is खिड़कियाँ: feminine nouns ending in -ी change to -ियाँ.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.match.002
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *l2, second: *l2, third: *l2, fourth: *l2, fifth: *l2, sixth: *l2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Feminine nouns ending in -ी form the plural with -ियाँ: खिड़की, खिड़कियाँ and कुर्सी, कुर्सियाँ.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.order.003
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: word_order
+    frame: {text: "रसोई में एक {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *mk}
+    answer_derivation: {kind: render_frame, frame: {text: "रसोई में एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The place takes में, then the number and the thing, and the verb comes last.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.order.004
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: word_order
+    frame: {text: "रसोई में चार {item} हैं।", language_code: hi, direction: ltr}
+    slots: {item: *kursiyan}
+    answer_derivation: {kind: render_frame, frame: {text: "रसोई में चार {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With four chairs the noun is plural and the verb is हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.order.005
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: word_order
+    frame: {text: "बेडरूम में दो {item} हैं।", language_code: hi, direction: ltr}
+    slots: {item: *khidkiyan}
+    answer_derivation: {kind: render_frame, frame: {text: "बेडरूम में दो {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "खिड़कियाँ is the plural of खिड़की, so the verb is हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.fill.006
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: fill_in_blank
+    frame: {text: "बेडरूम में एक {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bistar, hint: *bistar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The sentence has one bed, so the verb is है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.translate.007
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: translation
+    frame: {text: "There is one table in the kitchen.", language_code: en, direction: ltr}
+    slots: {item: *mez}
+    answer_derivation: {kind: render_frame, frame: {text: "रसोई में एक {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The place takes में and comes first, as in रसोई में.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.translate.008
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: translation
+    frame: {text: "There are four chairs in the kitchen.", language_code: en, direction: ltr}
+    slots: {item: *kursiyan}
+    answer_derivation: {kind: render_frame, frame: {text: "रसोई में चार {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "चार is followed by the plural noun and हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit18.lesson02.translate.009
+    lesson_content_key: hi.a1.unit18.lesson02.mez_kursi_bistar_khidki
+    type: translation
+    frame: {text: "There are two windows in the bedroom.", language_code: en, direction: ltr}
+    slots: {item: *khidkiyan}
+    answer_derivation: {kind: render_frame, frame: {text: "बेडरूम में दो {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The plural of खिड़की ends in -ियाँ.", language_code: en, direction: ltr}

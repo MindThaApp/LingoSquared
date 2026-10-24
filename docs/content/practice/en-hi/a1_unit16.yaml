@@ -1,0 +1,156 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit16
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit16.health
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u16*, w_<token> anchors). Lesson 3 (dialogue) introduces no lexemes, so it has no templates. Imperatives are informal (tum-level) and every English prompt says so. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+    Opus pass 2026-10-24: headache prompt carries the literal structure (मेरे सिर में दर्द है is also natural); के पास and चाहिए feedback corrected. NATIVE FLAG: सिर दर्द vs सिरदर्द spelling (exact-match risk); मेरे सिर में दर्द है is an equally natural answer.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_सिर, w_दर्द, w_बुखार, w_डॉक्टर, w_आराम, w_दवा, w_करो]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_सिर, w_दर्द, w_बुखार]}}
+  sir: &sir {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_सिर}}
+  dard: &dard {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_दर्द}}
+  bukhar: &bukhar {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बुखार}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_डॉक्टर, w_आराम, w_दवा, w_करो]}}
+  l2n: &l2n {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_डॉक्टर, w_आराम, w_दवा]}}
+  doc: &doc {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_डॉक्टर}}
+  rest: &rest {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_आराम, w_दवा]}}
+  dawa: &dawa {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_दवा}}
+  aram: &aram {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_आराम}}
+  karo: &karo {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_करो}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.choose.001
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "दर्द is a masculine noun for pain, and मुझे सिर दर्द है is the usual way to say I have a headache.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.listen.002
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Hindi says to me a fever is: मुझे बुखार है, with है and not a verb like have.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.order.003
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: word_order
+    frame: {text: "मुझे {item} दर्द है।", language_code: hi, direction: ltr}
+    slots: {item: *sir}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} दर्द है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi says head pain for headache, with सिर before दर्द.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.order.004
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: word_order
+    frame: {text: "मुझे सिर {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *dard}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे सिर {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "दर्द comes after सिर and before है, as in सिर दर्द है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.fill.005
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: fill_in_blank
+    frame: {text: "मुझे {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bukhar, hint: *bukhar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Illnesses use मुझे ... है: literally, to me a fever is.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.fill.006
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: fill_in_blank
+    frame: {text: "मुझे सिर {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *dard, hint: *dard}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "सिर दर्द is a compound of head and pain.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.translate.007
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: translation
+    frame: {text: "I have a fever.", language_code: en, direction: ltr}
+    slots: {item: *bukhar}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi has no verb for have here; मुझे and है are enough.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson01.translate.008
+    lesson_content_key: hi.a1.unit16.lesson01.sir_dard_bukhar
+    type: translation
+    frame: {text: "I have a headache. (literally: to me head pain is)", language_code: en, direction: ltr}
+    slots: {item: *dard}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे सिर {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi does not say a headache: सिर दर्द is a compound used without a.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.choose.001
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "आराम करो is the informal command rest!, built from the noun आराम plus करो.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.order.002
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: word_order
+    frame: {text: "मुझे {item} के पास जाना है।", language_code: hi, direction: ltr}
+    slots: {item: *doc}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} के पास जाना है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "के पास after a person means to that person, so डॉक्टर के पास जाना is to go to the doctor.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.order.003
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: word_order
+    frame: {text: "तुम्हें {item} चाहिए।", language_code: hi, direction: ltr}
+    slots: {item: *rest}
+    answer_derivation: {kind: render_frame, frame: {text: "तुम्हें {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "चाहिए follows the thing needed and normally takes no है after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.order.004
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: word_order
+    frame: {text: "आराम {item} और डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}
+    slots: {item: *karo}
+    answer_derivation: {kind: render_frame, frame: {text: "आराम {item} और डॉक्टर के पास जाओ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Both commands end in -ो because they speak to someone addressed as तुम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.fill.005
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: fill_in_blank
+    frame: {text: "मुझे {item} चाहिए। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *dawa, hint: *dawa}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The thing needed comes between मुझे and चाहिए.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.fill.006
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: fill_in_blank
+    frame: {text: "आराम {item}! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *karo, hint: *karo}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "करो is the informal command form of करना, and आराम करो means rest.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.translate.007
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: translation
+    frame: {text: "I need medicine.", language_code: en, direction: ltr}
+    slots: {item: *dawa}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मुझे ... चाहिए is used for need and for would like, whoever is speaking.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.translate.008
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: translation
+    frame: {text: "I have to go to the doctor.", language_code: en, direction: ltr}
+    slots: {item: *doc}
+    answer_derivation: {kind: render_frame, frame: {text: "मुझे {item} के पास जाना है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "के पास goes after the doctor and means to the doctor's place.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.translate.009
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: translation
+    frame: {text: "Rest! (informal)", language_code: en, direction: ltr}
+    slots: {item: *karo}
+    answer_derivation: {kind: render_frame, frame: {text: "आराम {item}!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The informal command ends in -ो, which is the sound used with तुम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit16.lesson02.translate.010
+    lesson_content_key: hi.a1.unit16.lesson02.doctor_dawa
+    type: translation
+    frame: {text: "You need rest. (informal)", language_code: en, direction: ltr}
+    slots: {item: *aram}
+    answer_derivation: {kind: render_frame, frame: {text: "तुम्हें {item} चाहिए।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "तुम्हें plays the role of मुझे for the person you address as तुम.", language_code: en, direction: ltr}

@@ -1,0 +1,162 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit19
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit19.weather
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u19*, w_<token> anchors). Weather frames start with the literal word aaj and keep the slot inside the sentence. 'It is raining' is avoided as a translation prompt because Hindi also says baarish ho rahi hai. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+    Opus pass 2026-10-24: ठंडी frame uses हवा instead of रसोई; आज prompts reordered to Today the weather .... NATIVE FLAG: आज हवा है and आज मौसम बुरा है mirror the realization but natives more often say हवा चल रही है / मौसम ख़राब है.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_मौसम, w_धूप, w_बारिश, w_हवा, w_गर्म, w_ठंडा, w_ठंडी, w_बादल, w_बुरा, w_बाहर]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_मौसम, w_धूप, w_बारिश, w_हवा]}}
+  w3: &w3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_धूप, w_बारिश, w_हवा]}}
+  mausam: &mausam {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_मौसम}}
+  dhoop: &dhoop {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_धूप}}
+  baarish: &baarish {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बारिश}}
+  hawa: &hawa {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_हवा}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_गर्म, w_ठंडा, w_ठंडी, w_बादल, w_बुरा]}}
+  l2m: &l2m {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_गर्म, w_ठंडा, w_बादल, w_बुरा, w_हवा, w_ठंडी]}}
+  adjm: &adjm {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_गर्म, w_ठंडा, w_बुरा]}}
+  thandi: &thandi {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_ठंडी}}
+  baadal: &baadal {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बादल}}
+  thanda: &thanda {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_ठंडा}}
+  bura: &bura {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बुरा}}
+  garam: &garam {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_गर्म}}
+  l3: &l3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_बाहर, w_बादल, w_धूप, w_हवा, w_बारिश]}}
+  bahar: &bahar {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_बाहर}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.choose.001
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "मौसम is a masculine noun, so the question is आज मौसम कैसा है?, with कैसा and not कैसी.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.listen.002
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Weather words such as धूप, बारिश and हवा use है directly: आज धूप है is it is sunny today.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.order.003
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: word_order
+    frame: {text: "आज {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *w3}
+    answer_derivation: {kind: render_frame, frame: {text: "आज {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi names the weather and adds है, with no word for it: आज धूप है.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.order.004
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: word_order
+    frame: {text: "आज {item} कैसा है?", language_code: hi, direction: ltr}
+    slots: {item: *mausam}
+    answer_derivation: {kind: render_frame, frame: {text: "आज {item} कैसा है?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "कैसा agrees with the masculine noun मौसम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.fill.005
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: fill_in_blank
+    frame: {text: "आज {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *dhoop, hint: *dhoop}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "धूप is feminine, but है stays the same for a single thing.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.translate.006
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: translation
+    frame: {text: "It is sunny today.", language_code: en, direction: ltr}
+    slots: {item: *dhoop}
+    answer_derivation: {kind: render_frame, frame: {text: "आज {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi uses the noun धूप with है instead of an adjective for sunny.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson01.translate.007
+    lesson_content_key: hi.a1.unit19.lesson01.mausam_dhoop_baarish_hawa
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hindi names weather by noun: धूप is sunshine, बारिश is rain, and हवा is wind.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.choose.001
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "गर्म stays the same for every noun, but ठंडा changes: ठंडा for masculine, ठंडी for feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.match.002
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *l2m, second: *l2m, third: *l2m, fourth: *l2m, fifth: *l2m, sixth: *l2m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Weather adjectives: गर्म does not change for gender, but ठंडा and ठंडी do.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.order.003
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: word_order
+    frame: {text: "आज मौसम बहुत {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *adjm}
+    answer_derivation: {kind: render_frame, frame: {text: "आज मौसम बहुत {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "मौसम is masculine, so ठंडा and बुरा take the -ा form, and गर्म never changes.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.order.004
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: word_order
+    frame: {text: "आज हवा {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *thandi}
+    answer_derivation: {kind: render_frame, frame: {text: "आज हवा {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "हवा (wind) is feminine, so the adjective ends in -ी: ठंडी हवा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.fill.005
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: fill_in_blank
+    frame: {text: "आज मौसम {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bura, hint: *bura}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "मौसम is masculine, so the adjective ends in -ा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.translate.006
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: translation
+    frame: {text: "Today the weather is hot.", language_code: en, direction: ltr}
+    slots: {item: *garam}
+    answer_derivation: {kind: render_frame, frame: {text: "आज मौसम {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "गर्म stays the same whatever noun it describes.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.translate.007
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: translation
+    frame: {text: "There are clouds today.", language_code: en, direction: ltr}
+    slots: {item: *baadal}
+    answer_derivation: {kind: render_frame, frame: {text: "आज {item} हैं।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "बादल is used in the plural here, so the verb is हैं.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson02.translate.008
+    lesson_content_key: hi.a1.unit19.lesson02.garam_thanda_baadal
+    type: translation
+    frame: {text: "Today the weather is very cold.", language_code: en, direction: ltr}
+    slots: {item: *thanda}
+    answer_derivation: {kind: render_frame, frame: {text: "आज मौसम बहुत {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "बहुत comes before the adjective, and ठंडा agrees with मौसम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson03.choose.001
+    lesson_content_key: hi.a1.unit19.lesson03.priya_arjun_kal_ka_mausam
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "बाहर means outside, and चलो, बाहर जाते हैं! is a suggestion to go outside.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson03.fill.002
+    lesson_content_key: hi.a1.unit19.lesson03.priya_arjun_kal_ka_mausam
+    type: fill_in_blank
+    frame: {text: "चलो, {item} जाते हैं! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *bahar, hint: *bahar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "बाहर is an adverb, so it never changes for gender or number.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit19.lesson03.translate.003
+    lesson_content_key: hi.a1.unit19.lesson03.priya_arjun_kal_ka_mausam
+    type: translation
+    frame: {text: "Let's go outside!", language_code: en, direction: ltr}
+    slots: {item: *bahar}
+    answer_derivation: {kind: render_frame, frame: {text: "चलो, {item} जाते हैं!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "चलो plus a -ते verb with हैं is the usual way to suggest something together.", language_code: en, direction: ltr}

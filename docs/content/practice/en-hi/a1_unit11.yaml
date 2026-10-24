@@ -1,0 +1,144 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit11
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job B) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u11*, w_<token> anchors). Suggestions use 'chalo ... -te hain'; the English prompts avoid a/the where Hindi has no article. The refusal frame uses informal 'maaf karna' and says so. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+    Opus pass 2026-10-24: tea suggestion drops movable साथ; Good idea! prompt marks the full sentence with है; two feedback lines replaced (invented message-dash claim, विचार is not a plan).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_फ़िल्म, w_साथ, w_सुझाव, w_विचार, w_देखते, w_पीते, w_व्यस्त, w_हम, w_करना, w_माफ़, w_संदेश]
+slot_presets:
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_फ़िल्म, w_साथ, w_सुझाव, w_विचार, w_देखते, w_पीते]}}
+  l1b: &l1b {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_फ़िल्म, w_साथ, w_सुझाव, w_विचार]}}
+  film: &film {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_फ़िल्म}}
+  pite: &pite {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_पीते}}
+  vichar: &vichar {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_विचार}}
+  dekhte: &dekhte {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_देखते}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_व्यस्त, w_हम, w_करना, w_माफ़]}}
+  l2m: &l2m {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_व्यस्त, w_हम, w_संदेश, w_माफ़, w_करना, w_फ़िल्म]}}
+  vyast: &vyast {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_व्यस्त}}
+  hum: &hum {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_हम}}
+  l3: &l3 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_संदेश, w_सुझाव, w_विचार, w_फ़िल्म]}}
+  sath: &sath {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_साथ}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.choose.001
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "चलो plus a -ते verb and हैं suggests doing something together: चलो, फ़िल्म देखते हैं!", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.listen.002
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1b}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "साथ means together or with, and a suggestion often includes it: चलो, साथ चाय पीते हैं!", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.order.003
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: word_order
+    frame: {text: "चलो, {item} देखते हैं!", language_code: hi, direction: ltr}
+    slots: {item: *film}
+    answer_derivation: {kind: render_frame, frame: {text: "चलो, {item} देखते हैं!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "फ़िल्म is feminine, but the suggestion form -ते हैं does not change for it.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.order.004
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: word_order
+    frame: {text: "चलो, साथ चाय {item} हैं!", language_code: hi, direction: ltr}
+    slots: {item: *pite}
+    answer_derivation: {kind: render_frame, frame: {text: "चलो, साथ चाय {item} हैं!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The suggestion form is the -ते verb with हैं, meaning let us ...", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.fill.005
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: fill_in_blank
+    frame: {text: "अच्छा {item} है! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *vichar, hint: *vichar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "अच्छा विचार है is a common way to accept a suggestion.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.fill.006
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: fill_in_blank
+    frame: {text: "चलो, फ़िल्म {item} हैं! ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *dekhte, hint: *dekhte}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "देखते is the -ते form, which with हैं means we watch and, after चलो, let's watch.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.translate.007
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: translation
+    frame: {text: "Let's drink tea!", language_code: en, direction: ltr}
+    slots: {item: *pite}
+    answer_derivation: {kind: render_frame, frame: {text: "चलो, चाय {item} हैं!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Let's in Hindi is चलो plus the -ते हैं form of the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson01.translate.008
+    lesson_content_key: hi.a1.unit11.lesson01.prastaav_aur_sweekriti
+    type: translation
+    frame: {text: "Good idea! (a full sentence: good idea is)", language_code: en, direction: ltr}
+    slots: {item: *vichar}
+    answer_derivation: {kind: render_frame, frame: {text: "अच्छा {item} है!", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "विचार is masculine, which is why the adjective is अच्छा.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson02.choose.001
+    lesson_content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "माफ़ करना is the informal way to say sorry or excuse me, used with people you address as तुम.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson02.match.002
+    lesson_content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: hi, direction: ltr}
+    slots: {first: *l2m, second: *l2m, third: *l2m, fourth: *l2m, fifth: *l2m, sixth: *l2m}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Hindi words for polite refusals include माफ़ करना for sorry and व्यस्त for busy.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson02.fill.003
+    lesson_content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+    type: fill_in_blank
+    frame: {text: "माफ़ करना, मैं {item} हूँ। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *vyast, hint: *vyast}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After माफ़ करना you give your situation, such as being busy.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson02.translate.004
+    lesson_content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+    type: translation
+    frame: {text: "Sorry, I am busy. (informal)", language_code: en, direction: ltr}
+    slots: {item: *vyast}
+    answer_derivation: {kind: render_frame, frame: {text: "माफ़ करना, मैं {item} हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "माफ़ करना is the informal way to excuse yourself; व्यस्त stays the same for a man or a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson02.translate.005
+    lesson_content_key: hi.a1.unit11.lesson02.hum_kab_milte_hain
+    type: translation
+    frame: {text: "So when do we meet?", language_code: en, direction: ltr}
+    slots: {item: *hum}
+    answer_derivation: {kind: render_frame, frame: {text: "तो {item} कब मिलते हैं?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "हम takes the plural -ते हैं form: हम मिलते हैं, we meet.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson03.choose.001
+    lesson_content_key: hi.a1.unit11.lesson03.priya_arjun_yojana
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "संदेश is a message, such as a text that makes a plan: प्रिया, चलो शनिवार को फ़िल्म देखते हैं?", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson03.order.002
+    lesson_content_key: hi.a1.unit11.lesson03.priya_arjun_yojana
+    type: word_order
+    frame: {text: "प्रिया, चलो शनिवार को {item} देखते हैं?", language_code: hi, direction: ltr}
+    slots: {item: *film}
+    answer_derivation: {kind: render_frame, frame: {text: "प्रिया, चलो शनिवार को {item} देखते हैं?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Starting with the name addresses the person directly, and को after शनिवार means on Saturday.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit11.lesson03.translate.003
+    lesson_content_key: hi.a1.unit11.lesson03.priya_arjun_yojana
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "सुझाव is a suggestion you make to someone, while विचार is an idea or thought: अच्छा विचार है! means good idea!", language_code: en, direction: ltr}
