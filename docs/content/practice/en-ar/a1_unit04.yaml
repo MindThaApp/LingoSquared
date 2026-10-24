@@ -1,0 +1,157 @@
+schema_version: "1.0"
+pack_key: practice.en-ar.a1.unit04
+source_language: en
+target_language: ar
+unit_content_key: ar.a1.unit04.dates
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-ar) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_ar.py (per-unit tags ar_a1_u04*, single-member w_<token> anchors). Pools are
+    unit-scoped and curated: الدرس ("the lesson") is kept out of every pool that also holds درس ("lesson")
+    for recognition and matching so the two are never offered side by side; it appears only as literal frame text (so it is
+    not a hosted target). The dates use the ordinals الخامس and السادس (masculine, agreeing
+    with اليوم) and the months مايو and يونيو; every month/ordinal combination used in a frame is a valid
+    date. The عندي sentence from the dialogue is not used in prompts because عندي is taught in unit 06.
+    Reviewer: confirm "السادس من مايو" and "الخامس من يونيو" style combinations read naturally.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_تاريخ, w_اليوم, w_مايو, w_يونيو, w_الخامس, w_السادس, w_درس, w_في]
+slot_presets:
+  l01: &l01 {language_code: ar, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_تاريخ, w_اليوم, w_مايو, w_يونيو]}}
+  l02mc: &l02mc {language_code: ar, part_of_speech: [noun, adjective, preposition], agreement_tags: {semantic: [w_الخامس, w_السادس, w_درس, w_في]}}
+  words: &words {language_code: ar, part_of_speech: [noun, adjective, adverb, preposition], agreement_tags: {semantic: [w_تاريخ, w_اليوم, w_مايو, w_يونيو, w_الخامس, w_السادس, w_درس, w_في]}}
+  months: &months {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: [w_مايو, w_يونيو]}}
+  ords: &ords {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: [w_الخامس, w_السادس]}}
+  tareekh: &tareekh {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_تاريخ}}
+  yawm: &yawm {language_code: ar, part_of_speech: adverb, agreement_tags: {semantic: w_اليوم}}
+  fi: &fi {language_code: ar, part_of_speech: preposition, agreement_tags: {semantic: w_في}}
+  khamis: &khamis {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_الخامس}}
+  sadis: &sadis {language_code: ar, part_of_speech: adjective, agreement_tags: {semantic: w_السادس}}
+  may: &may {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_مايو}}
+  june: &june {language_code: ar, part_of_speech: noun, agreement_tags: {semantic: w_يونيو}}
+templates:
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.choose.001
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "اليوم literally means the day, with the article ال joined to the front; that is how Arabic says today.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.match.002
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *words, second: *words, third: *words, fourth: *words, fifth: *words, sixth: *words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "The month names مايو and يونيو follow the international calendar names May and June.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.order.003
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: word_order
+    frame: {text: "اليوم الخامس من {item}.", language_code: ar, direction: rtl}
+    slots: {item: *months}
+    answer_derivation: {kind: render_frame, frame: {text: "اليوم الخامس من {item}.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Dates in Arabic read the day first, then من (of) and the month.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.fill.004
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: fill_in_blank
+    frame: {text: "ما {item} اليوم؟ ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *tareekh, hint: *tareekh}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "ما تاريخ اليوم؟ is the usual way to ask for today's date.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.translate.005
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Month names are written as one word: مايو for May and يونيو for June.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.translate.006
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: translation
+    frame: {text: "What is today's date?", language_code: en, direction: ltr}
+    slots: {item: *tareekh}
+    answer_derivation: {kind: render_frame, frame: {text: "ما {item} اليوم", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The date question uses ما (what) with تاريخ (date) and اليوم (today).", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.listen.001
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Ordinal numbers like الخامس (the fifth) take ال and agree with the noun they describe; اليوم is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.match.002
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: ar, direction: rtl}
+    slots: {first: *words, second: *words, third: *words, fourth: *words, fifth: *words, sixth: *words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "في means in or on and is written as its own word, unlike ب which joins to the next word.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.order.003
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: word_order
+    frame: {text: "اليوم {item} من مايو.", language_code: ar, direction: rtl}
+    slots: {item: *ords}
+    answer_derivation: {kind: render_frame, frame: {text: "اليوم {item} من مايو.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "Ordinals take ال: الخامس is the fifth and السادس is the sixth.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.fill.004
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: fill_in_blank
+    frame: {text: "اليوم الخامس من {item}. ({hint})", language_code: ar, direction: rtl, slot_rendering: {hint: english_gloss}}
+    slots: {item: *june, hint: *june}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The month follows من, so اليوم الخامس من يونيو means today is the fifth of June.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.order.005
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: word_order
+    frame: {text: "الدرس {item} الخامس من مايو.", language_code: ar, direction: rtl}
+    slots: {item: *fi}
+    answer_derivation: {kind: render_frame, frame: {text: "الدرس {item} الخامس من مايو.", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "في before a date means on that day: في الخامس من مايو.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.translate.006
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *l02mc}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Words after في work like any noun: في الدرس means in the lesson, with ال marking the.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.translate.007
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: translation
+    frame: {text: "Today is the fifth of May.", language_code: en, direction: ltr}
+    slots: {a: *khamis, b: *may}
+    answer_derivation: {kind: render_frame, frame: {text: "اليوم {a} من {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The fifth is الخامس and the sixth is السادس; both agree with the masculine word اليوم.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.translate.008
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: translation
+    frame: {text: "Today is the sixth of June.", language_code: en, direction: ltr}
+    slots: {a: *sadis, b: *june}
+    answer_derivation: {kind: render_frame, frame: {text: "اليوم {a} من {b}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The sixth is السادس; it is formed like the other ordinals with ال at the front.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson01.listen.007
+    lesson_content_key: ar.a1.unit04.lesson01.date_words
+    type: listen_select
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l01}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Months have their own names, but the day and month are joined by من (of): الخامس من مايو.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.choose.009
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: multiple_choice
+    frame: {text: "{item}", language_code: ar, direction: rtl}
+    slots: {item: *l02mc}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "في before a date means on that day, and ال marks an ordinal as the fifth or the sixth.", language_code: en, direction: ltr}
+  - content_key: practice.en-ar.ar.a1.unit04.lesson02.translate.010
+    lesson_content_key: ar.a1.unit04.lesson02.state_dates
+    type: translation
+    frame: {text: "The lesson is on the fifth of May.", language_code: en, direction: ltr}
+    slots: {f: *fi, d: *khamis, m: *may}
+    answer_derivation: {kind: render_frame, frame: {text: "الدرس {f} {d} من {m}", language_code: ar, direction: rtl}}
+    feedback_frame: {text: "The lesson date uses في (on) before the ordinal: الدرس في الخامس من مايو.", language_code: en, direction: ltr}
