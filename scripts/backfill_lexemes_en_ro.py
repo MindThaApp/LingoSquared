@@ -132,9 +132,9 @@ GLOSSES: dict[str, str] = {
     "aproape": "near; close", "departe": "far", "magazinul": "the store",
     "banca": "the bank", "gara": "the train station", "spital": "hospital",
     "poștă": "post office", "bibliotecă": "library", "biblioteca": "the library",
-    "stație": "stop; station", "autobuz": "bus", "lângă": "next to",
+    "stație": "stop (for a bus)", "autobuz": "bus", "lângă": "next to",
     "vizavi": "opposite; across", "între": "between", "spitalul": "the hospital",
-    "poșta": "the post office", "stația": "the stop; the station",
+    "poșta": "the post office", "stația": "the stop (for a bus)",
     # unit09 directions
     "ajung": "I arrive; I get to", "mergeți": "go (formal command)",
     "înainte": "ahead; forward", "dreapta": "right (side)", "stânga": "left (side)",
@@ -147,7 +147,7 @@ GLOSSES: dict[str, str] = {
     "mergem": "we go; let us go", "cinema": "movie theater; cinema",
     "parc": "park", "atunci": "then; in that case", "sigur": "sure; certainly",
     # unit12 past events
-    "fost": "been; was", "mâncat": "eaten", "băut": "drunk (past of drinking)",
+    "fost": "been; was", "mâncat": "eaten (as in 'have eaten')", "băut": "drunk (as in 'have drunk')",
     "a": "has (helper for the past)",
     # unit13 preferences
     "place": "is pleasing (as in \"I like\")", "cafeaua": "the coffee",
