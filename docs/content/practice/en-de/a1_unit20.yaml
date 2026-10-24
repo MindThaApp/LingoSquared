@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit20
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit20.wetter
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated w_<token> pools). Six lexemes, so exactly one matching_pairs. Weather statements use the impersonal es (Es ist kalt). Frames
+    with Morgen/Heute start with a literal capital; the slot is never first. Reviewer: confirm 'Gute Idee' is shown as Good idea.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Wetter, w_sonnig, w_kalt, w_warm, w_regnet, w_Idee]
+slot_presets:
+  words_1: &words_1 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Wetter, w_sonnig, w_kalt, w_warm, w_regnet]}}
+  words_2: &words_2 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_sonnig, w_kalt, w_warm, w_regnet, w_Wetter]}}
+  words_3: &words_3 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Idee, w_Wetter, w_regnet, w_warm]}}
+  words_4: &words_4 {language_code: de, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_Idee, w_sonnig, w_kalt, w_Wetter]}}
+  order_5: &order_5 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Wetter}}
+  order_6: &order_6 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_sonnig, w_kalt, w_warm]}}
+  order_7: &order_7 {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_regnet}}
+  order_8: &order_8 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: [w_sonnig, w_warm]}}
+  match_9: &match_9 {language_code: de, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_Wetter, w_sonnig, w_kalt, w_warm, w_regnet, w_Idee]}}
+  fill_10: &fill_10 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_sonnig}}
+  fill_11: &fill_11 {language_code: de, part_of_speech: [adjective], agreement_tags: {semantic: w_kalt}}
+  fill_12: &fill_12 {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Idee}}
+  bare_13: &bare_13 {language_code: de, part_of_speech: [adjective, noun], agreement_tags: {semantic: [w_Wetter, w_sonnig, w_kalt, w_warm, w_Idee]}}
+templates:
+  - content_key: practice.en-de.de.a1.unit20.lesson01.choose.001
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Es regnet: the impersonal es is needed in German.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.listen.002
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Das Wetter is neuter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson02.choose.003
+    lesson_content_key: de.a1.unit20.lesson02.plan_bei_wetter
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Idee is feminine: die Idee, gute Idee.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson02.listen.004
+    lesson_content_key: de.a1.unit20.lesson02.plan_bei_wetter
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *words_4}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Gute Idee is a short way to agree with a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.order.005
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: word_order
+    frame: {text: "Wie ist das {item} heute?", language_code: de, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie ist das {item} heute?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Das Wetter is neuter and capitalised.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.order.006
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: word_order
+    frame: {text: "Es ist {item}.", language_code: de, direction: ltr}
+    slots: {item: *order_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Es ist plus an adjective describes the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.order.007
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: word_order
+    frame: {text: "Heute ist es kalt und es {item}.", language_code: de, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Heute ist es kalt und es {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Regnen has no real subject: es regnet.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson02.order.008
+    lesson_content_key: de.a1.unit20.lesson02.plan_bei_wetter
+    type: word_order
+    frame: {text: "Morgen ist es {item}.", language_code: de, direction: ltr}
+    slots: {item: *order_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Morgen ist es {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Morgen is first, so the verb ist is second and es follows.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.match.009
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *match_9, second: *match_9, third: *match_9, fourth: *match_9, fifth: *match_9, sixth: *match_9}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Weather adjectives follow es ist: es ist kalt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.fill.010
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: fill_in_blank
+    frame: {text: "Morgen ist es {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_10, hint: *fill_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sonnig is the adjective for sunny.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.fill.011
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: fill_in_blank
+    frame: {text: "Heute ist es {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_11, hint: *fill_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Kalt describes today’s weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.fill.012
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: fill_in_blank
+    frame: {text: "Heute ist es kalt und es {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *order_7, hint: *order_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Regnen is used with es: es regnet.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson02.fill.013
+    lesson_content_key: de.a1.unit20.lesson02.plan_bei_wetter
+    type: fill_in_blank
+    frame: {text: "Gute {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *fill_12, hint: *fill_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gute ends in -e because Idee is feminine.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.translate.014
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *bare_13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.translate.015
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: translation
+    frame: {text: "What is the weather like?", language_code: en, direction: ltr}
+    slots: {item: *order_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wie ist das {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wie ist ...? asks what something is like.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.translate.016
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: translation
+    frame: {text: "It is sunny.", language_code: en, direction: ltr}
+    slots: {item: *fill_10}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Es ist plus an adjective describes the weather.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson01.translate.017
+    lesson_content_key: de.a1.unit20.lesson01.wetter_heute
+    type: translation
+    frame: {text: "It is cold and it is raining.", language_code: en, direction: ltr}
+    slots: {item: *order_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Es ist kalt und es {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Regnen needs es: es regnet.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit20.lesson02.translate.018
+    lesson_content_key: de.a1.unit20.lesson02.plan_bei_wetter
+    type: translation
+    frame: {text: "Good idea.", language_code: en, direction: ltr}
+    slots: {item: *fill_12}
+    answer_derivation: {kind: render_frame, frame: {text: "Gute {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Gute takes -e before the feminine noun Idee.", language_code: en, direction: ltr}
