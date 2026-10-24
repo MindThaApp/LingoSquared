@@ -1,0 +1,161 @@
+schema_version: "1.0"
+pack_key: practice.en-de.a1.unit04
+source_language: en
+target_language: de
+unit_content_key: de.a1.unit04.daten
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-de) from scripts/backfill_lexemes_en_de.py lexemes (curated
+    w_<token> pools). The articles der/die/den are not used as bare prompts (their glosses name case
+    and gender, not a stand-alone meaning). Date frames use the taught "der siebte X" / "der dritte X"
+    pattern with the six months the unit teaches. Reviewer: confirm "Today is the seventh of July." is
+    only answered by Heute ist der siebte Juli. and that "Mein Geburtstag ist der dritte X" is natural.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_Montag, w_Dienstag, w_Mittwoch, w_Donnerstag, w_Freitag, w_Samstag, w_Sonntag, w_heute, w_Januar, w_März, w_Mai, w_Juli, w_September, w_Dezember, w_Monat, w_kann, w_auch, w_als, w_schreiben, w_wann, w_haben, w_Geburtstag, w_mein, w_man, w_dritte, w_siebte, w_öffnet, w_wieder, w_Bibliothek, w_geschlossen, w_am, w_neunten]
+slot_presets:
+  weekdays: &weekdays {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Montag, w_Dienstag, w_Mittwoch, w_Donnerstag, w_Freitag, w_Samstag, w_Sonntag]}}
+  weekday_words: &weekday_words {language_code: de, part_of_speech: [noun, adverb], agreement_tags: {semantic: [w_Montag, w_Dienstag, w_Mittwoch, w_Donnerstag, w_Freitag, w_Samstag, w_Sonntag, w_heute]}}
+  months: &months {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Januar, w_März, w_Mai, w_Juli, w_September, w_Dezember]}}
+  month_words: &month_words {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: [w_Januar, w_März, w_Mai, w_Juli, w_September, w_Dezember, w_Monat]}}
+  date_words: &date_words {language_code: de, part_of_speech: [verb, adverb, particle, noun, pronoun, adjective], agreement_tags: {semantic: [w_kann, w_auch, w_als, w_schreiben, w_wann, w_haben, w_Geburtstag, w_mein, w_man, w_dritte, w_siebte]}}
+  date_match: &date_match {language_code: de, part_of_speech: [verb, adverb, particle, noun, adjective, pronoun], agreement_tags: {semantic: [w_kann, w_auch, w_als, w_schreiben, w_wann, w_Geburtstag, w_öffnet, w_wieder, w_Bibliothek, w_geschlossen, w_man]}}
+  library_words: &library_words {language_code: de, part_of_speech: [verb, adverb, noun, preposition, adjective], agreement_tags: {semantic: [w_öffnet, w_wieder, w_Bibliothek, w_am, w_neunten, w_geschlossen]}}
+  date_bare: &date_bare {language_code: de, part_of_speech: [adverb, noun, verb, adjective], agreement_tags: {semantic: [w_auch, w_wann, w_Geburtstag, w_öffnet, w_wieder, w_Bibliothek, w_geschlossen, w_schreiben]}}
+  heute: &heute {language_code: de, part_of_speech: [adverb], agreement_tags: {semantic: w_heute}}
+  Monat: &Monat {language_code: de, part_of_speech: [noun], agreement_tags: {semantic: w_Monat}}
+  haben: &haben {language_code: de, part_of_speech: [verb], agreement_tags: {semantic: w_haben}}
+templates:
+  - content_key: practice.en-de.de.a1.unit04.lesson01.choose.001
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *weekday_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Weekdays are masculine and always capitalised: der Montag, der Dienstag ...", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson02.listen.001
+    lesson_content_key: de.a1.unit04.lesson02.monate
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *month_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Month names are capitalised nouns, and many resemble English: Januar, Juli, September.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.choose.001
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *date_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The ordinal ends in -te up to nineteenth (siebte, dritte); dritte is irregular.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson04.listen.001
+    lesson_content_key: de.a1.unit04.lesson04.im_gespraech_ueber_das_datum
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *library_words}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Am combines an and dem, so am Donnerstag means on Thursday.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.order.002
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: word_order
+    frame: {text: "Heute ist {item}.", language_code: de, direction: ltr}
+    slots: {item: *weekdays}
+    answer_derivation: {kind: render_frame, frame: {text: "Heute ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The verb ist stays second, so Heute ist Montag puts the time word first.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.order.002
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: word_order
+    frame: {text: "Heute ist der siebte {item}.", language_code: de, direction: ltr}
+    slots: {item: *months}
+    answer_derivation: {kind: render_frame, frame: {text: "Heute ist der siebte {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Dates use der plus an ordinal: der siebte Juli, the seventh of July.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.match.003
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *weekday_words, second: *weekday_words, third: *weekday_words, fourth: *weekday_words, fifth: *weekday_words, sixth: *weekday_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "All seven weekdays end in -tag except Mittwoch.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson02.match.002
+    lesson_content_key: de.a1.unit04.lesson02.monate
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *month_words, second: *month_words, third: *month_words, fourth: *month_words, fifth: *month_words, sixth: *month_words}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Every month is a capitalised noun; Mai and Juli are short, and M\u00e4rz has an umlaut.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.match.003
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: matching_pairs
+    frame: {text: "{first} \u00b7 {second} \u00b7 {third} \u00b7 {fourth} \u00b7 {fifth} \u00b7 {sixth}", language_code: de, direction: ltr}
+    slots: {first: *date_match, second: *date_match, third: *date_match, fourth: *date_match, fifth: *date_match, sixth: *date_match}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Kann and schreiben belong together in Man kann es auch als 7.7. schreiben.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.fill.004
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: fill_in_blank
+    frame: {text: "Welcher Tag ist {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *heute, hint: *heute}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Welcher Tag ist heute? asks for the weekday; Der Wievielte ist heute? asks for the date.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson02.fill.003
+    lesson_content_key: de.a1.unit04.lesson02.monate
+    type: fill_in_blank
+    frame: {text: "Welcher {item} ist es? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *Monat, hint: *Monat}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Monat is masculine (der Monat), which is why the question word is welcher.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.fill.004
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: fill_in_blank
+    frame: {text: "Wann {item} Sie Geburtstag? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *haben, hint: *haben}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "German says have a birthday: Wann haben Sie Geburtstag?", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.translate.005
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekday_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Weekdays are masculine nouns, so they always start with a capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson02.translate.004
+    lesson_content_key: de.a1.unit04.lesson02.monate
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *month_words}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "May is Mai, and the month itself is Monat.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.translate.005
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *date_bare}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Geburtstag is a compound of Geburt (birth) and Tag (day).", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.translate.006
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: translation
+    frame: {text: "Today is {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *weekdays}
+    answer_derivation: {kind: render_frame, frame: {text: "Heute ist {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The weekday name needs no article after Heute ist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson03.translate.006
+    lesson_content_key: de.a1.unit04.lesson03.das_datum
+    type: translation
+    frame: {text: "Today is the seventh of {item}.", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *months}
+    answer_derivation: {kind: render_frame, frame: {text: "Heute ist der siebte {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The ordinal agrees with der: der siebte Juli.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.a1.unit04.lesson01.translate.007
+    lesson_content_key: de.a1.unit04.lesson01.wochentage
+    type: translation
+    frame: {text: "What day is it today?", language_code: en, direction: ltr}
+    slots: {item: *heute}
+    answer_derivation: {kind: render_frame, frame: {text: "Welcher Tag ist {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Welcher Tag ist heute? asks for the weekday.", language_code: en, direction: ltr}
