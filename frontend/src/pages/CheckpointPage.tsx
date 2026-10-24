@@ -15,6 +15,7 @@ import { AlmostFeedback } from "../components/AlmostFeedback";
 import type { AnswerResponse, CheckpointResult, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
+import { EmphasizedText } from "../components/EmphasizedText";
 
 type Phase =
   | "loading"
@@ -324,6 +325,11 @@ export function CheckpointPage() {
             {status !== "correct" && (
               <p style={{ margin: "0 0 10px", fontWeight: 400 }}>
                 {t("checkpoint.correct_answer", { answer: formatCorrectResponse(result.correct_response) })}
+              </p>
+            )}
+            {result.feedback && (
+              <p dir="auto" style={{ margin: "0 0 10px", fontWeight: 400 }}>
+                <EmphasizedText text={result.feedback} />
               </p>
             )}
             <button className="btn btn-block" onClick={handleContinue}>

@@ -1312,3 +1312,168 @@ def test_speaking_practice_batch_is_seed_repeatable_for_same_state(
 
     assert [item["type"] for item in second_items] == first_types
     assert practice_item_answers([item["id"] for item in second_items]) == first_answers
+
+
+def test_practice_answer_returns_rendered_template_feedback(client, admin, auth):
+    course_id, lesson_id = create_course_with_lexemes()
+    body = artifact(include_listen=False)
+    templates = body["packs"][0]["templates"]
+    by_key = {t["content_key"]: t for t in templates}
+    by_key["test.practice.multiple_choice"]["feedback_frame"] = {
+        "text": "{word} means {word}.",
+        "language_code": "en",
+        "direction": "ltr",
+        "slot_rendering": {"word": "english_gloss"},
+    }
+    by_key["test.practice.fill_in_blank"]["feedback_frame"] = {
+        "text": "Remember *{word}*.",
+        "language_code": "en",
+        "direction": "ltr",
+    }
+    by_key["test.practice.translation"]["feedback_frame"] = {
+        "text": "  ",
+        "language_code": "en",
+        "direction": "ltr",
+    }
+    import_templates(client, admin, course_id, body)
+    complete_lesson(auth, lesson_id)
+    uid = user_id(auth)
+    with SessionLocal() as db:
+        gloss = db.scalar(
+            select(Lexeme.english_gloss).where(
+                Lexeme.course_id == course_id, Lexeme.token == "uno"
+            )
+        )
+        ids = {}
+        for key in (
+            "test.practice.multiple_choice",
+            "test.practice.fill_in_blank",
+            "test.practice.translation",
+        ):
+            template = db.scalar(
+                select(PracticeTemplate).where(
+                    PracticeTemplate.course_id == course_id,
+                    PracticeTemplate.content_key == key,
+                )
+            )
+            item = PracticeItem(
+                user_id=uid,
+                course_id=course_id,
+                template_id=template.id,
+                filled_slots={"word": "uno"},
+                prompt={"text_blocks": []},
+                correct_response="one",
+                xp_value=5,
+                expires_at=datetime.now(timezone.utc) + timedelta(hours=24),
+            )
+            db.add(item)
+            db.flush()
+            ids[key] = item.id
+        db.commit()
+
+    def answer(key, response):
+        r = client.post(
+            f"/practice/items/{ids[key]}/answer",
+            headers=auth,
+            json={"response": response},
+        )
+        assert r.status_code == 200, r.text
+        return r.json()
+
+    # Rendered for a correct answer, honouring slot_rendering.
+    mc = answer("test.practice.multiple_choice", "one")
+    assert mc["correct"] is True
+    assert mc["feedback"] == f"{gloss} means {gloss}."
+    # Rendered for an incorrect answer too, using the stored token.
+    fib = answer("test.practice.fill_in_blank", "wrong")
+    assert fib["correct"] is False
+    assert fib["feedback"] == "Remember *uno*."
+    # Blank feedback text is omitted (field stays backwards compatible).
+    blank = answer("test.practice.translation", "one")
+    assert "feedback" not in blank
+
+
+def _feedback_template(db, course_id, text, slot_rendering=None, pos=("noun",)):
+    from app.practice.service import render_item_feedback  # noqa: F401
+
+    frame = {"text": text, "language_code": "en", "direction": "ltr"}
+    if slot_rendering:
+        frame["slot_rendering"] = slot_rendering
+    template = db.scalar(
+        select(PracticeTemplate).where(PracticeTemplate.course_id == course_id)
+    )
+    template.feedback_frame = frame
+    template.slots = {
+        "word": {
+            "language_code": "es",
+            "part_of_speech": list(pos),
+            "agreement_tags": {"semantic": "word"},
+        }
+    }
+    return template
+
+
+def test_render_item_feedback_guards(client, admin, auth):
+    from app.practice.service import (
+        feedback_suppression_reason,
+        render_item_feedback,
+    )
+
+    course_id, _ = create_course_with_lexemes()
+    import_templates(client, admin, course_id, artifact(include_listen=False))
+    with SessionLocal() as db:
+        template = _feedback_template(db, course_id, "Note: {word} is one.")
+        # Generated speaking items borrow an unrelated template: no feedback.
+        assert (
+            render_item_feedback(
+                db, template, course_id,
+                {"word": "uno", "_generated_type": "speak_repeat"},
+            )
+            is None
+        )
+        assert (
+            render_item_feedback(db, template, course_id, {"word": "uno"})
+            == "Note: uno is one."
+        )
+
+        # Same token, two parts of speech with different glosses.
+        lex = db.scalar(
+            select(Lexeme).where(Lexeme.course_id == course_id, Lexeme.token == "uno")
+        )
+        other = Lexeme(
+            course_id=course_id,
+            token="uno",
+            language_code="es",
+            part_of_speech="adjective",
+            english_gloss="single",
+            agreement_tags={"semantic": "word"},
+            provenance_lesson_id=lex.provenance_lesson_id,
+            provenance_lesson_content_key=LESSON_KEY,
+            provenance_content_key="test.lexeme.uno.adj",
+        )
+        db.add(other)
+        db.flush()
+        template = _feedback_template(
+            db, course_id, "Meaning: {word}.", {"word": "english_gloss"},
+            pos=("noun", "adjective"),
+        )
+        slots = {"word": "uno"}
+        assert render_item_feedback(db, template, course_id, slots) is None
+        assert (
+            render_item_feedback(db, template, course_id, slots, other.id)
+            == "Meaning: single."
+        )
+        assert (
+            render_item_feedback(db, template, course_id, slots, lex.id)
+            == f"Meaning: {lex.english_gloss}."
+        )
+
+        # Render errors never propagate.
+        template.feedback_frame = {"text": "{word}!", "slot_rendering": {"word": "nope"}}
+        assert render_item_feedback(db, template, course_id, slots, lex.id) is None
+        db.rollback()
+
+    assert feedback_suppression_reason("{item}") == "bare_slot"
+    assert feedback_suppression_reason("Match each word with its meaning.") == "instruction"
+    assert feedback_suppression_reason("The correct answer is {item}.") == "restates_answer"
+    assert feedback_suppression_reason("The Dutch word is {item}.") is None

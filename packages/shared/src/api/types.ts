@@ -280,6 +280,8 @@ export interface PracticeAnswerResult {
   result: GradingStatus;
   correct_response: unknown;
   xp_awarded: number;
+  /** Authored explanation from the practice template's feedback_frame. */
+  feedback?: string;
 }
 
 export interface ReviewDueCourse {
