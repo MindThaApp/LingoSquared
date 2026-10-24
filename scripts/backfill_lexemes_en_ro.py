@@ -52,9 +52,9 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "ro"
-LEVELS = {"a1": "en-ro"}
+LEVELS = {"a1": "en-ro", "a2": "en-ro-a2"}
 
-PROPER_NOUNS = {"Ana", "Mihai", "București"}
+PROPER_NOUNS = {"Ana", "Mihai", "București", "Elena", "Radu", "Diana", "Vasile", "Ionescu"}
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
 
@@ -178,6 +178,70 @@ GLOSSES: dict[str, str] = {
     # unit20 clothing
     "tricou": "t-shirt", "culoare": "color", "roșu": "red", "albastru": "blue",
     "pantaloni": "pants; trousers", "mărime": "size", "pantalonii": "the pants; the trousers",
+    # a2 unit21 city hall
+    "primărie": "city hall", "primăria": "the city hall",
+    "programare": "appointment", "programarea": "the appointment",
+    "înscriu": "I register; I enroll", "noua": "the new (fem.)", "adresă": "address",
+    "liberă": "free; available (fem.)", "act": "official document",
+    "acte": "official documents", "buletin": "ID card", "buletinul": "the ID card",
+    "trebuie": "must; it is needed", "actul": "the official document",
+    "proprietate": "property; ownership", "formularul": "the form",
+    "completați": "you fill in (formal)", "acest": "this (masc.)", "formular": "form",
+    "pentru": "for", "înscrierea": "the registration", "contract": "contract",
+    "contractul": "the contract", "închiriere": "rental; renting",
+    "orele": "the hours", "programările": "the appointments", "până": "until",
+    "fac": "they make; they do", "completat": "filled in", "perfect": "perfect",
+    "poftim": "here you are", "totul": "everything", "în": "in", "ordine": "order",
+    "Elena": "Elena", "puteți": "you can (formal)", "veți": "you will (formal)",
+    "primi": "to receive", "confirmarea": "the confirmation", "prin": "by; through",
+    "mult": "much; a lot",
+    # a2 unit22 opinions
+    "cred": "I think; I believe", "crede": "thinks; believes (he; she)",
+    "că": "that (introduces a clause)", "trafic": "traffic", "traficul": "the traffic",
+    "aglomerat": "crowded", "prea": "too", "multe": "many (fem.)", "mașini": "cars",
+    "părere": "opinion", "părerea": "the opinion", "despre": "about",
+    "acord": "agreement", "parcul": "the park", "foarte": "very",
+    "frumos": "beautiful; nice (masc.)", "oraș": "city; town", "orașul": "the city",
+    "opinia": "the opinion", "dar": "but", "interesant": "interesting",
+    "parcuri": "parks", "familii": "families", "dreptate": "being right",
+    "plăcere": "pleasure",
+    # a2 unit23 bank
+    "cont": "account", "curent": "current; checking (of an account)",
+    "deschid": "I open", "deschis": "opened", "necesare": "necessary (plural)",
+    "dovadă": "proof", "dovada": "the proof", "adresei": "of the address",
+    "deschide": "to open", "precum": "such as", "informații": "information",
+    "card": "card", "cardul": "the card", "va": "will (he; she; it)", "sosi": "to arrive",
+    "zile": "days", "lucrătoare": "working (fem. plural)",
+    "suficient": "enough; sufficient", "semnătură": "signature", "Radu": "Radu",
+    "primesc": "I receive; I get", "ajutor": "help",
+    # a2 unit24 doctor
+    "doctoriță": "doctor (woman)", "tare": "hard; severe", "ales": "chosen (in 'especially')",
+    "confirmată": "confirmed (fem.)", "rugăm": "we ask (in 'we ask you to')",
+    "veniți": "you come (formal)", "minute": "minutes", "devreme": "early",
+    "doctorița": "the doctor (woman)", "Vasile": "Vasile", "recomand": "I recommend",
+    "medicament": "medicine", "ori": "times", "pe": "on; per", "timp": "time",
+    "control": "check-up; follow-up visit", "înțeleg": "I understand",
+    "întorc": "I return", "doar": "only", "dacă": "if", "durerea": "the pain",
+    "trece": "passes; goes away", "însănătoșire": "recovery", "grabnică": "speedy (fem.)",
+    # a2 unit25 housing problems
+    "robinet": "faucet; tap", "robinetul": "the faucet", "din": "from; of",
+    "curge": "leaks; flows", "meșter": "repairman; craftsman",
+    "poate": "can; may (he; she; it)", "veni": "to come", "reparație": "repair",
+    "curând": "soon", "posibil": "possible", "douăsprezece": "twelve",
+    "reparația": "the repair", "meșterul": "the repairman", "suna": "to call (by phone)",
+    "rău": "bad; sorry", "aud": "I hear", "asta": "this; that",
+    "ați": "you have (formal, helper for the past)", "observat": "noticed",
+    "problema": "the problem", "administratorul": "the administrator",
+    "Ionescu": "Ionescu", "fie": "be (as in 'must be')", "fiți": "you be (formal)",
+    # a2 unit26 interview
+    "Diana": "Diana", "experiență": "experience", "domeniu": "field; area",
+    "lucrat": "worked", "ca": "as", "tehniciană": "technician (woman)",
+    "sunteți": "you are (formal)", "disponibilă": "available (fem.)",
+    "avea": "to have", "întrebare": "question", "program": "schedule; program",
+    "căutăm": "we are looking for", "tehnician": "technician (man)",
+    "complet": "full; complete", "ore": "hours", "disponibil": "available (masc.)",
+    "vom": "we will", "contacta": "to contact", "întrebări": "questions",
+    "mine": "me (after 'for')", "programul": "the schedule",
 }
 
 POS_SETS = {
@@ -207,6 +271,22 @@ POS_SETS = {
         "simt sunt lucrează lucrați are plouă"
     ),
 }
+POS_SETS["verb"] |= split_words(
+    "înscriu trebuie completați puteți veți primi cred crede deschid deschide "
+    "va sosi primesc rugăm veniți recomand înțeleg întorc trece curge poate "
+    "veni suna aud ați observat fie fiți lucrat sunteți avea căutăm vom contacta fac"
+)
+POS_SETS["adjective"] |= split_words(
+    "noua liberă acest completat perfect aglomerat multe frumos interesant "
+    "curent necesare lucrătoare suficient ales confirmată grabnică posibil "
+    "disponibilă disponibil complet deschis douăsprezece"
+)
+POS_SETS["adverb"] |= split_words("mult prea foarte devreme curând rău doar tare")
+POS_SETS["pronoun"] |= split_words("totul asta mine")
+POS_SETS["preposition"] |= split_words("pentru până prin despre din pe ca precum în")
+POS_SETS["particle"] |= split_words("că dacă dar")
+POS_SETS["phrase"] |= split_words("poftim")
+POS_SETS["proper_noun"] = POS_SETS["proper_noun"] | {"Elena", "Radu", "Diana", "Vasile", "Ionescu"}
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -232,6 +312,18 @@ for _tag, _words in {
 
 part_of_speech = pos_lookup(POS_SETS)
 
+# A2 re-teaches a few A1 tokens in a different sense; the global gloss would
+# be shown to the learner as the correct answer, so override per unit file.
+GLOSS_OVERRIDES = {
+    ("a2_unit21_birocratie", "poștă"): "post office; mail",
+    ("a2_unit22_opinii", "sunt"): "I am; there are",
+    ("a2_unit25_probleme_locuinta", "fiu"): "I be (as in 'I must be')",
+    ("a2_unit25_probleme_locuinta", "înainte"): "before; ahead",
+}
+POS_OVERRIDES = {
+    ("a2_unit25_probleme_locuinta", "fiu"): "verb",
+}
+
 
 def iter_specs():
     for level, group in LEVELS.items():
@@ -244,6 +336,8 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=GLOSS_OVERRIDES,
+            pos_overrides=POS_OVERRIDES,
         )
 
 
