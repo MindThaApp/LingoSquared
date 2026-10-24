@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.en-hi.a1.unit17
+source_language: en
+target_language: hi
+unit_content_key: hi.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-24 (session 10, en-hi, job C) against PRACTICE_PACK_RECIPE.md and lexemes from
+    scripts/backfill_lexemes_en_hi.py (tags hi_a1_u17*, w_<token> anchors). Gendered first-person sentences say (said by a man) or (said by a woman). Yes/no questions are only fixed frames, never translation targets. The lesson-3 verb jaate is glossed 'go (habitual, masc. plural, or you informal)'; its frames address a man. Feedback lines carry a usage or grammar point, never the task or the answer. Reviewer: check gender/honorific agreement in every frame and that the Devanagari spellings match the realization.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_शिक्षक, w_शिक्षिका, w_इंजीनियर, w_दफ़्तर, w_जाते]
+slot_presets:
+  all: &all {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शिक्षक, w_शिक्षिका, w_इंजीनियर, w_दफ़्तर, w_जाते]}}
+  l1: &l1 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शिक्षक, w_शिक्षिका, w_इंजीनियर]}}
+  teach: &teach {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_शिक्षक, w_शिक्षिका]}}
+  shiksh: &shiksh {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_शिक्षिका}}
+  engg: &engg {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_इंजीनियर}}
+  shik: &shik {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_शिक्षक}}
+  daftar: &daftar {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_दफ़्तर}}
+  jaate: &jaate {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: w_जाते}}
+  l2: &l2 {language_code: hi, part_of_speech: [noun, verb, adjective, adverb, pronoun, phrase, particle, preposition, proper_noun], agreement_tags: {semantic: [w_दफ़्तर, w_शिक्षक, w_इंजीनियर]}}
+templates:
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.choose.001
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "शिक्षक is a male teacher and शिक्षिका a female teacher; इंजीनियर is used for both.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.listen.002
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: listen_select
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *l1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Hindi often has separate words for a man's and a woman's job, as in शिक्षक and शिक्षिका.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.order.003
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: word_order
+    frame: {text: "मैं {item} हूँ।", language_code: hi, direction: ltr}
+    slots: {item: *teach}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "The word for teacher follows the speaker's gender: शिक्षक for a man, शिक्षिका for a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.order.004
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: word_order
+    frame: {text: "प्रिया {item} है।", language_code: hi, direction: ltr}
+    slots: {item: *shiksh}
+    answer_derivation: {kind: render_frame, frame: {text: "प्रिया {item} है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "प्रिया is a woman, so she is a शिक्षिका.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.fill.005
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: fill_in_blank
+    frame: {text: "मैं {item} हूँ। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *shiksh, hint: *shiksh}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The hint says female, so the word ends in -का, not -क.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.fill.006
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: fill_in_blank
+    frame: {text: "अर्जुन {item} है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *engg, hint: *engg}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "इंजीनियर is the same word for a man and for a woman.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.translate.007
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: translation
+    frame: {text: "I am a teacher. (said by a woman)", language_code: en, direction: ltr}
+    slots: {item: *shiksh}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "A woman says शिक्षिका; a man would say शिक्षक.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.translate.008
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: translation
+    frame: {text: "I am a teacher. (said by a man)", language_code: en, direction: ltr}
+    slots: {item: *shik}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "A man says शिक्षक; a woman would say शिक्षिका.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson01.translate.009
+    lesson_content_key: hi.a1.unit17.lesson01.shikshak_shikshika_engineer
+    type: translation
+    frame: {text: "I am an engineer.", language_code: en, direction: ltr}
+    slots: {item: *engg}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "इंजीनियर does not change for gender, and Hindi has no word for an.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson02.choose.001
+    lesson_content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "दफ़्तर is a masculine noun for office, and में after it means in the office.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson02.order.002
+    lesson_content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+    type: word_order
+    frame: {text: "मैं {item} में काम करता हूँ।", language_code: hi, direction: ltr}
+    slots: {item: *daftar}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} में काम करता हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "में after the place means in, and the place comes before the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson02.fill.003
+    lesson_content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+    type: fill_in_blank
+    frame: {text: "अर्जुन {item} में काम करता है। ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *daftar, hint: *daftar}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "काम करना is to work, and the place of work takes में.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson02.translate.004
+    lesson_content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+    type: translation
+    frame: {text: "I work in an office. (said by a man)", language_code: en, direction: ltr}
+    slots: {item: *daftar}
+    answer_derivation: {kind: render_frame, frame: {text: "मैं {item} में काम करता हूँ।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "Hindi has no word for an, and the place goes before काम करता हूँ.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson02.translate.005
+    lesson_content_key: hi.a1.unit17.lesson02.school_aspatal_daftar
+    type: translation
+    frame: {text: "Arjun works in an office.", language_code: en, direction: ltr}
+    slots: {item: *daftar}
+    answer_derivation: {kind: render_frame, frame: {text: "अर्जुन {item} में काम करता है।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With a name the verb ends in है, not हूँ, and -ता shows that Arjun is a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson03.choose.001
+    lesson_content_key: hi.a1.unit17.lesson03.priya_arjun_kaam
+    type: multiple_choice
+    frame: {text: "{item}", language_code: hi, direction: ltr}
+    slots: {item: *all}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "जाते in तुम रोज़ दफ़्तर जाते हो is the -ते form used with तुम when speaking to a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson03.order.002
+    lesson_content_key: hi.a1.unit17.lesson03.priya_arjun_kaam
+    type: word_order
+    frame: {text: "तुम रोज़ दफ़्तर {item} हो?", language_code: hi, direction: ltr}
+    slots: {item: *jaate}
+    answer_derivation: {kind: render_frame, frame: {text: "तुम रोज़ दफ़्तर {item} हो?", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With तुम the verb ends in -ते and is followed by हो when speaking to a man.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson03.fill.003
+    lesson_content_key: hi.a1.unit17.lesson03.priya_arjun_kaam
+    type: fill_in_blank
+    frame: {text: "तुम रोज़ दफ़्तर {item} हो? ({hint})", language_code: hi, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *jaate, hint: *jaate}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The question is carried by the voice and the question mark, since Hindi needs no extra word.", language_code: en, direction: ltr}
+  - content_key: practice.en-hi.hi.a1.unit17.lesson03.translate.004
+    lesson_content_key: hi.a1.unit17.lesson03.priya_arjun_kaam
+    type: translation
+    frame: {text: "You go to the office every day. (informal, speaking to a man)", language_code: en, direction: ltr}
+    slots: {item: *jaate}
+    answer_derivation: {kind: render_frame, frame: {text: "तुम रोज़ दफ़्तर {item} हो।", language_code: hi, direction: ltr}}
+    feedback_frame: {text: "With तुम the verb ends in -ते and is followed by हो, for a man.", language_code: en, direction: ltr}
