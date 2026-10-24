@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit63.asking_for_help
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). fill.005 'This bag is {item}.' and fill.006 'Put it on the {item}.' had no cue (heavy/big/blue; shelf/table/desk) -> added hint slots rendering the Persian gloss. Left: lesson02.translate.001 prompt 'می‌تونی در رو باز کنی؟' is answered 'could you open the door' but 'can you open the door' is equally natural (no accepted-answers list, no lever in a phrase pool). NATIVE FLAGS: could vs can distinction not expressible in the Persian gloss. BACKFILL GLOSS FLAGS: none.
+
     THIN UNIT: backfill_lexemes_fa_en.py registers only 4 lexemes (carry/
     heavy/shelf in lesson01, carried in lesson04; lesson02/lesson03 have zero
     lexemes and are invisible to any checkpoint). 9 templates authored at
@@ -71,15 +74,15 @@ templates:
   - content_key: practice.fa-en.en.a1.unit63.lesson01.fill.005
     lesson_content_key: en.a1.unit63.lesson01.help_words
     type: fill_in_blank
-    frame: {text: "This bag is {item}.", language_code: en, direction: ltr}
-    slots: {item: *lesson01_adj}
+    frame: {text: "This bag is {item}. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson01_adj, hint: *lesson01_adj}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «سنگین».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit63.lesson01.fill.006
     lesson_content_key: en.a1.unit63.lesson01.help_words
     type: fill_in_blank
-    frame: {text: "Put it on the {item}.", language_code: en, direction: ltr}
-    slots: {item: *lesson01_noun}
+    frame: {text: "Put it on the {item}. (“{hint}”)", language_code: en, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *lesson01_noun, hint: *lesson01_noun}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "{item} یعنی «قفسه».", language_code: fa, direction: rtl}
   - content_key: practice.fa-en.en.a1.unit63.lesson02.translate.001

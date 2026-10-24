@@ -6,7 +6,10 @@ unit_content_key: en.a2.unit33.weekly_schedule
 review:
   status: reviewed
   fresh_context: 'true'
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (fa-en practice pass, rest): 1 fix -- lesson04.translate.003 could draw does (gloss is only a grammar label, unanswerable as translation) and bare verbs; narrowed to nouns and adverbs (preset l4t). NATIVE FLAGS: none. BACKFILL GLOSS FLAGS: go (gloss has a stray annotation) and relax (آرام شدن means calm down) -- override proposals in the F3 log.
+
     37 lexemes across all 4 lessons (5/8/11/13). Recognition/production use
     each lesson's own tag narrowed to [noun, verb, adjective, adverb]
     (excludes untagged prepositions "after"/"before"). Two matching_pairs (6
@@ -30,6 +33,7 @@ slot_presets:
   l3: &l3 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit33_lesson03_words}}
   l3m: &l3m {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit33_lesson03_words}}
   l4: &l4 {language_code: en, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: fa_en_a2_unit33_lesson04_words}}
+  l4t: &l4t {language_code: en, part_of_speech: [noun, adverb], agreement_tags: {semantic: fa_en_a2_unit33_lesson04_words}}
   l4m: &l4m {language_code: en, part_of_speech: noun, agreement_tags: {semantic: fa_en_a2_unit33_lesson04_words}}
   weekday: &weekday {language_code: en, part_of_speech: noun, agreement_tags: {semantic: weekday}}
 templates:
@@ -44,6 +48,6 @@ templates:
   - {content_key: practice.fa-en.en.a2.unit33.lesson03.match.003, lesson_content_key: en.a2.unit33.lesson03.reading_a_weekly_schedule, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l3m, second: *l3m, third: *l3m, fourth: *l3m, fifth: *l3m, sixth: *l3m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
   - {content_key: practice.fa-en.en.a2.unit33.lesson04.choose.001, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: multiple_choice, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "معنی فارسی {item} را انتخاب کنید.", language_code: fa, direction: rtl}}
   - {content_key: practice.fa-en.en.a2.unit33.lesson04.listen.002, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: listen_select, frame: {text: "{item}", language_code: en, direction: ltr}, slots: {item: *l4}, answer_derivation: {kind: slot_gloss, slot: item}, feedback_frame: {text: "واژه‌ای که شنیدید {item} بود.", language_code: fa, direction: rtl}}
-  - {content_key: practice.fa-en.en.a2.unit33.lesson04.translate.003, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
+  - {content_key: practice.fa-en.en.a2.unit33.lesson04.translate.003, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: translation, frame: {text: "{item}", language_code: fa, direction: rtl, slot_rendering: {item: english_gloss}}, slots: {item: *l4t}, answer_derivation: {kind: slot_text, slot: item}, feedback_frame: {text: "پاسخ درست، معادل انگلیسی این واژه است.", language_code: fa, direction: rtl}}
   - {content_key: practice.fa-en.en.a2.unit33.lesson04.match.004, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: matching_pairs, frame: {text: "{first} — {second} — {third} — {fourth} — {fifth} — {sixth}", language_code: en, direction: ltr}, slots: {first: *l4m, second: *l4m, third: *l4m, fourth: *l4m, fifth: *l4m, sixth: *l4m}, slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}], answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}, feedback_frame: {text: "هر واژه را به معنی فارسی خودش وصل کنید.", language_code: fa, direction: rtl}}
   - {content_key: practice.fa-en.en.a2.unit33.lesson04.order.005, lesson_content_key: en.a2.unit33.lesson04.weekly_schedule_dialogue, type: word_order, frame: {text: "I play soccer on {item}", language_code: en, direction: ltr}, slots: {item: *weekday}, answer_derivation: {kind: render_frame, frame: {text: "I play soccer on {item}", language_code: en, direction: ltr}}, feedback_frame: {text: "{item} نام یکی از روزهای هفته است.", language_code: fa, direction: rtl}}

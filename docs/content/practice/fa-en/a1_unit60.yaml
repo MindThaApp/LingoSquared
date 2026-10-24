@@ -6,7 +6,10 @@ unit_content_key: en.a1.unit60.invitations
 review:
   status: reviewed
   fresh_context: 'true'
-  notes: 'Generated per PRACTICE_PACK_RECIPE.md §8 vocabulary pattern. THIN UNIT: only 3 distinct content
+  required_next_reviewer: native_speaker_review
+  notes: 'Review 2026-10-22 (fa-en practice pass, rest; 2 fixes). (1) choose/listen/translate (lesson01 + lesson04, 6 templates): the unit-wide pool reached lesson03 dialogue lines and the lesson04 notice whose Persian gloss starts with a speaker label (''دنیل می‌گه: ...'', ''لیلا می‌گه: ...'') that is not part of the English answer, so the answer was not determined by the prompt; pool narrowed to the lesson01+lesson02 tags with noun/phrase (invitation, picnic and the six lesson02 phrases). (2) lesson04.fill.004 ''She {item} a short note...'' had no cue -> added a hint slot. Left: ''sorry, i can''t come'' (can''t/cannot) and ''would you like...'' answers are exact strings, no accepted-answers list. NATIVE FLAGS: phrase glosses use informal تو (داری، بیار) while the dinner-invitation note uses -ین (بیارین). BACKFILL GLOSS FLAGS: lesson03/04 phrase glosses carry speaker prefixes.
+
+    Generated per PRACTICE_PACK_RECIPE.md §8 vocabulary pattern. THIN UNIT: only 3 distinct content
     tokens across 2 lessons with lexemes -- below the recipe''s comfortable capacity for the §8 bars (12
     templates / 12 distinct items per tier / 40 per pack). Authored what the real pool supports; did not
     pad with untaught/forward-referenced vocabulary. Flagging for coordinator per hard rule #3. No mis-glossed
@@ -32,6 +35,7 @@ tag_schema:
   agreement_tags:
     semantic:
     - fa_en_a1_unit60_lesson01_words
+    - fa_en_a1_unit60_lesson02_words
     - fa_en_a1_unit60_lesson04_words
     - fa_en_a1_unit60_words
 templates:
@@ -47,12 +51,11 @@ templates:
       language_code: en
       part_of_speech: &id001
       - noun
-      - verb
-      - adjective
-      - adverb
       - phrase
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -72,7 +75,9 @@ templates:
       language_code: en
       part_of_speech: *id001
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -94,7 +99,9 @@ templates:
       language_code: en
       part_of_speech: *id001
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -161,7 +168,9 @@ templates:
       language_code: en
       part_of_speech: *id001
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -181,7 +190,9 @@ templates:
       language_code: en
       part_of_speech: *id001
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -203,7 +214,9 @@ templates:
       language_code: en
       part_of_speech: *id001
       agreement_tags:
-        semantic: fa_en_a1_unit60_words
+        semantic:
+        - fa_en_a1_unit60_lesson01_words
+        - fa_en_a1_unit60_lesson02_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -215,11 +228,18 @@ templates:
   lesson_content_key: en.a1.unit60.lesson04.dinner_invitation
   type: fill_in_blank
   frame:
-    text: She {item} a short note to invite her friend.
+    text: 'She {item} a short note to invite her friend. (“{hint}”)'
     language_code: en
     direction: ltr
+    slot_rendering:
+      hint: english_gloss
   slots:
     item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: fa_en_a1_unit60_lesson04_words
+    hint:
       language_code: en
       part_of_speech: verb
       agreement_tags:
