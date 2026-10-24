@@ -6,7 +6,19 @@ unit_content_key: fa.a2.unit09.bureaucracy
 review:
   status: reviewed
   fresh_context: true
+  required_next_reviewer: native_speaker_review
   notes: >-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 3 fixes). (1)
+    bureaucracy_match.002 drew 4 pairs from a 4-word pool (same cards every time): now 6
+    pairs from the lesson01+lesson03 nouns/adjectives (15), frame/feedback no longer say
+    office word. (2) paperwork_match.005 had 2 pairs: now 6 of the 7 lesson03 nouns. (3)
+    bureaucracy_phrase_match.008 used all 11 phrases (same long cards every time): now 6
+    of 11. Checked: glosses carry no Persian, و-list frame grammatical for all 4 nouns,
+    MC/translation pools unit-only. Open (not fixable in-pack): phrase_translate.009
+    accepts only the رو form for 'Could you tell me what I should bring?' while the
+    lesson04 line drops رو, and includes the two-sentence formal notice as a production
+    item. NATIVE FLAGS: none on frames.
+
     Authored 2026-07-06 by the practice-pool-sync lane (fa/prs bundle),
     part of the same pass as a1_unit06.yaml/a1_unit07.yaml/a1_unit08.yaml/
     a2_unit10.yaml -- see a1_unit06.yaml's notes for the shared
@@ -78,14 +90,16 @@ review:
     from bureaucracy_choice.001's (union vs single tag), so it is not a
     clone. Recognition tier now 3 live.
 tag_schema:
-  part_of_speech: [noun, phrase]
+  part_of_speech: [noun, adjective, phrase]
   agreement_tags:
-    semantic: [bureaucracy_word, paperwork_word, bureaucracy_phrase]
+    semantic: [bureaucracy_word, paperwork_word, bureaucracy_phrase, en_fa_a2_unit09_lesson01_words, en_fa_a2_unit09_lesson03_words]
 slot_presets:
   bureaucracy_word: &bureaucracy_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: bureaucracy_word}}
   paperwork_word: &paperwork_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: paperwork_word}}
   bureaucracy_phrase: &bureaucracy_phrase {language_code: fa, part_of_speech: phrase, agreement_tags: {semantic: bureaucracy_phrase}}
   office_word: &office_word {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: [bureaucracy_word, paperwork_word]}}
+  unit_word: &unit_word {language_code: fa, part_of_speech: [noun, adjective], agreement_tags: {semantic: [en_fa_a2_unit09_lesson01_words, en_fa_a2_unit09_lesson03_words]}}
+  notice_noun: &notice_noun {language_code: fa, part_of_speech: noun, agreement_tags: {semantic: en_fa_a2_unit09_lesson03_words}}
 templates:
   - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_choice.001
     lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
@@ -97,11 +111,11 @@ templates:
   - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_match.002
     lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
     type: matching_pairs
-    frame: {text: "Match each office/bureaucracy word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *bureaucracy_word, second: *bureaucracy_word, third: *bureaucracy_word, fourth: *bureaucracy_word}
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth]}
-    feedback_frame: {text: "Match each office/bureaucracy word to its English meaning.", language_code: en, direction: ltr}
+    frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
+    slots: {first: *unit_word, second: *unit_word, third: *unit_word, fourth: *unit_word, fifth: *unit_word, sixth: *unit_word}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit09.lesson01.bureaucracy_translate.003
     lesson_content_key: fa.a2.unit09.lesson01.bureaucracy_vocabulary
     type: translation
@@ -121,9 +135,9 @@ templates:
     lesson_content_key: fa.a2.unit09.lesson03.reading_the_notice
     type: matching_pairs
     frame: {text: "Match each word with its meaning.", language_code: en, direction: ltr}
-    slots: {first: *paperwork_word, second: *paperwork_word}
-    slot_relations: [{kind: distinct, slots: [first, second]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second]}
+    slots: {first: *notice_noun, second: *notice_noun, third: *notice_noun, fourth: *notice_noun, fifth: *notice_noun, sixth: *notice_noun}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each word to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit09.lesson03.paperwork_translate.006
     lesson_content_key: fa.a2.unit09.lesson03.reading_the_notice
@@ -150,13 +164,8 @@ templates:
       fourth: *bureaucracy_phrase
       fifth: *bureaucracy_phrase
       sixth: *bureaucracy_phrase
-      seventh: *bureaucracy_phrase
-      eighth: *bureaucracy_phrase
-      ninth: *bureaucracy_phrase
-      tenth: *bureaucracy_phrase
-      eleventh: *bureaucracy_phrase
-    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh]}]
-    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh]}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
     feedback_frame: {text: "Match each phrase to its English meaning.", language_code: en, direction: ltr}
   - content_key: practice.en-fa.fa.a2.unit09.lesson04.bureaucracy_phrase_translate.009
     lesson_content_key: fa.a2.unit09.lesson04.at_the_registry_office

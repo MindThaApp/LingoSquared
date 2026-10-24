@@ -5,61 +5,42 @@ target_language: fa
 unit_content_key: fa.b1.unit10.relative_clauses
 review:
   status: reviewed
-  fresh_context: 'true'
-  notes: 'Five lessons with lexemes, 51 fa lexemes. Drills subject / object / oblique relative clauses
-    with the indefinite -i marker. matching_pairs avoids a noun-only pool because hamsaayehaa ''neighbors
-    (plural)'' and hamsaayehaayi ''neighbors (indefinite/relative plural)'' would otherwise be drawable
-    into the same exercise.
+  fresh_context: true
+  required_next_reviewer: native_speaker_review
+  notes: |-
+    Review 2026-10-22 (en-fa practice rest pass, fresh context; 5 fixes).
+    (1) lesson01.choose.001 / translate.002 had no semantic tag (course 465: whole B1 level in Endless) -> unit content words (en_fa_b1_unit10_words). (2) lesson02.choose.001 / lesson03.translate.003 (verb, untagged, course 215) -> unit verbs. (3) lesson05.choose.001 / translate.003 (noun/adj/adv, untagged, course 193) -> unit words. (4) The three matching_pairs were reviewed_phrase unions of 6 / 8 / 6 unit members (same cards every checkpoint; B1-wide review phrases in Endless): now lesson01-04 nouns+verbs (19), unit verbs (17, 8 pairs), unit adjectives+adverbs (8); the two 'neighbors' forms (hamsaaye-haa / hamsaaye-haayi) are kept out of matching. (5) Feedback 'introduced in this unit' / 'word or phrase' -> accurate wording.
+    lesson04.translate.003 (proper nouns, untagged) left as is: the B1 proper-noun pool is 7 names.
+    NATIVE FLAGS: vaaghe'an is stored with tanvin (واقعاً); confirm the typed answer also accepts واقعا. kasi, baahaash, tush, behet, darbaare-sh, hamun, pas, baahaashun have no lesson tag and are unreachable from pack slots (tag lane).
 
+    Five lessons with lexemes, 51 fa lexemes. Drills subject / object / oblique relative clauses with the indefinite -i marker. matching_pairs avoids a noun-only pool because hamsaayehaa 'neighbors (plural)' and hamsaayehaayi 'neighbors (indefinite/relative plural)' would otherwise be drawable into the same exercise.
 
-    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit''s
-
+    Authored 2026-07-22 against docs/content/PRACTICE_PACK_RECIPE.md to unblock this unit's
     checkpoint: the unit had lexemes but no practice pack, so generate_checkpoint() returned
-
     checkpoint_unavailable. ZERO listen_select is authored - AZURE_SPEECH_KEY is unset, so
-
-    tts_actually_configured(''fa'') is false and _material() would delete those templates.
-
-    Every slot is satisfiable from THIS unit''s own lexemes, because generate_checkpoint()
-
-    calls _material() with only this unit''s lesson ids.
-
+    tts_actually_configured('fa') is false and _material() would delete those templates.
+    Every slot is satisfiable from THIS unit's own lexemes, because generate_checkpoint()
+    calls _material() with only this unit's lesson ids.
 
     The en-fa B1 lexeme classification carries almost no usable semantic tags (290 of 382 fa
-
     B1 lexemes are untagged), so the broad recognition / production / matching slots are
-
     constrained by language_code + part_of_speech only; the few semantic tags that do exist
-
     are used for the narrow, grammatically safe word_order / fill_in_blank / fixed-sentence
-
     slots. Every such tag was checked against the real backfill_lexemes.py data: each
-
     fill_in_blank anchor has exactly ONE distinct COURSE-WIDE candidate (AUTHORING_GUIDE #17
-
     hard-fail), and for every word_order frame each candidate in the whole B1 course pool is
-
     grammatical in that frame.
 
-
     proper_noun is deliberately excluded from multiple_choice and matching_pairs (the gloss is
-
     a transliteration, so those items are near-trivial) and is reachable only through a
-
     dedicated bare-word translation, which is a genuine script-production drill.
 
-
     Reviewer must double-check: (a) the Persian in every word_order / fill_in_blank frame reads
-
     as natural colloquial Iranian Persian and uses only vocabulary already taught in this course;
-
     (b) glosses that embed the Persian token in a parenthetical example (a backfill gloss-style
-
     artifact) partly give away the answer in multiple_choice - flagged, not fixable in a pack.
 
-
-    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order
-    x2 (13 total) anchored across the 5 lessons that introduce tokens.'
+    Template mix: fill_in_blank x1, matching_pairs x3, multiple_choice x3, translation x4, word_order x2 (13 total) anchored across the 5 lessons that introduce tokens.
 tag_schema:
   part_of_speech:
   - symbol
@@ -82,6 +63,11 @@ tag_schema:
     - size_word
     - ticket_request_word
     - volume_en_fa_a1_unit20_size_word_10_single
+    - en_fa_b1_unit10_words
+    - en_fa_b1_unit10_lesson01_words
+    - en_fa_b1_unit10_lesson02_words
+    - en_fa_b1_unit10_lesson03_words
+    - en_fa_b1_unit10_lesson04_words
 templates:
 - content_key: practice.en-fa.fa.b1.unit10.lesson01.choose.001
   lesson_content_key: fa.b1.unit10.lesson01.subject_relative
@@ -94,18 +80,17 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - pronoun
-      - adverb
-      - verb
       - noun
-      - preposition
+      - verb
       - adjective
-      - particle
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a word introduced in this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit10.lesson01.translate.002
@@ -121,13 +106,12 @@ templates:
     item:
       language_code: fa
       part_of_speech:
-      - pronoun
-      - adverb
-      - verb
       - noun
-      - preposition
+      - verb
       - adjective
-      - particle
+      - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -145,8 +129,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: verb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_gloss
     slot: item
@@ -166,62 +151,68 @@ templates:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
     second:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
     third:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
     fourth:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
     fifth:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
     sixth:
       language_code: fa
       part_of_speech:
       - noun
-      - adverb
       - verb
       agreement_tags:
         semantic:
-        - reviewed_phrase
-        - preference_reason
+        - en_fa_b1_unit10_lesson01_words
+        - en_fa_b1_unit10_lesson02_words
+        - en_fa_b1_unit10_lesson03_words
+        - en_fa_b1_unit10_lesson04_words
   slot_relations:
   - kind: distinct
     slots:
@@ -241,7 +232,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian word or phrase from this unit with its English meaning.
+    text: Match each Persian word from this unit with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit10.lesson03.match.001
@@ -254,108 +245,44 @@ templates:
   slots:
     first:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     second:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     third:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     fourth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     fifth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     sixth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     seventh:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
     eighth:
       language_code: fa
-      part_of_speech:
-      - noun
-      - adverb
-      - verb
-      - adjective
+      part_of_speech: verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - preference_reason
-        - size_word
-        - job_asking_word
+        semantic: en_fa_b1_unit10_words
   slot_relations:
   - kind: distinct
     slots:
@@ -379,7 +306,7 @@ templates:
     - seventh
     - eighth
   feedback_frame:
-    text: Match all eight Persian words and phrases with their English meanings.
+    text: Match all eight Persian verb forms with their English meanings.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit10.lesson03.fill.002
@@ -415,8 +342,9 @@ templates:
   slots:
     item:
       language_code: fa
-      part_of_speech:
-      - verb
+      part_of_speech: verb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_text
     slot: item
@@ -435,63 +363,45 @@ templates:
     first:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
     second:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
     third:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
     fourth:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
     fifth:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
     sixth:
       language_code: fa
       part_of_speech:
-      - noun
+      - adjective
       - adverb
-      - verb
       agreement_tags:
-        semantic:
-        - reviewed_phrase
-        - ordering_register
+        semantic: en_fa_b1_unit10_words
   slot_relations:
   - kind: distinct
     slots:
@@ -511,7 +421,7 @@ templates:
     - fifth
     - sixth
   feedback_frame:
-    text: Match each Persian word or phrase from this unit with its English meaning.
+    text: Match each Persian word from this unit with its English meaning.
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit10.lesson04.order.002
@@ -573,11 +483,13 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_gloss
     slot: item
   feedback_frame:
-    text: '{item} is a content word from this unit.'
+    text: '{item} is a word from this unit.'
     language_code: en
     direction: ltr
 - content_key: practice.en-fa.fa.b1.unit10.lesson05.order.002
@@ -620,6 +532,8 @@ templates:
       - noun
       - adjective
       - adverb
+      agreement_tags:
+        semantic: en_fa_b1_unit10_words
   answer_derivation:
     kind: slot_text
     slot: item
