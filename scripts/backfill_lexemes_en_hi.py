@@ -9,8 +9,12 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 only (the "en-hi" manifest group, units 01-19). A2+ is not
-classified yet; extend LEVELS and the tables below together.
+Scope: A1 (the "en-hi" manifest group, units 01-19) and A2 (the "en-hi-a2"
+group, units 20-25, added 2026-10-24 in session 11). A2 is a separate Course
+row, so its lexemes are first-sight per course and carry their own gloss and
+part-of-speech tables (GLOSSES_A2, POS_SETS_A2): a token re-taught in A2 is
+glossed for the sense A2 teaches. B1+ is not classified yet; extend LEVELS
+and the tables together.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight,
@@ -50,7 +54,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "hi"
-LEVELS = {"a1": "en-hi"}
+LEVELS = {"a1": "en-hi", "a2": "en-hi-a2"}
 
 PROPER_NOUNS = {"प्रिया", "अर्जुन", "भारत", "लंदन", "अमेरिका", "दिल्ली", "मुंबई"}
 
@@ -242,17 +246,110 @@ for _tag, _words in {
 part_of_speech = pos_lookup(POS_SETS)
 
 
+# ---------------------------------------------------------------------------
+# A2 (course "Hindi A2", manifest group en-hi-a2, units 20-25). Separate
+# tables: A2 is its own Course, so every token is first-sight again and is
+# glossed for the sense the A2 unit teaches. Each gloss is hand-written; no
+# Devanagari and no transliteration inside a gloss. Forms that differ by
+# gender or number say so, so a bare-word prompt names exactly one form.
+# ---------------------------------------------------------------------------
+GLOSSES_A2: dict[str, str] = {
+    # unit20 changing an address
+    "पता": "address", "नया": "new (masc.)", "नई": "new (fem.)",
+    "मेरा": "my (masc.)", "अपना": "one's own (masc.)",
+    "अपनी": "one's own (fem.)", "अपने": "one's own (masc. plural, or respectful)",
+    "बदलना": "to change", "मुझे": "to me; me", "है": "is (he, she, it)",
+    "आधार": "Aadhaar (India's national ID system)", "कार्ड": "card",
+    "केंद्र": "centre", "जाना": "to go",
+    "दस्तावेज़": "document", "फ़ॉर्म": "form", "भरना": "to fill in",
+    "ने": "(marks the doer of a past action)",
+    "मैंने": "I (as the doer of a past action)",
+    "भरा": "filled in (past, masc. singular object)", "लाना": "to bring",
+    "लाया": "brought (masc.)", "लाए": "brought (you, formal; or masc. plural)",
+    "क्या": "what; (question word)", "आप": "you (formal, respectful)",
+    "हाँ": "yes", "मैं": "I", "बदला": "changed (past, masc. singular object)",
+    "आपको": "to you (formal)", "अर्जुन": "Arjun", "प्रिया": "Priya",
+    "क्लर्क": "clerk", "गांधी": "Gandhi", "रोड": "road", "दिल्ली": "Delhi",
+    "आपका": "your (formal, masc.)",
+    # unit21 giving an opinion
+    "फ़िल्म": "film; movie", "यह": "this", "कैसी": "how (fem.)",
+    "लगना": "to seem; to feel (to someone)", "लगती": "seems (fem.)",
+    "अच्छी": "good; nice (fem.)", "कहानी": "story",
+    "मज़ेदार": "fun; entertaining",
+    "पसंद": "liking; liked", "क्योंकि": "because", "बहुत": "very; a lot",
+    "लगता": "seems (masc.)", "कि": "that (joins a statement to what was said)",
+    "बुरी": "bad (fem.)",
+    "नहीं": "no; not", "किताब": "book", "किताबें": "books", "हैं": "are",
+    # unit22 opening a bank account
+    "बैंक": "bank", "खाता": "account", "खोलना": "to open", "पैसे": "money",
+    "चाहिए": "need; would like",
+    "पहचान": "identity", "पत्र": "paper; card (as in identity card)",
+    "खोला": "opened (past, masc. singular object)", "दो": "two",
+    "भरे": "filled in (past, masc. plural object)",
+    "कर्मचारी": "employee", "अच्छा": "good; nice (masc.)", "खुश": "happy",
+    "था": "was (masc.)", "गया": "went (masc.)",
+    # unit23 at the doctor
+    "दर्द": "pain; ache", "बुखार": "fever", "सिर": "head", "तीन": "three",
+    "दिन": "day", "से": "since; for (a length of time); from; with",
+    "कब": "when",
+    "दवा": "medicine", "आराम": "rest", "करना": "to do", "तुम्हें": "to you (informal)",
+    "डॉक्टर": "doctor", "समस्या": "problem", "भी": "also; too",
+    "किया": "did (past, masc. singular object)", "ठीक": "fine; well; okay",
+    # unit24 a repair
+    "पंखा": "fan", "खराब": "broken; faulty", "मकान": "house (as a rented home)",
+    "मालिक": "owner", "नल": "tap", "कल": "tomorrow; yesterday",
+    "होगा": "will be (masc.)", "मरम्मत": "repair", "सूचना": "notice",
+    "पंखे": "fan (the form used before a postposition)",
+    # unit25 a job interview
+    "हूँ": "I am", "हो": "you are (informal)", "कितने": "how many (masc.)",
+    "साल": "year", "का": "of (masc.)", "अनुभव": "experience",
+    "नौकरी": "job", "इंटरव्यू": "interview", "मैनेजर": "manager",
+    "सोमवार": "Monday", "को": "on; to", "शुरू": "start; beginning",
+    "कर": "do (stem, used before can)", "सकता": "can; be able to (masc.)",
+}
+
+POS_SETS_A2 = {
+    "proper_noun": split_words("अर्जुन प्रिया दिल्ली गांधी"),
+    "pronoun": split_words(
+        "मेरा मुझे मैं मैंने आप आपको आपका यह क्या कितने तुम्हें अपना अपनी अपने"
+    ),
+    "preposition": split_words("से को का"),
+    "particle": split_words("ने नहीं कि क्योंकि भी"),
+    "adjective": split_words(
+        "नया नई कैसी अच्छी अच्छा बुरी मज़ेदार खुश ठीक खराब पसंद"
+    ),
+    "adverb": split_words("बहुत कब कल"),
+    "verb": split_words(
+        "है हूँ हो हैं बदलना भरना लाना लाया लाए भरा बदला लगना लगती लगता "
+        "खोलना खोला भरे था गया करना किया होगा सकता कर जाना चाहिए"
+    ),
+    "phrase": split_words("हाँ"),
+}
+POS_SETS_A2["noun"] = set(GLOSSES_A2) - set().union(*POS_SETS_A2.values())
+
+CATEGORY_TAGS_A2: dict[str, list[str]] = {}
+for _tag, _words in {
+    "hi_number": "दो तीन",
+    "hi_weekday": "सोमवार",
+}.items():
+    for _w in _words.split():
+        CATEGORY_TAGS_A2.setdefault(_w, []).append(_tag)
+
+part_of_speech_a2 = pos_lookup(POS_SETS_A2)
+
+
 def iter_specs():
     for level, group in LEVELS.items():
         realizations, _ = manifest_group(group)
+        a2 = level == "a2"
         yield from classify(
             lang=LANG,
             level=level,
             unit_files=realizations,
-            glosses=GLOSSES,
-            part_of_speech=part_of_speech,
+            glosses=GLOSSES_A2 if a2 else GLOSSES,
+            part_of_speech=part_of_speech_a2 if a2 else part_of_speech,
             normalize=normalize,
-            category_tags=CATEGORY_TAGS,
+            category_tags=CATEGORY_TAGS_A2 if a2 else CATEGORY_TAGS,
         )
 
 
