@@ -579,6 +579,9 @@ PRS_GLOSSES: dict[str, str] = {
     "حامد": "Hamed (name)", "من": "I", "همکار": "colleague", "نو": "new",
     "نجیب": "Najib (name)", "آمدین": "you came (polite)",
     "نام‌تان": "your name", "چیست": "what is", "نام": "name", "از": "from",
+    # نامم (spoken "my name", نام + -م) replaces نام من in the lesson06
+    # dialogue line (owner register decision 2026-10-24).
+    "نامم": "my name",
     "آشنایی": "acquaintance", "با": "with", "شدم": "I became", "هم": "also",
     "همکاران": "colleagues", "را": "(object marker)", "معرفی": "introduction",
     "بسیار": "very", "این": "this", "میز": "desk; table",
@@ -1077,7 +1080,7 @@ PRS_GLOSSES: dict[str, str] = {
     "بفرستی": "(that) you send", "می‌تانه": "he/she can",
     "می‌تانیم": "we can", "می‌تانن": "they can",
     "می‌تواند": "he/she can", "می‌توانیم": "we can", "می‌توانند": "they can",
-    "ببره": "(that) he/she take", "بکنین": "(that) you (polite) do",
+    "ببرد": "(that) he/she take", "بکنین": "(that) you (polite) do",
     "بیایند": "(that) they come", "آنها": "they",
     "می‌تانستم": "I could / I was able to",
     "نتانستم": "I could not / I was not able to",
@@ -1092,7 +1095,8 @@ PRS_GLOSSES: dict[str, str] = {
     "نداشتم": "I didn't have", "ملاقات": "appointment",
     "برود": "(that) he/she go", "نتانست": "he/she could not",
     "نزد": "near / at (someone's place)", "پارسال": "last year",
-    "بگیره": "(that) he/she take", "امسال": "this year",
+    # بگیرد (written; was colloquial بگیره) is glossed further below.
+    "امسال": "this year",
     # B1 unit 02 (necessity: باید paradigm, present + past + negation,
     # guests dialogue, reading), added 2026-07-11. Confirmed by reading
     # docs/content/realizations/prs/b1_unit02_necessity.yaml directly.
@@ -1103,8 +1107,10 @@ PRS_GLOSSES: dict[str, str] = {
     "بخری": "(that) you buy", "خودش": "himself; herself; itself",
     "همیشه": "always", "شکل": "form; shape",
     "فعل": "verb (grammar term)", "فاعل": "subject (grammar term)",
-    "بخره": "he/she (should) buy", "بخریم": "(that) we buy",
-    "بخرین": "(that) you (plural/polite) buy", "بخرن": "(that) they buy",
+    # بخرد/بخرند (written; were colloquial بخره/بخرن, register decision
+    # 2026-10-24) are glossed further below.
+    "بخریم": "(that) we buy",
+    "بخرین": "(that) you (plural/polite) buy",
     "می‌خریدم": "I should have bought / I was supposed to buy",
     "نباید": "must not", "نخریدم": "I didn't buy",
     "مهمان": "guest(s)", "امشب": "tonight", "پاک": "clean",
@@ -1472,6 +1478,7 @@ PRS_POS: dict[str, str] = {
     "دفتر": "noun", "کابل": "proper_noun", "حامد": "proper_noun", "من": "pronoun",
     "همکار": "noun", "نو": "adjective", "نجیب": "proper_noun", "آمدین": "verb",
     "نام‌تان": "noun", "چیست": "verb", "نام": "noun", "از": "preposition",
+    "نامم": "noun",
     "آشنایی": "noun", "با": "preposition", "شدم": "verb", "هم": "particle",
     "همکاران": "noun", "را": "particle", "معرفی": "noun", "بسیار": "adverb",
     "این": "pronoun", "میز": "noun",
@@ -1734,7 +1741,7 @@ PRS_POS: dict[str, str] = {
     # B1 unit 01 (abilities), added 2026-07-11.
     "می‌تانی": "verb", "می‌توانی": "verb", "بخرم": "verb", "ببینم": "verb", "بفرستم": "verb",
     "کتاب": "noun", "نامه": "noun", "بفرستی": "verb", "می‌تانه": "verb",
-    "می‌تانیم": "verb", "می‌تانن": "verb", "ببره": "verb",
+    "می‌تانیم": "verb", "می‌تانن": "verb", "ببرد": "verb",
     "می‌تواند": "verb", "می‌توانیم": "verb", "می‌توانند": "verb",
     "بکنین": "verb", "بیایند": "verb", "آنها": "pronoun",
     "می‌تانستم": "verb", "نتانستم": "verb", "می‌تانستی": "verb",
@@ -1743,11 +1750,11 @@ PRS_POS: dict[str, str] = {
     "پسته خانه": "noun", "نرفت": "verb", "ببری": "verb",
     "راستی": "adverb", "نداشتم": "verb", "ملاقات": "noun",
     "برود": "verb", "نتانست": "verb", "نزد": "preposition",
-    "پارسال": "adverb", "بگیره": "verb", "امسال": "adverb",
+    "پارسال": "adverb", "امسال": "adverb",
     # B1 unit 02 (necessity), added 2026-07-11.
     "بخری": "verb", "خودش": "pronoun", "همیشه": "adverb",
-    "شکل": "noun", "فعل": "noun", "فاعل": "noun", "بخره": "verb",
-    "بخریم": "verb", "بخرین": "verb", "بخرن": "verb",
+    "شکل": "noun", "فعل": "noun", "فاعل": "noun",
+    "بخریم": "verb", "بخرین": "verb",
     "می‌خریدم": "verb", "نباید": "verb", "نخریدم": "verb",
     "مهمان": "noun", "امشب": "adverb", "پاک": "adjective",
     "غذا": "noun", "بپزم": "verb", "گوشت": "noun",
@@ -2835,7 +2842,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("wellbeing_answer")
     if token in {"تشکر", "خواهش", "می‌کنم", "بفرمایین", "شکر"}:
         semantics.append("politeness")
-    if token in {"نام", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
+    if token in {"نام", "نامم", "نام‌تان", "چیست", "من", "شما", "تو", "است", "استم"}:
         semantics.append("identity")
     if token in {"حامد", "نجیب"}:
         semantics.append("person_name")
@@ -2855,7 +2862,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         semantics.append("country")
     if token == "شهر":
         semantics.append("city_word")
-    if token in {"نام", "نام‌تان", "نامت", "چیست"}:
+    if token in {"نام", "نامم", "نام‌تان", "نامت", "چیست"}:
         semantics.append("name_word")
     if token in {"کجا", "استین"} and lesson_key.startswith("prs.a1.unit02.lesson02"):
         semantics.append("origin_question")
@@ -3749,8 +3756,8 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
                  "توانستم", "نتوانستم", "نتوانست"}:
         semantics.append("past_ability_verb")
     if token in {
-        "بخرم", "ببینم", "بفرستم", "بفرستی", "ببره", "بکنین", "بیایند",
-        "برود", "ببری", "بگیره",
+        "بخرم", "ببینم", "بفرستم", "بفرستی", "ببرد", "بکنین", "بیایند",
+        "برود", "ببری", "بگیرد",
     }:
         semantics.append("ke_clause_subjunctive")
     if token == "آنها":
@@ -3788,7 +3795,7 @@ def prs_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     # obligation) is a genuine small closed set. "grammar_term_word"
     # pools the metalanguage this unit's grammar note teaches (itself/
     # always/form/verb/subject) to explain that باید never conjugates.
-    if token in {"بخرم", "بخری", "بخره", "بخریم", "بخرین", "بخرن"}:
+    if token in {"بخرم", "بخری", "بخرد", "بخریم", "بخرین", "بخرند"}:
         semantics.append("necessity_subjunctive_verb")
     if token in {"می‌خریدم", "می‌کرد"}:
         semantics.append("past_necessity_verb")
