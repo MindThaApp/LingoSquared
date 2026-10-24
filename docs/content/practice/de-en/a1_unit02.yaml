@@ -16,6 +16,7 @@ review:
     German gloss or a German sentence. Feedback is German, formal Sie. Reviewer: check the German gloss
     of near-synonyms (fine=prima, good=gut, okay=in Ordnung, hello vs hi) and the fixed-sentence prompts,
     which pin the form (e.g. ohne Kurzform) because grading compares one exact English string.
+    Opus pass 2026-10-24: student dropped from the bare-word translation pool (gloss Student would leak the answer); one over-general feedback claim softened.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
@@ -26,7 +27,7 @@ slot_presets:
   l3: &l3 {"language_code": "en", "part_of_speech": ["noun", "particle", "verb"], "agreement_tags": {"semantic": ["w_library", "w_assistant", "w_welcome", "w_the", "w_thank"]}}
   jobs: &jobs {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": ["w_student", "w_teacher", "w_member"]}}
   mt: &mt {"language_code": "en", "part_of_speech": ["noun", "particle"], "agreement_tags": {"semantic": ["w_name", "w_student", "w_teacher", "w_member", "w_engineer", "w_library", "w_yes", "w_no"]}}
-  tr2: &tr2 {"language_code": "en", "part_of_speech": ["adjective", "noun", "particle"], "agreement_tags": {"semantic": ["w_student", "w_teacher", "w_member", "w_engineer", "w_yes", "w_no", "w_new"]}}
+  tr2: &tr2 {"language_code": "en", "part_of_speech": ["adjective", "noun", "particle"], "agreement_tags": {"semantic": ["w_teacher", "w_member", "w_engineer", "w_yes", "w_no", "w_new"]}}
   tr3: &tr3 {"language_code": "en", "part_of_speech": ["noun", "verb"], "agreement_tags": {"semantic": ["w_library", "w_assistant", "w_welcome", "w_thank"]}}
   w_name: &w_name {"language_code": "en", "part_of_speech": "noun", "agreement_tags": {"semantic": "w_name"}}
   w_your: &w_your {"language_code": "en", "part_of_speech": "pronoun", "agreement_tags": {"semantic": "w_your"}}
@@ -157,7 +158,7 @@ templates:
     frame: {"text": "Sie ist Ingenieurin. (ausgeschrieben, ohne Kurzform)", "language_code": "de", "direction": "ltr"}
     slots: {item: *w_an}
     answer_derivation: {"kind": "render_frame", "frame": {"text": "She is {item} engineer.", "language_code": "en", "direction": "ltr"}}
-    feedback_frame: {"text": "Das Englische kennt keine weibliche Berufsform: Ingenieur und Ingenieurin heißen beide engineer.", "language_code": "de", "direction": "ltr"}
+    feedback_frame: {"text": "Viele englische Berufsbezeichnungen haben keine eigene weibliche Form: Ingenieur und Ingenieurin heißen beide engineer.", "language_code": "de", "direction": "ltr"}
   - content_key: practice.de-en.en.a1.unit02.lesson03.translate.018
     lesson_content_key: en.a1.unit02.lesson03.library_dialogue
     type: translation
