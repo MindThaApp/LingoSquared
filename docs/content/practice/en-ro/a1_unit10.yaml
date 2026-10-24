@@ -13,11 +13,13 @@ review:
     w_ pools of this unit's own tokens (no two members share a gloss); sentence frames use
     single w_ anchors. English prompts name tu versus dumneavoastră register where it matters.
     Feedback lines carry a usage or grammar point. Reviewer: confirm the reflexive mă trezesc / mă culc, and the Nu + verb negative frame (not taught as a pattern in this unit).
+    Opus quality pass 2026-10-24: bare-word translation uses a new r_words pool without the reflexive-only trezesc/culc; pronoun-drop feedback corrected.
 tag_schema:
   part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
   agreement_tags:
     semantic: [w_trezesc, w_mănânc, w_beau, w_lucrez, w_merg, w_acasă, w_culc]
 slot_presets:
+  r_words: &r_words {language_code: ro, part_of_speech: [adverb, verb], agreement_tags: {semantic: [w_mănânc, w_beau, w_lucrez, w_merg, w_acasă]}}
   r_pool: &r_pool {language_code: ro, part_of_speech: [adverb, verb], agreement_tags: {semantic: [w_trezesc, w_mănânc, w_beau, w_lucrez, w_merg, w_acasă, w_culc]}}
   r_first: &r_first {language_code: ro, part_of_speech: verb, agreement_tags: {semantic: [w_trezesc, w_mănânc, w_beau]}}
   r_sub: &r_sub {language_code: ro, part_of_speech: [adverb, verb], agreement_tags: {semantic: [w_mănânc, w_lucrez, w_merg, w_acasă, w_culc]}}
@@ -118,7 +120,7 @@ templates:
     lesson_content_key: ro.a1.unit10.lesson01.dimineata
     type: translation
     frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
-    slots: {item: *r_pool}
+    slots: {item: *r_words}
     answer_derivation: {kind: slot_text, slot: item}
     feedback_frame: {text: "Mănânc, beau and merg need no word for I, because the verb ending already shows the person.", language_code: en, direction: ltr}
   - content_key: practice.en-ro.ro.a1.unit10.lesson01.translate.006
@@ -134,7 +136,7 @@ templates:
     frame: {text: "I eat bread and I drink coffee in the morning.", language_code: en, direction: ltr}
     slots: {item: *t_beau}
     answer_derivation: {kind: render_frame, frame: {text: "Mănânc pâine și {item} cafea dimineața.", language_code: ro, direction: ltr}}
-    feedback_frame: {text: "Beau is I drink; the sentence has two verbs with one subject, so the pronoun is not repeated.", language_code: en, direction: ltr}
+    feedback_frame: {text: "Beau is I drink; Romanian leaves out eu because the endings of mănânc and beau already show I.", language_code: en, direction: ltr}
   - content_key: practice.en-ro.ro.a1.unit10.lesson02.translate.006
     lesson_content_key: ro.a1.unit10.lesson02.lucrez_merg_acasa
     type: translation
