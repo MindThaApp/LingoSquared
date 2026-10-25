@@ -13,7 +13,7 @@ vi.mock("react-i18next", () => ({
 }));
 
 vi.mock("@lingo/shared/api/endpoints", () => ({
-  ReviewApi: { due: vi.fn(), session: vi.fn(), answer: vi.fn(), retry: vi.fn(), reportIssue: vi.fn() },
+  ReviewApi: { due: vi.fn(), session: vi.fn(), answer: vi.fn(), retry: vi.fn(), reportIssue: vi.fn(), forecast: vi.fn(), leeches: vi.fn() },
   CatalogApi: { course: vi.fn() },
 }));
 
@@ -28,6 +28,8 @@ beforeEach(() => {
     by_course: [{ course_id: "c-1", due_count: 3 }],
   } as never);
   vi.mocked(CatalogApi.course).mockResolvedValue({ id: "c-1", title: "Dutch" } as never);
+  vi.mocked(ReviewApi.forecast).mockResolvedValue({ today: 0, tomorrow: 0, this_week: 0 });
+  vi.mocked(ReviewApi.leeches).mockResolvedValue({ threshold: 8, items: [] });
 });
 
 describe("ReviewPage session retry", () => {

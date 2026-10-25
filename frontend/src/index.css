@@ -263,9 +263,68 @@ button {
 }
 
 .tabbar .tab-icon {
-  font-size: 1.35rem;
+  display: flex;
   line-height: 1;
 }
+
+/* Crash-report prompt: on phones it must clear the fixed tab bar. */
+.crash-prompt {
+  position: fixed;
+  inset-inline: 12px;
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px) + 12px);
+  z-index: 1000;
+  max-width: 480px;
+  margin: 0 auto;
+}
+@media (min-width: 720px) {
+  .crash-prompt { bottom: 12px; }
+}
+
+/* Radio rows with a 44px tap target (WCAG 2.5.5 / mobile guidance). */
+.radio-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+}
+.radio-row input[type="radio"] {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin: 0;
+}
+
+/* Daily-goal picker: segmented buttons that wrap, logical so RTL mirrors. */
+.goal-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+.goal-option {
+  flex: 1 1 calc(50% - 8px);
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 10px;
+  background: var(--surface);
+  color: var(--text-h);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  font: inherit;
+  cursor: pointer;
+}
+.goal-option[aria-checked="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.goal-option:disabled { opacity: 0.6; cursor: default; }
+.goal-option-xp { font-size: 0.8rem; opacity: 0.85; }
 
 @media (min-width: 720px) {
   .tabbar { display: none; }
@@ -1586,10 +1645,11 @@ button {
   }
 
   .side-rail-icon {
-    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     line-height: 1;
     width: 1.6rem;
-    text-align: center;
   }
 
   .topbar-brand,
@@ -1735,4 +1795,22 @@ button {
   justify-content: space-between;
   gap: 12px;
   padding: 6px 0;
+}
+
+/* Guided first start */
+.onboarding-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.why-expander {
+  margin: 0 0 10px;
+  font-weight: 400;
+}
+.why-expander summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 32px;
 }

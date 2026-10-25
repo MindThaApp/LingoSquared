@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
@@ -14,11 +14,22 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import { AlmostFeedback } from "../components/AlmostFeedback";
-import type { AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
+import type { AnswerMeta, AnswerResponse, PracticeAnswerResult, PracticeItem } from "@lingo/shared/api/types";
 import { asExerciseType } from "@lingo/shared/api/types";
 import { useAuth } from "../auth/AuthContext";
 import { learnPath } from "../lib/activeCourse";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
+import { ReviewInsights, nextReviewLabel } from "../components/ReviewInsights";
+
+const RATINGS_PREF_KEY = "lingo.review.ratings";
+
+function readRatingsPref(): boolean {
+  try {
+    return localStorage.getItem(RATINGS_PREF_KEY) !== "off";
+  } catch {
+    return true;
+  }
+}
 
 interface CoursePickOption {
   courseId: string;
@@ -56,6 +67,10 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   const [result, setResult] = useState<PracticeAnswerResult | null>(null);
   const [lastResponse, setLastResponse] = useState<AnswerResponse | undefined>();
   const [lastSpoken, setLastSpoken] = useState(false);
+  const lastMetaRef = useRef<AnswerMeta | undefined>(undefined);
+  // When the current item appeared, so each answer can report its latency.
+  const shownAtRef = useRef(Date.now());
+  const [ratings, setRatings] = useState(readRatingsPref);
   const [submitting, setSubmitting] = useState(false);
   const [reviewedCount, setReviewedCount] = useState(0);
   const [submitError, setSubmitError] = useState(false);
@@ -127,17 +142,35 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   }
 
   const current = items?.[index];
+  const currentId = current?.id;
 
-  async function handleAnswer(response: AnswerResponse, meta?: { inputMode?: "spoken" }) {
+  useEffect(() => {
+    shownAtRef.current = Date.now();
+  }, [currentId]);
+
+  function toggleRatings(on: boolean) {
+    setRatings(on);
+    try {
+      localStorage.setItem(RATINGS_PREF_KEY, on ? "on" : "off");
+    } catch {
+      // Preference just won't persist.
+    }
+  }
+
+  async function handleAnswer(response: AnswerResponse, meta?: AnswerMeta) {
     if (!current) return;
     setSubmitting(true);
     setLastResponse(response);
     setLastSpoken(meta?.inputMode === "spoken");
+    const sent: AnswerMeta = { ...meta, latencyMs: meta?.latencyMs ?? Date.now() - shownAtRef.current };
+    lastMetaRef.current = sent;
     setSubmitError(false);
     try {
-      const res = await ReviewApi.answer(current.id, response, meta);
+      const res = await ReviewApi.answer(current.id, response, sent);
       setResult(res);
       invalidateProgressQueries(queryClient);
+      void queryClient.invalidateQueries({ queryKey: ["reviews-forecast"] });
+      void queryClient.invalidateQueries({ queryKey: ["reviews-leeches"] });
     } catch {
       setSubmitError(true);
     } finally {
@@ -146,7 +179,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
   }
 
   function handleResubmit() {
-    if (lastResponse) handleAnswer(lastResponse, lastSpoken ? { inputMode: "spoken" } : undefined);
+    if (lastResponse) handleAnswer(lastResponse, lastMetaRef.current);
   }
 
   function handleQuit() {
@@ -168,6 +201,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
       });
       setResult(null);
       setLastResponse(undefined);
+      shownAtRef.current = Date.now();
     } catch {
       // Without this the "Try again" button silently did nothing on a network
       // error. The result banner (and its Try again button) stays mounted
@@ -209,6 +243,9 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         <button className="btn btn-block" onClick={() => navigate(learnPath(user?.id))}>
           {t("review.continue_learning", { defaultValue: "Continue learning" })}
         </button>
+        <div style={{ textAlign: "start" }}>
+          <ReviewInsights />
+        </div>
       </div>
     );
   }
@@ -245,6 +282,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
             </button>
           ))
         )}
+        <ReviewInsights />
       </div>
     );
   }
@@ -271,6 +309,9 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         <button className="btn btn-block" onClick={() => navigate(courseId ? `/courses/${courseId}` : "/")}>
           {t("review.continue_learning", { defaultValue: "Continue learning" })}
         </button>
+        <div style={{ textAlign: "start" }}>
+          <ReviewInsights />
+        </div>
       </div>
     );
   }
@@ -299,6 +340,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         key={current.id}
         exercise={{ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt }}
         onAnswer={handleAnswer}
+        ratings={ratings}
         disabled={submitting || Boolean(result) || submitError}
         gradedResult={
           result ? { correct: result.correct, correctResponse: result.correct_response } : undefined
@@ -317,6 +359,12 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
       <div role="status" aria-live="polite">
       {result && (() => {
         const status = resultStatus(result);
+        const nextLine =
+          result.next_interval_days !== undefined ? (
+            <p data-testid="next-review" style={{ margin: "0 0 10px", fontWeight: 400 }}>
+              {nextReviewLabel(t, result.next_interval_days)}
+            </p>
+          ) : null;
         if (status === "almost") {
           return (
             <div className="feedback-banner almost">
@@ -326,6 +374,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
                 correct={formatCorrectResponse(result.correct_response)}
                 dir={answerDirectionForExercise({ id: current.id, type: asExerciseType(current.type), order: 0, prompt: current.prompt })}
               />
+              {nextLine}
               <button className="btn btn-block" onClick={handleContinue}>
                 {t("review.continue")}
               </button>
@@ -348,6 +397,7 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
                 <EmphasizedText text={result.feedback} />
               </p>
             )}
+            {nextLine}
             <div style={{ display: "flex", gap: 8 }}>
               {status === "incorrect" && (
                 <button className="btn btn-secondary btn-block" onClick={handleRetry} disabled={submitting}>
@@ -367,6 +417,16 @@ function SrsReview({ onSessionActiveChange }: { onSessionActiveChange: (active: 
         );
       })()}
       </div>
+      {current.type === "flashcard" && (
+        <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12 }}>
+          <input
+            type="checkbox"
+            checked={ratings}
+            onChange={(e) => toggleRatings(e.target.checked)}
+          />
+          <span className="muted">{t("review.rate_toggle")}</span>
+        </label>
+      )}
       <div style={{ marginTop: 12, textAlign: "center" }}>
         {/* current.id is a PracticeItem id (generated by /reviews/session),
             never an Exercise id - must go through the practice-item report

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AuthApi, CatalogApi, ProgressApi } from "@lingo/shared/api/endpoints";
 import { ApiError } from "@lingo/shared/api/client";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { setAccountDeletedNotice } from "../lib/accountDeletedNotice";
 import { VoiceSettings } from "../components/VoiceSettings";
+import { FeedbackSettings } from "../components/FeedbackSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
+import { DailyGoalPicker } from "../components/DailyGoalPicker";
 import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
@@ -209,8 +211,16 @@ export function ProfilePage() {
         )}
       </div>
 
+      <DailyGoalPicker />
+
+      <Link to="/vocabulary" className="card" style={{ display: "block", marginTop: 16, color: "inherit", textDecoration: "none" }}>
+        <strong>{t("nav.vocabulary")}</strong>
+        <p className="muted" style={{ margin: "4px 0 0" }}>{t("profile.words_hint")}</p>
+      </Link>
+
       <NotificationSettings />
       <SpeechSpeedSettings />
+      <FeedbackSettings />
       <VoiceSettings />
       <CrashReportSettings />
       <ReportProblem />

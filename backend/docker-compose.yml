@@ -24,6 +24,10 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
+      # Pre-rendered TTS clips: a host dir OUTSIDE the repo/code bind-mount and
+      # outside the image, so rebuilds/redeploys never delete rendered audio.
+      # Read-only here; scripts/render_audio.py writes it from the host.
+      - ${MEDIA_AUDIO_HOST_DIR:-${HOME}/lingosquared-media/audio}:/srv/media/audio:ro
       # faster-whisper downloads model weights from Hugging Face on first
       # use and caches them under ~/.cache/huggingface — without a named
       # volume here that cache lives only in the container's writable
@@ -44,6 +48,7 @@ services:
     volumes:
       - ./web_dist:/usr/share/nginx/html:ro
       - ./nginx.web.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${MEDIA_AUDIO_HOST_DIR:-${HOME}/lingosquared-media/audio}:/srv/media/audio:ro
 volumes:
   postgres_data:
   whisper_model_cache:

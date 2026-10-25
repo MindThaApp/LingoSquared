@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "render_rate": "1.00",
+  "note": "Single source of truth for pre-rendered audio. Read by scripts/render_audio.py and by the web frontend (src/lib/prerenderedAudio.ts). The file name of a clip is sha256(provider, voice, language, normalized text, render_rate)[:32] -- changing any value below changes the hash, so a voice change re-renders only that language. Slow playback is NOT rendered: the client applies playbackRate to the single normal-speed file. Voice names verified against Google Cloud TTS docs (naming pattern <locale>-<Neural2|Wavenet>-<letter>, <locale>-Chirp3-HD-<Name>) and Gemini speech-generation docs on 2026-10-25; a real render must still run `render_audio.py --check-voices` first.",
+  "tiers": {
+    "google-neural2": {"provider": "google", "free_chars_per_month": 1000000, "usd_per_million": 16},
+    "google-wavenet": {"provider": "google", "free_chars_per_month": 1000000, "usd_per_million": 16},
+    "google-chirp3hd": {"provider": "google", "free_chars_per_month": 1000000, "usd_per_million": 30},
+    "azure-neural": {"provider": "azure", "free_chars_per_month": 500000, "usd_per_million": 15},
+    "gemini-tts": {"provider": "gemini", "free_chars_per_month": null, "usd_per_million": 0, "note": "token-billed, free-tier rate limited; ~0.6 USD per 100k chars on Flash-Lite if paid"}
+  },
+  "languages": {
+    "en": {"tier": "google-neural2", "provider": "google", "language_code": "en-US", "voice": "en-US-Neural2-C"},
+    "es": {"tier": "google-neural2", "provider": "google", "language_code": "es-ES", "voice": "es-ES-Neural2-A"},
+    "fr": {"tier": "google-neural2", "provider": "google", "language_code": "fr-FR", "voice": "fr-FR-Neural2-F"},
+    "de": {"tier": "google-neural2", "provider": "google", "language_code": "de-DE", "voice": "de-DE-Neural2-G"},
+    "it": {"tier": "google-neural2", "provider": "google", "language_code": "it-IT", "voice": "it-IT-Neural2-A"},
+    "hi": {"tier": "google-neural2", "provider": "google", "language_code": "hi-IN", "voice": "hi-IN-Neural2-A"},
+    "nl": {"tier": "google-wavenet", "provider": "google", "language_code": "nl-NL", "voice": "nl-NL-Wavenet-F"},
+    "ru": {"tier": "google-wavenet", "provider": "google", "language_code": "ru-RU", "voice": "ru-RU-Wavenet-C"},
+    "pl": {"tier": "google-chirp3hd", "provider": "google", "language_code": "pl-PL", "voice": "pl-PL-Chirp3-HD-Achernar"},
+    "ro": {"tier": "google-chirp3hd", "provider": "google", "language_code": "ro-RO", "voice": "ro-RO-Chirp3-HD-Achernar"},
+    "ar": {"tier": "google-chirp3hd", "provider": "google", "language_code": "ar-XA", "voice": "ar-XA-Chirp3-HD-Achernar"},
+    "fa": {"tier": "azure-neural", "provider": "azure", "language_code": "fa-IR", "voice": "fa-IR-DilaraNeural"},
+    "prs": {"tier": "gemini-tts", "provider": "gemini", "language_code": "fa-AF", "voice": "voices-api:fa-AF", "model": "gemini-3.8-flash-lite-tts", "requires_env": "GEMINI_API_KEY"}
+  }
+}
