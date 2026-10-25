@@ -10,6 +10,7 @@ import App from './App.tsx'
 import { AuthProvider } from './auth/AuthContext'
 import { installGlobalCrashReporting } from './lib/crashReporter'
 import { initSentry, installCrashCapture } from './lib/sentry'
+import { installStaleChunkReload } from './lib/staleChunkReload'
 import { queryClient } from './queryClient'
 
 // @lingo/shared's api/client.ts and lib/answerInputMode.ts moved out of
@@ -84,6 +85,9 @@ configureAnswerInputModeStore({
     }
   },
 })
+
+// Reload once when a deploy removed the chunks this tab still references.
+installStaleChunkReload()
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
