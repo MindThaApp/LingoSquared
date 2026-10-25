@@ -124,6 +124,8 @@ class AnswerIn(BaseModel):
     response: str|list[Any]|dict[str,Any]|bool|int|float
     input_mode: Literal["typed", "spoken"] = "typed"
     client_operation_id: str|None=Field(default=None,max_length=36)
+    self_grade: Literal["again","hard","good","easy"]|None=None
+    latency_ms: int|None=Field(default=None,ge=0,le=3_600_000)
     @model_validator(mode="after")
     def bounded_response(self):
         _bounded_payload_size(self.response); return self
@@ -302,7 +304,7 @@ class PracticeBatchIn(BaseModel):
         return self
 class PracticeItemOut(BaseModel): id:str; type:PracticeItemExerciseType; prompt:dict[str,Any]
 class PracticeBatchOut(BaseModel): locked:bool; items:list[PracticeItemOut]
-class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None; feedback:str|None=None
+class PracticeAnswerOut(BaseModel): correct:bool; result:Literal["correct","almost","incorrect"]="correct"; correct_response:Any; xp_awarded:int; next_node:dict[str,Any]|None=None; feedback:str|None=None; next_due_at:datetime|None=None; next_interval_days:int|None=None
 class ReviewDueCourseOut(BaseModel):
     course_id: str
     due_count: int
