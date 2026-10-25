@@ -1,0 +1,133 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit33
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit33.secuencias
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Cuando with the present for routines and with the preterite for a finished past event. Variants swap the two clauses and accept mandé for envié. NATIVE FLAG: mandé is accepted for envié; check it is not marked as too colloquial.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_aviso, w_clase, w_cuando, w_envié, w_escribo, w_reunión, w_salgo, w_termino, w_terminó]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_clase, w_reunión, w_salgo, w_escribo, w_termino, w_aviso, w_terminó, w_envié]}}
+  p2: &p2 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_salgo]}}
+  p3: &p3 {language_code: es, part_of_speech: [particle], agreement_tags: {semantic: [w_cuando]}}
+  p4: &p4 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_escribo]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_clase]}}
+  p6: &p6 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_termino]}}
+  p7: &p7 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_aviso]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_terminó]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_reunión]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_envié]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit33.lesson01.choose.001
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on sequences with cuando.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson01.listen.001
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on sequences.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson04.translate.001
+    lesson_content_key: es.b1.unit33.lesson04.dos_tiempos
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson04.match.001
+    lesson_content_key: es.b1.unit33.lesson04.dos_tiempos
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the sequences.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson01.translate.001
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: translation
+    frame: {text: "When I leave class, I write to Mateo.", language_code: en, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando {item} de clase, escribo a Mateo.", language_code: es, direction: ltr}, accepted_variants: ["Escribo a Mateo cuando {item} de clase."]}
+    feedback_frame: {text: "Cuando plus the present describes a routine.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson01.fill.001
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: fill_in_blank
+    frame: {text: "{item} salgo de clase, escribo a Mateo. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cuando means when.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson01.fill.002
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: fill_in_blank
+    frame: {text: "Cuando salgo de clase, {item} a Mateo. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Escribir a alguien means to write to someone.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson01.order.001
+    lesson_content_key: es.b1.unit33.lesson01.cuando_salgo
+    type: word_order
+    frame: {text: "Cuando salgo de {item}, escribo a Mateo.", language_code: es, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando salgo de {item}, escribo a Mateo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Salir de clase means to leave class.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson02.translate.001
+    lesson_content_key: es.b1.unit33.lesson02.cuando_termino
+    type: translation
+    frame: {text: "When I finish the report, I let Elena know.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando {item} el informe, aviso a Elena.", language_code: es, direction: ltr}, accepted_variants: ["Aviso a Elena cuando {item} el informe."]}
+    feedback_frame: {text: "Terminar is a regular -ar verb: termino.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson02.fill.001
+    lesson_content_key: es.b1.unit33.lesson02.cuando_termino
+    type: fill_in_blank
+    frame: {text: "Cuando termino el informe, {item} a Elena. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Avisar a alguien means to let someone know.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson02.order.001
+    lesson_content_key: es.b1.unit33.lesson02.cuando_termino
+    type: word_order
+    frame: {text: "Cuando {item} el informe, aviso a Elena.", language_code: es, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando {item} el informe, aviso a Elena.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Terminar is a regular -ar verb: termino.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson03.translate.001
+    lesson_content_key: es.b1.unit33.lesson03.cuando_termino_reunion
+    type: translation
+    frame: {text: "When the meeting ended, I sent the report.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando {item} la reunión, envié el informe.", language_code: es, direction: ltr}, accepted_variants: ["Cuando {item} la reunión, mandé el informe.", "Envié el informe cuando {item} la reunión."]}
+    feedback_frame: {text: "The preterite terminó reports a finished event.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson03.fill.001
+    lesson_content_key: es.b1.unit33.lesson03.cuando_termino_reunion
+    type: fill_in_blank
+    frame: {text: "Cuando terminó la {item}, envié el informe. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Reunión is feminine and carries an accent.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson03.order.001
+    lesson_content_key: es.b1.unit33.lesson03.cuando_termino_reunion
+    type: word_order
+    frame: {text: "Cuando terminó la reunión, {item} el informe.", language_code: es, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "Cuando terminó la reunión, {item} el informe.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Envié is the preterite of enviar for yo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit33.lesson04.choose.001
+    lesson_content_key: es.b1.unit33.lesson04.dos_tiempos
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}

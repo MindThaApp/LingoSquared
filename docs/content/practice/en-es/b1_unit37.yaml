@@ -1,0 +1,141 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit37
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit37.reclamacion_seria
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Formal complaint: no funciona desde ayer, preterite for what happened (llamé, respondió), and quisiera que + subjunctive. Variants move the time phrase to the front. NATIVE FLAG: quisiera que envíen (subjunctive, plural/formal) assumes the company is addressed as ustedes.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_desde, w_envíen, w_funciona, w_internet, w_llamé, w_nadie, w_quisiera, w_respondió, w_técnico]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_internet, w_funciona, w_llamé, w_respondió, w_quisiera, w_técnico, w_envíen]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun, verb, pronoun], agreement_tags: {semantic: [w_internet, w_funciona, w_llamé, w_respondió, w_quisiera, w_técnico, w_envíen, w_nadie]}}
+  p3: &p3 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_internet]}}
+  p4: &p4 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_funciona]}}
+  p5: &p5 {language_code: es, part_of_speech: [preposition], agreement_tags: {semantic: [w_desde]}}
+  p6: &p6 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llamé]}}
+  p7: &p7 {language_code: es, part_of_speech: [pronoun], agreement_tags: {semantic: [w_nadie]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_respondió]}}
+  p9: &p9 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_envíen]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_quisiera]}}
+  p11: &p11 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_técnico]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit37.lesson01.choose.001
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the formal complaint.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson01.listen.001
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the complaint.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson02.translate.001
+    lesson_content_key: es.b1.unit37.lesson02.llame_ayer
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the complaint.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson03.match.001
+    lesson_content_key: es.b1.unit37.lesson03.quisiera_tecnico
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the complaint.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson01.translate.001
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: translation
+    frame: {text: "The internet has not worked since yesterday.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "El {item} no funciona desde ayer.", language_code: es, direction: ltr}, accepted_variants: ["Desde ayer el {item} no funciona."]}
+    feedback_frame: {text: "Spanish uses the present with desde: no funciona desde ayer.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson01.fill.001
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: fill_in_blank
+    frame: {text: "El internet no {item} desde ayer. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Funcionar means to work, for a device.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson01.fill.002
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: fill_in_blank
+    frame: {text: "El internet no funciona {item} ayer. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Desde marks the starting point in time.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson01.order.001
+    lesson_content_key: es.b1.unit37.lesson01.no_funciona
+    type: word_order
+    frame: {text: "El {item} no funciona desde ayer.", language_code: es, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "El {item} no funciona desde ayer.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Internet is masculine: el internet.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson02.translate.002
+    lesson_content_key: es.b1.unit37.lesson02.llame_ayer
+    type: translation
+    frame: {text: "I called yesterday and nobody answered.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} ayer y nadie respondió.", language_code: es, direction: ltr}, accepted_variants: ["Ayer {item} y nadie respondió."]}
+    feedback_frame: {text: "Llamé is the preterite of llamar for yo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson02.fill.001
+    lesson_content_key: es.b1.unit37.lesson02.llame_ayer
+    type: fill_in_blank
+    frame: {text: "Llamé ayer y {item} respondió. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Nadie takes a verb with no extra no after it.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson02.order.001
+    lesson_content_key: es.b1.unit37.lesson02.llame_ayer
+    type: word_order
+    frame: {text: "Llamé ayer y nadie {item}.", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Llamé ayer y nadie {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Respondió is the preterite of responder.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson02.translate.003
+    lesson_content_key: es.b1.unit37.lesson02.llame_ayer
+    type: translation
+    frame: {text: "I called yesterday and nobody answered.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Llamé ayer y nadie {item}.", language_code: es, direction: ltr}, accepted_variants: ["Ayer llamé y nadie {item}."]}
+    feedback_frame: {text: "Respondió is the preterite of responder for él.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson03.translate.001
+    lesson_content_key: es.b1.unit37.lesson03.quisiera_tecnico
+    type: translation
+    frame: {text: "I would like you to send a technician this week.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Quisiera que {item} un técnico esta semana.", language_code: es, direction: ltr}, accepted_variants: ["Esta semana quisiera que {item} un técnico."]}
+    feedback_frame: {text: "Quisiera que is followed by the subjunctive: envíen.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson03.fill.001
+    lesson_content_key: es.b1.unit37.lesson03.quisiera_tecnico
+    type: fill_in_blank
+    frame: {text: "{item} que envíen un técnico esta semana. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Quisiera is a polite way to say I would like.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson03.order.001
+    lesson_content_key: es.b1.unit37.lesson03.quisiera_tecnico
+    type: word_order
+    frame: {text: "Quisiera que envíen un {item} esta semana.", language_code: es, direction: ltr}
+    slots: {item: *p11}
+    answer_derivation: {kind: render_frame, frame: {text: "Quisiera que envíen un {item} esta semana.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Técnico carries an accent.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit37.lesson04.choose.001
+    lesson_content_key: es.b1.unit37.lesson04.la_reclamacion_completa
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
