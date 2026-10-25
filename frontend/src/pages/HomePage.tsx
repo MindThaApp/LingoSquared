@@ -6,7 +6,6 @@ import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
 import { learnPath } from "../lib/activeCourse";
 import type { LessonProgress, Progress, Streak, Xp } from "@lingo/shared/api/types";
-import { PushPrompt } from "../components/PushPrompt";
 import { DesktopSidebar } from "../components/layout/DesktopSidebar";
 
 export function isBrandNewUser(
@@ -221,8 +220,6 @@ export function HomePage() {
           </div>
         )}
       </div>
-
-      <PushPrompt />
 
       <div className="stat-grid">
         <div className="stat-card">
