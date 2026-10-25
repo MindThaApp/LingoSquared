@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit30
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit30.trabajo
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Workplace progress and requests: ser responsable de + infinitive, estar en proceso, estar retrasada, podrias + infinitive. Variants for the request accept me ayudas and the reordered por favor. NATIVE FLAG: informal tu is used for the colleague request (podrias), as in the unit.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_ayudarme, w_firma, w_informe, w_informes, w_podrías, w_preparar, w_proceso, w_responsable, w_retrasada, w_revisar, w_tarea, w_terminaré]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_responsable, w_informes, w_preparar, w_proceso, w_informe, w_retrasada, w_firma, w_tarea, w_revisar]}}
+  p2: &p2 {language_code: es, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: [w_responsable, w_informes, w_preparar, w_proceso, w_retrasada, w_firma, w_tarea, w_revisar]}}
+  p3: &p3 {language_code: es, part_of_speech: [adjective], agreement_tags: {semantic: [w_responsable]}}
+  p4: &p4 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_preparar]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_informes]}}
+  p6: &p6 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_terminaré]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_proceso]}}
+  p8: &p8 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_informe]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_tarea]}}
+  p10: &p10 {language_code: es, part_of_speech: [adjective], agreement_tags: {semantic: [w_retrasada]}}
+  p11: &p11 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_firma]}}
+  p12: &p12 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_revisar]}}
+  p13: &p13 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_podrías]}}
+  p14: &p14 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_ayudarme]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit30.lesson01.choose.001
+    lesson_content_key: es.b1.unit30.lesson01.responsabilidades
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on work responsibilities.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson01.listen.001
+    lesson_content_key: es.b1.unit30.lesson01.responsabilidades
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on work.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson02.translate.001
+    lesson_content_key: es.b1.unit30.lesson02.avance_en_proceso
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson03.match.001
+    lesson_content_key: es.b1.unit30.lesson03.retraso
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the work vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson01.translate.001
+    lesson_content_key: es.b1.unit30.lesson01.responsabilidades
+    type: translation
+    frame: {text: "I am responsible for preparing the office reports.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Soy {item} de preparar los informes de la oficina.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Ser responsable de is followed by an infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson01.fill.001
+    lesson_content_key: es.b1.unit30.lesson01.responsabilidades
+    type: fill_in_blank
+    frame: {text: "Soy responsable de {item} los informes de la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "De is followed by the infinitive: de preparar.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson01.order.001
+    lesson_content_key: es.b1.unit30.lesson01.responsabilidades
+    type: word_order
+    frame: {text: "Soy responsable de preparar los {item} de la oficina.", language_code: es, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Soy responsable de preparar los {item} de la oficina.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Informes is plural, so it takes los.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson02.translate.002
+    lesson_content_key: es.b1.unit30.lesson02.avance_en_proceso
+    type: translation
+    frame: {text: "The report is in progress and I will finish it this afternoon.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "El informe está en proceso y lo {item} esta tarde.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The future ends in -é for yo: terminaré.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson02.fill.001
+    lesson_content_key: es.b1.unit30.lesson02.avance_en_proceso
+    type: fill_in_blank
+    frame: {text: "El informe está en {item} y lo terminaré esta tarde. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Estar en proceso means to be in progress.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson02.order.001
+    lesson_content_key: es.b1.unit30.lesson02.avance_en_proceso
+    type: word_order
+    frame: {text: "El {item} está en proceso y lo terminaré esta tarde.", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "El {item} está en proceso y lo terminaré esta tarde.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Informe is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson03.translate.001
+    lesson_content_key: es.b1.unit30.lesson03.retraso
+    type: translation
+    frame: {text: "The task is delayed because a signature is missing.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "La {item} está retrasada porque falta una firma.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Tarea is feminine: la tarea.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson03.fill.001
+    lesson_content_key: es.b1.unit30.lesson03.retraso
+    type: fill_in_blank
+    frame: {text: "La tarea está {item} porque falta una firma. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Retrasada agrees with tarea.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson03.order.001
+    lesson_content_key: es.b1.unit30.lesson03.retraso
+    type: word_order
+    frame: {text: "La tarea está retrasada porque falta una {item}.", language_code: es, direction: ltr}
+    slots: {item: *p11}
+    answer_derivation: {kind: render_frame, frame: {text: "La tarea está retrasada porque falta una {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Falta una firma means a signature is missing.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson04.translate.001
+    lesson_content_key: es.b1.unit30.lesson04.pedir_ayuda
+    type: translation
+    frame: {text: "Could you help me review the report, please?", language_code: en, direction: ltr}
+    slots: {item: *p12}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Podrías ayudarme a {item} el informe, por favor?", language_code: es, direction: ltr}, accepted_variants: ["¿Me ayudas a {item} el informe, por favor?", "Por favor, ¿podrías ayudarme a {item} el informe?"]}
+    feedback_frame: {text: "Ayudar a is followed by an infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson04.fill.001
+    lesson_content_key: es.b1.unit30.lesson04.pedir_ayuda
+    type: fill_in_blank
+    frame: {text: "¿{item} ayudarme a revisar el informe, por favor? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Podrías is a polite way to ask for help.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson04.order.001
+    lesson_content_key: es.b1.unit30.lesson04.pedir_ayuda
+    type: word_order
+    frame: {text: "¿Podrías {item} a revisar el informe, por favor?", language_code: es, direction: ltr}
+    slots: {item: *p14}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Podrías {item} a revisar el informe, por favor?", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The pronoun me attaches to the infinitive: ayudarme.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit30.lesson04.choose.001
+    lesson_content_key: es.b1.unit30.lesson04.pedir_ayuda
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
