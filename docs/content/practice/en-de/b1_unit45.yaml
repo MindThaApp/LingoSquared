@@ -1,0 +1,209 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit45
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit45.ratschlaege
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches advice with an Ihrer Stelle würde ich and sollten. NATIVE FLAG: 'viel Stress bei der Arbeit' vs 'auf der Arbeit' (regional); 'Sie sollten öfter eine Pause machen' accepted next to 'Pause machen'.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_viel", "w_Stress", "w_Arbeit", "w_Stelle", "w_schlafe", "w_schlafen", "w_schlecht", "w_abends", "w_trinken", "w_sollten", "w_öfter", "w_Chef", "w_sprechen", "w_schwierig", "w_versuchen", "w_guter", "w_Rat", "w_danken"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_viel", "w_Stress", "w_Arbeit", "w_Stelle", "w_schlafe", "w_schlafen", "w_schlecht", "w_abends", "w_trinken", "w_sollten", "w_öfter", "w_Chef", "w_sprechen", "w_schwierig", "w_versuchen", "w_guter", "w_Rat", "w_danken"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_danken", "w_Rat", "w_guter", "w_versuchen", "w_schwierig", "w_sprechen", "w_Chef", "w_öfter", "w_sollten", "w_trinken", "w_abends", "w_schlecht", "w_schlafen", "w_schlafe", "w_Stelle", "w_Arbeit", "w_Stress", "w_viel"]}}
+  p3: &p3 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Stress"}}
+  p4: &p4 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Stelle"}}
+  p5: &p5 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_schlecht"}}
+  p6: &p6 {language_code: de, part_of_speech: adverb, agreement_tags: {semantic: "w_abends"}}
+  p7: &p7 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_sollten"}}
+  p8: &p8 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Chef"}}
+  p9: &p9 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_versuchen"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit45.lesson01.choose.001
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson03.choose.001
+    lesson_content_key: de.b1.unit45.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.listen.001
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.translate.001
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson03.match.001
+    lesson_content_key: de.b1.unit45.lesson03.cafe_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.order.001
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: word_order
+    frame: {text: "Ich habe viel {item} bei der Arbeit.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe viel {item} bei der Arbeit.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Stress is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.fill.001
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: fill_in_blank
+    frame: {text: "Ich habe viel {item} bei der Arbeit. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Stress is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.translate.002
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: translation
+    frame: {text: "I have a lot of stress at work.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe viel {item} bei der Arbeit.", language_code: de, direction: ltr}, accepted_variants: ["Ich habe bei der Arbeit viel {item}."]}
+    feedback_frame: {text: "Stress is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.order.002
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: word_order
+    frame: {text: "An Ihrer {item} würde ich früher nach Hause gehen.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "An Ihrer {item} würde ich früher nach Hause gehen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "An Ihrer Stelle introduces advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.fill.002
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: fill_in_blank
+    frame: {text: "An Ihrer {item} würde ich früher nach Hause gehen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "An Ihrer Stelle introduces advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.translate.003
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: translation
+    frame: {text: "In your place, I would go home earlier.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "An Ihrer {item} würde ich früher nach Hause gehen.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde an Ihrer {item} früher nach Hause gehen."]}
+    feedback_frame: {text: "An Ihrer Stelle introduces advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.order.003
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: word_order
+    frame: {text: "Ich schlafe {item}.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich schlafe {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Schlecht works as an adverb here and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.fill.003
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: fill_in_blank
+    frame: {text: "Ich schlafe {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Schlecht works as an adverb here and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.translate.004
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: translation
+    frame: {text: "I sleep badly.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich schlafe {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Schlecht works as an adverb here and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.order.004
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: word_order
+    frame: {text: "An Ihrer Stelle würde ich {item} keinen Kaffee trinken.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "An Ihrer Stelle würde ich {item} keinen Kaffee trinken.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Abends means regularly in the evening.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.fill.004
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: fill_in_blank
+    frame: {text: "An Ihrer Stelle würde ich {item} keinen Kaffee trinken. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Abends means regularly in the evening.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson01.translate.005
+    lesson_content_key: de.b1.unit45.lesson01.an_ihrer_stelle
+    type: translation
+    frame: {text: "In your place, I would not drink coffee in the evening.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "An Ihrer Stelle würde ich {item} keinen Kaffee trinken.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde an Ihrer Stelle {item} keinen Kaffee trinken."]}
+    feedback_frame: {text: "Abends means regularly in the evening.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.order.001
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: word_order
+    frame: {text: "Sie {item} öfter Pause machen.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie {item} öfter Pause machen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Sollten is the Sie form of sollen for advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.fill.001
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: fill_in_blank
+    frame: {text: "Sie {item} öfter Pause machen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sollten is the Sie form of sollen for advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.translate.001
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: translation
+    frame: {text: "You should take breaks more often.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie {item} öfter Pause machen.", language_code: de, direction: ltr}, accepted_variants: ["Sie {item} öfter eine Pause machen."]}
+    feedback_frame: {text: "Sollten is the Sie form of sollen for advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.order.002
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: word_order
+    frame: {text: "Sie sollten mit Ihrem {item} sprechen.", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie sollten mit Ihrem {item} sprechen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Mit takes the dative: mit Ihrem Chef.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.fill.002
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: fill_in_blank
+    frame: {text: "Sie sollten mit Ihrem {item} sprechen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mit takes the dative: mit Ihrem Chef.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson02.translate.002
+    lesson_content_key: de.b1.unit45.lesson02.sie_sollten
+    type: translation
+    frame: {text: "You should talk to your boss.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie sollten mit Ihrem {item} sprechen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Mit takes the dative: mit Ihrem Chef.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson03.order.001
+    lesson_content_key: de.b1.unit45.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Das ist schwierig, aber ich sollte es {item}.", language_code: de, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Das ist schwierig, aber ich sollte es {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Versuchen goes at the end after the modal verb sollte.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson03.fill.001
+    lesson_content_key: de.b1.unit45.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Das ist schwierig, aber ich sollte es {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Versuchen goes at the end after the modal verb sollte.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit45.lesson03.translate.001
+    lesson_content_key: de.b1.unit45.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "That is difficult, but I should try it.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Das ist schwierig, aber ich sollte es {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Versuchen goes at the end after the modal verb sollte.", language_code: en, direction: ltr}
