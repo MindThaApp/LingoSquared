@@ -1795,6 +1795,16 @@ practice.
 
 ## Text-to-speech
 
+**Added 2026-10-25: pre-rendered audio tier.** `scripts/render_audio.py`
+renders each unique sanitized target string once to
+`<sha256(provider, voice, language, normalized text, rate)[:32]>.mp3`
+(config: `packages/shared/src/audio/voices.json`). Served as static
+`GET /media/audio/<hash>.mp3` (nginx from the host dir, API route as
+fallback; immutable cache). The client computes the same name and tries it
+after a recorded asset and before `POST /tts`; slow/fast playback is
+`playbackRate` on the single normal-speed file. See
+`docs/PRE_DEPLOY_RUNBOOK.md`, "Pre-rendered audio".
+
 **Superseded 2026-07-04: ElevenLabs was replaced with Google Cloud TTS**
 (ElevenLabs never supported fa/prs at all; Google Cloud TTS turned out to
 have zero Persian/Dari voices either, so the fallback behavior below was
@@ -1902,7 +1912,7 @@ Backend owns:
   left untouched by this change.
 - Tracking cumulative characters synthesized per calendar month against
   `TTS_MONTHLY_CHAR_BUDGET` (config: `tts_monthly_char_budget`, default
-  4,000,000) via a Postgres advisory-lock-guarded `TTSUsage` row,
+  1,000,000, the WaveNet/Neural2/Chirp 3 HD free tier) via a Postgres advisory-lock-guarded `TTSUsage` row,
   preemptively returning `reason: "quota_exceeded"` once a request would
   exceed the budget — never rely on the provider's own error response for
   this. This budget/usage tracking is shared across both providers (not

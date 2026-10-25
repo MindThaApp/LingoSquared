@@ -13,8 +13,14 @@ class Settings(BaseSettings):
     # env var so credentials don't require a mounted file in every deploy
     # environment.
     google_cloud_tts_credentials_json: str = ""
-    # Google's free tier for Standard voices is 4M characters/month.
-    tts_monthly_char_budget: int = 4000000
+    # Google's free tier for WaveNet/Neural2 voices (what /tts actually uses) is
+    # 1M characters/month; Standard's 4M does not apply. Chirp 3 HD is also 1M.
+    tts_monthly_char_budget: int = 1000000
+    # Directory of pre-rendered clips (<sha256-prefix>.mp3) written by
+    # scripts/render_audio.py. Lives on a docker volume / host dir outside the
+    # image and the code bind-mount; nginx serves it at /media/audio/ and the API
+    # route of the same path is the fallback (dev, mobile, no-nginx setups).
+    media_audio_dir: str = "/srv/media/audio"
     # Azure Cognitive Services Speech — covers Farsi (fa), the one real
     # gap Google's TTS leaves. Subscription key + region, same
     # unset-by-default/graceful-degradation convention as the Google
