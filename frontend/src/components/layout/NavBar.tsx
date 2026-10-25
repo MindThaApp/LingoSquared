@@ -6,6 +6,7 @@ import { ProgressApi } from "@lingo/shared/api/endpoints";
 import { LanguageSwitcher } from "../LanguageSwitcher";
 import { learnPath } from "../../lib/activeCourse";
 import { NAV_TABS } from "./navTabs";
+import { NavIcon } from "./NavIcon";
 import { SideRail } from "./SideRail";
 
 export function NavBar() {
@@ -74,7 +75,7 @@ export function NavBar() {
         </div>
       </header>
       <nav className="tabbar" aria-label={t("nav.tabs_label")}>
-        {tabs.map((tab) => (
+        {tabs.filter((tab) => tab.phone).map((tab) => (
           <NavLink
             key={tab.to}
             to={tab.to}
@@ -84,7 +85,7 @@ export function NavBar() {
             }
           >
             <span className="tab-icon" aria-hidden="true">
-              {tab.icon}
+              <NavIcon name={tab.icon} />
             </span>
             {t(tab.labelKey)}
           </NavLink>

@@ -18,8 +18,7 @@ export function CrashReportPrompt() {
       role="alertdialog"
       aria-labelledby="crash-prompt-title"
       aria-describedby="crash-prompt-body"
-      className="card"
-      style={{ position: "fixed", left: 12, right: 12, bottom: 12, zIndex: 1000, maxWidth: 480, margin: "0 auto" }}
+      className="card crash-prompt"
     >
       <strong id="crash-prompt-title">{t("crash_report.prompt_title")}</strong>
       <p id="crash-prompt-body" className="muted" style={{ margin: "4px 0 10px" }}>

@@ -7,6 +7,7 @@ import type { LessonCompleteResult } from "@lingo/shared/api/types";
 import { useAuth } from "../auth/AuthContext";
 import { getActiveCourse } from "../lib/activeCourse";
 import { computeNextItem, findNextUnit } from "../lib/nextLesson";
+import { PushPrompt } from "../components/PushPrompt";
 import { MissedWordsSummary } from "./LessonRunnerPage";
 
 const CONFETTI_COLORS = ["var(--accent)", "var(--gold)", "var(--correct)"];
@@ -200,6 +201,11 @@ export function LessonCompletePage() {
           </div>
         </div>
       )}
+      {/* Notification permission is only ever offered here, right after a
+          finished lesson (a moment of value), never on first load. */}
+      <div style={{ maxWidth: 360, margin: "16px auto 0", textAlign: "start" }}>
+        <PushPrompt />
+      </div>
       <div
         style={{
           display: "flex",
