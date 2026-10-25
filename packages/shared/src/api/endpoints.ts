@@ -53,6 +53,8 @@ import type {
   QuestsResult,
   ReviewAnswerResult,
   ReviewDueResult,
+  ReviewForecast,
+  ReviewLeechesResult,
   ReviewItemsResult,
   ReviewsPage,
   Streak,
@@ -173,7 +175,12 @@ export const CatalogApi = {
 // Typed answers send exactly { response } — input_mode is added ONLY for
 // voice-produced answers.
 export function answerBody(response: AnswerResponse, meta?: AnswerMeta) {
-  return meta?.inputMode ? { response, input_mode: meta.inputMode } : { response };
+  return {
+    response,
+    ...(meta?.inputMode ? { input_mode: meta.inputMode } : {}),
+    ...(meta?.selfGrade ? { self_grade: meta.selfGrade } : {}),
+    ...(meta?.latencyMs !== undefined ? { latency_ms: Math.round(meta.latencyMs) } : {}),
+  };
 }
 
 export const LessonApi = {
@@ -220,6 +227,8 @@ export const ProgressApi = {
 // pre-existing legacy review rows.
 export const ReviewApi = {
   due: () => get<ReviewDueResult>("/me/reviews/due"),
+  forecast: () => get<ReviewForecast>("/me/reviews/forecast"),
+  leeches: () => get<ReviewLeechesResult>("/me/reviews/leeches"),
   session: (courseId: string, size?: number) =>
     post<ReviewItemsResult>("/reviews/session", {
       course_id: courseId,
