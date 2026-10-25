@@ -1,0 +1,167 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit40
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit40.resumir
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Summarising a short text: preterite chain (fui, compre, visite), en resumen, and hablamos de. Lessons 3 and 4 introduce no new lexemes, so their sentences are hosted by templates anchored to lessons 1 and 2 where the lexemes live. Variants: luego for despues, yo as subject, and the clause order. NATIVE FLAG: none.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_compré, w_dos, w_durante, w_fruta, w_fui, w_hablamos, w_hermana, w_mercado, w_pan, w_queso, w_resumen, w_su, w_sábado, w_visité]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_mercado, w_fruta, w_pan, w_queso, w_hermana, w_sábado, w_resumen, w_fui, w_compré, w_visité]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_mercado, w_fruta, w_pan, w_queso, w_hermana, w_sábado, w_resumen]}}
+  p3: &p3 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_fui]}}
+  p4: &p4 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_sábado]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_mercado]}}
+  p6: &p6 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_compré]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_queso]}}
+  p8: &p8 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_fruta]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_pan]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_visité]}}
+  p11: &p11 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_hermana]}}
+  p12: &p12 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_hablamos]}}
+  p13: &p13 {language_code: es, part_of_speech: [preposition], agreement_tags: {semantic: [w_durante]}}
+  p14: &p14 {language_code: es, part_of_speech: [pronoun], agreement_tags: {semantic: [w_su]}}
+  p15: &p15 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_dos]}}
+  p16: &p16 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_resumen]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit40.lesson01.choose.001
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the passage about the weekend.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.listen.001
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the weekend passage.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson02.translate.001
+    lesson_content_key: es.b1.unit40.lesson02.en_resumen_mercado
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the passage.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson02.match.001
+    lesson_content_key: es.b1.unit40.lesson02.en_resumen_mercado
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the passage.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.translate.001
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: translation
+    frame: {text: "On Saturday I went to the market.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "El sábado {item} al mercado.", language_code: es, direction: ltr}, accepted_variants: ["El sábado yo {item} al mercado."]}
+    feedback_frame: {text: "Fui is the preterite of ir for yo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.001
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "El {item} fui al mercado. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Days of the week take el and are not capitalised.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.order.001
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: word_order
+    frame: {text: "El sábado fui al {item}.", language_code: es, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "El sábado fui al {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "A plus el becomes al: al mercado.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.translate.002
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: translation
+    frame: {text: "I bought fruit, bread and cheese.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} fruta, pan y queso.", language_code: es, direction: ltr}, accepted_variants: ["Yo {item} fruta, pan y queso."]}
+    feedback_frame: {text: "Compré is the preterite of comprar for yo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.002
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "Compré fruta, pan y {item}. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A list joins its last two items with y.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.order.002
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: word_order
+    frame: {text: "Compré {item}, pan y queso.", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Compré {item}, pan y queso.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Fruta takes no article in a list of what you bought.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.003
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "Compré fruta, {item} y queso. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pan is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.translate.003
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: translation
+    frame: {text: "Afterwards I visited my sister.", language_code: en, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "Después {item} a mi hermana.", language_code: es, direction: ltr}, accepted_variants: ["Luego {item} a mi hermana."]}
+    feedback_frame: {text: "Visitar a alguien needs the personal a.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.004
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "Después visité a mi {item}. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The personal a is used before a person.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.translate.004
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: translation
+    frame: {text: "We talked about her new job for two hours.", language_code: en, direction: ltr}
+    slots: {item: *p12}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} de su nuevo trabajo durante dos horas.", language_code: es, direction: ltr}, accepted_variants: ["Durante dos horas {item} de su nuevo trabajo."]}
+    feedback_frame: {text: "Hablar de means to talk about.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.005
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "Hablamos de su nuevo trabajo {item} dos horas. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Durante says how long.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.fill.006
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: fill_in_blank
+    frame: {text: "Hablamos de {item} nuevo trabajo durante dos horas. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p14, hint: *p14}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Su can mean his, her, their or your (formal).", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson01.order.003
+    lesson_content_key: es.b1.unit40.lesson01.el_pasaje
+    type: word_order
+    frame: {text: "Hablamos de su nuevo trabajo durante {item} horas.", language_code: es, direction: ltr}
+    slots: {item: *p15}
+    answer_derivation: {kind: render_frame, frame: {text: "Hablamos de su nuevo trabajo durante {item} horas.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Dos is the number two.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson02.translate.002
+    lesson_content_key: es.b1.unit40.lesson02.en_resumen_mercado
+    type: translation
+    frame: {text: "In short, I went to the market and visited my sister.", language_code: en, direction: ltr}
+    slots: {item: *p16}
+    answer_derivation: {kind: render_frame, frame: {text: "En {item}, fui al mercado y visité a mi hermana.", language_code: es, direction: ltr}, accepted_variants: ["En {item}, visité a mi hermana y fui al mercado."]}
+    feedback_frame: {text: "En resumen introduces a summary.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit40.lesson04.choose.001
+    lesson_content_key: es.b1.unit40.lesson04.el_resumen_completo
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
