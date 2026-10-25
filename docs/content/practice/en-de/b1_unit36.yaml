@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit36
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit36.pflichten
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches müssen/dürfen and hätte ... sollen. NATIVE FLAG: confirm 'Ich muss Ihnen sagen, dass...' and 'Ich hätte früher das Formular abgeben sollen' as natural alternatives; 'Sie dürfen ... nicht ohne Unterschrift abgeben' vs 'ohne Unterschrift nicht' word order.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_muss", "w_Formular", "w_fehlt", "w_heute", "w_abgeben", "w_dürfen", "w_Unterschrift", "w_hätte", "w_früher", "w_sollen", "w_fertig", "w_stimmt", "w_unterschreibe", "w_jetzt"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_muss", "w_Formular", "w_fehlt", "w_heute", "w_abgeben", "w_dürfen", "w_Unterschrift", "w_hätte", "w_früher", "w_sollen", "w_fertig", "w_stimmt", "w_unterschreibe", "w_jetzt"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_jetzt", "w_unterschreibe", "w_stimmt", "w_fertig", "w_sollen", "w_früher", "w_hätte", "w_Unterschrift", "w_dürfen", "w_abgeben", "w_heute", "w_fehlt", "w_Formular", "w_muss"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_muss"}}
+  p4: &p4 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_abgeben"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_dürfen"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_hätte"}}
+  p7: &p7 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_unterschreibe"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit36.lesson01.choose.001
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson03.choose.001
+    lesson_content_key: de.b1.unit36.lesson03.buergeramt_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.listen.001
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.translate.001
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson03.match.001
+    lesson_content_key: de.b1.unit36.lesson03.buergeramt_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.order.001
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: word_order
+    frame: {text: "Ich {item} sagen, dass das Formular fehlt.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} sagen, dass das Formular fehlt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Muss is the ich form of müssen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.fill.001
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: fill_in_blank
+    frame: {text: "Ich {item} sagen, dass das Formular fehlt. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Muss is the ich form of müssen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.translate.002
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: translation
+    frame: {text: "I must say that the form is missing.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} sagen, dass das Formular fehlt.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} Ihnen sagen, dass das Formular fehlt."]}
+    feedback_frame: {text: "Muss is the ich form of müssen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.order.002
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: word_order
+    frame: {text: "Müssen Sie das Formular heute {item}?", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Müssen Sie das Formular heute {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "With a modal verb, the second verb stays at the end as an infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson01.translate.003
+    lesson_content_key: de.b1.unit36.lesson01.ich_muss_sagen_dass
+    type: translation
+    frame: {text: "Do you have to hand in the form today?", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Müssen Sie das Formular heute {item}?", language_code: de, direction: ltr}, accepted_variants: ["Müssen Sie heute das Formular {item}?"]}
+    feedback_frame: {text: "With a modal verb, the second verb stays at the end as an infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.order.001
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: word_order
+    frame: {text: "Sie {item} das Formular nicht ohne Unterschrift abgeben.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie {item} das Formular nicht ohne Unterschrift abgeben.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Dürfen says what is allowed; with nicht it says what is not allowed.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.fill.001
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: fill_in_blank
+    frame: {text: "Sie {item} das Formular nicht ohne Unterschrift abgeben. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dürfen says what is allowed; with nicht it says what is not allowed.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.translate.001
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: translation
+    frame: {text: "You may not hand in the form without a signature.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Sie {item} das Formular nicht ohne Unterschrift abgeben.", language_code: de, direction: ltr}, accepted_variants: ["Sie {item} das Formular ohne Unterschrift nicht abgeben."]}
+    feedback_frame: {text: "Dürfen says what is allowed; with nicht it says what is not allowed.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.order.002
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: word_order
+    frame: {text: "Ich {item} das Formular früher abgeben sollen.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} das Formular früher abgeben sollen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Hätte plus two infinitives at the end (abgeben sollen) says what you should have done.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.fill.002
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: fill_in_blank
+    frame: {text: "Ich {item} das Formular früher abgeben sollen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hätte plus two infinitives at the end (abgeben sollen) says what you should have done.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson02.translate.002
+    lesson_content_key: de.b1.unit36.lesson02.duerfen_nicht_haette_sollen
+    type: translation
+    frame: {text: "I should have handed in the form earlier.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} das Formular früher abgeben sollen.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} früher das Formular abgeben sollen."]}
+    feedback_frame: {text: "Hätte plus two infinitives at the end (abgeben sollen) says what you should have done.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson03.fill.001
+    lesson_content_key: de.b1.unit36.lesson03.buergeramt_dialogue
+    type: fill_in_blank
+    frame: {text: "Gut, ich {item} jetzt. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "German uses the present tense for what you are doing now.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit36.lesson03.translate.001
+    lesson_content_key: de.b1.unit36.lesson03.buergeramt_dialogue
+    type: translation
+    frame: {text: "Fine, I am signing now.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Gut, ich {item} jetzt.", language_code: de, direction: ltr}, accepted_variants: ["Gut, jetzt {item} ich."]}
+    feedback_frame: {text: "German uses the present tense for what you are doing now.", language_code: en, direction: ltr}
