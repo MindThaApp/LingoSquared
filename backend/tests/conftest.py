@@ -1,5 +1,9 @@
 import os
 
+# Tests run with weak placeholder secrets (short JWT secret, "change-me" DB
+# password); the production-like startup checks in app.main only apply when
+# APP_ENV is not dev/test, so declare the test environment explicitly.
+os.environ.setdefault("APP_ENV", "test")
 os.environ.setdefault("DATABASE_URL", "postgresql+psycopg://lingosquared:change-me@localhost:5432/lingosquared_test")
 os.environ.setdefault("JWT_SECRET", "test-secret")
 
@@ -11,6 +15,19 @@ from app.db.session import engine, SessionLocal
 from app.main import app
 from app.content.seed import main as seed
 from app.models import User
+
+# Per-exercise tests generated from the compiled docs/content corpus. They
+# verify content, not code, and make up ~98% of the test count. Select with
+# `-m content` / deselect with `-m "not content"`; with no -m the full suite
+# runs exactly as before.
+CONTENT_TEST_FILES = {"test_content_answer_shapes.py"}
+
+
+def pytest_collection_modifyitems(items):
+    for item in items:
+        if item.path.name in CONTENT_TEST_FILES:
+            item.add_marker(pytest.mark.content)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def database():
