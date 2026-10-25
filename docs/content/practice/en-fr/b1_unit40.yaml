@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit40
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit40.concessions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_cependant", "w_concession", "w_connecteur", "w_deuxième", "w_devrait", "w_donne", "w_machine", "w_main", "w_meilleur", "w_méthode", "w_nuance", "w_position", "w_priorité", "w_préfères", "w_pétrin", "w_pétrissage", "w_qualité", "w_rapide", "w_rapidité", "w_reformuler", "w_sent", "w_toujours", "w_traditionnelle", "w_utiliser", "w_électrique"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: ["w_pétrin", "w_électrique", "w_rapide", "w_pétrissage", "w_main", "w_donne", "w_meilleur", "w_concession", "w_reformuler", "w_position", "w_nuance"]}}
+  mat_2: &mat_2 {language_code: fr, part_of_speech: [adjective, adverb, noun, verb], agreement_tags: {semantic: ["w_pétrin", "w_électrique", "w_rapide", "w_pétrissage", "w_main", "w_donne", "w_meilleur", "w_concession", "w_reformuler", "w_position", "w_nuance", "w_cependant", "w_rapidité", "w_toujours", "w_priorité", "w_qualité", "w_connecteur", "w_deuxième", "w_devrait", "w_utiliser", "w_machine", "w_préfères", "w_méthode", "w_traditionnelle", "w_sent"]}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_pétrin"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_main"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_rapide"}}
+  rec2_6: &rec2_6 {language_code: fr, part_of_speech: [adjective, adverb, noun, verb], agreement_tags: {semantic: ["w_cependant", "w_rapidité", "w_toujours", "w_priorité", "w_qualité", "w_connecteur", "w_deuxième", "w_devrait", "w_utiliser", "w_machine", "w_préfères", "w_méthode", "w_traditionnelle", "w_sent"]}}
+  anc_7: &anc_7 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_priorité"}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_rapidité"}}
+  anc_9: &anc_9 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_traditionnelle"}}
+  anc_10: &anc_10 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_qualité"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.choose.001
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for conceding a point and then giving your own view.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.listen.002
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for conceding a point and then giving your own view.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.match.003
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for conceding a point and then giving your own view.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.order.004
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: word_order
+    frame: {text: "Même si tu as raison de dire que le {item} électrique est plus rapide.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Même si tu as raison de dire que le {item} électrique est plus rapide.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Même si + indicative concedes a point before you restate your position: même si le pétrin est plus rapide, je pense que...", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.order.005
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: word_order
+    frame: {text: "Je pense que le pétrissage à la {item} donne un meilleur résultat.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Je pense que le pétrissage à la {item} donne un meilleur résultat.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Le pétrissage à la main is kneading by hand.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.fill.006
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: fill_in_blank
+    frame: {text: "Le pétrin électrique est plus {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_5, hint: *anc_5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Même si + indicative concedes a point before you restate your position: même si le pétrin est plus rapide, je pense que...", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.translate.007
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for conceding a point and then giving your own view.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.translate.008
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: translation
+    frame: {text: "Even if the electric mixer is faster, I think kneading by hand gives a better result.", language_code: en, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Même si le pétrin électrique est plus {item}, je pense que le pétrissage à la main donne un meilleur résultat.", language_code: fr, direction: ltr}, accepted_variants: ["Même si le pétrin électrique est plus {item}, je pense que pétrir à la main donne un meilleur résultat.", "Bien que le pétrin électrique soit plus {item}, je pense que le pétrissage à la main donne un meilleur résultat."]}
+    feedback_frame: {text: "Le pétrissage à la main is kneading by hand.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson01.translate.009
+    lesson_content_key: fr.b1.unit40.lesson01.meme_si
+    type: translation
+    frame: {text: "I think kneading by hand gives a better result for the competition.", language_code: en, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Je pense que le pétrissage à la {item} donne un meilleur résultat pour le concours.", language_code: fr, direction: ltr}, accepted_variants: ["Je pense que le pétrissage à la {item} donne de meilleurs résultats pour le concours."]}
+    feedback_frame: {text: "Même si + indicative concedes a point before you restate your position: même si le pétrin est plus rapide, je pense que...", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.choose.001
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for making a second point with a stronger link than mais.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.listen.002
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for making a second point with a stronger link than mais.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.match.003
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for making a second point with a stronger link than mais.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.order.004
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: word_order
+    frame: {text: "La rapidité n'est pas toujours la {item}.", language_code: fr, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "La rapidité n'est pas toujours la {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Cependant is a stronger link than mais and often opens a second point: cependant, la rapidité n'est pas toujours la priorité.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.order.005
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: word_order
+    frame: {text: "Cependant, la {item} n'est pas toujours la priorité.", language_code: fr, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Cependant, la {item} n'est pas toujours la priorité.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Un concours de qualité is a quality competition.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.fill.006
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: fill_in_blank
+    frame: {text: "Tu préfères la méthode {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_9, hint: *anc_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Cependant is a stronger link than mais and often opens a second point: cependant, la rapidité n'est pas toujours la priorité.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.fill.007
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: fill_in_blank
+    frame: {text: "La rapidité n'est pas toujours la priorité pour un concours de {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_10, hint: *anc_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Un concours de qualité is a quality competition.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.translate.008
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for making a second point with a stronger link than mais.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.translate.009
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: translation
+    frame: {text: "Speed is not always the priority for a quality competition.", language_code: en, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "La rapidité n'est pas toujours la {item} pour un concours de qualité.", language_code: fr, direction: ltr}, accepted_variants: ["La rapidité n'est pas toujours la {item} dans un concours de qualité."]}
+    feedback_frame: {text: "Cependant is a stronger link than mais and often opens a second point: cependant, la rapidité n'est pas toujours la priorité.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.translate.010
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: translation
+    frame: {text: "You prefer the traditional method.", language_code: en, direction: ltr}
+    slots: {item: *anc_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu préfères la méthode {item}.", language_code: fr, direction: ltr}, accepted_variants: ["Tu préfères la méthode {item}, donc."]}
+    feedback_frame: {text: "Un concours de qualité is a quality competition.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit40.lesson02.translate.011
+    lesson_content_key: fr.b1.unit40.lesson02.cependant
+    type: translation
+    frame: {text: "However, speed is not always the priority.", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Cependant, la {item} n'est pas toujours la priorité.", language_code: fr, direction: ltr}, accepted_variants: ["Pourtant, la {item} n'est pas toujours la priorité."]}
+    feedback_frame: {text: "Cependant is a stronger link than mais and often opens a second point: cependant, la rapidité n'est pas toujours la priorité.", language_code: en, direction: ltr}
