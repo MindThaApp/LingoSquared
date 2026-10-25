@@ -99,10 +99,12 @@ describe("DesktopSidebar next-lesson card", () => {
 });
 
 describe("NavBar (phone)", () => {
-  it("still renders the bottom tab bar markup with every tab", () => {
+  it("still renders the bottom tab bar markup with five tabs (Words lives under Profile)", () => {
     const { container } = wrap(<NavBar />);
     const tabbar = container.querySelector("nav.tabbar");
     expect(tabbar).not.toBeNull();
-    expect(tabbar!.querySelectorAll("a")).toHaveLength(6);
+    expect(tabbar!.querySelectorAll("a")).toHaveLength(5);
+    expect(tabbar!.querySelector('a[href="/vocabulary"]')).toBeNull();
+    expect(tabbar!.querySelectorAll("svg").length).toBe(5);
   });
 });

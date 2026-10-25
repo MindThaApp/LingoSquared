@@ -501,6 +501,13 @@ export async function postFeedbackFile<T>(path: string, file: Blob, filename: st
   return res.json() as Promise<T>;
 }
 
+export function put<T>(path: string, body?: unknown): Promise<T> {
+  return apiFetch<T>(path, {
+    method: "PUT",
+    body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
 export function patch<T>(path: string, body?: unknown): Promise<T> {
   return apiFetch<T>(path, {
     method: "PATCH",
