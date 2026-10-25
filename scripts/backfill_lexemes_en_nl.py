@@ -1239,6 +1239,26 @@ NOUNS.update({
     "artikel", "Retourbeleid", "aankoop", "exemplaar",
 })
 
+# A2 unit 78 (afgelopen weekend/last weekend, perfectum), added 2026-10-25.
+# Participle glosses follow the unit-77 pattern ("got back (past participle)").
+NL_GLOSSES.update({
+    "afgelopen": "last; past", "gekookt": "cooked (past participle)",
+    "gewandeld": "walked (past participle)", "gespeeld": "played (past participle)",
+    "gefietst": "cycled (past participle)", "gesport": "exercised (past participle)",
+    "gelezen": "read (past participle)", "geslapen": "slept (past participle)",
+    "bezocht": "visited (past participle)",
+    "thuisgebleven": "stayed home (past participle)",
+    "geworden": "become (past participle)", "gebleven": "stayed (past participle)",
+    "Zaterdagochtend": "Saturday morning", "Middags": "in the afternoon",
+    "Avonds": "in the evening",
+})
+ADJECTIVES.update({"afgelopen"})
+ADVERBS.update({"Middags", "Avonds", "Zaterdagochtend"})
+VERBS.update({
+    "gekookt", "gewandeld", "gespeeld", "gefietst", "gesport", "gelezen",
+    "geslapen", "bezocht", "thuisgebleven", "geworden", "gebleven",
+})
+
 # Units 29-33 (hobbies, appearance, animals, sports, transportation), added
 # 2026-07-09 alongside UNIT_FILES' extended range above -- still the same
 # "Dutch A1" course, not a new course boundary (see UNIT_FILES' own comment).
@@ -3211,6 +3231,28 @@ ADJECTIVES.update({"gemeentelijke"})
 VOLUME_PRACTICE_SINGLETON_TAGS = {'België': ['volume_en_nl_a1_unit01_item_10_single'], 'Hoi': ['volume_en_nl_a1_unit01_item_05_single'], 'Jan': ['volume_en_nl_a1_unit01_item_07_single'], 'Je': ['volume_en_nl_a1_unit01_item_02_single', 'volume_en_nl_a1_unit01_item_12_single'], 'Retourbeleid': ['volume_en_nl_a2_unit77_item_03_single'], 'agenda': ['volume_en_nl_a2_unit76_item_11_single'], 'koptelefoon': ['volume_en_nl_a2_unit77_item_06_single', 'volume_en_nl_a2_unit77_item_08_single'], 'ruilen': ['volume_en_nl_a2_unit77_item_04_single'], 'terugkrijgen': ['volume_en_nl_a2_unit77_item_01_single'], 'volgorde': ['volume_en_nl_a2_unit76_item_09_single']}
 # END volume practice singleton tags
 
+# A2 unit78 practice pools (see nl_agreement_tags). Exact-case members.
+U78_POOLS: dict[str, tuple[str, ...]] = {
+    "regular_participles": ("gewerkt", "gekookt", "gewandeld", "gespeeld", "gefietst", "gesport"),
+    "zijn_participles": ("gegaan", "gekomen", "geweest", "geworden", "gebleven", "thuisgebleven"),
+    "irregular_participles": ("gezien", "gelezen", "geslapen", "gegeten", "gedronken", "gehad"),
+    "infinitives": ("werken", "koken", "eten", "drinken", "wandelen", "fietsen", "spelen",
+                    "lezen", "slapen", "kopen", "komen", "blijven", "worden", "gaan", "hebben"),
+    "things": ("markt", "park", "bioscoop", "boodschappen", "voetbal", "film", "koffie", "brood"),
+    "times": ("Zaterdagochtend", "Middags", "Avonds"),
+    "single_boodschappen": ("boodschappen",), "single_gewandeld": ("gewandeld",),
+    "single_gespeeld": ("gespeeld",), "single_gezien": ("gezien",),
+    "single_gegaan": ("gegaan",), "single_thuisgebleven": ("thuisgebleven",),
+    "single_gelezen": ("gelezen",), "single_gewerkt": ("gewerkt",),
+    "single_koffie": ("koffie",), "single_gehad": ("gehad",),
+    "single_brood": ("brood",), "single_geslapen": ("geslapen",),
+    "single_gekookt": ("gekookt",), "single_bezocht": ("bezocht",),
+    "single_geworden": ("geworden",), "single_geweest": ("geweest",),
+    "single_gegeten": ("gegeten",), "single_gedronken": ("gedronken",),
+    "single_ouders": ("ouders",),
+}
+
+
 def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     t = token.casefold()
     semantic: list[str] = []
@@ -3459,6 +3501,14 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "het_retourbeleid": "return_policy_statement",
         "beleid_lezen": "return_policy_reading",
         "omar_brengt_de_koptelefoon_terug": "return_dialogue",
+        # A2 unit 78 (afgelopen weekend/last weekend, perfectum), added
+        # 2026-10-25.
+        "wat_heb_je_gedaan": "last_weekend_vocabulary",
+        "gewerkt_gekookt_gespeeld": "perfectum_regular_participle",
+        "heb_of_ben": "perfectum_auxiliary_choice",
+        "niet_en_geen": "negation_niet_geen",
+        "noors_weekend_lezen": "weekend_reading",
+        "lotte_en_omar_op_maandag": "weekend_dialogue",
         # B1 unit 01 (hypothetische situaties/hypothetical situations),
         # added 2026-07-11.
         "ik_zou_graag": "hypothetical_wish_singular",
@@ -4652,6 +4702,16 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     if t == "artikel": semantic.append("terugbrengen_artikel_single")
     if t == "terugkrijgen": semantic.append("terugbrengen_terugkrijgen_single")
 
+    # A2 unit78 (afgelopen weekend) curated pools and single-member anchors,
+    # added 2026-10-25. Gated on the unit's lesson keys so no other unit's
+    # lexeme picks them up. Pools keep a slot to one grammatical kind (all
+    # hebben-participles of regular verbs, all zijn-participles, ...); the
+    # *_single tags have exactly one member and anchor fixed-sentence items.
+    if lesson_key.startswith("nl.a2.unit78."):
+        for _pool, _members in U78_POOLS.items():
+            if token in _members:
+                semantic.append("weekend_" + _pool)
+
     # A1 volume batch (units 34-42 / 49-72), added 2026-07-22. Unlike the
     # per-token `if t == ...` blocks above, these are derived from the
     # lesson_key + part of speech, because 33 units x ~25 content words is
@@ -4712,6 +4772,11 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
 # unit-scoped decision. English-gloss values are authorable here (the learner
 # is an English speaker); Dutch-side sense confirmation is not needed.
 NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
+    # a2_unit78 (afgelopen weekend), 2026-10-25: the global glosses read
+    # "stay (with we)" and "tall; long"; this unit uses blijven as a plain
+    # infinitive ("thuisblijven") and lang as "for a long time".
+    ("a2_unit78_afgelopen_weekend", "blijven"): "to stay; to remain",
+    ("a2_unit78_afgelopen_weekend", "lang"): "long; for a long time",
     # b1_unit06 teaches the noun "de regel" (nl.b1.unit06.lesson06.teach.de_regel);
     # global `regel` = verb "arrange (with ik)". Without this,
     # translate.002 cued "the rule" and graded the correct answer "regel" wrong.
