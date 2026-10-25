@@ -152,5 +152,8 @@ def health_ready():
         logger.exception("readiness check failed")
         return JSONResponse(status_code=503, content={"status":"unavailable","database":"down"})
     return {"status":"ok","database":"ok"}
+
+from app.review.api import router as review_router
+router.include_router(review_router)
 app.include_router(router, prefix="/v1")
 app.include_router(router, include_in_schema=False)
