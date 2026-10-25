@@ -503,8 +503,8 @@ human clip -> `/media/audio/<hash>.mp3` -> `POST /tts` -> browser speech.
   user before the first `docker compose up`, or Docker creates it root-owned:**
   `mkdir -p ~/lingosquared-media/audio`. Redeploys, rsyncs of `web_dist` and image
   rebuilds never touch it. Back it up with the DB if you want to avoid re-rendering.
-  If a `docker-compose.prod.yml` exists, add the same two volume lines to its
-  `api` and `web` services.
+  `docker-compose.prod.yml` repeats the `api` mount (its `volumes: !override`
+  replaces the base list); `web` inherits it unchanged.
 - **File name** = `sha256(provider, voice, language, normalized text, rate)[:32].mp3`.
   Providers/voices/free allowances: `packages/shared/src/audio/voices.json`
   (read by the script and the frontend). Changing a voice there changes the hash,
@@ -709,13 +709,16 @@ test per compiled exercise, from `docs/content`) carry the pytest marker
 Counts (2026-10-25, branch fix/backend-quick): see the line below, updated by
 the last gate run.
 
-| Selection | Tests | Wall time (compose, full-repo ro mount) |
-|---|---|---|
-| full suite (no `-m`) | 33,922 passed (was 33,906 + 1 skipped; +15 new ops tests; the renderer-registration check now runs because the worktree mount includes `frontend/`) | about 185 s |
-| `-m "not content"` | 513 | about 150 s (collection still compiles all content) |
-| `--ignore=tests/test_content_answer_shapes.py` (same 513) | 513 | about 93 s |
-| `-m content` | 33,409 | about 90 s of test time plus collection |
+| Selection | Tests |
+|---|---|
+| full suite (no `-m`) | 34,290 collected: 34,289 passed + 1 skipped, about 165-245 s |
+| `-m "not content"` | 545 (hand-written code tests) |
+| `-m content` | 33,745 (per-exercise content tests) |
+
+(Counted 2026-10-25 on fix/backend-quick after merging origin; the content count
+grows with every content PR. The earlier 33,906 + 1 baseline pre-dates
+those PRs and this branch's 15 new ops tests.)
 
 `-m content` or `-m "not content"` still compile `docs/content` at collection
 because the cases are generated in `pytest_generate_tests`; for the quickest
-code-only loop use `--ignore=tests/test_content_answer_shapes.py`.
+code-only loop use `--ignore=tests/test_content_answer_shapes.py` (about 95 s, the 545 code tests themselves are the cost).
