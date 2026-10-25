@@ -313,7 +313,11 @@ def render_frame(
         # undistinguished run-on line. Only the caller that substitutes a
         # DIFFERENT language's text into the frame (word_order's English-
         # gloss hint, below) opts in; ordinary token rendering is unaffected.
-        return f"*{value}*" if emphasize else value
+        # The gloss is a hint, not part of the sentence: a blank plus the
+        # emphasized gloss in parentheses (the same cloze-hint form
+        # fill_in_blank uses) instead of an English word spliced into the
+        # target-language frame ("Hoy es ___ (*Wednesday*).").
+        return f"___ (*{value}*)" if emphasize else value
 
     return SLOT_RE.sub(replacement, frame["text"])
 
