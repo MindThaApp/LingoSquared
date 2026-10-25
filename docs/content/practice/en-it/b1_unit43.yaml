@@ -1,0 +1,118 @@
+schema_version: "1.0"
+pack_key: practice.en-it.b1.unit43
+source_language: en
+target_language: it
+unit_content_key: it.b1.unit43.discorso_indiretto
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-it B1 set) from scripts/backfill_lexemes_en_it.py (en-it-b1 course; w_<token> anchors, one token per sentence slot, unit-own lexemes only). Reported speech: ha detto che + indicative, ha chiesto se + indicative. Variants accept comincia for inizia. NATIVE FLAG: the unit keeps the present tense in the reported clause because the meeting is still ahead.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_alle", "w_chiedere", "w_chiesto", "w_inizia", "w_iniziare", "w_riunione", "w_tre"]
+slot_presets:
+  p1: &p1 {language_code: it, part_of_speech: ["noun", "verb", "preposition"], agreement_tags: {semantic: ["w_riunione", "w_inizia", "w_iniziare", "w_alle", "w_tre", "w_chiesto", "w_chiedere"]}}
+  p2: &p2 {language_code: it, part_of_speech: ["verb", "noun"], agreement_tags: {semantic: ["w_chiesto", "w_chiedere", "w_inizia", "w_riunione"]}}
+  p3: &p3 {language_code: it, part_of_speech: ["noun"], agreement_tags: {semantic: ["w_riunione"]}}
+  p4: &p4 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_inizia"]}}
+  p5: &p5 {language_code: it, part_of_speech: ["preposition"], agreement_tags: {semantic: ["w_alle"]}}
+  p6: &p6 {language_code: it, part_of_speech: ["noun"], agreement_tags: {semantic: ["w_tre"]}}
+  p7: &p7 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_iniziare"]}}
+  p8: &p8 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_chiesto"]}}
+  p9: &p9 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_chiedere"]}}
+templates:
+  - content_key: practice.en-it.it.b1.unit43.lesson01.choose.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on reporting what someone said.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.listen.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on reported speech.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson02.choose.001
+    lesson_content_key: it.b1.unit43.lesson02.riferire_domanda
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the second lesson of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.translate.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.match.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.translate.002
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: translation
+    frame: {text: "Elena said that the meeting starts at three.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Elena ha detto che la {item} inizia alle tre.", language_code: it, direction: ltr}, accepted_variants: ["Elena ha detto che la {item} comincia alle tre."]}
+    feedback_frame: {text: "Riunione is feminine: la riunione.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.translate.003
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: translation
+    frame: {text: "Elena said that the meeting starts at three.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Elena ha detto che la riunione {item} alle tre.", language_code: it, direction: ltr}, accepted_variants: ["Elena ha detto che la riunione comincia alle tre."]}
+    feedback_frame: {text: "The reported clause stays in the present because the meeting has not started.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.fill.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: fill_in_blank
+    frame: {text: "Elena ha detto che la riunione inizia {item} tre. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Alle goes with clock times.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.order.001
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: word_order
+    frame: {text: "Elena ha detto che la riunione inizia alle {item}.", language_code: it, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Elena ha detto che la riunione inizia alle {item}.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Tre is the number three.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson01.fill.002
+    lesson_content_key: it.b1.unit43.lesson01.riferire_affermazione
+    type: fill_in_blank
+    frame: {text: "La riunione deve {item} presto. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dovere is followed by the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson02.translate.001
+    lesson_content_key: it.b1.unit43.lesson02.riferire_domanda
+    type: translation
+    frame: {text: "Sam asked whether the meeting starts at three.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Sam ha {item} se la riunione inizia alle tre.", language_code: it, direction: ltr}, accepted_variants: ["Sam ha {item} se la riunione comincia alle tre."]}
+    feedback_frame: {text: "Chiesto is the participle of chiedere.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson02.fill.001
+    lesson_content_key: it.b1.unit43.lesson02.riferire_domanda
+    type: fill_in_blank
+    frame: {text: "Vorrei {item} una cosa. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Vorrei is followed by the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit43.lesson02.order.001
+    lesson_content_key: it.b1.unit43.lesson02.riferire_domanda
+    type: word_order
+    frame: {text: "Sam ha chiesto se la {item} inizia alle tre.", language_code: it, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Sam ha chiesto se la {item} inizia alle tre.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "A reported question starts with se.", language_code: en, direction: ltr}
