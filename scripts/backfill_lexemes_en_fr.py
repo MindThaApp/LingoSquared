@@ -10,8 +10,11 @@ docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
 Scope: A1 (the "en-fr" group, units 01-14) and A2 (the "en-fr-a2" group, units
-15-24; table A2_ENTRIES, session 11). B1+ is not classified yet; extend LEVELS
-and the tables below together.
+15-24; table A2_ENTRIES, session 11) and B1 (the "en-fr-b1" group, units
+25-43; table B1_ENTRIES plus B1_REGLOSS, session 12). B1 is its own course, so
+every B1 token is classified for it afresh; tokens A1/A2 already glossed reuse
+that gloss unless B1_REGLOSS says the B1 unit teaches another sense. B2+ is not
+classified yet; extend LEVELS and the tables below together.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md section 0.1, 6.6):
 * the gloss is the sense the unit actually teaches at first sight,
@@ -52,7 +55,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "fr"
-LEVELS = {"a1": "en-fr", "a2": "en-fr-a2"}
+LEVELS = {"a1": "en-fr", "a2": "en-fr-a2", "b1": "en-fr-b1"}
 
 PROPER_NOUNS = {
     "Camille", "Noé", "Montreuil", "Lille", "Inès", "Mathieu", "Trois-Frères",
@@ -607,6 +610,178 @@ for _tok, (_code, _gloss) in A2_ENTRIES.items():
     if _code != "n":
         POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
 
+B1_ENTRIES: dict[str, tuple[str, str]] = {
+    # unit25 abilities
+    "complet": ("a", "complete; full (masc.)"), "prêt": ("a", "ready (masc.)"),
+    "expliquer": ("v", "to explain"), "pouvoir": ("v", "to be able to; can"),
+    "phrase": ("n", "sentence; clause"), "intégrée": ("a", "embedded (fem.)"),
+    "copie": ("n", "copy"), "j'aurais": ("v", "I would have"),
+    "leur": ("r", "them; to them"), "lui": ("r", "him; her; to him; to her"),
+    "l'envoyer": ("h", "to send it"), "aurais": ("v", "I would have; you would have (informal)"),
+    "travaillais": ("v", "I was working; you were working (informal)"),
+    "n'aurais": ("v", "I would not have; you would not have (informal)"),
+    # unit26 obligations
+    "préviens": ("v", "I warn; I let know"), "badge": ("n", "badge; pass"),
+    "sac": ("n", "bag"), "prévienne": ("v", "let know (subjunctive)"),
+    "apportes": ("v", "you bring (informal)"), "uniforme": ("n", "uniform"),
+    "obligation": ("n", "obligation"), "j'oublie": ("v", "I forget"),
+    "aurait": ("v", "would have (he, she)"), "fallu": ("v", "been necessary (past participle)"),
+    "veille": ("n", "the day before"), "pars": ("v", "leave (I; you, informal)"),
+    "l'avais": ("h", "had it (imperfect)"),
+    # unit27 hypotheses
+    "passerai": ("v", "I will come by"), "finir": ("v", "to finish"),
+    "j'irai": ("v", "I will go"), "condition": ("n", "condition"),
+    "résultat": ("n", "result"), "futur": ("n", "future"),
+    "j'avais": ("v", "I had"), "passerais": ("v", "I would come by"),
+    "n'avais": ("v", "I did not have"), "resterais": ("v", "I would stay"),
+    "longtemps": ("d", "for a long time"), "régler": ("v", "to settle; to sort out"),
+    "finirais": ("v", "I would finish"), "irréelle": ("a", "unreal (fem.)"),
+    "présent": ("n", "present (tense)"), "imparfait": ("n", "imperfect (a past tense)"),
+    "vas": ("v", "you go; you are going (informal)"),
+    # unit28 debate
+    "court": ("a", "short (masc.)"), "l'organisation": ("n", "the organisation"),
+    "importante": ("a", "important (fem.)"), "l'équipe": ("n", "the team"),
+    "répondre": ("v", "to answer; to reply"), "l'avis": ("n", "the opinion"),
+    "raison": ("n", "reason; being right"), "commande": ("n", "order (for goods)"),
+    "commandes": ("n", "orders (for goods)"), "pause": ("n", "break"),
+    "longue": ("a", "long (fem.)"), "aiderait": ("v", "would help"),
+    "déjà": ("d", "already"), "garder": ("v", "to keep"),
+    "qu'une": ("c", "that a (fem.)"), "refuses": ("v", "you refuse (informal)"),
+    "l'idée": ("n", "the idea"), "long": ("a", "long (masc.)"),
+    "proposes": ("v", "you suggest (informal)"), "solution": ("n", "solution"),
+    "vraie": ("a", "real; true (fem.)"),
+    # unit29 work
+    "responsable": ("a", "in charge; responsible"), "importantes": ("a", "important (fem. plural)"),
+    "liste": ("n", "list"), "vouvoiement": ("n", "using the formal form of address"),
+    "collègue": ("n", "colleague"), "terminée": ("a", "finished (fem.)"),
+    "livraison": ("n", "delivery"), "vérifier": ("v", "to check"),
+    "elles": ("r", "they (fem.)"), "prêtes": ("a", "ready (fem. plural)"),
+    "d'aide": ("h", "of help"),
+    # unit30 narrative
+    "préparais": ("v", "I was preparing; you were preparing (informal)"),
+    "appelé": ("v", "called (past participle)"), "fond": ("n", "background"),
+    "composé": ("a", "compound"), "événement": ("n", "event"),
+    "principal": ("a", "main (masc.)"), "séquence": ("n", "sequence"),
+    "fallait": ("v", "was necessary"), "livreur": ("n", "delivery person (masc.)"),
+    "passée": ("v", "gone by; passed (fem. past participle)"),
+    "avons": ("v", "we have"), "fini": ("v", "finished (past participle)"),
+    # unit31 conditions
+    "arrive": ("v", "arrives; I arrive"), "finirons": ("v", "we will finish"),
+    "n'arrive": ("v", "does not arrive"), "préviendrai": ("v", "I will warn; I will let know"),
+    "écrirai": ("v", "I will write"), "écriras": ("v", "you will write (informal)"),
+    # unit32 sequences
+    "l'envoie": ("h", "I send it"), "habituel": ("a", "usual (masc.)"),
+    "l'événement": ("n", "the event"), "suivant": ("a", "following; next (masc.)"),
+    "répondu": ("v", "answered (past participle)"), "été": ("v", "been (past participle)"),
+    "confirmé": ("v", "confirmed (past participle)"), "envoies": ("v", "you send (informal)"),
+    "réponse": ("n", "answer; reply"), "m'as": ("h", "you have (with me; helper verb)"),
+    "prévenu": ("v", "warned; informed (past participle)"),
+    "t'ai": ("h", "I have (with you; helper verb)"),
+    # unit33 reported speech
+    "rapporter": ("v", "to report (what was said)"), "demandé": ("v", "asked (past participle)"),
+    "concordance": ("n", "agreement (of tenses)"), "verbe": ("n", "verb"),
+    "d'introduction": ("h", "of introduction"), "n'a": ("v", "has not"),
+    "rien": ("r", "nothing"), "d'autre": ("h", "else; other"),
+    "maintenant": ("d", "now"),
+    # unit34 goals
+    "économies": ("n", "savings"), "formation": ("n", "training course"),
+    "avancée": ("a", "advanced (fem.)"), "infinitif": ("n", "infinitive"),
+    "but": ("n", "goal; purpose"), "étudier": ("v", "to study"),
+    "forme": ("v", "trains (he, she)"), "puisse": ("v", "could; may (subjunctive)"),
+    "seule": ("a", "alone; on one's own (fem.)"), "indépendante": ("a", "independent (fem.)"),
+    "différent": ("a", "different (masc.)"), "pourquoi": ("d", "why"),
+    "montre": ("v", "shows"), "bientôt": ("d", "soon"),
+    "n'auras": ("v", "you will not have (informal)"),
+    # unit35 advice
+    "devrais": ("v", "I should; you should (informal)"), "parler": ("v", "to speak; to talk"),
+    "emploi": ("n", "job; (in a set phrase) schedule"), "conseil": ("n", "piece of advice"),
+    "j'étais": ("v", "I was"), "demanderais": ("v", "I would ask"),
+    "repos": ("n", "rest"), "t'aidera": ("h", "will help you"),
+    "n'ose": ("v", "do not dare (I); does not dare"), "directement": ("d", "directly"),
+    "essayer": ("v", "to try"),
+    # unit36 serious complaint
+    "cassé": ("a", "broken (masc.)"), "livré": ("v", "delivered (past participle)"),
+    "correctement": ("d", "correctly; properly"), "poli": ("a", "polite (masc.)"),
+    "souhaiterais": ("v", "I would like (formal)"), "remplacement": ("n", "replacement"),
+    "a-t-il": ("h", "has he; has it (question)"), "enverrons": ("v", "we will send"),
+    "résolution": ("n", "resolution; settling"), "d'apprendre": ("h", "of learning; to hear (news)"),
+    "situation": ("n", "situation"), "souhaitez-vous": ("v", "do you wish (formal)"),
+    # unit37 regrets
+    "concours": ("n", "competition; contest"), "dû": ("v", "had to; should have (past participle)"),
+    "m'entraîner": ("h", "to train (myself)"), "davantage": ("d", "more"),
+    "regret": ("n", "regret"), "regrette": ("v", "regret; regrets"),
+    "l'aide": ("n", "the help"), "n'as": ("v", "you have not (informal)"),
+    "eu": ("v", "had (past participle)"), "t'entraîner": ("h", "to train (yourself)"),
+    "souhait": ("n", "wish"), "réalisé": ("a", "fulfilled; achieved (masc.)"),
+    # unit38 plans
+    "l'examen": ("n", "the exam"), "l'intention": ("n", "the intention"),
+    "intention": ("n", "intention"), "projet": ("n", "plan; project"),
+    "fixe": ("a", "fixed"), "réussirai": ("v", "I will succeed; I will pass"),
+    "probablement": ("d", "probably"), "nerveuse": ("a", "nervous (fem.)"),
+    "simple": ("a", "simple"), "prédiction": ("n", "prediction"),
+    "assez": ("d", "fairly; quite; enough"), "sûre": ("a", "sure (fem.)"),
+    "examen": ("n", "exam"), "penses": ("v", "you think (informal)"),
+    "réussir": ("v", "to succeed; to pass"),
+    # unit39 summarising
+    "pétrir": ("v", "to knead"), "pâte": ("n", "dough"),
+    "laisser": ("v", "to let; to leave"), "cuire": ("v", "to bake; to cook"),
+    "haute": ("a", "high (fem.)"), "température": ("n", "temperature"),
+    "points": ("n", "points"), "principaux": ("a", "main (masc. plural)"),
+    "ordre": ("n", "order; sequence"), "étapes": ("n", "steps; stages"),
+    "résumé": ("n", "summary"), "raconté": ("v", "told; recounted (past participle)"),
+    "histoire": ("n", "story; history"), "n'était": ("v", "was not"),
+    "important": ("a", "important (masc.)"), "distinguer": ("v", "to distinguish"),
+    "détails": ("n", "details"), "essentiel": ("a", "essential (masc.)"),
+    "expliqué": ("v", "explained (past participle)"), "l'essentiel": ("n", "the essential part"),
+    # unit40 concessions
+    "pétrin": ("n", "kneading machine; dough mixer"), "électrique": ("a", "electric"),
+    "rapide": ("a", "fast; quick"), "pétrissage": ("n", "kneading"),
+    "main": ("n", "hand"), "donne": ("v", "gives"),
+    "concession": ("n", "concession"), "reformuler": ("v", "to rephrase"),
+    "position": ("n", "position"), "nuance": ("n", "nuance; shade of meaning"),
+    "cependant": ("d", "however"), "rapidité": ("n", "speed"),
+    "priorité": ("n", "priority"), "qualité": ("n", "quality"),
+    "connecteur": ("n", "linking word"), "deuxième": ("a", "second"),
+    "machine": ("n", "machine"), "méthode": ("n", "method"),
+    "traditionnelle": ("a", "traditional (fem.)"), "sent": ("v", "feels; smells"),
+    # unit41 conditional hypotheses
+    "propre": ("a", "own"), "j'utiliserais": ("v", "I would use"),
+    "bio": ("a", "organic"), "hypothèse": ("n", "hypothesis"),
+    "congé": ("n", "time off; leave"), "adoucir": ("v", "to soften"),
+    "rêves": ("v", "you dream (informal)"), "patron": ("n", "boss; owner (masc.)"),
+    "quelque": ("a", "some"),
+    # unit42 meetings
+    "peut-être": ("d", "perhaps"), "d'essayer": ("h", "of trying"),
+    "vitrine": ("n", "shop window; display case"), "suggestion": ("n", "suggestion"),
+    "formelle": ("a", "formal (fem.)"), "adoucie": ("a", "softened (fem.)"),
+    "réunion": ("n", "meeting"), "convenu": ("v", "agreed (past participle)"),
+    "confirme": ("v", "confirm (I); confirms"), "essaierons": ("v", "we will try"),
+    "professionnel": ("a", "professional (masc.)"), "bref": ("a", "brief (masc.)"),
+    "laquelle": ("r", "which one (fem.)"), "proposeriez-vous": ("v", "would you suggest (formal)"),
+    "proposerais": ("v", "I would suggest"), "citron": ("n", "lemon"),
+    "revisitée": ("a", "revisited; given a new twist (fem.)"),
+    "essayons-la": ("h", "let us try it (fem.)"), "pouvez-vous": ("v", "can you (formal or plural)"),
+    "écrit": ("n", "writing"),
+    # unit43 descriptions
+    "patient": ("a", "patient (masc.)"), "apprise": ("v", "learned (fem. past participle)"),
+    "objet": ("n", "object"), "direct": ("a", "direct"),
+    "secret": ("n", "secret"), "dont": ("r", "of which; whose; about which"),
+    "complément": ("n", "complement; object (grammar)"), "remplace": ("v", "replaces"),
+    "introduit": ("v", "introduces"), "sévère": ("a", "strict; severe"),
+    "t'a": ("h", "has (with you; helper verb)"), "celle": ("r", "the one (fem.)"),
+}
+# B1 re-glosses of tokens that A1/A2 already classified in a different sense.
+# Applied to the B1 course only.
+B1_REGLOSS: dict[str, str] = {
+    "peux": "I can; you can (informal)",
+    "avis": "opinion",
+    "service": "service; shift; department",
+}
+for _tok, (_code, _gloss) in B1_ENTRIES.items():
+    GLOSSES[_tok] = _gloss
+    if _code != "n":
+        POS_SETS.setdefault(_POS_CODE[_code], set()).add(_tok)
+
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -650,6 +825,14 @@ def iter_specs():
             category_tags=CATEGORY_TAGS,
             gloss_overrides=GLOSS_OVERRIDES,
             pos_overrides=POS_OVERRIDES,
+        ) if level != "b1" else classify(
+            lang=LANG,
+            level=level,
+            unit_files=realizations,
+            glosses={**GLOSSES, **B1_REGLOSS},
+            part_of_speech=part_of_speech,
+            normalize=normalize,
+            category_tags=CATEGORY_TAGS,
         )
 
 
