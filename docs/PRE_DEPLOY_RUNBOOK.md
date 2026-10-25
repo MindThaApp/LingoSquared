@@ -486,6 +486,80 @@ phone-testing, not a bug).
   load of the app end-to-end. Do these live, with Ramin present, per
   the rest of this runbook's conventions.
 
+## Pre-rendered audio (TTS clips on disk)
+
+Spoken audio is rendered once by `scripts/render_audio.py` and served as static
+files; `POST /tts` stays as the fallback. Lookup order in the app: recorded
+human clip -> `/media/audio/<hash>.mp3` -> `POST /tts` -> browser speech.
+
+- **Host path (persistent, outside the image and the code bind-mount):**
+  `~/lingosquared-media/audio` (override with `MEDIA_AUDIO_HOST_DIR` in the shell
+  or `backend/.env`). `docker-compose.yml` mounts it read-only at
+  `/srv/media/audio` in both `api` and `web`. nginx serves it at
+  `/media/audio/` with `Cache-Control: public, max-age=31536000, immutable`; the
+  API route of the same path is the fallback. **Create the directory as your own
+  user before the first `docker compose up`, or Docker creates it root-owned:**
+  `mkdir -p ~/lingosquared-media/audio`. Redeploys, rsyncs of `web_dist` and image
+  rebuilds never touch it. Back it up with the DB if you want to avoid re-rendering.
+  If a `docker-compose.prod.yml` exists, add the same two volume lines to its
+  `api` and `web` services.
+- **File name** = `sha256(provider, voice, language, normalized text, rate)[:32].mp3`.
+  Providers/voices/free allowances: `packages/shared/src/audio/voices.json`
+  (read by the script and the frontend). Changing a voice there changes the hash,
+  so only that language re-renders. Slow playback is not rendered: the client
+  applies `playbackRate` (pitch preserved) to the one normal-speed file.
+- **Budget:** `TTS_MONTHLY_CHAR_BUDGET` now defaults to 1,000,000 (the WaveNet /
+  Neural2 / Chirp 3 HD free tier; Standard's 4M never applied). It only guards the
+  runtime `/tts` fallback.
+- **Secrets (never committed):** Google `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` and
+  `AZURE_SPEECH_KEY`/`AZURE_SPEECH_REGION` come from `backend/.env`. Gemini
+  (Dari/prs only, render-time only): save the key to
+  `secrets/gemini/api-key.txt` (git-excluded, like `secrets/sentry`) or set
+  `GEMINI_API_KEY` in the environment/`.env`; `.env.example` has a placeholder.
+  Without it prs is skipped with a message.
+
+### Render on the server (supervised, run by the deploy agent)
+
+Costs money only if a tier's free allowance is exceeded; the script refuses to
+do that unless `--allow-paid` is passed. Do not pass it without Ramin.
+
+1. Deploy this branch's backend + web build first (nginx location + mounts), then
+   `mkdir -p ~/lingosquared-media/audio` and `docker compose up -d api web`.
+2. Host toolchain (once): `python3 -m venv .audio-venv && .audio-venv/bin/pip install -r scripts/requirements-audio.txt`
+   and `sudo apt install ffmpeg` (ffmpeg only needed for prs). The repo checkout
+   must contain `docs/content/` (it does on the server).
+3. Confirm credentials load: `backend/.env` has the Google JSON and Azure key;
+   for prs check `ls secrets/gemini/api-key.txt`.
+4. Free check of every voice name (no synthesis, no cost):
+   `.audio-venv/bin/python scripts/render_audio.py --check-voices`
+   Fix any `MISSING` voice in `voices.json` before continuing. Chirp 3 HD names
+   (`pl-PL`, `ro-RO`, `ar-XA`) and the Gemini `fa-AF` voice-library lookup were
+   not verified live when this was written.
+5. Dry run and read the table (no network):
+   `.audio-venv/bin/python scripts/render_audio.py --dry-run`
+6. Listening test first, one language at a time, smallest cap:
+   `... render_audio.py --lang nl --max-chars 2000 --out-dir ~/lingosquared-media/audio`
+   Open `https://<host>/media/audio/<file>` (names are in `manifest.json`), listen,
+   check cache headers with `curl -sI`. Repeat for fa, ar (flag: strings
+   without tashkeel are rendered as-is, see `flags` in the manifest) and, if a
+   Gemini key exists, prs (needs a native Dari speaker to approve before enabling).
+7. Full render, per tier so a stall costs little. Use a cap slightly above that
+   language's "to render" chars from the dry run:
+   `... render_audio.py --lang en,es,fr,de,it,hi --max-chars 800000`  (Neural2)
+   `... --lang nl,ru --max-chars 300000`  (WaveNet)
+   `... --lang pl,ro,ar --max-chars 300000`  (Chirp 3 HD)
+   `... --lang fa --max-chars 120000`  (Azure F0)
+   `... --lang prs --max-chars 130000`  (Gemini; free tier is rate limited, the script paces and backs off)
+   The run is resumable: rerun the same command after any STOP/interrupt. A
+   `usage.json` ledger in the output dir tracks characters per tier per month.
+8. Verify: `ls ~/lingosquared-media/audio | wc -l`; open the app, play a lesson
+   card, and confirm in the browser network tab that a `/media/audio/<hash>.mp3`
+   request returns 200 with `immutable`; a string without a clip falls back to
+   `/tts` silently.
+9. Rendering never needs an app restart or rebuild: files are looked up by name at
+   request time. Practice sentences built from templates at request time are not
+   pre-rendered and keep using `/tts` (listed as skipped in the dry run).
+
 ## Contradictions / open questions found while synthesizing this (need Ramin's input)
 
 1. **`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` on live was never explicitly
