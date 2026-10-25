@@ -135,6 +135,7 @@ from app.api.deps import current_user, optional_current_user, lenient_current_us
 from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
+from app.review.events import apply_self_grade, schedule_and_log, schedule_practice_srs
 from app.review.grading import (
     decode_feedback,
     display_correct_response,
@@ -1592,7 +1593,7 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")),input_mode=body.input_mode)
     correct=result!="incorrect"
     xp=e.xp if correct else 0
-    schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()
+    schedule_and_log(db,r,result,user=user,source="legacy",exercise_id=r.exercise_id,latency_ms=body.latency_ms); record_activity(db,user.id,xp,user.timezone); db.commit()
     feedback = select_feedback(feedback_meta,body.response,result)
     if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
         feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
@@ -2799,7 +2800,7 @@ def practice_answer(
                 )
             ) or 0
             if attempts_today == 0:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
             srs.last_reviewed_at = now
 
         db.add(
@@ -2834,6 +2835,7 @@ def practice_answer(
             True if item.source == "checkpoint" else None
         ),
     )
+    result = apply_self_grade(result, item_type, body)
     correct = result != "incorrect"
 
     xp_awarded = 0
@@ -2865,7 +2867,7 @@ def practice_answer(
     if srs is not None:
         if item.source == "review":
             if srs.last_session_id != item.session_id:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
                 srs.last_session_id = item.session_id
             srs.last_reviewed_at = now
         elif item.source == "practice":
@@ -2887,7 +2889,7 @@ def practice_answer(
                 )
             ) or 0
             if attempts_today == 0:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
             srs.last_reviewed_at = now
 
     db.add(
@@ -2901,6 +2903,11 @@ def practice_answer(
     )
     item.answered_at = now
     record_activity(db, user.id, xp_awarded, user.timezone)
+    next_due = (
+        {"next_due_at": srs.due_at, "next_interval_days": srs.interval_days}
+        if srs is not None and item.source in ("review", "practice")
+        else {}
+    )
     db.commit()
     return {
         "correct": correct,
@@ -2913,6 +2920,7 @@ def practice_answer(
             db, template, item.course_id, item.filled_slots,
             item.target_lexeme_id,
         ),
+        **next_due,
     }
 
 def temporary_password() -> str:

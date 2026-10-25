@@ -21,4 +21,7 @@ export interface ExerciseComponentProps {
   lessonExercises?: Exercise[];
   // Correct answer of the previous miss, already shown on screen.
   answerHint?: string;
+  // Self-graded types (flashcard) only: offer Again/Hard/Good/Easy instead of
+  // the two-button known/unknown pair. Ignored by auto-graded types.
+  ratings?: boolean;
 }

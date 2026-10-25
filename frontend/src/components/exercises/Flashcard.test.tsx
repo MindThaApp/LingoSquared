@@ -55,3 +55,16 @@ describe("Flashcard answer payload", () => {
     expect(onAnswer.mock.calls[0][0]).toBe("unknown");
   });
 });
+
+describe("Flashcard rating buttons", () => {
+  it("maps each rating to a known/unknown verdict plus its grade", () => {
+    const onAnswer = vi.fn();
+    render(<Flashcard exercise={exercise} onAnswer={onAnswer} disabled={false} ratings />);
+    fireEvent.click(screen.getByRole("button", { name: "exercise.show_answer" }));
+    fireEvent.click(screen.getByRole("button", { name: "review.rate_hard" }));
+    expect(onAnswer).toHaveBeenLastCalledWith("known", { selfGrade: "hard" });
+    fireEvent.click(screen.getByRole("button", { name: "review.rate_again" }));
+    expect(onAnswer).toHaveBeenLastCalledWith("unknown", { selfGrade: "again" });
+    expect(screen.queryByRole("button", { name: "exercise.got_it" })).not.toBeInTheDocument();
+  });
+});
