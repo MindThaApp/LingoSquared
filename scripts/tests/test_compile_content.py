@@ -1795,3 +1795,76 @@ def test_matching_pairs_untaught_validator_uses_effective_overlay_pairs():
     )
 
     assert source_clue_report.warnings == []
+
+
+def _card(target, example):
+    return {
+        "units": [
+            {
+                "lessons": [
+                    {
+                        "teaching": [
+                            {
+                                "content_key": "x.a1.unit01.lesson01.teach.a",
+                                "kind": "phrase",
+                                "target": {"text": target},
+                                "example": {"text": example},
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+
+
+def test_example_label_prefix_is_warned_but_sentence_colons_are_not():
+    compiler = load_content_compiler()
+
+    flagged = compiler.Report()
+    compiler.validate_example_label_prefixes(
+        _card("Ja, gern.", "Im Dialog: Ja, gern."), flagged
+    )
+    assert len(flagged.warnings) == 1
+    assert "label prefix" in flagged.warnings[0]
+
+    for target, example in (
+        ("Ja, gern.", "Ja, gern."),
+        ("Ewa", "Ewa mówi: Dzień dobry."),  # speech attribution
+        ("la cifra", "Marcos da una cifra: cuarenta euros."),  # reuses card word
+        ("Uhr", "Es ist neun Uhr: Zeit zu gehen."),  # no short label at start
+    ):
+        report = compiler.Report()
+        compiler.validate_example_label_prefixes(_card(target, example), report)
+        assert report.warnings == [], (target, example)
+
+
+def test_matching_pairs_warn_only_below_four_pairs():
+    compiler = load_content_compiler()
+
+    def run(count):
+        report = compiler.Report()
+        compiler.validate_matching_pairs_minimum_scale(
+            {
+                "units": [
+                    {
+                        "lessons": [
+                            {
+                                "exercises": [
+                                    {
+                                        "type": "matching_pairs",
+                                        "content_key": "x",
+                                        "pairs": [{"left": str(i), "right": str(i)} for i in range(count)],
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            report,
+        )
+        return report.warnings
+
+    assert len(run(3)) == 1
+    assert run(4) == [] and run(5) == []
