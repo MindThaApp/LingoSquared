@@ -12,7 +12,7 @@ export function CrashReportSettings() {
       <legend style={{ fontWeight: 600, padding: 0 }}>{t("crash_report.settings_title")}</legend>
       <p className="muted" style={{ marginTop: 4 }}>{t("crash_report.settings_hint")}</p>
       {CRASH_CONSENT_VALUES.map((option) => (
-        <label key={option} style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 6 }}>
+        <label key={option} className="radio-row">
           <input
             type="radio"
             name={name}

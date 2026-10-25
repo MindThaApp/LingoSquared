@@ -10,11 +10,14 @@ scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
 Scope: A1 (the "en-hi" manifest group, units 01-19) and A2 (the "en-hi-a2"
-group, units 20-25, added 2026-10-24 in session 11). A2 is a separate Course
-row, so its lexemes are first-sight per course and carry their own gloss and
-part-of-speech tables (GLOSSES_A2, POS_SETS_A2): a token re-taught in A2 is
-glossed for the sense A2 teaches. B1+ is not classified yet; extend LEVELS
-and the tables together.
+group, units 20-25, added 2026-10-24 in session 11) and B1 (the "en-hi-b1"
+group, units 01-19, added 2026-10-25 in session 12). A2 and B1 are separate
+Course rows, so their lexemes are first-sight per course and carry their own
+gloss and part-of-speech tables (GLOSSES_A2 / POS_SETS_A2, GLOSSES_B1 /
+POS_SETS_B1): a token re-taught at a later level is glossed for the sense
+that level's first unit teaches. B2+ is not classified yet; extend LEVELS and
+the tables together. Before the B1 course is imported the script stops with
+"en-hi 'Hindi B1' course must be imported first" and writes nothing.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight,
@@ -54,7 +57,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "hi"
-LEVELS = {"a1": "en-hi", "a2": "en-hi-a2"}
+LEVELS = {"a1": "en-hi", "a2": "en-hi-a2", "b1": "en-hi-b1"}
 
 PROPER_NOUNS = {"प्रिया", "अर्जुन", "भारत", "लंदन", "अमेरिका", "दिल्ली", "मुंबई"}
 
@@ -338,18 +341,420 @@ for _tag, _words in {
 part_of_speech_a2 = pos_lookup(POS_SETS_A2)
 
 
+# ---------------------------------------------------------------------------
+# B1 (course "Hindi B1", manifest group en-hi-b1, units 01-19; session 12,
+# 2026-10-25). Another separate Course, so every token is first-sight again:
+# the gloss is the sense of the FIRST B1 unit that teaches it. Inflected and
+# gendered forms say who or what they belong to, so a bare-word prompt names
+# exactly one form, and no two B1 glosses are identical.
+# ---------------------------------------------------------------------------
+GLOSSES_B1: dict[str, str] = {
+    "मुझे": "to me; me",
+    "यह": "this",
+    "ये": "these",
+    "चाहिए": "need; should (obligation)",
+    "काम": "work; task",
+    "करना": "to do (with a masc. singular noun)",
+    "करने": "to do (with a masc. plural noun)",
+    "रिपोर्ट": "report",
+    "रिपोर्टें": "reports",
+    "पूरी": "complete; finished (fem.)",
+    "करनी": "to do (with a fem. noun)",
+    "कल": "yesterday; tomorrow",
+    "था": "was (masc.)",
+    "थी": "was (fem.)",
+    "वहाँ": "there",
+    "नहीं": "no; not",
+    "जाना": "to go",
+    "तुम्हें": "to you (informal)",
+    "देर": "delay; lateness",
+    "रात": "night",
+    "क्लाइंट": "client",
+    "व्यस्त": "busy",
+    "मैं": "I",
+    "हूँ": "am",
+    "है": "is (he, she, it)",
+    "हैं": "are (we, they, or formal you)",
+    "हो": "are (with informal you)",
+    "हम": "we",
+    "प्रिया": "Priya",
+    "कर": "do (stem, used before can)",
+    "फ़ॉर्म": "form (document)",
+    "भर": "fill in (stem)",
+    "सकता": "can; be able to (masc.)",
+    "सकती": "can; be able to (fem.)",
+    "सकते": "can; be able to (masc. plural, or we)",
+    "आ": "come (stem)",
+    "आया": "came (masc.)",
+    "पर": "but; on; at",
+    "जा": "go (stem)",
+    "अब": "now",
+    "कि": "that (joins a statement to what was said)",
+    "सकूँ": "may be able to (I, subjunctive)",
+    "अकेले": "alone",
+    "शाम": "evening",
+    "अगर": "if",
+    "तो": "then; so (in the result part of a sentence)",
+    "बारिश": "rain",
+    "घर": "home; house",
+    "होगा": "will be (masc.)",
+    "होगी": "will be (fem.)",
+    "रहूँगा": "will stay (I, masc.)",
+    "समय": "time",
+    "आओगे": "will come (informal you)",
+    "साथ": "together; with",
+    "जाएँगे": "will go (we, they)",
+    "तुम": "you (informal)",
+    "छुट्टी": "holiday; day off",
+    "आज": "today",
+    "होती": "would be (fem.)",
+    "बाज़ार": "market",
+    "जाता": "go (habitual, masc.); would go (masc.)",
+    "पता": "knowledge (as in I know)",
+    "होता": "would be (masc.)",
+    "आता": "come (habitual, masc.); would come (masc.)",
+    "फ़िल्म": "film; movie",
+    "तुमसे": "with you (informal)",
+    "अच्छा": "good; nice (masc.)",
+    "सहमत": "in agreement",
+    "क्योंकि": "because",
+    "सही": "correct; right",
+    "कहते": "say (habitual, masc. plural, or informal you)",
+    "असहमत": "in disagreement",
+    "महंगा": "expensive (masc.)",
+    "लगता": "seems (masc.)",
+    "विचार": "idea; thought",
+    "तुमने": "you (informal, as the doer of a past action)",
+    "कहा": "said",
+    "नया": "new (masc.)",
+    "रेस्टोरेंट": "restaurant",
+    "का": "of (masc.)",
+    "ज़िम्मेदारी": "responsibility",
+    "मेरी": "my (fem.)",
+    "प्रोजेक्ट": "project",
+    "टीम": "team",
+    "देखता": "look after; watch (habitual, masc.)",
+    "देखती": "look after; watch (habitual, fem.)",
+    "अर्जुन": "Arjun",
+    "क्या": "what; (question word)",
+    "चल": "go on; run (stem)",
+    "रहा": "in progress (masc.)",
+    "रही": "in progress (fem.)",
+    "रहे": "in progress (masc. plural)",
+    "पूरा": "complete; finished (masc.)",
+    "गया": "went; became (masc.)",
+    "गई": "went; became (fem.)",
+    "में": "in",
+    "मदद": "help",
+    "आपकी": "your (formal, fem.)",
+    "थोड़ी": "a little (fem.)",
+    "आप": "you (formal)",
+    "जब": "when (at the time that)",
+    "तब": "then; at that time",
+    "हुआ": "happened (masc.)",
+    "वह": "he; she; that",
+    "को": "at; to; on",
+    "मिली": "met (fem.)",
+    "से": "from; with; by",
+    "फिर": "then; again",
+    "उसने": "he or she (as the doer of a past action)",
+    "भी": "also; too",
+    "दुकान": "shop",
+    "पड़ोसी": "neighbour",
+    "मज़ेदार": "fun; amusing",
+    "बात": "matter; talk",
+    "हुई": "happened (fem.)",
+    "समस्या": "problem",
+    "नींद": "sleep (the state of sleeping)",
+    "आती": "come (habitual, fem.)",
+    "जल्दी": "early; quickly",
+    "सोना": "to sleep",
+    "कॉफ़ी": "coffee",
+    "पीनी": "to drink (with a fem. noun)",
+    "जगह": "place; position",
+    "तुम्हारी": "your (informal, fem.)",
+    "सोता": "sleep (habitual, masc.)",
+    "सोती": "sleep (habitual, fem.)",
+    "कोशिश": "attempt; effort",
+    "करूँगी": "will do (I, fem.)",
+    "करूँगा": "will do (I, masc.)",
+    "क्यों": "why",
+    "न": "not; why not (in a suggestion)",
+    "सोओ": "sleep! (informal command)",
+    "की": "of (fem.); did (with a fem. noun)",
+    "मैंने": "I (as the doer of a past action)",
+    "पीता": "drink (habitual, masc.)",
+    "पीती": "drink (habitual, fem.)",
+    "करेगी": "will do (she)",
+    "शिकायत": "complaint",
+    "एक": "one; a",
+    "फ़ोन": "phone",
+    "खराब": "broken; faulty",
+    "करता": "do (habitual, masc.); work (as in the phone works)",
+    "कृपया": "please",
+    "पैसे": "money (plural form)",
+    "वापस": "back",
+    "करें": "do (formal request)",
+    "मेरे": "my (masc. plural, or respectful)",
+    "माफ़": "sorry; forgiven",
+    "कीजिए": "please do (formal)",
+    "ज़रूर": "certainly; of course",
+    "खरीदा": "bought",
+    "और": "and; more",
+    "दुकानदार": "shopkeeper",
+    "माँगे": "asked for (masc. plural object)",
+    "जी": "respectful particle (like sir or madam)",
+    "हाँ": "yes",
+    "चाहती": "want (fem.)",
+    "अभी": "now; right now",
+    "करते": "do (habitual, masc. plural, or we)",
+    "विनम्रता": "politeness",
+    "खत्म": "finished; over",
+    "भूल": "forget (stem)",
+    "काश": "if only",
+    "शुरू": "start; beginning",
+    "किया": "did (masc.)",
+    "गलती": "mistake",
+    "पछतावा": "regret",
+    "कोई": "any; some",
+    "अगली": "next (fem.)",
+    "बार": "time (occasion)",
+    "मेरा": "my (masc.)",
+    "योजना": "plan",
+    "इरादा": "intention",
+    "अगले": "next (masc. plural, or before a postposition)",
+    "हफ़्ते": "weeks; week (in next week)",
+    "मुंबई": "Mumbai",
+    "जाने": "to go (form used before a postposition)",
+    "महीने": "months; month (in next month)",
+    "सोच": "think (stem)",
+    "के": "of (before a masc. plural or respected noun)",
+    "बारे": "matter (as in about)",
+    "लेने": "to take (form used before a postposition)",
+    "नयी": "new (fem.)",
+    "नौकरी": "job",
+    "ढूँढ़ने": "to look for (form used before a postposition)",
+    "शायद": "maybe; perhaps",
+    "सोऊँगा": "will sleep (I, masc.)",
+    "सावधान": "careful",
+    "रहना": "to stay; to be (as in be careful)",
+    "ठीक": "fine; okay",
+    "मुख्य": "main",
+    "मीटिंग": "meeting",
+    "सुबह": "morning",
+    "दस": "ten",
+    "बजे": "o'clock",
+    "सच": "truth",
+    "थका": "tired (masc.)",
+    "सबसे": "most; of all",
+    "पहले": "first; before",
+    "आखिर": "end (as in finally)",
+    "उठा": "got up (masc.)",
+    "नाश्ता": "breakfast",
+    "दफ़्तर": "office",
+    "संक्षेप": "brief summary",
+    "पिछले": "last; previous (masc. plural, or before a postposition)",
+    "माता-पिता": "parents",
+    "मिलने": "to meet (form used before a postposition)",
+    "ट्रेन": "train",
+    "सफ़र": "journey",
+    "मौसम": "weather",
+    "पहुँची": "arrived (fem.)",
+    "सुरक्षित": "safe; safely",
+    "बिताया": "spent (time)",
+    "लेकिन": "but",
+    "अपने": "one's own (masc. plural, or respectful)",
+    "परिवार": "family",
+    "बचाने": "to save (form used before a postposition)",
+    "लिए": "for; for the sake of",
+    "करती": "do (habitual, fem.)",
+    "बोलता": "speak (habitual, masc.)",
+    "बोलती": "speak (habitual, fem.)",
+    "ताकि": "so that",
+    "उठ": "get up (stem)",
+    "लक्ष्य": "goal",
+    "अंग्रेज़ी": "English (language)",
+    "सीख": "learn (stem)",
+    "प्रमोशन": "promotion",
+    "मिल": "get; receive (stem)",
+    "सके": "may be able to (he, she, it, subjunctive)",
+    "ओवरटाइम": "overtime",
+    "खरीद": "buy (stem)",
+    "सकें": "may be able to (we, they, subjunctive)",
+    "बहुत": "very; a lot",
+    "उसे": "to him or her",
+    "वे": "they",
+    "पहुँचता": "reach (habitual, masc.)",
+    "पहुँचती": "reach (habitual, fem.)",
+    "स्कूल": "school",
+    "दिन": "day",
+    "उसका": "his; her",
+    "घूमने": "to wander; to go for a walk (form used before a postposition)",
+    "बाहर": "outside",
+    "पड़ेगा": "will have to",
+    "आना": "to come",
+    "ताश": "playing cards",
+    "खेलेंगे": "will play (we, they)",
+    "पार्क": "park",
+    "टहलेंगे": "will stroll (we, they)",
+    "जाऊँगा": "will go (I, masc.)",
+    "जाऊँगी": "will go (I, fem.)",
+    "शनिवार": "Saturday",
+    "रहेंगे": "will stay (we, they)",
+    "ईमेल": "email",
+    "बनाती": "make (habitual, fem.)",
+    "चाय": "tea",
+    "स्टेशन": "station",
+    "गए": "went (masc. plural)",
+    "मैनेजर": "manager",
+    "भेजी": "sent (fem. object)",
+    "ने": "(marks the doer of a past action)",
+    "खुश": "happy",
+    "आमतौर": "usually (as in usually, with the next word)",
+    "उठता": "get up (habitual, masc.)",
+    "संदेश": "message",
+    "अपना": "one's own (masc.)",
+    "देखा": "saw; looked at",
+    "पूछा": "asked",
+    "तैयार": "ready",
+    "कब": "when",
+    "कहाँ": "where",
+    "भेजा": "sent (masc. object)",
+    "अच्छी": "good; nice (fem.)",
+    "जवाब": "answer",
+    "दिया": "gave",
+    "आएगा": "will come (he)",
+    "दोस्त": "friend",
+    "खाली": "free; empty",
+    "हालांकि": "although",
+    "दूर": "far",
+    "पसंद": "liked; pleasing",
+    "पढ़ती": "read; study (habitual, fem.)",
+    "रोज़": "every day",
+    "बल्कि": "rather; instead",
+    "आलसी": "lazy",
+    "आरामदायक": "comfortable",
+    "ज़्यादा": "more",
+    "हर": "every",
+    "किसी": "anyone; someone (before a postposition)",
+    "अलग": "different; separate",
+    "हमेशा": "always",
+    "बेहतर": "better",
+    "मेहनत": "hard work",
+    "जाती": "go (habitual, fem.)",
+    "प्रयास": "effort (formal)",
+    "परीक्षा": "exam",
+    "पास": "passed (an exam); near",
+    "पैसा": "money (singular form)",
+    "बचाया": "saved",
+    "ख़रीद": "buy (stem, as in would buy)",
+    "लेते": "take; would take (masc. plural)",
+    "बताया": "told",
+    "देते": "give; would give (masc. plural)",
+    "चाहूँगा": "would like (I, masc.)",
+    "भेजो": "send! (informal command)",
+    "चाहूँगी": "would like (I, fem.)",
+    "करो": "do! (informal command)",
+    "थोड़ा": "a little (masc.)",
+    "आराम": "rest",
+    "थे": "were (masc. plural)",
+    "सुझाव": "suggestion",
+    "देना": "to give",
+    "बैठक": "formal meeting",
+    "तक": "until; by",
+    "भेज": "send (stem)",
+    "सकेंगे": "will be able to (formal you, or we)",
+    "सीमा": "limit",
+    "हफ़्ता": "week",
+    "बढ़ा": "extend (stem)",
+    "दें": "give; extend (formal request)",
+    "प्रिय": "dear",
+    "धन्यवाद": "thank you",
+    "जो": "who; which; that (relative)",
+    "लड़का": "boy",
+    "गा": "sing (stem)",
+    "लड़की": "girl",
+    "आदमी": "man",
+    "जिसके": "of whom; of which",
+    "शहर": "city",
+    "जिसमें": "in which; in whom",
+    "पैदा": "born",
+    "सुंदर": "beautiful",
+    "जहाँ": "where (relative)",
+    "रहता": "live (habitual, masc.)",
+    "किताब": "book",
+    "मेज़": "table",
+}
+
+POS_SETS_B1 = {
+    "proper_noun": split_words(
+        "प्रिया अर्जुन मुंबई"
+    ),
+    "pronoun": split_words(
+        "मुझे यह ये तुम्हें मैं हम तुम तुमसे तुमने मेरी क्या आपकी आप वह उसने तुम्हारी मैंने "
+        "मेरे कोई मेरा अपने उसे वे उसका अपना हर किसी जो जिसके जिसमें"
+    ),
+    "preposition": split_words(
+        "का में को से की के लिए ने तक"
+    ),
+    "particle": split_words(
+        "नहीं पर कि अगर तो क्योंकि जब तब भी न और जी काश लेकिन ताकि हालांकि बल्कि"
+    ),
+    "adjective": split_words(
+        "पूरी व्यस्त अच्छा सहमत सही असहमत महंगा नया पूरा थोड़ी मज़ेदार खराब माफ़ खत्म अगली "
+        "अगले नयी सावधान ठीक मुख्य थका पिछले सुरक्षित खुश तैयार अच्छी खाली पसंद आलसी आरामदायक "
+        "अलग बेहतर पास थोड़ा प्रिय पैदा सुंदर"
+    ),
+    "adverb": split_words(
+        "कल वहाँ अब अकेले साथ आज फिर जल्दी क्यों कृपया वापस ज़रूर अभी शायद सबसे पहले बहुत "
+        "बाहर आमतौर कब कहाँ दूर रोज़ ज़्यादा हमेशा जहाँ"
+    ),
+    "verb": split_words(
+        "चाहिए करना करने करनी था थी जाना हूँ है हैं हो कर भर सकता सकती सकते आ आया जा सकूँ "
+        "होगा होगी रहूँगा आओगे जाएँगे होती जाता होता आता कहते लगता कहा देखता देखती चल रहा रही "
+        "रहे गया गई हुआ मिली हुई आती सोना पीनी सोता सोती करूँगी करूँगा सोओ पीता पीती करेगी "
+        "करता करें कीजिए खरीदा माँगे चाहती करते भूल किया जाने सोच लेने ढूँढ़ने सोऊँगा रहना "
+        "उठा मिलने पहुँची बिताया बचाने करती बोलता बोलती उठ सीख मिल सके खरीद सकें पहुँचता "
+        "पहुँचती घूमने पड़ेगा आना खेलेंगे टहलेंगे जाऊँगा जाऊँगी रहेंगे बनाती गए भेजी उठता "
+        "देखा पूछा भेजा दिया आएगा पढ़ती जाती बचाया ख़रीद लेते बताया देते चाहूँगा भेजो चाहूँगी "
+        "करो थे देना भेज सकेंगे बढ़ा दें गा रहता"
+    ),
+    "phrase": split_words(
+        "हाँ धन्यवाद"
+    ),
+}
+POS_SETS_B1["noun"] = set(GLOSSES_B1) - set().union(*POS_SETS_B1.values())
+
+CATEGORY_TAGS_B1: dict[str, list[str]] = {}
+for _tag, _words in {
+    "hi_number": "दस",
+    "hi_weekday": "शनिवार",
+}.items():
+    for _w in _words.split():
+        CATEGORY_TAGS_B1.setdefault(_w, []).append(_tag)
+
+part_of_speech_b1 = pos_lookup(POS_SETS_B1)
+
+
+TABLES = {
+    "a1": (GLOSSES, part_of_speech, CATEGORY_TAGS),
+    "a2": (GLOSSES_A2, part_of_speech_a2, CATEGORY_TAGS_A2),
+    "b1": (GLOSSES_B1, part_of_speech_b1, CATEGORY_TAGS_B1),
+}
+
+
 def iter_specs():
     for level, group in LEVELS.items():
         realizations, _ = manifest_group(group)
-        a2 = level == "a2"
+        glosses, pos, tags = TABLES[level]
         yield from classify(
             lang=LANG,
             level=level,
             unit_files=realizations,
-            glosses=GLOSSES_A2 if a2 else GLOSSES,
-            part_of_speech=part_of_speech_a2 if a2 else part_of_speech,
+            glosses=glosses,
+            part_of_speech=pos,
             normalize=normalize,
-            category_tags=CATEGORY_TAGS_A2 if a2 else CATEGORY_TAGS,
+            category_tags=tags,
         )
 
 
