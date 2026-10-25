@@ -8,7 +8,7 @@ agent context re-reading.
 ## What is (and is not) language specific
 
 A direction = shared target realization (never touched) + overlay per unit + practice pack per unit + lexeme
-backfill + manifest lines. Only the learner-language strings differ between siblings:
+backfill + manifest files. Only the learner-language strings differ between siblings:
 
 | Artifact | Learner-language strings | Everything else |
 |---|---|---|
@@ -34,6 +34,8 @@ python3 scripts/derive_direction.py validate --sibling $S --new $N --levels a1  
   unchanged and re-queues only the changed strings.
 * `inject` refuses to run when a placeholder (`{slot}`) or `*asterisk*` span differs from the source, when the sibling text
   drifted since extract, or when ids are untranslated (`--allow-missing`, `--force` override).
+* `inject` writes one file per course group / pack into `scripts/manifest.d/content/<group>.txt` and `scripts/manifest.d/practice/<pair>.txt`
+  (overwriting only its own files), so parallel directions never conflict on a shared manifest. Readers glob the dirs in sorted order.
 * Overlays/packs are written with `review.status: unreviewed`, `required_next_reviewer: native_speaker_review`.
   Native review of the translated text is still required (contrastive notes, register, distractor plausibility).
 * The generated `scripts/backfill_lexemes_<x>_<t>.py` is a clone of the sibling's backfill (so the sibling must use

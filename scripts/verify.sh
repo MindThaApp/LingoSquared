@@ -77,8 +77,8 @@ if [ "$RUN_CONTENT" = "1" ]; then
     source .content-venv/bin/activate
     CONTENT_OK=1
 
-    if [ ! -f scripts/content_manifest.txt ]; then
-      echo "!! scripts/content_manifest.txt not found -- nothing to validate"
+    if ! ls scripts/manifest.d/content/*.txt >/dev/null 2>&1; then
+      echo "!! scripts/manifest.d/content/*.txt not found -- nothing to validate"
       CONTENT_OK=0
     else
       COMPILE_SCRATCH="$(mktemp -d)"
@@ -109,10 +109,10 @@ if [ "$RUN_CONTENT" = "1" ]; then
           echo "!! COMPILE FAILED for $course (validate passed but real assembly did not)"
           CONTENT_OK=0
         fi
-      done < scripts/content_manifest.txt
+      done < <(LC_ALL=C cat scripts/manifest.d/content/*.txt)
     fi
 
-    if [ -f scripts/practice_manifest.txt ]; then
+    if ls scripts/manifest.d/practice/*.txt >/dev/null 2>&1; then
       while IFS='|' read -r pack_name packs; do
         [ -z "$pack_name" ] && continue
         case "$pack_name" in \#*) continue ;; esac
@@ -124,7 +124,7 @@ if [ "$RUN_CONTENT" = "1" ]; then
           echo "!! practice validation FAILED for $pack_name"
           CONTENT_OK=0
         fi
-      done < scripts/practice_manifest.txt
+      done < <(LC_ALL=C cat scripts/manifest.d/practice/*.txt)
     fi
 
     deactivate 2>/dev/null || true

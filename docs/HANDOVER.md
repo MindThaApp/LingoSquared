@@ -307,8 +307,8 @@ checkpoint, and Endless Practice. Specifically exercise what changed:
 | **Working checkpoints** | ⚠️ **579/603 (96.0%)**, see below |
 
 Re-measured 2026-10-11 on a freshly synced DB (all of
-`content_manifest.txt`, every lexeme backfill, every pack in
-`practice_manifest.txt`) by calling the real `generate_checkpoint()` on
+`manifest.d/content/`, every lexeme backfill, every pack in
+`manifest.d/practice/`) by calling the real `generate_checkpoint()` on
 every unit of the 6 launch directions:
 
 | direction | available | missing |

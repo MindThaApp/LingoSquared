@@ -209,8 +209,8 @@ file is genuinely clean, say so explicitly and recommend
   like "reviewed" leaking into feedback text (both have happened for
   real — see BUILD_LOG.md).
 - Run `scripts/verify.sh --content-only` (or add the new unit's
-  realization/overlay files to `scripts/content_manifest.txt` first)
+  realization/overlay files to `scripts/manifest.d/content/*.txt` first)
   before considering any unit done.
-- Update `scripts/content_manifest.txt` (and `practice_manifest.txt`
+- Update `scripts/manifest.d/content/*.txt` (and `manifest.d/practice/`
   for practice packs) when a new course-direction or pack is added, so
   `verify.sh` picks it up automatically.
