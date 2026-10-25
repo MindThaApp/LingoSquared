@@ -102,7 +102,7 @@ digest, not a replacement for it.
   sets: nl-en, fa-en, prs-en AND de-en** — any change to an en
   realization's matching_pairs/exercise shapes must update ALL FOUR
   mirrors (a §16 retrofit missed de-en on 2026-07-12; caught in review
-  by the compiler's mirror validator). Grep content_manifest.txt for
+  by the compiler's mirror validator). Grep manifest.d/content/ for
   every line referencing the changed en file before committing.
 - **`content_key` is unique PER COURSE, never globally** (migration 0015)
   — fa-en/nl-en/prs-en share the same English realization so content_keys
@@ -218,7 +218,7 @@ built for the automatable ones, but AUTHORS must not reproduce them:
   extended validator lands.
 - **Corollary — NEVER judge "tokens not introduced" findings from a
   single-unit `validate` run; validate the whole COURSE (all units together,
-  manifest order, per `scripts/content_manifest.txt`).** The introduced-token
+  manifest order, per `scripts/manifest.d/content/*.txt`).** The introduced-token
   check accumulates across units, so validating one unit in isolation
   fabricates ERRORs for every word taught in an earlier unit (a 2026-08-03
   single-unit sweep reported 1441 phantom "debt" errors corpus-wide; the

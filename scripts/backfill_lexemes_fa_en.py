@@ -226,7 +226,7 @@ UNIT_FILES = (
     # >=10hr publish-gate bar). These are all still A1-level; the shared
     # English realization's on-disk unit numbering skips 25-29 for the A1
     # track (those are the SEPARATE A2 course's own units 25-29, see
-    # UNIT_FILES_A2 below, and content_manifest.txt/practice_manifest.txt
+    # UNIT_FILES_A2 below, and manifest.d/content//manifest.d/practice/
     # both order fa-en's realization/overlay files exactly this way: 1-24,
     # then 30-42-and-beyond) -- appended here CONTINUOUS with units 1-24 so
     # `_classify()`'s enumerate(..., 1) unit_order matches the real Unit.
@@ -334,7 +334,7 @@ UNIT_FILES = (
     # same "انگلیسی A1" course row, so they stay CONTINUOUS with units
     # 1-24/30-48 here -- `_classify()`'s enumerate(..., 1) unit_order must
     # match the real Unit.order values the course was imported with, and
-    # scripts/content_manifest.txt's fa-en line orders the realization files
+    # scripts/manifest.d/content/*.txt's fa-en line orders the realization files
     # in exactly this sequence (1-24, then 30-68).
     #
     # POS/semantic classification for the ~765 tokens these units (plus the
@@ -499,7 +499,7 @@ UNIT_FILES_A2 = (
     # Units 30-34 (job interview, travel disruption, online habits, weekly
     # schedule, shopping complaint), added 2026-07-22 by the unit-checkpoint
     # unblocking lane -- all five had zero lexemes. Order here matches
-    # scripts/content_manifest.txt's fa-en-a2 line (25, 26, 27, 28, 29, 30,
+    # scripts/manifest.d/content/*.txt's fa-en-a2 line (25, 26, 27, 28, 29, 30,
     # 31, 32, 33, 34), i.e. LOCAL 1-based positions 6-10 inside the
     # "انگلیسی A2" course.
     (
@@ -558,7 +558,7 @@ UNIT_FILES_A2 = (
 # never cross a course boundary (AUTHORING_GUIDE section 18). Both tuples use
 # LOCAL 1-based ordering, matched against their own course in main(),
 # never mixed with UNIT_FILES'/UNIT_FILES_A2's indices. Order matches
-# scripts/content_manifest.txt's fa-en-b1 / fa-en-b2 lines.
+# scripts/manifest.d/content/*.txt's fa-en-b1 / fa-en-b2 lines.
 #
 # Added 2026-07-22: all 19 B1 + all 8 B2 units had zero lexemes, so every
 # one of them returned `checkpoint_unavailable` regardless of practice
@@ -1172,7 +1172,7 @@ EN_TARGET_TO_FA_GLOSS.update({
 # the shared module is consumed by nl-en/prs-en/de-en as well, and those
 # lanes' backfills were being extended over the SAME 52 units concurrently
 # by other agents. Editing one shared dict from four workers at once is the
-# `content_manifest.txt`-class concurrency hazard root CLAUDE.md forbids, so
+# `manifest.d/content/`-class concurrency hazard root CLAUDE.md forbids, so
 # this pass keeps its classification local and file-private. The ~443
 # already-classified tokens these units re-use are still served from the
 # shared module, so they stay byte-identical to nl-en/prs-en; only the ~765

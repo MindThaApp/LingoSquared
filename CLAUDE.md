@@ -123,7 +123,7 @@ append every fresh-context review's findings (zero-defect included) to its Secti
 - **Never `git add -A` / `git add .` when other sessions may have files open — stage explicit
   pathspecs only**, and `git show --stat` anything touching files you didn't personally edit
   (broad staging twice swept a concurrent session's work into an unrelated commit; on shared
-  files like `content_manifest.txt`/`universal_spine.yaml`, stagger agents or use worktrees). Detail: BUILD_LOG 2026-07-06/07/08.
+  files like `universal_spine.yaml` (manifests are one file per group under `scripts/manifest.d/`, so no longer shared), stagger agents or use worktrees). Detail: BUILD_LOG 2026-07-06/07/08.
 - **A safety-system block means stop and escalate to Ramin — never route around it, and never
   hand the blocked action to a differently-governed agent (e.g. Codex).** Detail: BUILD_LOG 2026-07-06.
 - **Direct DB credential writes are blocked even with chat authorization.** Pattern: do the
@@ -166,7 +166,7 @@ append every fresh-context review's findings (zero-defect included) to its Secti
 # OPERATIONS
 
 - **`scripts/verify.sh`** — content compiler validation (reads
-  `content_manifest.txt`/`practice_manifest.txt` — update them when you add a course/pack) +
+  `scripts/manifest.d/{content,practice}/<name>.txt`, one file per course/pack, sorted; add a new file when you add a course/pack) +
   backend pytest (isolated DB) + full frontend build; flags `--content-only`/`--backend-only`/
   `--frontend-only`/`--skip-*`; `--e2e`/`--e2e-only` adds Playwright (needs a live seeded
   backend). **Judge it by the printed summary, NOT its exit code — it can exit 0 with a

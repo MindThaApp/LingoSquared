@@ -53,7 +53,7 @@ import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 REALIZATIONS_DIR = REPO_ROOT / "docs" / "content" / "realizations"
-MANIFEST = REPO_ROOT / "scripts" / "content_manifest.txt"
+MANIFEST = REPO_ROOT / "scripts" / "manifest.d" / "content"
 
 # First-pass calibration, seconds of real learner time per card, by
 # teaching card `kind`. Not measured against real session telemetry yet
@@ -73,9 +73,10 @@ DEFAULT_SECONDS_PER_CARD = 15  # any kind not listed above
 
 
 def load_manifest_courses() -> dict[str, list[str]]:
-    """course_name -> list of realization file paths, from content_manifest.txt."""
+    """course_name -> list of realization file paths, from scripts/manifest.d/content."""
     courses: dict[str, list[str]] = {}
-    for line in MANIFEST.read_text(encoding="utf-8").splitlines():
+    lines = [l for fp in sorted(MANIFEST.glob("*.txt")) for l in fp.read_text(encoding="utf-8").splitlines()]
+    for line in lines:
         line = line.strip()
         if not line or line.startswith("#"):
             continue

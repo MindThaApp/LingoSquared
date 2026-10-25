@@ -46,8 +46,8 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTENT = ROOT / "docs/content"
-MANIFEST = ROOT / "scripts/content_manifest.txt"
-PRACTICE_MANIFEST = ROOT / "scripts/practice_manifest.txt"
+MANIFEST = ROOT / "scripts/manifest.d/content"      # one <course_name>.txt per group
+PRACTICE_MANIFEST = ROOT / "scripts/manifest.d/practice"  # one <pack_name>.txt per pack
 DEFAULT_WORK = ROOT / ".local/derive"
 
 # ---------------------------------------------------------------------------
@@ -85,7 +85,9 @@ def lang_name(code: str) -> str:
 # ---------------------------------------------------------------------------
 def read_manifest(path: Path) -> "OrderedDict[str, list[list[str]]]":
     out: "OrderedDict[str, list[list[str]]]" = OrderedDict()
-    for line in path.read_text(encoding="utf-8").splitlines():
+    files = sorted(path.glob("*.txt"), key=lambda p: p.name)
+    lines = [l for fp in files for l in fp.read_text(encoding="utf-8").splitlines()]
+    for line in lines:
         if not line.strip() or line.startswith("#") or "|" not in line:
             continue
         parts = line.split("|")
@@ -771,26 +773,13 @@ def new_direction_tags(pair: str) -> set | None:
 
 
 def update_manifests(cm_new, new_pair, pack_paths):
-    text = MANIFEST.read_text(encoding="utf-8")
-    existing = read_manifest(MANIFEST)
-    add = []
+    """Write one file per group/pack under scripts/manifest.d/ (no shared-file appends)."""
+    MANIFEST.mkdir(parents=True, exist_ok=True)
     for g, (reals, ovs) in cm_new.items():
-        line = f"{g}|{' '.join(reals)}|{' '.join(ovs)}"
-        if g in existing:
-            text = "\n".join(line if l.startswith(g + "|") else l for l in text.split("\n"))
-        else:
-            add.append(line)
-    if add:
-        text = text.rstrip("\n") + "\n" + "\n".join(add) + "\n"
-    MANIFEST.write_text(text, encoding="utf-8")
-    ptext = PRACTICE_MANIFEST.read_text(encoding="utf-8")
+        (MANIFEST / f"{g}.txt").write_text(f"{g}|{' '.join(reals)}|{' '.join(ovs)}\n", encoding="utf-8")
     if pack_paths:
-        pl = f"{new_pair}|{' '.join(pack_paths)}"
-        if any(l.startswith(new_pair + "|") for l in ptext.split("\n")):
-            ptext = "\n".join(pl if l.startswith(new_pair + "|") else l for l in ptext.split("\n"))
-        else:
-            ptext = ptext.rstrip("\n") + "\n" + pl + "\n"
-        PRACTICE_MANIFEST.write_text(ptext, encoding="utf-8")
+        PRACTICE_MANIFEST.mkdir(parents=True, exist_ok=True)
+        (PRACTICE_MANIFEST / f"{new_pair}.txt").write_text(f"{new_pair}|{' '.join(pack_paths)}\n", encoding="utf-8")
 
 
 def py_dict_literal(d: dict[str, str]) -> str:

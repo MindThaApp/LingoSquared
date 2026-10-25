@@ -3,7 +3,7 @@
 realization, across all four prs-en course rows (A1/A2/B1/B2).
 
 Scope as of 2026-07-22: A1 units 01-24 + 30-68, A2 units 25-34, B1 units
-01-19, B2 units 01-08 -- i.e. every unit in scripts/content_manifest.txt's
+01-19, B2 units 01-08 -- i.e. every unit in scripts/manifest.d/content/*.txt's
 four `prs-en*` lines. The 52 units a1 49-68 / a2 30-34 / b1 01-19 / b2 01-08
 were added on 2026-07-22 to unblock unit checkpoints: `generate_checkpoint()`
 needs BOTH practice templates AND lexemes and hard-fails below 12 items, so
@@ -201,7 +201,7 @@ UNIT_FILES = (
     # Endless Practice coverage from unit29 to unit42, per a depth audit
     # finding prs-en had only ~7.2hrs vs the >=10hr publish bar, with
     # existing practice packs stopping at unit29). Appended in the SAME
-    # order these units are imported in scripts/content_manifest.txt's
+    # order these units are imported in scripts/manifest.d/content/*.txt's
     # prs-en line (...a1_unit24...a1_unit30...a1_unit42...) -- units
     # 25-29 are NOT in this tuple (they belong to the separate "انگلیسی
     # A2" course, UNIT_FILES_A2 below), so position 25 in THIS tuple
@@ -294,7 +294,7 @@ UNIT_FILES = (
     # BOTH practice templates AND lexemes -- prs-en had ZERO lexemes for 52
     # units (a1 49-68, a2 30-34, b1 01-19, b2 01-08), so none of them could
     # generate the unit checkpoint that the publish gate requires. Appended in
-    # the SAME order as scripts/content_manifest.txt's `prs-en` line
+    # the SAME order as scripts/manifest.d/content/*.txt's `prs-en` line
     # (...a1_unit48 a1_unit49 ... a1_unit68), so this tuple's positional index
     # keeps matching the imported course's unit_order (the A1 course's units
     # are 1-24 then 30-68, contiguous by IMPORT order, not by on-disk number).
@@ -454,7 +454,7 @@ UNIT_FILES_A2 = (
     # Units 30-34 (job interview / travel disruption / online habits / weekly
     # schedule / shopping complaint), added 2026-07-22 by the same
     # checkpoint-coverage pass as a1 units 49-68 above. Order matches
-    # scripts/content_manifest.txt's `prs-en-a2` line exactly.
+    # scripts/manifest.d/content/*.txt's `prs-en-a2` line exactly.
     (
         REPO_ROOT / "docs/content/realizations/en/a2_unit30_job_interview.yaml",
         REPO_ROOT / "docs/content/overlays/prs-en/a2_unit30.yaml",
@@ -511,7 +511,7 @@ UNIT_FILES_A2 = (
 # (source_language, target_language, title)). Same LOCAL 1-based ordering
 # discipline as UNIT_FILES_A2: these indices are looked up against their own
 # course in main(), never mixed with another tuple's. Order matches
-# scripts/content_manifest.txt's `prs-en-b1` / `prs-en-b2` lines.
+# scripts/manifest.d/content/*.txt's `prs-en-b1` / `prs-en-b2` lines.
 UNIT_FILES_B1 = (
     (
         REPO_ROOT / "docs/content/realizations/en/b1_unit01_necessity.yaml",
