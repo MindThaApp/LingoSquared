@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit28
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit28.debat
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_aiderait", "w_avis", "w_beaucoup", "w_commande", "w_commandes", "w_court", "w_crois", "w_d'accord", "w_dis", "w_dit", "w_déjà", "w_garder", "w_importante", "w_l'avis", "w_l'idée", "w_l'organisation", "w_l'équipe", "w_long", "w_longue", "w_mieux", "w_pause", "w_pense", "w_proposes", "w_raison", "w_refuses", "w_répondre", "w_solution", "w_travaille", "w_trop", "w_vraie"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_avis", "w_pense", "w_trop", "w_court", "w_d'accord", "w_dit", "w_l'organisation", "w_importante", "w_l'équipe", "w_travaille", "w_mieux", "w_répondre", "w_l'avis", "w_raison"]}}
+  mat_2: &mat_2 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_avis", "w_pense", "w_trop", "w_court", "w_d'accord", "w_dit", "w_l'organisation", "w_importante", "w_l'équipe", "w_travaille", "w_mieux", "w_répondre", "w_l'avis", "w_raison", "w_commande", "w_beaucoup", "w_commandes", "w_pause", "w_longue", "w_aiderait", "w_dis", "w_déjà", "w_crois", "w_garder", "w_refuses", "w_l'idée", "w_long", "w_proposes", "w_solution", "w_vraie"]}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_court"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_l'équipe"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_avis"}}
+  rec2_6: &rec2_6 {language_code: fr, part_of_speech: [adjective, adverb, noun, verb], agreement_tags: {semantic: ["w_commande", "w_beaucoup", "w_commandes", "w_pause", "w_longue", "w_aiderait", "w_dis", "w_déjà", "w_crois", "w_garder", "w_refuses", "w_l'idée", "w_long", "w_proposes", "w_solution", "w_vraie"]}}
+  anc_7: &anc_7 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_pause"}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_commandes"}}
+  anc_9: &anc_9 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_proposes"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.choose.001
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for giving an opinion and agreeing with a reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.listen.002
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for giving an opinion and agreeing with a reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.match.003
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for giving an opinion and agreeing with a reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.order.004
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: word_order
+    frame: {text: "Je pense que le service du matin est trop {item}.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Je pense que le service du matin est trop {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je pense que + clause gives an opinion; je suis d'accord avec X quand il dit que + clause agrees with someone.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.order.005
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: word_order
+    frame: {text: "Je suis d'accord parce que {item} travaille mieux.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis d'accord parce que {item} travaille mieux.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Parce que introduces the reason: je suis d'accord parce que l'équipe travaille mieux.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.fill.006
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: fill_in_blank
+    frame: {text: "Mathieu a un {item} sur le service. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_5, hint: *anc_5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Je pense que + clause gives an opinion; je suis d'accord avec X quand il dit que + clause agrees with someone.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.translate.007
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for giving an opinion and agreeing with a reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.translate.008
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: translation
+    frame: {text: "I think the morning service is too short.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Je pense que le service du matin est trop {item}.", language_code: fr, direction: ltr}, accepted_variants: ["Je trouve que le service du matin est trop {item}."]}
+    feedback_frame: {text: "Parce que introduces the reason: je suis d'accord parce que l'équipe travaille mieux.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson01.translate.009
+    lesson_content_key: fr.b1.unit28.lesson01.accord_raison
+    type: translation
+    frame: {text: "I agree because the team works better.", language_code: en, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis d'accord parce que {item} travaille mieux.", language_code: fr, direction: ltr}, accepted_variants: ["Je suis d'accord, car {item} travaille mieux."]}
+    feedback_frame: {text: "Je pense que + clause gives an opinion; je suis d'accord avec X quand il dit que + clause agrees with someone.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.choose.001
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for disagreeing politely and offering another solution.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.listen.002
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for disagreeing politely and offering another solution.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.match.003
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for disagreeing politely and offering another solution.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.order.004
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: word_order
+    frame: {text: "Une {item} plus longue aiderait l'équipe.", language_code: fr, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Une {item} plus longue aiderait l'équipe.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Je ne suis pas d'accord avec toi quand tu dis que + clause disagrees; mais je pense que + clause offers an alternative.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.order.005
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: word_order
+    frame: {text: "On prépare déjà beaucoup de {item}.", language_code: fr, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "On prépare déjà beaucoup de {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "The conditional aiderait softens a suggestion: une pause plus longue aiderait l'équipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.fill.006
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: fill_in_blank
+    frame: {text: "Tu refuses l'idée du service plus long, mais tu {item} une autre solution. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_9, hint: *anc_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Je ne suis pas d'accord avec toi quand tu dis que + clause disagrees; mais je pense que + clause offers an alternative.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.translate.007
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for disagreeing politely and offering another solution.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.translate.008
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: translation
+    frame: {text: "A longer break would help the team.", language_code: en, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Une {item} plus longue aiderait l'équipe.", language_code: fr, direction: ltr}, accepted_variants: ["Une {item} plus longue aiderait l'équipe de travail."]}
+    feedback_frame: {text: "The conditional aiderait softens a suggestion: une pause plus longue aiderait l'équipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit28.lesson02.translate.009
+    lesson_content_key: fr.b1.unit28.lesson02.desaccord_solution
+    type: translation
+    frame: {text: "We already prepare a lot of orders.", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "On prépare déjà beaucoup de {item}.", language_code: fr, direction: ltr}, accepted_variants: ["Nous préparons déjà beaucoup de {item}."]}
+    feedback_frame: {text: "Je ne suis pas d'accord avec toi quand tu dis que + clause disagrees; mais je pense que + clause offers an alternative.", language_code: en, direction: ltr}

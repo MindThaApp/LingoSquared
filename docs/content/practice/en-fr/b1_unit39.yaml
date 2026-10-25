@@ -1,0 +1,183 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit39
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit39.resumer
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_cuire", "w_deux", "w_distinguer", "w_détails", "w_essentiel", "w_expliqué", "w_haute", "w_histoire", "w_important", "w_l'atelier", "w_l'essentiel", "w_laisser", "w_minutes", "w_n'était", "w_ordre", "w_points", "w_premier", "w_principaux", "w_pâte", "w_pétrir", "w_quinze", "w_raconté", "w_recette", "w_reposer", "w_résumé", "w_température", "w_travail", "w_trois", "w_étapes"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: ["w_pétrir", "w_pâte", "w_quinze", "w_minutes", "w_laisser", "w_reposer", "w_deux", "w_cuire", "w_haute", "w_température", "w_points", "w_principaux", "w_recette", "w_ordre", "w_étapes"]}}
+  mat_2: &mat_2 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: ["w_pétrir", "w_pâte", "w_quinze", "w_minutes", "w_laisser", "w_reposer", "w_deux", "w_cuire", "w_haute", "w_température", "w_points", "w_principaux", "w_recette", "w_ordre", "w_étapes", "w_résumé", "w_raconté", "w_histoire", "w_n'était", "w_important", "w_distinguer", "w_détails", "w_essentiel", "w_expliqué", "w_l'atelier", "w_premier", "w_travail", "w_trois", "w_l'essentiel"]}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_pétrir"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_reposer"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_cuire"}}
+  anc_6: &anc_6 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_pâte"}}
+  rec2_7: &rec2_7 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: ["w_résumé", "w_raconté", "w_histoire", "w_n'était", "w_important", "w_distinguer", "w_détails", "w_essentiel", "w_expliqué", "w_l'atelier", "w_premier", "w_travail", "w_trois", "w_l'essentiel"]}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_résumé"}}
+  anc_9: &anc_9 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_important"}}
+  anc_10: &anc_10 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_histoire"}}
+  anc_11: &anc_11 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_l'essentiel"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.choose.001
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for the main steps of a recipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.listen.002
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for the main steps of a recipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.match.003
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for the main steps of a recipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.order.004
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: word_order
+    frame: {text: "Il faut {item} la pâte quinze minutes.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Il faut {item} la pâte quinze minutes.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Il faut + infinitive gives the steps in order: pétrir, laisser reposer, cuire.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.order.005
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: word_order
+    frame: {text: "Il faut la laisser {item} deux heures.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Il faut la laisser {item} deux heures.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Quinze minutes and deux heures give the duration with no preposition needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.order.006
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: word_order
+    frame: {text: "Puis il faut {item} à haute température.", language_code: fr, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Puis il faut {item} à haute température.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Il faut + infinitive gives the steps in order: pétrir, laisser reposer, cuire.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.fill.007
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: fill_in_blank
+    frame: {text: "Il faut pétrir la {item} quinze minutes. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_6, hint: *anc_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Quinze minutes and deux heures give the duration with no preposition needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.translate.008
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for the main steps of a recipe.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.translate.009
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: translation
+    frame: {text: "You have to knead the dough for fifteen minutes.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Il faut {item} la pâte quinze minutes.", language_code: fr, direction: ltr}, accepted_variants: ["Il faut {item} la pâte pendant quinze minutes."]}
+    feedback_frame: {text: "Il faut + infinitive gives the steps in order: pétrir, laisser reposer, cuire.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.translate.010
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: translation
+    frame: {text: "Then you have to bake at a high temperature.", language_code: en, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Puis il faut {item} à haute température.", language_code: fr, direction: ltr}, accepted_variants: ["Ensuite, il faut {item} à haute température."]}
+    feedback_frame: {text: "Quinze minutes and deux heures give the duration with no preposition needed.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson01.translate.011
+    lesson_content_key: fr.b1.unit39.lesson01.les_trois_etapes
+    type: translation
+    frame: {text: "You have to let it rest for two hours.", language_code: en, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Il faut la laisser {item} deux heures.", language_code: fr, direction: ltr}, accepted_variants: ["Il faut la laisser {item} pendant deux heures."]}
+    feedback_frame: {text: "Il faut + infinitive gives the steps in order: pétrir, laisser reposer, cuire.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.choose.001
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for summarising: the essential points and the details you leave out.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.listen.002
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for summarising: the essential points and the details you leave out.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.match.003
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for summarising: the essential points and the details you leave out.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.order.004
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: word_order
+    frame: {text: "En {item}, il faut pétrir la pâte quinze minutes.", language_code: fr, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "En {item}, il faut pétrir la pâte quinze minutes.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "En résumé introduces the summary; leave out details that are not important: ce n'était pas important.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.order.005
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: word_order
+    frame: {text: "Il a aussi raconté une histoire, mais ce n'était pas {item}.", language_code: fr, direction: ltr}
+    slots: {item: *anc_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Il a aussi raconté une histoire, mais ce n'était pas {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "L'essentiel is the essential part; les points principaux are the main points.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.fill.006
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: fill_in_blank
+    frame: {text: "Il a aussi raconté une {item} sur son premier jour de travail. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_10, hint: *anc_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "En résumé introduces the summary; leave out details that are not important: ce n'était pas important.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.fill.007
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: fill_in_blank
+    frame: {text: "D'accord, donc les trois étapes sont {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_11, hint: *anc_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "L'essentiel is the essential part; les points principaux are the main points.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.translate.008
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for summarising: the essential points and the details you leave out.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.translate.009
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: translation
+    frame: {text: "In short, you have to knead the dough for fifteen minutes.", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "En {item}, il faut pétrir la pâte quinze minutes.", language_code: fr, direction: ltr}, accepted_variants: ["En {item}, il faut pétrir la pâte pendant quinze minutes."]}
+    feedback_frame: {text: "En résumé introduces the summary; leave out details that are not important: ce n'était pas important.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.translate.010
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: translation
+    frame: {text: "He also told a story, but it was not important.", language_code: en, direction: ltr}
+    slots: {item: *anc_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Il a aussi raconté une histoire, mais ce n'était pas {item}.", language_code: fr, direction: ltr}, accepted_variants: ["Il a aussi raconté une histoire, mais ça n'était pas {item}."]}
+    feedback_frame: {text: "L'essentiel is the essential part; les points principaux are the main points.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit39.lesson02.translate.011
+    lesson_content_key: fr.b1.unit39.lesson02.en_resume
+    type: translation
+    frame: {text: "So the three steps are the essential part.", language_code: en, direction: ltr}
+    slots: {item: *anc_11}
+    answer_derivation: {kind: render_frame, frame: {text: "Donc les trois étapes sont {item}.", language_code: fr, direction: ltr}, accepted_variants: ["Donc, les trois étapes, c'est {item}."]}
+    feedback_frame: {text: "En résumé introduces the summary; leave out details that are not important: ce n'était pas important.", language_code: en, direction: ltr}
