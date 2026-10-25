@@ -144,6 +144,11 @@ SLOT_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SLOT_PLACEHOLDER_RE = re.compile(r"\{([a-z][a-z0-9_]*)\}")
 _MISSING = object()
 MIN_MATCHING_PAIR_COUNT = 6
+# Warn only below this many pairs. 4-5 pairs is a normal size for an early
+# lesson whose vocabulary pool is small (padding it would repeat words), so
+# it is no longer reported; 2-3 pair exercises are still flagged as real
+# candidates for pooling earlier vocabulary.
+MATCHING_PAIR_WARN_BELOW = 4
 PRODUCTION_EXERCISE_TYPES = {
     "writing_prompt",
     "dialogue_response",
@@ -1677,6 +1682,21 @@ def validate_order_word_bank_answers(
                             "of tested_text sentence order"
                         )
 
+                    if (
+                        "scrambled" in message
+                        and answer_location.startswith("accepted_answers[")
+                        and answer_location != "accepted_answers[0]"
+                    ):
+                        # An accepted_answers variant after the first is a
+                        # deliberate alternate word order (all tiles, same
+                        # multiset, different but grammatical sequence).
+                        # Only the primary answer (correct_response or
+                        # accepted_answers[0]) must follow tested_text order,
+                        # so a scrambled primary still warns. The
+                        # "matches the displayed word_bank order" message
+                        # stays for every variant.
+                        continue
+
                     report.warn(
                         f"overlay.exercises.{key}.{answer_location}",
                         f"{message}: "
@@ -1701,7 +1721,7 @@ def validate_matching_pairs_minimum_scale(
                 if not isinstance(pairs, list):
                     continue
 
-                if len(pairs) < MIN_MATCHING_PAIR_COUNT:
+                if len(pairs) < MATCHING_PAIR_WARN_BELOW:
                     # WARNING, not error: AUTHORING_GUIDE.md §16 is an aim
                     # ("6-12 where the unit's vocabulary genuinely supports
                     # it - don't pad"), and it explicitly grandfathers
@@ -3781,6 +3801,78 @@ def validate_vocabulary_examples(
                         )
 
 
+# A teaching card's `example:` is spoken by TTS and shown as a sentence, so it
+# must not start with a meta label such as "Im Dialog:" or "Bedauern:" (the
+# label would be read aloud and the text is no longer a sentence). Speaker
+# turns belong in the structured `speaker` field, not in the text.
+EXAMPLE_LABEL_PREFIX_RE = re.compile(
+    r"^\s*(?P<label>[^\s:\uff1a.!?\u061f,;\u060c]+(?:\s[^\s:\uff1a.!?\u061f,;\u060c]+){0,3})"
+    r"\s?[:\uff1a]\s+\S",
+)
+# Speech-attribution openers ("Ewa mówi: ...", "قالت ليلى: ...", "Felix sagt
+# zu Anna: ...") read naturally aloud and are not meta labels.
+_SPEECH_ATTRIBUTION_TOKENS = {
+    "sagt", "sagte", "fragt", "fragte", "antwortet", "antwortete",
+    "zegt", "vraagt", "antwoordt", "says", "said", "asks", "asked",
+    "dit", "demande", "dice", "pregunta",
+    "mówi", "pyta", "odpowiada", "говорит", "спрашивает", "отвечает",
+    "قال", "قالت", "سأل", "سألت", "يقول", "تقول", "أجاب", "أجابت",
+    "يسأل", "تسأل",
+}
+
+
+def _label_overlaps_target(label: str, target_text: str) -> bool:
+    """True when the colon-prefix reuses the card's own word(s), i.e. the
+    example is a real sentence-with-colon demonstrating the word."""
+    label_tokens = [t for t in re.split(r"[^\w]+", label.casefold()) if len(t) >= 3]
+    target_tokens = [t for t in re.split(r"[^\w]+", target_text.casefold()) if len(t) >= 3]
+    for left in label_tokens:
+        for right in target_tokens:
+            if left == right or (
+                min(len(left), len(right)) >= 4 and left[:4] == right[:4]
+            ):
+                return True
+    return False
+
+
+def validate_example_label_prefixes(
+    realization: dict[str, Any],
+    report: Report,
+):
+    for unit_index, unit in enumerate(realization.get("units", [])):
+        for lesson_index, lesson in enumerate(unit.get("lessons", [])):
+            for teaching_index, item in enumerate(lesson.get("teaching", [])):
+                if not isinstance(item, dict):
+                    continue
+                target = item.get("target")
+                target_text = (
+                    target.get("text", "") if isinstance(target, dict) else ""
+                )
+                if not isinstance(target_text, str):
+                    target_text = ""
+                for entry_index, entry in enumerate(teaching_example_entries(item)):
+                    text = entry.get("text") if isinstance(entry, dict) else None
+                    if not isinstance(text, str):
+                        continue
+                    match = EXAMPLE_LABEL_PREFIX_RE.match(text)
+                    if not match:
+                        continue
+                    label = match.group("label")
+                    label_tokens = {t.casefold() for t in label.split()}
+                    if label_tokens & _SPEECH_ATTRIBUTION_TOKENS:
+                        continue
+                    if _label_overlaps_target(label, target_text):
+                        continue
+                    report.warn(
+                        f"realization.units[{unit_index}].lessons[{lesson_index}]"
+                        f".teaching[{teaching_index}].example[{entry_index}]",
+                        f"example starts with a label prefix {label + ':'!r}; "
+                        "TTS would read it aloud. Remove the label (speaker "
+                        "turns go in the `speaker` field, context in the "
+                        "overlay note)",
+                    )
+
+
 def validate_reading_glosses(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -4741,6 +4833,7 @@ def validate_documents(
         overlay,
     )
     validate_vocabulary_examples(realization, overlay, report)
+    validate_example_label_prefixes(realization, report)
     validate_reading_glosses(realization, overlay, report)
     validate_no_internal_authoring_text(realization, overlay, report)
     validate_underdetermined_production_prompts(realization, overlay, report)
