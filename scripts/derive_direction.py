@@ -763,11 +763,17 @@ def _collect_semantic(o, acc: set) -> None:
 
 def new_direction_tags(pair: str) -> set | None:
     """Semantic tags the new direction's backfill will create (None if it has no backfill)."""
-    mod, _ = load_backfill_module(pair)
-    if mod is None or not hasattr(mod, "iter_specs"):
+    try:
+        mod, _ = load_backfill_module(pair)
+        if mod is None or not hasattr(mod, "iter_specs"):
+            return None
+        specs = list(mod.iter_specs())
+    except SystemExit:
+        # first inject of a new pair: its manifest group files do not exist yet (written at the end of inject);
+        # re-running inject afterwards applies the tag filter.
         return None
     tags: set = set()
-    for spec in mod.iter_specs():
+    for spec in specs:
         tags.update(spec["agreement_tags"].get("semantic", []))
     return tags
 
