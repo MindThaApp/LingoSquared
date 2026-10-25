@@ -1,0 +1,41 @@
+# Production override. NOT applied on the live server yet -- see
+# docs/PRE_DEPLOY_RUNBOOK.md "Switching to the production compose".
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build api
+#
+# What it changes versus docker-compose.yml:
+#   - builds the `prod` Dockerfile stage: runtime requirements only, code
+#     baked into the image, runs as non-root user `app`, HEALTHCHECK on
+#     /health/ready. No `.:/app` bind mount, so an image tag really is a code
+#     version and `docker tag backend-api:<old> backend-api:latest` rolls
+#     code back.
+#   - persistent data the app writes/reads under /app is mounted explicitly:
+#     media_assets (read-only), feedback_uploads (read-write), Whisper cache.
+#   - backfill/sync scripts are not in the image (it only contains backend/).
+#     Run them as before by mounting the repo read-only:
+#       docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm \
+#         -v "$(cd .. && pwd):/repo:ro" -e PYTHONPATH=/repo/backend \
+#         --entrypoint python api /repo/scripts/backfill_lexemes.py
+services:
+  api:
+    build:
+      context: .
+      target: prod
+      args:
+        APP_UID: ${APP_UID:-1000}
+    image: backend-api:${API_TAG:-latest}
+    volumes: !override
+      - ./media_assets:/app/media_assets:ro
+      - ./feedback_uploads:/app/feedback_uploads
+      # Pre-rendered TTS audio (see runbook "Pre-rendered audio"); `!override`
+      # above replaced the base list, so repeat the mount from docker-compose.yml.
+      - ${MEDIA_AUDIO_HOST_DIR:-${HOME}/lingosquared-media/audio}:/srv/media/audio:ro
+      - whisper_model_cache_nonroot:/home/app/.cache/huggingface
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=4).status == 200 else 1)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+volumes:
+  whisper_model_cache_nonroot:

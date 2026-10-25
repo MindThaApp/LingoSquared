@@ -6,14 +6,16 @@
 # "Required environment variables" table, which until now were manual
 # grep-and-eyeball steps (runbook pre-flight step 4):
 #
-#   FAIL  ADMIN_EMAILS is unset/empty, or still lists the .env.example
-#         placeholder (admin@example.com). register() grants is_admin at
-#         signup to whoever registers first with a listed email and there
-#         is no email verification — a placeholder here is an open admin
-#         takeover on a public deployment.
-#   FAIL  JWT_SECRET is unset/empty, the app-code default
-#         ("development-only-secret", backend/app/core/config.py), or the
-#         .env.example placeholder ("replace-with-a-long-random-secret").
+#   FAIL  The .env file is group/world accessible (mode must be 600; it
+#         holds JWT_SECRET, the DB password and cloud keys).
+#   FAIL  APP_ENV is unset or dev/development/test on a deploy (the app
+#         treats anything else as production; dev/test skips the startup
+#         safety checks and labels Sentry events "development").
+#   FAIL  JWT_SECRET is unset/empty, shorter than 32 characters, the
+#         app-code default ("development-only-secret",
+#         backend/app/core/config.py), or the .env.example placeholder
+#         ("replace-with-a-long-random-secret"). The app itself refuses to
+#         start in a production-like APP_ENV in these cases.
 #   FAIL  POSTGRES_PASSWORD or DATABASE_URL still carries the
 #         .env.example placeholder password ("change-me") — runbook table
 #         row "confirm they're real values, not .env.example placeholders."
@@ -21,6 +23,7 @@
 #         empty). Fails safe (requests rejected) but breaks the app for
 #         every real beta user until the real frontend origin is added — a
 #         product decision for Ramin, so WARN not FAIL.
+#   WARN  SENTRY_DSN is empty (crash reporting off; optional).
 #   WARN  GOOGLE_CLOUD_TTS_CREDENTIALS_JSON is empty — /tts degrades
 #         gracefully to browser speechSynthesis, so not a deploy blocker,
 #         but the 8 Google-covered languages get no cloud TTS.
@@ -80,15 +83,31 @@ echo "Pre-deploy config check: $ENV_FILE"
 echo "(FAIL = must fix before deploy; WARN = degrades gracefully, fix when decided)"
 echo
 
-# --- ADMIN_EMAILS -----------------------------------------------------------
-ADMIN_EMAILS="$(get_var ADMIN_EMAILS)"
-if [ -z "$ADMIN_EMAILS" ]; then
-  fail "ADMIN_EMAILS is unset or empty — no admin account can ever be registered."
-elif printf '%s' "$ADMIN_EMAILS" | grep -qi 'admin@example\.com'; then
-  fail "ADMIN_EMAILS still contains the .env.example placeholder (admin@example.com) — needs Ramin's real private email, registered BEFORE any beta invite (first-to-register race, no email verification). Current value: $ADMIN_EMAILS"
+# --- File mode ----------------------------------------------------------------
+MODE="$(stat -c %a "$ENV_FILE" 2>/dev/null || stat -f %Lp "$ENV_FILE" 2>/dev/null || echo unknown)"
+if [ "$MODE" = "600" ] || [ "$MODE" = "400" ]; then
+  ok   ".env file mode is $MODE"
 else
-  ok   "ADMIN_EMAILS is set and not the placeholder: $ADMIN_EMAILS"
-  echo "      (this script can't check the DB — still confirm the account is actually REGISTERED under it, runbook post-deploy step 4)"
+  fail ".env file mode is $MODE, must be 600 (chmod 600 <file>). It holds JWT_SECRET, the DB password and cloud keys. NOTE: a copy pulled over ssh gets your local umask, so run this check on the server file itself or compare 'stat -c %a' there."
+fi
+
+# --- APP_ENV ------------------------------------------------------------------
+APP_ENV="$(get_var APP_ENV)"
+case "$(printf '%s' "$APP_ENV" | tr 'A-Z' 'a-z')" in
+  "")
+    fail "APP_ENV is unset — the app defaults to production, but set it explicitly (APP_ENV=production) so the deploy is unambiguous." ;;
+  dev|development|test)
+    fail "APP_ENV=$APP_ENV on a deploy — dev/test skips the startup safety checks (JWT secret strength, DB password). Use APP_ENV=production." ;;
+  *)
+    ok   "APP_ENV=$APP_ENV (production-like)" ;;
+esac
+
+# --- SENTRY_DSN (optional) ----------------------------------------------------
+SENTRY_DSN="$(get_var SENTRY_DSN)"
+if [ -z "$SENTRY_DSN" ]; then
+  warn "SENTRY_DSN is empty — server crash reporting is off (optional; see docs/SENTRY.md)."
+else
+  ok   "SENTRY_DSN is set (value not printed)"
 fi
 
 # --- CORS_ORIGINS ------------------------------------------------------------
@@ -123,6 +142,8 @@ if [ -z "$JWT_SECRET" ]; then
   fail "JWT_SECRET is unset or empty — the app silently falls back to the hardcoded dev default ('development-only-secret', backend/app/core/config.py), so every token is forgeable."
 elif [ "$JWT_SECRET" = "development-only-secret" ]; then
   fail "JWT_SECRET is the hardcoded app-code default ('development-only-secret') — every token is forgeable. Set a real random secret. (Never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions.)"
+elif [ "${#JWT_SECRET}" -lt 32 ]; then
+  fail "JWT_SECRET is shorter than 32 characters — the app refuses to start with it in a production-like APP_ENV. Generate one with: openssl rand -hex 32 (but never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions)."
 elif [ "$JWT_SECRET" = "replace-with-a-long-random-secret" ]; then
   fail "JWT_SECRET is the .env.example placeholder — set a real random secret. (Never regenerate on a RUNNING deploy without warning Ramin — invalidates all sessions.)"
 else

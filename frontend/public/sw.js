@@ -4,13 +4,45 @@
  * offline-sync APIs (POST /sync/batch) — do NOT cache authenticated
  * API responses here; personalized state must stay fresh.
  */
-const SHELL_CACHE = "lingo2-shell-v1";
+// Bump the version suffix to invalidate everything cached by older workers;
+// the activate handler deletes every cache whose name is not this one.
+const SHELL_CACHE = "lingo2-shell-v2";
+
+// Never cached: the API, and the big on-device speech files (ONNX wasm,
+// model weights, sourcemaps) which would blow the storage quota.
+const NO_CACHE_PATH = /^\/api(\/|$)|\.(?:wasm|onnx|bin|gguf|safetensors|map)$/i;
+
+function isCacheablePath(pathname) {
+  return !NO_CACHE_PATH.test(pathname);
+}
+
+// Push payload urls are untrusted: resolve against our origin and fall back
+// to "/" for anything that is not same-origin http(s).
+function safeSameOriginUrl(raw) {
+  try {
+    const u = new URL(typeof raw === "string" ? raw : "/", self.location.origin);
+    if (u.origin !== self.location.origin) return "/";
+    return u.pathname + u.search + u.hash;
+  } catch {
+    return "/";
+  }
+}
+
+// Pre-rendered TTS clips (/media/audio/<content-hash>.mp3, immutable). Separate
+// cache so the shell cleanup below never evicts them and the shell handler
+// never stores them unbounded. Cache-on-play only (nothing is precached) and
+// capped: oldest entries go first once MAX_AUDIO_ENTRIES is exceeded.
+const AUDIO_CACHE = "lingo2-audio-v1";
+const MAX_AUDIO_ENTRIES = 400;
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(SHELL_CACHE).then((cache) => cache.addAll(["/", "/manifest.webmanifest"])),
   );
-  self.skipWaiting();
+  // No skipWaiting(): a new worker waits until every tab running the old one
+  // is closed or navigated away, so a lesson in progress is never swapped
+  // under a running page (its lazy chunks would vanish). The next
+  // navigation after the old tabs are gone picks up the new version.
 });
 
 self.addEventListener("activate", (event) => {
@@ -18,7 +50,7 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== SHELL_CACHE).map((k) => caches.delete(k))),
+        Promise.all(keys.filter((k) => k !== SHELL_CACHE && k !== AUDIO_CACHE).map((k) => caches.delete(k))),
       )
       .then(() => self.clients.claim()),
   );
@@ -43,14 +75,14 @@ self.addEventListener("push", (event) => {
       body: payload.body || "",
       icon: "/icons/icon-192.png",
       badge: "/icons/icon-192.png",
-      data: { url: typeof payload.url === "string" ? payload.url : "/" },
+      data: { url: safeSameOriginUrl(payload.url) },
     }),
   );
 });
 
 self.addEventListener("notificationclick", (event) => {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || "/";
+  const url = safeSameOriginUrl(event.notification.data && event.notification.data.url);
   event.waitUntil(
     self.clients
       .matchAll({ type: "window", includeUncontrolled: true })
@@ -67,18 +99,80 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
+async function trimAudioCache(cache) {
+  const keys = await cache.keys(); // insertion order: oldest first
+  for (let i = 0; i < keys.length - MAX_AUDIO_ENTRIES; i++) await cache.delete(keys[i]);
+}
+
+// <audio> asks for byte ranges (and Safari insists on 206 answers). Serve a
+// cached full body as a 206 slice; on a miss go to the network and, in the
+// background, fetch + store the whole file with a plain GET for next time.
+async function audioResponse(request, waitUntil) {
+  const cache = await caches.open(AUDIO_CACHE);
+  const hit = await cache.match(request.url);
+  const range = request.headers.get("range");
+  if (hit) {
+    if (!range) return hit;
+    const m = /^bytes=(\d*)-(\d*)$/.exec(range);
+    const buf = await hit.arrayBuffer();
+    if (m && (m[1] || m[2])) {
+      const size = buf.byteLength;
+      let start = m[1] ? parseInt(m[1], 10) : Math.max(0, size - parseInt(m[2], 10));
+      let end = m[1] && m[2] ? Math.min(parseInt(m[2], 10), size - 1) : size - 1;
+      if (start <= end && start < size) {
+        return new Response(buf.slice(start, end + 1), {
+          status: 206,
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Content-Range": "bytes " + start + "-" + end + "/" + size,
+            "Content-Length": String(end - start + 1),
+          },
+        });
+      }
+    }
+    return new Response(buf, { status: 200, headers: { "Content-Type": "audio/mpeg" } });
+  }
+  const res = await fetch(request);
+  if (res.ok && !range && res.status === 200) {
+    const copy = res.clone();
+    waitUntil(cache.put(request.url, copy).then(() => trimAudioCache(cache)).catch(() => {}));
+  } else if (res.ok && range) {
+    // Ranged answer: fetch the whole file once in the background for next time.
+    waitUntil(
+      fetch(request.url)
+        .then((full) => (full.ok && full.status === 200 ? cache.put(request.url, full) : undefined))
+        .then(() => trimAudioCache(cache))
+        .catch(() => {}),
+    );
+  }
+  return res;
+}
+
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+  if (
+    event.request.method === "GET" &&
+    url.origin === self.location.origin &&
+    url.pathname.startsWith("/media/audio/")
+  ) {
+    event.respondWith(audioResponse(event.request, (p) => event.waitUntil(p)));
+    return;
+  }
   // Never intercept API calls or non-GET requests.
-  if (event.request.method !== "GET" || url.pathname.startsWith("/api")) return;
-  // Only handle same-origin static assets/navigation.
-  if (url.origin !== self.location.origin) return;
+  if (event.request.method !== "GET") return;
+  // Only handle same-origin static assets/navigation, minus API and the
+  // heavy whisper wasm/model files (see NO_CACHE_PATH).
+  if (url.origin !== self.location.origin || !isCacheablePath(url.pathname)) return;
 
   event.respondWith(
     fetch(event.request)
       .then((res) => {
-        const copy = res.clone();
-        caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, copy));
+        // Only successful same-origin ("basic") responses; never partial
+        // (206), error, opaque or redirected results.
+        if (res.status === 200 && res.type === "basic") {
+          const copy = res.clone();
+          caches.open(SHELL_CACHE).then((cache) => cache.put(event.request, copy)).catch(() => {});
+        }
         return res;
       })
       .catch(() =>

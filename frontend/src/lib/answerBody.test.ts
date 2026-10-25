@@ -11,3 +11,15 @@ describe("answerBody", () => {
     expect(answerBody("eet", { inputMode: "spoken" })).toEqual({ response: "eet", input_mode: "spoken" });
   });
 });
+
+describe("answerBody self-grade and latency", () => {
+  it("adds self_grade and latency_ms only when given", async () => {
+    const { answerBody } = await import("@lingo/shared/api/endpoints");
+    expect(answerBody("known", { selfGrade: "hard", latencyMs: 1234.6 })).toEqual({
+      response: "known",
+      self_grade: "hard",
+      latency_ms: 1235,
+    });
+    expect(answerBody("known")).toEqual({ response: "known" });
+  });
+});
