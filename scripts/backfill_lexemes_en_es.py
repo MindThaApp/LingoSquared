@@ -9,10 +9,10 @@ directions. All plumbing lives in scripts/_target_lexeme_backfill_common.py
 (see its docstring for the tag scheme); this file is data only:
 one hand-written English gloss and one part of speech per citation form.
 
-Scope: A1 ("en-es" manifest group, units 01-15) and A2 ("en-es-a2", units
-16-25; session 11). B1+ is not classified yet; extend LEVELS and the tables
-below together. A token already glossed for A1 keeps that gloss in A2 unless
-A2_GLOSS_OVERRIDES says the A2 unit teaches another sense.
+Scope: A1 ("en-es" manifest group, units 01-15), A2 ("en-es-a2", units
+16-25; session 11) and B1 ("en-es-b1", units 26-44; session 12). B2+ is not
+classified yet; extend LEVELS and the tables below together. A token already glossed for A1 keeps that gloss in A2 unless
+A2_GLOSS_OVERRIDES (also used for B1) says the unit teaches another sense.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -48,7 +48,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "es"
-LEVELS = {"a1": "en-es", "a2": "en-es-a2"}
+LEVELS = {"a1": "en-es", "a2": "en-es-a2", "b1": "en-es-b1"}
 
 PROPER_NOUNS = {
     "Elena", "Mateo", "Lucía", "Diego", "Carlos", "Ana", "México", "Colombia",
@@ -352,6 +352,66 @@ GLOSSES: dict[str, str] = {
     "debe": "must; should; you must (formal)", "recibo": "receipt",
     "estar": "to be (a state or place)", "usar": "to use",
     "ofrecer": "to offer", "compré": "I bought",
+    # b1 (units 26-44). The B1 course is its own course row, so every token is
+    # classified again at first sight there; only tokens that are new to this
+    # table are glossed below, the rest reuse the A1/A2 entries (or the
+    # overrides further down where B1 teaches another sense).
+    "opina": "thinks; is of the opinion", "llegué": "I arrived",
+    "contable": "accountant", "confirmar": "to confirm", "explicar": "to explain",
+    "documento": "document", "haber": "to have (before a past participle)",
+    "explicado": "explained (past participle)",
+    "estaba": "was (a past state or description)", "formulario": "form (to fill in)",
+    "entregar": "to hand in", "entregue": "hand in (after a phrase like it is necessary that)",
+    "permitido": "allowed", "tendría": "would have (as in: should have)",
+    "original": "original", "obligatorio": "obligatory; mandatory",
+    "entregado": "handed in (past participle)", "llamaré": "I will call",
+    "tuviera": "had (in an unreal condition)", "llamaría": "I would call",
+    "hubiera": "had (in an unreal past condition)", "tenido": "had (past participle)",
+    "habría": "would have (before a past participle)", "llamado": "called (past participle)",
+    "pedir": "to ask for", "pediría": "I would ask for",
+    "debemos": "we must; we should", "desacuerdo": "disagreement",
+    "llamemos": "we call (after a phrase like I do not agree that)",
+    "falta": "is missing", "debamos": "we must (after a phrase like I do not agree that)",
+    "responsable": "responsible", "informes": "reports", "preparar": "to prepare",
+    "proceso": "process", "informe": "report", "terminaré": "I will finish",
+    "retrasada": "delayed (fem.)", "firma": "signature", "tarea": "task",
+    "revisar": "to review; to check", "podrías": "could you (informal)",
+    "mientras": "while", "preparaba": "was preparing (he or she; I)",
+    "llamó": "called (he or she did)", "dijo": "said (he or she did)",
+    "esperando": "waiting", "entregué": "I handed in",
+    "cambiaremos": "we will change", "plan": "plan", "respuesta": "reply; answer",
+    "revisaremos": "we will review", "iremos": "we will go", "trae": "brings",
+    "llega": "arrives", "llamaremos": "we will call", "cuando": "when",
+    "salgo": "I leave", "termino": "I finish", "aviso": "I let know; I notify",
+    "terminó": "finished (he or she did)", "reunión": "meeting", "envié": "I sent",
+    "dice": "says", "llave": "key", "llegó": "arrived (he or she did)",
+    "estudio": "I study", "ahorro": "I save (money)", "dinero": "money",
+    "comprar": "to buy", "horas": "hours", "ahorrar": "to save (money)",
+    "deberías": "you should (informal)", "dormir": "to sleep",
+    "descansas": "you rest (informal)", "dormiré": "I will sleep",
+    "internet": "internet", "llamé": "I called", "nadie": "nobody",
+    "respondió": "answered (he or she did)",
+    "envíen": "send (after a phrase like I would like that; plural)",
+    "debería": "should; ought to", "estudiado": "studied (past participle)",
+    "examen": "exam", "ojalá": "I hope; if only", "hablado": "spoken (past participle)",
+    "jefe": "boss", "pedido": "asked for (past participle)", "sido": "been (past participle)",
+    "sale": "leaves; goes out", "buscar": "to look for", "año": "year",
+    "probablemente": "probably", "lloverá": "it will rain", "fui": "I went",
+    "queso": "cheese", "visité": "I visited", "resumen": "summary",
+    "aunque": "although; even though", "flexible": "flexible", "ahorra": "saves",
+    "difícil": "difficult", "concentrarse": "to concentrate", "viajaría": "I would travel",
+    "compraría": "I would buy", "recomendarme": "to recommend to me", "lugar": "place",
+    "cambiar": "to change", "podríamos": "we could", "enviarme": "to send me",
+    "empleados": "employees", "colega": "colleague", "quien": "who; whom",
+    # b1 spelling variants (the dictation exercises list an unaccented form next
+    # to the accented one). They get a gloss only so the classifier can run; the
+    # specs are dropped again in iter_specs (see B1_VARIANT_SPELLINGS).
+    "llamare": "I will call", "llamaria": "I would call", "habria": "would have",
+    "todavia": "still", "podrias": "could you (informal)", "terminare": "I will finish",
+    "reunion": "meeting", "envie": "I sent", "envien": "send", "respondio": "answered",
+    "razon": "reason", "ojala": "I hope", "espanol": "Spanish", "mas": "more",
+    "deberias": "you should", "despues": "after", "dias": "days", "tecnico": "technician",
+    "opinion": "opinion", "llame": "I called",
 }
 
 POS_SETS = {
@@ -409,6 +469,30 @@ POS_SETS = {
     ),
     "phrase": split_words("hola gracias adiós oye felicidades ah ay"),
 }
+
+B1_POS_ADDITIONS = {
+    "pronoun": "quien nadie",
+    "particle": "mientras cuando aunque ojalá ojala",
+    "adjective": (
+        "permitido original obligatorio responsable retrasada flexible difícil"
+    ),
+    "adverb": "probablemente todavia despues mas",
+    "verb": (
+        "opina llegué confirmar explicar haber explicado estaba entregar entregue tendría "
+        "entregado llamaré tuviera llamaría hubiera tenido habría llamado pedir "
+        "pediría debemos llamemos falta debamos preparar terminaré revisar "
+        "podrías preparaba llamó dijo esperando entregué cambiaremos revisaremos "
+        "iremos trae llega llamaremos salgo termino aviso terminó envié dice "
+        "llegó estudio ahorro comprar ahorrar deberías dormir descansas dormiré "
+        "llamé respondió envíen debería estudiado hablado pedido sido sale buscar "
+        "lloverá fui visité ahorra concentrarse viajaría compraría recomendarme "
+        "cambiar podríamos enviarme llamare llamaria habria podrias terminare "
+        "envie envien respondio deberias llame recibo"
+    ),
+}
+for _pos, _words in B1_POS_ADDITIONS.items():
+    POS_SETS[_pos] |= split_words(_words)
+
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -431,7 +515,40 @@ A2_GLOSS_OVERRIDES = {
     ("a2_unit21_entrevista", "hace"): "makes; does; ago (with a length of time)",
     ("a2_unit17_opiniones", "razón"): "reason; being right",
     ("a2_unit16_tramites", "desde"): "since; from",
+    # B1: the unit teaches another sense than the A1/A2 entry
+    ("b1_unit26_habilidades", "como"): "as (in the role of)",
+    ("b1_unit27_obligaciones", "entre"): "enter (after a phrase like it is not allowed that)",
+    ("b1_unit28_hipotesis", "tiempo"): "time; weather",
+    ("b1_unit29_debate", "acuerdo"): "agreement (de acuerdo: agreed)",
+    ("b1_unit29_debate", "sea"): "be (after a phrase like I agree that)",
+    ("b1_unit32_condiciones", "recibo"): "I receive",
+    ("b1_unit34_estilo_indirecto", "pregunta"): "asks",
+    ("b1_unit36_consejos", "qué"): "what (also why, in por qué)",
+    ("b1_unit36_consejos", "razón"): "reason; being right",
+    ("b1_unit39_planes_futuros", "mañana"): "tomorrow; morning",
 }
+# Parts of speech that differ from the A1/A2 classification, per unit.
+B1_POS_OVERRIDES = {
+    ("b1_unit26_habilidades", "como"): "preposition",
+    ("b1_unit27_obligaciones", "entre"): "verb",
+    ("b1_unit32_condiciones", "recibo"): "verb",
+    ("b1_unit34_estilo_indirecto", "pregunta"): "verb",
+}
+# Unaccented spellings the B1 realizations list next to the accented form
+# (dictation answers). They are not words to teach: token -> unit whose
+# first-sight spec is the variant. A same-spelled real word introduced in an
+# earlier unit (entregue in unit 27) is kept.
+B1_VARIANT_SPELLINGS = {
+    "llamare": "unit28", "llamaria": "unit28", "habria": "unit28",
+    "todavia": "unit29", "podrias": "unit30", "terminare": "unit30",
+    "llegue": "unit31", "llamo": "unit31", "despues": "unit31",
+    "reunion": "unit33", "envie": "unit33", "termino": None,
+    "llego": "unit34", "espanol": "unit35", "dias": "unit36", "mas": "unit36",
+    "deberias": "unit36", "razon": "unit36", "llame": "unit37",
+    "respondio": "unit37", "envien": "unit37", "tecnico": "unit37",
+    "ojala": "unit38", "opinion": "unit29",
+}
+del B1_VARIANT_SPELLINGS["termino"]
 
 part_of_speech = pos_lookup(POS_SETS)
 
@@ -439,7 +556,7 @@ part_of_speech = pos_lookup(POS_SETS)
 def iter_specs():
     for level, group in LEVELS.items():
         realizations, _ = manifest_group(group)
-        yield from classify(
+        for spec in classify(
             lang=LANG,
             level=level,
             unit_files=realizations,
@@ -448,7 +565,12 @@ def iter_specs():
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
             gloss_overrides=A2_GLOSS_OVERRIDES,
-        )
+            pos_overrides=B1_POS_OVERRIDES,
+        ):
+            unit = B1_VARIANT_SPELLINGS.get(spec["token"])
+            if level == "b1" and unit and f".{unit}." in spec["lesson_content_key"]:
+                continue
+            yield spec
 
 
 def main() -> int:

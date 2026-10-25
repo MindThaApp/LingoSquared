@@ -1,0 +1,143 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit39
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit39.planes_futuros
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Future talk: present for schedules (el tren sale), ir a + infinitive for plans, future with probablemente. Variants move the time phrase. NATIVE FLAG: none.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_año, w_buscar, w_lloverá, w_mañana, w_nuevo, w_ocho, w_probablemente, w_sale, w_trabajo, w_tren, w_voy]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: [w_tren, w_ocho, w_mañana, w_buscar, w_trabajo, w_nuevo, w_año, w_probablemente, w_lloverá, w_sale]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [w_tren, w_ocho, w_mañana, w_buscar, w_trabajo, w_nuevo, w_año, w_lloverá]}}
+  p3: &p3 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_sale]}}
+  p4: &p4 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_tren]}}
+  p5: &p5 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_ocho]}}
+  p6: &p6 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_mañana]}}
+  p7: &p7 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_buscar]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_voy]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_trabajo]}}
+  p10: &p10 {language_code: es, part_of_speech: [adjective], agreement_tags: {semantic: [w_nuevo]}}
+  p11: &p11 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_año]}}
+  p12: &p12 {language_code: es, part_of_speech: [adverb], agreement_tags: {semantic: [w_probablemente]}}
+  p13: &p13 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_lloverá]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit39.lesson01.choose.001
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on future plans.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson01.listen.001
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on plans.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.translate.001
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson03.match.001
+    lesson_content_key: es.b1.unit39.lesson03.probablemente_lloveremos
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p2, second: *p2, third: *p2, fourth: *p2, fifth: *p2, sixth: *p2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the plans.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson01.translate.001
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: translation
+    frame: {text: "The train leaves at eight tomorrow.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "El tren {item} a las ocho mañana.", language_code: es, direction: ltr}, accepted_variants: ["Mañana el tren {item} a las ocho.", "El tren {item} mañana a las ocho."]}
+    feedback_frame: {text: "A fixed schedule uses the present: sale.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson01.fill.001
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: fill_in_blank
+    frame: {text: "El {item} sale a las ocho mañana. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tren is masculine.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson01.fill.002
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: fill_in_blank
+    frame: {text: "El tren sale a las {item} mañana. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Times take las: a las ocho.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson01.order.001
+    lesson_content_key: es.b1.unit39.lesson01.el_tren_sale
+    type: word_order
+    frame: {text: "El tren sale a las ocho {item}.", language_code: es, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "El tren sale a las ocho {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Mañana means tomorrow here.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.translate.002
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: translation
+    frame: {text: "I am going to look for a new job this year.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Voy a {item} un trabajo nuevo este año.", language_code: es, direction: ltr}, accepted_variants: ["Este año voy a {item} un trabajo nuevo."]}
+    feedback_frame: {text: "Ir a plus an infinitive expresses a plan.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.fill.001
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: fill_in_blank
+    frame: {text: "{item} a buscar un trabajo nuevo este año. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Voy a plus an infinitive means I am going to.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.fill.002
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: fill_in_blank
+    frame: {text: "Voy a buscar un {item} nuevo este año. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Trabajo means job here.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.fill.003
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: fill_in_blank
+    frame: {text: "Voy a buscar un trabajo {item} este año. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p10, hint: *p10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The adjective follows the noun: trabajo nuevo.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson02.order.001
+    lesson_content_key: es.b1.unit39.lesson02.voy_a_buscar
+    type: word_order
+    frame: {text: "Voy a buscar un trabajo nuevo este {item}.", language_code: es, direction: ltr}
+    slots: {item: *p11}
+    answer_derivation: {kind: render_frame, frame: {text: "Voy a buscar un trabajo nuevo este {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Año carries the letter ñ.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson03.translate.001
+    lesson_content_key: es.b1.unit39.lesson03.probablemente_lloveremos
+    type: translation
+    frame: {text: "It will probably rain at the weekend.", language_code: en, direction: ltr}
+    slots: {item: *p12}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} lloverá el fin de semana.", language_code: es, direction: ltr}, accepted_variants: ["Lloverá {item} el fin de semana."]}
+    feedback_frame: {text: "Probablemente can go before the verb.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson03.fill.001
+    lesson_content_key: es.b1.unit39.lesson03.probablemente_lloveremos
+    type: fill_in_blank
+    frame: {text: "Probablemente {item} el fin de semana. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p13, hint: *p13}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lloverá is the future of llover.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit39.lesson04.choose.001
+    lesson_content_key: es.b1.unit39.lesson04.el_plan_completo
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
