@@ -9,9 +9,13 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 (the "en-ru-a1" manifest group, units 01-24) and A2 (the
-"en-ru-a2" group, units 25-34; session 11). B1+ is not classified yet; extend
-LEVELS and the tables below together. A1 and A2 are separate courses, so A2
+Scope: A1 (the "en-ru-a1" manifest group, units 01-24), A2 (the
+"en-ru-a2" group, units 25-34; session 11) and B1 (the "en-ru-b1" group, units
+35-53; session 12). B2+ is not classified yet; extend LEVELS and the tables
+below together. The B1 course is separate again, so B1 re-glosses every token it
+introduces (already-glossed A1/A2 tokens reuse their gloss; GLOSS_OVERRIDES
+keys a different B1 sense by (realization stem, token)). A run before the B1
+course is imported errors cleanly ("... course must be imported first"). A1 and A2 are separate courses, so A2
 re-glosses every token it introduces, function words included; where A2 teaches
 a different sense of an A1 token (банка, дня, за, работы) GLOSS_OVERRIDES keys the
 A2 gloss by (realization stem, token).
@@ -54,12 +58,13 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "ru"
-LEVELS = {"a1": "en-ru-a1", "a2": "en-ru-a2"}
+LEVELS = {"a1": "en-ru-a1", "a2": "en-ru-a2", "b1": "en-ru-b1"}
 
 PROPER_NOUNS = {
     "Анна", "Максим", "Виктор", "Канады", "Канада", "Москвы", "Москва",
     "Ирина", "Петровна", "Джон", "Ольга", "Тверской", "Чайковского",
     "Пушкина", "Олег", "Мария", "Настя", "Дима", "Тулы",
+    "Настю", "Насти", "Диме",
 }
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
@@ -370,6 +375,193 @@ GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     ("a2_unit30_sobesedovanie", "работы"): "work (genitive case, as in 'work experience')",
 }
 
+# ---- B1 (units 35-53), session 12 -------------------------------------------
+GLOSSES.update({
+    # unit35 abilities
+    "сказать": "to say", "документ": "document", "готов": "ready (masc.)",
+    "раньше": "before; earlier", "мог": "could; was able to (masc.)",
+    "объяснить": "to explain", "могли": "could (plural or formal)",
+    "если": "if", "бы": "would (a word that makes a statement hypothetical)",
+    "было": "was; there was (neuter)", "время": "time",
+    "проверить": "to check", "правильный": "correct; right (masc.)",
+    # unit36 duties
+    "должен": "must; obliged to (masc.)", "отправить": "to send",
+    "форму": "form (accusative case, as an object)", "сделать": "to do; to make",
+    "нельзя": "it is not allowed; must not", "опаздывать": "to be late",
+    "успел": "managed to; had time to (masc.)",
+    # unit37 hypotheses
+    "отправь": "send (informal command)", "проверю": "I will check",
+    "отправлю": "I will send", "сделаешь": "you will do (informal)",
+    "проверил": "checked (masc.; with 'would', 'would check')",
+    "попросил": "asked; requested (masc.; with 'would', 'would ask')",
+    "Настю": "Nastya (accusative case, as in 'ask Nastya')",
+    # unit38 debates
+    "тем": "that (instrumental case, as in 'agree with the idea that')",
+    "там": "there", "тихо": "quiet; quietly", "думает": "thinks (he or she)",
+    "лишняя": "unnecessary; superfluous (fem.)", "нам": "to us; for us",
+    "обсудить": "to discuss", "план": "plan", "важен": "important (masc.)",
+    "проект": "project", "срочный": "urgent (masc.)",
+    # unit39 work
+    "отвечаю": "I am responsible; I answer", "отчёт": "report",
+    "проверяю": "I check", "данные": "data",
+    "отвечаете": "you are responsible; you answer (formal)",
+    "работе": "work (prepositional case, as in 'in progress')",
+    "жду": "I wait; I am waiting", "от": "from (a person or source)",
+    "коллег": "colleagues (genitive plural, as in 'from colleagues')",
+    "коллега": "colleague", "неделе": "week (prepositional case, 'this week')",
+    "помогите": "help (formal command)", "таблицу": "spreadsheet; table (accusative case)",
+    "посмотрю": "I will look", "обеда": "lunch (genitive case, 'after lunch')",
+    # unit40 story
+    "читал": "was reading; read (masc.)", "письмо": "letter; email",
+    "позвонил": "called; phoned (masc., completed once)", "процесс": "process",
+    "прошлом": "past (prepositional case, 'in the past')",
+    "одно": "one (neuter)", "законченное": "completed; finished (neuter)",
+    "событие": "event", "сначала": "at first; first", "сказал": "said (masc.)",
+    "началась": "began; started (fem. past, as in 'the meeting had started')",
+    "случилось": "happened", "этого": "this (genitive case, as in 'after that')",
+    "открыл": "opened (masc.)", "ссылку": "link (accusative case)",
+    # unit41 conditions
+    "хорошая": "good (fem.)", "парк": "park",
+    "хорошей": "good (fem., after a negated 'will be')",
+    "будешь": "you will be (informal)", "делать": "to do",
+    "Насти": "Nastya (genitive case, as in 'Nastya has')",
+    "поможет": "will help (he or she)", "Диме": "Dima (dative case, 'help Dima')",
+    "позвоню": "I will call", "позже": "later",
+    # unit42 routine
+    "прихожу": "I come; I arrive", "домой": "home (as in 'come home')",
+    "готовлю": "I cook; I prepare", "ужин": "dinner", "делаешь": "you do (informal)",
+    "пришёл": "came; arrived (masc.)", "зазвонил": "rang; started to ring (masc.)",
+    "раз": "time (as in 'one time')",
+    # unit43 reported speech
+    "без": "without", "изменения": "change (genitive case, 'without change')",
+    "спросила": "asked (fem.)", "ли": "whether (question word after a verb)",
+    "делает": "does; is doing (he or she)",
+    "глагола": "verb (genitive case, 'after the verb')",
+    # unit44 purpose
+    "учится": "studies; learns (he or she)",
+    "вечерам": "evenings (dative plural, 'in the evenings')",
+    "чтобы": "in order to; so that", "получить": "to get; to receive",
+    "повышение": "promotion", "инфинитив": "infinitive", "субъект": "subject (of a sentence)",
+    "зачем": "why; what for", "учишься": "you study (informal)",
+    "откладывает": "puts aside; saves (he or she)", "деньги": "money",
+    "купить": "to buy", "машину": "car (accusative case)",
+    "прошедшее": "past (the past tense)", "разные": "different; various",
+    "откладываешь": "you save (informal)", "учусь": "I study",
+    "откладываю": "I save",
+    # unit45 advice
+    "сплю": "I sleep", "ночам": "nights (dative plural, 'at night')",
+    "совет": "advice", "твоём": "your (informal, prepositional case, masc.)",
+    "месте": "place (prepositional case, 'in your place')",
+    "пил": "drank (masc.; with 'would', 'would drink')",
+    "сделал": "did (masc.; with 'would', 'would do')",
+    "моём": "my (prepositional case, masc.)", "попробую": "I will try",
+    # unit46 complaint
+    "пожаловаться": "to complain", "приходил": "came (more than once; masc. past)",
+    "всё": "all; still (as in 'still leaking')", "решена": "solved; resolved (fem.)",
+    "прислали": "sent (plural past, 'you sent')",
+    "другого": "another; different (masc., accusative case)",
+    "вежливая": "polite (fem.)", "просьба": "request",
+    "мастера": "repairman (genitive or accusative case, 'a different repairman')",
+    "пришлите": "send (formal command)", "жаль": "pity; sorry",
+    "хотите": "you want (formal)", "сделали": "did (plural past, 'we did')",
+    # unit47 regrets
+    "взял": "took (masc.)", "зонт": "umbrella", "теперь": "now",
+    "весь": "all; whole; entirely (masc.)", "мокрый": "wet (masc.)",
+    "надо": "necessary; must", "взять": "to take", "сожаление": "regret",
+    "промок": "got soaked; got wet (masc.)",
+    # unit48 plans
+    "идём": "we are going", "нас": "us (after the word for 'at')",
+    "билеты": "tickets", "настоящее": "present (neuter, 'present tense')",
+    "точный": "exact; precise (masc.)", "собираюсь": "I am planning to",
+    "бегать": "to run; to jog", "утрам": "mornings (dative plural, 'in the mornings')",
+    "намерение": "intention", "может": "can; may (he, she or it)",
+    "быть": "to be (also in the phrase for 'maybe')", "начнёшь": "you will start",
+    "идея": "idea", "наверное": "probably", "права": "right; correct (fem.)",
+    "побегаю": "I will go for a run", "вместо": "instead of",
+    # unit49 unreal conditions
+    "путешествовал": "traveled (masc.; with 'would', 'would travel')",
+    "нереальное": "unreal (neuter)", "условие": "condition",
+    "денег": "money (genitive case, 'more money')", "купил": "bought (masc.; with 'would', 'would buy')",
+    "новую": "new (fem., accusative case)", "помочь": "to help",
+    "этим": "this (instrumental case, 'with this')",
+    "смягчённая": "softened (fem.)",
+    "хотела": "wanted (fem.; with 'would', 'would like')",
+    "чашку": "cup (accusative case)",
+    "путешествовала": "traveled (fem.; with 'would', 'would travel')",
+    "отчётом": "report (instrumental case, 'with the report')",
+    "просил": "asked (masc.; 'I would not be asking')",
+    # unit50 meetings
+    "предложил": "suggested (masc.; with 'would', 'would suggest')",
+    "перенести": "to move; to postpone", "встречу": "meeting (accusative case)",
+    "порекомендовал": "recommended (masc.; with 'would', 'would recommend')",
+    "формальное": "formal (neuter)", "смягчённое": "softened (neuter)",
+    "предложение": "suggestion; sentence", "нет": "there is no; no",
+    "всех": "all (genitive plural)", "данных": "data (genitive plural)",
+    "отчёта": "report (genitive case, 'for the report')",
+    "пятницы": "Friday (genitive case, 'by Friday')", "формальная": "formal (fem.)",
+    "почему": "why", "среды": "Wednesday (genitive case, 'by Wednesday')",
+    # unit51 descriptions
+    "инженером": "engineer (instrumental case, 'as an engineer')",
+    "которая": "who; which (fem.)",
+    "учительницей": "teacher (fem., instrumental case, 'as a teacher')",
+    "которое": "which (neuter)", "которые": "who; which (plural)",
+    "относительное": "relative (neuter)", "местоимение": "pronoun",
+    "согласуется": "agrees (with)", "роде": "gender (prepositional case, 'in gender')",
+    "числе": "number (prepositional case, 'in number')",
+    "которым": "whom; which (instrumental case, masc., 'with whom')",
+    "над": "over; above (also 'on' in 'work on a project')",
+    "проектом": "project (instrumental case, 'on the project')",
+    "подруга": "friend (female)",
+    "которой": "whom; which (fem., instrumental case, 'with whom')",
+    "предлог": "preposition (a word like 'in' or 'with')",
+    "творительном": "instrumental (prepositional case, masc.)",
+    "падеже": "case (grammatical; prepositional case)",
+    "новым": "new (instrumental case)", "познакомиться": "to meet; to get acquainted",
+    "говорите": "you speak; you talk (formal)", "интересный": "interesting (masc.)",
+    # unit52 retelling
+    "короче": "shorter (also in the phrase for 'in short')",
+    "говоря": "saying (as in the phrase for 'in short')",
+    "поездка": "trip", "отличной": "excellent (fem., instrumental case)",
+    "главное": "the main thing; main (neuter)", "все": "everyone; all",
+    "были": "were", "довольны": "pleased; satisfied (plural)",
+    "связки": "connectors (plural)", "главной": "main (fem., genitive case)",
+    "мысли": "idea; thought (genitive case, 'of the main idea')",
+    "во-первых": "firstly; first of all", "гуляли": "walked; strolled (plural past)",
+    "лесу": "forest (prepositional case, 'in the forest')",
+    "во-вторых": "secondly", "готовили": "cooked; prepared (plural past)",
+    "итоге": "result (prepositional case, 'in the end')",
+    "прекрасными": "wonderful (plural, instrumental case)", "порядок": "order",
+    "пересказа": "retelling (genitive case, 'of a retelling')",
+    "поехали": "went (by vehicle; plural past)", "дачу": "dacha; country house (accusative case)",
+    "солнечно": "sunny", "правда": "truth (also 'right?' as a tag question)",
+    "именно": "exactly; precisely",
+    # unit53 concessions
+    "хотя": "although", "работа": "work", "удобна": "convenient (fem.)",
+    "хватает": "is enough (as in 'I miss', literally 'is not enough for me')",
+    "общения": "communication; contact (genitive case)",
+    "коллегами": "colleagues (instrumental case, 'with colleagues')",
+    "связка": "connector (a linking word)",
+    "придаточное": "subordinate (neuter, 'subordinate clause')",
+    "уступительная": "concessive (fem.)", "менее": "less", "более": "more",
+    "сильная": "stronger; strong (fem.)", "контраста": "contrast (genitive case)",
+    "экономишь": "you save (informal)", "действительно": "really; indeed",
+    "легче": "easier", "сосредоточиться": "to concentrate",
+})
+
+# B1 senses that differ from the A1/A2 gloss of the same token.
+GLOSS_OVERRIDES.update({
+    ("b1_unit37_gipotezy", "времени"): "time (genitive case, as in 'there was no time')",
+    ("b1_unit37_gipotezy", "тебя"): "you (informal), object form (as in 'ask you')",
+    ("b1_unit38_debaty", "согласен"): "in agreement; I agree (said by a man)",
+    ("b1_unit38_debaty", "согласна"): "in agreement; I agree (said by a woman)",
+    ("b1_unit39_rabota", "за"): "for (as in 'responsible for')",
+    ("b1_unit43_kosvennaja_rech", "стоит"): "stands; is placed (also 'it is worth', as in advice: 'you should')",
+    ("b1_unit44_celi", "по"): "in; on (as in 'in the evenings'); by; according to",
+    ("b1_unit45_sovety", "можно"): "possible; allowed (as in 'what else can be done')",
+    ("b1_unit51_opisanija", "который"): "who; which; that (relative pronoun, masc.)",
+    ("b1_unit51_opisanija", "котором"): "which (prepositional case, 'about which')",
+})
+
 POS_SETS = {
     "symbol": split_words("з д р т е ъ ь й"),
     "proper_noun": PROPER_NOUNS,
@@ -426,7 +618,45 @@ for _pos, _words in {
     ),
 }.items():
     POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
+
+for _pos, _words in {
+    "proper_noun": "Настю Насти Диме",
+    "pronoun": (
+        "тем нам нас все всех этого этим твоём моём всё весь которая которое "
+        "которые которым которой"
+    ),
+    "preposition": "без от над вместо",
+    "particle": "если бы ли чтобы хотя нет",
+    "adjective": (
+        "готов правильный должен лишняя важен срочный хорошая хорошей вежливая "
+        "мокрый точный новую новым другого разные формальное смягчённое "
+        "смягчённая формальная нереальное законченное одно решена настоящее "
+        "прошедшее главное главной интересный отличной довольны прекрасными "
+        "удобна сильная уступительная относительное придаточное творительном "
+        "права надо жаль"
+    ),
+    "adverb": (
+        "раньше сначала теперь позже домой там наверное именно действительно "
+        "легче короче менее более почему зачем тихо солнечно нельзя говоря"
+    ),
+    "verb": (
+        "сказать мог объяснить могли было проверить отправить сделать "
+        "опаздывать успел отправь проверю отправлю сделаешь проверил попросил "
+        "думает обсудить отвечаю проверяю отвечаете жду помогите посмотрю "
+        "читал позвонил сказал началась случилось открыл будешь делать поможет "
+        "позвоню прихожу готовлю делаешь пришёл зазвонил спросила делает "
+        "учится получить откладывает купить откладываешь учусь откладываю "
+        "сплю пил сделал попробую пожаловаться приходил прислали пришлите "
+        "хотите сделали взял взять промок идём собираюсь бегать начнёшь "
+        "побегаю путешествовал купил помочь хотела путешествовала просил "
+        "предложил перенести порекомендовал согласуется говорите познакомиться "
+        "гуляли готовили поехали хватает сосредоточиться экономишь может быть "
+        "были учишься"
+    ),
+}.items():
+    POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
 POS_SETS["particle"] = set(POS_SETS["particle"]) | {"потому что"}
+POS_SETS["particle"] = set(POS_SETS["particle"]) | {"во-первых", "во-вторых"}
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
