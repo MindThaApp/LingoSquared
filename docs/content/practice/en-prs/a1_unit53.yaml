@@ -23,7 +23,15 @@ review:
     from 20 course-wide tokens (past verbs, ''sees'', ''won'' ...) to the unit''s 3 words (en_prs_a1_unit53_words).
     (2) order.005 ''او {item}.'' offered incomplete/odd sentences (''او شد.'', ''او کرد.'', ''او برد.'')
     -> ''او نمایشگاه را {item}.'' with the unit verb دید (the taught sentence). NATIVE FLAGS: none beyond
-    thin-unit coverage (3 words).'
+    thin-unit coverage (3 words).
+
+
+    Added 2026-10-25 (session 12): seven fill_in_blank / word_order / fixed-sentence translation templates
+    over the unit''s own reading and dialogue sentences (the checkpoint returned 11 items, now 15). Every slot
+    is single-candidate through the automatic per-lesson tags (en_prs_a1_unit53_lesson01_words = موزیم,
+    lesson02_words = نمایشگاه, lesson05_words = دید); no frame word is a candidate, no vocabulary added, no
+    Write-exactly task touched. Sentences are copied from the unit (Dari register, no 2pl endings needed).
+    NATIVE FLAGS: none.'
   required_next_reviewer: native_speaker_review
 tag_schema:
   part_of_speech:
@@ -41,6 +49,9 @@ tag_schema:
     semantic:
     - en_prs_a1_unit53_words
     - museum_word
+    - en_prs_a1_unit53_lesson01_words
+    - en_prs_a1_unit53_lesson02_words
+    - en_prs_a1_unit53_lesson05_words
 templates:
 - content_key: practice.en-prs.prs.a1.unit53.lesson01.museum_and_staff_vocabulary.choose.001
   lesson_content_key: prs.a1.unit53.lesson01.museum_and_staff_vocabulary
@@ -221,5 +232,157 @@ templates:
       direction: rtl
   feedback_frame:
     text: He/she saw the exhibition. -- third-person past verb
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson01.museum_and_staff_vocabulary.fill.006
+  lesson_content_key: prs.a1.unit53.lesson01.museum_and_staff_vocabulary
+  type: fill_in_blank
+  frame:
+    text: 'کارمند در {item} است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson01_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: کارمند در موزیم است means 'the staff member is in the museum'.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson02.exhibition_and_ticket_price.fill.007
+  lesson_content_key: prs.a1.unit53.lesson02.exhibition_and_ticket_price
+  type: fill_in_blank
+  frame:
+    text: 'در موزیم، {item} عکس است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson02_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: در موزیم، نمایشگاه عکس است means 'in the museum, the exhibition is photographs'.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson02.exhibition_and_ticket_price.fill.008
+  lesson_content_key: prs.a1.unit53.lesson02.exhibition_and_ticket_price
+  type: fill_in_blank
+  frame:
+    text: '{item} چیست؟'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson02_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: نمایشگاه چیست means 'what is the exhibition?', the question from this unit's dialogue.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson01.museum_and_staff_vocabulary.order.009
+  lesson_content_key: prs.a1.unit53.lesson01.museum_and_staff_vocabulary
+  type: word_order
+  frame:
+    text: 'همایون در {item} است.'
+    language_code: prs
+    direction: rtl
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'همایون در {item} است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: Humayun is in the museum, so the place comes before the final است.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson01.museum_and_staff_vocabulary.translate.010
+  lesson_content_key: prs.a1.unit53.lesson01.museum_and_staff_vocabulary
+  type: translation
+  frame:
+    text: Humayun is in the museum.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'همایون در {item} است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: در موزیم means 'in the museum' and است closes the sentence.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson02.exhibition_and_ticket_price.translate.011
+  lesson_content_key: prs.a1.unit53.lesson02.exhibition_and_ticket_price
+  type: translation
+  frame:
+    text: The photo exhibition is interesting.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson02_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} عکس جالب است.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: In Dari the noun comes first and the adjective جالب is placed before است.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-prs.prs.a1.unit53.lesson05.reading.translate.012
+  lesson_content_key: prs.a1.unit53.lesson05.reading
+  type: translation
+  frame:
+    text: He saw the exhibition.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: prs
+      part_of_speech: verb
+      agreement_tags:
+        semantic: en_prs_a1_unit53_lesson05_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: 'او نمایشگاه را {item}.'
+      language_code: prs
+      direction: rtl
+  feedback_frame:
+    text: را marks the object, and the verb دید closes the sentence.
     language_code: en
     direction: ltr
