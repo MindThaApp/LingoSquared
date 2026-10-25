@@ -762,8 +762,8 @@ bugs and need zero fluency in the target language:**
   import).
 - **Spine outcome existence**: verify every `spine_outcome_id` the unit
   references exists verbatim in `universal_spine.yaml`
-  (`grep -c "id: <exact-id>$"`), and that `scripts/content_manifest.
-  txt` actually lists the new files.
+  (`grep -c "id: <exact-id>$"`), and that `scripts/manifest.d/content/<course>.txt`
+  actually lists the new files.
 - **`accepted_answers` shape**: every variant entry (when a dict) must
   have a `value:` key, never `text:` or any other name — a bug that
   passes `validate` clean and only crashes real `compile`

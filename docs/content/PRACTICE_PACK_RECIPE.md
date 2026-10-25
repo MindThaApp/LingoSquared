@@ -202,7 +202,7 @@ docs/content/practice/<direction>/<level>_unit<NN>.yaml
 
 **One file per unit. Never put two units in one file.**
 
-**Do NOT edit `scripts/practice_manifest.txt`.** Many agents author packs
+**Do NOT edit `scripts/manifest.d/practice/*.txt`.** Many agents author packs
 concurrently and that file is a known concurrency hazard. Report the pack path to
 the coordinator; the coordinator appends it to the direction's manifest line.
 
@@ -846,7 +846,7 @@ for grammaticality (§1.1). For every `word_order` frame and every fixed-sentenc
 confirm **every** one of them is grammatical in the frame and is not a literal word of
 the frame. Report the course-scope candidate count per sentence frame.
 
-**Do NOT run `scripts/verify.sh` and do NOT edit `scripts/practice_manifest.txt`** —
+**Do NOT run `scripts/verify.sh` and do NOT edit `scripts/manifest.d/practice/*.txt`** —
 `verify.sh` reads the manifest, and the manifest belongs to the coordinator.
 
 ---
@@ -899,7 +899,7 @@ the frame. Report the course-scope candidate count per sentence frame.
 15. **DO NOT** mismatch `direction` and `language_code`, or use Arabic Yeh/Kaf in
     fa/prs. (§7)
 16. **DO NOT** mix Iranian and Afghan verb endings inside one `prs` pack. (1.28)
-17. **DO NOT** edit `scripts/practice_manifest.txt`, `scripts/backfill_lexemes*.py`,
+17. **DO NOT** edit `scripts/manifest.d/practice/*.txt`, `scripts/backfill_lexemes*.py`,
     or any file outside your own pack. Many agents are running concurrently.
 18. **DO NOT** declare a decorative slot the frame never uses just to inflate target
     coverage — the item then credits the wrong lexeme in the learner's SRS.
@@ -986,7 +986,7 @@ templates:
    sense the unit actually teaches, and whether you excluded it or worked around it.
    The coordinator routes these to the backfill lane.
 7. **The manifest line the coordinator must add** — the pack path appended to the
-   existing `<direction>|…` line in `scripts/practice_manifest.txt`. Do not edit it
+   existing `<direction>|…` line in `scripts/manifest.d/practice/*.txt`. Do not edit it
    yourself.
 8. Anything you had to leave undone (e.g. a lesson with no usable tag, a unit that
    turned out to be backfill-blocked).
