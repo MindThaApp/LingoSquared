@@ -12,6 +12,7 @@ import { EmphasizedText } from "../components/EmphasizedText";
 import { invalidateProgressQueries } from "../lib/invalidateProgress";
 import { ApiError } from "@lingo/shared/api/client";
 import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
+import { AnswerFeedbackExtras } from "../components/AnswerFeedbackExtras";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import { AlmostFeedback } from "../components/AlmostFeedback";
@@ -189,6 +190,7 @@ function PracticeCard({
                   correct={formatCorrectResponse(result.correct_response)}
                   dir={answerDirectionForExercise({ id: item.id, type: item.type, order: 0, prompt: item.prompt })}
                 />
+                <AnswerFeedbackExtras result={result} prompt={item.prompt} />
               </div>
             );
           }
@@ -206,6 +208,7 @@ function PracticeCard({
                   <EmphasizedText text={result.feedback} />
                 </p>
               )}
+              <AnswerFeedbackExtras result={result} prompt={item.prompt} />
             </div>
           );
         })()}

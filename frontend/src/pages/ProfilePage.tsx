@@ -7,6 +7,7 @@ import { ApiError } from "@lingo/shared/api/client";
 import { isGuestUser, useAuth } from "../auth/AuthContext";
 import { setAccountDeletedNotice } from "../lib/accountDeletedNotice";
 import { VoiceSettings } from "../components/VoiceSettings";
+import { FeedbackSettings } from "../components/FeedbackSettings";
 import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 import { DailyGoalPicker } from "../components/DailyGoalPicker";
 import { NotificationSettings } from "../components/NotificationSettings";
@@ -219,6 +220,7 @@ export function ProfilePage() {
 
       <NotificationSettings />
       <SpeechSpeedSettings />
+      <FeedbackSettings />
       <VoiceSettings />
       <CrashReportSettings />
       <ReportProblem />
