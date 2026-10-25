@@ -9,8 +9,9 @@ All plumbing lives in scripts/_target_lexeme_backfill_common.py (see its
 docstring for the tag scheme); this file is data only: one hand-written
 English gloss and one part of speech per citation form.
 
-Scope: A1 (the "en-it-a1" manifest group, units 01-24) and A2 (the "en-it-a2"
-group, units 25-34, added in session 11). B1+ is not classified yet; extend
+Scope: A1 (the "en-it-a1" manifest group, units 01-24), A2 (the "en-it-a2"
+group, units 25-34, added in session 11) and B1 (the "en-it-b1" group, units
+35-53, added in session 12). B2+ is not classified yet; extend
 LEVELS and the tables below together. The A2 course is its own course, so a
 token already glossed for A1 is simply reused at first sight in A2.
 
@@ -55,9 +56,10 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "it"
-LEVELS = {"a1": "en-it-a1", "a2": "en-it-a2"}
+LEVELS = {"a1": "en-it-a1", "a2": "en-it-a2", "b1": "en-it-b1"}
 
-PROPER_NOUNS = {"Elena", "Sam", "Chicago", "Milano", "Roma", "Bologna", "Italia"}
+PROPER_NOUNS = {"Elena", "Sam", "Chicago", "Milano", "Roma", "Bologna", "Italia",
+                "Firenze", "Napoli", "Colosseo"}
 _PROPER_BY_LOWER = {p.lower(): p for p in PROPER_NOUNS}
 
 
@@ -275,20 +277,101 @@ GLOSSES: dict[str, str] = {
     "rimborso": "refund", "sostituzione": "replacement", "possiamo": "we can",
     "fare": "to do; to make", "oppure": "or else", "quattordici": "fourteen",
     "reso": "return (of goods)",
+    # B1 unit35 abilities
+    "modo": "way; manner (in: make sure that)", "riceva": "receives (subjunctive)",
+    "ricevere": "to receive", "avrei": "I would have",
+    "potuto": "been able to (past participle)",
+    "ricevesse": "received (imperfect subjunctive)", "conferma": "confirmation",
+    # B1 unit36 obligations
+    "bisogna": "it is necessary", "consegni": "hands in (subjunctive)",
+    "firmi": "signs (subjunctive)", "firmare": "to sign",
+    "bisognava": "it was necessary",
+    "l": "it (shortened form of lo, in: I did not do it)",
+    "chiamassi": "called (imperfect subjunctive, I)", "chiamare": "to call",
+    # B1 unit37 hypotheses
+    "arriva": "arrives", "arrivare": "to arrive", "chiamerò": "I will call",
+    "arrivasse": "arrived (imperfect subjunctive)", "chiamerei": "I would call",
+    # B1 unit38 debate
+    "sul": "on the (masc.)", "sia": "is (subjunctive)", "risparmiare": "to save",
+    "pensa": "thinks", "manca": "is missing",
+    # B1 unit39 work
+    "occupo": "I take care of", "del": "of the (masc.)", "rapporto": "report",
+    "responsabile": "responsible", "quasi": "almost", "controllare": "to check",
+    # B1 unit40 storytelling
+    "arrivato": "arrived (masc.)", "dopo": "after; then",
+    "consegnato": "handed in (past participle)", "mentre": "while",
+    "preparavo": "I was preparing", "chiamato": "called (past participle)",
+    "detto": "said (past participle)", "aspettava": "was waiting",
+    # B1 unit41-43
+    "piovere": "to rain", "resto": "I stay", "restare": "to stay",
+    "usciamo": "we go out", "uscire": "to go out",
+    "controllo": "I check", "email": "email", "trovato": "found (past participle)",
+    "trovare": "to find", "riunione": "meeting", "inizia": "starts",
+    "iniziare": "to start", "chiesto": "asked (past participle)",
+    "chiedere": "to ask",
+    # B1 unit44 purposes
+    "studiare": "to study", "l'italiano": "the Italian language",
+    "lavorare": "to work", "parto": "I leave", "partire": "to leave",
+    "perdere": "to lose; to miss",
+    # B1 unit45 advice
+    "fossi": "I were (subjunctive)", "parlerei": "I would speak", "capo": "boss",
+    "dovresti": "you should", "spiegare": "to explain", "problema": "problem",
+    "chiedi": "you ask (informal)", "ferie": "vacation; time off",
+    "buona": "good (fem.)", "idea": "idea", "penso": "I think",
+    # B1 unit46 serious complaint
+    "riscaldamento": "heating", "già": "already", "volte": "times",
+    "mandasse": "sent (imperfect subjunctive)", "stesso": "itself; the very same",
+    "possibile": "possible",
+    # B1 unit47 regrets
+    "dovuto": "had to; should have (past participle)",
+    "avessi": "I had (subjunctive)", "saputo": "known (past participle)",
+    # B1 unit48 plans
+    "intenzione": "intention", "settimane": "weeks",
+    "comprato": "bought (past participle)", "probabilmente": "probably",
+    "tornerò": "I will return", "agosto": "August", "forse": "maybe",
+    "resterò": "I will stay", "mese": "month",
+    # B1 unit49 conditional
+    "viaggerei": "I would travel", "viaggiare": "to travel",
+    "potessi": "I could (subjunctive)", "andrei": "I would go",
+    "potresti": "could you (informal)", "chiudere": "to close",
+    "preferirei": "I would prefer",
+    # B1 unit50 meetings
+    "proporrei": "I would suggest", "rimandare": "to postpone",
+    "potremmo": "we could", "procede": "is progressing", "progetto": "project",
+    "finito": "finished (masc.)", "manderò": "I will send", "un'email": "an email",
+    "dettagli": "details",
+    # B1 unit51 descriptions
+    "ristorante": "restaurant", "abbiamo": "we have",
+    "visitato": "visited (past participle)", "collega": "colleague",
+    "lavora": "works", "unire": "to join; to combine", "fatti": "facts",
+    "persona": "person", "cui": "which; whom (after a preposition)",
+    "simpatica": "nice; friendly (fem.)", "città": "city", "abito": "I live",
+    # B1 unit52 summarizing
+    "Firenze": "Florence", "Napoli": "Naples", "Colosseo": "the Colosseum",
+    "bistecca": "steak", "nuotato": "swum (past participle)", "mare": "sea",
+    "breve": "short; brief", "punto": "point", "principale": "main",
+    "divertito": "had fun (past participle)", "dettaglio": "detail",
+    "essenziale": "essential", "riassumere": "to summarize", "viaggio": "trip",
+    # B1 unit53 concessions
+    "anche": "even; also", "ragione": "reason; right (in: you are right)",
+    "nonostante": "despite", "continua": "continues", "opinione": "opinion",
+    "tuttavia": "however", "credo": "I believe", "necessario": "necessary",
+    "cambiare": "to change", "qualcosa": "something", "primo": "first (masc.)",
+    "chiaro": "clear",
 }
 
 POS_SETS = {
     "proper_noun": PROPER_NOUNS,
     "pronoun": split_words(
         "tu lei ci si ti mi io che quanto cosa chi ne questo questa te me "
-        "quale qual lo mio mia tuo quanti sua"
+        "quale qual lo mio mia tuo quanti sua l cui qualcosa"
     ),
     "preposition": split_words(
         "entro secondo durante della dalle a di in da per con al alla alle dal nel nella dei delle accanto "
-        "davanti dietro sopra sotto"
+        "davanti dietro sopra sotto del sul nonostante"
     ),
     "particle": split_words(
-        "e o il la le i un una non se ma d perché come c gli oppure però invece"
+        "e o il la le i un una non se ma d perché come c gli oppure però invece mentre"
     ),
     "adjective": split_words(
         "informale formale rispettoso americano americana italiana italiano "
@@ -296,12 +379,15 @@ POS_SETS = {
         "fiscale comodo rumoroso utile utili corrente inclusa forte leggera molta "
         "bagnato disponibile cancellato sostitutivo difettoso "
         "bel caldo freddo piccola media grande felice triste stanco stanca "
-        "nervoso blu postale vicino dritto benvenuto"
+        "nervoso blu postale vicino dritto benvenuto "
+        "responsabile simpatica buona breve principale essenziale necessario "
+        "primo chiaro possibile finito stesso"
     ),
     "adverb": split_words(
         "dove dov quando sì no poi allora così bene domani oggi dopodomani meno più molto solo sempre presto "
         "ieri stamattina stasera male piano certo anch'io qui po po' "
-        "troppo spesso poco tardi prima ogni"
+        "troppo spesso poco tardi prima ogni "
+        "quasi dopo già forse probabilmente anche tuttavia"
     ),
     "verb": {"ce n'è"} | split_words(
         "stai sta vediamo chiama chiami chiamo sono sei è parli parla parlo "
@@ -313,7 +399,17 @@ POS_SETS = {
         "desidera basta riposa arrivi arrivo dov'è conoscerla scusi "
         "registrare prendere porti consegnare capisco aprire aiutarla servono "
         "ha prenda beva prenotare dica può venire confermo perso mandare uso "
-        "leggere perdo riposo vedo funziona possiamo fare"
+        "leggere perdo riposo vedo funziona possiamo fare "
+        "riceva ricevere ricevesse avrei potuto bisogna consegni firmi firmare "
+        "bisognava chiamassi chiamare arriva arrivare chiamerò arrivasse chiamerei "
+        "sia risparmiare pensa manca occupo controllare arrivato consegnato "
+        "preparavo chiamato detto aspettava piovere resto restare usciamo uscire "
+        "controllo trovato trovare inizia iniziare chiesto chiedere studiare "
+        "lavorare parto partire perdere fossi parlerei dovresti spiegare chiedi "
+        "penso mandasse dovuto avessi saputo comprato tornerò resterò viaggerei "
+        "viaggiare potessi andrei potresti chiudere preferirei proporrei "
+        "rimandare potremmo procede manderò abbiamo visitato lavora unire abito "
+        "nuotato riassumere divertito continua credo cambiare"
     ),
     "phrase": split_words(
         "ciao buongiorno buonasera buonanotte grazie ecco pronto arrivederla "
@@ -342,6 +438,23 @@ GLOSS_OVERRIDES = {
     ("a2_unit31_viaggio_interrotto", "dal"): "from the (masc.)",
     ("a2_unit32_vita_online", "tempo"): "time",
     ("a2_unit34_reclamo", "lo"): "the (masc., before some sounds)",
+    ("b1_unit35_capacita", "che"): "that (introduces a clause)",
+    ("b1_unit38_dibattito", "piano"): "plan",
+    ("b1_unit38_dibattito", "tempo"): "time",
+    ("b1_unit38_dibattito", "pronto"): "ready",
+    ("b1_unit38_dibattito", "fa"): "makes; does",
+    ("b1_unit41_condizioni", "chiamo"): "I call",
+    ("b1_unit45_consigli", "ci"): "about it; there",
+    ("b1_unit52_riassumere", "si"): "himself (reflexive)",
+    ("b1_unit53_concessioni", "secondo"): "second (masc.)",
+}
+
+# POS of a B1 first-sight sense that differs from the A1/A2 entry.
+POS_OVERRIDES = {
+    ("b1_unit35_capacita", "che"): "particle",
+    ("b1_unit38_dibattito", "piano"): "noun",
+    ("b1_unit38_dibattito", "pronto"): "adjective",
+    ("b1_unit53_concessioni", "secondo"): "adjective",
 }
 
 part_of_speech = pos_lookup(POS_SETS)
@@ -359,6 +472,7 @@ def iter_specs():
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
             gloss_overrides=GLOSS_OVERRIDES,
+            pos_overrides=POS_OVERRIDES,
         )
 
 
