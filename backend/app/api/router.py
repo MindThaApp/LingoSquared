@@ -152,6 +152,7 @@ from app.review.placement import (
     recommend_from_answers,
 )
 from app.services import tts as tts_service
+from app.services import audio_prerender
 from app.services import stt as stt_service
 from app.services import social_auth
 from app.services import push as push_service
@@ -3258,6 +3259,22 @@ def get_media_asset(key: str):
         media_type=media_type,
         headers={"Cache-Control": MEDIA_CACHE_CONTROL},
     )
+@router.get("/media/audio/{name}", name="get_prerendered_audio")
+def get_prerendered_audio(name: str):
+    """Pre-rendered TTS clip by content hash (see scripts/render_audio.py).
+
+    nginx normally serves /media/audio/ straight from the volume; this is the
+    fallback for dev, mobile builds and any setup without that nginx location.
+    The strict name pattern is the only path input, so traversal is impossible.
+    """
+    if audio_prerender.AUDIO_NAME_RE.fullmatch(name) is None:
+        fail(404, "audio_not_found", "No pre-rendered audio with that name")
+    path = Path(get_settings().media_audio_dir) / name
+    if not path.is_file():
+        fail(404, "audio_not_found", "No pre-rendered audio with that name")
+    return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": MEDIA_CACHE_CONTROL})
+
+
 @router.post("/admin/content/import",response_model=ImportOut)
 def content_import(body:ImportRequest,user=Depends(admin_user),db:Session=Depends(get_db)):
     count,messages,counters=import_content(db,body)
