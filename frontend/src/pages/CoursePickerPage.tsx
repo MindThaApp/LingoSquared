@@ -136,7 +136,10 @@ function UiLanguagePrompt({ sourceCode }: { sourceCode: string }) {
   );
 }
 
-export function CoursePickerPage() {
+export function CoursePickerPage({ onPickCourse }: { onPickCourse?: (course: CourseSummary) => void } = {}) {
+  // onPickCourse is set by the guided first start (OnboardingPage): a course
+  // card then selects the course instead of opening the level check, and the
+  // per-course level / placement shortcuts are replaced by the next step.
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
@@ -307,6 +310,25 @@ export function CoursePickerPage() {
 
           {courses?.map((course, i) => (
             <div key={course.id} style={{ marginBottom: 12 }}>
+              {onPickCourse ? (
+                <button
+                  type="button"
+                  className="card continue-card"
+                  style={{ width: "100%", textAlign: "start", font: "inherit", color: "inherit", cursor: "pointer" }}
+                  onClick={() => onPickCourse(course)}
+                >
+                  <div className="continue-info">
+                    <h3 style={{ margin: "0 0 4px" }}>
+                      {course.title} <span className="badge">{course.level}</span>
+                    </h3>
+                    <span className="muted">
+                      {t(`cefr.${course.level}`)} · {t("course_picker.unit_count", { count: course.unit_count })}
+                      {i === 0 && courses.length > 1 && t("course_picker.start_here_hint")}
+                    </span>
+                  </div>
+                  <span className="btn">{t("onboarding.choose")}</span>
+                </button>
+              ) : (
               <Link to={`/courses/${course.id}/level`}>
                 <div className="card continue-card">
                   <div className="continue-info">
@@ -321,6 +343,7 @@ export function CoursePickerPage() {
                   <span className="btn">{t("course_picker.start")}</span>
                 </div>
               </Link>
+              )}
               {descriptionById.get(course.id) && (
                 <p className="muted course-description" style={{ margin: "4px 0 0" }}>
                   {descriptionById.get(course.id)}
@@ -334,6 +357,7 @@ export function CoursePickerPage() {
                   yet. "Take the test" always shows: it's a direct shortcut
                   into the real placement test, bypassing the level-check
                   page entirely. */}
+              {!onPickCourse && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
                 {getLevelPreference(course.id) && (
                   <button
@@ -356,6 +380,7 @@ export function CoursePickerPage() {
                   {t("placement.course_picker_cta")}
                 </button>
               </div>
+              )}
             </div>
           ))}
         </>
