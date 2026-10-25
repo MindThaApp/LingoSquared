@@ -28,6 +28,13 @@ function safeSameOriginUrl(raw) {
   }
 }
 
+// Pre-rendered TTS clips (/media/audio/<content-hash>.mp3, immutable). Separate
+// cache so the shell cleanup below never evicts them and the shell handler
+// never stores them unbounded. Cache-on-play only (nothing is precached) and
+// capped: oldest entries go first once MAX_AUDIO_ENTRIES is exceeded.
+const AUDIO_CACHE = "lingo2-audio-v1";
+const MAX_AUDIO_ENTRIES = 400;
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(SHELL_CACHE).then((cache) => cache.addAll(["/", "/manifest.webmanifest"])),
@@ -43,7 +50,7 @@ self.addEventListener("activate", (event) => {
     caches
       .keys()
       .then((keys) =>
-        Promise.all(keys.filter((k) => k !== SHELL_CACHE).map((k) => caches.delete(k))),
+        Promise.all(keys.filter((k) => k !== SHELL_CACHE && k !== AUDIO_CACHE).map((k) => caches.delete(k))),
       )
       .then(() => self.clients.claim()),
   );
@@ -92,8 +99,65 @@ self.addEventListener("notificationclick", (event) => {
   );
 });
 
+async function trimAudioCache(cache) {
+  const keys = await cache.keys(); // insertion order: oldest first
+  for (let i = 0; i < keys.length - MAX_AUDIO_ENTRIES; i++) await cache.delete(keys[i]);
+}
+
+// <audio> asks for byte ranges (and Safari insists on 206 answers). Serve a
+// cached full body as a 206 slice; on a miss go to the network and, in the
+// background, fetch + store the whole file with a plain GET for next time.
+async function audioResponse(request, waitUntil) {
+  const cache = await caches.open(AUDIO_CACHE);
+  const hit = await cache.match(request.url);
+  const range = request.headers.get("range");
+  if (hit) {
+    if (!range) return hit;
+    const m = /^bytes=(\d*)-(\d*)$/.exec(range);
+    const buf = await hit.arrayBuffer();
+    if (m && (m[1] || m[2])) {
+      const size = buf.byteLength;
+      let start = m[1] ? parseInt(m[1], 10) : Math.max(0, size - parseInt(m[2], 10));
+      let end = m[1] && m[2] ? Math.min(parseInt(m[2], 10), size - 1) : size - 1;
+      if (start <= end && start < size) {
+        return new Response(buf.slice(start, end + 1), {
+          status: 206,
+          headers: {
+            "Content-Type": "audio/mpeg",
+            "Content-Range": "bytes " + start + "-" + end + "/" + size,
+            "Content-Length": String(end - start + 1),
+          },
+        });
+      }
+    }
+    return new Response(buf, { status: 200, headers: { "Content-Type": "audio/mpeg" } });
+  }
+  const res = await fetch(request);
+  if (res.ok && !range && res.status === 200) {
+    const copy = res.clone();
+    waitUntil(cache.put(request.url, copy).then(() => trimAudioCache(cache)).catch(() => {}));
+  } else if (res.ok && range) {
+    // Ranged answer: fetch the whole file once in the background for next time.
+    waitUntil(
+      fetch(request.url)
+        .then((full) => (full.ok && full.status === 200 ? cache.put(request.url, full) : undefined))
+        .then(() => trimAudioCache(cache))
+        .catch(() => {}),
+    );
+  }
+  return res;
+}
+
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
+  if (
+    event.request.method === "GET" &&
+    url.origin === self.location.origin &&
+    url.pathname.startsWith("/media/audio/")
+  ) {
+    event.respondWith(audioResponse(event.request, (p) => event.waitUntil(p)));
+    return;
+  }
   // Never intercept API calls or non-GET requests.
   if (event.request.method !== "GET") return;
   // Only handle same-origin static assets/navigation, minus API and the
