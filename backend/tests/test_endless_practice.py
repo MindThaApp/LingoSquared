@@ -994,11 +994,13 @@ def test_word_order_prompt_includes_a_gloss_hint_not_just_the_instruction(
         # mixed-language run-on (e.g. "Ben you; your (informal) nieuw
         # hier?").
         assert hint["text"].endswith(" ahora")
+        # Cloze-hint form: blank plus the gloss in parentheses, so the
+        # English word is not spliced into the Spanish sentence.
         assert hint["text"] in {
-            "*one* ahora",
-            "*two* ahora",
-            "*three* ahora",
-            "*four* ahora",
+            "___ (*one*) ahora",
+            "___ (*two*) ahora",
+            "___ (*three*) ahora",
+            "___ (*four*) ahora",
         }
 
 
