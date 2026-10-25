@@ -9,10 +9,15 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 (the "en-de" manifest group, units 01-24) and A2 (the "en-de-a2"
-group, units 25-34; session 11). B1+ is not classified yet; extend LEVELS and
-the tables below together. A1 and A2 are separate courses, so A2 re-glosses
-every token it introduces, function words included.
+Scope: A1 (the "en-de" manifest group, units 01-24), A2 (the "en-de-a2"
+group, units 25-34; session 11) and B1 (the "en-de-b1" group, units 35-53;
+session 12). B2+ is not classified yet; extend LEVELS and the tables below
+together. A1, A2 and B1 are separate courses, so each re-glosses every token
+it introduces, function words included. B1_GLOSS_OVERRIDES holds the few
+tokens whose B1 sense differs from the A1/A2 entry.
+
+The B1 course must be imported first: the runner stops with a clear error
+("course must be imported first") when the en-de-b1 course row is missing.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md §0.1, §6.6):
 * the gloss is the sense the unit actually teaches at first sight; a token
@@ -68,7 +73,7 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "de"
-LEVELS = {"a1": "en-de", "a2": "en-de-a2"}
+LEVELS = {"a1": "en-de", "a2": "en-de-a2", "b1": "en-de-b1"}
 
 PROPER_NOUNS = {
     "Anna", "Felix", "Berlin", "Deutschland", "England", "Frankreich",
@@ -119,6 +124,15 @@ CITATION_FORMS: dict[str, str] = {
     "Welche": "welche", "Bekomme": "bekomme", "Gibt": "gibt",
     "Kommen": "kommen", "In": "in", "Am": "am", "Leider": "leider",
     "Vielen": "vielen",
+    # B1 (units 35-53): sentence-initial forms of non-nouns, plus the
+    # dictation spelling "tag" of the noun Tag
+    "Letzte": "letzte", "Konnten": "konnten", "Könnten": "könnten",
+    "Wenn": "wenn", "Aber": "aber", "Müssen": "müssen", "Während": "während",
+    "Als": "als", "Wirklich": "wirklich", "Vielleicht": "vielleicht",
+    "Obwohl": "obwohl", "Zwar": "zwar", "Deshalb": "deshalb",
+    "Außerdem": "außerdem", "Zusammenfassend": "zusammenfassend",
+    "Einverstanden": "einverstanden", "Warum": "warum", "Wofür": "wofür",
+    "An": "an", "Danke": "danke", "tag": "Tag",
 }
 
 
@@ -308,6 +322,101 @@ GLOSSES: dict[str, str] = {
     "Geld": "money", "bezahlen": "to pay", "bar": "in cash", "Karte": "card",
     "mit": "with; by (means of)", "Betrag": "amount", "zahlen": "pay; to pay",
     "Quittung": "receipt", "Zahlung": "payment", "zahlt": "pays (he/she/it)",
+    # b1 (units 35-53). New tokens only; tokens already glossed above keep
+    # their A1/A2 entry unless B1_GLOSS_OVERRIDES says the unit teaches
+    # another sense.
+    "Frau": "Mrs.; Ms.; woman", "Klein": "Klein (a surname)",
+    "Bürgeramt": "registration office; citizens' office",
+    "sagen": "to say; to tell", "ob": "whether; if", "letzte": "last",
+    "konnte": "could; was able to (I, he, she)",
+    "konnten": "could; were able to (formal you; they)",
+    "schon": "already", "Nummer": "number", "geben": "to give; give (formal you)",
+    "könnte": "could (hypothetical; I, he, she)",
+    "Formular": "form (to fill in)", "fehlt": "is missing",
+    "müssen": "must; have to (we; they; formal you)",
+    "dürfen": "may; are allowed to (we; they; formal you)",
+    "ohne": "without", "Unterschrift": "signature",
+    "hätte": "would have; had (hypothetical; I, he, she)",
+    "früher": "earlier; sooner", "sollen": "should; ought to (infinitive)",
+    "fertig": "finished; ready", "stimmt": "is correct; is right",
+    "unterschreibe": "I sign", "jetzt": "now", "helfen": "to help",
+    "würde": "would (I, he, she)", "dringend": "urgent",
+    "wäre": "would be (hypothetical; I, he, she)", "sofort": "immediately",
+    "stimme": "I agree", "Homeoffice": "working from home",
+    "besser": "better", "spart": "saves (time or money)",
+    "denn": "because (giving a reason in a main clause)",
+    "Teamarbeit": "teamwork", "einfacher": "easier; simpler",
+    "denken": "think; you think (formal)", "über": "about; over",
+    "Videoanrufe": "video calls", "praktisch": "practical",
+    "Projekt": "project", "zuständig": "responsible (for)", "Planung": "planning",
+    "Bericht": "report", "wofür": "for what; what for",
+    "diese": "this (before a fem. noun)", "Stand": "status; state of progress",
+    "beim": "at the; with the (a contraction)", "während": "while; during",
+    "arbeitete": "worked; was working (I, he, she)", "klingelte": "rang",
+    "kam": "came (I, he, she)", "beschäftigt": "busy", "sagte": "said (I, he, she)",
+    "plötzlich": "suddenly", "gesagt": "said (past participle)",
+    "Freundin": "friend (female); girlfriend", "bestimmt": "surely; certainly",
+    "regnen": "to rain", "bleibe": "I stay", "bleiben": "to stay",
+    "Hause": "home (as in at home)", "wandern": "to hike", "allein": "alone",
+    "immer": "always", "hatte": "had (I, he, she)",
+    "vorbei": "by; over (part of the verb meaning to drop by)",
+    "vorbeikommen": "to drop by", "wirklich": "really", "schön": "nice; beautiful",
+    "fragte": "asked (I, he, she)", "gefragt": "asked (past participle)",
+    "Kollegin": "colleague (female)", "geantwortet": "answered (past participle)",
+    "antworten": "to answer", "sparen": "to save (money)", "Reise": "trip; journey",
+    "spricht": "speaks (he, she)", "damit": "so that", "ihn": "him; it (masc. accusative)",
+    "versteht": "understands (he, she)", "verstehen": "to understand",
+    "schreibt": "writes (he, she)", "vergisst": "forgets (he, she)",
+    "vergessen": "to forget", "warum": "why", "spreche": "I speak",
+    "Stress": "stress", "bei": "at; with (as in at work)", "Arbeit": "work",
+    "Ihrer": "your (formal, before a fem. noun after a preposition)",
+    "schlafe": "I sleep", "abends": "in the evening",
+    "keinen": "no; not a (masc. accusative)", "sollten": "should (we; they; formal you)",
+    "öfter": "more often", "Ihrem": "your (formal, before a masc. noun after a preposition)",
+    "Chef": "boss", "schwierig": "difficult", "sollte": "should (I, he, she)",
+    "versuchen": "to try", "guter": "good (before a masc. noun)", "Rat": "advice",
+    "danken": "to thank", "funktionieren": "to work; to function",
+    "angerufen": "called (past participle)", "so": "so; as", "schnell": "fast; quick",
+    "möglich": "possible", "reparieren": "to repair", "König": "König (a surname)",
+    "leid": "sorry (in the phrase meaning I am sorry)", "passiert": "happened",
+    "schicke": "I send", "schicken": "to send", "Techniker": "technician",
+    "schnelle": "quick (before a fem. noun)", "melden": "to report; to notify",
+    "lange": "for a long time; long", "warten": "to wait",
+    "wünschte": "wished (in: I wish I had...)",
+    "kaputtgegangen": "broken (past participle, of breaking down)",
+    "repariert": "repaired (past participle)",
+    "nächste": "next (after an article)", "Mal": "time (an occasion)",
+    "Sommer": "summer", "ziehen": "to move (to a new place)", "werde": "I will",
+    "nächstes": "next (without an article)", "Jahr": "year",
+    "eigenes": "own (before a neuter noun)", "wahrscheinlich": "probably",
+    "Job": "job", "wechseln": "to change", "vielleicht": "perhaps; maybe",
+    "ziehe": "I move (to a new place)", "umziehen": "to move house",
+    "spannend": "exciting", "beide": "both", "Hauptpunkt": "main point",
+    "nächster": "next (before a fem. noun after a preposition)",
+    "neue": "new (before a fem. or plural noun)", "zusammenfassend": "in summary",
+    "lässt": "lets (in the phrase meaning it can be said)",
+    "Frühstück": "breakfast", "anbietet": "offers", "außerdem": "also; besides",
+    "erwähnt": "mentions", "Detail": "detail", "gerade": "just now; right now",
+    "unser": "our (before a masc. or neuter noun)", "gelesen": "read (past participle)",
+    "wissen": "to know (a fact)", "obwohl": "although", "riskant": "risky",
+    "Filiale": "branch (of a business)", "zwar": "admittedly (it is true that...)",
+    "Chance": "chance; opportunity", "groß": "big; great", "Bedenken": "doubts; concerns",
+    "Ende": "end", "deshalb": "therefore; that is why",
+    "genauen": "precise; exact (before a masc. accusative noun)", "Plan": "plan",
+    "mehr": "more", "kochen": "to cook", "reich": "rich",
+    "zweites": "second (before a neuter noun)", "vorschlagen": "to suggest",
+    "schließen": "to close", "klingt": "sounds", "klingen": "to sound",
+    "neues": "new (before a neuter noun)", "Rezept": "recipe",
+    "ausprobieren": "to try out", "toll": "great; wonderful",
+    "könnten": "could (we; they; formal you)", "Meeting": "meeting (a business meeting)",
+    "14": "fourteen", "15": "fifteen", "verschieben": "to postpone; to move to another time",
+    "Zeitplan": "schedule; timetable", "besprechen": "to discuss",
+    "passen": "to fit; to suit", "einverstanden": "in agreement; agreed",
+    "geehrte": "dear (in a formal letter greeting)", "Vogel": "Vogel (a surname)",
+    "Kunde": "customer (male)", "bestellt": "orders", "bestellen": "to order",
+    "Herr": "Mr.; gentleman", "Braun": "Braun (a surname)", "beliebt": "popular",
+    "sitzen": "to sit; we sit", "reserviert": "reserved", "Mann": "man",
+    "Fenster": "window", "sitzt": "sits", "Lieblingsplatz": "favorite spot",
 }
 
 # A2 (session 11): units 25-34, glosses for the tokens A1 did not teach.
@@ -445,6 +554,41 @@ for _pos, _words in {
     ),
 }.items():
     POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
+# B1 (units 35-53): parts of speech of the new tokens; everything not listed
+# here and not in an earlier set is a noun.
+for _pos, _words in {
+    "proper_noun": "Klein König Vogel Braun",
+    "symbol": "14 15",
+    "pronoun": "diese Ihrer Ihrem unser beide ihn",
+    "preposition": "ohne über beim bei",
+    "particle": (
+        "ob denn während damit obwohl zwar keinen"
+    ),
+    "adjective": (
+        "letzte fertig dringend besser einfacher praktisch zuständig beschäftigt "
+        "schön schwierig guter möglich schnell schnelle leid nächste nächstes "
+        "nächster eigenes spannend neue riskant groß genauen reich zweites neues "
+        "toll einverstanden geehrte beliebt reserviert"
+    ),
+    "adverb": (
+        "schon früher sofort wofür plötzlich bestimmt allein immer vorbei "
+        "wirklich warum abends öfter so lange wahrscheinlich vielleicht "
+        "zusammenfassend außerdem gerade deshalb mehr jetzt"
+    ),
+    "verb": (
+        "sagen konnte konnten könnte geben fehlt müssen dürfen hätte sollen "
+        "stimmt unterschreibe helfen würde wäre stimme spart denken arbeitete "
+        "klingelte kam sagte gesagt regnen bleibe bleiben wandern hatte "
+        "vorbeikommen fragte gefragt geantwortet antworten sparen spricht "
+        "versteht verstehen schreibt vergisst vergessen spreche schlafe sollten "
+        "sollte versuchen danken funktionieren angerufen reparieren passiert "
+        "schicke schicken melden warten wünschte kaputtgegangen repariert ziehen "
+        "werde wechseln ziehe umziehen lässt anbietet erwähnt gelesen wissen "
+        "kochen vorschlagen schließen klingt klingen ausprobieren könnten "
+        "verschieben besprechen passen bestellt bestellen sitzen sitzt"
+    ),
+}.items():
+    POS_SETS[_pos] = set(POS_SETS.get(_pos, ())) | split_words(_words)
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -465,6 +609,14 @@ for _tag, _words in {
 
 part_of_speech = pos_lookup(POS_SETS)
 
+# (realization stem, token) -> gloss, for tokens the B1 unit teaches in another
+# sense than the A1/A2 entry.
+B1_GLOSS_OVERRIDES = {
+    ("b1_unit37_hypothesen", "an"): "at; on; to (also the particle of the verb meaning to call)",
+    ("b1_unit42_zeitablauf", "als"): "when (for one event in the past)",
+    ("b1_unit52_besprechungen", "passt"): "suits; fits (a schedule)",
+}
+
 
 def iter_specs():
     for level, group in LEVELS.items():
@@ -477,6 +629,7 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=B1_GLOSS_OVERRIDES,
         )
 
 
