@@ -549,6 +549,13 @@ class PracticeItem(Base):
             "course_id",
             "target_lexeme_id",
         ),
+        # Serves _batch_rng / _recent_signatures (newest items per user+course).
+        Index(
+            "ix_practice_items_user_course_created",
+            "user_id",
+            "course_id",
+            "created_at",
+        ),
     )
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
