@@ -20,7 +20,7 @@ Check every one of these logged bug classes — all of them have slipped a GREEN
 8. **Internal-jargon leaks.** snake_case tokens or internal words ("reviewed", `null_subject`) in options/distractors/feedback.
 9. **Homograph/sense correctness of glosses.** A gloss must match the sense actually used in the context, not merely a dictionary sense of the word.
 
-Token-coverage judgments are COURSE-scoped, never single-unit: the introduced-token check accumulates across units, so a single-unit `validate` run fabricates errors for words taught earlier. Confirm any non-zero "untaught token" finding against the whole course (manifest order per `scripts/content_manifest.txt`) before reporting it.
+Token-coverage judgments are COURSE-scoped, never single-unit: the introduced-token check accumulates across units, so a single-unit `validate` run fabricates errors for words taught earlier. Confirm any non-zero "untaught token" finding against the whole course (manifest order per `scripts/manifest.d/content/*.txt`) before reporting it.
 
 Be conservative: report only real learner-facing errors — things that grade a correct answer wrong, make an exercise unanswerable/ambiguous, teach something false, or leak internals. Style preferences and phrasing quibbles are not defects.
 

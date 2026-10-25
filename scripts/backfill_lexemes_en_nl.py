@@ -130,7 +130,7 @@ lexeme.
 **The same change fixed a live data-corruption bug.** ``_classify_nl()``
 derives ``unit_order`` from the file's POSITION in ``UNIT_FILES``, which
 ``main()`` then matches against the imported course's ``Unit.order`` -- and
-``Unit.order`` comes from scripts/content_manifest.txt, which lists every a1
+``Unit.order`` comes from scripts/manifest.d/content/*.txt, which lists every a1
 file. Skipping units the manifest imports therefore silently shifted every
 later unit's provenance: a1_unit43 sat at position 29 while DB unit.order 29
 was a1_unit34, so 79 lexemes claiming units 43-48 were written onto units
@@ -174,7 +174,7 @@ if str(BACKEND_ROOT) not in sys.path:
 
 # Extended 2026-07-09 (practice-template depth-closing pass) to also cover
 # units 29-33 (hobbies/appearance/animals/sports/transportation) -- these are
-# file-numbered units appended after unit23 in scripts/content_manifest.txt's
+# file-numbered units appended after unit23 in scripts/manifest.d/content/*.txt's
 # en-nl line (still the same "Dutch A1" course, not a level change; see each
 # realization file's own review.notes for why the file numbering jumps).
 # Units 24-28 are NOT included here -- those are the SEPARATE "Dutch A2"
@@ -188,7 +188,7 @@ if str(BACKEND_ROOT) not in sys.path:
 # `_classify_nl()` derives `unit_order` from `enumerate(unit_files, 1)`, i.e.
 # the POSITION of the file inside this tuple, and `main()` then looks that
 # number up against the imported course's real `Unit.order`. `Unit.order` is
-# assigned from scripts/content_manifest.txt's en-nl line, which lists EVERY
+# assigned from scripts/manifest.d/content/*.txt's en-nl line, which lists EVERY
 # a1 file on disk. So the moment this glob SKIPS a unit that the manifest
 # imports, every later unit's position silently drifts and its lexemes get
 # attached to the WRONG lesson rows -- with no error anywhere, because the
@@ -203,7 +203,7 @@ if str(BACKEND_ROOT) not in sys.path:
 # position == unit.order for the whole course.
 #
 # INVARIANT: this tuple must stay a CONTIGUOUS prefix-matching mirror of the
-# en-nl line in scripts/content_manifest.txt. Never skip a unit the manifest
+# en-nl line in scripts/manifest.d/content/*.txt. Never skip a unit the manifest
 # imports. (A1 numbering legitimately jumps 23 -> 29 because 24-28 are the
 # separate "Dutch A2" course and are absent from the A1 manifest line too,
 # so that gap does NOT desynchronise the positions.)
@@ -226,10 +226,10 @@ UNIT_FILES = tuple(sorted(
 # with LOCAL 1-based ordering (looked up against the "Dutch A2" course
 # separately in main(), never mixed with UNIT_FILES' indices) -- unit.order
 # is assigned per-course at compile/import time (see scripts/
-# content_manifest.txt's separate "en-nl"/"en-nl-a2" compile groups), so a2_
+# manifest.d/content/'s separate "en-nl"/"en-nl-a2" compile groups), so a2_
 # unit24 is unit.order=1 within the "Dutch A2" course, not 24.
 #
-# Restricted to the files scripts/content_manifest.txt's en-nl-a2 line
+# Restricted to the files scripts/manifest.d/content/*.txt's en-nl-a2 line
 # actually imports. A realization file can sit on disk before it is wired
 # into the course (e.g. a2_unit78_afgelopen_weekend.yaml, a pilot still
 # awaiting native review): the DB has no Unit/Lesson rows for it and
@@ -238,7 +238,7 @@ UNIT_FILES = tuple(sorted(
 # the manifest also keeps position == unit.order, the same invariant
 # UNIT_FILES documents above.
 def _manifest_realizations(group: str) -> frozenset[str]:
-    manifest = REPO_ROOT / "scripts/content_manifest.txt"
+    manifest = REPO_ROOT / f"scripts/manifest.d/content/{group}.txt"
     for line in manifest.read_text(encoding="utf-8").splitlines():
         if line.startswith(group + "|"):
             return frozenset(line.split("|")[1].split())

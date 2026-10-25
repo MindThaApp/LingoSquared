@@ -74,7 +74,7 @@ it never widens it past these rules.
   units. Before acting on any non-zero token-coverage result (fixing,
   skipping, or reporting it as debt), confirm it with a COURSE-scoped
   validate: all of that course's units together, in
-  `scripts/content_manifest.txt` order. Single-unit validation is fine
+  `scripts/manifest.d/content/*.txt` order. Single-unit validation is fine
   only as a quick 0-error smoke check.
 - **`--realization`/`--overlay` are `nargs='+'`, not append** — the
   interleaved form silently keeps only the LAST value. Pass all

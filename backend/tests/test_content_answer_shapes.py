@@ -1,7 +1,7 @@
 """Corpus-wide answer-shape regression test.
 
 For EVERY exercise in the real on-disk content corpus (every course listed
-in scripts/content_manifest.txt, compiled through the real
+in scripts/manifest.d/content/*.txt, compiled through the real
 scripts/compile_content.py), construct the CORRECT answer in the exact
 payload shape the real frontend component for that exercise type submits
 (see frontend/src/components/exercises/*.tsx), push it through the real
@@ -107,8 +107,8 @@ def _find_repo_root() -> Path | None:
     candidates.append(Path(__file__).resolve().parents[2])
     for candidate in candidates:
         if (candidate / "scripts" / "compile_content.py").exists() and (
-            candidate / "scripts" / "content_manifest.txt"
-        ).exists():
+            candidate / "scripts" / "manifest.d" / "content"
+        ).is_dir():
             return candidate
     return None
 
@@ -129,8 +129,11 @@ def _load_compiler(repo_root: Path):
 def _parse_manifest(repo_root: Path) -> list[tuple[str, list[Path], list[Path]]]:
     """content_manifest.txt: course_name|realization paths|overlay paths."""
     courses = []
-    manifest = repo_root / "scripts" / "content_manifest.txt"
-    for raw_line in manifest.read_text(encoding="utf-8").splitlines():
+    manifest = repo_root / "scripts" / "manifest.d" / "content"
+    raw_lines = [
+        l for fp in sorted(manifest.glob("*.txt")) for l in fp.read_text(encoding="utf-8").splitlines()
+    ]
+    for raw_line in raw_lines:
         line = raw_line.strip()
         if not line or line.startswith("#"):
             continue
@@ -169,7 +172,7 @@ def _load_cases() -> list[Case]:
                 case_id="content-corpus-unavailable",
                 skip_reason=(
                     "repo root (scripts/compile_content.py + "
-                    "scripts/content_manifest.txt) not visible in this "
+                    "scripts/manifest.d/content/*.txt) not visible in this "
                     "environment — run with the full repo mounted and "
                     "LINGO_REPO_ROOT set (see module docstring)."
                 ),
