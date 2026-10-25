@@ -609,7 +609,7 @@ Switch-over steps (with Ramin present, after a pg_dump backup):
    Whisper model cache moves to a new named volume
    (`..._whisper_model_cache_nonroot`), so the ~150 MB model re-downloads on
    first STT use; the old `whisper_model_cache` volume can be removed later
-   by hand. Alembic revision 0035 (index on `practice_items`) ships with
+   by hand. Alembic revision 0036 (index on `practice_items`) ships with
    this change set; run `alembic upgrade head` as usual.
 6. Rollback: `docker tag backend-api:<previous> backend-api:latest &&
    docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps api`
