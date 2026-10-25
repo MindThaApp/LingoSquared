@@ -11,6 +11,7 @@ import { HomePage } from "./pages/HomePage";
 import { LoginPage } from "./pages/LoginPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import { CoursePickerPage } from "./pages/CoursePickerPage";
+import { OnboardingPage } from "./pages/OnboardingPage";
 import { LevelCheckPage } from "./pages/LevelCheckPage";
 import { CourseUnitsPage } from "./pages/CourseUnitsPage";
 import { UnitLessonsPage } from "./pages/UnitLessonsPage";
@@ -87,6 +88,14 @@ function App() {
                   prospective user reads these before registering). */}
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/terms" element={<TermsOfServicePage />} />
+              <Route
+                path="/welcome"
+                element={
+                  <ProtectedRoute>
+                    <OnboardingPage />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/courses"
                 element={
