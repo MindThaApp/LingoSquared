@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../auth/AuthContext";
 import { learnPath } from "../../lib/activeCourse";
+import { NavIcon } from "./NavIcon";
 import { NAV_TABS } from "./navTabs";
 
 // Desktop-only (>= 1024px) left navigation rail. Rendered at every width but
@@ -29,7 +30,7 @@ export function SideRail() {
             }
           >
             <span className="side-rail-icon" aria-hidden="true">
-              {tab.icon}
+              <NavIcon name={tab.icon} />
             </span>
             <span>{t(tab.labelKey)}</span>
           </NavLink>

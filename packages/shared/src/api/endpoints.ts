@@ -8,6 +8,7 @@ import {
   post,
   postFeedback,
   postFeedbackFile,
+  put,
   storeAuthTokens,
 } from "./client";
 import type {
@@ -204,6 +205,9 @@ export const ProgressApi = {
     post<ReviewAnswerResult>(`/reviews/${reviewItemId}/answer`, answerBody(response, meta)),
   streak: () => get<Streak>("/me/streak"),
   xp: () => get<Xp>("/me/xp"),
+  // Server accepts exactly these four values (DailyGoalIn Literal).
+  setDailyGoal: (daily_goal_xp: 10 | 20 | 30 | 50) =>
+    put<{ daily_goal_xp: number }>("/me/daily-goal", { daily_goal_xp }),
   achievements: () => get<Achievement[]>("/me/achievements"),
   // Progress/target are computed live server-side on every call; XP is
   // awarded at most once per quest per day (server-enforced), so this
