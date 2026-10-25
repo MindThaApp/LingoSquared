@@ -1,0 +1,151 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit37
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit37.hypothesen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches real wenn-clauses and the unreal pair hätte/würde/wäre. NATIVE FLAG: confirm 'Ich rufe Sie an, wenn das Formular fertig ist' as the reordered variant.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_rufe", "w_Zeit", "w_haben", "w_helfen", "w_würde", "w_dringend", "w_wäre", "w_sofort", "w_habe", "w_keine"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_rufe", "w_Zeit", "w_haben", "w_helfen", "w_würde", "w_dringend", "w_wäre", "w_sofort", "w_habe"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_habe", "w_sofort", "w_wäre", "w_dringend", "w_würde", "w_helfen", "w_haben", "w_Zeit", "w_rufe"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_rufe"}}
+  p4: &p4 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_helfen"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_würde"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_wäre"}}
+  p7: &p7 {language_code: de, part_of_speech: pronoun, agreement_tags: {semantic: "w_keine"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit37.lesson01.choose.001
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson03.choose.001
+    lesson_content_key: de.b1.unit37.lesson03.buergeramt_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.listen.001
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.translate.001
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson03.match.001
+    lesson_content_key: de.b1.unit37.lesson03.buergeramt_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.order.001
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: word_order
+    frame: {text: "Wenn das Formular fertig ist, {item} ich Sie an.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn das Formular fertig ist, {item} ich Sie an.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Anrufen is separable: rufe ... an.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.fill.001
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: fill_in_blank
+    frame: {text: "Wenn das Formular fertig ist, {item} ich Sie an. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Anrufen is separable: rufe ... an.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.translate.002
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: translation
+    frame: {text: "If the form is ready, I will call you.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn das Formular fertig ist, {item} ich Sie an.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} Sie an, wenn das Formular fertig ist."]}
+    feedback_frame: {text: "Anrufen is separable: rufe ... an.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.order.002
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: word_order
+    frame: {text: "Wenn Sie Zeit haben, kann ich Ihnen {item}.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie Zeit haben, kann ich Ihnen {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Helfen takes the dative: Ihnen helfen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.fill.002
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: fill_in_blank
+    frame: {text: "Wenn Sie Zeit haben, kann ich Ihnen {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Helfen takes the dative: Ihnen helfen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson01.translate.003
+    lesson_content_key: de.b1.unit37.lesson01.wenn_real
+    type: translation
+    frame: {text: "If you have time, I can help you.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie Zeit haben, kann ich Ihnen {item}.", language_code: de, direction: ltr}, accepted_variants: ["Ich kann Ihnen {item}, wenn Sie Zeit haben."]}
+    feedback_frame: {text: "Helfen takes the dative: Ihnen helfen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.order.001
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: word_order
+    frame: {text: "Wenn ich Zeit hätte, {item} ich Ihnen helfen.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich Zeit hätte, {item} ich Ihnen helfen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.fill.001
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: fill_in_blank
+    frame: {text: "Wenn ich Zeit hätte, {item} ich Ihnen helfen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.translate.001
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: translation
+    frame: {text: "If I had time, I would help you.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich Zeit hätte, {item} ich Ihnen helfen.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} Ihnen helfen, wenn ich Zeit hätte."]}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.order.002
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: word_order
+    frame: {text: "Wenn es dringend {item}, würde ich sofort helfen.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es dringend {item}, würde ich sofort helfen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wäre is the unreal form of sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson02.translate.002
+    lesson_content_key: de.b1.unit37.lesson02.wenn_unreal
+    type: translation
+    frame: {text: "If it were urgent, I would help immediately.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es dringend {item}, würde ich sofort helfen.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde sofort helfen, wenn es dringend {item}."]}
+    feedback_frame: {text: "Wäre is the unreal form of sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson03.fill.001
+    lesson_content_key: de.b1.unit37.lesson03.buergeramt_dialogue
+    type: fill_in_blank
+    frame: {text: "Aber wenn ich {item} Zeit hätte, würde ich Sie morgen anrufen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Keine negates a noun without an article: keine Zeit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit37.lesson03.translate.001
+    lesson_content_key: de.b1.unit37.lesson03.buergeramt_dialogue
+    type: translation
+    frame: {text: "But if I had no time, I would call you tomorrow.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Aber wenn ich {item} Zeit hätte, würde ich Sie morgen anrufen.", language_code: de, direction: ltr}, accepted_variants: ["Aber ich würde Sie morgen anrufen, wenn ich {item} Zeit hätte."]}
+    feedback_frame: {text: "Keine negates a noun without an article: keine Zeit.", language_code: en, direction: ltr}

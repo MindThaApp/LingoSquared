@@ -1,0 +1,128 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit43
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit43.indirekte_rede
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches reported statements and questions (dass / ob). Only six new lexemes, so no matching template. NATIVE FLAG: 'ob ich heute Zeit hätte' accepted next to 'ob ich heute Zeit habe'.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_fragte", "w_Kollegin", "w_geantwortet", "w_antworten", "w_mich", "w_gefragt"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, pronoun], agreement_tags: {semantic: ["w_fragte", "w_Kollegin", "w_geantwortet", "w_antworten", "w_mich"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, pronoun], agreement_tags: {semantic: ["w_mich", "w_antworten", "w_geantwortet", "w_Kollegin", "w_fragte"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_fragte"}}
+  p4: &p4 {language_code: de, part_of_speech: pronoun, agreement_tags: {semantic: "w_mich"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_gefragt"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_geantwortet"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit43.lesson02.choose.001
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.choose.001
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.listen.001
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.translate.001
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.order.001
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: word_order
+    frame: {text: "Felix {item} mich, ob ich heute Zeit habe.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix {item} mich, ob ich heute Zeit habe.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Ob introduces an indirect question and sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.fill.001
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: fill_in_blank
+    frame: {text: "Felix {item} mich, ob ich heute Zeit habe. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ob introduces an indirect question and sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.translate.002
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: translation
+    frame: {text: "Felix asked me whether I have time today.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix {item} mich, ob ich heute Zeit habe.", language_code: de, direction: ltr}, accepted_variants: ["Felix {item} mich, ob ich heute Zeit hätte."]}
+    feedback_frame: {text: "Ob introduces an indirect question and sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.order.002
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: word_order
+    frame: {text: "Felix fragte {item}, ob ich heute Zeit habe.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix fragte {item}, ob ich heute Zeit habe.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Mich is the accusative of ich after fragen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson02.fill.002
+    lesson_content_key: de.b1.unit43.lesson02.fragen_ob
+    type: fill_in_blank
+    frame: {text: "Felix fragte {item}, ob ich heute Zeit habe. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Mich is the accusative of ich after fragen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.order.001
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Und was hat er {item}?", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Und was hat er {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The perfect tense puts the participle at the end: hat ... gefragt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.fill.001
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Und was hat er {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The perfect tense puts the participle at the end: hat ... gefragt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.translate.001
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "And what did he ask?", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Und was hat er {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The perfect tense puts the participle at the end: hat ... gefragt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.order.002
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Und haben Sie {item}?", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Und haben Sie {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Geantwortet is the participle of antworten.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.fill.002
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Und haben Sie {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Geantwortet is the participle of antworten.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit43.lesson03.translate.002
+    lesson_content_key: de.b1.unit43.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "And did you answer?", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Und haben Sie {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Geantwortet is the participle of antworten.", language_code: en, direction: ltr}

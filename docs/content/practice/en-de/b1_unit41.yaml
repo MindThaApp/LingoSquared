@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit41
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit41.bedingungen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches real wenn-conditions with and without nicht/keine. NATIVE FLAG: none beyond reordered wenn-clause variants.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_regnet", "w_regnen", "w_bleibe", "w_bleiben", "w_Hause", "w_treffen", "w_neun", "w_gehen", "w_wandern", "w_allein", "w_gehe"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_regnet", "w_regnen", "w_bleibe", "w_bleiben", "w_Hause", "w_treffen", "w_neun", "w_gehen", "w_wandern", "w_allein", "w_gehe"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_gehe", "w_allein", "w_wandern", "w_gehen", "w_neun", "w_treffen", "w_Hause", "w_bleiben", "w_bleibe", "w_regnen", "w_regnet"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_regnet"}}
+  p4: &p4 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_bleibe"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_treffen"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_wandern"}}
+  p7: &p7 {language_code: de, part_of_speech: adverb, agreement_tags: {semantic: "w_allein"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit41.lesson01.choose.001
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.choose.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.listen.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.translate.001
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.match.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.order.001
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: word_order
+    frame: {text: "Wenn es morgen {item}, bleibe ich zu Hause.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es morgen {item}, bleibe ich zu Hause.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The wenn-clause sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.fill.001
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: fill_in_blank
+    frame: {text: "Wenn es morgen {item}, bleibe ich zu Hause. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The wenn-clause sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.translate.002
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: translation
+    frame: {text: "If it rains tomorrow, I will stay at home.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es morgen {item}, bleibe ich zu Hause.", language_code: de, direction: ltr}, accepted_variants: ["Ich bleibe zu Hause, wenn es morgen {item}."]}
+    feedback_frame: {text: "The wenn-clause sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.order.002
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: word_order
+    frame: {text: "Wenn es morgen regnet, {item} ich zu Hause.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es morgen regnet, {item} ich zu Hause.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After a wenn-clause the main verb comes first.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.fill.002
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: fill_in_blank
+    frame: {text: "Wenn es morgen regnet, {item} ich zu Hause. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After a wenn-clause the main verb comes first.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.order.003
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: word_order
+    frame: {text: "Wenn Sie Zeit haben, {item} wir uns um neun.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie Zeit haben, {item} wir uns um neun.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Sich treffen is reflexive: wir treffen uns.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.fill.003
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: fill_in_blank
+    frame: {text: "Wenn Sie Zeit haben, {item} wir uns um neun. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Sich treffen is reflexive: wir treffen uns.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson01.translate.003
+    lesson_content_key: de.b1.unit41.lesson01.wenn_real_positive
+    type: translation
+    frame: {text: "If you have time, we will meet at nine.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie Zeit haben, {item} wir uns um neun.", language_code: de, direction: ltr}, accepted_variants: ["Wir {item} uns um neun, wenn Sie Zeit haben."]}
+    feedback_frame: {text: "Sich treffen is reflexive: wir treffen uns.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.order.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: word_order
+    frame: {text: "Wenn es morgen nicht regnet, gehen wir {item}.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es morgen nicht regnet, gehen wir {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Gehen plus an infinitive says what you go and do.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.fill.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: fill_in_blank
+    frame: {text: "Wenn es morgen nicht regnet, gehen wir {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gehen plus an infinitive says what you go and do.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.translate.001
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: translation
+    frame: {text: "If it does not rain tomorrow, we will go hiking.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn es morgen nicht regnet, gehen wir {item}.", language_code: de, direction: ltr}, accepted_variants: ["Wir gehen {item}, wenn es morgen nicht regnet."]}
+    feedback_frame: {text: "Gehen plus an infinitive says what you go and do.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.order.002
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: word_order
+    frame: {text: "Wenn Sie keine Zeit haben, gehe ich {item}.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie keine Zeit haben, gehe ich {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Allein is an adverb and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.fill.002
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: fill_in_blank
+    frame: {text: "Wenn Sie keine Zeit haben, gehe ich {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Allein is an adverb and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit41.lesson02.translate.002
+    lesson_content_key: de.b1.unit41.lesson02.wenn_real_negated
+    type: translation
+    frame: {text: "If you have no time, I will go alone.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie keine Zeit haben, gehe ich {item}.", language_code: de, direction: ltr}, accepted_variants: ["Ich gehe {item}, wenn Sie keine Zeit haben."]}
+    feedback_frame: {text: "Allein is an adverb and does not change.", language_code: en, direction: ltr}

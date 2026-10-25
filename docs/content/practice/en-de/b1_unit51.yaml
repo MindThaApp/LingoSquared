@@ -1,0 +1,209 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit51
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit51.hypothesen_konditional
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches unreal conditions with hätte/wäre + würde, and ich würde vorschlagen. NATIVE FLAG: none beyond reordered wenn-clause variants.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_mehr", "w_kochen", "w_reich", "w_zweites", "w_vorschlagen", "w_schließen", "w_lieber", "w_Tee", "w_klingt", "w_klingen", "w_Idee", "w_neues", "w_Rezept", "w_ausprobieren", "w_toll"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_mehr", "w_kochen", "w_reich", "w_zweites", "w_vorschlagen", "w_schließen", "w_lieber", "w_Tee", "w_klingt", "w_klingen", "w_Idee", "w_neues", "w_Rezept", "w_ausprobieren", "w_toll"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_toll", "w_ausprobieren", "w_Rezept", "w_neues", "w_Idee", "w_klingen", "w_klingt", "w_Tee", "w_lieber", "w_schließen", "w_vorschlagen", "w_zweites", "w_reich", "w_kochen", "w_mehr"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_kochen"}}
+  p4: &p4 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_reich"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_schließen"}}
+  p6: &p6 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Tee"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Rezept"}}
+  p8: &p8 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_toll"}}
+  p9: &p9 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_klingt"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit51.lesson01.choose.001
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.choose.001
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.listen.001
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.translate.001
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.match.001
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.order.001
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: word_order
+    frame: {text: "Wenn ich mehr Zeit hätte, würde ich öfter {item}.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich mehr Zeit hätte, würde ich öfter {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.fill.001
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: fill_in_blank
+    frame: {text: "Wenn ich mehr Zeit hätte, würde ich öfter {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.translate.002
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: translation
+    frame: {text: "If I had more time, I would cook more often.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich mehr Zeit hätte, würde ich öfter {item}.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde öfter {item}, wenn ich mehr Zeit hätte."]}
+    feedback_frame: {text: "Würde plus an infinitive at the end says what would happen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.order.002
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: word_order
+    frame: {text: "Wenn ich {item} wäre, würde ich ein zweites Café eröffnen.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich {item} wäre, würde ich ein zweites Café eröffnen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Wäre is the unreal form of sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.fill.002
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: fill_in_blank
+    frame: {text: "Wenn ich {item} wäre, würde ich ein zweites Café eröffnen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Wäre is the unreal form of sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson01.translate.003
+    lesson_content_key: de.b1.unit51.lesson01.wenn_haette_wuerde
+    type: translation
+    frame: {text: "If I were rich, I would open a second cafe.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn ich {item} wäre, würde ich ein zweites Café eröffnen.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde ein zweites Café eröffnen, wenn ich {item} wäre."]}
+    feedback_frame: {text: "Wäre is the unreal form of sein.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.order.001
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: word_order
+    frame: {text: "Ich würde vorschlagen, dass wir früher {item}.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich würde vorschlagen, dass wir früher {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After dass the verb goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.fill.001
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: fill_in_blank
+    frame: {text: "Ich würde vorschlagen, dass wir früher {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After dass the verb goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.translate.001
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: translation
+    frame: {text: "I would suggest that we close earlier.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich würde vorschlagen, dass wir früher {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After dass the verb goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.order.002
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: word_order
+    frame: {text: "Ich würde lieber {item} als Kaffee trinken.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich würde lieber {item} als Kaffee trinken.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Lieber with würde says what you would prefer.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.fill.002
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: fill_in_blank
+    frame: {text: "Ich würde lieber {item} als Kaffee trinken. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lieber with würde says what you would prefer.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson02.translate.002
+    lesson_content_key: de.b1.unit51.lesson02.wuerde_alleine
+    type: translation
+    frame: {text: "I would rather drink tea than coffee.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich würde lieber {item} als Kaffee trinken.", language_code: de, direction: ltr}, accepted_variants: ["Ich würde lieber {item} trinken als Kaffee."]}
+    feedback_frame: {text: "Lieber with würde says what you would prefer.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.order.001
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Und vielleicht würde ich dann auch ein neues {item} ausprobieren.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Und vielleicht würde ich dann auch ein neues {item} ausprobieren.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Rezept is neuter, so it takes ein neues.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.fill.001
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Und vielleicht würde ich dann auch ein neues {item} ausprobieren. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Rezept is neuter, so it takes ein neues.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.translate.001
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "And maybe I would then also try a new recipe.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Und vielleicht würde ich dann auch ein neues {item} ausprobieren.", language_code: de, direction: ltr}, accepted_variants: ["Und dann würde ich vielleicht auch ein neues {item} ausprobieren."]}
+    feedback_frame: {text: "Rezept is neuter, so it takes ein neues.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.order.002
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Das wäre {item}.", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Das wäre {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Toll is an adjective after wäre and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.fill.002
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Das wäre {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Toll is an adjective after wäre and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.translate.002
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "That would be great.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Das wäre {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Toll is an adjective after wäre and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.order.003
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Das {item} gut.", language_code: de, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Das {item} gut.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Klingen takes an adjective, not an adverb: klingt gut.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.fill.003
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Das {item} gut. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Klingen takes an adjective, not an adverb: klingt gut.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit51.lesson03.translate.003
+    lesson_content_key: de.b1.unit51.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "That sounds good.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Das {item} gut.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Klingen takes an adjective, not an adverb: klingt gut.", language_code: en, direction: ltr}
