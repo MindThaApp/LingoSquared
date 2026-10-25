@@ -169,8 +169,14 @@ export type AnswerResponse = string | string[] | Record<string, string> | Matchi
 // Optional per-submission metadata. `inputMode: "spoken"` marks an answer that
 // was produced by voice (speak_* exercises or the mic-fill button); typed
 // answers carry no meta at all and the request body has no input_mode key.
+export type SelfGrade = "again" | "hard" | "good" | "easy";
+
 export interface AnswerMeta {
   inputMode?: "spoken";
+  /** Self-graded item types (flashcards): the learner's recall rating. */
+  selfGrade?: SelfGrade;
+  /** Milliseconds from showing the item to answering it. */
+  latencyMs?: number;
 }
 
 // Phase C (docs/CONTRACT.md): "almost" means a free-text answer was within
@@ -282,6 +288,28 @@ export interface PracticeAnswerResult {
   xp_awarded: number;
   /** Authored explanation from the practice template's feedback_frame. */
   feedback?: string;
+  /** Present for scheduled (review/practice) items: when it is due next. */
+  next_due_at?: string;
+  next_interval_days?: number;
+}
+
+export interface ReviewForecast {
+  today: number;
+  tomorrow: number;
+  this_week: number;
+}
+
+export interface ReviewLeech {
+  lexeme_id: string;
+  course_id: string;
+  token: string;
+  english_gloss: string;
+  lapses: number;
+}
+
+export interface ReviewLeechesResult {
+  threshold: number;
+  items: ReviewLeech[];
 }
 
 export interface ReviewDueCourse {
