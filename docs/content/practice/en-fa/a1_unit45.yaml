@@ -59,6 +59,8 @@ review:
     naturally excludes صالحی (its part_of_speech is proper_noun, not
     noun/adverb) -- pool is now the 4-member pharmacy_word set only, all
     distinct glosses, no floor concern (translation/MC still clear 3).
+
+    Added 2026-10-25 (session 12): four word_order / fill_in_blank templates over the unit's own dialogue sentences (before-food question, where-is-the-pharmacy, two-pills-a-day) because the unit's checkpoint returned only 12 items; every slot is single-candidate (unit lesson tag or part of speech), no frame word is a candidate, no vocabulary added. NATIVE FLAGS: none.
 tag_schema:
   part_of_speech:
   - symbol
@@ -77,7 +79,7 @@ tag_schema:
     - person_name
     - en_fa_a1_unit45_lesson01_words
     - en_fa_a1_unit45_lesson02_words
-
+    - en_fa_a1_unit45_lesson03_words
 templates:
 # --- lesson01 (new_pharmacy_one) ---
 - content_key: practice.en-fa.fa.a1.unit45.lesson01.choose.001
@@ -291,5 +293,91 @@ templates:
   answer_derivation: {kind: slot_text, slot: item}
   feedback_frame:
     text: The Farsi word is {item}.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit45.lesson03.order.004
+  lesson_content_key: fa.a1.unit45.lesson03.dosage_timing
+  type: word_order
+  frame:
+    text: '{item} از غذا هم می‌تونم؟'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: pharmacy_word
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} از غذا هم می‌تونم؟'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: قبل از غذا هم می‌تونم means 'can I take it before food too?' -- the question from this unit's dialogue.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit45.lesson01.fill.005
+  lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+  type: fill_in_blank
+  frame:
+    text: '{item} کجاست؟'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_fa_a1_unit45_lesson01_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: داروخانه کجاست means 'where is the pharmacy?'.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit45.lesson02.fill.006
+  lesson_content_key: fa.a1.unit45.lesson02.new_pharmacy_two
+  type: fill_in_blank
+  frame:
+    text: روزی دو تا {item}.
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_fa_a1_unit45_lesson02_words
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: روزی دو تا قرص means 'two pills a day' -- the dosage from this unit's dialogue.
+    language_code: en
+    direction: ltr
+- content_key: practice.en-fa.fa.a1.unit45.lesson01.order.007
+  lesson_content_key: fa.a1.unit45.lesson01.new_pharmacy_one
+  type: word_order
+  frame:
+    text: '{item} کجاست؟'
+    language_code: fa
+    direction: rtl
+  slots:
+    item:
+      language_code: fa
+      part_of_speech: noun
+      agreement_tags:
+        semantic: en_fa_a1_unit45_lesson01_words
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} کجاست؟'
+      language_code: fa
+      direction: rtl
+  feedback_frame:
+    text: 'Word order: the place word comes first, then کجاست.'
     language_code: en
     direction: ltr
