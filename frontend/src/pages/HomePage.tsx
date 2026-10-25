@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { CheckCircle, Flame, Medal, Snowflake, Star } from "lucide-react";
 import { useAuth } from "../auth/AuthContext";
 import { ProgressApi, ReviewApi } from "@lingo/shared/api/endpoints";
-import { learnPath } from "../lib/activeCourse";
+import { getActiveCourse, learnPath } from "../lib/activeCourse";
+import { shouldShowOnboarding } from "../lib/onboarding";
 import type { LessonProgress, Progress, Streak, Xp } from "@lingo/shared/api/types";
 import { DesktopSidebar } from "../components/layout/DesktopSidebar";
 
@@ -125,6 +126,11 @@ export function HomePage() {
         : user?.display_name
           ? t("home.welcome_named", { name: user.display_name })
           : t("home.welcome");
+
+  // Guided first start: brand-new account, no course yet, not skipped/done.
+  if (shouldShowOnboarding(user?.id, isFirstVisit, getActiveCourse(user?.id))) {
+    return <Navigate to="/welcome" replace />;
+  }
 
   return (
     <div className="page-with-aside">

@@ -112,5 +112,7 @@ async def internal_error(request:Request,exc:Exception):
     )
 @app.get("/health")
 def health(): return {"status":"ok"}
+from app.review.api import router as review_router
+router.include_router(review_router)
 app.include_router(router, prefix="/v1")
 app.include_router(router, include_in_schema=False)
