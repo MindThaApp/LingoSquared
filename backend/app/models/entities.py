@@ -531,6 +531,14 @@ class UserLexemeSRS(Base):
     last_session_id: Mapped[str | None] = mapped_column(
         String(36), nullable=True
     )
+    # Lifetime count of failed scheduled reviews. Reaching the leech
+    # threshold flags the word (surfaced to the learner, never removed).
+    lapses: Mapped[int] = mapped_column(
+        Integer, default=0, server_default="0"
+    )
+    leech: Mapped[bool] = mapped_column(
+        Boolean, default=False, server_default="false"
+    )
 
 
 class PracticeItem(Base):
@@ -540,6 +548,13 @@ class PracticeItem(Base):
             "ix_practice_items_course_target_lexeme",
             "course_id",
             "target_lexeme_id",
+        ),
+        # Serves _batch_rng / _recent_signatures (newest items per user+course).
+        Index(
+            "ix_practice_items_user_course_created",
+            "user_id",
+            "course_id",
+            "created_at",
         ),
     )
 
@@ -811,6 +826,51 @@ class ReviewItem(Base):
     repetitions: Mapped[int] = mapped_column(Integer, default=0)
     mastery: Mapped[float] = mapped_column(Float, default=0)
     due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class ReviewEvent(Base):
+    """Append-only log of every scheduled review (input for a later FSRS fit).
+
+    One row per call to the scheduler. Exactly one of lexeme_id / exercise_id
+    is set (lexeme SRS vs the legacy exercise-keyed review items).
+    """
+
+    __tablename__ = "review_events"
+    __table_args__ = (
+        Index("ix_review_events_user_reviewed", "user_id", "reviewed_at"),
+        Index("ix_review_events_user_lexeme", "user_id", "lexeme_id"),
+    )
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
+    user_id: Mapped[str] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE")
+    )
+    lexeme_id: Mapped[str | None] = mapped_column(
+        ForeignKey("lexemes.id", ondelete="SET NULL"), nullable=True
+    )
+    exercise_id: Mapped[str | None] = mapped_column(
+        ForeignKey("exercises.id", ondelete="SET NULL"), nullable=True
+    )
+    course_id: Mapped[str | None] = mapped_column(
+        ForeignKey("courses.id", ondelete="SET NULL"), nullable=True
+    )
+    source: Mapped[str] = mapped_column(String(16))
+    reviewed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=now
+    )
+    result: Mapped[str] = mapped_column(String(16))
+    self_grade: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    quality: Mapped[int] = mapped_column(Integer)
+    correct: Mapped[bool] = mapped_column(Boolean)
+    previous_interval_days: Mapped[int] = mapped_column(Integer)
+    new_interval_days: Mapped[int] = mapped_column(Integer)
+    previous_ease: Mapped[float] = mapped_column(Float)
+    new_ease: Mapped[float] = mapped_column(Float)
+    previous_due_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
+    new_due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    latency_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
 
 
 class Achievement(Base):

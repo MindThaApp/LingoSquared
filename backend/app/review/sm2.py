@@ -1,4 +1,62 @@
-from datetime import datetime, timedelta, timezone
+import hashlib
+from datetime import datetime, time, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
+
+# Lapses before a word is flagged as a leech. The flag only surfaces the word
+# to the learner; it never suspends or removes it.
+LEECH_THRESHOLD = 8
+# Intervals at or below this many days are not fuzzed (short steps stay exact).
+FUZZ_MIN_INTERVAL_DAYS = 7
+FUZZ_FRACTION = 0.05
+# The study day rolls over at this local hour, so a late-night review still
+# counts toward "today" and new reviews become due in the learner's morning.
+DAY_ROLLOVER_HOUR = 4
+
+# Self-graded buttons (flashcards) -> SM-2 quality.
+SELF_GRADES = ("again", "hard", "good", "easy")
+_GRADE_QUALITY = {"again": 2, "hard": 3, "good": 4, "easy": 5}
+HARD_INTERVAL_FACTOR = 1.2
+EASY_INTERVAL_BONUS = 1.3
+
+
+def _tz(name: str | None):
+    if name:
+        try:
+            return ZoneInfo(name)
+        except (ZoneInfoNotFoundError, ValueError):
+            pass
+    return ZoneInfo("UTC")
+
+
+def fuzz_factor(key: str, local_day) -> float:
+    """Deterministic factor in [-FUZZ_FRACTION, +FUZZ_FRACTION], stable for
+    one (item, local day) pair so the same review always lands on the same
+    date and tests need no random seed."""
+    digest = hashlib.sha256(f"{key}|{local_day.isoformat()}".encode()).digest()
+    unit = int.from_bytes(digest[:4], "big") / 0xFFFFFFFF  # 0..1
+    return (unit * 2 - 1) * FUZZ_FRACTION
+
+
+def fuzzed_days(interval_days: int, key: str | None, local_day) -> int:
+    if key is None or interval_days <= FUZZ_MIN_INTERVAL_DAYS:
+        return interval_days
+    return max(1, round(interval_days * (1 + fuzz_factor(key, local_day))))
+
+
+def study_day(now: datetime, tz_name: str | None):
+    """The learner's current study day (local date, rolling over at 04:00)."""
+    local = now.astimezone(_tz(tz_name))
+    return (local - timedelta(hours=DAY_ROLLOVER_HOUR)).date()
+
+
+def due_at_for(
+    now: datetime, days: int, tz_name: str | None = None
+) -> datetime:
+    """Start (04:00 local) of the study day `days` after today, in UTC."""
+    tz = _tz(tz_name)
+    day = study_day(now, tz_name) + timedelta(days=days)
+    local = datetime.combine(day, time(DAY_ROLLOVER_HOUR), tzinfo=tz)
+    return local.astimezone(timezone.utc)
 
 
 def quality_for_result(result: bool | str) -> int:
@@ -9,6 +67,8 @@ def quality_for_result(result: bool | str) -> int:
     """
     if isinstance(result, bool):
         return 5 if result else 2
+    if result in _GRADE_QUALITY:
+        return _GRADE_QUALITY[result]
     if result == "correct":
         return 5
     if result == "almost":
@@ -16,7 +76,23 @@ def quality_for_result(result: bool | str) -> int:
     return 2
 
 
-def schedule(item, correct: bool | str):
+def schedule(
+    item,
+    correct: bool | str,
+    *,
+    now: datetime | None = None,
+    tz: str | None = None,
+    fuzz_key: str | None = None,
+    self_grade: str | None = None,
+):
+    """Advance one item's SM-2 state.
+
+    `correct` is the grading result. `self_grade` (again/hard/good/easy),
+    when given, replaces it for scheduling. `tz` is the learner's IANA
+    timezone (UTC when unset): due times land on 04:00 local. `fuzz_key`
+    (e.g. the item id) enables deterministic +/-5% spread on intervals over
+    a week; the stored interval stays exact, only due_at is spread.
+    Returns the item; `item.last_schedule` carries details for the log."""
     # SQLAlchemy column defaults are applied during INSERT, not necessarily
     # when a mapped object is constructed. Normalize before scheduling so
     # new unflushed items and legacy rows with null state are both safe.
@@ -27,7 +103,9 @@ def schedule(item, correct: bool | str):
     item.ease_factor = item.ease_factor if item.ease_factor is not None else 2.5
     item.mastery = item.mastery if item.mastery is not None else 0.0
 
-    now = datetime.now(timezone.utc)
+    now = now or datetime.now(timezone.utc)
+    previous_due_at = getattr(item, "due_at", None)
+    previous_ease = item.ease_factor
     previous_interval_days = item.interval_days
     early_review_ratio = 1.0
     last_reviewed_at = getattr(item, "last_reviewed_at", None)
@@ -41,7 +119,11 @@ def schedule(item, correct: bool | str):
                 min(1.0, elapsed_span / scheduled_span),
             )
 
-    quality = quality_for_result(correct)
+    if self_grade in _GRADE_QUALITY:
+        quality = _GRADE_QUALITY[self_grade]
+    else:
+        quality = quality_for_result(correct)
+        self_grade = None
     success = quality >= 3
     if not success:
         # Lapse handling: proportional demotion, NOT a full reset.
@@ -84,6 +166,10 @@ def schedule(item, correct: bool | str):
         #       learner keeps failing, so this is strictly a softening
         #       of the single-lapse case, not unlimited credit.
         item.repetitions = max(0, item.repetitions - 2)
+        if hasattr(item, "lapses"):
+            item.lapses = (item.lapses or 0) + 1
+            if item.lapses >= LEECH_THRESHOLD:
+                item.leech = True
         item.interval_days = max(1, round(item.interval_days * 0.3))
     else:
         next_interval_days = (
@@ -93,6 +179,15 @@ def schedule(item, correct: bool | str):
             if item.repetitions == 1
             else max(1, round(item.interval_days * item.ease_factor))
         )
+        if self_grade == "hard" and item.repetitions >= 2:
+            next_interval_days = max(
+                1, round(previous_interval_days * HARD_INTERVAL_FACTOR)
+            )
+        elif self_grade == "easy":
+            next_interval_days = max(
+                next_interval_days + 1,
+                round(next_interval_days * EASY_INTERVAL_BONUS),
+            )
         if early_review_ratio < 1.0:
             interval_growth = next_interval_days - previous_interval_days
             next_interval_days = max(
@@ -114,5 +209,17 @@ def schedule(item, correct: bool | str):
         1.0,
         max(0.0, item.mastery + (0.15 if success else -0.2)),
     )
-    item.due_at = now + timedelta(days=item.interval_days)
+    local_day = study_day(now, tz)
+    item.due_at = due_at_for(
+        now, fuzzed_days(item.interval_days, fuzz_key, local_day), tz
+    )
+    item.last_schedule = {
+        "quality": quality,
+        "success": success,
+        "self_grade": self_grade,
+        "previous_interval_days": previous_interval_days,
+        "previous_ease": previous_ease,
+        "previous_due_at": previous_due_at,
+        "reviewed_at": now,
+    }
     return item

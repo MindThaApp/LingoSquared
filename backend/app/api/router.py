@@ -135,6 +135,7 @@ from app.api.deps import current_user, optional_current_user, lenient_current_us
 from app.services.progress import activity_day_bounds, effective_streak_days, record_activity, resolve_user_tz, stats_for, valid_timezone_or_none, award_xp
 from app.services.quests import QUEST_DEFINITIONS, daily_quests_for
 from app.review.sm2 import schedule
+from app.review.events import apply_self_grade, schedule_and_log, schedule_practice_srs
 from app.review.grading import (
     decode_feedback,
     display_correct_response,
@@ -151,6 +152,7 @@ from app.review.placement import (
     recommend_from_answers,
 )
 from app.services import tts as tts_service
+from app.services import audio_prerender
 from app.services import stt as stt_service
 from app.services import social_auth
 from app.services import push as push_service
@@ -177,6 +179,14 @@ logger = logging.getLogger(__name__)
 router=APIRouter()
 
 GENERATED_PRACTICE_TYPES = {"speak_repeat", "speak_response", "conversation"}
+
+
+def load_templates(db: Session, items) -> dict:
+    """One bulk query for the templates of a batch of practice items."""
+    ids = {i.template_id for i in items}
+    if not ids:
+        return {}
+    return {t.id: t for t in db.scalars(select(PracticeTemplate).where(PracticeTemplate.id.in_(ids)))}
 
 
 def practice_item_type(item: PracticeItem, template: PracticeTemplate) -> str:
@@ -1147,56 +1157,64 @@ def course(course_id:str,db:Session=Depends(get_db)):
 def units(course_id:str,user=Depends(optional_current_user),db:Session=Depends(get_db)):
     if not db.get(Course,course_id):
         fail(404,"course_not_found","Course not found")
-    result=[]
-    for unit in db.scalars(
-        select(Unit)
-        .where(Unit.course_id==course_id)
-        .order_by(Unit.order)
-    ):
-        checkpoint_passed=bool(
-            user
-            and db.scalar(
-                select(CheckpointAttempt.id)
+    unit_rows=list(db.scalars(select(Unit).where(Unit.course_id==course_id).order_by(Unit.order)))
+    unit_ids=[u.id for u in unit_rows]
+    lesson_counts:dict={}
+    completed_counts:dict={}
+    passed_units:set=set()
+    if unit_ids:
+        lesson_counts=dict(db.execute(
+            select(Lesson.unit_id,func.count(Lesson.id)).where(Lesson.unit_id.in_(unit_ids)).group_by(Lesson.unit_id)
+        ).all())
+        if user:
+            completed_counts=dict(db.execute(
+                select(Lesson.unit_id,func.count(func.distinct(LessonProgress.lesson_id)))
+                .join(Lesson,Lesson.id==LessonProgress.lesson_id)
+                .where(
+                    LessonProgress.user_id==user.id,
+                    Lesson.unit_id.in_(unit_ids),
+                    LessonProgress.completed_at.is_not(None),
+                )
+                .group_by(Lesson.unit_id)
+            ).all())
+            passed_units=set(db.scalars(
+                select(CheckpointAttempt.unit_id)
                 .where(
                     CheckpointAttempt.user_id==user.id,
-                    CheckpointAttempt.unit_id==unit.id,
+                    CheckpointAttempt.unit_id.in_(unit_ids),
                     CheckpointAttempt.passed.is_(True),
                 )
-                .limit(1)
-            )
-        )
+                .distinct()
+            ))
+    admin=bool(user and is_admin_user(user))
+    # Speaking unlock (same rule as speaking_unlocked()): every earlier core
+    # reading/writing unit must have lessons, all completed. Computed in one
+    # pass over the ordered units instead of two queries per earlier unit.
+    reading_ok=True
+    result=[]
+    for unit in unit_rows:
+        lessons_n=lesson_counts.get(unit.id,0)
+        done_n=completed_counts.get(unit.id,0)
+        locked=False
+        if unit.track=="core" and unit.section==UnitSection.speaking:
+            locked=not (admin or (bool(user) and reading_ok))
         result.append(
             {
                 "id":unit.id,
                 "title":unit.title,
                 "order":unit.order,
-                "lesson_count":db.scalar(
-                    select(func.count(Lesson.id))
-                    .where(Lesson.unit_id==unit.id)
-                ),
-                "completed_lesson_count":(
-                    db.scalar(
-                        select(func.count(LessonProgress.id))
-                        .join(Lesson,Lesson.id==LessonProgress.lesson_id)
-                        .where(
-                            LessonProgress.user_id==user.id,
-                            Lesson.unit_id==unit.id,
-                            LessonProgress.completed_at.is_not(None),
-                        )
-                    )
-                    if user
-                    else 0
-                ),
+                "lesson_count":lessons_n,
+                "completed_lesson_count":done_n if user else 0,
                 "section":unit.section,
-                "locked":unit.track=="core" and unit.section==UnitSection.speaking and not (
-                    (user and is_admin_user(user))
-                    or speaking_unlocked(db,course_id,user.id if user else None,unit.order)
-                ),
-                "checkpoint_passed":checkpoint_passed,
+                "locked":locked,
+                "checkpoint_passed":unit.id in passed_units,
                 "content_key":unit.content_key,
                 "track":unit.track,
             }
         )
+        if unit.track=="core" and unit.section==UnitSection.reading_writing:
+            if not lessons_n or done_n!=lessons_n:
+                reading_ok=False
     return result
 @router.get("/units/{unit_id}/lessons",response_model=list[LessonOut])
 def lessons(unit_id:str,db:Session=Depends(get_db)):
@@ -1591,7 +1609,7 @@ def review_answer(review_item_id:str,body:AnswerIn,user=Depends(current_user),db
     result=grade(body.response,e.correct_response,e.type,script=script,language_code=language_code,orthography_strict=feedback_meta.get("orthography_strict"),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict")),input_mode=body.input_mode)
     correct=result!="incorrect"
     xp=e.xp if correct else 0
-    schedule(r,result); record_activity(db,user.id,xp,user.timezone); db.commit()
+    schedule_and_log(db,r,result,user=user,source="legacy",exercise_id=r.exercise_id,latency_ms=body.latency_ms); record_activity(db,user.id,xp,user.timezone); db.commit()
     feedback = select_feedback(feedback_meta,body.response,result)
     if result == "almost" and isinstance(body.response,str) and isinstance(e.correct_response,str) and is_arabic_hamza_only_difference(body.response,e.correct_response,language_code=language_code,exercise_type=exercise_type_value(e.type),case_sensitive=bool(feedback_meta.get("case_sensitive")),punctuation_strict=bool(feedback_meta.get("punctuation_strict"))):
         feedback = "Check the hamza spelling: أ, إ, and آ are written differently from ا."
@@ -2100,13 +2118,12 @@ def review_session(
         session_id,
     )
     db.commit()
+    templates = load_templates(db, items)
     return {
         "items": [
             {
                 "id": item.id,
-                "type": db.get(
-                    PracticeTemplate, item.template_id
-                ).type,
+                "type": templates[item.template_id].type,
                 "prompt": item.prompt,
             }
             for item in items
@@ -2188,14 +2205,12 @@ def checkpoint_session(
         )
     )
     db.commit()
+    templates = load_templates(db, items)
     return {
         "items": [
             {
                 "id": item.id,
-                "type": db.get(
-                    PracticeTemplate,
-                    item.template_id,
-                ).type,
+                "type": templates[item.template_id].type,
                 "prompt": item.prompt,
             }
             for item in items
@@ -2656,6 +2671,7 @@ def practice_batch(
         ),
     )
     db.commit()
+    templates = load_templates(db, items)
     return {
         "locked":locked,
         "items":[
@@ -2663,7 +2679,7 @@ def practice_batch(
                 "id":item.id,
                 "type":practice_item_type(
                     item,
-                    db.get(PracticeTemplate,item.template_id),
+                    templates[item.template_id],
                 ),
                 "prompt":item.prompt,
             }
@@ -2798,7 +2814,7 @@ def practice_answer(
                 )
             ) or 0
             if attempts_today == 0:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
             srs.last_reviewed_at = now
 
         db.add(
@@ -2833,6 +2849,7 @@ def practice_answer(
             True if item.source == "checkpoint" else None
         ),
     )
+    result = apply_self_grade(result, item_type, body)
     correct = result != "incorrect"
 
     xp_awarded = 0
@@ -2864,7 +2881,7 @@ def practice_answer(
     if srs is not None:
         if item.source == "review":
             if srs.last_session_id != item.session_id:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
                 srs.last_session_id = item.session_id
             srs.last_reviewed_at = now
         elif item.source == "practice":
@@ -2886,7 +2903,7 @@ def practice_answer(
                 )
             ) or 0
             if attempts_today == 0:
-                schedule(srs, result)
+                schedule_practice_srs(db, srs, result, user=user, item=item, body=body)
             srs.last_reviewed_at = now
 
     db.add(
@@ -2900,6 +2917,11 @@ def practice_answer(
     )
     item.answered_at = now
     record_activity(db, user.id, xp_awarded, user.timezone)
+    next_due = (
+        {"next_due_at": srs.due_at, "next_interval_days": srs.interval_days}
+        if srs is not None and item.source in ("review", "practice")
+        else {}
+    )
     db.commit()
     return {
         "correct": correct,
@@ -2912,6 +2934,7 @@ def practice_answer(
             db, template, item.course_id, item.filled_slots,
             item.target_lexeme_id,
         ),
+        **next_due,
     }
 
 def temporary_password() -> str:
@@ -3250,6 +3273,22 @@ def get_media_asset(key: str):
         media_type=media_type,
         headers={"Cache-Control": MEDIA_CACHE_CONTROL},
     )
+@router.get("/media/audio/{name}", name="get_prerendered_audio")
+def get_prerendered_audio(name: str):
+    """Pre-rendered TTS clip by content hash (see scripts/render_audio.py).
+
+    nginx normally serves /media/audio/ straight from the volume; this is the
+    fallback for dev, mobile builds and any setup without that nginx location.
+    The strict name pattern is the only path input, so traversal is impossible.
+    """
+    if audio_prerender.AUDIO_NAME_RE.fullmatch(name) is None:
+        fail(404, "audio_not_found", "No pre-rendered audio with that name")
+    path = Path(get_settings().media_audio_dir) / name
+    if not path.is_file():
+        fail(404, "audio_not_found", "No pre-rendered audio with that name")
+    return FileResponse(path, media_type="audio/mpeg", headers={"Cache-Control": MEDIA_CACHE_CONTROL})
+
+
 @router.post("/admin/content/import",response_model=ImportOut)
 def content_import(body:ImportRequest,user=Depends(admin_user),db:Session=Depends(get_db)):
     count,messages,counters=import_content(db,body)
