@@ -34,13 +34,18 @@ python3 scripts/derive_direction.py validate --sibling $S --new $N --levels a1  
   unchanged and re-queues only the changed strings.
 * `inject` refuses to run when a placeholder (`{slot}`) or `*asterisk*` span differs from the source, when the sibling text
   drifted since extract, or when ids are untranslated (`--allow-missing`, `--force` override).
-* `inject` writes one file per course group / pack into `scripts/manifest.d/content/<group>.txt` and `scripts/manifest.d/practice/<pair>.txt`
-  (overwriting only its own files), so parallel directions never conflict on a shared manifest. Readers glob the dirs in sorted order.
+* `inject` writes one file per course group into `scripts/manifest.d/content/<group>.txt` (overwriting only its own files) and
+  **merges** `scripts/manifest.d/practice/<pair>.txt` with what is already there (union of pack paths, sorted, no duplicates), so
+  injecting A2 after A1 keeps the A1 packs. Parallel directions never conflict on a shared manifest. Readers glob the dirs in sorted order.
+* Missing `scripts/manifest.d/content/<new>-<level>.txt` files are created automatically from the sibling's file (the generated
+  backfill imports them); no manual seeding is needed. Existing files are never touched until inject writes the real lines.
 * Overlays/packs are written with `review.status: unreviewed`, `required_next_reviewer: native_speaker_review`.
   Native review of the translated text is still required (contrastive notes, register, distractor plausibility).
 * The generated `scripts/backfill_lexemes_<x>_<t>.py` is a clone of the sibling's backfill (so the sibling must use
   `_target_lexeme_backfill_common.py`, like de-en and the generated ones) with the gloss tables replaced. Levels that were not
-  derived get empty tables.
+  derived get empty tables on the first inject. Re-running inject for another level **merges** into the existing file: `LEVELS`,
+  `GLOSSES_BY_LEVEL` and the gloss dicts of levels not being injected are kept verbatim (hand edits survive); only the
+  injected levels are added or replaced.
 
 ## Sibling choice
 
