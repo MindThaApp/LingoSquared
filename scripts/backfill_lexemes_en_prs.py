@@ -434,6 +434,10 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/prs/a2_unit18_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/en-prs/a2_unit18.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/prs/a2_unit19_last_weekend.yaml",
+        REPO_ROOT / "docs/content/overlays/en-prs/a2_unit19.yaml",
+    ),
 )
 
 # B1 units 01-06 (abilities, necessity, conditions, sequencing, reported
@@ -2795,6 +2799,76 @@ for _new, _old in PRS_B2_SPELLING_ALIASES.items():
 PRS_GLOSSES.setdefault("سپاسگزارم", "I am grateful")
 PRS_POS.setdefault("سپاسگزارم", "phrase")
 
+# A2 unit19 (last weekend: the simple past as a system), added 2026-10-25.
+# English-only glosses; person forms carry the person so two forms of one
+# lemma never share a gloss.
+PRS_A2U19_NEW = {
+    "رفتن": ("to go (infinitive)", "verb"),
+    "داشتن": ("to have (infinitive)", "verb"),
+    "آن‌ها": ("they", "pronoun"),
+    "رفتیم": ("we went", "verb"),
+    "رفتین": ("you (plural) went", "verb"),
+    "خوردن": ("to eat (infinitive)", "verb"),
+    "خوردی": ("you ate", "verb"),
+    "خوردیم": ("we ate", "verb"),
+    "خوردین": ("you (plural) ate", "verb"),
+    "خوردند": ("they ate", "verb"),
+    "میوه": ("fruit", "noun"),
+    "دیدی": ("you saw", "verb"),
+    "خریدن": ("to buy (infinitive)", "verb"),
+    "نرفتم": ("I didn't go", "verb"),
+    "نرفتی": ("you didn't go", "verb"),
+    "نرفتیم": ("we didn't go", "verb"),
+    "نرفتین": ("you (plural) didn't go", "verb"),
+    "نرفتند": ("they didn't go", "verb"),
+    "نخوردم": ("I didn't eat", "verb"),
+    "ندیدم": ("I didn't see", "verb"),
+    "نکردم": ("I didn't do (it)", "verb"),
+    "دوستم": ("my friend", "noun"),
+}
+for _tok, (_gloss, _pos) in PRS_A2U19_NEW.items():
+    PRS_GLOSSES.setdefault(_tok, _gloss)
+    PRS_POS.setdefault(_tok, _pos)
+
+# Unit-scoped gloss overrides (applied only to the unit19 row of the token, so
+# A1/A2-earlier rows keep their inherited glosses): the bare-stem and
+# have-forms need the person spelled out next to their sibling forms.
+PRS_A2U19_GLOSS_OVERRIDES = {
+    "نرفت": "he/she didn't go",
+    "داشت": "he/she had",
+    "داشتم": "I had",
+}
+
+# Curated practice pools for unit19 (added 2026-10-25). Tags apply only to the
+# unit19 first-introduction row of each token and keep each practice slot to
+# one grammatical kind (all I-forms, all negatives, all forms of one verb).
+# The *_single_* tags are one-member anchors for the fixed-sentence items.
+_U19 = "en_prs_a2_unit19_"
+_U19_POOLS = {
+    "past_1sg": ("رفتم", "خوردم", "دیدم", "شدم", "داشتم"),
+    "act_1sg": ("رفتم", "خوردم", "دیدم"),
+    "neg_1sg": ("نرفتم", "نخوردم", "ندیدم", "نخریدم", "نداشتم", "نکردم"),
+    "things": ("پارک", "نان", "میوه", "فلم", "صبحانه"),
+    "past_3sg": ("رفت", "خورد", "دید", "کرد", "شد", "داشت"),
+    "you_we": ("رفتی", "رفتیم", "خوردی", "خوردیم", "دیدی", "کردی"),
+    "infinitives": ("رفتن", "خوردن", "خریدن", "داشتن"),
+    "go_forms": ("رفتم", "رفتی", "رفت", "رفتیم", "رفتین", "رفتند"),
+    "eat_forms": ("خوردم", "خوردی", "خورد", "خوردیم", "خوردین", "خوردند"),
+    "neg_go_forms": ("نرفتم", "نرفتی", "نرفت", "نرفتیم", "نرفتین", "نرفتند"),
+    "time_words": ("پنجشنبه", "جمعه", "عصر", "پارک"),
+    "single_go_i": ("رفتم",),
+    "single_go_we": ("رفتیم",),
+    "single_not_go_i": ("نرفتم",),
+    "single_not_do_i": ("نکردم",),
+    "single_eat_i": ("خوردم",),
+    "single_see_i": ("دیدم",),
+    "single_my_friend": ("دوستم",),
+}
+PRS_A2U19_EXTRA_TAGS: dict[str, list[str]] = {}
+for _group, _tokens in _U19_POOLS.items():
+    for _t in _tokens:
+        PRS_A2U19_EXTRA_TAGS.setdefault(_t, []).append(_U19 + _group)
+
 
 # BEGIN volume practice singleton tags (generated 2026-07-13)
 VOLUME_PRACTICE_SINGLETON_TAGS = {'آبی': ['volume_en_prs_a1_unit38_color_word_05_single'], 'آرزو': ['volume_en_prs_a1_unit02_person_name_04_single'], 'بانک': ['volume_en_prs_a1_unit05_city_place_06_single'], 'بهار': ['volume_en_prs_a1_unit39_specific_season_word_03_single'], 'جمعه': ['volume_en_prs_a1_unit09_weekday_name_10_single'], 'دور': ['volume_en_prs_a1_unit05_location_word_08_single'], 'سند': ['volume_en_prs_a2_unit09_office_word_12_single'], 'شریف': ['volume_en_prs_a1_unit02_city_name_02_single'], 'شوخ': ['volume_en_prs_a1_unit37_personality_word_07_single'], 'غذا': ['volume_en_prs_a1_unit36_cook_object_word_09_single'], 'نامه': ['volume_en_prs_a1_unit35_sendable_item_word_11_single'], 'پولیس': ['volume_en_prs_a1_unit40_emergency_service_word_01_single']}
@@ -4590,6 +4664,11 @@ def _classify(files, level, specs, derive_phrases=False):
                             semantic.extend(
                                 t for t in PRS_B2_EXTRA_TAGS[token] if t not in semantic
                             )
+                    if (
+                        lesson_key.startswith("prs.a2.unit19.")
+                        and token in PRS_A2U19_GLOSS_OVERRIDES
+                    ):
+                        english_gloss = PRS_A2U19_GLOSS_OVERRIDES[token]
                     existing = specs.get(key)
                     if existing is None:
                         # ONLY on first introduction -- see
@@ -4601,6 +4680,8 @@ def _classify(files, level, specs, derive_phrases=False):
                         unit_tags = _unit_semantic_tags(
                             unit_stem, lesson_order, token, part_of_speech
                         )
+                        if lesson_key.startswith("prs.a2.unit19."):
+                            unit_tags = unit_tags + PRS_A2U19_EXTRA_TAGS.get(token, [])
                         if unit_tags:
                             semantic = tags.setdefault("semantic", [])
                             semantic.extend(t for t in unit_tags if t not in semantic)
