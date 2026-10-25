@@ -1,0 +1,168 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit35
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit35.conseils
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_bonne", "w_conseil", "w_demanderais", "w_devrais", "w_directement", "w_emploi", "w_essayer", "w_fatigué", "w_idée", "w_j'étais", "w_jour", "w_matins", "w_mois", "w_n'ose", "w_parler", "w_repos", "w_t'aidera", "w_vais", "w_vraiment"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adjective, noun, verb], agreement_tags: {semantic: ["w_devrais", "w_parler", "w_emploi", "w_fatigué", "w_matins", "w_conseil"]}}
+  mat_2: &mat_2 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_devrais", "w_parler", "w_emploi", "w_fatigué", "w_matins", "w_conseil", "w_j'étais", "w_demanderais", "w_jour", "w_repos", "w_bonne", "w_idée", "w_t'aidera", "w_vraiment", "w_mois", "w_n'ose", "w_directement", "w_vais", "w_essayer"]}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_devrais"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_parler"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: adjective, agreement_tags: {semantic: "w_fatigué"}}
+  rec2_6: &rec2_6 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_j'étais", "w_demanderais", "w_jour", "w_repos", "w_bonne", "w_idée", "w_t'aidera", "w_vraiment", "w_mois", "w_n'ose", "w_directement", "w_vais", "w_essayer"]}}
+  anc_7: &anc_7 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_j'étais"}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_demanderais"}}
+  anc_9: &anc_9 {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: "w_directement"}}
+  anc_10: &anc_10 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_idée"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.choose.001
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for giving a friend advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.listen.002
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for giving a friend advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.match.003
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for giving a friend advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.order.004
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: word_order
+    frame: {text: "Tu {item} parler au chef de ton emploi du temps.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu {item} parler au chef de ton emploi du temps.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Tu devrais + infinitive gives advice: you should.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.order.005
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: word_order
+    frame: {text: "Tu devrais {item} au chef de ton emploi du temps.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu devrais {item} au chef de ton emploi du temps.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "L'emploi du temps is the schedule; tous les matins means every morning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.fill.006
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: fill_in_blank
+    frame: {text: "Je suis {item}, je travaille tous les matins. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_5, hint: *anc_5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tu devrais + infinitive gives advice: you should.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.translate.007
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for giving a friend advice.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.translate.008
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: translation
+    frame: {text: "You should talk to the boss about your schedule.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu {item} parler au chef de ton emploi du temps.", language_code: fr, direction: ltr}, accepted_variants: ["Tu {item} parler à ton chef de ton emploi du temps."]}
+    feedback_frame: {text: "L'emploi du temps is the schedule; tous les matins means every morning.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson01.translate.009
+    lesson_content_key: fr.b1.unit35.lesson01.tu_devrais
+    type: translation
+    frame: {text: "I am tired, I work every morning.", language_code: en, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Je suis {item}, je travaille tous les matins.", language_code: fr, direction: ltr}, accepted_variants: ["Je suis {item}, je travaille chaque matin."]}
+    feedback_frame: {text: "Tu devrais + infinitive gives advice: you should.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.choose.001
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for advice with a hypothesis, and for answering it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.listen.002
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for advice with a hypothesis, and for answering it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.match.003
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for advice with a hypothesis, and for answering it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.order.004
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: word_order
+    frame: {text: "Si {item} toi, je lui demanderais un jour de repos par semaine.", language_code: fr, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Si {item} toi, je lui demanderais un jour de repos par semaine.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Si j'étais toi, je + conditional: if I were you, I would. The si-clause uses the imperfect.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.order.005
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: word_order
+    frame: {text: "Si j'étais toi, je lui {item} un jour de repos par semaine.", language_code: fr, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Si j'étais toi, je lui {item} un jour de repos par semaine.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Ça t'aidera is the future: that will help you.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.fill.006
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: fill_in_blank
+    frame: {text: "Je n'ose pas lui demander {item}. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_9, hint: *anc_9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Si j'étais toi, je + conditional: if I were you, I would. The si-clause uses the imperfect.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.fill.007
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: fill_in_blank
+    frame: {text: "Bonne {item}, ça t'aidera vraiment. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_10, hint: *anc_10}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Ça t'aidera is the future: that will help you.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.translate.008
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec2_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for advice with a hypothesis, and for answering it.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.translate.009
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: translation
+    frame: {text: "If I were you, I would ask him for a day off each week.", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Si j'étais toi, je lui {item} un jour de repos par semaine.", language_code: fr, direction: ltr}, accepted_variants: ["Si j'étais toi, je lui {item} un jour de repos chaque semaine.", "À ta place, je lui {item} un jour de repos par semaine."]}
+    feedback_frame: {text: "Si j'étais toi, je + conditional: if I were you, I would. The si-clause uses the imperfect.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.translate.010
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: translation
+    frame: {text: "I do not dare ask him directly.", language_code: en, direction: ltr}
+    slots: {item: *anc_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Je n'ose pas lui demander {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Ça t'aidera is the future: that will help you.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit35.lesson02.translate.011
+    lesson_content_key: fr.b1.unit35.lesson02.si_jetais_toi
+    type: translation
+    frame: {text: "Good idea, it will really help you.", language_code: en, direction: ltr}
+    slots: {item: *anc_10}
+    answer_derivation: {kind: render_frame, frame: {text: "Bonne {item}, ça t'aidera vraiment.", language_code: fr, direction: ltr}, accepted_variants: ["C'est une bonne {item}, ça t'aidera vraiment."]}
+    feedback_frame: {text: "Si j'étais toi, je + conditional: if I were you, I would. The si-clause uses the imperfect.", language_code: en, direction: ltr}

@@ -1,0 +1,184 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit42
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit42.reunions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_adoucie", "w_avez-vous", "w_bien", "w_bref", "w_citron", "w_confirme", "w_convenu", "w_d'essayer", "w_essaierons", "w_essayons-la", "w_formelle", "w_message", "w_nouvelle", "w_peut-être", "w_pouvez-vous", "w_professionnel", "w_proposerais", "w_proposeriez-vous", "w_revisitée", "w_réunion", "w_serait", "w_suggestion", "w_tarte", "w_vitrine", "w_écrit"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_serait", "w_peut-être", "w_d'essayer", "w_nouvelle", "w_vitrine", "w_suggestion", "w_formelle", "w_adoucie", "w_réunion"]}}
+  mat_2: &mat_2 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_serait", "w_peut-être", "w_d'essayer", "w_nouvelle", "w_vitrine", "w_suggestion", "w_formelle", "w_adoucie", "w_réunion", "w_convenu", "w_confirme", "w_essaierons", "w_message", "w_professionnel", "w_bref", "w_avez-vous", "w_proposeriez-vous", "w_proposerais", "w_tarte", "w_citron", "w_revisitée", "w_essayons-la", "w_pouvez-vous", "w_écrit", "w_bien"]}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: "w_peut-être"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_vitrine"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: phrase, agreement_tags: {semantic: "w_d'essayer"}}
+  anc_6: &anc_6 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_suggestion"}}
+  rec2_7: &rec2_7 {language_code: fr, part_of_speech: [adjective, adverb, noun, phrase, verb], agreement_tags: {semantic: ["w_convenu", "w_confirme", "w_essaierons", "w_message", "w_professionnel", "w_bref", "w_avez-vous", "w_proposeriez-vous", "w_proposerais", "w_tarte", "w_citron", "w_revisitée", "w_essayons-la", "w_pouvez-vous", "w_écrit", "w_bien"]}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_convenu"}}
+  anc_9: &anc_9 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_proposerais"}}
+  anc_10: &anc_10 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_citron"}}
+  anc_11: &anc_11 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_écrit"}}
+  anc_12: &anc_12 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_proposeriez-vous"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.choose.001
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for making a polite suggestion in a meeting.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.listen.002
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for making a polite suggestion in a meeting.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.match.003
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for making a polite suggestion in a meeting.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.order.004
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: word_order
+    frame: {text: "Il serait {item} possible d'essayer une nouvelle recette.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Il serait {item} possible d'essayer une nouvelle recette.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Il serait peut-être possible de + infinitive is a softened formal suggestion.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.order.005
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: word_order
+    frame: {text: "Il serait peut-être possible d'essayer une nouvelle recette pour la {item}.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Il serait peut-être possible d'essayer une nouvelle recette pour la {item}.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Pour la vitrine means for the shop window display.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.fill.006
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: fill_in_blank
+    frame: {text: "Il serait peut-être possible {item} une nouvelle recette pour la vitrine. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_5, hint: *anc_5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Il serait peut-être possible de + infinitive is a softened formal suggestion.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.fill.007
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: fill_in_blank
+    frame: {text: "Inès, avez-vous une {item} pour la réunion de cette semaine ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_6, hint: *anc_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pour la vitrine means for the shop window display.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.translate.008
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for making a polite suggestion in a meeting.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.translate.009
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: translation
+    frame: {text: "It might perhaps be possible to try a new recipe for the shop window.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Il serait {item} possible d'essayer une nouvelle recette pour la vitrine.", language_code: fr, direction: ltr}, accepted_variants: ["Il serait {item} possible de tester une nouvelle recette pour la vitrine."]}
+    feedback_frame: {text: "Il serait peut-être possible de + infinitive is a softened formal suggestion.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson01.translate.010
+    lesson_content_key: fr.b1.unit42.lesson01.suggestion
+    type: translation
+    frame: {text: "Inès, do you have a suggestion for this week's meeting?", language_code: en, direction: ltr}
+    slots: {item: *anc_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Inès, avez-vous une {item} pour la réunion de cette semaine ?", language_code: fr, direction: ltr}, accepted_variants: ["Inès, est-ce que vous avez une {item} pour la réunion de cette semaine ?"]}
+    feedback_frame: {text: "Pour la vitrine means for the shop window display.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.choose.001
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for confirming an agreement in a short professional message.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.listen.002
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for confirming an agreement in a short professional message.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.match.003
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *mat_2, second: *mat_2, third: *mat_2, fourth: *mat_2, fifth: *mat_2, sixth: *mat_2}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for confirming an agreement in a short professional message.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.order.004
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: word_order
+    frame: {text: "Comme {item}, je vous confirme que nous essaierons la nouvelle recette.", language_code: fr, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Comme {item}, je vous confirme que nous essaierons la nouvelle recette.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Comme convenu, je vous confirme que + clause opens a short professional confirmation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.order.005
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: word_order
+    frame: {text: "Je {item} une tarte au citron revisitée.", language_code: fr, direction: ltr}
+    slots: {item: *anc_9}
+    answer_derivation: {kind: render_frame, frame: {text: "Je {item} une tarte au citron revisitée.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Pouvez-vous confirmer par écrit ? asks for written confirmation, in the vous register.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.order.006
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: word_order
+    frame: {text: "Je proposerais une tarte au {item} revisitée.", language_code: fr, direction: ltr}
+    slots: {item: *anc_10}
+    answer_derivation: {kind: render_frame, frame: {text: "Je proposerais une tarte au {item} revisitée.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Comme convenu, je vous confirme que + clause opens a short professional confirmation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.fill.007
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: fill_in_blank
+    frame: {text: "Pouvez-vous confirmer par {item} ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_11, hint: *anc_11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Pouvez-vous confirmer par écrit ? asks for written confirmation, in the vous register.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.fill.008
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: fill_in_blank
+    frame: {text: "Laquelle {item} ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_12, hint: *anc_12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Comme convenu, je vous confirme que + clause opens a short professional confirmation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.translate.009
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec2_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for confirming an agreement in a short professional message.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.translate.010
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: translation
+    frame: {text: "As agreed, I confirm that we will try the new recipe next week.", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Comme {item}, je vous confirme que nous essaierons la nouvelle recette la semaine prochaine.", language_code: fr, direction: ltr}, accepted_variants: ["Comme {item}, je vous confirme que nous allons essayer la nouvelle recette la semaine prochaine."]}
+    feedback_frame: {text: "Pouvez-vous confirmer par écrit ? asks for written confirmation, in the vous register.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.translate.011
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: translation
+    frame: {text: "I would suggest a revisited lemon tart.", language_code: en, direction: ltr}
+    slots: {item: *anc_10}
+    answer_derivation: {kind: render_frame, frame: {text: "Je proposerais une tarte au {item} revisitée.", language_code: fr, direction: ltr}, accepted_variants: ["Je proposerais une tarte revisitée au {item}."]}
+    feedback_frame: {text: "Comme convenu, je vous confirme que + clause opens a short professional confirmation.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit42.lesson02.translate.012
+    lesson_content_key: fr.b1.unit42.lesson02.confirmation
+    type: translation
+    frame: {text: "Can you confirm in writing?", language_code: en, direction: ltr}
+    slots: {item: *anc_11}
+    answer_derivation: {kind: render_frame, frame: {text: "Pouvez-vous confirmer par {item} ?", language_code: fr, direction: ltr}, accepted_variants: ["Pourriez-vous confirmer par {item} ?", "Est-ce que vous pouvez confirmer par {item} ?"]}
+    feedback_frame: {text: "Pouvez-vous confirmer par écrit ? asks for written confirmation, in the vous register.", language_code: en, direction: ltr}
