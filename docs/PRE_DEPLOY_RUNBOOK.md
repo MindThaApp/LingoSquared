@@ -14,27 +14,30 @@ present, never unattended.**
 ## FIRST: set `$LINGO_REPO` (every command below depends on it)
 
 ```bash
-export LINGO_REPO="$HOME/dev/LingoSquared"
+export LINGO_REPO="${LINGO_REPO:-$HOME/AI/Projects/LingoSquared}"   # the WSL checkout; adjust if yours differs
 [ -d "$LINGO_REPO/backend" ] || { echo "WRONG PATH — stop"; }
 ```
 
-The repo lives at `~/dev/LingoSquared` on both macOS and WSL. **Always quote
+The repo lives at `~/AI/Projects/LingoSquared` on the WSL box (older notes say
+`~/dev/LingoSquared`). On the server it is `/home/ramin/LingoSquared`. **Always quote
 `$LINGO_REPO`** so a path with spaces can never word-split.
 
-## Load-bearing fact: the live server has never been deployed to
+## Current state: the live server HAS been deployed to (many times)
 
-Every mention of 192.168.4.4 in `docs/BUILD_LOG.md`'s entire history
-(2026-07-02 → 2026-07-07) is either the deploy recipe itself, a
-read-only SSH check (`grep` on `.env`), or an explicit "was NOT
-touched" / "never touched the live server" statement. No entry
-describes an actual rsync/build/migrate/seed/restart cycle executed
-against it. **Treat this as a from-scratch-equivalent first deploy,
-not an incremental one** — don't assume any prior migration/seed state
-beyond whatever was there from original box setup (Debian, Docker,
-`docker-compose.yml`, an empty or near-empty Postgres). If you find
-evidence during pre-flight (below) that contradicts this — e.g.
-`alembic_version` already has real rows — stop and reconcile before
-proceeding; don't silently pick one story.
+The server (192.168.4.4) is a running deployment, updated incrementally by
+rsync + `docker compose build api` + `alembic upgrade head` + content/backfill
+sync (see the session deploy logs in `.local/logs/session12-deploy*.md` and
+the BUILD_LOG). Treat every deploy as incremental: back up first, expect
+`alembic_version` to exist, and do NOT re-run first-deploy-only steps (e.g.
+registering the first admin) unless a pre-flight check shows they are needed.
+The "from scratch" material further down (steps written for a first deploy)
+is kept as the reference for rebuilding a box or a throwaway environment.
+
+Rollback today: `docker tag backend-api:<previous> backend-api:latest && docker
+compose up -d api` (only a true code rollback after the production compose
+switch below; with the current `.:/app` bind mount the running code is
+whatever was rsynced), plus a DB restore from the pre-deploy dump if a
+migration was not additive.
 
 ## Pre-flight checks (BEFORE touching anything)
 
@@ -94,30 +97,26 @@ the live server.
 4. **Confirm current env var values** (from step 2's `.env` dump, or
    individually):
    ```bash
-   ssh ramin@192.168.4.4 "grep -E 'ADMIN_EMAILS|CORS_ORIGINS|AZURE_SPEECH|GOOGLE_CLOUD_TTS|JWT_SECRET' /home/ramin/LingoSquared/backend/.env"
+   ssh ramin@192.168.4.4 "grep -E 'APP_ENV|SENTRY_DSN|CORS_ORIGINS|AZURE_SPEECH|GOOGLE_CLOUD_TTS|JWT_SECRET' /home/ramin/LingoSquared/backend/.env"
    ```
    **Automated version of this check** (added 2026-07-10):
    `scripts/check_deploy_config.sh <path-to-.env>` — checks every row of
    the "Required environment variables" table below against a `.env`
    file and exits non-zero on any FAIL-level finding (placeholder
-   `ADMIN_EMAILS`/`JWT_SECRET`/`POSTGRES_PASSWORD`; localhost-only
+   `JWT_SECRET`/`POSTGRES_PASSWORD`, `.env` file mode other than 600, `APP_ENV` dev/test or unset; localhost-only
    `CORS_ORIGINS` and missing TTS credentials are WARN-level, matching
    the table's "not a deploy blocker" calls). For the live server, pull
    the file locally first rather than SSHing from the script:
    ```bash
+   ssh ramin@192.168.4.4 "stat -c %a /home/ramin/LingoSquared/backend/.env"   # must print 600; fix with chmod 600
    ssh ramin@192.168.4.4 cat /home/ramin/LingoSquared/backend/.env > /tmp/live.env
+   chmod 600 /tmp/live.env   # the copy's mode is local; the line above checks the server file's mode
    scripts/check_deploy_config.sh /tmp/live.env && rm /tmp/live.env
    ```
    It only inspects the file — it cannot confirm the admin account is
    actually registered (post-deploy step 4) or that a non-empty Google
    credential isn't the corrupted key (open question #1 below).
-   As of the last read-only check (2026-07-05), `ADMIN_EMAILS` was
-   still the `.env.example` placeholder (`admin@example.com`) and
-   `CORS_ORIGINS` was `http://localhost:5173, http://localhost:5174`
-   — confirm these haven't changed since, they almost certainly
-   haven't been touched given no entry since claims otherwise. See
-   "Required environment variables" below for what each needs to
-   become before deploy.
+   See "Required environment variables" below for what each needs to be.
 
 5. **Confirm no other session is mid-deploy.** Check for an
    in-progress `git worktree`/uncommitted changes on your own working
@@ -136,7 +135,9 @@ unilaterally.
 
 | Variable | Current live state (last confirmed) | What it needs to be |
 |---|---|---|
-| `ADMIN_EMAILS` | `admin@example.com` (placeholder, confirmed 2026-07-05) | **Needs Ramin's real private email**, and his account must be registered under it. No email verification exists — whoever registers first with the literal listed address becomes admin, so set this *before* any beta invite goes out, and register Ramin's account immediately after. |
+| `.env` file mode | was 644 on the server (finding from the 2026-10-25 backend review) | `chmod 600 /home/ramin/LingoSquared/backend/.env`. It holds `JWT_SECRET`, the DB password and cloud keys. `env_file:` is read by the docker client, so 600 owned by the deploy user is safe. |
+| `APP_ENV` | check | `production` on the server. Anything other than dev/development/test is production-like, and then the app **refuses to start** if `JWT_SECRET` is under 32 characters or a placeholder, or the `DATABASE_URL` password is `change-me`. Set a real secret before flipping it (`openssl rand -hex 32`; this invalidates sessions). |
+| `SENTRY_DSN` | optional | Crash reporting; empty means off (WARN only). See `docs/SENTRY.md`. |
 | `CORS_ORIGINS` | `http://localhost:5173, http://localhost:5174` (confirmed 2026-07-05) | **Needs the real origin(s) beta users' browsers will load the frontend from** (a real domain or the LAN IP + port). Fails safe (rejects) if wrong, but breaks the app for every real user until fixed — a product decision (what the origin actually is), not something to infer. **If deploying the LAN web bundle (see "Frontend (LAN web)" section below), must also include `http://192.168.4.4:8011`.** |
 | `AZURE_SPEECH_KEY` / `AZURE_SPEECH_REGION` | unset (never provisioned anywhere, dev or live) | **Needs Ramin to provision an Azure Speech resource** (Azure Portal → Cognitive Services → Speech), then set both here. Without it, `fa` TTS degrades gracefully to `provider_error`/browser fallback (no crash — `tts_actually_configured()` in `backend/app/services/tts.py` already gates the Endless Practice `listen_select` generator on real credentials, not just language support) — so this is NOT a deploy blocker, just a "fa audio won't actually work" gap until provided. |
 | `GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` | presumed already set on live (predates this session) — genuinely unconfirmed whether it's present, unset, or the corrupted key from the 2026-07-04 incident (see open question #1 below) | Confirm it's present and non-empty. If TTS for the 8 Google-covered languages is silently falling back to browser speech, re-verify via the debug path in `CLAUDE.md`'s Footguns section (`json.loads` → `Credentials.from_service_account_info()` → `creds.refresh()`) rather than trusting `/tts`'s silent exception-swallowing fallback. |
@@ -227,13 +228,14 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run
 
 # 5. Bring the server up NOW, on the new image + migrated DB — required
 #    before any of the HTTP-based admin steps below can be called at all.
-#    Requires ADMIN_EMAILS/CORS_ORIGINS/etc. already correct in the synced
+#    Requires APP_ENV/CORS_ORIGINS/etc. already correct in the synced
 #    .env (rsync never touches .env — set these directly on the server
 #    BEFORE this step, see "Required environment variables" above).
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"
 
-# 6. Register Ramin's real admin account (requires ADMIN_EMAILS to already
-#    list this email — see above) and log in to get a bearer token for every
+# 6. Register Ramin's real admin account, promote it
+#    (`docker compose run --rm api python -m app.scripts.promote_admin <email>`;
+#    registration never grants admin) and log in to get a bearer token for every
 #    admin call below:
 curl -X POST http://192.168.4.4:8010/auth/register -H "Content-Type: application/json" \
   -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}'
@@ -291,7 +293,7 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run
 #    POST it to /admin/courses/{course_id}/practice/import (get course_id
 #    from step 7's import response or GET /courses) with the same $TOKEN.
 
-# 10. If ADMIN_EMAILS/CORS_ORIGINS/any other .env value changed AFTER step 5
+# 10. If APP_ENV/CORS_ORIGINS/any other .env value changed AFTER step 5
 #     (e.g. you fixed a placeholder mid-deploy instead of before), re-run:
 ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose up -d api"
 #     `docker compose restart` does NOT reload .env — only `up -d`/
@@ -386,7 +388,7 @@ time.
    confirms the migration actually applied, not just that the command
    exited 0.
 
-4. **Confirm ADMIN_EMAILS/CORS_ORIGINS were actually updated** (not
+4. **Confirm APP_ENV/CORS_ORIGINS were actually updated** (not
    just planned) if this deploy included that decision — re-run the
    step-4 pre-flight grep and confirm the values changed, then
    register Ramin's real admin account and confirm `is_admin: true`
@@ -488,6 +490,10 @@ phone-testing, not a bug).
 
 ## Contradictions / open questions found while synthesizing this (need Ramin's input)
 
+*(Written before the server was deployed to; items 2 and 3 are historical. A
+rollback plan now exists: see "Current state" at the top and the production
+compose section below.)*
+
 1. **`GOOGLE_CLOUD_TTS_CREDENTIALS_JSON` on live was never explicitly
    re-confirmed after the 2026-07-04 corruption incident** (a GUI
    copy-paste mangled the key once, on whatever environment that was
@@ -541,3 +547,101 @@ phone-testing, not a bug).
    double-checking on deploy day that this runbook's step 7 is actually
    followed and not skipped by habit in favor of the old, insufficient
    `app.content.seed` step.
+
+## Health endpoints
+
+- `GET /health` is static (`{"status":"ok"}`): liveness only, never touches the DB.
+- `GET /health/ready` runs `SELECT 1`: 200 `{"status":"ok","database":"ok"}`, or 503 when
+  the database is unreachable. The production image's HEALTHCHECK uses it.
+
+## Scheduled housekeeping (cron, not installed by anyone automatically)
+
+The app has no scheduler for housekeeping (only the in-process push loop), so
+`python -m app.maintenance` runs four jobs: expired/revoked refresh tokens,
+orphan feedback attachments (rows + files), expired unanswered
+`practice_items` that nothing references (older than 7 days past expiry), and
+expired social sign-in nonces. Run one job with `python -m app.maintenance
+practice_items` (names: `refresh_tokens attachments practice_items nonces`).
+Exit code 1 if any job failed. Safe to re-run.
+
+Cron line for the server user (add by hand with `crontab -e`; this is NOT
+installed by deploys or agents). 03:30, after the 03:00 DB backup:
+
+```cron
+30 3 * * * cd /home/ramin/LingoSquared/backend && docker compose run --rm --no-deps api python -m app.maintenance >> /home/ramin/lingo_maintenance.log 2>&1
+```
+
+With the production compose, add `-f docker-compose.yml -f docker-compose.prod.yml`
+after `docker compose`. The attachments job needs the `feedback_uploads` mount,
+so use `exec` on the running api container if you prefer
+(`docker compose exec -T api python -m app.maintenance`).
+
+## Switching to the production compose (NOT yet applied on the server)
+
+`backend/docker-compose.prod.yml` + the `prod` stage of `backend/Dockerfile`:
+code baked into the image (no `.:/app` bind mount, so `backend-api:<tag>`
+really is a code version and an image-tag rollback rolls back code), runtime
+requirements only (no pytest), non-root user `app` (uid 1000 by default,
+`APP_UID` build arg / env), HEALTHCHECK on `/health/ready`. The dev stage is
+still the default build target, so `docker compose build` is unchanged.
+Verified locally: prod image builds, runs as uid 1000, goes `healthy`,
+`alembic upgrade head` works, startup refuses a short JWT secret, readiness
+returns 503 with the DB stopped while `/health` stays 200.
+
+Switch-over steps (with Ramin present, after a pg_dump backup):
+
+1. Before switching, tag the running image for rollback:
+   `docker tag backend-api:latest backend-api:pre-prod-compose`.
+2. Prepare host dirs the container user must own. Today the bind-mounted
+   `backend/` dir is written by a root container, so `feedback_uploads/` is
+   likely root-owned:
+   `cd /home/ramin/LingoSquared/backend && mkdir -p feedback_uploads && sudo chown -R $(id -u):$(id -g) feedback_uploads`
+   (`media_assets/` is mounted read-only; it only needs to be readable.) Confirm
+   `id -u` is 1000, or export `APP_UID=$(id -u)` before building.
+3. `.env` must satisfy the startup checks (`scripts/check_deploy_config.sh`):
+   APP_ENV=production, 32+ char JWT_SECRET, a real DB password, mode 600.
+4. Build and switch only the api service:
+   `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build api`
+   Use the same `-f` pair for every later `docker compose` command (or export
+   `COMPOSE_FILE=docker-compose.yml:docker-compose.prod.yml` in the server
+   user's shell profile).
+5. Migration notes: no DB migration is needed for the switch itself. The
+   Whisper model cache moves to a new named volume
+   (`..._whisper_model_cache_nonroot`), so the ~150 MB model re-downloads on
+   first STT use; the old `whisper_model_cache` volume can be removed later
+   by hand. Alembic revision 0035 (index on `practice_items`) ships with
+   this change set; run `alembic upgrade head` as usual.
+6. Rollback: `docker tag backend-api:<previous> backend-api:latest &&
+   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --no-deps api`
+   (set `API_TAG=<previous>` instead to run a specific tag without retagging).
+7. Backfill/sync scripts are not in the image. They keep working unchanged by
+   mounting the repo (read-only is fine), as in step 8 above, e.g.:
+   `docker compose -f docker-compose.yml -f docker-compose.prod.yml run --rm -v "$(cd .. && pwd):/repo:ro" -e PYTHONPATH=/repo/backend --entrypoint python api /repo/scripts/backfill_lexemes.py --dry-run`
+   Any `docker compose run ... pytest` no longer works in the prod image (no
+   pytest); run tests with the default (dev) compose on the dev box.
+8. Because the code is baked in, **every deploy now needs `--build`**; rsync
+   alone no longer changes what runs.
+
+## Running the test suite: fast versus content split
+
+The per-exercise tests in `backend/tests/test_content_answer_shapes.py` (one
+test per compiled exercise, from `docs/content`) carry the pytest marker
+`content`. Default behaviour is unchanged: no `-m` runs everything.
+
+- `pytest -m "not content"`: hand-written code tests (the fast layer).
+- `pytest -m content`: the content-parametrized tests (needs the full-repo
+  mount, `LINGO_REPO_ROOT=/repo`).
+
+Counts (2026-10-25, branch fix/backend-quick): see the line below, updated by
+the last gate run.
+
+| Selection | Tests | Wall time (compose, full-repo ro mount) |
+|---|---|---|
+| full suite (no `-m`) | 33,922 passed (was 33,906 + 1 skipped; +15 new ops tests; the renderer-registration check now runs because the worktree mount includes `frontend/`) | about 185 s |
+| `-m "not content"` | 513 | about 150 s (collection still compiles all content) |
+| `--ignore=tests/test_content_answer_shapes.py` (same 513) | 513 | about 93 s |
+| `-m content` | 33,409 | about 90 s of test time plus collection |
+
+`-m content` or `-m "not content"` still compile `docs/content` at collection
+because the cases are generated in `pytest_generate_tests`; for the quickest
+code-only loop use `--ignore=tests/test_content_answer_shapes.py`.
