@@ -10,7 +10,7 @@ regression pass.
 
 1. The local Docker stack is up and seeded: start Docker (Docker Desktop / `sudo service docker start` on
    WSL / `colima start` on macOS), then `cd ../backend && docker compose up -d`, migrations applied, content
-   imported per `scripts/content_manifest.txt`. Per the ownership map
+   imported per `scripts/manifest.d/content/*.txt`. Per the ownership map
    in `docs/SONNET_BUILD_PROMPT_UPGRADES.md`, the Docker stack has ONE
    owner at a time -- this suite assumes someone else (or you, in a
    different terminal) already brought it up correctly. It will not

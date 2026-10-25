@@ -4,9 +4,9 @@
 # interactively; the credential is never written to disk or shell history.
 #
 # Order matters (documented in docs/PRE_DEPLOY_RUNBOOK.md and CLAUDE.md):
-#   1. content import   (POST /admin/content/import, per content_manifest.txt)
+#   1. content import   (POST /admin/content/import, per manifest.d/content/)
 #   2. lexeme backfills (docker compose run with full-repo mount)
-#   3. practice import  (POST /admin/courses/{id}/practice/import, per practice_manifest.txt)
+#   3. practice import  (POST /admin/courses/{id}/practice/import, per manifest.d/practice/)
 #
 # Usage:  ./scripts/sync_dev_db.sh [API_BASE]
 #         API_BASE defaults to http://localhost:8000
@@ -128,7 +128,7 @@ while IFS='|' read -r COURSE REALS OVERLAYS; do
     FAILED_COURSES="${FAILED_COURSES:-} $COURSE"; continue
   fi
   "$PY" -c 'import json,sys; d=json.load(open(sys.argv[1])); print("   ", {k:v for k,v in d.items() if k!="warnings"}); w=d.get("warnings") or []; [print("    warn:", x) for x in w[:5]]' "$TMPDIR_SYNC/resp.json"
-done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/content_manifest.txt" | grep -v '^\s*$')
+done < <(LC_ALL=C cat "$REPO_ROOT"/scripts/manifest.d/content/*.txt | grep -v '^\s*$')
 
 fi  # DO_CONTENT
 
@@ -201,7 +201,7 @@ if matches:
         --data-binary @"$TMPDIR_SYNC/practice.json")
     echo "   $LEVEL -> course $CID -> $HTTP: $(head -c 200 "$TMPDIR_SYNC/presp.json")"
   done
-done < <(grep -v '^\s*#' "$REPO_ROOT/scripts/practice_manifest.txt" | grep -v '^\s*$')
+done < <(LC_ALL=C cat "$REPO_ROOT"/scripts/manifest.d/practice/*.txt | grep -v '^\s*$')
 
 fi  # DO_PRACTICE
 

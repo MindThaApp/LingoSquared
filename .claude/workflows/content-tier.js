@@ -1,6 +1,6 @@
 export const meta = {
   name: 'content-tier',
-  description: 'Graph-run a content tier/unit through review -> fix -> adversarial re-verify; pipelined (no barrier) so item B reviews while item A fixes. Ends by reporting which files are clean and ready for the COORDINATOR to wire into the manifest + commit (the workflow never touches content_manifest.txt or git).',
+  description: 'Graph-run a content tier/unit through review -> fix -> adversarial re-verify; pipelined (no barrier) so item B reviews while item A fixes. Ends by reporting which files are clean and ready for the COORDINATOR to wire into the manifest + commit (the workflow never touches manifest.d/content/ or git).',
   phases: [
     { title: 'Author', detail: 'greenfield only — runs when an item sets authored:false' },
     { title: 'Review', detail: 'fresh-context reviewer -> structured findings (SHIP / FIX-FIRST)' },
@@ -83,7 +83,7 @@ const authorPrompt = (item) => item.authorBrief || (
   `You are a content-author sub-agent for ${REPO_ROOT}. Author the ${item.lang} tier "${item.id}" ` +
   `following docs/content/AUTHORING_GUIDE.md (all of it) and the shipped nl B2 exemplar for structure/outcome ids. ` +
   `Create ONLY ${(item.reviewRealizations || []).join(', ')} and ${(item.reviewOverlays || []).join(', ')}. ` +
-  `Do NOT touch scripts/content_manifest.txt or any existing file. Never mask a validation error — a smaller clean unit beats a padded one. ` +
+  `Do NOT touch scripts/manifest.d/content/*.txt or any existing file. Never mask a validation error — a smaller clean unit beats a padded one. ` +
   `Prove 0 errors/0 warnings and paste output verbatim:\n${compileCmd(item)}`
 )
 
@@ -107,7 +107,7 @@ const fixPrompt = (item, review) => (
   review.findings.map((f, i) => `${i + 1}. [${f.severity}] ${f.file} ${f.location}: ${f.issue}\n   FIX: ${f.fix}`).join('\n') +
   `\n\nRules: change ONLY what the findings specify, only within ${(item.reviewRealizations || []).join(', ')} and ${(item.reviewOverlays || []).join(', ')}. ` +
   `If any fix is blocked, honestly DROP/skip that item and say so — NEVER mask an error with bogus content, letter-blanks, symbolic notation, or padding. ` +
-  `Do NOT touch scripts/content_manifest.txt, git, or any file outside this tier.\n\n` +
+  `Do NOT touch scripts/manifest.d/content/*.txt, git, or any file outside this tier.\n\n` +
   `Prove it — run and paste output verbatim:\n${compileCmd(item)}\nRequired: ZERO errors, ZERO warnings. Report each finding as fixed or dropped-with-reason.`
 )
 

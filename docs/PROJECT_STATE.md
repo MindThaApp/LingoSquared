@@ -180,7 +180,7 @@ through in a live browser yet:
   + working scored module checkpoints, per launch pair.** Practice hours
   come from the Endless Practice engine (built for all 6 launch
   directions — en-fa 124, en-nl 240, en-prs 36, fa-en 86, nl-en 327,
-  prs-en 86 templates per `scripts/practice_manifest.txt`); actual
+  prs-en 86 templates per `scripts/manifest.d/practice/*.txt`); actual
   hour-depth vs the bar hasn't been separately measured. Phase F unit
   checkpoints are a hard publish-gate requirement. Detail:
   APP_SPEC_FOR_FABLE_REVIEW.md §1 + `project-lingosquared-roadmap` memory.

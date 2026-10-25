@@ -243,10 +243,10 @@ TOKEN=$(curl -s -X POST http://192.168.4.4:8010/auth/login -H "Content-Type: app
   -d '{"email":"<ramins-real-email>","password":"<a-real-password>"}' | python3 -c "import json,sys;print(json.load(sys.stdin)['access_token'])")
 
 # 7. Compile + import the REAL course content, per direction, per
-#    scripts/content_manifest.txt (decide with Ramin which directions are
+#    scripts/manifest.d/content/*.txt (decide with Ramin which directions are
 #    in scope for this first deploy — at minimum the 6 publish-gate
 #    directions: en-fa, en-nl, en-prs, fa-en, nl-en, prs-en). For each line
-#    of content_manifest.txt in scope:
+#    of manifest.d/content/ in scope:
 python scripts/compile_content.py compile --realization <realizations for that course> \
   --overlay <overlays for that course> --out /tmp/<course>.json
 curl -X POST http://192.168.4.4:8010/admin/content/import \
@@ -289,7 +289,7 @@ ssh ramin@192.168.4.4 "cd /home/ramin/LingoSquared/backend && docker compose run
 #    fails every template with "lesson key ... was not found in the course"
 #    (found live 2026-07-06; CLAUDE.md's own recipe had this backwards once,
 #    already corrected there — this file states the corrected order explicitly).
-#    Per scripts/practice_manifest.txt entry in scope, compile the pack and
+#    Per scripts/manifest.d/practice/*.txt entry in scope, compile the pack and
 #    POST it to /admin/courses/{course_id}/practice/import (get course_id
 #    from step 7's import response or GET /courses) with the same $TOKEN.
 
@@ -597,11 +597,11 @@ compose section below.)*
    imported**, depends on exactly which courses/units this deploy
    ships — not something this runbook can resolve without knowing the
    deploy's actual content scope on the day. Confirm against
-   `scripts/practice_manifest.txt` and the actual `/admin/content/
+   `scripts/manifest.d/practice/*.txt` and the actual `/admin/content/
    import` payload being sent.
 5. **Which course directions actually get imported on this first
    deploy is an open product decision, not something this runbook
-   picks.** `scripts/content_manifest.txt` currently has 9 entries (the
+   picks.** `scripts/manifest.d/content/*.txt` originally had 9 entries (now one file per entry) (the
    6 publish-gate directions plus `en-es`/`en-fr`, both explicitly
    "park until nl is done" per `CLAUDE.md`, plus an `en-nl-a2`
    extension). Decide with Ramin whether the first live deploy imports

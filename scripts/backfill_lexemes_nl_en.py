@@ -42,7 +42,7 @@ classified here now (+3374 specs), including two ENTIRELY NEW course rows,
 separate-course pattern as `UNIT_FILES_A2`). Consequence for deploys: the
 nl-en B1/B2 content must be imported before this script runs, or it exits 1
 with "ERROR: nl-en 'Engels B1' course must be imported first" -- the four
-tuples below are kept in the exact file order of `scripts/content_manifest.txt`'s
+tuples below are kept in the exact file order of `scripts/manifest.d/content/*.txt`'s
 `nl-en`/`nl-en-a2`/`nl-en-b1`/`nl-en-b2` lines, because `unit_order` here is
 positional and must line up with the imported `Unit.order`.
 
@@ -733,7 +733,7 @@ UNIT_FILES = (
 # in main()) -- also closes a real coverage gap found while fixing this:
 # unit27 (banking) existed on disk (docs/content/realizations/en/
 # a2_unit27_banking.yaml, docs/content/overlays/nl-en/a2_unit27.yaml,
-# scripts/content_manifest.txt's "nl-en-a2" entry) but this script never
+# scripts/manifest.d/content/*.txt's "nl-en-a2" entry) but this script never
 # classified it at all.
 UNIT_FILES_A2 = (
     (
