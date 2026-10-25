@@ -4,6 +4,7 @@ import { getSpeedPreference } from "../lib/ttsSpeedPreferences";
 import { postRaw } from "@lingo/shared/api/client";
 import { audioCache, audioCacheKey } from "../lib/audioCache";
 import { sanitizeForSpeech } from "../lib/sanitizeForSpeech";
+import { prerenderedAudioUrl } from "../lib/prerenderedAudio";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
@@ -148,7 +149,34 @@ export async function speak(
   }
   const spoken = sanitizeForSpeech(text);
   if (!spoken) return false;
+  if (await playPrerendered(spoken, languageCode)) return true;
   return speakViaTtsAndBrowser(spoken, languageCode);
+}
+
+// Tier 2 of the chain (after a recorded human clip, before POST /tts): the clip
+// scripts/render_audio.py rendered for exactly this sanitized text. The file is
+// one normal-speed mp3 per string; the per-language speed preference is applied
+// with playbackRate (pitch preserved), same as recorded clips. A definite miss
+// (NotSupportedError = 404/undecodable) is remembered for the session so a
+// string with no clip costs one failed request, not one per tap.
+const missingPrerendered = new Set<string>();
+
+async function playPrerendered(spoken: string, languageCode: string): Promise<boolean> {
+  const url = prerenderedAudioUrl(spoken, languageCode, BASE_URL);
+  if (!url || missingPrerendered.has(url)) return false;
+  const audio = new Audio(url);
+  audio.playbackRate = getSpeedPreference(languageCode);
+  audio.preservesPitch = true;
+  stopCurrentPlayback();
+  current = { audio };
+  try {
+    await audio.play();
+    return true;
+  } catch (err) {
+    if (current?.audio === audio) current = null;
+    if (err instanceof DOMException && err.name === "NotSupportedError") missingPrerendered.add(url);
+    return false;
+  }
 }
 
 async function playCloudUrl(url: string): Promise<boolean> {
