@@ -1109,12 +1109,19 @@ def _batch_rng(
         text("SELECT pg_advisory_xact_lock(hashtext(:key))"),
         {"key": lock_key},
     )
+    # The seed must change whenever a batch has been generated for this
+    # user+course. The newest item id does that without counting (and
+    # scanning) every item the user ever got; it is index-served by
+    # ix_practice_items_user_course_created.
     counter = db.scalar(
-        select(func.count(PracticeItem.id)).where(
+        select(PracticeItem.id)
+        .where(
             PracticeItem.user_id == user_id,
             PracticeItem.course_id == course_id,
         )
-    ) or 0
+        .order_by(PracticeItem.created_at.desc(), PracticeItem.id.desc())
+        .limit(1)
+    ) or "none"
     material = f"{namespace}:{user_id}:{course_id}:{counter}".encode()
     seed = int.from_bytes(hashlib.sha256(material).digest()[:8], "big")
     return random.Random(seed)

@@ -3,12 +3,15 @@ import re
 import secrets
 import asyncio
 from contextlib import asynccontextmanager
+from sqlalchemy import text
+from sqlalchemy.engine import make_url
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.api.router import router
 from app.core.config import get_settings
+from app.db.session import engine
 from app.core.security import decode_token
 from app.core.sentry import init_sentry
 from app.services.push_scheduler import push_scheduler_enabled, run_push_scheduler_once
@@ -22,10 +25,36 @@ from app.services.push_scheduler import push_scheduler_enabled, run_push_schedul
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 logger = logging.getLogger("app.main")
 
+NON_PRODUCTION_ENVS = {"dev", "development", "test"}
+MIN_JWT_SECRET_LENGTH = 32
+_DEFAULT_JWT_SECRETS = {"development-only-secret", "replace-with-a-long-random-secret"}
+
+
 def validate_startup_settings(settings):
-    if settings.jwt_secret == "development-only-secret" and settings.app_env.lower() not in {"dev", "development", "test"}:
+    """Refuse to boot a production-like environment with unsafe secrets.
+
+    Anything other than APP_ENV=dev/development/test counts as production
+    (including the default), so dev and the test suite are unaffected.
+    """
+    if settings.app_env.lower() in NON_PRODUCTION_ENVS:
+        return
+    problems = []
+    secret = settings.jwt_secret
+    if secret in _DEFAULT_JWT_SECRETS:
+        problems.append("JWT_SECRET is the built-in JWT secret or a placeholder")
+    elif len(secret) < MIN_JWT_SECRET_LENGTH:
+        problems.append(f"JWT_SECRET is shorter than {MIN_JWT_SECRET_LENGTH} characters")
+    try:
+        db_password = make_url(settings.database_url).password
+    except Exception:
+        db_password = None
+    if db_password == "change-me":
+        problems.append('the database password in DATABASE_URL is the placeholder "change-me"')
+    if problems:
         raise RuntimeError(
-            "Refusing to start with the built-in JWT secret; set JWT_SECRET to a strong secret or set APP_ENV=dev/test for local development and tests."
+            "Refusing to start in a production-like environment (APP_ENV="
+            f"{settings.app_env!r}): " + "; ".join(problems)
+            + ". Set strong values, or APP_ENV=dev/test for local development and tests."
         )
 
 s=get_settings()
@@ -112,5 +141,16 @@ async def internal_error(request:Request,exc:Exception):
     )
 @app.get("/health")
 def health(): return {"status":"ok"}
+
+@app.get("/health/ready")
+def health_ready():
+    """Readiness: verifies the database answers. /health stays static (liveness)."""
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+    except Exception:
+        logger.exception("readiness check failed")
+        return JSONResponse(status_code=503, content={"status":"unavailable","database":"down"})
+    return {"status":"ok","database":"ok"}
 app.include_router(router, prefix="/v1")
 app.include_router(router, include_in_schema=False)

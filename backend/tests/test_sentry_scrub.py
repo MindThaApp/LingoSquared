@@ -21,7 +21,7 @@ def test_no_dsn_means_sdk_never_initialised():
 
 
 def test_dsn_enables_sdk_with_pii_off_and_scrubber():
-    s = _settings(sentry_dsn="https://key@example.invalid/1", sentry_release="abc123")
+    s = _settings(app_env="production", sentry_dsn="https://key@example.invalid/1", sentry_release="abc123")
     with mock.patch("sentry_sdk.init") as init:
         assert init_sentry(s) is True
     kw = init.call_args.kwargs
