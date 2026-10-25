@@ -10,7 +10,7 @@ keeps the per-direction scripts down to DATA (one hand-written gloss and part
 of speech per token, plus optional category tags), so a reviewer reads
 glosses instead of plumbing:
 
-* Unit files come from the direction's ``scripts/content_manifest.txt`` line,
+* Unit files come from the direction's ``scripts/manifest.d/content/*.txt`` line,
   in manifest order. ``unit_order`` is positional and must equal the imported
   ``Unit.order``; reading the manifest line itself (instead of a glob) keeps
   that invariant by construction (see the long comment above
@@ -46,7 +46,7 @@ BACKEND_ROOT = REPO_ROOT / "backend"
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-MANIFEST = REPO_ROOT / "scripts/content_manifest.txt"
+MANIFEST = REPO_ROOT / "scripts/manifest.d/content"
 POS_ORDER = (
     "symbol", "proper_noun", "pronoun", "preposition", "particle",
     "adjective", "adverb", "verb", "phrase", "noun",
@@ -55,9 +55,10 @@ _UNIT_NUM_RE = re.compile(r"^[a-c][12]_unit(\d+)_")
 
 
 def manifest_group(group: str) -> tuple[list[Path], list[Path]]:
-    """(realization paths, overlay paths) of one content_manifest.txt line,
+    """(realization paths, overlay paths) of one manifest.d/content group file,
     in manifest order."""
-    for line in MANIFEST.read_text(encoding="utf-8").splitlines():
+    fp = MANIFEST / f"{group}.txt"
+    for line in (fp.read_text(encoding="utf-8").splitlines() if fp.exists() else []):
         if line.startswith(group + "|"):
             parts = line.split("|")
             return (
@@ -173,7 +174,7 @@ def run(
 ) -> int:
     """CLI + DB writer shared by the per-direction scripts.
 
-    ``levels`` maps level -> content_manifest group (e.g. {"a1": "en-es"}).
+    ``levels`` maps level -> manifest.d/content group (e.g. {"a1": "en-es"}).
     Same DB semantics as backfill_lexemes_en_nl.py's main(): update an
     existing (course, language, token, pos) row in place; migrate a single
     other-POS row for the same token in place (keeps FK references valid);

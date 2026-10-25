@@ -151,7 +151,7 @@ cleverness. The failures that actually cost time today were all
 3. **Shared-artifact checklist before committing content changes:** the
    en realization has FOUR overlay consumers (nl-en/fa-en/prs-en/de-en);
    manifests and `_en_target_lexeme_common.py` are single-writer; grep
-   content_manifest.txt for every consumer of a changed file.
+   manifest.d/content/ for every consumer of a changed file.
 4. **Escalate, don't improvise, on launch-gate design questions**
    (register norms, bar interpretations, anything Ramin owns). A
    reviewer who says "this needs a human call" is right — route it to
