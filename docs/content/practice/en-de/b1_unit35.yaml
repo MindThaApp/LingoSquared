@@ -1,0 +1,144 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit35
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit35.faehigkeiten
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches kann/konnte/könnte + dass- and ob-clauses. Variants: Ihnen/mir inserted after sagen. NATIVE FLAG: confirm 'Ich kann sagen, dass...' next to 'Ich kann Ihnen sagen, dass...' and 'Können Sie mir sagen, ob...' as natural office German.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Tag", "w_Bürgeramt", "w_kann", "w_sagen", "w_Termin", "w_frei", "w_letzte", "w_Woche", "w_konnte", "w_noch", "w_schon", "w_Nummer", "w_geben", "w_morgen", "w_anrufen", "w_Montag", "w_ob", "w_könnte"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Tag", "w_Bürgeramt", "w_kann", "w_sagen", "w_Termin", "w_frei", "w_letzte", "w_Woche", "w_konnte", "w_noch", "w_schon", "w_Nummer", "w_geben", "w_morgen", "w_anrufen", "w_Montag"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Montag", "w_anrufen", "w_morgen", "w_geben", "w_Nummer", "w_schon", "w_noch", "w_konnte", "w_Woche", "w_letzte", "w_frei", "w_Termin", "w_sagen", "w_kann", "w_Bürgeramt", "w_Tag"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_sagen"}}
+  p4: &p4 {language_code: de, part_of_speech: particle, agreement_tags: {semantic: "w_ob"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_konnte"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_könnte"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Montag"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit35.lesson01.choose.001
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson03.choose.001
+    lesson_content_key: de.b1.unit35.lesson03.buergeramt_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.listen.001
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.translate.001
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson03.match.001
+    lesson_content_key: de.b1.unit35.lesson03.buergeramt_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.order.001
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: word_order
+    frame: {text: "Ich kann {item}, dass der Termin frei ist.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich kann {item}, dass der Termin frei ist.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The dass-clause sends its verb to the end: ..., dass der Termin frei ist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.fill.001
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: fill_in_blank
+    frame: {text: "Ich kann {item}, dass der Termin frei ist. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The dass-clause sends its verb to the end: ..., dass der Termin frei ist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.translate.002
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: translation
+    frame: {text: "I can say that the appointment is free.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich kann {item}, dass der Termin frei ist.", language_code: de, direction: ltr}, accepted_variants: ["Ich kann Ihnen {item}, dass der Termin frei ist."]}
+    feedback_frame: {text: "The dass-clause sends its verb to the end: ..., dass der Termin frei ist.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.order.002
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: word_order
+    frame: {text: "Können Sie sagen, {item} der Termin frei ist?", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Können Sie sagen, {item} der Termin frei ist?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Ob (whether) also sends the verb to the end of its clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson01.translate.003
+    lesson_content_key: de.b1.unit35.lesson01.ich_kann_sagen_dass
+    type: translation
+    frame: {text: "Can you say whether the appointment is free?", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Können Sie sagen, {item} der Termin frei ist?", language_code: de, direction: ltr}, accepted_variants: ["Können Sie mir sagen, {item} der Termin frei ist?"]}
+    feedback_frame: {text: "Ob (whether) also sends the verb to the end of its clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.order.001
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: word_order
+    frame: {text: "Letzte Woche {item} ich noch nicht sagen, dass der Termin frei ist.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Letzte Woche {item} ich noch nicht sagen, dass der Termin frei ist.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Konnte is the past of können for ich and er/sie/es.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.fill.001
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: fill_in_blank
+    frame: {text: "Letzte Woche {item} ich noch nicht sagen, dass der Termin frei ist. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Konnte is the past of können for ich and er/sie/es.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.translate.001
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: translation
+    frame: {text: "Last week I could not yet say that the appointment is free.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Letzte Woche {item} ich noch nicht sagen, dass der Termin frei ist.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} letzte Woche noch nicht sagen, dass der Termin frei ist."]}
+    feedback_frame: {text: "Konnte is the past of können for ich and er/sie/es.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.order.002
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: word_order
+    frame: {text: "Wenn Sie mir Ihre Nummer geben, {item} ich Sie morgen anrufen.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie mir Ihre Nummer geben, {item} ich Sie morgen anrufen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Könnte (with an umlaut) says what would be possible; konnte says what was possible.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson02.translate.002
+    lesson_content_key: de.b1.unit35.lesson02.ich_konnte_sagen
+    type: translation
+    frame: {text: "If you give me your number, I could call you tomorrow.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Wenn Sie mir Ihre Nummer geben, {item} ich Sie morgen anrufen.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} Sie morgen anrufen, wenn Sie mir Ihre Nummer geben."]}
+    feedback_frame: {text: "Könnte (with an umlaut) says what would be possible; konnte says what was possible.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson03.fill.001
+    lesson_content_key: de.b1.unit35.lesson03.buergeramt_dialogue
+    type: fill_in_blank
+    frame: {text: "Können Sie sagen, ob der Termin am {item} frei ist? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Days of the week are nouns, so Montag keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit35.lesson03.translate.001
+    lesson_content_key: de.b1.unit35.lesson03.buergeramt_dialogue
+    type: translation
+    frame: {text: "Can you say whether the appointment is free on Monday?", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Können Sie sagen, ob der Termin am {item} frei ist?", language_code: de, direction: ltr}, accepted_variants: ["Können Sie mir sagen, ob der Termin am {item} frei ist?"]}
+    feedback_frame: {text: "Days of the week are nouns, so Montag keeps its capital letter.", language_code: en, direction: ltr}

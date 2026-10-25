@@ -1,0 +1,144 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit39
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit39.arbeitsalltag
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches zuständig sein für, status questions and a polite request. NATIVE FLAG: 'verantwortlich' accepted next to 'zuständig'; 'Könnten Sie mir bitte helfen' as a politer variant.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Projekt", "w_zuständig", "w_bin", "w_Planung", "w_arbeite", "w_Bericht", "w_wofür", "w_Stand", "w_bitte"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Projekt", "w_zuständig", "w_bin", "w_Planung", "w_arbeite", "w_Bericht", "w_wofür", "w_Stand"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Stand", "w_wofür", "w_Bericht", "w_arbeite", "w_Planung", "w_bin", "w_zuständig", "w_Projekt"]}}
+  p3: &p3 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Projekt"}}
+  p4: &p4 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Planung"}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Bericht"}}
+  p6: &p6 {language_code: de, part_of_speech: particle, agreement_tags: {semantic: "w_bitte"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Stand"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit39.lesson01.choose.001
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson03.choose.001
+    lesson_content_key: de.b1.unit39.lesson03.buero_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.listen.001
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.translate.001
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson03.match.001
+    lesson_content_key: de.b1.unit39.lesson03.buero_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.order.001
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: word_order
+    frame: {text: "Ich bin für das {item} zuständig.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für das {item} zuständig.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Für takes the accusative: für das Projekt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.fill.001
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: fill_in_blank
+    frame: {text: "Ich bin für das {item} zuständig. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Für takes the accusative: für das Projekt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.translate.002
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: translation
+    frame: {text: "I am responsible for the project.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für das {item} zuständig.", language_code: de, direction: ltr}, accepted_variants: ["Ich bin für das {item} verantwortlich."]}
+    feedback_frame: {text: "Für takes the accusative: für das Projekt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.order.002
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: word_order
+    frame: {text: "Ich bin für die {item} zuständig.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für die {item} zuständig.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Planung is feminine, so it takes die.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson01.translate.003
+    lesson_content_key: de.b1.unit39.lesson01.zustaendigkeit
+    type: translation
+    frame: {text: "I am responsible for the planning.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für die {item} zuständig.", language_code: de, direction: ltr}, accepted_variants: ["Für die {item} bin ich zuständig."]}
+    feedback_frame: {text: "Planung is feminine, so it takes die.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.order.001
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: word_order
+    frame: {text: "Ich arbeite noch am {item}.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich arbeite noch am {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Am is an contracted with dem: am Bericht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.fill.001
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: fill_in_blank
+    frame: {text: "Ich arbeite noch am {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Am is an contracted with dem: am Bericht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.translate.001
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: translation
+    frame: {text: "I am still working on the report.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich arbeite noch am {item}.", language_code: de, direction: ltr}, accepted_variants: ["Ich arbeite noch an dem {item}."]}
+    feedback_frame: {text: "Am is an contracted with dem: am Bericht.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.fill.002
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: fill_in_blank
+    frame: {text: "Können Sie mir {item} helfen? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Bitte makes the request polite.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson02.translate.002
+    lesson_content_key: de.b1.unit39.lesson02.statusupdate
+    type: translation
+    frame: {text: "Can you please help me?", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Können Sie mir {item} helfen?", language_code: de, direction: ltr}, accepted_variants: ["Könnten Sie mir {item} helfen?"]}
+    feedback_frame: {text: "Bitte makes the request polite.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson03.order.001
+    lesson_content_key: de.b1.unit39.lesson03.buero_dialogue
+    type: word_order
+    frame: {text: "Und wie ist der {item} beim Bericht?", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Und wie ist der {item} beim Bericht?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Beim is bei contracted with dem.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit39.lesson03.translate.001
+    lesson_content_key: de.b1.unit39.lesson03.buero_dialogue
+    type: translation
+    frame: {text: "And what is the status of the report?", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Und wie ist der {item} beim Bericht?", language_code: de, direction: ltr}, accepted_variants: ["Und wie ist der {item} bei dem Bericht?"]}
+    feedback_frame: {text: "Beim is bei contracted with dem.", language_code: en, direction: ltr}
