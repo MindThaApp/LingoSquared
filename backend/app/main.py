@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from app.api.router import router
 from app.core.config import get_settings
 from app.core.security import decode_token
+from app.core.sentry import init_sentry
 from app.services.push_scheduler import push_scheduler_enabled, run_push_scheduler_once
 
 # Basic logging configuration so app.* loggers actually emit to stdout.
@@ -29,6 +30,7 @@ def validate_startup_settings(settings):
 
 s=get_settings()
 validate_startup_settings(s)
+init_sentry(s)  # no-op unless SENTRY_DSN is set
 async def _push_scheduler_loop():
     while True:
         try:

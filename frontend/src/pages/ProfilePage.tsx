@@ -11,6 +11,8 @@ import { SpeechSpeedSettings } from "../components/SpeechSpeedSettings";
 import { NotificationSettings } from "../components/NotificationSettings";
 import { DeleteAccountConfirm } from "../components/DeleteAccountConfirm";
 import { SocialSignInButtons } from "../components/SocialSignInButtons";
+import { CrashReportSettings } from "../components/CrashReportSettings";
+import { ReportProblem } from "../components/ReportProblem";
 import { ConnectedSignIns } from "../components/ConnectedSignIns";
 import { hasAnySocialProvider } from "../lib/socialSignIn";
 
@@ -210,6 +212,8 @@ export function ProfilePage() {
       <NotificationSettings />
       <SpeechSpeedSettings />
       <VoiceSettings />
+      <CrashReportSettings />
+      <ReportProblem />
 
       <button
         className="btn btn-secondary btn-block"

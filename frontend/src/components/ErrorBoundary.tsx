@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import i18n from "../i18n";
+import { handleCrash } from "../lib/sentry";
 import { reportCrash, truncateComponentStack } from "../lib/crashReporter";
 
 interface ErrorBoundaryProps {
@@ -33,6 +34,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     reportCrash("error_boundary", error.message, error.stack, {
       component_stack: truncateComponentStack(info.componentStack),
     });
+    // Sentry, if configured and the learner allows it (Never/Ask/Always).
+    handleCrash(error, truncateComponentStack(info.componentStack));
   }
 
   handleReset = () => {

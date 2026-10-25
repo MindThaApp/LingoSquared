@@ -432,7 +432,9 @@ build actually ran, not a stale copy.
 **Deploy the built bundle and bring the `web` service up:**
 
 ```bash
-rsync -az --delete "$LINGO_REPO"/frontend/dist/ \
+# --exclude='*.map': the build emits hidden source maps for Sentry
+# (docs/SENTRY.md); they are uploaded to Sentry, not served from the box.
+rsync -az --delete --exclude='*.map' "$LINGO_REPO"/frontend/dist/ \
   ramin@192.168.4.4:/home/ramin/LingoSquared/backend/web_dist/
 
 # nginx.web.conf and docker-compose.yml's new `web` service are already
