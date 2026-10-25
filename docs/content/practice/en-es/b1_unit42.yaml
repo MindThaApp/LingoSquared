@@ -1,0 +1,136 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit42
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit42.hipotesis_condicional
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Hypotheses and softened requests with the conditional: viajaria, compraria, podrias + infinitive. Only six lexemes are new, so no matching template (fewer than six unit lexemes). Variants: -se subjunctive, reversed clause order, and Me podrias + infinitive / Puedes + infinitive for the polite request. NATIVE FLAG: puedes ayudarme is accepted next to podrias; it is less polite, check the register.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_buen, w_compraría, w_esto, w_lugar, w_recomendarme, w_viajaría]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [verb, noun, adjective], agreement_tags: {semantic: [w_viajaría, w_compraría, w_recomendarme, w_lugar, w_buen]}}
+  p2: &p2 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_viajaría]}}
+  p3: &p3 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_compraría]}}
+  p4: &p4 {language_code: es, part_of_speech: [pronoun], agreement_tags: {semantic: [w_esto]}}
+  p5: &p5 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_recomendarme]}}
+  p6: &p6 {language_code: es, part_of_speech: [adjective], agreement_tags: {semantic: [w_buen]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_lugar]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit42.lesson01.choose.001
+    lesson_content_key: es.b1.unit42.lesson01.tiempo_viajaria
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on hypotheses and polite requests.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson01.listen.001
+    lesson_content_key: es.b1.unit42.lesson01.tiempo_viajaria
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on hypotheses.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson02.translate.001
+    lesson_content_key: es.b1.unit42.lesson02.dinero_casa
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson01.translate.001
+    lesson_content_key: es.b1.unit42.lesson01.tiempo_viajaria
+    type: translation
+    frame: {text: "If I had more time, I would travel more.", language_code: en, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tuviera más tiempo, {item} más.", language_code: es, direction: ltr}, accepted_variants: ["Si tuviese más tiempo, {item} más.", "{item} más si tuviera más tiempo."]}
+    feedback_frame: {text: "The result of an unreal condition uses the conditional.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson01.fill.001
+    lesson_content_key: es.b1.unit42.lesson01.tiempo_viajaria
+    type: fill_in_blank
+    frame: {text: "Si tuviera más tiempo, {item} más. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p2, hint: *p2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Viajaría is the conditional of viajar.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson01.order.001
+    lesson_content_key: es.b1.unit42.lesson01.tiempo_viajaria
+    type: word_order
+    frame: {text: "{item} más si tuviera más tiempo.", language_code: es, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} más si tuviera más tiempo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The result clause can also come first.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson02.translate.002
+    lesson_content_key: es.b1.unit42.lesson02.dinero_casa
+    type: translation
+    frame: {text: "If I had more money, I would buy a house.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tuviera más dinero, {item} una casa.", language_code: es, direction: ltr}, accepted_variants: ["Si tuviese más dinero, {item} una casa.", "{item} una casa si tuviera más dinero."]}
+    feedback_frame: {text: "Comprar in the conditional: compraría.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson02.fill.001
+    lesson_content_key: es.b1.unit42.lesson02.dinero_casa
+    type: fill_in_blank
+    frame: {text: "Si tuviera más dinero, {item} una casa. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Compraría is the conditional of comprar.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson02.order.001
+    lesson_content_key: es.b1.unit42.lesson02.dinero_casa
+    type: word_order
+    frame: {text: "{item} una casa si tuviera más dinero.", language_code: es, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "{item} una casa si tuviera más dinero.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The result clause can also come first.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson03.translate.001
+    lesson_content_key: es.b1.unit42.lesson03.podrias_ayudarme
+    type: translation
+    frame: {text: "Could you help me with this?", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Podrías ayudarme con {item}?", language_code: es, direction: ltr}, accepted_variants: ["¿Me podrías ayudar con {item}?", "¿Puedes ayudarme con {item}?"]}
+    feedback_frame: {text: "Esto points to something unnamed.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson03.fill.001
+    lesson_content_key: es.b1.unit42.lesson03.podrias_ayudarme
+    type: fill_in_blank
+    frame: {text: "¿Podrías ayudarme con {item}? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Esto points to something unnamed.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson03.order.001
+    lesson_content_key: es.b1.unit42.lesson03.podrias_ayudarme
+    type: word_order
+    frame: {text: "Necesito ayuda con {item}.", language_code: es, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Necesito ayuda con {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Con esto means with this.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson04.translate.001
+    lesson_content_key: es.b1.unit42.lesson04.hipotesis_y_peticion
+    type: translation
+    frame: {text: "Could you recommend a good place to me?", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "¿Podrías {item} un buen lugar?", language_code: es, direction: ltr}, accepted_variants: ["¿Me podrías recomendar un buen lugar?", "¿Puedes {item} un buen lugar?"]}
+    feedback_frame: {text: "Recomendarme means to recommend to me.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson04.fill.001
+    lesson_content_key: es.b1.unit42.lesson04.hipotesis_y_peticion
+    type: fill_in_blank
+    frame: {text: "¿Podrías recomendarme un {item} lugar? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Buen is the short form of bueno before a masculine noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson04.fill.002
+    lesson_content_key: es.b1.unit42.lesson04.hipotesis_y_peticion
+    type: fill_in_blank
+    frame: {text: "¿Podrías recomendarme un buen {item}? ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lugar means place.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit42.lesson04.choose.001
+    lesson_content_key: es.b1.unit42.lesson04.hipotesis_y_peticion
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}

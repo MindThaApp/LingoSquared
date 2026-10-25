@@ -1,0 +1,153 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit28
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit28.hipotesis
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Three conditional patterns: si + present / future, si + imperfect subjunctive / conditional, si + pluperfect subjunctive / conditional perfect. Variants accept the -se subjunctive (tuviese, hubiese) and the clause order reversed. NATIVE FLAG: the -se forms are accepted but less common in speech; confirm you want them.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_habría, w_hubiera, w_llamado, w_llamar, w_llamaré, w_llamaría, w_oficina, w_otra, w_pedir, w_pediría, w_tenido, w_tiempo, w_tuviera]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_tiempo, w_llamar, w_llamaré, w_llamaría, w_pediría, w_oficina, w_pedir, w_llamado, w_tenido]}}
+  p2: &p2 {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [w_tiempo, w_llamar, w_llamaré, w_llamaría, w_pediría, w_oficina, w_pedir, w_otra]}}
+  p3: &p3 {language_code: es, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: [w_tiempo, w_llamar, w_oficina, w_pedir, w_otra, w_llamado, w_tenido, w_llamaré]}}
+  p4: &p4 {language_code: es, part_of_speech: [noun, verb], agreement_tags: {semantic: [w_tiempo, w_llamar, w_llamaré, w_llamaría, w_pediría, w_oficina, w_pedir, w_llamado]}}
+  p5: &p5 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llamaré]}}
+  p6: &p6 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_tiempo]}}
+  p7: &p7 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_oficina]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llamaría]}}
+  p9: &p9 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_tuviera]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llamado]}}
+  p11: &p11 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_hubiera]}}
+  p12: &p12 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_habría]}}
+  p13: &p13 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_tenido]}}
+  p14: &p14 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_pediría]}}
+  p15: &p15 {language_code: es, part_of_speech: [adjective], agreement_tags: {semantic: [w_otra]}}
+  p16: &p16 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_pedir]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit28.lesson01.choose.001
+    lesson_content_key: es.b1.unit28.lesson01.condicion_real
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on real and imagined conditions.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson01.listen.001
+    lesson_content_key: es.b1.unit28.lesson01.condicion_real
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on conditions.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson04.translate.001
+    lesson_content_key: es.b1.unit28.lesson04.dos_condiciones
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson02.match.001
+    lesson_content_key: es.b1.unit28.lesson02.condicion_irreal
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p4, second: *p4, third: *p4, fourth: *p4, fifth: *p4, sixth: *p4}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Notice how the tense changes the meaning: to call, I will call, I would call.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson01.translate.001
+    lesson_content_key: es.b1.unit28.lesson01.condicion_real
+    type: translation
+    frame: {text: "If I have time, I will call the office.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tengo tiempo, {item} a la oficina.", language_code: es, direction: ltr}, accepted_variants: ["{item} a la oficina si tengo tiempo."]}
+    feedback_frame: {text: "A real condition uses the present after si and the future in the result.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson01.fill.001
+    lesson_content_key: es.b1.unit28.lesson01.condicion_real
+    type: fill_in_blank
+    frame: {text: "Si tengo {item}, llamaré a la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tener tiempo means to have time.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson01.order.001
+    lesson_content_key: es.b1.unit28.lesson01.condicion_real
+    type: word_order
+    frame: {text: "Si tengo tiempo, llamaré a la {item}.", language_code: es, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tengo tiempo, llamaré a la {item}.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Oficina is feminine: la oficina.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson02.translate.001
+    lesson_content_key: es.b1.unit28.lesson02.condicion_irreal
+    type: translation
+    frame: {text: "If I had time, I would call the office.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tuviera tiempo, {item} a la oficina.", language_code: es, direction: ltr}, accepted_variants: ["Si tuviese tiempo, {item} a la oficina.", "{item} a la oficina si tuviera tiempo."]}
+    feedback_frame: {text: "An unreal present uses the imperfect subjunctive after si and the conditional in the result.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson02.fill.001
+    lesson_content_key: es.b1.unit28.lesson02.condicion_irreal
+    type: fill_in_blank
+    frame: {text: "Si {item} tiempo, llamaría a la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Tuviera is the imperfect subjunctive of tener.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson03.translate.001
+    lesson_content_key: es.b1.unit28.lesson03.pasado_irreal
+    type: translation
+    frame: {text: "If I had had time, I would have called the office.", language_code: en, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "Si hubiera tenido tiempo, habría {item} a la oficina.", language_code: es, direction: ltr}, accepted_variants: ["Si hubiese tenido tiempo, habría {item} a la oficina.", "Habría {item} a la oficina si hubiera tenido tiempo."]}
+    feedback_frame: {text: "An unreal past uses hubiera plus a participle, then habría plus a participle.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson03.fill.001
+    lesson_content_key: es.b1.unit28.lesson03.pasado_irreal
+    type: fill_in_blank
+    frame: {text: "Si {item} tenido tiempo, habría llamado a la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hubiera is the auxiliary of the unreal past condition.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson03.fill.002
+    lesson_content_key: es.b1.unit28.lesson03.pasado_irreal
+    type: fill_in_blank
+    frame: {text: "Si hubiera tenido tiempo, {item} llamado a la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Habría plus a participle is the conditional perfect.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson03.order.001
+    lesson_content_key: es.b1.unit28.lesson03.pasado_irreal
+    type: word_order
+    frame: {text: "Si hubiera {item} tiempo, habría llamado a la oficina.", language_code: es, direction: ltr}
+    slots: {item: *p13}
+    answer_derivation: {kind: render_frame, frame: {text: "Si hubiera {item} tiempo, habría llamado a la oficina.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "The participle of tener is tenido.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson04.translate.002
+    lesson_content_key: es.b1.unit28.lesson04.dos_condiciones
+    type: translation
+    frame: {text: "If I had the document, I would ask for another appointment.", language_code: en, direction: ltr}
+    slots: {item: *p14}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tuviera el documento, {item} otra cita.", language_code: es, direction: ltr}, accepted_variants: ["Si tuviese el documento, {item} otra cita.", "{item} otra cita si tuviera el documento."]}
+    feedback_frame: {text: "The result of an unreal condition uses the conditional.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson04.order.001
+    lesson_content_key: es.b1.unit28.lesson04.dos_condiciones
+    type: word_order
+    frame: {text: "Si tuviera el documento, pediría {item} cita.", language_code: es, direction: ltr}
+    slots: {item: *p15}
+    answer_derivation: {kind: render_frame, frame: {text: "Si tuviera el documento, pediría {item} cita.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Otra is feminine to agree with cita, and takes no article.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson04.order.002
+    lesson_content_key: es.b1.unit28.lesson04.dos_condiciones
+    type: word_order
+    frame: {text: "Voy a {item} otra cita.", language_code: es, direction: ltr}
+    slots: {item: *p16}
+    answer_derivation: {kind: render_frame, frame: {text: "Voy a {item} otra cita.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Pedir means to ask for: pedir una cita.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit28.lesson04.choose.001
+    lesson_content_key: es.b1.unit28.lesson04.dos_condiciones
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}

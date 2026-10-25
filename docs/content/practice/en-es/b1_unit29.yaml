@@ -1,0 +1,149 @@
+schema_version: "1.0"
+pack_key: practice.en-es.b1.unit29
+source_language: en
+target_language: es
+unit_content_key: es.b1.unit29.debate
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-es B1 set) from scripts/backfill_lexemes_en_es.py (en-es-b1 course; w_<token> anchors, one token per sentence slot). Opinions and (dis)agreement with que + subjunctive (sea, llamemos, debamos) and porque for the reason. Variants accept estar de acuerdo EN que, aun for todavia and piensa for opina. NATIVE FLAG: de acuerdo con que vs de acuerdo en que (both used; Spain prefers en que in speech).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: [w_acuerdo, w_debamos, w_debemos, w_desacuerdo, w_falta, w_llamemos, w_opina, w_opinión, w_porque, w_sea, w_todavía]
+slot_presets:
+  p1: &p1 {language_code: es, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: [w_opinión, w_opina, w_acuerdo, w_desacuerdo, w_falta, w_todavía, w_debemos]}}
+  p2: &p2 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_opina]}}
+  p3: &p3 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_debemos]}}
+  p4: &p4 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_opinión]}}
+  p5: &p5 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_sea]}}
+  p6: &p6 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_acuerdo]}}
+  p7: &p7 {language_code: es, part_of_speech: [particle], agreement_tags: {semantic: [w_porque]}}
+  p8: &p8 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_llamemos]}}
+  p9: &p9 {language_code: es, part_of_speech: [noun], agreement_tags: {semantic: [w_desacuerdo]}}
+  p10: &p10 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_debamos]}}
+  p11: &p11 {language_code: es, part_of_speech: [adverb], agreement_tags: {semantic: [w_todavía]}}
+  p12: &p12 {language_code: es, part_of_speech: [verb], agreement_tags: {semantic: [w_falta]}}
+templates:
+  - content_key: practice.en-es.es.b1.unit29.lesson01.choose.001
+    lesson_content_key: es.b1.unit29.lesson01.opinion_de_mateo
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the debate about the appointment.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson01.listen.001
+    lesson_content_key: es.b1.unit29.lesson01.opinion_de_mateo
+    type: listen_select
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the debate.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson03.translate.001
+    lesson_content_key: es.b1.unit29.lesson03.desacuerdo_con_razon
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the debate.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson04.match.001
+    lesson_content_key: es.b1.unit29.lesson04.respuesta_debate
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: es, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the debate vocabulary.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson01.translate.001
+    lesson_content_key: es.b1.unit29.lesson01.opinion_de_mateo
+    type: translation
+    frame: {text: "Mateo thinks that we should call the office.", language_code: en, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: render_frame, frame: {text: "Mateo {item} que debemos llamar a la oficina.", language_code: es, direction: ltr}, accepted_variants: ["Mateo piensa que debemos llamar a la oficina."]}
+    feedback_frame: {text: "Opinar que is followed by the indicative when the opinion is stated directly.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson01.fill.001
+    lesson_content_key: es.b1.unit29.lesson01.opinion_de_mateo
+    type: fill_in_blank
+    frame: {text: "Mateo opina que {item} llamar a la oficina. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Debemos plus an infinitive means we should.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson01.order.001
+    lesson_content_key: es.b1.unit29.lesson01.opinion_de_mateo
+    type: word_order
+    frame: {text: "La {item} de Mateo es clara.", language_code: es, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "La {item} de Mateo es clara.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Opinión is feminine and carries a written accent.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson02.translate.001
+    lesson_content_key: es.b1.unit29.lesson02.acuerdo_con_razon
+    type: translation
+    frame: {text: "I agree that the appointment should be on Tuesday because Elena has time.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Estoy de acuerdo con que la cita {item} el martes porque Elena tiene tiempo.", language_code: es, direction: ltr}, accepted_variants: ["Estoy de acuerdo en que la cita {item} el martes porque Elena tiene tiempo."]}
+    feedback_frame: {text: "Estar de acuerdo con que is followed by the subjunctive: sea.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson02.fill.001
+    lesson_content_key: es.b1.unit29.lesson02.acuerdo_con_razon
+    type: fill_in_blank
+    frame: {text: "Estoy de {item} con que la cita sea el martes. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Estar de acuerdo means to agree.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson02.order.001
+    lesson_content_key: es.b1.unit29.lesson02.acuerdo_con_razon
+    type: word_order
+    frame: {text: "Estoy de acuerdo con que la cita sea el martes {item} Elena tiene tiempo.", language_code: es, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Estoy de acuerdo con que la cita sea el martes {item} Elena tiene tiempo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Porque introduces the reason.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson03.translate.002
+    lesson_content_key: es.b1.unit29.lesson03.desacuerdo_con_razon
+    type: translation
+    frame: {text: "I do not agree that we call today because the document is not ready.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "No estoy de acuerdo con que {item} hoy porque el documento no está listo.", language_code: es, direction: ltr}, accepted_variants: ["No estoy de acuerdo en que {item} hoy porque el documento no está listo."]}
+    feedback_frame: {text: "Not agreeing with something also takes the subjunctive: llamemos.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson03.fill.001
+    lesson_content_key: es.b1.unit29.lesson03.desacuerdo_con_razon
+    type: fill_in_blank
+    frame: {text: "Estoy en {item}. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Estar en desacuerdo means to disagree.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson03.order.001
+    lesson_content_key: es.b1.unit29.lesson03.desacuerdo_con_razon
+    type: word_order
+    frame: {text: "No estoy de acuerdo con que {item} hoy porque el documento no está listo.", language_code: es, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "No estoy de acuerdo con que {item} hoy porque el documento no está listo.", language_code: es, direction: ltr}}
+    feedback_frame: {text: "Llamemos is the subjunctive of llamar for nosotros.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson04.translate.001
+    lesson_content_key: es.b1.unit29.lesson04.respuesta_debate
+    type: translation
+    frame: {text: "I do not agree that we should call today because the form is still missing.", language_code: en, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "No estoy de acuerdo con que {item} llamar hoy porque todavía falta el formulario.", language_code: es, direction: ltr}, accepted_variants: ["No estoy de acuerdo en que {item} llamar hoy porque aún falta el formulario."]}
+    feedback_frame: {text: "Deber after con que takes the subjunctive: debamos.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson04.fill.001
+    lesson_content_key: es.b1.unit29.lesson04.respuesta_debate
+    type: fill_in_blank
+    frame: {text: "No estoy de acuerdo con que debamos llamar hoy porque {item} falta el formulario. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p11, hint: *p11}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Todavía means still, or yet.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson04.fill.002
+    lesson_content_key: es.b1.unit29.lesson04.respuesta_debate
+    type: fill_in_blank
+    frame: {text: "No estoy de acuerdo con que debamos llamar hoy porque todavía {item} el formulario. ({hint})", language_code: es, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Faltar agrees with what is missing: falta el formulario.", language_code: en, direction: ltr}
+  - content_key: practice.en-es.es.b1.unit29.lesson04.choose.001
+    lesson_content_key: es.b1.unit29.lesson04.respuesta_debate
+    type: multiple_choice
+    frame: {text: "{item}", language_code: es, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
