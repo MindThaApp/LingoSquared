@@ -1,0 +1,158 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit38
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit38.debatte
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches agreeing and disagreeing with dass-clauses, weil and denn. NATIVE FLAG: 'Ich stimme Ihnen zu, dass...' accepted next to 'Ich stimme zu, dass...'; denn variant for weil (word order changes).
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_stimme", "w_Homeoffice", "w_besser", "w_spart", "w_Teamarbeit", "w_einfacher", "w_Büro", "w_finde", "w_denken", "w_Videoanrufe", "w_praktisch"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: ["w_stimme", "w_Homeoffice", "w_besser", "w_spart", "w_Teamarbeit", "w_einfacher", "w_Büro", "w_finde", "w_denken", "w_Videoanrufe", "w_praktisch"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: ["w_praktisch", "w_Videoanrufe", "w_denken", "w_finde", "w_Büro", "w_einfacher", "w_Teamarbeit", "w_spart", "w_besser", "w_Homeoffice", "w_stimme"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_stimme"}}
+  p4: &p4 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_spart"}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Teamarbeit"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_denken"}}
+  p7: &p7 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_praktisch"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit38.lesson01.choose.001
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.choose.001
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson02.listen.001
+    lesson_content_key: de.b1.unit38.lesson02.widersprechen
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.translate.001
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.match.001
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.order.001
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: word_order
+    frame: {text: "Ich {item} zu, dass Homeoffice besser ist.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} zu, dass Homeoffice besser ist.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Zustimmen is separable: stimme ... zu.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.fill.001
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: fill_in_blank
+    frame: {text: "Ich {item} zu, dass Homeoffice besser ist. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zustimmen is separable: stimme ... zu.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.translate.002
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: translation
+    frame: {text: "I agree that working from home is better.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich {item} zu, dass Homeoffice besser ist.", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} Ihnen zu, dass Homeoffice besser ist."]}
+    feedback_frame: {text: "Zustimmen is separable: stimme ... zu.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.order.002
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: word_order
+    frame: {text: "Homeoffice ist besser, weil man Zeit {item}.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Homeoffice ist besser, weil man Zeit {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Weil sends the verb to the end of its clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.fill.002
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: fill_in_blank
+    frame: {text: "Homeoffice ist besser, weil man Zeit {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Weil sends the verb to the end of its clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson01.translate.003
+    lesson_content_key: de.b1.unit38.lesson01.zustimmen
+    type: translation
+    frame: {text: "Working from home is better because you save time.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Homeoffice ist besser, weil man Zeit {item}.", language_code: de, direction: ltr}, accepted_variants: ["Weil man Zeit {item}, ist Homeoffice besser."]}
+    feedback_frame: {text: "Weil sends the verb to the end of its clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson02.order.001
+    lesson_content_key: de.b1.unit38.lesson02.widersprechen
+    type: word_order
+    frame: {text: "Ich stimme nicht zu, denn {item} ist im Büro einfacher.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich stimme nicht zu, denn {item} ist im Büro einfacher.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "After denn the verb stays in second position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson02.fill.001
+    lesson_content_key: de.b1.unit38.lesson02.widersprechen
+    type: fill_in_blank
+    frame: {text: "Ich stimme nicht zu, denn {item} ist im Büro einfacher. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After denn the verb stays in second position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson02.translate.001
+    lesson_content_key: de.b1.unit38.lesson02.widersprechen
+    type: translation
+    frame: {text: "I do not agree, because teamwork is easier in the office.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich stimme nicht zu, denn {item} ist im Büro einfacher.", language_code: de, direction: ltr}, accepted_variants: ["Ich stimme nicht zu, denn im Büro ist {item} einfacher."]}
+    feedback_frame: {text: "After denn the verb stays in second position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.order.001
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: word_order
+    frame: {text: "Und was {item} Sie über Videoanrufe?", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Und was {item} Sie über Videoanrufe?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Denken über asks for an opinion about something.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.fill.001
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: fill_in_blank
+    frame: {text: "Und was {item} Sie über Videoanrufe? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Denken über asks for an opinion about something.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.translate.001
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: translation
+    frame: {text: "And what do you think about video calls?", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Und was {item} Sie über Videoanrufe?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Denken über asks for an opinion about something.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.fill.002
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: fill_in_blank
+    frame: {text: "Ich stimme zu, dass Videoanrufe {item} sind, weil man Zeit spart. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Both dass and weil send the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit38.lesson03.translate.002
+    lesson_content_key: de.b1.unit38.lesson03.homeoffice_dialogue
+    type: translation
+    frame: {text: "I agree that video calls are practical, because you save time.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich stimme zu, dass Videoanrufe {item} sind, weil man Zeit spart.", language_code: de, direction: ltr}, accepted_variants: ["Ich stimme zu, dass Videoanrufe {item} sind, denn man spart Zeit."]}
+    feedback_frame: {text: "Both dass and weil send the verb to the end.", language_code: en, direction: ltr}

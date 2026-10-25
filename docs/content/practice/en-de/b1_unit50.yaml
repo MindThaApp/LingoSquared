@@ -1,0 +1,180 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit50
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit50.einraeumungen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches concessions with obwohl and zwar ... aber. NATIVE FLAG: 'auch wenn' accepted as a variant of 'obwohl'; 'Es kostet zwar viel Geld' reordered variant.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_riskant", "w_zweite", "w_Filiale", "w_kostet", "w_Chance", "w_groß", "w_Bedenken", "w_Ende", "w_deshalb", "w_zuerst", "w_genauen", "w_Plan", "w_obwohl"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_riskant", "w_zweite", "w_Filiale", "w_kostet", "w_Chance", "w_groß", "w_Bedenken", "w_Ende", "w_deshalb", "w_zuerst", "w_genauen", "w_Plan"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_Plan", "w_genauen", "w_zuerst", "w_deshalb", "w_Ende", "w_Bedenken", "w_groß", "w_Chance", "w_kostet", "w_Filiale", "w_zweite", "w_riskant"]}}
+  p3: &p3 {language_code: de, part_of_speech: particle, agreement_tags: {semantic: "w_obwohl"}}
+  p4: &p4 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_riskant"}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Chance"}}
+  p6: &p6 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Bedenken"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Plan"}}
+  p8: &p8 {language_code: de, part_of_speech: adverb, agreement_tags: {semantic: "w_zuerst"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit50.lesson01.choose.001
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.choose.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.listen.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.translate.001
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.match.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.order.001
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: word_order
+    frame: {text: "Ich bin für eine zweite Filiale, {item} es riskant ist.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für eine zweite Filiale, {item} es riskant ist.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Obwohl sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.fill.001
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: fill_in_blank
+    frame: {text: "Ich bin für eine zweite Filiale, {item} es riskant ist. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Obwohl sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.translate.002
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: translation
+    frame: {text: "I am for a second branch, although it is risky.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich bin für eine zweite Filiale, {item} es riskant ist.", language_code: de, direction: ltr}, accepted_variants: ["Ich bin für eine zweite Filiale, auch wenn es riskant ist."]}
+    feedback_frame: {text: "Obwohl sends the verb to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.order.002
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: word_order
+    frame: {text: "Obwohl es {item} ist, bin ich für eine zweite Filiale.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Obwohl es {item} ist, bin ich für eine zweite Filiale.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Riskant is an adjective after ist and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.fill.002
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: fill_in_blank
+    frame: {text: "Obwohl es {item} ist, bin ich für eine zweite Filiale. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Riskant is an adjective after ist and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.translate.003
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: translation
+    frame: {text: "Although it is risky, I am for a second branch.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Obwohl es {item} ist, bin ich für eine zweite Filiale.", language_code: de, direction: ltr}, accepted_variants: ["Ich bin für eine zweite Filiale, obwohl es {item} ist."]}
+    feedback_frame: {text: "Riskant is an adjective after ist and does not change.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.order.003
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: word_order
+    frame: {text: "Zwar kostet es viel Geld, aber die {item} ist groß.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Zwar kostet es viel Geld, aber die {item} ist groß.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Zwar ... aber admits one point and then contrasts it.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.fill.003
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: fill_in_blank
+    frame: {text: "Zwar kostet es viel Geld, aber die {item} ist groß. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zwar ... aber admits one point and then contrasts it.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson01.translate.004
+    lesson_content_key: de.b1.unit50.lesson01.obwohl_zwar_aber
+    type: translation
+    frame: {text: "It does cost a lot of money, but the chance is great.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Zwar kostet es viel Geld, aber die {item} ist groß.", language_code: de, direction: ltr}, accepted_variants: ["Es kostet zwar viel Geld, aber die {item} ist groß."]}
+    feedback_frame: {text: "Zwar ... aber admits one point and then contrasts it.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.order.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: word_order
+    frame: {text: "Obwohl ich {item} habe, stimme ich Ihnen am Ende zu.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Obwohl ich {item} habe, stimme ich Ihnen am Ende zu.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Bedenken is a plural noun here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.fill.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: fill_in_blank
+    frame: {text: "Obwohl ich {item} habe, stimme ich Ihnen am Ende zu. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Bedenken is a plural noun here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.translate.001
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: translation
+    frame: {text: "Although I have doubts, I agree with you in the end.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Obwohl ich {item} habe, stimme ich Ihnen am Ende zu.", language_code: de, direction: ltr}, accepted_variants: ["Ich stimme Ihnen am Ende zu, obwohl ich {item} habe."]}
+    feedback_frame: {text: "Bedenken is a plural noun here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.order.002
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: word_order
+    frame: {text: "Deshalb sollten wir zuerst einen genauen {item} machen.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Deshalb sollten wir zuerst einen genauen {item} machen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Deshalb gives the reason and takes the first position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.fill.002
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: fill_in_blank
+    frame: {text: "Deshalb sollten wir zuerst einen genauen {item} machen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Deshalb gives the reason and takes the first position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.translate.002
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: translation
+    frame: {text: "That is why we should first make a precise plan.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Deshalb sollten wir zuerst einen genauen {item} machen.", language_code: de, direction: ltr}, accepted_variants: ["Wir sollten deshalb zuerst einen genauen {item} machen."]}
+    feedback_frame: {text: "Deshalb gives the reason and takes the first position.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.order.003
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: word_order
+    frame: {text: "Deshalb sollten wir {item} einen genauen Plan machen.", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Deshalb sollten wir {item} einen genauen Plan machen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Zuerst means first, before anything else.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit50.lesson02.fill.003
+    lesson_content_key: de.b1.unit50.lesson02.obwohl_trotzdem
+    type: fill_in_blank
+    frame: {text: "Deshalb sollten wir {item} einen genauen Plan machen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Zuerst means first, before anything else.", language_code: en, direction: ltr}

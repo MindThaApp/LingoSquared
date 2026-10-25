@@ -1,0 +1,173 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit44
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit44.ziele
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches um ... zu and damit. NATIVE FLAG: clause-first variants (Um ... zu arbeiten, lernt Anna Deutsch) accepted.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_lernt", "w_lernen", "w_Deutsch", "w_arbeiten", "w_sparen", "w_Geld", "w_Reise", "w_machen", "w_spricht", "w_langsam", "w_versteht", "w_verstehen", "w_schreibt", "w_schreiben", "w_vergisst", "w_vergessen", "w_warum", "w_lerne", "w_spreche", "w_verstehe"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_lernt", "w_lernen", "w_Deutsch", "w_arbeiten", "w_sparen", "w_Geld", "w_Reise", "w_machen", "w_spricht", "w_langsam", "w_versteht", "w_verstehen", "w_schreibt", "w_schreiben", "w_vergisst", "w_vergessen", "w_warum", "w_lerne", "w_spreche", "w_verstehe"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective, adverb], agreement_tags: {semantic: ["w_verstehe", "w_spreche", "w_lerne", "w_warum", "w_vergessen", "w_vergisst", "w_schreiben", "w_schreibt", "w_verstehen", "w_versteht", "w_langsam", "w_spricht", "w_machen", "w_Reise", "w_Geld", "w_sparen", "w_arbeiten", "w_Deutsch", "w_lernen", "w_lernt"]}}
+  p3: &p3 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_lernt"}}
+  p4: &p4 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Geld"}}
+  p5: &p5 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Reise"}}
+  p6: &p6 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_spricht"}}
+  p7: &p7 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_vergisst"}}
+  p8: &p8 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_verstehe"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit44.lesson01.choose.001
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson03.choose.001
+    lesson_content_key: de.b1.unit44.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.listen.001
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.translate.001
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson03.match.001
+    lesson_content_key: de.b1.unit44.lesson03.cafe_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.order.001
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: word_order
+    frame: {text: "Anna {item} Deutsch, um im Büro zu arbeiten.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna {item} Deutsch, um im Büro zu arbeiten.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Um ... zu plus an infinitive gives a purpose.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.fill.001
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: fill_in_blank
+    frame: {text: "Anna {item} Deutsch, um im Büro zu arbeiten. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Um ... zu plus an infinitive gives a purpose.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.translate.002
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: translation
+    frame: {text: "Anna is learning German in order to work in the office.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna {item} Deutsch, um im Büro zu arbeiten.", language_code: de, direction: ltr}, accepted_variants: ["Um im Büro zu arbeiten, {item} Anna Deutsch."]}
+    feedback_frame: {text: "Um ... zu plus an infinitive gives a purpose.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.order.002
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: word_order
+    frame: {text: "Anna spart {item}, um eine Reise zu machen.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna spart {item}, um eine Reise zu machen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Geld is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.fill.002
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: fill_in_blank
+    frame: {text: "Anna spart {item}, um eine Reise zu machen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Geld is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.translate.003
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: translation
+    frame: {text: "Anna is saving money in order to take a trip.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna spart {item}, um eine Reise zu machen.", language_code: de, direction: ltr}, accepted_variants: ["Um eine Reise zu machen, spart Anna {item}."]}
+    feedback_frame: {text: "Geld is a noun and keeps its capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.order.003
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: word_order
+    frame: {text: "Anna spart Geld, um eine {item} zu machen.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Anna spart Geld, um eine {item} zu machen.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Eine Reise machen means to take a trip.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson01.fill.003
+    lesson_content_key: de.b1.unit44.lesson01.um_zu
+    type: fill_in_blank
+    frame: {text: "Anna spart Geld, um eine {item} zu machen. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Eine Reise machen means to take a trip.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.order.001
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: word_order
+    frame: {text: "Felix {item} langsam, damit Anna ihn versteht.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix {item} langsam, damit Anna ihn versteht.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Damit sends the verb to the end and introduces a different subject.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.fill.001
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: fill_in_blank
+    frame: {text: "Felix {item} langsam, damit Anna ihn versteht. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Damit sends the verb to the end and introduces a different subject.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.translate.001
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: translation
+    frame: {text: "Felix speaks slowly so that Anna understands him.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix {item} langsam, damit Anna ihn versteht.", language_code: de, direction: ltr}, accepted_variants: ["Damit Anna ihn versteht, {item} Felix langsam."]}
+    feedback_frame: {text: "Damit sends the verb to the end and introduces a different subject.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.order.002
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: word_order
+    frame: {text: "Felix schreibt es auf, damit Anna es nicht {item}.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix schreibt es auf, damit Anna es nicht {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Aufschreiben is separable: schreibt ... auf.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.fill.002
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: fill_in_blank
+    frame: {text: "Felix schreibt es auf, damit Anna es nicht {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Aufschreiben is separable: schreibt ... auf.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson02.translate.002
+    lesson_content_key: de.b1.unit44.lesson02.damit
+    type: translation
+    frame: {text: "Felix writes it down so that Anna does not forget it.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Felix schreibt es auf, damit Anna es nicht {item}.", language_code: de, direction: ltr}, accepted_variants: ["Felix schreibt es auf, damit es Anna nicht {item}."]}
+    feedback_frame: {text: "Aufschreiben is separable: schreibt ... auf.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson03.fill.001
+    lesson_content_key: de.b1.unit44.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Das {item} ich gut! ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Verstehe is the ich form of verstehen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit44.lesson03.translate.001
+    lesson_content_key: de.b1.unit44.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "I understand that well!", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Das {item} ich gut!", language_code: de, direction: ltr}, accepted_variants: ["Ich {item} das gut!"]}
+    feedback_frame: {text: "Verstehe is the ich form of verstehen.", language_code: en, direction: ltr}
