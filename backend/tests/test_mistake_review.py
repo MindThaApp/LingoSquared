@@ -116,7 +116,10 @@ def test_due_reviews_and_review_answer_schedule(client, auth):
     )
     assert response.status_code == 200 and response.json()["result"] == "correct"
     next_due_at = datetime.fromisoformat(response.json()["next_due_at"])
-    assert next_due_at > before + timedelta(hours=23)
+    # Due times land on 04:00 of the learner's local day (UTC when no
+    # timezone is stored), so a 1-day interval is the next such morning.
+    assert before < next_due_at <= before + timedelta(hours=24 + 4)
+    assert (next_due_at.hour, next_due_at.minute) == (4, 0)
 
 
 def test_retired_exercise_is_excluded_from_due_reviews(client, auth):
