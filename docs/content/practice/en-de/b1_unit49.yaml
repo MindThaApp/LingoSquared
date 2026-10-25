@@ -1,0 +1,173 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit49
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit49.zusammenfassen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches summarising. NATIVE FLAG: 'Zusammenfassend kann man sagen' accepted next to 'lässt sich sagen'; 'ab nächster Woche' vs 'ab der nächsten Woche'.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Hauptpunkt", "w_Öffnungszeiten", "w_zusammenfassend", "w_Frühstück", "w_anbietet", "w_außerdem", "w_erwähnt", "w_Artikel", "w_nur", "w_Detail", "w_gerade", "w_gelesen", "w_wissen"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_Hauptpunkt", "w_Öffnungszeiten", "w_zusammenfassend", "w_Frühstück", "w_anbietet", "w_außerdem", "w_erwähnt", "w_Artikel", "w_nur", "w_Detail", "w_gerade", "w_gelesen", "w_wissen"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adverb], agreement_tags: {semantic: ["w_wissen", "w_gelesen", "w_gerade", "w_Detail", "w_nur", "w_Artikel", "w_erwähnt", "w_außerdem", "w_anbietet", "w_Frühstück", "w_zusammenfassend", "w_Öffnungszeiten", "w_Hauptpunkt"]}}
+  p3: &p3 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Hauptpunkt"}}
+  p4: &p4 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Frühstück"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_erwähnt"}}
+  p6: &p6 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Detail"}}
+  p7: &p7 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_gelesen"}}
+  p8: &p8 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_wissen"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit49.lesson01.choose.001
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.choose.001
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.listen.001
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.translate.001
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.match.001
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.order.001
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: word_order
+    frame: {text: "Der {item} ist, dass das Café ab nächster Woche neue Öffnungszeiten hat.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} ist, dass das Café ab nächster Woche neue Öffnungszeiten hat.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Hauptpunkt is masculine, so it takes der.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.fill.001
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: fill_in_blank
+    frame: {text: "Der {item} ist, dass das Café ab nächster Woche neue Öffnungszeiten hat. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Hauptpunkt is masculine, so it takes der.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.translate.002
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: translation
+    frame: {text: "The main point is that the cafe has new opening hours from next week.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item} ist, dass das Café ab nächster Woche neue Öffnungszeiten hat.", language_code: de, direction: ltr}, accepted_variants: ["Der {item} ist, dass das Café ab der nächsten Woche neue Öffnungszeiten hat."]}
+    feedback_frame: {text: "Hauptpunkt is masculine, so it takes der.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.order.002
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: word_order
+    frame: {text: "Zusammenfassend lässt sich sagen, dass das Café jetzt auch {item} anbietet.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Zusammenfassend lässt sich sagen, dass das Café jetzt auch {item} anbietet.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Anbieten is separable: anbietet is the one-word form in a dass-clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.fill.002
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: fill_in_blank
+    frame: {text: "Zusammenfassend lässt sich sagen, dass das Café jetzt auch {item} anbietet. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Anbieten is separable: anbietet is the one-word form in a dass-clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson01.translate.003
+    lesson_content_key: de.b1.unit49.lesson01.der_hauptpunkt_ist
+    type: translation
+    frame: {text: "In summary, it can be said that the cafe now also offers breakfast.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Zusammenfassend lässt sich sagen, dass das Café jetzt auch {item} anbietet.", language_code: de, direction: ltr}, accepted_variants: ["Zusammenfassend kann man sagen, dass das Café jetzt auch {item} anbietet."]}
+    feedback_frame: {text: "Anbieten is separable: anbietet is the one-word form in a dass-clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.order.001
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: word_order
+    frame: {text: "Außerdem {item} der Artikel, dass es jetzt auch Frühstück gibt.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Außerdem {item} der Artikel, dass es jetzt auch Frühstück gibt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Außerdem opens the sentence, so the verb comes second.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.fill.001
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: fill_in_blank
+    frame: {text: "Außerdem {item} der Artikel, dass es jetzt auch Frühstück gibt. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Außerdem opens the sentence, so the verb comes second.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.translate.001
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: translation
+    frame: {text: "In addition, the article mentions that there is now breakfast too.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Außerdem {item} der Artikel, dass es jetzt auch Frühstück gibt.", language_code: de, direction: ltr}, accepted_variants: ["Der Artikel {item} außerdem, dass es jetzt auch Frühstück gibt."]}
+    feedback_frame: {text: "Außerdem opens the sentence, so the verb comes second.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.order.002
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: word_order
+    frame: {text: "Das ist nur ein {item}, kein Hauptpunkt.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das ist nur ein {item}, kein Hauptpunkt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Kein negates a noun: kein Hauptpunkt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.fill.002
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: fill_in_blank
+    frame: {text: "Das ist nur ein {item}, kein Hauptpunkt. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Kein negates a noun: kein Hauptpunkt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson02.translate.002
+    lesson_content_key: de.b1.unit49.lesson02.ausserdem_detail
+    type: translation
+    frame: {text: "That is only a detail, not a main point.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das ist nur ein {item}, kein Hauptpunkt.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Kein negates a noun: kein Hauptpunkt.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.order.001
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Ich habe gerade den Artikel über unser Café {item}.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe gerade den Artikel über unser Café {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Gelesen is the participle of lesen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.fill.001
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Ich habe gerade den Artikel über unser Café {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gelesen is the participle of lesen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.translate.001
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "I have just read the article about our cafe.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Ich habe gerade den Artikel über unser Café {item}.", language_code: de, direction: ltr}, accepted_variants: ["Ich habe den Artikel über unser Café gerade {item}."]}
+    feedback_frame: {text: "Gelesen is the participle of lesen.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit49.lesson03.fill.002
+    lesson_content_key: de.b1.unit49.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Das ist nur ein Detail, kein Hauptpunkt, aber gut zu {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Gut zu wissen is a fixed phrase.", language_code: en, direction: ltr}

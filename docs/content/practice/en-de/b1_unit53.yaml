@@ -1,0 +1,195 @@
+schema_version: "1.0"
+pack_key: practice.en-de.b1.unit53
+source_language: en
+target_language: de
+unit_content_key: de.b1.unit53.beschreibungen
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-de B1 set) from scripts/backfill_lexemes_en_de.py (en-de-b1 course; w_<token> anchors, one token per sentence slot, recognition and production pools are this unit's own content words with distinct glosses). Unit teaches relative clauses (nominative and after a preposition). NATIVE FLAG: relative-clause word order variants ('Kaffee jeden Tag bestellt'); 'Cafe' spelling accepted next to 'Café'; 'an dem' / 'am', 'in dem' / 'im' expansions.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_Kunde", "w_bestellt", "w_bestellen", "w_heißt", "w_Herr", "w_arbeitet", "w_beliebt", "w_Tisch", "w_sitzen", "w_reserviert", "w_Mann", "w_Fenster", "w_sitzt", "w_Lieblingsplatz"]
+slot_presets:
+  p1: &p1 {language_code: de, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: ["w_Kunde", "w_bestellt", "w_bestellen", "w_heißt", "w_Herr", "w_arbeitet", "w_beliebt", "w_Tisch", "w_sitzen", "w_reserviert", "w_Mann", "w_Fenster", "w_sitzt", "w_Lieblingsplatz"]}}
+  p2: &p2 {language_code: de, part_of_speech: [noun, verb, adjective], agreement_tags: {semantic: ["w_Lieblingsplatz", "w_sitzt", "w_Fenster", "w_Mann", "w_reserviert", "w_sitzen", "w_Tisch", "w_beliebt", "w_arbeitet", "w_Herr", "w_heißt", "w_bestellen", "w_bestellt", "w_Kunde"]}}
+  p3: &p3 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Kunde"}}
+  p4: &p4 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_bestellt"}}
+  p5: &p5 {language_code: de, part_of_speech: verb, agreement_tags: {semantic: "w_arbeitet"}}
+  p6: &p6 {language_code: de, part_of_speech: adjective, agreement_tags: {semantic: "w_beliebt"}}
+  p7: &p7 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Tisch"}}
+  p8: &p8 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Fenster"}}
+  p9: &p9 {language_code: de, part_of_speech: noun, agreement_tags: {semantic: "w_Lieblingsplatz"}}
+templates:
+  - content_key: practice.en-de.de.b1.unit53.lesson01.choose.001
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.choose.001
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: multiple_choice
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "Pick the meaning of the word.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.listen.001
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: listen_select
+    frame: {text: "{item}", language_code: de, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from this unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.translate.001
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Type the German word; nouns keep their capital letter.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.match.001
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: de, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Words from this unit and their meanings.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.order.001
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: word_order
+    frame: {text: "Der {item}, der jeden Tag Kaffee bestellt, heißt Herr Braun.", language_code: de, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item}, der jeden Tag Kaffee bestellt, heißt Herr Braun.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "The relative pronoun der matches Kunde: masculine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.fill.001
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: fill_in_blank
+    frame: {text: "Der {item}, der jeden Tag Kaffee bestellt, heißt Herr Braun. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p3, hint: *p3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The relative pronoun der matches Kunde: masculine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.translate.002
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: translation
+    frame: {text: "The customer who orders coffee every day is called Mr. Braun.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item}, der jeden Tag Kaffee bestellt, heißt Herr Braun.", language_code: de, direction: ltr}, accepted_variants: ["Der {item}, der Kaffee jeden Tag bestellt, heißt Herr Braun."]}
+    feedback_frame: {text: "The relative pronoun der matches Kunde: masculine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.order.002
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: word_order
+    frame: {text: "Der Kunde, der jeden Tag Kaffee {item}, heißt Herr Braun.", language_code: de, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Kunde, der jeden Tag Kaffee {item}, heißt Herr Braun.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "In a relative clause the verb goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.fill.002
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: fill_in_blank
+    frame: {text: "Der Kunde, der jeden Tag Kaffee {item}, heißt Herr Braun. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p4, hint: *p4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In a relative clause the verb goes to the end.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.order.003
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: word_order
+    frame: {text: "Die Kollegin, die im Büro {item}, heißt Frau Vogel.", language_code: de, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Die Kollegin, die im Büro {item}, heißt Frau Vogel.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Die matches Kollegin: feminine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.fill.003
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: fill_in_blank
+    frame: {text: "Die Kollegin, die im Büro {item}, heißt Frau Vogel. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Die matches Kollegin: feminine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson01.translate.003
+    lesson_content_key: de.b1.unit53.lesson01.relativsaetze_nominativ
+    type: translation
+    frame: {text: "The colleague who works in the office is called Ms. Vogel.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Die Kollegin, die im Büro {item}, heißt Frau Vogel.", language_code: de, direction: ltr}, accepted_variants: ["Die Kollegin, die in dem Büro {item}, heißt Frau Vogel."]}
+    feedback_frame: {text: "Die matches Kollegin: feminine, nominative.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.order.001
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: word_order
+    frame: {text: "Das Café, in dem Anna arbeitet, ist sehr {item}.", language_code: de, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Café, in dem Anna arbeitet, ist sehr {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "In dem is used because in takes the dative here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.fill.001
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: fill_in_blank
+    frame: {text: "Das Café, in dem Anna arbeitet, ist sehr {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "In dem is used because in takes the dative here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.translate.001
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: translation
+    frame: {text: "The cafe where Anna works is very popular.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Das Café, in dem Anna arbeitet, ist sehr {item}.", language_code: de, direction: ltr}, accepted_variants: ["Das Cafe, in dem Anna arbeitet, ist sehr {item}."]}
+    feedback_frame: {text: "In dem is used because in takes the dative here.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.order.002
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: word_order
+    frame: {text: "Der {item}, an dem wir sitzen, ist reserviert.", language_code: de, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Der {item}, an dem wir sitzen, ist reserviert.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "An dem: the preposition comes before the relative pronoun.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson02.fill.002
+    lesson_content_key: de.b1.unit53.lesson02.relativsatz_praeposition
+    type: fill_in_blank
+    frame: {text: "Der {item}, an dem wir sitzen, ist reserviert. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "An dem: the preposition comes before the relative pronoun.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.order.001
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Wer ist der Mann am {item}?", language_code: de, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Wer ist der Mann am {item}?", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Am is an contracted with dem.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.fill.001
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Wer ist der Mann am {item}? ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Am is an contracted with dem.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.translate.001
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "Who is the man at the window?", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Wer ist der Mann am {item}?", language_code: de, direction: ltr}, accepted_variants: ["Wer ist der Mann an dem {item}?"]}
+    feedback_frame: {text: "Am is an contracted with dem.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.order.002
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: word_order
+    frame: {text: "Der Tisch, an dem er sitzt, ist sein {item}.", language_code: de, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Tisch, an dem er sitzt, ist sein {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Lieblingsplatz is a compound: Lieblings plus Platz.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.fill.002
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: fill_in_blank
+    frame: {text: "Der Tisch, an dem er sitzt, ist sein {item}. ({hint})", language_code: de, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p9, hint: *p9}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Lieblingsplatz is a compound: Lieblings plus Platz.", language_code: en, direction: ltr}
+  - content_key: practice.en-de.de.b1.unit53.lesson03.translate.002
+    lesson_content_key: de.b1.unit53.lesson03.cafe_dialogue
+    type: translation
+    frame: {text: "The table at which he sits is his favorite spot.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Der Tisch, an dem er sitzt, ist sein {item}.", language_code: de, direction: ltr}}
+    feedback_frame: {text: "Lieblingsplatz is a compound: Lieblings plus Platz.", language_code: en, direction: ltr}
