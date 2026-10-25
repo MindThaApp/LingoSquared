@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit31
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit31.conditions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_arrive", "w_finirons", "w_n'arrive", "w_préviendrai", "w_suite", "w_écrirai", "w_écriras"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_arrive", "w_finirons", "w_n'arrive", "w_préviendrai", "w_écrirai", "w_suite", "w_écriras"]}}
+  anc_2: &anc_2 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_arrive"}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_finirons"}}
+  anc_4: &anc_4 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_n'arrive"}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_préviendrai"}}
+  anc_6: &anc_6 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_écrirai"}}
+  tr2_7: &tr2_7 {language_code: fr, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_n'arrive", "w_préviendrai", "w_écrirai", "w_suite", "w_écriras"]}}
+  anc_8: &anc_8 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_écriras"}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.choose.001
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for a condition about a delivery and what happens next.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.listen.002
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for a condition about a delivery and what happens next.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.match.003
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *rec1_1, second: *rec1_1, third: *rec1_1, fourth: *rec1_1, fifth: *rec1_1, sixth: *rec1_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for a condition about a delivery and what happens next.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.order.004
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: word_order
+    frame: {text: "Si la livraison {item} avant midi, nous finirons les commandes.", language_code: fr, direction: ltr}
+    slots: {item: *anc_2}
+    answer_derivation: {kind: render_frame, frame: {text: "Si la livraison {item} avant midi, nous finirons les commandes.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Si + present, future: if the delivery arrives, we will finish.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.order.005
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: word_order
+    frame: {text: "Si la livraison arrive avant midi, nous {item} les commandes aujourd'hui.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Si la livraison arrive avant midi, nous {item} les commandes aujourd'hui.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Nous finirons is the future of finir: the endings are -rons for nous.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.fill.006
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: fill_in_blank
+    frame: {text: "Si la livraison arrive avant midi, nous {item} les commandes. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_3, hint: *anc_3}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Si + present, future: if the delivery arrives, we will finish.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.translate.007
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for a condition about a delivery and what happens next.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.translate.008
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: translation
+    frame: {text: "If the delivery arrives before noon, we will finish the orders today.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "Si la livraison arrive avant midi, nous {item} les commandes aujourd'hui.", language_code: fr, direction: ltr}, accepted_variants: ["Nous {item} les commandes aujourd'hui si la livraison arrive avant midi."]}
+    feedback_frame: {text: "Nous finirons is the future of finir: the endings are -rons for nous.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson01.translate.009
+    lesson_content_key: fr.b1.unit31.lesson01.si_present_futur
+    type: translation
+    frame: {text: "We will finish the orders if the delivery arrives before noon.", language_code: en, direction: ltr}
+    slots: {item: *anc_2}
+    answer_derivation: {kind: render_frame, frame: {text: "Nous finirons les commandes si la livraison {item} avant midi.", language_code: fr, direction: ltr}, accepted_variants: ["Si la livraison {item} avant midi, nous finirons les commandes."]}
+    feedback_frame: {text: "Si + present, future: if the delivery arrives, we will finish.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.choose.001
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for a negative condition and the action you will take.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.listen.002
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for a negative condition and the action you will take.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.match.003
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *rec1_1, second: *rec1_1, third: *rec1_1, fourth: *rec1_1, fifth: *rec1_1, sixth: *rec1_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for a negative condition and the action you will take.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.order.004
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: word_order
+    frame: {text: "Si elle {item} pas avant midi, je préviendrai le chef.", language_code: fr, direction: ltr}
+    slots: {item: *anc_4}
+    answer_derivation: {kind: render_frame, frame: {text: "Si elle {item} pas avant midi, je préviendrai le chef.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Si elle n'arrive pas + future: the negative stays in the present after si, and the result is in the future.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.order.005
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: word_order
+    frame: {text: "Si elle n'arrive pas avant midi, je {item} le chef.", language_code: fr, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Si elle n'arrive pas avant midi, je {item} le chef.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Lui goes before the verb: je lui écrirai, tu lui écriras.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.fill.006
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: fill_in_blank
+    frame: {text: "Je lui {item} tout de suite. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_6, hint: *anc_6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Si elle n'arrive pas + future: the negative stays in the present after si, and the result is in the future.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.translate.007
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *tr2_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for a negative condition and the action you will take.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.translate.008
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: translation
+    frame: {text: "If it does not arrive before noon, I will let the boss know.", language_code: en, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Si elle n'arrive pas avant midi, je {item} le chef.", language_code: fr, direction: ltr}, accepted_variants: ["Je {item} le chef si elle n'arrive pas avant midi."]}
+    feedback_frame: {text: "Lui goes before the verb: je lui écrirai, tu lui écriras.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.translate.009
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: translation
+    frame: {text: "I will write to him right away.", language_code: en, direction: ltr}
+    slots: {item: *anc_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Je lui {item} tout de suite.", language_code: fr, direction: ltr}, accepted_variants: ["Je lui {item} immédiatement."]}
+    feedback_frame: {text: "Si elle n'arrive pas + future: the negative stays in the present after si, and the result is in the future.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit31.lesson02.translate.010
+    lesson_content_key: fr.b1.unit31.lesson02.si_negatif
+    type: translation
+    frame: {text: "Will you write to him right away?", language_code: en, direction: ltr}
+    slots: {item: *anc_8}
+    answer_derivation: {kind: render_frame, frame: {text: "Tu lui {item} tout de suite ?", language_code: fr, direction: ltr}, accepted_variants: ["Est-ce que tu lui {item} tout de suite ?"]}
+    feedback_frame: {text: "Lui goes before the verb: je lui écrirai, tu lui écriras.", language_code: en, direction: ltr}
