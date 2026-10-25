@@ -1,0 +1,117 @@
+schema_version: "1.0"
+pack_key: practice.en-it.b1.unit37
+source_language: en
+target_language: it
+unit_content_key: it.b1.unit37.ipotesi
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-it B1 set) from scripts/backfill_lexemes_en_it.py (en-it-b1 course; w_<token> anchors, one token per sentence slot, unit-own lexemes only). Real hypothesis (se + present, future) against unreal hypothesis (se + imperfect subjunctive, conditional). Only six unit lexemes, so each template is anchored on one of them. Variants swap the clause order. NATIVE FLAG: none beyond the unit.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_arriva", "w_arrivare", "w_arrivasse", "w_chiamerei", "w_chiamerò", "w_se"]
+slot_presets:
+  p1: &p1 {language_code: it, part_of_speech: ["particle", "verb"], agreement_tags: {semantic: ["w_se", "w_arriva", "w_arrivare", "w_chiamerò", "w_arrivasse", "w_chiamerei"]}}
+  p2: &p2 {language_code: it, part_of_speech: ["verb", "particle"], agreement_tags: {semantic: ["w_arrivasse", "w_chiamerei", "w_se", "w_arriva"]}}
+  p3: &p3 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_arriva"]}}
+  p4: &p4 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_chiamerò"]}}
+  p5: &p5 {language_code: it, part_of_speech: ["particle"], agreement_tags: {semantic: ["w_se"]}}
+  p6: &p6 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_arrivare"]}}
+  p7: &p7 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_arrivasse"]}}
+  p8: &p8 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_chiamerei"]}}
+templates:
+  - content_key: practice.en-it.it.b1.unit37.lesson01.choose.001
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on real and unreal conditions.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.listen.001
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on conditions.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson02.choose.001
+    lesson_content_key: it.b1.unit37.lesson02.se_irreale
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the second lesson of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.translate.001
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.match.001
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Notice how the tense changes the meaning.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.translate.002
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: translation
+    frame: {text: "If the confirmation arrives today, I will call Sam.", language_code: en, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: render_frame, frame: {text: "Se la conferma {item} oggi, chiamerò Sam.", language_code: it, direction: ltr}, accepted_variants: ["Chiamerò Sam se la conferma {item} oggi.", "Se la conferma {item} oggi, io chiamerò Sam."]}
+    feedback_frame: {text: "A real condition uses the present after se.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.translate.003
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: translation
+    frame: {text: "If the confirmation arrives today, I will call Sam.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Se la conferma arriva oggi, {item} Sam.", language_code: it, direction: ltr}, accepted_variants: ["{item} Sam se la conferma arriva oggi."]}
+    feedback_frame: {text: "The result of a real condition uses the future.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.fill.001
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: fill_in_blank
+    frame: {text: "{item} la conferma arriva oggi, chiamerò Sam. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p5, hint: *p5}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Se introduces the condition.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson01.fill.002
+    lesson_content_key: it.b1.unit37.lesson01.se_reale
+    type: fill_in_blank
+    frame: {text: "La conferma deve {item} oggi. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p6, hint: *p6}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dovere is followed by the infinitive.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson02.translate.001
+    lesson_content_key: it.b1.unit37.lesson02.se_irreale
+    type: translation
+    frame: {text: "If the confirmation arrived today, I would call Sam.", language_code: en, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Se la conferma {item} oggi, chiamerei Sam.", language_code: it, direction: ltr}, accepted_variants: ["Chiamerei Sam se la conferma {item} oggi.", "Se la conferma {item} oggi, io chiamerei Sam."]}
+    feedback_frame: {text: "An unreal condition uses the imperfect subjunctive after se.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson02.translate.002
+    lesson_content_key: it.b1.unit37.lesson02.se_irreale
+    type: translation
+    frame: {text: "If the confirmation arrived today, I would call Sam.", language_code: en, direction: ltr}
+    slots: {item: *p8}
+    answer_derivation: {kind: render_frame, frame: {text: "Se la conferma arrivasse oggi, {item} Sam.", language_code: it, direction: ltr}, accepted_variants: ["{item} Sam se la conferma arrivasse oggi."]}
+    feedback_frame: {text: "The result of an unreal condition uses the conditional.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson02.order.001
+    lesson_content_key: it.b1.unit37.lesson02.se_irreale
+    type: word_order
+    frame: {text: "Se la conferma {item} oggi, chiamerei Sam.", language_code: it, direction: ltr}
+    slots: {item: *p7}
+    answer_derivation: {kind: render_frame, frame: {text: "Se la conferma {item} oggi, chiamerei Sam.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Arrivasse is the imperfect subjunctive of arrivare.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit37.lesson02.fill.001
+    lesson_content_key: it.b1.unit37.lesson02.se_irreale
+    type: fill_in_blank
+    frame: {text: "Se la conferma arrivasse oggi, {item} Sam. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Chiamerei is the conditional: I would call.", language_code: en, direction: ltr}
