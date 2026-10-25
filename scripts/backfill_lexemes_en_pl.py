@@ -9,8 +9,10 @@ scripts/_target_lexeme_backfill_common.py (see its docstring for the tag
 scheme); this file is data only: one hand-written English gloss and one part
 of speech per citation form.
 
-Scope: A1 ("en-pl", units 01-20) and A2 ("en-pl-a2", units 21-26; session 11).
-B1+ is not classified yet; extend LEVELS and the tables below together.
+Scope: A1 ("en-pl", units 01-20), A2 ("en-pl-a2", units 21-26; session 11) and
+B1 ("en-pl-b1", units 01-19; session 12). B2+ is not classified yet; extend
+LEVELS and the tables below together. Each course is its own course, so a token
+already glossed for A1/A2 is simply reused at first sight in B1.
 
 Glossing rules followed here (PRACTICE_PACK_RECIPE.md section 0.1, 6.6):
 * the gloss is the sense the unit actually teaches at first sight,
@@ -45,12 +47,12 @@ from _target_lexeme_backfill_common import (  # noqa: E402
 )
 
 LANG = "pl"
-LEVELS = {"a1": "en-pl", "a2": "en-pl-a2"}
+LEVELS = {"a1": "en-pl", "a2": "en-pl-a2", "b1": "en-pl-b1"}
 
 PROPER_NOUNS = {
     "Anna", "Kowalska", "Kanady", "Warszawie", "Marek", "Wójcik", "Ewa",
     "Gdańsku", "Krakowie", "Kraków", "Krakowa", "Warszawa", "Warszawy",
-    "Kwiatowa",
+    "Kwiatowa", "Marku", "Kasia", "Kasią", "Kasi", "Ewie", "Piotrze", "Zakopane",
 }
 # Capital kept on purpose: proper nouns plus the clothing size letter.
 _KEEP_CASE = PROPER_NOUNS | {"M"}
@@ -373,6 +375,257 @@ POS_SETS["adverb"] |= split_words("oczywiście najszybciej dziennie doskonale")
 POS_SETS["pronoun"] |= split_words("czym wszystko moim panią jakie")
 POS_SETS["preposition"] |= split_words("od za jako")
 POS_SETS["particle"] |= split_words("ponieważ żeby że")
+
+# B1 (en-pl-b1, units 01-19; session 12). Same rules as above. A token already
+# glossed for A1/A2 is reused at first sight in B1 unless GLOSS_OVERRIDES says otherwise.
+B1_GLOSSES: dict[str, str] = {
+    "czas": "time", "dużo": "a lot; much", "podróżować": "to travel", "więcej": "more",
+    "czasu": "time (form after 'more' or 'of')", "zmienić": "to change",
+    "pracę": "work; job (object form)", "gdybym": "if I (hypothetical)", "zmienił": "changed (he)",
+    "zostałbym": "I would become (said by a man)", "coś": "something",
+    "innego": "other; different (form after 'something')", "robiłbym": "I would do (said by a man)",
+    "gdybyś": "if you (hypothetical)", "robiłbyś": "you would do (informal, to a man)",
+    "miasto": "city; town", "mógłbym": "I could (said by a man)", "mógł": "was able to (he)",
+    "mieszkać": "to live (reside)", "innym": "other; different (form after 'in')",
+    "mieście": "city (after 'in')", "przeprowadzić": "to move house (with się)",
+    "pojechałbyś": "you would go (by vehicle; informal, to a man)", "bliżej": "closer",
+    "gór": "mountains (form after 'closer to')", "zostałabym": "I would stay (said by a woman)",
+    "tutaj": "here", "marzenia": "dreams", "każdy": "everyone; each",
+    "inne": "other; different (plural)", "pojechałbym": "I would go (by vehicle; said by a man)",
+    "zawsze": "always", "chciałem": "I wanted (said by a man)", "dlaczego": "why",
+    "akurat": "precisely; of all places", "kocham": "I love", "góry": "mountains", "tu": "here",
+    "przyjaciół": "friends (object form)", "wolny": "free; available (masc.)",
+    "wolnego": "free (form after 'not have')", "miałbym": "I would have (said by a man)",
+    "gdyby": "if (hypothetical)", "częściej": "more often",
+    "podróżowałbym": "I would travel (said by a man)", "zdalnie": "remotely", "chociaż": "although",
+    "wygodna": "convenient; comfortable (fem.)", "mimo": "despite (mimo że: even though)",
+    "brakuje": "is lacking; is missing", "kontaktu": "contact (form after 'lack')",
+    "ludźmi": "people (after 'with')", "zdalna": "remote (fem.)", "jednak": "however",
+    "dojazd": "commute", "oszczędzam": "I save (time or money)", "oszczędza": "saves (he; she; it)",
+    "spontaniczna": "spontaneous (fem.)", "łatwiejsza": "easier (fem.)",
+    "koncentracja": "concentration", "koncentrację": "concentration (object form)",
+    "lepszą": "better (fem., object form)", "jednej": "one (fem., in 'on one hand')",
+    "strony": "side (in 'on one hand')", "prawda": "truth; true",
+    "drugiej": "second; other (fem., in 'on the other hand')", "tęsknię": "I miss (someone)",
+    "kolegami": "colleagues (after 'miss')", "priorytety": "priorities", "temat": "topic",
+    "ciekawy": "interesting (masc.)", "trudny": "difficult (masc.)", "wybór": "choice",
+    "ważne": "important (neuter or plural)", "projekt": "project", "gotowy": "ready (masc.)",
+    "przesłać": "to send (a file or message)", "raport": "report",
+    "termin": "deadline; appointment date", "zaproponować": "to propose; to offer",
+    "powinniśmy": "we should", "przedstawić": "to present", "postępy": "progress",
+    "panie": "sir (when addressing a man)", "Marku": "Marek (when addressing him)",
+    "prawie": "almost", "potrzebuje": "needs (he; she; formal you)", "potrzebować": "to need",
+    "problem": "problem", "elementem": "element (after 'with')",
+    "jednym": "one (masc., after 'with')", "mamy": "we have", "przetestować": "to test",
+    "go": "him; it (object form)", "przesunąć": "to postpone; to move",
+    "pomoże": "will help (he; she; it)", "szanowna": "dear (fem., in a letter)",
+    "szanowny": "dear (masc., in a letter)", "poważaniem": "regard (in 'best regards')",
+    "wiadomość": "message", "piszę": "I write", "sprawie": "matter (in 'regarding')",
+    "projektu": "project (form after 'regarding')",
+    "kierowniczko": "manager (fem., when addressing her)", "tę": "this (fem., object form)",
+    "który": "who; which (masc.)", "które": "which (neuter or plural)", "sąsiad": "neighbor",
+    "mężczyzna": "man", "pracuje": "works (he; she)", "sąsiadem": "neighbor (after 'is')",
+    "książka": "book", "czytam": "I read", "którą": "which (fem., object form)",
+    "kolega": "colleague; friend (masc.)", "znam": "I know (a person)",
+    "którego": "whom; which (masc., after a negated verb)", "przyjaciółka": "friend (fem.)",
+    "pomagam": "I help", "lekarz": "doctor", "rozmawiam": "I talk; I am talking",
+    "którym": "whom; which (masc., after 'with' or 'in')", "zdrowiu": "health (after 'about')",
+    "kolegę": "colleague (masc., object form)", "pięciu": "five (form after 'for')",
+    "ładny": "nice; pretty (masc.)", "często": "often", "zakupami": "shopping (after 'with')",
+    "twojej": "your (fem., in 'kind of you')", "pomagać": "to help",
+    "ludziom": "people (as the ones helped)", "których": "whom; which (plural, object form)",
+    "życie": "life", "życiu": "life (after 'in')", "osoba": "person", "ważna": "important (fem.)",
+    "osoby": "persons; people", "powiedział": "said (he)", "zmęczony": "tired (masc.)",
+    "zapytała": "asked (she)", "zapytał": "asked (he)", "zmęczona": "tired (fem.)",
+    "Kasią": "Kasia (after 'with')", "rozmawiałam": "I talked (said by a woman)",
+    "powiedziała": "said (she)", "przeprowadza": "moves house (he; she)",
+    "przyszłym": "next (form after 'in')", "miesiącu": "month (after 'in')", "weekend": "weekend",
+    "naprawdę": "really", "zapytałam": "I asked (said by a woman)", "ją": "her; it (object form)",
+    "samo": "same (neuter)", "jej": "to her; her", "twoim": "your (form after 'in' or 'on')",
+    "miejscu": "place (after 'in' or 'on')", "poszedłbym": "I would go (on foot; said by a man)",
+    "lekarza": "doctor (form after 'to')", "powinnaś": "you should (informal, to a woman)",
+    "kłaść": "to lay down (kłaść się: to go to bed)", "wcześniej": "earlier",
+    "powinieneś": "you should (informal, to a man)", "ten": "this (masc.)",
+    "ciężki": "hard; heavy (masc.)", "miałam": "I had (said by a woman)",
+    "spróbujesz": "you will try (informal)", "umówię": "I will arrange; I will book",
+    "wizytę": "appointment; visit (object form)", "teraz": "now", "kładę": "I lay; I put",
+    "północy": "midnight (form after 'at')", "przed": "before; in front of",
+    "jedenastą": "eleventh (in 'before eleven o'clock')", "stres": "stress",
+    "stresu": "stress (form after 'a lot of')", "byś": "would (conditional particle, 'you')",
+    "zrobił": "did; made (he)", "zrobiła": "did; made (she)",
+    "porozmawiałbym": "I would talk (said by a man)", "szefem": "boss (after 'with')",
+    "złożyć": "to submit; to file", "reklamację": "complaint (object form)",
+    "pralka": "washing machine", "dzwoniłem": "I called (said by a man)", "temu": "ago",
+    "nikt": "nobody", "odpowiedział": "answered (he)", "kupiłem": "I bought (said by a man)",
+    "pralkę": "washing machine (object form)", "tygodnie": "weeks", "prosić": "to ask (for)",
+    "wymianę": "replacement (object form)", "przykro": "sorry (in 'I am sorry')",
+    "wyślemy": "we will send", "nową": "new (fem., object form)", "słyszeć": "to hear",
+    "kupił": "bought (he)", "opóźnienie": "delay", "woli": "prefers (he; she; formal you)",
+    "naprawę": "repair (object form)", "jeśli": "if", "możliwe": "possible (neuter)",
+    "pewno": "sure (in 'for sure')", "cierpliwość": "patience", "żałuję": "I regret",
+    "pojechaliśmy": "we went (by vehicle)", "narty": "skis (na narty: skiing)",
+    "trzeba": "it is necessary", "zarezerwować": "to book; to reserve", "bilety": "tickets",
+    "zeszłej": "last (fem., form after 'in')", "zimy": "winter (in 'last winter')",
+    "Zakopane": "Zakopane", "mieliśmy": "we had; we were supposed to",
+    "pojechać": "to go (by vehicle)", "byłeś": "you were (informal, to a man)",
+    "zbyt": "too (excessively)", "zajęty": "busy (masc.)", "pracą": "work (after 'busy with')",
+    "zarezerwowaliśmy": "we booked", "biletów": "tickets (form after 'did not book')",
+    "zanim": "before (introduces a clause)", "wyprzedało": "sold out (it)",
+    "byli": "were (they, men)", "październiku": "October (after 'in')",
+    "roku": "year (form in 'next year')", "pojedziemy": "we will go (by vehicle)",
+    "była": "was (she; it)", "powinienem": "I should (said by a man)", "był": "was (he; it)",
+    "zamierzam": "I intend", "nauczyć": "to teach (nauczyć się: to learn)", "pływać": "to swim",
+    "tym": "this (form after 'in')", "chyba": "probably; I guess",
+    "padać": "to fall (padać: to rain)", "prawdopodobnie": "probably",
+    "pójdziemy": "we will go (on foot)", "spacer": "walk", "u": "at (someone's place)",
+    "dentysty": "dentist (form after 'at')", "obejrzymy": "we will watch", "robicie": "you all do",
+    "plany": "plans", "świetny": "great (masc.)", "pomysł": "idea", "robimy": "we do; we are doing",
+    "więc": "so; therefore", "szkoda": "pity; too bad", "zrobimy": "we will do",
+    "tygodniu": "week (after 'in')", "rodziców": "parents (form after 'to')", "Kasia": "Kasia",
+    "zmienia": "changes (he; she)", "skrócie": "brief form (in 'in short')",
+    "chodzi": "it is about; it concerns", "dostała": "got; received (she)",
+    "najważniejsze": "most important (neuter)", "zaczyna": "starts; begins (he; she)",
+    "szczegóły": "details", "tej": "this (fem., form after 'in')",
+    "historii": "story (form after 'in')", "słyszałaś": "you heard (informal, to a woman)",
+    "Kasi": "Kasia (form after 'about')", "nowego": "new (form after 'something')",
+    "opowiadała": "told; was telling (she)", "szukała": "looked for (she)",
+    "przez": "for (a period); through", "miesiące": "months",
+    "nowej": "new (fem., form after 'for')", "wysłała": "sent (she)",
+    "podań": "applications (form after 'fifteen')", "miała": "had (she)",
+    "rozmowy": "conversations; interviews",
+    "kwalifikacyjne": "qualifying (plural, in 'job interviews')", "końcu": "end (in 'in the end')",
+    "szczegółów": "details (form after 'a lot of')", "stało": "happened (it)",
+    "dużej": "big (fem., form after 'in')", "firmie": "company (after 'in')",
+    "centrum": "center; downtown", "miasta": "city (form after 'center of')",
+    "najpierw": "first (at first)", "znalazła": "found (she)", "streścić": "to summarize",
+    "historię": "story (object form)", "angielskiego": "English language (form after 'study')",
+    "dostać": "to get; to receive", "samochód": "car", "codziennie": "every day",
+    "pomaga": "helps (he; she)", "Ewie": "Ewa (to Ewa)", "szybciej": "faster; more quickly",
+    "skończyła": "finished (she)", "żebyśmy": "so that we", "pojechali": "went (by vehicle; they)",
+    "wakacje": "vacation (object form)", "międzynarodowej": "international (fem., form after 'in')",
+    "nad": "to; above (in 'to the seaside')", "morze": "sea; seaside", "żebyś": "so that you",
+    "mogła": "could (she)", "uczysz": "you study; you learn (informal)",
+    "intensywnie": "intensively", "piękny": "beautiful (masc.)", "cel": "goal",
+    "właśnie": "exactly; just", "cieszyć": "to delight (cieszyć się: to enjoy)",
+    "takimi": "such (plural, after 'with')", "chwilami": "moments (after 'with')",
+    "żebym": "so that I", "zdała": "passed (she)", "wynosić": "to take out",
+    "śmieci": "trash; garbage", "poniedziałki": "Mondays",
+    "bloku": "apartment building (form after 'in')", "wyniósł": "took out (he)", "dzisiaj": "today",
+    "podpisała": "signed (she)", "regulamin": "rules; regulations", "zapłacić": "to pay",
+    "czynsz": "rent", "zapłacił": "paid (he)", "piątym": "fifth (form after 'before')",
+    "zapomniałam": "I forgot (said by a woman)", "przeczytałaś": "you read (informal, to a woman)",
+    "środy": "Wednesdays", "wiesz": "you know (informal)", "wolno": "allowed", "palić": "to smoke",
+    "balkonie": "balcony (after 'on')", "serio": "seriously; really",
+    "starym": "old (form after 'in')", "zapomniałem": "I forgot (said by a man)",
+    "piątego": "fifth (form after 'by')", "miesiąca": "month (form after 'of')",
+    "zadzwonił": "called; rang (he; it)", "administracji": "management office (form after 'to')",
+    "wyjaśnił": "explained (he)", "zadzwonić": "to call (once)", "wyjaśnić": "to explain",
+    "obowiązek": "duty; obligation", "powiedzieć": "to say; to tell",
+    "zeszłym": "last (form after 'in')", "mogłam": "I could (said by a woman)",
+    "podała": "gave; provided (she)", "mogłabym": "I could (said by a woman; hypothetical)",
+    "oddzwonić": "to call back", "chwileczkę": "just a moment (object form)",
+    "tego": "this; that (form after a negated verb)", "system": "system",
+    "działał": "worked; was working (he; it)", "mogłaby": "could (she; hypothetical)",
+    "potwierdzeniem": "confirmation (after 'with')", "media": "media",
+    "społecznościowe": "social (plural, in 'social media')", "marnują": "waste (they)",
+    "dzięki": "thanks to", "nim": "them (form after 'thanks to')", "kontakt": "contact",
+    "przyjaciółmi": "friends (after 'with')", "lepiej": "better (adverb)", "gotować": "to cook",
+    "drogie": "expensive (neuter)", "uważam": "I think; I consider", "punkt": "point",
+    "spędzam": "I spend (time)", "uważać": "to be careful", "twoja": "your (fem.)",
+    "odpowiadam": "I am responsible (odpowiadam za: I am responsible for)",
+    "dokumentację": "documentation (object form)", "techniczną": "technical (fem., object form)",
+    "projekcie": "project (form after 'in')", "sprzedaży": "sales (form after 'report')",
+    "skończyłem": "I finished (said by a man)", "dokumentacja": "documentation",
+    "opóźniona": "delayed (fem.)", "trakcie": "process (in 'in the process of')",
+    "tłumaczenia": "translation (form after 'in the process of')",
+    "dokumentów": "documents (form after 'translating')", "status": "status",
+    "dwóch": "two (form after 'need')", "Piotrze": "Piotr (when addressing him)",
+    "tłumaczeniem": "translation (after 'with')",
+    "dokumentacji": "documentation (form after 'with')", "pomogę": "I will help",
+    "wycieczkę": "trip; excursion (object form)",
+    "rowerową": "bike (fem., object form, in 'bike trip')", "zostaniemy": "we will stay",
+    "mało": "little; not much", "miał": "had (he)", "kupiłbym": "I would buy (said by a man)",
+    "rower": "bicycle", "jeździłabym": "I would ride (said by a woman)",
+    "rowerze": "bicycle (form after 'on')", "jasne": "sure; clear (neuter)",
+    "ugotujemy": "we will cook", "taki": "such; so (masc.)", "pamiętasz": "you remember (informal)",
+    "wiedział": "knew (he)", "zabrałbym": "I would take (said by a man)", "parasol": "umbrella",
+    "zmokłeś": "you got wet (informal, to a man)", "zupełnie": "completely",
+    "dałabym": "I would give (said by a woman)", "zdążę": "I will make it in time",
+    "złapię": "I will catch", "ósmej": "eighth (in 'at eight o'clock')", "następny": "next (masc.)",
+    "pociągiem": "train (after 'by')", "autem": "car (after 'by')", "starczy": "will be enough",
+    "kupię": "I will buy", "nowe": "new (plural or neuter)", "buty": "shoes",
+    "poczekam": "I will wait", "przyszłego": "next (form after 'until')",
+    "zakupy": "shopping (plural)", "jedziesz": "you go (by vehicle; informal)",
+    "idziesz": "you go (on foot; informal)", "robię": "I do; I make",
+    "kolację": "dinner (object form)", "oglądam": "I watch",
+    "telewizję": "television (object form)", "gdy": "when",
+    "wróciłem": "I came back (said by a man)", "telefon": "phone",
+    "odebrałem": "I picked up (said by a man)", "robiłeś": "you were doing (informal, to a man)",
+    "kto": "who", "rozmawialiśmy": "we talked", "godzinę": "hour (object form)", "później": "later",
+    "długiej": "long (fem., form after 'after')", "rozmowie": "conversation (form after 'after')",
+    "zjeść": "to eat up", "prostego": "simple (form after 'something')",
+    "robisz": "you do; you are doing (informal)", "czekaliśmy": "we waited",
+    "peronie": "platform (form after 'on')", "wsiedliśmy": "we got on (a vehicle)",
+    "pociągu": "train (form after 'onto')", "spóźnił": "was late (he; it)",
+    "zeszły": "last (masc., object form)", "byliśmy": "we were", "krótka": "short (fem.)",
+    "podróż": "trip; journey", "cały": "whole; all (masc.)", "podczas": "during",
+    "zaczęło": "started (it)", "parasola": "umbrella (form after 'not have')",
+    "niespodziewanie": "unexpectedly", "opowiedz": "tell! (command, informal)",
+    "waszej": "your (plural, fem., form after 'about')", "pamiętam": "I remember",
+    "powiedziałam": "I said; I told (said by a woman)", "wtedy": "then; at that time",
+    "spóźni": "will be late", "miałaś": "you had (informal, to a woman)",
+    "dworcu": "station (form after 'at')", "minut": "minutes (form after 'twenty')",
+    "przynajmniej": "at least", "zmokliście": "you all got wet",
+    "ostatniej": "last (fem., form after 'about')", "egzamin": "exam",
+}
+GLOSSES.update(B1_GLOSSES)
+POS_SETS["verb"] |= split_words(
+    "podróżować zmienić zmienił zostałbym robiłbym robiłbyś mógłbym mógł mieszkać "
+    "przeprowadzić pojechałbyś zostałabym pojechałbym chciałem kocham miałbym "
+    "podróżowałbym brakuje oszczędzam oszczędza tęsknię przesłać zaproponować powinniśmy "
+    "przedstawić potrzebuje potrzebować mamy przetestować przesunąć pomoże piszę pracuje "
+    "czytam znam pomagam rozmawiam pomagać powiedział zapytała zapytał rozmawiałam "
+    "powiedziała przeprowadza zapytałam poszedłbym powinnaś kłaść powinieneś miałam "
+    "spróbujesz umówię kładę zrobił zrobiła porozmawiałbym złożyć dzwoniłem odpowiedział "
+    "kupiłem prosić wyślemy słyszeć kupił woli żałuję pojechaliśmy trzeba zarezerwować "
+    "mieliśmy pojechać byłeś zarezerwowaliśmy wyprzedało byli pojedziemy była powinienem "
+    "był zamierzam nauczyć pływać padać pójdziemy obejrzymy robicie robimy zrobimy "
+    "zmienia chodzi dostała zaczyna słyszałaś opowiadała szukała wysłała miała stało "
+    "znalazła streścić dostać pomaga skończyła pojechali mogła uczysz cieszyć zdała "
+    "wynosić wyniósł podpisała zapłacić zapłacił zapomniałam przeczytałaś wiesz palić "
+    "zapomniałem zadzwonił wyjaśnił zadzwonić wyjaśnić powiedzieć mogłam podała mogłabym "
+    "oddzwonić działał mogłaby marnują gotować uważam spędzam uważać odpowiadam "
+    "skończyłem pomogę zostaniemy miał kupiłbym jeździłabym ugotujemy pamiętasz wiedział "
+    "zabrałbym zmokłeś dałabym zdążę złapię starczy kupię poczekam jedziesz idziesz robię "
+    "oglądam wróciłem odebrałem robiłeś rozmawialiśmy zjeść robisz czekaliśmy wsiedliśmy "
+    "spóźnił byliśmy zaczęło opowiedz pamiętam powiedziałam spóźni miałaś zmokliście"
+)
+POS_SETS["adjective"] |= split_words(
+    "innego innym inne wolny wolnego wygodna zdalna spontaniczna łatwiejsza lepszą jednej "
+    "drugiej ciekawy trudny ważne gotowy jednym szanowna szanowny pięciu ładny ważna "
+    "zmęczony zmęczona przyszłym samo ciężki jedenastą nową możliwe zeszłej zajęty "
+    "świetny najważniejsze nowego nowej kwalifikacyjne dużej międzynarodowej piękny "
+    "takimi piątym starym piątego zeszłym społecznościowe drogie techniczną opóźniona "
+    "dwóch rowerową jasne ósmej następny nowe przyszłego długiej prostego zeszły krótka "
+    "cały ostatniej"
+)
+POS_SETS["adverb"] |= split_words(
+    "dużo więcej bliżej tutaj zawsze akurat tu częściej zdalnie prawie często naprawdę "
+    "wcześniej teraz temu przykro pewno zbyt chyba prawdopodobnie najpierw codziennie "
+    "szybciej intensywnie właśnie dzisiaj wolno serio lepiej mało zupełnie później "
+    "niespodziewanie wtedy przynajmniej"
+)
+POS_SETS["pronoun"] |= split_words(
+    "coś każdy panie go tę który które którą którego którym twojej których ją jej twoim "
+    "ten nikt tym tej tego nim twoja taki kto waszej"
+)
+POS_SETS["preposition"] |= split_words(
+    "mimo przed u przez nad dzięki podczas"
+)
+POS_SETS["particle"] |= split_words(
+    "gdybym gdybyś dlaczego gdyby chociaż jednak byś jeśli zanim więc żebyśmy żebyś żebym "
+    "gdy"
+)
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
@@ -392,6 +645,30 @@ for _tag, _words in {
 part_of_speech = pos_lookup(POS_SETS)
 
 
+# B1 first-sight senses that differ from the A1/A2 entry, keyed (realization
+# stem, token).
+GLOSS_OVERRIDES = {
+    ("b1_unit02_dyskusja_z_niuansami", "domu"): "home (form after 'at')",
+    ("b1_unit02_dyskusja_z_niuansami", "za"): "for; too (in 'too much')",
+    ("b1_unit04_zdania_wzgledne", "banku"): "bank (after 'at')",
+    ("b1_unit04_zdania_wzgledne", "której"): "whom (fem., the person helped)",
+    ("b1_unit06_rady", "pracy"): "work; job (form after 'at' or 'of')",
+    ("b1_unit11_cele", "po"): "after; for (in 'po to')",
+    ("b1_unit12_obowiazki", "dnia"): "day (in 'the fifth day')",
+    ("b1_unit13_umiejetnosci", "pana"): "sir (in 'excuse me, sir')",
+    ("b1_unit14_zgoda_i_sprzeciw", "widzenia"): "view (in 'point of view')",
+    ("b1_unit15_codziennosc_w_pracy", "odpowiada"): "is responsible",
+    ("b1_unit16_warunki_realne_i_nierealne", "pieniędzy"): "money (form after 'more' or 'enough')",
+    ("b1_unit19_opowiadanie_o_przeszlosci", "godziny"): "hour (form in 'half an hour')",
+    ("b1_unit19_opowiadanie_o_przeszlosci", "podróży"): "trip (form after 'on')",
+}
+
+# POS of a B1 first-sight sense that differs from the A1/A2 entry.
+POS_OVERRIDES = {
+    ("b1_unit14_zgoda_i_sprzeciw", "widzenia"): "noun",
+}
+
+
 def iter_specs():
     for level, group in LEVELS.items():
         realizations, _ = manifest_group(group)
@@ -403,6 +680,8 @@ def iter_specs():
             part_of_speech=part_of_speech,
             normalize=normalize,
             category_tags=CATEGORY_TAGS,
+            gloss_overrides=GLOSS_OVERRIDES,
+            pos_overrides=POS_OVERRIDES,
         )
 
 
