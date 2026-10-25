@@ -1,0 +1,159 @@
+schema_version: "1.0"
+pack_key: practice.en-fr.b1.unit33
+source_language: en
+target_language: fr
+unit_content_key: fr.b1.unit33.discours_indirect
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: "Authored 2026-10-25 (session 12, en-fr B1) against PRACTICE_PACK_RECIPE.md and lexemes from scripts/backfill_lexemes_en_fr.py (level b1, group en-fr-b1). Grammar-unit layout: recognition and bare-word production pools are curated w_<token> lists from this unit's own first-sight tokens; the structured and sentence-production templates pin one lexeme with a single-member anchor and carry the unit's construction in the frame. Sentence translations list accepted_variants for natural alternatives (word order, dès que/quand, on/nous, est-ce que). Native review: confirm the glosses of conjugated forms (for example j'aurais, aurais, tu/je ambiguity in forms such as préviens, arrive, parle) and the accepted variants."
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_concordance", "w_demander", "w_demandé", "w_indicatif", "w_maintenant", "w_rapporter", "w_rien", "w_salle", "w_verbe"]
+slot_presets:
+  rec1_1: &rec1_1 {language_code: fr, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: ["w_salle", "w_demander", "w_indicatif", "w_rapporter", "w_demandé", "w_concordance", "w_verbe", "w_maintenant"]}}
+  anc_2: &anc_2 {language_code: fr, part_of_speech: noun, agreement_tags: {semantic: "w_salle"}}
+  anc_3: &anc_3 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_rapporter"}}
+  tr1_4: &tr1_4 {language_code: fr, part_of_speech: [noun, verb], agreement_tags: {semantic: ["w_salle", "w_demander", "w_indicatif", "w_rapporter"]}}
+  anc_5: &anc_5 {language_code: fr, part_of_speech: verb, agreement_tags: {semantic: "w_demandé"}}
+  anc_6: &anc_6 {language_code: fr, part_of_speech: pronoun, agreement_tags: {semantic: "w_rien"}}
+  anc_7: &anc_7 {language_code: fr, part_of_speech: adverb, agreement_tags: {semantic: "w_maintenant"}}
+  tr2_8: &tr2_8 {language_code: fr, part_of_speech: [adverb, noun, verb], agreement_tags: {semantic: ["w_demandé", "w_concordance", "w_verbe", "w_maintenant"]}}
+templates:
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.choose.001
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone says right now.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.listen.002
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone says right now.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.match.003
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *rec1_1, second: *rec1_1, third: *rec1_1, fourth: *rec1_1, fifth: *rec1_1, sixth: *rec1_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for reporting what someone says right now.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.order.004
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: word_order
+    frame: {text: "Le chef demande si la {item} est prête.", language_code: fr, direction: ltr}
+    slots: {item: *anc_2}
+    answer_derivation: {kind: render_frame, frame: {text: "Le chef demande si la {item} est prête.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Dire que + present reports a statement; demander si + present reports a yes-or-no question.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.order.005
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: word_order
+    frame: {text: "On peut {item} ce que le chef dit.", language_code: fr, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "On peut {item} ce que le chef dit.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "When the speaking verb is in the present, the reported verb stays in the present.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.fill.006
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: fill_in_blank
+    frame: {text: "Le chef demande si la {item} est prête. ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_2, hint: *anc_2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Dire que + present reports a statement; demander si + present reports a yes-or-no question.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.translate.007
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *tr1_4}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone says right now.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.translate.008
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: translation
+    frame: {text: "The chef asks if the room is ready.", language_code: en, direction: ltr}
+    slots: {item: *anc_2}
+    answer_derivation: {kind: render_frame, frame: {text: "Le chef demande si la {item} est prête.", language_code: fr, direction: ltr}, accepted_variants: ["Le chef veut savoir si la {item} est prête."]}
+    feedback_frame: {text: "When the speaking verb is in the present, the reported verb stays in the present.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson01.translate.009
+    lesson_content_key: fr.b1.unit33.lesson01.discours_present
+    type: translation
+    frame: {text: "We can report what the chef says.", language_code: en, direction: ltr}
+    slots: {item: *anc_3}
+    answer_derivation: {kind: render_frame, frame: {text: "On peut {item} ce que le chef dit.", language_code: fr, direction: ltr}, accepted_variants: ["Nous pouvons {item} ce que le chef dit."]}
+    feedback_frame: {text: "Dire que + present reports a statement; demander si + present reports a yes-or-no question.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.choose.001
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: multiple_choice
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone said earlier.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.listen.002
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: listen_select
+    frame: {text: "{item}", language_code: fr, direction: ltr}
+    slots: {item: *rec1_1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone said earlier.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.match.003
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: fr, direction: ltr}
+    slots: {first: *rec1_1, second: *rec1_1, third: *rec1_1, fourth: *rec1_1, fifth: *rec1_1, sixth: *rec1_1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "These are the words for reporting what someone said earlier.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.order.004
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: word_order
+    frame: {text: "Le chef a {item} si la salle était prête.", language_code: fr, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Le chef a {item} si la salle était prête.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "After a past introducing verb (a dit que, a demandé si), the reported verb moves to the imperfect: il fallait, la salle était prête.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.order.005
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: word_order
+    frame: {text: "Il n'a {item} demandé d'autre.", language_code: fr, direction: ltr}
+    slots: {item: *anc_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Il n'a {item} demandé d'autre.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "Rien goes with ne: il n'a rien demandé d'autre.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.fill.006
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: fill_in_blank
+    frame: {text: "Et {item}, qu'est-ce qu'il dit ? ({hint})", language_code: fr, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *anc_7, hint: *anc_7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "After a past introducing verb (a dit que, a demandé si), the reported verb moves to the imperfect: il fallait, la salle était prête.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.translate.007
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *tr2_8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the words for reporting what someone said earlier.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.translate.008
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: translation
+    frame: {text: "The chef asked if the room was ready.", language_code: en, direction: ltr}
+    slots: {item: *anc_5}
+    answer_derivation: {kind: render_frame, frame: {text: "Le chef a {item} si la salle était prête.", language_code: fr, direction: ltr}, accepted_variants: ["Le chef a {item} si la salle était prête."]}
+    feedback_frame: {text: "Rien goes with ne: il n'a rien demandé d'autre.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.translate.009
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: translation
+    frame: {text: "He did not ask anything else.", language_code: en, direction: ltr}
+    slots: {item: *anc_6}
+    answer_derivation: {kind: render_frame, frame: {text: "Il n'a {item} demandé d'autre.", language_code: fr, direction: ltr}}
+    feedback_frame: {text: "After a past introducing verb (a dit que, a demandé si), the reported verb moves to the imperfect: il fallait, la salle était prête.", language_code: en, direction: ltr}
+  - content_key: practice.en-fr.fr.b1.unit33.lesson02.translate.010
+    lesson_content_key: fr.b1.unit33.lesson02.discours_passe_concordance
+    type: translation
+    frame: {text: "And now he says that the delivery arrives at noon.", language_code: en, direction: ltr}
+    slots: {item: *anc_7}
+    answer_derivation: {kind: render_frame, frame: {text: "Et {item}, il dit que la livraison arrive à midi.", language_code: fr, direction: ltr}, accepted_variants: ["Et {item} il dit que la livraison arrive à midi."]}
+    feedback_frame: {text: "Rien goes with ne: il n'a rien demandé d'autre.", language_code: en, direction: ltr}
