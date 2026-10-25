@@ -17,6 +17,7 @@ import { formatCorrectResponse } from "@lingo/shared/lib/formatAnswer";
 import { resultStatus } from "@lingo/shared/lib/gradingResult";
 import { answerDirectionForExercise } from "@lingo/shared/lib/scripts";
 import { AlmostFeedback } from "../components/AlmostFeedback";
+import { AnswerFeedbackExtras } from "../components/AnswerFeedbackExtras";
 import { answerOutcome } from "../lib/answerOutcome";
 import type {
   AnswerResponse,
@@ -548,6 +549,7 @@ export function LessonRunnerPage() {
                     prompt: item.prompt,
                   })}
                 />
+                <AnswerFeedbackExtras result={reviewResult} prompt={item.prompt} />
                 <button className="btn btn-block" onClick={handleReviewContinue}>
                   {t("lesson_runner.continue")}
                 </button>
@@ -573,6 +575,7 @@ export function LessonRunnerPage() {
                   <EmphasizedText text={reviewResult.feedback} />
                 </p>
               )}
+              <AnswerFeedbackExtras result={reviewResult} prompt={item.prompt} />
               <button className="btn btn-block" onClick={handleReviewContinue}>
                 {t("lesson_runner.continue")}
               </button>
@@ -793,9 +796,12 @@ export function LessonRunnerPage() {
             learner: lastResponse,
             spoken: lastSpoken,
             footer: (
-              <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
-                {t("lesson_runner.continue")}
-              </button>
+              <>
+                <AnswerFeedbackExtras result={result} prompt={current.exercise.prompt} />
+                <button ref={continueButtonRef} className="btn btn-block" onClick={handleContinue}>
+                  {t("lesson_runner.continue")}
+                </button>
+              </>
             ),
           })}
       </div>

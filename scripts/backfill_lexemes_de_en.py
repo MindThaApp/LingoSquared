@@ -14,7 +14,13 @@ translation exercises (see the IMPORTANT note in _en_target_lexeme_common.py).
 It must never contain the English answer word.
 
 Scope: A1 (the "de-en" manifest group, units 01-14 of the shared English
-realization) and A2 (the "de-en-a2" group, units 25-40, session 11). English classification (part of speech, citation form,
+realization), A2 (the "de-en-a2" group, units 25-40, session 11) and B1 (the
+"de-en-b1" group, units 01-19 of the shared B1 realization, session 12). A1, A2
+and B1 are separate courses, so each glosses every token it introduces;
+B1_SENSE_FIXES re-glosses the A1/A2 tokens whose B1 unit teaches another sense.
+The B1 course must be imported first: the runner stops with "ERROR: de-en
+'Englisch B1' course must be imported first" (exit 1, nothing written) when the
+de-en-b1 course row is missing. English classification (part of speech, citation form,
 semantic category tags) is shared with nl-en/fa-en/prs-en through
 scripts/_en_target_lexeme_common.py; the German glosses below are this
 direction's own, hand-written.
@@ -52,7 +58,7 @@ from _target_lexeme_backfill_common import classify, manifest_group, run  # noqa
 from backfill_lexemes_nl_en import EN_POS_ALL as EN_POS  # noqa: E402
 
 LANG = "en"
-LEVELS = {"a1": "de-en", "a2": "de-en-a2"}
+LEVELS = {"a1": "de-en", "a2": "de-en-a2", "b1": "de-en-b1"}
 
 
 def normalize(token: str) -> str:
@@ -353,13 +359,188 @@ A2_SENSE_FIXES: dict[str, str] = {
     "class": "Kurs", "too": "zu (zu viel)", "from": "ab; von",
 }
 
+# B1 ("de-en-b1" group, units 01-19; session 12). B1 is its own course, so
+# every token it introduces is glossed again; tokens already glossed for A1/A2
+# keep that entry unless B1_SENSE_FIXES re-glosses them for the sense the B1
+# unit teaches (resolved per token, first sight in the course). New tokens only
+# below; German glosses are hand-written and never contain the English answer.
+B1_GLOSSES: dict[str, str] = {
+    # unit01 necessity
+    "must": "müssen", "task": "Aufgabe", "rent": "Miete", "finish": "beenden; fertig machen",
+    "pay": "bezahlen", "called": "rief an; angerufen", "earlier": "früher; eher",
+    "forgot": "vergaß", "forget": "vergessen", "you're": "du bist; Sie sind",
+    "busy": "beschäftigt; viel zu tun", "renew": "erneuern; verlängern", "gym": "Fitnessstudio",
+    "membership": "Mitgliedschaft", "set": "einstellen; festlegen", "reminder": "Erinnerung",
+    "late": "spät; zu spät", "did": "tat; machte (Hilfsverb in Fragen)", "done": "getan; erledigt",
+    "dentist": "Zahnarzt; Zahnärztin", "everything": "alles",
+    # unit02 abilities
+    "able": "fähig; imstande", "manage": "schaffen; es hinbekommen", "license": "Führerschein; Lizenz",
+    "person": "Person", "friend": "Freund; Freundin", "system": "System",
+    "their": "ihr; ihre (Plural)", "licenses": "Führerscheine; Lizenzen", "everyone": "alle; jeder",
+    "changed": "änderte; geändert", "hers": "ihrer; ihre; ihres (Besitz)",
+    "wasn't": "war nicht", "really": "wirklich; tatsächlich", "want": "wollen; möchten",
+    # unit03 hypotheticals
+    "stay": "bleiben", "paint": "malen", "rains": "regnet", "loves": "liebt; mag sehr",
+    "near": "in der Nähe von", "house": "Haus", "known": "gewusst; gekannt",
+    "signed": "unterschrieb; angemeldet", "checks": "prüft; sieht nach", "plans": "Pläne",
+    "walk": "Spaziergang", "painting": "Mal-; Malerei", "didn't": "tat nicht; taten nicht (Hilfsverb)",
+    "join": "mitmachen; beitreten", "sign": "unterschreiben; sich anmelden",
+    # unit04 debate
+    "disagree": "nicht zustimmen; anderer Meinung sein", "believe": "glauben; meinen",
+    "reason": "Grund", "focus": "sich konzentrieren", "respect": "respektieren",
+    "thinks": "denkt; findet", "easily": "leicht; mühelos", "disagrees": "stimmt nicht zu",
+    "believes": "glaubt; meint", "likes": "mag; gefällt", "seeing": "sehen (Verlaufsform)",
+    "each": "jeder; jede; jedes (einzeln)", "other's": "des anderen; der anderen",
+    "important": "wichtig", "conversations": "Gespräche", "saves": "spart",
+    "makes": "macht", "sense": "Sinn", "different": "anders; verschieden",
+    # unit05 workplace
+    "responsible": "verantwortlich", "project": "Projekt", "technical": "technisch",
+    "sales": "Verkaufs-; Vertrieb", "gives": "gibt", "short": "kurz", "expects": "erwartet",
+    "tells": "sagt; erzählt", "truth": "Wahrheit", "delays": "Verzögerungen",
+    "review": "durchsehen; überprüfen", "numbers": "Zahlen", "notes": "Notizen; Anmerkungen",
+    "appreciate": "zu schätzen wissen; schätzen", "let": "lassen",
+    # unit06 narrative
+    "while": "während", "flat": "platt; ohne Luft", "tire": "Reifen", "pull": "ziehen",
+    "stranger": "Fremder; Fremde", "mechanic": "Mechaniker; Mechanikerin",
+    "said": "sagte; gesagt", "driving": "fahren (Verlaufsform)", "went": "ging; fuhr",
+    "pulled": "zog; fuhr (rechts ran)", "helped": "half; geholfen",
+    "already": "schon; bereits", "kept": "hielt; gehalten", "word": "Wort",
+    "suddenly": "plötzlich", "quiet": "ruhig", "car": "Auto", "offered": "bot an",
+    "say": "sagen", "got": "bekam; wurde", "happened": "geschah; passierte",
+    "kind": "freundlich; nett", "him": "ihn; ihm",
+    # unit07 conditions
+    "unless": "es sei denn; wenn nicht", "condition": "Bedingung", "result": "Ergebnis; Folge",
+    "starts": "beginnt; fängt an", "ready": "fertig; bereit", "backup": "Ersatz-; Reserve-",
+    "plan": "Plan", "writes": "schreibt", "conference": "Konferenz; Besprechungs-",
+    "room": "Raum; Zimmer", "joins": "kommt dazu; schließt sich an", "shorter": "kürzer",
+    "cannot": "kann nicht; können nicht",
+    # unit08 sequencing
+    "soon": "bald", "lock": "abschließen; verschließen", "upstairs": "oben; nach oben",
+    "mail": "Post", "locks": "schließt ab", "careful": "sorgfältig; vorsichtig",
+    "routine": "Routine", "dinner": "Abendessen", "washes": "wäscht", "hands": "Hände",
+    "clears": "räumt ab; räumt auf", "table": "Tisch", "arrives": "kommt an",
+    # unit09 reported speech
+    "told": "sagte; erzählte", "asked": "fragte; bat", "says": "sagt", "summary": "Zusammenfassung",
+    "enough": "genug; ausreichend", "read": "las; lesen", "Mia's": "Mias",
+    "finished": "beendete; fertiggestellt", "needed": "brauchte; benötigte", "ask": "fragen",
+    "perfect": "perfekt",
+    # unit10 purpose
+    "goal": "Ziel", "design": "Gestaltung; Design", "improve": "verbessern", "money": "Geld",
+    "prepare": "vorbereiten", "english": "Englisch", "remember": "sich merken; sich erinnern",
+    "vocabulary": "Wortschatz; Vokabeln", "clear": "klar; deutlich", "helps": "hilft",
+    "choose": "wählen; auswählen", "goals": "Ziele", "practices": "übt",
+    "updates": "Aktualisierungen; Neuigkeiten", "sound": "klingen", "professional": "professionell",
+    "reads": "liest", "descriptions": "Beschreibungen", "program": "Programm; Studiengang",
+    "studying": "lernen; studieren (Verlaufsform)", "saving": "sparen (Verlaufsform)",
+    # unit11 unreal hypotheticals
+    "rather": "lieber", "opportunity": "Gelegenheit; Chance", "regret": "Bedauern; Reue",
+    "chance": "Chance; Risiko", "cheaper": "billiger; günstiger", "tense": "Zeitform",
+    "unreal": "unwirklich", "present": "gegenwärtig", "situation": "Situation",
+    "sooner": "früher; eher", "confident": "selbstbewusst; zuversichtlich", "found": "fand; gefunden",
+    "wants": "will; möchte", "expensive": "teuer", "joined": "trat bei; machte mit",
+    "timing": "Zeitpunkt", "saved": "sparte; gespart", "definitely": "auf jeden Fall; definitiv",
+    # unit12 concession
+    "although": "obwohl", "even": "sogar; selbst", "though": "obwohl; doch",
+    "despite": "trotz", "distractions": "Ablenkungen", "however": "jedoch; allerdings",
+    "valid": "berechtigt; gültig", "convince": "überzeugen", "prefers": "bevorzugt; mag lieber",
+    "finishes": "beendet; schließt ab", "clause": "Nebensatz; Teilsatz", "followed": "gefolgt",
+    "noun": "Nomen; Substantiv", "sentence": "Satz", "period": "Punkt (Satzzeichen)",
+    "semicolon": "Semikolon", "flexibility": "Flexibilität", "teamwork": "Teamarbeit",
+    "builds": "schafft; baut auf", "comfortable": "bequem; angenehm", "misses": "vermisst",
+    "gets": "bekommt; kommt", "talking": "sprechen (Verlaufsform)", "colleagues": "Kollegen; Kolleginnen",
+    "during": "während", "breaks": "Pausen", "noise": "Lärm", "alone": "allein",
+    "change": "ändern; wechseln", "mind": "Meinung; Verstand", "probably": "wahrscheinlich",
+    "matters": "ist wichtig; zählt", "most": "am meisten", "our": "unser; unsere",
+    "preferences": "Vorlieben",
+    # unit13 relative clauses
+    "whose": "dessen; deren", "approved": "genehmigte; genehmigt", "downtown": "Innenstadt",
+    "coworker": "Kollege; Kollegin", "studies": "lernt; studiert", "Spanish": "Spanisch",
+    "colleague": "Kollege; Kollegin", "sits": "sitzt", "leads": "leitet", "projects": "Projekte",
+    "defining": "bestimmend", "relative": "Relativ-; relativ", "commas": "Kommas",
+    "mean": "bedeuten; meinen", "non-defining": "nicht bestimmend", "add": "hinzufügen",
+    "extra": "zusätzlich; extra", "information": "Information; Informationen",
+    "identified": "identifiziert; bestimmt", "meets": "trifft; erfüllt", "approve": "genehmigen",
+    "several": "mehrere", "easier": "leichter; einfacher", "fifth": "fünfte; fünfter",
+    "floor": "Stockwerk; Boden", "eats": "isst", "together": "zusammen",
+    "finishing": "abschließen (Verlaufsform)", "has already": "hat schon", "met": "traf; kennengelernt",
+    "woman": "Frau", "desk": "Schreibtisch", "window": "Fenster", "designer": "Designer; Designerin",
+    "logo": "Logo", "won": "gewann; gewonnen", "award": "Preis; Auszeichnung",
+    "used": "benutzte; gewohnt", "smaller": "kleiner", "ours": "unseres; unsere; unser (Besitz)",
+    "explains": "erklärt",
+    # unit14 professional communication
+    "possibly": "möglicherweise; vielleicht", "agenda": "Tagesordnung", "formal": "förmlich; formell",
+    "workplace": "Arbeitsplatz", "requests": "Bitten; Anfragen", "softened": "abgeschwächt",
+    "conditional": "Bedingungs-; bedingt", "command": "Befehl", "these": "diese (Plural)",
+    "forms": "Formen", "polite": "höflich", "budget": "Budget", "afterward": "danach; anschließend",
+    "hope": "hoffen", "doing": "tun (Verlaufsform)", "tomorrow's": "morgig; von morgen",
+    "latest": "neueste; aktuellste", "client": "Kunde; Kundin", "best": "Bestes",
+    "advance": "Voraus (im Voraus)", "updated": "aktualisiert",
+    # unit15 complaints
+    "complain": "sich beschweren", "resolve": "lösen; klären", "issue": "Problem; Anliegen",
+    "product": "Produkt", "item": "Artikel", "written": "schriftlich; geschrieben",
+    "complaint": "Beschwerde", "parts": "Teile", "specific": "bestimmt; konkret",
+    "resolution": "Lösung", "chair": "Stuhl", "ordered": "bestellte; bestellt", "wheel": "Rad",
+    "proceed": "weitermachen; vorgehen", "we'll": "wir werden",
+    # unit16 advice
+    "advice": "Rat; Ratschlag", "overwhelmed": "überfordert", "prioritize": "priorisieren; Prioritäten setzen",
+    "workload": "Arbeitsbelastung; Arbeitspensum", "decline": "ablehnen", "closer": "näher",
+    "asking": "fragen; bitten (Verlaufsform)", "suggestions": "Vorschläge",
+    "hypothetical": "Annahme; Hypothese", "recommendation": "Empfehlung", "softer": "sanfter; weicher",
+    "suggestion": "Vorschlag", "stronger": "stärker", "depending": "abhängen (Verlaufsform)",
+    "try": "versuchen; ausprobieren", "top": "oben; Spitze; obendrauf",
+    "goes": "geht", "leading": "leiten (Verlaufsform)", "seem": "scheinen; wirken",
+    "handle": "bewältigen; handhaben", "solid": "solide; fest",
+    # unit17 regret
+    "wish": "wünschen; Wunsch", "hindsight": "Rückblick; im Nachhinein",
+    "procrastinate": "aufschieben; trödeln", "talked": "sprach; gesprochen",
+    "express": "ausdrücken", "participle": "Partizip", "describe": "beschreiben",
+    "happen": "geschehen; passieren", "missed": "verpasste; verpasst", "wait": "warten",
+    "worry": "sich Sorgen machen", "end": "Ende", "true": "wahr; stimmt",
+    # unit18 future plans
+    "arrangement": "Verabredung; feste Vereinbarung", "intention": "Absicht; Vorhaben",
+    "prediction": "Vorhersage; Prognose", "months": "Monate", "might": "könnte; vielleicht",
+    "continuous": "fortlaufend; durchgehend", "agreed": "stimmte zu; vereinbart",
+    "decision": "Entscheidung", "made": "machte; gemacht", "without": "ohne", "steps": "Schritte",
+    "feels": "fühlt sich", "completely": "völlig; ganz", "predicts": "sagt voraus",
+    "agrees": "stimmt zu", "exciting": "spannend; aufregend",
+    # unit19 summarizing
+    "main": "Haupt-; wichtigste", "detail": "Detail; Einzelheit", "own": "eigen",
+    "words": "Wörter; Worte", "covered": "behandelte; abgedeckt", "phrase": "Ausdruck; Wendung",
+    "give": "geben", "points": "Punkte", "keeping": "behalten (Verlaufsform)",
+    "highlight": "hervorheben", "single": "einzeln; einzig", "separately": "getrennt; einzeln",
+    "details": "Details; Einzelheiten", "condensed": "verkürzt; gekürzt", "original": "ursprünglich; Original-",
+    "article": "Artikel", "communication": "Kommunikation", "examples": "Beispiele",
+    "background": "Hintergrund", "wrote": "schrieb", "messages": "Nachrichten",
+    "guessing": "raten (Verlaufsform)", "out": "heraus; aus; weggelassen",
+    "ideas": "Ideen", "helpful": "hilfreich",
+}
+
+# A1/A2 tokens whose B1 unit teaches another sense (first sight in the B1 course
+# decides which unit that is; the entry replaces the A1/A2 gloss).
+B1_SENSE_FIXES: dict[str, str] = {
+    "right": "richtig; recht haben", "managed": "schaffte; geschafft",
+    "save": "sparen", "class": "Kurs; Unterricht", "about": "über; darüber",
+    "one": "eins; eine (Ersatzwort für ein Nomen)", "take": "nehmen; belegen (einen Kurs)",
+    "miss": "verpassen; vermissen", "working": "arbeiten (Verlaufsform)",
+    "report": "Bericht; melden", "update": "Update; aktualisieren", "office": "Büro; Amt",
+    "manager": "Vorgesetzter; Teamleitung", "meet": "sich treffen; kennenlernen",
+    "meeting": "Besprechung; Meeting", "delay": "Verzögerung; verzögern",
+    "as": "wie; so (bei „sobald“)", "before": "vor; bevor", "after": "nach; nachdem",
+    "over": "über; vorbei; rechts ran", "order": "Reihenfolge; Bestellung; um zu",
+    "so": "damit; also", "taking": "besuchen; nehmen (Verlaufsform)",
+    "past": "Vergangenheit; vergangen", "works": "arbeitet; funktioniert",
+    "follow": "folgen; befolgen", "request": "Bitte; Anfrage", "left": "ließ; verließ; ließ weg",
+    "moved": "verschoben; zog um", "looking": "blicken; schauen (Verlaufsform)",
+    "fixed": "behoben; repariert", "this": "diese; dieser; dieses",
+}
+
 GLOSSES = EN_TARGET_TO_DE_GLOSS
 
 # Semantic category tags shared with the other X->en directions
 # (greeting, number, day_part, farewell, ...). The per-direction
 # "volume_*" singleton tags belong to other courses and are dropped.
 CATEGORY_TAGS: dict[str, list[str]] = {}
-for _token in {**GLOSSES, **A2_GLOSSES, **A2_SENSE_FIXES}:
+for _token in {**GLOSSES, **A2_GLOSSES, **A2_SENSE_FIXES, **B1_GLOSSES, **B1_SENSE_FIXES}:
     _semantic = en_agreement_tags(normalize_en_token(_token)).get("semantic") or []
     _kept = [t for t in _semantic if not t.startswith("volume_")]
     if _kept:
@@ -369,6 +550,7 @@ for _token in {**GLOSSES, **A2_GLOSSES, **A2_SENSE_FIXES}:
 GLOSSES_BY_LEVEL = {
     "a1": GLOSSES,
     "a2": {**GLOSSES, **A2_GLOSSES, **A2_SENSE_FIXES},
+    "b1": {**GLOSSES, **A2_GLOSSES, **B1_GLOSSES, **B1_SENSE_FIXES},
 }
 
 
