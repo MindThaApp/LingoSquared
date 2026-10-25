@@ -1,0 +1,128 @@
+schema_version: "1.0"
+pack_key: practice.en-it.b1.unit42
+source_language: en
+target_language: it
+unit_content_key: it.b1.unit42.sequenze
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: "false"
+  notes: >-
+    Authored 2026-10-25 (session 12, en-it B1 set) from scripts/backfill_lexemes_en_it.py (en-it-b1 course; w_<token> anchors, one token per sentence slot, unit-own lexemes only). Time clauses with quando: habitual (quando arrivo) against past (quando sono arrivato). Variants accept mail and e-mail for email and a fronted clause. NATIVE FLAG: none.
+tag_schema:
+  part_of_speech: [symbol, noun, proper_noun, pronoun, verb, adjective, adverb, preposition, particle, phrase]
+  agreement_tags:
+    semantic: ["w_arrivo", "w_controllo", "w_email", "w_le", "w_messaggio", "w_quando", "w_trovare", "w_trovato", "w_un"]
+slot_presets:
+  p1: &p1 {language_code: it, part_of_speech: ["adverb", "verb", "particle", "noun"], agreement_tags: {semantic: ["w_quando", "w_arrivo", "w_controllo", "w_le", "w_email", "w_trovato", "w_trovare", "w_messaggio"]}}
+  p2: &p2 {language_code: it, part_of_speech: ["adverb", "verb", "noun"], agreement_tags: {semantic: ["w_quando", "w_arrivo", "w_controllo", "w_email", "w_trovato", "w_trovare", "w_messaggio"]}}
+  p3: &p3 {language_code: it, part_of_speech: ["verb", "noun"], agreement_tags: {semantic: ["w_trovato", "w_trovare", "w_messaggio", "w_email"]}}
+  p4: &p4 {language_code: it, part_of_speech: ["adverb"], agreement_tags: {semantic: ["w_quando"]}}
+  p5: &p5 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_controllo"]}}
+  p6: &p6 {language_code: it, part_of_speech: ["noun"], agreement_tags: {semantic: ["w_email"]}}
+  p7: &p7 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_arrivo"]}}
+  p8: &p8 {language_code: it, part_of_speech: ["particle"], agreement_tags: {semantic: ["w_le"]}}
+  p9: &p9 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_trovato"]}}
+  p10: &p10 {language_code: it, part_of_speech: ["noun"], agreement_tags: {semantic: ["w_messaggio"]}}
+  p11: &p11 {language_code: it, part_of_speech: ["particle"], agreement_tags: {semantic: ["w_un"]}}
+  p12: &p12 {language_code: it, part_of_speech: ["verb"], agreement_tags: {semantic: ["w_trovare"]}}
+templates:
+  - content_key: practice.en-it.it.b1.unit42.lesson01.choose.001
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p1}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the unit on time clauses.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.listen.001
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: listen_select
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "The word you heard comes from the unit on time clauses.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson02.choose.001
+    lesson_content_key: it.b1.unit42.lesson02.quando_passato
+    type: multiple_choice
+    frame: {text: "{item}", language_code: it, direction: ltr}
+    slots: {item: *p3}
+    answer_derivation: {kind: slot_gloss, slot: item}
+    feedback_frame: {text: "These words come from the second lesson of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.translate.001
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: translation
+    frame: {text: "{item}", language_code: en, direction: ltr, slot_rendering: {item: english_gloss}}
+    slots: {item: *p2}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "These are the key words of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.match.001
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: matching_pairs
+    frame: {text: "{first} · {second} · {third} · {fourth} · {fifth} · {sixth}", language_code: it, direction: ltr}
+    slots: {first: *p1, second: *p1, third: *p1, fourth: *p1, fifth: *p1, sixth: *p1}
+    slot_relations: [{kind: distinct, slots: [first, second, third, fourth, fifth, sixth]}]
+    answer_derivation: {kind: matching_pairs, slots: [first, second, third, fourth, fifth, sixth]}
+    feedback_frame: {text: "Match the vocabulary of the unit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.translate.002
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: translation
+    frame: {text: "Every morning, when I arrive at the office, I check my emails.", language_code: en, direction: ltr}
+    slots: {item: *p4}
+    answer_derivation: {kind: render_frame, frame: {text: "Ogni mattina, {item} arrivo in ufficio, controllo le email.", language_code: it, direction: ltr}, accepted_variants: ["Ogni mattina, {item} arrivo in ufficio, controllo le mail.", "Quando arrivo in ufficio ogni mattina, controllo le email."]}
+    feedback_frame: {text: "Quando introduces the time clause.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.translate.003
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: translation
+    frame: {text: "Every morning, when I arrive at the office, I check my emails.", language_code: en, direction: ltr}
+    slots: {item: *p5}
+    answer_derivation: {kind: render_frame, frame: {text: "Ogni mattina, quando arrivo in ufficio, {item} le email.", language_code: it, direction: ltr}, accepted_variants: ["Ogni mattina, quando arrivo in ufficio, {item} le mail."]}
+    feedback_frame: {text: "Controllare in the io form is controllo.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.translate.004
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: translation
+    frame: {text: "Every morning, when I arrive at the office, I check my emails.", language_code: en, direction: ltr}
+    slots: {item: *p6}
+    answer_derivation: {kind: render_frame, frame: {text: "Ogni mattina, quando arrivo in ufficio, controllo le {item}.", language_code: it, direction: ltr}, accepted_variants: ["Ogni mattina, quando arrivo in ufficio, controllo le e-mail.", "Ogni mattina, quando arrivo in ufficio, controllo le mail."]}
+    feedback_frame: {text: "Email stays unchanged in the plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.fill.001
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: fill_in_blank
+    frame: {text: "Ogni mattina, quando {item} in ufficio, controllo le email. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p7, hint: *p7}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "The present describes the habit.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson01.fill.002
+    lesson_content_key: it.b1.unit42.lesson01.quando_abituale
+    type: fill_in_blank
+    frame: {text: "Ogni mattina, quando arrivo in ufficio, controllo {item} email. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p8, hint: *p8}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "Le goes with the feminine plural.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson02.translate.001
+    lesson_content_key: it.b1.unit42.lesson02.quando_passato
+    type: translation
+    frame: {text: "When I arrived yesterday, I found a message.", language_code: en, direction: ltr}
+    slots: {item: *p9}
+    answer_derivation: {kind: render_frame, frame: {text: "Quando sono arrivato ieri, ho {item} un messaggio.", language_code: it, direction: ltr}, accepted_variants: ["Ieri, quando sono arrivato, ho {item} un messaggio."]}
+    feedback_frame: {text: "Trovare takes avere: ho trovato.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson02.translate.002
+    lesson_content_key: it.b1.unit42.lesson02.quando_passato
+    type: translation
+    frame: {text: "When I arrived yesterday, I found a message from Elena.", language_code: en, direction: ltr}
+    slots: {item: *p10}
+    answer_derivation: {kind: render_frame, frame: {text: "Quando sono arrivato ieri, ho trovato un {item} di Elena.", language_code: it, direction: ltr}, accepted_variants: ["Ieri, quando sono arrivato, ho trovato un {item} di Elena."]}
+    feedback_frame: {text: "Messaggio is masculine: un messaggio.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson02.order.001
+    lesson_content_key: it.b1.unit42.lesson02.quando_passato
+    type: word_order
+    frame: {text: "Quando sono arrivato ieri, ho trovato {item} messaggio.", language_code: it, direction: ltr}
+    slots: {item: *p11}
+    answer_derivation: {kind: render_frame, frame: {text: "Quando sono arrivato ieri, ho trovato {item} messaggio.", language_code: it, direction: ltr}}
+    feedback_frame: {text: "Un goes with a masculine singular noun.", language_code: en, direction: ltr}
+  - content_key: practice.en-it.it.b1.unit42.lesson02.fill.001
+    lesson_content_key: it.b1.unit42.lesson02.quando_passato
+    type: fill_in_blank
+    frame: {text: "Non riesco a {item} il messaggio di Elena. ({hint})", language_code: it, direction: ltr, slot_rendering: {hint: english_gloss}}
+    slots: {item: *p12, hint: *p12}
+    answer_derivation: {kind: slot_text, slot: item}
+    feedback_frame: {text: "A is followed by the infinitive.", language_code: en, direction: ltr}
