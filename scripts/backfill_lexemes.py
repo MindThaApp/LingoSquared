@@ -431,6 +431,10 @@ UNIT_FILES_A2 = (
         REPO_ROOT / "docs/content/realizations/fa/a2_unit18_shopping_complaint.yaml",
         REPO_ROOT / "docs/content/overlays/en-fa/a2_unit18.yaml",
     ),
+    (
+        REPO_ROOT / "docs/content/realizations/fa/a2_unit19_last_weekend.yaml",
+        REPO_ROOT / "docs/content/overlays/en-fa/a2_unit19.yaml",
+    ),
 )
 
 # B1 units live in a THIRD, separate course row ("Farsi B1", confirmed by
@@ -1442,6 +1446,30 @@ FA_GLOSSES = {
     "تقسیم": "division (as in 'to divide up')",
 }
 
+
+# A2 unit19 (last weekend: the simple past as a system), added 2026-10-25.
+# English-only glosses (no Persian script). Person forms carry the person
+# and register so two forms of one lemma never share a gloss.
+FA_GLOSSES.update({
+    "مادربزرگم": "my grandmother",
+    "اومدم": "I came (spoken past)",
+    "خوابیدم": "I slept",
+    "رفتن": "to go (infinitive)", "رفتی": "you went",
+    "رفتیم": "we went", "رفتید": "you (plural, polite) went",
+    "رفتین": "you (plural, spoken) went", "رفتند": "they went (written style)",
+    "خوردن": "to eat (infinitive)", "خورد": "he/she ate",
+    "خوردی": "you ate", "خوردیم": "we ate",
+    "موندن": "to stay (infinitive)", "موندی": "you stayed",
+    "موندیم": "we stayed",
+    "اومدن": "to come (infinitive)",
+    "خوابیدن": "to sleep (infinitive)", "خوابید": "he/she slept",
+    "نخوردم": "I didn't eat", "ندیدم": "I didn't see",
+    "نخوندم": "I didn't read", "نموندم": "I didn't stay",
+    "نرفتی": "you didn't go", "نرفتیم": "we didn't go",
+    "نیومدی": "you didn't come (spoken)", "نیومدیم": "we didn't come (spoken)",
+    "نمی‌رم": "I don't go / I'm not going",
+    "نکردم": "I didn't do (it)", "نکرد": "he/she didn't do (it)",
+})
 
 # --- 2026-10-19: Farsi B2 tier (units 01-08) ---------------------------------
 # Every B2 introduced token absent from FA_GLOSSES above (364 of the 573
@@ -2491,6 +2519,12 @@ FA_VERBS = {
     "روشنه", "بزنه", "افتاده", "خواست", "بزنم", "داده", "خواسته",
     "فرداست", "اومد", "اینه", "می‌خوره", "بتونه", "بتونن", "بشم",
     "بتونم", "بتونیم",
+    # A2 unit19 (simple past paradigm), added 2026-10-25.
+    "اومدم", "خوابیدم", "رفتن", "رفتی", "رفتیم", "رفتید", "رفتین",
+    "رفتند", "خوردن", "خورد", "خوردی", "خوردیم", "موندن", "موندی",
+    "موندیم", "اومدن", "خوابیدن", "خوابید", "نخوردم", "ندیدم", "نخوندم",
+    "نموندم", "نرفتی", "نرفتیم", "نیومدی", "نیومدیم", "نمی‌رم", "نکردم",
+    "نکرد",
 }
 FA_PHRASE_PARTS = {"بخیر", "خواهش"}
 # Multi-word tokens a realization introduces as ONE vocabulary item that
@@ -2553,6 +2587,8 @@ TOO_PREPOSITION_LESSONS = {
 # collision, but these three lessons' negation still collides with the
 # long-established plain "نه" = "nine" entry without this split.
 NO_NEGATION_LESSONS = {
+    # A2 unit19 (added 2026-10-25): "نه، ورزش نکردم" / "نه، نرفتم" = no.
+    "fa.a2.unit19.lesson03.negative_past",
     # B2 (added 2026-10-19): "نه کاملا ... نه کاملا" (neither ... nor),
     # "نه چیز دیگر" (nothing else), "نه سرد است نه خودمانی".
     "fa.b2.unit03.nuance.lesson02.qualification",
@@ -2624,6 +2660,8 @@ PAS_RETURN_LESSONS = {
 # B1 teaches no counting classifier at all, so today the only b1 تا row
 # carries the classifier gloss.
 TA_UNTIL_LESSONS = {
+    # A2 unit19 (added 2026-10-25): "تا ظهر خوابیدم" = I slept until noon.
+    "fa.a2.unit19.lesson06.weekend_conversation",
     # B2 (added 2026-10-19): "تا حدی" = "to some extent" -- no counting
     # classifier anywhere in B2.
     "fa.b2.unit03.nuance.lesson01.hedging",
@@ -4354,6 +4392,38 @@ METALANGUAGE_TOKENS: frozenset[str] = frozenset()
 TAGGABLE_POS = frozenset({"noun", "verb", "adjective", "adverb", "phrase"})
 
 
+# A2 unit19 curated practice pools (added 2026-10-25). Tags apply only to the
+# unit19 first-introduction row of each token and keep practice slots to
+# grammatical, same-kind sets (all I-forms, all negatives, ...). The
+# *_single_* tags are one-member anchors for the fixed-sentence translations.
+_U19 = "en_fa_a2_unit19_"
+_U19_PAST1 = ("رفتم", "اومدم", "موندم", "خوردم", "دیدم", "خوندم", "خوابیدم")
+_U19_ACT = ("رفتم", "اومدم", "موندم", "خوردم", "خوابیدم")
+_U19_NEG1 = ("نرفتم", "نخوردم", "ندیدم", "نخوندم", "نموندم", "نیومدم")
+_U19_THINGS = ("پارک", "سینما", "کتاب", "فیلم")
+_U19_3SG = ("رفت", "خورد", "دید", "خوند", "موند", "اومد", "خوابید")
+_U19_YOUWE = ("رفتی", "رفتیم", "خوردی", "خوردیم", "موندی", "موندیم")
+_U19_INF = ("رفتن", "خوردن", "موندن", "اومدن", "خوابیدن", "دیدن")
+_U19_NEG_OTHER = ("نرفتی", "نرفت", "نرفتیم", "نیومدی", "نیومد", "نیومدیم", "نمی‌رم")
+_U19_GO = ("رفتم", "رفتی", "رفت", "رفتیم", "رفتید", "رفتین")
+_U19_SINGLE = {
+    "موندم": "stay_i", "نرفتم": "not_go_i",
+    "موندیم": "stay_we", "خوندم": "read_i", "رفتیم": "go_we", "تا": "until",
+    "نکردم": "not_do_i",
+}
+FA_A2U19_EXTRA_TAGS: dict[str, list[str]] = {}
+for _group, _tokens in (
+    ("past_1sg", _U19_PAST1), ("act_1sg", _U19_ACT), ("neg_1sg", _U19_NEG1),
+    ("things", _U19_THINGS), ("past_3sg", _U19_3SG),
+    ("you_we", _U19_YOUWE), ("infinitives", _U19_INF),
+    ("neg_other", _U19_NEG_OTHER), ("go_forms", _U19_GO),
+):
+    for _t in _tokens:
+        FA_A2U19_EXTRA_TAGS.setdefault(_t, []).append(_U19 + _group)
+for _t, _name in _U19_SINGLE.items():
+    FA_A2U19_EXTRA_TAGS.setdefault(_t, []).append(_U19 + "single_" + _name)
+
+
 def _unit_semantic_tags(unit_stem, lesson_order, token, part_of_speech):
     if part_of_speech not in TAGGABLE_POS or token in METALANGUAGE_TOKENS:
         return []
@@ -4550,6 +4620,15 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         english_gloss = "I study (spoken, 1st person)"
                     if level == "b1" and token == "شرکت":
                         english_gloss = "participation (as in 'to take part')"
+                    # A2 unit19 (2026-10-25): اون is the 3rd-person subject in
+                    # the past-ending table (he/she), and دیدن is "visit" in
+                    # رفتم دیدن دوستم; the inherited A1 glosses ("that",
+                    # "to watch / to see") hid those senses. Gloss-only,
+                    # keyed per level, so A1 rows are untouched.
+                    if token == "اون" and lesson_key.startswith("fa.a2.unit19."):
+                        english_gloss = "he / she / that (spoken)"
+                    if token == "دیدن" and lesson_key.startswith("fa.a2.unit19."):
+                        english_gloss = "to see; to visit (in 'visit a friend')"
                     if token == "تا" and lesson_key in TA_UNTIL_LESSONS:
                         key = (level, token, "until_prep")
                         part_of_speech = "preposition"
@@ -4577,6 +4656,8 @@ def _classify_fa(files, level, fa_specs, seen_en):
                         )
                         if level == "b2":
                             unit_tags = unit_tags + FA_B2_EXTRA_TAGS.get(token, [])
+                        if lesson_key.startswith("fa.a2.unit19."):
+                            unit_tags = unit_tags + FA_A2U19_EXTRA_TAGS.get(token, [])
                         if unit_tags:
                             semantic = tags.setdefault("semantic", [])
                             semantic.extend(t for t in unit_tags if t not in semantic)
