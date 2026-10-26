@@ -127,6 +127,14 @@ if [ "$RUN_CONTENT" = "1" ]; then
       done < <(LC_ALL=C cat scripts/manifest.d/practice/*.txt)
     fi
 
+    # German text left in a non-de learner-language overlay/pack (derive_direction
+    # once treated every teaching-card title as English and shipped German ones).
+    echo "-- german-leftover check (non-de learner-language overlays + packs) --"
+    if ! python scripts/_german_leftover_check.py; then
+      echo "!! german-leftover check FAILED"
+      CONTENT_OK=0
+    fi
+
     deactivate 2>/dev/null || true
     [ "$CONTENT_OK" = "1" ] && CONTENT_STATUS="pass" || CONTENT_STATUS="fail"
   fi
