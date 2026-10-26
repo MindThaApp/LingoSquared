@@ -707,6 +707,35 @@ class UnitDeriver:
                 s = re.sub(rf"(?<![\w]){re.escape(k[1:])}(?![\w])", v, s)
         return s.replace(self.p.src_name, self.p.new_name)
 
+    def segment_items(self) -> list[tuple[str, str]]:
+        """Sentence-sized pieces of multi-sentence atoms (a sign `Open: negen uur tot vijf uur. Kaartje: acht euro.`), so English feedback that
+        quotes one piece is substituted too.  Only when the translation splits into the same number of pieces."""
+        if getattr(self, "_segs", None) is not None:
+            return self._segs
+        segs: dict[str, str] = {}
+        eng = self.p.english_words()
+        for text in list(self.atom_texts):
+            if "\n" in text:
+                continue
+            parts = re.split(r"(?<=[.!?])\s+", text.strip())
+            if len(parts) < 2:
+                continue
+            aid = self.atom_texts[text]
+            tr = self.p.derived.get(aid) or self.p.tr_atoms.get(aid)
+            if not tr:
+                continue
+            tr = self.p.names(tr)
+            tparts = re.split(r"(?<=[.!?])\s+", tr.strip())
+            if len(tparts) != len(parts):
+                continue
+            for a, b in zip(parts, tparts):
+                words = re.findall(r"[^\W\d_]{3,}", a.casefold())
+                if len(a) >= 6 and a not in self.atom_texts and words and not all(w in eng for w in words):
+                    segs.setdefault(a, b)
+        self._seg_tr = segs
+        self._segs = [(a, a) for a in segs]
+        return self._segs
+
     def en_checked(self, s: str, slot: str, kind: str, ctx: dict | None = None) -> str:
         """English text that may quote or discuss the source language.  Quoted atoms are
         substituted; anything still source-language needs authoring.  The substituted target text is masked
@@ -714,7 +743,7 @@ class UnitDeriver:
         out = s
         subs: dict[str, str] = {}
         eng = self.p.english_words()
-        for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
+        for text, aid in sorted(list(self.atom_texts.items()) + self.segment_items(), key=lambda kv: -len(kv[0])):
             if len(text) < 3:
                 continue
             # whole word ("gras" is not inside "grass"); a lowercase source atom also matches its sentence-initial capital ("Boom is tree")
@@ -728,7 +757,7 @@ class UnitDeriver:
 
             def put(m, text=text):
                 ph = f"\x00{len(subs)}\x00"
-                tr = self.T(text, "quote")
+                tr = self._seg_tr[text] if text not in self.atom_texts else self.T(text, "quote")
                 if m.group(0)[:1].isupper() and text[:1].islower() and not tr.startswith("<<"):
                     tr = tr[:1].upper() + tr[1:]
                 subs[ph] = tr
