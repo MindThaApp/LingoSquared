@@ -2329,7 +2329,7 @@ def cmd_packs(args):
 
 def cmd_fixintro(args):
     """Inflected targets (Polish): an exercise tests or shows a case/person form of a lemma the lesson only introduced in another form
-    (`uwielbiam` vs `uwielbiać`). Runs the compiler validation and adds the reported tokens to the introduced_tokens of the last teaching
+    (`uwielbiam` vs `uwielbiać`). Runs the compiler validation and adds the reported tokens (errors and the matching_pairs / prompt warnings) to the introduced_tokens of the last teaching
     item of that lesson (a form the learner sees in the exercise's own sentence). Re-run after every inject; review the printed list."""
     plan = make_plan(args)
     py = ROOT / ".content-venv/bin/python"
@@ -2340,7 +2340,7 @@ def cmd_fixintro(args):
     mine = {f"{d.new_stem}.yaml" for d in plan.derivers}
     todo: dict[tuple[str, int], set[str]] = defaultdict(set)
     for line in (r.stdout + r.stderr).splitlines():
-        m = re.match(r"ERROR: (\S+?):realization\.units\[0\]\.lessons\[(\d+)\]\..*?tokens not introduced in this or an earlier lesson: (.+)$", line)
+        m = re.match(r"(?:ERROR|WARN): (\S+?):realization\.units\[0\]\.lessons\[(\d+)\]\..*?(?:tokens not introduced in this or an earlier lesson|untaught tokens): (.+)$", line)
         if m and Path(m.group(1)).name in mine:
             todo[(m.group(1), int(m.group(2)))] |= {t.strip() for t in m.group(3).split(",")}
     for (path, li), toks in sorted(todo.items()):
