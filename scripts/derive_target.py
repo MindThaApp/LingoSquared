@@ -124,6 +124,26 @@ CFG = {
               "c'est, qu'il, d'abord). Hyphenated inversions and elided forms are single tiles (vas-tu, est-ce, l'école). "
               "Speaker-gendered words (je suis fatigué/fatiguée, étudiant/étudiante) need the other gender as an accepted alternate (#alt)."),
     ),
+    "pl": dict(
+        name="Polish",
+        rekey_exercises=True,                # exercise key tails re-derived from the translation
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        formal=r"\b(?:pan|pani|panie|panu|panią|pana|panowie|panów|państwo|państwa|państwu|państwem|paniom)\b",
+        informal=r"\b(?:ty|ciebie|cię|ci|tobie|tobą|twój|twoja|twoje|twoim|twoją|twojego|twojej|masz|jesteś|możesz|chcesz|lubisz|robisz|"
+                 r"mieszkasz|pracujesz|idziesz|czujesz|wiesz|potrzebujesz|jesteście|wy|wam|wasz\w*)\b",
+        gender=dict(mode="pl"),              # speaker-gendered: jestem zmęczony/zmęczona, byłem/byłam, chciałbym/chciałabym, jestem studentem/studentką
+        note=("Natural standard Polish with full diacritics (ą ć ę ł ń ó ś ź ż): the grader does not fold them, so a diacritic-less answer is never accepted "
+              "and must never be listed as a variant. Informal source roles -> ty (2nd person singular), formal -> pan/pani (3rd person: Czy pan jest ...?, "
+              "Proszę pani). Seven cases (name the case you use: accusative after widzę/mam/chcę, genitive after nie ma/brak/numbers 5+, locative after w/na/o, "
+              "instrumental after z and with jestem + noun, dative after dać/pomóc, genitive after do/od/z). Verbs agree in person, tense and gender: "
+              "speaker-gendered words (byłem/byłam, jestem zmęczony/zmęczona, studentem/studentką) need the other gender as an accepted alternate (#alt). "
+              "Aspect pairs (robić/zrobić, pisać/napisać): imperfective for habit and process, perfective for a finished result. "
+              "Pro-drop: leave the subject pronoun out unless it is contrastive (Mam psa, not Ja mam psa). Masculine personal plural uses -i/-y forms (oni są zmęczeni), "
+              "other plurals -e. Cast names: write the nominative name as the source name (it is mapped), but write DECLINED forms directly with the final Polish name "
+              "(z Ewą, do Marka, u Kasi, w Krakowie)."),
+    ),
     "pt": dict(name="Portuguese", formal=r"\bo senhor|a senhora\b", informal=r"\btu\b"),
 }
 TARGET_ANSWER_TYPES = {
@@ -164,7 +184,7 @@ def tokens(s: str) -> list[str]:
 TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue"})
 
 
-TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae"})      # sœur -> soeur, not "sur"
+TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae", "ł": "l", "Ł": "L"})      # sœur -> soeur, not "sur"; Polish ł does not decompose (słowo -> slowo)
 
 
 def slug(s: str, words: int = 4, translit: bool = False) -> str:
@@ -272,6 +292,96 @@ def fr_gender_alts(text: str) -> list[str]:
             head = text[:m.start(1)] + (flipped.capitalize() if art[:1].isupper() else flipped) + text[m.end(1):m.start(2)]
         out.append(head + c + text[m.end(2):])
     return out
+
+
+# --- Polish: speaker-gendered words ------------------------------------------------------------------------
+PL_COPULA = re.compile(
+    r"\b(jestem|jesteś|czuję się|czujesz się|byłem|byłam|byłeś|byłaś|czułem się|czułam się|czułeś się|czułaś się)"
+    r"((?:\s+(?:bardzo|trochę|dość|zbyt|już|też|także|naprawdę|całkiem|raczej|nie|zawsze|często|teraz|dziś|dzisiaj|strasznie|dosyć|jeszcze))*)"
+    r"\s+([^\W\d_]{4,})", re.I)
+PL_PAST = re.compile(r"\b([^\W\d_]+?)(łem|łam|łeś|łaś|łbym|łabym|łbyś|łabyś)\b", re.I)
+PL_PAST_M2F = {"łem": "łam", "łeś": "łaś", "łbym": "łabym", "łbyś": "łabyś"}
+PL_PAST_F2M = {v: k for k, v in PL_PAST_M2F.items()}
+PL_PAST_IRREG = {"poszedł": "poszł", "przyszedł": "przyszł", "wyszedł": "wyszł", "doszedł": "doszł", "wszedł": "weszł", "zszedł": "zeszł", "odszedł": "odeszł",
+                 "przeszedł": "przeszł", "poszła": "poszedł"}
+PL_AGENT = {"studentem": "studentką", "uczniem": "uczennicą", "lekarzem": "lekarką", "nauczycielem": "nauczycielką", "kelnerem": "kelnerką",
+            "fryzjerem": "fryzjerką", "kucharzem": "kucharką", "pielęgniarzem": "pielęgniarką", "aktorem": "aktorką", "pracownikiem": "pracownicą",
+            "informatykiem": "informatyczką", "sprzedawcą": "sprzedawczynią", "Polakiem": "Polką", "Anglikiem": "Angielką", "Amerykaninem": "Amerykanką",
+            "Niemcem": "Niemką", "Francuzem": "Francuzką", "Holendrem": "Holenderką", "Włochem": "Włoszką", "Hiszpanem": "Hiszpanką", "turystą": "turystką",
+            "kierowcą": "kierowczynią", "malarzem": "malarką", "kolegą": "koleżanką", "przyjacielem": "przyjaciółką", "inżynierem": "inżynierką",
+            "programistą": "programistką", "sprzątaczem": "sprzątaczką", "dentystą": "dentystką", "księgarzem": "księgarką", "piekarzem": "piekarką"}
+PL_AGENT.update({v: k for k, v in list(PL_AGENT.items())})
+PL_NOT_GENDERED = frozenset("tutaj teraz blisko daleko razem przy obok koło dzisiaj wtedy gotów gotowi zawsze często".split())
+PL_F2M_STEM = (("zaczę", "zaczą"), ("wzię", "wzią"), ("zaję", "zają"), ("wyję", "wyją"), ("ję", "ją"))
+
+
+def _keep_case(old: str, new: str) -> str:
+    return new[:1].upper() + new[1:] if old[:1].isupper() else new
+
+
+def pl_adj_flip(w: str) -> str | None:
+    lw = w.lower()
+    if w[:1].isupper() or lw in PL_NOT_GENDERED or len(lw) < 4:
+        return None
+    if lw.endswith("y"):
+        return w[:-1] + "a"
+    if lw.endswith("i"):
+        return (w[:-1] + "a") if lw[-2] in "kg" else (w + "a")
+    if lw.endswith("ia"):
+        return w[:-1]
+    if lw.endswith("a") and lw[-2] in "nłtwrkgdzbcmspj":
+        return w[:-1] + ("i" if lw[-2] in "kg" else "y")
+    return None
+
+
+def pl_gender_alts(text: str) -> list[str]:
+    """Polish 'Jestem zmęczony.' / 'Byłem w domu.' -> the other gender, every speaker-gendered word flipped together (None when there is none)."""
+    out = text
+    changed = False
+
+    def cop(m):
+        nonlocal changed
+        new = pl_adj_flip(m.group(3))
+        if new is None and m.group(3) in PL_AGENT:
+            new = PL_AGENT[m.group(3)]
+        if new is None and m.group(3).lower() in PL_AGENT:
+            new = PL_AGENT[m.group(3).lower()]
+        if new is None:
+            return m.group(0)
+        changed = True
+        return m.group(0)[:m.start(3) - m.start(0)] + new
+    out = PL_COPULA.sub(cop, out)
+
+    def past(m):
+        nonlocal changed
+        stem, end = m.group(1), m.group(2).lower()
+        lw = (stem + end).lower()
+        if lw in ("chciałem",) and False:
+            return m.group(0)
+        if end in PL_PAST_M2F:
+            new_end = PL_PAST_M2F[end]
+            new_stem = stem
+            full_m = (stem + "ł").lower()
+            if full_m in PL_PAST_IRREG:
+                new_stem = PL_PAST_IRREG[full_m][:-1]
+            elif stem.endswith("ą"):
+                new_stem = stem[:-1] + "ę"
+        else:
+            new_end = PL_PAST_F2M[end]
+            new_stem = stem
+            full_f = stem.lower() + "ł"
+            irregular = {"poszł": "poszedł", "przyszł": "przyszedł", "wyszł": "wyszedł", "doszł": "doszedł", "weszł": "wszedł", "zeszł": "zszedł", "odeszł": "odszedł", "przeszł": "przeszedł"}
+            if full_f in irregular:
+                new_stem = irregular[full_f][:-1]
+            else:
+                for a, b in PL_F2M_STEM:
+                    if stem.lower().endswith(a):
+                        new_stem = stem[:-len(a)] + b
+                        break
+        changed = True
+        return _keep_case(m.group(0), new_stem + new_end)
+    out = PL_PAST.sub(past, out)
+    return [out] if changed and out != text else []
 
 
 # obligatory elision: je le la de ne me te se que ce (+ jusque, lorsque ...) before a vowel / mute h; exceptions are h aspiré words and onze/oui/yaourt
@@ -1055,6 +1165,10 @@ class UnitDeriver:
             alts_fr = fr_gender_alts(text)
             if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "pl":
+            alts_pl = pl_gender_alts(text)
+            if alts_pl and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_pl):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_pl[0]!r}) via `{key}#alt`")
         elif g and kind == "answer" and g.get("mode") == "agent":
             alt = agent_gender_alt(text)
             if alt and norm(alt) not in {norm(x) for x in (answers or [])}:
