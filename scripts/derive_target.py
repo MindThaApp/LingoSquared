@@ -65,6 +65,7 @@ DEFAULT_WORK = ROOT / ".local/derive-target"
 # ---------------------------------------------------------------------------
 # Per-language configuration (formal / informal markers, gender, contractions)
 # ---------------------------------------------------------------------------
+DEV = "\u0900-\u0963\u0966-\u096f\u0971-\u097f"       # see PUNCT_CHARS below
 CFG = {
     # code: formal marker, informal marker (regexes over lowercase text)
     "nl": dict(name="Dutch", formal=r"\b(u|uw)\b", informal=r"\b(je|jij|jou|jouw|jullie)\b",
@@ -189,6 +190,29 @@ CFG = {
               "dropped in the present (Я дома, У меня есть брат). Short answers: keep word order natural, topic first. "
               "Tiles: every word is one tile, a hyphenated word (по-русски, кто-то) is one tile."),
     ),
+    "hi": dict(
+        name="Hindi",
+        script="devanagari",                 # tokens / tiles / norm keys keep the vowel signs (DEV); slugs transliterate (translit_hi); no Latin letters in Hindi text
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        danda=True,                          # sentences end with the danda; an internal danda also gets a full-stop variant (the grader only strips boundary punctuation)
+        spell_fold="hi",                     # chandrabindu/anusvara and the optional nukta are folded by the grader, but the lexeme backfill keeps them apart: one spelling per word
+        formal=r"(?<![%(W)s])(?:आप|आपका|आपकी|आपके|आपको|आपसे|आपने|आपमें)(?![%(W)s])" % dict(W=DEV + r"\w"),
+        informal=r"(?<![%(W)s])(?:तुम|तुम्हारा|तुम्हारी|तुम्हारे|तुम्हें|तुम्हे|तुमसे|तुमने|तुमको|तू|तेरा|तेरी|तेरे|तुझे)(?![%(W)s])" % dict(W=DEV + r"\w"),
+        gender=dict(mode="hi"),              # speaker-gendered participle / adjective / agent noun after मैं: जाता हूँ / जाती हूँ, थका / थकी, छात्र / छात्रा
+        note=("Natural everyday Hindi in Devanagari, not overly Sanskritised (use the common word: पानी, दोस्त, अस्पताल, रविवार; keep established English "
+              "loans in Devanagari: डॉक्टर, फ़ोन, टिकट, स्टेशन). Sentences end with the danda । (? and ! stay). No Latin letters. Informal source roles -> तुम "
+              "(verb हो / -ते हो; तू only for a child or a pet), formal or service staff and strangers -> आप (verb हैं / -ते हैं). Postpositions follow the noun and "
+              "make it oblique: घर में, दुकान पर, दोस्त के साथ, बाज़ार से, स्कूल को; का/की/के agree with the thing owned (मेरा भाई, मेरी बहन, मेरे दोस्त). "
+              "Word order is subject - object - verb. Simple present: -ता/-ती/-ते + हूँ/है/हो/हैं; progressive: रहा/रही/रहे + हूँ/है; "
+              "need and obligation: मुझे ... चाहिए / मुझे ... जाना है; mujhe-type constructions for pain, liking and having. "
+              "Gender: a learner speaking as themselves needs the other gender as an accepted alternate (#alt): मैं जाता हूँ / मैं जाती हूँ, मैं थका हूँ / मैं थकी हूँ, "
+              "मैं छात्र हूँ / मैं छात्रा हूँ. Past transitive uses ने (मैंने खाना खाया) and does not change with the speaker. "
+              "Spelling: use चँद्रबिंदु where it is standard (हूँ, कहाँ, यहाँ, मैं with anusvara) and keep ONE spelling per word in the whole unit - the grader folds "
+              "ँ/ं and the nukta of क़ ख़ ग़ ज़ फ़, but the lexemes do not. Keep ड़ ढ़ with the nukta. Avoid hyphenated reduplications (a hyphenated word is one tile, but keep it rare)."),
+    ),
     "pt": dict(name="Portuguese", formal=r"\bo senhor|a senhora\b", informal=r"\btu\b"),
 }
 TARGET_ANSWER_TYPES = {
@@ -200,8 +224,10 @@ YO_FOLD_TYPES = {"fill_in_blank", "translation", "writing_prompt", "dictation", 
                  "reverse_translation", "grammar_check"}
 SEP = " || "
 BLANK = "___"
-PUNCT_CHARS = re.compile(r"[^\w\s'’\-‌]", re.U)
-TOKEN_RE = re.compile(r"[\w'’\-‌]+", re.U)
+# Python's \w misses the Devanagari vowel signs, nukta, virama and chandrabindu (U+0900-0963); DEV keeps them inside words.
+# The danda (U+0964/0965) stays punctuation.  A no-op for every other script.
+PUNCT_CHARS = re.compile(rf"[^\w{DEV}\s'’\-‌]", re.U)
+TOKEN_RE = re.compile(rf"[\w{DEV}'’\-‌]+", re.U)
 
 
 # ---------------------------------------------------------------------------
@@ -216,12 +242,12 @@ def strip_punct(s: str) -> str:
 
 def boundary_strip(s: str) -> str:
     """Only the punctuation at both ends (the dictation compiler check ignores just that)."""
-    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–]+|[\s.!?¿¡;:,\"“”„«»…—–]+$", "", s)
+    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–।]+|[\s.!?¿¡;:,\"“”„«»…—–।]+$", "", s)
 
 
 def norm(s: str) -> str:
     """Same folding as compile_content.normalize_dialogue_option."""
-    return " ".join(re.sub(r"[^\w‌]+", " ", s, flags=re.U).casefold().split())
+    return " ".join(re.sub(rf"[^\w{DEV}‌]+", " ", s, flags=re.U).casefold().split())
 
 
 def tokens(s: str) -> list[str]:
@@ -241,9 +267,62 @@ TRANSLIT_RU = str.maketrans({
     "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"})
 
 
+# Devanagari -> the Latin of the existing hi content keys (mujhe_sir_dard_hai, main_theek_nahin_hoon): consonant + inherent a,
+# matras, anusvara/chandrabindu as n, final and medial schwa dropped.  Keys only; no learner-facing text is transliterated.
+_HI_CONS = {"क": "k", "ख": "kh", "ग": "g", "घ": "gh", "ङ": "ng", "च": "ch", "छ": "chh", "ज": "j", "झ": "jh", "ञ": "ny", "ट": "t", "ठ": "th",
+            "ड": "d", "ढ": "dh", "ण": "n", "त": "t", "थ": "th", "द": "d", "ध": "dh", "न": "n", "प": "p", "फ": "ph", "ब": "b", "भ": "bh",
+            "म": "m", "य": "y", "र": "r", "ल": "l", "व": "v", "श": "sh", "ष": "sh", "स": "s", "ह": "h"}
+_HI_NUKTA = {"क": "q", "ख": "kh", "ग": "g", "ज": "z", "फ": "f", "ड": "r", "ढ": "rh"}
+_HI_VOW = {"अ": "a", "आ": "a", "इ": "i", "ई": "ee", "उ": "u", "ऊ": "oo", "ऋ": "ri", "ए": "e", "ऐ": "ai", "ओ": "o", "औ": "au", "ऑ": "o"}
+_HI_MATRA = {"ा": "a", "ि": "i", "ी": "ee", "ु": "u", "ू": "oo", "ृ": "ri", "े": "e", "ै": "ai", "ो": "o", "ौ": "au", "ॉ": "o", "ॅ": "e"}
+
+
+def translit_hi_word(w: str) -> str:
+    units: list[list] = []          # [text, kind]  kind: C (consonant + inherent a), c (bare consonant), V (vowel)
+    i = 0
+    while i < len(w):
+        ch = w[i]
+        if ch in _HI_CONS:
+            c = _HI_CONS[ch]
+            if i + 1 < len(w) and w[i + 1] == "\u093c":
+                c = _HI_NUKTA.get(ch, c)
+                i += 1
+            units.append([c, "C"])
+        elif ch in _HI_MATRA and units:
+            units[-1][1] = "c"
+            units.append([_HI_MATRA[ch], "V"])
+        elif ch == "\u094d" and units:          # virama: no inherent vowel
+            units[-1][1] = "c"
+        elif ch in "\u0901\u0902\u0903":
+            units.append(["h" if ch == "\u0903" else "n", "N"])
+        elif ch in _HI_VOW:
+            units.append([_HI_VOW[ch], "V"])
+        i += 1
+    out = []
+    for j, (t, k) in enumerate(units):
+        if k == "C":
+            last = j == len(units) - 1 or all(u[1] == "N" for u in units[j + 1:])
+            nxt_c = j + 1 < len(units) and units[j + 1][1] in "Cc"
+            after_c = j + 2 < len(units) and units[j + 2][1] in "CV" or (j + 2 < len(units) and units[j + 1][1] == "c")
+            prev_v = j > 0 and units[j - 1][1] in "VN" or (j > 0 and units[j - 1][1] == "C")
+            if last or (j > 0 and nxt_c and after_c and prev_v and units[j - 1][1] != "c"):
+                out.append(t)
+                continue
+            out.append(t + "a")
+        else:
+            out.append(t)
+    return "".join(out)
+
+
+def translit_hi(s: str) -> str:
+    return " ".join(translit_hi_word(w) if re.search(r"[\u0900-\u097f]", w) else w for w in s.split())
+
+
 def slug(s: str, words: int = 4, translit: bool = False) -> str:
     if translit:
         s = s.translate(TRANSLIT_DE)
+    if re.search(r"[\u0900-\u097f]", s):
+        s = translit_hi(s.replace("।", " "))
     if re.search(r"[\u0400-\u04ff]", s):
         s = s.lower().translate(TRANSLIT_RU)
     s = unicodedata.normalize("NFKD", s.translate(TRANSLIT_LIG)).encode("ascii", "ignore").decode()
@@ -491,6 +570,73 @@ def fr_elision_errors(text: str) -> list[str]:
     return out
 
 
+# --- Hindi: speaker-gendered words ---------------------------------------------------------------------------
+HI_STOP = frozenset("तुम आप वह वो वे हम ये यह लोग".split())
+HI_AUX = frozenset("हूँ हूं था थी".split())
+HI_M2F = {"था": "थी", "गया": "गई", "आया": "आई", "हुआ": "हुई", "रहा": "रही", "सोया": "सोई", "चला": "चली", "उठा": "उठी", "बैठा": "बैठी",
+          "पहुँचा": "पहुँची", "पहुंचा": "पहुंची", "लौटा": "लौटी", "निकला": "निकली", "थका": "थकी", "अकेला": "अकेली", "भूखा": "भूखी", "प्यासा": "प्यासी",
+          "अच्छा": "अच्छी", "खड़ा": "खड़ी", "बड़ा": "बड़ी", "छोटा": "छोटी", "पतला": "पतली", "मोटा": "मोटी", "लंबा": "लंबी", "बूढ़ा": "बूढ़ी",
+          "दुबला": "दुबली", "वाला": "वाली", "नया": "नई", "जागा": "जागी", "मुड़ा": "मुड़ी", "रुका": "रुकी", "फँसा": "फँसी", "भीगा": "भीगी",
+          "छात्र": "छात्रा", "शिक्षक": "शिक्षिका", "अध्यापक": "अध्यापिका", "लेखक": "लेखिका", "गायक": "गायिका", "पाठक": "पाठिका",
+          "अभिनेता": "अभिनेत्री", "नर्तक": "नर्तकी", "कलाकार": "कलाकार", "ग्वाला": "ग्वालिन", "दर्जी": "दर्जी", "सेवक": "सेविका"}
+HI_M2F = {m: f for m, f in HI_M2F.items() if m != f and m not in ("कलाकार", "दर्जी")}
+HI_F2M = {f: m for m, f in reversed(list(HI_M2F.items()))}
+HI_NOT_VERB = frozenset("रास्ता पता सस्ता नाश्ता रिश्ता फ़रिश्ता देवता माता पिता नेता दाता सजा खाता".split())
+
+
+def hi_flip(w: str, nxt: str | None) -> str | None:
+    """The other-gender spelling of one word that follows मैं, or None."""
+    if w in HI_M2F:
+        return HI_M2F[w]
+    if w in HI_F2M:
+        return HI_F2M[w]
+    if w in HI_NOT_VERB:
+        return None
+    if len(w) >= 3 and nxt is not None and (nxt in HI_AUX or nxt.endswith(("रहता", "रहती"))):
+        if w.endswith("ता"):
+            return w[:-2] + "ती"
+        if w.endswith("ती"):
+            return w[:-2] + "ता"
+    if len(w) >= 4 and w.endswith(("ूँगा", "ूंगा", "ऊँगा", "ऊंगा")):
+        return w[:-1] + "ी"
+    if len(w) >= 4 and w.endswith(("ूँगी", "ूंगी", "ऊँगी", "ऊंगी")):
+        return w[:-1] + "ा"
+    return None
+
+
+def hi_gender_alts(text: str) -> list[str]:
+    """Hindi 'मैं रोज़ स्कूल जाता हूँ।' -> ['मैं रोज़ स्कूल जाती हूँ।'] (and back): every gendered word that follows मैं in the sentence
+    (ergative मैंने is not subject-gendered and is not matched; another subject pronoun ends the span)."""
+    parts, last = [], 0
+    for sm in re.finditer(r"[^।.!?\n]+", text):
+        sent = sm.group(0)
+        words = list(re.finditer(rf"[\w{DEV}]+", sent))
+        low = [w.group(0) for w in words]
+        if "मैं" not in low:
+            continue
+        i0 = low.index("मैं")
+        repl = []
+        for i in range(i0 + 1, len(words)):
+            if low[i] in HI_STOP or low[i] == "मैं":
+                break
+            o = hi_flip(low[i], low[i + 1] if i + 1 < len(low) else None)
+            if o:
+                repl.append((words[i].start(), words[i].end(), o))
+        if repl:
+            new = sent
+            for a, b, r in reversed(repl):
+                new = new[:a] + r + new[b:]
+            parts.append(text[last:sm.start()] + new)
+            last = sm.end()
+    return ["".join(parts) + text[last:]] if parts else []
+
+
+def hi_fold(s: str) -> str:
+    """Spelling variants the grader folds (chandrabindu -> anusvara, nukta of क ख ग ज फ) - used to find one word written two ways."""
+    s = s.replace("\u0901", "\u0902")
+    return re.sub("([\u0915\u0916\u0917\u091c\u092b])\u093c", r"\1", s)
+
+
 # --- Romanian: speaker-gendered words and orthography -----------------------------------------------------
 RO_COPULA = re.compile(r"\b(?:sunt|eram|nu sunt|mă simt|nu mă simt|mă simțeam|m-am simțit|mă simt la fel de)\s+"
                        r"(?:(?:foarte|prea|destul de|puțin|tot|deja|mereu|întotdeauna|așa|chiar|și eu|mai|încă|niciodată|nu|puțin)\s+)*"
@@ -613,7 +759,7 @@ class UnitDeriver:
                 parts = [self.T(c, "teach", None, where) for c in comps[0]]
                 joined = " ".join(parts)
                 if comps[1]:
-                    joined = re.sub(r"^[^\W\d_]+:\s*", "", joined)
+                    joined = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s*", "", joined)
                 known = self.atom_texts.get(text)
                 if known and known.startswith("d_"):
                     return self.p.derived[known]
@@ -682,7 +828,7 @@ class UnitDeriver:
         s = self.p.names_en(s)
         for k, v in self.p.en_over.items():          # "~word": word-level rewrite of source-language words that survive in English text
             if k.startswith("~"):
-                s = re.sub(rf"(?<![\w]){re.escape(k[1:])}(?![\w])", v, s)
+                s = re.sub(rf"(?<![\w{DEV}]){re.escape(k[1:])}(?![\w{DEV}])", v, s)
         return s.replace(self.p.src_name, self.p.new_name)
 
     def en_checked(self, s: str, slot: str, kind: str, ctx: dict | None = None) -> str:
@@ -694,9 +840,11 @@ class UnitDeriver:
         eng = self.p.english_words()
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
+                if text in self.p.names_map:
+                    continue                          # a cast name in English prose is mapped by names_en (Arjun), never quoted as target text
                 if " " not in text and text.casefold() in eng and not re.search(rf"[*'\"‘“]{re.escape(text)}", out):
                     continue                          # a bare English word that is also a source word ('game', 'sport'): not a quotation
-                pat = re.compile(rf"(?<![\w]){re.escape(text)}(?![\w])")         # whole words: 'game' is not inside 'games'
+                pat = re.compile(rf"(?<![\w{DEV}]){re.escape(text)}(?![\w{DEV}])")         # whole words: 'game' is not inside 'games'
                 if not pat.search(out):
                     continue
                 ph = f"\x00{len(subs)}\x00"
@@ -998,7 +1146,7 @@ class UnitDeriver:
                     v["glosses"] = new_gl
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
-                    if card and not k.startswith("<<") and not re.search(rf"(?<![\w'’\-]){re.escape(k)}(?![\w'’\-])", card["target"]["text"], re.I):
+                    if card and not k.startswith("<<") and not re.search(rf"(?<![\w{DEV}'’\-]){re.escape(k)}(?![\w{DEV}'’\-])", card["target"]["text"], re.I):
                         self.flag(ck, "GLOSS_KEY", f"gloss key {k!r} is not a whole-word token of the card text (keys must be single words that occur in it)")
         # -- header ---------------------------------------------------------------
         self.grammar_lint(O)
@@ -1252,6 +1400,9 @@ class UnitDeriver:
             if src_plain:
                 out.append(boundary_strip(x) if ty == "dictation" else strip_punct(x) if ty != "fill_in_blank" else x)
         out = list(OrderedDict.fromkeys(out))
+        if CFG.get(self.p.tgt, {}).get("danda") and ty in YO_FOLD_TYPES and ty != "dictation":
+            # the grader strips boundary punctuation only: an inner danda between two sentences also accepts the full stop a keyboard gives
+            out = list(OrderedDict.fromkeys(out + [re.sub(r"।(?=\s)", ".", x) for x in out if re.search(r"।(?=\s)", x)]))
         if self.p.translit and ty in GERMAN_FREE_TEXT_TYPES:
             # the German compiler wants the full ASCII transliteration (ä->ae ...) of every typed answer with umlauts
             out = list(OrderedDict.fromkeys(out + [x.translate(TRANSLIT_DE) for x in out if x.translate(TRANSLIT_DE) != x]))
@@ -1259,7 +1410,7 @@ class UnitDeriver:
             out = list(OrderedDict.fromkeys(out + [yo_fold(x) for x in out if yo_fold(x) != x]))      # е for ё is a keyboard habit, not an error
         canon_form = out[0]
         if "correct_option" in ov:
-            ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else (re.sub(r"^[^\w]+|[^\w]+$", "", base) if ty == "dictation" else strip_punct(base))
+            ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else (re.sub(rf"^[^\w{DEV}]+|[^\w{DEV}]+$", "", base) if ty == "dictation" else strip_punct(base))
         new_acc = []
         proto = ov.get("accepted_answers") or [{"status": "correct"}]
         for v in out:
@@ -1284,7 +1435,7 @@ class UnitDeriver:
                 return boundary_strip(canon_tr)          # dictation: the compiler compares with the audio text, inner commas included
             body = strip_punct(canon_tr)
             if e.get("type") == "dictation":          # dictation tested_text must equal the audio text up to boundary punctuation only
-                body = re.sub(r"^[^\w]+|[^\w]+$", "", canon_tr)
+                body = re.sub(rf"^[^\w{DEV}]+|[^\w{DEV}]+$", "", canon_tr)
             if self.p.cs:
                 return body
             return body if tested_src == strip_punct(canon_src) else body.lower() if tested_src == tested_src.lower() else body
@@ -1298,7 +1449,7 @@ class UnitDeriver:
             return body if keep_case or self.p.cs else body.casefold()
         v = self.A(ck + "#tested", tested_src, "tested", dict(ctx, canon=canon_tr))
         low = {a.casefold(): b.casefold() for a, b in self.p.names_map.items()}       # tested spans are written in lowercase: omar -> mathieu
-        return re.sub(r"(?<![\w])(" + "|".join(map(re.escape, low)) + r")(?![\w])", lambda m: low[m.group(1)], v) if low and not v.startswith("<<") else v
+        return re.sub(rf"(?<![\w{DEV}])(" + "|".join(map(re.escape, low)) + rf")(?![\w{DEV}])", lambda m: low[m.group(1)], v) if low and not v.startswith("<<") else v
 
     def bank(self, e, ck, tested_src, tested_tr, alts, ctx):
         src_tokens = [t.casefold() for t in tokens(tested_src)]
@@ -1349,8 +1500,19 @@ class UnitDeriver:
             if re.search(r"[A-Za-z]", plain):
                 self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Russian text (write it in Cyrillic, or acknowledge a real exception in ack.json)")
             self.yo_lint(key, text)
+        if cfg.get("script") == "devanagari" and kind in ("teach", "answer", "transcribe"):
+            plain = re.sub(r"\{[^}]*\}", "", text)
+            if re.search(r"[A-Za-z]", plain):
+                self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Hindi text (write it in Devanagari, or acknowledge a real exception in ack.json)")
+            if re.search(r"[\u0900-\u097f][^\u0900-\u097f\w]*\.(?:\s|$)", text):
+                self.flag(key, "DANDA", f"{text!r}: end a Hindi sentence with the danda । (not a full stop)")
+            self.spell_lint(key, text, hi_fold)
         g = cfg.get("gender")
-        if g and kind == "answer" and g.get("mode") == "ru":
+        if g and kind == "answer" and g.get("mode") == "hi":
+            alts_hi = hi_gender_alts(text)
+            if alts_hi and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_hi):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_hi[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "ru":
             alts_ru = ru_gender_alts(text)
             if alts_ru and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ru):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_ru[0]!r}) via `{key}#alt`")
@@ -1382,20 +1544,24 @@ class UnitDeriver:
             self.case_lint(key, text)
 
     def yo_lint(self, key: str, text: str) -> None:
-        """One spelling per word: идёт and идет must not both occur in the course (they would become two lexemes)."""
+        self.spell_lint(key, text, yo_fold)
+
+    def spell_lint(self, key: str, text: str, fold) -> None:
+        """One spelling per word: идёт and идет (ru), हूँ and हूं (hi) must not both occur in the course (they would become two lexemes)."""
         seen = self.p.yo_forms
         if seen is None:
             seen = self.p.yo_forms = defaultdict(set)
             up, low = self.p.lexicon
             for k in up | low:
-                seen[yo_fold(k.casefold())].add(k.casefold())
+                seen[fold(k.casefold())].add(k.casefold())
+        code = "SPELL_MIXED" if fold is hi_fold else "YO_MIXED"
         for t in tokens(text):
             c = t.casefold()
-            f = yo_fold(c)
-            if f in RU_YO_SAME or c in RU_YO_SAME:
+            f = fold(c)
+            if fold is yo_fold and (f in RU_YO_SAME or c in RU_YO_SAME):
                 continue
             if seen[f] and c not in seen[f]:
-                self.flag(key, "YO_MIXED", f"{t!r} in {text!r}: the course also spells this word {sorted(seen[f])}; use one spelling")
+                self.flag(key, code, f"{t!r} in {text!r}: the course also spells this word {sorted(seen[f])}; use one spelling")
             seen[f].add(c)
 
     def case_lint(self, key: str, text: str) -> None:
@@ -2024,7 +2190,7 @@ def cmd_check(args):
 # ---------------------------------------------------------------------------
 PACK_GOOD_POS = ["noun", "verb", "adjective", "adverb"]
 PACK_POS_ALL = ["symbol", "noun", "proper_noun", "pronoun", "verb", "adjective", "adverb", "preposition", "particle", "phrase"]
-TOKEN_WORD = re.compile(r"[^\W\d_]+(?:['\u2019-][^\W\d_]+)*", re.U)
+TOKEN_WORD = re.compile(r"(?:[^\W\d_]|[\u0900-\u0963\u0971-\u097f])+(?:['\u2019-](?:[^\W\d_]|[\u0900-\u0963\u0971-\u097f])+)*", re.U)
 
 
 def _plain_en(s: str, limit: int = 230) -> str:
@@ -2053,13 +2219,13 @@ def pack_sentences(lesson: dict, O: dict, minw: int = 3, maxw: int = 11):
             texts.append((e["text"], eg[i] if i < len(eg) else None))
         for text, gloss in texts:
             raw = text
-            m = re.match(r"^[^\W\d_]+:\s+(.)", text)
+            m = re.match(rf"^(?:[^\W\d_]|[{DEV}])+:\s+(.)", text)
             if m:
                 if not (m.group(1).isupper() or m.group(1) in "¿¡"):     # "Atención: el tren ..." is not a speaker label
                     continue
-                text = re.sub(r"^[^\W\d_]+:\s+", "", text)
+                text = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s+", "", text)
                 if gloss:
-                    gloss = re.sub(r"^[^\W\d_]+:\s+", "", gloss)
+                    gloss = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s+", "", gloss)
             if re.search(r"[:→{}\n]", text) or len(re.findall(r"[.!?]", text)) != 1 or not re.search(r"[.!?]$", text):
                 continue
             n = len(TOKEN_WORD.findall(text))
@@ -2081,7 +2247,7 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
     for s in specs:
         tok, gl = s["token"], s["english_gloss"]
         base = re.sub(r"\s*\([^)]*\)", "", gl).split(";")[0].strip().lower()
-        if (s["part_of_speech"] in PACK_GOOD_POS and re.fullmatch(r"[^\W\d_]{3,}", tok) and tok not in excl
+        if (s["part_of_speech"] in PACK_GOOD_POS and re.fullmatch(rf"(?:[^\W\d_]|[{DEV}]){{3,}}", tok) and tok not in excl
                 and base not in seen):
             seen.add(base)
             good.append(dict(token=tok, tag=wtag(s), gloss=gl, lesson=s["lesson_content_key"], pos=s["part_of_speech"]))
@@ -2162,7 +2328,7 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
                 words = TOKEN_WORD.findall(text)
                 if words.count(g["token"]) != 1 or words.index(g["token"]) == 0:
                     continue
-                m = re.search(rf"(?<![\w]){re.escape(g['token'])}(?![\w])", text)
+                m = re.search(rf"(?<![\w{DEV}]){re.escape(g['token'])}(?![\w{DEV}])", text)
                 if not m:
                     continue
                 blank = text[:m.start()] + "{item}" + text[m.end():]
