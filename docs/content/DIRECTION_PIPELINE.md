@@ -47,6 +47,27 @@ python3 scripts/derive_direction.py validate --sibling $S --new $N --levels a1  
   `GLOSSES_BY_LEVEL` and the gloss dicts of levels not being injected are kept verbatim (hand edits survive); only the
   injected levels are added or replaced.
 
+## Adding new units to an already-derived pair (incremental)
+
+Use this when the sibling gained units after the pair was derived (e.g. de-en A1 units 15-17, 22-24, 31, 62, 63, 66,
+session 14). `--units` limits extract and inject to the named unit stems; `inject` merges the new units into the existing
+`manifest.d/content/<group>.txt` (union, ordered by unit number) and `manifest.d/practice/<pair>.txt`.
+
+```bash
+S=de-en; N=es-en; U=a1_unit15,a1_unit16,a1_unit17,a1_unit22,a1_unit23,a1_unit24,a1_unit31,a1_unit62,a1_unit63,a1_unit66
+python3 scripts/derive_direction.py extract --sibling $S --new $N --levels a1 --units $U
+# translate every NAME.src.json (overlay + pack strings of those units only); ignore glosses.src.json (see below)
+# add glosses for the NEW English tokens by hand to scripts/backfill_lexemes_<x>_en.py (A1 gloss dict)
+python3 scripts/derive_direction.py inject  --sibling $S --new $N --levels a1 --units $U --no-backfill --allow-missing
+python3 scripts/derive_direction.py inject  --sibling $S --new $N --levels a1 --units $U --no-backfill   # 2nd pass: tag filter sees the new lexemes
+python3 scripts/derive_direction.py validate --sibling $S --new $N --levels a1
+```
+
+* `--no-backfill` keeps the hand-maintained `backfill_lexemes_<x>_<t>.py`; without it `inject` rewrites the A1 gloss
+  dicts from `glosses.src.json`, which always covers the whole sibling level (not only `--units`).
+* The first inject pass writes overlays, packs and the merged manifest line; the pack-template tag filter reads the
+  pair's backfill through that manifest, so run inject a second time once the glosses and manifest are in place.
+
 ## Sibling choice
 
 * **de-en is the cleanest sibling for packs**: its packs use only `en_<lvl>_uNN*` / `w_<token>` tags, so they port 1:1.
