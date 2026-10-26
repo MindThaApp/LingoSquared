@@ -545,3 +545,148 @@ def test_citation_alias_block_is_written_and_applied(dt_de, tmp_path):
     exec(bf, ns)
     assert ns["normalize"]("Hast") == "hast" and ns["GLOSSES"]["hast"].startswith("you have")
     assert ns["POS_SETS"]["verb"] >= {"hast", "bin"} and "hast" not in ns["POS_SETS"]["noun"]
+
+
+# ---------------------------------------------------------------------------
+# French target: tu/vous, speaker gender, elision, contractions, straight apostrophes, matching-pair key collisions
+# ---------------------------------------------------------------------------
+BACKFILL_FR = '''"""fixture"""
+GLOSSES = {"bonjour": "hello"}
+POS_SETS = {"phrase": {"bonjour"}}
+
+
+def normalize(token):
+    return token.lower()
+
+
+POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
+'''
+ATOMS_FR = {
+    "Hoeveel kost het?": "Combien ça coûte ?",
+    "Beginnen": "Commencer",
+    "Test": "Épreuve",
+    "Ziek en moe zijn bijvoeglijke naamwoorden en gebruiken zijn in het Nederlands.":
+        "Fatigué et malade sont des adjectifs ; on les utilise avec être.",
+    "Lotte: Hoi.": "Lotte: Salut.",
+    "Omar: Ik ben moe.": "Omar: Je suis fatigué.",
+    "moe": "fatigué",
+    "a rest": "une pause",
+}
+AUTHOR_FR = {
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#dist": "Combien ça coûtes ? || Comment ça coûte ?",
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#feedback": "*Combien* asks for the price.",
+    "nl.a1.unit05.lesson01.exercise02.order_cost#feedback": "The question word can come last in speech.",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#frame": "Combien ça ___ ?",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#ans": "coûte",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#feedback": "The verb is coûte.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#ans": "Je suis fatigué.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "Je suis fatiguée.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#feedback": "Je suis fatigué.",
+    "nl.a1.unit05.lesson01.exercise05.match#tested": "combien fatigué",
+    "nl.a1.unit05.lesson01.exercise05.match#feedback": "Fatigué means tired.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Mathieu says: Je suis fatigué.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "je suis fatigué",
+    "nl.a1.unit05.lesson01.teach.hoeveel#note": "*Ça coûte* is the everyday way to ask the price.",
+    "a1_unit05_test#desc": "Beginner French for a test unit.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Être with adjectives",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Fatigué and malade are adjectives; with être you say: Je suis fatigué.",
+}
+
+
+@pytest.fixture()
+def dt_fr(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("derive_target_fr_under_test", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for name, sub in (("ROOT", ""), ("CONTENT", "docs/content"), ("MANIFEST", "scripts/manifest.d/content")):
+        monkeypatch.setattr(mod, name, tmp_path / sub if sub else tmp_path)
+    c = tmp_path / "docs/content"
+    base_r = dict(BASE_REAL, target_language="fr", course={"realization_key": "fr.a1"})
+    base_o = dict(BASE_OVL, target_language="fr")
+    for path, obj in ((c / "realizations/nl/a1_unit05_test.yaml", src_realization()),
+                      (c / "overlays/en-nl/a1_unit05.yaml", src_overlay()),
+                      (c / "realizations/fr/a1_unit01_base.yaml", base_r),
+                      (c / "overlays/en-fr/a1_unit01.yaml", base_o)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    m = tmp_path / "scripts/manifest.d/content"
+    m.mkdir(parents=True)
+    (m / "en-fr.txt").write_text(
+        "en-fr|docs/content/realizations/fr/a1_unit01_base.yaml|docs/content/overlays/en-fr/a1_unit01.yaml\n", encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_fr.py").write_text(BACKFILL_FR, encoding="utf-8")
+    return mod
+
+
+def fr_run(dt, tmp_path, author=None, atoms=None):
+    a = args(tmp_path, new="en-fr", first_unit=43, names="Lotte=Inès,Omar=Mathieu")
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    table = atoms or ATOMS_FR
+    (work / "atoms.tr.json").write_text(json.dumps({i: table[t] for i, t in src.items() if t in table}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author or AUTHOR_FR, ensure_ascii=False), encoding="utf-8")
+    return a
+
+
+def fr_codes(dt, tmp_path, author=None, atoms=None):
+    plan = dt.make_plan(fr_run(dt, tmp_path, author, atoms))
+    plan.build_all()
+    return {f["code"] for f in dt.active_flags(plan)}
+
+
+def test_french_register_gender_and_slugs(dt):
+    assert dt.register_of("Vous avez un chien ?", "fr") == "formal"
+    assert dt.register_of("Tu as ton billet ?", "fr") == "informal"
+    assert dt.register_of("T'es en retard.", "fr") == "informal"
+    assert dt.register_of("Il a un chien.", "fr") is None
+    assert dt.fr_gender_alts("Je suis fatigué.") == ["Je suis fatiguée."]
+    assert dt.fr_gender_alts("Je suis très fatiguée.") == ["Je suis très fatigué."]
+    assert dt.fr_gender_alts("Je suis étudiant.") == ["Je suis étudiante."]
+    assert dt.fr_gender_alts("Je suis une étudiante.") == ["Je suis un étudiant."]
+    assert dt.fr_gender_alts("Je suis infirmier.") == ["Je suis infirmière."]
+    assert dt.fr_gender_alts("Je suis allée au parc.") == ["Je suis allé au parc."]
+    assert dt.fr_gender_alts("Je suis malade.") == [] and dt.fr_gender_alts("Je suis en retard.") == []
+    assert dt.fr_gender_alts("Tu es fatigué ?") == []                      # only the speaker's own gender is a variant
+    assert dt.slug("La sœur d'Éloïse", 4) == "la_soeur_d_eloise"
+
+
+def test_french_elision_and_contraction_patterns(dt):
+    assert dt.fr_elision_errors("J'habite à l'hôtel avec l'oncle d'Alice.") == []
+    assert dt.fr_elision_errors("Je habite ici.") == ["Je habite"]
+    assert dt.fr_elision_errors("Je pense que il vient.") == ["que il"]
+    assert dt.fr_elision_errors("Le huit, le héros et le yaourt, de huit heures, le onze.") == []   # h aspiré, onze, yaourt
+    assert dt.fr_elision_errors("Si il pleut, la école est fermée.") == ["Si il", "la école"]
+    assert dt.fr_elision_errors("Donne-le à Paul.") == []                  # hyphenated clitic is not an elision slot
+    import re
+    assert any(re.search(p, "Je vais à le marché.") for p, _ in dt.CFG["fr"]["contractions"])
+
+
+def test_french_inject_applies_gender_elision_apostrophe_and_collision_lints(dt_fr, tmp_path):
+    dt = dt_fr
+    assert fr_codes(dt, tmp_path) == {"GRAMMAR_REWRITE"} or "GENDER" not in fr_codes(dt, tmp_path)
+    no_alt = {k: v for k, v in AUTHOR_FR.items() if not k.endswith("write_tired#alt")}
+    assert "GENDER" in fr_codes(dt, tmp_path, no_alt)
+    assert "ELISION" in fr_codes(dt, tmp_path, None, dict(ATOMS_FR, **{"Hoeveel kost het?": "Je habite ici"}))
+    assert "CONTRACTION" in fr_codes(dt, tmp_path, None, dict(ATOMS_FR, **{"Hoeveel kost het?": "Je vais à le marché"}))
+    assert "REGISTER" not in fr_codes(dt, tmp_path)
+
+
+def test_french_curly_apostrophes_become_straight_and_ligature_slugs(dt_fr, tmp_path):
+    dt = dt_fr
+    a = fr_run(dt, tmp_path, None, dict(ATOMS_FR, **{"Hoeveel kost het?": "Combien coûte l’œuf ?"}))
+    plan = dt.make_plan(a)
+    assert plan.names("l’œuf") == "l'œuf"
+
+
+def test_pair_collision_lint_catches_left_items_that_differ_only_by_punctuation(dt):
+    class P:                                  # a bare deriver: the lint only needs norm() and flag()
+        flags: list = []
+    d = dt.UnitDeriver.__new__(dt.UnitDeriver)
+    d.p = SimpleNamespace(flags=[])
+    d.stem = "x"
+    d.pair_collisions("k", [{"left": "El desayuno está incluido.", "right": "Breakfast is included."},
+                            {"left": "¿El desayuno está incluido?", "right": "Is breakfast included?"}])
+    assert [f["code"] for f in d.p.flags] == ["PAIR_COLLISION"]
+    d.p.flags.clear()
+    d.pair_collisions("k", [{"left": "Le petit-déjeuner est inclus.", "right": "a"}, {"left": "Le petit-déjeuner n'est pas inclus.", "right": "b"}])
+    assert d.p.flags == []

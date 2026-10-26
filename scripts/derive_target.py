@@ -108,9 +108,20 @@ CFG = {
     ),
     "fr": dict(
         name="French",
-        formal=r"\bvous\b",
-        informal=r"\b(tu|toi|ton|ta|tes)\b",
+        rekey_exercises=True,                # exercise key tails re-derived from the translation
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        straight_apostrophe=True,            # j'ai, l'école: the grader folds both, the corpus uses the straight one
+        formal=r"\b(?:vous|votre|vos)\b",
+        informal=r"\b(?:tu|toi|ton|ta|tes|te)\b|(?<!\w)t'",
+        gender=dict(mode="fr"),              # speaker-gendered adjective / participle / agent noun after je suis, je me sens ...
         contractions=[(r"\b[dD]e le\b", "du"), (r"\b[àÀ] le\b", "au"), (r"\b[dD]e les\b", "des"), (r"\b[àÀ] les\b", "aux")],
+        elision=True,                        # je/le/la/de/ne/me/te/se/que/ce + vowel or mute h -> j'/l'/d'/n'/m'/t'/s'/qu'/c'
+        note=("Natural standard French (metropolitan). Straight apostrophes (j'ai, l'école). Informal source roles -> tu, formal -> vous "
+              "(service staff, strangers). Obligatory contractions: du, au, des, aux. Obligatory elision before a vowel or mute h (l'hôtel, j'habite, "
+              "c'est, qu'il, d'abord). Hyphenated inversions and elided forms are single tiles (vas-tu, est-ce, l'école). "
+              "Speaker-gendered words (je suis fatigué/fatiguée, étudiant/étudiante) need the other gender as an accepted alternate (#alt)."),
     ),
     "pt": dict(name="Portuguese", formal=r"\bo senhor|a senhora\b", informal=r"\btu\b"),
 }
@@ -152,10 +163,13 @@ def tokens(s: str) -> list[str]:
 TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue"})
 
 
+TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae"})      # sœur -> soeur, not "sur"
+
+
 def slug(s: str, words: int = 4, translit: bool = False) -> str:
     if translit:
         s = s.translate(TRANSLIT_DE)
-    s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
+    s = unicodedata.normalize("NFKD", s.translate(TRANSLIT_LIG)).encode("ascii", "ignore").decode()
     parts = re.findall(r"[a-z0-9]+", s.lower())[:words]
     return "_".join(parts)[:36] or "x"
 
@@ -204,6 +218,80 @@ def agent_gender_alt(text: str) -> str | None:
     new_art = {"ein": "eine", "eine": "ein"}.get(art, art)
     head = text[:m.start(2) if art else m.start(3)]
     return head + (new_art + " " if art else "") + other + text[m.end():]
+
+
+# --- French: speaker-gendered words -----------------------------------------------------------------------
+FR_COPULA = re.compile(r"\b(?:je suis|je me sens|j'étais|je me suis|moi aussi,? je suis)\s+"
+                       r"(?:(?:très|trop|assez|un peu|vraiment|tout à fait|bien|déjà|souvent|toujours|pas|jamais|aussi|si|plutôt|complètement)\s+)*"
+                       r"(?:(un|une)\s+)?([a-zàâçéèêëîïôûùüÿœ]{4,})", re.I)
+FR_NOT_GENDERED = frozenset((
+    "dans chez avec sans pour vers près loin ici là-bas bien très trop assez peu plus moins aussi déjà encore souvent toujours jamais "
+    "debout ensemble seul? ouvert? tard tôt demain hier maintenant aujourd comme dessus dessous devant derrière entre parmi depuis "
+    "malade triste jeune calme timide rapide riche pauvre simple sympathique timide drôle fort optimiste pessimiste sociable "
+    "stressé? libre propre agréable difficile facile possible mince célèbre mauvais gentil? "
+    "ensuite alors aussi arrivé? "
+).replace("?", "").split()) - {"stressé", "seul", "ouvert", "gentil", "arrivé"}
+FR_F2M = (("trice", ("teur",)), ("euse", ("eux", "eur")), ("ière", ("ier",)), ("ère", ("er",)), ("ive", ("if",)), ("ienne", ("ien",)),
+          ("onne", ("on",)), ("elle", ("el",)), ("ée", ("é",)), ("ie", ("i",)), ("ue", ("u",)), ("nte", ("nt",)), ("nde", ("nd",)),
+          ("rde", ("rd",)), ("tte", ("t",)), ("ite", ("it",)), ("ine", ("in",)), ("aine", ("ain",)), ("ise", ("is",)), ("sse", ("s",)))
+FR_M2F = (("eux", ("euse",)), ("eur", ("euse", "rice")), ("ier", ("ière",)), ("er", ("ère",)), ("if", ("ive",)), ("ien", ("ienne",)),
+          ("on", ("onne",)), ("el", ("elle",)), ("é", ("ée",)), ("i", ("ie",)), ("u", ("ue",)), ("nt", ("nte",)), ("nd", ("nde",)),
+          ("rd", ("rde",)), ("in", ("ine",)), ("ain", ("aine",)), ("s", ("se", "sse")), ("t", ("te", "tte")), ("l", ("le",)),
+          ("d", ("de",)), ("n", ("ne",)), ("r", ("re",)), ("m", ("me",)), ("p", ("pe",)), ("g", ("gue",)), ("c", ("che", "que")),
+          ("x", ("se",)))
+FR_FEM_ONLY = ("ée", "euse", "ière", "ère", "ive", "ienne", "onne", "trice", "nte", "nde", "rde", "tte", "ite", "aine")
+
+
+def fr_gender_alts(text: str) -> list[str]:
+    """French 'Je suis fatigué.' -> ['Je suis fatiguée.'] (and back): candidate alternates (a noun/adjective can have two spellings)."""
+    m = FR_COPULA.search(text)
+    if not m:
+        return []
+    art, w = m.group(1), m.group(2)
+    lw = w.lower()
+    if lw in FR_NOT_GENDERED or lw.endswith(("ment", "tion", "sion")) or lw in ("sûr", "tout", "toute", "fois", "moi", "toi", "lui", "elle", "nous", "vous"):
+        return []
+    cands: list[str] = []
+    if lw.endswith(FR_FEM_ONLY) or lw.endswith(("ie", "ue")) and len(lw) > 4:
+        for suf, reps in FR_F2M:
+            if lw.endswith(suf) and len(lw) - len(suf) >= 2:
+                cands = [lw[:-len(suf)] + r for r in reps]
+                break
+    elif not lw.endswith("e"):
+        for suf, reps in FR_M2F:
+            if lw.endswith(suf) and len(lw) - len(suf) >= 2:
+                cands = [lw[:-len(suf)] + r for r in reps]
+                break
+    out = []
+    for c in cands:
+        c = c.capitalize() if w[:1].isupper() else c
+        head = text[:m.start(2)]
+        if art:
+            flipped = "une" if art.lower() == "un" else "un"
+            head = text[:m.start(1)] + (flipped.capitalize() if art[:1].isupper() else flipped) + text[m.end(1):m.start(2)]
+        out.append(head + c + text[m.end(2):])
+    return out
+
+
+# obligatory elision: je le la de ne me te se que ce (+ jusque, lorsque ...) before a vowel / mute h; exceptions are h aspiré words and onze/oui/yaourt
+FR_ELIDE = re.compile(
+    r"(?<![\w'’-])(je|le|la|de|ne|me|te|se|que|ce|jusque|lorsque|puisque|quoique|si(?= ils?\b))\s+"
+    r"(?=(?:[aeiouyâàéèêëîïôöûùüœæ]|h(?![ao]ut|aricot|ockey|uit|amburger|éros|asard|onte|ibou|érisson|andball|all\b|anche|angar|omard|arpe"
+    r"|ollande|ongr|ameau|asch|ors|asard|ussard|ublot|ache\b|aut))[\w'’-]*)", re.I)
+FR_ELIDE_OK = frozenset(("onze", "onzième", "oui", "ouistiti", "yaourt", "yaourts", "yoga", "yéti", "yen", "ukulélé", "un?", ""))
+
+
+def fr_elision_errors(text: str) -> list[str]:
+    out = []
+    for m in FR_ELIDE.finditer(text):
+        nxt = re.match(r"[\w'’-]+", text[m.end():])
+        word = nxt.group(0).lower() if nxt else ""
+        if word in FR_ELIDE_OK and word:
+            continue
+        if m.group(1).lower() in ("le", "la") and word in ("y", "yacht"):
+            continue
+        out.append(f"{m.group(1)} {word}")
+    return out
 
 
 class Unresolved(Exception):
@@ -751,6 +839,7 @@ class UnitDeriver:
                     for pr in a["value"]:
                         pr["left"] = self.pr(pr["left"])
                         pr["right"] = self.pr(pr["right"])
+            self.pair_collisions(ck, e.get("pairs") or [])
         elif has_opts and ans_target:
             canon_tr = self.T_by_norm(ov["correct_option"]) or self.T(ov["correct_option"], "option")
             ov["correct_option"] = canon_tr
@@ -828,6 +917,20 @@ class UnitDeriver:
         if self.p.strict_residual and self.residual(self.en(right)):
             return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
         return self.en(right)
+
+    def pair_collisions(self, ck: str, pairs: list[dict]) -> None:
+        """The grader keys a matching answer by the normalised left (and right) text: two sides that differ only by
+        punctuation or case collapse into one key and the exact answer grades wrong (en-es unit69 'esta incluido.' / '?')."""
+        for side in ("left", "right"):
+            seen: dict[str, str] = {}
+            for pr in pairs:
+                txt = pr[side]
+                if txt.startswith("<<"):
+                    continue
+                k = norm(txt)
+                if k in seen:
+                    self.flag(ck, "PAIR_COLLISION", f"matching {side} items {seen[k]!r} and {txt!r} normalise to the same key; reword one")
+                seen[k] = txt
 
     def real_prompt_langs(self, e: dict) -> set[str]:
         return {b.get("language_code") for b in (e.get("prompt") or {}).get("target_blocks") or []}
@@ -940,8 +1043,17 @@ class UnitDeriver:
             tr_reg = register_of(text, tp) if cfg else None
             if src_reg and tr_reg and src_reg != tr_reg:
                 self.flag(key, "REGISTER", f"source is {src_reg} ({src_text!r}) but translation reads {tr_reg} ({text!r})")
+        if cfg.get("elision") and kind in ("teach", "answer", "transcribe"):
+            for bad in fr_elision_errors(text):
+                self.flag(key, "ELISION", f"{text!r}: obligatory elision not applied ({bad!r}); never accept the unelided form as a variant")
+        if cfg.get("straight_apostrophe") and "’" in text:
+            self.flag(key, "APOSTROPHE", f"{text!r}: use the straight apostrophe (')")
         g = cfg.get("gender")
-        if g and kind == "answer" and g.get("mode") == "agent":
+        if g and kind == "answer" and g.get("mode") == "fr":
+            alts_fr = fr_gender_alts(text)
+            if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "agent":
             alt = agent_gender_alt(text)
             if alt and norm(alt) not in {norm(x) for x in (answers or [])}:
                 self.flag(key, "GENDER", f"speaker-gendered noun in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
@@ -1180,6 +1292,8 @@ class Plan:
 
     def names(self, s: str) -> str:
         """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
+        if CFG.get(self.tgt, {}).get("straight_apostrophe"):
+            s = s.replace("\u2019", "'")
         if not self.names_map:
             return s
         pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(self.names_map, key=len, reverse=True)) + r")\b")
@@ -1639,7 +1753,7 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
                                   slots={n: content for n in names},
                                   slot_relations=[dict(kind="distinct", slots=names)],
                                   answer_derivation=dict(kind="matching_pairs", slots=names),
-                                  feedback_frame=frame("Match each Spanish word with its English meaning; the words come from this unit's lessons.", "en")))
+                                  feedback_frame=frame(f"Match each {plan.new_name} word with its English meaning; the words come from this unit's lessons.", "en")))
     # -- sentence-based structured / production templates anchored to single lexemes
     rot = ["order", "fill", "translate"]
     for lck in good_lessons:
