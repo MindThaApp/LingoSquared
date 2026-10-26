@@ -129,8 +129,27 @@ the A1 group). Coordinate it with other agents adding units to the same course: 
 | Cast names | `--names` maps them after translation (keep genders aligned: Lotte/Elena, Omar/Mateo) |
 | Lexeme backfill | `lexemes` lists the new tokens; `inject` writes a marked, mergeable block into `backfill_lexemes_<x>_<t>.py` (`DERIVED_TARGET_GLOSSES`, `DERIVED_TARGET_POS`) |
 
-Not derived: practice packs (hand-authored per language, see PRACTICE_PACK_RECIPE.md: the new units have no pack and so no
-Endless Practice or checkpoint pool until one is written), audio (media assets stay `pending_generation`), native review.
+Not derived: audio (media assets stay `pending_generation`) and native review. Practice packs are not derived from the source packs
+either, but `derive_target.py packs` builds them from the injected units (below).
+
+## Practice packs: `packs`
+
+```bash
+python3 scripts/derive_target.py packs     # docs/content/practice/<pair>/a1_unitNN.yaml + scripts/manifest.d/practice/<pair>.txt
+```
+
+Unit-wide choose/listen/translate/match templates are built over the unit's `w_<token>` lexeme tags; sentence templates are anchored to
+single-lexeme tags. A unit needs at least 3 usable lexemes (checkpoint needs >= 3 candidates for multiple choice and >= 6 for
+matching pairs; the match template is skipped below that). Tokens that must not appear in packs (cast surnames, shop names, tokens a
+learner has not met) go into `packs_exclude.json` in the work dir. Run `practice-validate` and the practice leakage and integrity
+checks afterwards.
+
+## Further work-dir inputs
+
+* `en_override.json`: rewrites English text that is reused from the source overlay but names source-language grammar. Keys are exact
+  strings, scoped (`<source content key>|title`, `|gloss`, `|example_gloss`, `|gloss:<key>`) or word level (`"~word": "rewrite"`).
+* Scoped gloss keys: when two cards share a source word that becomes different target words, the atom key is
+  `"<content key>#gk#<key>"` in `atoms.tr.json`.
 
 ## Lints (`status` / `inject`; errors block inject, acknowledge false positives in `ack.json` as `"<id>:<FLAG>": "reason"`)
 
@@ -144,6 +163,9 @@ Endless Practice or checkpoint pool until one is written), audio (media assets s
 * `TILES`: an accepted word-order variant uses other words than the tiles (the bank is built from the canonical answer).
 * `GLOSS_KEY`: a reading card's gloss key must be one whole word of the translated card text (multi-word phrases fail the compiler).
 * `VARIANTS` (warn): the source accepted more distinct forms than the translation gave.
+* `SOURCE_GRAMMAR`: English text (feedback, notes, options) still explains source-language grammar (separable verbs, het-words, main
+  clause order, local culture). Rewrite it via the `#note` / `#feedback` / `#options` slots or `en_override.json`.
+* `OPTIONS_COUNT`: a reading exercise with an authored `#options` list does not give the same number of options as the source.
 * `PAIR_RIGHT_TARGET`, `GRAMMAR_REWRITE`, `LEFTOVER` (warn/error): review hints; `LEFTOVER` means source-language words survived in
   an English field.
 
