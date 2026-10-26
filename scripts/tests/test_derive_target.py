@@ -873,3 +873,133 @@ def test_russian_cast_names_stay_cyrillic_in_target_text_and_latin_in_english(dt
     assert plan.names_en("Lotte: Hi, Omar!") == "Nastya: Hi, Dima!"
     b = args(tmp_path, new="en-ru", first_unit=25, names="Lotte=Настя")
     assert dt_ru.make_plan(b).names_en("Lotte") == "Настя"          # no --names-en: the single map applies to both sides (Latin targets)
+
+
+# ---------------------------------------------------------------------------
+# Arabic target (RTL, unvocalised, gender, dual, clitics, article)
+# ---------------------------------------------------------------------------
+BACKFILL_AR = BACKFILL_RU.replace("привет", "مرحبا")
+ATOMS_AR = {
+    "Hoeveel kost het?": "كم الثمن؟",
+    "Beginnen": "البداية",
+    "Test": "اختبار",
+    "Ziek en moe zijn bijvoeglijke naamwoorden en gebruiken zijn in het Nederlands.":
+        "المتعب والمريض صفتان، وتتغير الصفة مع الرجل والمرأة.",
+    "Lotte: Hoi.": "Lotte: مرحبا.",
+    "Omar: Ik ben moe.": "Omar: أنا متعب.",
+    "moe": "متعب",
+    "a rest": "راحة",
+}
+AUTHOR_AR = {
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#dist": "كم ثمن؟ || ما الثمن كم؟",
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#feedback": "كم (kam) asks for the amount.",
+    "nl.a1.unit05.lesson01.exercise02.order_cost#feedback": "The question word comes first.",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#frame": "___ الثمن؟",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#ans": "كم",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#feedback": "كم means how much.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#ans": "أنا متعب.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "أنا متعبة.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#feedback": "A man says متعب (mutʿab), a woman متعبة (mutʿaba).",
+    "nl.a1.unit05.lesson01.exercise05.match#tested": "كم متعب",
+    "nl.a1.unit05.lesson01.exercise05.match#feedback": "متعب means tired.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Omar says أنا متعب.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "أنا متعب",
+    "nl.a1.unit05.lesson01.teach.hoeveel#note": "كم (kam) asks how much; الثمن (ath-thaman) is the price.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Adjectives and gender",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Tired and ill change for a man and a woman: متعب (m.), متعبة (f.).",
+}
+
+
+@pytest.fixture()
+def dt_ar(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("derive_target_ar_under_test", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for name, sub in (("ROOT", ""), ("CONTENT", "docs/content"), ("MANIFEST", "scripts/manifest.d/content")):
+        monkeypatch.setattr(mod, name, tmp_path / sub if sub else tmp_path)
+    c = tmp_path / "docs/content"
+    base_r = dict(BASE_REAL, target_language="ar", course={"realization_key": "ar.a1"})
+    base_o = dict(BASE_OVL, target_language="ar")
+    for path, obj in ((c / "realizations/nl/a1_unit05_test.yaml", src_realization()),
+                      (c / "overlays/en-nl/a1_unit05.yaml", src_overlay()),
+                      (c / "realizations/ar/a1_unit01_base.yaml", base_r),
+                      (c / "overlays/en-ar/a1_unit01.yaml", base_o)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    m = tmp_path / "scripts/manifest.d/content"
+    m.mkdir(parents=True)
+    (m / "en-ar.txt").write_text(
+        "en-ar|docs/content/realizations/ar/a1_unit01_base.yaml|docs/content/overlays/en-ar/a1_unit01.yaml\n", encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_ar.py").write_text(BACKFILL_AR, encoding="utf-8")
+    return mod
+
+
+def ar_plan(dt, tmp_path, author=None, atoms=None):
+    a = args(tmp_path, new="en-ar", first_unit=25, names="Lotte=ليلى,Omar=يوسف", names_en="Lotte=Layla,Omar=Yusuf")
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    table = atoms or ATOMS_AR
+    (work / "atoms.tr.json").write_text(json.dumps({i: table[t] for i, t in src.items() if t in table}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author or AUTHOR_AR, ensure_ascii=False), encoding="utf-8")
+    return a, dt.make_plan(a)
+
+
+def test_arabic_slugs_tokens_and_punctuation(dt):
+    assert dt.slug("أحب القراءة", 3) == "ahb_alqraaa"
+    assert dt.slug("اشرب الماء") == "ashrb_almaa"
+    assert dt.slug("Sun") == "sun"                                   # Latin text is unchanged
+    assert dt.tokens("هل تريد قهوة؟ نعم، أريد!") == ["هل", "تريد", "قهوة", "نعم", "أريد"]
+    assert dt.tokens("سأدفع بالبطاقة وللمدرسة") == ["سأدفع", "بالبطاقة", "وللمدرسة"]       # attached particles stay one token
+    assert dt.boundary_strip("«كم الساعة؟»") == "كم الساعة" and dt.boundary_strip("نعم،") == "نعم"
+    assert dt.register_of("هل تريد قهوة؟", "ar") is None                   # no tu/vous split at A1
+
+
+def test_arabic_gender_alternates_speaker_and_addressee(dt):
+    g = dt.ar_gender_alts
+    assert g("أنا متعب.") == ["أنا متعبة."] and g("أنا طالبة.") == ["أنا طالب."]
+    assert g("أنا سعيد جدا.") == ["أنا سعيدة جدا."]
+    assert g("هل تريد قهوة؟") == ["هل تريدين قهوة؟"] and g("هل تريدين قهوة؟") == ["هل تريد قهوة؟"]
+    assert g("اشرب ماء.") == ["اشربي ماء."] and g("اشربي ماء واستريحي.") == ["اشرب ماء واستريحي."]
+    assert g("أنت مريضة.") == ["أنت مريض."] and g("قل لي من فضلك.") == ["قولي لي من فضلك."]
+    # 1st-person verbs, possessives and 3rd person need no alternate
+    assert g("أنا أحب القهوة.") == [] and g("اسمي ليلى.") == [] and g("هي تحب الشاي.") == [] and g("كل يوم أدرس.") == []
+
+
+def test_arabic_orthography_lints_and_sun_letters(dt_ar, tmp_path):
+    dt = dt_ar
+
+    def codes(atoms=None, author=None):
+        a, plan = ar_plan(dt, tmp_path, author, atoms)
+        plan.build_all()
+        return {f["code"] for f in dt.active_flags(plan)}
+
+    base = codes()
+    assert not base & {"HARAKAT", "SCRIPT", "PUNCT", "CLITIC", "ARTICLE", "DUAL", "GENDER", "SUNLETTER", "ARDIGIT"}
+    assert "HARAKAT" in codes({"Hoeveel kost het?": "كَمِ الثَّمَنُ؟"})
+    assert "SCRIPT" in codes({"Hoeveel kost het?": "كم price؟"})
+    assert "SCRIPT" in codes({"Hoeveel kost het?": "كم الثمن؟ ک"})                        # Persian kaf
+    assert "CLITIC" in codes({"Hoeveel kost het?": "كم و الثمن؟"})
+    assert "ARTICLE" in codes({"Hoeveel kost het?": "كم لالثمن؟"})
+    assert "DUAL" in codes({"Hoeveel kost het?": "اثنان كتب"})
+    assert "ARDIGIT" in codes({"Hoeveel kost het?": "كم ٥؟"})
+    assert "GENDER" in codes(None, {k: v for k, v in AUTHOR_AR.items() if not k.endswith("write_tired#alt")})
+    assert "SUNLETTER" in codes(None, dict(AUTHOR_AR, **{"nl.a1.unit05.lesson01.teach.hoeveel#note": "الثمن (al-thaman) is the price."}))
+
+
+def test_arabic_latin_question_mark_and_comma_become_arabic_punctuation(dt_ar, tmp_path):
+    a, plan = ar_plan(dt_ar, tmp_path, None, dict(ATOMS_AR, **{"Hoeveel kost het?": "كم الثمن, من فضلك?"}))
+    assert plan.names("كم الثمن, من فضلك?") == "كم الثمن، من فضلك؟"
+    assert plan.names_en("Is it ok, Lotte?") == "Is it ok, Layla?"            # English fields keep Latin punctuation
+    a, plan = ar_plan(dt_ar, tmp_path)
+    built = plan.build_all()
+    texts = " ".join(t["target"]["text"] for t in built[0][1]["units"][0]["lessons"][0]["teaching"])
+    assert "؟" in texts and "?" not in texts
+
+
+def test_arabic_variant_spellings_are_flagged_as_warnings(dt_ar, tmp_path):
+    a, plan = ar_plan(dt_ar, tmp_path, None, dict(ATOMS_AR, **{"moe": "مدرسه"}))
+    plan.build_all()
+    plan.derivers[0].arabic_lint("k", "مدرسة")
+    plan.derivers[0].arabic_lint("k", "مدرسه")
+    assert any(f["code"] == "AR_MIXED" and f["level"] == "warn" for f in plan.flags)
