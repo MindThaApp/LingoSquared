@@ -194,6 +194,24 @@ checks afterwards.
   keep each to a short why. Keep `Write exactly` copy tasks as they are at A1.
 * Always pass `--new en-de` (or rely on the saved `plan.json`); an earlier default of `en-es` once wrote the wrong config.
 
+## Italian target (`it`)
+
+`CFG["it"]` (generic switches reused from the German run: `rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) plus:
+
+* Register: informal source roles -> tu (`tu/ti/tuo`, 2sg verb forms), formal -> Lei (3rd person: Lei ha, Prenda); `REGISTER` lint.
+* Gender: speaker-gendered `-o/-a` adjective or participle after `sono/sei/mi sento` in a learner answer needs the other gender as `#alt`
+  (`GENDER` lint; `-e` adjectives are common gender). Third person needs none.
+* Articulated prepositions are obligatory (`di/a/da/in/su` + `il/lo/la/l'/i/gli/le` -> del, al, dal, nel, sul ...): `CONTRACTION` lint.
+* Elision (`elisions` in the config): `lo/la/una` before a vowel or h -> `l'`, `un'`; `un'` before a masculine noun is an error: `ELISION` lint.
+  The lint also hits quoted letters ("la h"); reword or acknowledge in `ack.json`.
+* Dates, times, prices and numbers are spelled out like the existing it units; `always_desc` makes the unit description an authored slot.
+* Elided forms are single tokens (`l'acqua`, `dov'è`); cast names go in `PROPER_NOUNS` of `backfill_lexemes_en_it.py`.
+
+Generic additions made for it (usable by other targets): unit-scoped atom overrides (`"<source stem>#t#<dutch text>"` in `atoms.tr.json`),
+English-gloss overrides per reading-card key (`"<source ck>|gloss:<key>"` in `en_override.json`), whole-word quote substitution that skips English
+words, an English vocabulary measured over string values of >= 4 English-learner courses (so words quoted from one target are not English),
+duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target language name.
+
 ## French target (`fr`)
 
 `CFG["fr"]` reuses the generic switches of the German target (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
