@@ -68,7 +68,20 @@ DEFAULT_WORK = ROOT / ".local/derive-target"
 CFG = {
     # code: formal marker, informal marker (regexes over lowercase text)
     "nl": dict(name="Dutch", formal=r"\b(u|uw)\b", informal=r"\b(je|jij|jou|jouw|jullie)\b"),
-    "de": dict(name="German", formal=r"\b(sie|ihnen|ihr(?:e|en|em)?)\b", informal=r"\b(du|dich|dir|dein\w*)\b"),
+    "de": dict(
+        name="German",
+        case_sensitive=True,                 # nouns are capitalised: never casefold tested_text / tiles; slugs transliterate umlauts
+        translit=True,
+        formal=r"\bIhnen\b|\bIhr(?:e|en|em|er|es)?\b|(?<=[\w,]) Sie\b",    # matched on the original case: sentence-initial Sie is ambiguous (she/they)
+        informal=r"(?i:\b(?:du|dich|dir|dein\w*)\b)",
+        gender=dict(mode="agent"),           # learner speaks as themselves: Ich bin Student / Studentin
+        contractions=[(r"\b[iI]n dem\b", "im"), (r"\b[aA]n dem\b", "am"), (r"\b[zZ]u dem\b", "zum"), (r"\b[zZ]u der\b", "zur"),
+                      (r"\b[vV]on dem\b", "vom"), (r"\b[bB]ei dem\b", "beim")],
+        note=("Natural standard German. Nouns capitalised (Hund, not hund); real spelling (ä ö ü ß, no ae/ue). Informal source roles -> du, formal -> Sie "
+              "(capital Sie/Ihnen/Ihr). Verb second in main clauses, verb-first questions, separable verbs split (Ich stehe um sieben Uhr auf), "
+              "cases marked (accusative: Ich habe einen Hund; dative after mit/bei/zu). "
+              "Contract in dem/an dem/zu dem/zu der/von dem/bei dem -> im/am/zum/zur/vom/beim."),
+    ),
     "es": dict(
         name="Spanish",
         formal=r"\busted(es)?\b",
@@ -121,7 +134,12 @@ def tokens(s: str) -> list[str]:
     return TOKEN_RE.findall(strip_punct(s))
 
 
-def slug(s: str, words: int = 4) -> str:
+TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue"})
+
+
+def slug(s: str, words: int = 4, translit: bool = False) -> str:
+    if translit:
+        s = s.translate(TRANSLIT_DE)
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
     parts = re.findall(r"[a-z0-9]+", s.lower())[:words]
     return "_".join(parts)[:36] or "x"
@@ -143,10 +161,34 @@ def register_of(text: str, src: str) -> str | None:
     cfg = CFG.get(src)
     if not cfg:
         return None
-    low = text.casefold()
+    low = text if cfg.get("case_sensitive") else text.casefold()
     f = bool(re.search(cfg["formal"], low))
     i = bool(re.search(cfg["informal"], low))
     return "formal" if f and not i else "informal" if i and not f else None
+
+
+AGENT_UMLAUT = {"Arzt": "Ärztin", "Koch": "Köchin", "Anwalt": "Anwältin"}
+AGENT_UNDO = {v: k for k, v in AGENT_UMLAUT.items()}
+AGENT_RE = re.compile(r"\b(Ich bin|bin ich)\s+(?:(ein|eine)\s+)?([A-ZÄÖÜ][\wäöüß]+)")
+
+
+def agent_gender_alt(text: str) -> str | None:
+    """German 'Ich bin Student' -> 'Ich bin Studentin' (and back); None when the noun is not an agent noun."""
+    m = AGENT_RE.search(text)
+    if not m:
+        return None
+    art, noun = m.group(2), m.group(3)
+    if noun in AGENT_UNDO:
+        other = AGENT_UNDO[noun]
+    elif noun.endswith("in") and len(noun) > 5 and noun[:-2].endswith(("er", "ent", "ist", "or", "eur", "ler", "ner", "ger", "ter")):
+        other = noun[:-2]
+    elif noun.endswith(("er", "ent", "ist", "or", "eur", "arzt", "Arzt")) and len(noun) > 4:
+        other = AGENT_UMLAUT.get(noun, noun + "in")
+    else:
+        return None
+    new_art = {"ein": "eine", "eine": "ein"}.get(art, art)
+    head = text[:m.start(2) if art else m.start(3)]
+    return head + (new_art + " " if art else "") + other + text[m.end():]
 
 
 class Unresolved(Exception):
@@ -410,7 +452,7 @@ class UnitDeriver:
             si = idx - 1
             while si > 2 and parts[si] in ("formal", "informal"):
                 si -= 1
-            base = slug(self.T(a["text"], "media"), 5)
+            base = slug(self.T(a["text"], "media"), 5, self.p.translit)
             s = base
             n = 2
             while s in media_slugs or s in self.p.media_slugs:
@@ -425,13 +467,13 @@ class UnitDeriver:
             for l in u["lessons"]:
                 lk = l["content_key"]
                 m = re.match(r"^(.*\.lesson\d+)\.(.+)$", lk)
-                nl = prefix_new + m.group(1)[len(prefix_old):] + "." + slug(self.T(l["title"], "title"))
+                nl = prefix_new + m.group(1)[len(prefix_old):] + "." + slug(self.T(l["title"], "title"), 4, self.p.translit)
                 self.keymap[lk] = nl
                 seen: set[str] = set()
                 for t in l.get("teaching") or []:
                     ck = t["content_key"]
                     mm = re.match(r"^(.*\.teach)\.(.+)$", ck)
-                    base = slug(self.T(t["target"]["text"], "teach"), 3)
+                    base = slug(self.T(t["target"]["text"], "teach"), 3, self.p.translit)
                     s, n = base, 2
                     while s in seen:
                         s = f"{base}_{n}"
@@ -499,7 +541,7 @@ class UnitDeriver:
         # target tokens plus the tokens of the card's examples (the source course introduces example words on the card too)
         ex_toks = [w for e in ([exs] if isinstance(exs, dict) else (exs or [])) for w in tokens(e["text"])]
         t["introduced_tokens"] = list(OrderedDict.fromkeys(tokens(tgt["text"]) + ex_toks))
-        for atom_txt in [tgt["text"]]:
+        for atom_txt in [tgt["text"]] + ([e["text"] for e in ([exs] if isinstance(exs, dict) else (exs or []))] if self.p.cs else []):
             self.lints(t["content_key"], atom_txt, kind="teach")
 
     # -- exercises ---------------------------------------------------------------
@@ -648,6 +690,8 @@ class UnitDeriver:
             if canon_tr.startswith("<<"):
                 return canon_tr
             body = strip_punct(canon_tr)
+            if self.p.cs:
+                return body
             return body if tested_src == strip_punct(canon_src) else body.lower() if tested_src == tested_src.lower() else body
         aid = self.atom_norms.get(norm(tested_src))
         if aid is not None:
@@ -656,7 +700,7 @@ class UnitDeriver:
                 return atom_tr
             body = strip_punct(atom_tr)
             keep_case = tested_src == strip_punct(self.id_text[aid])
-            return body if keep_case else body.casefold()
+            return body if keep_case or self.p.cs else body.casefold()
         v = self.A(ck + "#tested", tested_src, "tested", dict(ctx, canon=canon_tr))
         return v
 
@@ -692,7 +736,11 @@ class UnitDeriver:
             if src_reg and tr_reg and src_reg != tr_reg:
                 self.flag(key, "REGISTER", f"source is {src_reg} ({src_text!r}) but translation reads {tr_reg} ({text!r})")
         g = cfg.get("gender")
-        if g and kind == "answer":
+        if g and kind == "answer" and g.get("mode") == "agent":
+            alt = agent_gender_alt(text)
+            if alt and norm(alt) not in {norm(x) for x in (answers or [])}:
+                self.flag(key, "GENDER", f"speaker-gendered noun in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
+        elif g and kind == "answer":
             m = re.search(g["copula"] + r"\s+(?:(?:muy|tan|un poco|bastante|molto|più)\s+)?(\w{3,}?)(os|as|o|a|i|e)\b", text, re.I)
             if m:
                 stem, end = m.group(2), m.group(3)
@@ -704,6 +752,25 @@ class UnitDeriver:
                         alt = text[:m.start(2)] + stem + other + text[m.end():]
                         if norm(alt) not in {norm(x) for x in (answers or [])}:
                             self.flag(key, "GENDER", f"speaker-gendered form in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
+        if self.p.cs:
+            self.case_lint(key, text)
+
+    def case_lint(self, key: str, text: str) -> None:
+        """Case-sensitive targets (German): a known noun written lowercase, or a known non-noun capitalised mid-sentence."""
+        up, low = self.p.lexicon
+        start = True
+        for m in re.finditer(r"[^\W\d_][\w'’\-]*|[.!?:\n]", text):
+            t = m.group(0)
+            if t in ".!?:\n":
+                start = True
+                continue
+            first, start = start, False
+            if first or t in up or t in low:
+                continue
+            if t[0].islower() and (t[0].upper() + t[1:]) in up:
+                self.flag(key, "CASE", f"{t!r} in {text!r}: German nouns are capitalised ({t[0].upper() + t[1:]!r})")
+            elif t[0].isupper() and (t[0].lower() + t[1:]) in low and t not in self.p.case_ok:
+                self.flag(key, "CASE", f"{t!r} in {text!r}: capitalised mid-sentence, but {t[0].lower() + t[1:]!r} is a known non-noun")
 
     # -- header -----------------------------------------------------------------
     def finish(self, R: dict, O: dict) -> tuple[dict, dict]:
@@ -765,6 +832,9 @@ class Plan:
         self.src, self.tgt = self.src_pair.split("-")[1], self.new_pair.split("-")[1]
         self.src_name = CFG.get(self.src, {}).get("name", self.src)
         self.new_name = CFG.get(self.tgt, {}).get("name", self.tgt)
+        self.cs = bool(CFG.get(self.tgt, {}).get("case_sensitive"))      # case carries meaning (German nouns)
+        self.translit = bool(CFG.get(self.tgt, {}).get("translit"))
+        self._lex = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
         self.units = args.units
@@ -786,6 +856,19 @@ class Plan:
         self.base_real, self.base_ovl = real[0], ovl[0]
         first = args.first_unit or next_unit_number(self.tgt)
         self.derivers = [UnitDeriver(self, s, first + i) for i, s in enumerate(self.units)]
+
+    @property
+    def lexicon(self) -> tuple[set[str], set[str]]:
+        """(capitalised, lowercase) lexemes already known to the target backfill."""
+        if self._lex is None:
+            try:
+                g = load_backfill(self).GLOSSES
+            except (OSError, SystemExit, AttributeError):
+                g = {}
+            self._lex = ({k for k in g if k[:1].isupper()}, {k for k in g if k[:1].islower()})
+        return self._lex
+
+    case_ok = frozenset({"Sie", "Ihnen", "Ihr", "Ihre", "Ihren", "Ihrem", "Ihrer", "Ihres"})   # formal address: capital is correct mid-sentence
 
     def names(self, s: str) -> str:
         for a, b in self.names_map.items():
@@ -891,6 +974,9 @@ Rules
     <ck>#note / #feedback / #instruction  rewrite in English about {plan.new_name} (the source text discusses {plan.src_name})
 * Obligatory contractions are always applied (es del/al, fr du/au, it nel/del...); never list the uncontracted form as a variant.
 * Gender: when the learner speaks as themselves with a gendered adjective, add the other gender via `#alt`.
+* Lexemes (`lexemes.tr.json`): {{token: "english gloss | pos"}}; for a case-sensitive target a sentence-initial capital of a non-noun
+  is written as {{"Hast": "=hast"}} (citation-form alias) next to its own entry {{"hast": "you have (informal) | verb"}}.
+{CFG.get(plan.tgt, {}).get("note", "")}
 """
 
 
@@ -948,18 +1034,30 @@ def cmd_status(args):
 
 
 def new_tokens(plan: Plan, built) -> tuple[dict, object]:
+    """Tokens of the derived units that the target backfill has no gloss for.
+
+    Case-sensitive targets (German): a sentence-initial capital of a non-noun (`Hast`) is its own raw token. Give it
+    the value `=hast` in lexemes.tr.json to map it to its citation form instead of glossing it as a noun."""
     mod = load_backfill(plan)
+    tr = load_json(plan.work / "lexemes.tr.json")
     out: dict[str, dict] = {}
     for d, R, O in built:
         for u in R["units"]:
             for l in u["lessons"]:
                 for t in l.get("teaching") or []:
                     for raw in t.get("introduced_tokens") or []:
-                        tok = mod.normalize(str(raw))
+                        raw = str(raw)
+                        alias = tr.get(raw, "")
+                        tok = alias[1:].strip() if alias.startswith("=") else mod.normalize(raw)
                         if tok in mod.GLOSSES or tok in out:
                             continue
-                        out[tok] = dict(example=t["target"]["text"], en=(O["teaching"].get(t["content_key"]) or {}).get("gloss"),
-                                        unit=d.new_stem)
+                        info = dict(example=t["target"]["text"], en=(O["teaching"].get(t["content_key"]) or {}).get("gloss"),
+                                    unit=d.new_stem)
+                        if plan.cs and tok[:1].isupper() and tok[:1].lower() + tok[1:] in mod.GLOSSES:
+                            info["hint"] = f"capitalised: gloss as a NEW noun, or write '={tok[:1].lower() + tok[1:]}' if it is only a sentence-initial form"
+                        elif plan.cs and tok[:1].isupper():
+                            info["hint"] = "capitalised: a noun/proper noun, or '=lowercase' (and gloss that) for a sentence-initial verb/adjective/pronoun"
+                        out[tok] = info
     return out, mod
 
 
@@ -993,21 +1091,31 @@ def write_backfill_block(plan: Plan, lex: dict[str, str]) -> Path:
     path = ROOT / f"scripts/backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}.py"
     text = path.read_text(encoding="utf-8")
     existing: dict[str, tuple[str, str]] = {}
+    cites: dict[str, str] = {}
     if GEN_BEGIN in text:
         block = text[text.index(GEN_BEGIN):text.index(GEN_END)]
         m = re.search(r"DERIVED_TARGET_GLOSSES: dict\[str, str\] = (\{.*?\n\})\nDERIVED_TARGET_POS", block, re.S)
         g = eval(m.group(1)) if m else {}  # literal dict written by this tool
         m2 = re.search(r"DERIVED_TARGET_POS: dict\[str, str\] = (\{.*?\n\})\n", block, re.S)
         p = eval(m2.group(1)) if m2 else {}
+        m3 = re.search(r"DERIVED_TARGET_CITATION: dict\[str, str\] = (\{.*?\n\})\n", block, re.S)
+        cites = eval(m3.group(1)) if m3 else {}
         for k, v in g.items():
             existing[k] = (v, p.get(k, "noun"))
     for tok, val in lex.items():
-        gloss, _, pos = [x.strip() for x in (val.split("|") + ["", ""])[:3]][:3]
-        existing[tok] = (gloss, pos or "noun")
+        if val.strip().startswith("="):                      # sentence-initial form -> citation form
+            cites[tok] = val.strip()[1:].strip()
+            continue
+        parts = [x.strip() for x in val.split("|")]          # "gloss | pos" (the pilot read the 3rd field and lost every pos)
+        existing[tok] = (parts[0], (parts[1] if len(parts) > 1 else "") or "noun")
     gl = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[0], ensure_ascii=False)},\n" for k, v in sorted(existing.items())) + "}"
     ps = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[1])},\n" for k, v in sorted(existing.items()) if v[1] != "noun") + "}"
+    cs = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)},\n" for k, v in sorted(cites.items())) + "}"
+    cite_code = ("if DERIVED_TARGET_CITATION and \"CITATION_FORMS\" in globals():\n    CITATION_FORMS.update(DERIVED_TARGET_CITATION)\n"
+                 if cites else "")
     block = (f"{GEN_BEGIN}\n"
              f"DERIVED_TARGET_GLOSSES: dict[str, str] = {gl}\nDERIVED_TARGET_POS: dict[str, str] = {ps}\n"
+             f"DERIVED_TARGET_CITATION: dict[str, str] = {cs}\n" + cite_code +
              "for _tok, _gloss in DERIVED_TARGET_GLOSSES.items():\n    GLOSSES.setdefault(_tok, _gloss)\n"
              "for _tok, _pos in DERIVED_TARGET_POS.items():\n    POS_SETS.setdefault(_pos, set()).add(_tok)\n"
              f"{GEN_END}\n")
@@ -1051,7 +1159,8 @@ def cmd_inject(args):
         new_ovl.append(op.relative_to(ROOT).as_posix())
     update_manifest(plan.group, new_real, new_ovl)
     if not args.skip_lexemes and lex:
-        written.append(write_backfill_block(plan, {t: lex[t] for t in toks if t in lex} if toks else {}))
+        # all of lexemes.tr.json: gloss entries and `=citation` aliases (an alias target may not occur as a raw token itself)
+        written.append(write_backfill_block(plan, dict(lex)))
     for p in written:
         print("wrote", p.relative_to(ROOT))
 
