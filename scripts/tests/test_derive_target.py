@@ -85,7 +85,7 @@ def src_overlay():
         "teaching": {
             f"{p}.lesson01.teach.hoeveel": {"title": "Price", "gloss": "How much is it?",
                                             "note": "*Kost* is the third-person form of *kosten*."},
-            f"{p}.lesson01.teach.grammar": {"title": "Grammar", "gloss": "Sick and tired are adjectives and use zijn."},
+            f"{p}.lesson01.teach.grammar": {"title": "Grammar", "gloss": "Sick and tired are adjectives."},
             f"{p}.lesson01.teach.d1": {"title": "Hi", "gloss": "Lotte: Hi.", "note": "A greeting."},
             f"{p}.lesson01.teach.d2": {"title": "Tired", "gloss": "Omar: I am tired."},
         },
@@ -367,3 +367,27 @@ def test_unit_numbers_follow_the_target_course_and_names_are_whole_words(dt, tmp
     assert plan.names("Lotte and Lottery, Omar") == "Elena and Lottery, Mateo"
     assert dt.strip_punct("¿Cuánto cuesta?") == "Cuánto cuesta"
     assert dt.slug("¿Cuánto cuesta el café?") == "cuanto_cuesta_el_cafe"
+
+
+def test_pack_sentences_keep_single_sentences_and_strip_speaker_labels(dt):
+    lesson = {"teaching": [
+        {"content_key": "k1", "target": {"text": "Elena: ¿Cuánto cuesta en total?"}},
+        {"content_key": "k2", "target": {"text": "Atención: el tren sale ahora."}},
+        {"content_key": "k3", "target": {"text": "Hola. Buenas tardes a todos."}},
+        {"content_key": "k4", "target": {"text": "Quiero un cono."}, "example": {"text": "Tengo una mascota en casa."}},
+    ]}
+    O = {"teaching": {"k1": {"gloss": "Elena: How much is it in total?"}, "k4": {"example_gloss": "I have a pet at home."}}}
+    out = dt.pack_sentences(lesson, O)
+    texts = [t for t, _g, _n in out]
+    assert "¿Cuánto cuesta en total?" in texts                      # speaker label removed
+    assert dict((t, g) for t, g, _ in out)["¿Cuánto cuesta en total?"] == "How much is it in total?"
+    assert "Tengo una mascota en casa." in texts                    # examples count
+    assert all("Atención" not in t and "Buenas tardes" not in t for t in texts)   # label-like prefix with lowercase, two sentences
+
+
+def test_source_grammar_pattern_matches_dutch_grammar_words(dt):
+    import re
+    pat = dt.CFG["nl"]["grammar"]
+    assert re.search(pat, "Separable verbs split in a main clause", re.I)
+    assert re.search(pat, "With het-words you use elk", re.I)
+    assert not re.search(pat, "Cada never changes before a noun", re.I)
