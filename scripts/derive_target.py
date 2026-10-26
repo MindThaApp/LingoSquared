@@ -1539,6 +1539,16 @@ class UnitDeriver:
             if k in O:
                 newO[k] = O[k]
         if CFG.get(tp, {}).get("script") == "arabic":
+            def _rtl(o):                     # target-language text blocks are RTL (the source blocks say ltr)
+                if isinstance(o, dict):
+                    if o.get("language_code") == tp and "text" in o:
+                        o["direction"] = "rtl"
+                    for v in o.values():
+                        _rtl(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        _rtl(v)
+            _rtl(R)
             for sv in yaml_strings(newO):
                 bad = ar_sun_errors(sv)
                 if bad:
@@ -2190,7 +2200,8 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
         return f"practice.{pair}.{tp}.{d.level}.unit{nn:02d}.{ln}.{verb}.{counters[ln]:03d}"
 
     def frame(text: str, lang: str, **kw) -> dict:
-        return dict(text=text, language_code=lang, direction="ltr", **kw)
+        rtl = lang == tp and CFG.get(tp, {}).get("script") == "arabic"
+        return dict(text=text, language_code=lang, direction="rtl" if rtl else "ltr", **kw)
 
     content = dict(language_code=tp, part_of_speech=PACK_GOOD_POS, agreement_tags=dict(semantic=pool_tags))
 
