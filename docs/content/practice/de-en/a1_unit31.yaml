@@ -1,0 +1,224 @@
+schema_version: '1.0'
+pack_key: practice.de-en.a1.unit31
+source_language: de
+target_language: en
+unit_content_key: en.a1.unit31.appearance
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.nl-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - trait_adj
+    - eye_color
+slot_presets:
+  trait_adj: &id001
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: trait_adj
+  eye_color: &id002
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic: eye_color
+  appearance_adj: &id003
+    language_code: en
+    part_of_speech: adjective
+    agreement_tags:
+      semantic:
+      - trait_adj
+      - eye_color
+templates:
+- content_key: practice.de-en.en.a1.unit31.lesson01.choose.001
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Merkmal aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson01.listen.002
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson01.match.003
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: matching_pairs
+  frame:
+    text: '{first} · {second}'
+    language_code: en
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+  feedback_frame:
+    text: Verbinden Sie jedes Merkmal mit der deutschen Bedeutung.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson01.translate.004
+  lesson_content_key: en.a1.unit31.lesson01.height_and_hair
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Die englische Übersetzung ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson02.order.001
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: word_order
+  frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist die genannte Augenfarbe.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson02.translate.002
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: translation
+  frame:
+    text: Ihre Augen sind {item}.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Ihre Augen sind {item}.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+- content_key: practice.de-en.en.a1.unit31.lesson02.choose.003
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} beschreibt das Aussehen einer Person.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson02.translate.004
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Die englische Übersetzung ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-en.en.a1.unit31.lesson02.translate.002.volume_order.005
+  lesson_content_key: en.a1.unit31.lesson02.eyes_and_description
+  type: word_order
+  frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: eye_color
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Her eyes are {item}
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Her eyes are {item}
+    language_code: en
+    direction: ltr
