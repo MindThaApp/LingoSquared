@@ -232,6 +232,32 @@ duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target l
 * Media keys: slugs of the other files of the course are reserved, so batches derived in separate runs never collide.
 * Batches can be authored in parallel with one `--work` dir per batch (own `--first-unit`); inject them one after the other.
 
+## Arabic target (`ar`, first RTL target)
+
+`CFG["ar"]` reuses the generic switches of the German/French/Russian targets (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds
+`script="arabic"` and `arabic_punct`:
+
+* Script and slugs: `slug()` writes the consonant skeleton of Arabic text (`TRANSLIT_AR`: `ahb_alqraaa`), so keys are Latin like the other targets. `boundary_strip` also
+  drops `؟ ، ؛`. Target text gets `؟ ، ؛` automatically (a Latin `? , ;` next to Arabic letters is folded in `Plan.names`; English fields keep Latin punctuation); the full stop stays `.`
+  like the existing units. Cast: `--names Lotte=ليلى,...` for the target text, `--names-en Lotte=Layla,...` for every English field.
+* **Tashkeel decision**: no harakat in A1 target text (lint `HARAKAT`). The existing en-ar A1 text is unvocalised (97 % of Arabic strings; only B2 carries some), the compiler
+  tokenizer uses `\w`, which does not match harakat, so a vocalised card would split a word into several tokens (introduced_tokens, tiles, lexemes, tested spans), and
+  the grader strips harakat from both sides anyway (`STRIPPED_FORMATTING_CHARS`), so answers are accepted with or without them. The vowels are given in the card notes as a
+  transliteration in parentheses (`مال (māl)`), as in units 01-24. Vocalised audio text for TTS needs a separate field (e.g. a `tts_text` on media assets) or an auto-diacritizer in
+  `render_audio.py`; it is deliberately not stored in the realization text.
+* Attached particles and pronouns: `و ف ب ل ك` and `سـ` are written joined and are ONE token / tile / lexeme (`وقهوة`, `بالبطاقة`, `سأدفع`), the existing convention. `CLITIC` flags a
+  detached one. The grader additionally accepts a detached `و` typed by the learner (`_ARABIC_DETACHED_WAW_RE`).
+* Definite article `ال` is attached. `ARTICLE` flags `لال` (ل + ال = لل) and a doubled article. Sun letters only matter in transliteration: `SUNLETTER` flags `al-shams` in English
+  fields (`ash-shams`, `ar-raʾs`; `al-qamar` is right).
+* Dual: `DUAL` flags the numeral `اثنان/اثنين` followed by a noun (two books = `كتابان`, not `اثنان كتب`).
+* Gender mode `ar` (`GENDER`; `#alt`): after `أنا`/`أنت` a predicate adjective or agent noun (`متعب/متعبة`, `طالب/طالبة`), a 2nd-person present verb (`تريد/تريدين`,
+  after a question word or `أنت`) and an imperative (`اشرب/اشربي`, `قل/قولي`) need the other gender as an accepted alternate. 1st-person verbs, `أنا`/`أنت` and the suffix `ـك` are the
+  same for both genders in unvocalised text, so they need nothing. The lists (`AR_PRED_M`, `AR_IMP_M2F`) are heuristics: extend them when a lint misses a form.
+* Hamza / alef / yeh / teh marbuta: one spelling per word, written correctly (أ إ آ ؤ ئ, ي, ك, ة, ى). The grader treats a hamza-only slip as "almost" (never auto-accepted) and the
+  `ة/ه`, `ى/ي` pairs as wrong, so variants are NOT added to accepted answers. `AR_MIXED` (warn) flags a word that the course spells two ways (it would become two lexemes);
+  `SCRIPT` flags Latin letters and Persian forms (ی ک پ چ گ), `ARDIGIT` Arabic-Indic digits (the course uses 5).
+* Register: MSA at A1 has no tu/vous split; `REGISTER` never fires. Notes quote Arabic followed by a transliteration in parentheses.
+
 ## Limits and pitfalls
 
 * The overlay English (glosses, English options, pair meanings) is reused unchanged, so a translation must keep the meaning of the
