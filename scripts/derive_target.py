@@ -798,6 +798,7 @@ class UnitDeriver:
                     for pr in a["value"]:
                         pr["left"] = self.pr(pr["left"])
                         pr["right"] = self.pr(pr["right"])
+            self.pair_collisions(ck, e.get("pairs") or [])
         elif has_opts and ans_target:
             canon_tr = self.T_by_norm(ov["correct_option"]) or self.T(ov["correct_option"], "option")
             ov["correct_option"] = canon_tr
@@ -875,6 +876,20 @@ class UnitDeriver:
         if self.p.strict_residual and self.residual(self.en(right)):
             return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
         return self.en(right)
+
+    def pair_collisions(self, ck: str, pairs: list[dict]) -> None:
+        """The grader keys a matching answer by the normalised left (and right) text: two sides that differ only by
+        punctuation or case collapse into one key and the exact answer grades wrong (en-es unit69 'esta incluido.' / '?')."""
+        for side in ("left", "right"):
+            seen: dict[str, str] = {}
+            for pr in pairs:
+                txt = pr[side]
+                if txt.startswith("<<"):
+                    continue
+                k = norm(txt)
+                if k in seen:
+                    self.flag(ck, "PAIR_COLLISION", f"matching {side} items {seen[k]!r} and {txt!r} normalise to the same key; reword one")
+                seen[k] = txt
 
     def real_prompt_langs(self, e: dict) -> set[str]:
         return {b.get("language_code") for b in (e.get("prompt") or {}).get("target_blocks") or []}

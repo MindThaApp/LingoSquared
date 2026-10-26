@@ -589,3 +589,14 @@ def test_italian_gender_alternate_is_required(dt):
     assert "GENDER" in _it_lints(dt, "Mi sento stanca.", "answer", ["Mi sento stanca."])
     assert "GENDER" not in _it_lints(dt, "Sono felice.", "answer", ["Sono felice."])    # -e adjectives are common gender
     assert "GENDER" not in _it_lints(dt, "Sono di Roma.", "answer", ["Sono di Roma."])
+
+
+def test_pair_collision_lint_catches_sides_that_differ_only_by_punctuation(dt):
+    """en-es unit69: two matching lefts that normalise to the same key grade the correct answer wrong."""
+    flags = []
+    stub = SimpleNamespace(flag=lambda key, code, msg, level="error": flags.append(code))
+    dt.UnitDeriver.pair_collisions(stub, "k", [dict(left="Dov'è la stazione?", right="where"), dict(left="Dov'è la stazione", right="station")])
+    assert flags == ["PAIR_COLLISION"]
+    flags.clear()
+    dt.UnitDeriver.pair_collisions(stub, "k", [dict(left="il parco", right="the park"), dict(left="la piazza", right="the square")])
+    assert flags == []
