@@ -902,7 +902,7 @@ class Plan:
         if getattr(self, "_english", None) is None:
             counts: Counter = Counter()
             for d in sorted((CONTENT / "overlays").iterdir()):
-                if not d.is_dir() or self.src in d.name.split("-"):
+                if not d.is_dir() or self.src in d.name.split("-") or d.name == self.new_pair:
                     continue
                 for f in d.glob("*.yaml"):
                     counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
