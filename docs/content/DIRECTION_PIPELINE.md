@@ -214,6 +214,20 @@ checks afterwards.
 * Media keys: slugs of the other files of the course are reserved, so batches derived in separate runs never collide.
 * Batches can be authored in parallel with one `--work` dir per batch (own `--first-unit`); inject them one after the other.
 
+## Romanian target (`ro`)
+
+`CFG["ro"]` reuses the generic switches of the French target (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
+
+* `fold_chars`: translations are folded from cedilla (ş ţ) to comma-below (ș ț). The grader (`ROMANIAN_CEDILLA_FOLD`) accepts both for learner input, but the corpus and the
+  tiles use only the comma-below forms, so no cedilla variant is ever listed as an accepted answer.
+* `ORTHO` lint (`diacritics: "ro"`): cedilla characters; `â` at the start or end of a word; `î` inside a word (except after the prefixes ne- re- pre- dez- sub- ...).
+* Register `tu` / `dumneavoastră` (`REGISTER`; the plural `voi`/`vă` for a Dutch `jullie` is acked). Hyphenated clitics (`mi-e`, `m-am`, `nu-mi`) are one token and one tile.
+* Gender mode `ro`: after `sunt / mă simt / eram / m-am simțit` an adjective, participle or agent noun gets the other gender as a required alternate (`GENDER`; `#alt`):
+  obosit/obosită, student/studentă, profesor/profesoară, vânzător/vânzătoare, bolnav/bolnavă. Nouns have three genders (the neuter is masculine in the singular and
+  feminine in the plural); the definite article is an enclitic suffix (casă / casa), so tiles and `tested` bags must use the form the card introduced (`bicicleta`, not `bicicletă`).
+* Cast: `Lotte=Ana, Omar=Mihai` (existing storyline) and Romanian names for the rest; avoid vocative/genitive/dative forms of the mapped female names (`pentru Lotte`).
+* Prices are lei: `en_override.json` with `"~euro": "leu"`, `"~euros": "lei"`.
+
 ## Limits and pitfalls
 
 * The overlay English (glosses, English options, pair meanings) is reused unchanged, so a translation must keep the meaning of the
