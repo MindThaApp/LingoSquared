@@ -90,3 +90,69 @@ Dari/Iranian lexis note in the translator brief.
 * Native review is not automated. Treat the first derived direction per language like any new-language lane.
 * AUTHORING_GUIDE section 8 (do not consult sibling files while authoring) is intentionally bypassed: the translator
   adapts, it does not author. The review pass must therefore look for calques of the sibling's phrasing.
+
+# Deriving a new TARGET course (en->T) from a deeper target course: `scripts/derive_target.py`
+
+`derive_direction.py` reuses one target course across learner languages. `derive_target.py` is the other axis: the learner
+language stays English and the **target** language changes. It rebuilds A1 units of a deep course (en-nl: 67 A1 units; the deepest
+A1 course, versus es 15, fr 14, de 24, it 24) as units of a thin one (en-es). The English side (glosses, titles, instructions, English
+options, pair meanings, accepted English answers) is reused as is; only the target side is translated or authored.
+
+```bash
+SRC=en-nl; NEW=en-es; U="a1_unit23_money a1_unit16_health"
+python3 scripts/derive_target.py extract --source $SRC --new $NEW --units $U --first-unit 45 --names Lotte=Elena,Omar=Mateo
+#   -> .local/derive-target/$NEW/  atoms.src.json (translate)  author.src.json (author)  *.ctx.json  atoms.view.tsv  GUIDE.md
+# write atoms.tr.json {id: text} and author.tr.json {slot: text}
+python3 scripts/derive_target.py status                 # missing ids + lint flags (re-reads the work dir saved by extract)
+python3 scripts/derive_target.py lexemes                # tokens that still need "gloss | pos"; write lexemes.tr.json
+python3 scripts/derive_target.py inject                 # realizations, overlays, en-es manifest line, backfill block
+python3 scripts/derive_target.py check                  # compiler validate + compile of the course, backfill --dry-run
+```
+
+`--first-unit` defaults to the next free unit number of the target course (es numbers A1-B1 continuously; derived units are A1 in
+the A1 group). Coordinate it with other agents adding units to the same course: content keys must be unique.
+
+## What is translated, derived, authored
+
+| Piece | How |
+|---|---|
+| Teaching targets, examples, unit/lesson titles, prompt texts, media texts, pair target sides | **atoms**: translated once per distinct text; reused wherever the exact text occurs, including quoted inside English feedback |
+| Media text that is a concatenation of cards (dialogues) or a card minus its speaker label | derived from the translated cards (cannot drift from the card text) |
+| `introduced_tokens` | derived: tokens of the translated target + its examples |
+| `tested_text` | derived when it is a sentence atom or the answer; otherwise **authored** (`#tested`: comprehension spans, matching word bags; must occur in the audio text) |
+| `word_bank` tiles | derived from the translated answer and deterministically scrambled; source tiles with distractors become an authored `#bank` |
+| Punctuation variants of accepted answers | derived (`X.` and `X`, like the source); real alternatives are authored (`#ans` with `||`, extra `#alt` on any exercise) |
+| Distractors for target-language options, fill-in-blank frames and fillers, free-production answers | **authored** (`#dist`, `#frame`, `#ans`): wrong answers are plausible errors in the new language, never translations of the old errors |
+| Notes and feedback that mention the source language (`*italic*` spans, unit cross references, leftover source words) | **authored** (`#note`, `#feedback`, `#instruction`): rewritten for the new language |
+| `grammar_note` cards that explain source-language grammar | translated slot flagged `rewrite` + `GRAMMAR_REWRITE`: write the new language's own explanation |
+| Content keys | slugs re-derived from the translation (lesson, teaching, media); unit number remapped |
+| Cast names | `--names` maps them after translation (keep genders aligned: Lotte/Elena, Omar/Mateo) |
+| Lexeme backfill | `lexemes` lists the new tokens; `inject` writes a marked, mergeable block into `backfill_lexemes_<x>_<t>.py` (`DERIVED_TARGET_GLOSSES`, `DERIVED_TARGET_POS`) |
+
+Not derived: practice packs (hand-authored per language, see PRACTICE_PACK_RECIPE.md: the new units have no pack and so no
+Endless Practice or checkpoint pool until one is written), audio (media assets stay `pending_generation`), native review.
+
+## Lints (`status` / `inject`; errors block inject, acknowledge false positives in `ack.json` as `"<id>:<FLAG>": "reason"`)
+
+* `GENDER` (es, it): a speaker-gendered predicate in a learner-produced answer (`Estoy cansado`) needs the other gender as an
+  accepted alternate (`#alt`). It caught a missing feminine form in the pilot.
+* `REGISTER`: the source marks formal (`u`/`uw`) or informal (`je`/`jij`) and the translation reads the opposite register.
+  Atom context lists `register` so the translator keeps tu/usted aligned with the source roles.
+* `CONTRACTION`: an obligatory contraction was not applied (es `de el`->`del`, fr `de le`->`du`, it `di il`->`del`). Never add the
+  uncontracted form as a variant. English contractions (`don't`/`do not`) are folded by the shared grader and must not be listed
+  as variants either (AUTHORING_GUIDE section 18).
+* `TILES`: an accepted word-order variant uses other words than the tiles (the bank is built from the canonical answer).
+* `GLOSS_KEY`: a reading card's gloss key must be one whole word of the translated card text (multi-word phrases fail the compiler).
+* `VARIANTS` (warn): the source accepted more distinct forms than the translation gave.
+* `PAIR_RIGHT_TARGET`, `GRAMMAR_REWRITE`, `LEFTOVER` (warn/error): review hints; `LEFTOVER` means source-language words survived in
+  an English field.
+
+## Limits and pitfalls
+
+* The overlay English (glosses, English options, pair meanings) is reused unchanged, so a translation must keep the meaning of the
+  source sentence. Where Spanish needs another construction (`Ik lees graag` -> `Me gusta leer`), choose the translation that matches the
+  English gloss; an example whose words the card never introduces is fixed by example tokens being introduced on the card.
+* Culture is not translated: Dutch-specific topics (bike rental, waste separation, gemeente) need a localisation decision, not a
+  translation. Pick portable units first (health, money, hobbies, phone, appearance, animals, colours, seasons, restaurant).
+* Native review of the derived target text is required; derived units are written `unreviewed` / `native_speaker_review`.
+* Tested with en-nl as source only; other sources need their own `CFG` formal/informal markers in the script.
