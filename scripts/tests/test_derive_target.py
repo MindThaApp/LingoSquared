@@ -367,3 +367,157 @@ def test_unit_numbers_follow_the_target_course_and_names_are_whole_words(dt, tmp
     assert plan.names("Lotte and Lottery, Omar") == "Elena and Lottery, Mateo"
     assert dt.strip_punct("¿Cuánto cuesta?") == "Cuánto cuesta"
     assert dt.slug("¿Cuánto cuesta el café?") == "cuanto_cuesta_el_cafe"
+
+
+# ---------------------------------------------------------------------------
+# German (first case-sensitive target): register, agent-noun gender, contractions, case, umlaut slugs, citation aliases
+# ---------------------------------------------------------------------------
+BACKFILL_DE = '''"""fixture"""
+GLOSSES = {"Hund": "dog", "ich": "I", "bin": "am"}
+POS_SETS = {"verb": {"bin"}, "pronoun": {"ich"}}
+CITATION_FORMS = {"Ich": "ich"}
+
+
+def normalize(token):
+    return CITATION_FORMS.get(token, token)
+
+
+POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
+'''
+ATOMS_DE = {
+    "Hoeveel kost het?": "Wie viel kostet der Hund?",
+    "Beginnen": "Anfangen",
+    "Test": "Prüfung",
+    "Ziek en moe zijn bijvoeglijke naamwoorden en gebruiken zijn in het Nederlands.":
+        "Müde und krank sind Adjektive; mit sein sagt man: Ich bin müde.",
+    "Lotte: Hoi.": "Lotte: Hallo.",
+    "Omar: Ik ben moe.": "Omar: Ich bin Student.",
+    "moe": "Student",
+    "a rest": "eine Pause",
+}
+AUTHOR_DE = {
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#dist": "Wie viel kostet Hund? || Wie kostet der Hund?",
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#feedback": "*Wie viel* asks for the price; the noun *Hund* keeps its capital.",
+    "nl.a1.unit05.lesson01.exercise02.order_cost#feedback": "The verb is second: Wie viel kostet ...",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#frame": "Wie viel ___ der Hund?",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#ans": "kostet",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#feedback": "The verb is kostet.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#ans": "Ich bin Student.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "Ich bin Studentin.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#feedback": "Ich bin Student.",
+    "nl.a1.unit05.lesson01.exercise05.match#tested": "Student Hund",
+    "nl.a1.unit05.lesson01.exercise05.match#feedback": "Student means student.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Felix says: Ich bin Student.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "Ich bin Student",
+    "nl.a1.unit05.lesson01.teach.hoeveel#note": "*Kostet* is the third-person form of *kosten*.",
+    "a1_unit05_test#desc": "Beginner German for a test unit.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Sein with adjectives",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Müde and krank are adjectives; with sein you say: Ich bin müde.",
+}
+
+
+@pytest.fixture()
+def dt_de(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("derive_target_de_under_test", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for name, sub in (("ROOT", ""), ("CONTENT", "docs/content"), ("MANIFEST", "scripts/manifest.d/content")):
+        monkeypatch.setattr(mod, name, tmp_path / sub if sub else tmp_path)
+    c = tmp_path / "docs/content"
+    base_r = dict(BASE_REAL, target_language="de", course={"realization_key": "de.a1"})
+    base_o = dict(BASE_OVL, target_language="de", answer_policy={"accent_marks": "strict"})
+    for path, obj in ((c / "realizations/nl/a1_unit05_test.yaml", src_realization()),
+                      (c / "overlays/en-nl/a1_unit05.yaml", src_overlay()),
+                      (c / "realizations/de/a1_unit01_base.yaml", base_r),
+                      (c / "overlays/en-de/a1_unit01.yaml", base_o)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    m = tmp_path / "scripts/manifest.d/content"
+    m.mkdir(parents=True)
+    (m / "en-de.txt").write_text(
+        "en-de|docs/content/realizations/de/a1_unit01_base.yaml|docs/content/overlays/en-de/a1_unit01.yaml\n", encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_de.py").write_text(BACKFILL_DE, encoding="utf-8")
+    return mod
+
+
+def de_run(dt, tmp_path, author=None, atoms=None):
+    a = args(tmp_path, new="en-de", first_unit=54, names="Lotte=Anna,Omar=Felix")
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    table = atoms or ATOMS_DE
+    (work / "atoms.tr.json").write_text(json.dumps({i: table[t] for i, t in src.items() if t in table}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author or AUTHOR_DE, ensure_ascii=False), encoding="utf-8")
+    return a
+
+
+def test_german_register_gender_contractions_and_slugs(dt):
+    assert dt.register_of("Wie heißen Sie?", "de") == "formal"
+    assert dt.register_of("Das ist Ihr Hund.", "de") == "formal"
+    assert dt.register_of("Sie hat Hunger.", "de") is None                      # sentence-initial Sie: she/they, not formal
+    assert dt.register_of("Kannst du mir helfen?", "de") == "informal"
+    assert dt.agent_gender_alt("Ich bin Student.") == "Ich bin Studentin."
+    assert dt.agent_gender_alt("Ich bin eine Ärztin.") == "Ich bin ein Arzt."
+    assert dt.agent_gender_alt("Ich bin müde.") is None
+    assert dt.slug("Größe und Gefühle", 4, translit=True) == "groesse_und_gefuehle"
+    assert dt.slug("Größe", 4) == "groe"                                        # other targets keep the old ascii folding
+    import re
+    assert any(re.search(p, "Ich gehe in dem Park.") for p, _ in dt.CFG["de"]["contractions"])
+
+
+def test_german_keeps_case_and_derives_capitalised_tiles(dt_de, tmp_path):
+    dt = dt_de
+    a = de_run(dt, tmp_path)
+    dt.cmd_lexemes(a)
+    lex = json.loads((Path(a.work) / "lexemes.src.json").read_text(encoding="utf-8"))
+    assert "Ich" not in lex and "Hund" not in lex                                # known through normalize()/GLOSSES
+    (Path(a.work) / "lexemes.tr.json").write_text(json.dumps({t: "g | noun" for t in lex}, ensure_ascii=False), encoding="utf-8")
+    dt.cmd_inject(a)
+    real = yaml.safe_load((tmp_path / "docs/content/realizations/de/a1_unit54_test.yaml").read_text(encoding="utf-8"))
+    ex = {e["content_key"].split(".")[-1]: e for e in real["units"][0]["lessons"][0]["exercises"]}
+    assert "order_wie_viel_kostet" in ex                                          # exercise key re-derived from the translation
+    assert ex["order_wie_viel_kostet"]["tested_text"] == "Wie viel kostet der Hund"        # not casefolded
+    assert sorted(ex["order_wie_viel_kostet"]["word_bank"]) == sorted(["Wie", "viel", "kostet", "der", "Hund"])
+    assert any(v["tested_text"] == "Ich bin Student" for v in ex.values())
+    assert real["media_assets"][0]["text"] == "Anna: Hallo. Felix: Ich bin Student."
+    assert real["units"][0]["lessons"][0]["teaching"][0]["content_key"].endswith(".teach.wie_viel_kostet")
+    ovl = yaml.safe_load((tmp_path / "docs/content/overlays/en-de/a1_unit54.yaml").read_text(encoding="utf-8"))
+    vals = [x["value"] for k, v in ovl["exercises"].items() if "write_" in k and "ich_bin" in k for x in v["accepted_answers"]]
+    assert vals == ["Ich bin Student.", "Ich bin Student", "Ich bin Studentin.", "Ich bin Studentin"]
+
+
+def test_german_gender_and_case_lints(dt_de, tmp_path):
+    dt = dt_de
+    author = {k: v for k, v in AUTHOR_DE.items() if not k.endswith("write_tired#alt")}
+    a = de_run(dt, tmp_path, author)
+    plan = dt.make_plan(a)
+    plan.build_all()
+    assert "GENDER" in {f["code"] for f in dt.active_flags(plan)}
+    # a lowercase known noun is a CASE error
+    atoms = dict(ATOMS_DE, **{"Hoeveel kost het?": "Wie viel kostet der hund?"})
+    a = de_run(dt, tmp_path, None, atoms)
+    plan = dt.make_plan(a)
+    plan.build_all()
+    assert "CASE" in {f["code"] for f in dt.active_flags(plan)}
+
+
+def test_citation_alias_block_is_written_and_applied(dt_de, tmp_path):
+    dt = dt_de
+    a = de_run(dt, tmp_path, None, dict(ATOMS_DE, **{"Hoeveel kost het?": "Hast der Hund Hunger?"}))
+    work = Path(a.work)
+    (work / "lexemes.tr.json").write_text(json.dumps(
+        {"Hast": "=hast", "hast": "you have (informal) | verb", "der": "the | particle", "Hunger": "hunger", "Student": "student",
+         "Hallo": "hello | phrase", "Anna": "Anna | proper_noun", "Felix": "Felix | proper_noun", "Eine": "=eine", "eine": "a | particle",
+         "Pause": "break", "Müde": "=müde", "müde": "tired | adjective", "Wie": "=wie", "wie": "how | adverb"}, ensure_ascii=False), encoding="utf-8")
+    dt.cmd_lexemes(a)
+    toks = json.loads((work / "lexemes.ctx.json").read_text(encoding="utf-8"))
+    assert "Hast" not in toks and "hast" in toks                                  # alias resolved; the citation form is glossed in the tr file
+    tr = json.loads((work / "lexemes.tr.json").read_text(encoding="utf-8"))
+    tr.update({t: "g | noun" for t in toks if t not in tr})
+    (work / "lexemes.tr.json").write_text(json.dumps(tr, ensure_ascii=False), encoding="utf-8")
+    dt.cmd_inject(a)
+    bf = (tmp_path / "scripts/backfill_lexemes_en_de.py").read_text(encoding="utf-8")
+    ns: dict = {}
+    exec(bf, ns)
+    assert ns["normalize"]("Hast") == "hast" and ns["GLOSSES"]["hast"].startswith("you have")
+    assert ns["POS_SETS"]["verb"] >= {"hast", "bin"} and "hast" not in ns["POS_SETS"]["noun"]
