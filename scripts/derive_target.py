@@ -569,9 +569,14 @@ class UnitDeriver:
         subs: dict[str, str] = {}
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
+                if " " not in text and text.casefold() in self.p.english_words():
+                    continue                         # a source word spelled like an English word (water, tablet, film) is English here
+                pat = re.compile(r"(?<![\w])" + re.escape(text) + r"(?![\w])")      # never inside a longer word (tablet|s, open|ing)
+                if not pat.search(out):
+                    continue
                 ph = f"\x00{len(subs)}\x00"
                 subs[ph] = self.T(text, "quote")
-                out = out.replace(text, ph)
+                out = pat.sub(ph, out)
         out = self.en(out)
         left = self.residual(re.sub(r"\x00\d+\x00", " ", out))
         gpat = CFG.get(self.p.src, {}).get("grammar")
@@ -916,6 +921,11 @@ class UnitDeriver:
             sp_ = tgt["speaker"]
             # a role label ("de medewerker") is source-language text; a cast name is mapped
             tgt["speaker"] = self.T(sp_, "speaker") if (sp_[:1].islower() or " " in sp_) else self.p.names(sp_)
+            if CFG.get(self.p.tgt, {}).get("script") == "cyrillic" and (sp_[:1].islower() or " " in sp_):
+                tgt["speaker"] = tgt["speaker"][:1].upper() + tgt["speaker"][1:]       # ru speaker labels are case-sensitive in the validator (Сотрудник:)
+            lab = re.match(r"([^\W\d_][^:\n]{0,30}?)\s*:", tgt["text"])
+            if lab and lab.group(1).casefold() == str(tgt["speaker"]).casefold():
+                tgt["speaker"] = lab.group(1)             # the structured speaker must spell the label as the card (and the audio text) does
         exs = t.get("example")
         for e in ([exs] if isinstance(exs, dict) else (exs or [])):
             e["text"] = self.T(e["text"], "example")
