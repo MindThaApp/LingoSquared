@@ -677,6 +677,8 @@ def cmd_inject(args):
         if not args.force:
             sys.exit(f"inject aborted: {len(problems)} problem(s). Fix the .tr.json files (or --force).")
 
+    for g in seed_content_manifests(args.sibling, args.new, args.levels):
+        print(f"seeded scripts/manifest.d/content/{g}.txt from the sibling")
     write_backfill(args, work, units)
     tag_universe = new_direction_tags(args.new)
     dropped_templates = 0
@@ -779,13 +781,54 @@ def new_direction_tags(pair: str) -> set | None:
 
 
 def update_manifests(cm_new, new_pair, pack_paths):
-    """Write one file per group/pack under scripts/manifest.d/ (no shared-file appends)."""
+    """Write one file per group/pack under scripts/manifest.d/ (no shared-file appends).
+
+    Content group files are overwritten (one file per group). The practice file is shared by every
+    level of the pair, so it is merged with what is already there: union of pack paths, sorted, no duplicates.
+    """
     MANIFEST.mkdir(parents=True, exist_ok=True)
     for g, (reals, ovs) in cm_new.items():
         (MANIFEST / f"{g}.txt").write_text(f"{g}|{' '.join(reals)}|{' '.join(ovs)}\n", encoding="utf-8")
     if pack_paths:
         PRACTICE_MANIFEST.mkdir(parents=True, exist_ok=True)
-        (PRACTICE_MANIFEST / f"{new_pair}.txt").write_text(f"{new_pair}|{' '.join(pack_paths)}\n", encoding="utf-8")
+        dest = PRACTICE_MANIFEST / f"{new_pair}.txt"
+        existing: list[str] = []
+        if dest.exists():
+            existing = [p for parts in read_manifest_file(dest).get(new_pair, []) for p in parts]
+        merged = sorted(set(existing) | set(pack_paths))
+        dest.write_text(f"{new_pair}|{' '.join(merged)}\n", encoding="utf-8")
+
+
+def read_manifest_file(path: Path) -> "OrderedDict[str, list[list[str]]]":
+    out: "OrderedDict[str, list[list[str]]]" = OrderedDict()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip() or line.startswith("#") or "|" not in line:
+            continue
+        parts = line.split("|")
+        out[parts[0]] = [p.split() for p in parts[1:]]
+    return out
+
+
+def seed_content_manifests(sibling: str, new_pair: str, levels: list[str]) -> list[str]:
+    """Create scripts/manifest.d/content/<new>-<level>.txt from the sibling's file when missing.
+
+    The generated backfill imports these groups, so they must exist before inject loads it. The seeded line
+    points at the sibling's realizations and overlays; update_manifests overwrites it with the real one.
+    """
+    created: list[str] = []
+    MANIFEST.mkdir(parents=True, exist_ok=True)
+    for sib_g, new_g in zip(group_names(sibling, levels), group_names(new_pair, levels)):
+        dest = MANIFEST / f"{new_g}.txt"
+        src = MANIFEST / f"{sib_g}.txt"
+        if dest.exists() or not src.exists():
+            continue
+        text = src.read_text(encoding="utf-8")
+        lines = [l for l in text.splitlines() if l.startswith(f"{sib_g}|")]
+        if not lines:
+            continue
+        dest.write_text(f"{new_g}|" + lines[0].split("|", 1)[1] + "\n", encoding="utf-8")
+        created.append(new_g)
+    return created
 
 
 def py_dict_literal(d: dict[str, str]) -> str:
@@ -794,6 +837,66 @@ def py_dict_literal(d: dict[str, str]) -> str:
         lines.append(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)},")
     lines.append("}")
     return "\n".join(lines)
+
+
+def _top_assign(node):
+    """(name, value node) of a module-level simple assignment, else (None, None)."""
+    if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
+        return node.targets[0].id, node.value
+    if isinstance(node, ast.AnnAssign) and isinstance(node.target, ast.Name) and node.value is not None:
+        return node.target.id, node.value
+    return None, None
+
+
+def _existing_levels(text: str) -> list[str]:
+    for node in ast.parse(text).body:
+        name, val = _top_assign(node)
+        if name == "LEVELS" and isinstance(val, ast.Dict):
+            return [k.value for k in val.keys if isinstance(k, ast.Constant)]
+    return []
+
+
+def _gloss_level(name: str) -> str:
+    """Level a gloss dict belongs to: A2_/B1_ prefix, otherwise the A1 base table."""
+    m = re.match(r"([AB][12]|C1)_", name)
+    return m.group(1).lower() if m else "a1"
+
+
+def merge_backfill(generated: str, existing: str, injected: set) -> str:
+    """Keep every level of the existing backfill that is not being injected.
+
+    Gloss dicts of non-injected levels and the LEVELS / GLOSSES_BY_LEVEL entries of non-injected levels are taken
+    verbatim from the existing file (hand edits survive); injected levels come from the generated text.
+    """
+    ex_src = {}
+    for node in ast.parse(existing).body:
+        name, val = _top_assign(node)
+        if name and isinstance(val, ast.Dict):
+            ex_src[name] = (node, val)
+    gen_lines = generated.split("\n")
+    ex_lines = existing.split("\n")
+    repl: list[tuple[int, int, str]] = []
+    for node in ast.parse(generated).body:
+        name, val = _top_assign(node)
+        if not name or not isinstance(val, ast.Dict) or name not in ex_src:
+            continue
+        ex_node, ex_val = ex_src[name]
+        if name in ("LEVELS", "GLOSSES_BY_LEVEL"):
+            ex_items = {k.value: ast.get_source_segment(existing, v) for k, v in zip(ex_val.keys, ex_val.values)
+                        if isinstance(k, ast.Constant)}
+            parts = []
+            for k, v in zip(val.keys, val.values):
+                key = k.value  # type: ignore[union-attr]
+                seg = ex_items[key] if key not in injected and key in ex_items else ast.get_source_segment(generated, v)
+                parts.append(f"{json.dumps(key)}: {seg}")
+            first = gen_lines[node.lineno - 1]
+            repl.append((node.lineno - 1, node.end_lineno, first.split("=", 1)[0] + "= {" + ", ".join(parts) + "}"))
+        elif re.search(r"GLOSS|SENSE_FIXES|OVERRIDES", name) and not name.startswith("_") \
+                and _gloss_level(name) not in injected:
+            repl.append((node.lineno - 1, node.end_lineno, "\n".join(ex_lines[ex_node.lineno - 1:ex_node.end_lineno])))
+    for start, end, text in sorted(repl, reverse=True):
+        gen_lines[start:end] = text.split("\n")
+    return "\n".join(gen_lines)
 
 
 def write_backfill(args, work: Path, units: list[Unit]) -> None:
@@ -826,7 +929,12 @@ def write_backfill(args, work: Path, units: list[Unit]) -> None:
     repl: list[tuple[int, int, str]] = []
     aliases: dict[str, str] = {}
     all_gloss = set(gloss_dicts(mod))
-    keep_levels = set(args.levels)
+    dest = ROOT / f"scripts/backfill_lexemes_{new_src}_{target}.py"
+    existing = dest.read_text(encoding="utf-8") if dest.exists() else None
+    injected = set(args.levels)
+    keep_levels = set(injected)
+    if existing is not None:
+        keep_levels |= set(_existing_levels(existing))
     for node in tree.body:
         tname = None
         if isinstance(node, ast.Assign) and len(node.targets) == 1 and isinstance(node.targets[0], ast.Name):
@@ -862,15 +970,17 @@ def write_backfill(args, work: Path, units: list[Unit]) -> None:
     out = out.replace(f"TO_{S}_GLOSS", f"TO_{N}_GLOSS")
     out = out.replace(f'source_language="{sib_src}"', f'source_language="{new_src}"')
     out = out.replace(lang_name(sib_src), lang_name(new_src))
-    out = re.sub(r'^(#![^\n]*\n)""".*?"""', lambda m_: m_.group(1) + _docstring(args, units, new_src, target), out, count=1, flags=re.S)
-    dest = ROOT / f"scripts/backfill_lexemes_{new_src}_{target}.py"
+    doc_levels = sorted(keep_levels)
+    out = re.sub(r'^(#![^\n]*\n)""".*?"""', lambda m_: m_.group(1) + _docstring(args, doc_levels, new_src, target), out, count=1, flags=re.S)
+    if existing is not None:
+        out = merge_backfill(out, existing, injected)
     dest.write_text(out, encoding="utf-8")
     dest.chmod(0o755)
     print(f"wrote {dest.relative_to(ROOT)} ({sum(len(d) for d in new_dicts.values())} glosses)")
 
 
-def _docstring(args, units, new_src, target) -> str:
-    lv = ", ".join(sorted({u.level for u in units}))
+def _docstring(args, levels, new_src, target) -> str:
+    lv = ", ".join(levels)
     return f'''"""Idempotently backfill {args.new} ({lang_name(target)} target, {lang_name(new_src)} source) lexemes.
 
 Generated by scripts/derive_direction.py from scripts/backfill_lexemes_{args.sibling.replace("-", "_")}.py
