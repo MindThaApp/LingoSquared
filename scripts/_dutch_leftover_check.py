@@ -55,7 +55,7 @@ def load(path: Path):
 # hier, wie, war, dag, haar, men, over, op, om, of, an, er, ja, so, zo, nu, al, hun, ze, je, te, ons.
 NL_WORDS = set("""het een niet zijn ik jij wij jullie zegt zeggen heeft hebben naar voor maar ook geen mijn
 waarom welke kaartje alsjeblieft graag bedankt gaat gaan wordt worden kunnen willen wil moet moeten elke veel altijd
-nooit bij uit aan wel toch nee goed deze onze zij hij dank alstublieft tot straks vandaag morgen gisteren vanavond
+nooit bij aan wel toch nee goed deze onze zij hij dank alstublieft tot straks vandaag morgen gisteren vanavond
 vanmorgen dinsdag woensdag donderdag vrijdag zaterdag zondag maandag mevrouw meneer lekker eigenlijk misschien
 ontbijt ontbijten koffie tafel kamer huis vraagt antwoordt antwoord vragen woord woorden zin zinnen bijvoorbeeld
 tussen zonder omdat dus nog alle allemaal heel erg zeer mag mogen zal zullen zou zouden kan kon konden
@@ -182,10 +182,31 @@ def dutch_vocab() -> frozenset:
 
 
 @functools.lru_cache(maxsize=None)
+def target_vocab_native(target: str) -> frozenset:
+    """Words of the target course's own text blocks (language_code == target) and titles-free: never English prompt text."""
+    voc: set[str] = set()
+
+    def walk(o):
+        if isinstance(o, dict):
+            if isinstance(o.get("text"), str) and o.get("language_code", o.get("language")) == target:
+                voc.update(WORD3.findall(o["text"].casefold()))
+                voc.update(w for w in TOKEN.findall(o["text"].casefold()) if len(w) == 2)
+            for v in o.values():
+                walk(v)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v)
+    for f in sorted((CONTENT / "realizations" / target).glob("*.yaml")):
+        walk(load(f))
+    return frozenset(voc)
+
+
+@functools.lru_cache(maxsize=None)
 def target_vocab(target: str) -> frozenset:
+    """Every word of the target realizations, English prompt text included (a Dutch word that the course itself uses is no leftover)."""
     voc: set[str] = set()
     for f in sorted((CONTENT / "realizations" / target).glob("*.yaml")):
-        for k, t in dd.walk_strings(load(f)):
+        for _p, t in dd.walk_strings(load(f)):
             voc.update(WORD3.findall(t.casefold()))
     return frozenset(voc)
 
@@ -237,6 +258,74 @@ def identity_hit(v: str, src: frozenset, target: str, lang: str = "en") -> bool:
     return v in src and bool(nl_markers(v, lang) or nl_only_tokens(v, target))
 
 
+# ---------------------------------------------------------------------------
+# English-side lint: fields of an en-<target> overlay that must be English but are not
+# (derive_target translated the English side of a matching pair: "museum" -> "muzeu")
+# ---------------------------------------------------------------------------
+# gloss is deliberately absent: a phrase card's gloss is the target sentence, its title the English meaning.
+EN_FIELDS = {"example_gloss", "note", "instruction", "accepted_note", "course_description"}
+
+
+@functools.lru_cache(maxsize=None)
+def english_loose() -> frozenset:
+    """Pair-lint English vocabulary: english_words() plus any word that occurs in the overlays of >= 3 en-<target> courses
+    other than en-nl (cognates and loanwords: bouquet, score, fan, stage, sea). A word quoted from one target stays out."""
+    from collections import Counter
+    cnt: Counter = Counter()
+    for d in sorted((CONTENT / "overlays").iterdir()):
+        if d.is_dir() and d.name.startswith("en-") and d.name != "en-nl":
+            seen: set[str] = set()
+            for f in d.glob("*.yaml"):
+                for _p, t in dd.walk_strings(load(f)):
+                    seen.update(WORD3.findall(t.casefold()))
+            cnt.update(seen)
+    return frozenset(english_words() | {w for w, n in cnt.items() if n >= 3})
+
+
+def _tgt_share(text: str, target: str, strip_quotes: bool = False) -> float:
+    """Share of the word tokens (>= 2 letters) that are target-course words and not English vocabulary."""
+    if strip_quotes:
+        text = re.sub(r"\*[^*]*\*|'[^']*'|\"[^\"]*\"|\u2018[^\u2019]*\u2019", " ", text)
+    toks = [t.casefold() for t in TOKEN.findall(re.sub(r"\{[^}]*\}", " ", text)) if len(t) >= 2]
+    if not toks:
+        return 0.0
+    tv, ev = target_vocab_native(target), english_loose()
+    return sum(t in tv and t not in ev for t in toks) / len(toks)
+
+
+def _pairs(node, path=()):
+    if isinstance(node, dict):
+        if isinstance(node.get("left"), str) and isinstance(node.get("right"), str):
+            yield path, node["left"], node["right"]
+        for k, v in node.items():
+            yield from _pairs(v, path + (k,))
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            yield from _pairs(v, path + (i,))
+
+
+def english_side_hits(pair: str, p: Path) -> list[str]:
+    """Matching pairs with no English side, and English-only fields (gloss / note / instruction) that are not English."""
+    learner, target = pair.split("-")
+    if learner != "en":
+        return []
+    y = load(p)
+    if "Derived by scripts/derive_target.py" not in str((y.get("review") or {}).get("notes") or ""):
+        return []                                     # hand-authored units are reviewed by native speakers; this lint guards derivation
+    out: list[str] = []
+    for path, left, right in _pairs(y):
+        same = left.casefold() == right.casefold()
+        short = len(left.split()) <= 3 and len(right.split()) <= 3 and not (left[:1].isupper() and len(left.split()) == 1 and not same)
+        if _tgt_share(left, target) >= 0.99 and _tgt_share(right, target) >= 0.99 and (same or short):
+            out.append(f"overlays/{pair}/{p.name}: {'/'.join(map(str, path))[-60:]}: pair {left!r} = {right!r} [no English side]")
+    for path, v in dd.walk_strings(y):
+        if not dd.has_words(v) or dd.overlay_role(path) is None or path[0] in ("exercises",) and path[2:3] == ("feedback",):
+            continue
+        if path[-1] in EN_FIELDS and len(TOKEN.findall(v)) >= 3 and _tgt_share(v, target, True) >= 0.8:
+            out.append(f"overlays/{pair}/{p.name}: {'/'.join(map(str, path))[-60:]}: {v[:80]!r} [English field not English]")
+    return out
+
+
 def _is_target_text(path: tuple) -> bool:
     return any(isinstance(p, str) and p in ("target", "frame", "text") for p in path)
 
@@ -282,6 +371,8 @@ def scan_pair(pair: str) -> tuple[list[str], set[str]]:
                 h, s = scan_file(kind, pair, p, learner, target)
                 out += h
                 slugs |= s
+                if kind == "overlays":
+                    out += english_side_hits(pair, p)
     d = CONTENT / "realizations" / target
     if learner == "en" and d.is_dir():                       # realizations belong to the target; scan them once, with en-<target>
         for p in sorted(d.glob("*.yaml")):
