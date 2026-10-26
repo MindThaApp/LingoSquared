@@ -1912,6 +1912,8 @@ def cmd_check(args):
         [py, "scripts/compile_content.py", "validate", "--realization", *map(str, real), "--overlay", *map(str, ovl)],
         [py, "scripts/compile_content.py", "compile", "--realization", *map(str, real), "--overlay", *map(str, ovl), "--out", str(plan.work / "compiled.json")],
         [py, f"scripts/backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}.py", "--dry-run"],
+        # Dutch text left in the derived course (English feedback/notes, target text): see scripts/_dutch_leftover_check.py
+        [py, "scripts/_dutch_leftover_check.py", "--pairs", plan.new_pair, "--quiet"],
     ):
         print("$", " ".join(cmd[:3]), "...")
         r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
