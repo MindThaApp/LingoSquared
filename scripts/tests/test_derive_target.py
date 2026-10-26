@@ -410,6 +410,7 @@ AUTHOR_DE = {
     "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Felix says: Ich bin Student.",
     "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "Ich bin Student",
     "nl.a1.unit05.lesson01.teach.hoeveel#note": "*Kostet* is the third-person form of *kosten*.",
+    "a1_unit05_test#desc": "Beginner German for a test unit.",
     "nl.a1.unit05.lesson01.teach.grammar#title": "Sein with adjectives",
     "nl.a1.unit05.lesson01.teach.grammar#gloss": "Müde and krank are adjectives; with sein you say: Ich bin müde.",
 }
