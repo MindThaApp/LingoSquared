@@ -673,7 +673,7 @@ class UnitDeriver:
                 parts = [self.T(c, "teach", None, where) for c in comps[0]]
                 joined = " ".join(parts)
                 if comps[1]:
-                    joined = re.sub(r"^[^\W\d_]+:\s*", "", joined)
+                    joined = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s*", "", joined)
                 known = self.atom_texts.get(text)
                 if known and known.startswith("d_"):
                     return self.p.derived[known]
@@ -754,6 +754,8 @@ class UnitDeriver:
         eng = self.p.english_words()
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
+                if text in self.p.names_map:
+                    continue                          # a cast name in English prose is mapped by names_en (Arjun), never quoted as target text
                 if " " not in text and text.casefold() in eng and not re.search(rf"[*'\"‘“]{re.escape(text)}", out):
                     continue                          # a bare English word that is also a source word ('game', 'sport'): not a quotation
                 pat = re.compile(rf"(?<![\w{DEV}]){re.escape(text)}(?![\w{DEV}])")         # whole words: 'game' is not inside 'games'
@@ -2119,13 +2121,13 @@ def pack_sentences(lesson: dict, O: dict, minw: int = 3, maxw: int = 11):
             texts.append((e["text"], eg[i] if i < len(eg) else None))
         for text, gloss in texts:
             raw = text
-            m = re.match(r"^[^\W\d_]+:\s+(.)", text)
+            m = re.match(rf"^(?:[^\W\d_]|[{DEV}])+:\s+(.)", text)
             if m:
                 if not (m.group(1).isupper() or m.group(1) in "¿¡"):     # "Atención: el tren ..." is not a speaker label
                     continue
-                text = re.sub(r"^[^\W\d_]+:\s+", "", text)
+                text = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s+", "", text)
                 if gloss:
-                    gloss = re.sub(r"^[^\W\d_]+:\s+", "", gloss)
+                    gloss = re.sub(rf"^(?:[^\W\d_]|[{DEV}])+:\s+", "", gloss)
             if re.search(r"[:→{}\n]", text) or len(re.findall(r"[.!?]", text)) != 1 or not re.search(r"[.!?]$", text):
                 continue
             n = len(TOKEN_WORD.findall(text))
@@ -2147,7 +2149,7 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
     for s in specs:
         tok, gl = s["token"], s["english_gloss"]
         base = re.sub(r"\s*\([^)]*\)", "", gl).split(";")[0].strip().lower()
-        if (s["part_of_speech"] in PACK_GOOD_POS and re.fullmatch(r"[^\W\d_]{3,}", tok) and tok not in excl
+        if (s["part_of_speech"] in PACK_GOOD_POS and re.fullmatch(rf"(?:[^\W\d_]|[{DEV}]){{3,}}", tok) and tok not in excl
                 and base not in seen):
             seen.add(base)
             good.append(dict(token=tok, tag=wtag(s), gloss=gl, lesson=s["lesson_content_key"], pos=s["part_of_speech"]))
