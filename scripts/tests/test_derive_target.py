@@ -922,3 +922,144 @@ def test_russian_cast_names_stay_cyrillic_in_target_text_and_latin_in_english(dt
     assert plan.names_en("Lotte: Hi, Omar!") == "Nastya: Hi, Dima!"
     b = args(tmp_path, new="en-ru", first_unit=25, names="Lotte=Настя")
     assert dt_ru.make_plan(b).names_en("Lotte") == "Настя"          # no --names-en: the single map applies to both sides (Latin targets)
+
+
+# ---------------------------------------------------------------------------
+# Hindi target (Devanagari): vowel signs stay inside words, slugs transliterate, आप/तुम, speaker gender, danda, one spelling per word
+# ---------------------------------------------------------------------------
+BACKFILL_HI = '''"""fixture"""
+GLOSSES = {"नमस्ते": "hello", "हूँ": "I am"}
+POS_SETS = {"phrase": {"नमस्ते"}}
+
+
+def normalize(token):
+    return token
+
+
+POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
+'''
+ATOMS_HI = {
+    "Hoeveel kost het?": "यह कितने का है?",
+    "Beginnen": "शुरुआत",
+    "Test": "जाँच",
+    "Ziek en moe zijn bijvoeglijke naamwoorden en gebruiken zijn in het Nederlands.":
+        "थका और बीमार विशेषण हैं।",
+    "Lotte: Hoi.": "प्रिया: नमस्ते।",
+    "Omar: Ik ben moe.": "अर्जुन: मैं थका हूँ।",
+    "moe": "थका",
+    "a rest": "आराम",
+}
+AUTHOR_HI = {
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#dist": "यह कितना का है? || यह कितने है?",
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#feedback": "*कितने* asks for the amount.",
+    "nl.a1.unit05.lesson01.exercise02.order_cost#feedback": "The question word sits before the verb.",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#frame": "यह कितने का ___?",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#ans": "है",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#feedback": "The verb is है.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#ans": "मैं थका हूँ।",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "मैं थकी हूँ।",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#feedback": "मैं थका हूँ।",
+    "nl.a1.unit05.lesson01.exercise05.match#tested": "कितने थका",
+    "nl.a1.unit05.lesson01.exercise05.match#feedback": "थका means tired.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "अर्जुन says: मैं थका हूँ।",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "मैं थका हूँ",
+    "nl.a1.unit05.lesson01.teach.hoeveel#note": "*कितने* is the masculine plural form of *कितना*.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Adjectives agree",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Tired and ill are adjectives; they agree with the speaker: मैं थका हूँ / मैं थकी हूँ.",
+}
+
+
+@pytest.fixture()
+def dt_hi(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("derive_target_hi_under_test", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for name, sub in (("ROOT", ""), ("CONTENT", "docs/content"), ("MANIFEST", "scripts/manifest.d/content")):
+        monkeypatch.setattr(mod, name, tmp_path / sub if sub else tmp_path)
+    c = tmp_path / "docs/content"
+    base_r = dict(BASE_REAL, target_language="hi", course={"realization_key": "hi.a1"})
+    base_o = dict(BASE_OVL, target_language="hi")
+    for path, obj in ((c / "realizations/nl/a1_unit05_test.yaml", src_realization()),
+                      (c / "overlays/en-nl/a1_unit05.yaml", src_overlay()),
+                      (c / "realizations/hi/a1_unit01_base.yaml", base_r),
+                      (c / "overlays/en-hi/a1_unit01.yaml", base_o)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    m = tmp_path / "scripts/manifest.d/content"
+    m.mkdir(parents=True)
+    (m / "en-hi.txt").write_text(
+        "en-hi|docs/content/realizations/hi/a1_unit01_base.yaml|docs/content/overlays/en-hi/a1_unit01.yaml\n", encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_hi.py").write_text(BACKFILL_HI, encoding="utf-8")
+    return mod
+
+
+def hi_plan(dt, tmp_path, author=None, atoms=None):
+    a = args(tmp_path, new="en-hi", first_unit=20, names="Lotte=प्रिया,Omar=अर्जुन", names_en="Lotte=Priya,Omar=Arjun")
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    table = atoms or ATOMS_HI
+    (work / "atoms.tr.json").write_text(json.dumps({i: table[t] for i, t in src.items() if t in table}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author or AUTHOR_HI, ensure_ascii=False), encoding="utf-8")
+    return a, dt.make_plan(a)
+
+
+def test_hindi_vowel_signs_stay_in_tokens_and_danda_is_punctuation(dt):
+    assert dt.tokens("मुझे सिर दर्द है।") == ["मुझे", "सिर", "दर्द", "है"]
+    assert dt.tokens("क्या आप फ़ोन करेंगे?") == ["क्या", "आप", "फ़ोन", "करेंगे"]
+    assert dt.strip_punct("मैं ठीक हूँ।") == "मैं ठीक हूँ"
+    assert dt.norm("मैं ठीक हूँ।") == dt.norm("मैं ठीक हूँ") == "मैं ठीक हूँ"
+    assert dt.boundary_strip("मैं ठीक हूँ।") == "मैं ठीक हूँ"
+
+
+def test_hindi_slugs_follow_the_existing_hi_content_keys(dt):
+    assert dt.slug("मुझे सिर दर्द है।", 5) == "mujhe_sir_dard_hai"
+    assert dt.slug("मैं ठीक नहीं हूँ", 4) == "main_theek_naheen_hoon"
+    assert dt.slug("कमरा बड़ा है", 3) == "kamra_bara_hai" and dt.slug("बाज़ार में", 2) == "bazar_men"
+
+
+def test_hindi_register_aap_tum_and_no_false_hit_on_words_starting_with_aap(dt):
+    assert dt.register_of("आप कैसे हैं?", "hi") == "formal" and dt.register_of("आपका नाम क्या है?", "hi") == "formal"
+    assert dt.register_of("तुम कैसे हो?", "hi") == "informal" and dt.register_of("तुम्हारा नाम क्या है?", "hi") == "informal"
+    assert dt.register_of("आपातकाल में १०० पर फ़ोन करो।", "hi") is None and dt.register_of("तूफ़ान आ रहा है।", "hi") is None
+
+
+def test_hindi_gender_alternates_cover_participles_adjectives_agent_nouns_and_skip_ergative(dt):
+    g = dt.hi_gender_alts
+    assert g("मैं रोज़ स्कूल जाता हूँ।") == ["मैं रोज़ स्कूल जाती हूँ।"] and g("मैं रोज़ स्कूल जाती हूँ।") == ["मैं रोज़ स्कूल जाता हूँ।"]
+    assert g("मैं थका हूँ।") == ["मैं थकी हूँ।"] and g("मैं छात्र हूँ।") == ["मैं छात्रा हूँ।"]
+    assert g("मैं कल दिल्ली जाऊँगा।") == ["मैं कल दिल्ली जाऊँगी।"] and g("मैं घर जा रही थी।") == ["मैं घर जा रहा था।"]
+    assert g("मैं कल गया और सो गया।") == ["मैं कल गई और सो गई।"]
+    assert g("मैंने खाना खाया।") == [] and g("मैं बीमार हूँ।") == [] and g("तुम थके हो।") == [] and g("हम जाते हैं।") == []
+    assert g("मैं चाय पीता हूँ। तुम कॉफ़ी पीते हो।") == ["मैं चाय पीती हूँ। तुम कॉफ़ी पीते हो।"]
+
+
+def test_hindi_spelling_fold_matches_the_grader_folds(dt):
+    assert dt.hi_fold("हूँ") == dt.hi_fold("हूं") and dt.hi_fold("फ़ोन") == dt.hi_fold("फोन") and dt.hi_fold("ज़रूर") == dt.hi_fold("जरूर")
+    assert dt.hi_fold("बड़ा") != dt.hi_fold("बदा") and dt.hi_fold("पढ़") != dt.hi_fold("पढ")        # ड़/ढ़ keep their nukta
+
+
+def test_hindi_inject_lints_gender_script_danda_and_adds_full_stop_variant(dt_hi, tmp_path):
+    dt = dt_hi
+
+    def codes(author=None, atoms=None):
+        a, plan = hi_plan(dt, tmp_path, author, atoms)
+        plan.build_all()
+        return {f["code"] for f in dt.active_flags(plan)}
+
+    base = codes()
+    assert not base & {"GENDER", "SCRIPT", "DANDA"}
+    assert "GENDER" in codes({k: v for k, v in AUTHOR_HI.items() if not k.endswith("write_tired#alt")})
+    assert "SCRIPT" in codes(None, dict(ATOMS_HI, **{"Hoeveel kost het?": "यह kitne का है?"}))
+    assert "DANDA" in codes(None, dict(ATOMS_HI, **{"Lotte: Hoi.": "प्रिया: नमस्ते."}))
+    a, plan = hi_plan(dt, tmp_path, dict(AUTHOR_HI, **{"nl.a1.unit05.lesson01.exercise04.write_tired#ans": "ठीक है। मैं थका हूँ।",
+                                                          "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "ठीक है। मैं थकी हूँ।"}))
+    ov = plan.build_all()[0][2]["exercises"]
+    acc = next(vals for vals in ([x["value"] for x in v.get("accepted_answers", [])] for v in ov.values()) if "ठीक है। मैं थका हूँ।" in vals)
+    assert "ठीक है मैं थका हूँ" in acc and "ठीक है. मैं थका हूँ।" in acc and "ठीक है। मैं थकी हूँ।" in acc
+
+
+def test_hindi_cast_names_stay_devanagari_in_target_text_and_latin_in_english(dt_hi, tmp_path):
+    a = args(tmp_path, new="en-hi", first_unit=20, names="Lotte=प्रिया,Omar=अर्जुन", names_en="Lotte=Priya,Omar=Arjun")
+    plan = dt_hi.make_plan(a)
+    assert plan.names("Lotte: नमस्ते।") == "प्रिया: नमस्ते।" and plan.names_en("Lotte: Hi, Omar!") == "Priya: Hi, Arjun!"
