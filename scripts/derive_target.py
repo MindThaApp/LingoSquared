@@ -317,15 +317,21 @@ class UnitDeriver:
 
     def en_checked(self, s: str, slot: str, kind: str, ctx: dict | None = None) -> str:
         """English text that may quote or discuss the source language.  Quoted atoms are
-        substituted; anything still source-language needs authoring."""
+        substituted; anything still source-language needs authoring.  The substituted target text is masked
+        before the residual check, so a cognate in the translation (Tulpen, Party) is not mistaken for a leftover."""
         out = s
+        subs: dict[str, str] = {}
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
-                out = out.replace(text, self.T(text, "quote"))
+                ph = f"\x00{len(subs)}\x00"
+                subs[ph] = self.T(text, "quote")
+                out = out.replace(text, ph)
         out = self.en(out)
-        if "*" in s or re.search(r"\bunits?\s+\d+", s, re.I) or self.residual(out):
-            v = self.A(slot, s, kind, dict(ctx or {}, why=",".join(self.residual(out)) or "italic span / unit cross-reference"))
-            return v
+        left = self.residual(re.sub(r"\x00\d+\x00", " ", out))
+        if "*" in s or re.search(r"\bunits?\s+\d+", s, re.I) or left:
+            return self.A(slot, s, kind, dict(ctx or {}, why=",".join(left) or "italic span / unit cross-reference"))
+        for ph, val in subs.items():
+            out = out.replace(ph, val)
         return out
 
     def residual(self, s: str) -> list[str]:
@@ -423,7 +429,8 @@ class UnitDeriver:
                             continue
                         self.pair_target.add(L)
                         tk = re.findall(r"[^\W\d_]{2,}", Rt.casefold())
-                        if tk and all(t in allsrc for t in tk) and not all(t in env for t in tk):
+                        eng = (self.p.en_vocab | self.p.cast_words) if self.p.strict_residual else env      # env itself contains quoted source words
+                        if tk and all(t in allsrc for t in tk) and not all(t in eng for t in tk):
                             self.pair_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
@@ -552,7 +559,14 @@ class UnitDeriver:
             if "note" in v:
                 v["note"] = self.en_checked(v["note"], ck + "#note", "note", dict(en=v.get("gloss")))
             if isinstance(v.get("glosses"), dict):
-                v["glosses"] = OrderedDict((self.T(k, "gloss-key", None, ck), self.en(val)) for k, val in v["glosses"].items())
+                new_gl = OrderedDict()
+                for k, val in v["glosses"].items():
+                    gk = self.T(k, "gloss-key", None, ck)
+                    left = self.residual(self.en(val)) if self.p.strict_residual else []
+                    # a gloss may explain a source word ('completes komt ... aan'): authored, with the translated key as context
+                    new_gl[gk] = (self.A(f"{ck}#gv:{k}", val, "gloss-value", dict(key=gk, card=self.card_tr.get(ck), why=",".join(left)))
+                                  if left else self.en(val))
+                v["glosses"] = new_gl
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
                     if card and not k.startswith("<<") and not re.search(rf"(?<![\w]){re.escape(k)}(?![\w])", card["target"]["text"], re.I):
@@ -612,6 +626,7 @@ class UnitDeriver:
             ctx["media"] = self.media_tr[mk]                      # translated audio text: the context a tested span / feedback refers to
         # prompt blocks
         frame_src = None
+        n_en = 0
         for b in (e.get("prompt") or {}).get("target_blocks") or []:
             if b.get("language_code") == sp:
                 if BLANK in b["text"]:
@@ -621,7 +636,10 @@ class UnitDeriver:
                     b["text"] = self.T(b["text"], "prompt")
                 b["language_code"] = tp
             else:
-                b["text"] = self.en(b["text"])
+                # English prompt text may quote the source sentence ("What does '...' mean?"): substitute / author it
+                b["text"] = (self.en_checked(b["text"], f"{ck}#prompt{n_en}", "prompt_en", dict(ctx))
+                             if self.p.strict_residual else self.en(b["text"]))
+                n_en += 1
         pr_tr = [b["text"] for b in (e.get("prompt") or {}).get("target_blocks") or [] if b.get("language_code") == tp]
         if pr_tr:
             ctx["prompt"] = " ".join(pr_tr)
@@ -700,7 +718,11 @@ class UnitDeriver:
             pass
 
     def pr(self, right: str) -> str:
-        return self.T(right, "pair") if right in self.pair_target else self.en(right)
+        if right in self.pair_target:
+            return self.T(right, "pair")
+        if self.p.strict_residual and self.residual(self.en(right)):
+            return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
+        return self.en(right)
 
     def real_prompt_langs(self, e: dict) -> set[str]:
         return {b.get("language_code") for b in (e.get("prompt") or {}).get("target_blocks") or []}
@@ -883,8 +905,10 @@ class UnitDeriver:
         newO["review"] = {"status": "unreviewed", "required_next_reviewer": "native_speaker_review", "notes": note}
         if "answer_policy" in base_o:
             newO["answer_policy"] = copy.deepcopy(base_o["answer_policy"])
-        newO["course"] = {"title": base_o["course"]["title"],
-                          "description": self.en(O["course"]["description"])}
+        desc = self.en(O["course"]["description"])
+        if self.p.strict_residual and self.residual(desc):
+            desc = self.A(f"{self.stem}#desc", O["course"]["description"], "description", dict(why=",".join(self.residual(desc))))
+        newO["course"] = {"title": base_o["course"]["title"], "description": desc}
         for k in ("units", "lessons", "teaching", "exercises"):
             if k in O:
                 newO[k] = O[k]
@@ -948,7 +972,7 @@ class Plan:
         if _EN_VOCAB is None:
             v: set[str] = set()
             for pair in ("en-de", "en-es", "en-fr", "en-it", "en-pl", "en-ro"):
-                if pair in (self.src_pair,):
+                if pair in (self.src_pair, self.new_pair):          # never the course being derived: a leak there would legitimise itself
                     continue
                 for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
                     v.update(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold()))
@@ -979,12 +1003,16 @@ class Plan:
                 spec = importlib.util.spec_from_file_location("bf_src_" + self.src, ROOT / f"scripts/backfill_lexemes_{self.src_pair.split('-')[0]}_{self.src}.py")
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
+                gl = {}
                 for name in dir(mod):
                     d = getattr(mod, name)
                     if name.endswith("GLOSSES") and isinstance(d, dict):
-                        for v in d.values():
-                            if isinstance(v, str):
-                                self._gloss_words.update(re.findall(r"[^\W\d_]{3,}", v.casefold()))
+                        gl.update({k: v for k, v in d.items() if isinstance(v, str)})
+                keys = {k.casefold() for k in gl}
+                for k, v in gl.items():
+                    for w in re.findall(r"[^\W\d_]{3,}", v.casefold()):
+                        if w not in keys or w == k.casefold():     # glosses quote source words ('komt ... aan'): only real English or a cognate of its own entry (blond)
+                            self._gloss_words.add(w)
             except Exception:
                 pass
         return self._src_lex
@@ -1011,9 +1039,11 @@ class Plan:
     case_ok = frozenset({"Sie", "Ihnen", "Ihr", "Ihre", "Ihren", "Ihrem", "Ihrer", "Ihres"})   # formal address: capital is correct mid-sentence
 
     def names(self, s: str) -> str:
-        for a, b in self.names_map.items():
-            s = re.sub(rf"\b{re.escape(a)}\b", b, s)
-        return s
+        """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
+        if not self.names_map:
+            return s
+        pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(self.names_map, key=len, reverse=True)) + r")\b")
+        return pat.sub(lambda m: self.names_map[m.group(1)], s)
 
     def add_atom(self, aid, text, kind, en, where, unit):
         self.atoms.setdefault(aid, text)
