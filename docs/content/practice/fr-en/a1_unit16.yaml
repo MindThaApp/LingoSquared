@@ -1,0 +1,268 @@
+schema_version: '1.0'
+pack_key: practice.fr-en.a1.unit16
+source_language: fr
+target_language: en
+unit_content_key: en.a1.unit16.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.de-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_after
+    - w_bed
+    - w_breakfast
+    - w_day
+    - w_dinner
+    - w_every
+    - w_morning
+    - w_time
+    - w_usually
+templates:
+- content_key: practice.fr-en.en.a1.unit16.lesson01.choose.001
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_dinner
+        - w_bed
+        - w_breakfast
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'En anglais, les repas s’emploient sans article : have breakfast, have dinner. Avec go to bed, il n’y a pas d’article non plus.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson02.choose.002
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - adverb
+      - preposition
+      agreement_tags:
+        semantic:
+        - w_usually
+        - w_every
+        - w_after
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Usually, every et after se placent devant le verbe ou au début d’une indication de temps : I usually go, every day, after that.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson01.order.003
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: word_order
+  frame:
+    text: I have {item} at seven.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_breakfast
+        - w_dinner
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have {item} at seven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'Devant breakfast et dinner, il n’y a pas d’article : I have breakfast, pas I have a breakfast.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson02.order.004
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: word_order
+  frame:
+    text: I {item} go to bed at eleven.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} go to bed at eleven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Usually se place devant le verbe principal go ; on ne peut pas recopier l’ordre libre du français « Je vais me coucher d’habitude... ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson02.fill.005
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: fill_in_blank
+  frame:
+    text: I {item} go to bed at eleven. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id001
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Usually (d’habitude) se place entre le sujet et le verbe principal : I usually go.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson01.fill.006
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: fill_in_blank
+  frame:
+    text: I have {item} at seven. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id002
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_breakfast
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Have breakfast et have dinner sont des expressions figées sans article.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson02.translate.007
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: translation
+  frame:
+    text: D’habitude, je me couche à onze heures.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} go to bed at eleven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: En anglais, usually se place devant go ; at se met devant l’heure.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson04.translate.008
+  lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+  type: translation
+  frame:
+    text: Qu’est-ce que tu fais après ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: preposition
+      agreement_tags:
+        semantic: w_after
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: What do you do {item} that?
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Avec after that, tu demandes ce qui vient après quelque chose ; la question demande do.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit16.lesson01.match.009
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech:
+      - adverb
+      - noun
+      - preposition
+      agreement_tags:
+        semantic:
+        - w_dinner
+        - w_bed
+        - w_breakfast
+        - w_usually
+        - w_after
+        - w_morning
+        - w_day
+        - w_time
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: 'Les mots de ce jeu appartiennent à la routine quotidienne : repas (breakfast, dinner), indications de temps (morning, day, time, after) et usually.'
+    language_code: fr
+    direction: ltr
