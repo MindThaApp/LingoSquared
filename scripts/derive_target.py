@@ -48,7 +48,7 @@ import re
 import subprocess
 import sys
 import unicodedata
-from collections import OrderedDict, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 from pathlib import Path
 
 import yaml
@@ -67,7 +67,9 @@ DEFAULT_WORK = ROOT / ".local/derive-target"
 # ---------------------------------------------------------------------------
 CFG = {
     # code: formal marker, informal marker (regexes over lowercase text)
-    "nl": dict(name="Dutch", formal=r"\b(u|uw)\b", informal=r"\b(je|jij|jou|jouw|jullie)\b"),
+    "nl": dict(name="Dutch", formal=r"\b(u|uw)\b", informal=r"\b(je|jij|jou|jouw|jullie)\b",
+               short=("ik", "je", "op", "om", "de", "te", "ze", "nu", "zo", "er", "van", "het", "een", "niet", "geen", "voor", "naar", "bij", "dat", "ook", "maar", "wel", "nog", "zijn", "heeft", "als", "hij", "zij", "jij", "mijn", "jullie", "aan"),
+               grammar=r"\b(split(?:s|ting)?|separable|prefix(?:es)?|main clause|het-?words?|de-?words?|neuter|common gender|inversion|bare adjective|extra -e|final position|verb-second|halfway|counts forward)\b"),
     "de": dict(name="German", formal=r"\b(sie|ihnen|ihr(?:e|en|em)?)\b", informal=r"\b(du|dich|dir|dein\w*)\b"),
     "es": dict(
         name="Spanish",
@@ -226,6 +228,11 @@ class UnitDeriver:
             return f"<<{aid}>>"
         return self.p.names(tr)
 
+    def gloss_key(self, ck: str, key: str) -> str:
+        """Gloss keys are shared atoms; "<source content_key>#gk#<source key>" in atoms.tr.json overrides one card."""
+        scoped = self.p.tr_atoms.get(f"{ck}#gk#{key}")
+        return self.p.names(scoped) if scoped else self.T(key, "gloss-key")
+
     def T_by_norm(self, text: str) -> str | None:
         aid = self.atom_norms.get(norm(text))
         if aid is None:
@@ -252,9 +259,18 @@ class UnitDeriver:
     def flag(self, key: str, code: str, msg: str, level: str = "error") -> None:
         self.p.flags.append(dict(id=key, code=code, level=level, msg=msg, unit=self.stem))
 
-    def en(self, s: str) -> str:
-        """English text: cast names and language name swapped."""
+    def en(self, s: str, scope: str | None = None) -> str:
+        """English text: cast names and language name swapped.  `scope` ("<source content_key>|title", "|gloss",
+        "|example_gloss", "|gloss:<source key>") selects a scoped authored rewrite from en_override.json before the
+        exact-string one."""
+        if scope and scope in self.p.en_over:
+            return self.p.names(self.p.en_over[scope])
+        if s in self.p.en_over:                      # authored English rewrite (en_override.json)
+            return self.p.names(self.p.en_over[s])
         s = self.p.names(s)
+        for k, v in self.p.en_over.items():          # "~word": word-level rewrite of source-language words that survive in English text
+            if k.startswith("~"):
+                s = re.sub(rf"(?<![\w]){re.escape(k[1:])}(?![\w])", v, s)
         return s.replace(self.p.src_name, self.p.new_name)
 
     def en_checked(self, s: str, slot: str, kind: str, ctx: dict | None = None) -> str:
@@ -265,14 +281,19 @@ class UnitDeriver:
             if len(text) >= 3 and text in out:
                 out = out.replace(text, self.T(text, "quote"))
         out = self.en(out)
-        if "*" in s or re.search(r"\bunits?\s+\d+", s, re.I) or self.residual(out):
+        gpat = CFG.get(self.p.src, {}).get("grammar")
+        if "*" in s or re.search(r"\bunits?\s+\d+", s, re.I) or self.residual(out) or (gpat and re.search(gpat, out, re.I)):
             v = self.A(slot, s, kind, dict(ctx or {}, why=",".join(self.residual(out)) or "italic span / unit cross-reference"))
             return v
         return out
 
     def residual(self, s: str) -> list[str]:
-        toks = set(re.findall(r"[^\W\d_]{3,}", s.casefold()))
-        return sorted(toks & self.src_only)
+        low = s.casefold()
+        toks = set(re.findall(r"[^\W\d_]{3,}", low))
+        short = set(CFG.get(self.p.src, {}).get("short", ()))
+        toks |= {x for x in re.findall(r"[^\W\d_]{2,}", low) if x in short}
+        keep = {k.casefold() for k in self.p.names_map}          # cast and place names are not leftovers
+        return sorted((toks & (self.src_only | short)) - keep)
 
     # -- build ---------------------------------------------------------------
     def prepass(self) -> None:
@@ -314,6 +335,33 @@ class UnitDeriver:
         srclex = set()
         for text in self.atom_texts:
             srclex |= set(re.findall(r"[^\W\d_]{3,}", text.casefold()))
+        # Source-language option sentences that are not atoms of their own (e.g. a correct option that also appears
+        # inside a longer teaching line) are still source text: a text is source text when most of its words occur in the
+        # source atoms and not in the English strings (instructions, titles, glosses).
+        allsrc2: set[str] = set()
+        for text in self.atom_texts:
+            allsrc2 |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
+        clean_env: set[str] = set()
+        for sect in ("units", "lessons"):
+            for v in (O.get(sect) or {}).values():
+                clean_env.update(re.findall(r"[^\W\d_]{2,}", str(v.get("title") or "").casefold()))
+        for v in (O.get("teaching") or {}).values():
+            for f in ("title", "gloss", "example_gloss"):
+                x = v.get(f)
+                for s in ([x] if isinstance(x, str) else x or []):
+                    clean_env.update(re.findall(r"[^\W\d_]{2,}", s.casefold()))
+        for v in (O.get("exercises") or {}).values():
+            clean_env.update(re.findall(r"[^\W\d_]{2,}", str(v.get("instruction") or "").casefold()))
+        short_set = set(CFG.get(self.p.src, {}).get("short", ()))
+        eng = self.p.english_words()
+        def is_src(s, instruction=""):
+            if self.p.src_name in str(instruction) and "English" not in str(instruction):
+                return True              # "Choose the Dutch sentence ..." -> the options are Dutch
+            names_cf2 = {k.casefold() for k in self.p.names_map}
+            toks = [x for x in re.findall(r"[^\W\d_]{2,}", str(s).casefold()) if x not in names_cf2]
+            hits = [x for x in toks if x in allsrc2 and ((len(x) >= 3 and x not in eng) or x in short_set)]
+            return bool(toks) and len(hits) / len(toks) >= 0.5
+        self.is_src = is_src
         env: set[str] = set()
         def add_en(s):
             if isinstance(s, str):
@@ -331,7 +379,7 @@ class UnitDeriver:
         for ck, v in (O.get("exercises") or {}).items():
             add_en(v.get("instruction"))
             co = v.get("correct_option")
-            if isinstance(co, str) and norm(co) in self.atom_norms:
+            if isinstance(co, str) and (norm(co) in self.atom_norms or is_src(co, v.get("instruction", ""))):
                 continue          # source-language options (also word_order answers) are not English vocabulary
             add_en(co)
             for d in v.get("distractors") or []:
@@ -350,6 +398,7 @@ class UnitDeriver:
         teach_norms = set(self.atom_norms)
         for text in self.atom_texts:
             allsrc |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
+        names_cf = {k.casefold() for k in self.p.names_map}
         self.pair_target: set[str] = set()
         self.right_target: set[str] = set()
         for u in R["units"]:
@@ -364,7 +413,8 @@ class UnitDeriver:
                             continue
                         self.pair_target.add(L)
                         tk = re.findall(r"[^\W\d_]{2,}", Rt.casefold())
-                        if tk and all(t in allsrc for t in tk) and not all(t in env for t in tk):
+                        tk = [x for x in tk if x not in names_cf]
+                        if tk and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6:
                             self.pair_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
@@ -387,11 +437,13 @@ class UnitDeriver:
         srclex = set()
         for text in self.atom_texts:
             srclex |= set(re.findall(r"[^\W\d_]{3,}", text.casefold()))
-        self.src_only = srclex - env
+        # English vocabulary: words that occur in >= 10 overlay files of other pairs (never the source pair's own files,
+        # which quote the source language).  A source word that is not English vocabulary counts as leftover in English text.
+        self.src_only = (srclex | self.p.source_vocab()) - self.p.english_words()
 
-    def options_are_target(self, ov: dict) -> bool:
+    def options_are_target(self, ov: dict, instruction: str = "") -> bool:
         co = ov.get("correct_option")
-        return isinstance(co, str) and norm(co) in self.atom_norms and "distractors" in ov
+        return isinstance(co, str) and (norm(co) in self.atom_norms or self.is_src(co, instruction or ov.get("instruction", ""))) and "distractors" in ov
 
     def build(self) -> tuple[dict, dict]:
         self.prepass()
@@ -460,30 +512,51 @@ class UnitDeriver:
                     self.exercise(e, O_ex.get(e["content_key"]), l)
         # -- overlay English passthroughs -----------------------------------------
         for sect in ("units", "lessons"):
-            for v in (O.get(sect) or {}).values():
-                v["title"] = self.en(v["title"])
+            for kk, v in (O.get(sect) or {}).items():
+                v["title"] = self.en(v["title"], kk + "|title")
         for ck, v in (O_te).items():
             for f in ("title", "gloss"):
                 if isinstance(v.get(f), str):
-                    if self.residual(self.en(v[f])):
+                    if f"{ck}|{f}" not in self.p.en_over and self.residual(self.en(v[f], f"{ck}|{f}")):
                         self.flag(ck, "LEFTOVER", f"{f} {v[f]!r} still contains {self.p.src_name} words {self.residual(v[f])}")
-                    v[f] = self.en(v[f])
+                    v[f] = self.en(v[f], f"{ck}|{f}")
             eg = v.get("example_gloss")
             if isinstance(eg, str):
-                v["example_gloss"] = self.en(eg)
+                v["example_gloss"] = self.en(eg, f"{ck}|example_gloss")
             elif isinstance(eg, list):
-                v["example_gloss"] = [self.en(x) for x in eg]
+                v["example_gloss"] = [self.en(x, f"{ck}|example_gloss{i}") for i, x in enumerate(eg)]
             if "note" in v:
                 v["note"] = self.en_checked(v["note"], ck + "#note", "note", dict(en=v.get("gloss")))
             if isinstance(v.get("glosses"), dict):
-                v["glosses"] = OrderedDict((self.T(k, "gloss-key"), self.en(val)) for k, val in v["glosses"].items())
+                v["glosses"] = OrderedDict((self.gloss_key(ck, k), self.en(val, f"{ck}|gloss:{k}")) for k, val in v["glosses"].items())
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
                     if card and not k.startswith("<<") and not re.search(rf"(?<![\w]){re.escape(k)}(?![\w])", card["target"]["text"], re.I):
                         self.flag(ck, "GLOSS_KEY", f"gloss key {k!r} is not a whole-word token of the card text (keys must be single words that occur in it)")
         # -- header ---------------------------------------------------------------
+        self.grammar_lint(O)
         R, O = self.finish(R, O)
         return R, O
+
+    def grammar_lint(self, O: dict) -> None:
+        """English strings that still describe source-language grammar (split verbs, het-words, ...) after rewriting."""
+        pat = CFG.get(self.p.src, {}).get("grammar")
+        if not pat:
+            return
+        def chk(key: str, field: str, s) -> None:
+            if isinstance(s, str) and re.search(pat, s, re.I):
+                self.flag(key, "SOURCE_GRAMMAR", f"{field} {s!r} still describes {self.p.src_name} grammar; rewrite it (note/feedback/instruction slot or en_override.json)")
+        for sect in ("units", "lessons"):
+            for k, v in (O.get(sect) or {}).items():
+                chk(k, "title", v.get("title"))
+        for k, v in (O.get("teaching") or {}).items():
+            for f in ("title", "gloss", "note"):
+                chk(k, f, v.get(f))
+            for g in (v.get("glosses") or {}).values():
+                chk(k, "glosses", g)
+        for k, v in (O.get("exercises") or {}).items():
+            for f in ("instruction", "feedback"):
+                chk(k, f, v.get(f))
 
     # -- teaching ---------------------------------------------------------------
     def teach(self, t: dict, ov: dict | None) -> None:
@@ -530,7 +603,7 @@ class UnitDeriver:
         old_accepted = copy.deepcopy(ov.get("accepted_answers") or [])
         acc_vals = [a.get("value") for a in old_accepted]
         canon_src = (acc_vals[0] if acc_vals and isinstance(acc_vals[0], str) else ov.get("correct_option"))
-        ans_target = (self.options_are_target(ov) if has_opts else (ty in TARGET_ANSWER_TYPES and isinstance(canon_src, str)))
+        ans_target = (self.options_are_target(ov, en_inst or "") if has_opts else (ty in TARGET_ANSWER_TYPES and isinstance(canon_src, str)))
         if ty == "translation" and e.get("prompt"):
             bl = (self.real_prompt_langs(e))
             if sp in bl:
@@ -548,7 +621,7 @@ class UnitDeriver:
                         pr["left"] = self.pr(pr["left"])
                         pr["right"] = self.pr(pr["right"])
         elif has_opts and ans_target:
-            canon_tr = self.T_by_norm(ov["correct_option"])
+            canon_tr = self.T_by_norm(ov["correct_option"]) or self.T(ov["correct_option"], "option")
             ov["correct_option"] = canon_tr
             dist = self.A(ck + "#dist", SEP.join(ov["distractors"]), "distractors",
                           dict(ctx, correct_src=canon_src, correct_tr=canon_tr, n=len(ov["distractors"])))
@@ -558,11 +631,25 @@ class UnitDeriver:
             ov["accepted_answers"] = [dict(a, value=canon_tr) if isinstance(a.get("value"), str) else a for a in old_accepted[:1]]
             alts = [canon_tr]
         elif has_opts:
-            ov["correct_option"] = self.en(ov["correct_option"])
-            ov["distractors"] = [self.en(d) for d in ov["distractors"]]
-            for a in ov.get("accepted_answers") or []:
-                if isinstance(a.get("value"), str):
-                    a["value"] = self.en(a["value"])
+            opts_src = [ov["correct_option"]] + list(ov["distractors"])
+            gpat = CFG.get(self.p.src, {}).get("grammar")
+            if any(self.residual(self.en(x)) or (gpat and re.search(gpat, x, re.I)) for x in opts_src):
+                # English options that quote or discuss the source language need rewriting for the new one
+                got = self.A(ck + "#options", SEP.join(opts_src), "options", dict(ctx))
+                parts = [x for x in re.split(r"\s*\|\|\s*", got) if x]
+                if not got.startswith("<<") and len(parts) == len(opts_src):
+                    ov["correct_option"], ov["distractors"] = parts[0], parts[1:]
+                    for a in ov.get("accepted_answers") or []:
+                        if isinstance(a.get("value"), str):
+                            a["value"] = parts[0]
+                elif not got.startswith("<<"):
+                    self.flag(ck, "OPTIONS_COUNT", f"#options needs {len(opts_src)} options (correct first)")
+            else:
+                ov["correct_option"] = self.en(ov["correct_option"])
+                ov["distractors"] = [self.en(d) for d in ov["distractors"]]
+                for a in ov.get("accepted_answers") or []:
+                    if isinstance(a.get("value"), str):
+                        a["value"] = self.en(a["value"])
         elif ans_target:
             canon_tr, alts = self.answers(ck, ty, ov, canon_src, acc_vals, frame_src, ctx)
         else:
@@ -626,7 +713,7 @@ class UnitDeriver:
         out = list(OrderedDict.fromkeys(out))
         canon_form = out[0]
         if "correct_option" in ov:
-            ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else strip_punct(base)
+            ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else (re.sub(r"^[^\w]+|[^\w]+$", "", base) if ty == "dictation" else strip_punct(base))
         new_acc = []
         proto = ov.get("accepted_answers") or [{"status": "correct"}]
         for v in out:
@@ -648,6 +735,8 @@ class UnitDeriver:
             if canon_tr.startswith("<<"):
                 return canon_tr
             body = strip_punct(canon_tr)
+            if e.get("type") == "dictation":          # dictation tested_text must equal the audio text up to boundary punctuation only
+                body = re.sub(r"^[^\w]+|[^\w]+$", "", canon_tr)
             return body if tested_src == strip_punct(canon_src) else body.lower() if tested_src == tested_src.lower() else body
         aid = self.atom_norms.get(norm(tested_src))
         if aid is not None:
@@ -779,6 +868,8 @@ class Plan:
         self.tr_atoms = load_json(work / "atoms.tr.json")
         self.tr_author = load_json(work / "author.tr.json")
         self.acks = load_json(work / "ack.json")
+        # English strings that describe source-language grammar (titles, glosses, notes): exact string -> rewrite for the new language
+        self.en_over = load_json(work / "en_override.json")
         # base files of the target course: header/answer policy come from them
         group = args.group or self.new_pair
         real, ovl = manifest_group(group)
@@ -786,6 +877,37 @@ class Plan:
         self.base_real, self.base_ovl = real[0], ovl[0]
         first = args.first_unit or next_unit_number(self.tgt)
         self.derivers = [UnitDeriver(self, s, first + i) for i, s in enumerate(self.units)]
+
+    def source_vocab(self) -> set[str]:
+        """Every word of the source course's realizations (all A1 files), for leftover detection in English text."""
+        if getattr(self, "_svocab", None) is None:
+            voc: set[str] = set()
+            def walk(o):
+                if isinstance(o, dict):
+                    if isinstance(o.get("text"), str) and self.src in (o.get("language_code"), o.get("language")):
+                        voc.update(re.findall(r"[^\W\d_]{3,}", o["text"].casefold()))
+                    if isinstance(o.get("title"), str):                      # unit / lesson titles are source-language text
+                        voc.update(re.findall(r"[^\W\d_]{3,}", o["title"].casefold()))
+                    for v in o.values():
+                        walk(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        walk(v)
+            for f in sorted((CONTENT / f"realizations/{self.src}").glob("a1_*.yaml")):
+                walk(dd.load(f))
+            self._svocab = voc
+        return self._svocab
+
+    def english_words(self) -> set[str]:
+        if getattr(self, "_english", None) is None:
+            counts: Counter = Counter()
+            for d in sorted((CONTENT / "overlays").iterdir()):
+                if not d.is_dir() or self.src in d.name.split("-"):
+                    continue
+                for f in d.glob("*.yaml"):
+                    counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
+            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond"}
+        return self._english
 
     def names(self, s: str) -> str:
         for a, b in self.names_map.items():
@@ -989,7 +1111,7 @@ GEN_BEGIN = "# --- derive_target.py: derived units (generated; keep markers) ---
 GEN_END = "# --- end derive_target.py ---"
 
 
-def write_backfill_block(plan: Plan, lex: dict[str, str]) -> Path:
+def write_backfill_block(plan: Plan, lex: dict[str, str], allowed: set[str] | None = None) -> Path:
     path = ROOT / f"scripts/backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}.py"
     text = path.read_text(encoding="utf-8")
     existing: dict[str, tuple[str, str]] = {}
@@ -1002,8 +1124,12 @@ def write_backfill_block(plan: Plan, lex: dict[str, str]) -> Path:
         for k, v in g.items():
             existing[k] = (v, p.get(k, "noun"))
     for tok, val in lex.items():
-        gloss, _, pos = [x.strip() for x in (val.split("|") + ["", ""])[:3]][:3]
-        existing[tok] = (gloss, pos or "noun")
+        if allowed is not None and tok not in existing and tok not in allowed:
+            continue                                # a token already glossed by the hand-written table stays there
+        gloss, _, pos = val.rpartition("|")
+        if not _:                                   # no "|": the whole value is the gloss
+            gloss, pos = val, ""
+        existing[tok] = (gloss.strip(), pos.strip() or "noun")
     gl = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[0], ensure_ascii=False)},\n" for k, v in sorted(existing.items())) + "}"
     ps = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[1])},\n" for k, v in sorted(existing.items()) if v[1] != "noun") + "}"
     block = (f"{GEN_BEGIN}\n"
@@ -1051,7 +1177,7 @@ def cmd_inject(args):
         new_ovl.append(op.relative_to(ROOT).as_posix())
     update_manifest(plan.group, new_real, new_ovl)
     if not args.skip_lexemes and lex:
-        written.append(write_backfill_block(plan, {t: lex[t] for t in toks if t in lex} if toks else {}))
+        written.append(write_backfill_block(plan, lex, set(toks)))
     for p in written:
         print("wrote", p.relative_to(ROOT))
 
@@ -1092,11 +1218,222 @@ def cmd_check(args):
     return rc
 
 
+# ---------------------------------------------------------------------------
+# Practice packs (Endless Practice + unit checkpoint) for the derived units
+# ---------------------------------------------------------------------------
+PACK_GOOD_POS = ["noun", "verb", "adjective", "adverb"]
+PACK_POS_ALL = ["symbol", "noun", "proper_noun", "pronoun", "verb", "adjective", "adverb", "preposition", "particle", "phrase"]
+TOKEN_WORD = re.compile(r"[^\W\d_]+(?:['\u2019-][^\W\d_]+)*", re.U)
+
+
+def _plain_en(s: str, limit: int = 230) -> str:
+    s = re.sub(r"[*{}]", "", s or "")
+    s = " ".join(s.split())
+    return s if len(s) <= limit else s[:limit].rsplit(" ", 1)[0].rstrip(",;:") + "."
+
+
+def _lesson_no(ck: str) -> str:
+    return re.search(r"\.(lesson\d+)\.", ck).group(1)
+
+
+def pack_sentences(lesson: dict, O: dict, minw: int = 3, maxw: int = 11):
+    """Single-sentence teaching lines of one lesson: (text, english gloss or None, note or None)."""
+    out = []
+    for t in lesson.get("teaching") or []:
+        ck = t["content_key"]
+        ov = (O.get("teaching") or {}).get(ck) or {}
+        gl = ov.get("gloss") if isinstance(ov.get("gloss"), str) else None
+        eg = ov.get("example_gloss")
+        eg = [eg] if isinstance(eg, str) else (eg or [])
+        texts = [(t["target"]["text"], gl)]
+        exs = t.get("example")
+        exs = [exs] if isinstance(exs, dict) else (exs or [])
+        for i, e in enumerate(exs):
+            texts.append((e["text"], eg[i] if i < len(eg) else None))
+        for text, gloss in texts:
+            raw = text
+            m = re.match(r"^[^\W\d_]+:\s+(.)", text)
+            if m:
+                if not (m.group(1).isupper() or m.group(1) in "¿¡"):     # "Atención: el tren ..." is not a speaker label
+                    continue
+                text = re.sub(r"^[^\W\d_]+:\s+", "", text)
+                if gloss:
+                    gloss = re.sub(r"^[^\W\d_]+:\s+", "", gloss)
+            if re.search(r"[:→{}\n]", text) or len(re.findall(r"[.!?]", text)) != 1 or not re.search(r"[.!?]$", text):
+                continue
+            n = len(TOKEN_WORD.findall(text))
+            if minw <= n <= maxw:
+                out.append((text, gloss, ov.get("note") if raw == t["target"]["text"] else None))
+    return out
+
+
+def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) -> tuple[Path, dict]:
+    tp, sp = plan.tgt, plan.src
+    R = dd.load(CONTENT / f"realizations/{tp}/{d.new_stem}.yaml")
+    O = dd.load(CONTENT / f"overlays/{plan.new_pair}/{d.level}_unit{d.new_no:02d}.yaml")
+    unit = R["units"][0]
+    nn = d.new_no
+    pair = plan.new_pair
+    specs = [s for s in specs_all if s["lesson_content_key"].startswith(f"{tp}.{d.level}.unit{nn:02d}.")]
+    wtag = lambda s: next(x for x in s["agreement_tags"]["semantic"] if x.startswith("w_"))
+    good, seen = [], set()
+    for s in specs:
+        tok, gl = s["token"], s["english_gloss"]
+        base = re.sub(r"\s*\([^)]*\)", "", gl).split(";")[0].strip().lower()
+        if (s["part_of_speech"] in PACK_GOOD_POS and re.fullmatch(r"[^\W\d_]{3,}", tok) and tok not in excl
+                and base not in seen):
+            seen.add(base)
+            good.append(dict(token=tok, tag=wtag(s), gloss=gl, lesson=s["lesson_content_key"], pos=s["part_of_speech"]))
+    if len(good) < 6:
+        raise SystemExit(f"{d.new_stem}: only {len(good)} usable lexemes for a pack (need >= 6)")
+    pool_tags = [g["tag"] for g in good]
+    lesson_by_ck = {l["content_key"]: l for l in unit["lessons"]}
+    en_lesson_title = lambda ck: ((O.get("lessons") or {}).get(ck) or {}).get("title") or ""
+    # lessons that own lexemes, in order
+    lex_lessons = []
+    for s in specs:
+        if s["lesson_content_key"] not in lex_lessons:
+            lex_lessons.append(s["lesson_content_key"])
+    good_lessons = list(OrderedDict.fromkeys(g["lesson"] for g in good))
+    counters: dict[str, int] = defaultdict(int)
+    templates: list[dict] = []
+    used_tags: set[str] = set(pool_tags)
+
+    def key(lesson_ck: str, verb: str) -> str:
+        ln = _lesson_no(lesson_ck)
+        counters[ln] += 1
+        return f"practice.{pair}.{tp}.{d.level}.unit{nn:02d}.{ln}.{verb}.{counters[ln]:03d}"
+
+    def frame(text: str, lang: str, **kw) -> dict:
+        return dict(text=text, language_code=lang, direction="ltr", **kw)
+
+    content = dict(language_code=tp, part_of_speech=PACK_GOOD_POS, agreement_tags=dict(semantic=pool_tags))
+
+    def anchor(g: dict) -> dict:
+        used_tags.add(g["tag"])
+        return dict(language_code=tp, part_of_speech=g["pos"], agreement_tags=dict(semantic=g["tag"]))
+
+    # -- unit-wide recognition / production / matching templates, spread over the lessons that own lexemes
+    plan_generic = ["choose", "listen", "translate", "match", "choose", "translate"]
+    for i, verb in enumerate(plan_generic):
+        lck = good_lessons[i % len(good_lessons)]
+        title = en_lesson_title(lck).lower() or "this unit"
+        fb = frame(f"{{item}} is one of this unit's words, from the lesson on {_plain_en(title, 80)}.", "en")
+        if verb in ("choose", "listen"):
+            templates.append(dict(content_key=key(lck, verb), lesson_content_key=lck,
+                                  type="multiple_choice" if verb == "choose" else "listen_select",
+                                  frame=frame("{item}", tp), slots=dict(item=content),
+                                  answer_derivation=dict(kind="slot_gloss", slot="item"), feedback_frame=fb))
+        elif verb == "translate":
+            templates.append(dict(content_key=key(lck, verb), lesson_content_key=lck, type="translation",
+                                  frame=frame("{item}", "en", slot_rendering=dict(item="english_gloss")),
+                                  slots=dict(item=content), answer_derivation=dict(kind="slot_text", slot="item"),
+                                  feedback_frame=fb))
+        elif verb == "match" and len(good) >= 6:
+            names = ["first", "second", "third", "fourth", "fifth", "sixth"]
+            templates.append(dict(content_key=key(lck, verb), lesson_content_key=lck, type="matching_pairs",
+                                  frame=frame(" · ".join("{%s}" % n for n in names), tp),
+                                  slots={n: content for n in names},
+                                  slot_relations=[dict(kind="distinct", slots=names)],
+                                  answer_derivation=dict(kind="matching_pairs", slots=names),
+                                  feedback_frame=frame("Match each Spanish word with its English meaning; the words come from this unit's lessons.", "en")))
+    # -- sentence-based structured / production templates anchored to single lexemes
+    rot = ["order", "fill", "translate"]
+    for lck in good_lessons:
+        lesson = lesson_by_ck[lck]
+        here = [g for g in good if g["lesson"] == lck]
+        # sentences of this lesson first, then of the rest of the unit (the anchor lexeme's own lesson stays the template's lesson)
+        sents = pack_sentences(lesson, O)
+        for other in unit["lessons"]:
+            if other is not lesson:
+                sents += pack_sentences(other, O)
+        made = 0
+        used_sent: set[str] = set()
+        for g in here:
+            if made >= 3:
+                break
+            for text, gloss, note in sents:
+                if text in used_sent:
+                    continue
+                words = TOKEN_WORD.findall(text)
+                if words.count(g["token"]) != 1 or words.index(g["token"]) == 0:
+                    continue
+                m = re.search(rf"(?<![\w]){re.escape(g['token'])}(?![\w])", text)
+                if not m:
+                    continue
+                blank = text[:m.start()] + "{item}" + text[m.end():]
+                verb = rot[made % 3]
+                if verb == "translate" and not (gloss and "{" not in gloss):
+                    verb = "order"
+                fbtxt = _plain_en((gloss + " " if gloss else "") + (note or f"{g['token']} means {g['gloss']}."))
+                slots = dict(item=anchor(g))
+                if verb == "order":
+                    tpl = dict(type="word_order", frame=frame(blank, tp), slots=slots,
+                               answer_derivation=dict(kind="render_frame", frame=frame(blank, tp)))
+                elif verb == "fill":
+                    slots["hint"] = anchor(g)
+                    tpl = dict(type="fill_in_blank", frame=frame(blank + " ({hint})", tp, slot_rendering=dict(hint="english_gloss")),
+                               slots=slots, answer_derivation=dict(kind="slot_text", slot="item"))
+                else:
+                    tpl = dict(type="translation", frame=frame(gloss, "en"), slots=slots,
+                               answer_derivation=dict(kind="render_frame", frame=frame(blank, tp)))
+                tpl.update(content_key=key(lck, {"word_order": "order", "fill_in_blank": "fill", "translation": "translate"}[tpl["type"]]),
+                           lesson_content_key=lck, feedback_frame=frame(fbtxt, "en"))
+                ordered = dict(content_key=tpl["content_key"], lesson_content_key=lck, type=tpl["type"], frame=tpl["frame"],
+                               slots=tpl["slots"], answer_derivation=tpl["answer_derivation"], feedback_frame=tpl["feedback_frame"])
+                templates.append(ordered)
+                used_sent.add(text)
+                made += 1
+                break
+    notes = (f"Generated by scripts/derive_target.py packs from the unit's realization/overlay and the {pair} backfill lexemes "
+             f"(tags {tp}_{d.level}_u{nn} / w_<token>). {len(good)} pool lexemes (pos noun/verb/adjective/adverb, one gloss each); "
+             f"unit-wide choose/listen/translate/match templates use the union of their w_ tags, sentence templates are single-lexeme "
+             f"anchors on the unit's own teaching lines. Needs native review of frames and feedback.")
+    pack = OrderedDict(
+        schema_version="1.0", pack_key=f"practice.{pair}.{d.level}.unit{nn:02d}", source_language=plan.src_pair.split("-")[0],
+        target_language=tp, unit_content_key=unit["content_key"],
+        review=OrderedDict(status="unreviewed", required_next_reviewer="native_speaker_review", fresh_context="false", notes=notes),
+        tag_schema=OrderedDict(part_of_speech=PACK_POS_ALL, agreement_tags=OrderedDict(semantic=sorted(used_tags))),
+        templates=templates)
+    path = CONTENT / f"practice/{pair}/{d.level}_unit{nn:02d}.yaml"
+    return path, pack
+
+
+def cmd_packs(args):
+    import yaml
+    plan = make_plan(args)
+    sys.path.insert(0, str(ROOT / "scripts"))
+    bf = importlib.import_module(f"backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}")
+    specs_all = list(bf.iter_specs())
+    excl = set(load_json(plan.work / "packs_exclude.json").get("tokens", []))
+    paths = []
+    for d in plan.derivers:
+        path, pack = build_pack(plan, d, specs_all, excl)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        class D(yaml.SafeDumper):
+            pass
+        D.add_representer(OrderedDict, lambda dumper, o: dumper.represent_mapping("tag:yaml.org,2002:map", o.items()))
+        path.write_text(yaml.dump(pack, Dumper=D, sort_keys=False, allow_unicode=True, width=10000, default_flow_style=None), encoding="utf-8")
+        paths.append(path.relative_to(ROOT).as_posix())
+        print("wrote", paths[-1], f"({len(pack['templates'])} templates)")
+    fp = MANIFEST.parent / "practice" / f"{plan.new_pair}.txt"
+    lines = fp.read_text(encoding="utf-8").splitlines()
+    out = []
+    for line in lines:
+        if line.startswith(plan.new_pair + "|"):
+            head, _, rest = line.partition("|")
+            cur = set(rest.split()) | set(paths)
+            line = head + "|" + " ".join(sorted(cur))
+        out.append(line)
+    fp.write_text("\n".join(out) + "\n", encoding="utf-8")
+    print("updated", fp.relative_to(ROOT))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("extract", cmd_extract), ("status", cmd_status), ("lexemes", cmd_lexemes),
-                     ("inject", cmd_inject), ("check", cmd_check)):
+                     ("inject", cmd_inject), ("check", cmd_check), ("packs", cmd_packs)):
         p = sub.add_parser(name)
         p.add_argument("--source", default="en-nl", help="source course pair (default en-nl)")
         p.add_argument("--new", default="en-es", help="new target course pair (default en-es)")
