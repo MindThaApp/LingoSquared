@@ -101,10 +101,34 @@ CFG = {
     ),
     "it": dict(
         name="Italian",
+        rekey_exercises=True,                # exercise key tails re-derived from the translation (no Dutch slugs)
+        strict_residual=True,                # source-language words inside English fields are found by vocabulary
+        per_card_keys=True,                  # reading-card gloss keys translate per card
+        rewrite_gloss=True,                  # rewritten grammar cards get an authored English title + gloss
+        always_desc=True,                    # the unit description quotes Dutch phrases: author it for every unit
         formal=r"\blei\b",
-        informal=r"\b(tu|ti|te|tuo|tua)\b",
-        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"), ("i", "e"))),
-        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[aA] il\b", "al"), (r"\b[iI]n il\b", "nel"), (r"\b[dD]a il\b", "dal")],
+        informal=r"\b(tu|ti|te|tuo|tua|tuoi|tue)\b|\b(hai|puoi|vuoi|vai|fai|devi|sai|dici|vieni|parli|abiti|lavori|preferisci|prendi|ti chiami)\b",
+        # learner speaks as themselves: Sono stanco / Sono stanca (-o/-a; -e adjectives and -i/-e plurals need no alternate)
+        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"),)),
+        # articulated prepositions are obligatory (di il -> del, in l' -> nell'); never accept the open form as a variant
+        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[dD]i lo\b", "dello"), (r"\b[dD]i la\b", "della"), (r"\b[dD]i l'", "dell'"),
+                      (r"\b[dD]i i\b", "dei"), (r"\b[dD]i gli\b", "degli"), (r"\b[dD]i le\b", "delle"),
+                      (r"\b[aA] il\b", "al"), (r"\b[aA] lo\b", "allo"), (r"\b[aA] la\b", "alla"), (r"\b[aA] l'", "all'"),
+                      (r"\b[aA] i\b", "ai"), (r"\b[aA] gli\b", "agli"), (r"\b[aA] le\b", "alle"),
+                      (r"\b[iI]n il\b", "nel"), (r"\b[iI]n lo\b", "nello"), (r"\b[iI]n la\b", "nella"), (r"\b[iI]n l'", "nell'"),
+                      (r"\b[iI]n i\b", "nei"), (r"\b[iI]n gli\b", "negli"), (r"\b[iI]n le\b", "nelle"),
+                      (r"\b[dD]a il\b", "dal"), (r"\b[dD]a lo\b", "dallo"), (r"\b[dD]a la\b", "dalla"), (r"\b[dD]a l'", "dall'"),
+                      (r"\b[dD]a i\b", "dai"), (r"\b[dD]a gli\b", "dagli"), (r"\b[dD]a le\b", "dalle"),
+                      (r"\b[sS]u il\b", "sul"), (r"\b[sS]u lo\b", "sullo"), (r"\b[sS]u la\b", "sulla"), (r"\b[sS]u l'", "sull'"),
+                      (r"\b[sS]u i\b", "sui"), (r"\b[sS]u gli\b", "sugli"), (r"\b[sS]u le\b", "sulle")],
+        # elision: lo/la/una before a vowel is written l'/l'/un' (no space); `un` never takes an apostrophe before a masculine noun
+        elisions=[(r"(?<![\w'’])[lL][oa] (?=[aeiouàèéìòùhAEIOU])", "l'"), (r"(?<![\w'’])[uU]na (?=[aeiouàèéìòùAEIOU])", "un'"),
+                  (r"(?<![\w'’])[uU]n['’]\s?(?=(?:amico|albergo|uomo|orologio|ombrello|ufficio|aereo|autobus|anno|esame|ospedale|inverno|appuntamento|indirizzo)\b)", "un (masculine nouns take no apostrophe)")],
+        note=("Natural standard Italian. Informal source roles -> tu, formal -> Lei (capital Lei/Le/La only for 'you'; verb in the third person: Lei ha, "
+              "Può aiutarmi?). Obligatory articulated prepositions: di/a/da/in/su + il/lo/la/l'/i/gli/le -> del, al, dal, nel, sul ... "
+              "(nel parco, dell'ufficio, alla stazione, sul tavolo). Elision: l'amico, l'acqua, un'amica (but un amico), dov'è, c'è. "
+              "Pro-drop: no subject pronoun unless it contrasts (Sono di Roma). Speaker-gendered adjectives/participles as the learner "
+              "answer (Sono stanco/stanca, Sono stato/stata) need the other gender as an accepted alternate."),
     ),
     "fr": dict(
         name="French",
@@ -238,6 +262,18 @@ def agent_gender_alt(text: str) -> str | None:
     new_art = {"ein": "eine", "eine": "ein"}.get(art, art)
     head = text[:m.start(2) if art else m.start(3)]
     return head + (new_art + " " if art else "") + other + text[m.end():]
+
+
+def yaml_strings(o):
+    """Every string value (never a mapping key) of a loaded YAML document."""
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from yaml_strings(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from yaml_strings(v)
+    elif isinstance(o, str):
+        yield o
 
 
 # --- French: speaker-gendered words -----------------------------------------------------------------------
@@ -456,6 +492,8 @@ class UnitDeriver:
             if kind != "title":                      # titles lose their punctuation; prefer sentence atoms
                 self.atom_norms.setdefault(norm(text), aid)
         tr = self.p.tr_atoms.get(aid)
+        if kind != "gloss-key" and f"{self.stem}#t#{text}" in self.p.tr_atoms:        # this unit translates a shared word differently
+            tr = self.p.tr_atoms[f"{self.stem}#t#{text}"]
         if tr is None:
             self.p.missing.add(aid)
             return f"<<{aid}>>"
@@ -512,11 +550,17 @@ class UnitDeriver:
         before the residual check, so a cognate in the translation (Tulpen, Party) is not mistaken for a leftover."""
         out = s
         subs: dict[str, str] = {}
+        eng = self.p.english_words()
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
+                if " " not in text and text.casefold() in eng and not re.search(rf"[*'\"‘“]{re.escape(text)}", out):
+                    continue                          # a bare English word that is also a source word ('game', 'sport'): not a quotation
+                pat = re.compile(rf"(?<![\w]){re.escape(text)}(?![\w])")         # whole words: 'game' is not inside 'games'
+                if not pat.search(out):
+                    continue
                 ph = f"\x00{len(subs)}\x00"
                 subs[ph] = self.T(text, "quote")
-                out = out.replace(text, ph)
+                out = pat.sub(ph, out)
         out = self.en(out)
         left = self.residual(re.sub(r"\x00\d+\x00", " ", out))
         gpat = CFG.get(self.p.src, {}).get("grammar")
@@ -639,8 +683,10 @@ class UnitDeriver:
         for text in self.atom_texts:
             allsrc |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
         names_cf = {k.casefold() for k in self.p.names_map}
-        self.pair_target: set[str] = set()
+        self.pair_target: set[str] = set()           # kept for callers that test membership regardless of side
         self.right_target: set[str] = set()
+        self.lt_target: set[str] = set()             # left sides that are target text
+        self.rt_target: set[str] = set()             # right sides that are target text: an English right equal to a left (museum) is NOT
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
@@ -650,8 +696,10 @@ class UnitDeriver:
                         if norm(Rt) in teach_norms and norm(L) not in teach_norms:
                             self.pair_target.add(Rt)
                             self.right_target.add(Rt)
+                            self.rt_target.add(Rt)
                             continue
                         self.pair_target.add(L)
+                        self.lt_target.add(L)
                         tk = re.findall(r"[^\W\d_]{2,}", Rt.casefold())
                         if self.p.strict_residual:
                             eng2 = self.p.en_vocab | self.p.cast_words
@@ -661,6 +709,7 @@ class UnitDeriver:
                             is_right = bool(tk) and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6
                         if is_right:
                             self.pair_target.add(Rt)
+                            self.rt_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
                                 self.flag(ck, "PAIR_RIGHT_TARGET",
@@ -669,15 +718,15 @@ class UnitDeriver:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side, other in ((pr["left"], pr["right"]), (pr["right"], pr["left"])):
-                            if side in self.pair_target:
+                        for side, other, tgt in ((pr["left"], pr["right"], self.lt_target), (pr["right"], pr["left"], self.rt_target)):
+                            if side in tgt:
                                 self.T(side, "pair", other, e["content_key"])
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side in (pr["left"], pr["right"]):
-                            if side not in self.pair_target:
+                        for side, tgt in ((pr["left"], self.lt_target), (pr["right"], self.rt_target)):
+                            if side not in tgt:
                                 add_en(side)
         srclex = set()
         for text in self.atom_texts:
@@ -685,7 +734,8 @@ class UnitDeriver:
         if self.p.strict_residual:
             # `env` is built from the English fields themselves, so a source word quoted inside an English instruction or option
             # (*sporten*, doen aan) counted as English.  Strict mode: every word of the source course that no other English overlay uses.
-            self.src_only = ({w for w in self.p.src_lexicon if len(w) >= 4} | srclex) - self.p.en_vocab - self.p.cast_words
+            self.src_only = (({w for w in self.p.src_lexicon if len(w) >= 4} | srclex) - self.p.en_vocab - self.p.cast_words) | (
+                (srclex | self.p.source_vocab()) - self.p.english_words() - self.p.cast_words)      # either test finds a leftover
         else:
             # English vocabulary: words that occur in >= 10 overlay files of other pairs (never the source pair's own files,
             # which quote the source language).  A source word that is not English vocabulary counts as leftover in English text.
@@ -798,10 +848,12 @@ class UnitDeriver:
                     new_gl = OrderedDict()
                     for k, val in v["glosses"].items():
                         gk = self.T(k, "gloss-key", None, ck)
-                        left = self.residual(self.en(val)) if self.p.strict_residual else []
+                        left = self.residual(self.en(val, f"{ck}|gloss:{k}")) if self.p.strict_residual else []
                         # a gloss may explain a source word ('completes komt ... aan'): authored, with the translated key as context
                         new_gl[gk] = (self.A(f"{ck}#gv:{k}", val, "gloss-value", dict(key=gk, card=self.card_tr.get(ck), why=",".join(left)))
-                                      if left else self.en(val))
+                                      if left else self.en(val, f"{ck}|gloss:{k}"))
+                    if len(new_gl) < len(v["glosses"]) and not any(g.startswith("<<") for g in new_gl):
+                        self.flag(ck, "GLOSS_KEY", f"two gloss keys translate to the same word ({len(v['glosses'])} source keys, {len(new_gl)} distinct): rephrase the card so each key is its own word")
                     v["glosses"] = new_gl
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
@@ -919,12 +971,12 @@ class UnitDeriver:
         canon_tr: str | None = None
         if ty == "matching_pairs":
             for p_ in e.get("pairs") or []:
-                p_["left"] = self.pr(p_["left"])
+                p_["left"] = self.pr(p_["left"], "left")
                 p_["right"] = self.pr(p_["right"])
             for a in ov.get("accepted_answers") or []:
                 if isinstance(a.get("value"), list):
                     for pr in a["value"]:
-                        pr["left"] = self.pr(pr["left"])
+                        pr["left"] = self.pr(pr["left"], "left")
                         pr["right"] = self.pr(pr["right"])
             self.pair_collisions(ck, e.get("pairs") or [])
         elif has_opts and ans_target:
@@ -998,8 +1050,8 @@ class UnitDeriver:
         if "media_asset_key" in e:
             pass
 
-    def pr(self, right: str) -> str:
-        if right in self.pair_target:
+    def pr(self, right: str, side: str = "right") -> str:
+        if right in (self.lt_target if side == "left" else self.rt_target):
             return self.T(right, "pair")
         if self.p.strict_residual and self.residual(self.en(right)):
             return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
@@ -1126,6 +1178,9 @@ class UnitDeriver:
         for pat, fix in cfg.get("contractions", []):
             if re.search(pat, text):
                 self.flag(key, "CONTRACTION", f"{text!r}: obligatory contraction not applied (use {fix!r}); never accept the uncontracted form as a variant")
+        for pat, fix in cfg.get("elisions", []):
+            if re.search(pat, text):
+                self.flag(key, "ELISION", f"{text!r}: obligatory elision / apostrophe rule not applied (use {fix!r})")
         if src_text:
             src_reg = register_of(src_text, sp)
             tr_reg = register_of(text, tp) if cfg else None
@@ -1220,7 +1275,7 @@ class UnitDeriver:
         if "answer_policy" in base_o:
             newO["answer_policy"] = copy.deepcopy(base_o["answer_policy"])
         desc = self.en(O["course"]["description"])
-        if self.p.strict_residual and self.residual(desc):
+        if (self.p.strict_residual and self.residual(desc)) or self.p.always_desc:
             desc = self.A(f"{self.stem}#desc", O["course"]["description"], "description", dict(why=",".join(self.residual(desc))))
         newO["course"] = {"title": base_o["course"]["title"], "description": desc}
         for k in ("units", "lessons", "teaching", "exercises"):
@@ -1254,6 +1309,7 @@ class Plan:
         self.strict_residual = bool(CFG.get(self.tgt, {}).get("strict_residual"))
         self.per_card_keys = bool(CFG.get(self.tgt, {}).get("per_card_keys"))
         self.rewrite_gloss = bool(CFG.get(self.tgt, {}).get("rewrite_gloss"))
+        self.always_desc = bool(CFG.get(self.tgt, {}).get("always_desc"))     # the unit description is always authored (it quotes source-language phrases)
         self.rekey = bool(CFG.get(self.tgt, {}).get("rekey_exercises"))     # exercise key tails re-derived from the translation
         self.suffixes = dict(kv.split("=", 1) for kv in (getattr(args, "suffixes", None) or "").split(",") if "=" in kv)
         self._lex = None
@@ -1309,14 +1365,38 @@ class Plan:
         return self._svocab
 
     def english_words(self) -> set[str]:
+        """English vocabulary: words found (as string values, never keys) in >= 2 files of >= 4 different English-learner courses.
+        A word quoted from one target language (Vogel in en-de, perro in en-es) is therefore not English, which the older
+        'in >= 10 overlay files' rule could not tell (de-en and en-de overlays quote German hundreds of times)."""
         if getattr(self, "_english", None) is None:
-            counts: Counter = Counter()
-            for d in sorted((CONTENT / "overlays").iterdir()):
-                if not d.is_dir() or self.src in d.name.split("-") or d.name == self.new_pair:
-                    continue
-                for f in d.glob("*.yaml"):
-                    counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
-            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit", "giraffe", "croissant", "croissants", "meter"}
+            dirs = [d for d in sorted((CONTENT / "overlays").iterdir())
+                    if d.is_dir() and d.name.startswith("en-") and self.src not in d.name.split("-") and d.name != self.new_pair]
+            files = [f for d in dirs for f in d.glob("*.yaml")]
+            sig = f"{len(files)}:{max((f.stat().st_mtime_ns for f in files), default=0)}:{self.new_pair}"
+            cache = self.work / "english_words.cache.json"
+            cached = load_json(cache)
+            if cached.get("sig") == sig:
+                words = set(cached["words"])
+            else:
+                per: dict[str, Counter] = {}
+                for d in dirs:
+                    c: Counter = Counter()
+                    for f in d.glob("*.yaml"):
+                        seen: set[str] = set()
+                        for text in yaml_strings(dd.load(f)):
+                            seen.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
+                        c.update(seen)
+                    per[d.name] = c
+                tally: Counter = Counter()
+                for c in per.values():
+                    tally.update(w for w, n in c.items() if n >= 2)
+                words = {w for w, n in tally.items() if n >= 4}
+                dump_json(cache, dict(sig=sig, words=sorted(words)))
+            self._english = words | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit", "giraffe", "croissant", "croissants", "meter",
+                                     # English words that a Germanic/Romance course spells the same way
+                                     "sport", "sports", "yoga", "computer", "internet", "app", "apps", "hobby", "hobbies", "jogging", "hotel", "taxi", "bus",
+                                     "film", "menu", "team", "stress", "test", "tennis", "online", "email", "video", "radio", "jazz", "pizza", "cinema",
+                                     "park", "gym", "poster", "sandwich", "toilet", "bar", "pop", "rock", "club", "boss", "plan", "idee"}
         return self._english
 
     @property
@@ -1329,7 +1409,10 @@ class Plan:
                 if pair in (self.src_pair, self.new_pair):          # never the course being derived: a leak there would legitimise itself
                     continue
                 for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
-                    v.update(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold()))
+                    # values only: content keys of derived units still carry source-language slugs (choose_ontbijten) and would
+                    # legitimise those words as English
+                    for text in yaml_strings(dd.load(fp)):
+                        v.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
             _EN_VOCAB = v
         return _EN_VOCAB
 
@@ -1849,7 +1932,10 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
     plan_generic = ["choose", "listen", "translate", "match", "choose", "translate"]
     for i, verb in enumerate(plan_generic):
         lck = good_lessons[i % len(good_lessons)]
-        title = en_lesson_title(lck).lower() or "this unit"
+        title = en_lesson_title(lck)
+        if title.split(",")[0].split(" ")[0] not in set(plan.names_map.values()):         # 'Marco, Chiara and Luca on animals' keeps its capitals
+            title = title.lower()
+        title = title or "this unit"
         fb = frame(f"{{item}} is one of this unit's words, from the lesson on {_plain_en(title, 80)}.", "en")
         if verb in ("choose", "listen"):
             templates.append(dict(content_key=key(lck, verb), lesson_content_key=lck,
