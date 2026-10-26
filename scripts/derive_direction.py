@@ -284,6 +284,27 @@ ASTERISK = re.compile(r"\*([^*]+)\*")
 PLACEHOLDER = re.compile(r"\{[a-z_0-9]+\}")
 
 
+def _norm_title(s: str) -> str:
+    return re.sub(r"[\W_]+", " ", s.lower()).strip()
+
+
+def teaching_title_is_english(title: str, target: str = "") -> bool:
+    """Is a teaching-card title English target text (keep) or a learner-language description (translate)?
+
+    In the de-en source a card title is EITHER the English target text itself (vocabulary / phrase
+    cards: "Hello", "Good morning", grammar labels like "prefer X to Y") OR a German description
+    of the card ("Daniel fragt nach dem Namen", "Preisschild", "Sagen, wie oft man etwas einnimmt").
+    The source never marks which, so decide on content: it is target text when it equals the
+    card's English target text (case/punctuation-insensitive) or is (almost) entirely English
+    vocabulary; otherwise it is a learner-language description and must be translated.
+    """
+    if not has_words(title):
+        return True
+    if target and _norm_title(title) == _norm_title(target):
+        return True
+    return english_fraction(title) >= 0.9
+
+
 def has_words(s: str) -> bool:
     return bool(re.search(r"[^\W\d_]", PLACEHOLDER.sub("", s)))
 
@@ -357,7 +378,9 @@ def build_overlay_occs(unit: Unit, witnesses: dict[str, dict[str, Path]], src_co
         section = path[0]
         key = path[1] if section != "course" else None
         scope = (section, key)
-        if role in ALWAYS_ENGLISH or (section == "teaching" and role == "title") or not has_words(val):
+        if section == "teaching" and role == "title":
+            english = teaching_title_is_english(val, ridx.get(key or "", {}).get("target", ""))
+        elif role in ALWAYS_ENGLISH or not has_words(val):
             english = True
         elif role in ALWAYS_LEARNER:
             english = False
@@ -1073,7 +1096,14 @@ def cmd_validate(args):
     # leftover scan: sibling-language residue / unchanged strings
     left = leftover_scan(args)
     print(f"leftover-scan   {left} suspicious string(s)")
-    sys.exit(1 if fails else 0)
+    # German residue in a non-de learner-language overlay/pack (e.g. untranslated card titles)
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import _german_leftover_check as glc
+    german = glc.scan_pair(args.new) if args.new.split("-")[0] != "de" else []
+    for h in german[:50]:
+        print("  " + h)
+    print(f"german-leftover {len(german)} string(s)")
+    sys.exit(1 if fails or german else 0)
 
 
 def leftover_scan(args) -> int:
