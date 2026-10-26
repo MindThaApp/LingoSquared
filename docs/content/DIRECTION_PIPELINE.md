@@ -129,8 +129,9 @@ the A1 group). Coordinate it with other agents adding units to the same course: 
 | Cast names | `--names` maps them after translation (keep genders aligned: Lotte/Elena, Omar/Mateo) |
 | Lexeme backfill | `lexemes` lists the new tokens; `inject` writes a marked, mergeable block into `backfill_lexemes_<x>_<t>.py` (`DERIVED_TARGET_GLOSSES`, `DERIVED_TARGET_POS`) |
 
-Not derived: practice packs (hand-authored per language, see PRACTICE_PACK_RECIPE.md: the new units have no pack and so no
-Endless Practice or checkpoint pool until one is written), audio (media assets stay `pending_generation`), native review.
+Not derived: practice packs (see PRACTICE_PACK_RECIPE.md: the new units have no pack and so no Endless Practice or checkpoint
+pool until one is written; the en-de depth run generated them from each unit's lexemes and teaching sentences, see
+"German target" below), audio (media assets stay `pending_generation`), native review.
 
 ## Lints (`status` / `inject`; errors block inject, acknowledge false positives in `ack.json` as `"<id>:<FLAG>": "reason"`)
 
@@ -146,6 +147,30 @@ Endless Practice or checkpoint pool until one is written), audio (media assets s
 * `VARIANTS` (warn): the source accepted more distinct forms than the translation gave.
 * `PAIR_RIGHT_TARGET`, `GRAMMAR_REWRITE`, `LEFTOVER` (warn/error): review hints; `LEFTOVER` means source-language words survived in
   an English field.
+
+## German target (`de`, first non-es target)
+
+`CFG["de"]` carries what German needs; the same switches are generic and reusable for other targets.
+
+* `case_sensitive`: tested text, tiles and register detection keep case (nouns are capitalised; `Sie`/`Ihnen`/`Ihr` is formal
+  and `sie` is not). `slug(translit=...)` writes `ae/oe/ue/ss` in file names and keys; typed answers also accept the
+  transliteration variants (`schlaeft`, `Strasse`) because learners may not have umlaut keys.
+* Gender: mode `agent` (`Ich bin Student/in`): a gendered agent noun in a learner answer needs the other form as `#alt`.
+* Register: du/Sie pairs are checked against the source u/je roles (`REGISTER`); contractions `im am zum zur vom beim` are required
+  where the grammar demands them (`CONTRACTION`).
+* `CASE` lint: a capitalised word in mid-sentence that is not a known noun, or a lowercase noun, is flagged using the backfill
+  lexicon. Acknowledge real exceptions in `ack.json` (nominalised verbs and adjectives: `Essen`, `Gute`, colour nouns; proper
+  names such as `Theater Zum Stern`; the particle `mal`).
+* `--suffixes nl=de` maps topic words in file names and unit keys (`bakker=baeckerei` gives `a1_unit90_baeckerei.yaml`); units
+  continue the target's numbering (`--first-unit`).
+* Extra author slots the strict residual check needs: `#opts` (English options that quote a source word), `#gv:<key>` (gloss values),
+  `#desc` (course description), `#prompt<N>` (English prompt blocks), `#title`/`#gloss` (rewritten grammar cards). `strict_residual`
+  fails when a source-language word survives in a learner-facing English field (cognates such as `Party`, `blond` are masked).
+* Lexeme glosses: `lexemes.tr.json` takes `"gloss | pos"`, or `"=lowercase"` to alias a sentence-initial capital onto its
+  lowercase citation form (written to `DERIVED_TARGET_CITATION`).
+* Rewrite the grammar notes for German (cases, verb-second, separable verbs, `kein/nicht`) instead of translating the Dutch ones;
+  keep each to a short why. Keep `Write exactly` copy tasks as they are at A1.
+* Always pass `--new en-de` (or rely on the saved `plan.json`); an earlier default of `en-es` once wrote the wrong config.
 
 ## Limits and pitfalls
 
