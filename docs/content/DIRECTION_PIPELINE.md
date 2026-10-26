@@ -232,6 +232,28 @@ duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target l
 * Media keys: slugs of the other files of the course are reserved, so batches derived in separate runs never collide.
 * Batches can be authored in parallel with one `--work` dir per batch (own `--first-unit`); inject them one after the other.
 
+## Polish target (`pl`)
+
+`CFG["pl"]` (rekey, strict residual, per-card gloss keys, rewritten gloss cards like fr) plus:
+
+* Register `ty` / `pan, pani` (3rd person, lowercase as in the existing pl course); `REGISTER` reads ty/masz/jesteś/możesz ... against pan/pani/państwo.
+* Gender mode `pl` (`GENDER`; `#alt`): every speaker-gendered word of a learner answer flips together to the other gender: `byłem/byłam`,
+  `poszedłem/poszłam`, `zacząłem/zaczęłam`, `chciałbym/chciałabym`, `jestem zmęczony/zmęczona`, `jestem studentem/studentką`; second person singular
+  (`jesteś głodny/głodna`) too, because the English prompt does not say who is addressed.
+* Diacritics (ą ć ę ł ń ó ś ź ż) are never folded by the grader (`grading.py` only folds quotes, case, punctuation and script variants; a missing
+  diacritic is at best an "almost" typo), so ASCII spellings are NOT accepted variants. `slug()` maps `ł` to `l` for file names and keys.
+* Cast names decline: write the nominative as the source name (it is mapped, `Lotte=Ewa`), write declined forms with the final name (`z Ewą`, `u Kasi`).
+* Prices: złoty/grosz instead of euro through `en_override.json` (`"~euro": "zloty"`), with number agreement (1 złoty, 2-4 złote, 5+ złotych).
+* `fixintro` (new command, all inflected targets): an exercise tests or shows a case/person form whose lemma the lesson introduced in another form
+  (`uwielbiam` after `uwielbiać`). `fixintro` runs the compiler validation and adds the reported tokens (errors, and the matching_pairs / prompt warnings) to the
+  last teaching item of that lesson. Run it after every `inject` (inject rewrites the YAML), give the new tokens glosses in `lexemes.tr.json` first
+  (`inject` writes all of lexemes.tr.json), review the printed list.
+* English leftovers: quote substitution is whole-word and case aware (`Boom is tree` -> `Drzewo is tree`; `gras` is not found inside `grass`), sentence pieces of
+  sign texts are substituted (`Open: negen uur tot vijf uur.`), and an English-word atom (`games`, `yoga`) is only substituted when quoted. A final net
+  (`english_leftover_scan`) turns any remaining source-language word in an English field into an authored slot. `en_vocab` counts a word as English only when at
+  least three overlay files of other courses use it, so earlier derived courses cannot legitimise a Dutch word. Word-level rewrites that must run after
+  substitution go in `en_override.json` as `"~zegt": "says"`; `pair_force.json` (`["pin"]`) lists pair right sides that are source text although they look English; `not_english.json` (`["markt","strand"]`) lists source words the cross-course vocabulary wrongly counts as English.
+
 ## Romanian target (`ro`)
 
 `CFG["ro"]` reuses the generic switches of the French target (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
