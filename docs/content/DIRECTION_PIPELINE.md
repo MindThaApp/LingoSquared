@@ -194,6 +194,24 @@ checks afterwards.
   keep each to a short why. Keep `Write exactly` copy tasks as they are at A1.
 * Always pass `--new en-de` (or rely on the saved `plan.json`); an earlier default of `en-es` once wrote the wrong config.
 
+## Italian target (`it`)
+
+`CFG["it"]` (generic switches reused from the German run: `rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) plus:
+
+* Register: informal source roles -> tu (`tu/ti/tuo`, 2sg verb forms), formal -> Lei (3rd person: Lei ha, Prenda); `REGISTER` lint.
+* Gender: speaker-gendered `-o/-a` adjective or participle after `sono/sei/mi sento` in a learner answer needs the other gender as `#alt`
+  (`GENDER` lint; `-e` adjectives are common gender). Third person needs none.
+* Articulated prepositions are obligatory (`di/a/da/in/su` + `il/lo/la/l'/i/gli/le` -> del, al, dal, nel, sul ...): `CONTRACTION` lint.
+* Elision (`elisions` in the config): `lo/la/una` before a vowel or h -> `l'`, `un'`; `un'` before a masculine noun is an error: `ELISION` lint.
+  The lint also hits quoted letters ("la h"); reword or acknowledge in `ack.json`.
+* Dates, times, prices and numbers are spelled out like the existing it units; `always_desc` makes the unit description an authored slot.
+* Elided forms are single tokens (`l'acqua`, `dov'è`); cast names go in `PROPER_NOUNS` of `backfill_lexemes_en_it.py`.
+
+Generic additions made for it (usable by other targets): unit-scoped atom overrides (`"<source stem>#t#<dutch text>"` in `atoms.tr.json`),
+English-gloss overrides per reading-card key (`"<source ck>|gloss:<key>"` in `en_override.json`), whole-word quote substitution that skips English
+words, an English vocabulary measured over string values of >= 4 English-learner courses (so words quoted from one target are not English),
+duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target language name.
+
 ## French target (`fr`)
 
 `CFG["fr"]` reuses the generic switches of the German target (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
@@ -223,3 +241,22 @@ checks afterwards.
   translation. Pick portable units first (health, money, hobbies, phone, appearance, animals, colours, seasons, restaurant).
 * Native review of the derived target text is required; derived units are written `unreviewed` / `native_speaker_review`.
 * Tested with en-nl as source only; other sources need their own `CFG` formal/informal markers in the script.
+
+## Russian target (`ru`, first non-Latin script)
+
+`CFG["ru"]` reuses the generic switches of the German and French targets (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
+
+* Script: `script="cyrillic"`. Tokens, tiles, norm keys and lexeme keys use `\w`, which already covers Cyrillic; `slug()` transliterates Cyrillic
+  (`TRANSLIT_RU`, the Latin of the existing ru content keys: `u_menya_bolit_golova`, `khleb_i_chay`). `boundary_strip` also drops `«» … — –`.
+  Capitalisation does not carry meaning (not `case_sensitive`); names are mapped with `--names` to Cyrillic (`Lotte=Настя,Omar=Дима`).
+* No stress marks and no Latin letters in Russian text: lints `STRESS` (U+0301) and `SCRIPT` (acknowledge real exceptions such as a brand in `ack.json`).
+* ё/е: the grader does not fold them and the corpus writes ё (идёт). `yo_fold`: every accepted free-text answer containing ё also gets the е spelling
+  (not word_order tiles, which keep ё). `YO_MIXED` flags a word spelled both ways in the course (the backfill treats them as two lexemes); `все/всё` are exempt.
+* Register `ты`/`Вы` (`REGISTER`); plural or polite `вы` for a Dutch `jullie` is acked. There are no obligatory contractions or elision.
+* Gender mode `ru` (`GENDER`; `#alt`): after `я` a past-tense verb (`устал/устала`, `пошёл/пошла`, `учился/училась`; later coordinated past verbs flip too),
+  a short adjective (`рад/рада`, `должен/должна`) or an agent noun (`студент/студентка`) needs the other gender as an accepted alternate.
+* The CFG note tells the translator about the six cases, aspect, motion verbs and the dropped present-tense `быть`.
+* The en-ru exercises use no transliteration field, so none is generated.
+* Cast names: `--names Lotte=Настя,Omar=Дима` maps the Dutch names in the Russian text (speaker labels, nominative), `--names-en Lotte=Nastya,Omar=Dima`
+  maps them in every English field (the en-ru overlays spell the cast Nastya, Dima). Russian names inflect, so the translator writes the right case
+  form directly (`Настю`, `Диме`) and never a Latin name in Russian text. Without `--names-en` the single `--names` map serves both sides.
