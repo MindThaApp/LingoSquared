@@ -14,6 +14,17 @@ const UI_SWITCHABLE_LANGUAGES: Record<string, string> = {
   fa: "language_switcher.farsi",
   prs: "language_switcher.dari",
   nl: "language_switcher.dutch",
+  es: "language_switcher.spanish",
+  fr: "language_switcher.french",
+  ru: "language_switcher.russian",
+  it: "language_switcher.italian",
+  ar: "language_switcher.arabic",
+  pl: "language_switcher.polish",
+  hi: "language_switcher.hindi",
+  ro: "language_switcher.romanian",
+  ko: "language_switcher.korean",
+  zh: "language_switcher.chinese",
+  ja: "language_switcher.japanese",
 };
 
 // Below this total unit count for a path, it's real but still growing --
