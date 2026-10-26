@@ -149,6 +149,26 @@ CFG = {
               "c'est, qu'il, d'abord). Hyphenated inversions and elided forms are single tiles (vas-tu, est-ce, l'école). "
               "Speaker-gendered words (je suis fatigué/fatiguée, étudiant/étudiante) need the other gender as an accepted alternate (#alt)."),
     ),
+    "pl": dict(
+        name="Polish",
+        rekey_exercises=True,                # exercise key tails re-derived from the translation
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        formal=r"\b(?:pan|pani|panie|panu|panią|pana|panowie|panów|państwo|państwa|państwu|państwem|paniom)\b",
+        informal=r"\b(?:ty|ciebie|cię|ci|tobie|tobą|twój|twoja|twoje|twoim|twoją|twojego|twojej|masz|jesteś|możesz|chcesz|lubisz|robisz|"
+                 r"mieszkasz|pracujesz|idziesz|czujesz|wiesz|potrzebujesz|jesteście|wy|wam|wasz\w*)\b",
+        gender=dict(mode="pl"),              # speaker-gendered: jestem zmęczony/zmęczona, byłem/byłam, chciałbym/chciałabym, jestem studentem/studentką
+        note=("Natural standard Polish with full diacritics (ą ć ę ł ń ó ś ź ż): the grader does not fold them, so a diacritic-less answer is never accepted "
+              "and must never be listed as a variant. Informal source roles -> ty (2nd person singular), formal -> pan/pani (3rd person: Czy pan jest ...?, "
+              "Proszę pani). Seven cases (name the case you use: accusative after widzę/mam/chcę, genitive after nie ma/brak/numbers 5+, locative after w/na/o, "
+              "instrumental after z and with jestem + noun, dative after dać/pomóc, genitive after do/od/z). Verbs agree in person, tense and gender: "
+              "speaker-gendered words (byłem/byłam, jestem zmęczony/zmęczona, studentem/studentką) need the other gender as an accepted alternate (#alt). "
+              "Aspect pairs (robić/zrobić, pisać/napisać): imperfective for habit and process, perfective for a finished result. "
+              "Pro-drop: leave the subject pronoun out unless it is contrastive (Mam psa, not Ja mam psa). Masculine personal plural uses -i/-y forms (oni są zmęczeni), "
+              "other plurals -e. Cast names: write the nominative name as the source name (it is mapped), but write DECLINED forms directly with the final Polish name "
+              "(z Ewą, do Marka, u Kasi, w Krakowie)."),
+    ),
     "ro": dict(
         name="Romanian",
         rekey_exercises=True,
@@ -257,7 +277,7 @@ def tokens(s: str) -> list[str]:
 TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue"})
 
 
-TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae"})      # sœur -> soeur, not "sur"
+TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae", "ł": "l", "Ł": "L"})      # sœur -> soeur, not "sur"; Polish ł does not decompose (słowo -> slowo)
 
 
 # Cyrillic -> the Latin of the existing ru content keys (zhivot, solntse, u_menya, davay_poydyom); a no-op for Latin text
@@ -441,6 +461,94 @@ def fr_gender_alts(text: str) -> list[str]:
     return out
 
 
+# --- Polish: speaker-gendered words ------------------------------------------------------------------------
+PL_COPULA = re.compile(
+    r"\b(jestem|jesteś|czuję się|czujesz się|byłem|byłam|byłeś|byłaś|czułem się|czułam się|czułeś się|czułaś się)"
+    r"((?:\s+(?:bardzo|trochę|dość|zbyt|już|też|także|naprawdę|całkiem|raczej|nie|zawsze|często|teraz|dziś|dzisiaj|strasznie|dosyć|jeszcze))*)"
+    r"\s+([^\W\d_]{4,})", re.I)
+PL_PAST = re.compile(r"\b([^\W\d_]+?)(łem|łam|łeś|łaś|łbym|łabym|łbyś|łabyś)\b", re.I)
+PL_PAST_M2F = {"łem": "łam", "łeś": "łaś", "łbym": "łabym", "łbyś": "łabyś"}
+PL_PAST_F2M = {v: k for k, v in PL_PAST_M2F.items()}
+PL_PAST_IRREG = {"poszedł": "poszł", "przyszedł": "przyszł", "wyszedł": "wyszł", "doszedł": "doszł", "wszedł": "weszł", "zszedł": "zeszł", "odszedł": "odeszł",
+                 "przeszedł": "przeszł", "poszła": "poszedł"}
+PL_AGENT = {"studentem": "studentką", "uczniem": "uczennicą", "lekarzem": "lekarką", "nauczycielem": "nauczycielką", "kelnerem": "kelnerką",
+            "fryzjerem": "fryzjerką", "kucharzem": "kucharką", "pielęgniarzem": "pielęgniarką", "aktorem": "aktorką", "pracownikiem": "pracownicą",
+            "informatykiem": "informatyczką", "sprzedawcą": "sprzedawczynią", "Polakiem": "Polką", "Anglikiem": "Angielką", "Amerykaninem": "Amerykanką",
+            "Niemcem": "Niemką", "Francuzem": "Francuzką", "Holendrem": "Holenderką", "Włochem": "Włoszką", "Hiszpanem": "Hiszpanką", "turystą": "turystką",
+            "kierowcą": "kierowczynią", "malarzem": "malarką", "kolegą": "koleżanką", "przyjacielem": "przyjaciółką", "inżynierem": "inżynierką",
+            "programistą": "programistką", "sprzątaczem": "sprzątaczką", "dentystą": "dentystką", "księgarzem": "księgarką", "piekarzem": "piekarką"}
+PL_AGENT.update({v: k for k, v in list(PL_AGENT.items())})
+PL_NOT_GENDERED = frozenset("tutaj teraz blisko daleko razem przy obok koło dzisiaj wtedy gotów gotowi zawsze często".split())
+PL_F2M_STEM = (("zaczę", "zaczą"), ("wzię", "wzią"), ("zaję", "zają"), ("wyję", "wyją"), ("ję", "ją"))
+
+
+def _keep_case(old: str, new: str) -> str:
+    return new[:1].upper() + new[1:] if old[:1].isupper() else new
+
+
+def pl_adj_flip(w: str) -> str | None:
+    lw = w.lower()
+    if w[:1].isupper() or lw in PL_NOT_GENDERED or len(lw) < 4:
+        return None
+    if lw.endswith("y"):
+        return w[:-1] + "a"
+    if lw.endswith("i"):
+        return (w[:-1] + "a") if lw[-2] in "kg" else (w + "a")
+    if lw.endswith("ia"):
+        return w[:-1]
+    if lw.endswith("a") and lw[-2] in "nłtwrkgdzbcmspj":
+        return w[:-1] + ("i" if lw[-2] in "kg" else "y")
+    return None
+
+
+def pl_gender_alts(text: str) -> list[str]:
+    """Polish 'Jestem zmęczony.' / 'Byłem w domu.' -> the other gender, every speaker-gendered word flipped together (None when there is none)."""
+    out = text
+    changed = False
+
+    def cop(m):
+        nonlocal changed
+        new = pl_adj_flip(m.group(3))
+        if new is None and m.group(3) in PL_AGENT:
+            new = PL_AGENT[m.group(3)]
+        if new is None and m.group(3).lower() in PL_AGENT:
+            new = PL_AGENT[m.group(3).lower()]
+        if new is None:
+            return m.group(0)
+        changed = True
+        return m.group(0)[:m.start(3) - m.start(0)] + new
+    out = PL_COPULA.sub(cop, out)
+
+    def past(m):
+        nonlocal changed
+        stem, end = m.group(1), m.group(2).lower()
+        lw = (stem + end).lower()
+        if lw in ("chciałem",) and False:
+            return m.group(0)
+        if end in PL_PAST_M2F:
+            new_end = PL_PAST_M2F[end]
+            new_stem = stem
+            full_m = (stem + "ł").lower()
+            if full_m in PL_PAST_IRREG:
+                new_stem = PL_PAST_IRREG[full_m][:-1]
+            elif stem.endswith("ą"):
+                new_stem = stem[:-1] + "ę"
+        else:
+            new_end = PL_PAST_F2M[end]
+            new_stem = stem
+            full_f = stem.lower() + "ł"
+            irregular = {"poszł": "poszedł", "przyszł": "przyszedł", "wyszł": "wyszedł", "doszł": "doszedł", "weszł": "wszedł", "zeszł": "zszedł", "odeszł": "odszedł", "przeszł": "przeszedł"}
+            if full_f in irregular:
+                new_stem = irregular[full_f][:-1]
+            else:
+                for a, b in PL_F2M_STEM:
+                    if stem.lower().endswith(a):
+                        new_stem = stem[:-len(a)] + b
+                        break
+        changed = True
+        return _keep_case(m.group(0), new_stem + new_end)
+    out = PL_PAST.sub(past, out)
+    return [out] if changed and out != text else []
 # --- Russian: speaker-gendered words ------------------------------------------------------------------------
 RU_ADV = frozenset("не ни уже тоже также очень всегда часто иногда редко потом сегодня вчера завтра сейчас там здесь тут ещё еще никогда просто почти совсем только "
                    "сам сама а и но да вот же вообще обычно утром вечером днём днем ночью".split())
@@ -831,6 +939,35 @@ class UnitDeriver:
                 s = re.sub(rf"(?<![\w{DEV}]){re.escape(k[1:])}(?![\w{DEV}])", v, s)
         return s.replace(self.p.src_name, self.p.new_name)
 
+    def segment_items(self) -> list[tuple[str, str]]:
+        """Sentence-sized pieces of multi-sentence atoms (a sign `Open: negen uur tot vijf uur. Kaartje: acht euro.`), so English feedback that
+        quotes one piece is substituted too.  Only when the translation splits into the same number of pieces."""
+        if getattr(self, "_segs", None) is not None:
+            return self._segs
+        segs: dict[str, str] = {}
+        eng = self.p.english_words()
+        for text in list(self.atom_texts):
+            if "\n" in text:
+                continue
+            parts = re.split(r"(?<=[.!?])\s+", text.strip())
+            if len(parts) < 2:
+                continue
+            aid = self.atom_texts[text]
+            tr = self.p.derived.get(aid) or self.p.tr_atoms.get(aid)
+            if not tr:
+                continue
+            tr = self.p.names(tr)
+            tparts = re.split(r"(?<=[.!?])\s+", tr.strip())
+            if len(tparts) != len(parts):
+                continue
+            for a, b in zip(parts, tparts):
+                words = re.findall(r"[^\W\d_]{3,}", a.casefold())
+                if len(a) >= 6 and a not in self.atom_texts and words and not all(w in eng for w in words):
+                    segs.setdefault(a, b)
+        self._seg_tr = segs
+        self._segs = [(a, a) for a in segs]
+        return self._segs
+
     def en_checked(self, s: str, slot: str, kind: str, ctx: dict | None = None) -> str:
         """English text that may quote or discuss the source language.  Quoted atoms are
         substituted; anything still source-language needs authoring.  The substituted target text is masked
@@ -838,18 +975,26 @@ class UnitDeriver:
         out = s
         subs: dict[str, str] = {}
         eng = self.p.english_words()
-        for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
-            if len(text) >= 3 and text in out:
-                if text in self.p.names_map:
-                    continue                          # a cast name in English prose is mapped by names_en (Arjun), never quoted as target text
-                if " " not in text and text.casefold() in eng and not re.search(rf"[*'\"‘“]{re.escape(text)}", out):
-                    continue                          # a bare English word that is also a source word ('game', 'sport'): not a quotation
-                pat = re.compile(rf"(?<![\w{DEV}]){re.escape(text)}(?![\w{DEV}])")         # whole words: 'game' is not inside 'games'
-                if not pat.search(out):
-                    continue
+        for text, aid in sorted(list(self.atom_texts.items()) + self.segment_items(), key=lambda kv: -len(kv[0])):
+            if len(text) < 3 or text in self.p.names_map:
+                continue                              # a cast name in English prose is mapped by names_en, never quoted as target text
+            # whole word ("gras" is not inside "grass"); a lowercase source atom also matches its sentence-initial capital ("Boom is tree")
+            first = text[0]
+            head = f"[{first}{first.upper()}]" if first.islower() else re.escape(first)
+            word = rf"(?<![^\W\d_])(?<![{DEV}])" + head + re.escape(text[1:]) + rf"(?![^\W\d_])(?![{DEV}])"
+            if not re.search(word, out):
+                continue
+            quoted_only = all(self.p.is_english(w) for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(c in text for c in " ,.")
+            pat = re.compile((r"(?<=['\"*\u2018\u201c])" if quoted_only else "") + word[len(rf"(?<![^\W\d_])(?<![{DEV}])"):] if quoted_only else word)
+
+            def put(m, text=text):
                 ph = f"\x00{len(subs)}\x00"
-                subs[ph] = self.T(text, "quote")
-                out = pat.sub(ph, out)
+                tr = self._seg_tr[text] if text not in self.atom_texts else self.T(text, "quote")
+                if m.group(0)[:1].isupper() and text[:1].islower() and not tr.startswith("<<"):
+                    tr = tr[:1].upper() + tr[1:]
+                subs[ph] = tr
+                return ph
+            out = pat.sub(put, out)
         out = self.en(out)
         left = self.residual(re.sub(r"\x00\d+\x00", " ", out))
         gpat = CFG.get(self.p.src, {}).get("grammar")
@@ -996,7 +1141,7 @@ class UnitDeriver:
                         else:
                             tk = [x for x in tk if x not in names_cf]
                             is_right = bool(tk) and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6
-                        if is_right:
+                        if is_right or Rt in self.p.pair_force:
                             self.pair_target.add(Rt)
                             self.rt_target.add(Rt)
                             if Rt not in self.atom_texts:
@@ -1151,7 +1296,44 @@ class UnitDeriver:
         # -- header ---------------------------------------------------------------
         self.grammar_lint(O)
         R, O = self.finish(R, O)
+        self.english_leftover_scan(R, O)
         return R, O
+
+    def english_leftover_scan(self, R, O) -> None:
+        """Final net over every English field of the finished overlay: a source-language word that is not a word of the translated target
+        text (so a cognate or a quoted target word is fine) is a leftover (`Pinnen is the verb`, `Jong means young`)."""
+        if not self.p.strict_residual:
+            return
+        tgt: set[str] = set()
+
+        def collect(o):
+            if isinstance(o, dict):
+                for v in o.values():
+                    collect(v)
+            elif isinstance(o, list):
+                for v in o:
+                    collect(v)
+            elif isinstance(o, str):
+                tgt.update(re.findall(r"[^\W\d_]{2,}", o.casefold()))
+        collect(R)
+        collect({k: v for k, v in O.items() if k == "exercises"})              # accepted answers, options: target text lives there too
+        skip = {"title", "gloss", "note", "feedback", "instruction", "hint", "description", "example_gloss", "glosses", "prompt"}
+        cast = {w.casefold() for kv in self.p.names_map.items() for w in kv}
+
+        def walk(o, path, ck):
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    walk(v, path + [str(k)], str(k) if path and path[-1] in ("exercises", "teaching", "units", "lessons") else ck)
+            elif isinstance(o, list):
+                for v in o:
+                    walk(v, path, ck)
+            elif isinstance(o, str) and path and path[-1] in skip and "<<" not in o:
+                t = re.sub(r"\*[^*]*\*", " ", o)
+                t = re.sub(r"['\"\u2018\u201c][^'\"\u2019\u201d]{2,}['\"\u2019\u201d]", " ", t)
+                left = sorted(set(re.findall(r"[^\W\d_]{3,}", t.casefold())) & self.src_only - tgt - cast)
+                if left:
+                    self.flag(ck or "?", "LEFTOVER", f"{path[-1]} {o[:120]!r} still contains {self.p.src_name} words {left}")
+        walk({k: v for k, v in O.items() if k in ("exercises", "teaching", "units", "lessons")}, [], None)
 
     def grammar_lint(self, O: dict) -> None:
         """English strings that still describe source-language grammar (split verbs, het-words, ...) after rewriting."""
@@ -1520,6 +1702,11 @@ class UnitDeriver:
             alts_fr = fr_gender_alts(text)
             if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "pl":
+            alts_pl = pl_gender_alts(text)
+            if alts_pl and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_pl):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_pl[0]!r}) via `{key}#alt`")
+
         elif g and kind == "answer" and g.get("mode") == "ro":
             alts_ro = ro_gender_alts(text)
             if alts_ro and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ro):
@@ -1674,6 +1861,7 @@ class Plan:
         self.acks = load_json(work / "ack.json")
         # English strings that describe source-language grammar (titles, glosses, notes): exact string -> rewrite for the new language
         self.en_over = load_json(work / "en_override.json")
+        self.pair_force = set(load_json(work / "pair_force.json") or [])      # pair right sides that are source text although they look English ("pin")
         # base files of the target course: header/answer policy come from them
         group = args.group or self.new_pair
         real, ovl = manifest_group(group)
@@ -1708,6 +1896,11 @@ class Plan:
                 walk(dd.load(f))
             self._svocab = voc
         return self._svocab
+
+    def is_english(self, w: str) -> bool:
+        """An English word for the quote-substitution guard: english_words() minus `not_english.json` of the work dir (source words that
+        earlier derived courses leaked into English fields until the cross-course vocabulary counts them: 'markt', 'strand')."""
+        return w in self.english_words() and w not in set(load_json(self.work / "not_english.json") or [])
 
     def english_words(self) -> set[str]:
         """English vocabulary: words found (as string values, never keys) in >= 2 files of >= 4 different English-learner courses.
@@ -1749,16 +1942,19 @@ class Plan:
         """Words used in the English fields of the other courses' overlays (anything the source course quotes is not in here)."""
         global _EN_VOCAB
         if _EN_VOCAB is None:
-            v: set[str] = set()
+            cnt: Counter = Counter()
             for pair in ("en-de", "en-es", "en-fr", "en-it", "en-pl", "en-ro"):
                 if pair in (self.src_pair, self.new_pair):          # never the course being derived: a leak there would legitimise itself
                     continue
                 for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
+                    toks: set[str] = set()
                     # values only: content keys of derived units still carry source-language slugs (choose_ontbijten) and would
                     # legitimise those words as English
                     for text in yaml_strings(dd.load(fp)):
-                        v.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
-            _EN_VOCAB = v
+                        toks.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
+                    cnt.update(toks)
+            # a word that only one or two overlay files use is more likely a leak of an earlier derived course than English
+            _EN_VOCAB = {w for w, n in cnt.items() if n >= 3}
         return _EN_VOCAB
 
     @property
@@ -2142,7 +2338,7 @@ def cmd_inject(args):
     update_manifest(plan.group, new_real, new_ovl)
     if not args.skip_lexemes and lex:
         # all of lexemes.tr.json: gloss entries and `=citation` aliases (an alias target may not occur as a raw token itself)
-        written.append(write_backfill_block(plan, dict(lex), set(toks)))
+        written.append(write_backfill_block(plan, dict(lex), None))
     for p in written:
         print("wrote", p.relative_to(ROOT))
 
@@ -2399,11 +2595,40 @@ def cmd_packs(args):
     print("updated", fp.relative_to(ROOT))
 
 
+def cmd_fixintro(args):
+    """Inflected targets (Polish): an exercise tests or shows a case/person form of a lemma the lesson only introduced in another form
+    (`uwielbiam` vs `uwielbiać`). Runs the compiler validation and adds the reported tokens (errors and the matching_pairs / prompt warnings) to the introduced_tokens of the last teaching
+    item of that lesson (a form the learner sees in the exercise's own sentence). Re-run after every inject; review the printed list."""
+    plan = make_plan(args)
+    py = ROOT / ".content-venv/bin/python"
+    py = str(py if py.exists() else sys.executable)
+    real, ovl = manifest_group(plan.group)
+    r = subprocess.run([py, "scripts/compile_content.py", "validate", "--realization", *map(str, real), "--overlay", *map(str, ovl)],
+                       cwd=ROOT, capture_output=True, text=True)
+    mine = {f"{d.new_stem}.yaml" for d in plan.derivers}
+    todo: dict[tuple[str, int], set[str]] = defaultdict(set)
+    for line in (r.stdout + r.stderr).splitlines():
+        m = re.match(r"(?:ERROR|WARN): (\S+?):realization\.units\[0\]\.lessons\[(\d+)\]\..*?(?:tokens not introduced in this or an earlier lesson|untaught tokens): (.+)$", line)
+        if m and Path(m.group(1)).name in mine:
+            todo[(m.group(1), int(m.group(2)))] |= {t.strip() for t in m.group(3).split(",")}
+    for (path, li), toks in sorted(todo.items()):
+        doc = dd.load(Path(path))
+        teaching = doc["units"][0]["lessons"][li]["teaching"]
+        item = teaching[-1]
+        have = item.setdefault("introduced_tokens", [])
+        add = [t for t in sorted(toks) if t not in have]
+        have.extend(add)
+        dd.dump(doc, Path(path))
+        print(f"{Path(path).name} lesson {li + 1}: +{add} (review: the form is only shown in the exercise sentence)")
+    print(f"fixintro: {sum(len(v) for v in todo.values())} tokens in {len(todo)} lessons")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("extract", cmd_extract), ("status", cmd_status), ("lexemes", cmd_lexemes),
-                     ("inject", cmd_inject), ("check", cmd_check), ("packs", cmd_packs)):
+                     ("inject", cmd_inject), ("check", cmd_check), ("packs", cmd_packs), ("fixintro", cmd_fixintro)):
         p = sub.add_parser(name)
         p.add_argument("--source", help="source course pair (default: the saved plan, else en-nl)")
         p.add_argument("--new", help="new target course pair (default: the saved plan, else en-es)")
