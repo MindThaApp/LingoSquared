@@ -8,6 +8,17 @@ const UI_LANGUAGES: { code: string; nativeName: string }[] = [
   { code: "nl", nativeName: "Nederlands" },
   { code: "fa", nativeName: "فارسی" },
   { code: "prs", nativeName: "دری" },
+  { code: "es", nativeName: "Español" },
+  { code: "fr", nativeName: "Français" },
+  { code: "ru", nativeName: "Русский" },
+  { code: "it", nativeName: "Italiano" },
+  { code: "ar", nativeName: "العربية" },
+  { code: "pl", nativeName: "Polski" },
+  { code: "hi", nativeName: "हिन्दी" },
+  { code: "ro", nativeName: "Română" },
+  { code: "ko", nativeName: "한국어" },
+  { code: "zh", nativeName: "中文" },
+  { code: "ja", nativeName: "日本語" },
 ];
 
 export function LanguageSwitcher() {
