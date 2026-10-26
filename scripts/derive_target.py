@@ -210,6 +210,30 @@ CFG = {
               "dropped in the present (Я дома, У меня есть брат). Short answers: keep word order natural, topic first. "
               "Tiles: every word is one tile, a hyphenated word (по-русски, кто-то) is one tile."),
     ),
+    "ar": dict(
+        name="Arabic",
+        script="arabic",                     # RTL; tokens / tiles / lexeme keys use \w (letters only: harakat are NOT \w, so the A1 text carries none)
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        arabic_punct=True,                   # ? , ; written as the Arabic question mark / comma / semicolon in target text
+        formal=r"(?!)",                      # MSA has no tu/vous split at A1: the REGISTER lint never fires
+        informal=r"(?!)",
+        gender=dict(mode="ar"),              # speaker gender (انا متعب/متعبة) and addressee gender (تريد/تريدين, اشرب/اشربي, انت مريض/مريضة)
+        note=("Natural Modern Standard Arabic (fusha), the register of ar units 01-24. Write WITHOUT tashkeel (no harakat, no tatweel): the course "
+              "convention and the tokenizer both rely on it, and the grader accepts answers with or without harakat; the notes give a transliteration "
+              "in parentheses instead (مال (māl)). Spell hamza exactly (أ إ آ ؤ ئ) and use Arabic yeh ي, kaf ك, teh marbuta ة, alef maqsura ى; "
+              "a hamza-only slip is graded 'almost', never auto-accepted, so keep ONE spelling per word through the course. Western digits (5, not ٥). "
+              "Punctuation: ، ؟ ؛ (the full stop stays '.'). Attached particles are written joined and are ONE tile / token: و (and), ب (with, by), "
+              "ل (for, to), ك, ف, سـ (will): وقهوة, بالبطاقة, للمدرسة, سأدفع. Never leave them detached (و قهوة). Definite article ال is attached "
+              "(الكتاب); ل + ال contracts to لل (للمدرسة, not لالمدرسة); sun letters assimilate only in pronunciation, so in a transliteration write "
+              "ash-shams, ar-raʾs, at-tuffāḥ, but al-qamar, al-baṭn. Dual: two of something is the dual noun, not the numeral + plural "
+              "(كتابان / كتابين, not اثنان كتب). Gender: every 2nd-person verb, imperative and predicate adjective differs for a man and a woman "
+              "(تشرب / تشربين, اشرب / اشربي, أنت متعب / متعبة) and so do predicates after أنا (أنا طالب / طالبة): the learner answer needs the other gender as "
+              "an accepted alternate (#alt). Cast: Layla ليلى and Nour نور are women, Yusuf يوسف and Karim كريم are men. Prices in dirhams or dinars as the "
+              "existing units do. Notes quote Arabic followed by a transliteration in parentheses: مال (māl) means money."),
+    ),
     "hi": dict(
         name="Hindi",
         script="devanagari",                 # tokens / tiles / norm keys keep the vowel signs (DEV); slugs transliterate (translit_hi); no Latin letters in Hindi text
@@ -262,7 +286,7 @@ def strip_punct(s: str) -> str:
 
 def boundary_strip(s: str) -> str:
     """Only the punctuation at both ends (the dictation compiler check ignores just that)."""
-    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–।]+|[\s.!?¿¡;:,\"“”„«»…—–।]+$", "", s)
+    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–؟،؛।]+|[\s.!?¿¡;:,\"“”„«»…—–؟،؛।]+$", "", s)
 
 
 def norm(s: str) -> str:
@@ -286,6 +310,13 @@ TRANSLIT_RU = str.maketrans({
     "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh",
     "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"})
 
+
+# Arabic -> Latin consonant skeleton for content-key slugs (no short vowels are written): alqraa_walriyada
+TRANSLIT_AR = str.maketrans({
+    "ا": "a", "أ": "a", "إ": "i", "آ": "a", "ٱ": "a", "ء": "a", "ؤ": "u", "ئ": "i", "ب": "b", "ت": "t", "ث": "th", "ج": "j", "ح": "h", "خ": "kh",
+    "د": "d", "ذ": "dh", "ر": "r", "ز": "z", "س": "s", "ش": "sh", "ص": "s", "ض": "d", "ط": "t", "ظ": "z", "ع": "a", "غ": "gh", "ف": "f",
+    "ق": "q", "ك": "k", "ل": "l", "م": "m", "ن": "n", "ه": "h", "ة": "a", "و": "w", "ي": "y", "ى": "a"})
+AR_MARKS = re.compile("[\u064b-\u065f\u0670\u0640]")
 
 # Devanagari -> the Latin of the existing hi content keys (mujhe_sir_dard_hai, main_theek_nahin_hoon): consonant + inherent a,
 # matras, anusvara/chandrabindu as n, final and medial schwa dropped.  Keys only; no learner-facing text is transliterated.
@@ -345,6 +376,8 @@ def slug(s: str, words: int = 4, translit: bool = False) -> str:
         s = translit_hi(s.replace("।", " "))
     if re.search(r"[\u0400-\u04ff]", s):
         s = s.lower().translate(TRANSLIT_RU)
+    if re.search(r"[\u0600-\u06ff]", s):
+        s = AR_MARKS.sub("", s).translate(TRANSLIT_AR)
     s = unicodedata.normalize("NFKD", s.translate(TRANSLIT_LIG)).encode("ascii", "ignore").decode()
     parts = re.findall(r"[a-z0-9]+", s.lower())[:words]
     return "_".join(parts)[:36] or "x"
@@ -678,6 +711,89 @@ def fr_elision_errors(text: str) -> list[str]:
     return out
 
 
+# --- Arabic: speaker / addressee gender, dual, clitics, article, script -----------------------------------------
+# The A1 text is unvocalised, so only a few forms differ in writing between a man and a woman: predicate adjectives and agent nouns (متعب / متعبة),
+# 2nd-person present verbs (تشرب / تشربين) and imperatives (اشرب / اشربي). 1st-person verbs and the pronouns أنا / أنت / ـك are the same for both.
+AR_ADV = frozenset("جدا جدًا دائما غالبا احيانا أحيانا كثيرا قليلا الآن اليوم اليوم هنا هناك أيضا ايضا فعلا حقا لا ليس لست لستَ ما مازال ما زال ربما فقط تماما بالفعل كان كنت".split())
+AR_PRED_M = frozenset((
+    "متعب مريض جائع عطشان سعيد حزين غاضب مشغول جاهز مسرور خائف قلق متحمس متوتر مرتاح مرهق نشيط كسول مرتبك حر فرحان زعلان مستعد ممتن"
+    " متأخر مبكر موجود متزوج أعزب غني فقير طويل قصير نحيف سمين شاب كبير صغير جديد قديم ذكي لطيف هادئ اجتماعي خجول كريم مهذب صبور"
+    " طالب معلم مدرس مهندس طبيب ممرض موظف بائع طباخ طاه سائق محاسب مدير ممثل مغني كاتب صحفي مصور رسام لاعب سباح مبرمج مترجم موسيقي"
+    " عامل صيدلي نجار خباز حلاق ممرض مزارع شرطي جندي مدرب مرشد سائح زائر ضيف جار صديق مبتدئ متعلم ناجح مسافر مقيم مواطن أجنبي"
+    " مصري لبناني سوري عراقي أردني مغربي فلسطيني سعودي تونسي جزائري عربي هولندي أمريكي إنجليزي فرنسي ألماني إيطالي إسباني").split())
+AR_PRED_F_IRREG = {"حر": "حرة", "شاب": "شابة", "طاه": "طاهية", "جار": "جارة", "صديق": "صديقة", "ضيف": "ضيفة", "زائر": "زائرة", "عامل": "عاملة",
+                   "فرحان": "فرحانة", "عطشان": "عطشانة", "زعلان": "زعلانة"}
+AR_FLIP_M2F = {m: AR_PRED_F_IRREG.get(m, m + "ة") for m in AR_PRED_M}
+AR_FLIP_F2M = {f: m for m, f in AR_FLIP_M2F.items()}
+AR_NISBA_NOT = frozenset("هادئ".split())
+# 2nd person: masculine imperative -> feminine (strip nothing, add ي); irregular ones listed
+AR_IMP_M2F = {w: w + "ي" for w in (
+    "اشرب استرح اجلس افتح اكتب اقرأ انتظر ادخل اذهب استمع اسمع تحدث ساعد اتصل انظر اترك اختر ارجع اسأل أجب جرب خذ تفضل اصعد انزل امش اركب"
+    " اشتر ادفع اطلب ابحث اعمل ارتح تعال تأكد تذكر سامح سامحني اعذرني افعل اترك أعد صل اختم اغسل البس ارتد انتبه قف اخرج ابدأ ابق قم").split()}
+AR_IMP_M2F.update({"قل": "قولي", "خذ": "خذي", "تعال": "تعالي", "ضع": "ضعي", "قف": "قفي", "قم": "قومي", "عد": "عودي", "صل": "صلي"})
+AR_IMP_F2M = {f: m for m, f in AR_IMP_M2F.items()}
+AR_NOT_2F = frozenset("تين تمرين تأمين تسعين تعيين تدوين تلوين تحسين تمارين تكوين تسمين تخمين تهجين ثلاثين عشرين ثمانين سبعين ستين خمسين أربعين تحيين".split())
+AR_Q_START = frozenset("هل ماذا متى أين كيف لماذا ما كم من لا لن لم".split())
+AR_FEM_3 = frozenset("هي".split())
+AR_SUN = "تثدذرزسشصضطظنل"
+
+
+def _ar_words(sent: str):
+    return list(re.finditer(r"[\u0621-\u064a\u0671]+", sent))
+
+
+def ar_gender_alts(text: str) -> list[str]:
+    """Arabic gender alternates: after أنا / أنت a predicate adjective or agent noun, a 2nd-person present verb (تريد <-> تريدين)
+    and an imperative (اشرب <-> اشربي). Returns ['<text with every gendered word flipped>'] or []."""
+    parts, last = [], 0
+    for sm in re.finditer(r"[^.!؟?\n]+", text):
+        sent = sm.group(0)
+        words = _ar_words(sent)
+        low = [w.group(0) for w in words]
+        repl: list[tuple[int, int, str]] = []
+        for i, w in enumerate(low):
+            base = w[1:] if w[:1] in "وف" and len(w) > 3 and w[1:] in (AR_IMP_M2F | AR_IMP_F2M) else w
+            off = len(w) - len(base)
+            # predicate after أنا / أنت
+            if w in ("انا", "أنا", "انت", "أنت", "وأنا", "وأنت", "فأنا", "فأنت") or (w in ("وانا", "وانت")):
+                j = i + 1
+                while j < len(low) and low[j] in AR_ADV:
+                    j += 1
+                if j < len(low):
+                    x = low[j]
+                    o = AR_FLIP_M2F.get(x) or AR_FLIP_F2M.get(x)
+                    if o is None and x.endswith("ة") and len(x) > 3 and x[:-1] in AR_FLIP_M2F:
+                        o = x[:-1]
+                    if o:
+                        repl.append((words[j].start(), words[j].end(), o))
+                        # a coordinated predicate (متعب وجائع) flips with it
+                        if j + 1 < len(low) and low[j + 1][:1] == "و" and low[j + 1][1:] in (AR_FLIP_M2F | AR_FLIP_F2M):
+                            y = low[j + 1][1:]
+                            repl.append((words[j + 1].start(), words[j + 1].end(), "و" + (AR_FLIP_M2F.get(y) or AR_FLIP_F2M.get(y))))
+                continue
+            # imperative at the start of a sentence / clause
+            if base in AR_IMP_M2F or base in AR_IMP_F2M:
+                if i == 0 or (low[i - 1] in ("ثم", "و", "ف", "يا") or i == 1 and low[0] in ("من", "لو")) :
+                    o = AR_IMP_M2F.get(base) or AR_IMP_F2M.get(base)
+                    repl.append((words[i].start() + off, words[i].end(), o))
+                    continue
+            # 2nd-person present verb
+            fem_sent = any(x in AR_FEM_3 for x in low)
+            if len(w) >= 5 and w[0] == "ت" and w.endswith("ين") and w not in AR_NOT_2F and not fem_sent and not w.endswith("تين"):
+                repl.append((words[i].start(), words[i].end(), w[:-2]))
+            elif (len(w) >= 3 and w[0] == "ت" and not w.endswith(("ين", "ون", "ان", "ة", "ا")) and not fem_sent
+                  and (i == 0 and w[:2] != "تا" or (i > 0 and (low[i - 1] in AR_Q_START or low[i - 1] in ("انت", "أنت", "هل", "لا", "لن", "لم", "ماذا"))))
+                  and w not in ("تلفاز", "تذكرة", "تفاح", "تاريخ", "تمر", "تين", "تعب", "تحت", "تلك", "تشرفنا", "تفضلي")):
+                repl.append((words[i].start(), words[i].end(), w + ("ين" if not w.endswith("ي") else "ن")))
+        if repl:
+            new = sent
+            for a, b, r in sorted(repl, reverse=True):
+                new = new[:a] + r + new[b:]
+            parts.append(text[last:sm.start()] + new)
+            last = sm.end()
+    return ["".join(parts) + text[last:]] if parts else []
+
+
 # --- Hindi: speaker-gendered words ---------------------------------------------------------------------------
 HI_STOP = frozenset("तुम आप वह वो वे हम ये यह लोग".split())
 HI_AUX = frozenset("हूँ हूं था थी".split())
@@ -737,6 +853,24 @@ def hi_gender_alts(text: str) -> list[str]:
             parts.append(text[last:sm.start()] + new)
             last = sm.end()
     return ["".join(parts) + text[last:]] if parts else []
+
+
+AR_FOLD = str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ة": "ه", "ؤ": "و", "ئ": "ي"})
+
+
+def ar_fold(s: str) -> str:
+    """Spelling-variant key: harakat removed; alef-hamza forms, alef maqsura / yeh, teh marbuta / heh, hamza on waw / yeh folded."""
+    return AR_MARKS.sub("", s).translate(AR_FOLD)
+
+
+AR_PERSIAN = re.compile("[\u06cc\u06a9\u067e\u0686\u06af\u0698\u06a4\u06be\u06c1]")
+AR_DUAL_NUM = re.compile(r"(?<![\w])(?:اثنان|اثنين|اثنتان|اثنتين|إثنان|إثنين)\s+(?!و|من|في|فقط|بالضبط|ف)([\u0621-\u064a]+)")
+SUN_LATIN = re.compile(r"\bal-(sh|th|dh|[stdrznṣḍṭẓ])(?=[a-zāīūʿʾḥṣḍṭẓ])")      # lowercase only: a capitalised Al-Saeed is a proper name
+
+
+def ar_sun_errors(s: str) -> list[str]:
+    """English text transliterates Arabic: the article assimilates to a sun letter (ash-shams, ar-raʾs), never al-shams."""
+    return [m.group(0) + "…" for m in SUN_LATIN.finditer(s) if m.group(1) != "l"]
 
 
 def hi_fold(s: str) -> str:
@@ -1682,6 +1816,8 @@ class UnitDeriver:
             if re.search(r"[A-Za-z]", plain):
                 self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Russian text (write it in Cyrillic, or acknowledge a real exception in ack.json)")
             self.yo_lint(key, text)
+        if cfg.get("script") == "arabic" and kind in ("teach", "answer", "transcribe"):
+            self.arabic_lint(key, text)
         if cfg.get("script") == "devanagari" and kind in ("teach", "answer", "transcribe"):
             plain = re.sub(r"\{[^}]*\}", "", text)
             if re.search(r"[A-Za-z]", plain):
@@ -1690,7 +1826,11 @@ class UnitDeriver:
                 self.flag(key, "DANDA", f"{text!r}: end a Hindi sentence with the danda । (not a full stop)")
             self.spell_lint(key, text, hi_fold)
         g = cfg.get("gender")
-        if g and kind == "answer" and g.get("mode") == "hi":
+        if g and kind == "answer" and g.get("mode") == "ar":
+            alts_ar = ar_gender_alts(text)
+            if alts_ar and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ar):
+                self.flag(key, "GENDER", f"gendered word in {text!r} (speaker or addressee); add the other gender ({alts_ar[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "hi":
             alts_hi = hi_gender_alts(text)
             if alts_hi and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_hi):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_hi[0]!r}) via `{key}#alt`")
@@ -1729,6 +1869,39 @@ class UnitDeriver:
                             self.flag(key, "GENDER", f"speaker-gendered form in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
         if self.p.cs:
             self.case_lint(key, text)
+
+    def arabic_lint(self, key: str, text: str) -> None:
+        plain = re.sub(r"\{[^}]*\}", "", text)
+        if AR_MARKS.search(plain):
+            self.flag(key, "HARAKAT", f"{text!r}: no harakat / tatweel in A1 Arabic text (the course is unvocalised; \\w tokenisation splits a word at a haraka; give the vowels in the note's transliteration)")
+        if re.search(r"[A-Za-z]", plain):
+            self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Arabic text (write it in Arabic script, or acknowledge a real exception in ack.json)")
+        if AR_PERSIAN.search(plain):
+            self.flag(key, "SCRIPT", f"{text!r}: Persian / Urdu letter in Arabic text (use Arabic yeh ي, kaf ك, heh ه / teh marbuta ة)")
+        if re.search("[\u0660-\u0669\u06f0-\u06f9]", plain):
+            self.flag(key, "ARDIGIT", f"{text!r}: the en-ar course writes Western digits (5), not Arabic-Indic digits")
+        if re.search(r"[?;]", plain) or re.search(r"[\u0621-\u064a],", plain):
+            self.flag(key, "PUNCT", f"{text!r}: Arabic punctuation in Arabic text (؟ ، ؛ instead of ? , ;)")
+        if re.search(r"(?:^|\s)[وفبلك]\s+(?=[\u0621-\u064a])", plain):
+            self.flag(key, "CLITIC", f"{text!r}: a detached و ف ب ل ك; the particle is written joined to the next word and is one token / tile")
+        if re.search(r"(?<![\u0621-\u064a])[وف]?لال(?=[\u0621-\u064a])", plain):
+            self.flag(key, "ARTICLE", f"{text!r}: ل + ال contracts to لل (للمدرسة, not لالمدرسة)")
+        if re.search(r"(?<![\u0621-\u064a])[وفبكل]?الال", plain):
+            self.flag(key, "ARTICLE", f"{text!r}: doubled definite article")
+        m = AR_DUAL_NUM.search(plain)
+        if m:
+            self.flag(key, "DUAL", f"{text!r}: 'two X' is the dual noun (كتابان / كتابين), not the numeral اثنان + a noun")
+        if self.p.ar_forms is None:
+            self.p.ar_forms = defaultdict(set)
+            up, low = self.p.lexicon
+            for k in up | low:
+                self.p.ar_forms[ar_fold(k)].add(k)
+        for t in tokens(text):
+            f = ar_fold(t)
+            seen = self.p.ar_forms[f]
+            if seen and t not in seen:
+                self.flag(key, "AR_MIXED", f"{t!r} in {text!r}: the course also spells this word {sorted(seen)} (hamza / alef / yeh / teh marbuta variant); one spelling per word, or acknowledge two real words", level="warn")
+            seen.add(t)
 
     def yo_lint(self, key: str, text: str) -> None:
         self.spell_lint(key, text, yo_fold)
@@ -1810,6 +1983,21 @@ class UnitDeriver:
         for k in ("units", "lessons", "teaching", "exercises"):
             if k in O:
                 newO[k] = O[k]
+        if CFG.get(tp, {}).get("script") == "arabic":
+            def _rtl(o):                     # target-language text blocks are RTL (the source blocks say ltr)
+                if isinstance(o, dict):
+                    if o.get("language_code") == tp and "text" in o:
+                        o["direction"] = "rtl"
+                    for v in o.values():
+                        _rtl(v)
+                elif isinstance(o, list):
+                    for v in o:
+                        _rtl(v)
+            _rtl(R)
+            for sv in yaml_strings(newO):
+                bad = ar_sun_errors(sv)
+                if bad:
+                    self.flag(self.stem, "SUNLETTER", f"transliteration {bad[0]!r} in {sv[:80]!r}: the article assimilates to a sun letter (ash-shams, ar-raʾs)")
         R = self.remap(R)
         newO = self.remap(newO)
         return R, newO
@@ -1843,6 +2031,7 @@ class Plan:
         self.suffixes = dict(kv.split("=", 1) for kv in (getattr(args, "suffixes", None) or "").split(",") if "=" in kv)
         self._lex = None
         self.yo_forms = None
+        self.ar_forms = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
         # English fields name the cast in Latin letters when the target script is not Latin (Лотте -> Nastya): --names-en
@@ -2030,6 +2219,9 @@ class Plan:
         """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
         if CFG.get(self.tgt, {}).get("straight_apostrophe"):
             s = s.replace("\u2019", "'")
+        if table is None and CFG.get(self.tgt, {}).get("arabic_punct") and re.search(r"[\u0621-\u064a]", s):
+            s = s.replace("?", "؟").replace(",", "،").replace(";", "؛")
+
         fold = CFG.get(self.tgt, {}).get("fold_chars")
         if fold:
             s = s.translate(str.maketrans(fold))
@@ -2468,7 +2660,8 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
         return f"practice.{pair}.{tp}.{d.level}.unit{nn:02d}.{ln}.{verb}.{counters[ln]:03d}"
 
     def frame(text: str, lang: str, **kw) -> dict:
-        return dict(text=text, language_code=lang, direction="ltr", **kw)
+        rtl = lang == tp and CFG.get(tp, {}).get("script") == "arabic"
+        return dict(text=text, language_code=lang, direction="rtl" if rtl else "ltr", **kw)
 
     content = dict(language_code=tp, part_of_speech=PACK_GOOD_POS, agreement_tags=dict(semantic=pool_tags))
 
