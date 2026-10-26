@@ -906,7 +906,7 @@ class Plan:
                     continue
                 for f in d.glob("*.yaml"):
                     counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
-            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit"}
+            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit", "giraffe", "croissant", "croissants", "meter"}
         return self._english
 
     def names(self, s: str) -> str:
