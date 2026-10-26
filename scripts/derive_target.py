@@ -508,8 +508,10 @@ class UnitDeriver:
         for text in self.atom_texts:
             allsrc |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
         names_cf = {k.casefold() for k in self.p.names_map}
-        self.pair_target: set[str] = set()
+        self.pair_target: set[str] = set()           # kept for callers that test membership regardless of side
         self.right_target: set[str] = set()
+        self.lt_target: set[str] = set()             # left sides that are target text
+        self.rt_target: set[str] = set()             # right sides that are target text: an English right equal to a left (museum) is NOT
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
@@ -519,8 +521,10 @@ class UnitDeriver:
                         if norm(Rt) in teach_norms and norm(L) not in teach_norms:
                             self.pair_target.add(Rt)
                             self.right_target.add(Rt)
+                            self.rt_target.add(Rt)
                             continue
                         self.pair_target.add(L)
+                        self.lt_target.add(L)
                         tk = re.findall(r"[^\W\d_]{2,}", Rt.casefold())
                         if self.p.strict_residual:
                             eng2 = self.p.en_vocab | self.p.cast_words
@@ -530,6 +534,7 @@ class UnitDeriver:
                             is_right = bool(tk) and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6
                         if is_right:
                             self.pair_target.add(Rt)
+                            self.rt_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
                                 self.flag(ck, "PAIR_RIGHT_TARGET",
@@ -538,15 +543,15 @@ class UnitDeriver:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side, other in ((pr["left"], pr["right"]), (pr["right"], pr["left"])):
-                            if side in self.pair_target:
+                        for side, other, tgt in ((pr["left"], pr["right"], self.lt_target), (pr["right"], pr["left"], self.rt_target)):
+                            if side in tgt:
                                 self.T(side, "pair", other, e["content_key"])
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side in (pr["left"], pr["right"]):
-                            if side not in self.pair_target:
+                        for side, tgt in ((pr["left"], self.lt_target), (pr["right"], self.rt_target)):
+                            if side not in tgt:
                                 add_en(side)
         srclex = set()
         for text in self.atom_texts:
@@ -791,12 +796,12 @@ class UnitDeriver:
         canon_tr: str | None = None
         if ty == "matching_pairs":
             for p_ in e.get("pairs") or []:
-                p_["left"] = self.pr(p_["left"])
+                p_["left"] = self.pr(p_["left"], "left")
                 p_["right"] = self.pr(p_["right"])
             for a in ov.get("accepted_answers") or []:
                 if isinstance(a.get("value"), list):
                     for pr in a["value"]:
-                        pr["left"] = self.pr(pr["left"])
+                        pr["left"] = self.pr(pr["left"], "left")
                         pr["right"] = self.pr(pr["right"])
             self.pair_collisions(ck, e.get("pairs") or [])
         elif has_opts and ans_target:
@@ -870,8 +875,8 @@ class UnitDeriver:
         if "media_asset_key" in e:
             pass
 
-    def pr(self, right: str) -> str:
-        if right in self.pair_target:
+    def pr(self, right: str, side: str = "right") -> str:
+        if right in (self.lt_target if side == "left" else self.rt_target):
             return self.T(right, "pair")
         if self.p.strict_residual and self.residual(self.en(right)):
             return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
