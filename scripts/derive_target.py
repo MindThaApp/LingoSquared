@@ -538,6 +538,16 @@ class UnitDeriver:
         subs: dict[str, str] = {}
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) >= 3 and text in out:
+                if all(w in self.p.english_words() for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(
+                        c in text for c in " ,."):
+                    # a source atom that is also an English word (games, yoga, winter, water): only a quoted occurrence is the atom
+                    pat = re.compile(r"(?<=['\"*\u2018\u201c])" + re.escape(text) + r"(?![^\W\d_])")
+                    if not pat.search(out):
+                        continue
+                    ph = f"\x00{len(subs)}\x00"
+                    subs[ph] = self.T(text, "quote")
+                    out = pat.sub(ph, out)
+                    continue
                 ph = f"\x00{len(subs)}\x00"
                 subs[ph] = self.T(text, "quote")
                 out = out.replace(text, ph)
@@ -1727,7 +1737,7 @@ def cmd_inject(args):
     update_manifest(plan.group, new_real, new_ovl)
     if not args.skip_lexemes and lex:
         # all of lexemes.tr.json: gloss entries and `=citation` aliases (an alias target may not occur as a raw token itself)
-        written.append(write_backfill_block(plan, dict(lex), set(toks)))
+        written.append(write_backfill_block(plan, dict(lex), None))
     for p in written:
         print("wrote", p.relative_to(ROOT))
 
@@ -1979,11 +1989,40 @@ def cmd_packs(args):
     print("updated", fp.relative_to(ROOT))
 
 
+def cmd_fixintro(args):
+    """Inflected targets (Polish): an exercise tests or shows a case/person form of a lemma the lesson only introduced in another form
+    (`uwielbiam` vs `uwielbiać`). Runs the compiler validation and adds the reported tokens to the introduced_tokens of the last teaching
+    item of that lesson (a form the learner sees in the exercise's own sentence). Re-run after every inject; review the printed list."""
+    plan = make_plan(args)
+    py = ROOT / ".content-venv/bin/python"
+    py = str(py if py.exists() else sys.executable)
+    real, ovl = manifest_group(plan.group)
+    r = subprocess.run([py, "scripts/compile_content.py", "validate", "--realization", *map(str, real), "--overlay", *map(str, ovl)],
+                       cwd=ROOT, capture_output=True, text=True)
+    mine = {f"{d.new_stem}.yaml" for d in plan.derivers}
+    todo: dict[tuple[str, int], set[str]] = defaultdict(set)
+    for line in (r.stdout + r.stderr).splitlines():
+        m = re.match(r"ERROR: (\S+?):realization\.units\[0\]\.lessons\[(\d+)\]\..*?tokens not introduced in this or an earlier lesson: (.+)$", line)
+        if m and Path(m.group(1)).name in mine:
+            todo[(m.group(1), int(m.group(2)))] |= {t.strip() for t in m.group(3).split(",")}
+    for (path, li), toks in sorted(todo.items()):
+        doc = dd.load(Path(path))
+        teaching = doc["units"][0]["lessons"][li]["teaching"]
+        item = teaching[-1]
+        have = item.setdefault("introduced_tokens", [])
+        add = [t for t in sorted(toks) if t not in have]
+        have.extend(add)
+        dd.dump(doc, Path(path))
+        print(f"{Path(path).name} lesson {li + 1}: +{add} (review: the form is only shown in the exercise sentence)")
+    print(f"fixintro: {sum(len(v) for v in todo.values())} tokens in {len(todo)} lessons")
+    return 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("extract", cmd_extract), ("status", cmd_status), ("lexemes", cmd_lexemes),
-                     ("inject", cmd_inject), ("check", cmd_check), ("packs", cmd_packs)):
+                     ("inject", cmd_inject), ("check", cmd_check), ("packs", cmd_packs), ("fixintro", cmd_fixintro)):
         p = sub.add_parser(name)
         p.add_argument("--source", help="source course pair (default: the saved plan, else en-nl)")
         p.add_argument("--new", help="new target course pair (default: the saved plan, else en-es)")
