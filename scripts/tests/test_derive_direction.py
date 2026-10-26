@@ -131,3 +131,66 @@ def test_update_manifests_merges_units_incrementally(dd):
         "a1_unit01_x.yaml", "a1_unit02_x.yaml", "a1_unit03_x.yaml", "a1_unit15_x.yaml"]
     assert [p.split("/")[-1] for p in ovs.split()] == [
         "a1_unit01.yaml", "a1_unit02.yaml", "a1_unit03.yaml", "a1_unit15.yaml"]
+
+
+# ---------------------------------------------------------------------------
+# Teaching-card titles: English target text vs learner-language description
+# ---------------------------------------------------------------------------
+def test_teaching_title_classifier(dd, monkeypatch):
+    monkeypatch.setattr(dd, "_EN_VOCAB", set("good morning how are you i would like to make an appointment see a doctor please".split()))
+    # target text: equals the card's English target (case/punctuation-insensitive) -> keep
+    assert dd.teaching_title_is_english("Good morning", "Good morning")
+    assert dd.teaching_title_is_english("Hello!", "hello")  # not in vocab, rescued by target equality
+    # (almost) pure English vocabulary, e.g. a grammar label -> keep
+    assert dd.teaching_title_is_english("I would like to see a doctor", "")
+    # German descriptions -> translate, even when the card target is English text
+    assert not dd.teaching_title_is_english("Daniel fragt nach dem Namen", "Daniel: What's your name?")
+    assert not dd.teaching_title_is_english("Preisschild", "Apples: $2 per pound.")
+    assert not dd.teaching_title_is_english("Um einen Termin bitten", "I'd like to make an appointment to see a doctor, please.")
+    assert not dd.teaching_title_is_english("should und shouldn't für Anweisungen", "You should take it with food.")
+    # no letters at all (numbers, symbols) -> nothing to translate
+    assert dd.teaching_title_is_english("10:30", "")
+
+
+def _title_occs(dd, y, ridx):
+    stats = {"strings_total": 0, "strings_invariant": 0}
+    unit = SimpleNamespace(stem="a1_unit02", real_name="a1_unit02_x.yaml")
+    return dd.build_overlay_occs(unit, {}, "de", ridx, y, stats)
+
+
+def test_extract_translates_german_teaching_titles_and_keeps_english_ones(dd, monkeypatch):
+    monkeypatch.setattr(dd, "_EN_VOCAB", {"good", "morning"})
+    k_dlg, k_voc = "en.a1.unit02.lesson03.teach.request", "en.a1.unit02.lesson01.teach.morning"
+    y = {"teaching": {
+        k_dlg: {"title": "Daniel fragt nach dem Namen", "gloss": "Daniel fragt: Wie heißt du?"},
+        k_voc: {"title": "Good morning", "gloss": "Guten Morgen"},
+    }}
+    ridx = {k_dlg: {"kind": "dialogue", "target": "Daniel: What's your name?"},
+            k_voc: {"kind": "vocabulary", "target": "Good morning"}}
+    occs = _title_occs(dd, y, ridx)
+    got = {(o.scope[1].rsplit(".", 1)[-1], o.role): o.src for o in occs}
+    assert got[("request", "title")] == "Daniel fragt nach dem Namen"
+    assert ("morning", "title") not in got  # English target title stays untouched
+    assert got[("morning", "gloss")] == "Guten Morgen"
+
+
+def _check_module():
+    spec = importlib.util.spec_from_file_location("german_leftover_check_under_test",
+                                                  SCRIPT.parent / "_german_leftover_check.py")
+    mod = importlib.util.module_from_spec(spec)
+    import sys
+    sys.path.insert(0, str(SCRIPT.parent))
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_german_marker_detector():
+    ck = _check_module()
+    for s in ("Daniel fragt nach dem Namen", "was man mitbringen soll", "Auch wenn es schön ist, arbeite ich lieber zu Hause",
+              "Ich bin müde"):
+        assert ck.german_markers(s, "es"), s
+    for s in ("Daniel pregunta el nombre", "I am Leila. I am a student.", "tomorrow between 9am and 11am",
+              "Vom rezolva situația și vă vom trimite un scaun nou", "Preisschild", "cousin is een woord voor neef of nicht",
+              "{item} 在英语中", "丹尼尔问名字"):
+        # 'Preisschild' has no function word: only the sibling-equality detector catches single German nouns
+        assert not ck.german_markers(s, "ro" if "Vom" in s else ("nl" if "een" in s else "es")), s
