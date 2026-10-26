@@ -599,12 +599,12 @@ def ar_fold(s: str) -> str:
 
 AR_PERSIAN = re.compile("[\u06cc\u06a9\u067e\u0686\u06af\u0698\u06a4\u06be\u06c1]")
 AR_DUAL_NUM = re.compile(r"(?<![\w])(?:اثنان|اثنين|اثنتان|اثنتين|إثنان|إثنين)\s+(?!و|من|في|فقط|بالضبط|ف)([\u0621-\u064a]+)")
-SUN_LATIN = re.compile(r"\bal-(sh|th|dh|[stdrznṣḍṭẓ])(?=[a-zāīūʿʾḥṣḍṭẓ])", re.I)
+SUN_LATIN = re.compile(r"\bal-(sh|th|dh|[stdrznṣḍṭẓ])(?=[a-zāīūʿʾḥṣḍṭẓ])")      # lowercase only: a capitalised Al-Saeed is a proper name
 
 
 def ar_sun_errors(s: str) -> list[str]:
     """English text transliterates Arabic: the article assimilates to a sun letter (ash-shams, ar-raʾs), never al-shams."""
-    return [m.group(0) + "…" for m in SUN_LATIN.finditer(s) if m.group(1).lower() != "l"]
+    return [m.group(0) + "…" for m in SUN_LATIN.finditer(s) if m.group(1) != "l"]
 
 
 class Unresolved(Exception):
