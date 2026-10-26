@@ -124,6 +124,28 @@ CFG = {
               "c'est, qu'il, d'abord). Hyphenated inversions and elided forms are single tiles (vas-tu, est-ce, l'école). "
               "Speaker-gendered words (je suis fatigué/fatiguée, étudiant/étudiante) need the other gender as an accepted alternate (#alt)."),
     ),
+    "ru": dict(
+        name="Russian",
+        script="cyrillic",                   # tokens, tiles, lexeme keys and content-key slugs (TRANSLIT_RU) work on Cyrillic; no stress marks, no Latin letters
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        yo_fold=True,                        # an accepted free-text answer with ё also accepts е (the grader does not fold them; the ru corpus lists both)
+        formal=r"\b(?:вы|вас|вам|вами|ваш\w*)\b",
+        informal=r"\b(?:ты|тебя|тебе|тобой|тво(?:й|я|ё|е|и|их|ей|его|ему|им|ими|ю|ем)|давай(?:те)?)\b",
+        gender=dict(mode="ru"),              # speaker-gendered past tense, short adjective or agent noun after я: устал/устала, рад/рада, студент/студентка
+        note=("Natural standard Russian (contemporary, Moscow norm). Cyrillic only, written with ё where it is normal in the course (идёт, всё, ещё) "
+              "and NO stress marks. Informal source roles -> ты, formal or service staff and strangers -> Вы/вы (capital Вы only for one person in a "
+              "formal address). Six cases: nominative for the subject, accusative for the object (читаю книгу), genitive after нет/у/из/для/numbers "
+              "(у меня нет брата), dative for мне нравится / мне нужно / дать кому, instrumental after с and for the profession after работаю "
+              "(работаю учителем), prepositional after в/на/о (в школе, на работе). Gender: a learner who speaks as themselves with a past-tense verb or "
+              "short adjective needs the other gender as an accepted alternate (#alt): Я устал / Я устала, Я был / Я была, Я рад / Я рада, "
+              "Я студент / Я студентка. Aspect: use imperfective for habits and ongoing actions (я читал), perfective for a finished result (я прочитал); "
+              "future with буду + infinitive only for imperfective. Verbs of motion: идти (on foot) / ехать (by vehicle). No articles; the verb 'to be' is "
+              "dropped in the present (Я дома, У меня есть брат). Short answers: keep word order natural, topic first. "
+              "Tiles: every word is one tile, a hyphenated word (по-русски, кто-то) is one tile."),
+    ),
     "pt": dict(name="Portuguese", formal=r"\bo senhor|a senhora\b", informal=r"\btu\b"),
 }
 TARGET_ANSWER_TYPES = {
@@ -131,6 +153,8 @@ TARGET_ANSWER_TYPES = {
     "dictation", "listen_type", "dialogue_response", "speak_response",
 }
 GERMAN_FREE_TEXT_TYPES = {"writing_prompt", "dialogue_response", "listen_type", "translation", "reverse_translation", "grammar_check"}   # compile_content.py
+YO_FOLD_TYPES = {"fill_in_blank", "translation", "writing_prompt", "dictation", "listen_type", "dialogue_response", "speak_response",
+                 "reverse_translation", "grammar_check"}
 SEP = " || "
 BLANK = "___"
 PUNCT_CHARS = re.compile(r"[^\w\s'’\-‌]", re.U)
@@ -149,7 +173,7 @@ def strip_punct(s: str) -> str:
 
 def boundary_strip(s: str) -> str:
     """Only the punctuation at both ends (the dictation compiler check ignores just that)."""
-    return re.sub(r"^[\s.!?¿¡;:,\"“”„]+|[\s.!?¿¡;:,\"“”„]+$", "", s)
+    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–]+|[\s.!?¿¡;:,\"“”„«»…—–]+$", "", s)
 
 
 def norm(s: str) -> str:
@@ -167,9 +191,18 @@ TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä
 TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae"})      # sœur -> soeur, not "sur"
 
 
+# Cyrillic -> the Latin of the existing ru content keys (zhivot, solntse, u_menya, davay_poydyom); a no-op for Latin text
+TRANSLIT_RU = str.maketrans({
+    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo", "ж": "zh", "з": "z", "и": "i", "й": "y", "к": "k", "л": "l",
+    "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh",
+    "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"})
+
+
 def slug(s: str, words: int = 4, translit: bool = False) -> str:
     if translit:
         s = s.translate(TRANSLIT_DE)
+    if re.search(r"[\u0400-\u04ff]", s):
+        s = s.lower().translate(TRANSLIT_RU)
     s = unicodedata.normalize("NFKD", s.translate(TRANSLIT_LIG)).encode("ascii", "ignore").decode()
     parts = re.findall(r"[a-z0-9]+", s.lower())[:words]
     return "_".join(parts)[:36] or "x"
@@ -272,6 +305,114 @@ def fr_gender_alts(text: str) -> list[str]:
             head = text[:m.start(1)] + (flipped.capitalize() if art[:1].isupper() else flipped) + text[m.end(1):m.start(2)]
         out.append(head + c + text[m.end(2):])
     return out
+
+
+# --- Russian: speaker-gendered words ------------------------------------------------------------------------
+RU_ADV = frozenset("не ни уже тоже также очень всегда часто иногда редко потом сегодня вчера завтра сейчас там здесь тут ещё еще никогда просто почти совсем только "
+                   "сам сама а и но да вот же вообще обычно утром вечером днём днем ночью".split())
+RU_NOT_VERB = frozenset("стол пол угол осёл козёл орёл ствол котёл посол сокол школа скала пила игла метла мгла смола мало мол ил футбол вокзал зал канал".split())
+RU_IRREG_M2F = {"мог": "могла", "смог": "смогла", "помог": "помогла", "лёг": "легла", "лег": "легла", "вёз": "везла", "нёс": "несла", "умер": "умерла",
+                "шёл": "шла", "шел": "шла", "пошёл": "пошла", "пошел": "пошла", "ушёл": "ушла", "ушел": "ушла", "пришёл": "пришла", "пришел": "пришла",
+                "нашёл": "нашла", "нашел": "нашла", "зашёл": "зашла", "зашел": "зашла", "вошёл": "вошла", "вошел": "вошла", "вышел": "вышла",
+                "перешёл": "перешла", "перешел": "перешла", "дошёл": "дошла", "дошел": "дошла", "прошёл": "прошла", "прошел": "прошла"}
+RU_IRREG_F2M = {}
+for _m, _f in RU_IRREG_M2F.items():
+    RU_IRREG_F2M.setdefault(_f, _m)
+RU_IRREG_F2M.update({"шла": "шёл", "пошла": "пошёл", "ушла": "ушёл", "пришла": "пришёл", "нашла": "нашёл", "зашла": "зашёл", "вошла": "вошёл",
+                     "перешла": "перешёл", "дошла": "дошёл", "прошла": "прошёл", "легла": "лёг"})
+# short adjectives and agent nouns (masculine <-> feminine); the first listed spelling of a form is the one produced
+RU_PAIRS_M2F = {
+    "рад": "рада", "готов": "готова", "должен": "должна", "занят": "занята", "болен": "больна", "голоден": "голодна", "согласен": "согласна",
+    "свободен": "свободна", "уверен": "уверена", "прав": "права", "один": "одна", "доволен": "довольна", "виноват": "виновата",
+    "благодарен": "благодарна", "сыт": "сыта", "здоров": "здорова", "женат": "замужем", "жив": "жива", "вынужден": "вынуждена",
+    "студент": "студентка", "учитель": "учительница", "актёр": "актриса", "актер": "актриса", "официант": "официантка",
+    "продавец": "продавщица", "переводчик": "переводчица", "певец": "певица", "художник": "художница", "писатель": "писательница",
+    "танцор": "танцовщица", "пенсионер": "пенсионерка", "школьник": "школьница", "турист": "туристка", "повар": "повариха",
+    "секретарь": "секретарша", "директор": "директорша", "кассир": "кассирша", "медбрат": "медсестра", "программист": "программистка",
+    "журналист": "журналистка", "музыкант": "музыкантка", "водитель": "водительница", "администратор": "администраторша",
+    "иностранец": "иностранка", "москвич": "москвичка", "англичанин": "англичанка", "американец": "американка", "русский": "русская",
+}
+RU_PAIRS_F2M = {f: m for m, f in reversed(list(RU_PAIRS_M2F.items()))}
+RU_PAIRS_F2M.update({"замужем": "женат", "актриса": "актёр"})
+
+
+def _ru_case(w: str, new: str) -> str:
+    return new[:1].upper() + new[1:] if w[:1].isupper() else new
+
+
+def ru_gender_alts(text: str) -> list[str]:
+    """Russian 'Я устал.' -> ['Я устала.'] (and back): the other gender of every speaker-gendered word that follows я
+    (past-tense verb, short adjective, agent noun; adverbs and не in between are skipped)."""
+    parts, last = [], 0
+    for sm in re.finditer(r"[^.!?\n]+", text):
+        sent = sm.group(0)
+        words = list(re.finditer(r"[\w'-]+", sent))
+        low = [w.group(0).casefold() for w in words]
+        if "я" not in low:
+            continue
+        new = sent
+        changed = False
+        # walk right to left so earlier offsets stay valid
+        repl = []
+        i = low.index("я") + 1
+        while i < len(words):
+            w = low[i]
+            if w in RU_ADV:
+                i += 1
+                continue
+            other = None
+            if w in RU_NOT_VERB:
+                pass
+            elif w in RU_IRREG_M2F:
+                other = RU_IRREG_M2F[w]
+            elif w in RU_IRREG_F2M:
+                other = RU_IRREG_F2M[w]
+            elif w in RU_PAIRS_M2F:
+                other = RU_PAIRS_M2F[w]
+            elif w in RU_PAIRS_F2M:
+                other = RU_PAIRS_F2M[w]
+            elif w.endswith("лся") and len(w) > 4:
+                other = w[:-3] + "лась"
+            elif w.endswith("лась") and len(w) > 5:
+                other = w[:-4] + "лся"
+            elif w.endswith("л") and len(w) >= 3 and w[-2] in "аеиоуыяёю":
+                other = w + "а"
+            elif w.endswith("ла") and len(w) >= 4 and w[-3] in "аеиоуыяёю":
+                other = w[:-1]
+            if other:
+                repl.append((words[i].start(), words[i].end(), _ru_case(words[i].group(0), other)))
+                changed = True
+                # a coordinated past-tense verb later in the sentence (купил хлеб и пошёл домой) flips with it
+                for j in range(i + 1, len(words)):
+                    wj = low[j]
+                    if wj in RU_NOT_VERB:
+                        continue
+                    o2 = RU_IRREG_M2F.get(wj) or RU_IRREG_F2M.get(wj)
+                    if not o2 and wj.endswith("лся") and len(wj) > 4:
+                        o2 = wj[:-3] + "лась"
+                    elif not o2 and wj.endswith("лась") and len(wj) > 5:
+                        o2 = wj[:-4] + "лся"
+                    elif not o2 and wj.endswith("л") and len(wj) >= 4 and wj[-2] in "аеиоуыяёю":
+                        o2 = wj + "а"
+                    elif not o2 and wj.endswith("ла") and len(wj) >= 5 and wj[-3] in "аеиоуыяёю":
+                        o2 = wj[:-1]
+                    if o2:
+                        repl.append((words[j].start(), words[j].end(), _ru_case(words[j].group(0), o2)))
+                break
+            break
+        if changed:
+            for a, b, r in reversed(repl):
+                new = new[:a] + r + new[b:]
+            parts.append(text[last:sm.start()] + new)
+            last = sm.end()
+    return ["".join(parts) + text[last:]] if parts else []
+
+
+RU_YO_SAME = frozenset(("все", "всё", "ее", "её", "нем", "нём", "узнает", "дает"))        # real minimal pairs / not worth flagging
+
+
+def yo_fold(s: str) -> str:
+    return s.replace("ё", "е").replace("Ё", "Е")
 
 
 # obligatory elision: je le la de ne me te se que ce (+ jusque, lorsque ...) before a vowel / mute h; exceptions are h aspiré words and onze/oui/yaourt
@@ -971,6 +1112,8 @@ class UnitDeriver:
         if self.p.translit and ty in GERMAN_FREE_TEXT_TYPES:
             # the German compiler wants the full ASCII transliteration (ä->ae ...) of every typed answer with umlauts
             out = list(OrderedDict.fromkeys(out + [x.translate(TRANSLIT_DE) for x in out if x.translate(TRANSLIT_DE) != x]))
+        if CFG.get(self.p.tgt, {}).get("yo_fold") and ty in YO_FOLD_TYPES:
+            out = list(OrderedDict.fromkeys(out + [yo_fold(x) for x in out if yo_fold(x) != x]))      # е for ё is a keyboard habit, not an error
         canon_form = out[0]
         if "correct_option" in ov:
             ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else (re.sub(r"^[^\w]+|[^\w]+$", "", base) if ty == "dictation" else strip_punct(base))
@@ -1050,8 +1193,19 @@ class UnitDeriver:
                 self.flag(key, "ELISION", f"{text!r}: obligatory elision not applied ({bad!r}); never accept the unelided form as a variant")
         if cfg.get("straight_apostrophe") and "’" in text:
             self.flag(key, "APOSTROPHE", f"{text!r}: use the straight apostrophe (')")
+        if cfg.get("script") == "cyrillic" and kind in ("teach", "answer", "transcribe"):
+            if "\u0301" in text:
+                self.flag(key, "STRESS", f"{text!r}: no stress marks in learner-facing Russian text")
+            plain = re.sub(r"\{[^}]*\}", "", text)
+            if re.search(r"[A-Za-z]", plain):
+                self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Russian text (write it in Cyrillic, or acknowledge a real exception in ack.json)")
+            self.yo_lint(key, text)
         g = cfg.get("gender")
-        if g and kind == "answer" and g.get("mode") == "fr":
+        if g and kind == "answer" and g.get("mode") == "ru":
+            alts_ru = ru_gender_alts(text)
+            if alts_ru and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ru):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_ru[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "fr":
             alts_fr = fr_gender_alts(text)
             if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
@@ -1073,6 +1227,23 @@ class UnitDeriver:
                             self.flag(key, "GENDER", f"speaker-gendered form in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
         if self.p.cs:
             self.case_lint(key, text)
+
+    def yo_lint(self, key: str, text: str) -> None:
+        """One spelling per word: идёт and идет must not both occur in the course (they would become two lexemes)."""
+        seen = self.p.yo_forms
+        if seen is None:
+            seen = self.p.yo_forms = defaultdict(set)
+            up, low = self.p.lexicon
+            for k in up | low:
+                seen[yo_fold(k.casefold())].add(k.casefold())
+        for t in tokens(text):
+            c = t.casefold()
+            f = yo_fold(c)
+            if f in RU_YO_SAME or c in RU_YO_SAME:
+                continue
+            if seen[f] and c not in seen[f]:
+                self.flag(key, "YO_MIXED", f"{t!r} in {text!r}: the course also spells this word {sorted(seen[f])}; use one spelling")
+            seen[f].add(c)
 
     def case_lint(self, key: str, text: str) -> None:
         """Case-sensitive targets (German): a known common noun written lowercase, or a known non-noun capitalised mid-sentence.
@@ -1164,6 +1335,7 @@ class Plan:
         self.rekey = bool(CFG.get(self.tgt, {}).get("rekey_exercises"))     # exercise key tails re-derived from the translation
         self.suffixes = dict(kv.split("=", 1) for kv in (getattr(args, "suffixes", None) or "").split(",") if "=" in kv)
         self._lex = None
+        self.yo_forms = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
         self.units = args.units
