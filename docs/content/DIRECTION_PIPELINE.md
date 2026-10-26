@@ -274,3 +274,24 @@ duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target l
 * Cast names: `--names Lotte=Настя,Omar=Дима` maps the Dutch names in the Russian text (speaker labels, nominative), `--names-en Lotte=Nastya,Omar=Dima`
   maps them in every English field (the en-ru overlays spell the cast Nastya, Dima). Russian names inflect, so the translator writes the right case
   form directly (`Настю`, `Диме`) and never a Latin name in Russian text. Without `--names-en` the single `--names` map serves both sides.
+
+## Hindi target (`hi`, Devanagari)
+
+`CFG["hi"]` reuses the generic switches of the Russian run (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`, `script`) and adds:
+
+* Vowel signs: Python's `\w` does not cover the Devanagari matras, nukta, virama and chandrabindu, so every tokenising regex (`tokens`, `strip_punct`,
+  `norm`, whole-word quote substitution, pack words) also takes `DEV` (U+0900-0963, U+0966-096F, U+0971-097F). The danda `।` stays punctuation:
+  `strip_punct` and `boundary_strip` (dictation) drop it. This is a no-op for every other script.
+* Slugs: `translit_hi` writes the Latin of the existing hi keys (`mujhe_sir_dard_hai`, `main_theek_naheen_hoon`): consonant + inherent a, matras, final and medial
+  schwa dropped, chandrabindu/anusvara as `n`. Keys and file names only; the en-hi exercises use no transliteration field, so none is generated.
+* Register `आप` / `तुम` (`REGISTER`; explicit form lists so `आपातकाल` and `तूफ़ान` are not hits; `तू` is never used at A1). Plural `तुम` for a Dutch `jullie` is acked.
+* Gender mode `hi` (`GENDER`, `#alt`): after `मैं` a participle (`जाता/जाती हूँ`, `रहा/रही`), future (`जाऊँगा/जाऊँगी`), adjective (`थका/थकी`), past of an intransitive verb (`गया/गई`)
+  or an agent noun (`छात्र/छात्रा`) needs the other gender as an accepted alternate. Ergative `मैंने` does not agree with the speaker and is not matched; another subject pronoun ends the span.
+* `DANDA`: a Devanagari sentence ending in `.` is an error (the corpus ends statements with `।`). The grader only strips boundary punctuation, so an answer with an inner danda also gets
+  the full-stop variant (`ठीक है। ...` / `ठीक है. ...`) and the plain variant without punctuation. `SCRIPT`: Latin letters in Hindi text.
+* Nukta and chandrabindu: **no variants are generated**. `grading.fold_orthographic_variants` folds `ँ` to `ं` and drops the nukta after क ख ग ज फ on both sides of every free-text comparison
+  (not ड़ ढ़), so listing them would only bloat the accepted answers. The lexeme backfill keeps them apart, so `SPELL_MIXED` flags a word that the course writes two ways (हूँ / हूं, फ़ोन / फोन).
+  No hi exercise can test nukta or chandrabindu outside dictation (dictation stays byte-strict).
+* Names: `--names Lotte=प्रिया,Omar=अर्जुन` (Devanagari, the existing hi cast) and `--names-en Lotte=Priya,Omar=Arjun`; names do not inflect, the postposition follows.
+* Localisation: rupees written as words in Hindi (`पचास रुपये`), `en_override.json` (`"~euros": "rupees"`) keeps the English in step; shop and place names, chai, samosa, metro, cricket replace the Dutch ones.
+* Register of the CFG note for the translator: everyday Hindi, not Sanskritised; English loans stay in Devanagari; postpositions, oblique case, का/की/के agreement, `मुझे`-constructions.
