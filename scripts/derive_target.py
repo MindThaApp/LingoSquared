@@ -148,6 +148,25 @@ CFG = {
               "c'est, qu'il, d'abord). Hyphenated inversions and elided forms are single tiles (vas-tu, est-ce, l'école). "
               "Speaker-gendered words (je suis fatigué/fatiguée, étudiant/étudiante) need the other gender as an accepted alternate (#alt)."),
     ),
+    "ro": dict(
+        name="Romanian",
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        fold_chars={"\u015f": "\u0219", "\u015e": "\u0218", "\u0163": "\u021b", "\u0162": "\u021a"},   # cedilla -> comma-below (the grader folds both, the corpus uses ș ț)
+        diacritics="ro",                     # ORTHO lint: no cedilla, â/î placement
+        formal=r"\b(?:dumneavoastr[aă]|dvs|dumneata|v[aă]|v-|vi-)(?!\w)",
+        informal=r"\b(?:tu|tine|te|ți|tău|ta|tale|tăi|ești|vrei|poți|vii|ai)\b|\bți-|-ți\b|\bt-",
+        gender=dict(mode="ro"),              # speaker-gendered adjective / participle / agent noun after sunt, mă simt ...
+        note=("Natural standard Romanian. Diacritics are mandatory and use comma-below ș ț (never cedilla ş ţ), plus ă â î: î at the start and end of a word, â inside "
+              "(România, mâncare, pâine, gândesc, cânt, dar înainte, încă, în). Informal source roles -> tu (te rog, ai, ești), formal -> dumneavoastră "
+              "(vă rog, aveți, sunteți; staff, strangers, doctors). Nouns have three genders: masculine, feminine, neuter (neuter is masculine in the singular "
+              "and feminine in the plural: un scaun / două scaune). The definite article is a suffix: casă / casa, un băiat / băiatul, o fată / fata, "
+              "plural casele, băieții. Hyphenated clitics are single tiles (mi-e, m-am, nu-mi, ți-e, s-a, n-am). Speaker-gendered words (sunt obosit/obosită, "
+              "sunt student/studentă) need the other gender as an accepted alternate (#alt). Names: avoid vocative/genitive/dative forms of the mapped "
+              "cast names (use pentru Lotte, cu Lotte, de la Lotte); lui Omar is fine."),
+    ),
     "ru": dict(
         name="Russian",
         script="cyrillic",                   # tokens, tiles, lexeme keys and content-key slugs (TRANSLIT_RU) work on Cyrillic; no stress marks, no Latin letters
@@ -605,6 +624,72 @@ SUN_LATIN = re.compile(r"\bal-(sh|th|dh|[stdrznṣḍṭẓ])(?=[a-zāīūʿʾ�
 def ar_sun_errors(s: str) -> list[str]:
     """English text transliterates Arabic: the article assimilates to a sun letter (ash-shams, ar-raʾs), never al-shams."""
     return [m.group(0) + "…" for m in SUN_LATIN.finditer(s) if m.group(1) != "l"]
+
+# --- Romanian: speaker-gendered words and orthography -----------------------------------------------------
+RO_COPULA = re.compile(r"\b(?:sunt|eram|nu sunt|mă simt|nu mă simt|mă simțeam|m-am simțit|mă simt la fel de)\s+"
+                       r"(?:(?:foarte|prea|destul de|puțin|tot|deja|mereu|întotdeauna|așa|chiar|și eu|mai|încă|niciodată|nu|puțin)\s+)*"
+                       r"(?:(un|o)\s+)?([a-zăâîșț]{4,})", re.I)
+RO_NOT_GENDERED = frozenset("acasă aici acolo bine rău destul foarte mereu prea gata mare verde liniștit? aproape departe între lângă dintr la din cu pentru despre "
+                            "sus jos afară înăuntru ocupat? singur? sigur? pe în de lângă după înainte acord vreme liber? tare gri bej maro roz cuminte "
+                            "fericit? trist? tânăr? ".replace("?", "").split()) - {"singur", "sigur", "ocupat", "liber", "liniștit", "fericit", "trist", "tânăr"}
+RO_VOWEL_END = ("a", "e", "i", "o", "u", "â", "î")
+
+
+def ro_gender_alts(text: str) -> list[str]:
+    """Romanian 'Sunt obosit.' -> ['Sunt obosită.'] (and back); [] when the word is not speaker-gendered."""
+    m = RO_COPULA.search(text)
+    if not m:
+        return []
+    art, w = m.group(1), m.group(2)
+    lw = w.lower()
+    if lw in RO_NOT_GENDERED or lw.endswith(("ment", "ție", "ință", "ime")):
+        return []
+    cands: list[str] = []
+    if lw.endswith("ă") and len(lw) > 4:
+        base = lw[:-1]
+        if lw.endswith("oasă"):
+            cands = [lw[:-4] + "os"]
+        elif lw.endswith("oară"):
+            cands = [lw[:-4] + "or"]
+        else:
+            cands = [base]
+    elif lw.endswith("oare"):
+        cands = [lw[:-4] + "or"]
+    elif not lw.endswith(RO_VOWEL_END):
+        if lw.endswith("os"):
+            cands = [lw[:-2] + "oasă"]
+        elif lw.endswith("or"):
+            cands = [lw[:-2] + "oare"] if lw.endswith("tor") else [lw[:-2] + "oară", lw + "ă", lw[:-2] + "oare"]
+        else:
+            cands = [lw + "ă"]
+    else:
+        return []
+    new_art = {"un": "o", "o": "un", "Un": "O", "O": "Un"}.get(art, art)
+    out = []
+    for c in cands:
+        if w[:1].isupper():
+            c = c[:1].upper() + c[1:]
+        head = text[:m.start(1)] + new_art + " " if art else text[:m.start(2)]
+        out.append(head + c + text[m.end():])
+    return out
+
+
+RO_CEDILLA = re.compile("[\u015f\u015e\u0163\u0162]")
+RO_I_INSIDE = re.compile(r"(?<=[^\W\d_])î")
+RO_PREFIX_I = re.compile(r"^(?:ne|re|pre|dez|sub|co|supra|extra|contra|anti|prea|auto|bine|rău|mai|semi|inter|multi)î", re.I)
+
+
+def ro_ortho_errors(text: str) -> list[str]:
+    """Comma-below ș ț only; â is never word-initial or word-final, î never word-internal (except after prefixes)."""
+    out = []
+    if RO_CEDILLA.search(text):
+        out.append("cedilla ş/ţ (write comma-below ș/ț)")
+    for w in re.findall(r"[^\W\d_]+", text):
+        if w[:1] in "âÂ" or w[-1:] in "âÂ":
+            out.append(f"{w!r}: â is only written inside a word (î at the start or end)")
+        elif RO_I_INSIDE.search(w) and not RO_PREFIX_I.match(w) and "-" not in w:
+            out.append(f"{w!r}: î inside a word (write â)")
+    return out
 
 
 class Unresolved(Exception):
@@ -1386,6 +1471,9 @@ class UnitDeriver:
         if cfg.get("elision") and kind in ("teach", "answer", "transcribe"):
             for bad in fr_elision_errors(text):
                 self.flag(key, "ELISION", f"{text!r}: obligatory elision not applied ({bad!r}); never accept the unelided form as a variant")
+        if cfg.get("diacritics") == "ro":
+            for bad in ro_ortho_errors(text):
+                self.flag(key, "ORTHO", f"{text!r}: {bad}")
         if cfg.get("straight_apostrophe") and "’" in text:
             self.flag(key, "APOSTROPHE", f"{text!r}: use the straight apostrophe (')")
         if cfg.get("script") == "cyrillic" and kind in ("teach", "answer", "transcribe"):
@@ -1410,6 +1498,10 @@ class UnitDeriver:
             alts_fr = fr_gender_alts(text)
             if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "ro":
+            alts_ro = ro_gender_alts(text)
+            if alts_ro and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ro):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_ro[0]!r}) via `{key}#alt`")
         elif g and kind == "answer" and g.get("mode") == "agent":
             alt = agent_gender_alt(text)
             if alt and norm(alt) not in {norm(x) for x in (answers or [])}:
@@ -1767,6 +1859,10 @@ class Plan:
             s = s.replace("\u2019", "'")
         if table is None and CFG.get(self.tgt, {}).get("arabic_punct") and re.search(r"[\u0621-\u064a]", s):
             s = s.replace("?", "؟").replace(",", "،").replace(";", "؛")
+
+        fold = CFG.get(self.tgt, {}).get("fold_chars")
+        if fold:
+            s = s.translate(str.maketrans(fold))
         table = self.names_map if table is None else table
         if not table:
             return s
@@ -2104,6 +2200,8 @@ def cmd_check(args):
         [py, "scripts/compile_content.py", "validate", "--realization", *map(str, real), "--overlay", *map(str, ovl)],
         [py, "scripts/compile_content.py", "compile", "--realization", *map(str, real), "--overlay", *map(str, ovl), "--out", str(plan.work / "compiled.json")],
         [py, f"scripts/backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}.py", "--dry-run"],
+        # Dutch text left in the derived course (English feedback/notes, target text): see scripts/_dutch_leftover_check.py
+        [py, "scripts/_dutch_leftover_check.py", "--pairs", plan.new_pair, "--quiet"],
     ):
         print("$", " ".join(cmd[:3]), "...")
         r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
