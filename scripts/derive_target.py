@@ -838,7 +838,7 @@ class UnitDeriver:
             word = r"(?<![^\W\d_])" + head + re.escape(text[1:]) + r"(?![^\W\d_])"
             if not re.search(word, out):
                 continue
-            quoted_only = all(w in self.p.english_words() for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(c in text for c in " ,.")
+            quoted_only = all(self.p.is_english(w) for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(c in text for c in " ,.")
             pat = re.compile((r"(?<=['\"*\u2018\u201c])" if quoted_only else "") + word[len(r"(?<![^\W\d_])"):] if quoted_only else word)
 
             def put(m, text=text):
@@ -1732,6 +1732,11 @@ class Plan:
                 walk(dd.load(f))
             self._svocab = voc
         return self._svocab
+
+    def is_english(self, w: str) -> bool:
+        """An English word for the quote-substitution guard: english_words() minus `not_english.json` of the work dir (source words that
+        earlier derived courses leaked into English fields until the cross-course vocabulary counts them: 'markt', 'strand')."""
+        return w in self.english_words() and w not in set(load_json(self.work / "not_english.json") or [])
 
     def english_words(self) -> set[str]:
         """English vocabulary: words found (as string values, never keys) in >= 2 files of >= 4 different English-learner courses.
