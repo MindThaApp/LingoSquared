@@ -102,9 +102,28 @@ CFG = {
     "it": dict(
         name="Italian",
         formal=r"\blei\b",
-        informal=r"\b(tu|ti|te|tuo|tua)\b",
-        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"), ("i", "e"))),
-        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[aA] il\b", "al"), (r"\b[iI]n il\b", "nel"), (r"\b[dD]a il\b", "dal")],
+        informal=r"\b(tu|ti|te|tuo|tua|tuoi|tue)\b|\b(hai|puoi|vuoi|vai|fai|devi|sai|dici|vieni|parli|abiti|lavori|preferisci|prendi|ti chiami)\b",
+        # learner speaks as themselves: Sono stanco / Sono stanca (-o/-a; -e adjectives and -i/-e plurals need no alternate)
+        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"),)),
+        # articulated prepositions are obligatory (di il -> del, in l' -> nell'); never accept the open form as a variant
+        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[dD]i lo\b", "dello"), (r"\b[dD]i la\b", "della"), (r"\b[dD]i l'", "dell'"),
+                      (r"\b[dD]i i\b", "dei"), (r"\b[dD]i gli\b", "degli"), (r"\b[dD]i le\b", "delle"),
+                      (r"\b[aA] il\b", "al"), (r"\b[aA] lo\b", "allo"), (r"\b[aA] la\b", "alla"), (r"\b[aA] l'", "all'"),
+                      (r"\b[aA] i\b", "ai"), (r"\b[aA] gli\b", "agli"), (r"\b[aA] le\b", "alle"),
+                      (r"\b[iI]n il\b", "nel"), (r"\b[iI]n lo\b", "nello"), (r"\b[iI]n la\b", "nella"), (r"\b[iI]n l'", "nell'"),
+                      (r"\b[iI]n i\b", "nei"), (r"\b[iI]n gli\b", "negli"), (r"\b[iI]n le\b", "nelle"),
+                      (r"\b[dD]a il\b", "dal"), (r"\b[dD]a lo\b", "dallo"), (r"\b[dD]a la\b", "dalla"), (r"\b[dD]a l'", "dall'"),
+                      (r"\b[dD]a i\b", "dai"), (r"\b[dD]a gli\b", "dagli"), (r"\b[dD]a le\b", "dalle"),
+                      (r"\b[sS]u il\b", "sul"), (r"\b[sS]u lo\b", "sullo"), (r"\b[sS]u la\b", "sulla"), (r"\b[sS]u l'", "sull'"),
+                      (r"\b[sS]u i\b", "sui"), (r"\b[sS]u gli\b", "sugli"), (r"\b[sS]u le\b", "sulle")],
+        # elision: lo/la/una before a vowel is written l'/l'/un' (no space); `un` never takes an apostrophe before a masculine noun
+        elisions=[(r"(?<![\w'’])[lL][oa] (?=[aeiouàèéìòùhAEIOU])", "l'"), (r"(?<![\w'’])[uU]na (?=[aeiouàèéìòùAEIOU])", "un'"),
+                  (r"(?<![\w'’])[uU]n['’]\s?(?=(?:amico|albergo|uomo|orologio|ombrello|ufficio|aereo|autobus|anno|esame|ospedale|inverno|appuntamento|indirizzo)\b)", "un (masculine nouns take no apostrophe)")],
+        note=("Natural standard Italian. Informal source roles -> tu, formal -> Lei (capital Lei/Le/La only for 'you'; verb in the third person: Lei ha, "
+              "Può aiutarmi?). Obligatory articulated prepositions: di/a/da/in/su + il/lo/la/l'/i/gli/le -> del, al, dal, nel, sul ... "
+              "(nel parco, dell'ufficio, alla stazione, sul tavolo). Elision: l'amico, l'acqua, un'amica (but un amico), dov'è, c'è. "
+              "Pro-drop: no subject pronoun unless it contrasts (Sono di Roma). Speaker-gendered adjectives/participles as the learner "
+              "answer (Sono stanco/stanca, Sono stato/stata) need the other gender as an accepted alternate."),
     ),
     "fr": dict(
         name="French",
@@ -935,6 +954,9 @@ class UnitDeriver:
         for pat, fix in cfg.get("contractions", []):
             if re.search(pat, text):
                 self.flag(key, "CONTRACTION", f"{text!r}: obligatory contraction not applied (use {fix!r}); never accept the uncontracted form as a variant")
+        for pat, fix in cfg.get("elisions", []):
+            if re.search(pat, text):
+                self.flag(key, "ELISION", f"{text!r}: obligatory elision / apostrophe rule not applied (use {fix!r})")
         if src_text:
             src_reg = register_of(src_text, sp)
             tr_reg = register_of(text, tp) if cfg else None
