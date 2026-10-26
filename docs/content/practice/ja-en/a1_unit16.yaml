@@ -1,0 +1,268 @@
+schema_version: '1.0'
+pack_key: practice.ja-en.a1.unit16
+source_language: ja
+target_language: en
+unit_content_key: en.a1.unit16.routines
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.de-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Japanese). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_after
+    - w_bed
+    - w_breakfast
+    - w_day
+    - w_dinner
+    - w_every
+    - w_morning
+    - w_time
+    - w_usually
+templates:
+- content_key: practice.ja-en.en.a1.unit16.lesson01.choose.001
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_dinner
+        - w_bed
+        - w_breakfast
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 英語では、食事の名前に冠詞をつけません。have breakfast、have dinner のようになります。go to bed でも冠詞はつきません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson02.choose.002
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - adjective
+      - adverb
+      - preposition
+      agreement_tags:
+        semantic:
+        - w_usually
+        - w_every
+        - w_after
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: usually、every、after は、動詞の前か、時を表す表現の先頭に置きます。I usually go、every day、after that のようになります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson01.order.003
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: word_order
+  frame:
+    text: I have {item} at seven.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_breakfast
+        - w_dinner
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have {item} at seven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: breakfast や dinner の前には冠詞をつけません。I have breakfast であって、I have a breakfast ではありません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson02.order.004
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: word_order
+  frame:
+    text: I {item} go to bed at eleven.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} go to bed at eleven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: usually は一般動詞 go の前に置きます。日本語の「たいてい」のように、文中で自由に動かすことはできません。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson02.fill.005
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: fill_in_blank
+  frame:
+    text: I {item} go to bed at eleven. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id001
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: usually(たいてい)は、主語と一般動詞の間に置きます。I usually go のようになります。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson01.fill.006
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: fill_in_blank
+  frame:
+    text: I have {item} at seven. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id002
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_breakfast
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: have breakfast と have dinner は、冠詞をつけない決まった言い方です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson02.translate.007
+  lesson_content_key: en.a1.unit16.lesson02.routine_with_times
+  type: translation
+  frame:
+    text: 私はたいてい11時に寝ます。
+    language_code: ja
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_usually
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I {item} go to bed at eleven.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 英語では usually を go の前に置き、時刻の前には at を使います。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson04.translate.008
+  lesson_content_key: en.a1.unit16.lesson04.routine_dialogue
+  type: translation
+  frame:
+    text: そのあとは何をしますか。
+    language_code: ja
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: preposition
+      agreement_tags:
+        semantic: w_after
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: What do you do {item} that?
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: after that を使うと、あるものの次に来ることをたずねられます。この質問には do が必要です。
+    language_code: ja
+    direction: ltr
+- content_key: practice.ja-en.en.a1.unit16.lesson01.match.009
+  lesson_content_key: en.a1.unit16.lesson01.routine_verbs
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech:
+      - adverb
+      - noun
+      - preposition
+      agreement_tags:
+        semantic:
+        - w_dinner
+        - w_bed
+        - w_breakfast
+        - w_usually
+        - w_after
+        - w_morning
+        - w_day
+        - w_time
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: このゲームの単語は、一日の流れに関係するものです。食事(breakfast、dinner)、時を表す言葉(morning、day、time、after)、そして usually です。
+    language_code: ja
+    direction: ltr
