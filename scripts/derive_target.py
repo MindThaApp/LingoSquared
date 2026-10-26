@@ -1187,6 +1187,13 @@ class Plan:
         self.base_real, self.base_ovl = real[0], ovl[0]
         first = args.first_unit or next_unit_number(self.tgt)
         self.derivers = [UnitDeriver(self, s, first + i) for i, s in enumerate(self.units)]
+        # media keys of the other files of the target course are taken: a later batch must not reuse their slugs
+        mine = {d.new_stem for d in self.derivers}
+        for fp in (CONTENT / f"realizations/{self.tgt}").glob("*.yaml"):
+            if fp.stem in mine:
+                continue
+            for m in re.finditer(r"content_key:\s*\w+\.\w+\.audio\.(\S+)\.\d+\s*$", fp.read_text(encoding="utf-8"), re.M):
+                self.media_slugs.update(x for x in m.group(1).split(".") if x not in ("neutral", "formal", "informal", "polite"))
 
     def source_vocab(self) -> set[str]:
         """Every word of the source course's realizations (all A1 files), for leftover detection in English text."""
