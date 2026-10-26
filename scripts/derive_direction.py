@@ -679,7 +679,10 @@ def cmd_inject(args):
 
     for g in seed_content_manifests(args.sibling, args.new, args.levels):
         print(f"seeded scripts/manifest.d/content/{g}.txt from the sibling")
-    write_backfill(args, work, units)
+    if getattr(args, "no_backfill", False):
+        print("note: --no-backfill, backfill script left untouched")
+    else:
+        write_backfill(args, work, units)
     tag_universe = new_direction_tags(args.new)
     dropped_templates = 0
     cm_new: "OrderedDict[str, tuple[list[str], list[str]]]" = OrderedDict()
@@ -788,7 +791,18 @@ def update_manifests(cm_new, new_pair, pack_paths):
     """
     MANIFEST.mkdir(parents=True, exist_ok=True)
     for g, (reals, ovs) in cm_new.items():
-        (MANIFEST / f"{g}.txt").write_text(f"{g}|{' '.join(reals)}|{' '.join(ovs)}\n", encoding="utf-8")
+        dest_g = MANIFEST / f"{g}.txt"
+        pairs = list(zip(reals, ovs))
+        if dest_g.exists():
+            # incremental inject (--units): keep the units already listed, add/replace the injected ones,
+            # and order by unit number so realizations and overlays stay position-matched.
+            old_parts = read_manifest_file(dest_g).get(g)
+            if old_parts and len(old_parts) == 2 and len(old_parts[0]) == len(old_parts[1]):
+                have = {r for r, _ in pairs}
+                pairs = [pr for pr in zip(*old_parts) if pr[0] not in have] + pairs
+                num = lambda pr: int(re.search(r"unit(\d+)", pr[0]).group(1)) if re.search(r"unit(\d+)", pr[0]) else 0
+                pairs.sort(key=num)
+        dest_g.write_text(f"{g}|{' '.join(r for r, _ in pairs)}|{' '.join(o for _, o in pairs)}\n", encoding="utf-8")
     if pack_paths:
         PRACTICE_MANIFEST.mkdir(parents=True, exist_ok=True)
         dest = PRACTICE_MANIFEST / f"{new_pair}.txt"
@@ -1090,6 +1104,8 @@ def main():
         if name == "inject":
             sp.add_argument("--allow-missing", action="store_true")
             sp.add_argument("--force", action="store_true")
+            sp.add_argument("--no-backfill", action="store_true",
+                            help="do not (re)write scripts/backfill_lexemes_<x>_<t>.py (hand-maintained glosses)")
         sp.set_defaults(fn=fn)
     args = ap.parse_args()
     if args.cmd in ("extract", "inject") and not args.sibling:
