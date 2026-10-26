@@ -10,6 +10,17 @@ const LOCALE_LOADERS: Record<string, () => Promise<{ default: Record<string, unk
   fa: () => import("./locales/fa.json"),
   prs: () => import("./locales/prs.json"),
   nl: () => import("./locales/nl.json"),
+  es: () => import("./locales/es.json"),
+  fr: () => import("./locales/fr.json"),
+  ru: () => import("./locales/ru.json"),
+  it: () => import("./locales/it.json"),
+  ar: () => import("./locales/ar.json"),
+  pl: () => import("./locales/pl.json"),
+  hi: () => import("./locales/hi.json"),
+  ro: () => import("./locales/ro.json"),
+  ko: () => import("./locales/ko.json"),
+  zh: () => import("./locales/zh.json"),
+  ja: () => import("./locales/ja.json"),
 };
 
 const lazyLocaleBackend: BackendModule = {
@@ -37,7 +48,7 @@ const lazyLocaleBackend: BackendModule = {
 // and an optional onLanguageChanged callback instead of reaching for
 // localStorage/DOM itself. Web's frontend/src/i18n/index.ts is the thin
 // wrapper that restores the exact previous behavior (see that file).
-export const RTL_LANGUAGES = new Set(["fa", "prs"]);
+export const RTL_LANGUAGES = new Set(["fa", "prs", "ar"]);
 
 export interface InitI18nOptions {
   language: string;
