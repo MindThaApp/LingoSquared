@@ -90,3 +90,29 @@ def test_repo_has_no_dutch_leftovers_in_a_clean_pair(ck):
     # real corpus smoke test: ar-en has never carried Dutch
     hits, _ = ck.scan_pair("ar-en")
     assert hits == []
+
+
+def _scan_side(ck, tmp_path, monkeypatch, pairs, note="Derived by scripts/derive_target.py from nl/a1_unit11_plans.yaml"):
+    d = tmp_path / "overlays/en-es"
+    d.mkdir(parents=True, exist_ok=True)
+    y = {"review": {"notes": note},
+         "exercises": {"x.match": {"accepted_answers": [{"value": [{"left": a, "right": b} for a, b in pairs]}]}}}
+    (d / "a1_unit50.yaml").write_text(yaml.safe_dump(y, allow_unicode=True))
+    monkeypatch.setattr(ck, "CONTENT", tmp_path)
+    monkeypatch.setattr(ck, "english_loose", lambda: frozenset({"museum", "the", "stage", "to", "visit", "ticket"}))
+    monkeypatch.setattr(ck, "target_vocab_native", lambda t: frozenset({"museo", "visitar", "el", "escenario", "lucía", "nadar"}))
+    ck._load.cache_clear()
+    return ck.english_side_hits("en-es", d / "a1_unit50.yaml")
+
+
+def test_english_side_lint_flags_translated_english_side(ck, tmp_path, monkeypatch):
+    hits = _scan_side(ck, tmp_path, monkeypatch, [("museo", "museo"), ("visitar", "to visit"), ("el escenario", "visitar")])
+    assert len(hits) == 2 and all("no English side" in h for h in hits)
+
+
+def test_english_side_lint_accepts_good_pairs_and_person_sentence_pairs(ck, tmp_path, monkeypatch):
+    assert not _scan_side(ck, tmp_path, monkeypatch, [("museo", "museum"), ("el escenario", "the stage"), ("Lucía", "nadar el museo visitar")])
+
+
+def test_english_side_lint_skips_hand_authored_units(ck, tmp_path, monkeypatch):
+    assert not _scan_side(ck, tmp_path, monkeypatch, [("museo", "museo")], note="Reviewed by a native speaker")

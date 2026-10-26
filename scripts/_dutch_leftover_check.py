@@ -19,6 +19,11 @@ carry Dutch), with two detectors:
   3. Dutch slugs: a snake_case token built from Dutch words (choose_ontbijten) in a user-visible value is a hit.
      The same slugs as dict keys / content keys are not user-visible: listed with --slugs, never failing.
 
+  4. English-side lint (derived en-<target> overlays only): a matching pair whose two sides are both target-language
+     (or identical non-English words), e.g. 'museo' = 'museo' where the English side 'museum' was translated, and
+     English-only fields (example_gloss / note / instruction / accepted_note / course_description) that are
+     almost entirely target-course words outside quotes. Person-vs-sentence pairs (name = activity) are not flagged.
+
 Exit 1 when any user-visible hit is found. Usage:
     .content-venv/bin/python3 scripts/_dutch_leftover_check.py [--pairs en-es,en-fr] [--slugs] [--quiet]
 """
