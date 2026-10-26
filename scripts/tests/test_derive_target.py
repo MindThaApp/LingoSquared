@@ -745,6 +745,25 @@ def test_pair_collision_lint_catches_left_items_that_differ_only_by_punctuation(
     assert d.p.flags == []
 
 
+def test_polish_register_gender_and_slugs(dt):
+    assert dt.register_of("Czy pan ma bilet?", "pl") == "formal"
+    assert dt.register_of("Proszę pani, gdzie jest apteka?", "pl") == "formal"
+    assert dt.register_of("Masz swój bilet?", "pl") == "informal"
+    assert dt.register_of("On ma psa.", "pl") is None
+    assert dt.pl_gender_alts("Jestem zmęczony.") == ["Jestem zmęczona."]
+    assert dt.pl_gender_alts("Jestem bardzo zmęczona.") == ["Jestem bardzo zmęczony."]
+    assert dt.pl_gender_alts("Wczoraj byłem w domu.") == ["Wczoraj byłam w domu."]
+    assert dt.pl_gender_alts("Poszłam do sklepu.") == ["Poszedłem do sklepu."]
+    assert dt.pl_gender_alts("Zacząłem pracę.") == ["Zaczęłam pracę."]
+    assert dt.pl_gender_alts("Chciałbym kawę.") == ["Chciałabym kawę."]
+    assert dt.pl_gender_alts("Jestem studentem.") == ["Jestem studentką."]
+    assert dt.pl_gender_alts("Czy jesteś głodny?") == ["Czy jesteś głodna?"]
+    assert dt.pl_gender_alts("Jestem Marek.") == [] and dt.pl_gender_alts("Mam psa.") == []
+    assert dt.pl_gender_alts("Ewa jest zmęczona.") == []                  # third person is not the speaker's own gender
+    assert dt.slug("Słowo żółć, święty Łukasz", 5) == "slowo_zolc_swiety_lukasz"
+    assert "ą ć ę ł ń ó ś ź ż" in dt.CFG["pl"]["note"]
+
+
 def test_romanian_register_gender_and_slugs(dt):
     assert dt.register_of("Dumneavoastră aveți un câine?", "ro") == "formal"
     assert dt.register_of("Vă rog să intrați.", "ro") == "formal"
