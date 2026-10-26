@@ -719,7 +719,7 @@ class UnitDeriver:
                     v["glosses"] = new_gl
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
-                    if card and not k.startswith("<<") and not re.search(rf"(?<![\w]){re.escape(k)}(?![\w])", card["target"]["text"], re.I):
+                    if card and not k.startswith("<<") and not re.search(rf"(?<![\w'’\-]){re.escape(k)}(?![\w'’\-])", card["target"]["text"], re.I):
                         self.flag(ck, "GLOSS_KEY", f"gloss key {k!r} is not a whole-word token of the card text (keys must be single words that occur in it)")
         # -- header ---------------------------------------------------------------
         self.grammar_lint(O)
@@ -966,7 +966,7 @@ class UnitDeriver:
             if src_punct:
                 out.append(x)
             if src_plain:
-                out.append(strip_punct(x) if ty != "fill_in_blank" else x)
+                out.append(boundary_strip(x) if ty == "dictation" else strip_punct(x) if ty != "fill_in_blank" else x)
         out = list(OrderedDict.fromkeys(out))
         if self.p.translit and ty in GERMAN_FREE_TEXT_TYPES:
             # the German compiler wants the full ASCII transliteration (ä->ae ...) of every typed answer with umlauts
