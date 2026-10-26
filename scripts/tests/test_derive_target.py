@@ -410,6 +410,8 @@ AUTHOR_DE = {
     "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Felix says: Ich bin Student.",
     "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "Ich bin Student",
     "nl.a1.unit05.lesson01.teach.hoeveel#note": "*Kostet* is the third-person form of *kosten*.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Sein with adjectives",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Müde and krank are adjectives; with sein you say: Ich bin müde.",
 }
 
 
@@ -472,13 +474,14 @@ def test_german_keeps_case_and_derives_capitalised_tiles(dt_de, tmp_path):
     dt.cmd_inject(a)
     real = yaml.safe_load((tmp_path / "docs/content/realizations/de/a1_unit54_test.yaml").read_text(encoding="utf-8"))
     ex = {e["content_key"].split(".")[-1]: e for e in real["units"][0]["lessons"][0]["exercises"]}
-    assert ex["order_cost"]["tested_text"] == "Wie viel kostet der Hund"        # not casefolded
-    assert sorted(ex["order_cost"]["word_bank"]) == sorted(["Wie", "viel", "kostet", "der", "Hund"])
-    assert ex["listen_dialogue"]["tested_text"] == "Ich bin Student"
+    assert "order_wie_viel_kostet" in ex                                          # exercise key re-derived from the translation
+    assert ex["order_wie_viel_kostet"]["tested_text"] == "Wie viel kostet der Hund"        # not casefolded
+    assert sorted(ex["order_wie_viel_kostet"]["word_bank"]) == sorted(["Wie", "viel", "kostet", "der", "Hund"])
+    assert any(v["tested_text"] == "Ich bin Student" for v in ex.values())
     assert real["media_assets"][0]["text"] == "Anna: Hallo. Felix: Ich bin Student."
     assert real["units"][0]["lessons"][0]["teaching"][0]["content_key"].endswith(".teach.wie_viel_kostet")
     ovl = yaml.safe_load((tmp_path / "docs/content/overlays/en-de/a1_unit54.yaml").read_text(encoding="utf-8"))
-    vals = [x["value"] for k, v in ovl["exercises"].items() if k.endswith("write_tired") for x in v["accepted_answers"]]
+    vals = [x["value"] for k, v in ovl["exercises"].items() if "write_" in k and "ich_bin" in k for x in v["accepted_answers"]]
     assert vals == ["Ich bin Student.", "Ich bin Student", "Ich bin Studentin.", "Ich bin Studentin"]
 
 

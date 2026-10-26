@@ -72,6 +72,10 @@ CFG = {
         name="German",
         case_sensitive=True,                 # nouns are capitalised: never casefold tested_text / tiles; slugs transliterate umlauts
         translit=True,
+        rekey_exercises=True,
+        strict_residual=True,                # source-language words inside English fields are found by vocabulary, not by "occurs in an English field"
+        per_card_keys=True,                  # a reading card's gloss keys translate per card (the same source word is another token in another text)
+        rewrite_gloss=True,                  # rewritten grammar cards must also get an authored English title + gloss
         formal=r"\bIhnen\b|\bIhr(?:e|en|em|er|es)?\b|(?<=[\w,]) Sie\b",    # matched on the original case: sentence-initial Sie is ambiguous (she/they)
         informal=r"(?i:\b(?:du|dich|dir|dein\w*)\b)",
         gender=dict(mode="agent"),           # learner speaks as themselves: Ich bin Student / Studentin
@@ -112,6 +116,7 @@ TARGET_ANSWER_TYPES = {
     "word_order", "listen_order", "fill_in_blank", "translation", "writing_prompt",
     "dictation", "listen_type", "dialogue_response", "speak_response",
 }
+GERMAN_FREE_TEXT_TYPES = {"writing_prompt", "dialogue_response", "listen_type", "translation", "reverse_translation", "grammar_check"}   # compile_content.py
 SEP = " || "
 BLANK = "___"
 PUNCT_CHARS = re.compile(r"[^\w\s'’\-‌]", re.U)
@@ -121,8 +126,16 @@ TOKEN_RE = re.compile(r"[\w'’\-‌]+", re.U)
 # ---------------------------------------------------------------------------
 # Text helpers
 # ---------------------------------------------------------------------------
+_EN_VOCAB: set[str] | None = None
+
+
 def strip_punct(s: str) -> str:
     return " ".join(PUNCT_CHARS.sub(" ", s).split()) if "\n" in s else " ".join(PUNCT_CHARS.sub("", s).split())
+
+
+def boundary_strip(s: str) -> str:
+    """Only the punctuation at both ends (the dictation compiler check ignores just that)."""
+    return re.sub(r"^[\s.!?¿¡;:,\"“”„]+|[\s.!?¿¡;:,\"“”„]+$", "", s)
 
 
 def norm(s: str) -> str:
@@ -131,7 +144,7 @@ def norm(s: str) -> str:
 
 
 def tokens(s: str) -> list[str]:
-    return TOKEN_RE.findall(strip_punct(s))
+    return [t for t in (x.strip("-") for x in TOKEN_RE.findall(strip_punct(s))) if t]       # a bare "-e" ending is not a word
 
 
 TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä": "Ae", "Ö": "Oe", "Ü": "Ue"})
@@ -207,7 +220,8 @@ class UnitDeriver:
             raise SystemExit(f"{src_stem}: expected a1_unitNN_name (only A1 is supported)")
         self.level, self.src_no, self.suffix = m.group(1), int(m.group(2)), m.group(3)
         self.new_no = new_no
-        self.new_stem = f"{self.level}_unit{new_no:02d}_{self.suffix}"
+        self.new_suffix = plan.suffixes.get(self.suffix, self.suffix)       # --suffixes: file / topic name in the new language
+        self.new_stem = f"{self.level}_unit{new_no:02d}_{self.new_suffix}"
         self.real = dd.load(CONTENT / f"realizations/{plan.src}/{src_stem}.yaml")
         self.ovl = dd.load(CONTENT / f"overlays/{plan.src_pair}/{self.level}_unit{self.src_no:02d}.yaml")
         self.keymap: dict[str, str] = {}
@@ -216,6 +230,8 @@ class UnitDeriver:
         self.used_slugs: dict[str, set[str]] = defaultdict(set)
         self.compose: dict[str, tuple[list[str], bool]] = {}
         self.id_text: dict[str, str] = {}
+        self.rewrite_cks: set[str] = set()           # grammar_note cards whose explanation is rewritten (title + gloss are authored too)
+        self.card_tr: dict[str, str] = {}            # card content key -> translated target text
 
     def compose_for(self, text: str):
         """([line, ...], strip_speaker) when `text` is built from teaching lines (gaps between lines allowed)."""
@@ -255,7 +271,7 @@ class UnitDeriver:
                 self.atom_norms.setdefault(norm(text), aid)
                 self.p.derived[aid] = joined
                 return joined
-        aid = atom_id(("gk\0" if kind == "gloss-key" else "") + text)
+        aid = atom_id((("gk\0" + (where + "\0" if self.p.per_card_keys and where else "")) if kind == "gloss-key" else "") + text)
         self.p.add_atom(aid, text, kind, en, where, self.stem)
         if kind != "gloss-key":
             self.id_text[aid] = text
@@ -334,6 +350,7 @@ class UnitDeriver:
                     en = gl("teaching", ck, "gloss")
                     self.T(t["target"]["text"], "teach", en if isinstance(en, str) else None, ck)
                     if t.get("kind") == "grammar_note" and len(t["target"]["text"].split()) > 8:
+                        self.rewrite_cks.add(ck)
                         self.p.atom_ctx[atom_id(t["target"]["text"])]["rewrite"] = (
                             f"grammar explanation written in {self.p.src_name}: REWRITE it for {self.p.new_name} grammar, do not translate")
                         self.flag(ck, "GRAMMAR_REWRITE", "grammar_note card explains source-language grammar; rewrite per language", "warn")
@@ -388,7 +405,7 @@ class UnitDeriver:
         # Pair sides.  Default: left is source-language text, right is English.  A right side that
         # consists only of source-language words (field -> value pairs) is source text too, and a
         # pair whose right side is a teaching atom and whose left is not is reversed (English left).
-        allsrc = set()
+        allsrc = set(self.p.src_lexicon)             # inflected forms that occur on a pair side only (leest, luistert) are source text too
         teach_norms = set(self.atom_norms)
         for text in self.atom_texts:
             allsrc |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
@@ -430,6 +447,10 @@ class UnitDeriver:
         for text in self.atom_texts:
             srclex |= set(re.findall(r"[^\W\d_]{3,}", text.casefold()))
         self.src_only = srclex - env
+        if self.p.strict_residual:
+            # `env` is built from the English fields themselves, so a source word quoted inside an English instruction or option
+            # (*sporten*, doen aan) counted as English.  Strict mode: every word of the source course that no other English overlay uses.
+            self.src_only = ({w for w in self.p.src_lexicon if len(w) >= 4} | srclex) - self.p.en_vocab - self.p.cast_words
 
     def options_are_target(self, ov: dict) -> bool:
         co = ov.get("correct_option")
@@ -444,7 +465,7 @@ class UnitDeriver:
         unit_tail = old_unit.split(".", 3)[3]
         prefix_old = f"{sp}.a1.unit{self.src_no:02d}."
         prefix_new = f"{tp}.a1.unit{self.new_no:02d}."
-        self.keymap[old_unit] = prefix_new + unit_tail
+        self.keymap[old_unit] = prefix_new + (self.new_suffix if unit_tail == self.suffix else unit_tail)
         media_slugs: set[str] = set()
         for a in R.get("media_assets") or []:
             parts = a["content_key"].split(".")
@@ -461,6 +482,8 @@ class UnitDeriver:
             media_slugs.add(s)
             self.p.media_slugs.add(s)
             parts[si] = s
+            if len(parts) > 3 and parts[3] == self.suffix:
+                parts[3] = self.new_suffix
             parts[0] = tp
             self.keymap[a["content_key"]] = ".".join(parts)
         for u in R["units"]:
@@ -490,6 +513,7 @@ class UnitDeriver:
         for a in R.get("media_assets") or []:
             a["text"] = self.T(a["text"], "media")
             a["language"] = tp
+        self.media_tr = {a["content_key"]: a["text"] for a in R.get("media_assets") or []}
         O_ex = O.setdefault("exercises", {})
         O_te = O.setdefault("teaching", {})
         for u in R["units"]:
@@ -500,6 +524,8 @@ class UnitDeriver:
                     self.teach(t, O_te.get(t["content_key"]))
                 for i, e in enumerate(l["exercises"]):
                     self.exercise(e, O_ex.get(e["content_key"]), l)
+        if self.p.rekey:
+            self.rekey_exercises(R)
         # -- overlay English passthroughs -----------------------------------------
         for sect in ("units", "lessons"):
             for v in (O.get(sect) or {}).values():
@@ -507,8 +533,16 @@ class UnitDeriver:
         for ck, v in (O_te).items():
             for f in ("title", "gloss"):
                 if isinstance(v.get(f), str):
-                    if self.residual(self.en(v[f])):
-                        self.flag(ck, "LEFTOVER", f"{f} {v[f]!r} still contains {self.p.src_name} words {self.residual(v[f])}")
+                    left = self.residual(self.en(v[f]))
+                    if ck in self.rewrite_cks or left:
+                        # a rewritten grammar card needs its own English title/gloss; leftover source words can be authored away too
+                        got = self.A(f"{ck}#{f}", v[f], f, dict(en=v[f], card=self.card_tr.get(ck), why=",".join(left) or "grammar card rewritten"),
+                                     required=ck in self.rewrite_cks and self.p.rewrite_gloss)
+                        if got is not None:
+                            v[f] = got
+                            continue
+                    if left:
+                        self.flag(ck, "LEFTOVER", f"{f} {v[f]!r} still contains {self.p.src_name} words {left}")
                     v[f] = self.en(v[f])
             eg = v.get("example_gloss")
             if isinstance(eg, str):
@@ -518,7 +552,7 @@ class UnitDeriver:
             if "note" in v:
                 v["note"] = self.en_checked(v["note"], ck + "#note", "note", dict(en=v.get("gloss")))
             if isinstance(v.get("glosses"), dict):
-                v["glosses"] = OrderedDict((self.T(k, "gloss-key"), self.en(val)) for k, val in v["glosses"].items())
+                v["glosses"] = OrderedDict((self.T(k, "gloss-key", None, ck), self.en(val)) for k, val in v["glosses"].items())
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
                     if card and not k.startswith("<<") and not re.search(rf"(?<![\w]){re.escape(k)}(?![\w])", card["target"]["text"], re.I):
@@ -527,10 +561,30 @@ class UnitDeriver:
         R, O = self.finish(R, O)
         return R, O
 
+    def rekey_exercises(self, R: dict) -> None:
+        """Exercise key tails carry source-language words and cast names (choose_ik_sport): rebuild them from the translated tested text."""
+        for u in R["units"]:
+            for l in u["lessons"]:
+                seen: set[str] = set()
+                for e in l["exercises"]:
+                    old = e["content_key"]
+                    verb = self.keymap[old].rsplit(".", 1)[1].split("_", 1)[0]
+                    txt = e.get("tested_text") or ""
+                    if not txt or txt.startswith("<<"):
+                        continue
+                    base = f"{verb}_{slug(txt, 3, self.p.translit)}"
+                    tail, n = base, 2
+                    while tail in seen:
+                        tail, n = f"{base}_{n}", n + 1
+                    seen.add(tail)
+                    head = self.keymap[old].rsplit(".", 1)[0]
+                    self.keymap[old] = f"{head}.{tail}"
+
     # -- teaching ---------------------------------------------------------------
     def teach(self, t: dict, ov: dict | None) -> None:
         tgt = t["target"]
         tgt["text"] = self.T(tgt["text"], "teach")
+        self.card_tr[t["content_key"]] = tgt["text"]
         tgt["language_code"] = self.p.tgt
         if t["target"].get("speaker"):
             tgt["speaker"] = self.p.names(tgt["speaker"])
@@ -553,6 +607,9 @@ class UnitDeriver:
             self.flag(ck, "NO_OVERLAY", "exercise has no overlay entry; copied as is", "warn")
         en_inst = ov.get("instruction")
         ctx = dict(type=ty, instruction=en_inst)
+        mk = e.get("media_asset_key")
+        if mk and getattr(self, "media_tr", None) and mk in self.media_tr:
+            ctx["media"] = self.media_tr[mk]                      # translated audio text: the context a tested span / feedback refers to
         # prompt blocks
         frame_src = None
         for b in (e.get("prompt") or {}).get("target_blocks") or []:
@@ -565,6 +622,9 @@ class UnitDeriver:
                 b["language_code"] = tp
             else:
                 b["text"] = self.en(b["text"])
+        pr_tr = [b["text"] for b in (e.get("prompt") or {}).get("target_blocks") or [] if b.get("language_code") == tp]
+        if pr_tr:
+            ctx["prompt"] = " ".join(pr_tr)
         # overlay fields
         if "instruction" in ov:
             ov["instruction"] = self.en_checked(ov["instruction"], ck + "#instruction", "instruction", ctx)
@@ -600,8 +660,19 @@ class UnitDeriver:
             ov["accepted_answers"] = [dict(a, value=canon_tr) if isinstance(a.get("value"), str) else a for a in old_accepted[:1]]
             alts = [canon_tr]
         elif has_opts:
-            ov["correct_option"] = self.en(ov["correct_option"])
-            ov["distractors"] = [self.en(d) for d in ov["distractors"]]
+            left = self.residual(self.en(SEP.join([ov["correct_option"]] + list(ov["distractors"]))))
+            got = None
+            if left:                                   # options quote or discuss the source language: authored (correct || distractor || ...)
+                got = self.A(ck + "#opts", SEP.join([ov["correct_option"]] + list(ov["distractors"])), "options",
+                             dict(ctx, why=",".join(left), n=len(ov["distractors"]) + 1), required=self.p.strict_residual)
+            if got and not got.startswith("<<"):
+                parts = [x for x in re.split(r"\s*\|\|\s*", got) if x]
+                ov["correct_option"], ov["distractors"] = self.en(parts[0]), [self.en(d) for d in parts[1:]]
+                ov["accepted_answers"] = [dict(a, value=ov["correct_option"]) if isinstance(a.get("value"), str) else a
+                                          for a in ov.get("accepted_answers") or []]
+            else:
+                ov["correct_option"] = self.en(ov["correct_option"])
+                ov["distractors"] = [self.en(d) for d in ov["distractors"]]
             for a in ov.get("accepted_answers") or []:
                 if isinstance(a.get("value"), str):
                     a["value"] = self.en(a["value"])
@@ -611,15 +682,15 @@ class UnitDeriver:
             for a in ov.get("accepted_answers") or []:
                 if isinstance(a.get("value"), str):
                     a["value"] = self.en(a["value"])
-        if "feedback" in ov:
-            ov["feedback"] = self.en_checked(ov["feedback"], ck + "#feedback", "feedback",
-                                             dict(ctx, correct=canon_tr))
         # tested text
         if "tested_text" in e:
             e["tested_text"] = self.tested(e, ck, tested_src, canon_src, canon_tr, ctx)
         # word bank
         if "word_bank" in e:
             self.bank(e, ck, tested_src, e["tested_text"], alts, ctx)
+        if "feedback" in ov:
+            ov["feedback"] = self.en_checked(ov["feedback"], ck + "#feedback", "feedback",
+                                             dict(ctx, correct=canon_tr, tested=e.get("tested_text")))
         # lints on learner-produced alternates
         if ans_target and ty in TARGET_ANSWER_TYPES:
             produced = ty in ("translation", "writing_prompt", "dialogue_response", "speak_response", "fill_in_blank")
@@ -666,6 +737,9 @@ class UnitDeriver:
             if src_plain:
                 out.append(strip_punct(x) if ty != "fill_in_blank" else x)
         out = list(OrderedDict.fromkeys(out))
+        if self.p.translit and ty in GERMAN_FREE_TEXT_TYPES:
+            # the German compiler wants the full ASCII transliteration (ä->ae ...) of every typed answer with umlauts
+            out = list(OrderedDict.fromkeys(out + [x.translate(TRANSLIT_DE) for x in out if x.translate(TRANSLIT_DE) != x]))
         canon_form = out[0]
         if "correct_option" in ov:
             ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else strip_punct(base)
@@ -689,6 +763,8 @@ class UnitDeriver:
         if canon_tr is not None and canon_src and norm(tested_src) == norm(canon_src):
             if canon_tr.startswith("<<"):
                 return canon_tr
+            if tested_src != strip_punct(canon_src) and tested_src == boundary_strip(canon_src):
+                return boundary_strip(canon_tr)          # dictation: the compiler compares with the audio text, inner commas included
             body = strip_punct(canon_tr)
             if self.p.cs:
                 return body
@@ -756,20 +832,23 @@ class UnitDeriver:
             self.case_lint(key, text)
 
     def case_lint(self, key: str, text: str) -> None:
-        """Case-sensitive targets (German): a known noun written lowercase, or a known non-noun capitalised mid-sentence."""
+        """Case-sensitive targets (German): a known common noun written lowercase, or a known non-noun capitalised mid-sentence.
+        Sentence starts, quoted phrases (*Was machst du?*) and cast names are skipped; nominalised verbs/adjectives (Kochen, etwas Neues)
+        are legitimate exceptions to acknowledge in ack.json."""
         up, low = self.p.lexicon
         start = True
-        for m in re.finditer(r"[^\W\d_][\w'’\-]*|[.!?:\n]", text):
+        for m in re.finditer(r"[^\W\d_][\w'’\-]*|[.!?:\n*\"“„]", text):
             t = m.group(0)
-            if t in ".!?:\n":
+            if t in (".", "!", "?", ":", "\n", "*", '"', "“", "„"):
                 start = True
                 continue
             first, start = start, False
-            if first or t in up or t in low:
+            if first or t in up or t in low or t in self.p.case_ok or t in self.p.names_map.values():
                 continue
-            if t[0].islower() and (t[0].upper() + t[1:]) in up:
-                self.flag(key, "CASE", f"{t!r} in {text!r}: German nouns are capitalised ({t[0].upper() + t[1:]!r})")
-            elif t[0].isupper() and (t[0].lower() + t[1:]) in low and t not in self.p.case_ok:
+            cap = t[0].upper() + t[1:]
+            if t[0].islower() and cap in up and cap not in self.p.case_ok and cap not in self.p.proper_nouns:
+                self.flag(key, "CASE", f"{t!r} in {text!r}: German nouns are capitalised ({cap!r})")
+            elif t[0].isupper() and (t[0].lower() + t[1:]) in low:
                 self.flag(key, "CASE", f"{t!r} in {text!r}: capitalised mid-sentence, but {t[0].lower() + t[1:]!r} is a known non-noun")
 
     # -- header -----------------------------------------------------------------
@@ -834,6 +913,11 @@ class Plan:
         self.new_name = CFG.get(self.tgt, {}).get("name", self.tgt)
         self.cs = bool(CFG.get(self.tgt, {}).get("case_sensitive"))      # case carries meaning (German nouns)
         self.translit = bool(CFG.get(self.tgt, {}).get("translit"))
+        self.strict_residual = bool(CFG.get(self.tgt, {}).get("strict_residual"))
+        self.per_card_keys = bool(CFG.get(self.tgt, {}).get("per_card_keys"))
+        self.rewrite_gloss = bool(CFG.get(self.tgt, {}).get("rewrite_gloss"))
+        self.rekey = bool(CFG.get(self.tgt, {}).get("rekey_exercises"))     # exercise key tails re-derived from the translation
+        self.suffixes = dict(kv.split("=", 1) for kv in (getattr(args, "suffixes", None) or "").split(",") if "=" in kv)
         self._lex = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
@@ -858,6 +942,54 @@ class Plan:
         self.derivers = [UnitDeriver(self, s, first + i) for i, s in enumerate(self.units)]
 
     @property
+    def en_vocab(self) -> set[str]:
+        """Words used in the English fields of the other courses' overlays (anything the source course quotes is not in here)."""
+        global _EN_VOCAB
+        if _EN_VOCAB is None:
+            v: set[str] = set()
+            for pair in ("en-de", "en-es", "en-fr", "en-it", "en-pl", "en-ro"):
+                if pair in (self.src_pair,):
+                    continue
+                for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
+                    v.update(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold()))
+            _EN_VOCAB = v
+        return _EN_VOCAB
+
+    @property
+    def cast_words(self) -> set[str]:
+        self.src_lexicon                                      # loads _src_names / _gloss_words
+        return ({w.casefold() for kv in list(self.names_map.items()) for w in kv} | self._src_names | self._gloss_words
+                | {"opa", "taalcafé", "taalcafe"})
+
+    @property
+    def src_lexicon(self) -> set[str]:
+        """Lowercase words of the source target course (every introduced token of its realizations): recognises
+        source-language pair sides whose inflected forms occur nowhere else (leest, luistert)."""
+        if getattr(self, "_src_lex", None) is None:
+            raw: set[str] = set()
+            for fp in (CONTENT / f"realizations/{self.src}").glob("*.yaml"):
+                for m in re.finditer(r"introduced_tokens:\s*\[([^\]]*)\]", fp.read_text(encoding="utf-8")):
+                    raw.update(re.findall(r"[^\W\d_]{2,}", m.group(1)))
+            low = {w for w in raw if w[0].islower()}
+            self._src_names = {w.casefold() for w in raw if w[0].isupper() and w.casefold() not in low}    # Marieke, Pico: never lowercase
+            self._src_lex = {w.casefold() for w in raw}
+            # English glosses of the source lexemes are English words even when spelled like a source word (blond)
+            self._gloss_words: set[str] = set()
+            try:
+                spec = importlib.util.spec_from_file_location("bf_src_" + self.src, ROOT / f"scripts/backfill_lexemes_{self.src_pair.split('-')[0]}_{self.src}.py")
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                for name in dir(mod):
+                    d = getattr(mod, name)
+                    if name.endswith("GLOSSES") and isinstance(d, dict):
+                        for v in d.values():
+                            if isinstance(v, str):
+                                self._gloss_words.update(re.findall(r"[^\W\d_]{3,}", v.casefold()))
+            except Exception:
+                pass
+        return self._src_lex
+
+    @property
     def lexicon(self) -> tuple[set[str], set[str]]:
         """(capitalised, lowercase) lexemes already known to the target backfill."""
         if self._lex is None:
@@ -867,6 +999,14 @@ class Plan:
                 g = {}
             self._lex = ({k for k in g if k[:1].isupper()}, {k for k in g if k[:1].islower()})
         return self._lex
+
+    @property
+    def proper_nouns(self) -> set[str]:
+        try:
+            mod = load_backfill(self)
+            return set(getattr(mod, "PROPER_NOUNS", ())) | set(getattr(mod, "POS_SETS", {}).get("proper_noun", ()))
+        except (OSError, SystemExit, AttributeError):
+            return set()
 
     case_ok = frozenset({"Sie", "Ihnen", "Ihr", "Ihre", "Ihren", "Ihrem", "Ihrer", "Ihres"})   # formal address: capital is correct mid-sentence
 
@@ -935,13 +1075,18 @@ def next_unit_number(tgt: str) -> int:
 # Commands
 # ---------------------------------------------------------------------------
 def make_plan(args) -> Plan:
-    work = Path(args.work) if args.work else DEFAULT_WORK / args.new
+    work = Path(args.work) if args.work else DEFAULT_WORK / (args.new or "en-es")
     work.mkdir(parents=True, exist_ok=True)
+    saved = load_json(work / "plan.json")
+    args.source = args.source or saved.get("source") or "en-nl"          # without flags the saved plan decides, never the en-es default
+    args.new = args.new or saved.get("new") or "en-es"
+    if saved.get("new") == args.new:
+        args.group = args.group or saved.get("group")
     if not args.units:
-        saved = load_json(work / "plan.json")
         args.units = saved.get("units")
         args.first_unit = args.first_unit or saved.get("first_unit")
         args.names = args.names or saved.get("names")
+        args.suffixes = getattr(args, "suffixes", None) or saved.get("suffixes")
         if not args.units:
             raise SystemExit("--units a1_unitNN_name ... required on first run")
     return Plan(args, work)
@@ -986,7 +1131,8 @@ def cmd_extract(args):
     w = plan.work
     # keep earlier translations for unchanged text (ids are text hashes)
     dump_json(w / "plan.json", dict(source=plan.src_pair, new=plan.new_pair, units=plan.units,
-                                    first_unit=plan.derivers[0].new_no, names=args.names, group=plan.group))
+                                    first_unit=plan.derivers[0].new_no, names=args.names, group=plan.group,
+                                    suffixes=getattr(args, "suffixes", None)))
     atoms = OrderedDict(sorted(plan.atoms.items(), key=lambda kv: kv[0]))
     dump_json(w / "atoms.src.json", plan.atoms)
     dump_json(w / "atoms.ctx.json", plan.atom_ctx)
@@ -1207,12 +1353,13 @@ def main(argv=None):
     for name, fn in (("extract", cmd_extract), ("status", cmd_status), ("lexemes", cmd_lexemes),
                      ("inject", cmd_inject), ("check", cmd_check)):
         p = sub.add_parser(name)
-        p.add_argument("--source", default="en-nl", help="source course pair (default en-nl)")
-        p.add_argument("--new", default="en-es", help="new target course pair (default en-es)")
+        p.add_argument("--source", help="source course pair (default: the saved plan, else en-nl)")
+        p.add_argument("--new", help="new target course pair (default: the saved plan, else en-es)")
         p.add_argument("--group", help="manifest group receiving the units (default = --new)")
         p.add_argument("--units", nargs="*", help="source realization stems, e.g. a1_unit23_money")
         p.add_argument("--first-unit", type=int, help="unit number of the first derived unit (default: next free)")
         p.add_argument("--names", help="cast map, e.g. Lotte=Elena,Omar=Mateo")
+        p.add_argument("--suffixes", help="topic name map for file names / unit keys, e.g. sporten=sport,vervoer=verkehr")
         p.add_argument("--work")
         p.add_argument("--allow-missing", action="store_true")
         p.add_argument("--skip-lexemes", action="store_true")
