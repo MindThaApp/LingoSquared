@@ -811,3 +811,12 @@ def test_russian_inject_lints_gender_script_stress_and_accepts_e_for_yo(dt_ru, t
     ov = built[0][2]["exercises"]
     acc = next(vals for vals in ([x["value"] for x in v.get("accepted_answers", [])] for v in ov.values()) if "Я ушёл." in vals)
     assert "Я ушёл." in acc and "Я ушел." in acc and "Я ушла." in acc
+
+
+def test_russian_cast_names_stay_cyrillic_in_target_text_and_latin_in_english(dt_ru, tmp_path):
+    a = args(tmp_path, new="en-ru", first_unit=25, names="Lotte=Настя,Omar=Дима", names_en="Lotte=Nastya,Omar=Dima")
+    plan = dt_ru.make_plan(a)
+    assert plan.names("Lotte: Привет.") == "Настя: Привет."
+    assert plan.names_en("Lotte: Hi, Omar!") == "Nastya: Hi, Dima!"
+    b = args(tmp_path, new="en-ru", first_unit=25, names="Lotte=Настя")
+    assert dt_ru.make_plan(b).names_en("Lotte") == "Настя"          # no --names-en: the single map applies to both sides (Latin targets)
