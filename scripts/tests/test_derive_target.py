@@ -690,3 +690,124 @@ def test_pair_collision_lint_catches_left_items_that_differ_only_by_punctuation(
     d.p.flags.clear()
     d.pair_collisions("k", [{"left": "Le petit-déjeuner est inclus.", "right": "a"}, {"left": "Le petit-déjeuner n'est pas inclus.", "right": "b"}])
     assert d.p.flags == []
+
+
+# ---------------------------------------------------------------------------
+# Russian target (first non-Latin script): Cyrillic slugs, ты/Вы, speaker gender, ё/е answers, stress marks, script
+# ---------------------------------------------------------------------------
+BACKFILL_RU = '''"""fixture"""
+GLOSSES = {"привет": "hi"}
+POS_SETS = {"phrase": {"привет"}}
+
+
+def normalize(token):
+    return token.lower()
+
+
+POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
+'''
+ATOMS_RU = {
+    "Hoeveel kost het?": "Сколько это стоит?",
+    "Beginnen": "Начало",
+    "Test": "Проверка",
+    "Ziek en moe zijn bijvoeglijke naamwoorden en gebruiken zijn in het Nederlands.":
+        "Усталый и больной - прилагательные.",
+    "Lotte: Hoi.": "Настя: Привет.",
+    "Omar: Ik ben moe.": "Дима: Я устал.",
+    "moe": "усталый",
+    "a rest": "отдых",
+}
+AUTHOR_RU = {
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#dist": "Сколько это стоить? || Как это стоит?",
+    "nl.a1.unit05.lesson01.exercise01.choose_cost#feedback": "*Сколько* asks for the amount.",
+    "nl.a1.unit05.lesson01.exercise02.order_cost#feedback": "The question word comes first.",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#frame": "Сколько это ___?",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#ans": "стоит",
+    "nl.a1.unit05.lesson01.exercise03.complete_cost#feedback": "The verb is стоит.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#ans": "Я устал.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "Я устала.",
+    "nl.a1.unit05.lesson01.exercise04.write_tired#feedback": "Я устал.",
+    "nl.a1.unit05.lesson01.exercise05.match#tested": "сколько усталый",
+    "nl.a1.unit05.lesson01.exercise05.match#feedback": "Усталый means tired.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#feedback": "Дима says: Я устал.",
+    "nl.a1.unit05.lesson01.exercise06.listen_dialogue#tested": "я устал",
+    "nl.a1.unit05.lesson01.teach.hoeveel#note": "*Стоит* is the third-person form of *стоить*.",
+    "nl.a1.unit05.lesson01.teach.grammar#title": "Short adjectives",
+    "nl.a1.unit05.lesson01.teach.grammar#gloss": "Tired and ill are adjectives; the present of to be is dropped: Я устал.",
+}
+
+
+@pytest.fixture()
+def dt_ru(tmp_path, monkeypatch):
+    spec = importlib.util.spec_from_file_location("derive_target_ru_under_test", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    for name, sub in (("ROOT", ""), ("CONTENT", "docs/content"), ("MANIFEST", "scripts/manifest.d/content")):
+        monkeypatch.setattr(mod, name, tmp_path / sub if sub else tmp_path)
+    c = tmp_path / "docs/content"
+    base_r = dict(BASE_REAL, target_language="ru", course={"realization_key": "ru.a1"})
+    base_o = dict(BASE_OVL, target_language="ru")
+    for path, obj in ((c / "realizations/nl/a1_unit05_test.yaml", src_realization()),
+                      (c / "overlays/en-nl/a1_unit05.yaml", src_overlay()),
+                      (c / "realizations/ru/a1_unit01_base.yaml", base_r),
+                      (c / "overlays/en-ru/a1_unit01.yaml", base_o)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False), encoding="utf-8")
+    m = tmp_path / "scripts/manifest.d/content"
+    m.mkdir(parents=True)
+    (m / "en-ru.txt").write_text(
+        "en-ru|docs/content/realizations/ru/a1_unit01_base.yaml|docs/content/overlays/en-ru/a1_unit01.yaml\n", encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_ru.py").write_text(BACKFILL_RU, encoding="utf-8")
+    return mod
+
+
+def ru_plan(dt, tmp_path, author=None, atoms=None):
+    a = args(tmp_path, new="en-ru", first_unit=25, names="Lotte=Настя,Omar=Дима")
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    table = atoms or ATOMS_RU
+    (work / "atoms.tr.json").write_text(json.dumps({i: table[t] for i, t in src.items() if t in table}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author or AUTHOR_RU, ensure_ascii=False), encoding="utf-8")
+    plan = dt.make_plan(a)
+    return a, plan
+
+
+def test_russian_slugs_register_and_stress_free_tokens(dt):
+    assert dt.slug("У меня болит голова.", 4) == "u_menya_bolit_golova"
+    assert dt.slug("Идёт дождь") == "idyot_dozhd" and dt.slug("Хлеб и чай", 3) == "khleb_i_chay"
+    assert dt.tokens("Идёт дождь, кто-то пришёл!") == ["Идёт", "дождь", "кто-то", "пришёл"]
+    assert dt.boundary_strip("«Привет!»") == "Привет"
+    assert dt.register_of("Вы любите чай?", "ru") == "formal" and dt.register_of("Ты любишь чай?", "ru") == "informal"
+    assert dt.register_of("Мы любим чай.", "ru") is None
+
+
+def test_russian_gender_alternates_cover_verbs_adjectives_and_nouns(dt):
+    g = dt.ru_gender_alts
+    assert g("Я устал.") == ["Я устала."] and g("Я устала.") == ["Я устал."]
+    assert g("Я очень рада.") == ["Я очень рад."] and g("Я студент.") == ["Я студентка."]
+    assert g("Я пошла домой.") == ["Я пошёл домой."] and g("Я учился в школе.") == ["Я училась в школе."]
+    assert g("Я купил хлеб и пошёл домой.") == ["Я купила хлеб и пошла домой."]
+    assert g("Я купила билет. Я устала.") == ["Я купил билет. Я устал."]
+    assert g("Ты устал?") == [] and g("Я живу в школе.") == [] and g("Мы устали.") == []
+
+
+def test_russian_inject_lints_gender_script_stress_and_accepts_e_for_yo(dt_ru, tmp_path):
+    dt = dt_ru
+
+    def codes(author=None, atoms=None):
+        a, plan = ru_plan(dt, tmp_path, author, atoms)
+        plan.build_all()
+        return {f["code"] for f in dt.active_flags(plan)}
+
+    assert "GENDER" not in codes() and "SCRIPT" not in codes() and "STRESS" not in codes()
+    assert "GENDER" in codes({k: v for k, v in AUTHOR_RU.items() if not k.endswith("write_tired#alt")})
+    assert "SCRIPT" in codes(None, dict(ATOMS_RU, **{"Hoeveel kost het?": "Сколько это costs?"}))
+    assert "STRESS" in codes(None, dict(ATOMS_RU, **{"Hoeveel kost het?": "Ско́лько это стоит?"}))
+    # ё in a typed answer is accepted spelled with е (the grader does not fold them); tiles keep ё
+    a, plan = ru_plan(dt, tmp_path, dict(AUTHOR_RU, **{"nl.a1.unit05.lesson01.exercise04.write_tired#ans": "Я ушёл.",
+                                                          "nl.a1.unit05.lesson01.exercise04.write_tired#alt": "Я ушла."}))
+    built = plan.build_all()
+    ov = built[0][2]["exercises"]
+    acc = next(vals for vals in ([x["value"] for x in v.get("accepted_answers", [])] for v in ov.values()) if "Я ушёл." in vals)
+    assert "Я ушёл." in acc and "Я ушел." in acc and "Я ушла." in acc
