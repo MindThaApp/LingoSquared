@@ -115,3 +115,19 @@ def test_content_manifests_seeded_from_sibling(dd):
     assert (dd.MANIFEST / "es-en-a2.txt").read_text(encoding="utf-8") == "es-en-a2|r2.yaml|o2.yaml\n"
     # existing files are never overwritten
     assert (dd.MANIFEST / "es-en.txt").read_text(encoding="utf-8") == "es-en|r1.yaml|mine.yaml\n"
+
+
+def test_update_manifests_merges_units_incrementally(dd):
+    """A second inject with --units must add its units to the group file, not replace it."""
+    r = "docs/content/realizations/en/a1_unit%02d_x.yaml"
+    o = "docs/content/overlays/es-en/a1_unit%02d.yaml"
+    dd.update_manifests({"es-en": ([r % 1, r % 2], [o % 1, o % 2])}, "es-en", [])
+    dd.update_manifests({"es-en": ([r % 15, r % 3], [o % 15, o % 3])}, "es-en", [])
+    dd.update_manifests({"es-en": ([r % 15], [o % 15])}, "es-en", [])  # re-inject is idempotent
+    line = (dd.MANIFEST / "es-en.txt").read_text(encoding="utf-8").strip()
+    group, reals, ovs = line.split("|")
+    assert group == "es-en"
+    assert [p.split("/")[-1] for p in reals.split()] == [
+        "a1_unit01_x.yaml", "a1_unit02_x.yaml", "a1_unit03_x.yaml", "a1_unit15_x.yaml"]
+    assert [p.split("/")[-1] for p in ovs.split()] == [
+        "a1_unit01.yaml", "a1_unit02.yaml", "a1_unit03.yaml", "a1_unit15.yaml"]
