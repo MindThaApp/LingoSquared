@@ -601,7 +601,9 @@ class UnitDeriver:
         self.card_tr[t["content_key"]] = tgt["text"]
         tgt["language_code"] = self.p.tgt
         if t["target"].get("speaker"):
-            tgt["speaker"] = self.p.names(tgt["speaker"])
+            sp_ = tgt["speaker"]
+            # a role label ("de medewerker") is source-language text; a cast name is mapped
+            tgt["speaker"] = self.T(sp_, "speaker") if (sp_[:1].islower() or " " in sp_) else self.p.names(sp_)
         exs = t.get("example")
         for e in ([exs] if isinstance(exs, dict) else (exs or [])):
             e["text"] = self.T(e["text"], "example")
