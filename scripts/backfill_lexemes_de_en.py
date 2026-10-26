@@ -13,8 +13,8 @@ GERMAN meaning -- it is the answer text of multiple_choice and the prompt of
 translation exercises (see the IMPORTANT note in _en_target_lexeme_common.py).
 It must never contain the English answer word.
 
-Scope: A1 (the "de-en" manifest group, units 01-14 of the shared English
-realization), A2 (the "de-en-a2" group, units 25-40, session 11) and B1 (the
+Scope: A1 (the "de-en" manifest group: units 01-14 of the shared English
+realization plus the session-14 depth units 15-17, 22-24, 31, 62, 63, 66), A2 (the "de-en-a2" group, units 25-40, session 11) and B1 (the
 "de-en-b1" group, units 01-19 of the shared B1 realization, session 12). A1, A2
 and B1 are separate courses, so each glosses every token it introduces;
 B1_SENSE_FIXES re-glosses the A1/A2 tokens whose B1 unit teaches another sense.
@@ -187,6 +187,50 @@ EN_TARGET_TO_DE_GLOSS: dict[str, str] = {
     "more": "mehr", "slowly": "langsam", "hear": "hören", "well": "gut (Adverb)",
     "6pm": "18 Uhr", "message": "Nachricht", "suggest": "vorschlagen",
     "meeting": "Treffen", "place": "Ort", "about": "wie wäre es mit",
+    # session 14 depth: units 15-17, 22-24, 31, 62, 63, 66 (money, routines, plans, health, work, housing,
+    # appearance, phone calls, asking for help, pharmacy symptoms)
+    "cash": "Bargeld", "card": "Karte", "credit": "Kredit", "debit": "Abbuchung vom Konto",
+    "total": "Gesamtbetrag", "cards": "Karten", "pay": "bezahlen", "by": "mit; per (bei Zahlungsart)",
+    "tax": "Steuer", "1": "1", "10": "10", "wake": "wachen (in „wake up“)", "up": "auf (in „wake up“)",
+    "dressed": "angezogen (in „get dressed“)", "work": "arbeiten; Arbeit", "dinner": "Abendessen",
+    "bed": "Bett", "every": "jeder; jede; jedes", "usually": "normalerweise", "breakfast": "Frühstück",
+    "after": "nach; danach", "want": "wollen; möchten", "movie": "Film", "weekend": "Wochenende",
+    "would": "würde (in „would like“)", "walk": "Spaziergang; spazieren gehen",
+    "love": "sehr gern haben; lieben", "busy": "beschäftigt; zu tun", "maybe": "vielleicht",
+    "another": "ein anderer; noch ein", "lunch": "Mittagessen", "1pm": "13 Uhr",
+    "works": "passt; funktioniert (bei „works for me“)", "headache": "Kopfschmerzen",
+    "stomachache": "Bauchschmerzen", "fever": "Fieber", "cough": "Husten", "sore": "wund; schmerzend",
+    "throat": "Hals; Rachen", "wrong": "falsch; los (bei „What's wrong?“)", "feel": "fühlen; sich fühlen",
+    "rest": "ausruhen; Ruhe", "think": "denken; glauben", "need": "brauchen; müssen",
+    "doctor": "Arzt; Ärztin", "look": "aussehen; schauen", "drink": "trinken (Aufforderung: trinken Sie)",
+    "if": "wenn; falls", "doesn't": "tut nicht (er/sie/es)", "better": "besser",
+    "nurse": "Krankenpfleger; Krankenschwester", "cook": "Koch; Köchin", "driver": "Fahrer; Fahrerin",
+    "patients": "Patienten", "reports": "Berichte", "interesting": "interessant",
+    "company": "Firma; Unternehmen", "downtown": "Innenstadt", "answer": "beantworten; Antwort",
+    "emails": "E-Mails", "sometimes": "manchmal", "with": "mit", "clients": "Kunden",
+    "job": "Job; Arbeitsstelle", "bedroom": "Schlafzimmer", "kitchen": "Küche", "bathroom": "Badezimmer",
+    "living": "Wohn- (in „living room“)", "room": "Zimmer; Raum", "garden": "Garten", "many": "viele",
+    "rooms": "Zimmer (Mehrzahl)", "there": "da; dort; es (in „there is“)",
+    "there's": "es gibt (Kurzform von „there is“)", "apartment": "Wohnung", "has": "hat (er/sie/es)",
+    "bedrooms": "Schlafzimmer (Mehrzahl)", "favorite": "Lieblings-", "tell": "erzählen; sagen",
+    "isn't": "ist nicht", "balcony": "Balkon", "near": "in der Nähe von", "easy": "leicht; einfach",
+    "eat": "essen", "tall": "groß (Körpergröße)", "short": "klein (Körpergröße); kurz", "hair": "Haar; Haare",
+    "long": "lang", "blond": "blond", "curly": "lockig", "eyes": "Augen", "brown": "braun", "green": "grün",
+    "glasses": "Brille", "wears": "trägt (er/sie/es)", "coworker": "Kollege; Kollegin",
+    "starting": "anfangend (in „starting today“: ab heute)", "Mia": "Mia", "door": "Tür", "now": "jetzt",
+    "friends": "Freunde", "they": "sie (Mehrzahl)", "same": "gleich; derselbe", "laugh": "lachen",
+    "lot": "viel (in „a lot“)", "call": "anrufen; Anruf", "leave": "hinterlassen; verlassen",
+    "voicemail": "Mailbox; Sprachnachricht", "back": "zurück", "called": "rief an; angerufen",
+    "3:00": "3:00 Uhr", "sound": "Ton; Klang", "was": "war (ich/er/sie/es)", "clear": "klar; deutlich",
+    "asked": "fragte; bat", "said": "sagte", "wrote": "schrieb", "carry": "tragen", "heavy": "schwer",
+    "shelf": "Regal; Regalbrett", "put": "legen; stellen", "could": "könnte",
+    "course": "natürlich (in „of course“)", "problem": "Problem", "note": "Zettel; Notiz",
+    "helpful": "hilfsbereit", "neighbor": "Nachbar; Nachbarin", "had": "hatte", "saw": "sah",
+    "carried": "trug", "inside": "hinein; drinnen", "him": "ihn; ihm", "thanked": "bedankte sich bei",
+    "symptom": "Beschwerde; Krankheitszeichen", "hurts": "tut weh", "medicine": "Medikament; Medizin",
+    "ask": "fragen; bitten", "worse": "schlechter; schlimmer", "visit": "Besuch; besuchen", "went": "ging",
+    "hurt": "wehtun; tat weh", "pharmacist": "Apotheker; Apothekerin", "gave": "gab", "felt": "fühlte (sich)",
+    "help": "helfen; Hilfe",
 }
 # --- A2 (session 11): German glosses for the tokens the 16 A2 units introduce
 # that the A1 table above does not already cover. A1 and A2 are separate
