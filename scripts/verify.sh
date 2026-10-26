@@ -135,6 +135,14 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
+    # Dutch text left in a derived (non-nl) course: derive_target.py copies en-nl strings and
+    # misses what it cannot translate ("zegt", "Kaartje" in English feedback).
+    echo "-- dutch-leftover check (non-nl overlays + packs + realizations) --"
+    if ! python scripts/_dutch_leftover_check.py; then
+      echo "!! dutch-leftover check FAILED"
+      CONTENT_OK=0
+    fi
+
     deactivate 2>/dev/null || true
     [ "$CONTENT_OK" = "1" ] && CONTENT_STATUS="pass" || CONTENT_STATUS="fail"
   fi
