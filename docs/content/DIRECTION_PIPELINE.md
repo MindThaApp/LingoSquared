@@ -194,6 +194,26 @@ checks afterwards.
   keep each to a short why. Keep `Write exactly` copy tasks as they are at A1.
 * Always pass `--new en-de` (or rely on the saved `plan.json`); an earlier default of `en-es` once wrote the wrong config.
 
+## French target (`fr`)
+
+`CFG["fr"]` reuses the generic switches of the German target (`rekey_exercises`, `strict_residual`, `per_card_keys`, `rewrite_gloss`) and adds:
+
+* `straight_apostrophe`: translations are folded to `'` (the corpus and the tiles use it; the grader folds both). Elided and hyphenated forms
+  (`l'école`, `vas-tu`, `est-ce`) are one token, hence one tile and one lexeme.
+* `speaker_label_no_space`: a dialogue label stays `Camille: ...` even though French puts a space before other colons, otherwise the speaker
+  strip that derives media text and tested spans fails.
+* Register `tu`/`vous` (`REGISTER`; plural `vous` for a Dutch `jullie` is acked), contractions `du au des aux` (`CONTRACTION`),
+  `ELISION` (`je le la de ne me te se que ce` + vowel or mute h, `si il`; h aspire words and `onze oui yaourt` are exempt) and
+  `APOSTROPHE`.
+* Gender mode `fr`: after `je suis / je me sens / je me suis / j'etais` an adjective, participle or agent noun gets the other gender as a
+  required alternate (`GENDER`; `#alt`): fatigue/fatiguee, etudiant/etudiante, infirmier/infirmiere, acteur/actrice or actrice.
+* `PAIR_COLLISION` (all targets): two matching items of one side that normalise to the same key (differ only by punctuation or case) make the
+  exact answer grade wrong (en-es unit69 bug). Reword one of them.
+* Cast: use names that start with a consonant (`Lotte=Camille`, `Omar=Mathieu`) so `de Lotte` stays correct after the name mapping.
+  `#tested` bags are written in lowercase; cast names inside them are mapped too.
+* Media keys: slugs of the other files of the course are reserved, so batches derived in separate runs never collide.
+* Batches can be authored in parallel with one `--work` dir per batch (own `--first-unit`); inject them one after the other.
+
 ## Limits and pitfalls
 
 * The overlay English (glosses, English options, pair meanings) is reused unchanged, so a translation must keep the meaning of the
