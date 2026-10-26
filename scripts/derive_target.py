@@ -69,7 +69,7 @@ CFG = {
     # code: formal marker, informal marker (regexes over lowercase text)
     "nl": dict(name="Dutch", formal=r"\b(u|uw)\b", informal=r"\b(je|jij|jou|jouw|jullie)\b",
                short=("ik", "je", "op", "om", "de", "te", "ze", "nu", "zo", "er", "van", "het", "een", "niet", "geen", "voor", "naar", "bij", "dat", "ook", "maar", "wel", "nog", "zijn", "heeft", "als", "hij", "zij", "jij", "mijn", "jullie", "aan"),
-               grammar=r"\b(split(?:s|ting)?|separable|prefix(?:es)?|main clause|het-?words?|de-?words?|neuter|common gender|inversion|bare adjective|extra -e|final position|verb-second|halfway|counts forward)\b"),
+               grammar=r"\b(split(?:s|ting)?|separable|prefix(?:es)?|main clause|het-?words?|de-?words?|neuter|common gender|inversion|bare adjective|extra -e|final position|verb-second|halfway|counts forward|netherlands|holland|belgi\w+|flanders|gemeente|digid|sinterklaas|koningsdag|stroopwafel)\b"),
     "de": dict(name="German", formal=r"\b(sie|ihnen|ihr(?:e|en|em)?)\b", informal=r"\b(du|dich|dir|dein\w*)\b"),
     "es": dict(
         name="Spanish",
@@ -906,7 +906,7 @@ class Plan:
                     continue
                 for f in d.glob("*.yaml"):
                     counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
-            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond"}
+            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond", "receptionist"}
         return self._english
 
     def names(self, s: str) -> str:
@@ -1284,8 +1284,8 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
                 and base not in seen):
             seen.add(base)
             good.append(dict(token=tok, tag=wtag(s), gloss=gl, lesson=s["lesson_content_key"], pos=s["part_of_speech"]))
-    if len(good) < 6:
-        raise SystemExit(f"{d.new_stem}: only {len(good)} usable lexemes for a pack (need >= 6)")
+    if len(good) < 3:
+        raise SystemExit(f"{d.new_stem}: only {len(good)} usable lexemes for a pack (need >= 3 for recognition templates)")
     pool_tags = [g["tag"] for g in good]
     lesson_by_ck = {l["content_key"]: l for l in unit["lessons"]}
     en_lesson_title = lambda ck: ((O.get("lessons") or {}).get(ck) or {}).get("title") or ""
