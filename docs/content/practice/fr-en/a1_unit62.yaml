@@ -1,0 +1,270 @@
+schema_version: '1.0'
+pack_key: practice.fr-en.a1.unit62
+source_language: fr
+target_language: en
+unit_content_key: en.a1.unit62.phone_calls
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.de-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_asked
+    - w_back
+    - w_call
+    - w_called
+    - w_leave
+    - w_message
+    - w_phone
+    - w_repeat
+    - w_said
+    - w_slowly
+    - w_voicemail
+    - w_wrote
+templates:
+- content_key: practice.fr-en.en.a1.unit62.lesson01.choose.001
+  lesson_content_key: en.a1.unit62.lesson01.phone_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - w_call
+        - w_voicemail
+        - w_message
+        - w_phone
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Phone, call, message et voicemail sont les mots de base du téléphone ; call est à la fois nom et verbe.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson04.choose.002
+  lesson_content_key: en.a1.unit62.lesson04.phone_message
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic:
+        - w_called
+        - w_asked
+        - w_said
+        - w_wrote
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Called, asked, said et wrote sont des formes du passé ; said et wrote sont irrégulières.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson02.order.003
+  lesson_content_key: en.a1.unit62.lesson02.phone_phrases
+  type: word_order
+  frame:
+    text: Please {item} that.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_repeat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please {item} that.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Please repeat that est une demande polie de répétition ; après please, le verbe est sans terminaison.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson02.order.004
+  lesson_content_key: en.a1.unit62.lesson02.phone_phrases
+  type: word_order
+  frame:
+    text: Please speak {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_slowly
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please speak {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Slowly se place après le verbe speak.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson01.fill.005
+  lesson_content_key: en.a1.unit62.lesson01.phone_words
+  type: fill_in_blank
+  frame:
+    text: Please leave a {item}. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id001
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_message
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Leave a message est l’expression figée pour « laisser un message ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson02.fill.006
+  lesson_content_key: en.a1.unit62.lesson02.phone_phrases
+  type: fill_in_blank
+  frame:
+    text: I will call {item} later. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id002
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_back
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Call back signifie « rappeler » ; back se place après le verbe.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson02.translate.007
+  lesson_content_key: en.a1.unit62.lesson02.phone_phrases
+  type: translation
+  frame:
+    text: Parlez lentement, s’il vous plaît.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_slowly
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Please speak {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: En anglais, la demande est la même pour « tu » et « vous » ; please speak slowly suffit.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson04.translate.008
+  lesson_content_key: en.a1.unit62.lesson04.phone_message
+  type: translation
+  frame:
+    text: Mia a appelé à 3 h 00.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_called
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mia {item} at 3:00.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: Called est le passé de call ; at se place devant l’heure.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-en.en.a1.unit62.lesson01.match.009
+  lesson_content_key: en.a1.unit62.lesson01.phone_words
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech:
+      - adverb
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - w_call
+        - w_leave
+        - w_voicemail
+        - w_message
+        - w_repeat
+        - w_slowly
+        - w_back
+        - w_asked
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: 'Ces mots appartiennent au téléphone : appeler, laisser, message, répéter, lentement, en retour.'
+    language_code: fr
+    direction: ltr
