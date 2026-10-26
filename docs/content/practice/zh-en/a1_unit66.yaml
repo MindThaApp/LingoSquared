@@ -1,0 +1,272 @@
+schema_version: '1.0'
+pack_key: practice.zh-en.a1.unit66
+source_language: zh
+target_language: en
+unit_content_key: en.a1.unit66.pharmacy_symptoms
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.de-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Chinese (Mandarin, Simplified)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ask
+    - w_cough
+    - w_doctor
+    - w_felt
+    - w_fever
+    - w_gave
+    - w_headache
+    - w_medicine
+    - w_pharmacist
+    - w_symptom
+    - w_throat
+    - w_went
+templates:
+- content_key: practice.zh-en.en.a1.unit66.lesson01.choose.001
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_symptom
+        - w_medicine
+        - w_throat
+        - w_cough
+        - w_fever
+        - w_headache
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: symptom、medicine、throat、cough、fever 和 headache 是药店里的核心词；medicine 是不可数名词。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson04.choose.002
+  lesson_content_key: en.a1.unit66.lesson04.pharmacy_note
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - w_pharmacist
+        - w_went
+        - w_gave
+        - w_felt
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: went、gave 和 felt 是不规则的过去式；pharmacist 指药店里的药剂师。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson01.order.003
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: word_order
+  frame:
+    text: I have a {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_cough
+        - w_headache
+        - w_fever
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 说明不适时，英语要用 a：I have a cough、I have a headache、I have a fever。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson02.order.004
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: word_order
+  frame:
+    text: My {item} hurts.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_throat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My {item} hurts.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 英语里身体部位直接做主语：My throat hurts。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson01.fill.005
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: fill_in_blank
+  frame:
+    text: Take this {item} with water. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id001
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_medicine
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: medicine 是不可数名词；前面可以用 this，但不能用 a。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson02.fill.006
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: fill_in_blank
+  frame:
+    text: Please {item} a doctor. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id002
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_ask
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Please ask a doctor 是礼貌的建议；please 后面的动词不加词尾。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson01.translate.007
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: translation
+  frame:
+    text: 我头痛。
+    language_code: zh
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_headache
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 英语里 headache 用单数并带 a；汉语的“头痛”没有冠词，要注意补上。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson02.translate.008
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: translation
+  frame:
+    text: 我的喉咙疼。
+    language_code: zh
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_throat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My {item} hurts.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: hurts 带 -s，是因为 my throat 是第三人称单数主语。
+    language_code: zh
+    direction: ltr
+- content_key: practice.zh-en.en.a1.unit66.lesson01.match.009
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_symptom
+        - w_medicine
+        - w_throat
+        - w_cough
+        - w_fever
+        - w_headache
+        - w_pharmacist
+        - w_doctor
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: 这些词与药店和医生有关：症状、药、喉咙、咳嗽、发烧、头痛、药剂师、医生。
+    language_code: zh
+    direction: ltr
