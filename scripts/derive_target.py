@@ -101,10 +101,34 @@ CFG = {
     ),
     "it": dict(
         name="Italian",
+        rekey_exercises=True,                # exercise key tails re-derived from the translation (no Dutch slugs)
+        strict_residual=True,                # source-language words inside English fields are found by vocabulary
+        per_card_keys=True,                  # reading-card gloss keys translate per card
+        rewrite_gloss=True,                  # rewritten grammar cards get an authored English title + gloss
+        always_desc=True,                    # the unit description quotes Dutch phrases: author it for every unit
         formal=r"\blei\b",
-        informal=r"\b(tu|ti|te|tuo|tua)\b",
-        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"), ("i", "e"))),
-        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[aA] il\b", "al"), (r"\b[iI]n il\b", "nel"), (r"\b[dD]a il\b", "dal")],
+        informal=r"\b(tu|ti|te|tuo|tua|tuoi|tue)\b|\b(hai|puoi|vuoi|vai|fai|devi|sai|dici|vieni|parli|abiti|lavori|preferisci|prendi|ti chiami)\b",
+        # learner speaks as themselves: Sono stanco / Sono stanca (-o/-a; -e adjectives and -i/-e plurals need no alternate)
+        gender=dict(copula=r"\b(sono|sei|siamo|mi sento|ti senti)\b", skip="di in a qui lì ora bene male già con senza per un una il la i le mio tua molto".split(), swap=(("o", "a"),)),
+        # articulated prepositions are obligatory (di il -> del, in l' -> nell'); never accept the open form as a variant
+        contractions=[(r"\b[dD]i il\b", "del"), (r"\b[dD]i lo\b", "dello"), (r"\b[dD]i la\b", "della"), (r"\b[dD]i l'", "dell'"),
+                      (r"\b[dD]i i\b", "dei"), (r"\b[dD]i gli\b", "degli"), (r"\b[dD]i le\b", "delle"),
+                      (r"\b[aA] il\b", "al"), (r"\b[aA] lo\b", "allo"), (r"\b[aA] la\b", "alla"), (r"\b[aA] l'", "all'"),
+                      (r"\b[aA] i\b", "ai"), (r"\b[aA] gli\b", "agli"), (r"\b[aA] le\b", "alle"),
+                      (r"\b[iI]n il\b", "nel"), (r"\b[iI]n lo\b", "nello"), (r"\b[iI]n la\b", "nella"), (r"\b[iI]n l'", "nell'"),
+                      (r"\b[iI]n i\b", "nei"), (r"\b[iI]n gli\b", "negli"), (r"\b[iI]n le\b", "nelle"),
+                      (r"\b[dD]a il\b", "dal"), (r"\b[dD]a lo\b", "dallo"), (r"\b[dD]a la\b", "dalla"), (r"\b[dD]a l'", "dall'"),
+                      (r"\b[dD]a i\b", "dai"), (r"\b[dD]a gli\b", "dagli"), (r"\b[dD]a le\b", "dalle"),
+                      (r"\b[sS]u il\b", "sul"), (r"\b[sS]u lo\b", "sullo"), (r"\b[sS]u la\b", "sulla"), (r"\b[sS]u l'", "sull'"),
+                      (r"\b[sS]u i\b", "sui"), (r"\b[sS]u gli\b", "sugli"), (r"\b[sS]u le\b", "sulle")],
+        # elision: lo/la/una before a vowel is written l'/l'/un' (no space); `un` never takes an apostrophe before a masculine noun
+        elisions=[(r"(?<![\w'’])[lL][oa] (?=[aeiouàèéìòùhAEIOU])", "l'"), (r"(?<![\w'’])[uU]na (?=[aeiouàèéìòùAEIOU])", "un'"),
+                  (r"(?<![\w'’])[uU]n['’]\s?(?=(?:amico|albergo|uomo|orologio|ombrello|ufficio|aereo|autobus|anno|esame|ospedale|inverno|appuntamento|indirizzo)\b)", "un (masculine nouns take no apostrophe)")],
+        note=("Natural standard Italian. Informal source roles -> tu, formal -> Lei (capital Lei/Le/La only for 'you'; verb in the third person: Lei ha, "
+              "Può aiutarmi?). Obligatory articulated prepositions: di/a/da/in/su + il/lo/la/l'/i/gli/le -> del, al, dal, nel, sul ... "
+              "(nel parco, dell'ufficio, alla stazione, sul tavolo). Elision: l'amico, l'acqua, un'amica (but un amico), dov'è, c'è. "
+              "Pro-drop: no subject pronoun unless it contrasts (Sono di Roma). Speaker-gendered adjectives/participles as the learner "
+              "answer (Sono stanco/stanca, Sono stato/stata) need the other gender as an accepted alternate."),
     ),
     "fr": dict(
         name="French",
@@ -144,6 +168,28 @@ CFG = {
               "other plurals -e. Cast names: write the nominative name as the source name (it is mapped), but write DECLINED forms directly with the final Polish name "
               "(z Ewą, do Marka, u Kasi, w Krakowie)."),
     ),
+    "ru": dict(
+        name="Russian",
+        script="cyrillic",                   # tokens, tiles, lexeme keys and content-key slugs (TRANSLIT_RU) work on Cyrillic; no stress marks, no Latin letters
+        rekey_exercises=True,
+        strict_residual=True,
+        per_card_keys=True,
+        rewrite_gloss=True,
+        yo_fold=True,                        # an accepted free-text answer with ё also accepts е (the grader does not fold them; the ru corpus lists both)
+        formal=r"\b(?:вы|вас|вам|вами|ваш\w*)\b",
+        informal=r"\b(?:ты|тебя|тебе|тобой|тво(?:й|я|ё|е|и|их|ей|его|ему|им|ими|ю|ем)|давай(?:те)?)\b",
+        gender=dict(mode="ru"),              # speaker-gendered past tense, short adjective or agent noun after я: устал/устала, рад/рада, студент/студентка
+        note=("Natural standard Russian (contemporary, Moscow norm). Cyrillic only, written with ё where it is normal in the course (идёт, всё, ещё) "
+              "and NO stress marks. Informal source roles -> ты, formal or service staff and strangers -> Вы/вы (capital Вы only for one person in a "
+              "formal address). Six cases: nominative for the subject, accusative for the object (читаю книгу), genitive after нет/у/из/для/numbers "
+              "(у меня нет брата), dative for мне нравится / мне нужно / дать кому, instrumental after с and for the profession after работаю "
+              "(работаю учителем), prepositional after в/на/о (в школе, на работе). Gender: a learner who speaks as themselves with a past-tense verb or "
+              "short adjective needs the other gender as an accepted alternate (#alt): Я устал / Я устала, Я был / Я была, Я рад / Я рада, "
+              "Я студент / Я студентка. Aspect: use imperfective for habits and ongoing actions (я читал), perfective for a finished result (я прочитал); "
+              "future with буду + infinitive only for imperfective. Verbs of motion: идти (on foot) / ехать (by vehicle). No articles; the verb 'to be' is "
+              "dropped in the present (Я дома, У меня есть брат). Short answers: keep word order natural, topic first. "
+              "Tiles: every word is one tile, a hyphenated word (по-русски, кто-то) is one tile."),
+    ),
     "pt": dict(name="Portuguese", formal=r"\bo senhor|a senhora\b", informal=r"\btu\b"),
 }
 TARGET_ANSWER_TYPES = {
@@ -151,6 +197,8 @@ TARGET_ANSWER_TYPES = {
     "dictation", "listen_type", "dialogue_response", "speak_response",
 }
 GERMAN_FREE_TEXT_TYPES = {"writing_prompt", "dialogue_response", "listen_type", "translation", "reverse_translation", "grammar_check"}   # compile_content.py
+YO_FOLD_TYPES = {"fill_in_blank", "translation", "writing_prompt", "dictation", "listen_type", "dialogue_response", "speak_response",
+                 "reverse_translation", "grammar_check"}
 SEP = " || "
 BLANK = "___"
 PUNCT_CHARS = re.compile(r"[^\w\s'’\-‌]", re.U)
@@ -169,7 +217,7 @@ def strip_punct(s: str) -> str:
 
 def boundary_strip(s: str) -> str:
     """Only the punctuation at both ends (the dictation compiler check ignores just that)."""
-    return re.sub(r"^[\s.!?¿¡;:,\"“”„]+|[\s.!?¿¡;:,\"“”„]+$", "", s)
+    return re.sub(r"^[\s.!?¿¡;:,\"“”„«»…—–]+|[\s.!?¿¡;:,\"“”„«»…—–]+$", "", s)
 
 
 def norm(s: str) -> str:
@@ -187,9 +235,18 @@ TRANSLIT_DE = str.maketrans({"ä": "ae", "ö": "oe", "ü": "ue", "ß": "ss", "Ä
 TRANSLIT_LIG = str.maketrans({"œ": "oe", "Œ": "Oe", "æ": "ae", "Æ": "Ae", "ł": "l", "Ł": "L"})      # sœur -> soeur, not "sur"; Polish ł does not decompose (słowo -> slowo)
 
 
+# Cyrillic -> the Latin of the existing ru content keys (zhivot, solntse, u_menya, davay_poydyom); a no-op for Latin text
+TRANSLIT_RU = str.maketrans({
+    "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "yo", "ж": "zh", "з": "z", "и": "i", "й": "y", "к": "k", "л": "l",
+    "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f", "х": "kh", "ц": "ts", "ч": "ch", "ш": "sh",
+    "щ": "shch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "yu", "я": "ya"})
+
+
 def slug(s: str, words: int = 4, translit: bool = False) -> str:
     if translit:
         s = s.translate(TRANSLIT_DE)
+    if re.search(r"[\u0400-\u04ff]", s):
+        s = s.lower().translate(TRANSLIT_RU)
     s = unicodedata.normalize("NFKD", s.translate(TRANSLIT_LIG)).encode("ascii", "ignore").decode()
     parts = re.findall(r"[a-z0-9]+", s.lower())[:words]
     return "_".join(parts)[:36] or "x"
@@ -239,6 +296,18 @@ def agent_gender_alt(text: str) -> str | None:
     new_art = {"ein": "eine", "eine": "ein"}.get(art, art)
     head = text[:m.start(2) if art else m.start(3)]
     return head + (new_art + " " if art else "") + other + text[m.end():]
+
+
+def yaml_strings(o):
+    """Every string value (never a mapping key) of a loaded YAML document."""
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from yaml_strings(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from yaml_strings(v)
+    elif isinstance(o, str):
+        yield o
 
 
 # --- French: speaker-gendered words -----------------------------------------------------------------------
@@ -382,6 +451,112 @@ def pl_gender_alts(text: str) -> list[str]:
         return _keep_case(m.group(0), new_stem + new_end)
     out = PL_PAST.sub(past, out)
     return [out] if changed and out != text else []
+# --- Russian: speaker-gendered words ------------------------------------------------------------------------
+RU_ADV = frozenset("не ни уже тоже также очень всегда часто иногда редко потом сегодня вчера завтра сейчас там здесь тут ещё еще никогда просто почти совсем только "
+                   "сам сама а и но да вот же вообще обычно утром вечером днём днем ночью".split())
+RU_NOT_VERB = frozenset("стол пол угол осёл козёл орёл ствол котёл посол сокол школа скала пила игла метла мгла смола мало мол ил футбол вокзал зал канал".split())
+RU_IRREG_M2F = {"мог": "могла", "смог": "смогла", "помог": "помогла", "лёг": "легла", "лег": "легла", "вёз": "везла", "нёс": "несла", "умер": "умерла",
+                "шёл": "шла", "шел": "шла", "пошёл": "пошла", "пошел": "пошла", "ушёл": "ушла", "ушел": "ушла", "пришёл": "пришла", "пришел": "пришла",
+                "нашёл": "нашла", "нашел": "нашла", "зашёл": "зашла", "зашел": "зашла", "вошёл": "вошла", "вошел": "вошла", "вышел": "вышла",
+                "перешёл": "перешла", "перешел": "перешла", "дошёл": "дошла", "дошел": "дошла", "прошёл": "прошла", "прошел": "прошла"}
+RU_IRREG_F2M = {}
+for _m, _f in RU_IRREG_M2F.items():
+    RU_IRREG_F2M.setdefault(_f, _m)
+RU_IRREG_F2M.update({"шла": "шёл", "пошла": "пошёл", "ушла": "ушёл", "пришла": "пришёл", "нашла": "нашёл", "зашла": "зашёл", "вошла": "вошёл",
+                     "перешла": "перешёл", "дошла": "дошёл", "прошла": "прошёл", "легла": "лёг"})
+# short adjectives and agent nouns (masculine <-> feminine); the first listed spelling of a form is the one produced
+RU_PAIRS_M2F = {
+    "рад": "рада", "готов": "готова", "должен": "должна", "занят": "занята", "болен": "больна", "голоден": "голодна", "согласен": "согласна",
+    "свободен": "свободна", "уверен": "уверена", "прав": "права", "один": "одна", "доволен": "довольна", "виноват": "виновата",
+    "благодарен": "благодарна", "сыт": "сыта", "здоров": "здорова", "женат": "замужем", "жив": "жива", "вынужден": "вынуждена",
+    "студент": "студентка", "учитель": "учительница", "актёр": "актриса", "актер": "актриса", "официант": "официантка",
+    "продавец": "продавщица", "переводчик": "переводчица", "певец": "певица", "художник": "художница", "писатель": "писательница",
+    "танцор": "танцовщица", "пенсионер": "пенсионерка", "школьник": "школьница", "турист": "туристка", "повар": "повариха",
+    "секретарь": "секретарша", "директор": "директорша", "кассир": "кассирша", "медбрат": "медсестра", "программист": "программистка",
+    "журналист": "журналистка", "музыкант": "музыкантка", "водитель": "водительница", "администратор": "администраторша",
+    "иностранец": "иностранка", "москвич": "москвичка", "англичанин": "англичанка", "американец": "американка", "русский": "русская",
+}
+RU_PAIRS_F2M = {f: m for m, f in reversed(list(RU_PAIRS_M2F.items()))}
+RU_PAIRS_F2M.update({"замужем": "женат", "актриса": "актёр"})
+
+
+def _ru_case(w: str, new: str) -> str:
+    return new[:1].upper() + new[1:] if w[:1].isupper() else new
+
+
+def ru_gender_alts(text: str) -> list[str]:
+    """Russian 'Я устал.' -> ['Я устала.'] (and back): the other gender of every speaker-gendered word that follows я
+    (past-tense verb, short adjective, agent noun; adverbs and не in between are skipped)."""
+    parts, last = [], 0
+    for sm in re.finditer(r"[^.!?\n]+", text):
+        sent = sm.group(0)
+        words = list(re.finditer(r"[\w'-]+", sent))
+        low = [w.group(0).casefold() for w in words]
+        if "я" not in low:
+            continue
+        new = sent
+        changed = False
+        # walk right to left so earlier offsets stay valid
+        repl = []
+        i = low.index("я") + 1
+        while i < len(words):
+            w = low[i]
+            if w in RU_ADV:
+                i += 1
+                continue
+            other = None
+            if w in RU_NOT_VERB:
+                pass
+            elif w in RU_IRREG_M2F:
+                other = RU_IRREG_M2F[w]
+            elif w in RU_IRREG_F2M:
+                other = RU_IRREG_F2M[w]
+            elif w in RU_PAIRS_M2F:
+                other = RU_PAIRS_M2F[w]
+            elif w in RU_PAIRS_F2M:
+                other = RU_PAIRS_F2M[w]
+            elif w.endswith("лся") and len(w) > 4:
+                other = w[:-3] + "лась"
+            elif w.endswith("лась") and len(w) > 5:
+                other = w[:-4] + "лся"
+            elif w.endswith("л") and len(w) >= 3 and w[-2] in "аеиоуыяёю":
+                other = w + "а"
+            elif w.endswith("ла") and len(w) >= 4 and w[-3] in "аеиоуыяёю":
+                other = w[:-1]
+            if other:
+                repl.append((words[i].start(), words[i].end(), _ru_case(words[i].group(0), other)))
+                changed = True
+                # a coordinated past-tense verb later in the sentence (купил хлеб и пошёл домой) flips with it
+                for j in range(i + 1, len(words)):
+                    wj = low[j]
+                    if wj in RU_NOT_VERB:
+                        continue
+                    o2 = RU_IRREG_M2F.get(wj) or RU_IRREG_F2M.get(wj)
+                    if not o2 and wj.endswith("лся") and len(wj) > 4:
+                        o2 = wj[:-3] + "лась"
+                    elif not o2 and wj.endswith("лась") and len(wj) > 5:
+                        o2 = wj[:-4] + "лся"
+                    elif not o2 and wj.endswith("л") and len(wj) >= 4 and wj[-2] in "аеиоуыяёю":
+                        o2 = wj + "а"
+                    elif not o2 and wj.endswith("ла") and len(wj) >= 5 and wj[-3] in "аеиоуыяёю":
+                        o2 = wj[:-1]
+                    if o2:
+                        repl.append((words[j].start(), words[j].end(), _ru_case(words[j].group(0), o2)))
+                break
+            break
+        if changed:
+            for a, b, r in reversed(repl):
+                new = new[:a] + r + new[b:]
+            parts.append(text[last:sm.start()] + new)
+            last = sm.end()
+    return ["".join(parts) + text[last:]] if parts else []
+
+
+RU_YO_SAME = frozenset(("все", "всё", "ее", "её", "нем", "нём", "узнает", "дает"))        # real minimal pairs / not worth flagging
+
+
+def yo_fold(s: str) -> str:
+    return s.replace("ё", "е").replace("Ё", "Е")
 
 
 # obligatory elision: je le la de ne me te se que ce (+ jusque, lorsque ...) before a vowel / mute h; exceptions are h aspiré words and onze/oui/yaourt
@@ -480,6 +655,8 @@ class UnitDeriver:
             if kind != "title":                      # titles lose their punctuation; prefer sentence atoms
                 self.atom_norms.setdefault(norm(text), aid)
         tr = self.p.tr_atoms.get(aid)
+        if kind != "gloss-key" and f"{self.stem}#t#{text}" in self.p.tr_atoms:        # this unit translates a shared word differently
+            tr = self.p.tr_atoms[f"{self.stem}#t#{text}"]
         if tr is None:
             self.p.missing.add(aid)
             return f"<<{aid}>>"
@@ -511,7 +688,7 @@ class UnitDeriver:
                 self.p.missing.add(slot)
                 return f"<<{slot}>>"
             return None
-        return self.p.names(v)
+        return self.p.names(v) if re.search(r"#(?:ans|alt|dist|frame|tested|bank)$", slot) else self.p.names_en(v)
 
     def flag(self, key: str, code: str, msg: str, level: str = "error") -> None:
         self.p.flags.append(dict(id=key, code=code, level=level, msg=msg, unit=self.stem))
@@ -521,10 +698,10 @@ class UnitDeriver:
         "|example_gloss", "|gloss:<source key>") selects a scoped authored rewrite from en_override.json before the
         exact-string one."""
         if scope and scope in self.p.en_over:
-            return self.p.names(self.p.en_over[scope])
+            return self.p.names_en(self.p.en_over[scope])
         if s in self.p.en_over:                      # authored English rewrite (en_override.json)
-            return self.p.names(self.p.en_over[s])
-        s = self.p.names(s)
+            return self.p.names_en(self.p.en_over[s])
+        s = self.p.names_en(s)
         for k, v in self.p.en_over.items():          # "~word": word-level rewrite of source-language words that survive in English text
             if k.startswith("~"):
                 s = re.sub(rf"(?<![\w]){re.escape(k[1:])}(?![\w])", v, s)
@@ -536,6 +713,7 @@ class UnitDeriver:
         before the residual check, so a cognate in the translation (Tulpen, Party) is not mistaken for a leftover."""
         out = s
         subs: dict[str, str] = {}
+        eng = self.p.english_words()
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
             if len(text) < 3:
                 continue
@@ -678,8 +856,10 @@ class UnitDeriver:
         for text in self.atom_texts:
             allsrc |= set(re.findall(r"[^\W\d_]{2,}", text.casefold()))
         names_cf = {k.casefold() for k in self.p.names_map}
-        self.pair_target: set[str] = set()
+        self.pair_target: set[str] = set()           # kept for callers that test membership regardless of side
         self.right_target: set[str] = set()
+        self.lt_target: set[str] = set()             # left sides that are target text
+        self.rt_target: set[str] = set()             # right sides that are target text: an English right equal to a left (museum) is NOT
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
@@ -689,8 +869,10 @@ class UnitDeriver:
                         if norm(Rt) in teach_norms and norm(L) not in teach_norms:
                             self.pair_target.add(Rt)
                             self.right_target.add(Rt)
+                            self.rt_target.add(Rt)
                             continue
                         self.pair_target.add(L)
+                        self.lt_target.add(L)
                         tk = re.findall(r"[^\W\d_]{2,}", Rt.casefold())
                         if self.p.strict_residual:
                             eng2 = self.p.en_vocab | self.p.cast_words
@@ -700,6 +882,7 @@ class UnitDeriver:
                             is_right = bool(tk) and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6
                         if is_right or Rt in self.p.pair_force:
                             self.pair_target.add(Rt)
+                            self.rt_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
                                 self.flag(ck, "PAIR_RIGHT_TARGET",
@@ -708,15 +891,15 @@ class UnitDeriver:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side, other in ((pr["left"], pr["right"]), (pr["right"], pr["left"])):
-                            if side in self.pair_target:
+                        for side, other, tgt in ((pr["left"], pr["right"], self.lt_target), (pr["right"], pr["left"], self.rt_target)):
+                            if side in tgt:
                                 self.T(side, "pair", other, e["content_key"])
         for u in R["units"]:
             for l in u["lessons"]:
                 for e in l["exercises"]:
                     for pr in e.get("pairs") or []:
-                        for side in (pr["left"], pr["right"]):
-                            if side not in self.pair_target:
+                        for side, tgt in ((pr["left"], self.lt_target), (pr["right"], self.rt_target)):
+                            if side not in tgt:
                                 add_en(side)
         srclex = set()
         for text in self.atom_texts:
@@ -724,7 +907,8 @@ class UnitDeriver:
         if self.p.strict_residual:
             # `env` is built from the English fields themselves, so a source word quoted inside an English instruction or option
             # (*sporten*, doen aan) counted as English.  Strict mode: every word of the source course that no other English overlay uses.
-            self.src_only = ({w for w in self.p.src_lexicon if len(w) >= 4} | srclex) - self.p.en_vocab - self.p.cast_words
+            self.src_only = (({w for w in self.p.src_lexicon if len(w) >= 4} | srclex) - self.p.en_vocab - self.p.cast_words) | (
+                (srclex | self.p.source_vocab()) - self.p.english_words() - self.p.cast_words)      # either test finds a leftover
         else:
             # English vocabulary: words that occur in >= 10 overlay files of other pairs (never the source pair's own files,
             # which quote the source language).  A source word that is not English vocabulary counts as leftover in English text.
@@ -837,10 +1021,12 @@ class UnitDeriver:
                     new_gl = OrderedDict()
                     for k, val in v["glosses"].items():
                         gk = self.T(k, "gloss-key", None, ck)
-                        left = self.residual(self.en(val)) if self.p.strict_residual else []
+                        left = self.residual(self.en(val, f"{ck}|gloss:{k}")) if self.p.strict_residual else []
                         # a gloss may explain a source word ('completes komt ... aan'): authored, with the translated key as context
                         new_gl[gk] = (self.A(f"{ck}#gv:{k}", val, "gloss-value", dict(key=gk, card=self.card_tr.get(ck), why=",".join(left)))
-                                      if left else self.en(val))
+                                      if left else self.en(val, f"{ck}|gloss:{k}"))
+                    if len(new_gl) < len(v["glosses"]) and not any(g.startswith("<<") for g in new_gl):
+                        self.flag(ck, "GLOSS_KEY", f"two gloss keys translate to the same word ({len(v['glosses'])} source keys, {len(new_gl)} distinct): rephrase the card so each key is its own word")
                     v["glosses"] = new_gl
                 card = next((t for u in R["units"] for l in u["lessons"] for t in l.get("teaching") or [] if t["content_key"] == ck), None)
                 for k in v["glosses"]:
@@ -937,6 +1123,11 @@ class UnitDeriver:
             sp_ = tgt["speaker"]
             # a role label ("de medewerker") is source-language text; a cast name is mapped
             tgt["speaker"] = self.T(sp_, "speaker") if (sp_[:1].islower() or " " in sp_) else self.p.names(sp_)
+            if CFG.get(self.p.tgt, {}).get("script") == "cyrillic" and (sp_[:1].islower() or " " in sp_):
+                tgt["speaker"] = tgt["speaker"][:1].upper() + tgt["speaker"][1:]       # ru speaker labels are case-sensitive in the validator (Сотрудник:)
+            lab = re.match(r"([^\W\d_][^:\n]{0,30}?)\s*:", tgt["text"])
+            if lab and lab.group(1).casefold() == str(tgt["speaker"]).casefold():
+                tgt["speaker"] = lab.group(1)             # the structured speaker must spell the label as the card (and the audio text) does
         exs = t.get("example")
         for e in ([exs] if isinstance(exs, dict) else (exs or [])):
             e["text"] = self.T(e["text"], "example")
@@ -995,12 +1186,12 @@ class UnitDeriver:
         canon_tr: str | None = None
         if ty == "matching_pairs":
             for p_ in e.get("pairs") or []:
-                p_["left"] = self.pr(p_["left"])
+                p_["left"] = self.pr(p_["left"], "left")
                 p_["right"] = self.pr(p_["right"])
             for a in ov.get("accepted_answers") or []:
                 if isinstance(a.get("value"), list):
                     for pr in a["value"]:
-                        pr["left"] = self.pr(pr["left"])
+                        pr["left"] = self.pr(pr["left"], "left")
                         pr["right"] = self.pr(pr["right"])
             self.pair_collisions(ck, e.get("pairs") or [])
         elif has_opts and ans_target:
@@ -1074,8 +1265,8 @@ class UnitDeriver:
         if "media_asset_key" in e:
             pass
 
-    def pr(self, right: str) -> str:
-        if right in self.pair_target:
+    def pr(self, right: str, side: str = "right") -> str:
+        if right in (self.lt_target if side == "left" else self.rt_target):
             return self.T(right, "pair")
         if self.p.strict_residual and self.residual(self.en(right)):
             return self.T(right, "pair")          # English side that still quotes a source word: translated like an atom (its translation is English)
@@ -1133,6 +1324,8 @@ class UnitDeriver:
         if self.p.translit and ty in GERMAN_FREE_TEXT_TYPES:
             # the German compiler wants the full ASCII transliteration (ä->ae ...) of every typed answer with umlauts
             out = list(OrderedDict.fromkeys(out + [x.translate(TRANSLIT_DE) for x in out if x.translate(TRANSLIT_DE) != x]))
+        if CFG.get(self.p.tgt, {}).get("yo_fold") and ty in YO_FOLD_TYPES:
+            out = list(OrderedDict.fromkeys(out + [yo_fold(x) for x in out if yo_fold(x) != x]))      # е for ё is a keyboard habit, not an error
         canon_form = out[0]
         if "correct_option" in ov:
             ov["correct_option"] = base if re.search(r"[.!?]", canon_src) else (re.sub(r"^[^\w]+|[^\w]+$", "", base) if ty == "dictation" else strip_punct(base))
@@ -1202,6 +1395,9 @@ class UnitDeriver:
         for pat, fix in cfg.get("contractions", []):
             if re.search(pat, text):
                 self.flag(key, "CONTRACTION", f"{text!r}: obligatory contraction not applied (use {fix!r}); never accept the uncontracted form as a variant")
+        for pat, fix in cfg.get("elisions", []):
+            if re.search(pat, text):
+                self.flag(key, "ELISION", f"{text!r}: obligatory elision / apostrophe rule not applied (use {fix!r})")
         if src_text:
             src_reg = register_of(src_text, sp)
             tr_reg = register_of(text, tp) if cfg else None
@@ -1212,8 +1408,19 @@ class UnitDeriver:
                 self.flag(key, "ELISION", f"{text!r}: obligatory elision not applied ({bad!r}); never accept the unelided form as a variant")
         if cfg.get("straight_apostrophe") and "’" in text:
             self.flag(key, "APOSTROPHE", f"{text!r}: use the straight apostrophe (')")
+        if cfg.get("script") == "cyrillic" and kind in ("teach", "answer", "transcribe"):
+            if "\u0301" in text:
+                self.flag(key, "STRESS", f"{text!r}: no stress marks in learner-facing Russian text")
+            plain = re.sub(r"\{[^}]*\}", "", text)
+            if re.search(r"[A-Za-z]", plain):
+                self.flag(key, "SCRIPT", f"{text!r}: Latin letters in Russian text (write it in Cyrillic, or acknowledge a real exception in ack.json)")
+            self.yo_lint(key, text)
         g = cfg.get("gender")
-        if g and kind == "answer" and g.get("mode") == "fr":
+        if g and kind == "answer" and g.get("mode") == "ru":
+            alts_ru = ru_gender_alts(text)
+            if alts_ru and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_ru):
+                self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_ru[0]!r}) via `{key}#alt`")
+        elif g and kind == "answer" and g.get("mode") == "fr":
             alts_fr = fr_gender_alts(text)
             if alts_fr and not any(norm(a) in {norm(x) for x in (answers or [])} for a in alts_fr):
                 self.flag(key, "GENDER", f"speaker-gendered word in {text!r}; add the other gender ({alts_fr[0]!r}) via `{key}#alt`")
@@ -1239,6 +1446,23 @@ class UnitDeriver:
                             self.flag(key, "GENDER", f"speaker-gendered form in {text!r}; add the other gender ({alt!r}) via `{key}#alt`")
         if self.p.cs:
             self.case_lint(key, text)
+
+    def yo_lint(self, key: str, text: str) -> None:
+        """One spelling per word: идёт and идет must not both occur in the course (they would become two lexemes)."""
+        seen = self.p.yo_forms
+        if seen is None:
+            seen = self.p.yo_forms = defaultdict(set)
+            up, low = self.p.lexicon
+            for k in up | low:
+                seen[yo_fold(k.casefold())].add(k.casefold())
+        for t in tokens(text):
+            c = t.casefold()
+            f = yo_fold(c)
+            if f in RU_YO_SAME or c in RU_YO_SAME:
+                continue
+            if seen[f] and c not in seen[f]:
+                self.flag(key, "YO_MIXED", f"{t!r} in {text!r}: the course also spells this word {sorted(seen[f])}; use one spelling")
+            seen[f].add(c)
 
     def case_lint(self, key: str, text: str) -> None:
         """Case-sensitive targets (German): a known common noun written lowercase, or a known non-noun capitalised mid-sentence.
@@ -1293,7 +1517,7 @@ class UnitDeriver:
         if "answer_policy" in base_o:
             newO["answer_policy"] = copy.deepcopy(base_o["answer_policy"])
         desc = self.en(O["course"]["description"])
-        if self.p.strict_residual and self.residual(desc):
+        if (self.p.strict_residual and self.residual(desc)) or self.p.always_desc:
             desc = self.A(f"{self.stem}#desc", O["course"]["description"], "description", dict(why=",".join(self.residual(desc))))
         newO["course"] = {"title": base_o["course"]["title"], "description": desc}
         for k in ("units", "lessons", "teaching", "exercises"):
@@ -1327,11 +1551,15 @@ class Plan:
         self.strict_residual = bool(CFG.get(self.tgt, {}).get("strict_residual"))
         self.per_card_keys = bool(CFG.get(self.tgt, {}).get("per_card_keys"))
         self.rewrite_gloss = bool(CFG.get(self.tgt, {}).get("rewrite_gloss"))
+        self.always_desc = bool(CFG.get(self.tgt, {}).get("always_desc"))     # the unit description is always authored (it quotes source-language phrases)
         self.rekey = bool(CFG.get(self.tgt, {}).get("rekey_exercises"))     # exercise key tails re-derived from the translation
         self.suffixes = dict(kv.split("=", 1) for kv in (getattr(args, "suffixes", None) or "").split(",") if "=" in kv)
         self._lex = None
+        self.yo_forms = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
+        # English fields name the cast in Latin letters when the target script is not Latin (Лотте -> Nastya): --names-en
+        self.names_en_map = dict(kv.split("=", 1) for kv in (getattr(args, "names_en", None) or "").split(",") if "=" in kv) or self.names_map
         self.units = args.units
         self.atoms: OrderedDict[str, str] = OrderedDict()
         self.atom_ctx: dict[str, dict] = {}
@@ -1383,14 +1611,38 @@ class Plan:
         return self._svocab
 
     def english_words(self) -> set[str]:
+        """English vocabulary: words found (as string values, never keys) in >= 2 files of >= 4 different English-learner courses.
+        A word quoted from one target language (Vogel in en-de, perro in en-es) is therefore not English, which the older
+        'in >= 10 overlay files' rule could not tell (de-en and en-de overlays quote German hundreds of times)."""
         if getattr(self, "_english", None) is None:
-            counts: Counter = Counter()
-            for d in sorted((CONTENT / "overlays").iterdir()):
-                if not d.is_dir() or self.src in d.name.split("-") or d.name == self.new_pair:
-                    continue
-                for f in d.glob("*.yaml"):
-                    counts.update(set(re.findall(r"[^\W\d_]{3,}", f.read_text(encoding="utf-8").casefold())))
-            self._english = {w for w, n in counts.items() if n >= 10} | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit", "giraffe", "croissant", "croissants", "meter"}
+            dirs = [d for d in sorted((CONTENT / "overlays").iterdir())
+                    if d.is_dir() and d.name.startswith("en-") and self.src not in d.name.split("-") and d.name != self.new_pair]
+            files = [f for d in dirs for f in d.glob("*.yaml")]
+            sig = f"{len(files)}:{max((f.stat().st_mtime_ns for f in files), default=0)}:{self.new_pair}"
+            cache = self.work / "english_words.cache.json"
+            cached = load_json(cache)
+            if cached.get("sig") == sig:
+                words = set(cached["words"])
+            else:
+                per: dict[str, Counter] = {}
+                for d in dirs:
+                    c: Counter = Counter()
+                    for f in d.glob("*.yaml"):
+                        seen: set[str] = set()
+                        for text in yaml_strings(dd.load(f)):
+                            seen.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
+                        c.update(seen)
+                    per[d.name] = c
+                tally: Counter = Counter()
+                for c in per.values():
+                    tally.update(w for w, n in c.items() if n >= 2)
+                words = {w for w, n in tally.items() if n >= 4}
+                dump_json(cache, dict(sig=sig, words=sorted(words)))
+            self._english = words | {"april", "blond", "receptionist", "popcorn", "concert", "band", "fruit", "giraffe", "croissant", "croissants", "meter",
+                                     # English words that a Germanic/Romance course spells the same way
+                                     "sport", "sports", "yoga", "computer", "internet", "app", "apps", "hobby", "hobbies", "jogging", "hotel", "taxi", "bus",
+                                     "film", "menu", "team", "stress", "test", "tennis", "online", "email", "video", "radio", "jazz", "pizza", "cinema",
+                                     "park", "gym", "poster", "sandwich", "toilet", "bar", "pop", "rock", "club", "boss", "plan", "idee"}
         return self._english
 
     @property
@@ -1403,7 +1655,12 @@ class Plan:
                 if pair in (self.src_pair, self.new_pair):          # never the course being derived: a leak there would legitimise itself
                     continue
                 for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
-                    cnt.update(set(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold())))
+                    toks: set[str] = set()
+                    # values only: content keys of derived units still carry source-language slugs (choose_ontbijten) and would
+                    # legitimise those words as English
+                    for text in yaml_strings(dd.load(fp)):
+                        toks.update(re.findall(r"[^\W\d_]{3,}", text.casefold()))
+                    cnt.update(toks)
             # a word that only one or two overlay files use is more likely a leak of an earlier derived course than English
             _EN_VOCAB = {w for w, n in cnt.items() if n >= 3}
         return _EN_VOCAB
@@ -1477,14 +1734,18 @@ class Plan:
             return self.SPEAKER_FIX.sub(r"\1: ", tr)
         return tr
 
-    def names(self, s: str) -> str:
+    def names(self, s: str, table: dict | None = None) -> str:
         """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
         if CFG.get(self.tgt, {}).get("straight_apostrophe"):
             s = s.replace("\u2019", "'")
-        if not self.names_map:
+        table = self.names_map if table is None else table
+        if not table:
             return s
-        pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(self.names_map, key=len, reverse=True)) + r")\b")
-        return pat.sub(lambda m: self.names_map[m.group(1)], s)
+        pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(table, key=len, reverse=True)) + r")\b")
+        return pat.sub(lambda m: table[m.group(1)], s)
+
+    def names_en(self, s: str) -> str:
+        return self.names(s, self.names_en_map)
 
     def add_atom(self, aid, text, kind, en, where, unit):
         self.atoms.setdefault(aid, text)
@@ -1557,6 +1818,7 @@ def make_plan(args) -> Plan:
         args.units = saved.get("units")
         args.first_unit = args.first_unit or saved.get("first_unit")
         args.names = args.names or saved.get("names")
+        args.names_en = getattr(args, "names_en", None) or saved.get("names_en")
         args.suffixes = getattr(args, "suffixes", None) or saved.get("suffixes")
         if not args.units:
             raise SystemExit("--units a1_unitNN_name ... required on first run")
@@ -1602,7 +1864,7 @@ def cmd_extract(args):
     w = plan.work
     # keep earlier translations for unchanged text (ids are text hashes)
     dump_json(w / "plan.json", dict(source=plan.src_pair, new=plan.new_pair, units=plan.units,
-                                    first_unit=plan.derivers[0].new_no, names=args.names, group=plan.group,
+                                    first_unit=plan.derivers[0].new_no, names=args.names, names_en=getattr(args, "names_en", None), group=plan.group,
                                     suffixes=getattr(args, "suffixes", None)))
     atoms = OrderedDict(sorted(plan.atoms.items(), key=lambda kv: kv[0]))
     dump_json(w / "atoms.src.json", plan.atoms)
@@ -1921,7 +2183,10 @@ def build_pack(plan: Plan, d: "UnitDeriver", specs_all: list, excl: set[str]) ->
     plan_generic = ["choose", "listen", "translate", "match", "choose", "translate"]
     for i, verb in enumerate(plan_generic):
         lck = good_lessons[i % len(good_lessons)]
-        title = en_lesson_title(lck).lower() or "this unit"
+        title = en_lesson_title(lck)
+        if title.split(",")[0].split(" ")[0] not in set(plan.names_map.values()):         # 'Marco, Chiara and Luca on animals' keeps its capitals
+            title = title.lower()
+        title = title or "this unit"
         fb = frame(f"{{item}} is one of this unit's words, from the lesson on {_plain_en(title, 80)}.", "en")
         if verb in ("choose", "listen"):
             templates.append(dict(content_key=key(lck, verb), lesson_content_key=lck,
@@ -2074,6 +2339,7 @@ def main(argv=None):
         p.add_argument("--units", nargs="*", help="source realization stems, e.g. a1_unit23_money")
         p.add_argument("--first-unit", type=int, help="unit number of the first derived unit (default: next free)")
         p.add_argument("--names", help="cast map, e.g. Lotte=Elena,Omar=Mateo")
+        p.add_argument("--names-en", dest="names_en", help="cast map for the English fields when the target script is not Latin, e.g. Lotte=Nastya,Omar=Dima (default: --names)")
         p.add_argument("--suffixes", help="topic name map for file names / unit keys, e.g. sporten=sport,vervoer=verkehr")
         p.add_argument("--work")
         p.add_argument("--allow-missing", action="store_true")
