@@ -1,0 +1,272 @@
+schema_version: '1.0'
+pack_key: practice.ar-en.a1.unit66
+source_language: ar
+target_language: en
+unit_content_key: en.a1.unit66.pharmacy_symptoms
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.de-en by scripts/derive_direction.py (templates, slots and tags unchanged; frame/feedback text translated to Arabic (MSA)). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_ask
+    - w_cough
+    - w_doctor
+    - w_felt
+    - w_fever
+    - w_gave
+    - w_headache
+    - w_medicine
+    - w_pharmacist
+    - w_symptom
+    - w_throat
+    - w_went
+templates:
+- content_key: practice.ar-en.en.a1.unit66.lesson01.choose.001
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_symptom
+        - w_medicine
+        - w_throat
+        - w_cough
+        - w_fever
+        - w_headache
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: symptom وmedicine وthroat وcough وfever وheadache كلمات أساسية في الصيدلية؛ وmedicine غير معدودة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson04.choose.002
+  lesson_content_key: en.a1.unit66.lesson04.pharmacy_note
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech:
+      - noun
+      - verb
+      agreement_tags:
+        semantic:
+        - w_pharmacist
+        - w_went
+        - w_gave
+        - w_felt
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: went وgave وfelt صيغ ماضٍ شاذّة؛ وpharmacist هو الشخص في الصيدلية.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson01.order.003
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: word_order
+  frame:
+    text: I have a {item}.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_cough
+        - w_headache
+        - w_fever
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'مع الأعراض تأتي a في الإنجليزية: I have a cough وI have a headache وI have a fever.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson02.order.004
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: word_order
+  frame:
+    text: My {item} hurts.
+    language_code: en
+    direction: ltr
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_throat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My {item} hurts.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: 'في الإنجليزية العضو هو الفاعل: My throat hurts.'
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson01.fill.005
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: fill_in_blank
+  frame:
+    text: Take this {item} with water. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id001
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_medicine
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: medicine غير معدودة؛ تأتي this قبلها لكن لا تأتي a أبدًا.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson02.fill.006
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: fill_in_blank
+  frame:
+    text: Please {item} a doctor. ({hint})
+    language_code: en
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    hint: &id002
+      language_code: en
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_ask
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Please ask a doctor نصيحة مهذّبة؛ وبعد please يأتي الفعل بلا لاحقة.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson01.translate.007
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: translation
+  frame:
+    text: عندي صداع.
+    language_code: ar
+    direction: rtl
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_headache
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: I have a {item}.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: في الإنجليزية تأتي headache بصيغة المفرد مع a.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson02.translate.008
+  lesson_content_key: en.a1.unit66.lesson02.symptom_phrases
+  type: translation
+  frame:
+    text: حلقي يؤلمني.
+    language_code: ar
+    direction: rtl
+  slots:
+    item:
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_throat
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: My {item} hurts.
+      language_code: en
+      direction: ltr
+  feedback_frame:
+    text: يأخذ hurts حرف s لأن my throat فاعل مفرد غائب.
+    language_code: ar
+    direction: rtl
+- content_key: practice.ar-en.en.a1.unit66.lesson01.match.009
+  lesson_content_key: en.a1.unit66.lesson01.symptom_words
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: en
+    direction: ltr
+  slot_relations:
+  - kind: distinct
+    slots: &id004
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  slots:
+    first: &id003
+      language_code: en
+      part_of_speech: noun
+      agreement_tags:
+        semantic:
+        - w_symptom
+        - w_medicine
+        - w_throat
+        - w_cough
+        - w_fever
+        - w_headache
+        - w_pharmacist
+        - w_doctor
+    second: *id003
+    third: *id003
+    fourth: *id003
+    fifth: *id003
+    sixth: *id003
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id004
+  feedback_frame:
+    text: 'هذه الكلمات من الصيدلية والطبيب: عَرَض، دواء، حلق، سعال، حمّى، صداع، صيدلي، طبيب.'
+    language_code: ar
+    direction: rtl
