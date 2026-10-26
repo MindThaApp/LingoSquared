@@ -537,20 +537,25 @@ class UnitDeriver:
         out = s
         subs: dict[str, str] = {}
         for text, aid in sorted(self.atom_texts.items(), key=lambda kv: -len(kv[0])):
-            if len(text) >= 3 and text in out:
-                if all(w in self.p.english_words() for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(
-                        c in text for c in " ,."):
-                    # a source atom that is also an English word (games, yoga, winter, water): only a quoted occurrence is the atom
-                    pat = re.compile(r"(?<=['\"*\u2018\u201c])" + re.escape(text) + r"(?![^\W\d_])")
-                    if not pat.search(out):
-                        continue
-                    ph = f"\x00{len(subs)}\x00"
-                    subs[ph] = self.T(text, "quote")
-                    out = pat.sub(ph, out)
-                    continue
+            if len(text) < 3:
+                continue
+            # whole word ("gras" is not inside "grass"); a lowercase source atom also matches its sentence-initial capital ("Boom is tree")
+            first = text[0]
+            head = f"[{first}{first.upper()}]" if first.islower() else re.escape(first)
+            word = r"(?<![^\W\d_])" + head + re.escape(text[1:]) + r"(?![^\W\d_])"
+            if not re.search(word, out):
+                continue
+            quoted_only = all(w in self.p.english_words() for w in re.findall(r"[^\W\d_]{3,}", text.casefold())) and not any(c in text for c in " ,.")
+            pat = re.compile((r"(?<=['\"*\u2018\u201c])" if quoted_only else "") + word[len(r"(?<![^\W\d_])"):] if quoted_only else word)
+
+            def put(m, text=text):
                 ph = f"\x00{len(subs)}\x00"
-                subs[ph] = self.T(text, "quote")
-                out = out.replace(text, ph)
+                tr = self.T(text, "quote")
+                if m.group(0)[:1].isupper() and text[:1].islower() and not tr.startswith("<<"):
+                    tr = tr[:1].upper() + tr[1:]
+                subs[ph] = tr
+                return ph
+            out = pat.sub(put, out)
         out = self.en(out)
         left = self.residual(re.sub(r"\x00\d+\x00", " ", out))
         gpat = CFG.get(self.p.src, {}).get("grammar")
@@ -693,7 +698,7 @@ class UnitDeriver:
                         else:
                             tk = [x for x in tk if x not in names_cf]
                             is_right = bool(tk) and sum(x in allsrc and ((len(x) >= 3 and x not in eng) or x in short_set) for x in tk) / len(tk) >= 0.6
-                        if is_right:
+                        if is_right or Rt in self.p.pair_force:
                             self.pair_target.add(Rt)
                             if Rt not in self.atom_texts:
                                 self.right_target.add(Rt)
@@ -844,7 +849,44 @@ class UnitDeriver:
         # -- header ---------------------------------------------------------------
         self.grammar_lint(O)
         R, O = self.finish(R, O)
+        self.english_leftover_scan(R, O)
         return R, O
+
+    def english_leftover_scan(self, R, O) -> None:
+        """Final net over every English field of the finished overlay: a source-language word that is not a word of the translated target
+        text (so a cognate or a quoted target word is fine) is a leftover (`Pinnen is the verb`, `Jong means young`)."""
+        if not self.p.strict_residual:
+            return
+        tgt: set[str] = set()
+
+        def collect(o):
+            if isinstance(o, dict):
+                for v in o.values():
+                    collect(v)
+            elif isinstance(o, list):
+                for v in o:
+                    collect(v)
+            elif isinstance(o, str):
+                tgt.update(re.findall(r"[^\W\d_]{2,}", o.casefold()))
+        collect(R)
+        collect({k: v for k, v in O.items() if k == "exercises"})              # accepted answers, options: target text lives there too
+        skip = {"title", "gloss", "note", "feedback", "instruction", "hint", "description", "example_gloss", "glosses", "prompt"}
+        cast = {w.casefold() for kv in self.p.names_map.items() for w in kv}
+
+        def walk(o, path, ck):
+            if isinstance(o, dict):
+                for k, v in o.items():
+                    walk(v, path + [str(k)], str(k) if path and path[-1] in ("exercises", "teaching", "units", "lessons") else ck)
+            elif isinstance(o, list):
+                for v in o:
+                    walk(v, path, ck)
+            elif isinstance(o, str) and path and path[-1] in skip and "<<" not in o:
+                t = re.sub(r"\*[^*]*\*", " ", o)
+                t = re.sub(r"['\"\u2018\u201c][^'\"\u2019\u201d]{2,}['\"\u2019\u201d]", " ", t)
+                left = sorted(set(re.findall(r"[^\W\d_]{3,}", t.casefold())) & self.src_only - tgt - cast)
+                if left:
+                    self.flag(ck or "?", "LEFTOVER", f"{path[-1]} {o[:120]!r} still contains {self.p.src_name} words {left}")
+        walk({k: v for k, v in O.items() if k in ("exercises", "teaching", "units", "lessons")}, [], None)
 
     def grammar_lint(self, O: dict) -> None:
         """English strings that still describe source-language grammar (split verbs, het-words, ...) after rewriting."""
@@ -1304,6 +1346,7 @@ class Plan:
         self.acks = load_json(work / "ack.json")
         # English strings that describe source-language grammar (titles, glosses, notes): exact string -> rewrite for the new language
         self.en_over = load_json(work / "en_override.json")
+        self.pair_force = set(load_json(work / "pair_force.json") or [])      # pair right sides that are source text although they look English ("pin")
         # base files of the target course: header/answer policy come from them
         group = args.group or self.new_pair
         real, ovl = manifest_group(group)
@@ -1355,13 +1398,14 @@ class Plan:
         """Words used in the English fields of the other courses' overlays (anything the source course quotes is not in here)."""
         global _EN_VOCAB
         if _EN_VOCAB is None:
-            v: set[str] = set()
+            cnt: Counter = Counter()
             for pair in ("en-de", "en-es", "en-fr", "en-it", "en-pl", "en-ro"):
                 if pair in (self.src_pair, self.new_pair):          # never the course being derived: a leak there would legitimise itself
                     continue
                 for fp in (CONTENT / f"overlays/{pair}").glob("*.yaml"):
-                    v.update(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold()))
-            _EN_VOCAB = v
+                    cnt.update(set(re.findall(r"[^\W\d_]{3,}", fp.read_text(encoding="utf-8").casefold())))
+            # a word that only one or two overlay files use is more likely a leak of an earlier derived course than English
+            _EN_VOCAB = {w for w, n in cnt.items() if n >= 3}
         return _EN_VOCAB
 
     @property
