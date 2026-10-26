@@ -542,7 +542,7 @@ class UnitDeriver:
                 self.p.missing.add(slot)
                 return f"<<{slot}>>"
             return None
-        return self.p.names(v)
+        return self.p.names(v) if re.search(r"#(?:ans|alt|dist|frame|tested|bank)$", slot) else self.p.names_en(v)
 
     def flag(self, key: str, code: str, msg: str, level: str = "error") -> None:
         self.p.flags.append(dict(id=key, code=code, level=level, msg=msg, unit=self.stem))
@@ -552,10 +552,10 @@ class UnitDeriver:
         "|example_gloss", "|gloss:<source key>") selects a scoped authored rewrite from en_override.json before the
         exact-string one."""
         if scope and scope in self.p.en_over:
-            return self.p.names(self.p.en_over[scope])
+            return self.p.names_en(self.p.en_over[scope])
         if s in self.p.en_over:                      # authored English rewrite (en_override.json)
-            return self.p.names(self.p.en_over[s])
-        s = self.p.names(s)
+            return self.p.names_en(self.p.en_over[s])
+        s = self.p.names_en(s)
         for k, v in self.p.en_over.items():          # "~word": word-level rewrite of source-language words that survive in English text
             if k.startswith("~"):
                 s = re.sub(rf"(?<![\w]){re.escape(k[1:])}(?![\w])", v, s)
@@ -1338,6 +1338,8 @@ class Plan:
         self.yo_forms = None
         self.work = work
         self.names_map = dict(kv.split("=", 1) for kv in (args.names or "").split(",") if "=" in kv)
+        # English fields name the cast in Latin letters when the target script is not Latin (Лотте -> Nastya): --names-en
+        self.names_en_map = dict(kv.split("=", 1) for kv in (getattr(args, "names_en", None) or "").split(",") if "=" in kv) or self.names_map
         self.units = args.units
         self.atoms: OrderedDict[str, str] = OrderedDict()
         self.atom_ctx: dict[str, dict] = {}
@@ -1481,14 +1483,18 @@ class Plan:
             return self.SPEAKER_FIX.sub(r"\1: ", tr)
         return tr
 
-    def names(self, s: str) -> str:
+    def names(self, s: str, table: dict | None = None) -> str:
         """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
         if CFG.get(self.tgt, {}).get("straight_apostrophe"):
             s = s.replace("\u2019", "'")
-        if not self.names_map:
+        table = self.names_map if table is None else table
+        if not table:
             return s
-        pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(self.names_map, key=len, reverse=True)) + r")\b")
-        return pat.sub(lambda m: self.names_map[m.group(1)], s)
+        pat = re.compile(r"\b(" + "|".join(re.escape(a) for a in sorted(table, key=len, reverse=True)) + r")\b")
+        return pat.sub(lambda m: table[m.group(1)], s)
+
+    def names_en(self, s: str) -> str:
+        return self.names(s, self.names_en_map)
 
     def add_atom(self, aid, text, kind, en, where, unit):
         self.atoms.setdefault(aid, text)
@@ -1561,6 +1567,7 @@ def make_plan(args) -> Plan:
         args.units = saved.get("units")
         args.first_unit = args.first_unit or saved.get("first_unit")
         args.names = args.names or saved.get("names")
+        args.names_en = getattr(args, "names_en", None) or saved.get("names_en")
         args.suffixes = getattr(args, "suffixes", None) or saved.get("suffixes")
         if not args.units:
             raise SystemExit("--units a1_unitNN_name ... required on first run")
@@ -1606,7 +1613,7 @@ def cmd_extract(args):
     w = plan.work
     # keep earlier translations for unchanged text (ids are text hashes)
     dump_json(w / "plan.json", dict(source=plan.src_pair, new=plan.new_pair, units=plan.units,
-                                    first_unit=plan.derivers[0].new_no, names=args.names, group=plan.group,
+                                    first_unit=plan.derivers[0].new_no, names=args.names, names_en=getattr(args, "names_en", None), group=plan.group,
                                     suffixes=getattr(args, "suffixes", None)))
     atoms = OrderedDict(sorted(plan.atoms.items(), key=lambda kv: kv[0]))
     dump_json(w / "atoms.src.json", plan.atoms)
@@ -2049,6 +2056,7 @@ def main(argv=None):
         p.add_argument("--units", nargs="*", help="source realization stems, e.g. a1_unit23_money")
         p.add_argument("--first-unit", type=int, help="unit number of the first derived unit (default: next free)")
         p.add_argument("--names", help="cast map, e.g. Lotte=Elena,Omar=Mateo")
+        p.add_argument("--names-en", dest="names_en", help="cast map for the English fields when the target script is not Latin, e.g. Lotte=Nastya,Omar=Dima (default: --names)")
         p.add_argument("--suffixes", help="topic name map for file names / unit keys, e.g. sporten=sport,vervoer=verkehr")
         p.add_argument("--work")
         p.add_argument("--allow-missing", action="store_true")

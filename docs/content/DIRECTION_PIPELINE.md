@@ -239,3 +239,6 @@ checks afterwards.
   a short adjective (`рад/рада`, `должен/должна`) or an agent noun (`студент/студентка`) needs the other gender as an accepted alternate.
 * The CFG note tells the translator about the six cases, aspect, motion verbs and the dropped present-tense `быть`.
 * The en-ru exercises use no transliteration field, so none is generated.
+* Cast names: `--names Lotte=Настя,Omar=Дима` maps the Dutch names in the Russian text (speaker labels, nominative), `--names-en Lotte=Nastya,Omar=Dima`
+  maps them in every English field (the en-ru overlays spell the cast Nastya, Dima). Russian names inflect, so the translator writes the right case
+  form directly (`Настю`, `Диме`) and never a Latin name in Russian text. Without `--names-en` the single `--names` map serves both sides.
