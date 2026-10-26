@@ -548,6 +548,59 @@ def test_citation_alias_block_is_written_and_applied(dt_de, tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# Italian target: tu/Lei, gender alternates, articulated prepositions, elision
+# ---------------------------------------------------------------------------
+def _it_lints(dt, text, kind="answer", answers=None, src_text=None):
+    flags = []
+    stub = SimpleNamespace(p=SimpleNamespace(tgt="it", src="nl", cs=False), flag=lambda key, code, msg, level="error": flags.append(code))
+    dt.UnitDeriver.lints(stub, "k", text, kind, answers, src_text)
+    return flags
+
+
+def test_italian_register_tu_lei(dt):
+    assert dt.register_of("Come si chiama Lei?", "it") == "formal"
+    assert dt.register_of("Come ti chiami?", "it") == "informal"
+    assert dt.register_of("Puoi aiutarmi?", "it") == "informal"
+    assert dt.register_of("Lei ha una prenotazione?", "it") == "formal"
+    assert dt.register_of("Buongiorno!", "it") is None
+    assert "REGISTER" in _it_lints(dt, "Come ti chiami?", "text", None, "Hoe heet u?")      # source formal, translation informal
+    assert "REGISTER" not in _it_lints(dt, "Come si chiama Lei?", "text", None, "Hoe heet u?")
+
+
+def test_italian_articulated_prepositions_are_obligatory(dt):
+    assert "CONTRACTION" in _it_lints(dt, "Vado a il parco.", "text")
+    assert "CONTRACTION" in _it_lints(dt, "I biglietti sono in la borsa.", "text")
+    assert "CONTRACTION" in _it_lints(dt, "Il numero di l'ufficio.", "text")
+    assert "CONTRACTION" in _it_lints(dt, "Il libro è su lo scaffale.", "text")
+    assert "CONTRACTION" not in _it_lints(dt, "Vado al parco, nella piazza dell'ufficio, sul ponte, dallo zio.", "text")
+
+
+def test_italian_elision_and_apostrophe_rules(dt):
+    assert "ELISION" in _it_lints(dt, "Ho una amica.", "text")
+    assert "ELISION" in _it_lints(dt, "La acqua è fredda.", "text")
+    assert "ELISION" in _it_lints(dt, "Lo ho visto.", "text")
+    assert "ELISION" in _it_lints(dt, "Ho un'amico.", "text")                 # masculine noun takes no apostrophe
+    assert "ELISION" not in _it_lints(dt, "Ho un'amica e l'amico, l'acqua, un amico, la casa, lo zaino.", "text")
+
+
+def test_italian_gender_alternate_is_required(dt):
+    assert "GENDER" in _it_lints(dt, "Sono stanco.", "answer", ["Sono stanco."])
+    assert "GENDER" not in _it_lints(dt, "Sono stanco.", "answer", ["Sono stanco.", "Sono stanca."])
+    assert "GENDER" in _it_lints(dt, "Mi sento stanca.", "answer", ["Mi sento stanca."])
+    assert "GENDER" not in _it_lints(dt, "Sono felice.", "answer", ["Sono felice."])    # -e adjectives are common gender
+    assert "GENDER" not in _it_lints(dt, "Sono di Roma.", "answer", ["Sono di Roma."])
+
+
+def test_pair_collision_lint_catches_sides_that_differ_only_by_punctuation(dt):
+    """en-es unit69: two matching lefts that normalise to the same key grade the correct answer wrong."""
+    flags = []
+    stub = SimpleNamespace(flag=lambda key, code, msg, level="error": flags.append(code))
+    dt.UnitDeriver.pair_collisions(stub, "k", [dict(left="Dov'è la stazione?", right="where"), dict(left="Dov'è la stazione", right="station")])
+    assert flags == ["PAIR_COLLISION"]
+    flags.clear()
+    dt.UnitDeriver.pair_collisions(stub, "k", [dict(left="il parco", right="the park"), dict(left="la piazza", right="the square")])
+    assert flags == []
+
 # French target: tu/vous, speaker gender, elision, contractions, straight apostrophes, matching-pair key collisions
 # ---------------------------------------------------------------------------
 BACKFILL_FR = '''"""fixture"""
