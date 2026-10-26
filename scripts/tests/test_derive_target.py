@@ -690,3 +690,34 @@ def test_pair_collision_lint_catches_left_items_that_differ_only_by_punctuation(
     d.p.flags.clear()
     d.pair_collisions("k", [{"left": "Le petit-déjeuner est inclus.", "right": "a"}, {"left": "Le petit-déjeuner n'est pas inclus.", "right": "b"}])
     assert d.p.flags == []
+
+
+def test_romanian_register_gender_and_slugs(dt):
+    assert dt.register_of("Dumneavoastră aveți un câine?", "ro") == "formal"
+    assert dt.register_of("Vă rog să intrați.", "ro") == "formal"
+    assert dt.register_of("Te rog, ai un bilet?", "ro") == "informal"
+    assert dt.register_of("El are un câine.", "ro") is None
+    assert dt.ro_gender_alts("Sunt obosit.") == ["Sunt obosită."]
+    assert dt.ro_gender_alts("Sunt foarte obosită.") == ["Sunt foarte obosit."]
+    assert dt.ro_gender_alts("Sunt student.") == ["Sunt studentă."]
+    assert dt.ro_gender_alts("Sunt o studentă.") == ["Sunt un student."]
+    assert "Sunt profesoară." in dt.ro_gender_alts("Sunt profesor.")
+    assert dt.ro_gender_alts("Mă simt bolnav.") == ["Mă simt bolnavă."]
+    assert dt.ro_gender_alts("Sunt vânzătoare.") == ["Sunt vânzător."]
+    assert dt.ro_gender_alts("Sunt acasă.") == [] and dt.ro_gender_alts("Mă simt bine.") == [] and dt.ro_gender_alts("Ești obosit?") == []
+    assert dt.slug("Țara și șansa, înapoi", 4) == "tara_si_sansa_inapoi"
+
+
+def test_romanian_orthography_lint_and_cedilla_fold(dt):
+    assert dt.ro_ortho_errors("România, mâncare, pâine, înainte, încă, neînțeles, gândesc, cânt, în.") == []
+    assert dt.ro_ortho_errors("Mîncare bună.") and dt.ro_ortho_errors("Âla e bun.") and dt.ro_ortho_errors("Românîa")
+    assert dt.ro_ortho_errors("Ştiu ţara.")                               # cedilla: ş ţ
+    assert dt.ro_ortho_errors("Știu țara.") == []
+    plan = SimpleNamespace(tgt="ro", names_map={})
+    assert dt.Plan.names(plan, "Ştiu ţara, Şi Ţine.") == "Știu țara, Și Ține."
+
+
+def test_romanian_config_declares_comma_below_and_neuter_note(dt):
+    cfg = dt.CFG["ro"]
+    assert cfg["name"] == "Romanian" and cfg["diacritics"] == "ro" and cfg["gender"]["mode"] == "ro"
+    assert "neuter" in cfg["note"] and "comma-below" in cfg["note"]
