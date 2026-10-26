@@ -252,7 +252,7 @@ duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target l
   sign texts are substituted (`Open: negen uur tot vijf uur.`), and an English-word atom (`games`, `yoga`) is only substituted when quoted. A final net
   (`english_leftover_scan`) turns any remaining source-language word in an English field into an authored slot. `en_vocab` counts a word as English only when at
   least three overlay files of other courses use it, so earlier derived courses cannot legitimise a Dutch word. Word-level rewrites that must run after
-  substitution go in `en_override.json` as `"~zegt": "says"`; `pair_force.json` (`["pin"]`) lists pair right sides that are source text although they look English.
+  substitution go in `en_override.json` as `"~zegt": "says"`; `pair_force.json` (`["pin"]`) lists pair right sides that are source text although they look English; `not_english.json` (`["markt","strand"]`) lists source words the cross-course vocabulary wrongly counts as English.
 
 ## Romanian target (`ro`)
 
