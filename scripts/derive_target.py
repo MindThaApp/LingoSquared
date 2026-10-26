@@ -112,6 +112,7 @@ CFG = {
         strict_residual=True,
         per_card_keys=True,
         rewrite_gloss=True,
+        speaker_label_no_space=True,         # "Camille: Bonjour." even though French puts a space before other colons
         straight_apostrophe=True,            # j'ai, l'école: the grader folds both, the corpus uses the straight one
         formal=r"\b(?:vous|votre|vos)\b",
         informal=r"\b(?:tu|toi|ton|ta|tes|te)\b|(?<!\w)t'",
@@ -372,7 +373,7 @@ class UnitDeriver:
         if tr is None:
             self.p.missing.add(aid)
             return f"<<{aid}>>"
-        return self.p.names(tr)
+        return self.p.names(self.p.speaker_colon(text, tr))
 
     def gloss_key(self, ck: str, key: str) -> str:
         """Gloss keys are shared atoms; "<source content_key>#gk#<source key>" in atoms.tr.json overrides one card."""
@@ -1010,7 +1011,8 @@ class UnitDeriver:
             keep_case = tested_src == strip_punct(self.id_text[aid])
             return body if keep_case or self.p.cs else body.casefold()
         v = self.A(ck + "#tested", tested_src, "tested", dict(ctx, canon=canon_tr))
-        return v
+        low = {a.casefold(): b.casefold() for a, b in self.p.names_map.items()}       # tested spans are written in lowercase: omar -> mathieu
+        return re.sub(r"(?<![\w])(" + "|".join(map(re.escape, low)) + r")(?![\w])", lambda m: low[m.group(1)], v) if low and not v.startswith("<<") else v
 
     def bank(self, e, ck, tested_src, tested_tr, alts, ctx):
         src_tokens = [t.casefold() for t in tokens(tested_src)]
@@ -1289,6 +1291,16 @@ class Plan:
             return set()
 
     case_ok = frozenset({"Sie", "Ihnen", "Ihr", "Ihre", "Ihren", "Ihrem", "Ihrer", "Ihres"})   # formal address: capital is correct mid-sentence
+
+    SPEAKER_SRC = re.compile(r"(?:^|(?<=[.!?] ))[^\W\d_]+(?: [^\W\d_]+)?:\s")
+    SPEAKER_FIX = re.compile(r"(?:^|(?<=[.!?] ))([A-ZÉÈ][^\W\d_']*(?: [a-zéèê]+)?) : ")
+
+    def speaker_colon(self, src: str, tr: str) -> str:
+        """French typography puts a space before the colon, but a dialogue speaker label must stay `Name: text`
+        (the speaker-strip that derives media text and tested spans needs it)."""
+        if CFG.get(self.tgt, {}).get("speaker_label_no_space") and self.SPEAKER_SRC.search(src):
+            return self.SPEAKER_FIX.sub(r"\1: ", tr)
+        return tr
 
     def names(self, s: str) -> str:
         """Cast / place names in one pass, so a chain (Lotte=Anna, Anna=Petra) never maps twice."""
