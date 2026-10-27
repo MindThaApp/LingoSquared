@@ -2237,6 +2237,10 @@ for _tok, _pos in DERIVED_TARGET_POS.items():
     POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end derive_target.py ---
 
+# Session 16: realistic local prices introduced new numeral tokens.
+for _tok, _gloss in {"100": "one hundred", "300": "three hundred", "700": "seven hundred", "900": "nine hundred", "восемьдесят": "eighty", "пятьсот": "five hundred", "семьсот": "seven hundred", "тысяча": "thousand (one thousand)", "тысячи": "thousand (form after two to four)", "четыреста": "four hundred", "шестьсот": "six hundred"}.items():
+    GLOSSES.setdefault(_tok, _gloss)
+
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}

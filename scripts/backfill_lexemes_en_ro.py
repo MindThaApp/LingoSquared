@@ -1992,6 +1992,11 @@ for _tok, _pos in DERIVED_TARGET_POS.items():
     POS_SETS.setdefault(_pos, set()).add(_tok)
 # --- end derive_target.py ---
 
+# Session 16: realistic local prices introduced new numeral tokens.
+for _tok, _gloss in {"135": "one hundred thirty-five", "80": "eighty"}.items():
+    GLOSSES.setdefault(_tok, _gloss)
+POS_SETS.setdefault("adjective", set()).update(['135', '80'])
+
 POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
 
 CATEGORY_TAGS: dict[str, list[str]] = {}
