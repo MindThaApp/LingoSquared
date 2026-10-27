@@ -1194,3 +1194,40 @@ def test_arabic_variant_spellings_are_flagged_as_warnings(dt_ar, tmp_path):
     plan.derivers[0].arabic_lint("k", "مدرسه")
     assert any(f["code"] == "AR_MIXED" and f["level"] == "warn" for f in plan.flags)
 
+
+
+# --- A2 level -----------------------------------------------------------------------------------------------------
+def test_level_option_completes_stems_and_refuses_other_levels_and_nl_culture_units(dt):
+    assert dt.apply_level(["unit78_afgelopen_weekend"], "A2") == ["a2_unit78_afgelopen_weekend"]
+    assert dt.apply_level(["a2_unit78_x", "unit5_y"], "a2") == ["a2_unit78_x", "a2_unit5_y"]
+    assert dt.apply_level(["a1_unit23_money"], None) == ["a1_unit23_money"]            # no --level: A1 behaviour unchanged
+    with pytest.raises(SystemExit):
+        dt.apply_level(["a1_unit23_money"], "A2")
+    with pytest.raises(SystemExit):
+        dt.apply_level(["a2_unit24_gemeente"], "A2")                                   # Dutch-culture A2 unit
+    assert dt.apply_level(["a2_unit24_gemeente"], "A2", force=True) == ["a2_unit24_gemeente"]
+    assert dt.apply_level(["a1_unit40_fiets_huren"], None) == ["a1_unit40_fiets_huren"]  # A1: warning only
+
+
+def test_a2_unit_is_derived_with_a2_keys_and_cefr_level(dt, tmp_path):
+    c = tmp_path / "docs/content"
+    for path, obj in ((c / "realizations/nl/a2_unit05_test.yaml", src_realization()), (c / "overlays/en-nl/a2_unit05.yaml", src_overlay())):
+        path.write_text(path.name and yaml.safe_dump(obj, allow_unicode=True, sort_keys=False).replace("nl.a1.", "nl.a2.")
+                        .replace("en-nl.a1.", "en-nl.a2.").replace("A1", "A2"), encoding="utf-8")
+    author = {k.replace("nl.a1.", "nl.a2."): v for k, v in AUTHOR.items()}
+    a = args(tmp_path, units=["a2_unit05_test"], first_unit=90)
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    (work / "atoms.tr.json").write_text(json.dumps({i: ATOMS[t] for i, t in src.items() if t in ATOMS}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author, ensure_ascii=False), encoding="utf-8")
+    (work / "lexemes.tr.json").write_text("{}", encoding="utf-8")
+    dt.cmd_lexemes(a)
+    lex = json.loads((work / "lexemes.src.json").read_text(encoding="utf-8"))
+    (work / "lexemes.tr.json").write_text(json.dumps({t: "gloss | verb" for t in lex}, ensure_ascii=False), encoding="utf-8")
+    dt.cmd_inject(a)
+    real = yaml.safe_load((c / "realizations/es/a2_unit90_test.yaml").read_text(encoding="utf-8"))
+    ovl = yaml.safe_load((c / "overlays/en-es/a2_unit90.yaml").read_text(encoding="utf-8"))
+    assert real["cefr_level"] == "A2" and real["units"][0]["content_key"] == "es.a2.unit90.test"
+    assert ovl["overlay_key"] == "en-es.a2.unit90"
+    assert all(k.startswith("es.a2.unit90.") for k in ovl["exercises"])
