@@ -1231,3 +1231,15 @@ def test_a2_unit_is_derived_with_a2_keys_and_cefr_level(dt, tmp_path):
     assert real["cefr_level"] == "A2" and real["units"][0]["content_key"] == "es.a2.unit90.test"
     assert ovl["overlay_key"] == "en-es.a2.unit90"
     assert all(k.startswith("es.a2.unit90.") for k in ovl["exercises"])
+
+
+def test_authored_bank_overrides_derived_tiles_and_must_cover_the_answer(dt):
+    from types import SimpleNamespace
+    flags = []
+    fake = SimpleNamespace(p=SimpleNamespace(tr_author={"k#bank": "W | niedzielę | zostałem | zostałam | w | domu"}), flag=lambda *a, **k: flags.append(a))
+    e = {"word_bank": ["x"]}
+    dt.UnitDeriver.bank(fake, e, "k", "Zondag ben ik thuisgebleven", "W niedzielę zostałem w domu", ["W niedzielę zostałem w domu"], {})
+    assert e["word_bank"] == ["W", "niedzielę", "zostałem", "zostałam", "w", "domu"] and not flags
+    fake.p.tr_author["k#bank"] = "W | niedzielę | zostałam | w | domu"
+    dt.UnitDeriver.bank(fake, e, "k", "Zondag ben ik thuisgebleven", "W niedzielę zostałem w domu", [], {})
+    assert flags and flags[0][1] == "TILES"
