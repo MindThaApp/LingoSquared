@@ -116,3 +116,9 @@ def test_english_side_lint_accepts_good_pairs_and_person_sentence_pairs(ck, tmp_
 
 def test_english_side_lint_skips_hand_authored_units(ck, tmp_path, monkeypatch):
     assert not _scan_side(ck, tmp_path, monkeypatch, [("museo", "museo")], note="Reviewed by a native speaker")
+
+
+def test_taalcafe_compound_flagged_in_long_string(ck):
+    s = "Emergencies: asking for help at the taalcafé in the library when there is a fire today"
+    assert ck.nl_markers(s, "en") == ["taalcafé"]
+    assert ck.nl_markers("Welcome to the language café, everyone in the library today", "en") == []

@@ -67,6 +67,10 @@ tussen zonder omdat dus nog alle allemaal heel erg zeer mag mogen zal zullen zou
 had hadden waren wordt gewoon vrij klein groot nieuwe oude mooie leuke leuk lekkere beetje twee drie vier vijf zes
 zeven acht negen tien kopje kopjes stukje straat gezelligfijn fiets fietsen ziekenhuis winkel winkels
 apotheek bibliotheek station perron spoor reis reizen kaart kaartjes retour enkele dubbele""".split())
+# Dutch compounds that are never words of another checked language: one occurrence is a hit at any string length
+# (the usual "1 hit only in a short string" rule missed "...asking for help at the taalcafe" in long titles).
+NL_COMPOUNDS = set("""taalcafe taalcafé taalles taalcursus taalschool taalmaatje taalgids taalniveau
+taalcafes taalcafés taalcafeetje""".split())
 # A few of the above are ordinary words of one of the checked languages; drop them per language of the text.
 SHARED = {
     "de": set("tot dank morgen alle dus zin erg sechs acht neun tisch kaffee frage antwort wort worte kamer huis "
@@ -112,6 +116,9 @@ def nl_markers(text: str, lang: str = "en") -> list[str]:
         return []
     shared = set().union(*(SHARED.get(l, set()) for l in lang.split("+")))
     hits = [t for t in toks if t in NL_WORDS and t not in shared]
+    compounds = sorted({t for t in toks if t in NL_COMPOUNDS})
+    if compounds:
+        return sorted(set(hits) | set(compounds))
     strong = [t for t in hits if t not in WEAK]
     if len(set(hits)) >= 2 or (strong and len(toks) <= 4) or (strong and len(set(strong)) >= 1 and len(toks) <= 8):
         return sorted(set(hits))
