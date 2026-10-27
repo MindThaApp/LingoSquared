@@ -957,9 +957,9 @@ class UnitDeriver:
     def __init__(self, plan: "Plan", src_stem: str, new_no: int):
         self.p = plan
         self.stem = src_stem                         # a1_unit23_money
-        m = re.match(r"^(a1)_unit(\d+)_(.+)$", src_stem)
+        m = re.match(r"^(a1|a2)_unit(\d+)_(.+)$", src_stem)
         if not m:
-            raise SystemExit(f"{src_stem}: expected a1_unitNN_name (only A1 is supported)")
+            raise SystemExit(f"{src_stem}: expected a1_unitNN_name or a2_unitNN_name (A1 and A2 are supported)")
         self.level, self.src_no, self.suffix = m.group(1), int(m.group(2)), m.group(3)
         self.new_no = new_no
         self.new_suffix = plan.suffixes.get(self.suffix, self.suffix)       # --suffixes: file / topic name in the new language
@@ -1320,8 +1320,8 @@ class UnitDeriver:
         # -- keys -----------------------------------------------------------
         old_unit = R["units"][0]["content_key"]
         unit_tail = old_unit.split(".", 3)[3]
-        prefix_old = f"{sp}.a1.unit{self.src_no:02d}."
-        prefix_new = f"{tp}.a1.unit{self.new_no:02d}."
+        prefix_old = f"{sp}.{self.level}.unit{self.src_no:02d}."
+        prefix_new = f"{tp}.{self.level}.unit{self.new_no:02d}."
         self.keymap[old_unit] = prefix_new + (self.new_suffix if unit_tail == self.suffix else unit_tail)
         media_slugs: set[str] = set()
         for a in R.get("media_assets") or []:
@@ -1364,7 +1364,7 @@ class UnitDeriver:
                     ck = e["content_key"]
                     self.keymap[ck] = prefix_new + ck[len(prefix_old):]
         for k in list(self.keymap):
-            if not (k.startswith(sp + ".a1.")):
+            if not (k.startswith(f"{sp}.{self.level}.")):
                 raise SystemExit(f"unexpected key {k}")
         # -- realization ---------------------------------------------------------
         for a in R.get("media_assets") or []:
@@ -1646,6 +1646,8 @@ class UnitDeriver:
         # tested text
         if "tested_text" in e:
             e["tested_text"] = self.tested(e, ck, tested_src, canon_src, canon_tr, ctx)
+            if ty == "dictation" and isinstance(ov.get("correct_response"), str):
+                ov["correct_response"] = e["tested_text"]      # A2 dictation: overlay holds the audio text (= tested_text) as a plain string
         # word bank
         if "word_bank" in e:
             self.bank(e, ck, tested_src, e["tested_text"], alts, ctx)
@@ -1954,11 +1956,11 @@ class UnitDeriver:
                 f"(register, naturalness, distractor plausibility). No sibling-file consultation was done for the authored parts "
                 f"beyond the source ctx shown in author.src.json.")
         R["target_language"] = tp
-        R["cefr_level"] = "A1"
+        R["cefr_level"] = self.level.upper()
         R["status"] = "complete_draft"
         R["generation_provenance"] = {
             "method": "ai_generated", "authoring_system": "claude", "human_reviewed": False,
-            "source_material": f"Translated from {sp} A1 unit {self.src_no:02d} ({self.stem}) by scripts/derive_target.py.",
+            "source_material": f"Translated from {sp} {self.level.upper()} unit {self.src_no:02d} ({self.stem}) by scripts/derive_target.py.",
         }
         R["review"] = {"status": "unreviewed", "required_next_reviewer": "native_speaker_review", "notes": note}
         R["course"] = copy.deepcopy(base_r["course"])
@@ -1968,7 +1970,7 @@ class UnitDeriver:
         newO = OrderedDict()
         for k in ("schema_version", "overlay_version"):
             newO[k] = base_o.get(k, O.get(k))
-        newO["overlay_key"] = f"{self.p.new_pair}.a1.unit{self.new_no:02d}"
+        newO["overlay_key"] = f"{self.p.new_pair}.{self.level}.unit{self.new_no:02d}"
         newO["source_language"] = base_o["source_language"]
         newO["target_language"] = tp
         newO["status"] = "complete_draft"
@@ -2081,7 +2083,7 @@ class Plan:
                 elif isinstance(o, list):
                     for v in o:
                         walk(v)
-            for f in sorted((CONTENT / f"realizations/{self.src}").glob("a1_*.yaml")):
+            for f in sorted((CONTENT / f"realizations/{self.src}").glob("a[12]_*.yaml")):
                 walk(dd.load(f))
             self._svocab = voc
         return self._svocab
@@ -2309,7 +2311,33 @@ def make_plan(args) -> Plan:
         args.suffixes = getattr(args, "suffixes", None) or saved.get("suffixes")
         if not args.units:
             raise SystemExit("--units a1_unitNN_name ... required on first run")
+    args.units = apply_level(args.units, getattr(args, "level", None), getattr(args, "force", False))
     return Plan(args, work)
+
+
+# Dutch-culture A2 units: a localisation decision, not a translation (A1 equivalents: bibliotheek_lenen, afval_scheiden, fiets_huren, rondvaart).
+# Refused unless --force; en-es A2 already covers the topic through its own authored unit (tramites).
+SKIP_SOURCE_UNITS = {"a1": ("bibliotheek_lenen", "afval_scheiden", "fiets_huren", "rondvaart"), "a2": ("gemeente",)}
+
+
+def apply_level(units, level, force=False):
+    """--level A2: complete bare stems and reject stems of another level; refuse Dutch-culture units (SKIP_SOURCE_UNITS)."""
+    out = []
+    for u in units or []:
+        if level:
+            lv = level.lower()
+            if re.match(r"^a[12]_unit", u) and not u.startswith(lv + "_"):
+                raise SystemExit(f"{u}: --level {level} but the stem is another level")
+            if not re.match(r"^a[12]_unit", u):
+                u = f"{lv}_{u}"
+        m = re.match(r"^(a[12])_unit\d+_(.+)$", u)
+        if m and m.group(2) in SKIP_SOURCE_UNITS[m.group(1)]:
+            msg = f"{u}: Dutch-culture unit (localisation decision, not a translation)"
+            if m.group(1) == "a2" and not force:       # A1 runs keep their old behaviour (warning only)
+                raise SystemExit(msg + "; --force to derive it anyway")
+            print("warning: " + msg, file=sys.stderr)
+        out.append(u)
+    return out
 
 
 def guide(plan: Plan) -> str:
@@ -2826,7 +2854,9 @@ def main(argv=None):
         p.add_argument("--source", help="source course pair (default: the saved plan, else en-nl)")
         p.add_argument("--new", help="new target course pair (default: the saved plan, else en-es)")
         p.add_argument("--group", help="manifest group receiving the units (default = --new)")
-        p.add_argument("--units", nargs="*", help="source realization stems, e.g. a1_unit23_money")
+        p.add_argument("--units", nargs="*", help="source realization stems, e.g. a1_unit23_money (A2: a2_unit78_afgelopen_weekend)")
+        p.add_argument("--level", choices=("A1", "A2", "a1", "a2"), help="CEFR level of --units: bare stems (unit78_afgelopen_weekend) get this prefix, "
+                       "and a stem of another level is an error; A2 is the default group-less path (use --group en-es-a2)")
         p.add_argument("--first-unit", type=int, help="unit number of the first derived unit (default: next free)")
         p.add_argument("--names", help="cast map, e.g. Lotte=Elena,Omar=Mateo")
         p.add_argument("--names-en", dest="names_en", help="cast map for the English fields when the target script is not Latin, e.g. Lotte=Nastya,Omar=Dima (default: --names)")
