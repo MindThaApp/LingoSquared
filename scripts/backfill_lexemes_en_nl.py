@@ -1259,6 +1259,27 @@ VERBS.update({
     "geslapen", "bezocht", "thuisgebleven", "geworden", "gebleven",
 })
 
+# A2 units 79 (vakantieplannen/holiday plans) and 80 (afspraak verzetten/moving
+# an appointment), added 2026-10-27.
+NL_GLOSSES.update({
+    "vakantie": "holiday; vacation", "zomervakantie": "summer holiday",
+    "volgend": "next (before a het-word)", "Volgend": "Next (before a het-word)",
+    "binnenkort": "soon", "Binnenkort": "Soon", "hotel": "hotel",
+    "camping": "campsite", "verhuizen": "to move house",
+    "sparen": "to save (money)", "naartoe": "to (a place); towards",
+    "plannen": "plans", "annuleren": "to cancel", "sorry": "sorry",
+    "kapsalon": "hairdresser's; salon", "Kapsalon": "Hairdresser's; Salon",
+    "Helaas": "Unfortunately", "ongemak": "inconvenience",
+    "tevoren": "beforehand; in advance", "verzet": "moved (past participle)",
+    "goedemiddag": "good afternoon",
+})
+NOUNS.update({"vakantie", "zomervakantie", "hotel", "camping", "plannen",
+              "kapsalon", "Kapsalon", "ongemak"})
+VERBS.update({"verhuizen", "sparen", "annuleren", "verzet"})
+ADJECTIVES.update({"volgend", "Volgend"})
+ADVERBS.update({"binnenkort", "Binnenkort", "naartoe", "Helaas", "tevoren"})
+PHRASES.update({"sorry", "goedemiddag"})
+
 # Units 29-33 (hobbies, appearance, animals, sports, transportation), added
 # 2026-07-09 alongside UNIT_FILES' extended range above -- still the same
 # "Dutch A1" course, not a new course boundary (see UNIT_FILES' own comment).
@@ -3252,6 +3273,29 @@ U78_POOLS: dict[str, tuple[str, ...]] = {
     "single_ouders": ("ouders",),
 }
 
+# A2 unit79 (vakantieplannen) and unit80 (afspraak verzetten) practice pools,
+# added 2026-10-27 (see nl_agreement_tags). Exact-case members; *_single tags
+# have exactly one member and anchor fixed-sentence items.
+U79_POOLS: dict[str, tuple[str, ...]] = {
+    "nouns": ("vakantie", "zomervakantie", "hotel", "camping", "cursus", "zus", "ouders", "oom"),
+    "infinitives": ("reizen", "boeken", "blijven", "volgen", "verhuizen", "sparen", "werken", "doen"),
+    "times": ("binnenkort", "later", "misschien", "daarna", "zeker"),
+    "time_nouns": ("week", "weken", "dagen", "maand", "jaar"),
+    "single_boeken": ("boeken",), "single_reizen": ("reizen",),
+    "single_verhuizen": ("verhuizen",), "single_sparen": ("sparen",),
+    "single_volgen": ("volgen",), "single_ga": ("ga",), "single_wie": ("wie",),
+    "single_blijf": ("blijf",), "single_zus": ("zus",), "single_ouders": ("ouders",),
+}
+U80_POOLS: dict[str, tuple[str, ...]] = {
+    "nouns": ("afspraak", "kapsalon", "ongemak", "probleem", "dag"),
+    "infinitives": ("verzetten", "annuleren", "afspreken", "komen", "werken"),
+    "single_verzetten": ("verzetten",), "single_annuleren": ("annuleren",),
+    "single_komen": ("komen",), "single_werken": ("werken",),
+    "single_maandag": ("maandag",), "single_vrijdag": ("vrijdag",),
+    "single_uit": ("uit",), "single_om": ("om",), "single_ziek": ("ziek",),
+    "single_afspraak": ("afspraak",),
+}
+
 
 def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
     t = token.casefold()
@@ -3509,6 +3553,20 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
         "niet_en_geen": "negation_niet_geen",
         "noors_weekend_lezen": "weekend_reading",
         "lotte_en_omar_op_maandag": "weekend_dialogue",
+        # A2 unit 79 (vakantieplannen/holiday plans), added 2026-10-27.
+        "wat_ga_je_doen": "holiday_plans_vocabulary",
+        "van_plan_zijn": "intention_van_plan",
+        "nu_of_later": "certainty_misschien",
+        "vragen_over_plannen": "plans_questions",
+        "noors_vakantie_lezen": "holiday_reading",
+        "lotte_en_omar_plannen": "holiday_dialogue",
+        # A2 unit 80 (afspraak verzetten/moving an appointment), added 2026-10-27.
+        "ik_kan_niet_komen": "cannot_come_vocabulary",
+        "een_andere_dag": "alternative_day",
+        "een_reden_geven": "giving_reason_want",
+        "een_nieuwe_tijd": "agreeing_new_time",
+        "bericht_van_het_kapsalon": "rescheduling_reading",
+        "omar_belt_de_kapper": "rescheduling_dialogue",
         # B1 unit 01 (hypothetische situaties/hypothetical situations),
         # added 2026-07-11.
         "ik_zou_graag": "hypothetical_wish_singular",
@@ -4712,6 +4770,18 @@ def nl_agreement_tags(token: str, lesson_key: str) -> dict[str, object]:
             if token in _members:
                 semantic.append("weekend_" + _pool)
 
+    # A2 unit79 / unit80 curated pools and single-member anchors, added
+    # 2026-10-27. Gated on the units' lesson keys so no other unit's lexeme
+    # picks them up.
+    if lesson_key.startswith("nl.a2.unit79."):
+        for _pool, _members in U79_POOLS.items():
+            if token in _members:
+                semantic.append("plan_" + _pool)
+    if lesson_key.startswith("nl.a2.unit80."):
+        for _pool, _members in U80_POOLS.items():
+            if token in _members:
+                semantic.append("verzet_" + _pool)
+
     # A1 volume batch (units 34-42 / 49-72), added 2026-07-22. Unlike the
     # per-token `if t == ...` blocks above, these are derived from the
     # lesson_key + part of speech, because 33 units x ~25 content words is
@@ -4777,6 +4847,12 @@ NL_UNIT_GLOSS_OVERRIDES: dict[tuple[str, str], str] = {
     # infinitive ("thuisblijven") and lang as "for a long time".
     ("a2_unit78_afgelopen_weekend", "blijven"): "to stay; to remain",
     ("a2_unit78_afgelopen_weekend", "lang"): "long; for a long time",
+    # a2_unit79 (vakantieplannen), 2026-10-27: the global gloss for boeken is the
+    # noun "books"; this unit teaches the verb "to book" (a hotel).
+    ("a2_unit79_vakantieplannen", "boeken"): "to book",
+    ("a2_unit79_vakantieplannen", "blijf"): "stay (with ik)",
+    # a2_unit80 (afspraak verzetten), 2026-10-27: "het spijt me" = I am sorry.
+    ("a2_unit80_afspraak_verzetten", "spijt"): "regret (het spijt me = I am sorry)",
     # b1_unit06 teaches the noun "de regel" (nl.b1.unit06.lesson06.teach.de_regel);
     # global `regel` = verb "arrange (with ik)". Without this,
     # translate.002 cued "the rule" and graded the correct answer "regel" wrong.
@@ -4994,6 +5070,7 @@ NL_UNIT_POS_OVERRIDES: dict[tuple[str, str], str] = {
     ("b1_unit05_indirecte_rede", "vroeg"): "verb",
     ("b1_unit09_eens_en_oneens", "rust"): "noun",
     ("a2_unit25_meningen", "waar"): "adjective",
+    ("a2_unit79_vakantieplannen", "boeken"): "verb",
     ("b1_unit01_hypothetische_situaties", "werk"): "noun",
     ("b2_unit08_synthese", "eten"): "noun",
     ("b2_unit03_nuance", "best"): "adverb",
