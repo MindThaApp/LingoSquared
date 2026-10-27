@@ -1762,6 +1762,8 @@ class UnitDeriver:
             atom_tr = self.T_by_norm(tested_src)
             if atom_tr.startswith("<<"):
                 return atom_tr
+            if e.get("type") == "dictation" and tested_src != strip_punct(self.id_text[aid]) and tested_src == boundary_strip(self.id_text[aid]):
+                return boundary_strip(atom_tr)      # dictation sentence with an inner comma: keep comma and capital (byte-equal to the audio text)
             body = strip_punct(atom_tr)
             keep_case = tested_src == strip_punct(self.id_text[aid])
             return body if keep_case or self.p.cs else body.casefold()
