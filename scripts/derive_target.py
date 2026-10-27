@@ -1770,6 +1770,18 @@ class UnitDeriver:
         return re.sub(rf"(?<![\w{DEV}])(" + "|".join(map(re.escape, low)) + rf")(?![\w{DEV}])", lambda m: low[m.group(1)], v) if low and not v.startswith("<<") else v
 
     def bank(self, e, ck, tested_src, tested_tr, alts, ctx):
+        ov = (self.p.tr_author.get(ck + "#bank") or "") if not tested_tr.startswith("<<") else ""
+        if ov:          # authored tiles: a gendered word order exercise offers both forms (zostałem | zostałam); the canonical sentence must stay buildable
+            tiles = [x.strip() for x in ov.split("|") if x.strip()]
+            pool = [t.casefold() for t in tiles]
+            for t in (t.casefold() for t in tokens(tested_tr)):
+                if t in pool:
+                    pool.remove(t)
+                else:
+                    self.flag(ck, "TILES", f"authored #bank {tiles} cannot build the answer {tested_tr!r}")
+                    break
+            e["word_bank"] = tiles
+            return
         src_tokens = [t.casefold() for t in tokens(tested_src)]
         bank_src = [t.casefold() for t in e["word_bank"]]
         if sorted(src_tokens) != sorted(bank_src):
