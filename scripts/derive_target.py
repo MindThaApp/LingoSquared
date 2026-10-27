@@ -2445,6 +2445,7 @@ def new_tokens(plan: Plan, built) -> tuple[dict, object]:
     Case-sensitive targets (German): a sentence-initial capital of a non-noun (`Hast`) is its own raw token. Give it
     the value `=hast` in lexemes.tr.json to map it to its citation form instead of glossing it as a noun."""
     mod = load_backfill(plan)
+    gl_table = getattr(mod, "GLOSSES" + bf_suffix(plan, mod))
     tr = load_json(plan.work / "lexemes.tr.json")
     out: dict[str, dict] = {}
     for d, R, O in built:
@@ -2455,11 +2456,11 @@ def new_tokens(plan: Plan, built) -> tuple[dict, object]:
                         raw = str(raw)
                         alias = tr.get(raw, "")
                         tok = alias[1:].strip() if alias.startswith("=") else mod.normalize(raw)
-                        if tok in mod.GLOSSES or tok in out:
+                        if tok in gl_table or tok in out:
                             continue
                         info = dict(example=t["target"]["text"], en=(O["teaching"].get(t["content_key"]) or {}).get("gloss"),
                                     unit=d.new_stem)
-                        if plan.cs and tok[:1].isupper() and tok[:1].lower() + tok[1:] in mod.GLOSSES:
+                        if plan.cs and tok[:1].isupper() and tok[:1].lower() + tok[1:] in gl_table:
                             info["hint"] = f"capitalised: gloss as a NEW noun, or write '={tok[:1].lower() + tok[1:]}' if it is only a sentence-initial form"
                         elif plan.cs and tok[:1].isupper():
                             info["hint"] = "capitalised: a noun/proper noun, or '=lowercase' (and gloss that) for a sentence-initial verb/adjective/pronoun"
@@ -2491,20 +2492,34 @@ def cmd_lexemes(args):
 
 GEN_BEGIN = "# --- derive_target.py: derived units (generated; keep markers) ---"
 GEN_END = "# --- end derive_target.py ---"
+GEN_BEGIN_A2 = "# --- derive_target.py: derived A2 units (generated; keep markers) ---"
+GEN_END_A2 = "# --- end derive_target.py (A2) ---"
+
+
+def bf_suffix(plan: Plan, mod=None) -> str:
+    """"_A2" when the derived units are A2 and the target backfill keeps a separate A2 gloss table (GLOSSES_A2, POS_SETS_A2:
+    en-ar, en-de ... where A2 is its own Course), else "" (one shared table)."""
+    mod = mod or load_backfill(plan)
+    if plan.derivers and all(d.level == "a2" for d in plan.derivers) and hasattr(mod, "GLOSSES_A2") and hasattr(mod, "POS_SETS_A2"):
+        return "_A2"
+    return ""
 
 
 def write_backfill_block(plan: Plan, lex: dict[str, str], allowed: set[str] | None = None) -> Path:
     path = ROOT / f"scripts/backfill_lexemes_{plan.src_pair.split('-')[0]}_{plan.tgt}.py"
     text = path.read_text(encoding="utf-8")
+    sfx = bf_suffix(plan)
+    begin, end = (GEN_BEGIN_A2, GEN_END_A2) if sfx else (GEN_BEGIN, GEN_END)
+    names = dict(g=f"DERIVED_TARGET_GLOSSES{sfx}", p=f"DERIVED_TARGET_POS{sfx}", c=f"DERIVED_TARGET_CITATION{sfx}")
     existing: dict[str, tuple[str, str]] = {}
     cites: dict[str, str] = {}
-    if GEN_BEGIN in text:
-        block = text[text.index(GEN_BEGIN):text.index(GEN_END)]
-        m = re.search(r"DERIVED_TARGET_GLOSSES: dict\[str, str\] = (\{.*?\n\})\nDERIVED_TARGET_POS", block, re.S)
+    if begin in text:
+        block = text[text.index(begin):text.index(end)]
+        m = re.search(rf"{names['g']}: dict\[str, str\] = (\{{.*?\n\}})\n{names['p']}", block, re.S)
         g = eval(m.group(1)) if m else {}  # literal dict written by this tool
-        m2 = re.search(r"DERIVED_TARGET_POS: dict\[str, str\] = (\{.*?\n\})\n", block, re.S)
+        m2 = re.search(rf"{names['p']}: dict\[str, str\] = (\{{.*?\n\}})\n", block, re.S)
         p = eval(m2.group(1)) if m2 else {}
-        m3 = re.search(r"DERIVED_TARGET_CITATION: dict\[str, str\] = (\{.*?\n\})\n", block, re.S)
+        m3 = re.search(rf"{names['c']}: dict\[str, str\] = (\{{.*?\n\}})\n", block, re.S)
         cites = eval(m3.group(1)) if m3 else {}
         for k, v in g.items():
             existing[k] = (v, p.get(k, "noun"))
@@ -2521,18 +2536,18 @@ def write_backfill_block(plan: Plan, lex: dict[str, str], allowed: set[str] | No
     gl = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[0], ensure_ascii=False)},\n" for k, v in sorted(existing.items())) + "}"
     ps = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v[1])},\n" for k, v in sorted(existing.items()) if v[1] != "noun") + "}"
     cs = "{\n" + "".join(f"    {json.dumps(k, ensure_ascii=False)}: {json.dumps(v, ensure_ascii=False)},\n" for k, v in sorted(cites.items())) + "}"
-    cite_code = ("if DERIVED_TARGET_CITATION and \"CITATION_FORMS\" in globals():\n    CITATION_FORMS.update(DERIVED_TARGET_CITATION)\n"
+    cite_code = (f"if {names['c']} and \"CITATION_FORMS\" in globals():\n    CITATION_FORMS.update({names['c']})\n"
                  if cites else "")
-    block = (f"{GEN_BEGIN}\n"
-             f"DERIVED_TARGET_GLOSSES: dict[str, str] = {gl}\nDERIVED_TARGET_POS: dict[str, str] = {ps}\n"
-             f"DERIVED_TARGET_CITATION: dict[str, str] = {cs}\n" + cite_code +
-             "for _tok, _gloss in DERIVED_TARGET_GLOSSES.items():\n    GLOSSES.setdefault(_tok, _gloss)\n"
-             "for _tok, _pos in DERIVED_TARGET_POS.items():\n    POS_SETS.setdefault(_pos, set()).add(_tok)\n"
-             f"{GEN_END}\n")
-    if GEN_BEGIN in text:
-        text = text[:text.index(GEN_BEGIN)] + block + text[text.index(GEN_END) + len(GEN_END) + 1:]
+    block = (f"{begin}\n"
+             f"{names['g']}: dict[str, str] = {gl}\n{names['p']}: dict[str, str] = {ps}\n"
+             f"{names['c']}: dict[str, str] = {cs}\n" + cite_code +
+             f"for _tok, _gloss in {names['g']}.items():\n    GLOSSES{sfx}.setdefault(_tok, _gloss)\n"
+             f"for _tok, _pos in {names['p']}.items():\n    POS_SETS{sfx}.setdefault(_pos, set()).add(_tok)\n"
+             f"{end}\n")
+    if begin in text:
+        text = text[:text.index(begin)] + block + text[text.index(end) + len(end) + 1:]
     else:
-        anchor = 'POS_SETS["noun"] = set(GLOSSES)'
+        anchor = f'POS_SETS{sfx}["noun"] = set(GLOSSES{sfx})'
         if anchor not in text:
             raise SystemExit(f"{path.name}: anchor {anchor!r} not found")
         text = text.replace(anchor, block + "\n" + anchor, 1)
