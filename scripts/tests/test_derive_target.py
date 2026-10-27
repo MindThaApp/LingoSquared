@@ -1243,3 +1243,46 @@ def test_authored_bank_overrides_derived_tiles_and_must_cover_the_answer(dt):
     fake.p.tr_author["k#bank"] = "W | niedzielę | zostałam | w | domu"
     dt.UnitDeriver.bank(fake, e, "k", "Zondag ben ik thuisgebleven", "W niedzielę zostałem w domu", [], {})
     assert flags and flags[0][1] == "TILES"
+
+BACKFILL_A2_TABLES = '''"""fixture: A2 is its own course with separate gloss tables (en-ar, en-de)"""
+GLOSSES = {"hola": "hello"}
+POS_SETS = {"verb": {"hola"}}
+GLOSSES_A2 = {"adios": "bye"}
+POS_SETS_A2 = {"particle": {"adios"}}
+
+
+def normalize(token):
+    return token.lower()
+
+
+POS_SETS["noun"] = set(GLOSSES) - set().union(*POS_SETS.values())
+POS_SETS_A2["noun"] = set(GLOSSES_A2) - set().union(*POS_SETS_A2.values())
+'''
+
+
+def test_a2_units_use_the_separate_a2_backfill_tables_when_the_target_has_them(dt, tmp_path):
+    c = tmp_path / "docs/content"
+    for path, obj in ((c / "realizations/nl/a2_unit05_test.yaml", src_realization()), (c / "overlays/en-nl/a2_unit05.yaml", src_overlay())):
+        path.write_text(yaml.safe_dump(obj, allow_unicode=True, sort_keys=False).replace("nl.a1.", "nl.a2.")
+                        .replace("en-nl.a1.", "en-nl.a2.").replace("A1", "A2"), encoding="utf-8")
+    (tmp_path / "scripts/backfill_lexemes_en_es.py").write_text(BACKFILL_A2_TABLES, encoding="utf-8")
+    author = {k.replace("nl.a1.", "nl.a2."): v for k, v in AUTHOR.items()}
+    a = args(tmp_path, units=["a2_unit05_test"], first_unit=90)
+    dt.cmd_extract(a)
+    work = Path(a.work)
+    src = json.loads((work / "atoms.src.json").read_text(encoding="utf-8"))
+    (work / "atoms.tr.json").write_text(json.dumps({i: ATOMS[t] for i, t in src.items() if t in ATOMS}, ensure_ascii=False), encoding="utf-8")
+    (work / "author.tr.json").write_text(json.dumps(author, ensure_ascii=False), encoding="utf-8")
+    (work / "lexemes.tr.json").write_text("{}", encoding="utf-8")
+    dt.cmd_lexemes(a)
+    lex = json.loads((work / "lexemes.src.json").read_text(encoding="utf-8"))
+    assert lex                                                                           # new tokens are listed against the A2 table
+    (work / "lexemes.tr.json").write_text(json.dumps({t: "g | verb" for t in lex}, ensure_ascii=False), encoding="utf-8")
+    dt.cmd_inject(a)
+    bf = (tmp_path / "scripts/backfill_lexemes_en_es.py").read_text(encoding="utf-8")
+    assert dt.GEN_BEGIN_A2 in bf and dt.GEN_BEGIN not in bf
+    assert bf.index(dt.GEN_BEGIN_A2) < bf.index('POS_SETS_A2["noun"] = set(GLOSSES_A2)')
+    ns: dict = {}
+    exec(bf, ns)
+    assert ns["GLOSSES_A2"]["adios"] == "bye" and set(lex) <= set(ns["GLOSSES_A2"])      # derived glosses land in the A2 table
+    assert list(ns["GLOSSES"]) == ["hola"]                                               # the A1 table is untouched
