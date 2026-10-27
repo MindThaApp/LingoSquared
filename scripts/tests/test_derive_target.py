@@ -1286,3 +1286,19 @@ def test_a2_units_use_the_separate_a2_backfill_tables_when_the_target_has_them(d
     exec(bf, ns)
     assert ns["GLOSSES_A2"]["adios"] == "bye" and set(lex) <= set(ns["GLOSSES_A2"])      # derived glosses land in the A2 table
     assert list(ns["GLOSSES"]) == ["hola"]                                               # the A1 table is untouched
+
+def test_dictation_tested_text_keeps_inner_comma_and_capital_of_the_audio_atom(dt):
+    """A2 dictation whose sentence has an inner comma: tested_text must equal the audio text up to boundary punctuation."""
+    atom = "Mai întâi lucrez, apoi fac sport."
+    stub = SimpleNamespace(
+        atom_norms={dt.norm("Eerst werk ik, daarna ga ik sporten"): "a_1"},
+        id_text={"a_1": "Eerst werk ik, daarna ga ik sporten."},
+        T_by_norm=lambda s: atom,
+        p=SimpleNamespace(cs=False),
+    )
+    out = dt.UnitDeriver.tested(stub, {"type": "dictation"}, "k", "Eerst werk ik, daarna ga ik sporten", None, None, {})
+    assert out == "Mai întâi lucrez, apoi fac sport"
+    stub.id_text = {"a_1": "Hoe laat is het?"}
+    stub.T_by_norm = lambda s: "Cât este ceasul?"
+    stub.atom_norms = {dt.norm("Hoe laat is het"): "a_1"}
+    assert dt.UnitDeriver.tested(stub, {"type": "dictation"}, "k", "Hoe laat is het", None, None, {}) == "Cât este ceasul"
