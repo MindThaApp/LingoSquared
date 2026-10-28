@@ -1,0 +1,397 @@
+schema_version: '1.0'
+pack_key: practice.fr-es.a1.unit06
+source_language: fr
+target_language: es
+unit_content_key: es.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u06
+    - w_sándwich
+    - w_ensalada
+    - w_sopa
+    - w_agua
+    - w_café
+    - w_postre
+    - w_pastel
+    - w_comida
+    - w_menú
+    - w_cuenta
+    - w_quieres
+    - w_provecho
+    - w_quiero
+    - w_comer
+    - w_podemos
+    - w_ver
+    - w_quieren
+    - w_incluido
+slot_presets:
+  food: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+  food_m: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_café
+      - w_pastel
+  verbs: &id009
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u06
+  production: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+      - w_quiero
+      - w_comer
+      - w_podemos
+      - w_ver
+      - w_quieren
+      - w_incluido
+  quieres: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_quieres
+  menu: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_menú
+  provecho: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_provecho
+  cuenta: &id006
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cuenta
+  pastel: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pastel
+templates:
+- content_key: practice.fr-es.es.a1.unit06.lesson01.choose.001
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Agua est féminin, mais prend el au singulier parce qu’il commence par un a tonique : el agua fría.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson01.listen.002
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Café, menú et sándwich portent un accent écrit, qui indique la syllabe tonique.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson02.order.001
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: word_order
+  frame:
+    text: Quiero un {item}, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Un accompagne les noms masculins (un café) ; les noms féminins prennent una (una ensalada).
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson02.translate.002
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: translation
+  frame:
+    text: 'Je voudrais ceci : {item}, s’il vous plaît.'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Une autre façon courante de commander consiste à employer para mí suivi du plat : para mí, un café.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson02.fill.003
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: fill_in_blank
+  frame:
+    text: ¿Qué {item} comer? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Le radical de Querer change : quiero, quieres, quiere, mais queremos.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson03.order.001
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: word_order
+  frame:
+    text: ¿Podemos ver el {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Podemos ver el {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Pouvons-nous voir la carte ? La tournure ¿Podemos + infinitive? permet de demander quelque chose poliment.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson03.translate.002
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: translation
+  frame:
+    text: Bon appétit !
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¡Buen {item}!
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Buen provecho se dit aux personnes qui s’apprêtent à manger, même à des inconnus assis à la table voisine.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson04.fill.001
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: fill_in_blank
+  frame:
+    text: La {item}, por favor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: En Espagne, le serveur attend généralement que vous demandiez l’addition.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson04.translate.002
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: translation
+  frame:
+    text: En dessert, je veux du gâteau.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De postre quiero {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: De postre signifie comme dessert ; ici, aucun article n’est nécessaire devant pastel.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson05.match.001
+  lesson_content_key: es.a1.unit06.lesson05.leer_el_menu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: En Espagne, le menú del día est une formule déjeuner à prix fixe comprenant une entrée, un plat principal, un postre et généralement du pain et une boisson.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson06.translate.001
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Comida signifie à la fois nourriture et repas de midi, qui est le repas principal de la journée en Espagne.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson06.choose.002
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Le serveur dit ¿Qué quieren comer? parce que quieren s’adresse à vous deux.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-es.es.a1.unit06.lesson06.match.003
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Quiero, quieres et quieren sont toutes des formes de querer, vouloir.
+    language_code: fr
+    direction: ltr
