@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import functools
+import unicodedata
 import importlib
 import json
 import os
@@ -75,6 +76,10 @@ EN_STRONG = {"the", "is", "this", "with", "your", "you", "what", "how"}
 
 ALWAYS_LEARNER_CROSS = dd.ALWAYS_LEARNER | {"glosses", "title_unit", "correct_response_value"}
 CONTRAST = re.compile(r"\b(English|English-speaking|in English|Spanish|German|Dutch|French|Italian)\b")
+
+
+def fold(t: str) -> str:
+    return "".join(c for c in unicodedata.normalize("NFD", t) if not unicodedata.combining(c))
 
 
 def norm_tokens(s: str) -> list[str]:
@@ -182,6 +187,16 @@ def target_of(unit) -> str:
     return _target_of_path(unit.realization)
 
 
+def english_hint(text: str) -> bool:
+    """Target-coded prompt block that ends in a parenthesised English hint: "...___ del taller. (before, since ...)"."""
+    m = re.search(r"\(([^()]*)\)\s*$", text)
+    if not m:
+        return False
+    hint = m.group(1)
+    return bool(norm_tokens(hint)) and (english_prose(hint) or en_fraction(hint) >= 0.8
+                                         or re.match(r"(the|a|an|to) ", hint) is not None and en_fraction(hint) >= 0.5)
+
+
 @functools.lru_cache(maxsize=None)
 def foreign_prompt_blocks(real_path: Path, target: str) -> dict[str, tuple]:
     """exercise content_key -> ((block index, text), ...) of realization prompt blocks that show learner-language text:
@@ -196,11 +211,25 @@ def foreign_prompt_blocks(real_path: Path, target: str) -> dict[str, tuple]:
                 for i, b in enumerate(blocks or []):
                     if not (isinstance(b, dict) and isinstance(b.get("text"), str) and b["text"].strip()):
                         continue
-                    if b.get("language_code") not in (None, target) or (
-                            english_prose(b["text"]) and re.search(r"\((the|a|an|to) [^)]*\)\s*$", b["text"])):
+                    if b.get("language_code") not in (None, target) or english_hint(b["text"]):
                         found.append((i, b["text"], b.get("language_code") not in (None, target)))
                 if found:
                     out[ex["content_key"]] = tuple(found)
+    return out
+
+
+@functools.lru_cache(maxsize=None)
+def foreign_teaching_targets(real_path: Path, target: str) -> dict[str, tuple]:
+    """teaching card content_key -> (kind, text) of realization cards whose body (`target` block) is written in a learner
+    language (English grammar_note cards of the es / nl realizations); an overlay localizes them with `target_text`."""
+    out = {}
+    for unit in dd.load(real_path).get("units", []):
+        for lesson in unit.get("lessons", []):
+            for item in lesson.get("teaching", []) or []:
+                b = item.get("target") if isinstance(item, dict) else None
+                if isinstance(b, dict) and isinstance(b.get("text"), str) and b["text"].strip() \
+                        and b.get("language_code") not in (None, target):
+                    out[item["content_key"]] = (item.get("kind", "card"), b["text"])
     return out
 
 
@@ -282,6 +311,14 @@ def build_cross_overlay_occs(unit, witnesses, src_code, ridx, y, stats):
             o = dd.Occ(unit.stem, ("exercises", ck), "prompt_block", f[1], ctx, dd.container_set(container, k), "ov")
             o.contrastive = bool(CONTRAST.search(f[1]))  # type: ignore[attr-defined]
             occs.append(o)
+    for ck, (kind, text) in foreign_teaching_targets(unit.realization, target_of(unit)).items():
+        entry = y.setdefault("teaching", {}).setdefault(ck, {})
+        entry["target_text"] = text                                    # card body written in English in the realization
+        stats["strings_total"] += 1
+        o = dd.Occ(unit.stem, ("teaching", ck), "target_text", text,
+                   f"{kind} | card body shown to the learner (keep any target-language words)", dd.container_set(entry, "target_text"), "ov")
+        o.contrastive = bool(CONTRAST.search(text))  # type: ignore[attr-defined]
+        occs.append(o)
     sides = matching_sides(unit.realization, target_of(unit))
     real_pairs = {}
     for ru in dd.load(unit.realization).get("units", []):
@@ -1127,7 +1164,7 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> i
 # validate
 # ---------------------------------------------------------------------------
 STRICT_LEARNER_ROLES = {"instruction", "feedback", "note", "gloss", "example_gloss", "course_description",
-                        "prompt_block", "glosses", "accepted_note"}
+                        "prompt_block", "glosses", "accepted_note", "target_text"}
 
 
 def english_prose(v: str) -> bool:
@@ -1153,7 +1190,9 @@ def learner_leftovers(pair: str) -> list[str]:
                 continue
             y, s = dd.load(p), dd.load(sp)
             ys, ss = dict(dd.walk_strings(y)), dict(dd.walk_strings(s))
-            added = {k for k in ys if k not in ss and len(k) > 2 and k[0] == "exercises" and k[2] in ("prompt_blocks", "pairs", "localize_pair_lefts")}
+            added = {k for k in ys if k not in ss and len(k) > 2 and (
+                k[0] == "exercises" and k[2] in ("prompt_blocks", "pairs", "localize_pair_lefts")
+                or k[0] == "teaching" and k[2] == "target_text")}
             ys = {k: v for k, v in ys.items() if k not in added and k[0] not in ("review", "generation_provenance", "status")}
             ss = {k: v for k, v in ss.items() if k[0] not in ("review", "generation_provenance", "status")}
             if set(ys) != set(ss):
@@ -1234,12 +1273,20 @@ def target_strings(target: str) -> frozenset:
     return frozenset(out)
 
 
-def unchanged_english(cross_json: Path, sib_json: Path, target: str) -> list[str]:
+# Strings that legitimately equal the English sibling because the learner language spells them identically (loanwords/cognates
+# shared by English and the learner language).  Keyed by the learner language; each entry carries its reason.
+UNCHANGED_OK = {
+    ("fr", "football / yoga"),      # gloss of es "fútbol / yoga": French uses the same two words as English
+}
+
+
+def unchanged_english(cross_json: Path, sib_json: Path, target: str, learner: str = "") -> list[str]:
     """Strings of the compiled cross course that equal the compiled en-<target> string at the same place and read as
     English (any length: 'the beach'), unless every word is also a word of the target language (cognates, names)."""
     a = json.loads(cross_json.read_text(encoding="utf-8"))
     b = json.loads(sib_json.read_text(encoding="utf-8"))
     tv = target_vocab(target)
+    tv_f = {fold(t) for t in tv}          # accent-insensitive: "Soy de Mexico" is the target spelling México, not English
     ts = target_strings(target)
     out = []
 
@@ -1253,12 +1300,12 @@ def unchanged_english(cross_json: Path, sib_json: Path, target: str) -> list[str
                 walk(u, v, trail + [str(i)])
         elif isinstance(x, str) and x == y and not re.match(r"^[a-z0-9_.\-]+$", x):
             toks = norm_tokens(x)
-            if x.strip().casefold() in ts:
+            if x.strip().casefold() in ts or (learner, x.strip().casefold()) in UNCHANGED_OK:
                 return
             words_ = re.sub(r"[.!?,;:]", " ", x).split()
             if len(words_) <= 3 and words_ and all(w[:1].isupper() for w in words_):
                 return                                    # names and sign texts ("Zoo Central.")
-            if toks and (len(toks) > 1 or not x[:1].isupper()) and en_fraction(x) >= 0.6 and not all(t in tv for t in toks) and not trail[-1] in ("language_code", "direction"):
+            if toks and (len(toks) > 1 or not x[:1].isupper()) and en_fraction(x) >= 0.6 and not all(fold(t) in tv_f for t in toks) and not trail[-1] in ("language_code", "direction"):
                 out.append(f"compiled {'/'.join(trail)[-60:]}: {x[:70]!r} [unchanged English]")
 
     walk(a, b, [])
@@ -1293,18 +1340,87 @@ def cmd_validate(args):
         r = subprocess.run([py, "scripts/compile_content.py", "compile", "--realization", *sreals, "--overlay", *sovs,
                             "--out", f"/tmp/derive_cross_sib_{sg}.json"], cwd=ROOT, capture_output=True, text=True)
         if r.returncode == 0:
-            left += unchanged_english(Path(f"/tmp/derive_cross_{g}.json"), Path(f"/tmp/derive_cross_sib_{sg}.json"), target)
+            left += unchanged_english(Path(f"/tmp/derive_cross_{g}.json"), Path(f"/tmp/derive_cross_sib_{sg}.json"), target, args.new.split("-")[0])
     for h in left[:60]:
         print("  " + h)
     print(f"cross-leftover  {len(left)} string(s)")
     sys.exit(1 if fails or left else 0)
 
 
+def cmd_cards(args):
+    """Retrofit an existing cross pair with the overlay text that lives in the shared realization: English teaching card bodies
+    (`teaching.<key>.target_text`) and English cloze hints (`exercises.<key>.prompt_blocks`).  Translates only what the pair's
+    overlays do not carry yet (Codex / Claude), then writes it into the existing overlay files.  A new pair needs none of this:
+    `extract` already emits these items."""
+    target = args.new.split("-")[1]
+    cm = dd.read_manifest(dd.MANIFEST)
+    work = Path(args.work) / f"{args.new}-cards"
+    work.mkdir(parents=True, exist_ok=True)
+    (work / "GUIDE.md").write_text(cross_guide(f"en-{target}", args.new.split("-")[0], target), encoding="utf-8")
+    plan = {}                                          # file name -> (overlay path, [(id, kind, key, index, text)])
+    for g in dd.group_names(args.new, args.levels):
+        reals, ovs = cm[g]
+        for real, ov in zip(reals, ovs):
+            real, ov = ROOT / real, ROOT / ov
+            y = dd.load(ov)
+            todo = []
+            for ck, (kind, text) in foreign_teaching_targets(real, target).items():
+                if not (y.get("teaching", {}).get(ck) or {}).get("target_text"):
+                    todo.append(("card", ck, None, text))
+            for ck, found in foreign_prompt_blocks(real, target).items():
+                have = (y.get("exercises", {}).get(ck) or {}).get("prompt_blocks")
+                if have:
+                    continue
+                for i, text, foreign in found:
+                    todo.append(("hint" if not foreign else "block", ck, i, text))
+            if todo:
+                plan[ov.stem] = (ov, [(f"{n}", *t) for n, t in enumerate(todo, 1)])
+    for name, (ov, rows) in plan.items():
+        items = []
+        for n, kind, ck, i, text in rows:
+            items.append(["#", f"{kind} of {ck}"])
+            items.append([f"u{n}", "target_text" if kind == "card" else "prompt_block", text])
+        dd.write_src(work / f"{name}.src.json", {"direction": f"en-{target} -> {args.new}", "note": "retrofit: cards and hints"}, items)
+    total = sum(len(r) for _, r in plan.values())
+    print(f"cards: {total} item(s) in {len(plan)} file(s)")
+    if not total:
+        return
+    cargs = argparse.Namespace(**vars(args))
+    cargs.new = f"{args.new}-cards"
+    backend = "claude" if getattr(args, "claude", False) else "codex"
+    if getattr(args, "codex", False) or getattr(args, "claude", False):
+        left = cmd_translate_codex(cargs, backend=backend)
+        if left:
+            sys.exit(2)
+    # write
+    done = 0
+    for name, (ov, rows) in plan.items():
+        tr = dd.load_tr(work, name)
+        y = dd.load(ov)
+        blocks_by_key: dict[str, dict] = {}
+        for n, kind, ck, i, text in rows:
+            t = tr.get(f"u{n}")
+            if t is None:
+                continue
+            if kind == "card":
+                y.setdefault("teaching", {}).setdefault(ck, {})["target_text"] = t
+            elif kind == "hint":
+                blocks_by_key.setdefault(ck, {})[str(i)] = t
+            else:
+                blocks_by_key.setdefault(ck, {}).setdefault("__list__", []).append(t)
+            done += 1
+        for ck, d in blocks_by_key.items():
+            y.setdefault("exercises", {}).setdefault(ck, {})["prompt_blocks"] = d.get("__list__") or d
+        if any(tr.get(f"u{n}") is not None for n, *_ in rows):
+            dd.dump(y, ov)
+    print(f"cards: wrote {done} item(s)")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     for name, fn in (("extract", cmd_extract), ("translate", cmd_translate), ("status", dd.cmd_status), ("check", cmd_check), ("plan", cmd_plan), ("todo", cmd_todo), ("merge", cmd_merge), ("batch", cmd_batch),
-                     ("inject", cmd_inject), ("validate", cmd_validate)):
+                     ("inject", cmd_inject), ("validate", cmd_validate), ("cards", cmd_cards)):
         sp = sub.add_parser(name)
         if name == "batch":
             sp.add_argument("--pairs", required=True, type=lambda s: s.split(","))
@@ -1324,7 +1440,11 @@ def main():
         sp.add_argument("--work", default=str(WORK))
         if name == "check":
             sp.add_argument("files", nargs="*", help="file stems, e.g. a1_unit05 shared glosses (default: all)")
-        if name in ("translate", "batch"):
+        if name == "cards":
+            sp.add_argument("--codex", action="store_true")
+            sp.add_argument("--claude", action="store_true")
+            sp.add_argument("--batch", type=int, default=120)
+        if name in ("translate", "batch", "cards"):
             sp.add_argument("--codex-model", default=None, help="model for --codex (default: the Codex CLI default)")
             sp.add_argument("--claude-model", default="sonnet", help="model for --claude")
             sp.add_argument("--workers", type=int, default=4, help="parallel codex/claude calls")
