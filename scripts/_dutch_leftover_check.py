@@ -156,16 +156,52 @@ def key_slugs(node, path=()):
 WORD3 = re.compile(r"[^\W\d_]{3,}", re.UNICODE)
 
 
+def visible_strings(y):
+    """String leaves a learner can see: provenance / review notes / keys are excluded. They quote Dutch words
+    ("no longer contains the answer word kaartje", "Welke zin zegt de medewerker") and used to make those words
+    look like English or target vocabulary, which hid real leftovers such as 'Haar means hair' or 'Nina zegt: ...'."""
+    for path, t in dd.walk_strings(y):
+        if _visible(path) and not any(isinstance(p, str) and p in HIDDEN_SECTIONS for p in path[:1]):
+            yield path, t
+
+
+HIDDEN_SECTIONS = {"review", "generation_provenance"}
+
+
+def _english_core() -> set:
+    v = set(dd.CORE_EN)
+    for p in (CONTENT / "realizations" / "en").glob("*.yaml"):
+        for _, t in visible_strings(load(p)):
+            v.update(re.findall(r"[a-z]+(?:'[a-z]+)?", t.lower()))
+    return v
+
+
 @functools.lru_cache(maxsize=None)
-def english_words() -> frozenset:
-    """English vocabulary: all English realizations plus words found in >= 2 of the non-derived English-learner courses
-    (en-ar/en-fa/en-hi/en-prs), where a quoted Dutch leftover cannot be common."""
+def english_words_lenient() -> frozenset:
+    """Vocabulary for the English-side pair lint only: includes words quoted in provenance / review notes."""
     words = set(dd.english_vocab())
     per = []
     for pair in ("en-ar", "en-fa", "en-hi", "en-prs"):
         c: set[str] = set()
         for f in (CONTENT / "overlays" / pair).glob("*.yaml"):
             for _p, t in dd.walk_strings(load(f)):
+                c.update(WORD3.findall(t.casefold()))
+        per.append(c)
+    from collections import Counter
+    cnt = Counter(w for c in per for w in c)
+    return frozenset(words | {w for w, n in cnt.items() if n >= 2})
+
+
+@functools.lru_cache(maxsize=None)
+def english_words() -> frozenset:
+    """English vocabulary: all English realizations plus words found in >= 2 of the non-derived English-learner courses
+    (en-ar/en-fa/en-hi/en-prs), where a quoted Dutch leftover cannot be common."""
+    words = _english_core()
+    per = []
+    for pair in ("en-ar", "en-fa", "en-hi", "en-prs"):
+        c: set[str] = set()
+        for f in (CONTENT / "overlays" / pair).glob("*.yaml"):
+            for _p, t in visible_strings(load(f)):
                 c.update(WORD3.findall(t.casefold()))
         per.append(c)
     from collections import Counter
@@ -218,7 +254,7 @@ def target_vocab(target: str) -> frozenset:
     """Every word of the target realizations, English prompt text included (a Dutch word that the course itself uses is no leftover)."""
     voc: set[str] = set()
     for f in sorted((CONTENT / "realizations" / target).glob("*.yaml")):
-        for _p, t in dd.walk_strings(load(f)):
+        for _p, t in visible_strings(load(f)):
             voc.update(WORD3.findall(t.casefold()))
     return frozenset(voc)
 
@@ -226,11 +262,15 @@ def target_vocab(target: str) -> frozenset:
 def nl_only_tokens(text: str, target: str) -> list[str]:
     toks = WORD3.findall(re.sub(r"\{[^}]*\}", " ", text).casefold())
     dv, ev, tv = dutch_vocab(), english_words(), target_vocab(target)
-    return sorted({t for t in toks if t in dv and t not in ev and t not in tv and t not in NAMES})
+    own = TARGET_OWN.get(target, frozenset())
+    return sorted({t for t in toks if t in dv and t not in ev and t not in tv and t not in NAMES and t not in own})
 
 
 # Loanwords / cognates / names that are ordinary English (or course-neutral) although they occur in the Dutch course.
-NAMES = frozenset("loop meter sms pico centrale chef".split())
+NAMES = frozenset("loop meter sms pico centrale chef calque theater workshop tekst anna naam baat hun".split())
+# Targets whose own words (or romanisations) coincide with Dutch-only vocabulary: German 'das Haar'; Hindi/Arabic/Persian
+# transliterations (naam, baat, hun, anna: NAMES above) are target text quoted in English notes, never Dutch.
+TARGET_OWN = {"de": frozenset({"haar"})}
 
 
 # ---------------------------------------------------------------------------
@@ -291,7 +331,7 @@ def english_loose() -> frozenset:
                 for _p, t in dd.walk_strings(load(f)):
                     seen.update(WORD3.findall(t.casefold()))
             cnt.update(seen)
-    return frozenset(english_words() | {w for w, n in cnt.items() if n >= 3})
+    return frozenset(english_words_lenient() | {w for w, n in cnt.items() if n >= 3})
 
 
 def _tgt_share(text: str, target: str, strip_quotes: bool = False) -> float:
