@@ -1968,6 +1968,73 @@ def validate_prompt_block_localization(
                         )
 
 
+def localize_teaching_target(
+    target: dict[str, Any],
+    override: Any,
+    source_language: str,
+    target_language: str,
+) -> dict[str, Any]:
+    """Swap a learner-language teaching card body (e.g. an English grammar_note) for the overlay's `target_text`.
+
+    Same idea as `prompt_blocks`: a realization card whose `target` block is written in a language other than the
+    target language (language_code en) is shown to learners of another language in the overlay's own text.
+    """
+    if not (isinstance(override, str) and override.strip() and isinstance(target, dict)):
+        return target
+    if target.get("language_code") in (None, target_language):
+        return target  # reported by validate_teaching_target_localization
+    out = copy.deepcopy(target)
+    out["text"] = override
+    out["language_code"] = source_language
+    out["direction"] = "rtl" if source_language in RTL_LANGUAGES else "ltr"
+    return out
+
+
+def validate_teaching_target_localization(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """A teaching card body written in a learner language must be localized when the overlay's source language differs.
+
+    `target_text` is the overlay teaching field for it (a non-empty string). It is only valid on cards whose realization
+    `target` block is not written in the target language.
+    """
+    source_language = overlay.get("source_language")
+    target_language = realization.get("target_language") or overlay.get("target_language")
+    teaching_overlays = overlay.get("teaching")
+    if not isinstance(teaching_overlays, dict):
+        teaching_overlays = {}
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for item in lesson.get("teaching", []) or []:
+                if not isinstance(item, dict):
+                    continue
+                key = item.get("content_key", "<unknown>")
+                block = item.get("target")
+                foreign = (
+                    isinstance(block, dict)
+                    and isinstance(block.get("text"), str)
+                    and block["text"].strip()
+                    and block.get("language_code") not in (None, target_language)
+                )
+                item_overlay = teaching_overlays.get(key, {})
+                override = item_overlay.get("target_text") if isinstance(item_overlay, dict) else None
+                location = f"overlay.teaching.{key}.target_text"
+                if override is not None:
+                    if not isinstance(override, str) or not override.strip():
+                        report.error(location, "target_text must be a non-empty string")
+                    elif not foreign:
+                        report.error(location, "target_text is only valid on a card whose realization target block is written in a learner language")
+                    continue
+                if foreign and block.get("language_code") != source_language:
+                    report.error(
+                        f"realization.teaching.{key}.target",
+                        f"card body is written in {block.get('language_code')!r} but the overlay's source language is "
+                        f"{source_language!r}; add `target_text` to the overlay teaching entry",
+                    )
+
+
 def validate_matching_pairs_overlay_overrides(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -4377,8 +4444,11 @@ def compile_teaching_item(
     item: dict[str, Any],
     item_overlay: dict[str, Any],
     source_language: str,
+    target_language: str | None = None,
 ) -> dict[str, Any]:
     target = copy.deepcopy(item["target"])
+    if target_language:
+        target = localize_teaching_target(target, item_overlay.get("target_text"), source_language, target_language)
     validate_dialogue_teaching_card(
         {
             "kind": item["kind"],
@@ -4802,6 +4872,7 @@ def compile_import_request(
                         item,
                         teaching_overlays.get(item["content_key"], {}),
                         source_language,
+                        realization_document["target_language"],
                     )
                     for item in lesson.get("teaching", [])
                 ]
@@ -4930,6 +5001,7 @@ def validate_documents(
     validate_matching_pairs_confusable_lefts(realization, report)
     validate_matching_pairs_overlay_overrides(realization, overlay, report)
     validate_prompt_block_localization(realization, overlay, report)
+    validate_teaching_target_localization(realization, overlay, report)
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
     validate_untaught_vocabulary(
         realization,
