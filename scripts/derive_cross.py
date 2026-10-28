@@ -19,6 +19,7 @@ specific:
 
     python3 scripts/derive_cross.py extract  --new es-fr --levels a1
     python3 scripts/derive_cross.py translate --new es-fr          # or fill the *.tr.json files otherwise
+    python3 scripts/derive_cross.py translate --new fr-es --codex  # Codex CLI (ChatGPT plan), resumable
     python3 scripts/derive_cross.py inject   --new es-fr --levels a1
     python3 scripts/derive_cross.py validate --new es-fr --levels a1
 
@@ -33,8 +34,13 @@ import argparse
 import functools
 import importlib
 import json
+import os
 import re
+import subprocess
 import sys
+import tempfile
+import threading
+import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
@@ -575,6 +581,12 @@ def cmd_batch(args):
         if args.gemini:
             a.model, a.batch = args.model, args.batch
             cmd_translate(a)
+        elif args.codex:
+            a.sibling = f"en-{pair.split('-')[1]}"
+            cmd_translate_codex(a)
+            if Path(args.work, pair, "codex-stats.json").exists() and json.loads(Path(args.work, pair, "codex-stats.json").read_text()).get("quota"):
+                print("  usage limit reached: stopping the batch")
+                break
         work = Path(args.work) / pair
         miss = 0
         for src in work.glob("*.src.json"):
@@ -818,6 +830,9 @@ def gemini_call(model: str, prompt: str, key: str) -> str:
 
 
 def cmd_translate(args):
+    if getattr(args, "codex", False):
+        left = cmd_translate_codex(args)
+        sys.exit(2 if left else 0)
     work = Path(args.work) / args.new
     guide = (work / "GUIDE.md").read_text(encoding="utf-8")
     key = gemini_key()
@@ -859,6 +874,205 @@ def cmd_translate(args):
             tr.update({k: v for k, v in out.items() if isinstance(v, str)})
             (work / f"{name}.tr.json").write_text(json.dumps(tr, ensure_ascii=False, indent=0), encoding="utf-8")
         print(f"{name}: {len(todo)} translated")
+
+
+# ---------------------------------------------------------------------------
+# translate (Codex CLI, `codex exec`)
+# ---------------------------------------------------------------------------
+CODEX_SCHEMA = {
+    "type": "object", "additionalProperties": False, "required": ["items"],
+    "properties": {"items": {"type": "array", "items": {
+        "type": "object", "additionalProperties": False, "required": ["id", "t"],
+        "properties": {"id": {"type": "string"}, "t": {"type": "string"}}}}},
+}
+QUOTA_RE = re.compile(r"usage limit|quota|exceeded your|insufficient_quota|credits", re.I)
+RATE_RE = re.compile(r"rate.?limit|429|too many requests|overloaded|try again", re.I)
+
+
+class CodexQuotaExhausted(RuntimeError):
+    """The ChatGPT plan has no Codex usage left (retrying is pointless until the reset time in the message)."""
+
+
+def codex_call(prompt: str, model: str | None = None, effort: str = "low", timeout: int = 900) -> tuple[str, dict]:
+    """One non-interactive `codex exec`: read-only sandbox, empty scratch cwd (no repo access), no user config/rules, nothing
+    persisted, final message constrained by CODEX_SCHEMA.  Returns (final message text, {"tokens": n, "events": [...]}).
+    Raises CodexQuotaExhausted on a hard usage limit and RuntimeError("rate: ...") on transient limits."""
+    with tempfile.TemporaryDirectory(prefix="codex-tr-") as tmp:
+        tmpd = Path(tmp)
+        schema, last = tmpd / "schema.json", tmpd / "last.txt"
+        schema.write_text(json.dumps(CODEX_SCHEMA), encoding="utf-8")
+        cmd = ["codex", "exec", "-s", "read-only", "--ephemeral", "--skip-git-repo-check", "--ignore-user-config",
+               "--ignore-rules", "-C", str(tmpd), "--json", "--output-schema", str(schema), "-o", str(last),
+               "-c", f'model_reasoning_effort="{effort}"']
+        if model:
+            cmd += ["-m", model]
+        r = subprocess.run(cmd + ["-"], input=prompt, capture_output=True, text=True, timeout=timeout, cwd=tmp)
+        info: dict = {"tokens": 0, "events": []}
+        for line in r.stdout.splitlines():
+            try:
+                ev = json.loads(line)
+            except ValueError:
+                continue
+            if ev.get("type") in ("error", "turn.failed"):
+                info["events"].append(str((ev.get("message") or ev.get("error", {}).get("message") or ""))[:300])
+            u = ev.get("usage") or {}
+            if ev.get("type") == "turn.completed" and u:
+                info["tokens"] = int(u.get("input_tokens", 0)) + int(u.get("output_tokens", 0))
+                info["usage"] = u
+        err = " | ".join(info["events"]) or r.stderr[-300:]
+        if r.returncode != 0 or not last.exists():
+            if QUOTA_RE.search(err) and not RATE_RE.search(err.replace("try again at", "")):
+                raise CodexQuotaExhausted(err)
+            raise RuntimeError(("rate: " if RATE_RE.search(err) else "") + (err or f"exit {r.returncode}"))
+        return last.read_text(encoding="utf-8"), info
+
+
+def parse_codex_items(text: str) -> dict[str, str]:
+    data = json.loads(text)
+    return {i["id"]: i["t"] for i in data["items"] if isinstance(i.get("id"), str) and isinstance(i.get("t"), str)}
+
+
+def codex_prompt(guide: str, chunk: list, hints: dict[str, str] | None = None) -> str:
+    extra = ""
+    if hints:
+        extra = ("\nA previous attempt of these ids failed the checks below; fix exactly these problems:\n"
+                 + "\n".join(f"- {k}: {v}" for k, v in hints.items()) + "\n")
+    return (guide + "\n\nYou are a professional translator working on app text. Do NOT run commands or read files; answer from the "
+            "items below only. Return one entry for EVERY non-'#' item, using the item's `id` exactly as given, as the JSON object "
+            '{"items": [{"id": "...", "t": "<translation>"}]}. `t` is only the finished learner-facing text: no commentary, no '
+            "alternatives, no quotes added, no mention of translation.\n" + extra + "\nItems:\n"
+            + "\n".join(json.dumps(c, ensure_ascii=False) for c in chunk))
+
+
+def codex_chunks(work: Path, files: list[str], size: int) -> list[list]:
+    """Untranslated items of all files, context rows kept in front of their items, ids namespaced `file/id`, size items per chunk."""
+    chunks, chunk, n = [], [], 0
+    for name in files:
+        items = json.loads((work / f"{name}.src.json").read_text(encoding="utf-8"))["items"]
+        tr = dd.load_tr(work, name)
+        ctx = None
+        for it in items:
+            if it[0] == "#":
+                ctx = it
+                continue
+            if it[0] in tr:
+                continue
+            if ctx:
+                chunk.append(["#", f"[{name}] " + " ".join(str(x) for x in ctx[1:])])
+                ctx = None
+            chunk.append([f"{name}/{it[0]}"] + list(it[1:]))
+            n += 1
+            if n >= size:
+                chunks.append(chunk)
+                chunk, n = [], 0
+    if chunk:
+        chunks.append(chunk)
+    return chunks
+
+
+def cmd_translate_codex(args, call=None, sleep=time.sleep) -> int:
+    """Translate the missing ids of a work dir with `codex exec`.  Resumable (each finished chunk is written to NAME.tr.json at
+    once), parallel (--workers), retries with backoff on transient limits, stops cleanly on a hard usage limit.  Returns the
+    number of ids still untranslated."""
+    call = call or codex_call
+    work = Path(args.work) / args.new
+    guide = (work / "GUIDE.md").read_text(encoding="utf-8")
+    target = args.new.split("-")[1]
+    files = sorted(p.name[: -len(".src.json")] for p in work.glob("*.src.json"))
+    srcs = {n: {i[0]: i for i in json.loads((work / f"{n}.src.json").read_text(encoding="utf-8"))["items"] if i[0] != "#"} for n in files}
+    chunks = codex_chunks(work, files, args.batch)
+    stats = {"calls": 0, "failed_calls": 0, "tokens": 0, "rate_limited": 0, "lint_rejected": 0, "quota": None}
+    lock = threading.Lock()
+    stop = threading.Event()
+    t0 = time.time()
+    print(f"codex: {sum(1 for ch in chunks for c in ch if c[0] != '#')} item(s) in {len(chunks)} chunk(s), {args.workers} worker(s)")
+
+    def accept(got: dict[str, str], chunk: list, last_round: bool) -> dict[str, str]:
+        """Store lint-clean translations, return {key: problem} for the rest."""
+        bad: dict[str, str] = {}
+        ids = [c[0] for c in chunk if c[0] != "#"]
+        with lock:
+            by_file: dict[str, dict[str, str]] = {}
+            for key in ids:
+                name, iid = key.split("/", 1)
+                if key not in got or not got[key].strip():
+                    bad[key] = "missing from the answer"
+                    continue
+                src = srcs[name][iid]
+                probs = lint(src[1], src[2], got[key])
+                if got[key].strip() == src[2].strip() and english_prose(src[2]):
+                    probs.append("unchanged English")
+                if probs and not last_round:
+                    bad[key] = "; ".join(probs)
+                    stats["lint_rejected"] += 1
+                    continue
+                by_file.setdefault(name, {})[iid] = got[key]
+            for name, add in by_file.items():
+                tr = dd.load_tr(work, name)
+                tr.update(add)
+                (work / f"{name}.tr.json").write_text(json.dumps(tr, ensure_ascii=False, indent=0), encoding="utf-8")
+        return bad
+
+    def run_chunk(chunk: list) -> None:
+        todo, hints = chunk, None
+        for rnd in range(3):
+            if stop.is_set():
+                return
+            got = None
+            for attempt in range(args.retries):
+                if stop.is_set():
+                    return
+                try:
+                    text, info = call(codex_prompt(guide, todo, hints), model=args.codex_model)
+                    with lock:
+                        stats["calls"] += 1
+                        stats["tokens"] += info.get("tokens", 0)
+                    got = parse_codex_items(text)
+                    break
+                except CodexQuotaExhausted as e:
+                    with lock:
+                        stats["calls"] += 1
+                        stats["failed_calls"] += 1
+                        stats["quota"] = str(e)[:300]
+                    stop.set()
+                    return
+                except (RuntimeError, ValueError, KeyError, subprocess.TimeoutExpired) as e:
+                    with lock:
+                        stats["calls"] += 1
+                        stats["failed_calls"] += 1
+                        if str(e).startswith("rate"):
+                            stats["rate_limited"] += 1
+                    wait = min(300, 15 * 2 ** attempt)
+                    print(f"  retry {attempt + 1}/{args.retries} in {wait}s: {type(e).__name__}: {str(e)[:120]}")
+                    sleep(wait)
+            if got is None:
+                return
+            bad = accept(got, todo, last_round=(rnd == 2))
+            if not bad:
+                return
+            ids = set(bad)
+            todo = [c for c in todo if c[0] in ids or c[0] == "#"]
+            hints = bad
+
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=max(1, args.workers)) as ex:
+        list(ex.map(run_chunk, chunks))
+    left = 0
+    for n in files:
+        tr = dd.load_tr(work, n)
+        left += sum(1 for i in srcs[n] if i not in tr)
+    stats["seconds"] = round(time.time() - t0)
+    stats["left"] = left
+    sp = work / "codex-stats.json"
+    old = json.loads(sp.read_text()) if sp.exists() else {}
+    for k in ("calls", "failed_calls", "tokens", "rate_limited", "lint_rejected", "seconds"):
+        old[k] = old.get(k, 0) + stats[k]
+    old["left"], old["quota"] = left, stats["quota"]
+    sp.write_text(json.dumps(old, indent=1), encoding="utf-8")
+    print(f"codex: {stats} -> {left} item(s) untranslated")
+    if stats["quota"]:
+        print(f"codex: USAGE LIMIT reached, stopped: {stats['quota']}")
+    return left
 
 
 # ---------------------------------------------------------------------------
@@ -1047,9 +1261,10 @@ def main():
         if name == "batch":
             sp.add_argument("--pairs", required=True, type=lambda s: s.split(","))
             sp.add_argument("--gemini", action="store_true", help="translate missing ids with the Gemini API")
+            sp.add_argument("--codex", action="store_true", help="translate missing ids with the Codex CLI")
             sp.add_argument("--inject", action="store_true", help="inject pairs that are fully translated")
             sp.add_argument("--model", default="gemini-2.5-flash")
-            sp.add_argument("--batch", type=int, default=60)
+            sp.add_argument("--batch", type=int, default=120)
         elif name == "plan":
             sp.add_argument("--glosses", action="store_true")
         else:
@@ -1060,9 +1275,14 @@ def main():
         sp.add_argument("--work", default=str(WORK))
         if name == "check":
             sp.add_argument("files", nargs="*", help="file stems, e.g. a1_unit05 shared glosses (default: all)")
+        if name in ("translate", "batch"):
+            sp.add_argument("--codex-model", default=None, help="model for --codex (default: the Codex CLI default)")
+            sp.add_argument("--workers", type=int, default=4, help="parallel codex calls")
+            sp.add_argument("--retries", type=int, default=5)
         if name == "translate":
+            sp.add_argument("--codex", action="store_true", help="translate with `codex exec` (ChatGPT plan) instead of Gemini")
             sp.add_argument("--model", default="gemini-2.5-flash")
-            sp.add_argument("--batch", type=int, default=60)
+            sp.add_argument("--batch", type=int, default=120)
         if name == "inject":
             sp.add_argument("--allow-missing", action="store_true")
             sp.add_argument("--force", action="store_true")

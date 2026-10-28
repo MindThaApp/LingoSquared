@@ -78,3 +78,110 @@ def test_pair_clue_side_rule():
     assert not dc.pair_text_is_learner("la plage", True, "fr")
     assert not dc.pair_text_is_learner("zero", False, "fr")
     assert dc.pair_text_is_learner("The tea is cheaper.", False, "de")
+
+
+# ---------------------------------------------------------------------------
+# --codex translation backend (the codex call is mocked)
+# ---------------------------------------------------------------------------
+import json  # noqa: E402
+import types  # noqa: E402
+
+
+def _work(tmp_path, items_by_file):
+    w = tmp_path / "fr-es"
+    w.mkdir()
+    (w / "GUIDE.md").write_text("guide", encoding="utf-8")
+    for name, items in items_by_file.items():
+        (w / f"{name}.src.json").write_text(json.dumps({"items": items}), encoding="utf-8")
+    return w
+
+
+def _args(tmp_path, **kw):
+    base = dict(work=str(tmp_path), new="fr-es", batch=2, workers=2, retries=3, codex_model=None)
+    return types.SimpleNamespace(**{**base, **kw})
+
+
+def _echo(prompt, model=None):
+    """Fake codex: translate every item to 'ES:<text>' (keeps *spans* and placeholders)."""
+    items = [json.loads(l) for l in prompt.split("Items:\n", 1)[1].splitlines() if l.startswith("[")]
+    out = [{"id": it[0], "t": it[2].replace("Hello", "Hola")} for it in items if it[0] != "#"]
+    return json.dumps({"items": out}), {"tokens": 10}
+
+
+def test_codex_translates_all_files_in_namespaced_chunks_and_is_resumable(tmp_path):
+    w = _work(tmp_path, {"a1_unit01": [["#", "exercise"], ["u1", "instruction", "Hello there"], ["u2", "feedback", "Hello again"]],
+                         "shared": [["s1", "packtext", "Hello {item}"]]})
+    calls = []
+
+    def call(prompt, model=None):
+        calls.append(prompt)
+        return _echo(prompt)
+
+    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert json.loads((w / "a1_unit01.tr.json").read_text())["u1"] == "Hola there"
+    assert json.loads((w / "shared.tr.json").read_text())["s1"] == "Hola {item}"
+    assert len(calls) == 2                      # 3 items, batch 2
+    assert json.loads((w / "codex-stats.json").read_text())["calls"] == 2
+    calls.clear()
+    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert calls == []                          # nothing left to do on a re-run
+
+
+def test_codex_retries_transient_limits_with_backoff(tmp_path):
+    _work(tmp_path, {"shared": [["s1", "packtext", "Hello"]]})
+    state, waits = {"n": 0}, []
+
+    def call(prompt, model=None):
+        state["n"] += 1
+        if state["n"] < 3:
+            raise RuntimeError("rate: 429 too many requests")
+        return _echo(prompt)
+
+    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=waits.append) == 0
+    assert waits == [15, 30]
+    st = json.loads((tmp_path / "fr-es" / "codex-stats.json").read_text())
+    assert st["rate_limited"] == 2 and st["calls"] == 3
+
+
+def test_codex_stops_on_hard_usage_limit_and_records_it(tmp_path):
+    _work(tmp_path, {"shared": [["s1", "packtext", "Hello"], ["s2", "packtext", "Hello 2"]]})
+
+    def call(prompt, model=None):
+        raise dc.CodexQuotaExhausted("You've hit your usage limit")
+
+    assert dc.cmd_translate_codex(_args(tmp_path, batch=1, workers=1), call=call, sleep=lambda s: None) == 2
+    st = json.loads((tmp_path / "fr-es" / "codex-stats.json").read_text())
+    assert "usage limit" in st["quota"] and st["calls"] == 1      # no further calls after the quota error
+
+
+def test_codex_lint_failure_is_retried_with_the_problem_in_the_prompt(tmp_path):
+    w = _work(tmp_path, {"shared": [["s1", "feedback", "*Poulet* is masculine."]]})
+    prompts = []
+
+    def call(prompt, model=None):
+        prompts.append(prompt)
+        t = "Poulet es masculino." if len(prompts) == 1 else "*Poulet* es masculino."
+        return json.dumps({"items": [{"id": "shared/s1", "t": t}]}), {}
+
+    assert dc.cmd_translate_codex(_args(tmp_path), call=call, sleep=lambda s: None) == 0
+    assert "asterisk span" in prompts[1] and json.loads((w / "shared.tr.json").read_text())["s1"] == "*Poulet* es masculino."
+
+
+def test_codex_call_builds_a_sandboxed_command_and_classifies_errors(monkeypatch):
+    seen = {}
+
+    def fake_run(cmd, **kw):
+        seen["cmd"], seen["cwd"] = cmd, kw["cwd"]
+        ev = '{"type":"turn.failed","error":{"message":"You\'ve hit your usage limit. try again at Nov 17"}}\n'
+        return types.SimpleNamespace(returncode=1, stdout=ev, stderr="")
+
+    monkeypatch.setattr(dc.subprocess, "run", fake_run)
+    try:
+        dc.codex_call("x")
+    except dc.CodexQuotaExhausted:
+        pass
+    else:
+        raise AssertionError("usage limit must raise CodexQuotaExhausted")
+    c = seen["cmd"]
+    assert c[:2] == ["codex", "exec"] and c[c.index("-s") + 1] == "read-only" and "--ephemeral" in c and "--output-schema" in c
+    assert seen["cwd"] != str(dc.ROOT)
