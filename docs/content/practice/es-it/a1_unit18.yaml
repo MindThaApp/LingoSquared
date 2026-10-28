@@ -1,0 +1,465 @@
+schema_version: '1.0'
+pack_key: practice.es-it.a1.unit18
+source_language: es
+target_language: it
+unit_content_key: it.a1.unit18.housing
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_bagno
+    - w_camera
+    - w_cucina
+    - w_dietro
+    - w_divano
+    - w_dov'è
+    - w_finestra
+    - w_nel
+    - w_nella
+    - w_sedia
+    - w_soggiorno
+    - w_sopra
+    - w_sotto
+    - w_stanze
+    - w_tavolo
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_bagno
+      - w_stanze
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_camera
+      - w_bagno
+  pool3: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_camera
+  t_stanze: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_stanze
+  t_cucina: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cucina
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - noun
+    - preposition
+    agreement_tags:
+      semantic:
+      - w_tavolo
+      - w_sedia
+      - w_divano
+      - w_nella
+      - w_nel
+  t_tavolo: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_tavolo
+  t_nel: &id008
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_nel
+  t_nella: &id009
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_nella
+  t_sedia: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_sedia
+  pool11: &id011
+    language_code: it
+    part_of_speech:
+    - preposition
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_dietro
+      - w_sopra
+      - w_sotto
+      - w_finestra
+      - w_dov'è
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - preposition
+    - noun
+    agreement_tags:
+      semantic:
+      - w_dietro
+      - w_sopra
+      - w_sotto
+      - w_finestra
+  t_dietro: &id013
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_dietro
+  t_sotto: &id014
+    language_code: it
+    part_of_speech: preposition
+    agreement_tags:
+      semantic: w_sotto
+  t_finestra: &id015
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_finestra
+  pool16: &id016
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_cucina
+      - w_soggiorno
+      - w_bagno
+      - w_tavolo
+      - w_sedia
+      - w_divano
+      - w_finestra
+templates:
+- content_key: practice.es-it.it.a1.unit18.lesson01.choose.001
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il soggiorno e il bagno son masculinos; la cucina es femenino.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson01.listen.002
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Camera da letto significa dormitorio.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson01.order.003
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: word_order
+  frame:
+    text: Questa è la mia {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questa è la mia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Questa y mia son femeninos y concuerdan con una habitación femenina.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson01.fill.004
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: fill_in_blank
+  frame:
+    text: Ci sono quattro {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Stanze es el plural de stanza, por eso va después de quattro.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson01.translate.005
+  lesson_content_key: it.a1.unit18.lesson01.le_stanze_della_casa
+  type: translation
+  frame:
+    text: Esta es mi cocina.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Questa è la mia {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Cucina es femenino, por eso se usa questa y mia.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson02.choose.001
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Nel va con sustantivos masculinos y nella con femeninos.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson02.order.002
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: word_order
+  frame:
+    text: Il {item} è in cucina.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è in cucina.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Il tavolo es masculino e in cucina no lleva artículo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson02.fill.003
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: fill_in_blank
+  frame:
+    text: Il divano è {item} soggiorno. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nel es in más il, para el soggiorno masculino.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson02.translate.004
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: translation
+  frame:
+    text: La cama está en el dormitorio.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il letto è {item} camera da letto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Nella es in más la, para la camera femenina.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson02.translate.005
+  lesson_content_key: it.a1.unit18.lesson02.i_mobili
+  type: translation
+  frame:
+    text: La silla está cerca de la mesa.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} è vicino al tavolo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sedia es femenino y lleva la.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.choose.001
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Dietro, sopra y sotto dicen dónde está algo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.listen.002
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Sopra significa encima o sobre, y sotto significa debajo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.order.003
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: word_order
+  frame:
+    text: Il divano è {item} il tavolo.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il divano è {item} il tavolo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Dietro puede ir directamente delante del sustantivo: dietro il tavolo, detrás de la mesa.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.fill.004
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: fill_in_blank
+  frame:
+    text: La sedia è {item} il tavolo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id014
+    hint: *id014
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Sotto il tavolo significa debajo de la mesa.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.translate.005
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: translation
+  frame:
+    text: La cama está cerca de la ventana.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il letto è vicino alla {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla es a más la, para la finestra femenina.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit18.lesson03.match.006
+  lesson_content_key: it.a1.unit18.lesson03.dove_il_letto
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id016
+    second: *id016
+    third: *id016
+    fourth: *id016
+    fifth: *id016
+    sixth: *id016
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Cucina, soggiorno y bagno son habitaciones; tavolo, sedia y divano son muebles.
+    language_code: es
+    direction: ltr
