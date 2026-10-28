@@ -1871,6 +1871,103 @@ def _format_pair_counter(counter: Counter[tuple[str, str]]) -> list[str]:
     ]
 
 
+def _foreign_block_indexes(
+    target_blocks: Any, target_language: str
+) -> list[int]:
+    """Indexes of prompt blocks written in a learner language, not in the target language."""
+    if not isinstance(target_blocks, list):
+        return []
+    return [
+        i
+        for i, block in enumerate(target_blocks)
+        if isinstance(block, dict)
+        and isinstance(block.get("text"), str)
+        and block.get("text").strip()
+        and block.get("language_code") not in (None, target_language)
+    ]
+
+
+def localize_prompt_blocks(
+    target_blocks: Any,
+    override: Any,
+    source_language: str,
+    target_language: str,
+) -> Any:
+    """Swap the learner-language blocks of a realization prompt for the overlay's `prompt_blocks`.
+
+    Realizations of non-English targets carry English learner-language prompt blocks (language_code en). A cross-pair
+    overlay (learner language other than English) supplies `prompt_blocks`, one string per such block in order.
+    """
+    if isinstance(override, dict) and isinstance(target_blocks, list):
+        # {"<block index>": text}: replace single blocks written in the target language that carry a learner-language hint
+        out = copy.deepcopy(target_blocks)
+        for index, text in override.items():
+            if str(index).isdigit() and int(index) < len(out) and isinstance(out[int(index)], dict):
+                out[int(index)]["text"] = text
+        return out
+    if not isinstance(override, list) or not isinstance(target_blocks, list):
+        return target_blocks
+    foreign = _foreign_block_indexes(target_blocks, target_language)
+    if len(foreign) != len(override):
+        return target_blocks  # reported by validate_prompt_block_localization
+    out = copy.deepcopy(target_blocks)
+    for index, text in zip(foreign, override):
+        out[index]["text"] = text
+        out[index]["language_code"] = source_language
+        out[index]["direction"] = "rtl" if source_language in RTL_LANGUAGES else "ltr"
+    return out
+
+
+def validate_prompt_block_localization(
+    realization: dict[str, Any],
+    overlay: dict[str, Any],
+    report: Report,
+):
+    """A learner-language prompt block in the realization must be localized when the overlay's source language differs.
+
+    `prompt_blocks` is the overlay field for it (one string per block whose language_code is not the target language,
+    in order). Without it a cross-pair learner would see the realization's English text.
+    """
+    source_language = overlay.get("source_language")
+    target_language = realization.get("target_language") or overlay.get("target_language")
+    exercise_overlays = overlay.get("exercises", {})
+    if not isinstance(exercise_overlays, dict):
+        exercise_overlays = {}
+    for unit in realization.get("units", []):
+        for lesson in unit.get("lessons", []):
+            for exercise in lesson.get("exercises", []):
+                key = exercise.get("content_key", "<unknown>")
+                prompt = exercise.get("prompt")
+                blocks = prompt.get("target_blocks") if isinstance(prompt, dict) else None
+                foreign = _foreign_block_indexes(blocks, target_language)
+                exercise_overlay = exercise_overlays.get(key, {})
+                override = exercise_overlay.get("prompt_blocks") if isinstance(exercise_overlay, dict) else None
+                location = f"overlay.exercises.{key}.prompt_blocks"
+                if isinstance(override, dict):
+                    bad = [k for k, t in override.items()
+                           if not (str(k).isdigit() and blocks and int(k) < len(blocks)) or not isinstance(t, str) or not t.strip()]
+                    if bad:
+                        report.error(location, f"prompt_blocks entries {bad!r} do not name a prompt block with non-empty text")
+                    continue
+                if override is not None:
+                    if not isinstance(override, list) or not all(isinstance(t, str) and t.strip() for t in override):
+                        report.error(location, "prompt_blocks must be a list of non-empty strings")
+                    elif len(override) != len(foreign):
+                        report.error(
+                            location,
+                            f"prompt_blocks has {len(override)} string(s) but the realization prompt has "
+                            f"{len(foreign)} learner-language block(s)",
+                        )
+                    continue
+                for i in foreign:
+                    if blocks[i].get("language_code") != source_language:
+                        report.error(
+                            f"realization.exercises.{key}.prompt.target_blocks.{i}",
+                            f"prompt block is written in {blocks[i].get('language_code')!r} but the overlay's "
+                            f"source language is {source_language!r}; add `prompt_blocks` to the overlay exercise",
+                        )
+
+
 def validate_matching_pairs_overlay_overrides(
     realization: dict[str, Any],
     overlay: dict[str, Any],
@@ -4500,7 +4597,12 @@ def compile_exercise(
     introduced_tokens: set[str] | None = None,
 ) -> dict[str, Any]:
     prompt = copy.deepcopy(exercise.get("prompt", {}))
-    target_blocks = prompt.pop("target_blocks", [])
+    target_blocks = localize_prompt_blocks(
+        prompt.pop("target_blocks", []),
+        exercise_overlay.get("prompt_blocks"),
+        source_language,
+        target_language,
+    )
     text_blocks = []
 
     instruction = exercise_overlay.get("instruction")
@@ -4823,6 +4925,7 @@ def validate_documents(
     validate_matching_pairs_minimum_scale(realization, report)
     validate_matching_pairs_confusable_lefts(realization, report)
     validate_matching_pairs_overlay_overrides(realization, overlay, report)
+    validate_prompt_block_localization(realization, overlay, report)
     validate_matching_pairs_overlay_mirror(realization, overlay, report)
     validate_untaught_vocabulary(
         realization,
