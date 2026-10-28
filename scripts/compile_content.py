@@ -2030,6 +2030,10 @@ def validate_matching_pairs_overlay_overrides(
 
                 realization_answers = [left for left, _ in realization_pairs]
                 override_answers = [left for left, _ in override_pairs]
+                if exercise_overlay.get("localize_pair_lefts") == "yes":
+                    # reverse exercises: the realization's left side is a learner-language clue; a cross-pair overlay
+                    # may translate it (and must say so explicitly).
+                    continue
                 if override_answers != realization_answers:
                     report.error(
                         location,

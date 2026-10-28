@@ -359,6 +359,13 @@ python3 scripts/derive_cross.py inject   --new es-fr --levels a1       # overlay
 python3 scripts/derive_cross.py validate --new es-fr --levels a1       # compile, practice-validate, cross-leftover
 ```
 
+Bulk helpers: `plan --levels a1` lists every missing pair with its item/word counts; `batch --pairs es-it,fr-es --gemini --inject`
+runs extract -> translation-memory prefill -> Gemini -> inject for several pairs and is resumable (re-run continues);
+`todo` / `merge` split the untranslated items into small `STEM.todo.json` files for agents and merge their `STEM.new.json` back;
+the per-learner translation memory `docs/content/tm/<x>.json` (exact role + English text) is filled after every inject and prefilled
+at the next extract. Mixed matching exercises (English clue on either side) are handled per pair; verify with `validate`, which also
+diffs the compiled course against the compiled en-Y course for English that survived.
+
 What a new X->Y direction consists of, and where it comes from:
 
 | Piece | Source |

@@ -76,6 +76,11 @@ def _walk(node, path=()):
 
 def scan_pair(pair: str, quiet: bool = False) -> list[str]:
     learner = pair.split("-")[0]
+    if pair.endswith("-de") and learner not in ("de", "en"):
+        # German is the TARGET of a cross pair (es-de ...): overlays and packs legitimately carry German options,
+        # answers and quoted examples, so a German-marker scan cannot tell leftovers from target text. The English
+        # learner-language residue of such pairs is gated by scripts/_cross_leftover_check.py instead.
+        return []
     out: list[str] = []
     for kind in ("overlays", "practice"):
         d = CONTENT / kind / pair
