@@ -343,3 +343,33 @@ duplicate gloss-key lint, `PAIR_COLLISION` lint, pack feedback with the target l
 * Names: `--names Lotte=प्रिया,Omar=अर्जुन` (Devanagari, the existing hi cast) and `--names-en Lotte=Priya,Omar=Arjun`; names do not inflect, the postposition follows.
 * Localisation: rupees written as words in Hindi (`पचास रुपये`), `en_override.json` (`"~euros": "rupees"`) keeps the English in step; shop and place names, chai, samosa, metro, cricket replace the Dutch ones.
 * Register of the CFG note for the translator: everyday Hindi, not Sanskritised; English loans stay in Devanagari; postpositions, oblique case, का/की/के agreement, `मुझे`-constructions.
+
+# Cross pairs (X->Y, neither language English): `scripts/derive_cross.py`
+
+The learner-language axis for a target that is not English: Spanish speakers learning French (es-fr), Dari speakers learning
+German (prs-de), and so on. The realizations of Y are reused untouched; the overlays, practice packs and lexeme glosses of the
+English-source course `en-Y` are the sibling, and only their English learner-language strings are translated. Target-language text
+(options, typed answers, tiles, quoted words) is kept byte for byte, so the exercise logic, answer sets and audio keys are identical.
+
+```bash
+python3 scripts/derive_cross.py extract  --new es-fr --levels a1       # -> .local/derive-cross/es-fr/*.src.json + GUIDE.md
+python3 scripts/derive_cross.py translate --new es-fr                  # Gemini (key: $GEMINI_API_KEY or secrets/gemini/api-key.txt), or write *.tr.json by hand/agents
+python3 scripts/derive_cross.py check    --new es-fr [stem ...]        # lint translations: ids, {placeholders}, *spans*, kept target words, English left
+python3 scripts/derive_cross.py inject   --new es-fr --levels a1       # overlays, packs, manifest.d lines, lexicon + backfill shim
+python3 scripts/derive_cross.py validate --new es-fr --levels a1       # compile, practice-validate, cross-leftover
+```
+
+What a new X->Y direction consists of, and where it comes from:
+
+| Piece | Source |
+|---|---|
+| `overlays/X-Y/<unit>.yaml` | en-Y overlay with every English learner-language string translated (titles, glosses, notes, instructions, feedback, option/match clues, course text) |
+| `prompt_blocks` (new overlay field) | the realization of Y carries English prompt blocks (`language_code: en`); the overlay supplies one string per block, `compile_content.py` swaps them in; `validate_prompt_block_localization` errors when a non-English overlay forgets it |
+| `pairs` (existing overlay override) | matching-pair right-hand clues, written from the translated accepted-answer set |
+| `practice/X-Y/<unit>.yaml` | en-Y pack with the `language_code: en` frame and feedback texts translated; slots/tags unchanged (same lexeme tags) |
+| `scripts/manifest.d/content/X-Y[-lvl].txt`, `practice/X-Y.txt` | same realizations, same unit order as en-Y, new overlays |
+| `docs/content/lexicon/X-Y.json` + `scripts/backfill_lexemes_X_Y.py` | learner-language gloss per target token; the shim reuses the en-Y classification through `_cross_lexeme_backfill.py` |
+
+Rules: derive every unit of a level (the backfill maps units by position); never rename content keys; `_cross_leftover_check.py`
+(wired into `verify.sh`) must report 0. No DB or frontend registration is needed: the language picker is built from the imported courses.
+Native review of the translated text is still required (contrastive notes were rewritten from English-vs-Y to X-vs-Y by the translator).
