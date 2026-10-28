@@ -727,7 +727,8 @@ def cmd_inject(args):
                 o.node["language_code"] = new_src  # type: ignore[attr-defined]
                 o.node["direction"] = new_dir_dir  # type: ignore[attr-defined]
         # overlay metadata
-        y["overlay_key"] = y["overlay_key"].replace(f"{args.sibling}.", f"{new_pair}.", 1)
+        if "overlay_key" in y:
+            y["overlay_key"] = y["overlay_key"].replace(f"{args.sibling}.", f"{new_pair}.", 1)
         y["source_language"] = new_src
         y["overlay_version"] = "2026.1-draft.1"
         y["status"] = "complete_draft"
