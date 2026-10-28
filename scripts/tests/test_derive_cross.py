@@ -50,3 +50,31 @@ def test_prompt_block_validator_flags_unlocalized_blocks():
         report = cc.Report()
         cc.validate_prompt_block_localization(real, {"source_language": source, "exercises": {"fr.x": overlay_ex}}, report)
         assert len(report.errors) == errors, (source, overlay_ex)
+
+
+def test_translation_memory_keys_skip_contrast_and_target_spans():
+    assert dc.tm_key("instruction", "Listen and select.") == "instruction|Listen and select."
+    assert dc.tm_key("note CONTRAST", "English keeps it.") is None
+    assert dc.tm_key("feedback", "*Poulet* is masculine.") is None
+    assert dc.tm_key("course_title", "French A1") is None
+
+
+def test_group_names_follow_the_sibling_naming(tmp_path, monkeypatch):
+    monkeypatch.setattr(dc.dd, "MANIFEST", tmp_path)
+    (tmp_path / "en-it-a1.txt").write_text("x", encoding="utf-8")
+    assert dc.group_names("es-it", ["a1", "a2"]) == ["es-it-a1", "es-it-a2"]
+    assert dc.group_names("es-fr", ["a1", "a2"]) == ["es-fr", "es-fr-a2"]
+
+
+def test_english_prose_ignores_cognates_and_italian_are():
+    assert dc.english_prose("Riordinare es un verbo regular en -are")  is False
+    assert dc.english_prose("His or her work") is True
+    assert dc.english_prose("Je suis content") is False
+
+
+def test_pair_clue_side_rule():
+    # the learner side accepts weak English evidence, the other side only unmistakable English prose
+    assert dc.pair_text_is_learner("the beach", True, "fr")
+    assert not dc.pair_text_is_learner("la plage", True, "fr")
+    assert not dc.pair_text_is_learner("zero", False, "fr")
+    assert dc.pair_text_is_learner("The tea is cheaper.", False, "de")
