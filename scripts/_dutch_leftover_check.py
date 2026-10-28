@@ -79,7 +79,7 @@ SHARED = {
     "en": set("fine station reis straat kamer perron plan gewoon".split()),
     "ru": set(),
     "es": set("tot alle dus zin acht tafel kaart station reis spoor".split()),
-    "fr": set("tot alle dus zin acht tafel kaart station reis spoor onze retour".split()),
+    "fr": set("tot alle dus zin acht tafel kaart station reis spoor onze retour tien".split()),
     "it": set("tot alle dus zin acht tafel kaart station reis spoor".split()),
 }
 # Words that exist in the Romance / Germanic / Slavic targets too and are therefore only counted with a second hit.
