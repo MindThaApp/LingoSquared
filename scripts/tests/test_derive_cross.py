@@ -236,3 +236,63 @@ def test_claude_call_classifies_errors(monkeypatch):
             assert (exc is dc.CodexQuotaExhausted) or str(e).startswith("rate")
         else:
             raise AssertionError(msg)
+
+
+def test_compiler_localizes_teaching_card_body():
+    import compile_content as cc
+    card = {"text": "Dates use cardinal numbers.", "language_code": "en", "direction": "ltr"}
+    out = cc.localize_teaching_target(card, "Les dates utilisent des nombres cardinaux.", "fr", "es")
+    assert out == {"text": "Les dates utilisent des nombres cardinaux.", "language_code": "fr", "direction": "ltr"}
+    assert card["language_code"] == "en"  # input untouched
+    assert cc.localize_teaching_target(card, None, "fr", "es") == card
+    spanish = {"text": "Hola", "language_code": "es", "direction": "ltr"}
+    assert cc.localize_teaching_target(spanish, "Salut", "fr", "es") == spanish  # target-language card: field ignored
+    item = {"content_key": "k", "kind": "grammar_note", "target": card}
+    compiled = cc.compile_teaching_item(item, {"target_text": "Texte"}, "fr", "es")
+    assert compiled["text_blocks"][0]["text"] == "Texte" and compiled["text_blocks"][0]["language_code"] == "fr"
+
+
+def test_teaching_target_validator_flags_unlocalized_cards():
+    import compile_content as cc
+    real = {"target_language": "es", "units": [{"lessons": [{"teaching": [
+        {"content_key": "es.n", "kind": "grammar_note", "target": {"text": "Note", "language_code": "en"}},
+        {"content_key": "es.v", "kind": "vocabulary", "target": {"text": "Hola", "language_code": "es"}}]}]}]}
+    for source, teaching, errors in (
+        ("fr", {}, 1),
+        ("fr", {"es.n": {"target_text": "Note fr"}}, 0),
+        ("fr", {"es.n": {"target_text": " "}}, 1),
+        ("fr", {"es.n": {"target_text": "ok"}, "es.v": {"target_text": "mal"}}, 1),
+        ("en", {}, 0),
+    ):
+        report = cc.Report()
+        cc.validate_teaching_target_localization(real, {"source_language": source, "teaching": teaching}, report)
+        assert len(report.errors) == errors, (source, teaching)
+
+
+def test_cross_extract_finds_english_cards_and_cloze_hints(tmp_path):
+    real = tmp_path / "r.yaml"
+    real.write_text(
+        "target_language: es\nunits:\n- lessons:\n  - teaching:\n"
+        "    - {content_key: es.n, kind: grammar_note, target: {text: 'Dates use *de*.', language_code: en}}\n"
+        "    - {content_key: es.v, kind: vocabulary, target: {text: Hola, language_code: es}}\n"
+        "    exercises:\n"
+        "    - content_key: es.c\n      prompt: {target_blocks: [{text: 'Instruction', language_code: es}, "
+        "{text: 'Las tres y media es ___ del taller. (before, since it starts at four)', language_code: es}]}\n"
+        "    - content_key: es.d\n      prompt: {target_blocks: [{text: 'Voy a ___ casa. (to the)', language_code: es}, "
+        "{text: 'Me llamo ___.', language_code: es}]}\n", encoding="utf-8")
+    cards = dc.foreign_teaching_targets(real, "es")
+    assert cards == {"es.n": ("grammar_note", "Dates use *de*.")}
+    hints = dc.foreign_prompt_blocks(real, "es")
+    assert [h[0] for h in hints["es.c"]] == [1] and [h[0] for h in hints["es.d"]] == [0]
+    assert dc.english_hint("El taller ___. (ends)") and dc.english_hint("Quiero ___. (I want)")
+    assert not dc.english_hint("Me llamo ___.") and not dc.english_hint("¿Dónde está (el baño)?  ")
+
+
+def test_unchanged_english_gate_ignores_accent_variants_and_allowlist(tmp_path):
+    import json as _json
+    a, b = tmp_path / "a.json", tmp_path / "b.json"
+    for p in (a, b):
+        p.write_text(_json.dumps({"x": ["Soy de Mexico.", "football / yoga", "Which shop is the cheapest one?"]}), encoding="utf-8")
+    out = dc.unchanged_english(a, b, "es", "fr")
+    assert not any("Mexico" in o or "yoga" in o for o in out)
+    assert any("cheapest" in o for o in out)
