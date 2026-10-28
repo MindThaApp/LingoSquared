@@ -185,3 +185,54 @@ def test_codex_call_builds_a_sandboxed_command_and_classifies_errors(monkeypatch
     c = seen["cmd"]
     assert c[:2] == ["codex", "exec"] and c[c.index("-s") + 1] == "read-only" and "--ephemeral" in c and "--output-schema" in c
     assert seen["cwd"] != str(dc.ROOT)
+
+
+# ---------------------------------------------------------------------------
+# --claude backend (headless `claude -p`, subprocess mocked)
+# ---------------------------------------------------------------------------
+def test_claude_backend_translates_and_writes_usage_stats(tmp_path):
+    w = _work(tmp_path, {"a1_unit01": [["i1", "instruction", "Hello"], ["i2", "feedback", "Hello again"], ["i3", "note", "Hello!"]]})
+
+    def call(prompt, model=None):
+        text, _ = _echo(prompt)
+        return text, {"tokens": 100, "usage": {"input_tokens": 5, "cache_read_input_tokens": 60, "cache_creation_input_tokens": 20,
+                                                "output_tokens": 15}, "cost_usd": 0.01}
+
+    assert dc.cmd_translate_claude(_args(tmp_path, claude_model="sonnet"), call=call, sleep=lambda s: None) == 0
+    assert dc.dd.load_tr(w, "a1_unit01")["i1"] == "Hola"
+    st = json.loads((w / "claude-stats.json").read_text())
+    assert not (w / "codex-stats.json").exists()
+    assert st["calls"] == 2 and st["tokens"] == 200 and st["usage"]["cache_read_input_tokens"] == 120 and st["cost_usd"] == 0.02
+
+
+def test_claude_call_builds_a_toolless_command_and_parses_usage(monkeypatch):
+    seen = {}
+    ev = {"is_error": False, "structured_output": {"items": [{"id": "a", "t": "hola"}]}, "total_cost_usd": 0.5,
+          "usage": {"input_tokens": 2, "cache_creation_input_tokens": 3, "cache_read_input_tokens": 4, "output_tokens": 5}}
+
+    def fake_run(cmd, **kw):
+        seen["cmd"], seen["cwd"] = cmd, kw["cwd"]
+        return types.SimpleNamespace(returncode=0, stdout=json.dumps(ev), stderr="")
+
+    monkeypatch.setattr(dc.subprocess, "run", fake_run)
+    text, info = dc.claude_call("x")
+    c = seen["cmd"]
+    assert c[:2] == ["claude", "-p"] and c[c.index("--tools") + 1] == "" and c[c.index("--model") + 1] == "sonnet"
+    assert "--json-schema" in c and "--no-session-persistence" in c and seen["cwd"] != str(dc.ROOT)
+    assert json.loads(text)["items"][0]["t"] == "hola"
+    assert info["tokens"] == 14 and info["usage"]["cache_read_input_tokens"] == 4 and info["cost_usd"] == 0.5
+
+
+def test_claude_call_classifies_errors(monkeypatch):
+    def run_with(msg):
+        monkeypatch.setattr(dc.subprocess, "run", lambda cmd, **kw: types.SimpleNamespace(
+            returncode=1, stdout=json.dumps({"is_error": True, "result": msg}), stderr=""))
+        dc.claude_call("x")
+
+    for msg, exc in (("You've hit your usage limit", dc.CodexQuotaExhausted), ("429 rate limit, overloaded", RuntimeError)):
+        try:
+            run_with(msg)
+        except exc as e:
+            assert (exc is dc.CodexQuotaExhausted) or str(e).startswith("rate")
+        else:
+            raise AssertionError(msg)

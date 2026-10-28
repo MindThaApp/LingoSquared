@@ -48,6 +48,8 @@ def german_markers(text: str, learner: str) -> bool:
     if not toks:
         return False
     words = DUTCH_SAFE if learner == "nl" else DE_WORDS
+    if learner == "fr":
+        words = words - {"uns"}          # "quelques-uns", "les uns"
     hits = [t for t in toks if t in words]
     if len(hits) >= 2:
         return True

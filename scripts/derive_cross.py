@@ -20,6 +20,7 @@ specific:
     python3 scripts/derive_cross.py extract  --new es-fr --levels a1
     python3 scripts/derive_cross.py translate --new es-fr          # or fill the *.tr.json files otherwise
     python3 scripts/derive_cross.py translate --new fr-es --codex  # Codex CLI (ChatGPT plan), resumable
+    python3 scripts/derive_cross.py translate --new fr-es --claude # headless `claude -p` (Sonnet, no tools), same logic
     python3 scripts/derive_cross.py inject   --new es-fr --levels a1
     python3 scripts/derive_cross.py validate --new es-fr --levels a1
 
@@ -581,10 +582,12 @@ def cmd_batch(args):
         if args.gemini:
             a.model, a.batch = args.model, args.batch
             cmd_translate(a)
-        elif args.codex:
+        elif args.codex or args.claude:
             a.sibling = f"en-{pair.split('-')[1]}"
-            cmd_translate_codex(a)
-            if Path(args.work, pair, "codex-stats.json").exists() and json.loads(Path(args.work, pair, "codex-stats.json").read_text()).get("quota"):
+            backend = "claude" if args.claude else "codex"
+            (cmd_translate_claude if args.claude else cmd_translate_codex)(a)
+            stp = Path(args.work, pair, f"{backend}-stats.json")
+            if stp.exists() and json.loads(stp.read_text()).get("quota"):
                 print("  usage limit reached: stopping the batch")
                 break
         work = Path(args.work) / pair
@@ -830,6 +833,8 @@ def gemini_call(model: str, prompt: str, key: str) -> str:
 
 
 def cmd_translate(args):
+    if getattr(args, "claude", False):
+        sys.exit(2 if cmd_translate_claude(args) else 0)
     if getattr(args, "codex", False):
         left = cmd_translate_codex(args)
         sys.exit(2 if left else 0)
@@ -970,22 +975,57 @@ def codex_chunks(work: Path, files: list[str], size: int) -> list[list]:
     return chunks
 
 
-def cmd_translate_codex(args, call=None, sleep=time.sleep) -> int:
+def claude_call(prompt: str, model: str = "sonnet", effort: str | None = None, timeout: int = 900) -> tuple[str, dict]:
+    """One headless `claude -p`: no tools, empty scratch cwd, no settings/MCP/session, answer constrained by CODEX_SCHEMA.
+    Returns (final message JSON text, {"tokens": n, "usage": {...}, "cost_usd": x}).  Same error contract as codex_call
+    (CodexQuotaExhausted on a hard limit, RuntimeError("rate: ...") on transient limits)."""
+    with tempfile.TemporaryDirectory(prefix="claude-tr-") as tmp:
+        cmd = ["claude", "-p", "--model", model or "sonnet", "--output-format", "json", "--tools", "", "--no-session-persistence",
+               "--setting-sources", "", "--strict-mcp-config", "--system-prompt", "You are a precise translation engine.",
+               "--json-schema", json.dumps(CODEX_SCHEMA)]
+        if effort:
+            cmd += ["--effort", effort]
+        r = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=timeout, cwd=tmp)
+        try:
+            ev = json.loads(r.stdout)
+        except ValueError:
+            ev = {}
+        err = str(ev.get("result") or "") if ev.get("is_error") else ""
+        err = err or r.stderr[-300:]
+        if r.returncode != 0 or ev.get("is_error") or not isinstance(ev.get("structured_output"), dict):
+            err = err or f"exit {r.returncode}"
+            if QUOTA_RE.search(err) and not RATE_RE.search(err.replace("try again at", "")):
+                raise CodexQuotaExhausted(err)
+            raise RuntimeError(("rate: " if RATE_RE.search(err) else "") + err[:300])
+        u = ev.get("usage") or {}
+        usage = {"input_tokens": int(u.get("input_tokens", 0)), "cache_read_input_tokens": int(u.get("cache_read_input_tokens", 0)),
+                 "cache_creation_input_tokens": int(u.get("cache_creation_input_tokens", 0)), "output_tokens": int(u.get("output_tokens", 0))}
+        return json.dumps(ev["structured_output"]), {"tokens": sum(usage.values()), "usage": usage,
+                                                      "cost_usd": float(ev.get("total_cost_usd") or 0)}
+
+
+def cmd_translate_claude(args, call=None, sleep=time.sleep) -> int:
+    """Same as cmd_translate_codex but through headless `claude -p` (stats in claude-stats.json)."""
+    return cmd_translate_codex(args, call=call or claude_call, sleep=sleep, backend="claude")
+
+
+def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> int:
     """Translate the missing ids of a work dir with `codex exec`.  Resumable (each finished chunk is written to NAME.tr.json at
     once), parallel (--workers), retries with backoff on transient limits, stops cleanly on a hard usage limit.  Returns the
     number of ids still untranslated."""
     call = call or codex_call
+    model = getattr(args, f"{backend}_model", None)
     work = Path(args.work) / args.new
     guide = (work / "GUIDE.md").read_text(encoding="utf-8")
     target = args.new.split("-")[1]
     files = sorted(p.name[: -len(".src.json")] for p in work.glob("*.src.json"))
     srcs = {n: {i[0]: i for i in json.loads((work / f"{n}.src.json").read_text(encoding="utf-8"))["items"] if i[0] != "#"} for n in files}
     chunks = codex_chunks(work, files, args.batch)
-    stats = {"calls": 0, "failed_calls": 0, "tokens": 0, "rate_limited": 0, "lint_rejected": 0, "quota": None}
+    stats = {"calls": 0, "failed_calls": 0, "tokens": 0, "usage": {}, "cost_usd": 0.0, "rate_limited": 0, "lint_rejected": 0, "quota": None}
     lock = threading.Lock()
     stop = threading.Event()
     t0 = time.time()
-    print(f"codex: {sum(1 for ch in chunks for c in ch if c[0] != '#')} item(s) in {len(chunks)} chunk(s), {args.workers} worker(s)")
+    print(f"{backend}: {sum(1 for ch in chunks for c in ch if c[0] != '#')} item(s) in {len(chunks)} chunk(s), {args.workers} worker(s)")
 
     def accept(got: dict[str, str], chunk: list, last_round: bool) -> dict[str, str]:
         """Store lint-clean translations, return {key: problem} for the rest."""
@@ -1023,10 +1063,14 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep) -> int:
                 if stop.is_set():
                     return
                 try:
-                    text, info = call(codex_prompt(guide, todo, hints), model=args.codex_model)
+                    text, info = call(codex_prompt(guide, todo, hints), model=model)
                     with lock:
                         stats["calls"] += 1
                         stats["tokens"] += info.get("tokens", 0)
+                        stats["cost_usd"] += info.get("cost_usd", 0.0)
+                        for k, v in (info.get("usage") or {}).items():
+                            if isinstance(v, (int, float)):
+                                stats["usage"][k] = stats["usage"].get(k, 0) + v
                     got = parse_codex_items(text)
                     break
                 except CodexQuotaExhausted as e:
@@ -1063,15 +1107,19 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep) -> int:
         left += sum(1 for i in srcs[n] if i not in tr)
     stats["seconds"] = round(time.time() - t0)
     stats["left"] = left
-    sp = work / "codex-stats.json"
+    sp = work / f"{backend}-stats.json"
     old = json.loads(sp.read_text()) if sp.exists() else {}
     for k in ("calls", "failed_calls", "tokens", "rate_limited", "lint_rejected", "seconds"):
         old[k] = old.get(k, 0) + stats[k]
+    ou = old.setdefault("usage", {})
+    for k, v in stats["usage"].items():
+        ou[k] = ou.get(k, 0) + v
+    old["cost_usd"] = round(old.get("cost_usd", 0.0) + stats["cost_usd"], 6)
     old["left"], old["quota"] = left, stats["quota"]
     sp.write_text(json.dumps(old, indent=1), encoding="utf-8")
-    print(f"codex: {stats} -> {left} item(s) untranslated")
+    print(f"{backend}: {stats} -> {left} item(s) untranslated")
     if stats["quota"]:
-        print(f"codex: USAGE LIMIT reached, stopped: {stats['quota']}")
+        print(f"{backend}: USAGE LIMIT reached, stopped: {stats['quota']}")
     return left
 
 
@@ -1262,6 +1310,7 @@ def main():
             sp.add_argument("--pairs", required=True, type=lambda s: s.split(","))
             sp.add_argument("--gemini", action="store_true", help="translate missing ids with the Gemini API")
             sp.add_argument("--codex", action="store_true", help="translate missing ids with the Codex CLI")
+            sp.add_argument("--claude", action="store_true", help="translate missing ids with headless `claude -p` (Sonnet, no tools)")
             sp.add_argument("--inject", action="store_true", help="inject pairs that are fully translated")
             sp.add_argument("--model", default="gemini-2.5-flash")
             sp.add_argument("--batch", type=int, default=120)
@@ -1277,10 +1326,12 @@ def main():
             sp.add_argument("files", nargs="*", help="file stems, e.g. a1_unit05 shared glosses (default: all)")
         if name in ("translate", "batch"):
             sp.add_argument("--codex-model", default=None, help="model for --codex (default: the Codex CLI default)")
-            sp.add_argument("--workers", type=int, default=4, help="parallel codex calls")
+            sp.add_argument("--claude-model", default="sonnet", help="model for --claude")
+            sp.add_argument("--workers", type=int, default=4, help="parallel codex/claude calls")
             sp.add_argument("--retries", type=int, default=5)
         if name == "translate":
             sp.add_argument("--codex", action="store_true", help="translate with `codex exec` (ChatGPT plan) instead of Gemini")
+            sp.add_argument("--claude", action="store_true", help="translate with headless `claude -p` (Sonnet, no tools)")
             sp.add_argument("--model", default="gemini-2.5-flash")
             sp.add_argument("--batch", type=int, default=120)
         if name == "inject":
