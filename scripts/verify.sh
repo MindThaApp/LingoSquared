@@ -143,6 +143,13 @@ if [ "$RUN_CONTENT" = "1" ]; then
       CONTENT_OK=0
     fi
 
+    # English left in a cross-language (X->Y, neither English) overlay or pack, or structure that drifted from en->Y.
+    echo "-- cross-leftover check (X->Y overlays + packs vs en->Y) --"
+    if ! python scripts/_cross_leftover_check.py; then
+      echo "!! cross-leftover check FAILED"
+      CONTENT_OK=0
+    fi
+
     deactivate 2>/dev/null || true
     [ "$CONTENT_OK" = "1" ] && CONTENT_STATUS="pass" || CONTENT_STATUS="fail"
   fi
