@@ -122,3 +122,56 @@ def test_taalcafe_compound_flagged_in_long_string(ck):
     s = "Emergencies: asking for help at the taalcafé in the library when there is a fire today"
     assert ck.nl_markers(s, "en") == ["taalcafé"]
     assert ck.nl_markers("Welcome to the language café, everyone in the library today", "en") == []
+
+
+# --- s17: leftovers that went undetected because review/provenance notes made Dutch words look English ---
+
+def test_visible_strings_skip_review_and_provenance(ck):
+    y = {"review": {"notes": "no longer contains kaartje, zegt de medewerker"}, "generation_provenance": "haar",
+         "exercises": {"x": {"feedback": "Hello there", "content_key": "k.afspraak"}}}
+    vals = [v for _p, v in ck.visible_strings(y)]
+    assert vals == ["Hello there"]
+
+
+def test_dutch_word_quoted_in_review_notes_does_not_whitelist_it(ck, tmp_path, monkeypatch):
+    """Regression: 'Haar means hair', 'Kaartje means ticket', 'Nina zegt: <long French sentence>' passed the check because the
+    English realizations' review notes quote those words, which put them into the English vocabulary."""
+    d = tmp_path / "realizations/en"
+    d.mkdir(parents=True)
+    (d / "u.yaml").write_text(yaml.safe_dump({"review": {"notes": "answer word kaartje, Welke zin zegt de man, haar"},
+                                              "x": {"text": "Hello, I would like a ticket please"}}))
+    monkeypatch.setattr(ck, "CONTENT", tmp_path)
+    monkeypatch.setattr(ck.dd, "CONTENT", tmp_path)
+    ck._load.cache_clear()
+    core = ck._english_core()
+    assert "ticket" in core and not ({"kaartje", "zegt", "haar"} & core)
+
+
+def test_scan_flags_single_dutch_word_in_long_english_feedback(ck, tmp_path, monkeypatch):
+    monkeypatch.setattr(ck, "dutch_vocab", lambda: frozenset({"zegt", "haar", "kaartje", "tulpen"}))
+    for fb in ("Nina zegt: On va au parc d'attractions ensemble la semaine prochaine ?",
+               "Haar means hair; blond/brun/gris/noir are hair colors.",
+               "Kaartje means ticket, gare means gare, transport means transport, centre-ville means town centre."):
+        hits = _scan_en_fr(ck, tmp_path, monkeypatch, fb)
+        assert len(hits) == 1, fb
+
+
+def test_scan_does_not_flag_good_english_feedback_with_target_words(ck, tmp_path, monkeypatch):
+    for fb in ("Cheveux means hair; blond/brun/gris/noir are hair colors.", "Nina says: On va au parc d'attractions ensemble ?",
+               "Billet means ticket, gare means station, transport means transport."):
+        assert _scan_en_fr(ck, tmp_path, monkeypatch, fb) == [], fb
+
+
+def _scan_en_fr(ck, tmp_path, monkeypatch, feedback):
+    d = tmp_path / "overlays/en-fr"
+    d.mkdir(parents=True, exist_ok=True)
+    y = {"overlay_key": "en-fr.a1.unit50", "exercises": {"fr.a1.unit50.lesson01.exercise01.match_x": {"feedback": feedback}}}
+    (d / "a1_unit50.yaml").write_text(yaml.safe_dump(y, allow_unicode=True))
+    monkeypatch.setattr(ck, "CONTENT", tmp_path)
+    monkeypatch.setattr(ck, "english_words", lambda: frozenset({"means", "hair", "colors", "are", "ticket", "gare", "transport",
+                                                                "centre", "ville", "town", "says", "station", "ensemble", "the"}))
+    monkeypatch.setattr(ck, "target_vocab", lambda t: frozenset({"cheveux", "billet", "parc", "attractions", "semaine", "prochaine"}))
+    ck._strings.cache_clear()
+    ck._load.cache_clear()
+    hits, _ = ck.scan_file("overlays", "en-fr", d / "a1_unit50.yaml", "en", "fr")
+    return hits
