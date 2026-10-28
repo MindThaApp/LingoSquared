@@ -1,0 +1,524 @@
+schema_version: '1.0'
+pack_key: practice.es-it.a1.unit03
+source_language: es
+target_language: it
+unit_content_key: it.a1.unit03.basic_numbers
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_caffè
+    - w_cinquanta
+    - w_cinque
+    - w_cornetto
+    - w_costa
+    - w_dieci
+    - w_euro
+    - w_hai
+    - w_il
+    - w_mio
+    - w_ne
+    - w_nove
+    - w_numero
+    - w_otto
+    - w_perfetto
+    - w_qual
+    - w_quattro
+    - w_sette
+    - w_telefono
+    - w_tre
+    - w_tuo
+    - w_uno
+    - w_vorrei
+    - w_vuole
+    - w_zero
+slot_presets:
+  nums: &id001
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_zero
+      - w_uno
+      - w_tre
+      - w_quattro
+      - w_cinque
+      - w_sette
+      - w_otto
+      - w_nove
+      - w_dieci
+  ages: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_tre
+      - w_quattro
+      - w_cinque
+      - w_sette
+      - w_otto
+      - w_nove
+      - w_dieci
+  hai: &id003
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_hai
+  l2_core: &id004
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_costa
+      - w_caffè
+      - w_euro
+      - w_cornetto
+      - w_cinquanta
+      - w_ne
+      - w_vuole
+      - w_vorrei
+  l2_words: &id007
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_costa
+      - w_caffè
+      - w_cornetto
+      - w_cinquanta
+      - w_vorrei
+      - w_vuole
+  drinks: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_caffè
+      - w_cornetto
+  vorrei: &id006
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_vorrei
+  l3_core: &id008
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - adjective
+    - particle
+    agreement_tags:
+      semantic:
+      - w_il
+      - w_tuo
+      - w_numero
+      - w_telefono
+      - w_mio
+      - w_perfetto
+  l3_words: &id011
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_tuo
+      - w_mio
+      - w_numero
+      - w_telefono
+      - w_perfetto
+  telefono: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_telefono
+  tuo: &id010
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_tuo
+templates:
+- content_key: practice.es-it.it.a1.unit03.lesson01.choose.001
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Uno es el número para contar; ante un sustantivo masculino se acorta en un, y ante uno femenino pasa a una, como en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson01.listen.002
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Sette y otto llevan una t doble; mantén el sonido un poco más.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson01.order.003
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: word_order
+  frame:
+    text: Ho {age} anni.
+    language_code: it
+    direction: ltr
+  slots:
+    age: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho {age} anni.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'El italiano dice la edad con avere, tener: ho cinque anni significa literalmente «tengo cinco años», igual que en español.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson01.fill.004
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: fill_in_blank
+  frame:
+    text: Quanti anni {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Hai es la forma de tu de avere; con Lei la pregunta es Quanti anni ha?
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson01.match.005
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Del cero al diez son las piezas básicas; los demás números se construyen más adelante a partir de ellas.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson01.translate.006
+  lesson_content_key: it.a1.unit03.lesson01.contare_da_zero_a_dieci
+  type: translation
+  frame:
+    text: Tengo {age} años.
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      age: english_gloss
+  slots:
+    age: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ho {age} anni.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Para la edad nunca se usa sono: Ho dieci anni, no Sono dieci anni.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.choose.001
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Ne equivale a «de ello» o «de ellos»: Ne vorrei tre significa «querría tres de ellos».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.listen.002
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Caffè lleva el acento en la última sílaba, marcado con la tilde.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.order.003
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: word_order
+  frame:
+    text: Quanto costa un {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quanto costa un {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Costa es singular, así que va con un solo artículo: Quanto costa un cornetto? Para varios se dice costano.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.fill.004
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: fill_in_blank
+  frame:
+    text: Ne {item} tre, grazie. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Vorrei es la forma cortés de pedir algo, más suave que «quiero», como el español «querría».
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.translate.005
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Cinquanta es cincuenta; las decenas italianas terminan en -anta desde cuarenta.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson02.translate.006
+  lesson_content_key: it.a1.unit03.lesson02.quanto_costa_al_bar
+  type: translation
+  frame:
+    text: ¿Cuánto cuesta {item}?
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quanto costa un {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Quanto costa? se forma con quanto, cuánto, y costa, cuesta, igual que en español.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.choose.001
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Tuo y mio cambian con el género; aquí ambos son masculinos porque numero es masculino.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.order.002
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: word_order
+  frame:
+    text: Qual è il tuo numero di {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Qual è il tuo numero di {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Qual es la forma corta de quale; pierde la e final ante una forma de essere.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.fill.003
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: fill_in_blank
+  frame:
+    text: Qual è il {item} numero di telefono? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il tuo numero se refiere al número de la otra persona; il mio numero responde con el tuyo.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.match.004
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Il es el artículo masculino singular; numero y telefono son ambos masculinos.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.translate.005
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Perfetto concuerda con lo que describe: con un sustantivo femenino pasa a perfetta, como «perfecto» y «perfecta».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-it.it.a1.unit03.lesson03.translate.006
+  lesson_content_key: it.a1.unit03.lesson03.il_numero_di_telefono
+  type: translation
+  frame:
+    text: ¿Cuál es tu número de teléfono? (informal)
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Qual è il tuo numero di {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Tuo es el «tu» informal; con Lei dirías il Suo numero.
+    language_code: es
+    direction: ltr
