@@ -1,0 +1,296 @@
+schema_version: '1.0'
+pack_key: practice.de-fr.a1.unit56
+source_language: de
+target_language: fr
+unit_content_key: fr.a1.unit56.transports
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_achats
+    - w_inconnu
+    - w_leçons
+    - w_marche
+    - w_marcher
+    - w_mots
+    - w_moyen
+    - w_précédentes
+    - w_surtout
+    - w_transports
+    - w_utilises
+    - w_voiture
+    - w_voyage
+    - w_voyager
+    - w_vélo
+templates:
+- content_key: practice.de-fr.fr.a1.unit56.lesson01.choose.001
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_vélo
+        - w_voyage
+        - w_voiture
+        - w_marcher
+        - w_marche
+        - w_voyager
+        - w_leçons
+        - w_précédentes
+        - w_utilises
+        - w_mots
+        - w_transports
+        - w_inconnu
+        - w_achats
+        - w_moyen
+        - w_surtout
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion über Zug, Fahrrad, Auto und Zufußgehen.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson02.listen.001
+  lesson_content_key: fr.a1.unit56.lesson02.chacun_voyage_differemment
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion „Jeder ist anders unterwegs“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson03.translate.001
+  lesson_content_key: fr.a1.unit56.lesson03.acheter_un_billet
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz dieser Einheit, aus der Lektion zum Kauf einer Fahrkarte.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson04.match.001
+  lesson_content_key: fr.a1.unit56.lesson04.lea_demande_a_mathieu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Ordnen Sie jedem französischen Wort seine deutsche Bedeutung zu; die Wörter stammen aus den Lektionen dieser Einheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson01.choose.002
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion über Zug, Fahrrad, Auto und Zufußgehen.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson02.translate.002
+  lesson_content_key: fr.a1.unit56.lesson02.chacun_voyage_differemment
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Einheit, aus der Lektion „Jeder ist anders unterwegs“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson01.order.003
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: word_order
+  frame:
+    text: Mathieu va à son travail à {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_vélo
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Mathieu va à son travail à {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Mathieu fährt mit dem Fahrrad zur Arbeit. vélo bedeutet Fahrrad.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson01.fill.004
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: fill_in_blank
+  frame:
+    text: Camille {item} en train. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voyage
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voyage
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Camille reist mit dem Zug. voyage bedeutet Reise.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson01.translate.005
+  lesson_content_key: fr.a1.unit56.lesson01.le_train_le_velo
+  type: translation
+  frame:
+    text: Thomas fährt Auto.
+    language_code: de
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_voiture
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Thomas va en {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Thomas fährt Auto. voiture bedeutet Auto.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson03.order.002
+  lesson_content_key: fr.a1.unit56.lesson03.acheter_un_billet
+  type: word_order
+  frame:
+    text: Quel {item} de transport je prends pour aller au centre-ville ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_moyen
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quel {item} de transport je prends pour aller au centre-ville ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Welches Verkehrsmittel soll ich ins Stadtzentrum nehmen? moyen bedeutet Mittel; Weg.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit56.lesson04.order.002
+  lesson_content_key: fr.a1.unit56.lesson04.lea_demande_a_mathieu
+  type: word_order
+  frame:
+    text: J'y vais {item} à vélo, ce n'est pas loin.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_surtout
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: J'y vais {item} à vélo, ce n'est pas loin.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Ich fahre meistens Fahrrad, es ist nicht weit. surtout bedeutet besonders, vor allem.
+    language_code: de
+    direction: ltr
