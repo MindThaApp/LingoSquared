@@ -1,0 +1,333 @@
+schema_version: '1.0'
+pack_key: practice.de-it.a1.unit19
+source_language: de
+target_language: it
+unit_content_key: it.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_biglietto
+    - w_binario
+    - w_parte
+    - w_treno
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+      - w_parte
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_biglietto
+      - w_binario
+  t_treno: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_treno
+  t_parte: &id004
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_parte
+  t_binario: &id005
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_binario
+  t_biglietto: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_biglietto
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_treno
+      - w_binario
+      - w_biglietto
+templates:
+- content_key: practice.de-it.it.a1.unit19.lesson01.choose.001
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario und il biglietto sind alle maskulin.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.listen.002
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Parte ist die Form für „er/sie/es fährt ab“ und wird hier beim Zug verwendet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.choose.003
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Ein biglietto kauft man, um zu reisen; das binario ist der Ort, an dem der Zug hält.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.order.004
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il {item} è alla stazione.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} è alla stazione.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alla stazione bedeutet „am Bahnhof“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.order.005
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno {item} alle otto.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Parte ist die „er/sie/es“-Form von partire: fährt ab.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.order.006
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: word_order
+  frame:
+    text: Il treno parte dal {item} tre.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal ist da plus il und wird für das Abfahrtsgleis verwendet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.fill.007
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} è per Roma. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per Roma bedeutet „nach Rom“ und nennt das Reiseziel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.fill.008
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: A che ora {item} il treno per Roma? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Parte passt zu il treno: Um wie viel Uhr fährt der Zug ab?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.fill.009
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: fill_in_blank
+  frame:
+    text: Il {item} per Roma parte alle otto. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno per Roma ist der Zug, der nach Rom fährt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.translate.010
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: Der Zug fährt um acht Uhr ab.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno {item} alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Parte ist die dritte Person Singular: er/sie/es fährt ab.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.translate.011
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: Hast du die Fahrkarte für Rom? (informell, tu)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hai il {item} per Roma?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Hai ist die informelle tu-Form von „haben“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.translate.012
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: Der Zug fährt von Gleis drei ab.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il treno parte dal {item} tre.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Dal binario tre bedeutet „von Gleis drei“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.translate.013
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: Der Zug nach Rom fährt um acht Uhr ab.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item} per Roma parte alle otto.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Per Roma sagt Ihnen, wohin der Zug fährt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit19.lesson01.translate.014
+  lesson_content_key: it.a1.unit19.lesson01.treno_e_stazione
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il treno, il binario und il biglietto sind maskuline Nomen.
+    language_code: de
+    direction: ltr
