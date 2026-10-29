@@ -1,0 +1,334 @@
+schema_version: '1.0'
+pack_key: practice.de-fr.a1.unit88
+source_language: de
+target_language: fr
+unit_content_key: fr.a1.unit88.glacier
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-fr by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_boule
+    - w_boules
+    - w_cornet
+    - w_fleuriste
+    - w_glace
+    - w_parfum
+    - w_parfums
+    - w_pot
+    - w_vitrine
+templates:
+- content_key: practice.de-fr.fr.a1.unit88.lesson01.choose.001
+  lesson_content_key: fr.a1.unit88.lesson01.on_va_au_glacier
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: fr
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_vitrine
+        - w_glace
+        - w_parfum
+        - w_boule
+        - w_cornet
+        - w_parfums
+        - w_boules
+        - w_pot
+        - w_fleuriste
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Einheit, aus der Lektion „Gehen wir in die Eisdiele?“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson02.listen.001
+  lesson_content_key: fr.a1.unit88.lesson02.la_glace_et_le
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Einheit, aus der Lektion „Das Eis und die Sorte“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson03.translate.001
+  lesson_content_key: fr.a1.unit88.lesson03.la_boule_et_l
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Einheit, aus der Lektion „Die Kugel und der Mitarbeiter“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson04.match.001
+  lesson_content_key: fr.a1.unit88.lesson04.les_prix_au_glacier
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: fr
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Ordnen Sie jedem französischen Wort seine deutsche Bedeutung zu; die Wörter stammen aus den Lektionen dieser Einheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson05.choose.001
+  lesson_content_key: fr.a1.unit88.lesson05.a_la_vitrine_du
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Einheit, aus der Lektion „An der Vitrine in der Eisdiele“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson06.translate.001
+  lesson_content_key: fr.a1.unit88.lesson06.camille_entend_parler_du
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Lektion, in der Camille von der Eisdiele hört.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson01.order.002
+  lesson_content_key: fr.a1.unit88.lesson01.on_va_au_glacier
+  type: word_order
+  frame:
+    text: Je vois la {item}.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_vitrine
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Je vois la {item}.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Ich sehe die Auslage. vitrine bedeutet Schaufenster, Auslage.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson02.order.002
+  lesson_content_key: fr.a1.unit88.lesson02.la_glace_et_le
+  type: word_order
+  frame:
+    text: La {item} est froide.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_glace
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est froide.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Das Eis ist kalt. glace bedeutet Eis.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson02.fill.003
+  lesson_content_key: fr.a1.unit88.lesson02.la_glace_et_le
+  type: fill_in_blank
+  frame:
+    text: Je choisis le {item}. ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_parfum
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_parfum
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Ich wähle die Sorte. parfum bedeutet Sorte, Duft.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson03.order.002
+  lesson_content_key: fr.a1.unit88.lesson03.la_boule_et_l
+  type: word_order
+  frame:
+    text: La {item} est grande.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_boule
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} est grande.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Die Kugel ist groß. boule bedeutet Kugel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson04.order.002
+  lesson_content_key: fr.a1.unit88.lesson04.les_prix_au_glacier
+  type: word_order
+  frame:
+    text: Combien coûte le {item} ?
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_cornet
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Combien coûte le {item} ?
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Was kostet die Eistüte? cornet bedeutet Eistüte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson06.order.002
+  lesson_content_key: fr.a1.unit88.lesson06.camille_entend_parler_du
+  type: word_order
+  frame:
+    text: Nina a un {item} de glace.
+    language_code: fr
+    direction: ltr
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_pot
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Nina a un {item} de glace.
+      language_code: fr
+      direction: ltr
+  feedback_frame:
+    text: Nina hat einen Becher Eis. pot bedeutet Becher.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-fr.fr.a1.unit88.lesson06.fill.003
+  lesson_content_key: fr.a1.unit88.lesson06.camille_entend_parler_du
+  type: fill_in_blank
+  frame:
+    text: On va chez le {item} ensemble la semaine prochaine ? ({hint})
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_fleuriste
+    hint:
+      language_code: fr
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_fleuriste
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Camille: Gehen wir nächste Woche zusammen zum Blumenladen? fleuriste bedeutet Blumenladen, Florist.'
+    language_code: de
+    direction: ltr
