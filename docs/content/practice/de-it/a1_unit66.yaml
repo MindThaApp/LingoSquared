@@ -1,0 +1,336 @@
+schema_version: '1.0'
+pack_key: practice.de-it.a1.unit66
+source_language: de
+target_language: it
+unit_content_key: it.a1.unit66.museo
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_chiudere
+    - w_concerto
+    - w_guida
+    - w_mostra
+    - w_quadri
+    - w_quadro
+    - w_sala
+    - w_serve
+    - w_visitare
+    - w_visito
+templates:
+- content_key: practice.de-it.it.a1.unit66.lesson01.choose.001
+  lesson_content_key: it.a1.unit66.lesson01.voglio_andare_al_museo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: it
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_visitare
+        - w_mostra
+        - w_visito
+        - w_chiudere
+        - w_guida
+        - w_serve
+        - w_sala
+        - w_quadro
+        - w_quadri
+        - w_concerto
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Lektion, aus dem Thema „Ich möchte ins Museum gehen“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson02.listen.001
+  lesson_content_key: it.a1.unit66.lesson02.voglio_comprare_un_biglietto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz dieser Einheit, aus der Lektion „Ich möchte eine Eintrittskarte kaufen“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson03.translate.001
+  lesson_content_key: it.a1.unit66.lesson03.a_che_ora_chiude
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Lektion, aus dem Thema „Um wie viel Uhr schließt das Museum?“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson04.match.001
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Ordnen Sie jedem italienischen Wort seine deutsche Bedeutung zu; die Wörter stammen aus den Lektionen dieser Einheit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson05.choose.001
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eines der Wörter dieser Lektion, aus dem Thema „Das Informationsschild lesen“.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson06.translate.001
+  lesson_content_key: it.a1.unit66.lesson06.marco_nina_e_giulia
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zu den Wörtern dieser Lektion über Marco, Nina und Giulia im Museum.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson01.order.002
+  lesson_content_key: it.a1.unit66.lesson01.voglio_andare_al_museo
+  type: word_order
+  frame:
+    text: Voglio {item} il museo.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_visitare
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Voglio {item} il museo.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ich möchte das Museum besuchen. visitare bedeutet besuchen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson02.order.002
+  lesson_content_key: it.a1.unit66.lesson02.voglio_comprare_un_biglietto
+  type: word_order
+  frame:
+    text: Visito la {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_mostra
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Visito la {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ich besichtige die Ausstellung. mostra bedeutet Ausstellung.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson04.order.002
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: word_order
+  frame:
+    text: Bene, e vuole anche una {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_guida
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Bene, e vuole anche una {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Sehr gut, und möchten Sie auch einen Führer? guida bedeutet Führer; Führung.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson04.fill.003
+  lesson_content_key: it.a1.unit66.lesson04.al_museo
+  type: fill_in_blank
+  frame:
+    text: No, grazie, non {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_serve
+    hint:
+      language_code: it
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_serve
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nein, danke, das ist nicht nötig. serve bedeutet wird gebraucht (non serve = es ist nicht nötig).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson05.order.002
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: word_order
+  frame:
+    text: La {item} è grande.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_sala
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: La {item} è grande.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Der Saal ist groß. sala bedeutet Saal; Raum.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson05.fill.003
+  lesson_content_key: it.a1.unit66.lesson05.leggere_il_cartello_informativo
+  type: fill_in_blank
+  frame:
+    text: Il {item} è bello. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_quadro
+    hint:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_quadro
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das Gemälde ist schön. quadro bedeutet Gemälde.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit66.lesson06.order.002
+  lesson_content_key: it.a1.unit66.lesson06.marco_nina_e_giulia
+  type: word_order
+  frame:
+    text: Vado a un {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item:
+      language_code: it
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_concerto
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vado a un {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Ich gehe zu einem Konzert. concerto bedeutet Konzert.
+    language_code: de
+    direction: ltr

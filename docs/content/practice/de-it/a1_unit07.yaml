@@ -1,0 +1,493 @@
+schema_version: '1.0'
+pack_key: practice.de-it.a1.unit07
+source_language: de
+target_language: it
+unit_content_key: it.a1.unit07.food_and_drink
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_basta
+    - w_conto
+    - w_cosa
+    - w_così
+    - w_desidera
+    - w_favore
+    - w_l'acqua
+    - w_menù
+    - w_panino
+    - w_un'acqua
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    - pronoun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_desidera
+      - w_favore
+      - w_cosa
+  t_panino: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_panino
+  t_favore: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_favore
+  t_desidera: &id005
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_desidera
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_menù
+      - w_conto
+      - w_favore
+  pool7: &id007
+    language_code: it
+    part_of_speech:
+    - verb
+    - adverb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_basta
+      - w_così
+      - w_conto
+      - w_menù
+      - w_favore
+  t_basta: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_basta
+  pool9: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_menù
+      - w_conto
+      - w_un'acqua
+      - w_panino
+  t_conto: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_conto
+  t_un_acqua: &id011
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_un'acqua
+  pool12: &id012
+    language_code: it
+    part_of_speech:
+    - noun
+    - pronoun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_cosa
+      - w_desidera
+      - w_favore
+      - w_menù
+      - w_conto
+  pool13: &id013
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_panino
+      - w_l'acqua
+      - w_menù
+      - w_conto
+      - w_favore
+      - w_un'acqua
+templates:
+- content_key: practice.de-it.it.a1.unit07.lesson01.choose.001
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Cosa desidera? ist die formelle Art, wie ein Barista fragt, was Sie möchten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson01.listen.002
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Per favore ist die höfliche Wendung, die jede Bestellung begleitet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson01.order.003
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: word_order
+  frame:
+    text: Vorrei un caffè e un {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Vorrei bedeutet „ich möchte“ und ist die höfliche Art zu bestellen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson01.fill.004
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: fill_in_blank
+  frame:
+    text: Vorrei un caffè, per {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Per favore bedeutet „bitte“ und steht am Ende einer Bitte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson01.translate.005
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: Ich möchte bitte einen Kaffee und ein Croissant.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un caffè e un cornetto, per {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Un steht bei maskulinen Nomen wie caffè und cornetto; per favore schließt die Bitte ab.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson01.translate.006
+  lesson_content_key: it.a1.unit07.lesson01.al_bar
+  type: translation
+  frame:
+    text: Was möchten Sie? (formell, Lei)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Cosa {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Desidera ist die formelle Lei-Form, die das Servicepersonal verwendet, nicht die informelle tu-Form.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.choose.001
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id006
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Basta così ist eine feste Wendung und bedeutet: Das ist alles, nichts mehr.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.listen.002
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Così bedeutet „so“ oder „auf diese Weise“, und in basta così schließt es eine Bestellung ab.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson02.fill.001
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: fill_in_blank
+  frame:
+    text: Grazie, {item} così. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Basta bedeutet „es genügt“; mit basta così sagt man dem Servicepersonal, dass es reicht.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson02.translate.002
+  lesson_content_key: it.a1.unit07.lesson02.ordinare_al_bar
+  type: translation
+  frame:
+    text: Das ist alles, danke.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} così, grazie.'
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Basta così, grazie ist die höfliche Art, eine Bestellung abzuschließen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.choose.003
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Un'acqua behält den Apostroph, weil acqua feminin ist und mit einem Vokal beginnt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.listen.004
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Il menù und il conto sind maskulin, deshalb steht il davor.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.fill.005
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: fill_in_blank
+  frame:
+    text: Il {item}, per favore. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Il conto, per favore ist die Art, um die Rechnung zu bitten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.order.006
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: word_order
+  frame:
+    text: Un panino e {item}, per favore.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Un''acqua ist die feminine Form: una wird vor einem Vokal zu un''.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.match.007
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id012
+    second: *id012
+    third: *id012
+    fourth: *id012
+    fifth: *id012
+    sixth: *id012
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Il panino und il conto sind maskulin; l'acqua ist feminin und wird elidiert.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.translate.008
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: Ein Sandwich und ein Wasser, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Un panino e {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Acqua ist feminin, also heißt „ein Wasser“ una acqua, elidiert zu un'acqua.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.translate.009
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: Die Rechnung, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Il {item}, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Il conto ist die Rechnung, um die man am Ende bittet.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit07.lesson03.translate.010
+  lesson_content_key: it.a1.unit07.lesson03.il_conto
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Italienische Nomen stehen mit Artikel: il panino, l''acqua, il menù, il conto.'
+    language_code: de
+    direction: ltr
