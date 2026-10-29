@@ -1,0 +1,437 @@
+schema_version: '1.0'
+pack_key: practice.de-it.a1.unit08
+source_language: de
+target_language: it
+unit_content_key: it.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_banane
+    - w_chilo
+    - w_costano
+    - w_lo
+    - w_mele
+    - w_patate
+    - w_pomodori
+    - w_prendo
+    - w_va
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_mele
+      - w_banane
+      - w_pomodori
+      - w_patate
+      - w_costano
+      - w_chilo
+  pool2: &id002
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_mele
+      - w_banane
+      - w_patate
+  t_pomodori: &id003
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pomodori
+  t_chilo: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_chilo
+  t_costano: &id005
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_costano
+  pool6: &id006
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_mele
+      - w_banane
+      - w_pomodori
+      - w_patate
+      - w_chilo
+      - w_costano
+      - w_prendo
+  pool7: &id007
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_mele
+      - w_banane
+      - w_pomodori
+      - w_patate
+      - w_chilo
+  pool8: &id008
+    language_code: it
+    part_of_speech:
+    - verb
+    - pronoun
+    - noun
+    agreement_tags:
+      semantic:
+      - w_va
+      - w_lo
+      - w_prendo
+      - w_costano
+      - w_chilo
+  pool9: &id009
+    language_code: it
+    part_of_speech:
+    - verb
+    - noun
+    agreement_tags:
+      semantic:
+      - w_va
+      - w_prendo
+      - w_costano
+      - w_chilo
+  t_lo: &id010
+    language_code: it
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: w_lo
+  t_prendo: &id011
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_prendo
+templates:
+- content_key: practice.de-it.it.a1.unit08.lesson01.choose.001
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Mele ist der Plural von mela: Feminine Nomen auf -a bilden den Plural auf -e.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.listen.002
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Mele, banane und patate sind feminin im Plural und haben le; pomodori ist maskulin im Plural und hat i.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.order.003
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: word_order
+  frame:
+    text: Quanto costano le {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quanto costano le {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Le steht bei femininen Nomen im Plural, und costano ist die Pluralform des Verbs, weil mehrere Dinge einen Preis haben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.order.004
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: word_order
+  frame:
+    text: Quanto costano i {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quanto costano i {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Pomodori ist maskulin im Plural, deshalb steht i und nicht le.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.fill.005
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: fill_in_blank
+  frame:
+    text: Costano tre euro al {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id004
+    hint: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Al chilo bedeutet „pro Kilo“, die übliche Art, den Preis von Obst und Gemüse anzugeben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.fill.006
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: fill_in_blank
+  frame:
+    text: Quanto {item} le mele? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id005
+    hint: *id005
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mele steht im Plural, deshalb heißt das Verb costano und nicht costa.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.match.001
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id006
+    second: *id006
+    third: *id006
+    fourth: *id006
+    fifth: *id006
+    sixth: *id006
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: In italienischen Geschäften wird Obst und Gemüse nach Kilo verkauft.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.translate.007
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: translation
+  frame:
+    text: Wie viel kosten die Äpfel?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quanto {item} le mele?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Nomen im Plural verlangen costano: quanto costano le mele.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.translate.008
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: translation
+  frame:
+    text: Sie kosten drei Euro das Kilo.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Costano tre euro al {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Nach einer Zahl bleibt euro im Italienischen unverändert: tre euro.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.translate.009
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: translation
+  frame:
+    text: Ich hätte gern ein Kilo Äpfel, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Vorrei un {item} di mele, per favore.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Di verbindet die Menge mit der Ware: un chilo di mele.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson01.translate.010
+  lesson_content_key: it.a1.unit08.lesson01.al_mercato
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Mele, banane, pomodori und patate stehen hier im Plural, weil man sie kiloweise kauft.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.choose.002
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Lo prendo bedeutet „ich nehme es“; lo bezieht sich auf eine maskuline Ware.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.listen.003
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Va bene ist eine sehr gebräuchliche Art, „in Ordnung“ zu sagen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.fill.004
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: fill_in_blank
+  frame:
+    text: Va bene, {item} prendo. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id010
+    hint: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Lo bedeutet „es“ und steht vor dem Verb: lo prendo.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.order.005
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: word_order
+  frame:
+    text: Va bene, lo {item}.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Va bene, lo {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Prendo ist die ich-Form von prendere, „nehmen“, und wird verwendet, um einen Preis anzunehmen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit08.lesson03.translate.006
+  lesson_content_key: it.a1.unit08.lesson03.va_bene_lo_prendo
+  type: translation
+  frame:
+    text: Gut, ich nehme es.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Va bene, lo {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Va bene, lo prendo ist die übliche Art, einen Kauf abzuschließen.
+    language_code: de
+    direction: ltr

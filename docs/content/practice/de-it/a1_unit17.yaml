@@ -1,0 +1,405 @@
+schema_version: '1.0'
+pack_key: practice.de-it.a1.unit17
+source_language: de
+target_language: it
+unit_content_key: it.a1.unit17.work
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-it by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_commesso
+    - w_finisco
+    - w_inizi
+    - w_inizio
+    - w_insegnante
+    - w_lavori
+    - w_scuola
+slot_presets:
+  pool1: &id001
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_insegnante
+      - w_commesso
+      - w_scuola
+  pool2: &id002
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_insegnante
+      - w_commesso
+      - w_scuola
+      - w_lavori
+  pool3: &id003
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic:
+      - w_inizio
+      - w_finisco
+      - w_inizi
+      - w_lavori
+  t_insegnante: &id004
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_insegnante
+  t_lavori: &id005
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_lavori
+  t_scuola: &id006
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_scuola
+  t_finisco: &id007
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_finisco
+  t_inizi: &id008
+    language_code: it
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_inizi
+  t_commesso: &id009
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_commesso
+  pool10: &id010
+    language_code: it
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_insegnante
+      - w_scuola
+      - w_commesso
+  pool11: &id011
+    language_code: it
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_insegnante
+      - w_commesso
+      - w_scuola
+      - w_lavori
+      - w_inizio
+      - w_finisco
+      - w_inizi
+templates:
+- content_key: practice.de-it.it.a1.unit17.lesson02.choose.001
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Insegnante bezeichnet einen Lehrer oder eine Lehrerin; commesso ist ein männlicher Verkäufer.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson02.listen.002
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Lavori ist die informelle tu-Form des Verbs: du arbeitest.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.choose.001
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Inizio und finisco sind ich-Formen; inizi ist die informelle du-Form.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson01.order.001
+  lesson_content_key: it.a1.unit17.lesson01.che_lavoro_fai
+  type: word_order
+  frame:
+    text: Sono {item}, non sono commesso.
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item}, non sono commesso.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Insegnante hat eine Form für Männer und Frauen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson02.order.003
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: word_order
+  frame:
+    text: Dove {item}?
+    language_code: it
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dove {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Lavori ist die informelle tu-Form: Wo arbeitest du?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson02.fill.004
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: fill_in_blank
+  frame:
+    text: Lavoro in una {item}. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Scuola ist feminin, deshalb steht davor una.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.fill.002
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: fill_in_blank
+  frame:
+    text: Inizio alle nove e {item} alle cinque. ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Finisco ist die ich-Form von finire: ich höre auf.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.fill.003
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: fill_in_blank
+  frame:
+    text: A che ora {item}? ({hint})
+    language_code: it
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id008
+    hint: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Inizi ist die informelle tu-Form: Um wie viel Uhr fängst du an?'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson01.translate.002
+  lesson_content_key: it.a1.unit17.lesson01.che_lavoro_fai
+  type: translation
+  frame:
+    text: Ich bin Lehrer.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: 'Nach sono steht bei einem Beruf im Italienischen meist kein Artikel: sono insegnante.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson01.translate.003
+  lesson_content_key: it.a1.unit17.lesson01.che_lavoro_fai
+  type: translation
+  frame:
+    text: Ich bin Verkäufer. (von einem Mann gesagt)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Sono {item}.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Commesso ist die maskuline Form des Wortes.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson02.translate.005
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: translation
+  frame:
+    text: Wo arbeitest du? (informell, tu)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Dove {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Lavori endet in der informellen tu-Form auf -i.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.translate.004
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: translation
+  frame:
+    text: Ich fange um neun an und höre um fünf auf.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Inizio alle nove e {item} alle cinque.
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: Alle plus eine Zahl ergibt die Uhrzeit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.translate.005
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: translation
+  frame:
+    text: Um wie viel Uhr fängst du an? (informell, tu)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: A che ora {item}?
+      language_code: it
+      direction: ltr
+  feedback_frame:
+    text: A che ora fragt nach der Uhrzeit.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson02.translate.006
+  lesson_content_key: it.a1.unit17.lesson02.dove_lavori
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Insegnante und commesso sind Berufe; scuola ist ein Ort.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-it.it.a1.unit17.lesson03.match.006
+  lesson_content_key: it.a1.unit17.lesson03.a_che_ora_inizi
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: it
+    direction: ltr
+  slots:
+    first: *id011
+    second: *id011
+    third: *id011
+    fourth: *id011
+    fifth: *id011
+    sixth: *id011
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Inizio und finisco sind ich-Formen, inizi und lavori sind informelle du-Formen.
+    language_code: de
+    direction: ltr
