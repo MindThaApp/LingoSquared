@@ -1,0 +1,397 @@
+schema_version: '1.0'
+pack_key: practice.de-es.a1.unit06
+source_language: de
+target_language: es
+unit_content_key: es.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u06
+    - w_sándwich
+    - w_ensalada
+    - w_sopa
+    - w_agua
+    - w_café
+    - w_postre
+    - w_pastel
+    - w_comida
+    - w_menú
+    - w_cuenta
+    - w_quieres
+    - w_provecho
+    - w_quiero
+    - w_comer
+    - w_podemos
+    - w_ver
+    - w_quieren
+    - w_incluido
+slot_presets:
+  food: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+  food_m: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_café
+      - w_pastel
+  verbs: &id009
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u06
+  production: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+      - w_quiero
+      - w_comer
+      - w_podemos
+      - w_ver
+      - w_quieren
+      - w_incluido
+  quieres: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_quieres
+  menu: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_menú
+  provecho: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_provecho
+  cuenta: &id006
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cuenta
+  pastel: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pastel
+templates:
+- content_key: practice.de-es.es.a1.unit06.lesson01.choose.001
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Agua ist weiblich, steht im Singular aber mit el, weil es mit einem betonten a beginnt: el agua fría.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson01.listen.002
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Café, menú und sándwich tragen Akzentzeichen; der Akzent kennzeichnet die betonte Silbe.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson02.order.001
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: word_order
+  frame:
+    text: Quiero un {item}, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Un steht bei männlichen Substantiven (un café); weibliche Substantive stehen mit una (una ensalada).
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson02.translate.002
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: translation
+  frame:
+    text: Ich möchte {item}, bitte.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Eine weitere übliche Art zu bestellen ist para mí + das Gericht: para mí, un café.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson02.fill.003
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: fill_in_blank
+  frame:
+    text: ¿Qué {item} comer? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Querer verändert seinen Wortstamm: quiero, quieres, quiere, aber queremos.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson03.order.001
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: word_order
+  frame:
+    text: ¿Podemos ver el {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Podemos ver el {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Können wir die Speisekarte sehen? ¿Podemos + Infinitiv? ist eine höfliche Art, um etwas zu bitten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson03.translate.002
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: translation
+  frame:
+    text: Guten Appetit!
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¡Buen {item}!
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Buen provecho sagt man zu Menschen, die gleich essen werden, sogar zu Fremden am Nachbartisch.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson04.fill.001
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: fill_in_blank
+  frame:
+    text: La {item}, por favor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: In Spanien wartet der Kellner normalerweise, bis Sie um die Rechnung bitten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson04.translate.002
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: translation
+  frame:
+    text: Als Nachspeise möchte ich Kuchen.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De postre quiero {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: De postre bedeutet „zum Nachtisch“; vor pastel ist hier kein Artikel nötig.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson05.match.001
+  lesson_content_key: es.a1.unit06.lesson05.leer_el_menu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Das spanische menú del día ist ein festes Mittagsmenü: Vorspeise, Hauptgericht, postre und normalerweise Brot und ein Getränk zu einem Gesamtpreis.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson06.translate.001
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Comida bedeutet sowohl Essen als auch Mittagessen, das in Spanien die Hauptmahlzeit des Tages ist.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson06.choose.002
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Der Kellner sagt ¿Qué quieren comer?, weil er mit quieren Sie beide anspricht.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-es.es.a1.unit06.lesson06.match.003
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Quiero, quieres und quieren sind alles Formen von querer, „wollen“.
+    language_code: de
+    direction: ltr
