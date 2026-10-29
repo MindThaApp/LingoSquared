@@ -1167,10 +1167,14 @@ STRICT_LEARNER_ROLES = {"instruction", "feedback", "note", "gloss", "example_glo
                         "prompt_block", "glosses", "accepted_note", "target_text"}
 
 
+# German phrases that contain English-only function words as German words ("was ... tun will" = what ... wants to do).
+GERMAN_PROSE_PHRASES = ("wählen Sie, was ",)
+
+
 def english_prose(v: str) -> bool:
     """English sentence left in a learner-language string (function-word evidence; Spanish/French/Italian cognates do not count)."""
     toks = norm_tokens(v)
-    if len(toks) < 3:
+    if len(toks) < 3 or any(ph in v for ph in GERMAN_PROSE_PHRASES):
         return False
     hits = [t for t in toks if t in EN_ONLY]
     return len(set(hits)) >= 2 or bool(set(hits) & EN_STRONG)
@@ -1276,6 +1280,7 @@ def target_strings(target: str) -> frozenset:
 # Strings that legitimately equal the English sibling because the learner language spells them identically (loanwords/cognates
 # shared by English and the learner language).  Keyed by the learner language; each entry carries its reason.
 UNCHANGED_OK = {
+    ("de", "winter in madrid"),     # German title is the same two words plus a place name
     ("fr", "football / yoga"),      # gloss of es "fútbol / yoga": French uses the same two words as English
 }
 
