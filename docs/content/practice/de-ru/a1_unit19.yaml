@@ -1,0 +1,395 @@
+schema_version: '1.0'
+pack_key: practice.de-ru.a1.unit19
+source_language: de
+target_language: ru
+unit_content_key: ru.a1.unit19.travel
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_Тулы
+    - w_билет
+    - w_платформа
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_билет
+      - w_платформа
+      - w_Тулы
+  p2: &id002
+    language_code: ru
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: w_Тулы
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_платформа
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_билет
+      - w_платформа
+  p5: &id005
+    language_code: ru
+    part_of_speech:
+    - noun
+    - proper_noun
+    agreement_tags:
+      semantic:
+      - w_платформа
+      - w_билет
+      - w_Тулы
+templates:
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.choose.001
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Билет до Тулы, пожалуйста ist eine höfliche Bitte um eine Fahrkarte nach Tula.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.listen.002
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: До bedeutet „bis“ oder „bis zu“; der Städtename steht danach in der Form Тулы.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.order.003
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: word_order
+  frame:
+    text: Билет до {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Билет до {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Nach До steht der Genitiv des Ortes: Тула wird zu Тулы.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.fill.004
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: fill_in_blank
+  frame:
+    text: Билет до {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Nach до ändert sich der Städtename: Тула wird zu Тулы.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.translate.005
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: translation
+  frame:
+    text: Eine Fahrkarte nach Tula, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Билет до {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Im Russischen steht vor билет kein Artikel.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.order.001
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: word_order
+  frame:
+    text: Поезд в десять часов, {item} два.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Поезд в десять часов, {item} два.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Eine Zahl nach платформа nennt den Bahnsteig, zum Beispiel Bahnsteig zwei.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.fill.002
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: fill_in_blank
+  frame:
+    text: Поезд в десять часов, {item} два. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Платформа ist feminin; die Bahnsteignummer steht hinter dem Nomen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.translate.003
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: translation
+  frame:
+    text: Der Zug fährt um zehn Uhr, Bahnsteig zwei.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Поезд в десять часов, {item} два.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Платформа два heißt wörtlich „Bahnsteig zwei“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.translate.004
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Билет und платформа sind die beiden wichtigsten Nomen für eine Zugreise: was man kauft und wo man einsteigt.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.choose.005
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Платформа ist ein feminines Nomen; die Zahl dahinter nennt den Bahnsteig.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.order.006
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: word_order
+  frame:
+    text: Здравствуйте! Билет до {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Здравствуйте! Билет до {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Здравствуйте ist die höfliche Begrüßung am Fahrkartenschalter.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.translate.007
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: translation
+  frame:
+    text: Guten Tag! Eine Fahrkarte nach Tula, bitte.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Здравствуйте! Билет до {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Здравствуйте ist die förmliche Begrüßung, passend für Fremde wie eine Fahrkartenverkäuferin.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson01.fill.008
+  lesson_content_key: ru.a1.unit19.lesson01.bilet_do_tuly
+  type: fill_in_blank
+  frame:
+    text: Здравствуйте! Билет до {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id002
+    hint: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Der Ortsname bleibt nach до im Genitiv.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.listen.006
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Achten Sie auf die Endung: Тулы, билет und платформа klingen jeweils anders.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.order.007
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: word_order
+  frame:
+    text: Поезд сегодня в десять часов, {item} два.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Поезд сегодня в десять часов, {item} два.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сегодня kann direkt nach поезд stehen, um zu sagen, dass der Zug heute fährt.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.translate.008
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: translation
+  frame:
+    text: Der Zug fährt heute um zehn Uhr, Bahnsteig zwei.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Поезд сегодня в десять часов, {item} два.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Das Russische hat keinen Artikel; die Reihenfolge ist: Zug, heute, um zehn, Bahnsteig zwei.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.fill.009
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: fill_in_blank
+  frame:
+    text: Поезд сегодня в десять часов, {item} два. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Die Bahnsteignummer steht hinter dem Nomen, wie in платформа два.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit19.lesson02.translate.010
+  lesson_content_key: ru.a1.unit19.lesson02.poezd_v_desyat
+  type: translation
+  frame:
+    text: Bahnsteig zwei.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item} два.'
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Zwei Wörter genügen: erst das Nomen, dann die Zahl.'
+    language_code: de
+    direction: ltr

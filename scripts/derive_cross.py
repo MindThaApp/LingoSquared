@@ -1215,7 +1215,8 @@ TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will"}}
 _PROSE_TARGET = ""
 _PROSE_LEARNER = ""
 # Dutch learner-language prose shares these with the English function-word list ("Dit is een groet").
-LEARNER_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will", "me", "an", "in", "had", "kind"},
+LEARNER_AMBIGUOUS = {"de": {"was", "will"},       # German "was" (what), "will" (wants)
+                     "nl": {"is", "was", "of", "we", "her", "will", "me", "an", "in", "had", "kind"},
                      "pl": {"to", "we", "my", "was", "a", "i"}}   # Polish "to" (is), "we" (in), "my" (we), "was" (you)
 NL_MARKERS = {"ik", "je", "jij", "u", "wij", "jullie", "niet", "geen", "een", "het", "de", "van", "met", "voor", "naar", "op", "aan",
               "hallo", "kun", "kan", "wil", "zijn", "heb", "heeft", "dat", "dit", "wat", "waar", "hoe", "ook", "maar", "en", "om", "bij"}
@@ -1247,6 +1248,14 @@ def learner_leftovers(pair: str) -> list[str]:
                 out.append(f"{kind}/{pair}/{p.name}: no sibling file {sib}")
                 continue
             y, s = dd.load(p), dd.load(sp)
+            if kind == "practice" and isinstance(y.get("templates"), list) and isinstance(s.get("templates"), list):
+                # inject drops sibling templates whose lexeme tags the pair has no counterpart for: compare the kept ones
+                kept = {t.get("content_key", "").replace(f"practice.{pair}.", "practice.", 1) for t in y["templates"]}
+                s = {**s, "templates": [t for t in s["templates"]
+                                        if t.get("content_key", "").replace(f"practice.{sib}.", "practice.", 1) in kept]}
+                if len(s["templates"]) != len(dd.load(sp).get("templates", [])):      # tag_schema was pruned with them
+                    s.pop("tag_schema", None)
+                    y = {k: v for k, v in y.items() if k != "tag_schema"}
             ys, ss = dict(dd.walk_strings(y)), dict(dd.walk_strings(s))
             added = {k for k in ys if k not in ss and len(k) > 2 and (
                 k[0] == "exercises" and k[2] in ("prompt_blocks", "pairs", "localize_pair_lefts")
@@ -1295,6 +1304,33 @@ def compiled_leftovers(path: Path) -> list[str]:
             out.append(f"compiled {'/'.join(trail)[-60:]}: {o[:70]!r} [English]")
 
     walk(d, [])
+    return out
+
+
+def latin_in_cyrillic(path: Path, target: str) -> list[str]:
+    """Latin-script letters in Cyrillic target-language blocks (`language_code` ru) of a compiled course: a leftover from the
+    learner language.  A trailing parenthesised cloze hint is learner-language text and is skipped."""
+    if target != "ru":
+        return []
+    d = json.loads(path.read_text(encoding="utf-8"))
+    out = []
+
+    def walk(o, trail, lc):
+        if isinstance(o, dict):
+            lc = o.get("language_code", lc)
+            t = o.get("text")
+            if lc == "ru" and isinstance(t, str):
+                body = re.sub(r"\s*\([^()]*\)\s*$", "", t)
+                if re.search(r"(?<![A-Za-z])(?![XYZ](?![A-Za-z]))[A-Za-z]", body):      # lone X/Y/Z are placeholders
+                    out.append(f"compiled {'/'.join(trail)[-60:]}: Latin letters in Cyrillic block {t[:60]!r}")
+            for k, v in o.items():
+                if k not in ("content_key", "media_asset_key", "lesson_content_key", "unit_content_key", "audio_text"):
+                    walk(v, trail + [str(k)], lc)
+        elif isinstance(o, list):
+            for i, v in enumerate(o):
+                walk(v, trail + [str(i)], lc)
+
+    walk(d, [], None)
     return out
 
 
@@ -1401,6 +1437,7 @@ def cmd_validate(args):
     target = args.new.split("-")[1]
     for g, sg in zip(dd.group_names(args.new, args.levels), dd.group_names(f"en-{target}", args.levels)):
         left += compiled_leftovers(Path(f"/tmp/derive_cross_{g}.json"))
+        left += latin_in_cyrillic(Path(f"/tmp/derive_cross_{g}.json"), target)
         sreals, sovs = cm[sg]
         r = subprocess.run([py, "scripts/compile_content.py", "compile", "--realization", *sreals, "--overlay", *sovs,
                             "--out", f"/tmp/derive_cross_sib_{sg}.json"], cwd=ROOT, capture_output=True, text=True)

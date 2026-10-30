@@ -1,0 +1,482 @@
+schema_version: '1.0'
+pack_key: practice.de-ru.a1.unit08
+source_language: de
+target_language: ru
+unit_content_key: ru.a1.unit08.shopping
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_апельсины
+    - w_дайте
+    - w_двести
+    - w_капуста
+    - w_картофель
+    - w_килограмм
+    - w_магазин
+    - w_молоко
+    - w_огурцы
+    - w_полкило
+    - w_помидоров
+    - w_помидоры
+    - w_сто
+    - w_штук
+    - w_штука
+    - w_штуку
+    - w_яблок
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_магазин
+      - w_сто
+      - w_молоко
+      - w_двести
+      - w_килограмм
+      - w_полкило
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_молоко
+  p3: &id003
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_сто
+  p4: &id004
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_дайте
+      - w_килограмм
+      - w_полкило
+      - w_штука
+  p5: &id005
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+  p6: &id006
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штуку
+  p7: &id007
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_штук
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_полкило
+  p9: &id009
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_килограмм
+      - w_полкило
+      - w_штука
+      - w_дайте
+  p10: &id010
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_помидоры
+      - w_огурцы
+      - w_картофель
+      - w_капуста
+      - w_апельсины
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_яблок
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_помидоров
+  p13: &id013
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_капуста
+templates:
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.choose.001
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Сто und двести sind die Zahlen 100 und 200; das Nomen danach steht im Genitiv Plural: сто рублей, двести рублей.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.order.002
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: word_order
+  frame:
+    text: Сколько стоит {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Сколько стоит? fragt nach dem Preis eines einzelnen Gegenstands; молоко ist ein Nomen im Singular.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.fill.003
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: fill_in_blank
+  frame:
+    text: Хлеб стоит {item} рублей. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Nach сто – wie nach allen Zahlen ab fünf – steht das Nomen im Genitiv Plural: рублей.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.match.004
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Полкило ist ein halbes Kilo und wird zusammengeschrieben.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.translate.005
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: Wie viel kostet Milch?
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Сколько стоит {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Стоит richtet sich nach dem einzelnen Gegenstand, молоко; bei mehreren Gegenständen verwendet das Russische стоят.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson01.translate.006
+  lesson_content_key: ru.a1.unit08.lesson01.skolko_stoit
+  type: translation
+  frame:
+    text: Das Brot kostet hundert Rubel.
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Хлеб стоит {item} рублей.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Nach сто steht kein weiteres Wort wie „ein“; das Nomen danach lautet рублей.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.choose.001
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Дайте ist die höfliche Befehlsform mit вы und bedeutet „geben Sie mir“; mit ты heißt es дай.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.order.002
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: word_order
+  frame:
+    text: Дайте {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Килограмм und полкило nennen beide eine Warenmenge und stehen direkt nach дайте.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.fill.003
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте одну {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nach дайте wird das feminine штука zu штуку, der Form für das, was man haben möchte.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.fill.004
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: fill_in_blank
+  frame:
+    text: Дайте пять {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id007
+    hint: *id007
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Nach пять und höheren Zahlen steht das Nomen im Genitiv Plural: пять штук.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.translate.005
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: Geben Sie mir bitte ein halbes Kilo. (formell)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Дайте полкило, пожалуйста ist eine höfliche Art, einen Verkäufer um ein halbes Kilo zu bitten.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.translate.006
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: Geben Sie mir bitte fünf Stück. (formell)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте пять {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Штука wird nach der Zahl fünf zu штук.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson02.translate.007
+  lesson_content_key: ru.a1.unit08.lesson02.kolichestvo
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Штука zählt Dinge einzeln, während килограмм und полкило nach Gewicht zählen.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson03.listen.001
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Помидоры, огурцы und апельсины stehen im Plural; картофель und капуста sind Wörter im Singular und bedeuten „Kartoffeln“ und „Kohl“.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson03.order.002
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: word_order
+  frame:
+    text: У вас есть {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id010
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: У вас есть ...? funktioniert mit jedem Nomen und ist die übliche Art, einen Verkäufer zu fragen, ob er etwas hat.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson03.fill.003
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: fill_in_blank
+  frame:
+    text: Сколько стоит кило {item}? ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id011
+    hint: *id011
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Nach einem Mengenwort wie кило steht die Ware im Genitiv Plural, deshalb wird яблоки zu яблок.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson03.translate.004
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: Geben Sie mir bitte ein Kilogramm Tomaten. (formell)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id012
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Дайте килограмм {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Nach килограмм steht die Ware im Genitiv Plural: помидоры wird zu помидоров.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-ru.ru.a1.unit08.lesson03.translate.005
+  lesson_content_key: ru.a1.unit08.lesson03.na_rynke
+  type: translation
+  frame:
+    text: Haben Sie Kohl? (formell)
+    language_code: de
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: У вас есть {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Капуста steht im Russischen im Singular und hat keinen Artikel.
+    language_code: de
+    direction: ltr
