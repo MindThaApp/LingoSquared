@@ -21,6 +21,10 @@ and are not scanned.
 Output: TSV on stdout (or --out): course, file, item_id, field, matched_answer.
 Exit code is always 0 (WARN-only tool); counts per course go to stderr.
 
+Reviewed false positives live in scripts/_answer_leakage_allowlist.tsv
+(content_key <TAB> matched_answer (as printed here) <TAB> reason); they match in
+every field and course and are counted on stderr, not reported.
+
 Usage: .content-venv/bin/python3 scripts/_answer_leakage_check.py [--strip-accents] [--out FILE]
 """
 from __future__ import annotations
@@ -127,6 +131,20 @@ def check_item(ex: dict, real: dict, strip: bool):
                 yield field, ans
 
 
+ALLOWLIST = Path(__file__).resolve().parent / "_answer_leakage_allowlist.tsv"
+
+
+def load_allowlist() -> set[tuple[str, str]]:
+    out = set()
+    if ALLOWLIST.exists():
+        for line in ALLOWLIST.read_text(encoding="utf-8").splitlines():
+            if line.strip() and not line.startswith("#"):
+                parts = line.split("\t")
+                if len(parts) >= 2:
+                    out.add((parts[0], parts[1]))
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--strip-accents", action="store_true")
@@ -134,6 +152,8 @@ def main() -> int:
     args = ap.parse_args()
     ridx = realization_index()
     rows = []
+    allow = load_allowlist()
+    skipped = 0
     for f in sorted((CONTENT / "overlays").glob("*/*.yaml")):
         course = f.parent.name
         for key, ex in (_load(f).get("exercises") or {}).items():
@@ -141,6 +161,9 @@ def main() -> int:
             if not real or not isinstance(ex, dict):
                 continue
             for field, ans in check_item(ex, real, args.strip_accents):
+                if (key, ans) in allow:
+                    skipped += 1
+                    continue
                 rows.append((course, str(f.relative_to(REPO_ROOT)), key, field, ans))
     lines = ["course\tfile\titem_id\tfield\tmatched_answer"] + ["\t".join(r) for r in rows]
     text = "\n".join(lines) + "\n"
@@ -150,7 +173,7 @@ def main() -> int:
     else:
         sys.stdout.write(text)
     c = Counter(r[0] for r in rows)
-    print(f"answer-leakage: {len(rows)} hit(s)", file=sys.stderr)
+    print(f"answer-leakage: {len(rows)} hit(s) ({skipped} allowlisted)", file=sys.stderr)
     for k, v in sorted(c.items()):
         print(f"  {k}\t{v}", file=sys.stderr)
     return 0
