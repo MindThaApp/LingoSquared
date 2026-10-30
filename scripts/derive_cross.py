@@ -1233,6 +1233,14 @@ def english_prose(v: str) -> bool:
     return len(set(hits)) >= 2 or bool(set(hits) & strong)
 
 
+def _strip_semantic(o):
+    if isinstance(o, dict):
+        return {k: _strip_semantic(v) for k, v in o.items() if k != "semantic"}
+    if isinstance(o, list):
+        return [_strip_semantic(v) for v in o]
+    return o
+
+
 def learner_leftovers(pair: str) -> list[str]:
     """Learner-role strings of a cross pair that are still English prose, or that changed target-language text."""
     learner, target = pair.split("-")
@@ -1248,14 +1256,14 @@ def learner_leftovers(pair: str) -> list[str]:
                 out.append(f"{kind}/{pair}/{p.name}: no sibling file {sib}")
                 continue
             y, s = dd.load(p), dd.load(sp)
-            if kind == "practice" and isinstance(y.get("templates"), list) and isinstance(s.get("templates"), list):
-                # inject drops sibling templates whose lexeme tags the pair has no counterpart for: compare the kept ones
-                kept = {t.get("content_key", "").replace(f"practice.{pair}.", "practice.", 1) for t in y["templates"]}
-                s = {**s, "templates": [t for t in s["templates"]
-                                        if t.get("content_key", "").replace(f"practice.{sib}.", "practice.", 1) in kept]}
-                if len(s["templates"]) != len(dd.load(sp).get("templates", [])):      # tag_schema was pruned with them
-                    s.pop("tag_schema", None)
-                    y = {k: v for k, v in y.items() if k != "tag_schema"}
+            if kind == "practice":
+                # inject prunes tags no lexeme carries (and drops a template whose slot is left without one): compare the
+                # templates the pair kept, and not the semantic tag lists
+                if isinstance(y.get("templates"), list) and isinstance(s.get("templates"), list):
+                    kept = {t.get("content_key", "").replace(f"practice.{pair}.", "practice.", 1) for t in y["templates"]}
+                    s = {**s, "templates": [t for t in s["templates"]
+                                            if t.get("content_key", "").replace(f"practice.{sib}.", "practice.", 1) in kept]}
+                y, s = _strip_semantic(y), _strip_semantic(s)
             ys, ss = dict(dd.walk_strings(y)), dict(dd.walk_strings(s))
             added = {k for k in ys if k not in ss and len(k) > 2 and (
                 k[0] == "exercises" and k[2] in ("prompt_blocks", "pairs", "localize_pair_lefts")
