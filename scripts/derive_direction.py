@@ -750,9 +750,9 @@ def cmd_inject(args):
             if tag_universe is not None:
                 kept = []
                 for t in py.get("templates", []):
-                    used: set = set()
-                    _collect_semantic(t.get("slots", {}), used)
-                    if all(x in tag_universe for x in used):
+                    # a slot's tag list may name a word the sibling pack lists but no lexeme carries (stale tag): drop just
+                    # that tag; the template goes only when a slot would be left with no tag at all
+                    if _prune_semantic(t.get("slots", {}), tag_universe):
                         kept.append(t)
                 dropped_templates += len(py.get("templates", [])) - len(kept)
                 py["templates"] = kept
@@ -788,6 +788,27 @@ def _collect_semantic(o, acc: set) -> None:
     elif isinstance(o, list):
         for v in o:
             _collect_semantic(v, acc)
+
+
+def _prune_semantic(o, universe: set) -> bool:
+    """Remove `semantic` tags outside `universe` from slot tag lists in place; False if a slot is left without a tag
+    (or a single-tag slot names an unknown tag), i.e. the template cannot be kept honestly."""
+    if isinstance(o, dict):
+        for k, v in o.items():
+            if k == "semantic":
+                tags = [v] if isinstance(v, str) else list(v)
+                keep = [x for x in tags if x in universe]
+                if not keep:
+                    return False
+                if isinstance(v, list):
+                    o[k] = keep
+                elif keep != tags:
+                    return False
+            elif not _prune_semantic(v, universe):
+                return False
+    elif isinstance(o, list):
+        return all([_prune_semantic(v, universe) for v in o])
+    return True
 
 
 def new_direction_tags(pair: str) -> set | None:
