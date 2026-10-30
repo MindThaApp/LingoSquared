@@ -1,0 +1,265 @@
+schema_version: '1.0'
+pack_key: practice.es-nl.a1.unit13
+source_language: es
+target_language: nl
+unit_content_key: nl.a1.unit13.preferences
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - taste_preference
+    - activity_leuk
+    - preference_item
+    - preference_item_pure
+slot_presets:
+  lekker_food: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: taste_preference
+  activity_leuk: &id003
+    language_code: nl
+    part_of_speech: verb
+    agreement_tags:
+      semantic: activity_leuk
+  preference_item:
+    language_code: nl
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic: preference_item
+  preference_item_pure: &id002
+    language_code: nl
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic: preference_item_pure
+templates:
+- content_key: practice.es-nl.nl.a1.unit13.lesson01.order.001
+  lesson_content_key: nl.a1.unit13.lesson01.eten_en_drinken
+  type: word_order
+  frame:
+    text: Ik vind {item} lekker.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind {item} lekker.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} es la comida o bebida que gusta aquí.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson01.choose.003
+  lesson_content_key: nl.a1.unit13.lesson01.eten_en_drinken
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Elige el significado en español.
+      language_code: es
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una palabra que has aprendido.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson02.order.001
+  lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+  type: word_order
+  frame:
+    text: Ik vind {item} leuk.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind {item} leuk.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} es la actividad que gusta aquí.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson02.listen.003
+  lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra que oíste.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson02.translate.004
+  lesson_content_key: nl.a1.unit13.lesson02.activiteiten
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La palabra en neerlandés es {item}.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson03.choose.001
+  lesson_content_key: nl.a1.unit13.lesson03.houden_van
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Elige el significado en español.
+      language_code: es
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una palabra que has aprendido.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson04.translate.001
+  lesson_content_key: nl.a1.unit13.lesson04.kiezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La palabra en neerlandés es {item}.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson05.listen.001
+  lesson_content_key: nl.a1.unit13.lesson05.voorkeur_lezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra que oíste.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson06.order.001
+  lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+  type: word_order
+  frame:
+    text: Ik vind {item} lekker.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik vind {item} lekker.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} es la comida o bebida que gusta aquí.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson06.listen.002
+  lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es la palabra que oíste.'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-nl.nl.a1.unit13.lesson06.translate.003
+  lesson_content_key: nl.a1.unit13.lesson06.lotte_en_omar_kiezen
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: La palabra en neerlandés es {item}.
+    language_code: es
+    direction: ltr
