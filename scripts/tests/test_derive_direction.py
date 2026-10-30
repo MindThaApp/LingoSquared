@@ -194,3 +194,24 @@ def test_german_marker_detector():
               "{item} 在英语中", "丹尼尔问名字"):
         # 'Preisschild' has no function word: only the sibling-equality detector catches single German nouns
         assert not ck.german_markers(s, "ro" if "Vom" in s else ("nl" if "een" in s else "es")), s
+
+
+def _load_dd():
+    spec = importlib.util.spec_from_file_location("derive_direction_prune", SCRIPT)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_prune_semantic_drops_unknown_tags_and_keeps_template():
+    dd = _load_dd()
+    slots = {"item": {"agreement_tags": {"semantic": ["w_a", "w_stale", "w_b"]}}}
+    assert dd._prune_semantic(slots, {"w_a", "w_b"})
+    assert slots["item"]["agreement_tags"]["semantic"] == ["w_a", "w_b"]
+
+
+def test_prune_semantic_rejects_slot_left_without_tag():
+    dd = _load_dd()
+    assert not dd._prune_semantic({"item": {"agreement_tags": {"semantic": ["w_stale"]}}}, {"w_a"})
+    assert not dd._prune_semantic({"item": {"agreement_tags": {"semantic": "w_stale"}}}, {"w_a"})
+    assert dd._prune_semantic({"item": {"agreement_tags": {"semantic": "w_a"}}}, {"w_a"})
