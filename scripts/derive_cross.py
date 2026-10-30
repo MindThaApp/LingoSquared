@@ -166,6 +166,8 @@ def is_target_text(val: str, key_tokens: frozenset) -> bool:
     toks = [t for t in norm_tokens(val)]
     if not toks:
         return True
+    if _TARGET == "nl" and len(toks) >= 3 and english_only_nl(val):
+        return False                      # bare English option strings of the nl realizations ("He just met him today.")
     non_stop = [t for t in toks if t not in STOP or t in key_tokens]
     if toks and all(t in key_tokens for t in toks):
         # every token occurs in the realization node: target text, unless it is plain English prose
@@ -236,10 +238,23 @@ def foreign_teaching_targets(real_path: Path, target: str) -> dict[str, tuple]:
 def looks_english(text: str, target: str) -> bool:
     """A matching-pair clue that is learner-language English: known English words, or mostly words the target course never uses."""
     toks = norm_tokens(text)
+    if target == "nl" and toks and toks[0] in ("de", "het", "een"):
+        return False                      # article-led noun phrase: Dutch (cognates like "het concert" look English otherwise)
+    if target == "nl" and set(toks) & NL_MARKERS and not set(toks) & EN_STRONG:
+        return False                      # Dutch function words ("Hallo, met Lotte.", "Ik bel je.")
+    if target == "nl":                    # Dutch articles are in the English vocabulary (quoted in overlays): "de supermarkt"
+        text = " ".join(t for t in toks if t not in ("de", "het", "een"))
+        toks = norm_tokens(text)
     if not toks:
         return False
     tv = target_vocab(target)
     return en_fraction(text) >= 0.5 or sum(t in tv for t in toks) / len(toks) < 0.5
+
+
+def english_only_nl(text: str) -> bool:
+    """Unmistakably English Dutch-course string: >= 2 words, every word in the English vocabulary, no Dutch function word."""
+    toks = norm_tokens(text)
+    return len(toks) >= 2 and not set(toks) & NL_MARKERS and en_fraction(text) >= 0.99
 
 
 def pair_text_is_learner(text: str, on_learner_side: bool, target: str) -> bool:
@@ -247,6 +262,8 @@ def pair_text_is_learner(text: str, on_learner_side: bool, target: str) -> bool:
     only unmistakable English prose counts (mixed exercises exist)."""
     if not any(c.isalpha() for c in text):
         return False
+    if not on_learner_side and target == "nl" and english_only_nl(text):
+        return True                       # nl exercises mix Dutch cognates on both sides: judge the string itself
     return looks_english(text, target) if on_learner_side else english_prose(text)
 
 
@@ -1171,18 +1188,29 @@ STRICT_LEARNER_ROLES = {"instruction", "feedback", "note", "gloss", "example_glo
 GERMAN_PROSE_PHRASES = ("wählen Sie, was ",)
 
 
+# Words that are also valid in a target language and so cannot count as English evidence when that language is quoted
+# in learner-language strings ("Het is half drie" is Dutch, not English).  Set by learner_leftovers() for the pair at hand.
+TARGET_AMBIGUOUS = {"nl": {"is", "was", "of", "we", "her", "will"}}
+_PROSE_TARGET = ""
+NL_MARKERS = {"ik", "je", "jij", "u", "wij", "jullie", "niet", "geen", "een", "het", "de", "van", "met", "voor", "naar", "op", "aan",
+              "hallo", "kun", "kan", "wil", "zijn", "heb", "heeft", "dat", "dit", "wat", "waar", "hoe", "ook", "maar", "en", "om", "bij"}
+
+
 def english_prose(v: str) -> bool:
     """English sentence left in a learner-language string (function-word evidence; Spanish/French/Italian cognates do not count)."""
     toks = norm_tokens(v)
     if len(toks) < 3 or any(ph in v for ph in GERMAN_PROSE_PHRASES):
         return False
-    hits = [t for t in toks if t in EN_ONLY]
+    amb = TARGET_AMBIGUOUS.get(_PROSE_TARGET, ())
+    hits = [t for t in toks if t in EN_ONLY and t not in amb]
     return len(set(hits)) >= 2 or bool(set(hits) & EN_STRONG)
 
 
 def learner_leftovers(pair: str) -> list[str]:
     """Learner-role strings of a cross pair that are still English prose, or that changed target-language text."""
     learner, target = pair.split("-")
+    global _PROSE_TARGET
+    _PROSE_TARGET = target
     sib = f"en-{target}"
     out = []
     for kind in ("overlays", "practice"):
@@ -1251,6 +1279,8 @@ def target_vocab(target: str) -> frozenset:
     for p in sorted((CONTENT / "realizations" / target).glob("*.yaml")):
         for v in node_tokens(p).values():
             toks |= v
+    if target in TARGET_AMBIGUOUS:      # nl realizations carry bare English option strings: "the"/"this"... are not Dutch
+        toks -= EN_STRONG - TARGET_AMBIGUOUS[target]
     return frozenset(toks)
 
 
@@ -1305,6 +1335,10 @@ def unchanged_english(cross_json: Path, sib_json: Path, target: str, learner: st
                 walk(u, v, trail + [str(i)])
         elif isinstance(x, str) and x == y and not re.match(r"^[a-z0-9_.\-]+$", x):
             toks = norm_tokens(x)
+            if not re.search(r"[^\W\d_]{2,}", x):
+                return                                    # "500 g": numbers and unit symbols
+            if target == "nl" and set(toks) & NL_MARKERS and not set(toks) & EN_STRONG:
+                return                                    # Dutch sentence, same in every pair
             if x.strip().casefold() in ts or (learner, x.strip().casefold()) in UNCHANGED_OK:
                 return
             words_ = re.sub(r"[.!?,;:]", " ", x).split()
