@@ -1,0 +1,520 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a1.unit01
+source_language: de
+target_language: nl
+unit_content_key: nl.a1.unit01.greetings_and_introductions
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - register_language
+    - wellbeing
+    - name_exchange
+    - origin_language
+    - cafe_small_talk
+    - first_meeting_dialogue
+    - number
+    - contact_number
+    - age_quantity
+    - price
+    - library_registration
+    - weekday
+    - month
+    - ordinal_number
+    - date_expression
+    - library_date
+    - cafe_appointment
+    - clock_time
+    - quarter_hour
+    - time_question
+    - time_of_day
+    - schedule
+    - cafe_meetup_time
+    - informal_address
+    - polite_address
+    - greeting
+    - wellbeing_answer
+    - person_name
+    - place_name
+    - country
+    - language_or_nationality
+    - place_name
+    - volume_en_nl_a1_unit01_item_05_single
+    - volume_en_nl_a1_unit01_item_10_single
+    register:
+    - informal
+    - polite
+slot_presets:
+  informal_address: &id001
+    language_code: nl
+    part_of_speech: pronoun
+    agreement_tags:
+      semantic: informal_address
+  greeting: &id002
+    language_code: nl
+    part_of_speech: phrase
+    agreement_tags:
+      semantic: greeting
+  person_name: &id003
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: person_name
+  country: &id005
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic: country
+  unit_proper_noun: &id004
+    language_code: nl
+    part_of_speech: proper_noun
+    agreement_tags:
+      semantic:
+      - person_name
+      - country
+      - place_name
+  number:
+    language_code: nl
+    part_of_speech:
+    - symbol
+    - noun
+    agreement_tags:
+      semantic: number
+  weekday:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  month:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: month
+  ordinal_number:
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: ordinal_number
+  time_of_day:
+    language_code: nl
+    part_of_speech:
+    - noun
+    - adverb
+    agreement_tags:
+      semantic: time_of_day
+templates:
+- content_key: practice.de-nl.nl.a1.unit01.lesson01.order.001
+  lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
+  type: word_order
+  frame:
+    text: Ben {item} nieuw hier?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ben {item} nieuw hier?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist eine informelle Anredeform.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson01.complete.002
+  lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
+  type: fill_in_blank
+  frame:
+    text: Ben {item} nieuw hier?
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Vervollständigen Sie den niederländischen Satz.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} ist eine informelle Anredeform.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson01.translate.003
+  lesson_content_key: nl.a1.unit01.lesson01.jij_je_en_u
+  type: translation
+  frame:
+    text: 'Übersetzen Sie mit {item}: Bist du neu hier?'
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ben {item} nieuw hier?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Verwenden Sie in dieser Frage ben mit dem informellen Pronomen {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson02.listen.001
+  lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist die Begrüßung, die Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson02.translate.003
+  lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
+  type: translation
+  frame:
+    text: '{item}! Wie geht es dir? (Verwenden Sie die kurze Frage Hoe gaat het?)'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: '{item}! Hoe gaat het?'
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} eröffnet das Gespräch.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson02.choose.004
+  lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist eine Begrüßung aus dieser Einheit.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson03.order.001
+  lesson_content_key: nl.a1.unit01.lesson03.namen
+  type: word_order
+  frame:
+    text: Ik heet {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Die sprechende Person nennt den Namen {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson03.translate.003
+  lesson_content_key: nl.a1.unit01.lesson03.namen
+  type: translation
+  frame:
+    text: 'Übersetzen Sie mit heet: Ich heiße {item}.'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: token
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik heet {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Die sprechende Person nennt den Namen {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson04.match.001
+  lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: nl
+    direction: ltr
+  slots:
+    first: *id004
+    second: *id004
+    third: *id004
+    fourth: *id004
+    fifth: *id004
+    sixth: *id004
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Ordnen Sie jedem Namen und jedem Land aus dieser Einheit seine deutsche Entsprechung zu.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson04.translate.003
+  lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
+  type: translation
+  frame:
+    text: Ich komme aus {item}.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ik kom uit {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Die sprechende Person kommt aus {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson04.choose.004
+  lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: language_or_nationality
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} bezeichnet eine Sprache oder Nationalität aus dieser Einheit.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson05.order.001
+  lesson_content_key: nl.a1.unit01.lesson05.taalcafe
+  type: word_order
+  frame:
+    text: Ben {item} hier voor het taalcafé?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ben {item} hier voor het taalcafé?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} hält diese Frage informell.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson05.complete.002
+  lesson_content_key: nl.a1.unit01.lesson05.taalcafe
+  type: fill_in_blank
+  frame:
+    text: Ben {item} hier voor het taalcafé?
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Vervollständigen Sie den niederländischen Satz.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+    interchangeable: true
+  feedback_frame:
+    text: '{item} hält diese Frage informell.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson05.translate.003
+  lesson_content_key: nl.a1.unit01.lesson05.taalcafe
+  type: translation
+  frame:
+    text: 'Übersetzen Sie mit {item}: Bist du wegen des Sprachcafés hier?'
+    language_code: de
+    direction: ltr
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Ben {item} hier voor het taalcafé?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Verwenden Sie in dieser Frage ben mit dem informellen Pronomen {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson06.order.001
+  lesson_content_key: nl.a1.unit01.lesson06.eerste_ontmoeting
+  type: word_order
+  frame:
+    text: Hoi, ik ben {item}.
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoi, ik ben {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Die sprechende Person stellt sich als {item} vor.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson06.translate.003
+  lesson_content_key: nl.a1.unit01.lesson06.eerste_ontmoeting
+  type: translation
+  frame:
+    text: Hallo, ich bin {item}.
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: token
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Hoi, ik ben {item}.
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: Die sprechende Person stellt sich als {item} vor.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson02.translate.003.volume_fill.005
+  lesson_content_key: nl.a1.unit01.lesson02.groeten_en_welzijn
+  type: fill_in_blank
+  frame:
+    text: '{item}! Hoe gaat het? -- Hallo! Wie geht es dir?'
+    language_code: de
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: phrase
+      agreement_tags:
+        semantic: volume_en_nl_a1_unit01_item_05_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit01.lesson04.translate.003.volume_fill.010
+  lesson_content_key: nl.a1.unit01.lesson04.herkomst_en_taal
+  type: fill_in_blank
+  frame:
+    text: Ik kom uit {item}. -- I come from Belgium.
+    language_code: nl
+    direction: ltr
+  slots:
+    item:
+      language_code: nl
+      part_of_speech: proper_noun
+      agreement_tags:
+        semantic: volume_en_nl_a1_unit01_item_10_single
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
