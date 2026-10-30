@@ -1,0 +1,545 @@
+schema_version: '1.0'
+pack_key: practice.fr-ru.a1.unit07
+source_language: fr
+target_language: ru
+unit_content_key: ru.a1.unit07.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to French). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_борщ
+    - w_будете
+    - w_заказывать
+    - w_кофе
+    - w_меню
+    - w_мороженое
+    - w_официант
+    - w_официантка
+    - w_пить
+    - w_принесите
+    - w_садитесь
+    - w_салат
+    - w_свободен
+    - w_сладкое
+    - w_стол
+    - w_столик
+    - w_турист
+    - w_хочу
+    - w_чай
+slot_presets:
+  p1: &id001
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_меню
+      - w_официант
+      - w_официантка
+      - w_столик
+      - w_свободен
+      - w_садитесь
+      - w_заказывать
+  p2: &id002
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_столик
+      - w_стол
+  p3: &id003
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_садитесь
+  p4: &id004
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_меню
+  p5: &id005
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_будете
+  p6: &id006
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_заказывать
+  p7: &id007
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_хочу
+      - w_чай
+      - w_кофе
+      - w_борщ
+      - w_салат
+  p8: &id008
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_чай
+      - w_кофе
+      - w_борщ
+      - w_салат
+  p9: &id009
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_салат
+  p10: &id010
+    language_code: ru
+    part_of_speech:
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_хочу
+      - w_чай
+      - w_кофе
+      - w_борщ
+      - w_салат
+      - w_мороженое
+  p11: &id011
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_чай
+  p12: &id012
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_борщ
+  p13: &id013
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_мороженое
+      - w_принесите
+      - w_турист
+      - w_пить
+      - w_сладкое
+  p14: &id014
+    language_code: ru
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_мороженое
+  p15: &id015
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_пить
+  p16: &id016
+    language_code: ru
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_принесите
+  p17: &id017
+    language_code: ru
+    part_of_speech:
+    - adjective
+    - noun
+    - verb
+    agreement_tags:
+      semantic:
+      - w_мороженое
+      - w_турист
+      - w_пить
+      - w_сладкое
+templates:
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.choose.001
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Официант désigne le serveur et официантка la serveuse : le féminin ajoute -ка.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.order.002
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: word_order
+  frame:
+    text: Этот {item} свободен?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Этот {item} свободен?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Этот est le masculin de « ce » ; il s’emploie avec des noms masculins comme столик et стол ; свободен est aussi au masculin.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.fill.003
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: fill_in_blank
+  frame:
+    text: Да, {item}, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Садитесь se termine en -тесь : c’est l’impératif de politesse en вы, employé par le personnel s’adressant aux clients.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.match.004
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Свободен est un adjectif masculin qui s’accorde avec столик ; Этот столик свободен? demande si une table est libre.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.translate.005
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: translation
+  frame:
+    text: Voici la carte.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Вот {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Меню ne change jamais de terminaison, et Вот signifie « voici ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson01.translate.006
+  lesson_content_key: ru.a1.unit07.lesson01.v_restorane
+  type: translation
+  frame:
+    text: Qu’est-ce que vous allez commander ? (forme de politesse)
+    language_code: fr
+    direction: ltr
+  slots:
+    aux: *id005
+    item: *id006
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что {aux} {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Что будете заказывать? emploie la forme вы будете suivie d’un infinitif pour demander à un client ce qu’il va commander.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.choose.001
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Я хочу suivi d’un nom signifie « je veux… » ; le russe n’a pas d’article.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.order.002
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: word_order
+  frame:
+    text: Я хочу {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я хочу {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Я хочу signifie « je veux », et чай, кофе, борщ et салат gardent la même forme après lui.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.fill.003
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: fill_in_blank
+  frame:
+    text: Я хочу борщ и {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id009
+    hint: *id009
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Le mot и (« et ») relie deux éléments d’une commande : борщ и салат.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.match.004
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id010
+    second: *id010
+    third: *id010
+    fourth: *id010
+    fifth: *id010
+    sixth: *id010
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Кофе est un nom masculin qui ne change jamais de terminaison.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.translate.005
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: translation
+  frame:
+    text: Je veux du thé.
+    language_code: fr
+    direction: ltr
+  slots:
+    item: *id011
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я хочу {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Я хочу est une affirmation directe : au restaurant, ajoute пожалуйста pour l’adoucir.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson02.translate.006
+  lesson_content_key: ru.a1.unit07.lesson02.zakaz_edy
+  type: translation
+  frame:
+    text: Je veux du bortsch et une salade.
+    language_code: fr
+    direction: ltr
+  slots:
+    a: *id012
+    b: *id009
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Я хочу {a} и {b}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Я хочу борщ и салат est la commande du dialogue ; le russe n’a pas d’article.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.listen.001
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id013
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Мороженое se termine en -ое parce que c’est un nom neutre formé à partir d’un adjectif, comme сладкое.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.order.002
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: word_order
+  frame:
+    text: На сладкое принесите {item}, пожалуйста.
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На сладкое принесите {item}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: На сладкое signifie « en dessert », et принесите est l’impératif de politesse en вы qui signifie « apportez ».
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.order.003
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: word_order
+  frame:
+    text: Что будете {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id015
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Что будете {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: 'Что будете пить? est la question du serveur : будете suivi d’un infinitif.'
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.fill.004
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: fill_in_blank
+  frame:
+    text: На сладкое {item} мороженое, пожалуйста. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id016
+    hint: *id016
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Принесите est l’impératif de politesse en вы pour « apportez » ; avec ты, ce serait принеси.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.translate.005
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: translation
+  frame:
+    text: En dessert, apportez-moi une glace, s’il vous plaît. (forme de politesse)
+    language_code: fr
+    direction: ltr
+  slots:
+    a: *id016
+    b: *id014
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На сладкое {a} {b}, пожалуйста.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: На сладкое принесите мороженое est une façon naturelle de commander un dessert au serveur.
+    language_code: fr
+    direction: ltr
+- content_key: practice.fr-ru.ru.a1.unit07.lesson03.translate.006
+  lesson_content_key: ru.a1.unit07.lesson03.zakaz_dialog
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: fr
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id017
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Сладкое est un adjectif employé comme nom, qui signifie « le dessert ».
+    language_code: fr
+    direction: ltr
