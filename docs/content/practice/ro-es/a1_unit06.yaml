@@ -1,0 +1,397 @@
+schema_version: '1.0'
+pack_key: practice.ro-es.a1.unit06
+source_language: ro
+target_language: es
+unit_content_key: es.a1.unit06.food
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-es by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Romanian). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - es_a1_u06
+    - w_sándwich
+    - w_ensalada
+    - w_sopa
+    - w_agua
+    - w_café
+    - w_postre
+    - w_pastel
+    - w_comida
+    - w_menú
+    - w_cuenta
+    - w_quieres
+    - w_provecho
+    - w_quiero
+    - w_comer
+    - w_podemos
+    - w_ver
+    - w_quieren
+    - w_incluido
+slot_presets:
+  food: &id001
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+  food_m: &id002
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_café
+      - w_pastel
+  verbs: &id009
+    language_code: es
+    part_of_speech:
+    - verb
+    - adjective
+    agreement_tags:
+      semantic: es_a1_u06
+  production: &id008
+    language_code: es
+    part_of_speech:
+    - noun
+    - verb
+    - adjective
+    agreement_tags:
+      semantic:
+      - w_sándwich
+      - w_ensalada
+      - w_sopa
+      - w_agua
+      - w_café
+      - w_postre
+      - w_pastel
+      - w_comida
+      - w_menú
+      - w_cuenta
+      - w_quiero
+      - w_comer
+      - w_podemos
+      - w_ver
+      - w_quieren
+      - w_incluido
+  quieres: &id003
+    language_code: es
+    part_of_speech: verb
+    agreement_tags:
+      semantic: w_quieres
+  menu: &id004
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_menú
+  provecho: &id005
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_provecho
+  cuenta: &id006
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_cuenta
+  pastel: &id007
+    language_code: es
+    part_of_speech: noun
+    agreement_tags:
+      semantic: w_pastel
+templates:
+- content_key: practice.ro-es.es.a1.unit06.lesson01.choose.001
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: 'Agua este feminin, dar la singular primește el, pentru că începe cu a accentuat: el agua fría.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson01.listen.002
+  lesson_content_key: es.a1.unit06.lesson01.comida_y_bebida
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Café, menú și sándwich au accent scris; accentul marchează silaba accentuată.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson02.order.001
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: word_order
+  frame:
+    text: Quiero un {item}, por favor.
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Un se folosește cu substantive masculine (un café); substantivele feminine primesc una (una ensalada).
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson02.translate.002
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: translation
+  frame:
+    text: Vreau {item}, vă rog.
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Quiero un {item}, por favor.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: 'Un alt mod frecvent de a comanda este para mí + felul de mâncare: para mí, un café.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson02.fill.003
+  lesson_content_key: es.a1.unit06.lesson02.pedir_comida
+  type: fill_in_blank
+  frame:
+    text: ¿Qué {item} comer? ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id003
+    hint: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: 'Querer își schimbă rădăcina: quiero, quieres, quiere, dar queremos.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson03.order.001
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: word_order
+  frame:
+    text: ¿Podemos ver el {item}?
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id004
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¿Podemos ver el {item}?
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Putem vedea meniul? ¿Podemos + infinitiv? este un mod politicos de a cere ceva.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson03.translate.002
+  lesson_content_key: es.a1.unit06.lesson03.pedir_el_menu
+  type: translation
+  frame:
+    text: Poftă bună!
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id005
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: ¡Buen {item}!
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: Buen provecho se spune celor care urmează să mănânce, chiar și străinilor de la masa alăturată.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson04.fill.001
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: fill_in_blank
+  frame:
+    text: La {item}, por favor. ({hint})
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item: *id006
+    hint: *id006
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: În Spania, chelnerul de obicei așteaptă să ceri nota de plată.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson04.translate.002
+  lesson_content_key: es.a1.unit06.lesson04.postre_y_la_cuenta
+  type: translation
+  frame:
+    text: La desert, vreau tort.
+    language_code: ro
+    direction: ltr
+  slots:
+    item: *id007
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: De postre quiero {item}.
+      language_code: es
+      direction: ltr
+  feedback_frame:
+    text: De postre înseamnă „la desert”; aici nu este nevoie de articol înainte de pastel.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson05.match.001
+  lesson_content_key: es.a1.unit06.lesson05.leer_el_menu
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: 'Menú del día din Spania este un meniu fix de prânz: aperitiv, fel principal, postre și, de obicei, pâine și o băutură, la un singur preț.'
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson06.translate.001
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: ro
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id008
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Comida înseamnă și mâncare, și masa de la amiază, masa principală a zilei în Spania.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson06.choose.002
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+  slots:
+    item: *id009
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: Chelnerul spune ¿Qué quieren comer? pentru că quieren se adresează ambilor.
+    language_code: ro
+    direction: ltr
+- content_key: practice.ro-es.es.a1.unit06.lesson06.match.003
+  lesson_content_key: es.a1.unit06.lesson06.el_almuerzo_dialogue
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: es
+    direction: ltr
+  slots:
+    first: *id008
+    second: *id008
+    third: *id008
+    fourth: *id008
+    fifth: *id008
+    sixth: *id008
+  slot_relations:
+  - kind: distinct
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots:
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  feedback_frame:
+    text: Quiero, quieres și quieren sunt toate forme ale verbului querer, „a vrea”.
+    language_code: ro
+    direction: ltr
