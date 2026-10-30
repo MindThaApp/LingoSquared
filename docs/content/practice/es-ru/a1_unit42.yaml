@@ -1,0 +1,288 @@
+schema_version: '1.0'
+pack_key: practice.es-ru.a1.unit42
+source_language: es
+target_language: ru
+unit_content_key: ru.a1.unit42.appointment
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-ru by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to Spanish). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - w_записаться
+    - w_запись
+    - w_мая
+    - w_напомню
+    - w_подтверждена
+    - w_подтверждение
+    - w_подходит
+    - w_свободно
+    - w_среду
+templates:
+- content_key: practice.es-ru.ru.a1.unit42.lesson01.choose.001
+  lesson_content_key: ru.a1.unit42.lesson01.zapisatsya
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: &id001
+      language_code: ru
+      part_of_speech:
+      - noun
+      - verb
+      - adjective
+      - adverb
+      agreement_tags:
+        semantic:
+        - w_запись
+        - w_записаться
+        - w_свободно
+        - w_среду
+        - w_подходит
+        - w_подтверждена
+        - w_подтверждение
+        - w_мая
+        - w_напомню
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una de las palabras de esta unidad, de la lección «Pedir una cita».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson02.listen.001
+  lesson_content_key: ru.a1.unit42.lesson02.vremya_svobodno
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una de las palabras de esta unidad, de la lección «Hay un horario disponible».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson05.translate.001
+  lesson_content_key: ru.a1.unit42.lesson05.chitaem_podtverzhdenie
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} es una de las palabras de esta unidad, de la lección «Leer una confirmación».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson06.match.001
+  lesson_content_key: ru.a1.unit42.lesson06.dima_napominaet_nine
+  type: matching_pairs
+  frame:
+    text: '{first} · {second} · {third} · {fourth} · {fifth} · {sixth}'
+    language_code: ru
+    direction: ltr
+  slots:
+    first: *id001
+    second: *id001
+    third: *id001
+    fourth: *id001
+    fifth: *id001
+    sixth: *id001
+  slot_relations:
+  - kind: distinct
+    slots: &id002
+    - first
+    - second
+    - third
+    - fourth
+    - fifth
+    - sixth
+  answer_derivation:
+    kind: matching_pairs
+    slots: *id002
+  feedback_frame:
+    text: Relaciona cada palabra en ruso con su significado en español; las palabras proceden de las lecciones de esta unidad.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson01.choose.002
+  lesson_content_key: ru.a1.unit42.lesson01.zapisatsya
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: ru
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} es una de las palabras de esta unidad, de la lección «Pedir una cita».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson02.translate.002
+  lesson_content_key: ru.a1.unit42.lesson02.vremya_svobodno
+  type: translation
+  frame:
+    text: '{item}'
+    language_code: es
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} es una de las palabras de esta unidad, de la lección «Hay un horario disponible».'
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson01.order.003
+  lesson_content_key: ru.a1.unit42.lesson01.zapisatsya
+  type: word_order
+  frame:
+    text: На что {item}?
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: noun
+      agreement_tags:
+        semantic: w_запись
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: На что {item}?
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: ¿Para qué es la cita? запись significa cita, reserva.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson01.fill.004
+  lesson_content_key: ru.a1.unit42.lesson01.zapisatsya
+  type: fill_in_blank
+  frame:
+    text: Я хочу {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_записаться
+    hint:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_записаться
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Quisiera pedir una cita. записаться significa pedir una cita; inscribirse.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson02.order.003
+  lesson_content_key: ru.a1.unit42.lesson02.vremya_svobodno
+  type: word_order
+  frame:
+    text: В среду в десять часов {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: adverb
+      agreement_tags:
+        semantic: w_свободно
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: В среду в десять часов {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: El miércoles a las diez hay disponibilidad. свободно significa libre, disponible.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson02.fill.004
+  lesson_content_key: ru.a1.unit42.lesson02.vremya_svobodno
+  type: fill_in_blank
+  frame:
+    text: Мне это {item}. ({hint})
+    language_code: ru
+    direction: ltr
+    slot_rendering:
+      hint: english_gloss
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_подходит
+    hint:
+      language_code: ru
+      part_of_speech: verb
+      agreement_tags:
+        semantic: w_подходит
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Eso me viene bien. подходит significa conviene, viene bien.
+    language_code: es
+    direction: ltr
+- content_key: practice.es-ru.ru.a1.unit42.lesson05.order.002
+  lesson_content_key: ru.a1.unit42.lesson05.chitaem_podtverzhdenie
+  type: word_order
+  frame:
+    text: Да, запись {item}.
+    language_code: ru
+    direction: ltr
+  slots:
+    item:
+      language_code: ru
+      part_of_speech: adjective
+      agreement_tags:
+        semantic: w_подтверждена
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Да, запись {item}.
+      language_code: ru
+      direction: ltr
+  feedback_frame:
+    text: Sí, la cita está confirmada. подтверждена significa confirmada (fem.).
+    language_code: es
+    direction: ltr
