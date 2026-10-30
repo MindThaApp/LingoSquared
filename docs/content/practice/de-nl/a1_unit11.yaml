@@ -1,0 +1,263 @@
+schema_version: '1.0'
+pack_key: practice.de-nl.a1.unit11
+source_language: de
+target_language: nl
+unit_content_key: nl.a1.unit11.plans
+review:
+  status: unreviewed
+  required_next_reviewer: native_speaker_review
+  fresh_context: 'false'
+  notes: Derived from practice.en-nl by scripts/derive_cross.py (templates, slots and tags unchanged; frame/feedback text translated to German). Needs native review of frame grammar across the whole slot pool.
+tag_schema:
+  part_of_speech:
+  - symbol
+  - noun
+  - proper_noun
+  - pronoun
+  - verb
+  - adjective
+  - adverb
+  - preposition
+  - particle
+  - phrase
+  agreement_tags:
+    semantic:
+    - weekday
+    - plan_vocab
+    - accept_decline
+slot_presets:
+  weekday: &id001
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: weekday
+  plan_vocab: &id002
+    language_code: nl
+    part_of_speech:
+    - adverb
+    - verb
+    - noun
+    agreement_tags:
+      semantic: plan_vocab
+  accept_decline_noun: &id003
+    language_code: nl
+    part_of_speech: noun
+    agreement_tags:
+      semantic: accept_decline
+templates:
+- content_key: practice.de-nl.nl.a1.unit11.lesson01.order.001
+  lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+  type: word_order
+  frame:
+    text: Zullen we {item} koffie drinken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} koffie drinken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist der Tag, der für den Kaffee vorgeschlagen wird.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson01.choose.003
+  lesson_content_key: nl.a1.unit11.lesson01.een_activiteit_voorstellen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dieser Lektion über Verabredungen.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson02.listen.001
+  lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson02.translate.003
+  lesson_content_key: nl.a1.unit11.lesson02.ja_of_nee
+  type: translation
+  frame:
+    text: '{item} (ein niederländisches Wort, ohne de/het)'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id003
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: '{item} gehört zum Wortschatz für das Zusagen oder Absagen eines Plans.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson03.order.001
+  lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+  type: word_order
+  frame:
+    text: Zullen we {item} om half drie afspreken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} om half drie afspreken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist der Tag, der für das Treffen vorgeschlagen wird.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson03.translate.003
+  lesson_content_key: nl.a1.unit11.lesson03.dag_en_tijd_afspreken
+  type: translation
+  frame:
+    text: 'Sollen wir uns um 2:30 Uhr treffen: {item}?'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} om half drie afspreken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: 'Sollen wir uns um 2:30 Uhr treffen: {item}?'
+    slot_rendering:
+      item: english_gloss
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson04.choose.001
+  lesson_content_key: nl.a1.unit11.lesson04.een_bericht_lezen
+  type: multiple_choice
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+    text_blocks:
+    - text: Wählen Sie die deutsche Bedeutung.
+      language_code: de
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist ein Wort aus dieser Lektion.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson05.listen.001
+  lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie gehört haben.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson05.translate.002
+  lesson_content_key: nl.a1.unit11.lesson05.een_plan_schrijven
+  type: translation
+  frame:
+    text: '{item} (ein niederländisches Wort, ohne de/het)'
+    language_code: de
+    direction: ltr
+    slot_rendering:
+      item: english_gloss
+    text_blocks:
+    - text: Translate into Dutch.
+      language_code: en
+      direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_text
+    slot: item
+  feedback_frame:
+    text: Das niederländische Wort ist {item}.
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson06.order.001
+  lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+  type: word_order
+  frame:
+    text: Zullen we {item} koffie drinken?
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id001
+  answer_derivation:
+    kind: render_frame
+    frame:
+      text: Zullen we {item} koffie drinken?
+      language_code: nl
+      direction: ltr
+  feedback_frame:
+    text: '{item} ist der Tag, der für den Kaffee vorgeschlagen wird.'
+    language_code: de
+    direction: ltr
+- content_key: practice.de-nl.nl.a1.unit11.lesson06.listen.002
+  lesson_content_key: nl.a1.unit11.lesson06.lotte_en_omar_maken_een_plan
+  type: listen_select
+  frame:
+    text: '{item}'
+    language_code: nl
+    direction: ltr
+  slots:
+    item: *id002
+  answer_derivation:
+    kind: slot_gloss
+    slot: item
+  feedback_frame:
+    text: '{item} ist das Wort, das Sie in diesem Dialog gehört haben.'
+    language_code: de
+    direction: ltr
