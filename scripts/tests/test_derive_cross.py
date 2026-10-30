@@ -296,3 +296,23 @@ def test_unchanged_english_gate_ignores_accent_variants_and_allowlist(tmp_path):
     out = dc.unchanged_english(a, b, "es", "fr")
     assert not any("Mexico" in o or "yoga" in o for o in out)
     assert any("cheapest" in o for o in out)
+
+
+def test_normalize_spans_strips_only_spans_the_source_does_not_have():
+    # extra spans around a quote are stripped, then lint passes
+    fixed = dc.normalize_spans("Say it like this: Hoe gaat het?", "Zeg het zo: *Hoe gaat het?*")
+    assert fixed == "Zeg het zo: Hoe gaat het?"
+    # source spans survive, extras go
+    fixed = dc.normalize_spans("*Poulet* is masculine.", "*Poulet* is mannelijk, *het eten*.")
+    assert fixed == "*Poulet* is mannelijk, het eten."
+    assert dc.lint("feedback", "*Poulet* is masculine.", fixed) == []
+
+
+def test_normalize_spans_never_masks_a_real_mismatch():
+    # a missing span is not repaired
+    src, tr = "*Poulet* is masculine.", "Poulet es masculino."
+    assert dc.normalize_spans(src, tr) == tr
+    assert dc.lint("feedback", src, tr)
+    # a replaced span (wrong word) still fails the verbatim check
+    tr2 = dc.normalize_spans(src, "*Pollo* es masculino.")
+    assert dc.lint("feedback", src, tr2)

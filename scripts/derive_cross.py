@@ -509,6 +509,26 @@ def span_set(s: str) -> list[str]:
     return re.findall(r"\*([^*]+)\*", s)
 
 
+def normalize_spans(src: str, tr: str) -> str:
+    """Strip *asterisk* spans the translator added around text that is not a span in the source
+    (typically Dutch/other quotes). Spans that exist in the source are kept; a real mismatch
+    (missing or altered spans) is left alone so lint still reports it."""
+    want = [w.lower().replace("’", "'") for w in span_set(src)]
+    if len(span_set(tr)) <= len(want):
+        return tr
+    remaining = list(want)
+
+    def fix(m: re.Match) -> str:
+        inner = m.group(1)
+        key = inner.lower().replace("’", "'")
+        if key in remaining:
+            remaining.remove(key)
+            return m.group(0)
+        return inner
+
+    return re.sub(r"\*([^*\n]+)\*", fix, tr)
+
+
 def lint(role: str, src: str, tr: str, key_tokens: frozenset = frozenset()) -> list[str]:
     problems = _BASE_LINT(role, src, tr)
     if len(span_set(src)) != len(span_set(tr)):
@@ -1093,6 +1113,7 @@ def cmd_translate_codex(args, call=None, sleep=time.sleep, backend="codex") -> i
                     bad[key] = "missing from the answer"
                     continue
                 src = srcs[name][iid]
+                got[key] = normalize_spans(src[2], got[key])
                 probs = lint(src[1], src[2], got[key])
                 if got[key].strip() == src[2].strip() and english_prose(src[2]):
                     probs.append("unchanged English")
